@@ -1,7 +1,6 @@
 
 var merge = require('webpack-merge');
 
-// Plugins
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -13,16 +12,6 @@ const prodConfiguration = env => {
   return merge([
     {
       optimization: {
-        // runtimeChunk: 'single',
-        // splitChunks: {
-        //   cacheGroups: {
-        //     vendor: {
-        //       test: /[\\/]node_modules[\\/]/,
-        //       name: 'vendors',
-        //       chunks: 'all'
-        //     }
-        //   }
-        // },
         minimizer: [new UglifyJsPlugin()],
       },
       plugins: [
