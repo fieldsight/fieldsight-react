@@ -14,7 +14,11 @@ const Navbar = () => {
 
 const HomePage = () => <h1>Home Page</h1>
 
-const AboutPage = () => <h1>About Page</h1>
+const AboutPage = () => (
+  <div>
+    <h1>About Page</h1>
+    <img alt="header" src="/dist/images/header.jpg" className="app-header" />
+  </div>)
 
 const ContactPage = () => <h1>Contact Page</h1>
 
