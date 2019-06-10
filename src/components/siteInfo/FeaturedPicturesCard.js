@@ -7,8 +7,6 @@ const FeaturedPicturesCard = ({ title, form, question }) => (
             <div className="card-header sub-card-header">
                 <h5>{title}</h5>
                 <div className="add-btn">
-                    {/* <a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i className="la la-edit"></i></a>
-                    <a href="#" data-toggle="tooltip" data-placement="top" title="Delete"><i className="la la-trash-o"></i></a> */}
 
                     <a href="#" className="td-edit-btn">
                         <OverlayTrigger

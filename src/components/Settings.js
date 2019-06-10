@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { Route, Switch } from "react-router-dom";
-import "../css/bootstrap.min.css"
-import "../css/main.css"
 import LeftSidebar from './LeftSidebar';
-import EditProject from './EditProject';
+import EditProject from './editProject/EditProject';
 import SiteType from './siteType/SiteType';
 import SiteInformation from './siteInfo/SiteInformation';
 import SiteManage from './SiteManage';
@@ -46,8 +44,7 @@ export default class Settings extends Component {
                                                 <Route exact path="/" component={EditProject} />
                                                 <Route path="/site-type" component={SiteType} />
                                                 <Route path="/site-information" component={SiteInformation} />
-                                                <SiteManage />
-                                                <Route path="/manage-site" component={SiteInformation} />
+                                                <Route path="/manage-site" component={SiteManage} />
                                                 <Route path="/map-layer" component={MapLayer} />
                                             </Switch>
                                         </div>
