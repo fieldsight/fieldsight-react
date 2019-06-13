@@ -1,24 +1,27 @@
-import React, { Component } from 'react'
-import ActionBtn from './ActionBtn'
-import { MDBDataTable } from 'mdbreact';
-import data from '../../data/tableData'
+import React, { Component } from "react";
+import TableHeader from "./TableHeader";
+import TableRow from "./TableRow";
 
 export default class Table extends Component {
-    render() {
-        const { page } = this.props
-        return (
-            <MDBDataTable
-                bordered
-                small
-                data={data[page]}
-            />
-        );
+  render() {
+    const {
+      tableHeader,
+      questions,
+      page,
+      removeHandler,
+      editHandler
+    } = this.props;
+    return (
+      <table className="table  table-bordered  general_table">
+        <TableHeader tableHeader={tableHeader} />
 
-    }
+        <TableRow
+          tableRow={questions}
+          page={page}
+          removeHandler={removeHandler}
+          editHandler={editHandler}
+        />
+      </table>
+    );
+  }
 }
-
-
-
-
-
-

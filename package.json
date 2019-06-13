@@ -11,6 +11,7 @@
     "build": "node server"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "express": "^4.16.4",
     "font-awesome": "^4.7.0",
@@ -20,7 +21,8 @@
     "react-dom": "^16.8.6",
     "react-popper": "^1.3.3",
     "react-reveal": "^1.2.2",
-    "react-router-dom": "^5.0.0"
+    "react-router-dom": "^5.0.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

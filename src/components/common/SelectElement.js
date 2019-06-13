@@ -5,7 +5,8 @@ const SelectElement = ({
   className,
   label,
   options,
-  changeHandler
+  changeHandler,
+  value
 }) => (
   <div className="form-group">
     {label && (
@@ -13,7 +14,11 @@ const SelectElement = ({
         {label} {formType === "editForm" && <sup>*</sup>}
       </label>
     )}
-    <select className={className} onChange={changeHandler}>
+    <select
+      className={className}
+      onChange={changeHandler}
+      value={value ? value : undefined}
+    >
       {options.length > 0 ? (
         options.map((option, i) => (
           <option

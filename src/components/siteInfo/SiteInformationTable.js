@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import uuid from "uuid/v4";
 import Table from "../common/Table";
 import FormModal from "../common/FormModal";
 import InputElement from "../common/InputElement";
@@ -11,23 +12,53 @@ const INITIAL_STATE = {
   placeholder: "",
   helpText: "",
   showOptions: false,
+  editMode: false,
   options: {},
   optInputField: [],
+  selectedId: null,
   selectedForm: {},
   selectedQuestion: {},
   filteredQuestions: [],
-  selectedProject: {}
+  selectedProject: {},
+  tableQuestions: []
+};
+
+const typeOptions = {
+  TEXT: "Text",
+  NUMBER: "Number",
+  DATE: "Date",
+  SELECT_ONE: "Select One",
+  DRAW_FROM_ANOTHER_PROJECT: "Draw From Another Project",
+  DRAW_ANSWER_FROM_A_FORM: "Draw Answer From A Form",
+  FORM_SUBMISSION: "Form Submission",
+  FORM_SUBMISSIONS_COUNT: "Form Submissions Count",
+  FORM_QUESTION_ANSWER_STATUS: "Form Question Answer Status"
+};
+
+const tableHeader = {
+  siteInformationTable: [
+    "Attribute",
+    "Type",
+    "Form",
+    "Question",
+    "Project",
+    "Action"
+  ]
 };
 
 class SiteInformationTable extends Component {
   state = INITIAL_STATE;
 
   closeModal = () => {
-    this.setState(INITIAL_STATE);
+    this.setState({
+      ...INITIAL_STATE,
+      tableQuestions: [...this.state.tableQuestions]
+    });
     this.props.toggleModal("Info");
   };
 
   onSubmitHandler = e => {
+    e.preventDefault();
     const {
       state: {
         label,
@@ -35,52 +66,73 @@ class SiteInformationTable extends Component {
         placeholder,
         helpText,
         options,
+        optInputField,
+        editMode,
         selectedForm,
         selectedQuestion,
-        selectedProject
-      }
+        selectedProject,
+        selectedId,
+        tableQuestions
+      },
+      props: { toggleModal, siteInfoHandler }
     } = this;
 
-    e.preventDefault();
-    const data = {};
-    if (type === "Select One") {
-      data.label = label;
-      data.type = type;
-      data.helpText = helpText;
-      data.options = options;
+    const {
+      TEXT,
+      NUMBER,
+      DATE,
+      SELECT_ONE,
+      DRAW_FROM_ANOTHER_PROJECT,
+      DRAW_ANSWER_FROM_A_FORM,
+      FORM_SUBMISSION,
+      FORM_SUBMISSIONS_COUNT,
+      FORM_QUESTION_ANSWER_STATUS
+    } = typeOptions;
+
+    const question = {
+      ...(!editMode && { id: uuid() }),
+      label,
+      type,
+      ...(type === SELECT_ONE && { options }),
+      ...(type === SELECT_ONE && { optInputField }),
+      ...((type === DRAW_ANSWER_FROM_A_FORM ||
+        type === FORM_QUESTION_ANSWER_STATUS ||
+        type === FORM_SUBMISSION ||
+        type === FORM_SUBMISSIONS_COUNT) && { selectedForm }),
+      ...((type === DRAW_ANSWER_FROM_A_FORM ||
+        type === FORM_QUESTION_ANSWER_STATUS) && { selectedQuestion }),
+      ...(type === DRAW_FROM_ANOTHER_PROJECT && { selectedProject }),
+      ...((type === TEXT || type === NUMBER || type === DATE) && {
+        placeholder
+      }),
+      ...((type === TEXT ||
+        type === NUMBER ||
+        type === DATE ||
+        type === SELECT_ONE ||
+        type === DRAW_FROM_ANOTHER_PROJECT) && { helpText })
+    };
+
+    if (editMode) {
+      let filteredTableQuestions = tableQuestions.filter(
+        question => question.id !== selectedId
+      );
+
+      this.setState({
+        ...INITIAL_STATE,
+        tableQuestions: [
+          ...filteredTableQuestions,
+          { ...question, id: selectedId }
+        ]
+      });
+    } else {
+      this.setState({
+        ...INITIAL_STATE,
+        tableQuestions: [...tableQuestions, question]
+      });
     }
 
-    if (type === "Text" || type === "Number" || type === "Date") {
-      data.label = label;
-      data.type = type;
-      data.placeholder = placeholder;
-      data.helpText = helpText;
-    }
-
-    if (
-      type === "Draw Answer From A Form" ||
-      type === "Form Question Answer Status"
-    ) {
-      data.label = label;
-      data.type = type;
-      data.selectedForm = selectedForm;
-      data.selectedQuestion = selectedQuestion;
-    }
-
-    if (type === "Form Submission" || type === "Form Submission Count") {
-      data.label = label;
-      data.type = type;
-      data.selectedForm = selectedForm;
-    }
-
-    if (type === "Draw From Another Project") {
-      data.label = label;
-      data.type = type;
-      data.helpText = helpText;
-      data.selectedProject = selectedProject;
-    }
-
-    console.log("data in submit", data);
+    toggleModal("Info");
+    siteInfoHandler;
   };
 
   generateOptField = () => {
@@ -101,9 +153,10 @@ class SiteInformationTable extends Component {
 
   onSelectChangeHandler = e => {
     const { value } = e.target;
-    if (value === "Select One") {
+    const { SELECT_ONE } = typeOptions;
+    if (value === SELECT_ONE) {
       return this.setState({
-        type: "Select One",
+        type: SELECT_ONE,
         showOptions: true
       });
     }
@@ -128,7 +181,7 @@ class SiteInformationTable extends Component {
     });
   };
 
-  onRemoveHandler = val => {
+  removeInputHandler = val => {
     const filteredOptInputField = this.state.optInputField.filter(
       (field, i) => field.val !== val
     );
@@ -142,12 +195,23 @@ class SiteInformationTable extends Component {
 
   formChangeHandler = e => {
     const { value } = e.target;
-    const selectedForm = this.props.forms.find(form => form.name === value);
-    const filteredQuestions = findQuestion(selectedForm.json.children);
-    this.setState({
-      selectedForm,
-      filteredQuestions
-    });
+    const { type } = this.state;
+    const { DRAW_FROM_ANOTHER_PROJECT } = typeOptions;
+    if (type === DRAW_FROM_ANOTHER_PROJECT) {
+      const selectedProject = this.props.projects.find(
+        project => project.name === value
+      );
+      this.setState({
+        selectedProject
+      });
+    } else {
+      const selectedForm = this.props.forms.find(form => form.name === value);
+      const filteredQuestions = findQuestion(selectedForm.json.children);
+      this.setState({
+        selectedForm,
+        filteredQuestions
+      });
+    }
   };
 
   questionChangeHandler = e => {
@@ -158,26 +222,117 @@ class SiteInformationTable extends Component {
     this.setState({ selectedQuestion });
   };
 
+  editQuestionHandler = id => {
+    const selectedTableQuestion = this.state.tableQuestions.find(
+      question => question.id === id
+    );
+    const {
+      TEXT,
+      NUMBER,
+      DATE,
+      SELECT_ONE,
+      DRAW_FROM_ANOTHER_PROJECT,
+      DRAW_ANSWER_FROM_A_FORM,
+      FORM_SUBMISSION,
+      FORM_SUBMISSIONS_COUNT,
+      FORM_QUESTION_ANSWER_STATUS
+    } = typeOptions;
+
+    const question = {
+      label: selectedTableQuestion.label,
+      type: selectedTableQuestion.type,
+      ...(selectedTableQuestion.type === SELECT_ONE && {
+        options: selectedTableQuestion.options
+      }),
+      ...(selectedTableQuestion.type === SELECT_ONE && {
+        optInputField: selectedTableQuestion.optInputField
+      }),
+      ...((selectedTableQuestion.type === DRAW_ANSWER_FROM_A_FORM ||
+        selectedTableQuestion.type === FORM_QUESTION_ANSWER_STATUS ||
+        selectedTableQuestion.type === FORM_SUBMISSION ||
+        selectedTableQuestion.type === FORM_SUBMISSIONS_COUNT) && {
+        selectedForm: selectedTableQuestion.selectedForm
+      }),
+      ...((selectedTableQuestion.type === DRAW_ANSWER_FROM_A_FORM ||
+        selectedTableQuestion.type === FORM_QUESTION_ANSWER_STATUS) && {
+        selectedQuestion: selectedTableQuestion.selectedQuestion
+      }),
+      ...(selectedTableQuestion.type === DRAW_FROM_ANOTHER_PROJECT && {
+        selectedProject: selectedTableQuestion.selectedProject
+      }),
+      ...((selectedTableQuestion.type === TEXT ||
+        selectedTableQuestion.type === NUMBER ||
+        selectedTableQuestion.type === DATE) && {
+        placeholder: selectedTableQuestion.placeholder
+      }),
+      ...((selectedTableQuestion.type === TEXT ||
+        selectedTableQuestion.type === NUMBER ||
+        selectedTableQuestion.type === DATE ||
+        selectedTableQuestion.type === SELECT_ONE ||
+        selectedTableQuestion.type === DRAW_FROM_ANOTHER_PROJECT) && {
+        helpText: selectedTableQuestion.helpText
+      })
+    };
+
+    const filteredQuestions = selectedTableQuestion.selectedForm
+      ? findQuestion(selectedTableQuestion.selectedForm.json.children)
+      : this.state.filteredQuestions;
+
+    this.props.toggleModal("Info", () =>
+      this.setState({
+        selectedId: id,
+        editMode: true,
+        filteredQuestions,
+        ...question
+      })
+    );
+  };
+
+  removeQuestionHandler = id => {
+    const filteredTableQuestions = this.state.tableQuestions.filter(
+      question => question.id !== id
+    );
+
+    this.setState({
+      tableQuestions: filteredTableQuestions
+    });
+  };
   render() {
     const {
-      props: { showModalInfo, toggleModal, forms },
+      props: { showModalInfo, toggleModal, forms, projects },
       state: {
         label,
         type,
         placeholder,
         helpText,
+        editMode,
         optInputField,
-        filteredQuestions
+        filteredQuestions,
+        tableQuestions
       },
-      onRemoveHandler,
+      removeInputHandler,
       onSelectChangeHandler,
       onInputChangeHandler,
       questionChangeHandler,
       formChangeHandler,
       onSubmitHandler,
+      removeQuestionHandler,
+      editQuestionHandler,
       generateOptField,
       closeModal
     } = this;
+
+    const {
+      TEXT,
+      NUMBER,
+      DATE,
+      SELECT_ONE,
+      DRAW_FROM_ANOTHER_PROJECT,
+      DRAW_ANSWER_FROM_A_FORM,
+      FORM_SUBMISSION,
+      FORM_SUBMISSIONS_COUNT,
+      FORM_QUESTION_ANSWER_STATUS
+    } = typeOptions;
 
     return (
       <div className="card no-boxshadow">
@@ -193,7 +348,13 @@ class SiteInformationTable extends Component {
           </div>
         </div>
         <div className="card-body">
-          <Table page="siteInfo" />
+          <Table
+            tableHeader={tableHeader.siteInformationTable}
+            questions={tableQuestions}
+            page="siteInfo"
+            removeHandler={removeQuestionHandler}
+            editHandler={editQuestionHandler}
+          />
         </div>
         {showModalInfo && (
           <FormModal
@@ -216,19 +377,20 @@ class SiteInformationTable extends Component {
               className="form-control"
               label="Type"
               options={[
-                "Text",
-                "Number",
-                "Date",
-                "Select One",
-                "Draw From Another Project",
-                "Draw Answer From A form",
-                "Form Submission",
-                "Form Submissions Count",
-                "Form Question Answer Status"
+                TEXT,
+                NUMBER,
+                DATE,
+                SELECT_ONE,
+                DRAW_FROM_ANOTHER_PROJECT,
+                DRAW_ANSWER_FROM_A_FORM,
+                FORM_SUBMISSION,
+                FORM_SUBMISSIONS_COUNT,
+                FORM_QUESTION_ANSWER_STATUS
               ]}
+              value={editMode && type}
               changeHandler={onSelectChangeHandler}
             />
-            {(type === "Text" || type === "Number" || type === "Date") && (
+            {(type === TEXT || type === NUMBER || type === DATE) && (
               <InputElement
                 tag="input"
                 type="text"
@@ -241,17 +403,14 @@ class SiteInformationTable extends Component {
                 changeHandler={onInputChangeHandler}
               />
             )}
-            {type === "Select One" && (
+            {type === SELECT_ONE && (
               <div className="form-group">
-                <button
-                  style={{ display: "inline-block", background: "blue" }}
-                  onClick={generateOptField}
-                >
+                <button className="fieldsight-btn" onClick={generateOptField}>
                   Option+
                 </button>
               </div>
             )}
-            {type === "Select One" &&
+            {type === SELECT_ONE &&
               optInputField.length > 0 &&
               optInputField.map((el, i) => (
                 <el.tag
@@ -261,47 +420,58 @@ class SiteInformationTable extends Component {
                   label={`option${el.val}`}
                   formType="floatingForm"
                   htmlFor={`option${el.val}`}
+                  required={true}
                   removeBtn
-                  removeHandler={() => onRemoveHandler(el.val)}
+                  removeHandler={() => removeInputHandler(el.val)}
                   name={`option${el.val}`}
                   value={this.state.options[`option${el.val}`] || ""}
                   changeHandler={e => onInputChangeHandler(e, "option")}
                 />
               ))}
 
-            <InputElement
-              tag="textarea"
-              required={true}
-              label="Help Text"
-              formType="floatingForm"
-              htmlFor="helpText"
-              name={helpText}
-              changeHandler={onInputChangeHandler}
-            />
+            {(type === TEXT ||
+              type === NUMBER ||
+              type === DATE ||
+              type === SELECT_ONE ||
+              type === DRAW_FROM_ANOTHER_PROJECT) && (
+              <InputElement
+                tag="textarea"
+                required={true}
+                label="Help Text"
+                formType="floatingForm"
+                htmlFor="helpText"
+                name="helpText"
+                value={helpText}
+                changeHandler={onInputChangeHandler}
+              />
+            )}
 
-            {type === "Draw From Another Project" && (
+            {type === DRAW_FROM_ANOTHER_PROJECT && (
               <SelectElement
                 className="form-control"
-                options={["Select Project"]}
+                options={projects}
+                value={editMode && selectedProject.name}
                 changeHandler={formChangeHandler}
               />
             )}
-            {(type === "Draw Answer From A form" ||
-              type === "Form Submission" ||
-              type === "Form Submissions Count" ||
-              type === "Form Question Answer Status") && (
+            {(type === DRAW_ANSWER_FROM_A_FORM ||
+              type === FORM_SUBMISSION ||
+              type === FORM_SUBMISSIONS_COUNT ||
+              type === FORM_QUESTION_ANSWER_STATUS) && (
               <SelectElement
                 className="form-control"
                 options={forms}
+                value={editMode && selectedForm.name}
                 changeHandler={formChangeHandler}
               />
             )}
 
-            {(type === "Draw Answer From A form" ||
-              type === "Form Question Answer Status") && (
+            {(type === DRAW_ANSWER_FROM_A_FORM ||
+              type === FORM_QUESTION_ANSWER_STATUS) && (
               <SelectElement
                 className="form-control"
                 options={filteredQuestions}
+                value={editMode && selectedQuestion.name}
                 changeHandler={questionChangeHandler}
               />
             )}

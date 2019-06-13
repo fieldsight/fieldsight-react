@@ -21,7 +21,6 @@ const findQuestion = (children, type) => {
     }
   };
   filterQuestionByType(children);
-  console.log("fiteredQuestions", filteredQuestions);
   return filteredQuestions;
 };
 

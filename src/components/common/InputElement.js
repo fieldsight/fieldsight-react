@@ -27,15 +27,14 @@ const InputElement = ({
       onChange={changeHandler}
       name={name}
     />
+
+    {formType === "floatingForm" && <label htmlFor={htmlFor}>{label}</label>}
+
     {removeBtn && (
-      <button
-        style={{ display: "inline-block", background: "red" }}
-        onClick={removeHandler}
-      >
+      <button className="fieldsight-btn red" onClick={removeHandler}>
         Remove
       </button>
     )}
-    {formType === "floatingForm" && <label htmlFor={htmlFor}>{label}</label>}
   </div>
 );
 
