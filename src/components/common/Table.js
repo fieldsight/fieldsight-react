@@ -7,21 +7,25 @@ export default class Table extends Component {
     const {
       tableHeader,
       questions,
+      forms,
       page,
       removeHandler,
       editHandler
     } = this.props;
     return (
-      <table className="table  table-bordered  general_table">
-        <TableHeader tableHeader={tableHeader} />
+      <div className="table-responsive">
+        <table className="table  table-bordered  data-table general_table">
+          <TableHeader tableHeader={tableHeader} />
 
-        <TableRow
-          tableRow={questions}
-          page={page}
-          removeHandler={removeHandler}
-          editHandler={editHandler}
-        />
-      </table>
+          <TableRow
+            tableRow={questions}
+            page={page}
+            forms={forms}
+            removeHandler={removeHandler}
+            editHandler={editHandler}
+          />
+        </table>
+      </div>
     );
   }
 }

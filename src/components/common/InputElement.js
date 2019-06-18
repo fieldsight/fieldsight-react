@@ -19,11 +19,12 @@ const InputElement = ({
         {label} {required && <sup>*</sup>}
       </label>
     )}
+
     <Tag
       type={type}
       className="form-control"
       required={required}
-      value={value}
+      value={value ? value : ""}
       onChange={changeHandler}
       name={name}
     />

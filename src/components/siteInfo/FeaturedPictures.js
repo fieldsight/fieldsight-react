@@ -6,9 +6,12 @@ import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import findQuestion from "../../utils/findQuestion";
 
+const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 const INITIAL_STATE = {
+  showModal: false,
   label: "",
-  type: "Choose From Gallery",
+  type: "choose",
   selectedForm: {},
   selectedQuestion: {},
   filteredQuestions: [],
@@ -17,20 +20,38 @@ const INITIAL_STATE = {
   editMode: false
 };
 
-const typeOptions = {
-  GALLERY: "Choose From Gallery",
-  FORM: "Choose From Form"
-};
+const siteFeaturedTypes = [
+  { id: "choose", name: "Choose from Gallery" },
+  { id: "Form", name: "Choose from a form" }
+];
+
+// const typeOptions = {
+//   GALLERY: "Choose From Gallery",
+//   FORM: "Choose From Form"
+// };
 
 class FeaturedPictures extends Component {
   state = INITIAL_STATE;
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.siteFeaturedImages) {
+      this.setState({
+        featuredPics: [...nextProps.siteFeaturedImages]
+      });
+    }
+  }
 
   closeModal = () => {
     this.setState({
       ...INITIAL_STATE,
       featuredPics: [...this.state.featuredPics]
     });
-    this.props.toggleModal("Pic");
+  };
+
+  toggleModal = () => {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal
+    }));
   };
 
   onInputChangeHandler = e => {
@@ -40,7 +61,6 @@ class FeaturedPictures extends Component {
     });
   };
   onSelectChangeHandler = e => {
-    console.log("selct hanlder", e.target.value);
     const { value } = e.target;
     this.setState({
       type: value
@@ -59,43 +79,50 @@ class FeaturedPictures extends Component {
         selectedId,
         featuredPics
       },
-      props: { toggleModal }
+      props: { sitePicHandler }
     } = this;
-
-    const { GALLERY, FORM } = typeOptions;
 
     const picture = {
       ...(!editMode && { id: uuid() }),
-      label,
-      type,
-      ...(type === FORM && { selectedForm }),
-      ...(type === FORM && { selectedQuestion })
+      ...(editMode && { id: pattern.test(selectedId) ? selectedId : uuid() }),
+      question_name: label,
+      question_text: label,
+      question_type: type,
+      ...(type === "Form" && { form_id: selectedForm }),
+      ...(type === "Form" && { question: selectedQuestion })
     };
 
     if (editMode) {
-      let filteredFeaturedPics = featuredPics.filter(
-        pic => pic.id !== selectedId
+      let filteredFeaturedPics = featuredPics.filter(pic =>
+        pic.id ? pic.id !== selectedId : pic.question_name !== selectedId
       );
 
-      this.setState({
-        ...INITIAL_STATE,
-        featuredPics: [...filteredFeaturedPics, { ...picture, id: selectedId }]
-      });
+      this.setState(
+        {
+          ...INITIAL_STATE,
+          featuredPics: [
+            ...filteredFeaturedPics,
+            { ...picture, id: selectedId }
+          ]
+        },
+        () => this.props.sitePicHandler(this.state.featuredPics)
+      );
     } else {
-      this.setState({
-        ...INITIAL_STATE,
-        featuredPics: [...featuredPics, picture]
-      });
+      this.setState(
+        {
+          ...INITIAL_STATE,
+          featuredPics: [...featuredPics, picture]
+        },
+        () => this.props.sitePicHandler(this.state.featuredPics)
+      );
     }
-
-    toggleModal("Pic");
   };
   formChangeHandler = e => {
     const { value } = e.target;
-    const selectedForm = this.props.forms.find(form => form.name === value);
+    const selectedForm = this.props.forms.find(form => form.id === +value);
     const filteredQuestions = findQuestion(selectedForm.json.children);
     this.setState({
-      selectedForm,
+      selectedForm: value,
       filteredQuestions
     });
   };
@@ -108,51 +135,57 @@ class FeaturedPictures extends Component {
     this.setState({ selectedQuestion });
   };
 
-  removePicHandler = id => {
-    const filteredFeaturedPics = this.state.featuredPics.filter(
-      pic => pic.id !== id
+  removePicHandler = value => {
+    const filteredFeaturedPics = this.state.featuredPics.filter(pic =>
+      pic.id ? pic.id !== value : pic.question_name !== value
     );
 
-    this.setState({
-      featuredPics: filteredFeaturedPics
-    });
+    this.setState(
+      {
+        featuredPics: filteredFeaturedPics
+      },
+      () => this.props.sitePicHandler(this.state.featuredPics)
+    );
   };
 
-  editPicHandler = id => {
+  editPicHandler = value => {
     const selectedFeaturedPic = this.state.featuredPics.find(
-      pic => pic.id === id
+      pic => pic.id === value || pic.question_name === value
     );
-    const { GALLERY, FORM } = typeOptions;
 
     const picture = {
-      label: selectedFeaturedPic.label,
-      type: selectedFeaturedPic.type,
-      ...(selectedFeaturedPic.type === FORM && {
-        selectedForm: selectedFeaturedPic.selectedForm
+      label: selectedFeaturedPic.question_name,
+      type: selectedFeaturedPic.question_type,
+      ...(selectedFeaturedPic.question_type === "Form" && {
+        selectedForm: selectedFeaturedPic.form_id
       }),
-      ...(selectedFeaturedPic.type === FORM && {
-        selectedQuestion: selectedFeaturedPic.selectedQuestion
+      ...(selectedFeaturedPic.question_type === "Form" && {
+        selectedQuestion: selectedFeaturedPic.question
       })
     };
 
-    const filteredQuestions = selectedFeaturedPic.selectedForm
-      ? findQuestion(selectedFeaturedPic.selectedForm.json.children)
+    const filteredQuestions = selectedFeaturedPic.form_id
+      ? findQuestion(
+          this.props.forms.find(
+            form => form.id === +selectedFeaturedPic.form_id
+          ).json.children
+        )
       : this.state.filteredQuestions;
 
-    this.props.toggleModal("Pic", () =>
-      this.setState({
-        selectedId: id,
-        editMode: true,
-        filteredQuestions,
-        ...picture
-      })
-    );
+    this.setState({
+      showModal: true,
+      selectedId: value,
+      editMode: true,
+      filteredQuestions,
+      ...picture
+    });
   };
 
   render() {
     const {
-      props: { showModalPic, toggleModal, forms },
+      props: { forms },
       state: {
+        showModal,
         label,
         type,
         selectedForm,
@@ -162,6 +195,7 @@ class FeaturedPictures extends Component {
         featuredPics
       },
       closeModal,
+      toggleModal,
       formChangeHandler,
       questionChangeHandler,
       onInputChangeHandler,
@@ -171,13 +205,12 @@ class FeaturedPictures extends Component {
       onSubmitHandler
     } = this;
 
-    const { GALLERY, FORM } = typeOptions;
     return (
       <div className="card no-boxshadow">
         <div className="card-header main-card-header">
           <h5>featured pictures</h5>
           <div className="add-btn">
-            <a onClick={() => toggleModal("Pic")}>
+            <a onClick={toggleModal}>
               Add new{" "}
               <span>
                 <i className="la la-plus" />
@@ -189,16 +222,17 @@ class FeaturedPictures extends Component {
           <div className="row">
             {featuredPics.map(pic => (
               <FeaturedPicturesCard
-                key={pic.id}
+                key={pic.question_name}
                 picture={pic}
                 editPicHandler={editPicHandler}
                 removePicHandler={removePicHandler}
+                forms={forms}
               />
             ))}
           </div>
         </div>
 
-        {showModalPic && (
+        {showModal && (
           <FormModal
             title="Add Pictures"
             toggleModal={closeModal}
@@ -219,21 +253,21 @@ class FeaturedPictures extends Component {
             <SelectElement
               className="form-control"
               label="Type"
-              options={[GALLERY, FORM]}
+              options={siteFeaturedTypes}
               value={editMode && type}
               changeHandler={onSelectChangeHandler}
             />
 
-            {type === FORM && (
+            {type === "Form" && (
               <SelectElement
                 className="form-control"
                 options={forms}
-                value={editMode && selectedForm.name}
+                value={editMode && selectedForm}
                 changeHandler={formChangeHandler}
               />
             )}
 
-            {type === FORM && (
+            {type === "Form" && (
               <SelectElement
                 className="form-control"
                 options={filteredQuestions}

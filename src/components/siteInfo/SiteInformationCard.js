@@ -1,16 +1,27 @@
 import React, { Component } from "react";
 import SelectElement from "../common/SelectElement";
 import findQuestion from "../../utils/findQuestion";
+import isEmpty from "../..//utils/isEmpty";
+// const typeOptions = {
+//   UPLOAD: "Upload",
+//   CHOOSE_FROM_FORM: "Choose From Form",
+//   CHOOSE_FROM_GALLERY: "Choose from gallery"
+// };
 
 const typeOptions = {
-  UPLOAD: "Upload",
-  CHOOSE_FROM_FORM: "Choose From Form",
-  CHOOSE_FROM_GALLERY: "Choose from gallery"
+  sitePictureTypes: [
+    { id: "choose", name: "Upload / Choose From Gallery" },
+    { id: "Form", name: "Choose From A Form" }
+  ],
+  siteLocationTypes: [
+    { id: "choose", name: "Enter A Location/ Choose On Map" },
+    { id: "Form", name: "Choose From A Form" }
+  ]
 };
 
 const INITIAL_STATE = {
   showForm: false,
-  type: "Upload",
+  type: "choose",
   selectedForm: {},
   selectedQuestion: {},
   filteredQuestions: []
@@ -18,18 +29,47 @@ const INITIAL_STATE = {
 class SiteInformationCard extends Component {
   state = INITIAL_STATE;
 
+  componentWillReceiveProps(nextProps) {
+    let selectedForm = {};
+    let selectedQuestion = {};
+    let type = "choose";
+    let showForm = false;
+
+    if (nextProps.siteInfo && nextProps.siteInfo.form_id) {
+      selectedForm = nextProps.forms.find(form => form.id === form.id);
+    }
+
+    if (nextProps.siteInfo && !isEmpty(nextProps.siteInfo.question)) {
+      selectedQuestion = nextProps.siteInfo.question;
+    }
+
+    if (nextProps.siteInfo && nextProps.siteInfo.question_type) {
+      type = nextProps.siteInfo.question_type;
+    }
+
+    if (!isEmpty(selectedForm)) {
+      showForm = true;
+    }
+
+    this.setState({
+      selectedForm,
+      selectedQuestion,
+      type,
+      showForm
+    });
+  }
+
   onSubmitHandler = e => {
     e.preventDefault();
     const {
       state: { selectedForm, selectedQuestion, type },
       props: { infoType }
     } = this;
-
     if (infoType === "photo") {
       this.props.siteIdentityHandler({
         site_picture: {
           question_type: type,
-          form_id: selectedForm.id,
+          form_id: selectedForm.id ? selectedForm.id : 0,
           question: selectedQuestion
         }
       });
@@ -37,7 +77,7 @@ class SiteInformationCard extends Component {
       this.props.siteIdentityHandler({
         site_location: {
           question_type: type,
-          form_id: selectedForm.id,
+          form_id: selectedForm.id ? selectedForm.id : 0,
           question: selectedQuestion
         }
       });
@@ -46,10 +86,10 @@ class SiteInformationCard extends Component {
       ...INITIAL_STATE
     });
   };
+
   onChangeHandler = e => {
-    const { CHOOSE_FROM_FORM } = typeOptions;
     const { value } = e.target;
-    if (value == CHOOSE_FROM_FORM) {
+    if (value === "Form") {
       return this.setState({ type: value, showForm: true });
     }
     this.setState({
@@ -60,7 +100,7 @@ class SiteInformationCard extends Component {
 
   formChangeHandler = (e, type) => {
     const { value } = e.target;
-    const selectedForm = this.props.forms.find(form => form.name === value);
+    const selectedForm = this.props.forms.find(form => form.id == value);
     const filteredQuestions = findQuestion(selectedForm.json.children, type);
     this.setState({
       selectedForm,
@@ -76,17 +116,38 @@ class SiteInformationCard extends Component {
     this.setState({ selectedQuestion });
   };
 
+  getDefaultValue = type => {
+    let qvalue;
+    if (type === "photo") {
+      qvalue = typeOptions.sitePictureTypes.find(
+        qtype => qtype.id === this.state.type
+      );
+    } else {
+      qvalue = typeOptions.siteLocationTypes.find(
+        qtype => qtype.id === this.state.type
+      );
+    }
+    return qvalue ? qvalue.name : undefined;
+  };
+
   render() {
     const {
-      state: { showForm, filteredQuestions, type },
-      props: { title, infoType, forms },
+      state: {
+        showForm,
+        filteredQuestions,
+        selectedForm,
+        selectedQuestion,
+        type
+      },
+      props: { title, infoType, forms, siteInfo },
+      getDefaultValue,
       onChangeHandler,
       formChangeHandler,
       questionChangeHandler,
       onSubmitHandler
     } = this;
 
-    const { UPLOAD, CHOOSE_FROM_FORM, CHOOSE_FROM_GALLERY } = typeOptions;
+    const { sitePictureTypes, siteLocationTypes } = typeOptions;
 
     return (
       <div className="card">
@@ -97,9 +158,11 @@ class SiteInformationCard extends Component {
           <form>
             <SelectElement
               className="form-control"
-              options={[UPLOAD, CHOOSE_FROM_FORM, CHOOSE_FROM_GALLERY]}
+              options={
+                infoType === "photo" ? sitePictureTypes : siteLocationTypes
+              }
               changeHandler={onChangeHandler}
-              value={type}
+              value={getDefaultValue(infoType)}
             />
 
             {showForm && forms.length <= 0 && <h1>Loading...</h1>}
@@ -110,23 +173,25 @@ class SiteInformationCard extends Component {
                   className="form-control"
                   options={forms}
                   changeHandler={e => formChangeHandler(e, infoType)}
+                  value={!isEmpty(selectedForm) && selectedForm.name}
                 />
                 <SelectElement
                   className="form-control"
                   options={filteredQuestions}
                   changeHandler={questionChangeHandler}
+                  value={!isEmpty(selectedQuestion) && selectedQuestion.name}
                 />
-                <div className="form-group pull-right mr-0">
-                  <button
-                    type="submit"
-                    className="fieldsight-btn"
-                    onClick={onSubmitHandler}
-                  >
-                    Save
-                  </button>
-                </div>
               </div>
             )}
+            <div className="form-group pull-right mr-0">
+              <button
+                type="submit"
+                className="fieldsight-btn"
+                onClick={onSubmitHandler}
+              >
+                Save
+              </button>
+            </div>
           </form>
         </div>
       </div>

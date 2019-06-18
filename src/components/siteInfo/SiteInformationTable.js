@@ -4,9 +4,13 @@ import Table from "../common/Table";
 import FormModal from "../common/FormModal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
+import CheckBox from "../common/CheckBox";
 import findQuestion from "../../utils/findQuestion";
 
+const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 const INITIAL_STATE = {
+  showModal: false,
   label: "",
   type: "Text",
   placeholder: "",
@@ -20,20 +24,34 @@ const INITIAL_STATE = {
   selectedQuestion: {},
   filteredQuestions: [],
   selectedProject: {},
-  tableQuestions: []
+  tableQuestions: [],
+  publicChecked: false,
+  dashboardChecked: false
 };
 
-const typeOptions = {
-  TEXT: "Text",
-  NUMBER: "Number",
-  DATE: "Date",
-  SELECT_ONE: "Select One",
-  DRAW_FROM_ANOTHER_PROJECT: "Draw From Another Project",
-  DRAW_ANSWER_FROM_A_FORM: "Draw Answer From A Form",
-  FORM_SUBMISSION: "Form Submission",
-  FORM_SUBMISSIONS_COUNT: "Form Submissions Count",
-  FORM_QUESTION_ANSWER_STATUS: "Form Question Answer Status"
-};
+// const typeOptions = {
+//   TEXT: "Text",
+//   NUMBER: "Number",
+//   DATE: "Date",
+//   SELECT_ONE: "Select One",
+//   DRAW_FROM_ANOTHER_PROJECT: "Draw From Another Project",
+//   DRAW_ANSWER_FROM_A_FORM: "Draw Answer From A Form",
+//   FORM_SUBMISSION: "Form Submission",
+//   FORM_SUBMISSIONS_COUNT: "Form Submissions Count",
+//   FORM_QUESTION_ANSWER_STATUS: "Form Question Answer Status"
+// };
+
+const questionTypes = [
+  { id: "Text", name: "Text" },
+  { id: "Number", name: "Number" },
+  { id: "Date", name: "Date" },
+  { id: "MCQ", name: "Select one" },
+  { id: "Link", name: "Draw from another project" },
+  { id: "Form", name: "Draw answer from a form" },
+  { id: "FormSubStat", name: "Form submission" },
+  { id: "FormSubCountQuestion", name: "Form submissions count" },
+  { id: "FormQuestionAnswerStatus", name: "Form question answer status" }
+];
 
 const tableHeader = {
   siteInformationTable: [
@@ -49,90 +67,19 @@ const tableHeader = {
 class SiteInformationTable extends Component {
   state = INITIAL_STATE;
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.jsonQuestions) {
+      this.setState({
+        tableQuestions: [...nextProps.jsonQuestions]
+      });
+    }
+  }
+
   closeModal = () => {
     this.setState({
       ...INITIAL_STATE,
       tableQuestions: [...this.state.tableQuestions]
     });
-    this.props.toggleModal("Info");
-  };
-
-  onSubmitHandler = e => {
-    e.preventDefault();
-    const {
-      state: {
-        label,
-        type,
-        placeholder,
-        helpText,
-        options,
-        optInputField,
-        editMode,
-        selectedForm,
-        selectedQuestion,
-        selectedProject,
-        selectedId,
-        tableQuestions
-      },
-      props: { toggleModal, siteInfoHandler }
-    } = this;
-
-    const {
-      TEXT,
-      NUMBER,
-      DATE,
-      SELECT_ONE,
-      DRAW_FROM_ANOTHER_PROJECT,
-      DRAW_ANSWER_FROM_A_FORM,
-      FORM_SUBMISSION,
-      FORM_SUBMISSIONS_COUNT,
-      FORM_QUESTION_ANSWER_STATUS
-    } = typeOptions;
-
-    const question = {
-      ...(!editMode && { id: uuid() }),
-      label,
-      type,
-      ...(type === SELECT_ONE && { options }),
-      ...(type === SELECT_ONE && { optInputField }),
-      ...((type === DRAW_ANSWER_FROM_A_FORM ||
-        type === FORM_QUESTION_ANSWER_STATUS ||
-        type === FORM_SUBMISSION ||
-        type === FORM_SUBMISSIONS_COUNT) && { selectedForm }),
-      ...((type === DRAW_ANSWER_FROM_A_FORM ||
-        type === FORM_QUESTION_ANSWER_STATUS) && { selectedQuestion }),
-      ...(type === DRAW_FROM_ANOTHER_PROJECT && { selectedProject }),
-      ...((type === TEXT || type === NUMBER || type === DATE) && {
-        placeholder
-      }),
-      ...((type === TEXT ||
-        type === NUMBER ||
-        type === DATE ||
-        type === SELECT_ONE ||
-        type === DRAW_FROM_ANOTHER_PROJECT) && { helpText })
-    };
-
-    if (editMode) {
-      let filteredTableQuestions = tableQuestions.filter(
-        question => question.id !== selectedId
-      );
-
-      this.setState({
-        ...INITIAL_STATE,
-        tableQuestions: [
-          ...filteredTableQuestions,
-          { ...question, id: selectedId }
-        ]
-      });
-    } else {
-      this.setState({
-        ...INITIAL_STATE,
-        tableQuestions: [...tableQuestions, question]
-      });
-    }
-
-    toggleModal("Info");
-    siteInfoHandler;
   };
 
   generateOptField = () => {
@@ -153,10 +100,10 @@ class SiteInformationTable extends Component {
 
   onSelectChangeHandler = e => {
     const { value } = e.target;
-    const { SELECT_ONE } = typeOptions;
-    if (value === SELECT_ONE) {
+
+    if (value === "MCQ") {
       return this.setState({
-        type: SELECT_ONE,
+        type: "MCQ",
         showOptions: true
       });
     }
@@ -165,6 +112,9 @@ class SiteInformationTable extends Component {
       showOptions: false
     });
   };
+
+  handleCheckboxChange = (e, type) =>
+    this.setState({ [`${type}Checked`]: e.target.checked });
 
   onInputChangeHandler = (e, option) => {
     const { name, value } = e.target;
@@ -195,20 +145,17 @@ class SiteInformationTable extends Component {
 
   formChangeHandler = e => {
     const { value } = e.target;
+
     const { type } = this.state;
-    const { DRAW_FROM_ANOTHER_PROJECT } = typeOptions;
-    if (type === DRAW_FROM_ANOTHER_PROJECT) {
-      const selectedProject = this.props.projects.find(
-        project => project.name === value
-      );
+
+    if (type === "Link") {
       this.setState({
-        selectedProject
+        selectedProject: value
       });
     } else {
-      const selectedForm = this.props.forms.find(form => form.name === value);
       const filteredQuestions = findQuestion(selectedForm.json.children);
       this.setState({
-        selectedForm,
+        selectedForm: value,
         filteredQuestions
       });
     }
@@ -222,93 +169,180 @@ class SiteInformationTable extends Component {
     this.setState({ selectedQuestion });
   };
 
-  editQuestionHandler = id => {
-    const selectedTableQuestion = this.state.tableQuestions.find(
-      question => question.id === id
-    );
+  onSubmitHandler = e => {
+    e.preventDefault();
     const {
-      TEXT,
-      NUMBER,
-      DATE,
-      SELECT_ONE,
-      DRAW_FROM_ANOTHER_PROJECT,
-      DRAW_ANSWER_FROM_A_FORM,
-      FORM_SUBMISSION,
-      FORM_SUBMISSIONS_COUNT,
-      FORM_QUESTION_ANSWER_STATUS
-    } = typeOptions;
+      state: {
+        label,
+        type,
+        placeholder,
+        helpText,
+        options,
+        optInputField,
+        editMode,
+        selectedForm,
+        selectedQuestion,
+        selectedProject,
+        selectedId,
+        tableQuestions,
+        publicChecked,
+        dashboardChecked
+      }
+    } = this;
+    const { bind, children, ...restQuestion } = selectedQuestion;
 
     const question = {
-      label: selectedTableQuestion.label,
-      type: selectedTableQuestion.type,
-      ...(selectedTableQuestion.type === SELECT_ONE && {
-        options: selectedTableQuestion.options
+      ...(!editMode && { id: uuid() }),
+      ...(editMode && { id: pattern.test(selectedId) ? selectedId : uuid() }),
+      question_name: label,
+      question_text: label,
+      question_type: type,
+      ...(type === "MCQ" && { mcq_options: options }),
+      ...(type === "MCQ" && { optInputField }),
+      ...((type === "Form" ||
+        type === "FormQuestionAnswerStatus" ||
+        type === "FormSubStat" ||
+        type === "FormSubCountQuestion") && { form_id: selectedForm }),
+      ...((type === "Form" || type === "FormQuestionAnswerStatus") && {
+        question: restQuestion
       }),
-      ...(selectedTableQuestion.type === SELECT_ONE && {
+      ...(type === "Link" && {
+        project_id: selectedProject
+      }),
+      ...((type === "Text" || type === "Number" || type === "Date") && {
+        question_placeholder: placeholder
+      }),
+      ...((type === "Text" ||
+        type === "Number" ||
+        type === "Date" ||
+        type === "MCQ" ||
+        type === "Link") && { question_help: helpText }),
+      share_to_dashboard: dashboardChecked,
+      share_to_public: publicChecked
+    };
+
+    if (editMode) {
+      let filteredTableQuestions = tableQuestions.filter(question =>
+        question.id
+          ? question.id !== selectedId
+          : question.question_text !== selectedId
+      );
+
+      this.setState(
+        {
+          ...INITIAL_STATE,
+          tableQuestions: [...filteredTableQuestions, question]
+        },
+        () => this.props.siteInfoHandler(this.state.tableQuestions)
+      );
+    } else {
+      this.setState(
+        {
+          ...INITIAL_STATE,
+          tableQuestions: [...tableQuestions, question]
+        },
+        () => this.props.siteInfoHandler(this.state.tableQuestions)
+      );
+    }
+  };
+
+  toggleModal = () => {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal
+    }));
+  };
+
+  editQuestionHandler = value => {
+    const selectedTableQuestion = this.state.tableQuestions.find(
+      question => question.id === value || question.question_text === value
+    );
+
+    const question = {
+      label: selectedTableQuestion.question_text,
+      type: selectedTableQuestion.question_type,
+      ...(selectedTableQuestion.question_type === "MCQ" && {
+        options: selectedTableQuestion.mcq_options
+      }),
+      ...(selectedTableQuestion.question_type === "MCQ" && {
         optInputField: selectedTableQuestion.optInputField
       }),
-      ...((selectedTableQuestion.type === DRAW_ANSWER_FROM_A_FORM ||
-        selectedTableQuestion.type === FORM_QUESTION_ANSWER_STATUS ||
-        selectedTableQuestion.type === FORM_SUBMISSION ||
-        selectedTableQuestion.type === FORM_SUBMISSIONS_COUNT) && {
-        selectedForm: selectedTableQuestion.selectedForm
+      ...((selectedTableQuestion.question_type === "Form" ||
+        selectedTableQuestion.question_type === "FormQuestionAnswerStatus" ||
+        selectedTableQuestion.question_type === "FormSubStat" ||
+        selectedTableQuestion.question_type === "FormSubCountQuestion") && {
+        selectedForm: selectedTableQuestion.form_id
       }),
-      ...((selectedTableQuestion.type === DRAW_ANSWER_FROM_A_FORM ||
-        selectedTableQuestion.type === FORM_QUESTION_ANSWER_STATUS) && {
-        selectedQuestion: selectedTableQuestion.selectedQuestion
+      ...((selectedTableQuestion.question_type === "Form" ||
+        selectedTableQuestion.question_type === "FormQuestionAnswerStatus") && {
+        selectedQuestion: selectedTableQuestion.question
       }),
-      ...(selectedTableQuestion.type === DRAW_FROM_ANOTHER_PROJECT && {
-        selectedProject: selectedTableQuestion.selectedProject
+      ...(selectedTableQuestion.question_type === "Link" && {
+        selectedProject: selectedTableQuestion.project_id
       }),
-      ...((selectedTableQuestion.type === TEXT ||
-        selectedTableQuestion.type === NUMBER ||
-        selectedTableQuestion.type === DATE) && {
-        placeholder: selectedTableQuestion.placeholder
+      ...((selectedTableQuestion.question_type === "Text" ||
+        selectedTableQuestion.question_type === "Number" ||
+        selectedTableQuestion.question_type === "Date") && {
+        placeholder: selectedTableQuestion.question_placeholder
       }),
-      ...((selectedTableQuestion.type === TEXT ||
-        selectedTableQuestion.type === NUMBER ||
-        selectedTableQuestion.type === DATE ||
-        selectedTableQuestion.type === SELECT_ONE ||
-        selectedTableQuestion.type === DRAW_FROM_ANOTHER_PROJECT) && {
-        helpText: selectedTableQuestion.helpText
+      ...((selectedTableQuestion.question_type === "Text" ||
+        selectedTableQuestion.question_type === "Number" ||
+        selectedTableQuestion.question_type === "Date" ||
+        selectedTableQuestion.question_type === "MCQ" ||
+        selectedTableQuestion.question_type === "Link") && {
+        helpText: selectedTableQuestion.question_help
+      }),
+      ...(selectedTableQuestion.share_to_dashboard && {
+        dashboardChecked: selectedTableQuestion.share_to_dashboard
+      }),
+      ...(selectedTableQuestion.share_to_public && {
+        publicChecked: selectedTableQuestion.share_to_public
       })
     };
 
-    const filteredQuestions = selectedTableQuestion.selectedForm
-      ? findQuestion(selectedTableQuestion.selectedForm.json.children)
+    const filteredQuestions = selectedTableQuestion.form_id
+      ? findQuestion(
+          this.props.forms.find(
+            form => form.id === +selectedTableQuestion.form_id
+          ).json.children
+        )
       : this.state.filteredQuestions;
 
-    this.props.toggleModal("Info", () =>
-      this.setState({
-        selectedId: id,
-        editMode: true,
-        filteredQuestions,
-        ...question
-      })
-    );
+    this.setState({
+      showModal: true,
+      selectedId: value,
+      editMode: true,
+      filteredQuestions,
+      ...question
+    });
   };
 
-  removeQuestionHandler = id => {
-    const filteredTableQuestions = this.state.tableQuestions.filter(
-      question => question.id !== id
+  removeQuestionHandler = value => {
+    const filteredTableQuestions = this.state.tableQuestions.filter(question =>
+      question.id ? question.id !== value : question.question_text !== value
     );
 
-    this.setState({
-      tableQuestions: filteredTableQuestions
-    });
+    this.setState(
+      {
+        tableQuestions: filteredTableQuestions
+      },
+      () => this.props.siteInfoHandler(this.state.tableQuestions)
+    );
   };
   render() {
     const {
-      props: { showModalInfo, toggleModal, forms, projects },
+      props: { forms, projects, jsonQuestions },
       state: {
         label,
         type,
         placeholder,
         helpText,
         editMode,
+        selectedForm,
+        selectedQuestion,
         optInputField,
         filteredQuestions,
-        tableQuestions
+        tableQuestions,
+        showModal
       },
       removeInputHandler,
       onSelectChangeHandler,
@@ -319,27 +353,16 @@ class SiteInformationTable extends Component {
       removeQuestionHandler,
       editQuestionHandler,
       generateOptField,
-      closeModal
+      closeModal,
+      toggleModal
     } = this;
-
-    const {
-      TEXT,
-      NUMBER,
-      DATE,
-      SELECT_ONE,
-      DRAW_FROM_ANOTHER_PROJECT,
-      DRAW_ANSWER_FROM_A_FORM,
-      FORM_SUBMISSION,
-      FORM_SUBMISSIONS_COUNT,
-      FORM_QUESTION_ANSWER_STATUS
-    } = typeOptions;
 
     return (
       <div className="card no-boxshadow">
         <div className="card-header main-card-header">
           <h5>Site information</h5>
           <div className="add-btn">
-            <a onClick={() => toggleModal("Info")}>
+            <a onClick={toggleModal}>
               Add new{" "}
               <span>
                 <i className="la la-plus" />
@@ -354,9 +377,10 @@ class SiteInformationTable extends Component {
             page="siteInfo"
             removeHandler={removeQuestionHandler}
             editHandler={editQuestionHandler}
+            forms={forms}
           />
         </div>
-        {showModalInfo && (
+        {showModal && (
           <FormModal
             title="Add Information"
             toggleModal={closeModal}
@@ -376,21 +400,11 @@ class SiteInformationTable extends Component {
             <SelectElement
               className="form-control"
               label="Type"
-              options={[
-                TEXT,
-                NUMBER,
-                DATE,
-                SELECT_ONE,
-                DRAW_FROM_ANOTHER_PROJECT,
-                DRAW_ANSWER_FROM_A_FORM,
-                FORM_SUBMISSION,
-                FORM_SUBMISSIONS_COUNT,
-                FORM_QUESTION_ANSWER_STATUS
-              ]}
+              options={questionTypes}
               value={editMode && type}
               changeHandler={onSelectChangeHandler}
             />
-            {(type === TEXT || type === NUMBER || type === DATE) && (
+            {(type === "Text" || type === "Number" || type === "Date") && (
               <InputElement
                 tag="input"
                 type="text"
@@ -403,14 +417,19 @@ class SiteInformationTable extends Component {
                 changeHandler={onInputChangeHandler}
               />
             )}
-            {type === SELECT_ONE && (
-              <div className="form-group">
-                <button className="fieldsight-btn" onClick={generateOptField}>
-                  Option+
-                </button>
-              </div>
-            )}
-            {type === SELECT_ONE &&
+            <CheckBox
+              checked={this.state.dashboardChecked}
+              label="Shared To Dashboard"
+              onChange={e => this.handleCheckboxChange(e, "dashboard")}
+            />
+
+            <CheckBox
+              checked={this.state.publicChecked}
+              label="Shared To Public"
+              onChange={e => this.handleCheckboxChange(e, "public")}
+            />
+            {type === "MCQ" &&
+              optInputField &&
               optInputField.length > 0 &&
               optInputField.map((el, i) => (
                 <el.tag
@@ -428,12 +447,19 @@ class SiteInformationTable extends Component {
                   changeHandler={e => onInputChangeHandler(e, "option")}
                 />
               ))}
+            {type === "MCQ" && (
+              <div className="form-group">
+                <button className="fieldsight-btn" onClick={generateOptField}>
+                  Option+
+                </button>
+              </div>
+            )}
 
-            {(type === TEXT ||
-              type === NUMBER ||
-              type === DATE ||
-              type === SELECT_ONE ||
-              type === DRAW_FROM_ANOTHER_PROJECT) && (
+            {(type === "Text" ||
+              type === "Number" ||
+              type === "Date" ||
+              type === "MCQ" ||
+              type === "Link") && (
               <InputElement
                 tag="textarea"
                 required={true}
@@ -446,28 +472,27 @@ class SiteInformationTable extends Component {
               />
             )}
 
-            {type === DRAW_FROM_ANOTHER_PROJECT && (
+            {type === "Link" && (
               <SelectElement
                 className="form-control"
                 options={projects}
-                value={editMode && selectedProject.name}
+                value={editMode && selectedProject}
                 changeHandler={formChangeHandler}
               />
             )}
-            {(type === DRAW_ANSWER_FROM_A_FORM ||
-              type === FORM_SUBMISSION ||
-              type === FORM_SUBMISSIONS_COUNT ||
-              type === FORM_QUESTION_ANSWER_STATUS) && (
+            {(type === "Form" ||
+              type === "FormSubStat" ||
+              type === "FormSubCountQuestion" ||
+              type === "FormQuestionAnswerStatus") && (
               <SelectElement
                 className="form-control"
                 options={forms}
-                value={editMode && selectedForm.name}
+                value={editMode && selectedForm}
                 changeHandler={formChangeHandler}
               />
             )}
 
-            {(type === DRAW_ANSWER_FROM_A_FORM ||
-              type === FORM_QUESTION_ANSWER_STATUS) && (
+            {(type === "Form" || type === "FormQuestionAnswerStatus") && (
               <SelectElement
                 className="form-control"
                 options={filteredQuestions}
