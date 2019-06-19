@@ -373,7 +373,7 @@ class SiteInformationTable extends Component {
         <div className="card-body">
           <Table
             tableHeader={tableHeader.siteInformationTable}
-            questions={tableQuestions}
+            tableRow={tableQuestions}
             page="siteInfo"
             removeHandler={removeQuestionHandler}
             editHandler={editQuestionHandler}

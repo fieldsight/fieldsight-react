@@ -10,7 +10,6 @@ class TableRow extends Component {
     siteInfo: (row, i, editHandler, removeHandler) => (
       <tr key={i}>
         <td>{row.question_text}</td>
-
         <td>{row.question_type}</td>
         <td>{row.form_id && this.renderName("forms", row.form_id)}</td>
         <td>{row.question && row.question.name}</td>
@@ -36,8 +35,27 @@ class TableRow extends Component {
           </a>
         </td>
       </tr>
+    ),
+    siteType: (row, i, editHandler, removeHandler) => (
+      <tr key={row.id}>
+        <td>{row.identifier}</td>
+        <td>{row.name}</td>
+        <td>
+          <a onClick={() => editHandler(row.id)} className="td-edit-btn">
+            <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+              <i className="la la-edit" />
+            </OverlayTrigger>
+          </a>
+          <a onClick={() => removeHandler(row.id)} className="td-delete-btn">
+            <OverlayTrigger placement="top" overlay={<Tooltip>Delete</Tooltip>}>
+              <i className="la la-trash-o" />
+            </OverlayTrigger>
+          </a>
+        </td>
+      </tr>
     )
   });
+
   render() {
     const {
       props: { tableRow, page, editHandler, removeHandler },

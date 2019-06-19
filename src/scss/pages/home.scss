@@ -1,4 +1,13 @@
 .fieldsight-new{
+  .routing-list{
+    @include flex_start;
+    align-items: center;
+    li{
+      list-style: none;
+      margin-right:0.5rem;
+      text-transform: capitalize;
+    }
+  }
   #main-content{
     position: relative;
   }
@@ -222,17 +231,27 @@
         h5{
           margin:0;
           font-size: 1rem;
-          a{
+          a, button.btn.btn-link{
             display: block;
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color:$color-primary;
             // color:$color-blue;
             // font-size: 1rem;
             // text-transform: capitalize;
+            margin:0;
+            padding:0;
+            padding-right: 0.7rem;
             position: relative;
             &:after {
               content: "\f110"; /* fa-chevron-down */
               font-family: 'LineAwesome';
               position: absolute;
               right: 0;
+              top:0;
             }
           }
           a[aria-expanded="true"]:after {
@@ -270,18 +289,17 @@
             
             a{
               padding-right: 1rem;
-              
-              p{
-                color:rgba($color-primary, 0.5);
-                font-size: 0.725rem;
-                margin:0.35rem 0 0 0;
-                line-height: 1rem;
-              }
               &::after{
                 top:0;
                 right:-0.5rem;
               }
             }
+          }
+          p{
+            color:rgba($color-primary, 0.5);
+            font-size: 0.775rem;
+            margin:0.7rem 0 0 0;
+            line-height: 1rem;
           }
         }
         ul{
@@ -291,7 +309,6 @@
               display: block;
               padding-left:1.3rem;
               position: relative;
-              margin-left:4rem;
               &::before{
                 content:'\f274';
                 font-family : 'LineAwesome';

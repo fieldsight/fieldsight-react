@@ -31,6 +31,47 @@
             textarea.form-control{
               padding-top:0;
             }
+            .select-option{
+              position: relative;
+              select.form-control{
+                width: 100%;
+                height: calc(2.25rem + 2px);
+                padding: .375rem 1.75rem .375rem 0;
+                line-height: 1.5;
+                color: $color-primary;
+                vertical-align: middle;
+                border:0;
+                border-bottom: 1px solid $color-bg;
+                border-radius: 0;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                font-size: 0.8125rem;
+                &:focus{
+                  box-shadow:none;
+                  border-color:$color-blue;
+                  outline: none !important;
+                  -webkit-outline:none !important;
+                }
+                
+              }
+              &::after{
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 7px;
+                content: "\f110";
+                font-family: 'LineAwesome';
+                z-index: 99;
+                font-size: 0.875rem;
+                pointer-events: none;
+              }
+              &:focus-within{
+                &::after{
+                  transform: rotate(180deg)
+                }
+              }
+            }
             ::-webkit-input-placeholder { 
                 color: rgba($color-primary , 0.5);
                 font-weight: 400;

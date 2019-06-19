@@ -3,6 +3,7 @@
         .header-count{
             @include flex_start;
             align-items: center;
+            position: relative;
             .count-card{
                 background-color: $color-bg;
                 @include radius4;
@@ -33,6 +34,31 @@
                     h6{
                         font-size:0.775rem;
                         margin:0;
+                    }
+                }
+            }
+            .add-data{
+                position: absolute;
+                right:0;
+                top:0.5rem;
+                z-index: 999;
+                a{
+                    text-transform: capitalize;
+                    font-weight: 600;
+                    font-size:1rem;
+                    color:$color-blue;
+                    i{
+                        width:34px;
+                        height: 34px;
+                        line-height: 34px;
+                        text-align: center;
+                        @include radius50;
+                        background-color: $color-green;
+                        color:$color-white;
+                        margin-left:0.25rem;
+                    }
+                    &:hover{
+                        color:$color-green;
                     }
                 }
             }
@@ -263,6 +289,9 @@
                     }
                 }
             }
+        }
+        .leaflet-top, .leaflet-bottom{
+            z-index: 99;
         }
         
         @media screen and (max-width:$desktop){

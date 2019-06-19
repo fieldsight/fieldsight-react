@@ -1,8 +1,12 @@
 .fieldsight-new{
     div.dataTables_wrapper{
+        div.dataTables_filter{
+            float:right;
+        }
         div.dataTables_filter input {
             border:1px solid $color-bg;
             background-color: transparent;
+
         }
         div.dataTables_length{
             float:left;
@@ -38,6 +42,40 @@
     
     
     table.table {
+        tr{
+            .progress{
+                overflow: visible;
+                background-color: $color-bg;
+                position: relative;
+                height: 4px;
+                @include radius4;
+                .progress-bar{
+                    background-color: $color-green;
+                    -webkit-transition: width 1.5s ease-in-out;
+                    transition: width 1.5s ease-in-out;
+                    position: relative;
+                    height: 4px;
+                    @include radius4;
+                }
+                .progress-count{
+                    position: absolute;
+                    bottom: 5px;
+                    right: -15px;
+                    color: $color-primary;
+                    font-size: 0.675rem;
+                }
+            }
+            &.sub-row{
+                td:first-child{
+                    padding-left:0.775rem;
+                }
+            }
+            &.heading-row{
+                td{
+                    font-weight: 500;
+                }
+            }
+        }
         &.dataTable{
             border-color:$color-bg;
             thead{
@@ -49,25 +87,47 @@
                     font-size: 0.75rem;
                     padding: 0.625rem;
                     border-color:$color-bg;
+                    padding-left: 2rem;
+                    position: relative;
+                    &::before{
+                        position: absolute;
+                        color:$color-blue;
+                        opacity: 1;
+                        content: "\2191";
+                        font-size: 0.745rem;
+                        left:1rem;
+                        font-weight: 600;
+                        font-family: 'LineAwesome'
+                    }
+                    &::after{
+                        position: absolute;
+                        color:$color-bg;
+                        opacity: 1;
+                        content: "\2193";
+                        left:0.5rem;
+                        font-size: 0.745rem;
+                        font-weight: 600;
+                        font-family: 'LineAwesome'
+                    }
                 }
                 .sorting, .sorting_asc, .sorting_desc, .sorting_asc_disabled, .sorting_desc_disabled{
                     &::before{
                         color:$color-blue;
                         opacity: 1;
-                        content: "\f275";
+                        content: "\f30c";
                         font-size: 0.745rem;
                         right:1rem;
-                        font-family: 'LineAwesome';
+                        font-weight: 600;
                     }
                 }
                 .sorting, .sorting_asc, .sorting_desc, .sorting_asc_disabled, .sorting_desc_disabled{
                     &::after{
                         color:$color-bg;
                         opacity: 1;
-                        content: "\f272";
+                        content: "\f309";
                         right:0.5rem;
                         font-size: 0.745rem;
-                        font-family: 'LineAwesome';
+                        font-weight: 600;
                     }
                 }
             }
@@ -80,28 +140,7 @@
                     position: relative;
                     padding:0.625rem;
                     border-color:$color-bg;
-                    .progress{
-                        overflow: visible;
-                        background-color: $color-bg;
-                        position: relative;
-                        height: 4px;
-                        @include radius4;
-                        .progress-bar{
-                            background-color: $color-green;
-                            -webkit-transition: width 1.5s ease-in-out;
-                            transition: width 1.5s ease-in-out;
-                            position: relative;
-                            height: 4px;
-                            @include radius4;
-                        }
-                        .progress-count{
-                            position: absolute;
-                            bottom: 5px;
-                            right: -15px;
-                            color: $color-primary;
-                            font-size: 0.675rem;
-                        }
-                    }
+                    
                     a{
                         
                         &.td-edit-btn{
@@ -123,16 +162,7 @@
                 &.selected{
                     background-color: $color-bg;;
                 }
-                &.sub-row{
-                    td:first-child{
-                        padding-left:0.775rem;
-                    }
-                }
-                &.heading-row{
-                    td{
-                        font-weight: 500;
-                    }
-                }
+                
             }
             &.table-bordered{
                 border-top: 0;
@@ -184,12 +214,50 @@
                     padding:0.625rem;
                     border:none;
                     border-bottom:1px solid $color-bg;
+                    .td-doc-icon{
+                        font-size:1.2rem;
+                        margin-right:0.5rem;
+                    }
                 }
             }
         }
         
+        
     }
-    
+    .table-footer{
+        @include flexjust;
+        align-items: center;
+        .showing-rows{
+
+        }
+        .table-pagination{
+            ul{
+                @include flexjust;
+                justify-content: flex-end;
+                align-items: center;
+                li{
+                    min-width:40px;
+                    height: 40px;
+                    line-height: 40px;
+                    text-align: center;
+                    border:1px solid $color-bg;
+                    @include anim05;
+                    @include radius4;
+                    a{
+                        display: block;
+                        
+                    }
+                    &.current,
+                    &:hover{
+                        background-color: $color-blue;
+                        a{
+                            color:$color-white !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     @media print{
         table.fixedHeader-floating {

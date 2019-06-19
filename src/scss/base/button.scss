@@ -5,7 +5,7 @@
     vertical-align: middle;
     padding: 5px 10px;
     background: $color-blue;
-    color: $color-white;
+    color: $color-white !important;
     box-shadow: none;
     border:none;
     text-transform: capitalize;
@@ -107,11 +107,11 @@
         &:before{
           
           @include translatey;
-          right:10px;
-          content:"\f107";
-          font-family: 'FontAwesome';
+          right:7px;
+          content:"\f110";
+          font-family: 'LineAwesome';
           z-index: 99;
-          font-size:1rem;
+          font-size:0.875rem;
         }
       }
     }

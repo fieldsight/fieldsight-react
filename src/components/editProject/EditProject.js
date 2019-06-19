@@ -1,12 +1,191 @@
 import React, { Component } from "react";
+import L from "leaflet";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import axios from "axios";
+import Dropzone from "react-dropzone";
+import Cropper from "react-cropper";
+import Zoom from "react-reveal/Zoom";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import RightContentCard from "../common/RightContentCard";
+import "leaflet/dist/leaflet.css";
+import "cropperjs/dist/cropper.css";
 
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+  iconUrl: require("leaflet/dist/images/marker-icon.png"),
+  shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+});
+
+const urls = [
+  "https://fieldsight.naxa.com.np/fv3/api/update-project/137/",
+  "https://fieldsight.naxa.com.np/fv3/api/sectors-subsectors/"
+];
+
+const CropperModal = () => <h1>hello</h1>;
 class EditProject extends Component {
+  state = {
+    project: {},
+    sector: [],
+    subSectors: [],
+    selectedSector: "",
+    selectedSubSector: "",
+    position: {
+      latitude: "",
+      longitude: ""
+    },
+    zoom: 13,
+    src: "",
+    showCropper: false,
+    cropResult: ""
+  };
+
+  onSubmitHandler = e => {
+    e.preventDefault();
+
+    const {
+      project: {
+        name,
+        phone,
+        email,
+        address,
+        website,
+        public_desc,
+        donor,
+        logo,
+        organization
+      },
+      position: { latitude, longitude },
+      selectedSector,
+      selectedSubSector,
+      cropResult
+    } = this.state;
+
+    const project = {
+      name,
+      phone,
+      email_address: email,
+      address,
+      website,
+      donor,
+      public_desc,
+      logo: cropResult,
+      latitude,
+      longitude,
+      cluster_sites: true,
+      sector: selectedSector,
+      sub_sector: selectedSubSector,
+      organization
+    };
+    console.log("submitted data", project);
+    axios
+      .put(urls[0], project, {
+        headers: {
+          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
+        }
+      })
+      .then(res => console.log("res", res))
+      .catch(err => console.log(err));
+  };
+
+  onSelectChangeHandler = (e, subSect) => {
+    const { value } = e.target;
+    if (subSect) {
+      const selectedSubSectorId = this.state.subSectors.find(
+        subSect => subSect.name === value
+      ).id;
+      return this.setState({
+        selectedSubSector: selectedSubSectorId
+      });
+    }
+    const selectedSector = this.state.sector.find(sect => sect.name === value);
+    this.setState({
+      subSectors: selectedSector.subSectors,
+      selectedSector: selectedSector.id
+    });
+  };
+  onChangeHandler = (e, position) => {
+    const { name, value } = e.target;
+    if (position) {
+      return this.setState({
+        position: {
+          ...this.state.position,
+          [name]: value
+        }
+      });
+    }
+
+    this.setState({
+      project: {
+        ...this.state.project,
+        [name]: value
+      }
+    });
+  };
+
+  componentDidMount() {
+    axios
+      .all(
+        urls.map(url =>
+          axios.get(url, {
+            headers: {
+              Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
+            }
+          })
+        )
+      )
+      .then(
+        axios.spread((project, sector) => {
+          const position = project.data.location.split(" ");
+          const longitude = position[1].split("(")[1];
+          const latitude = position[2].split(")")[0];
+          this.setState({
+            project: project.data,
+            sector: sector.data,
+            position: { latitude, longitude }
+          });
+        })
+      )
+      .catch(err => console.log("err", err));
+  }
+
+  readFile = file => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.setState({ src: reader.result, showCropper: true });
+    };
+    reader.readAsDataURL(file[0]);
+  };
+
+  cropImage = () => {
+    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+      return;
+    }
+    this.setState({
+      cropResult: this.cropper.getCroppedCanvas().toDataURL(),
+      showCropper: false,
+      src: ""
+    });
+  };
+
   render() {
+    const {
+      state: {
+        project: { name, phone, email, address, website, donor, public_desc },
+        sector,
+        subSectors,
+        position: { latitude, longitude },
+        showCropper
+      },
+      onChangeHandler,
+      onSelectChangeHandler,
+      onSubmitHandler,
+      readFile
+    } = this;
+
     return (
-      <RightContentCard title="Edit Project">
+      <RightContentCard title="Edit Project" submitHandler={onSubmitHandler}>
         <form className="edit-form">
           <div className="row">
             <div className="col-xl-4 col-md-6">
@@ -16,21 +195,25 @@ class EditProject extends Component {
                 type="text"
                 required={true}
                 label="Name"
-                value="Nuwakot Retrofitting"
+                name="name"
+                value={name}
+                changeHandler={onChangeHandler}
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <SelectElement
-                className="wide"
+                className="form-control"
                 label="Sector"
-                options={["Agriculture, fishing and forestry", "Date"]}
+                options={sector.map(sect => sect.name)}
+                changeHandler={onSelectChangeHandler}
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <SelectElement
-                className="wide"
+                className="form-control"
                 label="Sub Sector"
-                options={["Irrigation and drainage", "Date"]}
+                options={subSectors.map(subSect => subSect.name)}
+                changeHandler={e => onSelectChangeHandler(e, "subSect")}
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -40,7 +223,9 @@ class EditProject extends Component {
                 type="text"
                 required={true}
                 label="Phone"
-                value="98560...."
+                name="phone"
+                value={phone}
+                changeHandler={onChangeHandler}
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -50,7 +235,9 @@ class EditProject extends Component {
                 type="text"
                 required={true}
                 label="Email"
-                value="info@naxa.com.np"
+                name="email"
+                value={email}
+                changeHandler={onChangeHandler}
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -60,7 +247,9 @@ class EditProject extends Component {
                 type="text"
                 required={true}
                 label="Address"
-                value="Kathmandu , nepal"
+                name="address"
+                value={address}
+                changeHandler={onChangeHandler}
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -71,7 +260,9 @@ class EditProject extends Component {
                   type="text"
                   required={true}
                   label="website"
-                  value="buildchange.org"
+                  name="website"
+                  value={website}
+                  changeHandler={onChangeHandler}
                 />
               </div>
             </div>
@@ -83,7 +274,9 @@ class EditProject extends Component {
                   type="text"
                   required={true}
                   label="Donor"
-                  value="Fieldsight"
+                  name="donor"
+                  value={donor}
+                  changeHandler={onChangeHandler}
                 />
               </div>
             </div>
@@ -95,7 +288,9 @@ class EditProject extends Component {
                 type="text"
                 required={true}
                 label="Description"
-                value="text"
+                name="public_desc"
+                value={public_desc}
+                changeHandler={onChangeHandler}
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -103,23 +298,48 @@ class EditProject extends Component {
                 <label>
                   Map <sup>*</sup>
                 </label>
+
                 <div className="map-form">
-                  <div id="map" />
+                  <Map
+                    style={{ height: "205px", marginTop: "1rem" }}
+                    center={[latitude, longitude]}
+                    zoom={this.state.zoom}
+                  >
+                    <TileLayer
+                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={[latitude, longitude]}>
+                      <Popup>
+                        <b>Name: </b>
+                        {name}
+                      </Popup>
+                    </Marker>
+                  </Map>
                   <div className="latitude-form">
                     <div className="lat-group">
-                      <label>Latitude</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value="27,0127"
+                      <InputElement
+                        formType="editForm"
+                        tag="input"
+                        type="number"
+                        required={true}
+                        label="Latitude"
+                        name="latitude"
+                        value={latitude}
+                        changeHandler={e => onChangeHandler(e, "latitude")}
                       />
                     </div>
+
                     <div className="lat-group">
-                      <label>longitude</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value="27,0127"
+                      <InputElement
+                        formType="editForm"
+                        tag="input"
+                        type="number"
+                        required={true}
+                        label="Longitude"
+                        name="longitude"
+                        value={longitude}
+                        changeHandler={e => onChangeHandler(e, "longitude")}
                       />
                     </div>
                   </div>
@@ -129,36 +349,82 @@ class EditProject extends Component {
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label>attach file</label>
-                <div className="upload-form">
-                  <div className="upload-wrap">
-                    <div className="content">
-                      <div className="upload-icon" />
-                      <h3>Drag & Drop an image</h3>
-                      <span>or</span>
-                    </div>
-                    <img src="" className="upload-img" />
-                    <input
-                      type="file"
-                      name="userprofile_picture"
-                      id="filePhoto"
-                    />
-                    <div className="fieldsight-btn">
-                      <label htmlFor="upload-btn">
-                        upload <i className="la la-cloud-upload" />
-                      </label>
-                      <input type="file" id="upload-btn" multiple />
-                    </div>
-                  </div>
-                </div>
+
+                <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                  {({ getRootProps, getInputProps }) => {
+                    return (
+                      <section>
+                        <div className="upload-form">
+                          <div className="upload-wrap">
+                            <div className="content">
+                              <div {...getRootProps()}>
+                                <input {...getInputProps()} multiple={false} />
+                                <div className="upload-icon" />
+                                <h3>Drag & Drop an image</h3>
+
+                                <button className="fieldsight-btn">
+                                  Upload
+                                  <i className="la la-cloud-upload" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                    );
+                  }}
+                </Dropzone>
               </div>
             </div>
-            <div className="col-sm-12">
+            {/* <div className="col-sm-12">
               <button type="submit" className="fieldsight-btn pull-right">
                 Save
               </button>
-            </div>
+            </div> */}
           </div>
         </form>
+        {showCropper && (
+          <Zoom duration={500}>
+            <div className="fieldsight-popup open">
+              <div
+                style={{
+                  width: 800,
+                  margin: "20px auto",
+                  height: "100%",
+                  background: "rgba(255,255,255,0.9)",
+                  padding: "30px 75px"
+                }}
+              >
+                <div style={{ width: 300, float: "left", marginRight: "50px" }}>
+                  <Cropper
+                    style={{ height: 400, width: 300 }}
+                    aspectRatio={1 / 1}
+                    preview=".img-preview"
+                    guides={false}
+                    src={this.state.src}
+                    ref={cropper => {
+                      this.cropper = cropper;
+                    }}
+                  />
+                  <button className="fieldsight-btn" onClick={this.cropImage}>
+                    Save Image
+                  </button>
+                </div>
+                <div className="box" style={{ width: 300, float: "left" }}>
+                  <h1>Preview</h1>
+                  <div
+                    className="img-preview"
+                    style={{
+                      width: "100%",
+                      height: 300,
+                      overflow: "hidden"
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </Zoom>
+        )}
       </RightContentCard>
     );
   }

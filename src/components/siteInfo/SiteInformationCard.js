@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SelectElement from "../common/SelectElement";
 import findQuestion from "../../utils/findQuestion";
-import isEmpty from "../..//utils/isEmpty";
+import isEmpty from "../../utils/isEmpty";
 // const typeOptions = {
 //   UPLOAD: "Upload",
 //   CHOOSE_FROM_FORM: "Choose From Form",

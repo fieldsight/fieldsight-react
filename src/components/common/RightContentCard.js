@@ -22,7 +22,7 @@ const RightContentCard = ({
       )}
     </div>
     <div className="card-body">{children}</div>
-    <button className="btn btn-success pull-right" onClick={submitHandler}>
+    <button className="fieldsight-btn pull-right " onClick={submitHandler}>
       <i className="la la-save" />
       Save Form
     </button>

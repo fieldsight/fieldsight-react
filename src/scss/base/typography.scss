@@ -54,13 +54,13 @@ Version: 1.01
  h6 {
      margin-top: 0;
      margin-bottom: .5rem;
-     font-family:!important;
+     font-family:$ubuntu !important;
      font-weight: 500;
  }
 
 
  a {
-     color: $color-primary;
+     color: $color-primary !important;
      text-decoration: none;
      background-color: transparent;
      @include anim05;
