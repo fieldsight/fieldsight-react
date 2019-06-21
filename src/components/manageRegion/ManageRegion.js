@@ -32,11 +32,7 @@ class ManageRegion extends Component {
 
   componentDidMount() {
     axios
-      .get(urls[0], {
-        headers: {
-          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-        }
-      })
+      .get(urls[0])
       .then(res => {
         this.setState({
           siteType: res.data

@@ -79,11 +79,7 @@ class EditProject extends Component {
     };
 
     axios
-      .put(urls[0], project, {
-        headers: {
-          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-        }
-      })
+      .put(urls[0], project)
       .then(res => console.log("res", res))
       .catch(err => console.log(err));
   };
@@ -125,15 +121,7 @@ class EditProject extends Component {
 
   componentDidMount() {
     axios
-      .all(
-        urls.map(url =>
-          axios.get(url, {
-            headers: {
-              Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-            }
-          })
-        )
-      )
+      .all(urls.map(url => axios.get(url)))
       .then(
         axios.spread((project, sector) => {
           const position =

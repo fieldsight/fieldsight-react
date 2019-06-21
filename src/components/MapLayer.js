@@ -14,39 +14,30 @@ export default class MapLayer extends Component {
   state = {
     geoLayer: [],
     initialData: [],
-    dropdownData: []
+    dropdownData: [],
+    multiValue: []
   };
 
   componentDidMount() {
-    axios
-      .all(
-        urls.map(url =>
-          axios.get(url, {
-            headers: {
-              Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-            }
-          })
-        )
-      )
-      .then(
-        axios.spread((initialData, dropdownData) => {
-          const modifiedInitialData = initialData.data.map(item => ({
-            ...item,
-            value: item.id,
-            label: item.title
-          }));
+    axios.all(urls.map(url => axios.get(url))).then(
+      axios.spread((initialData, dropdownData) => {
+        const modifiedInitialData = initialData.data.map(item => ({
+          ...item,
+          value: item.id,
+          label: item.title
+        }));
 
-          const modifiedDropdownData = dropdownData.data.map(item => ({
-            ...item,
-            value: item.id,
-            label: item.title
-          }));
-          this.setState({
-            initialData: modifiedInitialData,
-            dropdownData: modifiedDropdownData
-          });
-        })
-      );
+        const modifiedDropdownData = dropdownData.data.map(item => ({
+          ...item,
+          value: item.id,
+          label: item.title
+        }));
+        this.setState({
+          initialData: modifiedInitialData,
+          dropdownData: modifiedDropdownData
+        });
+      })
+    );
   }
 
   handleMultiChange = option => {
@@ -61,15 +52,7 @@ export default class MapLayer extends Component {
     e.preventDefault();
     const idArray = this.state.multiValue.map(item => item.id);
     axios
-      .post(
-        urls[0],
-        { project: 137, geo_layers: idArray },
-        {
-          headers: {
-            Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-          }
-        }
-      )
+      .post(urls[0], { project: 137, geo_layers: idArray })
       .then(res => console.log("res", res))
       .catch(err => console.log("Err", err));
   };

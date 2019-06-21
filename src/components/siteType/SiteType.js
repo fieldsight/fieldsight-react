@@ -32,11 +32,7 @@ class SiteType extends Component {
 
   componentDidMount() {
     axios
-      .get(urls[0], {
-        headers: {
-          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-        }
-      })
+      .get(urls[0])
       .then(res => {
         this.setState({
           siteType: res.data
@@ -71,19 +67,11 @@ class SiteType extends Component {
       selectedSite.name = selectedName;
 
       return axios
-        .put(
-          `${urls[1]}/${selectedId}/`,
-          {
-            identifier: selectedSite.identifier,
-            name: selectedSite.name,
-            project: selectedSite.project
-          },
-          {
-            headers: {
-              Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-            }
-          }
-        )
+        .put(`${urls[1]}/${selectedId}/`, {
+          identifier: selectedSite.identifier,
+          name: selectedSite.name,
+          project: selectedSite.project
+        })
         .then(res => {
           console.log("response", res);
           this.setState({
@@ -101,11 +89,7 @@ class SiteType extends Component {
     };
 
     axios
-      .post(urls[0], newSiteType, {
-        headers: {
-          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-        }
-      })
+      .post(urls[0], newSiteType)
       .then(res => {
         this.setState({
           ...INITIAL_STATE,
@@ -128,11 +112,7 @@ class SiteType extends Component {
   removeHandler = id => {
     const filteredSiteType = this.state.siteType.filter(site => site.id !== id);
     axios
-      .delete(`${urls[1]}/${id}/`, {
-        headers: {
-          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-        }
-      })
+      .delete(`${urls[1]}/${id}/`)
       .then(res => {
         res.status === 200
           ? this.setState({

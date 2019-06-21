@@ -50,11 +50,7 @@ export default class TermAndLabel extends Component {
         region_reviewer
       };
 
-      const response = await axios.put(`${urls[0]}/${id}`, termsAndLabels, {
-        headers: {
-          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-        }
-      });
+      const response = await axios.put(`${urls[0]}/${id}`, termsAndLabels);
       console.log("response", response);
     } catch (error) {
       console.log("error", error);
@@ -74,11 +70,7 @@ export default class TermAndLabel extends Component {
 
   componentDidMount() {
     axios
-      .get(`${urls[0]}?project=137`, {
-        headers: {
-          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-        }
-      })
+      .get(`${urls[0]}?project=137`)
       .then(res => {
         res.data && res.data.length > 0
           ? this.setState({
