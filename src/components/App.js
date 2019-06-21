@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { HashRouter as Router } from "react-router-dom";
+import axios from "axios";
 import Settings from "./Settings";
 import "../css/bootstrap.min.css";
 // import "../css/main.css"
