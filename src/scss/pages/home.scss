@@ -79,6 +79,17 @@
         }
       }
     }
+    &.userlist,
+    &.teamlist{
+      li{
+        position: relative;
+        form{
+          position:absolute;
+          right:0;
+          top:0;
+        }
+      }
+    }
   }
   .normal-list{
     ul{
@@ -400,6 +411,10 @@
         @include translatey;
         right:0;
     }
+}
+embed, iframe{
+  width:100%;
+  border:none;
 }
 @media screen and (max-width:$lg-tab){
   .right-content{

@@ -40,8 +40,9 @@ Version: 1.01
      font-family: $ubuntu !important;
      font-size: 0.8125rem;
      font-weight: 400 !important;
-     line-height: 1.5;
+     line-height: 1.2rem;
      color: $color-primary;
+     letter-spacing: 0.5px;
      text-align: left;
      background-color: $color-bg;
  }
@@ -56,6 +57,7 @@ Version: 1.01
      margin-bottom: .5rem;
      font-family:$ubuntu !important;
      font-weight: 500;
+     line-height: 1.2rem;
  }
 
 

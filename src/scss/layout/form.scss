@@ -567,6 +567,43 @@
                     }
                 }
             }
+            &.cropbody{
+              max-width: 750px;
+              .card{
+                .col-md-6:first-child{
+                  .card-body{
+                    padding-right: 0;
+                    figure{
+                      position: relative;
+                      &::after{
+                        content:'';
+                        width:1px;
+                        height: 100%;
+                        background-color: rgba($color-primary , 0.2);
+                        position: absolute;
+                        right: -15px;
+                        top:0;
+                        bottom: 0;
+                      }
+                    }
+                  }
+                }
+                .col-md-6:last-child{
+                  .card-body{
+                    padding-left: 0;
+                  }
+                }
+                .card-body{
+                  background-color: $color-white;
+                  figure{
+                    margin:0;
+                    img{
+                      max-height: 500px;
+                    }
+                  }
+                }
+              }
+            }
         }
       }
 }

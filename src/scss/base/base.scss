@@ -190,6 +190,7 @@
         .dash-pf{
           @include flex_start;
           align-items: center;
+          flex-wrap: nowrap;
           figure{
             max-width: 80px;
             @include radius50;
@@ -200,6 +201,10 @@
             }
           }
           .dash-pf-content{
+            h5{
+              line-height: 1.5rem;
+            }
+            
             span{
               font-size: 0.775rem;
               color:rgba($color-primary, 0.7);
