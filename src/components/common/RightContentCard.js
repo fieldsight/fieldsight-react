@@ -3,6 +3,7 @@ import React from "react";
 const RightContentCard = ({
   title,
   addButton,
+  hideButton,
   toggleModal,
   children,
   submitHandler
@@ -22,10 +23,12 @@ const RightContentCard = ({
       )}
     </div>
     <div className="card-body">{children}</div>
-    <button className="fieldsight-btn pull-right " onClick={submitHandler}>
-      <i className="la la-save" />
-      Save Form
-    </button>
+    {!hideButton && (
+      <button className="fieldsight-btn pull-right " onClick={submitHandler}>
+        <i className="la la-save" />
+        Save Form
+      </button>
+    )}
   </div>
 );
 

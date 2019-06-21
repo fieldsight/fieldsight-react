@@ -23,7 +23,6 @@ const urls = [
   "https://fieldsight.naxa.com.np/fv3/api/sectors-subsectors/"
 ];
 
-const CropperModal = () => <h1>hello</h1>;
 class EditProject extends Component {
   state = {
     project: {},
@@ -78,7 +77,7 @@ class EditProject extends Component {
       sub_sector: selectedSubSector,
       organization
     };
-    console.log("submitted data", project);
+
     axios
       .put(urls[0], project, {
         headers: {
@@ -137,9 +136,10 @@ class EditProject extends Component {
       )
       .then(
         axios.spread((project, sector) => {
-          const position = project.data.location.split(" ");
-          const longitude = position[1].split("(")[1];
-          const latitude = position[2].split(")")[0];
+          const position =
+            project && project.data && project.data.location.split(" ");
+          const longitude = position && position[1].split("(")[1];
+          const latitude = position && position[2].split(")")[0];
           this.setState({
             project: project.data,
             sector: sector.data,
@@ -385,41 +385,61 @@ class EditProject extends Component {
         </form>
         {showCropper && (
           <Zoom duration={500}>
-            <div className="fieldsight-popup open">
-              <div
-                style={{
-                  width: 800,
-                  margin: "20px auto",
-                  height: "100%",
-                  background: "rgba(255,255,255,0.9)",
-                  padding: "30px 75px"
-                }}
-              >
-                <div style={{ width: 300, float: "left", marginRight: "50px" }}>
-                  <Cropper
-                    style={{ height: 400, width: 300 }}
-                    aspectRatio={1 / 1}
-                    preview=".img-preview"
-                    guides={false}
-                    src={this.state.src}
-                    ref={cropper => {
-                      this.cropper = cropper;
-                    }}
-                  />
-                  <button className="fieldsight-btn" onClick={this.cropImage}>
-                    Save Image
-                  </button>
-                </div>
-                <div className="box" style={{ width: 300, float: "left" }}>
-                  <h1>Preview</h1>
-                  <div
-                    className="img-preview"
-                    style={{
-                      width: "100%",
-                      height: 300,
-                      overflow: "hidden"
-                    }}
-                  />
+            <div
+              className="fieldsight-popup open"
+              id="scheduled-popup"
+              style={{ zIndex: 9999 }}
+            >
+              <div className="popup-body cropbody">
+                <div className="card no-bg">
+                  <div className="card-header main-card-header">
+                    <h5>preview</h5>
+                    <span
+                      className="popup-close"
+                      onClick={() => this.setState({ showCropper: true })}
+                    >
+                      <i className="la la-close" />
+                    </span>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="card-body">
+                        <figure>
+                          <Cropper
+                            style={{ height: 400, width: 300 }}
+                            aspectRatio={1 / 1}
+                            preview=".img-preview"
+                            guides={false}
+                            src={this.state.src}
+                            ref={cropper => {
+                              this.cropper = cropper;
+                            }}
+                          />
+                          <button
+                            className="fieldsight-btn"
+                            style={{ marginTop: "15px" }}
+                            onClick={this.cropImage}
+                          >
+                            Save Image
+                          </button>
+                        </figure>
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="card-body">
+                        <figure>
+                          <div
+                            className="img-preview"
+                            style={{
+                              width: "100%",
+                              height: 400,
+                              overflow: "hidden"
+                            }}
+                          />
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

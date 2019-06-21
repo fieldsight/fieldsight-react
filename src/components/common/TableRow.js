@@ -53,6 +53,33 @@ class TableRow extends Component {
           </a>
         </td>
       </tr>
+    ),
+    manageRegion: (row, i, editHandler, removeHandler) => (
+      <tr key={row.id}>
+        <td>{row.identifier}</td>
+        <td>{row.name}</td>
+        <td>{row.date_created}</td>
+        <td>
+          <a onClick={() => editHandler(row.id)} className="td-edit-btn">
+            <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+              <i className="la la-edit" />
+            </OverlayTrigger>
+          </a>
+          <a onClick={() => removeHandler(row.id)} className="td-delete-btn">
+            <OverlayTrigger placement="top" overlay={<Tooltip>Delete</Tooltip>}>
+              <i className="la la-trash-o" />
+            </OverlayTrigger>
+          </a>
+        </td>
+      </tr>
+    ),
+    termsAndLabels: row => (
+      <tr key={row[0]}>
+        <td style={{ textTransform: "capitalize" }}>
+          {row[0].replace("_", " ")}
+        </td>
+        <td>{row[1]}</td>
+      </tr>
     )
   });
 

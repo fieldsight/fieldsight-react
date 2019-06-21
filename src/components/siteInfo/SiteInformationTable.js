@@ -419,13 +419,13 @@ class SiteInformationTable extends Component {
             )}
             <CheckBox
               checked={this.state.dashboardChecked}
-              label="Shared To Dashboard"
+              label="Share To Dashboard"
               onChange={e => this.handleCheckboxChange(e, "dashboard")}
             />
 
             <CheckBox
               checked={this.state.publicChecked}
-              label="Shared To Public"
+              label="Share To Public"
               onChange={e => this.handleCheckboxChange(e, "public")}
             />
             {type === "MCQ" &&

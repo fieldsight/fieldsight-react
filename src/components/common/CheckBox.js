@@ -1,11 +1,15 @@
 import React from "react";
 
 const CheckBox = ({ label, ...rest }) => (
-  <div>
-    <label>
-      <input type="checkbox" {...rest} />
-      <span>{label}</span>
-    </label>
+  <div className="form-group display-inline">
+    <div className="custom-checkbox">
+      <div className="checkbox ">
+        <label>
+          <input type="checkbox" {...rest} />
+          <i className="helper" /> {label}
+        </label>
+      </div>
+    </div>
   </div>
 );
 

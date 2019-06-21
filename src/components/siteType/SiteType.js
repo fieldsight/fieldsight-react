@@ -3,7 +3,6 @@ import Table from "../common/Table";
 import FormModal from "../common/FormModal";
 import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
-import DataTable from "../common/DataTable";
 import axios from "axios";
 
 const tableHeader = {
@@ -46,7 +45,17 @@ class SiteType extends Component {
       .catch(err => console.log("err", err));
   }
 
-  onSubmitHandler = e => {
+  // addHandler = e => {
+  //   const { selectedIdentifier, selectedName } = this.state;
+  //   const siteType = {
+  //     identifier: selectedIdentifier,
+  //     name: selectedName,
+  //     project: 137
+  //   };
+
+  // };
+
+  onSubmitHandler = (e, edit) => {
     e.preventDefault();
     const {
       selectedId,
@@ -54,35 +63,56 @@ class SiteType extends Component {
       selectedName,
       siteType
     } = this.state;
-    const newSiteType = [...siteType];
-    const selectedSite = newSiteType.find(site => site.id === +selectedId);
-    selectedSite.identifier = selectedIdentifier;
-    selectedSite.name = selectedName;
-    this.setState(
-      {
-        ...INITIAL_STATE,
-        siteType: newSiteType
-      },
-      () =>
-        axios
-          .put(
-            `${urls[1]}/${selectedId}/`,
-            {
-              identifier: selectedSite.identifier,
-              name: selectedSite.name,
-              project: selectedSite.project
-            },
-            {
-              headers: {
-                Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-              }
+
+    if (selectedId) {
+      const newSiteType = [...siteType];
+      const selectedSite = newSiteType.find(site => site.id === +selectedId);
+      selectedSite.identifier = selectedIdentifier;
+      selectedSite.name = selectedName;
+
+      return axios
+        .put(
+          `${urls[1]}/${selectedId}/`,
+          {
+            identifier: selectedSite.identifier,
+            name: selectedSite.name,
+            project: selectedSite.project
+          },
+          {
+            headers: {
+              Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
             }
-          )
-          .then(res => {
-            console.log("response", res);
-          })
-          .catch(err => console.log("err", err))
-    );
+          }
+        )
+        .then(res => {
+          console.log("response", res);
+          this.setState({
+            ...INITIAL_STATE,
+            siteType: newSiteType
+          });
+        })
+        .catch(err => console.log("err", err));
+    }
+
+    const newSiteType = {
+      identifier: selectedIdentifier,
+      name: selectedName,
+      project: 137
+    };
+
+    axios
+      .post(urls[0], newSiteType, {
+        headers: {
+          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
+        }
+      })
+      .then(res => {
+        this.setState({
+          ...INITIAL_STATE,
+          siteType: [...this.state.siteType, { ...res.data }]
+        });
+      })
+      .catch(err => console.log("err", err));
   };
 
   editHandler = id => {
@@ -97,23 +127,21 @@ class SiteType extends Component {
 
   removeHandler = id => {
     const filteredSiteType = this.state.siteType.filter(site => site.id !== id);
-    this.setState(
-      {
-        ...INITIAL_STATE,
-        siteType: filteredSiteType
-      },
-      () =>
-        axios
-          .delete(`${urls[1]}/${id}/`, {
-            headers: {
-              Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-            }
-          })
-          .then(res => {
-            console.log("response", res);
-          })
-          .catch(err => console.log("err", err))
-    );
+    axios
+      .delete(`${urls[1]}/${id}/`, {
+        headers: {
+          Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
+        }
+      })
+      .then(res => {
+        res.status === 200
+          ? this.setState({
+              ...INITIAL_STATE,
+              siteType: filteredSiteType
+            })
+          : null;
+      })
+      .catch(err => console.log("err", err));
   };
 
   onChangeHandler = e => {
@@ -134,7 +162,13 @@ class SiteType extends Component {
     } = this;
     return (
       <Fragment>
-        <RightContentCard title="Site Type" addButton toggleModal={toggleModal}>
+        <RightContentCard
+          title="Site Type"
+          addButton
+          toggleModal={toggleModal}
+          hideButton={true}
+          // submitHandler={addHandler}
+        >
           <Table
             page="siteType"
             tableHeader={tableHeader.siteTypes}

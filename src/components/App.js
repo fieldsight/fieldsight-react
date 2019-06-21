@@ -4,7 +4,6 @@ import Settings from "./Settings";
 import "../css/bootstrap.min.css";
 // import "../css/main.css"
 import "../css/line-awesome.min.css";
-import "mdbreact/dist/css/mdb.css";
 import "../scss/style.scss";
 class App extends Component {
   constructor(props) {
