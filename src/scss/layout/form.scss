@@ -498,6 +498,23 @@
       }
       
     }
+    .warning{
+      padding:1rem;
+      text-align: center;
+      i{
+        color:$color-red;
+        font-size:4rem;
+      }
+      h4{
+        font-size:1.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin: 1rem 0;
+      }
+      p{
+        font-size: 0.875rem;
+      }
+    }
     .edit-form{
       textarea{
         height: 220px;
@@ -643,6 +660,12 @@
                   }
                 }
               }
+            }
+            &.lg-body{
+              max-width: 800px;
+            }
+            &.sm-body{
+              max-width: 500px;
             }
         }
       }
