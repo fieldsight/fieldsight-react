@@ -154,15 +154,13 @@ class SiteType extends Component {
         axios
           .delete(`${urls[1]}/${selectedId}/`)
           .then(res => {
-            res.status === 200
-              ? this.setState(
-                  {
-                    ...INITIAL_STATE,
-                    siteType: filteredSiteType
-                  },
-                  () => successToast("Site", "deleted")
-                )
-              : null;
+            this.setState(
+              {
+                ...INITIAL_STATE,
+                siteType: filteredSiteType
+              },
+              () => successToast("Site", "deleted")
+            );
           })
           .catch(err => {
             this.setState(
