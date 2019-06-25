@@ -234,7 +234,17 @@
         }
       }
     }
-    
+    .myform-header{
+      position: relative;
+      
+    }
+    .myform-table{
+      .add-btn{
+        position: absolute;
+        right:1rem;
+        top:0.7rem;
+      }
+    }
     .card-body{
       padding: 1rem;
     }

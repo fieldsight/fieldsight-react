@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import Table from "../common/Table";
-import FormModal from "../common/FormModal";
+import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
@@ -176,34 +176,37 @@ class SiteType extends Component {
         </RightContentCard>
         {isLoading && <Loader />}
         {showModal && (
-          <FormModal
-            title="Add site type"
-            toggleModal={toggleModal}
-            submitHandler={onSubmitHandler}
-          >
-            <InputElement
-              tag="input"
-              type="text"
-              required={true}
-              label="ID"
-              formType="floatingForm"
-              htmlFor="input"
-              name="selectedIdentifier"
-              value={selectedIdentifier}
-              changeHandler={onChangeHandler}
-            />
-            <InputElement
-              tag="textarea"
-              type="text"
-              required={true}
-              label="Type"
-              formType="floatingForm"
-              htmlFor="textarea"
-              name="selectedName"
-              value={selectedName}
-              changeHandler={onChangeHandler}
-            />{" "}
-          </FormModal>
+          <Modal title="Add site type" toggleModal={toggleModal}>
+            <form className="floating-form" onSubmit={onSubmitHandler}>
+              <InputElement
+                tag="input"
+                type="text"
+                required={true}
+                label="ID"
+                formType="floatingForm"
+                htmlFor="input"
+                name="selectedIdentifier"
+                value={selectedIdentifier}
+                changeHandler={onChangeHandler}
+              />
+              <InputElement
+                tag="textarea"
+                type="text"
+                required={true}
+                label="Type"
+                formType="floatingForm"
+                htmlFor="textarea"
+                name="selectedName"
+                value={selectedName}
+                changeHandler={onChangeHandler}
+              />{" "}
+              <div className="form-group pull-right no-margin">
+                <button type="submit" className="fieldsight-btn">
+                  Save
+                </button>
+              </div>
+            </form>
+          </Modal>
         )}
       </Fragment>
     );

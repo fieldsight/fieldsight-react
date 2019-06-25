@@ -5,6 +5,7 @@ import axios from "axios";
 import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
 import Zoom from "react-reveal/Zoom";
+import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import RightContentCard from "../common/RightContentCard";
@@ -72,7 +73,7 @@ class EditProject extends Component {
       website,
       donor,
       public_desc,
-      logo: cropResult,
+      ...(cropResult && { logo: cropResult }),
       latitude,
       longitude,
       cluster_sites: true,
@@ -168,6 +169,12 @@ class EditProject extends Component {
     });
   };
 
+  closeModal = () => {
+    this.setState({
+      showCropper: false
+    });
+  };
+
   render() {
     const {
       state: {
@@ -182,7 +189,8 @@ class EditProject extends Component {
       onSelectChangeHandler,
       onSubmitHandler,
       handleCheckboxChange,
-      readFile
+      readFile,
+      closeModal
     } = this;
 
     return (
@@ -420,66 +428,63 @@ class EditProject extends Component {
           </div>
         </form>
         {showCropper && (
-          <Zoom duration={500}>
-            <div
-              className="fieldsight-popup open"
-              id="scheduled-popup"
-              style={{ zIndex: 9999 }}
-            >
-              <div className="popup-body cropbody">
-                <div className="card no-bg">
-                  <div className="card-header main-card-header">
-                    <h5>preview</h5>
-                    <span
-                      className="popup-close"
-                      onClick={() => this.setState({ showCropper: false })}
+          <Modal title="Preview" toggleModal={closeModal}>
+            <div class="warning">
+              <i class="la la-exclamation-triangle" />
+              <h4>Warning</h4>
+              <p>
+                "All the form submissions and user roles within this site will
+                be completely removed. Do you still want to continue?"
+              </p>
+            </div>
+            <div class="warning-footer text-center">
+              <a href="#" class="fieldsight-btn rejected-btn">
+                cancel
+              </a>
+              <a href="#" class="fieldsight-btn">
+                confirm
+              </a>
+            </div>
+            {/* <div className="row">
+              <div className="col-md-6">
+                <div className="card-body" style={{ padding: 0 }}>
+                  <figure>
+                    <Cropper
+                      style={{ height: 400, width: 300 }}
+                      aspectRatio={1 / 1}
+                      preview=".img-preview"
+                      guides={false}
+                      src={this.state.src}
+                      ref={cropper => {
+                        this.cropper = cropper;
+                      }}
+                    />
+                    <button
+                      className="fieldsight-btn"
+                      style={{ marginTop: "15px" }}
+                      onClick={this.cropImage}
                     >
-                      <i className="la la-close" />
-                    </span>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="card-body">
-                        <figure>
-                          <Cropper
-                            style={{ height: 400, width: 300 }}
-                            aspectRatio={1 / 1}
-                            preview=".img-preview"
-                            guides={false}
-                            src={this.state.src}
-                            ref={cropper => {
-                              this.cropper = cropper;
-                            }}
-                          />
-                          <button
-                            className="fieldsight-btn"
-                            style={{ marginTop: "15px" }}
-                            onClick={this.cropImage}
-                          >
-                            Save Image
-                          </button>
-                        </figure>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="card-body">
-                        <figure>
-                          <div
-                            className="img-preview"
-                            style={{
-                              width: "100%",
-                              height: 400,
-                              overflow: "hidden"
-                            }}
-                          />
-                        </figure>
-                      </div>
-                    </div>
-                  </div>
+                      Save Image
+                    </button>
+                  </figure>
                 </div>
               </div>
-            </div>
-          </Zoom>
+              <div className="col-md-6">
+                <div className="card-body" style={{ padding: 0 }}>
+                  <figure>
+                    <div
+                      className="img-preview"
+                      style={{
+                        width: "100%",
+                        height: 400,
+                        overflow: "hidden"
+                      }}
+                    />
+                  </figure>
+                </div>
+              </div>
+            </div> */}
+          </Modal>
         )}
       </RightContentCard>
     );

@@ -13,10 +13,36 @@
                 background-color: $color-white;
                 border-radius:0;
                 @include placeholder($color-primary);
+                box-shadow: none;
                 &:focus{
                     box-shadow:none;
                     border-color:$color-blue;
                 }
+            }
+            .css-yk16xz-control{
+              box-shadow: none;
+              border:0;
+              border-bottom:1px solid $color-bg;
+              &:hover{
+                box-shadow: none;
+                border:0;
+                border-color:$color-blue;
+              }
+              .css-tlfecz-indicatorContainer{
+                color:$color-blue;
+              }
+              
+            }
+            .css-1pahdxg-control{
+              border:none;
+                box-shadow: none;
+                border-radius: 0;
+              &:hover{
+                border:none;
+                box-shadow: none;
+                border-bottom:1px solid $color-blue;
+                border-radius: 0;
+              }
             }
             label{
               color:$color-primary;
@@ -481,6 +507,20 @@
           height: 205px; 
           margin-top:1rem
         }
+      }
+    }
+    .warning{
+      padding:2rem;
+      text-align: center;
+      i{
+        color:$color-red;
+        font-size:4rem;
+      }
+      h4{
+        font-size:1.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 1rem;
       }
     }
     form.floating-form{
