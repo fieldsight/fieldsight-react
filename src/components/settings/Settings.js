@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
-import LeftSidebar from "./LeftSidebar";
-import EditProject from "./editProject/EditProject";
-import SiteType from "./siteType/SiteType";
-import SiteInformation from "./siteInfo/SiteInformation";
-import SiteManage from "./SiteManage";
-import ManageRegion from "./manageRegion/ManageRegion";
-import TermsAndLabels from "./termsAndLabels/TermAndLabel";
-import MapLayer from "./MapLayer";
+import LeftSidebar from "../leftSidebar/LeftSidebar";
+import EditProject from "../editProject/EditProject";
+import SiteType from "../siteType/SiteType";
+import SiteInformation from "../siteInfo/SiteInformation";
+import SiteManage from "../SiteManage";
+import ManageRegion from "../manageRegion/ManageRegion";
+import TermsAndLabels from "../termsAndLabels/TermAndLabel";
+import MapLayer from "../mapLayer/MapLayer";
 
 export default class Settings extends Component {
   render() {

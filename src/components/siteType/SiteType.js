@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from "react";
+import axios from "axios";
 import Table from "../common/Table";
 import FormModal from "../common/FormModal";
 import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
-import axios from "axios";
+import Loader from "../common/Loader";
 
 const tableHeader = {
   siteTypes: ["ID", "Type", "Action"]
@@ -19,7 +20,8 @@ const INITIAL_STATE = {
   siteType: [],
   selectedId: "",
   selectedIdentifier: "",
-  selectedName: ""
+  selectedName: "",
+  isLoading: false
 };
 class SiteType extends Component {
   state = INITIAL_STATE;
@@ -50,9 +52,7 @@ class SiteType extends Component {
   //   };
 
   // };
-
-  onSubmitHandler = (e, edit) => {
-    e.preventDefault();
+  requestHandler = () => {
     const {
       selectedId,
       selectedIdentifier,
@@ -99,6 +99,17 @@ class SiteType extends Component {
       .catch(err => console.log("err", err));
   };
 
+  onSubmitHandler = (e, edit) => {
+    e.preventDefault();
+    this.setState(
+      {
+        isLoading: true,
+        showModal: false
+      },
+      this.requestHandler
+    );
+  };
+
   editHandler = id => {
     const selectedSiteId = this.state.siteType.find(site => site.id === id);
     this.setState({
@@ -133,7 +144,13 @@ class SiteType extends Component {
 
   render() {
     const {
-      state: { showModal, siteType, selectedIdentifier, selectedName },
+      state: {
+        showModal,
+        isLoading,
+        siteType,
+        selectedIdentifier,
+        selectedName
+      },
       toggleModal,
       editHandler,
       removeHandler,
@@ -157,6 +174,7 @@ class SiteType extends Component {
             editHandler={editHandler}
           />
         </RightContentCard>
+        {isLoading && <Loader />}
         {showModal && (
           <FormModal
             title="Add site type"

@@ -29,18 +29,6 @@ const INITIAL_STATE = {
   dashboardChecked: false
 };
 
-// const typeOptions = {
-//   TEXT: "Text",
-//   NUMBER: "Number",
-//   DATE: "Date",
-//   SELECT_ONE: "Select One",
-//   DRAW_FROM_ANOTHER_PROJECT: "Draw From Another Project",
-//   DRAW_ANSWER_FROM_A_FORM: "Draw Answer From A Form",
-//   FORM_SUBMISSION: "Form Submission",
-//   FORM_SUBMISSIONS_COUNT: "Form Submissions Count",
-//   FORM_QUESTION_ANSWER_STATUS: "Form Question Answer Status"
-// };
-
 const questionTypes = [
   { id: "Text", name: "Text" },
   { id: "Number", name: "Number" },
@@ -417,17 +405,7 @@ class SiteInformationTable extends Component {
                 changeHandler={onInputChangeHandler}
               />
             )}
-            <CheckBox
-              checked={this.state.dashboardChecked}
-              label="Share To Dashboard"
-              onChange={e => this.handleCheckboxChange(e, "dashboard")}
-            />
 
-            <CheckBox
-              checked={this.state.publicChecked}
-              label="Share To Public"
-              onChange={e => this.handleCheckboxChange(e, "public")}
-            />
             {type === "MCQ" &&
               optInputField &&
               optInputField.length > 0 &&
@@ -454,6 +432,18 @@ class SiteInformationTable extends Component {
                 </button>
               </div>
             )}
+
+            <CheckBox
+              checked={this.state.dashboardChecked}
+              label="Share To Dashboard"
+              onChange={e => this.handleCheckboxChange(e, "dashboard")}
+            />
+
+            <CheckBox
+              checked={this.state.publicChecked}
+              label="Share To Public"
+              onChange={e => this.handleCheckboxChange(e, "public")}
+            />
 
             {(type === "Text" ||
               type === "Number" ||

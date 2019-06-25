@@ -8,6 +8,8 @@ import Zoom from "react-reveal/Zoom";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import RightContentCard from "../common/RightContentCard";
+import CheckBox from "../common/CheckBox";
+
 import "leaflet/dist/leaflet.css";
 import "cropperjs/dist/cropper.css";
 
@@ -53,6 +55,7 @@ class EditProject extends Component {
         public_desc,
         donor,
         logo,
+        cluster_sites,
         organization
       },
       position: { latitude, longitude },
@@ -100,6 +103,15 @@ class EditProject extends Component {
       selectedSector: selectedSector.id
     });
   };
+
+  handleCheckboxChange = e =>
+    this.setState({
+      project: {
+        ...this.state.project,
+        cluster_sites: e.target.checked
+      }
+    });
+
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
     if (position) {
@@ -124,8 +136,7 @@ class EditProject extends Component {
       .all(urls.map(url => axios.get(url)))
       .then(
         axios.spread((project, sector) => {
-          const position =
-            project && project.data && project.data.location.split(" ");
+          const position = project.data && project.data.location.split(" ");
           const longitude = position && position[1].split("(")[1];
           const latitude = position && position[2].split(")")[0];
           this.setState({
@@ -164,17 +175,19 @@ class EditProject extends Component {
         sector,
         subSectors,
         position: { latitude, longitude },
-        showCropper
+        showCropper,
+        cropResult
       },
       onChangeHandler,
       onSelectChangeHandler,
       onSubmitHandler,
+      handleCheckboxChange,
       readFile
     } = this;
 
     return (
-      <RightContentCard title="Edit Project" submitHandler={onSubmitHandler}>
-        <form className="edit-form">
+      <RightContentCard title="Edit Project">
+        <form className="edit-form" onSubmit={onSubmitHandler}>
           <div className="row">
             <div className="col-xl-4 col-md-6">
               <InputElement
@@ -268,7 +281,13 @@ class EditProject extends Component {
                 />
               </div>
             </div>
-            <div className="col-xl-4 col-md-6" />
+            <div className="col-xl-4 col-md-6">
+              <CheckBox
+                checked={this.state.project.cluster_sites || false}
+                label="Do you want cluster sites in this project?"
+                onChange={handleCheckboxChange}
+              />
+            </div>
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"
@@ -334,41 +353,70 @@ class EditProject extends Component {
                 </div>
               </div>
             </div>
+
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
-                <label>attach file</label>
+                <label> {cropResult ? "Preview" : "Attach File"}</label>
+                {cropResult ? (
+                  <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                    {({ getRootProps, getInputProps }) => {
+                      return (
+                        <section>
+                          <div className="upload-form">
+                            <img
+                              src={this.state.cropResult}
+                              alt="Cropped Image"
+                            />
+                          </div>
+                          <div {...getRootProps()}>
+                            <input {...getInputProps()} multiple={false} />
+                            <div className="upload-icon" />
 
-                <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
-                  {({ getRootProps, getInputProps }) => {
-                    return (
-                      <section>
-                        <div className="upload-form">
-                          <div className="upload-wrap">
-                            <div className="content">
-                              <div {...getRootProps()}>
-                                <input {...getInputProps()} multiple={false} />
-                                <div className="upload-icon" />
-                                <h3>Drag & Drop an image</h3>
-
-                                <button className="fieldsight-btn">
-                                  Upload
-                                  <i className="la la-cloud-upload" />
-                                </button>
+                            <button className="fieldsight-btn">
+                              Upload
+                              <i className="la la-cloud-upload" />
+                            </button>
+                          </div>
+                        </section>
+                      );
+                    }}
+                  </Dropzone>
+                ) : (
+                  <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                    {({ getRootProps, getInputProps }) => {
+                      return (
+                        <section>
+                          <div className="upload-form">
+                            <div className="upload-wrap">
+                              <div className="content">
+                                <div {...getRootProps()}>
+                                  <input
+                                    {...getInputProps()}
+                                    multiple={false}
+                                  />
+                                  <div className="upload-icon" />
+                                  <h3>Drag & Drop an image</h3>
+                                  <button className="fieldsight-btn">
+                                    Upload
+                                    <i className="la la-cloud-upload" />
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </section>
-                    );
-                  }}
-                </Dropzone>
+                        </section>
+                      );
+                    }}
+                  </Dropzone>
+                )}
               </div>
             </div>
-            {/* <div className="col-sm-12">
+
+            <div className="col-sm-12">
               <button type="submit" className="fieldsight-btn pull-right">
                 Save
               </button>
-            </div> */}
+            </div>
           </div>
         </form>
         {showCropper && (
@@ -384,7 +432,7 @@ class EditProject extends Component {
                     <h5>preview</h5>
                     <span
                       className="popup-close"
-                      onClick={() => this.setState({ showCropper: true })}
+                      onClick={() => this.setState({ showCropper: false })}
                     >
                       <i className="la la-close" />
                     </span>

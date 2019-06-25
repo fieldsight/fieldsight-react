@@ -23,12 +23,12 @@ const RightContentCard = ({
       )}
     </div>
     <div className="card-body">{children}</div>
-    {!hideButton && (
+    {/* {!hideButton && (
       <button className="fieldsight-btn pull-right " onClick={submitHandler}>
         <i className="la la-save" />
         Save Form
       </button>
-    )}
+    )} */}
   </div>
 );
 

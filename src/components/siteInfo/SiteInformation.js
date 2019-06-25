@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import axios from "axios";
 import IdentityForm from "./IdentityForm";
 import SiteInformationTable from "./SiteInformationTable";
 import FeaturedPictures from "./FeaturedPictures";
 import RightContentCard from "../common/RightContentCard";
-import InputElement from "../common/InputElement";
+import Loader from "../common/Loader";
 
 const urls = [
   "https://fieldsight.naxa.com.np/fieldsight/api/organization/13/my_projects/137/",
@@ -18,30 +18,31 @@ class SiteInformation extends Component {
     projects: [],
     siteBasicInfo: {},
     jsonQuestions: [],
-    siteFeaturedImages: []
+    siteFeaturedImages: [],
+    isLoading: false
   };
 
-  onSubmitHandler = () => {
-    const { siteBasicInfo, jsonQuestions, siteFeaturedImages } = this.state;
+  requestHandler = async () => {
+    try {
+      const { siteBasicInfo, jsonQuestions, siteFeaturedImages } = this.state;
 
-    const headers = {
-      "Content-Type": "application/json"
-    };
+      const headers = {
+        "Content-Type": "application/json"
+      };
 
-    const modifiedJsonQuestions = jsonQuestions.map(question => {
-      if (question.question_type === "MCQ") {
-        const options = [];
-        Object.keys(question.mcq_options).map(opt => {
-          options.push({ option_text: question.mcq_options[opt] });
-        });
-        question.mcq_options = options;
-        const { optInputField, ...rest } = question;
-        return rest;
-      }
-      return question;
-    });
-    axios
-      .post(
+      const modifiedJsonQuestions = jsonQuestions.map(question => {
+        if (question.question_type === "MCQ") {
+          const options = [];
+          Object.keys(question.mcq_options).map(opt => {
+            options.push({ option_text: question.mcq_options[opt] });
+          });
+          question.mcq_options = options;
+          const { optInputField, ...rest } = question;
+          return rest;
+        }
+        return question;
+      });
+      await axios.post(
         urls[2],
         {
           json_questions: modifiedJsonQuestions,
@@ -49,9 +50,23 @@ class SiteInformation extends Component {
           site_featured_images: siteFeaturedImages
         },
         { headers: headers }
-      )
-      .then(res => console.log("response", res))
-      .catch(err => console.log("err", err));
+      );
+
+      this.setState({
+        isLoading: false
+      });
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
+  onSubmitHandler = () => {
+    this.setState(
+      {
+        isLoading: true
+      },
+      this.requestHandler
+    );
   };
 
   sitePicHandler = sitePic => {
@@ -75,40 +90,6 @@ class SiteInformation extends Component {
     });
   };
 
-  componentDidMount() {
-    Promise.all(urls.map(url => axios.get(url)))
-      .then(results => {
-        const modifiedJsonQuestions = results[2].data.json_questions.map(
-          question => {
-            if (question.question_type === "MCQ") {
-              let optInputField = [],
-                options = {};
-              if (Array.isArray(question.mcq_options)) {
-                question.mcq_options.map((opt, i) => {
-                  options[`option${i}`] = opt.option_text;
-                  optInputField.push({ tag: InputElement, val: i });
-                });
-              }
-              question.mcq_options = options;
-              question.optInputField = optInputField;
-              return question;
-            }
-            return question;
-          }
-        );
-        this.setState({
-          projects: results[0].data,
-          forms: results[1].data,
-          siteBasicInfo: results[2].data.site_basic_info,
-          jsonQuestions: modifiedJsonQuestions,
-          siteFeaturedImages: results[2].data.site_featured_images
-        });
-      })
-      .catch(error => {
-        console.log("error", error);
-      });
-  }
-
   render() {
     const {
       state: {
@@ -117,7 +98,8 @@ class SiteInformation extends Component {
         projects,
         siteBasicInfo,
         jsonQuestions,
-        siteFeaturedImages
+        siteFeaturedImages,
+        isLoading
       },
       toggleModal,
       onSubmitHandler,
@@ -126,27 +108,36 @@ class SiteInformation extends Component {
       siteIdentityHandler
     } = this;
     return (
-      <RightContentCard
-        title="Site Identification"
-        submitHandler={onSubmitHandler}
-      >
-        <IdentityForm
-          forms={forms}
-          siteBasicInfo={siteBasicInfo}
-          siteIdentityHandler={siteIdentityHandler}
-        />
-        <SiteInformationTable
-          forms={forms}
-          projects={projects}
-          jsonQuestions={jsonQuestions}
-          siteInfoHandler={siteInfoHandler}
-        />
-        <FeaturedPictures
-          forms={forms}
-          siteFeaturedImages={siteFeaturedImages}
-          sitePicHandler={sitePicHandler}
-        />
-      </RightContentCard>
+      <Fragment>
+        <RightContentCard title="Site Identification">
+          <IdentityForm
+            forms={forms}
+            siteBasicInfo={siteBasicInfo}
+            siteIdentityHandler={siteIdentityHandler}
+          />
+          <SiteInformationTable
+            forms={forms}
+            projects={projects}
+            jsonQuestions={jsonQuestions}
+            siteInfoHandler={siteInfoHandler}
+          />
+          <FeaturedPictures
+            forms={forms}
+            siteFeaturedImages={siteFeaturedImages}
+            sitePicHandler={sitePicHandler}
+          />
+
+          <div className="col-sm-12">
+            <button
+              className="fieldsight-btn pull-right"
+              onClick={onSubmitHandler}
+            >
+              Save
+            </button>
+          </div>
+        </RightContentCard>
+        {isLoading && <Loader />}
+      </Fragment>
     );
   }
 }

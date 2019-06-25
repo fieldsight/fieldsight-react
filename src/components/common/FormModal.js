@@ -13,13 +13,13 @@ const FormModal = ({ title, toggleModal, children, submitHandler }) => (
             </span>
           </div>
           <div className="card-body">
-            <form className="floating-form">
+            <form className="floating-form" onSubmit={submitHandler}>
               {children}
 
               <div className="form-group pull-right no-margin">
                 <button
                   type="submit"
-                  onClick={submitHandler}
+                  // onClick={submitHandler}
                   className="fieldsight-btn"
                 >
                   Save

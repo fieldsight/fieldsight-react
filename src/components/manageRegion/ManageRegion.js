@@ -11,7 +11,6 @@ const tableHeader = {
 
 const urls = [
   "https://fieldsight.naxa.com.np/fv3/api/project-regions/?project=137"
-  //   "https://fieldsight.naxa.com.np/fv3/api/project-site-types"
 ];
 
 const INITIAL_STATE = {
@@ -41,75 +40,11 @@ class ManageRegion extends Component {
       .catch(err => console.log("err", err));
   }
 
-  onSubmitHandler = e => {
-    // e.preventDefault();
-    // const {
-    //   selectedId,
-    //   selectedIdentifier,
-    //   selectedName,
-    //   siteType
-    // } = this.state;
-    // const newSiteType = [...siteType];
-    // const selectedSite = newSiteType.find(site => site.id === +selectedId);
-    // selectedSite.identifier = selectedIdentifier;
-    // selectedSite.name = selectedName;
-    // this.setState(
-    //   {
-    //     ...INITIAL_STATE,
-    //     siteType: newSiteType
-    //   },
-    //   () =>
-    //     axios
-    //       .put(
-    //         `${urls[1]}/${selectedId}/`,
-    //         {
-    //           identifier: selectedSite.identifier,
-    //           name: selectedSite.name,
-    //           project: selectedSite.project
-    //         },
-    //         {
-    //           headers: {
-    //             Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-    //           }
-    //         }
-    //       )
-    //       .then(res => {
-    //         console.log("response", res);
-    //       })
-    //       .catch(err => console.log("err", err))
-    // );
-  };
+  onSubmitHandler = e => {};
 
-  editHandler = id => {
-    // const selectedSiteId = this.state.siteType.find(site => site.id === id);
-    // this.setState({
-    //   showModal: true,
-    //   selectedId: id,
-    //   selectedIdentifier: selectedSiteId.identifier,
-    //   selectedName: selectedSiteId.name
-    // });
-  };
+  editHandler = id => {};
 
-  removeHandler = id => {
-    // const filteredSiteType = this.state.siteType.filter(site => site.id !== id);
-    // this.setState(
-    //   {
-    //     ...INITIAL_STATE,
-    //     siteType: filteredSiteType
-    //   },
-    //   () =>
-    //     axios
-    //       .delete(`${urls[1]}/${id}/`, {
-    //         headers: {
-    //           Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-    //         }
-    //       })
-    //       .then(res => {
-    //         console.log("response", res);
-    //       })
-    //       .catch(err => console.log("err", err))
-    // );
-  };
+  removeHandler = id => {};
 
   onChangeHandler = e => {
     const { name, value } = e.target;

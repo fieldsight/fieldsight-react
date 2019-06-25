@@ -3,15 +3,16 @@ import axios from "axios";
 import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Table from "../common/Table";
-
+import Loader from "../common/Loader";
 const tableHeader = {
   termsAndLabels: ["Terms And Labels", "Changed To"]
 };
-const urls = ["https://fieldsight.naxa.com.np/fv3/api/project-terms-labels/"];
+const urls = ["https://fieldsight.naxa.com.np/fv3/api/project-terms-labels"];
 
 export default class TermAndLabel extends Component {
   state = {
     termsAndLabels: {
+      id: "137",
       donor: "",
       site: "",
       site_supervisor: "",
@@ -20,13 +21,12 @@ export default class TermAndLabel extends Component {
       region_supervisor: "",
       region_reviewer: ""
     },
-    hasData: false
+    hasData: false,
+    isLoading: false
   };
 
-  onSubmitHandler = async e => {
+  requestHandler = async () => {
     try {
-      e.preventDefault();
-
       const {
         termsAndLabels: {
           id,
@@ -51,10 +51,22 @@ export default class TermAndLabel extends Component {
       };
 
       const response = await axios.put(`${urls[0]}/${id}`, termsAndLabels);
-      console.log("response", response);
+      this.setState({
+        isLoading: false
+      });
     } catch (error) {
       console.log("error", error);
     }
+  };
+
+  onSubmitHandler = e => {
+    e.preventDefault();
+    this.setState(
+      {
+        isLoading: true
+      },
+      this.requestHandler
+    );
   };
 
   onChangeHandler = e => {
@@ -75,7 +87,6 @@ export default class TermAndLabel extends Component {
         res.data && res.data.length > 0
           ? this.setState({
               termsAndLabels: res.data[0]
-              // hasData: true
             })
           : null;
       })
@@ -107,7 +118,8 @@ export default class TermAndLabel extends Component {
           region_supervisor,
           region_reviewer
         },
-        hasData
+        hasData,
+        isLoading
       },
       listHandler,
       editHandler,
@@ -117,124 +129,128 @@ export default class TermAndLabel extends Component {
 
     const { id, project, ...restLabels } = this.state.termsAndLabels;
     return (
-      <RightContentCard
-        title="Edit Project"
-        hideButton={hasData}
-        submitHandler={onSubmitHandler}
-      >
-        {!hasData && (
-          <Fragment>
-            <form className="edit-form">
-              <div className="row">
-                <div className="col-xl-4 col-md-6">
-                  <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="text"
-                    required={true}
-                    label="Donor"
-                    name="donor"
-                    value={donor}
-                    changeHandler={onChangeHandler}
-                  />
-                </div>
+      <Fragment>
+        <RightContentCard title="Terms And Labels">
+          {!hasData && (
+            <Fragment>
+              <form className="edit-form" onSubmit={onSubmitHandler}>
+                <div className="row">
+                  <div className="col-xl-4 col-md-6">
+                    <InputElement
+                      formType="editForm"
+                      tag="input"
+                      type="text"
+                      required={true}
+                      label="Donor"
+                      name="donor"
+                      value={donor}
+                      changeHandler={onChangeHandler}
+                    />
+                  </div>
 
-                <div className="col-xl-4 col-md-6">
-                  <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="text"
-                    required={true}
-                    label="Site"
-                    name="site"
-                    value={site}
-                    changeHandler={onChangeHandler}
-                  />
-                </div>
-                <div className="col-xl-4 col-md-6">
-                  <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="text"
-                    required={true}
-                    label="Site Supervisor"
-                    name="site_supervisor"
-                    value={site_supervisor}
-                    changeHandler={onChangeHandler}
-                  />
-                </div>
-                <div className="col-xl-4 col-md-6">
-                  <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="text"
-                    required={true}
-                    label="Site Reviewer"
-                    name="site_reviewer"
-                    value={site_reviewer}
-                    changeHandler={onChangeHandler}
-                  />
-                </div>
-                <div className="col-xl-4 col-md-6">
-                  <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="text"
-                    required={true}
-                    label="Region"
-                    name="region"
-                    value={region}
-                    changeHandler={onChangeHandler}
-                  />
-                </div>
-                <div className="col-xl-4 col-md-6">
-                  <div className="form-group">
+                  <div className="col-xl-4 col-md-6">
                     <InputElement
                       formType="editForm"
                       tag="input"
                       type="text"
                       required={true}
-                      label="Region Supervisor"
-                      name="region_supervisor"
-                      value={region_supervisor}
+                      label="Site"
+                      name="site"
+                      value={site}
                       changeHandler={onChangeHandler}
                     />
                   </div>
-                </div>
-                <div className="col-xl-4 col-md-6">
-                  <div className="form-group">
+                  <div className="col-xl-4 col-md-6">
                     <InputElement
                       formType="editForm"
                       tag="input"
                       type="text"
                       required={true}
-                      label="Region Reviewer"
-                      name="region_reviewer"
-                      value={region_reviewer}
+                      label="Site Supervisor"
+                      name="site_supervisor"
+                      value={site_supervisor}
                       changeHandler={onChangeHandler}
                     />
                   </div>
+                  <div className="col-xl-4 col-md-6">
+                    <InputElement
+                      formType="editForm"
+                      tag="input"
+                      type="text"
+                      required={true}
+                      label="Site Reviewer"
+                      name="site_reviewer"
+                      value={site_reviewer}
+                      changeHandler={onChangeHandler}
+                    />
+                  </div>
+                  <div className="col-xl-4 col-md-6">
+                    <InputElement
+                      formType="editForm"
+                      tag="input"
+                      type="text"
+                      required={true}
+                      label="Region"
+                      name="region"
+                      value={region}
+                      changeHandler={onChangeHandler}
+                    />
+                  </div>
+                  <div className="col-xl-4 col-md-6">
+                    <div className="form-group">
+                      <InputElement
+                        formType="editForm"
+                        tag="input"
+                        type="text"
+                        required={true}
+                        label="Region Supervisor"
+                        name="region_supervisor"
+                        value={region_supervisor}
+                        changeHandler={onChangeHandler}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xl-4 col-md-6">
+                    <div className="form-group">
+                      <InputElement
+                        formType="editForm"
+                        tag="input"
+                        type="text"
+                        required={true}
+                        label="Region Reviewer"
+                        name="region_reviewer"
+                        value={region_reviewer}
+                        changeHandler={onChangeHandler}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </form>
-            <button className="fieldsight-btn" onClick={listHandler}>
-              See List
-            </button>
-          </Fragment>
-        )}
-        {hasData && (
-          <Fragment>
-            <Table
-              page="termsAndLabels"
-              tableHeader={tableHeader.termsAndLabels}
-              tableRow={Object.entries(restLabels)}
-            />
-            <button className="fieldsight-btn" onClick={editHandler}>
-              Edit
-            </button>
-          </Fragment>
-        )}
-      </RightContentCard>
+                <div className="col-sm-12">
+                  <button type="submit" className="fieldsight-btn pull-right">
+                    Save
+                  </button>
+                </div>
+              </form>
+              <button className="fieldsight-btn" onClick={listHandler}>
+                See List
+              </button>
+            </Fragment>
+          )}
+          {hasData && (
+            <Fragment>
+              <Table
+                page="termsAndLabels"
+                tableHeader={tableHeader.termsAndLabels}
+                tableRow={Object.entries(restLabels)}
+              />
+              <button className="fieldsight-btn" onClick={editHandler}>
+                Edit
+              </button>
+            </Fragment>
+          )}
+        </RightContentCard>
+        {isLoading && <Loader />}
+      </Fragment>
     );
   }
 }

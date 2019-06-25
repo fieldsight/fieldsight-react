@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import SelectElement from "../common/SelectElement";
+import { DotLoader } from "../common/Loader";
 import findQuestion from "../../utils/findQuestion";
 import isEmpty from "../../utils/isEmpty";
 // const typeOptions = {
@@ -165,10 +166,10 @@ class SiteInformationCard extends Component {
               value={getDefaultValue(infoType)}
             />
 
-            {showForm && forms.length <= 0 && <h1>Loading...</h1>}
+            {showForm && forms.length <= 0 && <DotLoader />}
 
             {showForm && forms.length > 0 && (
-              <div>
+              <Fragment>
                 <SelectElement
                   className="form-control"
                   options={forms}
@@ -181,17 +182,17 @@ class SiteInformationCard extends Component {
                   changeHandler={questionChangeHandler}
                   value={!isEmpty(selectedQuestion) && selectedQuestion.name}
                 />
-              </div>
+                <div className="form-group pull-right mr-0">
+                  <button
+                    type="submit"
+                    className="fieldsight-btn"
+                    onClick={onSubmitHandler}
+                  >
+                    Save
+                  </button>
+                </div>
+              </Fragment>
             )}
-            <div className="form-group pull-right mr-0">
-              <button
-                type="submit"
-                className="fieldsight-btn"
-                onClick={onSubmitHandler}
-              >
-                Save
-              </button>
-            </div>
           </form>
         </div>
       </div>

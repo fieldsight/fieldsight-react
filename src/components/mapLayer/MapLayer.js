@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import axios from "axios";
-import RightContentCard from "./common/RightContentCard";
+import { DotLoader } from "../common/Loader";
+import RightContentCard from "../common/RightContentCard";
 const animatedComponents = makeAnimated();
 
 const urls = [
@@ -60,20 +61,31 @@ export default class MapLayer extends Component {
     return (
       <RightContentCard
         title="Map Layer"
-        hideButton={false}
-        submitHandler={this.onSubmitHandler}
+        // hideButton={false}
+        // submitHandler={this.onSubmitHandler}
       >
-        {this.state.initialData.length === 0 && <h1>Loading...</h1>}
-        {this.state.initialData.length > 0 && (
-          <Select
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            onChange={this.handleMultiChange}
-            defaultValue={this.state.initialData}
-            isMulti
-            options={this.state.dropdownData}
-          />
-        )}
+        {this.state.initialData.length === 0 && <DotLoader />}
+        <form onSubmit={this.onSubmitHandler}>
+          {this.state.initialData.length > 0 && (
+            <Select
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              onChange={this.handleMultiChange}
+              defaultValue={this.state.initialData}
+              isMulti
+              options={this.state.dropdownData}
+            />
+          )}
+          <div className="col-sm-12">
+            <button
+              type="submit"
+              className="fieldsight-btn pull-right"
+              style={{ marginTop: "15px" }}
+            >
+              Save
+            </button>
+          </div>
+        </form>
       </RightContentCard>
     );
   }
