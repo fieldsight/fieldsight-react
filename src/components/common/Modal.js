@@ -5,8 +5,8 @@ const Modal = ({ title, toggleModal, children }) => (
   <Zoom duration={500}>
     <div className="fieldsight-popup open" style={{ zIndex: 9999 }}>
       <div
-        className={`popup-body sm-body ${
-          title === "Preview" ? "cropbody" : ""
+        className={`popup-body ${title === "Preview" ? "cropbody" : ""} ${
+          title === "Warning" ? "sm-body" : ""
         }`}
       >
         <div className="card">

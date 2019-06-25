@@ -428,24 +428,8 @@ class EditProject extends Component {
           </div>
         </form>
         {showCropper && (
-          <Modal title="Preview" toggleModal={closeModal}>
-            <div class="warning">
-              <i class="la la-exclamation-triangle" />
-              <h4>Warning</h4>
-              <p>
-                "All the form submissions and user roles within this site will
-                be completely removed. Do you still want to continue?"
-              </p>
-            </div>
-            <div class="warning-footer text-center">
-              <a href="#" class="fieldsight-btn rejected-btn">
-                cancel
-              </a>
-              <a href="#" class="fieldsight-btn">
-                confirm
-              </a>
-            </div>
-            {/* <div className="row">
+          <Modal title="Warning" toggleModal={closeModal}>
+            <div className="row">
               <div className="col-md-6">
                 <div className="card-body" style={{ padding: 0 }}>
                   <figure>
@@ -483,7 +467,7 @@ class EditProject extends Component {
                   </figure>
                 </div>
               </div>
-            </div> */}
+            </div>
           </Modal>
         )}
       </RightContentCard>

@@ -21,7 +21,8 @@ const INITIAL_STATE = {
   selectedId: "",
   selectedIdentifier: "",
   selectedName: "",
-  isLoading: false
+  isLoading: false,
+  showDeleteConfirmation: false
 };
 class SiteType extends Component {
   state = INITIAL_STATE;
@@ -43,15 +44,6 @@ class SiteType extends Component {
       .catch(err => console.log("err", err));
   }
 
-  // addHandler = e => {
-  //   const { selectedIdentifier, selectedName } = this.state;
-  //   const siteType = {
-  //     identifier: selectedIdentifier,
-  //     name: selectedName,
-  //     project: 137
-  //   };
-
-  // };
   requestHandler = () => {
     const {
       selectedId,
@@ -73,7 +65,6 @@ class SiteType extends Component {
           project: selectedSite.project
         })
         .then(res => {
-          console.log("response", res);
           this.setState({
             ...INITIAL_STATE,
             siteType: newSiteType
@@ -121,18 +112,42 @@ class SiteType extends Component {
   };
 
   removeHandler = id => {
-    const filteredSiteType = this.state.siteType.filter(site => site.id !== id);
-    axios
-      .delete(`${urls[1]}/${id}/`)
-      .then(res => {
-        res.status === 200
-          ? this.setState({
-              ...INITIAL_STATE,
-              siteType: filteredSiteType
-            })
-          : null;
-      })
-      .catch(err => console.log("err", err));
+    this.setState({
+      showDeleteConfirmation: true,
+      selectedId: id
+    });
+  };
+
+  confirmHandler = () => {
+    this.setState(
+      {
+        isLoading: true
+      },
+      () => {
+        const { selectedId, siteType } = this.state;
+        const filteredSiteType = siteType.filter(
+          site => site.id !== +selectedId
+        );
+        axios
+          .delete(`${urls[1]}/${selectedId}/`)
+          .then(res => {
+            res.status === 200
+              ? this.setState({
+                  ...INITIAL_STATE,
+                  siteType: filteredSiteType
+                })
+              : null;
+          })
+          .catch(err => console.log("err", err));
+      }
+    );
+  };
+
+  cancelHandler = () => {
+    this.setState({
+      showDeleteConfirmation: false,
+      selectedId: ""
+    });
   };
 
   onChangeHandler = e => {
@@ -149,13 +164,16 @@ class SiteType extends Component {
         isLoading,
         siteType,
         selectedIdentifier,
-        selectedName
+        selectedName,
+        showDeleteConfirmation
       },
       toggleModal,
       editHandler,
       removeHandler,
       onChangeHandler,
-      onSubmitHandler
+      onSubmitHandler,
+      cancelHandler,
+      confirmHandler
     } = this;
     return (
       <Fragment>
@@ -164,7 +182,6 @@ class SiteType extends Component {
           addButton
           toggleModal={toggleModal}
           hideButton={true}
-          // submitHandler={addHandler}
         >
           <Table
             page="siteType"
@@ -206,6 +223,29 @@ class SiteType extends Component {
                 </button>
               </div>
             </form>
+          </Modal>
+        )}
+        {showDeleteConfirmation && (
+          <Modal title="Warning" toggleModal={toggleModal}>
+            <div className="warning">
+              <i className="la la-exclamation-triangle" />
+              {/* <h4>Warning</h4> */}
+              <p>
+                "All the form submissions and user roles within this site will
+                be completely removed. Do you still want to continue?"
+              </p>
+            </div>
+            <div className="warning-footer text-center">
+              <a
+                className="fieldsight-btn rejected-btn"
+                onClick={cancelHandler}
+              >
+                cancel
+              </a>
+              <a className="fieldsight-btn" onClick={confirmHandler}>
+                confirm
+              </a>
+            </div>
           </Modal>
         )}
       </Fragment>
