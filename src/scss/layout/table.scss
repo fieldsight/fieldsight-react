@@ -40,7 +40,30 @@
         }
     }
     
-    
+    table{
+        td{
+            a.table-profile{
+                @include flex_start;
+                align-items: center;
+                figure{
+                    max-width: 40px;
+                    margin:0;
+                    overflow: hidden;
+                    margin-right: 0.5rem;
+                    img{
+                        width:40px;
+                        height: 40px;
+                        @include radius50;
+                        @include boxshadow;
+                    }
+                }
+                h5{
+                    font-size:0.875rem;
+                }
+            }
+            
+        }
+    }
     table.table {
         tr{
             .progress{
@@ -258,7 +281,19 @@
             }
         }
     }
-    
+    .project-table{
+        .table-list{
+            margin-bottom:1rem;
+            h4{
+                font-size: 1rem;
+                font-weight: 500;
+                text-transform: capitalize;
+                padding-bottom:0.5rem;
+                border-bottom: 1px solid $color-bg;
+            }
+        }
+        
+    }
     @media print{
         table.fixedHeader-floating {
             display: none;
