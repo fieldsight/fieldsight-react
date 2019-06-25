@@ -5,6 +5,7 @@ import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
+import { successToast, errorToast } from "../../utils/toastHandler";
 
 const tableHeader = {
   siteTypes: ["ID", "Type", "Action"]
@@ -65,12 +66,23 @@ class SiteType extends Component {
           project: selectedSite.project
         })
         .then(res => {
-          this.setState({
-            ...INITIAL_STATE,
-            siteType: newSiteType
-          });
+          this.setState(
+            {
+              ...INITIAL_STATE,
+              siteType: newSiteType
+            },
+            () => successToast("Site", "updated")
+          );
         })
-        .catch(err => console.log("err", err));
+        .catch(err => {
+          this.setState(
+            {
+              isLoading: false,
+              selectedId: ""
+            },
+            errorToast
+          );
+        });
     }
 
     const newSiteType = {
@@ -82,12 +94,22 @@ class SiteType extends Component {
     axios
       .post(urls[0], newSiteType)
       .then(res => {
-        this.setState({
-          ...INITIAL_STATE,
-          siteType: [...this.state.siteType, { ...res.data }]
-        });
+        this.setState(
+          {
+            ...INITIAL_STATE,
+            siteType: [...this.state.siteType, { ...res.data }]
+          },
+          () => successToast("Site", "added")
+        );
       })
-      .catch(err => console.log("err", err));
+      .catch(err => {
+        this.setState(
+          {
+            isLoading: false
+          },
+          errorToast
+        );
+      });
   };
 
   onSubmitHandler = (e, edit) => {
@@ -121,6 +143,7 @@ class SiteType extends Component {
   confirmHandler = () => {
     this.setState(
       {
+        showDeleteConfirmation: false,
         isLoading: true
       },
       () => {
@@ -132,13 +155,23 @@ class SiteType extends Component {
           .delete(`${urls[1]}/${selectedId}/`)
           .then(res => {
             res.status === 200
-              ? this.setState({
-                  ...INITIAL_STATE,
-                  siteType: filteredSiteType
-                })
+              ? this.setState(
+                  {
+                    ...INITIAL_STATE,
+                    siteType: filteredSiteType
+                  },
+                  () => successToast("Site", "deleted")
+                )
               : null;
           })
-          .catch(err => console.log("err", err));
+          .catch(err => {
+            this.setState(
+              {
+                isLoading: false
+              },
+              errorToast
+            );
+          });
       }
     );
   };
@@ -226,7 +259,10 @@ class SiteType extends Component {
           </Modal>
         )}
         {showDeleteConfirmation && (
-          <Modal title="Warning" toggleModal={toggleModal}>
+          <Modal
+            title="Warning"
+            toggleModal={() => this.setState({ showDeleteConfirmation: false })}
+          >
             <div className="warning">
               <i className="la la-exclamation-triangle" />
               {/* <h4>Warning</h4> */}

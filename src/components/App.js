@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { HashRouter as Router } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import setDefault from "../config";
 import Settings from "./settings/Settings";
-import "../css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
+import "../css/custom.css";
 
 class App extends Component {
   constructor(props) {
@@ -21,6 +24,7 @@ class App extends Component {
       <div className="App Fade">
         <Router>
           <Settings />
+          <ToastContainer />
         </Router>
       </div>
     );
