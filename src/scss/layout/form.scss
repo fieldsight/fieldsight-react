@@ -221,7 +221,7 @@
                               transform-origin: left top;
                       border-radius: 0.25rem;
                       content: '';
-                      -webkit-transition: opacity 0.28s ease, height 0s linear 0.28s;
+                      -webkit-transition: opacity 0.2s ease, height 0s linear 0.2s;
                       transition: opacity 0.1s ease, height 0s linear 0.1s;
                       opacity: 0;
                     }
@@ -233,8 +233,8 @@
                       box-shadow: 0 0 0 0.0625rem $color-white;
                     }
                     &::after{
-                      top: 0.3rem;
-                      left: 0;
+                      top: 0.4rem;
+                      left: 0.12rem;
                       -webkit-transform: rotate(-45deg);
                               transform: rotate(-45deg);
                     }
@@ -250,17 +250,17 @@
                         color:$color-blue;
                         &::after{
                           opacity: 1;
-                          -webkit-transition: height 0.28s ease;
-                          transition: height 0.28s ease;
-                          height: 0.5rem;
+                          -webkit-transition: height 0.2s ease;
+                          transition: height 0.2s ease;
+                          height: 0.3rem;
                         }
                         &::before{
                           opacity: 1;
-                          -webkit-transition: height 0.28s ease;
-                          transition: height 0.28s ease;
-                          height: 1rem;
-                          -webkit-transition-delay: 0.28s;
-                                  transition-delay: 0.28s;
+                          -webkit-transition: height 0.2s ease;
+                          transition: height 0.2s ease;
+                          height: 0.6rem;
+                          -webkit-transition-delay: 0.2s;
+                                  transition-delay: 0.2s;
                         }
                       }
                     }
@@ -483,8 +483,6 @@
             background-color:$color-bg;
 
         }
-        .select2-selection--multiple {
-        }
           .select2-selection__choice{
             padding:0.1rem 0.5rem;
             background-color:$color-bg;
@@ -499,7 +497,7 @@
       
     }
     .warning{
-      padding:1rem;
+      padding: 0 1rem 1rem 0;
       text-align: center;
       i{
         color:$color-red;
@@ -513,6 +511,12 @@
       }
       p{
         font-size: 0.875rem;
+        margin:0.8rem 0 1.2rem 0;
+      }
+      .warning-footer{
+        a{
+          margin-right:0.6125rem;
+        }
       }
     }
     .edit-form{
@@ -652,6 +656,11 @@
             }
             &.sm-body{
               max-width: 500px;
+            }
+            .warning-footer{
+              a.fieldsight-btn{
+                margin-left:0.5rem;
+              }
             }
         }
       }
