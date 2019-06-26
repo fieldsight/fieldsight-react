@@ -4,22 +4,26 @@ import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Table from "../common/Table";
 import Loader from "../common/Loader";
+import { successToast, errorToast } from "../../utils/toastHandler";
+
 const tableHeader = {
   termsAndLabels: ["Terms And Labels", "Changed To"]
 };
+
 const urls = ["https://fieldsight.naxa.com.np/fv3/api/project-terms-labels"];
 
 export default class TermAndLabel extends Component {
   state = {
     termsAndLabels: {
-      id: "137",
+      id: "",
       donor: "",
       site: "",
       site_supervisor: "",
       site_reviewer: "",
       region: "",
       region_supervisor: "",
-      region_reviewer: ""
+      region_reviewer: "",
+      project: 137
     },
     hasData: false,
     isLoading: false
@@ -36,7 +40,8 @@ export default class TermAndLabel extends Component {
           site_reviewer,
           region,
           region_supervisor,
-          region_reviewer
+          region_reviewer,
+          project
         }
       } = this.state;
 
@@ -47,15 +52,28 @@ export default class TermAndLabel extends Component {
         site_reviewer,
         region,
         region_supervisor,
-        region_reviewer
+        region_reviewer,
+        project
       };
 
-      const response = await axios.put(`${urls[0]}/${id}`, termsAndLabels);
-      this.setState({
+      if (id) {
+        await axios.put(`${urls[0]}/${id}/`, termsAndLabels);
+        await this.setState({
+          isLoading: false
+        });
+        return successToast("Terms and Labels", "updated");
+      }
+
+      await axios.post(`${urls[0]}/?project=137`, termsAndLabels);
+      await this.setState({
         isLoading: false
       });
+      successToast("Terms and Labels", "added");
     } catch (error) {
-      console.log("error", error);
+      await this.setState({
+        isLoading: false
+      });
+      errorToast();
     }
   };
 
@@ -82,7 +100,7 @@ export default class TermAndLabel extends Component {
 
   componentDidMount() {
     axios
-      .get(`${urls[0]}?project=137`)
+      .get(`${urls[0]}/?project=137`)
       .then(res => {
         res.data && res.data.length > 0
           ? this.setState({

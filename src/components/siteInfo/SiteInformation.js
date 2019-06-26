@@ -5,6 +5,7 @@ import SiteInformationTable from "./SiteInformationTable";
 import FeaturedPictures from "./FeaturedPictures";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
+import { errorToast, successToast } from "../../utils/toastHandler";
 
 const urls = [
   "https://fieldsight.naxa.com.np/fieldsight/api/organization/13/my_projects/137/",
@@ -52,11 +53,17 @@ class SiteInformation extends Component {
         { headers: headers }
       );
 
-      this.setState({
+      await this.setState({
         isLoading: false
       });
+      () => successToast("Site", "deleted");
     } catch (err) {
-      console.log("err", err);
+      this.setState(
+        {
+          isLoading: false
+        },
+        errorToast
+      );
     }
   };
 

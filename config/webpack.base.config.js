@@ -1,25 +1,25 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require("path");
+const webpack = require("webpack");
 const merge = require("webpack-merge");
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
-const APP_DIR = path.resolve(__dirname, '../src');
+const APP_DIR = path.resolve(__dirname, "../src");
 
 module.exports = env => {
   const { PLATFORM, VERSION } = env;
   return merge([
     {
-      entry: ['@babel/polyfill', APP_DIR],
+      entry: ["@babel/polyfill", APP_DIR],
       module: {
         rules: [
           {
             test: /\.js$/,
             exclude: /node_modules/,
             use: {
-              loader: 'babel-loader'
+              loader: "babel-loader"
             }
           },
           {
@@ -56,11 +56,10 @@ module.exports = env => {
         ]
       },
       plugins: [
-
         new HtmlWebpackPlugin({
-          title: 'example',
-          template: './src/index.html',
-          filename: 'index.html',
+          title: "example",
+          template: "./src/index.html",
+          filename: "index.html",
           inject: true,
           minify: {
             collapseWhitespace: true,
@@ -73,11 +72,11 @@ module.exports = env => {
           }
         }),
         new webpack.DefinePlugin({
-          'process.env.VERSION': JSON.stringify(env.VERSION),
-          'process.env.PLATFORM': JSON.stringify(env.PLATFORM)
+          "process.env.VERSION": JSON.stringify(VERSION),
+          "process.env.PLATFORM": JSON.stringify(PLATFORM)
         }),
-        new CopyWebpackPlugin([{ from: 'src/static' }])
-      ],
+        new CopyWebpackPlugin([{ from: "src/static" }])
+      ]
     }
-  ])
+  ]);
 };

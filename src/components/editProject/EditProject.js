@@ -5,10 +5,13 @@ import axios from "axios";
 import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
 import Zoom from "react-reveal/Zoom";
+import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import RightContentCard from "../common/RightContentCard";
 import CheckBox from "../common/CheckBox";
+import Loader from "../common/Loader";
+import { errorToast, successToast } from "../../utils/toastHandler";
 
 import "leaflet/dist/leaflet.css";
 import "cropperjs/dist/cropper.css";
@@ -36,15 +39,14 @@ class EditProject extends Component {
       latitude: "",
       longitude: ""
     },
-    zoom: 13,
+    zoom: 1,
     src: "",
     showCropper: false,
-    cropResult: ""
+    cropResult: "",
+    isLoading: false
   };
 
-  onSubmitHandler = e => {
-    e.preventDefault();
-
+  requestHandler = () => {
     const {
       project: {
         name,
@@ -55,7 +57,7 @@ class EditProject extends Component {
         public_desc,
         donor,
         logo,
-        cluster_sites,
+        // cluster_sites,
         organization
       },
       position: { latitude, longitude },
@@ -72,10 +74,10 @@ class EditProject extends Component {
       website,
       donor,
       public_desc,
-      logo: cropResult,
+      ...(cropResult && { logo: cropResult }),
       latitude,
       longitude,
-      cluster_sites: true,
+      // cluster_sites,
       sector: selectedSector,
       sub_sector: selectedSubSector,
       organization
@@ -83,8 +85,32 @@ class EditProject extends Component {
 
     axios
       .put(urls[0], project)
-      .then(res => console.log("res", res))
-      .catch(err => console.log(err));
+      .then(res => {
+        this.setState(
+          {
+            isLoading: false
+          },
+          () => successToast("Project", "updated")
+        );
+      })
+      .catch(err => {
+        this.setState(
+          {
+            isLoading: false
+          },
+          errorToast
+        );
+      });
+  };
+
+  onSubmitHandler = e => {
+    e.preventDefault();
+    this.setState(
+      {
+        isLoading: true
+      },
+      this.requestHandler
+    );
   };
 
   onSelectChangeHandler = (e, subSect) => {
@@ -168,6 +194,22 @@ class EditProject extends Component {
     });
   };
 
+  closeModal = () => {
+    this.setState({
+      showCropper: false
+    });
+  };
+
+  mapClickHandler = e => {
+    this.setState({
+      position: {
+        ...this.state.position,
+        latitude: e.latlng.lat,
+        longitude: e.latlng.lng
+      }
+    });
+  };
+
   render() {
     const {
       state: {
@@ -176,13 +218,16 @@ class EditProject extends Component {
         subSectors,
         position: { latitude, longitude },
         showCropper,
-        cropResult
+        cropResult,
+        isLoading
       },
       onChangeHandler,
       onSelectChangeHandler,
       onSubmitHandler,
       handleCheckboxChange,
-      readFile
+      readFile,
+      closeModal,
+      mapClickHandler
     } = this;
 
     return (
@@ -282,11 +327,11 @@ class EditProject extends Component {
               </div>
             </div>
             <div className="col-xl-4 col-md-6">
-              <CheckBox
+              {/* <CheckBox
                 checked={this.state.project.cluster_sites || false}
                 label="Do you want cluster sites in this project?"
                 onChange={handleCheckboxChange}
-              />
+              /> */}
             </div>
             <div className="col-xl-4 col-md-6">
               <InputElement
@@ -311,6 +356,7 @@ class EditProject extends Component {
                     style={{ height: "205px", marginTop: "1rem" }}
                     center={[latitude, longitude]}
                     zoom={this.state.zoom}
+                    onClick={mapClickHandler}
                   >
                     <TileLayer
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -420,67 +466,49 @@ class EditProject extends Component {
           </div>
         </form>
         {showCropper && (
-          <Zoom duration={500}>
-            <div
-              className="fieldsight-popup open"
-              id="scheduled-popup"
-              style={{ zIndex: 9999 }}
-            >
-              <div className="popup-body cropbody">
-                <div className="card no-bg">
-                  <div className="card-header main-card-header">
-                    <h5>preview</h5>
-                    <span
-                      className="popup-close"
-                      onClick={() => this.setState({ showCropper: false })}
+          <Modal title="Preview" toggleModal={closeModal}>
+            <div className="row">
+              <div className="col-md-6">
+                <div className="card-body" style={{ padding: 0 }}>
+                  <figure>
+                    <Cropper
+                      style={{ height: 400, width: 300 }}
+                      aspectRatio={1 / 1}
+                      preview=".img-preview"
+                      guides={false}
+                      src={this.state.src}
+                      ref={cropper => {
+                        this.cropper = cropper;
+                      }}
+                    />
+                    <button
+                      className="fieldsight-btn"
+                      style={{ marginTop: "15px" }}
+                      onClick={this.cropImage}
                     >
-                      <i className="la la-close" />
-                    </span>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="card-body">
-                        <figure>
-                          <Cropper
-                            style={{ height: 400, width: 300 }}
-                            aspectRatio={1 / 1}
-                            preview=".img-preview"
-                            guides={false}
-                            src={this.state.src}
-                            ref={cropper => {
-                              this.cropper = cropper;
-                            }}
-                          />
-                          <button
-                            className="fieldsight-btn"
-                            style={{ marginTop: "15px" }}
-                            onClick={this.cropImage}
-                          >
-                            Save Image
-                          </button>
-                        </figure>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="card-body">
-                        <figure>
-                          <div
-                            className="img-preview"
-                            style={{
-                              width: "100%",
-                              height: 400,
-                              overflow: "hidden"
-                            }}
-                          />
-                        </figure>
-                      </div>
-                    </div>
-                  </div>
+                      Save Image
+                    </button>
+                  </figure>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="card-body" style={{ padding: 0 }}>
+                  <figure>
+                    <div
+                      className="img-preview"
+                      style={{
+                        width: "100%",
+                        height: 400,
+                        overflow: "hidden"
+                      }}
+                    />
+                  </figure>
                 </div>
               </div>
             </div>
-          </Zoom>
+          </Modal>
         )}
+        {isLoading && <Loader />}
       </RightContentCard>
     );
   }

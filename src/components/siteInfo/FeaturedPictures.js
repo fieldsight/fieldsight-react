@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import uuid from "uuid/v4";
 import FeaturedPicturesCard from "./FeaturedPicturesCard";
-import FormModal from "../common/FormModal";
+import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import findQuestion from "../../utils/findQuestion";
@@ -233,49 +233,56 @@ class FeaturedPictures extends Component {
         </div>
 
         {showModal && (
-          <FormModal
+          <Modal
             title="Add Pictures"
             toggleModal={closeModal}
             submitHandler={onSubmitHandler}
           >
-            <InputElement
-              tag="input"
-              type="text"
-              required={true}
-              label="Input Label"
-              formType="floatingForm"
-              htmlFor="input"
-              name="label"
-              value={label}
-              changeHandler={onInputChangeHandler}
-            />
+            <form className="floating-form" onSubmit={onSubmitHandler}>
+              <InputElement
+                tag="input"
+                type="text"
+                required={true}
+                label="Input Label"
+                formType="floatingForm"
+                htmlFor="input"
+                name="label"
+                value={label}
+                changeHandler={onInputChangeHandler}
+              />
 
-            <SelectElement
-              className="form-control"
-              label="Type"
-              options={siteFeaturedTypes}
-              value={editMode && type}
-              changeHandler={onSelectChangeHandler}
-            />
-
-            {type === "Form" && (
               <SelectElement
                 className="form-control"
-                options={forms}
-                value={editMode && selectedForm}
-                changeHandler={formChangeHandler}
+                label="Type"
+                options={siteFeaturedTypes}
+                value={editMode && type}
+                changeHandler={onSelectChangeHandler}
               />
-            )}
 
-            {type === "Form" && (
-              <SelectElement
-                className="form-control"
-                options={filteredQuestions}
-                value={editMode && selectedQuestion.name}
-                changeHandler={questionChangeHandler}
-              />
-            )}
-          </FormModal>
+              {type === "Form" && (
+                <SelectElement
+                  className="form-control"
+                  options={forms}
+                  value={editMode && selectedForm}
+                  changeHandler={formChangeHandler}
+                />
+              )}
+
+              {type === "Form" && (
+                <SelectElement
+                  className="form-control"
+                  options={filteredQuestions}
+                  value={editMode && selectedQuestion.name}
+                  changeHandler={questionChangeHandler}
+                />
+              )}
+              <div className="form-group pull-right no-margin">
+                <button type="submit" className="fieldsight-btn">
+                  Save
+                </button>
+              </div>
+            </form>
+          </Modal>
         )}
       </div>
     );

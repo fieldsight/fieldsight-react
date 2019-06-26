@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import uuid from "uuid/v4";
 import Table from "../common/Table";
-import FormModal from "../common/FormModal";
+import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import CheckBox from "../common/CheckBox";
@@ -369,128 +369,132 @@ class SiteInformationTable extends Component {
           />
         </div>
         {showModal && (
-          <FormModal
-            title="Add Information"
-            toggleModal={closeModal}
-            submitHandler={onSubmitHandler}
-          >
-            <InputElement
-              tag="input"
-              type="text"
-              required={true}
-              label="Input Label"
-              formType="floatingForm"
-              htmlFor="label"
-              value={label}
-              name="label"
-              changeHandler={onInputChangeHandler}
-            />
-            <SelectElement
-              className="form-control"
-              label="Type"
-              options={questionTypes}
-              value={editMode && type}
-              changeHandler={onSelectChangeHandler}
-            />
-            {(type === "Text" || type === "Number" || type === "Date") && (
+          <Modal title="Add Information" toggleModal={closeModal}>
+            <form className="floating-form" onSubmit={onSubmitHandler}>
               <InputElement
                 tag="input"
                 type="text"
                 required={true}
-                label="Placeholder"
+                label="Input Label"
                 formType="floatingForm"
-                htmlFor="placeholder"
-                name="placeholder"
-                value={placeholder}
+                htmlFor="label"
+                value={label}
+                name="label"
                 changeHandler={onInputChangeHandler}
               />
-            )}
-
-            {type === "MCQ" &&
-              optInputField &&
-              optInputField.length > 0 &&
-              optInputField.map((el, i) => (
-                <el.tag
-                  key={el.val}
+              <SelectElement
+                className="form-control"
+                label="Type"
+                options={questionTypes}
+                value={editMode && type}
+                changeHandler={onSelectChangeHandler}
+              />
+              {(type === "Text" || type === "Number" || type === "Date") && (
+                <InputElement
                   tag="input"
                   type="text"
-                  label={`option${el.val}`}
-                  formType="floatingForm"
-                  htmlFor={`option${el.val}`}
                   required={true}
-                  removeBtn
-                  removeHandler={() => removeInputHandler(el.val)}
-                  name={`option${el.val}`}
-                  value={this.state.options[`option${el.val}`] || ""}
-                  changeHandler={e => onInputChangeHandler(e, "option")}
+                  label="Placeholder"
+                  formType="floatingForm"
+                  htmlFor="placeholder"
+                  name="placeholder"
+                  value={placeholder}
+                  changeHandler={onInputChangeHandler}
                 />
-              ))}
-            {type === "MCQ" && (
-              <div className="form-group">
-                <button className="fieldsight-btn" onClick={generateOptField}>
-                  Option+
+              )}
+
+              {type === "MCQ" &&
+                optInputField &&
+                optInputField.length > 0 &&
+                optInputField.map((el, i) => (
+                  <el.tag
+                    key={el.val}
+                    tag="input"
+                    type="text"
+                    label={`option${el.val}`}
+                    formType="floatingForm"
+                    htmlFor={`option${el.val}`}
+                    required={true}
+                    removeBtn
+                    removeHandler={() => removeInputHandler(el.val)}
+                    name={`option${el.val}`}
+                    value={this.state.options[`option${el.val}`] || ""}
+                    changeHandler={e => onInputChangeHandler(e, "option")}
+                  />
+                ))}
+              {type === "MCQ" && (
+                <div className="form-group">
+                  <button className="fieldsight-btn" onClick={generateOptField}>
+                    Option+
+                  </button>
+                </div>
+              )}
+
+              <CheckBox
+                checked={this.state.dashboardChecked}
+                label="Share To Dashboard"
+                onChange={e => this.handleCheckboxChange(e, "dashboard")}
+              />
+
+              <CheckBox
+                checked={this.state.publicChecked}
+                label="Share To Public"
+                onChange={e => this.handleCheckboxChange(e, "public")}
+              />
+
+              {(type === "Text" ||
+                type === "Number" ||
+                type === "Date" ||
+                type === "MCQ" ||
+                type === "Link") && (
+                <InputElement
+                  tag="textarea"
+                  required={true}
+                  label="Help Text"
+                  formType="floatingForm"
+                  htmlFor="helpText"
+                  name="helpText"
+                  value={helpText}
+                  changeHandler={onInputChangeHandler}
+                />
+              )}
+
+              {type === "Link" && (
+                <SelectElement
+                  className="form-control"
+                  options={projects}
+                  value={editMode && selectedProject}
+                  changeHandler={formChangeHandler}
+                />
+              )}
+              {(type === "Form" ||
+                type === "FormSubStat" ||
+                type === "FormSubCountQuestion" ||
+                type === "FormQuestionAnswerStatus") && (
+                <SelectElement
+                  className="form-control"
+                  options={forms}
+                  value={editMode && selectedForm}
+                  changeHandler={formChangeHandler}
+                />
+              )}
+
+              {(type === "Form" || type === "FormQuestionAnswerStatus") && (
+                <SelectElement
+                  className="form-control"
+                  options={filteredQuestions}
+                  value={editMode && selectedQuestion.name}
+                  changeHandler={questionChangeHandler}
+                />
+              )}
+
+              <div className="form-group pull-right no-margin">
+                <button type="submit" className="fieldsight-btn">
+                  Save
                 </button>
               </div>
-            )}
-
-            <CheckBox
-              checked={this.state.dashboardChecked}
-              label="Share To Dashboard"
-              onChange={e => this.handleCheckboxChange(e, "dashboard")}
-            />
-
-            <CheckBox
-              checked={this.state.publicChecked}
-              label="Share To Public"
-              onChange={e => this.handleCheckboxChange(e, "public")}
-            />
-
-            {(type === "Text" ||
-              type === "Number" ||
-              type === "Date" ||
-              type === "MCQ" ||
-              type === "Link") && (
-              <InputElement
-                tag="textarea"
-                required={true}
-                label="Help Text"
-                formType="floatingForm"
-                htmlFor="helpText"
-                name="helpText"
-                value={helpText}
-                changeHandler={onInputChangeHandler}
-              />
-            )}
-
-            {type === "Link" && (
-              <SelectElement
-                className="form-control"
-                options={projects}
-                value={editMode && selectedProject}
-                changeHandler={formChangeHandler}
-              />
-            )}
-            {(type === "Form" ||
-              type === "FormSubStat" ||
-              type === "FormSubCountQuestion" ||
-              type === "FormQuestionAnswerStatus") && (
-              <SelectElement
-                className="form-control"
-                options={forms}
-                value={editMode && selectedForm}
-                changeHandler={formChangeHandler}
-              />
-            )}
-
-            {(type === "Form" || type === "FormQuestionAnswerStatus") && (
-              <SelectElement
-                className="form-control"
-                options={filteredQuestions}
-                value={editMode && selectedQuestion.name}
-                changeHandler={questionChangeHandler}
-              />
-            )}
-          </FormModal>
+            </form>
+          </Modal>
         )}
       </div>
     );
