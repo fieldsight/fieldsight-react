@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import moment from "moment";
+import { withRouter, Link } from "react-router-dom";
 
+function Td({ children, to }) {
+  return (
+    <td>
+      <Link to={to}>{children}</Link>
+    </td>
+  );
+}
 class TableRow extends Component {
   renderName = (dataType, id) => {
     return this.props[dataType].find(dtype => dtype.id === +id).name;
@@ -36,6 +45,7 @@ class TableRow extends Component {
         </td>
       </tr>
     ),
+
     siteType: (row, i, editHandler, removeHandler) => (
       <tr key={row.id}>
         <td>{row.identifier}</td>
@@ -54,11 +64,14 @@ class TableRow extends Component {
         </td>
       </tr>
     ),
-    manageRegion: (row, i, editHandler, removeHandler) => (
+
+    manageRegion: (row, i, editHandler, removeHandler, selectRegionHandler) => (
       <tr key={row.id}>
-        <td>{row.identifier}</td>
-        <td>{row.name}</td>
-        <td>{row.date_created}</td>
+        <Td to={`/manage-region/${row.id}/sub-region`}>{row.identifier}</Td>
+        <Td to={`/manage-region/${row.id}/sub-region`}>{row.name}</Td>
+        <Td to={`/manage-region/${row.id}/sub-region`}>
+          {moment(row.date_created).format("MMMM Do YYYY, h:mm:ss a")}
+        </Td>
         <td>
           <a onClick={() => editHandler(row.id)} className="td-edit-btn">
             <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
@@ -73,29 +86,44 @@ class TableRow extends Component {
         </td>
       </tr>
     ),
+
     termsAndLabels: row => (
       <tr key={row[0]}>
         <td style={{ textTransform: "capitalize" }}>
           {row[0].replace("_", " ")}
         </td>
-        <td>{row[1]}</td>
+        <td style={row[1] ? {} : { textTransform: "capitalize" }}>
+          {row[1] || row[0].replace("_", " ")}{" "}
+        </td>
       </tr>
     )
   });
 
   render() {
     const {
-      props: { tableRow, page, editHandler, removeHandler },
+      props: {
+        tableRow,
+        page,
+        editHandler,
+        removeHandler,
+        selectRegionHandler
+      },
       tableRowMethod
     } = this;
     return (
       <tbody>
         {tableRow.map((row, i) =>
-          tableRowMethod()[page](row, i, editHandler, removeHandler)
+          tableRowMethod()[page](
+            row,
+            i,
+            editHandler,
+            removeHandler,
+            selectRegionHandler
+          )
         )}
       </tbody>
     );
   }
 }
 
-export default TableRow;
+export default withRouter(TableRow);

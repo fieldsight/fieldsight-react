@@ -15,6 +15,7 @@ const urls = [
 ];
 
 export default class MapLayer extends Component {
+  _isMounted = false;
   state = {
     geoLayer: [],
     initialData: [],
@@ -24,23 +25,26 @@ export default class MapLayer extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     axios.all(urls.map(url => axios.get(url))).then(
       axios.spread((initialData, dropdownData) => {
-        const modifiedInitialData = initialData.data.map(item => ({
-          ...item,
-          value: item.id,
-          label: item.title
-        }));
+        if (this._isMounted) {
+          const modifiedInitialData = initialData.data.map(item => ({
+            ...item,
+            value: item.id,
+            label: item.title
+          }));
 
-        const modifiedDropdownData = dropdownData.data.map(item => ({
-          ...item,
-          value: item.id,
-          label: item.title
-        }));
-        this.setState({
-          initialData: modifiedInitialData,
-          dropdownData: modifiedDropdownData
-        });
+          const modifiedDropdownData = dropdownData.data.map(item => ({
+            ...item,
+            value: item.id,
+            label: item.title
+          }));
+          this.setState({
+            initialData: modifiedInitialData,
+            dropdownData: modifiedDropdownData
+          });
+        }
       })
     );
   }
@@ -120,5 +124,9 @@ export default class MapLayer extends Component {
         {isLoading && <Loader />}
       </Fragment>
     );
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 }

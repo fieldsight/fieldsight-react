@@ -9,6 +9,7 @@ const sideNavRoutes = [
     path: "/site-information",
     title: "Site Information"
   },
+  { to: "/manage-region", path: "/manage-region", title: "Manage Region" },
   { to: "/map-layer", path: "/map-layer", title: "Map Layers" },
   { to: "term-and-label", path: "/term-and-label", title: "Terms And Labels" }
 ];

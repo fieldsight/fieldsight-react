@@ -4,6 +4,7 @@ import IdentityForm from "./IdentityForm";
 import SiteInformationTable from "./SiteInformationTable";
 import FeaturedPictures from "./FeaturedPictures";
 import RightContentCard from "../common/RightContentCard";
+import InputElement from "../common/InputElement";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 
@@ -14,6 +15,8 @@ const urls = [
 ];
 
 class SiteInformation extends Component {
+  _isMounted = false;
+
   state = {
     forms: [],
     projects: [],
@@ -22,6 +25,43 @@ class SiteInformation extends Component {
     siteFeaturedImages: [],
     isLoading: false
   };
+
+  componentDidMount() {
+    this._isMounted = true;
+    Promise.all(urls.map(url => axios.get(url)))
+      .then(results => {
+        if (this._isMounted) {
+          const modifiedJsonQuestions = results[2].data.json_questions.map(
+            question => {
+              if (question.question_type === "MCQ") {
+                let optInputField = [],
+                  options = {};
+                if (Array.isArray(question.mcq_options)) {
+                  question.mcq_options.map((opt, i) => {
+                    options[`option${i}`] = opt.option_text;
+                    optInputField.push({ tag: InputElement, val: i });
+                  });
+                }
+                question.mcq_options = options;
+                question.optInputField = optInputField;
+                return question;
+              }
+              return question;
+            }
+          );
+          this.setState({
+            projects: results[0].data,
+            forms: results[1].data,
+            siteBasicInfo: results[2].data.site_basic_info,
+            jsonQuestions: modifiedJsonQuestions,
+            siteFeaturedImages: results[2].data.site_featured_images
+          });
+        }
+      })
+      .catch(error => {
+        console.log("error", error);
+      });
+  }
 
   requestHandler = async () => {
     try {
@@ -146,6 +186,10 @@ class SiteInformation extends Component {
         {isLoading && <Loader />}
       </Fragment>
     );
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 }
 

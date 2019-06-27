@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { HashRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { RegionProvider } from "../context";
 import setDefault from "../config";
 import Settings from "./settings/Settings";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -23,8 +24,10 @@ class App extends Component {
     return (
       <div className="App Fade">
         <Router>
-          <Settings />
-          <ToastContainer />
+          <RegionProvider>
+            <Settings />
+            <ToastContainer />
+          </RegionProvider>
         </Router>
       </div>
     );

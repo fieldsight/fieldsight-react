@@ -6,6 +6,7 @@ import SiteType from "../siteType/SiteType";
 import SiteInformation from "../siteInfo/SiteInformation";
 import SiteManage from "../SiteManage";
 import ManageRegion from "../manageRegion/ManageRegion";
+import SubRegion from "../manageRegion/SubRegion";
 import TermsAndLabels from "../termsAndLabels/TermAndLabel";
 import MapLayer from "../mapLayer/MapLayer";
 
@@ -54,6 +55,10 @@ export default class Settings extends Component {
                         <Route
                           path="/site-information"
                           component={SiteInformation}
+                        />
+                        <Route
+                          path="/manage-region/:subRegionId/sub-region"
+                          component={SubRegion}
                         />
                         <Route path="/manage-region" component={ManageRegion} />
 

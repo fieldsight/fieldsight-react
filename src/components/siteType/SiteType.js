@@ -26,6 +26,7 @@ const INITIAL_STATE = {
   showDeleteConfirmation: false
 };
 class SiteType extends Component {
+  _isMounted = false;
   state = INITIAL_STATE;
 
   toggleModal = () => {
@@ -35,12 +36,15 @@ class SiteType extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     axios
       .get(urls[0])
       .then(res => {
-        this.setState({
-          siteType: res.data
-        });
+        if (_this._isMounted) {
+          this.setState({
+            siteType: res.data
+          });
+        }
       })
       .catch(err => console.log("err", err));
   }
@@ -284,6 +288,10 @@ class SiteType extends Component {
         )}
       </Fragment>
     );
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 }
 

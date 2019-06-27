@@ -5,7 +5,7 @@ const merge = require("webpack-merge");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-
+const DashboardPlugin = require("webpack-dashboard/plugin");
 const APP_DIR = path.resolve(__dirname, "../src");
 
 module.exports = env => {
@@ -56,6 +56,10 @@ module.exports = env => {
         ]
       },
       plugins: [
+        new webpack.IgnorePlugin({
+          resourceRegExp: /^\.\/locale$/,
+          contextRegExp: /moment$/
+        }),
         new HtmlWebpackPlugin({
           title: "example",
           template: "./src/index.html",
@@ -75,7 +79,8 @@ module.exports = env => {
           "process.env.VERSION": JSON.stringify(VERSION),
           "process.env.PLATFORM": JSON.stringify(PLATFORM)
         }),
-        new CopyWebpackPlugin([{ from: "src/static" }])
+        new CopyWebpackPlugin([{ from: "src/static" }]),
+        new DashboardPlugin()
       ]
     }
   ]);

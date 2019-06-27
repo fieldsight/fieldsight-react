@@ -14,7 +14,7 @@ const RightContentCard = ({
       {addButton && (
         <div className="add-btn">
           <a onClick={toggleModal}>
-            Add new{" "}
+            {" "}
             <span>
               <i className="la la-plus" />
             </span>
@@ -22,6 +22,7 @@ const RightContentCard = ({
         </div>
       )}
     </div>
+
     <div className="card-body">{children}</div>
     {/* {!hideButton && (
       <button className="fieldsight-btn pull-right " onClick={submitHandler}>

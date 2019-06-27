@@ -11,7 +11,8 @@ export default class Table extends Component {
       forms,
       page,
       removeHandler,
-      editHandler
+      editHandler,
+      selectRegionHandler
     } = this.props;
     return (
       <div className="table-responsive">
@@ -27,6 +28,7 @@ export default class Table extends Component {
             forms={forms}
             removeHandler={removeHandler}
             editHandler={editHandler}
+            selectRegionHandler={selectRegionHandler}
           />
         </BootstrapTable>
       </div>

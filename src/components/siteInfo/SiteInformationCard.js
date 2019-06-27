@@ -1,13 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import SelectElement from "../common/SelectElement";
 import { DotLoader } from "../common/Loader";
 import findQuestion from "../../utils/findQuestion";
 import isEmpty from "../../utils/isEmpty";
-// const typeOptions = {
-//   UPLOAD: "Upload",
-//   CHOOSE_FROM_FORM: "Choose From Form",
-//   CHOOSE_FROM_GALLERY: "Choose from gallery"
-// };
 
 const typeOptions = {
   sitePictureTypes: [

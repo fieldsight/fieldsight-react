@@ -4,7 +4,6 @@ import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import axios from "axios";
 import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
-import Zoom from "react-reveal/Zoom";
 import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
@@ -29,6 +28,8 @@ const urls = [
 ];
 
 class EditProject extends Component {
+  _isMounted = false;
+
   state = {
     project: {},
     sector: [],
@@ -158,18 +159,21 @@ class EditProject extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     axios
       .all(urls.map(url => axios.get(url)))
       .then(
         axios.spread((project, sector) => {
-          const position = project.data && project.data.location.split(" ");
-          const longitude = position && position[1].split("(")[1];
-          const latitude = position && position[2].split(")")[0];
-          this.setState({
-            project: project.data,
-            sector: sector.data,
-            position: { latitude, longitude }
-          });
+          if (this._isMounted) {
+            const position = project.data && project.data.location.split(" ");
+            const longitude = position && position[1].split("(")[1];
+            const latitude = position && position[2].split(")")[0];
+            this.setState({
+              project: project.data,
+              sector: sector.data,
+              position: { latitude, longitude }
+            });
+          }
         })
       )
       .catch(err => console.log("err", err));
@@ -511,6 +515,10 @@ class EditProject extends Component {
         {isLoading && <Loader />}
       </RightContentCard>
     );
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 }
 

@@ -3,7 +3,8 @@ import axios from "axios";
 import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Table from "../common/Table";
-import Loader from "../common/Loader";
+import Loader, { DotLoader } from "../common/Loader";
+
 import { successToast, errorToast } from "../../utils/toastHandler";
 
 const tableHeader = {
@@ -13,6 +14,7 @@ const tableHeader = {
 const urls = ["https://fieldsight.naxa.com.np/fv3/api/project-terms-labels"];
 
 export default class TermAndLabel extends Component {
+  _isMounted = false;
   state = {
     termsAndLabels: {
       id: "",
@@ -25,8 +27,9 @@ export default class TermAndLabel extends Component {
       region_reviewer: "",
       project: 137
     },
-    hasData: false,
-    isLoading: false
+    showList: true,
+    isLoading: false,
+    dotLoader: true
   };
 
   requestHandler = async () => {
@@ -99,14 +102,18 @@ export default class TermAndLabel extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     axios
       .get(`${urls[0]}/?project=137`)
       .then(res => {
-        res.data && res.data.length > 0
-          ? this.setState({
-              termsAndLabels: res.data[0]
-            })
-          : null;
+        if (this._isMounted) {
+          res.data &&
+            res.data.length > 0 &&
+            this.setState({
+              termsAndLabels: res.data[0],
+              dotLoader: false
+            });
+        }
       })
 
       .catch(err => console.log("err", err));
@@ -114,13 +121,13 @@ export default class TermAndLabel extends Component {
 
   editHandler = () => {
     this.setState({
-      hasData: false
+      showList: false
     });
   };
 
   listHandler = () => {
     this.setState({
-      hasData: true
+      showList: true
     });
   };
 
@@ -136,8 +143,9 @@ export default class TermAndLabel extends Component {
           region_supervisor,
           region_reviewer
         },
-        hasData,
-        isLoading
+        showList,
+        isLoading,
+        dotLoader
       },
       listHandler,
       editHandler,
@@ -149,7 +157,8 @@ export default class TermAndLabel extends Component {
     return (
       <Fragment>
         <RightContentCard title="Terms And Labels">
-          {!hasData && (
+          {dotLoader && <DotLoader />}
+          {!dotLoader && !showList && (
             <Fragment>
               <form className="edit-form" onSubmit={onSubmitHandler}>
                 <div className="row">
@@ -254,7 +263,7 @@ export default class TermAndLabel extends Component {
               </button>
             </Fragment>
           )}
-          {hasData && (
+          {!dotLoader && showList && (
             <Fragment>
               <Table
                 page="termsAndLabels"
@@ -270,5 +279,8 @@ export default class TermAndLabel extends Component {
         {isLoading && <Loader />}
       </Fragment>
     );
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 }

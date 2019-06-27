@@ -1,16 +1,57 @@
 import React, { Component, Fragment } from "react";
-import Table from "../common/Table";
+import axios from "axios";
+import WithContext from "../../hoc/WithContext";
 import Modal from "../common/Modal";
+import Table from "../common/Table";
 import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
-import WithContext from "../../hoc/WithContext";
+
+const urls = ["https://fieldsight.naxa.com.np/fv3/api/project-regions/"];
 
 const tableHeader = {
   manageRegions: ["Region ID", "Region Name", "Created Date", "Action"]
 };
 
-class ManageRegion extends Component {
+class SubRegion extends Component {
+  state = {
+    subRegion: []
+  };
+
+  componentDidMount() {
+    const {
+      match: {
+        params: { subRegionId }
+      },
+      value: { setSubRegion }
+    } = this.props;
+    if (subRegionId) {
+      axios
+        .get(`${urls[0]}?project=137&region=${subRegionId}`)
+        .then(res => {
+          setSubRegion(res.data, subRegionId);
+        })
+        .catch(err => console.log("Err", err));
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      match: {
+        params: { subRegionId }
+      },
+      value: { setSubRegion }
+    } = this.props;
+    if (prevProps.match.params.subRegionId !== subRegionId) {
+      axios
+        .get(`${urls[0]}?project=137&region=${subRegionId}`)
+        .then(res => {
+          setSubRegion(res.data, subRegionId);
+        })
+        .catch(err => console.log("Err", err));
+    }
+  }
+
   render() {
     const {
       props: {
@@ -20,7 +61,7 @@ class ManageRegion extends Component {
           selectedName,
           showModal,
           showDeleteConfirmation,
-          region,
+          subRegion,
           toggleModal,
           onChangeHandler,
           editHandler,
@@ -32,6 +73,7 @@ class ManageRegion extends Component {
         }
       }
     } = this;
+    console.log("subreiog", this.props);
     return (
       <Fragment>
         <RightContentCard
@@ -42,10 +84,9 @@ class ManageRegion extends Component {
           <Table
             page="manageRegion"
             tableHeader={tableHeader.manageRegions}
-            tableRow={region}
+            tableRow={subRegion}
             removeHandler={removeHandler}
             editHandler={editHandler}
-            selectRegionHandler={selectRegionHandler}
           />
         </RightContentCard>
 
@@ -110,6 +151,10 @@ class ManageRegion extends Component {
       </Fragment>
     );
   }
+
+  componentWillUnmount() {
+    this.props.setSubRegion([], "");
+  }
 }
 
-export default WithContext(ManageRegion);
+export default WithContext(SubRegion);
