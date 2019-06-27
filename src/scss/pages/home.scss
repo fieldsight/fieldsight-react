@@ -86,9 +86,20 @@
         .checkbox-btn{
           position:absolute;
           right:0;
-          top:0;
+          top:0.6125rem;
         }
       }
+    }
+    &.globallist{
+      form{
+        .input-group.copyurl{
+          .input-group-text{
+            background:transparent;
+            cursor: pointer;
+          }
+        }
+      }
+      
     }
   }
   .normal-list{

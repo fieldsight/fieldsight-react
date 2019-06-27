@@ -165,9 +165,11 @@
                     border-color:$color-bg;
                     
                     a{
-                        
-                        &.td-edit-btn{
+                        &.td-btn{
                             margin:0 0.625rem;
+                        }
+                        &.td-edit-btn{
+                            
                             &:hover{
                                 color:$color-green;
                             }
@@ -175,6 +177,54 @@
                         &.td-delete-btn{
                             &:hover{
                                 color:$color-red;
+                            }
+                        }
+                        &.td-share-btn{
+                            margin:0 0.625rem; 
+                        }
+                    }
+                    .share-icon{
+                        position: relative;
+                        ul{
+                            padding:0 0.5rem;
+                            border:1px solid $color-bg;
+                            position: absolute;
+                            top:1.4rem;
+                            right:0;
+                            width:150px;
+                            background-color: $color-white;
+                            @include radius4;
+                            display: none;
+                            z-index: 99;
+                            &::after{
+                                content: "";
+                                display: block;
+                                position: absolute;
+                                top: -7px;
+                                border-left: 1px solid $color-bg;
+                                border-top: 1px solid $color-bg;
+                                z-index: 9999;
+                                right: 1rem;
+                                transform: rotate(45deg);
+                                background: $color-white;
+                                height: 12px;
+                                width: 12px;
+                            }
+                            li{
+                                
+                                a{
+                                    display: block;
+                                    padding:0.5rem 0;
+                                    text-transform: capitalize;
+                                    border-bottom: 1px solid $color-bg;
+                                    @include anim05;
+                                }
+                                &:hover{
+                                    a{
+                                        padding-left:0.5rem;
+                                        color:$color-blue;
+                                    }
+                                }
                             }
                         }
                     }
