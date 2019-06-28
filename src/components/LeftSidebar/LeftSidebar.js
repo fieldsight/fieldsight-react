@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 
-const projectId = window.project_id ? window.project_id : 137;
 const sideNavRoutes = [
   {
-    to: `/project-settings/${projectId}`,
-    path: "/project-settings/",
+    to: `/project-settings`,
+    path: "/project-settings",
     title: "Project Information"
   },
   { to: "/site-type", path: "/site-type", title: "Site Types" },

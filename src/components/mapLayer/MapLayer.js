@@ -20,33 +20,43 @@ export default class MapLayer extends Component {
     initialData: [],
     dropdownData: [],
     multiValue: [],
-    isLoading: false
+    isLoading: false,
+    dotLoader: true
   };
 
   componentDidMount() {
     this._isMounted = true;
     const { projectId } = this.context;
-    axios.all(urls.map(url => axios.get(`${url}?project=${projectId}`))).then(
-      axios.spread((initialData, dropdownData) => {
-        if (this._isMounted) {
-          const modifiedInitialData = initialData.data.map(item => ({
-            ...item,
-            value: item.id,
-            label: item.title
-          }));
+    axios
+      .all(urls.map(url => axios.get(`${url}?project=${projectId}`)))
+      .then(
+        axios.spread((initialData, dropdownData) => {
+          if (this._isMounted) {
+            const modifiedInitialData = initialData.data.map(item => ({
+              ...item,
+              value: item.id,
+              label: item.title
+            }));
 
-          const modifiedDropdownData = dropdownData.data.map(item => ({
-            ...item,
-            value: item.id,
-            label: item.title
-          }));
+            const modifiedDropdownData = dropdownData.data.map(item => ({
+              ...item,
+              value: item.id,
+              label: item.title
+            }));
+            this.setState({
+              initialData: modifiedInitialData,
+              dropdownData: modifiedDropdownData,
+              dotLoader: false
+            });
+          }
+        })
+      )
+      .catch(err => {
+        this._isMounted &&
           this.setState({
-            initialData: modifiedInitialData,
-            dropdownData: modifiedDropdownData
+            dotLoader: false
           });
-        }
-      })
-    );
+      });
   }
 
   handleMultiChange = option => {
@@ -95,14 +105,14 @@ export default class MapLayer extends Component {
 
   render() {
     const {
-      state: { initialData, dropdownData, isLoading },
+      state: { initialData, dropdownData, isLoading, dotLoader },
       onSubmitHandler,
       handleMultiChange
     } = this;
     return (
       <Fragment>
         <RightContentCard title="Map Layer">
-          {initialData.length === 0 && <DotLoader />}
+          {dotLoader && <DotLoader />}
           <form onSubmit={onSubmitHandler}>
             {initialData.length > 0 && (
               <Select

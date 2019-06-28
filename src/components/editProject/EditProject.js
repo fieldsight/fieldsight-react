@@ -166,12 +166,12 @@ class EditProject extends Component {
       .then(
         axios.spread((project, sector) => {
           if (this._isMounted) {
-            const position =
-              project && project.data && project.data.location.split(" ");
-            const longitude = position && position[1].split("(")[1];
-            const latitude = position && position[2].split(")")[0];
-
             if (project && sector) {
+              const position =
+                project && project.data && project.data.location.split(" ");
+              const longitude = position && position[1].split("(")[1];
+              const latitude = position && position[2].split(")")[0];
+
               this.setState({
                 project: project && project.data,
                 sector: sector.data,

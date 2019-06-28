@@ -119,7 +119,17 @@ export default class TermAndLabel extends Component {
         }
       })
 
-      .catch(err => console.log("err", err));
+      .catch(err => {
+        const { projectId } = this.context;
+        this._isMounted &&
+          this.setState({
+            termsAndLabels: {
+              ...this.state.termsAndLabels,
+              project: projectId
+            },
+            dotLoader: false
+          });
+      });
   }
 
   editHandler = () => {
