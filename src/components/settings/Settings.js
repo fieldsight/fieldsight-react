@@ -14,7 +14,7 @@ export default class Settings extends Component {
   render() {
     return (
       <div id="fieldsight-new" className="fieldsight-new">
-        <div id="main-container" className="minified">
+        <div id="main-container">
           <div className="container-fluid">
             <nav aria-label="breadcrumb" role="navigation">
               <ol className="breadcrumb">

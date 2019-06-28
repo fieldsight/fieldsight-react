@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 
-const projectId = window.location.hash.split("/")[2];
+const projectId = window.project_id ? window.project_id : 137;
 const sideNavRoutes = [
   {
     to: `/project-settings/${projectId}`,
