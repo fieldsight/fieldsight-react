@@ -113,8 +113,8 @@ export default class MapLayer extends Component {
       <Fragment>
         <RightContentCard title="Map Layer">
           {dotLoader && <DotLoader />}
-          <form onSubmit={onSubmitHandler}>
-            {initialData.length > 0 && (
+          {!dotLoader && (
+            <form onSubmit={onSubmitHandler}>
               <Select
                 closeMenuOnSelect={false}
                 components={animatedComponents}
@@ -123,17 +123,18 @@ export default class MapLayer extends Component {
                 isMulti
                 options={dropdownData}
               />
-            )}
-            <div className="col-sm-12">
-              <button
-                type="submit"
-                className="fieldsight-btn pull-right"
-                style={{ marginTop: "15px" }}
-              >
-                Save
-              </button>
-            </div>
-          </form>
+
+              <div className="col-sm-12">
+                <button
+                  type="submit"
+                  className="fieldsight-btn pull-right"
+                  style={{ marginTop: "15px" }}
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          )}
         </RightContentCard>
         {isLoading && <Loader />}
       </Fragment>

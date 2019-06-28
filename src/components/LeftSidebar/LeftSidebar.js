@@ -15,7 +15,7 @@ const sideNavRoutes = [
   },
   { to: "/manage-region", path: "/manage-region", title: "Manage Region" },
   { to: "/map-layer", path: "/map-layer", title: "Map Layers" },
-  { to: "term-and-label", path: "/term-and-label", title: "Terms And Labels" }
+  { to: "/term-and-label", path: "/term-and-label", title: "Terms And Labels" }
 ];
 
 class LeftSidebar extends Component {
@@ -34,7 +34,6 @@ class LeftSidebar extends Component {
               }
             >
               {route.title}
-              {console.log("paths", pathname.includes(route.path))}
             </Link>
           </li>
         ))}

@@ -24,7 +24,10 @@ class RegionProvider extends Component {
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({
-      showModal: !showModal
+      showModal: !showModal,
+      selectedIdentifier: "",
+      selectedName: "",
+      selectedId: ""
     }));
   };
 

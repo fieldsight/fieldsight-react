@@ -68,8 +68,7 @@ class SubRegion extends Component {
           removeHandler,
           confirmHandler,
           cancelHandler,
-          onSubmitHandler,
-          selectRegionHandler
+          onSubmitHandler
         }
       }
     } = this;
@@ -91,7 +90,7 @@ class SubRegion extends Component {
         </RightContentCard>
 
         {showModal && (
-          <Modal title="Add site type" toggleModal={toggleModal}>
+          <Modal title="Manage Region" toggleModal={toggleModal}>
             <form className="floating-form" onSubmit={onSubmitHandler}>
               <InputElement
                 tag="input"

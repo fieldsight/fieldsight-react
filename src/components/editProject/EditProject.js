@@ -168,12 +168,14 @@ class EditProject extends Component {
           if (this._isMounted) {
             if (project && sector) {
               const position =
-                project && project.data && project.data.location.split(" ");
+                project.data &&
+                project.data.location &&
+                project.data.location.split(" ");
               const longitude = position && position[1].split("(")[1];
               const latitude = position && position[2].split(")")[0];
 
               this.setState({
-                project: project && project.data,
+                project: project.data,
                 sector: sector.data,
                 position: { latitude, longitude }
               });

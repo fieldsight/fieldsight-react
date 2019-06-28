@@ -68,7 +68,7 @@ export default class TermAndLabel extends Component {
         });
         return successToast("Terms and Labels", "updated");
       }
-
+      debugger;
       await axios.post(`${url}?project=${project}`, termsAndLabels);
       await this.setState({
         isLoading: false
@@ -110,12 +110,20 @@ export default class TermAndLabel extends Component {
       .get(`${url}?project=${projectId}`)
       .then(res => {
         if (this._isMounted) {
-          res.data &&
-            res.data.length > 0 &&
+          if (res.data && res.data.length > 0) {
             this.setState({
               termsAndLabels: { ...res.data[0], project: projectId },
               dotLoader: false
             });
+          } else {
+            this.setState({
+              termsAndLabels: {
+                ...this.state.termsAndLabels,
+                project: projectId
+              },
+              dotLoader: false
+            });
+          }
         }
       })
 
