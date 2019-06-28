@@ -73,7 +73,10 @@ class SiteInformation extends Component {
 
   requestHandler = async () => {
     try {
-      const { siteBasicInfo, jsonQuestions, siteFeaturedImages } = this.state;
+      const {
+        state: { siteBasicInfo, jsonQuestions, siteFeaturedImages },
+        context: { projectId }
+      } = this;
 
       const headers = {
         "Content-Type": "application/json"
@@ -91,8 +94,9 @@ class SiteInformation extends Component {
         }
         return question;
       });
+
       await axios.post(
-        urls[2],
+        `${urls[2]}${projectId}/`,
         {
           json_questions: modifiedJsonQuestions,
           site_basic_info: siteBasicInfo,
