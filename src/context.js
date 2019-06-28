@@ -1,12 +1,9 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import { successToast, errorToast } from "./utils/toastHandler";
-const RegionContext = React.createContext();
+export const RegionContext = React.createContext();
 
-const urls = [
-  "https://fieldsight.naxa.com.np/fv3/api/project-regions/?project=137",
-  "https://fieldsight.naxa.com.np/fv3/api/project-regions"
-];
+const url = "fv3/api/project-regions/";
 
 const INITIAL_STATE = {
   region: [],
@@ -17,7 +14,9 @@ const INITIAL_STATE = {
   selectedName: "",
   selectedId: "",
   isLoading: false,
-  showDeleteConfirmation: false
+  showDeleteConfirmation: false,
+  projectId: window.project_id ? window.project_id : 137,
+  organizationId: window.organization_id ? window.organization_id : 13
 };
 
 class RegionProvider extends Component {
@@ -30,7 +29,13 @@ class RegionProvider extends Component {
   };
 
   regionPostHandler = () => {
-    const { selectedId, selectedIdentifier, selectedName, region } = this.state;
+    const {
+      selectedId,
+      selectedIdentifier,
+      selectedName,
+      region,
+      projectId
+    } = this.state;
 
     if (selectedId) {
       const newRegion = [...region];
@@ -41,7 +46,7 @@ class RegionProvider extends Component {
       selectedRegion.name = selectedName;
 
       return axios
-        .put(`${urls[1]}/${selectedId}/`, {
+        .put(`${url}${selectedId}/`, {
           identifier: selectedRegion.identifier,
           name: selectedRegion.name,
           project: selectedRegion.project
@@ -69,11 +74,11 @@ class RegionProvider extends Component {
     const newRegion = {
       identifier: selectedIdentifier,
       name: selectedName,
-      project: 137
+      project: projectId
     };
 
     axios
-      .post(urls[0], newRegion)
+      .post(url, newRegion)
       .then(res => {
         this.setState(
           {
@@ -99,7 +104,8 @@ class RegionProvider extends Component {
       selectedIdentifier,
       selectedName,
       subRegion,
-      subRegionId
+      subRegionId,
+      projectId
     } = this.state;
 
     if (selectedId) {
@@ -111,7 +117,7 @@ class RegionProvider extends Component {
       selectedSubRegion.name = selectedName;
 
       return axios
-        .put(`${urls[1]}/${selectedId}/`, {
+        .put(`${url}${selectedId}/`, {
           identifier: selectedSubRegion.identifier,
           name: selectedSubRegion.name,
           project: selectedSubRegion.project,
@@ -141,12 +147,12 @@ class RegionProvider extends Component {
     const newSubRegion = {
       identifier: selectedIdentifier,
       name: selectedName,
-      project: 137,
+      project: projectId,
       parent: subRegionId
     };
 
     axios
-      .post(urls[0], newSubRegion)
+      .post(url, newSubRegion)
       .then(res => {
         this.setState(
           {
@@ -243,10 +249,8 @@ class RegionProvider extends Component {
         region => region.id !== +selectedId
       );
 
-      console.log("filteredSubREgion", filteredSubRegion);
-
       return axios
-        .delete(`${urls[1]}/${selectedId}/`)
+        .delete(`${url}${selectedId}/`)
         .then(res => {
           this.setState(
             {
@@ -271,7 +275,7 @@ class RegionProvider extends Component {
     const filteredRegion = region.filter(region => region.id !== +selectedId);
 
     axios
-      .delete(`${urls[1]}/${selectedId}/`)
+      .delete(`${urls[1]}${selectedId}/`)
       .then(res => {
         this.setState(
           {
@@ -307,8 +311,9 @@ class RegionProvider extends Component {
   };
 
   componentDidMount() {
+    const { projectId } = this.state;
     axios
-      .get(urls[0])
+      .get(`${url}?project=${projectId}`)
       .then(res => {
         this.setState({
           region: res.data
@@ -330,7 +335,6 @@ class RegionProvider extends Component {
       state
     } = this;
 
-    console.log("this.props.context", this.props);
     return (
       <Fragment>
         <RegionContext.Provider

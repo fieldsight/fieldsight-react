@@ -6,15 +6,14 @@ import { DotLoader } from "../common/Loader";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
+import { RegionContext } from "../../context";
 
 const animatedComponents = makeAnimated();
 
-const urls = [
-  "https://fieldsight.naxa.com.np/fv3/api/geolayer/?project=137",
-  "https://fieldsight.naxa.com.np/fv3/api/organization-geolayer/?project=137"
-];
+const urls = ["fv3/api/geolayer/", "fv3/api/organization-geolayer/"];
 
 export default class MapLayer extends Component {
+  static contextType = RegionContext;
   _isMounted = false;
   state = {
     geoLayer: [],
@@ -26,7 +25,8 @@ export default class MapLayer extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    axios.all(urls.map(url => axios.get(url))).then(
+    const { projectId } = this.context;
+    axios.all(urls.map(url => axios.get(`${url}?project=${projectId}`))).then(
       axios.spread((initialData, dropdownData) => {
         if (this._isMounted) {
           const modifiedInitialData = initialData.data.map(item => ({
@@ -58,9 +58,13 @@ export default class MapLayer extends Component {
   };
 
   requestHandler = () => {
+    const { projectId } = this.context;
     const idArray = this.state.multiValue.map(item => item.id);
     axios
-      .post(urls[0], { project: 137, geo_layers: idArray })
+      .post(`${urls[0]}?project=${projectId}`, {
+        project: projectId,
+        geo_layers: idArray
+      })
       .then(res => {
         this.setState(
           {

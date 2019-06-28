@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 
+const projectId = window.location.hash.split("/")[2];
 const sideNavRoutes = [
-  { to: "/", path: "/", title: "Project Information" },
+  {
+    to: `/project-settings/${projectId}`,
+    path: "/",
+    title: "Project Information"
+  },
   { to: "/site-type", path: "/site-type", title: "Site Types" },
   {
     to: "/site-information",

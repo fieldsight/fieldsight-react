@@ -6,14 +6,16 @@ import Table from "../common/Table";
 import Loader, { DotLoader } from "../common/Loader";
 
 import { successToast, errorToast } from "../../utils/toastHandler";
+import { RegionContext } from "../../context";
 
 const tableHeader = {
   termsAndLabels: ["Terms And Labels", "Changed To"]
 };
 
-const urls = ["https://fieldsight.naxa.com.np/fv3/api/project-terms-labels"];
+const url = "fv3/api/project-terms-labels/";
 
 export default class TermAndLabel extends Component {
+  static contextType = RegionContext;
   _isMounted = false;
   state = {
     termsAndLabels: {
@@ -25,7 +27,7 @@ export default class TermAndLabel extends Component {
       region: "",
       region_supervisor: "",
       region_reviewer: "",
-      project: 137
+      project: ""
     },
     showList: true,
     isLoading: false,
@@ -60,14 +62,14 @@ export default class TermAndLabel extends Component {
       };
 
       if (id) {
-        await axios.put(`${urls[0]}/${id}/`, termsAndLabels);
+        await axios.put(`${url}${id}/`, termsAndLabels);
         await this.setState({
           isLoading: false
         });
         return successToast("Terms and Labels", "updated");
       }
 
-      await axios.post(`${urls[0]}/?project=137`, termsAndLabels);
+      await axios.post(`${url}?project=${project}`, termsAndLabels);
       await this.setState({
         isLoading: false
       });
@@ -103,14 +105,15 @@ export default class TermAndLabel extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    const { projectId } = this.context;
     axios
-      .get(`${urls[0]}/?project=137`)
+      .get(`${url}?project=${projectId}`)
       .then(res => {
         if (this._isMounted) {
           res.data &&
             res.data.length > 0 &&
             this.setState({
-              termsAndLabels: res.data[0],
+              termsAndLabels: { ...res.data[0], project: projectId },
               dotLoader: false
             });
         }

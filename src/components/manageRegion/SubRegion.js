@@ -7,29 +7,28 @@ import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
 
-const urls = ["https://fieldsight.naxa.com.np/fv3/api/project-regions/"];
+const url = "fv3/api/project-regions/";
 
 const tableHeader = {
   manageRegions: ["Region ID", "Region Name", "Created Date", "Action"]
 };
 
 class SubRegion extends Component {
-  state = {
-    subRegion: []
-  };
+  _isMounted = false;
 
   componentDidMount() {
+    this._isMounted = true;
     const {
       match: {
         params: { subRegionId }
       },
-      value: { setSubRegion }
+      value: { setSubRegion, projectId }
     } = this.props;
     if (subRegionId) {
       axios
-        .get(`${urls[0]}?project=137&region=${subRegionId}`)
+        .get(`${url}?project=${projectId}&region=${subRegionId}`)
         .then(res => {
-          setSubRegion(res.data, subRegionId);
+          this._isMounted && setSubRegion(res.data, subRegionId);
         })
         .catch(err => console.log("Err", err));
     }
@@ -40,13 +39,14 @@ class SubRegion extends Component {
       match: {
         params: { subRegionId }
       },
-      value: { setSubRegion }
+      value: { setSubRegion, projectId }
     } = this.props;
     if (prevProps.match.params.subRegionId !== subRegionId) {
       axios
-        .get(`${urls[0]}?project=137&region=${subRegionId}`)
+        .get(`${url}?project=${projectId}&region=${subRegionId}`)
         .then(res => {
-          setSubRegion(res.data, subRegionId);
+          console.log("res", res);
+          this._isMounted && setSubRegion(res.data, subRegionId);
         })
         .catch(err => console.log("Err", err));
     }
@@ -73,7 +73,7 @@ class SubRegion extends Component {
         }
       }
     } = this;
-    console.log("subreiog", this.props);
+
     return (
       <Fragment>
         <RightContentCard
@@ -129,7 +129,7 @@ class SubRegion extends Component {
           <Modal title="Warning" toggleModal={cancelHandler}>
             <div className="warning">
               <i className="la la-exclamation-triangle" />
-              {/* <h4>Warning</h4> */}
+
               <p>
                 "All the form submissions and user roles within this site will
                 be completely removed. Do you still want to continue?"
@@ -153,6 +153,7 @@ class SubRegion extends Component {
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     this.props.setSubRegion([], "");
   }
 }

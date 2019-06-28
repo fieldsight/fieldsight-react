@@ -7,14 +7,15 @@ import RightContentCard from "../common/RightContentCard";
 import InputElement from "../common/InputElement";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
-
+import { RegionContext } from "../../context";
 const urls = [
-  "https://fieldsight.naxa.com.np/fieldsight/api/organization/13/my_projects/137/",
-  "https://fieldsight.naxa.com.np/fieldsight/api/project/forms/137/",
-  "https://fieldsight.naxa.com.np/fv3/api/project-define-site-meta/137/"
+  "fieldsight/api/organization/",
+  "fieldsight/api/project/forms/",
+  "fv3/api/project-define-site-meta/"
 ];
 
 class SiteInformation extends Component {
+  static contextType = RegionContext;
   _isMounted = false;
 
   state = {
@@ -28,7 +29,14 @@ class SiteInformation extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    Promise.all(urls.map(url => axios.get(url)))
+    const { projectId, organizationId } = this.context;
+    Promise.all(
+      urls.map((url, i) => {
+        return i === 0
+          ? axios.get(`${url}${organizationId}/my_projects/${projectId}/`)
+          : axios.get(`${url}${projectId}/`);
+      })
+    )
       .then(results => {
         if (this._isMounted) {
           const modifiedJsonQuestions = results[2].data.json_questions.map(
@@ -140,7 +148,6 @@ class SiteInformation extends Component {
   render() {
     const {
       state: {
-        showModalPic,
         forms,
         projects,
         siteBasicInfo,
@@ -148,7 +155,7 @@ class SiteInformation extends Component {
         siteFeaturedImages,
         isLoading
       },
-      toggleModal,
+
       onSubmitHandler,
       sitePicHandler,
       siteInfoHandler,

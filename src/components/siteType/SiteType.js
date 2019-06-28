@@ -6,15 +6,13 @@ import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
 import { successToast, errorToast } from "../../utils/toastHandler";
+import { RegionContext } from "../../context";
 
 const tableHeader = {
   siteTypes: ["ID", "Type", "Action"]
 };
 
-const urls = [
-  "https://fieldsight.naxa.com.np/fv3/api/project-site-types/?project=137",
-  "https://fieldsight.naxa.com.np/fv3/api/project-site-types"
-];
+const url = "fv3/api/project-site-types/";
 
 const INITIAL_STATE = {
   showModal: false,
@@ -26,7 +24,10 @@ const INITIAL_STATE = {
   showDeleteConfirmation: false
 };
 class SiteType extends Component {
+  static contextType = RegionContext;
+
   _isMounted = false;
+
   state = INITIAL_STATE;
 
   toggleModal = () => {
@@ -37,10 +38,11 @@ class SiteType extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    const { projectId } = this.context;
     axios
-      .get(urls[0])
+      .get(`${url}?project=${projectId}`)
       .then(res => {
-        if (_this._isMounted) {
+        if (this._isMounted) {
           this.setState({
             siteType: res.data
           });
@@ -51,11 +53,9 @@ class SiteType extends Component {
 
   requestHandler = () => {
     const {
-      selectedId,
-      selectedIdentifier,
-      selectedName,
-      siteType
-    } = this.state;
+      state: { selectedId, selectedIdentifier, selectedName, siteType },
+      context: { projectId }
+    } = this;
 
     if (selectedId) {
       const newSiteType = [...siteType];
@@ -64,7 +64,7 @@ class SiteType extends Component {
       selectedSite.name = selectedName;
 
       return axios
-        .put(`${urls[1]}/${selectedId}/`, {
+        .put(`${url}${selectedId}/`, {
           identifier: selectedSite.identifier,
           name: selectedSite.name,
           project: selectedSite.project
@@ -92,11 +92,11 @@ class SiteType extends Component {
     const newSiteType = {
       identifier: selectedIdentifier,
       name: selectedName,
-      project: 137
+      project: projectId
     };
 
     axios
-      .post(urls[0], newSiteType)
+      .post(`${url}?project=${projectId}`, newSiteType)
       .then(res => {
         this.setState(
           {
@@ -156,7 +156,7 @@ class SiteType extends Component {
           site => site.id !== +selectedId
         );
         axios
-          .delete(`${urls[1]}/${selectedId}/`)
+          .delete(`${url}${selectedId}/`)
           .then(res => {
             this.setState(
               {
@@ -267,7 +267,7 @@ class SiteType extends Component {
           >
             <div className="warning">
               <i className="la la-exclamation-triangle" />
-              {/* <h4>Warning</h4> */}
+
               <p>
                 "All the form submissions and user roles within this site will
                 be completely removed. Do you still want to continue?"

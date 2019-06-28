@@ -8,10 +8,9 @@ import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import RightContentCard from "../common/RightContentCard";
-import CheckBox from "../common/CheckBox";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
-
+import { RegionContext } from "../../context";
 import "leaflet/dist/leaflet.css";
 import "cropperjs/dist/cropper.css";
 
@@ -22,13 +21,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
 
-const urls = [
-  "https://fieldsight.naxa.com.np/fv3/api/update-project/137/",
-  "https://fieldsight.naxa.com.np/fv3/api/sectors-subsectors/"
-];
+const urls = ["fv3/api/update-project/", "fv3/api/sectors-subsectors/"];
 
 class EditProject extends Component {
   _isMounted = false;
+
+  static contextType = RegionContext;
 
   state = {
     project: {},
@@ -58,7 +56,6 @@ class EditProject extends Component {
         public_desc,
         donor,
         logo,
-        // cluster_sites,
         organization
       },
       position: { latitude, longitude },
@@ -78,7 +75,6 @@ class EditProject extends Component {
       ...(cropResult && { logo: cropResult }),
       latitude,
       longitude,
-      // cluster_sites,
       sector: selectedSector,
       sub_sector: selectedSubSector,
       organization
@@ -160,19 +156,28 @@ class EditProject extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    const { projectId } = this.context;
     axios
-      .all(urls.map(url => axios.get(url)))
+      .all(
+        urls.map((url, i) => {
+          return i === 0 ? axios.get(`${url}${projectId}/`) : axios.get(url);
+        })
+      )
       .then(
         axios.spread((project, sector) => {
           if (this._isMounted) {
-            const position = project.data && project.data.location.split(" ");
+            const position =
+              project && project.data && project.data.location.split(" ");
             const longitude = position && position[1].split("(")[1];
             const latitude = position && position[2].split(")")[0];
-            this.setState({
-              project: project.data,
-              sector: sector.data,
-              position: { latitude, longitude }
-            });
+
+            if (project && sector) {
+              this.setState({
+                project: project && project.data,
+                sector: sector.data,
+                position: { latitude, longitude }
+              });
+            }
           }
         })
       )
@@ -228,7 +233,7 @@ class EditProject extends Component {
       onChangeHandler,
       onSelectChangeHandler,
       onSubmitHandler,
-      handleCheckboxChange,
+      // handleCheckboxChange,
       readFile,
       closeModal,
       mapClickHandler
