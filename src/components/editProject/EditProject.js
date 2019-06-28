@@ -47,22 +47,25 @@ class EditProject extends Component {
 
   requestHandler = () => {
     const {
-      project: {
-        name,
-        phone,
-        email,
-        address,
-        website,
-        public_desc,
-        donor,
-        logo,
-        organization
+      state: {
+        project: {
+          name,
+          phone,
+          email,
+          address,
+          website,
+          public_desc,
+          donor,
+          logo,
+          organization
+        },
+        position: { latitude, longitude },
+        selectedSector,
+        selectedSubSector,
+        cropResult
       },
-      position: { latitude, longitude },
-      selectedSector,
-      selectedSubSector,
-      cropResult
-    } = this.state;
+      context: { projectId }
+    } = this;
 
     const project = {
       name,
@@ -80,8 +83,9 @@ class EditProject extends Component {
       organization
     };
 
+    debugger;
     axios
-      .put(urls[0], project)
+      .put(`${urls[0]}${projectId}/`, project)
       .then(res => {
         this.setState(
           {

@@ -16,7 +16,7 @@ const INITIAL_STATE = {
   isLoading: false,
   showDeleteConfirmation: false,
   projectId: window.project_id ? window.project_id : 182,
-  organizationId: window.organization_id ? window.organization_id : 80
+  organizationId: window.organization_id ? window.organization_id : 62
 };
 
 class RegionProvider extends Component {
