@@ -291,7 +291,7 @@ class EditProject extends Component {
               <InputElement
                 formType="editForm"
                 tag="input"
-                type="text"
+                type="email"
                 required={true}
                 label="Email"
                 name="email"
@@ -316,7 +316,7 @@ class EditProject extends Component {
                 <InputElement
                   formType="editForm"
                   tag="input"
-                  type="text"
+                  type="url"
                   required={true}
                   label="website"
                   name="website"
