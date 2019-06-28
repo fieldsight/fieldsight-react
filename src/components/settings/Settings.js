@@ -16,23 +16,23 @@ export default class Settings extends Component {
       <div id="fieldsight-new" className="fieldsight-new">
         <div id="main-container">
           <div className="container-fluid">
-            <nav aria-label="breadcrumb" role="navigation">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <a href="/fieldsight/organization/">Teams</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="/fieldsight/organization-dashboard/13/">
-                    Build Change
-                  </a>
-                </li>
-
-                <li className="breadcrumb-item active" aria-current="page">
-                  DFID 31 District Retrofitting
-                </li>
-              </ol>
-            </nav>
             <main id="main-content">
+              <nav aria-label="breadcrumb" role="navigation">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <a href="/fieldsight/organization/">Teams</a>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <a href="/fieldsight/organization-dashboard/13/">
+                      Build Change
+                    </a>
+                  </li>
+
+                  <li className="breadcrumb-item active" aria-current="page">
+                    DFID 31 District Retrofitting
+                  </li>
+                </ol>
+              </nav>
               <div className="row">
                 <div className="col-xl-3 col-lg-4">
                   <div className="left-sidebar new-sidebar sticky-top">
