@@ -154,7 +154,7 @@ class SubRegion extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
-    this.props.setSubRegion([], "");
+    this.props.setSubRegion && this.props.setSubRegion([], "");
   }
 }
 

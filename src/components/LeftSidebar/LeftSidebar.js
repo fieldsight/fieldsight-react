@@ -5,7 +5,7 @@ const projectId = window.project_id ? window.project_id : 137;
 const sideNavRoutes = [
   {
     to: `/project-settings/${projectId}`,
-    path: "/",
+    path: "/project-settings/",
     title: "Project Information"
   },
   { to: "/site-type", path: "/site-type", title: "Site Types" },
@@ -31,10 +31,11 @@ class LeftSidebar extends Component {
             <Link
               to={route.to}
               className={
-                pathname === route.path ? "nav-link active" : "nav-link"
+                pathname.includes(route.path) ? "nav-link active" : "nav-link"
               }
             >
               {route.title}
+              {console.log("paths", pathname.includes(route.path))}
             </Link>
           </li>
         ))}
