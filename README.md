@@ -1,4 +1,4 @@
-# React Redux Phoenix Admin Panel
+# React FieldSight
 
 ## Installation
 
