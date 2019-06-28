@@ -52,7 +52,7 @@ export default class Settings extends Component {
                       <Switch>
                         <Route
                           exact
-                          path="/project-settings/:projectId"
+                          path="/project-settings"
                           component={EditProject}
                         />
                         <Route path="/site-type" component={SiteType} />
