@@ -57,6 +57,7 @@ class SiteInformation extends Component {
               return question;
             }
           );
+
           this.setState({
             projects: results[0].data,
             forms: results[1].data,

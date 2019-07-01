@@ -141,6 +141,7 @@ class SiteInformationTable extends Component {
         selectedProject: value
       });
     } else {
+      const selectedForm = this.props.forms.find(form => form.id === +value);
       const filteredQuestions = findQuestion(selectedForm.json.children);
       this.setState({
         selectedForm: value,

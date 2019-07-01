@@ -169,7 +169,7 @@ class SiteInformationCard extends Component {
                   className="form-control"
                   options={forms}
                   changeHandler={e => formChangeHandler(e, infoType)}
-                  value={!isEmpty(selectedForm) && selectedForm.name}
+                  value={!isEmpty(selectedForm) && selectedForm.id}
                 />
                 <SelectElement
                   className="form-control"

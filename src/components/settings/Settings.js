@@ -20,16 +20,19 @@ export default class Settings extends Component {
               <nav aria-label="breadcrumb" role="navigation">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <a href="/fieldsight/organization/">Teams</a>
-                  </li>
-                  <li className="breadcrumb-item">
-                    <a href="/fieldsight/organization-dashboard/13/">
-                      Build Change
+                    <a
+                      href={`/fieldsight/project-dashboard/${
+                        window.project_id ? window.project_id : 182
+                      }/`}
+                    >
+                      {window.project_name
+                        ? window.project_name
+                        : "Project Name"}
                     </a>
                   </li>
 
                   <li className="breadcrumb-item active" aria-current="page">
-                    DFID 31 District Retrofitting
+                    Project Settings
                   </li>
                 </ol>
               </nav>

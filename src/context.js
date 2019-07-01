@@ -278,7 +278,7 @@ class RegionProvider extends Component {
     const filteredRegion = region.filter(region => region.id !== +selectedId);
 
     axios
-      .delete(`${urls[1]}${selectedId}/`)
+      .delete(`${url}${selectedId}/`)
       .then(res => {
         this.setState(
           {
