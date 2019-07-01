@@ -13,7 +13,23 @@ const prodConfiguration = env => {
     {
       optimization: {
         minimizer: [new UglifyJsPlugin()]
+        // splitChunks: {
+        //   chunks: "all",
+        //   maxInitialRequests: Infinity,
+        //   minSize: 0,
+        //   cacheGroups: {
+        //     leafletVendor: {
+        //       test: /[\\/]node_modules[\\/](leaflet|react-leaflet)[\\/]/,
+        //       name: "leaflet"
+        //     },
+        //     utilityVendor: {
+        //       test: /[\\/]node_modules[\\/](moment|core-js|react-select)[\\/]/,
+        //       name: "utilityVendor"
+        //     }
+        //   }
+        // }
       },
+
       plugins: [
         new MiniCssExtractPlugin(),
         new OptimizeCssAssetsPlugin(),

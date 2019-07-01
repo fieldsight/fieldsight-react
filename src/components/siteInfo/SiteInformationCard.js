@@ -3,7 +3,7 @@ import SelectElement from "../common/SelectElement";
 import { DotLoader } from "../common/Loader";
 import findQuestion from "../../utils/findQuestion";
 import isEmpty from "../../utils/isEmpty";
-
+import { successToast } from "../../utils/toastHandler";
 const typeOptions = {
   sitePictureTypes: [
     { id: "choose", name: "Upload / Choose From Gallery" },
@@ -32,7 +32,9 @@ class SiteInformationCard extends Component {
     let showForm = false;
 
     if (nextProps.siteInfo && nextProps.siteInfo.form_id) {
-      selectedForm = nextProps.forms.find(form => form.id === form.id);
+      selectedForm = nextProps.forms.find(
+        form => form.id === nextProps.siteInfo.form_id
+      );
     }
 
     if (nextProps.siteInfo && !isEmpty(nextProps.siteInfo.question)) {
@@ -69,6 +71,7 @@ class SiteInformationCard extends Component {
           question: selectedQuestion
         }
       });
+      successToast("Photo", "saved");
     } else {
       this.props.siteIdentityHandler({
         site_location: {
@@ -77,14 +80,13 @@ class SiteInformationCard extends Component {
           question: selectedQuestion
         }
       });
+      successToast("Location", "saved");
     }
-    this.setState({
-      ...INITIAL_STATE
-    });
   };
 
   onChangeHandler = e => {
     const { value } = e.target;
+
     if (value === "Form") {
       return this.setState({ type: value, showForm: true });
     }
@@ -112,20 +114,6 @@ class SiteInformationCard extends Component {
     this.setState({ selectedQuestion });
   };
 
-  getDefaultValue = type => {
-    let qvalue;
-    if (type === "photo") {
-      qvalue = typeOptions.sitePictureTypes.find(
-        qtype => qtype.id === this.state.type
-      );
-    } else {
-      qvalue = typeOptions.siteLocationTypes.find(
-        qtype => qtype.id === this.state.type
-      );
-    }
-    return qvalue ? qvalue.name : undefined;
-  };
-
   render() {
     const {
       state: {
@@ -136,7 +124,6 @@ class SiteInformationCard extends Component {
         type
       },
       props: { title, infoType, forms, siteInfo },
-      getDefaultValue,
       onChangeHandler,
       formChangeHandler,
       questionChangeHandler,
@@ -157,8 +144,8 @@ class SiteInformationCard extends Component {
               options={
                 infoType === "photo" ? sitePictureTypes : siteLocationTypes
               }
-              changeHandler={onChangeHandler}
-              value={getDefaultValue(infoType)}
+              changeHandler={this.onChangeHandler}
+              value={type}
             />
 
             {showForm && forms.length <= 0 && <DotLoader />}
