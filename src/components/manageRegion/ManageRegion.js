@@ -5,16 +5,14 @@ import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
 import WithContext from "../../hoc/WithContext";
-
-const tableHeader = {
-  manageRegions: ["Region ID", "Region Name", "Created Date", "Action"]
-};
+import isEmpty from "../../utils/isEmpty";
 
 class ManageRegion extends Component {
   render() {
     const {
       props: {
         value: {
+          terms,
           isLoading,
           selectedIdentifier,
           selectedName,
@@ -32,10 +30,23 @@ class ManageRegion extends Component {
         }
       }
     } = this;
+
+    const tableHeader = {
+      manageRegions: !isEmpty(terms)
+        ? [
+            `${terms.region} ID`,
+            `${terms.region} Name`,
+            ,
+            "Created Date",
+            "Action"
+          ]
+        : ["Region ID", "Region Name", "Created Date", "Action"]
+    };
+
     return (
       <Fragment>
         <RightContentCard
-          title="Manage Region"
+          title={!isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"}
           addButton
           toggleModal={toggleModal}
         >
@@ -50,7 +61,10 @@ class ManageRegion extends Component {
         </RightContentCard>
 
         {showModal && (
-          <Modal title="Manage Region" toggleModal={toggleModal}>
+          <Modal
+            title={!isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"}
+            toggleModal={toggleModal}
+          >
             <form className="floating-form" onSubmit={onSubmitHandler}>
               <InputElement
                 tag="input"
@@ -88,7 +102,7 @@ class ManageRegion extends Component {
           <Modal title="Warning" toggleModal={cancelHandler}>
             <div className="warning">
               <i className="la la-exclamation-triangle" />
-              {/* <h4>Warning</h4> */}
+
               <p>
                 "All the form submissions and user roles within this site will
                 be completely removed. Do you still want to continue?"

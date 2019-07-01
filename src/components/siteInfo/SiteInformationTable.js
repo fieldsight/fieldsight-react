@@ -1,11 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import uuid from "uuid/v4";
 import Table from "../common/Table";
 import Modal from "../common/Modal";
+import RightContentCard from "../common/RightContentCard";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import CheckBox from "../common/CheckBox";
 import findQuestion from "../../utils/findQuestion";
+import isEmpty from "../../utils/isEmpty";
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -319,7 +321,7 @@ class SiteInformationTable extends Component {
   };
   render() {
     const {
-      props: { forms, projects, jsonQuestions },
+      props: { forms, terms, projects, jsonQuestions },
       state: {
         label,
         type,
@@ -347,19 +349,14 @@ class SiteInformationTable extends Component {
     } = this;
 
     return (
-      <div className="card no-boxshadow">
-        <div className="card-header main-card-header">
-          <h5>Site information</h5>
-          <div className="add-btn">
-            <a onClick={toggleModal}>
-              Add new{" "}
-              <span>
-                <i className="la la-plus" />
-              </span>
-            </a>
-          </div>
-        </div>
-        <div className="card-body">
+      <Fragment>
+        <RightContentCard
+          title={
+            !isEmpty(terms) ? `${terms.site} Information` : "Site Information"
+          }
+          addButton
+          toggleModal={toggleModal}
+        >
           <Table
             tableHeader={tableHeader.siteInformationTable}
             tableRow={tableQuestions}
@@ -368,7 +365,7 @@ class SiteInformationTable extends Component {
             editHandler={editQuestionHandler}
             forms={forms}
           />
-        </div>
+        </RightContentCard>
         {showModal && (
           <Modal title="Add Information" toggleModal={closeModal}>
             <form className="floating-form" onSubmit={onSubmitHandler}>
@@ -497,7 +494,7 @@ class SiteInformationTable extends Component {
             </form>
           </Modal>
         )}
-      </div>
+      </Fragment>
     );
   }
 }

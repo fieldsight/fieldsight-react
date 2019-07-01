@@ -5,8 +5,7 @@ const RightContentCard = ({
   addButton,
   hideButton,
   toggleModal,
-  children,
-  submitHandler
+  children
 }) => (
   <div className="card">
     <div className="card-header main-card-header sub-card-header">
@@ -24,12 +23,6 @@ const RightContentCard = ({
     </div>
 
     <div className="card-body">{children}</div>
-    {/* {!hideButton && (
-      <button className="fieldsight-btn pull-right " onClick={submitHandler}>
-        <i className="la la-save" />
-        Save Form
-      </button>
-    )} */}
   </div>
 );
 

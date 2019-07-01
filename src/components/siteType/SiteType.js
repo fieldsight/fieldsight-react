@@ -7,6 +7,7 @@ import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
 import { successToast, errorToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
+import isEmpty from "../../utils/isEmpty";
 
 const tableHeader = {
   siteTypes: ["ID", "Type", "Action"]
@@ -208,12 +209,13 @@ class SiteType extends Component {
       onChangeHandler,
       onSubmitHandler,
       cancelHandler,
-      confirmHandler
+      confirmHandler,
+      context: { terms }
     } = this;
     return (
       <Fragment>
         <RightContentCard
-          title="Site Type"
+          title={!isEmpty(terms) ? `${terms.site} Type` : "Site Type"}
           addButton
           toggleModal={toggleModal}
           hideButton={true}
@@ -228,7 +230,10 @@ class SiteType extends Component {
         </RightContentCard>
         {isLoading && <Loader />}
         {showModal && (
-          <Modal title="Add site type" toggleModal={toggleModal}>
+          <Modal
+            title={!isEmpty(terms) ? `Add ${terms.site} Type` : "Add Site Type"}
+            toggleModal={toggleModal}
+          >
             <form className="floating-form" onSubmit={onSubmitHandler}>
               <InputElement
                 tag="input"

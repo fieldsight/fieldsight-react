@@ -8,6 +8,8 @@ import InputElement from "../common/InputElement";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
+import isEmpty from "../../utils/isEmpty";
+
 const urls = [
   "fieldsight/api/organization/",
   "fieldsight/api/project/forms/",
@@ -160,7 +162,7 @@ class SiteInformation extends Component {
         siteFeaturedImages,
         isLoading
       },
-
+      context: { terms },
       onSubmitHandler,
       sitePicHandler,
       siteInfoHandler,
@@ -168,17 +170,25 @@ class SiteInformation extends Component {
     } = this;
     return (
       <Fragment>
-        <RightContentCard title="Site Identification">
+        <RightContentCard
+          title={
+            !isEmpty(terms)
+              ? `${terms.site} Identification`
+              : "Site Identification"
+          }
+        >
           <IdentityForm
             forms={forms}
             siteBasicInfo={siteBasicInfo}
             siteIdentityHandler={siteIdentityHandler}
+            terms={terms}
           />
           <SiteInformationTable
             forms={forms}
             projects={projects}
             jsonQuestions={jsonQuestions}
             siteInfoHandler={siteInfoHandler}
+            terms={terms}
           />
           <FeaturedPictures
             forms={forms}

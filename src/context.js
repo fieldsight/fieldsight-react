@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import { successToast, errorToast } from "./utils/toastHandler";
+
 export const RegionContext = React.createContext();
 
 const url = "fv3/api/project-regions/";
+const urls = ["fv3/api/project-regions/", "fv3/api/project-terms-labels/"];
 
 const INITIAL_STATE = {
+  terms: {},
   region: [],
   subRegion: [],
   subRegionId: "",
@@ -316,12 +319,15 @@ class RegionProvider extends Component {
   componentDidMount() {
     const { projectId } = this.state;
     axios
-      .get(`${url}?project=${projectId}`)
-      .then(res => {
-        this.setState({
-          region: res.data
-        });
-      })
+      .all(urls.map(url => axios.get(`${url}?project=${projectId}`)))
+      .then(
+        axios.spread((region, terms) => {
+          this.setState({
+            region: region.data,
+            terms: terms.data.length > 0 ? terms.data[0] : {}
+          });
+        })
+      )
       .catch(err => console.log("err", err));
   }
 

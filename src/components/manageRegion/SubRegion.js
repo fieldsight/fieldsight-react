@@ -6,12 +6,9 @@ import Table from "../common/Table";
 import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
+import isEmpty from "../../utils/isEmpty";
 
 const url = "fv3/api/project-regions/";
-
-const tableHeader = {
-  manageRegions: ["Region ID", "Region Name", "Created Date", "Action"]
-};
 
 class SubRegion extends Component {
   _isMounted = false;
@@ -45,7 +42,6 @@ class SubRegion extends Component {
       axios
         .get(`${url}?project=${projectId}&region=${subRegionId}`)
         .then(res => {
-          console.log("res", res);
           this._isMounted && setSubRegion(res.data, subRegionId);
         })
         .catch(err => console.log("Err", err));
@@ -56,6 +52,7 @@ class SubRegion extends Component {
     const {
       props: {
         value: {
+          terms,
           isLoading,
           selectedIdentifier,
           selectedName,
@@ -73,10 +70,21 @@ class SubRegion extends Component {
       }
     } = this;
 
+    const tableHeader = {
+      manageRegions: !isEmpty(terms)
+        ? [
+            `${terms.region} ID`,
+            `${terms.region} Name`,
+            ,
+            "Created Date",
+            "Action"
+          ]
+        : ["Region ID", "Region Name", "Created Date", "Action"]
+    };
     return (
       <Fragment>
         <RightContentCard
-          title="Manage Region"
+          title={!isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"}
           addButton
           toggleModal={toggleModal}
         >
@@ -90,7 +98,10 @@ class SubRegion extends Component {
         </RightContentCard>
 
         {showModal && (
-          <Modal title="Manage Region" toggleModal={toggleModal}>
+          <Modal
+            title={!isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"}
+            toggleModal={toggleModal}
+          >
             <form className="floating-form" onSubmit={onSubmitHandler}>
               <InputElement
                 tag="input"
