@@ -109,7 +109,7 @@ class SiteInformation extends Component {
       await this.setState({
         isLoading: false
       });
-      () => successToast("Site", "deleted");
+      successToast("Site", "added");
     } catch (err) {
       this.setState(
         {

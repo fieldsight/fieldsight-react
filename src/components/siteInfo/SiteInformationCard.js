@@ -63,12 +63,34 @@ class SiteInformationCard extends Component {
       state: { selectedForm, selectedQuestion, type },
       props: { infoType }
     } = this;
+    if (type === "Form") {
+      if (infoType === "photo") {
+        this.props.siteIdentityHandler({
+          site_picture: {
+            question_type: type,
+            form_id: selectedForm.id ? selectedForm.id : 0,
+            question: selectedQuestion
+          }
+        });
+        return successToast("Photo", "saved");
+      } else {
+        this.props.siteIdentityHandler({
+          site_location: {
+            question_type: type,
+            form_id: selectedForm.id ? selectedForm.id : 0,
+            question: selectedQuestion
+          }
+        });
+        return successToast("Location", "saved");
+      }
+    }
+
     if (infoType === "photo") {
       this.props.siteIdentityHandler({
         site_picture: {
           question_type: type,
-          form_id: selectedForm.id ? selectedForm.id : 0,
-          question: selectedQuestion
+          form_id: 0,
+          question: {}
         }
       });
       successToast("Photo", "saved");
@@ -76,8 +98,8 @@ class SiteInformationCard extends Component {
       this.props.siteIdentityHandler({
         site_location: {
           question_type: type,
-          form_id: selectedForm.id ? selectedForm.id : 0,
-          question: selectedQuestion
+          form_id: 0,
+          question: {}
         }
       });
       successToast("Location", "saved");
@@ -164,17 +186,17 @@ class SiteInformationCard extends Component {
                   changeHandler={questionChangeHandler}
                   value={!isEmpty(selectedQuestion) && selectedQuestion.name}
                 />
-                <div className="form-group pull-right mr-0">
-                  <button
-                    type="submit"
-                    className="fieldsight-btn"
-                    onClick={onSubmitHandler}
-                  >
-                    Save
-                  </button>
-                </div>
               </Fragment>
             )}
+            <div className="form-group pull-right mr-0">
+              <button
+                type="submit"
+                className="fieldsight-btn"
+                onClick={onSubmitHandler}
+              >
+                Save
+              </button>
+            </div>
           </form>
         </div>
       </div>
