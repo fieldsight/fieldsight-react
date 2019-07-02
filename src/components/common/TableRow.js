@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import moment from "moment";
+import format from "date-fns/format";
 import { withRouter, Link } from "react-router-dom";
 
 function Td({ children, to }) {
@@ -70,7 +70,7 @@ class TableRow extends Component {
         <Td to={`/manage-region/${row.id}/sub-region`}>{row.identifier}</Td>
         <Td to={`/manage-region/${row.id}/sub-region`}>{row.name}</Td>
         <Td to={`/manage-region/${row.id}/sub-region`}>
-          {moment(row.date_created).format("MMMM Do YYYY, h:mm:ss a")}
+          {format(row.date_created, ["MMMM Do YYYY, h:mm:ss a"])}
         </Td>
         <td>
           <a onClick={() => editHandler(row.id)} className="td-edit-btn">

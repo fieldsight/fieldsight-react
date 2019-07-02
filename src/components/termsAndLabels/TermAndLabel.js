@@ -7,6 +7,7 @@ import Loader, { DotLoader } from "../common/Loader";
 
 import { successToast, errorToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
+import isEmpty from "../../utils/isEmpty";
 
 const tableHeader = {
   termsAndLabels: ["Terms And Labels", "Changed To"]
@@ -16,7 +17,7 @@ const url = "fv3/api/project-terms-labels/";
 
 export default class TermAndLabel extends Component {
   static contextType = RegionContext;
-  _isMounted = false;
+
   state = {
     termsAndLabels: {
       id: "",
@@ -60,20 +61,23 @@ export default class TermAndLabel extends Component {
         region_reviewer,
         project
       };
-
+      debugger;
       if (id) {
         await axios.put(`${url}${id}/`, termsAndLabels);
         await this.setState({
           isLoading: false
         });
-        return successToast("Terms and Labels", "updated");
+
+        successToast("Terms and Labels", "updated");
+        return this.context.updateTerms(termsAndLabels);
       }
-      debugger;
+
       await axios.post(`${url}?project=${project}`, termsAndLabels);
       await this.setState({
         isLoading: false
       });
       successToast("Terms and Labels", "added");
+      this.context.updateTerms(termsAndLabels);
     } catch (error) {
       await this.setState({
         isLoading: false
@@ -104,40 +108,33 @@ export default class TermAndLabel extends Component {
   };
 
   componentDidMount() {
-    this._isMounted = true;
-    const { projectId } = this.context;
-    axios
-      .get(`${url}?project=${projectId}`)
-      .then(res => {
-        if (this._isMounted) {
-          if (res.data && res.data.length > 0) {
-            this.setState({
-              termsAndLabels: { ...res.data[0], project: projectId },
-              dotLoader: false
-            });
-          } else {
-            this.setState({
-              termsAndLabels: {
-                ...this.state.termsAndLabels,
-                project: projectId
-              },
-              dotLoader: false
-            });
-          }
-        }
-      })
+    const { projectId, terms } = this.context;
 
-      .catch(err => {
-        const { projectId } = this.context;
-        this._isMounted &&
-          this.setState({
-            termsAndLabels: {
-              ...this.state.termsAndLabels,
-              project: projectId
-            },
-            dotLoader: false
-          });
+    if (!isEmpty(terms)) {
+      this.setState({
+        termsAndLabels: { ...terms, project: projectId },
+        dotLoader: false
       });
+    }
+  }
+
+  componentDidUpdate() {
+    const {
+      state: {
+        termsAndLabels: { project, ...restLabels }
+      },
+      context: { projectId, terms }
+    } = this;
+
+    const isStateTermsEmpty =
+      Object.values(restLabels).filter(Boolean).length === 0;
+
+    if (isStateTermsEmpty) {
+      this.setState({
+        termsAndLabels: { ...terms, project: projectId },
+        dotLoader: false
+      });
+    }
   }
 
   editHandler = () => {
@@ -300,8 +297,5 @@ export default class TermAndLabel extends Component {
         {isLoading && <Loader />}
       </Fragment>
     );
-  }
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }

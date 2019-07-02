@@ -56,10 +56,10 @@ module.exports = env => {
         ]
       },
       plugins: [
-        new webpack.IgnorePlugin({
-          resourceRegExp: /^\.\/locale$/,
-          contextRegExp: /moment$/
-        }),
+        // new webpack.IgnorePlugin({
+        //   resourceRegExp: /^\.\/locale$/,
+        //   contextRegExp: /moment$/
+        // }),
         new HtmlWebpackPlugin({
           title: "example",
           template: "./src/index.html",

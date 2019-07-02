@@ -316,7 +316,14 @@ class RegionProvider extends Component {
     });
   };
 
+  updateTerms = terms => {
+    this.setState({
+      terms
+    });
+  };
+
   componentDidMount() {
+    console.log("context compoenntdidmount");
     const { projectId } = this.state;
     axios
       .all(urls.map(url => axios.get(`${url}?project=${projectId}`)))
@@ -341,6 +348,7 @@ class RegionProvider extends Component {
       confirmHandler,
       onSubmitHandler,
       setSubRegion,
+      updateTerms,
       state
     } = this;
 
@@ -356,7 +364,8 @@ class RegionProvider extends Component {
             cancelHandler,
             confirmHandler,
             onSubmitHandler,
-            setSubRegion
+            setSubRegion,
+            updateTerms
           }}
         >
           {this.props.children}

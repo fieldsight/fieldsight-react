@@ -23,7 +23,7 @@ const prodConfiguration = env => {
         //       name: "leaflet"
         //     },
         //     utilityVendor: {
-        //       test: /[\\/]node_modules[\\/](moment|core-js|react-select)[\\/]/,
+        //       test: /[\\/]node_modules[\\/](core-js|react-select)[\\/]/,
         //       name: "utilityVendor"
         //     }
         //   }
