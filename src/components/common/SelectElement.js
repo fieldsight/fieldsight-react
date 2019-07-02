@@ -18,6 +18,7 @@ const SelectElement = ({
       <select
         className={className}
         onChange={changeHandler}
+        onFocus={options.length > 0 ? changeHandler : () => {}}
         value={value ? value : undefined}
       >
         {options.length > 0 ? (

@@ -65,7 +65,8 @@ export default class TermAndLabel extends Component {
       if (id) {
         await axios.put(`${url}${id}/`, termsAndLabels);
         await this.setState({
-          isLoading: false
+          isLoading: false,
+          showList: true
         });
 
         successToast("Terms and Labels", "updated");
@@ -74,7 +75,8 @@ export default class TermAndLabel extends Component {
 
       await axios.post(`${url}?project=${project}`, termsAndLabels);
       await this.setState({
-        isLoading: false
+        isLoading: false,
+        showList: true
       });
       successToast("Terms and Labels", "added");
       this.context.updateTerms(termsAndLabels);

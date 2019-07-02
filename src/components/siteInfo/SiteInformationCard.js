@@ -122,9 +122,11 @@ class SiteInformationCard extends Component {
     const { value } = e.target;
     const selectedForm = this.props.forms.find(form => form.id == value);
     const filteredQuestions = findQuestion(selectedForm.json.children, type);
+
     this.setState({
       selectedForm,
-      filteredQuestions
+      filteredQuestions,
+      selectedQuestion: {}
     });
   };
 

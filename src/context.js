@@ -18,8 +18,8 @@ const INITIAL_STATE = {
   selectedId: "",
   isLoading: false,
   showDeleteConfirmation: false,
-  projectId: window.project_id ? window.project_id : 182,
-  organizationId: window.organization_id ? window.organization_id : 62
+  projectId: window.project_id ? window.project_id : 310,
+  organizationId: window.organization_id ? window.organization_id : 81
 };
 
 class RegionProvider extends Component {
@@ -61,7 +61,9 @@ class RegionProvider extends Component {
           this.setState(
             {
               ...INITIAL_STATE,
-              region: newRegion
+              region: newRegion,
+              subRegion: [...this.state.subRegion],
+              terms: { ...this.state.terms }
             },
             () => successToast("Region", "updated")
           );
@@ -84,12 +86,14 @@ class RegionProvider extends Component {
     };
 
     axios
-      .post(url, newRegion)
+      .post(`${url}?project=${projectId}`, newRegion)
       .then(res => {
         this.setState(
           {
             ...INITIAL_STATE,
-            region: [...this.state.region, { ...res.data }]
+            region: [...this.state.region, { ...res.data }],
+            subRegion: [...this.state.subRegion],
+            terms: { ...this.state.terms }
           },
           () => successToast("Region", "added")
         );
@@ -133,6 +137,8 @@ class RegionProvider extends Component {
           this.setState(
             {
               ...INITIAL_STATE,
+              region: [...this.state.region],
+              terms: { ...this.state.terms },
               subRegion: newSubRegion,
               subRegionId
             },
@@ -158,11 +164,13 @@ class RegionProvider extends Component {
     };
 
     axios
-      .post(url, newSubRegion)
+      .post(`${url}?project=${projectId}`, newSubRegion)
       .then(res => {
         this.setState(
           {
             ...INITIAL_STATE,
+            region: [...this.state.region],
+            terms: { ...this.state.terms },
             subRegion: [...this.state.subRegion, { ...res.data }],
             subRegionId
           },
@@ -323,7 +331,6 @@ class RegionProvider extends Component {
   };
 
   componentDidMount() {
-    console.log("context compoenntdidmount");
     const { projectId } = this.state;
     axios
       .all(urls.map(url => axios.get(`${url}?project=${projectId}`)))
