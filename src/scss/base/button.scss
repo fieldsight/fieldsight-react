@@ -169,4 +169,29 @@
       }
     }
   }
+  .btn-toggle {
+    border-radius: 1.5rem;
+    color: #6b7381;
+    background: $color-bg;
+    padding: 0;
+    position: relative;
+    border: none;
+    height: 1.5rem;
+    width: 3.8rem;
+    border-radius: 1.5rem;
+    text-align: right;
+    padding:0 0.4rem;
+    text-transform: capitalize;
+    
+    .handle {
+      position: absolute;
+      top: 0.1875rem;
+      left: 0.1875rem;
+      width: 1.125rem;
+      height: 1.125rem;
+      border-radius: 1.125rem;
+      background: $color-white;
+      transition: right 0.25s;
+    }
+  }
 }

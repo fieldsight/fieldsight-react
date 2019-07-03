@@ -61,7 +61,34 @@
                     font-size:0.875rem;
                 }
             }
-            
+            a.tag{
+                margin-right: 0.7rem;
+                @include radius4;
+                font-size:0.875rem;
+                i{
+                    font-size:1rem;
+                    font-weight: 600;
+                    margin-right: 0.2rem;
+                }
+                &.view-tag{
+                    i{
+                        color:$color-yellow;
+                    }
+                }
+                &.edit-tag{
+                    i{
+                        color:$color-green;
+                    }
+                }
+                &.pending-tag{
+                    i{
+                        color:$color-blue;
+                    }
+                }
+                &:hover{
+                    opacity:0.7;
+                }
+            }
         }
     }
     table.table {
@@ -194,7 +221,6 @@
                             width:150px;
                             background-color: $color-white;
                             @include radius4;
-                            display: none;
                             z-index: 99;
                             &::after{
                                 content: "";
@@ -300,9 +326,6 @@
     .table-footer{
         @include flexjust;
         align-items: center;
-        .showing-rows{
-
-        }
         .table-pagination{
             ul{
                 @include flexjust;
@@ -349,4 +372,29 @@
             display: none;
         }
     }
+    // #toggleSwitch {
+    //     background: lighten(lightgray, 10%);
+    //     width: 100px;
+    //     height: 60px;
+    //     border-radius: 50px;
+    //     padding: 0 5px;
+    //     display: flex;
+    //     align-items: center;
+    //     transition: .3s ease-in;
+    //   }
+      
+    //   #toggleCircle {
+    //     background:$color-white;
+    //     width: 50px;
+    //     height: 50px;
+    //     border-radius: 50%;
+    //     transition: transform .5s;
+    //   }
+      
+    //   #toggleSwitch.active {
+    //     background: $color-green;
+    //   }
+    //   #toggleCircle.toggle {
+    //     transform: translateX(100%);
+    //   }
 }
