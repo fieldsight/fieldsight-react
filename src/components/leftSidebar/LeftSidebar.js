@@ -10,36 +10,37 @@ class LeftSidebar extends Component {
     const { terms } = this.context;
 
     const {
-      location: { pathname }
+      location: { pathname },
+      match: { url }
     } = this.props;
 
     const sideNavRoutes = [
       {
-        to: `/project-settings`,
-        path: "/project-settings",
+        to: `${url}`,
+        path: `${url}`,
         title: "Project Information"
       },
       {
-        to: "/site-type",
-        path: "/site-type",
+        to: `${url}/site-type`,
+        path: `${url}/site-type`,
         title: !isEmpty(terms) ? `${terms.site} Types` : "Site Types"
       },
       {
-        to: "/site-information",
-        path: "/site-information",
+        to: `${url}/site-information`,
+        path: `${url}/site-information`,
         title: !isEmpty(terms)
           ? `${terms.site} Information`
           : "Site Information"
       },
       {
-        to: "/manage-region",
-        path: "/manage-region",
+        to: `${url}/manage-region`,
+        path: `${url}/manage-region`,
         title: !isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"
       },
-      { to: "/map-layer", path: "/map-layer", title: "Map Layers" },
+      { to: `${url}/map-layer`, path: `${url}/map-layer`, title: "Map Layers" },
       {
-        to: "/term-and-label",
-        path: "/term-and-label",
+        to: `${url}/term-and-label`,
+        path: `${url}/term-and-label`,
         title: "Terms And Labels"
       }
     ];
@@ -48,9 +49,7 @@ class LeftSidebar extends Component {
       <li className="nav-item" key={i}>
         <Link
           to={route.to}
-          className={
-            pathname.includes(route.path) ? "nav-link active" : "nav-link"
-          }
+          className={pathname === route.path ? "nav-link active" : "nav-link"}
         >
           {route.title}
         </Link>

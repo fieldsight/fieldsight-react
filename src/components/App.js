@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { HashRouter as Router } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { RegionProvider } from "../context";
 import setDefault from "../config";
@@ -25,7 +25,12 @@ class App extends Component {
       <div className="App Fade">
         <Router>
           <RegionProvider>
-            <Settings />
+            <Switch>
+              <Route
+                path="/project-settings"
+                render={props => <Settings {...props} />}
+              />
+            </Switch>
             <ToastContainer />
           </RegionProvider>
         </Router>

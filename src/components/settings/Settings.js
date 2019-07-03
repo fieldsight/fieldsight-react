@@ -12,6 +12,10 @@ import MapLayer from "../mapLayer/MapLayer";
 
 export default class Settings extends Component {
   render() {
+    const {
+      match: { path }
+    } = this.props;
+
     return (
       <div id="fieldsight-new" className="fieldsight-new">
         <div id="main-container">
@@ -55,24 +59,36 @@ export default class Settings extends Component {
                       <Switch>
                         <Route
                           exact
-                          path="/project-settings"
+                          path={`${path}/`}
                           component={EditProject}
                         />
-                        <Route path="/site-type" component={SiteType} />
                         <Route
-                          path="/site-information"
+                          path={`${path}/site-type`}
+                          component={SiteType}
+                        />
+                        <Route
+                          path={`${path}/site-information`}
                           component={SiteInformation}
                         />
                         <Route
-                          path="/manage-region/:subRegionId/sub-region"
+                          path={`${path}/manage-region/:subRegionId/sub-region`}
                           component={SubRegion}
                         />
-                        <Route path="/manage-region" component={ManageRegion} />
-
-                        <Route path="/manage-site" component={SiteManage} />
-                        <Route path="/map-layer" component={MapLayer} />
                         <Route
-                          path="/term-and-label"
+                          path={`${path}/manage-region`}
+                          component={ManageRegion}
+                        />
+
+                        <Route
+                          path={`${path}/manage-site`}
+                          component={SiteManage}
+                        />
+                        <Route
+                          path={`${path}/map-layer`}
+                          component={MapLayer}
+                        />
+                        <Route
+                          path={`${path}/term-and-label`}
                           component={TermsAndLabels}
                         />
                       </Switch>
