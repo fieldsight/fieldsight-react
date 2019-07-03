@@ -8,14 +8,12 @@ import ShareModal from "./ShareModal";
 import GlobalModel from "./GlobalModal";
 import { thisExpression } from "@babel/types";
 
-
 class MyFormMain extends Component {
   state = {
     popupModal: false,
     selectedModals: null,
     heading: null,
-    modalDatas: null,
-    
+    modalDatas: null
   };
 
   OpenTabHandler = (e, url) => {
@@ -36,17 +34,13 @@ class MyFormMain extends Component {
     modalType,
     shareUrl
   ) => {
-    // console.log(modalType)
-
     this.setState({
       popupModal: true,
       heading: modalHeading,
       selectedModals: selectedModal,
       modalDatas: modalData,
       modalTypes: modalType,
-      shareUrls: shareUrl,
-      
-     
+      shareUrls: shareUrl
     });
   };
 
@@ -58,49 +52,35 @@ class MyFormMain extends Component {
             <nav aria-label="breadcrumb" role="navigation">
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <a href="index.html">Home</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="/fieldsight/organization-dashboard/13/">Teams</a>
-                </li>
-
-                <li className="breadcrumb-item active" aria-current="page">
-                  Invitation
+                  <a>Forms</a>
                 </li>
               </ol>
             </nav>
             <main id="main-content">
               <div className="row">
-                {/* sidebar content */}
                 <SideBar
                   OpenTabHandler={this.OpenTabHandler}
                   commonPopupHandler={this.commonPopupHandler}
                   height={this.props.height}
                 />
-                {/* sidebar content */}
               </div>
             </main>
           </div>
         </div>
-
-        {/* popup content */}
 
         {this.state.popupModal && (
           <CommonPopup
             closePopup={this.closePopup}
             heading={this.state.heading}
           >
-          <this.state.selectedModals
+            <this.state.selectedModals
               previewUrl={this.state.modalDatas}
               modalTypes={this.state.modalTypes}
               modalDatas={this.state.modalDatas}
               shareUrls={this.state.shareUrls}
-            /> 
-           
+            />
           </CommonPopup>
         )}
-
-        {/* popup content */}
       </div>
     );
   }

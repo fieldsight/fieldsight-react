@@ -120,7 +120,7 @@ class FeaturedPictures extends Component {
   formChangeHandler = e => {
     const { value } = e.target;
     const selectedForm = this.props.forms.find(form => form.id === +value);
-    const filteredQuestions = findQuestion(selectedForm.json.children);
+    const filteredQuestions = findQuestion(selectedForm.json.children, "photo");
     this.setState({
       selectedForm: value,
       filteredQuestions
@@ -168,7 +168,8 @@ class FeaturedPictures extends Component {
       ? findQuestion(
           this.props.forms.find(
             form => form.id === +selectedFeaturedPic.form_id
-          ).json.children
+          ).json.children,
+          "photo"
         )
       : this.state.filteredQuestions;
 

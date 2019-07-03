@@ -428,18 +428,6 @@ class SiteInformationTable extends Component {
                 </div>
               )}
 
-              <CheckBox
-                checked={this.state.dashboardChecked}
-                label="Share To Dashboard"
-                onChange={e => this.handleCheckboxChange(e, "dashboard")}
-              />
-
-              <CheckBox
-                checked={this.state.publicChecked}
-                label="Share To Public"
-                onChange={e => this.handleCheckboxChange(e, "public")}
-              />
-
               {(type === "Text" ||
                 type === "Number" ||
                 type === "Date" ||
@@ -485,6 +473,18 @@ class SiteInformationTable extends Component {
                   changeHandler={questionChangeHandler}
                 />
               )}
+
+              <CheckBox
+                checked={this.state.dashboardChecked}
+                label="Share To Dashboard"
+                onChange={e => this.handleCheckboxChange(e, "dashboard")}
+              />
+
+              <CheckBox
+                checked={this.state.publicChecked}
+                label="Share To Public"
+                onChange={e => this.handleCheckboxChange(e, "public")}
+              />
 
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">

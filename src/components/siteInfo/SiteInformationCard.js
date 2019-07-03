@@ -57,31 +57,28 @@ class SiteInformationCard extends Component {
     });
   }
 
-  onSubmitHandler = e => {
-    e.preventDefault();
+  dataChangeHandler = () => {
     const {
       state: { selectedForm, selectedQuestion, type },
       props: { infoType }
     } = this;
     if (type === "Form") {
       if (infoType === "photo") {
-        this.props.siteIdentityHandler({
+        return this.props.siteIdentityHandler({
           site_picture: {
             question_type: type,
             form_id: selectedForm.id ? selectedForm.id : 0,
             question: selectedQuestion
           }
         });
-        return successToast("Photo", "saved");
       } else {
-        this.props.siteIdentityHandler({
+        return this.props.siteIdentityHandler({
           site_location: {
             question_type: type,
             form_id: selectedForm.id ? selectedForm.id : 0,
             question: selectedQuestion
           }
         });
-        return successToast("Location", "saved");
       }
     }
 
@@ -93,7 +90,6 @@ class SiteInformationCard extends Component {
           question: {}
         }
       });
-      successToast("Photo", "saved");
     } else {
       this.props.siteIdentityHandler({
         site_location: {
@@ -102,7 +98,6 @@ class SiteInformationCard extends Component {
           question: {}
         }
       });
-      successToast("Location", "saved");
     }
   };
 
@@ -112,10 +107,13 @@ class SiteInformationCard extends Component {
     if (value === "Form") {
       return this.setState({ type: value, showForm: true });
     }
-    this.setState({
-      type: value,
-      showForm: false
-    });
+    this.setState(
+      {
+        type: value,
+        showForm: false
+      },
+      this.dataChangeHandler
+    );
   };
 
   formChangeHandler = (e, type) => {
@@ -123,11 +121,14 @@ class SiteInformationCard extends Component {
     const selectedForm = this.props.forms.find(form => form.id == value);
     const filteredQuestions = findQuestion(selectedForm.json.children, type);
 
-    this.setState({
-      selectedForm,
-      filteredQuestions,
-      selectedQuestion: {}
-    });
+    this.setState(
+      {
+        selectedForm,
+        filteredQuestions,
+        selectedQuestion: {}
+      },
+      this.dataChangeHandler
+    );
   };
 
   questionChangeHandler = e => {
@@ -135,7 +136,7 @@ class SiteInformationCard extends Component {
     const selectedQuestion = this.state.filteredQuestions.find(
       question => question.name === value
     );
-    this.setState({ selectedQuestion });
+    this.setState({ selectedQuestion }, this.dataChangeHandler);
   };
 
   render() {
@@ -150,8 +151,7 @@ class SiteInformationCard extends Component {
       props: { title, infoType, forms, siteInfo },
       onChangeHandler,
       formChangeHandler,
-      questionChangeHandler,
-      onSubmitHandler
+      questionChangeHandler
     } = this;
 
     const { sitePictureTypes, siteLocationTypes } = typeOptions;
@@ -168,7 +168,7 @@ class SiteInformationCard extends Component {
               options={
                 infoType === "photo" ? sitePictureTypes : siteLocationTypes
               }
-              changeHandler={this.onChangeHandler}
+              changeHandler={onChangeHandler}
               value={type}
             />
 
@@ -190,15 +190,6 @@ class SiteInformationCard extends Component {
                 />
               </Fragment>
             )}
-            <div className="form-group pull-right mr-0">
-              <button
-                type="submit"
-                className="fieldsight-btn"
-                onClick={onSubmitHandler}
-              >
-                Save
-              </button>
-            </div>
           </form>
         </div>
       </div>

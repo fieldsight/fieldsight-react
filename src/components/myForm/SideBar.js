@@ -31,14 +31,14 @@ class SideBar extends Component {
                 >
                   <li className="nav-item">
                     <Link
-                      to={`${url}`}
+                      to={`${url}/myform`}
                       className={
-                        this.props.location.pathname == `${url}`
+                        this.props.location.pathname == `${url}/myform`
                           ? "nav-link active"
                           : "nav-link"
                       }
                     >
-                      My Form
+                      My Forms
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -62,7 +62,7 @@ class SideBar extends Component {
         <Switch>
           <Route
             exact
-            path={`${path}`}
+            path={`${path}/myform`}
             render={props => (
               <MyFormContent
                 {...props}

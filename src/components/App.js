@@ -31,7 +31,7 @@ class App extends Component {
                 path="/project-settings"
                 render={props => <Settings {...props} />}
               />
-              <Route path="/my-form" render={props => <MyForm {...props} />} />
+              <Route path="/forms" render={props => <MyForm {...props} />} />
             </Switch>
             <ToastContainer />
           </RegionProvider>
