@@ -5,6 +5,7 @@ import { RegionProvider } from "../context";
 import setDefault from "../config";
 import Settings from "./settings/Settings";
 import MyForm from "./myForm/MyformMain";
+import ProjectSiteList from "./projectSiteList/ProjectSiteList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "../css/line-awesome.min.css";
@@ -37,6 +38,10 @@ class App extends Component {
                     <Route
                       path="/forms"
                       render={props => <MyForm {...props} />}
+                    />
+                    <Route
+                      path="/project-sitelist"
+                      render={props => <ProjectSiteList {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
