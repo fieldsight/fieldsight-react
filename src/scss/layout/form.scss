@@ -483,6 +483,8 @@
             background-color:$color-bg;
 
         }
+        .select2-selection--multiple {
+        }
           .select2-selection__choice{
             padding:0.1rem 0.5rem;
             background-color:$color-bg;
@@ -528,20 +530,6 @@
           height: 205px; 
           margin-top:1rem
         }
-      }
-    }
-    .warning{
-      padding:2rem;
-      text-align: center;
-      i{
-        color:$color-red;
-        font-size:4rem;
-      }
-      h4{
-        font-size:1.5rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        margin-top: 1rem;
       }
     }
     form.floating-form{
@@ -670,11 +658,6 @@
             }
             &.sm-body{
               max-width: 500px;
-            }
-            .warning-footer{
-              a.fieldsight-btn{
-                margin-left:0.5rem;
-              }
             }
         }
       }
