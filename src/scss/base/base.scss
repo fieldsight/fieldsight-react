@@ -29,6 +29,12 @@
   .mrt-30{
     margin-top:2rem !important;
   }
+  .mrt-15{
+    margin-top:1rem !important;
+  }
+  .mrb-15{
+    margin-bottom:1rem !important;
+  }
   .mrb-30{
     margin-bottom:2rem !important;
   }
@@ -119,7 +125,7 @@
       @include flexjust;
       align-items: center;
       h5{
-        margin:0;
+        margin:0 0.5rem 0 0;
         font-size: 1rem;
         text-transform: capitalize;
         font-weight: 600;
@@ -218,7 +224,8 @@
     .sub-card-header{
       @extend .main-card-header;
       h5{
-        font-weight: 500;
+        font-weight: 600;
+        font-size:0.875rem;
       }
       form{
         .form-group{

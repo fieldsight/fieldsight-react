@@ -112,6 +112,11 @@
                 border: 2px dashed $color-bg;
                 padding: 0.625rem;
                 margin-top:1rem;
+                text-align: center;
+                img{
+                  max-height: 160px;
+                  margin: 0 auto;
+                }
                 .upload-wrap{
                   position: relative;
                   overflow: hidden;
@@ -197,16 +202,16 @@
                   padding-left: 1.5rem;
                   text-align: left;
                   display: block;
-                  color: rgba($color-primary , 0.5);
                   font-weight: 400;
+                  font-size:0.775rem;
                   .helper {
                     position: absolute;
                     top: 2px;
                     left: 0;
-                    width: 1rem;
-                    height: 1rem;
+                    width: 0.875rem;
+                    height: 0.875rem;
                     z-index: 0;
-                    border: 0.115rem solid $color-bg;
+                    border: 0.115rem solid $color-secondary;
                     border-radius: 0.0625rem;
                     -webkit-transition: border-color 0.1s ease;
                     transition: border-color 0.1s ease;
@@ -215,26 +220,25 @@
                       position: absolute;
                       height: 0;
                       width: 0.1rem;
-                      background-color: $color-blue;
+                      background-color: $color-white;
                       display: block;
                       -webkit-transform-origin: left top;
                               transform-origin: left top;
                       border-radius: 0.25rem;
                       content: '';
-                      -webkit-transition: opacity 0.2s ease, height 0s linear 0.2s;
+                      -webkit-transition: opacity 0.1s ease, height 0s linear 0.1s;
                       transition: opacity 0.1s ease, height 0s linear 0.1s;
                       opacity: 0;
                     }
                     &::before{
-                      top: 0.65rem;
-                      left: 0.38rem;
+                      top: 0.585rem;
+                      left: 0.3rem;
                       -webkit-transform: rotate(-135deg);
                               transform: rotate(-135deg);
-                      box-shadow: 0 0 0 0.0625rem $color-white;
                     }
                     &::after{
-                      top: 0.4rem;
-                      left: 0.12rem;
+                      top: 0.345rem;
+                      left: 1px;
                       -webkit-transform: rotate(-45deg);
                               transform: rotate(-45deg);
                     }
@@ -248,19 +252,20 @@
                     &:checked{
                       ~ .helper{
                         color:$color-blue;
+                        background-color: $color-blue;
                         &::after{
                           opacity: 1;
-                          -webkit-transition: height 0.2s ease;
-                          transition: height 0.2s ease;
+                          -webkit-transition: height 0.1s ease;
+                          transition: height 0.1s ease;
                           height: 0.3rem;
                         }
                         &::before{
                           opacity: 1;
-                          -webkit-transition: height 0.2s ease;
-                          transition: height 0.2s ease;
-                          height: 0.6rem;
-                          -webkit-transition-delay: 0.2s;
-                                  transition-delay: 0.2s;
+                          -webkit-transition: height 0.1s ease;
+                          transition: height 0.1s ease;
+                          height: 0.575rem;
+                          -webkit-transition-delay: 0.1s;
+                                  transition-delay: 0.1s;
                         }
                       }
                     }
