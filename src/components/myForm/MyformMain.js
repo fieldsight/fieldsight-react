@@ -46,17 +46,15 @@ class MyFormMain extends Component {
 
   render() {
     return (
-      <div id="fieldsight-new" className="fieldsight-new">
-        <div id="main-container" className="minified">
-          <div className="container-fluid">
-            <nav aria-label="breadcrumb" role="navigation">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <a>Forms</a>
-                </li>
-              </ol>
-            </nav>
+            <div>
             <main id="main-content">
+              <nav aria-label="breadcrumb" role="navigation">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <a>Forms</a>
+                  </li>
+                </ol>
+              </nav>
               <div className="row">
                 <SideBar
                   OpenTabHandler={this.OpenTabHandler}
@@ -65,8 +63,8 @@ class MyFormMain extends Component {
                 />
               </div>
             </main>
-          </div>
-        </div>
+            
+          
 
         {this.state.popupModal && (
           <CommonPopup
@@ -81,7 +79,7 @@ class MyFormMain extends Component {
             />
           </CommonPopup>
         )}
-      </div>
+        </div>
     );
   }
 }

@@ -473,7 +473,7 @@ class SiteInformationTable extends Component {
                   changeHandler={questionChangeHandler}
                 />
               )}
-
+              <div className="form-group display-inline text-center">
               <CheckBox
                 checked={this.state.dashboardChecked}
                 label="Share To Dashboard"
@@ -485,7 +485,7 @@ class SiteInformationTable extends Component {
                 label="Share To Public"
                 onChange={e => this.handleCheckboxChange(e, "public")}
               />
-
+              </div>
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
                   Save

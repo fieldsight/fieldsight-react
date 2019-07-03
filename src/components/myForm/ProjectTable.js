@@ -106,7 +106,7 @@ class ProjecTable extends Component {
                         <td>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-disabled">Preview!</Tooltip>
+                              <Tooltip id="tooltip-disabled">Preview</Tooltip>
                             }
                           >
                             <a
@@ -128,7 +128,7 @@ class ProjecTable extends Component {
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-disabled">Edit!</Tooltip>
+                              <Tooltip id="tooltip-disabled">Edit</Tooltip>
                             }
                           >
                             <a
@@ -143,14 +143,11 @@ class ProjecTable extends Component {
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-disabled">Replace!</Tooltip>
+                              <Tooltip id="tooltip-disabled">Replace</Tooltip>
                             }
                           >
                             <a
                               className="td-edit-btn td-btn"
-                              data-toggle="tooltip"
-                              data-placement="top"
-                              title="Replace"
                             >
                               {" "}
                               <i className="la la-refresh"> </i>{" "}
@@ -158,7 +155,19 @@ class ProjecTable extends Component {
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-disabled">Clone!</Tooltip>
+                              <Tooltip id="tooltip-disabled">download</Tooltip>
+                            }
+                          >
+                            <a
+                              className="td-edit-btn td-btn"
+                            >
+                              {" "}
+                              <i className="la la-download"> </i>{" "}
+                            </a>
+                          </OverlayTrigger>
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-disabled">Make a copy</Tooltip>
                             }
                           >
                             <a

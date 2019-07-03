@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Zoom from "react-reveal/Zoom";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PreviewModal from "./PreviewModal";
 import ReplaceModal from "./ReplaceModal";
@@ -31,36 +31,48 @@ class FormShare extends Component {
           <span>{item.date_modified}</span>
         </td>
         <td>
-          <a
-            onClick={e =>
-              this.props.commonPopupHandler(
-                e,
-                PreviewModal,
-                item.preview_url,
-                "Preview Form",
-                "preview",
-                null
-              )
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="tooltip-disabled">Preview</Tooltip>
             }
-            className="td-view-btn td-btn"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Preview"
           >
-            {" "}
-            <i className="la la-eye"> </i>{" "}
-          </a>
+            <a
+              onClick={e =>
+                this.props.commonPopupHandler(
+                  e,
+                  PreviewModal,
+                  item.preview_url,
+                  "Preview Form",
+                  "preview",
+                  null
+                )
+              }
+              className="td-view-btn td-btn"
+            >
+              {" "}
+              <i className="la la-eye"> </i>{" "}
+            </a>
+          </OverlayTrigger>
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="tooltip-disabled">Edit</Tooltip>
+            }
+          >
           <a
             onClick={e => this.props.OpenTabHandler(e, item.edit_url)}
             className="td-edit-btn td-btn"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Edit"
           >
             {" "}
             <i className="la la-edit" />{" "}
           </a>
-          {/* <a
+          </OverlayTrigger>
+
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="tooltip-disabled">Replace</Tooltip>
+            }
+          >
+          <a
             onClick={e =>
               this.props.commonPopupHandler(
                 e,
@@ -72,30 +84,49 @@ class FormShare extends Component {
               )
             }
             className="td-edit-btn td-btn"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Replace"
           >
             {" "}
             <i className="la la-refresh"> </i>{" "}
-          </a> */}
+          </a>
+          </OverlayTrigger>
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="tooltip-disabled">Download</Tooltip>
+            }
+          >
+          <a
+            onClick={e => this.props.OpenTabHandler(e, item.download_url)}
+            className="td-edit-btn td-btn"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Edit"
+          >
+            {" "}
+            <i className="la la-download" />{" "}
+          </a>
+          </OverlayTrigger>
 
           {/* <a  onClick={(e) => this.props.togglePopup(e, 'share')} className="td-edit-btn td-btn" data-toggle="tooltip" data-placement="top" title="Share"> <i className="la la-share-alt"> </i> </a>
                 <a  onClick={(e) => this.props.globashare(item.share_global_url,item.id_string)} className="td-edit-btn td-btn" data-toggle="tooltip" data-placement="top" title="globals Share"> <i className="la la-globe"> </i> </a> */}
+          
           <span className="share-icon">
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="tooltip-disabled">Share</Tooltip>
+            }
+          >
             <a
               onClick={e => this.shareToggle(e)}
               className="td-share-btn td-btn"
-              data-toggle="tooltip"
-              data-placement="top"
-              title="Share"
             >
               {" "}
               <i className="la la-share-alt"> </i>
             </a>
+            </OverlayTrigger>
 
             {this.state.shareOption && (
               <ul className="share-drop">
+                <h5>Share to</h5>
                 <li>
                   <a
                     onClick={e =>
@@ -103,7 +134,7 @@ class FormShare extends Component {
                         e,
                         ShareModal,
                         item.id_string,
-                        "User",
+                        "Select User",
                         "users",
                         item.share_users_url
                       )
@@ -120,7 +151,7 @@ class FormShare extends Component {
                         e,
                         ShareModal,
                         item.id_string,
-                        "Project",
+                        "Select Projects",
                         "projects",
                         item.share_project_url
                       )
@@ -137,7 +168,7 @@ class FormShare extends Component {
                         e,
                         ShareModal,
                         item.id_string,
-                        "Team",
+                        "Select Teams",
                         "teams",
                         item.share_team_url
                       )
@@ -155,38 +186,31 @@ class FormShare extends Component {
                         e,
                         GlobalModel,
                         item.id_string,
-                        "Global Form",
+                        " Select Global",
                         "global",
                         item.share_global_url
                       )
                     }
                     data-tab="global-share"
                   >
-                    Global
+                    Globle
                   </a>
                 </li>
               </ul>
             )}
           </span>
-          <a
-            onClick={e => this.props.OpenTabHandler(e, item.download_url)}
-            className="td-edit-btn td-btn"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Edit"
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="tooltip-disabled">Delete</Tooltip>
+            }
           >
-            {" "}
-            <i className="la la-download" />{" "}
-          </a>
-          {/* <a
+          <a
             className="td-delete-btn td-btn"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Delete"
           >
             {" "}
             <i className="la la-trash" />{" "}
-          </a> */}
+          </a>
+          </OverlayTrigger>
         </td>
       </tr>
     );
