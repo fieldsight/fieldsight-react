@@ -30,7 +30,9 @@ class SiteInformationCard extends Component {
     let selectedQuestion = {};
     let type = "choose";
     let showForm = false;
+    let filteredQuestions = [];
 
+    console.log("nextProps", nextProps);
     if (nextProps.siteInfo && nextProps.siteInfo.form_id) {
       selectedForm = nextProps.forms.find(
         form => form.id === nextProps.siteInfo.form_id
@@ -47,11 +49,16 @@ class SiteInformationCard extends Component {
 
     if (!isEmpty(selectedForm)) {
       showForm = true;
+      filteredQuestions = findQuestion(
+        selectedForm.json.children,
+        nextProps.infoType
+      );
     }
 
     this.setState({
       selectedForm,
       selectedQuestion,
+      filteredQuestions,
       type,
       showForm
     });
