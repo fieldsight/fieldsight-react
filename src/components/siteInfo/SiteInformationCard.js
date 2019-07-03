@@ -32,7 +32,6 @@ class SiteInformationCard extends Component {
     let showForm = false;
     let filteredQuestions = [];
 
-    console.log("nextProps", nextProps);
     if (nextProps.siteInfo && nextProps.siteInfo.form_id) {
       selectedForm = nextProps.forms.find(
         form => form.id === nextProps.siteInfo.form_id

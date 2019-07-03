@@ -50,7 +50,7 @@ class SideBar extends Component {
                           : "nav-link"
                       }
                     >
-                      Project Form
+                      Project Forms
                     </Link>
                   </li>
                 </ul>

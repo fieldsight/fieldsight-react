@@ -35,7 +35,7 @@ class LeftSidebar extends Component {
       {
         to: `${url}/manage-region`,
         path: `${url}/manage-region`,
-        title: !isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"
+        title: !isEmpty(terms) ? `${terms.region}` : "Region"
       },
       { to: `${url}/map-layer`, path: `${url}/map-layer`, title: "Map Layers" },
       {
