@@ -23,19 +23,28 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App Fade">
-        <Router>
-          <RegionProvider>
-            <Switch>
-              <Route
-                path="/project-settings"
-                render={props => <Settings {...props} />}
-              />
-              <Route path="/forms" render={props => <MyForm {...props} />} />
-            </Switch>
-            <ToastContainer />
-          </RegionProvider>
-        </Router>
+      <div id="fieldsight-new" className="fieldsight-new">
+        <div id="main-container">
+          <div className="container-fluid">
+            <main id="main-content">
+              <Router>
+                <RegionProvider>
+                  <Switch>
+                    <Route
+                      path="/project-settings"
+                      render={props => <Settings {...props} />}
+                    />
+                    <Route
+                      path="/forms"
+                      render={props => <MyForm {...props} />}
+                    />
+                  </Switch>
+                  <ToastContainer />
+                </RegionProvider>
+              </Router>
+            </main>
+          </div>
+        </div>
       </div>
     );
   }
