@@ -70,7 +70,7 @@ class EditProject extends Component {
     const project = {
       name,
       phone,
-      email_address: email,
+      email,
       address,
       website,
       donor,
@@ -83,7 +83,6 @@ class EditProject extends Component {
       organization
     };
 
-    debugger;
     axios
       .put(`${urls[0]}${projectId}/`, project)
       .then(res => {
@@ -118,13 +117,13 @@ class EditProject extends Component {
     const { value } = e.target;
     if (subSect) {
       const selectedSubSectorId = this.state.subSectors.find(
-        subSect => subSect.name === value
+        subSect => subSect.id === +value
       ).id;
       return this.setState({
         selectedSubSector: selectedSubSectorId
       });
     }
-    const selectedSector = this.state.sector.find(sect => sect.name === value);
+    const selectedSector = this.state.sector.find(sect => sect.id === +value);
     this.setState({
       subSectors: selectedSector.subSectors,
       selectedSector: selectedSector.id
@@ -175,11 +174,30 @@ class EditProject extends Component {
                 project.data.location && project.data.location.split(" ");
               const longitude = position && position[1].split("(")[1];
               const latitude = position && position[2].split(")")[0];
+              const newSubSectors = project.data.sub_sector
+                ? sector.data.find(sect => sect.id === +project.data.sector)
+                    .subSectors
+                : "";
+              const newSelectedSector = project.data.sector
+                ? project.data.sector
+                : "";
+              const newSelectedSubSector = project.data.sub_sector
+                ? project.data.sub_sector
+                : "";
+              const newPosition =
+                position && position.length > 0
+                  ? { latitude, longitude }
+                  : { latitude: "", longitude: "" };
+              const newCropResult = project.data.logo ? project.data.logo : "";
 
               this.setState({
                 project: project.data,
                 sector: sector.data,
-                ...(position & { position: { latitude, longitude } })
+                subSectors: newSubSectors,
+                selectedSector: newSelectedSector,
+                selectedSubSector: newSelectedSubSector,
+                cropResult: newCropResult,
+                position: newPosition
               });
             }
           }
@@ -232,7 +250,9 @@ class EditProject extends Component {
         position: { latitude, longitude },
         showCropper,
         cropResult,
-        isLoading
+        isLoading,
+        selectedSector,
+        selectedSubSector
       },
       onChangeHandler,
       onSelectChangeHandler,
@@ -263,16 +283,18 @@ class EditProject extends Component {
               <SelectElement
                 className="form-control"
                 label="Sector"
-                options={sector.map(sect => sect.name)}
+                options={sector.map(sect => sect)}
                 changeHandler={onSelectChangeHandler}
+                value={selectedSector && selectedSector}
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <SelectElement
                 className="form-control"
                 label="Sub Sector"
-                options={subSectors.map(subSect => subSect.name)}
+                options={subSectors.map(subSect => subSect)}
                 changeHandler={e => onSelectChangeHandler(e, "subSect")}
+                value={selectedSubSector && selectedSubSector}
               />
             </div>
             <div className="col-xl-4 col-md-6">
