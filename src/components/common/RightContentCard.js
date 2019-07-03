@@ -8,7 +8,7 @@ const RightContentCard = ({
   children
 }) => (
   <div className="card">
-    <div className="card-header main-card-header sub-card-header">
+    <div className="card-header main-card-header">
       <h5>{title}</h5>
       {addButton && (
         <div className="add-btn">

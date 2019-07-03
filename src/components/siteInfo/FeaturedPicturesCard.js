@@ -11,7 +11,7 @@ class FeaturedPicturesCard extends Component {
       renderName
     } = this;
     return (
-      <div className="col-lg-3 col-md-6">
+      <div className="col-lg-6 col-md-6">
         <div className="card">
           <div className="card-header sub-card-header">
             <h5>{picture.question_name}</h5>

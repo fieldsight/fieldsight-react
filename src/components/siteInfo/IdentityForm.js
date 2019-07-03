@@ -2,7 +2,7 @@ import React from "react";
 import SiteInformationCard from "./SiteInformationCard";
 import isEmpty from "../../utils/isEmpty";
 const IdentityForm = ({ forms, terms, siteIdentityHandler, siteBasicInfo }) => (
-  <div className="identity-form">
+  <div className="identity-form mrb-15">
     <div className="row">
       <div className="col-lg-6">
         <div className="site_photo_form">

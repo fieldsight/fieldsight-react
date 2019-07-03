@@ -207,7 +207,7 @@ class FeaturedPictures extends Component {
     } = this;
 
     return (
-      <div className="card no-boxshadow">
+      <div className="card mrt-15 no-boxshadow">
         <div className="card-header main-card-header">
           <h5>featured pictures</h5>
           <div className="add-btn">
