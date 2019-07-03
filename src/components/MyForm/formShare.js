@@ -79,7 +79,7 @@ class FormShare extends Component {
             {" "}
             <i className="la la-refresh"> </i>{" "}
           </a> */}
-          
+
           {/* <a  onClick={(e) => this.props.togglePopup(e, 'share')} className="td-edit-btn td-btn" data-toggle="tooltip" data-placement="top" title="Share"> <i className="la la-share-alt"> </i> </a>
                 <a  onClick={(e) => this.props.globashare(item.share_global_url,item.id_string)} className="td-edit-btn td-btn" data-toggle="tooltip" data-placement="top" title="globals Share"> <i className="la la-globe"> </i> </a> */}
           <span className="share-icon">
@@ -147,8 +147,8 @@ class FormShare extends Component {
                     Team
                   </a>
                 </li>
-               
-                {/* <li>
+
+                <li>
                   <a
                     onClick={e =>
                       this.props.commonPopupHandler(
@@ -164,7 +164,7 @@ class FormShare extends Component {
                   >
                     Global
                   </a>
-                </li> */}
+                </li>
               </ul>
             )}
           </span>

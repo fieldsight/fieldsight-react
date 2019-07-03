@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import { RegionProvider } from "../context";
 import setDefault from "../config";
 import Settings from "./settings/Settings";
+import MyForm from "./myForm/MyformMain";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "../css/line-awesome.min.css";
@@ -30,6 +31,7 @@ class App extends Component {
                 path="/project-settings"
                 render={props => <Settings {...props} />}
               />
+              <Route path="/my-form" render={props => <MyForm {...props} />} />
             </Switch>
             <ToastContainer />
           </RegionProvider>

@@ -4,64 +4,69 @@ import axios from "axios";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PreviewModal from "./PreviewModal";
-import {DotLoader} from "./Loader"
+import { DotLoader } from "./Loader";
 import { successToast, errorToast } from "./toastHandler";
+
+const url = "fv3/api/myprojectforms/";
 
 class ProjecTable extends Component {
   _isMounted = false;
   state = {
     project_list: [],
     list: [],
-    dLoader:true
+    dLoader: true
   };
 
   cloneHandler = (e, clone_url, id, form_id) => {
-   
     axios
-      .post(clone_url, { id_string: id , project:form_id })
+      .post(clone_url, { id_string: id, project: form_id })
       .then(res => {
-       
         // if (res.status === 201) {
         //   this.setState({
         //     globalUrl: res.data.share_link,
         //     disable: false
         //   });
         // }
-        successToast("Form", "cloned")
+        successToast("Form", "cloned");
       })
       .catch(err => console.log("err", err));
   };
 
   componentDidMount() {
-    const url = "https://fieldsight.naxa.com.np/fv3/api/myprojectforms/";
     this._isMounted = true;
     axios
-      .get(url)
+      .get(`${url}`)
 
       .then(res => {
-        console.log()
         if (this._isMounted) {
-          this.setState({
-            project_list: res.data
-          });
+          // this.setState({
+          //   project_list: res.data
+          // });
+          console.log("res", res);
+          if (res.status === 200) {
+            this.setState({
+              project_list: res.data,
+              dLoader: false
+            });
+          }
         }
-
-        if(res.data.length>0){
-
-          this.setState({
-              dLoader:false,
-              
-          })
-
-      }
-
       })
-      .catch(err => console.log("err", err));
+      .catch(err => {
+        this.setState({
+          // project_list: res.data,
+          dLoader: false
+        });
+      });
   }
 
   render() {
     return (
       <React.Fragment>
+        {this.state.project_list.length === 0 && !this.state.dLoader && (
+          <div className="card-header main-card-header sub-card-header bg-header">
+            <h5>No Form Data Available</h5>
+          </div>
+        )}
         {this.state.project_list.map((item, i) => (
           <div key={i}>
             <div className="card-header main-card-header sub-card-header bg-header">
@@ -188,11 +193,9 @@ class ProjecTable extends Component {
                 </table>
               </PerfectScrollbar>
             </div>
-           
           </div>
-          
         ))}
-        {this.state.dLoader && <DotLoader/>   } 
+        {this.state.dLoader && <DotLoader />}
       </React.Fragment>
     );
   }

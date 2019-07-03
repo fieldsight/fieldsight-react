@@ -38,18 +38,21 @@ export default class TermAndLabel extends Component {
   requestHandler = async () => {
     try {
       const {
-        termsAndLabels: {
-          id,
-          donor,
-          site,
-          site_supervisor,
-          site_reviewer,
-          region,
-          region_supervisor,
-          region_reviewer,
-          project
-        }
-      } = this.state;
+        state: {
+          termsAndLabels: {
+            id,
+            donor,
+            site,
+            site_supervisor,
+            site_reviewer,
+            region,
+            region_supervisor,
+            region_reviewer,
+            project
+          }
+        },
+        context: { updateTerms }
+      } = this;
 
       const termsAndLabels = {
         donor,
@@ -61,7 +64,7 @@ export default class TermAndLabel extends Component {
         region_reviewer,
         project
       };
-      debugger;
+
       if (id) {
         await axios.put(`${url}${id}/`, termsAndLabels);
         await this.setState({
@@ -70,7 +73,7 @@ export default class TermAndLabel extends Component {
         });
 
         successToast("Terms and Labels", "updated");
-        return this.context.updateTerms(termsAndLabels);
+        return updateTerms(termsAndLabels);
       }
 
       await axios.post(`${url}?project=${project}`, termsAndLabels);
@@ -79,7 +82,7 @@ export default class TermAndLabel extends Component {
         showList: true
       });
       successToast("Terms and Labels", "added");
-      this.context.updateTerms(termsAndLabels);
+      updateTerms(termsAndLabels);
     } catch (error) {
       await this.setState({
         isLoading: false

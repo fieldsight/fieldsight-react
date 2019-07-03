@@ -2,47 +2,40 @@ import React, { Component } from "react";
 import axios from "axios";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { timingSafeEqual } from "crypto";
-import {DotLoader} from "./Loader"
+import { DotLoader } from "./Loader";
 import { successToast, errorToast } from "./toastHandler";
+
+const url = "fv3/api/form/";
 
 class ShareModal extends Component {
   state = {
     userList: [],
-    dLoader:true,
-    shareState:false
+    dLoader: true,
+    shareState: false
   };
 
   componentDidMount() {
-    const baseurl = "https://fieldsight.naxa.com.np/fv3/api/form";
-    const url = baseurl + "/" + this.props.modalTypes + "/";
-    
+    const { modalTypes } = this.props;
 
     axios
-      .get(url)
-     
+      .get(`${url}${modalTypes}/`)
+
       .then(res => {
         const modifiedUser = res.data.map(user => ({
           ...user,
           checkbox: false
         }));
 
-        this.setState(
-          {
-            userList: modifiedUser
-          }
-          
-          
-        );
+        this.setState({
+          userList: modifiedUser
+        });
 
-        if(res.data.length>0){
-
+        if (res.data.length > 0) {
           this.setState({
-              dLoader:false,
-              shareState:true
-          })
-
-      }
+            dLoader: false,
+            shareState: true
+          });
+        }
       })
       .catch(err => console.log("err", err));
   }
@@ -71,60 +64,61 @@ class ShareModal extends Component {
       .then(res => {
         console.log(res.status);
         console.log(res.data.message);
-        successToast("Form", "shared")
-       
+        successToast("Form", "shared");
       })
-      
+
       .catch(err => console.log("err", err));
   };
 
   render() {
     const type = this.props.modalTypes;
 
-   
     return (
       <div className="thumb-list userlist">
-      {this.state.shareState && <form onSubmit={this.onSubmit}>
-          <ul style={{ position: "relative", height: "450px" }}>
-            <PerfectScrollbar>
-              {this.state.userList.map((user, i) => (
-                <li key={user.id}>
-                  <figure>
-                    <img
-                      src={type === "users" ? user.profile_picture : user.logo}
-                      alt="image"
-                    />
-                  </figure>
-                  <div className="content">
-                    <h6>{type === "users" ? user.first_name : user.name} </h6>
-                    {type == "users" ? <span>{user.email}</span> : null}
-                  </div>
-                  <div className="form-group checkbox-btn">
-                    <div className="custom-checkbox">
-                      <div className="checkbox ">
-                        <label>
-                          <input
-                            type="checkbox"
-                            onChange={e => this.checkboxHandler(e, user.id)}
-                            checked={user.checkbox}
-                          />
-                          <i className="helper" />
-                        </label>
+        {this.state.shareState && (
+          <form onSubmit={this.onSubmit}>
+            <ul style={{ position: "relative", height: "450px" }}>
+              <PerfectScrollbar>
+                {this.state.userList.map((user, i) => (
+                  <li key={user.id}>
+                    <figure>
+                      <img
+                        src={
+                          type === "users" ? user.profile_picture : user.logo
+                        }
+                        alt="image"
+                      />
+                    </figure>
+                    <div className="content">
+                      <h6>{type === "users" ? user.first_name : user.name} </h6>
+                      {type == "users" ? <span>{user.email}</span> : null}
+                    </div>
+                    <div className="form-group checkbox-btn">
+                      <div className="custom-checkbox">
+                        <div className="checkbox ">
+                          <label>
+                            <input
+                              type="checkbox"
+                              onChange={e => this.checkboxHandler(e, user.id)}
+                              checked={user.checkbox}
+                            />
+                            <i className="helper" />
+                          </label>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </PerfectScrollbar>
-          </ul>
-          <div className="form-group mrt-30 pull-right">
-            <button type="submit" className="fieldsight-btn">
-              Share
-            </button>
-          </div>
-        </form>
-      }
-        {this.state.dLoader && <DotLoader/>} 
+                  </li>
+                ))}
+              </PerfectScrollbar>
+            </ul>
+            <div className="form-group mrt-30 pull-right">
+              <button type="submit" className="fieldsight-btn">
+                Share
+              </button>
+            </div>
+          </form>
+        )}
+        {this.state.dLoader && <DotLoader />}
       </div>
     );
   }

@@ -20,7 +20,6 @@ class GlobalModal extends Component {
     axios
       .post(url, { id_string: id })
       .then(res => {
-        console.log(res.data.share_link);
         if (res.status === 201) {
           this.setState({
             globalUrl: res.data.share_link,

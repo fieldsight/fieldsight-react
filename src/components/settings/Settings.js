@@ -57,11 +57,7 @@ export default class Settings extends Component {
                   <div className="right-content">
                     <div className="tab-content">
                       <Switch>
-                        <Route
-                          exact
-                          path={`${path}/`}
-                          component={EditProject}
-                        />
+                        <Route exact path={`${path}`} component={EditProject} />
                         <Route
                           path={`${path}/site-type`}
                           component={SiteType}

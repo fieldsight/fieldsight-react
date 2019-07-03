@@ -9,6 +9,9 @@ import ProjectFormContent from "./ProjectFormContent";
 
 class SideBar extends Component {
   render() {
+    const {
+      match: { path, url }
+    } = this.props;
     return (
       <React.Fragment>
         <div className="col-xl-3 col-lg-4">
@@ -28,9 +31,9 @@ class SideBar extends Component {
                 >
                   <li className="nav-item">
                     <Link
-                      to="/"
+                      to={`${url}`}
                       className={
-                        this.props.location.pathname == "/"
+                        this.props.location.pathname == `${url}`
                           ? "nav-link active"
                           : "nav-link"
                       }
@@ -40,9 +43,9 @@ class SideBar extends Component {
                   </li>
                   <li className="nav-item">
                     <Link
-                      to="/projectform"
+                      to={`${url}/projectform`}
                       className={
-                        this.props.location.pathname == "/projectform"
+                        this.props.location.pathname == `${url}/projectform`
                           ? "nav-link active"
                           : "nav-link"
                       }
@@ -50,12 +53,6 @@ class SideBar extends Component {
                       Project Form
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
-                                            <a className="nav-link " id="site_info_tab" data-toggle="tab" href="#site_info" role="tab" aria-controls="site_info" aria-selected="false">team Form</a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a className="nav-link " id="region_manage_tab" data-toggle="tab" href="#region_manage" role="tab" aria-controls="region_manage" aria-selected="true">GLoabal form</a>
-                                        </li> */}
                 </ul>
               </div>
             </div>
@@ -65,7 +62,7 @@ class SideBar extends Component {
         <Switch>
           <Route
             exact
-            path="/"
+            path={`${path}`}
             render={props => (
               <MyFormContent
                 {...props}
@@ -78,7 +75,7 @@ class SideBar extends Component {
 
           <Route
             exact
-            path="/projectform"
+            path={`${path}/projectform`}
             render={props => (
               <ProjectFormContent
                 {...props}
