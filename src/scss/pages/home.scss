@@ -148,6 +148,17 @@
         }
       }
     }
+    ul{
+      li{
+        &:first-child{
+          padding:0.5rem 0;
+        }
+        &:last-child{
+          padding:0.5rem 0;
+          border-bottom:1px solid $color-bg;
+        }
+      }
+    }
     
 }
   .right-content{
