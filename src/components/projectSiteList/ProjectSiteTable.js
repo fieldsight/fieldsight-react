@@ -5,7 +5,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../myForm/Loader";
 
-const url = "fv3/api/project-site-list/?project=137";
+const project_id = 137;
 
 class ProjectSiteTable extends Component {
   _isMounted = false;
@@ -14,52 +14,22 @@ class ProjectSiteTable extends Component {
     totalCount: 0,
     toData: 200,
     fromData: 1,
-    pageNum: 0,
+    pageNum: 1,
     dLoader: true,
-    lowerPages: [],
-    higerPages: [],
+    // lowerPages: [],
+    // higerPages: [],
+    per_page: 200,
     totalPage:null
   };
 
   componentDidMount() {
-    this._isMounted = true;
-   
-    axios
-      .get(`${url}`)
-
-      .then(res => {
-        console.log(res.data);
-        if (this._isMounted) {
-          if (res.status === 200) {
-            this.setState({
-              siteList: res.data.results,
-              dLoader: false,
-              pageNum: this.state.pageNum+1,
-              totalCount: res.data.count,
-              totalPage:Math.ceil(res.data.count / 200)
-            },  this.pageCounter);
-          }
-        }
-      })
-      .catch(err => {
-        console.log(err)
-        // this.setState({
-        //   dLoader: false
-        // });
-      });
+    this.paginationHandler(1)
+    
   }
 
-  componentDidUpdate(props,prevstate){
-    if(prevstate.pageNum!=this.state.pageNum){
-    
-       this.pageCounter()
-
-    }
-
-
-  } 
-
+  
   requestHandler = paginateUrl => {
+    this._isMounted=true
     axios
       .get(`${paginateUrl}`)
 
@@ -68,7 +38,9 @@ class ProjectSiteTable extends Component {
           if (res.status === 200) {
             this.setState({
               siteList: res.data.results,
-              dLoader: false
+              dLoader: false,
+              totalCount: res.data.count,
+              totalPage:Math.ceil(res.data.count / 200)
             });
           }
         }
@@ -80,57 +52,50 @@ class ProjectSiteTable extends Component {
     const toNum = page_num * 200;
     const fromNum = (page_num - 1) * 200 + 1;
     const paginateUrl =
-      "fv3/api/project-site-list/?page=" + page_num + "&project=137";
+      "fv3/api/project-site-list/?page=" + page_num + "&project="+project_id;
     console.log(paginateUrl);
     this.setState(
       {
         toData: toNum,
         fromData: fromNum,
         pageNum: page_num,
-        dLoader: true
+        dLoader: true,
+        
       },
       () => this.requestHandler(paginateUrl)
     );
   };
 
-  pageCounter = () => {
-    let lowpages = [];
-    let highpages = [];
-    let j = 1;
-    let k = 1;
-    let totalPage = Math.ceil(this.state.totalCount / 200);
-    if (this.state.pageNum == totalPage) {
-      this.setState({
-        pageNum: totalPage - 10
-      });
-    }
-    for (let i = this.state.pageNum; i < totalPage; i++) {
-      lowpages.push(i);
-     
-      j++;
-      if (j >= 4) {
-        break;
+  
+
+  renderPageNumbers = () =>{
+    console.log(this.state.totalPage)
+    if(this.state.totalPage) {
+     const pageNumbers = []
+      for (let i = 1; i <= this.state.totalPage ; i++) {
+        pageNumbers.push(i);
       }
+      console.log(pageNumbers)
+     return pageNumbers.map(number => {
+        let classes = this.state.pageNum === number ? 'current' : '';
+      
+        if (number == 1 || number == this.state.totalPage || (number >= this.state.pageNum - 2 && number <= this.state.pageNum + 2)) {
+          return (
+           
+            <li  key={number} className={classes}  >
+               {" "}
+               <a onClick={e => this.paginationHandler(number)}>{number}</a>
+              </li>
+           
+          );
+        }
+      });
     }
 
    
 
-    for (let i = this.state.pageNum + 8; i < totalPage; i++) {
-      highpages.push(i);
-     
-      k++;
-      if (k >= 3) {
-        break;
-      }
-    }
-
-   this.setState({
-     lowerPages:lowpages,
-     higerPages:highpages
-   })
-
-    // return pages;
-  };
+  }
+  
 
   render() {
     return (
@@ -169,7 +134,7 @@ class ProjectSiteTable extends Component {
               >
                 <thead>
                   <tr>
-                    <th>id</th>
+                   
                     <th>Site name</th>
                     <th>id</th>
                     <th>Address</th>
@@ -184,7 +149,7 @@ class ProjectSiteTable extends Component {
                   {!this.state.dLoader &&
                     this.state.siteList.map((item, i) => (
                       <tr key={i}>
-                        <td>{i}</td>
+                       
                         <td>
                           <a href="#" className="pending table-profile">
                             <figure>
@@ -209,7 +174,7 @@ class ProjectSiteTable extends Component {
                               aria-valuenow="40"
                               aria-valuemin="0"
                               aria-valuemax="200"
-                              style={{ width: item.progress }}
+                              style={{ width: item.progress+'%' }}
                             >
                               <span className="progress-count">
                                 {item.progress + "%"}
@@ -226,7 +191,11 @@ class ProjectSiteTable extends Component {
                                 : null
                             }
                           >
-                            {item.status}
+                           {
+                              item.status != null
+                                ? item.status
+                                : "No Submission Yet"
+                            }
                           </a>
                         </td>
                       </tr>
@@ -255,38 +224,9 @@ class ProjectSiteTable extends Component {
                     <i className="la la-long-arrow-left" />
                   </a>
                 </li>
-                {this.state.lowerPages.map(page => (
-                  <li
-                    key={page}
-                    className={this.state.pageNum == page ? "current" : ""}
-                  >
-                    {" "}
-                    <a onClick={e => this.paginationHandler(page)}>{page}</a>
-                  </li>
-                ))}
 
-                {/* {this.pageCounter()} */}
-                <li className="page-item">.....</li>
-
-                {this.state.higerPages.map(page => (
-                  <li
-                    key={page}
-                    className={this.state.pageNum == page ? "current" : ""}
-                  >
-                    {" "}
-                    <a onClick={e => this.paginationHandler(page)}>{page}</a>
-                  </li>
-                ))}
-
-                {this.state.totalPage && <li
-                  key={this.state.totalPage}
-                  className={this.state.pageNum == this.state.totalPage ? "current" : ""}
-                >
-                  {" "}
-                  <a onClick={e => this.paginationHandler(this.state.totalPage)}>
-                    {this.state.totalPage}
-                  </a>
-                </li>}
+                {this.renderPageNumbers()} 
+               
 
                 <li className="page-item ">
                   <a
