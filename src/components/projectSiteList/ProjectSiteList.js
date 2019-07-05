@@ -54,65 +54,13 @@ class ProjectSiteList extends Component {
                 </ol>
               </nav>
             <div className="card">
-              <div className="card-header main-card-header sub-card-header">
-                <h5>Sites</h5>
-                <div className="dash-btn">
-                  <form className="floating-form">
-                    <div className="form-group mr-0">
-                      <input type="search" className="form-control" required />
-                      <label htmlFor="input">Search</label>
-                      <i className="la la-search" />
-                    </div>
-                  </form>
-                  <button
-                    className="fieldsight-btn"
-                    onClick={e => this.showPopup(e, "add")}
-                  >
-                    <i className="la la-plus" />
-                  </button>
-                  <button className="fieldsight-btn">Meta Attributes</button>
-                  <button
-                    className="fieldsight-btn"
-                    onClick={e => this.showPopup(e, "upload")}
-                  >
-                    Bulk upload/update
-                  </button>
-                </div>
-              </div>
-              <div className="card-body">
-                <ProjectSiteTable />
-                <div className="table-footer">
-                  <div className="showing-rows">
-                    <p>
-                      Showing <span>1</span> to <span>6</span>of <span>8</span>{" "}
-                      entries.
-                    </p>
-                  </div>
-                  <div className="table-pagination">
-                    <ul>
-                      <li className="page-item">
-                        <a href={`#/`}>
-                          <i className="la la-long-arrow-left" />
-                        </a>
-                      </li>
-                      <li className="page-item current">
-                        <a href={`#/`}>2</a>
-                      </li>
-                      <li className="page-item ">
-                        <a href={`#/`}>3</a>
-                      </li>
-                      <li className="page-item ">
-                        <a href={`#/`}>4</a>
-                      </li>
-                      <li className="page-item ">
-                        <a href={`#/`}>
-                          <i className="la la-long-arrow-right" />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              
+              
+                <ProjectSiteTable 
+                 showPopup={this.showPopup}
+                />
+               
+              
               {this.state.uploadModal && (
                 <Zoom duration={500}>
                   <div className="fieldsight-popup open">
@@ -148,7 +96,7 @@ class ProjectSiteList extends Component {
                                     />
                                     <div className="fieldsight-btn">
                                       <label htmlFor="upload-btn">
-                                        upload <i class="la la-cloud-upload" />
+                                        upload <i className="la la-cloud-upload" />
                                       </label>
                                       <input
                                         type="file"
@@ -261,7 +209,7 @@ class ProjectSiteList extends Component {
                                         <div className="fieldsight-btn">
                                           <label htmlFor="upload-btn">
                                             upload{" "}
-                                            <i class="la la-cloud-upload" />
+                                            <i className="la la-cloud-upload" />
                                           </label>
                                           <input
                                             type="file"
@@ -276,7 +224,7 @@ class ProjectSiteList extends Component {
                               </div>
                               <div className="form-group">
                                 <div className="form-group pull-right no-margin">
-                                  <button type="submit" class="fieldsight-btn">
+                                  <button type="submit" className="fieldsight-btn">
                                     Save
                                   </button>
                                 </div>
