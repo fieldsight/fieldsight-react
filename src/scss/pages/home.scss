@@ -408,43 +408,23 @@
           height:100%;
           background-color: $color-bg;
         }
-        &::before {
-          content: "\f110"; 
-          font-family: 'LineAwesome';
-          position: absolute;
-          right: 1rem;
-          top:-2rem;
-        }
-        &.show{
-          &::before {
-            content: "\f113"; /* fa-chevron-down */
-            font-family: 'LineAwesome';
-            position: absolute;
-            right: 1rem;
-            top:-2rem;
-          }
-        }
       }
-      .collapse:not(.show) {
-        position: relative;
-        &::before {
-          content: "\f110"; 
-          font-family: 'LineAwesome';
-            position: absolute;
-            right: 1rem;
-            top:-2rem;
-            display: block;
-        }
-    }
       .card{
         margin-top: 1.5rem;
         border-right:1px solid $color-bg;
         border-bottom:1px solid $color-bg;
         .card-header{
-          h5{
+          h5.rotate{
             a, button.btn.btn-link{
-              &:after {
-                display: none;
+              &::after{
+                content: "\f113" !important;
+              }
+            }
+            &.non-rotate{
+              a, button.btn.btn-link{
+                &::after{
+                  content: "\f110"!important;
+                }
               }
             }
           }
