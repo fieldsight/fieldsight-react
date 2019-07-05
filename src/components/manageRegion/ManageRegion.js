@@ -46,7 +46,7 @@ class ManageRegion extends Component {
     return (
       <Fragment>
         <RightContentCard
-          title={!isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"}
+          title={!isEmpty(terms) ? `${terms.region}` : "Region"}
           addButton
           toggleModal={toggleModal}
         >
@@ -62,7 +62,7 @@ class ManageRegion extends Component {
 
         {showModal && (
           <Modal
-            title={!isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"}
+            title={!isEmpty(terms) ? `${terms.region}` : "Region"}
             toggleModal={toggleModal}
           >
             <form className="floating-form" onSubmit={onSubmitHandler}>
