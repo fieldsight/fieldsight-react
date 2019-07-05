@@ -33,7 +33,6 @@
         }
         .content{
           h6{
-            font-size:0.8125rem;
             margin-bottom: 0.2rem;
           }
           span{
@@ -131,6 +130,26 @@
       }
     }
   }
+  .submission-list{
+    margin-top:1rem;
+    .submission-map{
+      .map-legend{
+        margin-top:1rem;
+        p{
+          margin-bottom: 0.2rem;
+          span{
+            min-width:5rem;
+            display: inline-block;
+          }
+          label{
+            font-weight: 600;
+            margin-left: 0.5rem;
+          }
+        }
+      }
+    }
+    
+}
   .right-content{
     background-color:$color-white;
     margin-bottom: 2rem;
@@ -281,9 +300,6 @@
               top:0;
             }
           }
-          a[aria-expanded="true"]:after {
-            content: "\f113"; /* fa-chevron-up */
-          }
         }
       }
       
@@ -381,11 +397,47 @@
           height:100%;
           background-color: $color-bg;
         }
+        &::before {
+          content: "\f110"; 
+          font-family: 'LineAwesome';
+          position: absolute;
+          right: 1rem;
+          top:-2rem;
+        }
+        &.show{
+          &::before {
+            content: "\f113"; /* fa-chevron-down */
+            font-family: 'LineAwesome';
+            position: absolute;
+            right: 1rem;
+            top:-2rem;
+          }
+        }
       }
+      .collapse:not(.show) {
+        position: relative;
+        &::before {
+          content: "\f110"; 
+          font-family: 'LineAwesome';
+            position: absolute;
+            right: 1rem;
+            top:-2rem;
+            display: block;
+        }
+    }
       .card{
         margin-top: 1.5rem;
         border-right:1px solid $color-bg;
         border-bottom:1px solid $color-bg;
+        .card-header{
+          h5{
+            a, button.btn.btn-link{
+              &:after {
+                display: none;
+              }
+            }
+          }
+        }
         .subgroup{
           
           .card-body{

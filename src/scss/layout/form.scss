@@ -73,11 +73,18 @@
                 -moz-appearance: none;
                 appearance: none;
                 font-size: 0.8125rem;
+                option{
+                  padding: .375rem 1.75rem .375rem 0;
+                  border:1px solid $color-bg;
+                }
                 &:focus{
                   box-shadow:none;
                   border-color:$color-blue;
                   outline: none !important;
                   -webkit-outline:none !important;
+                }
+                &.custom-select{
+                  background:none;
                 }
                 
               }
@@ -371,34 +378,7 @@
               }
             }
           }
-          .map-form{
-            position: relative;
-            .latitude-form{
-              position: absolute;
-              bottom:0;
-              right:0;
-              padding:0.5rem;
-              @include flex-start;
-              align-items: center;
-              background-color: rgba($color-white, 0.5);
-              z-index: 1001;
-              .lat-group{
-                max-width: 100px;
-                &:first-child{
-                  margin-right: 1rem;
-                }
-                input.form-control{
-                  background-color: transparent;
-                  font-size:0.775rem;
-                  padding: 0.25rem 0;
-                }
-                label{
-                  font-size:0.775rem;
-                }
-              }
-              
-            }
-          }
+          
           .nice-select {
             background-color: $color-white;
             border: none;
@@ -503,6 +483,35 @@
       }
       
     }
+    .map-form{
+      position: relative;
+      .latitude-form{
+        position: absolute;
+        bottom:0;
+        right:0;
+        padding:0.5rem;
+        @include flex-start;
+        align-items: center;
+        background-color: rgba($color-white, 0.5);
+        z-index: 1001;
+        .lat-group{
+          max-width: 100px;
+          &:first-child{
+            margin-right: 1rem;
+          }
+          input.form-control{
+            background-color: transparent;
+            font-size:0.775rem;
+            padding: 0.25rem 0;
+          }
+          label{
+            font-size:0.775rem;
+          }
+        }
+        
+      }
+    }
+    
     .warning{
       padding: 0 1rem 1rem 0;
       text-align: center;
