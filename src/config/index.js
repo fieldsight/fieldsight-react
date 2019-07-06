@@ -9,6 +9,7 @@ const setDefault = () => {
   axios.defaults.baseURL = "https://fieldsight.naxa.com.np/";
   axios.defaults.headers.common["X-CSRFTOKEN"] = csrfVal;
   axios.defaults.headers.common["Authorization"] = tokenVal;
+  axios.defaults.headers.common["Content-Type"] = "application/json";
 };
 
 export default setDefault;

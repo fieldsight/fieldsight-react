@@ -3,7 +3,7 @@ import SelectElement from "../common/SelectElement";
 import { DotLoader } from "../common/Loader";
 import findQuestion from "../../utils/findQuestion";
 import isEmpty from "../../utils/isEmpty";
-import { successToast } from "../../utils/toastHandler";
+
 const typeOptions = {
   sitePictureTypes: [
     { id: "choose", name: "Upload / Choose From Gallery" },
@@ -149,6 +149,7 @@ class SiteInformationCard extends Component {
     const {
       state: {
         showForm,
+        showProgressInput,
         filteredQuestions,
         selectedForm,
         selectedQuestion,
@@ -188,6 +189,7 @@ class SiteInformationCard extends Component {
                   changeHandler={e => formChangeHandler(e, infoType)}
                   value={!isEmpty(selectedForm) && selectedForm.id}
                 />
+
                 <SelectElement
                   className="form-control"
                   options={filteredQuestions}

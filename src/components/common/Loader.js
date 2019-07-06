@@ -15,7 +15,7 @@ export const DotLoader = () => (
   </div>
 );
 
-export default () => (
+export default props => (
   <Fade>
     <div className="fieldsight-popup open">
       <div
@@ -28,7 +28,8 @@ export default () => (
           top: "0",
           left: "0",
           right: "0",
-          bottom: "0"
+          bottom: "0",
+          zIndex: 99999
         }}
       >
         <ReactLoader
@@ -40,6 +41,7 @@ export default () => (
 
         <h6 style={{ color: "#00628E", marginTop: "20px" }}>
           Loading... Please wait!
+          {/* Loading... Please wait! {props.loaded && `${props.loaded} %`} */}
         </h6>
       </div>
     </div>

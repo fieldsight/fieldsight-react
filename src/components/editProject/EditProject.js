@@ -30,6 +30,7 @@ class EditProject extends Component {
 
   state = {
     project: {},
+    loaded: 0,
     sector: [],
     subSectors: [],
     selectedSector: "",
@@ -84,11 +85,20 @@ class EditProject extends Component {
     };
 
     axios
-      .put(`${urls[0]}${projectId}/`, project)
+      .put(`${urls[0]}${projectId}/`, project, {
+        onUploadProgress: progressEvent => {
+          this.setState({
+            loaded: Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            )
+          });
+        }
+      })
       .then(res => {
         this.setState(
           {
-            isLoading: false
+            isLoading: false,
+            loaded: 0
           },
           () => successToast("Project", "updated")
         );
@@ -177,17 +187,21 @@ class EditProject extends Component {
               const newSubSectors = project.data.sub_sector
                 ? sector.data.find(sect => sect.id === +project.data.sector)
                     .subSectors
-                : "";
+                : [];
+
               const newSelectedSector = project.data.sector
                 ? project.data.sector
                 : "";
+
               const newSelectedSubSector = project.data.sub_sector
                 ? project.data.sub_sector
                 : "";
+
               const newPosition =
                 position && position.length > 0
                   ? { latitude, longitude }
                   : { latitude: "", longitude: "" };
+
               const newCropResult = project.data.logo ? project.data.logo : "";
 
               this.setState({
@@ -244,6 +258,7 @@ class EditProject extends Component {
   render() {
     const {
       state: {
+        loaded,
         project: { name, phone, email, address, website, donor, public_desc },
         sector,
         subSectors,
@@ -257,7 +272,7 @@ class EditProject extends Component {
       onChangeHandler,
       onSelectChangeHandler,
       onSubmitHandler,
-      // handleCheckboxChange,
+
       readFile,
       closeModal,
       mapClickHandler
@@ -361,13 +376,7 @@ class EditProject extends Component {
                 />
               </div>
             </div>
-            <div className="col-xl-4 col-md-6">
-              {/* <CheckBox
-                checked={this.state.project.cluster_sites || false}
-                label="Do you want cluster sites in this project?"
-                onChange={handleCheckboxChange}
-              /> */}
-            </div>
+            <div className="col-xl-4 col-md-6" />
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"
@@ -543,7 +552,7 @@ class EditProject extends Component {
             </div>
           </Modal>
         )}
-        {isLoading && <Loader />}
+        {isLoading && <Loader loaded={loaded} />}
       </RightContentCard>
     );
   }

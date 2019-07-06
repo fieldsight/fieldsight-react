@@ -13,7 +13,8 @@ import isEmpty from "../../utils/isEmpty";
 const urls = [
   "fieldsight/api/organization/",
   "fieldsight/api/project/forms/",
-  "fv3/api/project-define-site-meta/"
+  "fv3/api/project-define-site-meta/",
+  "fv3/api/project/progress/add/"
 ];
 
 class SiteInformation extends Component {
@@ -25,6 +26,7 @@ class SiteInformation extends Component {
     projects: [],
     siteBasicInfo: {},
     jsonQuestions: [],
+    projectSettings: [],
     siteFeaturedImages: [],
     isLoading: false
   };
@@ -59,13 +61,17 @@ class SiteInformation extends Component {
               return question;
             }
           );
+          const modifiedProjectSettings = results[2].data.project_settings.map(
+            settings => ({ ...settings, source: source + 1 })
+          );
 
           this.setState({
             projects: results[0].data,
             forms: results[1].data,
             siteBasicInfo: results[2].data.site_basic_info,
             jsonQuestions: modifiedJsonQuestions,
-            siteFeaturedImages: results[2].data.site_featured_images
+            siteFeaturedImages: results[2].data.site_featured_images,
+            projectSettings: modifiedProjectSettings
           });
         }
       })
@@ -77,13 +83,14 @@ class SiteInformation extends Component {
   requestHandler = async () => {
     try {
       const {
-        state: { siteBasicInfo, jsonQuestions, siteFeaturedImages },
+        state: {
+          siteBasicInfo,
+          jsonQuestions,
+          siteFeaturedImages,
+          projectSettings
+        },
         context: { projectId }
       } = this;
-
-      const headers = {
-        "Content-Type": "application/json"
-      };
 
       const modifiedJsonQuestions = jsonQuestions.map(question => {
         if (question.question_type === "MCQ") {
@@ -98,14 +105,26 @@ class SiteInformation extends Component {
         return question;
       });
 
-      await axios.post(
-        `${urls[2]}${projectId}/`,
-        {
-          json_questions: modifiedJsonQuestions,
-          site_basic_info: siteBasicInfo,
-          site_featured_images: siteFeaturedImages
-        },
-        { headers: headers }
+      const modifiedProjectSettings = [
+        { ...projectSettings, source: projectSettings.source - 1 }
+      ];
+
+      await Promise.all(
+        [urls[2], urls[3]].map(
+          async (url, i) =>
+            await axios.post(
+              `${url}${projectId}/`,
+              i === 0
+                ? {
+                    json_questions: modifiedJsonQuestions,
+                    site_basic_info: siteBasicInfo,
+                    site_featured_images: siteFeaturedImages
+                  }
+                : {
+                    modifiedProjectSettings
+                  }
+            )
+        )
       );
 
       await this.setState({
@@ -113,6 +132,7 @@ class SiteInformation extends Component {
       });
       successToast("Site", "added");
     } catch (err) {
+      console.log("err in site", err);
       this.setState(
         {
           isLoading: false
@@ -152,6 +172,12 @@ class SiteInformation extends Component {
     });
   };
 
+  siteProgressHandler = progress => {
+    this.setState({
+      projectSettings: [progress]
+    });
+  };
+
   render() {
     const {
       state: {
@@ -160,13 +186,15 @@ class SiteInformation extends Component {
         siteBasicInfo,
         jsonQuestions,
         siteFeaturedImages,
+        projectSettings,
         isLoading
       },
       context: { terms },
       onSubmitHandler,
       sitePicHandler,
       siteInfoHandler,
-      siteIdentityHandler
+      siteIdentityHandler,
+      siteProgressHandler
     } = this;
     return (
       <Fragment>
@@ -182,6 +210,8 @@ class SiteInformation extends Component {
             siteBasicInfo={siteBasicInfo}
             siteIdentityHandler={siteIdentityHandler}
             terms={terms}
+            projectSettings={projectSettings[0]}
+            siteProgressHandler={siteProgressHandler}
           />
           <SiteInformationTable
             forms={forms}
