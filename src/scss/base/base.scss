@@ -63,6 +63,10 @@
   .sticky-top {
     z-index: 999;
 }
+.tooltip-inner {
+  color: $color-white;
+  background-color: $color-blue;
+}
   
   @media (min-width: 576px) {
     .container {

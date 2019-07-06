@@ -30,6 +30,12 @@
                 }
               }
           }
+          h5{
+            font-size:1rem;
+            font-weight: 500;
+            margin:0.7rem 0 0.7rem 0;
+            text-transform: capitalize
+          }
         }
         &.border-tabs{
           border:0;
@@ -40,7 +46,6 @@
                 border-bottom:1px solid $color-bg;
                 padding:0.625rem 0;
                 border-radius:0;
-                font-size: 0.8125rem;
                 font-weight: 400;
                 
                 &.active{

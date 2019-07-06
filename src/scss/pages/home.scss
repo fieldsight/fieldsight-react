@@ -33,7 +33,6 @@
         }
         .content{
           h6{
-            font-size:0.8125rem;
             margin-bottom: 0.2rem;
           }
           span{
@@ -131,6 +130,37 @@
       }
     }
   }
+  .submission-list{
+    margin-top:1rem;
+    .submission-map{
+      .map-legend{
+        margin-top:1rem;
+        p{
+          margin-bottom: 0.2rem;
+          span{
+            min-width:5rem;
+            display: inline-block;
+          }
+          label{
+            font-weight: 600;
+            margin-left: 0.5rem;
+          }
+        }
+      }
+    }
+    ul{
+      li{
+        &:first-child{
+          padding:0.5rem 0;
+        }
+        &:last-child{
+          padding:0.5rem 0;
+          border-bottom:1px solid $color-bg;
+        }
+      }
+    }
+    
+}
   .right-content{
     background-color:$color-white;
     margin-bottom: 2rem;
@@ -281,9 +311,6 @@
               top:0;
             }
           }
-          a[aria-expanded="true"]:after {
-            content: "\f113"; /* fa-chevron-up */
-          }
         }
       }
       
@@ -386,6 +413,22 @@
         margin-top: 1.5rem;
         border-right:1px solid $color-bg;
         border-bottom:1px solid $color-bg;
+        .card-header{
+          h5.rotate{
+            a, button.btn.btn-link{
+              &::after{
+                content: "\f113" !important;
+              }
+            }
+            &.non-rotate{
+              a, button.btn.btn-link{
+                &::after{
+                  content: "\f110"!important;
+                }
+              }
+            }
+          }
+        }
         .subgroup{
           
           .card-body{
