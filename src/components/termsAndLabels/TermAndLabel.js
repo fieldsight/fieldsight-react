@@ -31,8 +31,8 @@ export default class TermAndLabel extends Component {
       project: ""
     },
     showList: true,
-    isLoading: false,
-    dotLoader: true
+    isLoading: false
+    // dotLoader: true
   };
 
   requestHandler = async () => {
@@ -117,8 +117,8 @@ export default class TermAndLabel extends Component {
 
     if (!isEmpty(terms)) {
       this.setState({
-        termsAndLabels: { ...terms, project: projectId },
-        dotLoader: false
+        termsAndLabels: { ...terms, project: projectId }
+        // dotLoader: false
       });
     }
   }
@@ -134,10 +134,10 @@ export default class TermAndLabel extends Component {
     const isStateTermsEmpty =
       Object.values(restLabels).filter(Boolean).length === 0;
 
-    if (isStateTermsEmpty) {
+    if (isStateTermsEmpty && !isEmpty(terms)) {
       this.setState({
-        termsAndLabels: { ...terms, project: projectId },
-        dotLoader: false
+        termsAndLabels: { ...terms, project: projectId }
+        // dotLoader: false
       });
     }
   }
@@ -167,8 +167,8 @@ export default class TermAndLabel extends Component {
           region_reviewer
         },
         showList,
-        isLoading,
-        dotLoader
+        isLoading
+        // dotLoader
       },
       listHandler,
       editHandler,
@@ -180,8 +180,8 @@ export default class TermAndLabel extends Component {
     return (
       <Fragment>
         <RightContentCard title="Terms And Labels">
-          {dotLoader && <DotLoader />}
-          {!dotLoader && !showList && (
+          {/* {dotLoader && <DotLoader />} */}
+          {!showList && (
             <Fragment>
               <form className="edit-form" onSubmit={onSubmitHandler}>
                 <div className="row">
@@ -286,7 +286,7 @@ export default class TermAndLabel extends Component {
               </button>
             </Fragment>
           )}
-          {!dotLoader && showList && (
+          {showList && (
             <Fragment>
               <Table
                 page="termsAndLabels"
