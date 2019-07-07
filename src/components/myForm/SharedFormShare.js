@@ -6,7 +6,7 @@ import ReplaceModal from "./ReplaceModal";
 import ShareModal from "./ShareModal";
 import GlobalModel from "./GlobalModal";
 
-class FormShare extends Component {
+class SharedFormShare extends Component {
   state = {
     shareOption: false
   };
@@ -22,6 +22,7 @@ class FormShare extends Component {
     return (
       <tr key={item.id_string}>
         <td>{item.title}</td>
+        <td>{item.owner}</td>
         <td>
           <i className="fa fa-clock-o" />
           <span>{item.date_created}</span>
@@ -67,7 +68,7 @@ class FormShare extends Component {
           </a>
           </OverlayTrigger>
 
-          {/* <OverlayTrigger
+          <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">Replace</Tooltip>
             }
@@ -88,7 +89,7 @@ class FormShare extends Component {
             {" "}
             <i className="la la-refresh"> </i>{" "}
           </a>
-          </OverlayTrigger> */}
+          </OverlayTrigger>
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">Download</Tooltip>
@@ -106,10 +107,31 @@ class FormShare extends Component {
           </a>
           </OverlayTrigger>
 
+          {/* <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-disabled">Make a copy</Tooltip>
+                            }
+                          >
+                            <a
+                              onClick={e =>
+                                this.props.cloneHandler(
+                                  e,
+                                  item.clone_form_url,
+                                  item.id_string,
+                                  item.id
+                                )
+                              }
+                              className="td-edit-btn td-btn"
+                            >
+                              {" "}
+                              <i className="la la-clone"> </i>{" "}
+                            </a>
+                          </OverlayTrigger> */}
+
           {/* <a  onClick={(e) => this.props.togglePopup(e, 'share')} className="td-edit-btn td-btn" data-toggle="tooltip" data-placement="top" title="Share"> <i className="la la-share-alt"> </i> </a>
                 <a  onClick={(e) => this.props.globashare(item.share_global_url,item.id_string)} className="td-edit-btn td-btn" data-toggle="tooltip" data-placement="top" title="globals Share"> <i className="la la-globe"> </i> </a> */}
           
-          <span className="share-icon">
+          {/* <span className="share-icon">
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">Share</Tooltip>
@@ -199,7 +221,7 @@ class FormShare extends Component {
               </ul>
             )}
           </span>
-          {/* <OverlayTrigger
+          <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">Delete</Tooltip>
             }
@@ -217,4 +239,4 @@ class FormShare extends Component {
   }
 }
 
-export default FormShare;
+export default SharedFormShare;
