@@ -21,6 +21,7 @@ class ShareModal extends Component {
       .get(`${url}${modalTypes}/`)
 
       .then(res => {
+        
         const modifiedUser = res.data.map(user => ({
           ...user,
           checkbox: false
@@ -30,7 +31,7 @@ class ShareModal extends Component {
           userList: modifiedUser
         });
 
-        if (res.data.length > 0) {
+        if (res.status==200) {
           this.setState({
             dLoader: false,
             shareState: true
@@ -52,22 +53,28 @@ class ShareModal extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-
+    console.log("entered")
     const checkedList = this.state.userList
-      .map(user => (user.checkbox == true ? user.id : null))
+      .map(user => (user.checkbox == true ? +user.id : null))
       .filter(Boolean);
-
+      console.log(checkedList)
     const id = this.props.modalDatas;
     const url = this.props.shareUrls;
+    console.log("id_string",id)
+    console.log(url)
+    
     axios
-      .post(url, { id_string: id, users: checkedList })
+      .post(url, { id_string: id, share_id: checkedList })
       .then(res => {
-        console.log(res.status);
-        console.log(res.data.message);
+        
         successToast("Form", "shared");
       })
 
-      .catch(err => console.log("err", err));
+      .catch(
+        
+        err => console.log("err", err)
+      
+      );
   };
 
   render() {
@@ -75,6 +82,11 @@ class ShareModal extends Component {
 
     return (
       <div className="thumb-list userlist">
+        {this.state.userList.length === 0 && !this.state.dLoader && (
+          <div className="card-header main-card-header sub-card-header bg-header">
+            <h5>No Data Available</h5>
+          </div>
+        )}
         {this.state.shareState && (
           <form onSubmit={this.onSubmit}>
             <ul style={{ position: "relative", height: "450px" }}>
