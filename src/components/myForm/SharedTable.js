@@ -77,7 +77,10 @@ class SharedTable extends Component {
                     <th>Action</th>
                   </tr>
                 </thead>
+              
                 <tbody>
+                
+                 
                   {this.state.list.map((item, i) => (
                     <SharedFormShare
                       key={i + 1}
@@ -89,12 +92,15 @@ class SharedTable extends Component {
                   ))}
                 </tbody>
               </table>
+              {this.state.list.length === 0 && !this.state.dLoader && (
+                    <div className="card-header main-card-header sub-card-header bg-header">
+                      <h5>No Form Data Available</h5>
+                    </div>
+                  )}
 
               {this.state.dLoader && <DotLoader />}
             </PerfectScrollbar>
           </div>
-       
-
         </div>
       </React.Fragment>
     );
