@@ -13,6 +13,9 @@ import AddSite from "./AddSite"
 // ];
 
 // const SelectOption = () => <Select options={options} />;
+const project_id = 137;
+const base_url="https://fieldsight.naxa.com.np"
+const project_name="test"
 
 const popUpState = {
   addModal: false,
@@ -38,15 +41,10 @@ class ProjectSiteList extends Component {
     });
   };
 
-  mapClickHandler = e => {
-    // this.setState({
-    //   position: {
-    //     ...this.state.position,
-    //     latitude: e.latlng.lat,
-    //     longitude: e.latlng.lng
-    //   }
-    // });
+  OpenTabHandler = (e, url) => {
+    window.open(url, "_self");
   };
+
 
   render() {
     return (
@@ -54,19 +52,30 @@ class ProjectSiteList extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
+              <a  onClick={e =>
+                this.OpenTabHandler(
+                  e,
+                  base_url+"/fieldsight/project-dashboard/" +
+                    project_id +
+                    "/"
+                )
+              }>{project_name}</a>
             </li>
-            <li className="breadcrumb-item">
-              <a href="/fieldsight/organization-dashboard/13/">Teams</a>
-            </li>
+            {/* <li className="breadcrumb-item">
+              <a href="/fieldsight/organization-dashboard/13/">Site List</a>
+            </li> */}
 
             <li className="breadcrumb-item active" aria-current="page">
-              Invitation
+            Site List
             </li>
           </ol>
         </nav>
         <div className="card">
-          <ProjectSiteTable showPopup={this.showPopup} />
+          <ProjectSiteTable 
+          showPopup={this.showPopup}
+          OpenTabHandler={this.OpenTabHandler} 
+          
+          />
 
           {this.state.uploadModal && (
             <Zoom duration={500}>

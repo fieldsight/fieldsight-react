@@ -6,6 +6,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../myForm/Loader";
 
 const project_id = 137;
+const base_url="https://fieldsight.naxa.com.np"
 
 class ProjectSiteTable extends Component {
   _isMounted = false;
@@ -107,9 +108,9 @@ class ProjectSiteTable extends Component {
     }
   };
 
-  OpenTabHandler = (e, url) => {
-    window.open(url, "_self");
-  };
+  // OpenTabHandler = (e, url) => {
+  //   window.open(url, "_self");
+  // };
 
   searchHandler = e => {
     console.log("search");
@@ -118,7 +119,7 @@ class ProjectSiteTable extends Component {
     let searchUrl;
     if (searchValue) {
       searchUrl =
-        "/fv3/api/project-site-list/?page=1&project=137&q=" + searchValue;
+        "/fv3/api/project-site-list/?page=1&project="+project_id+"&q=" + searchValue;
 
       console.log(searchUrl);
 
@@ -157,9 +158,9 @@ class ProjectSiteTable extends Component {
             <button
               className="fieldsight-btn"
               onClick={e =>
-                this.OpenTabHandler(
+                this.props.OpenTabHandler(
                   e,
-                  "https://fieldsight.naxa.com.np/fieldsight/site/add/" +
+                  base_url+"/fieldsight/site/add/" +
                     project_id +
                     "/"
                 )
@@ -170,9 +171,9 @@ class ProjectSiteTable extends Component {
             <button
               className="fieldsight-btn"
               onClick={e =>
-                this.OpenTabHandler(
+                this.props.OpenTabHandler(
                   e,
-                  "https://fieldsight.naxa.com.np/fieldsight/application/?project=" +
+                  base_url+"/fieldsight/application/?project=" +
                     project_id +
                     "#/project-settings/site-information"
                 )
@@ -183,9 +184,9 @@ class ProjectSiteTable extends Component {
             <button
               className="fieldsight-btn"
               onClick={e =>
-                this.OpenTabHandler(
+                this.props.OpenTabHandler(
                   e,
-                  "https://fieldsight.naxa.com.np/fieldsight/upload/" +
+                  base_url+"/fieldsight/upload/" +
                     project_id +
                     "/"
                 )
@@ -219,7 +220,7 @@ class ProjectSiteTable extends Component {
                     this.state.siteList.map((item, i) => (
                       <tr key={i}>
                         <td>
-                          <a href="#" className="pending table-profile">
+                          <a onClick={e =>this.props.OpenTabHandler(e,base_url+"/fieldsight/site-dashboard/" + project_id + "/")} className="pending table-profile">
                             <figure>
                               <img src={item.logo} alt="site-logo" />
                             </figure>
