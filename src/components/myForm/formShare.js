@@ -179,7 +179,7 @@ class FormShare extends Component {
                   </a>
                 </li>
 
-                <li>
+                {/* <li>
                   <a
                     onClick={e =>
                       this.props.commonPopupHandler(
@@ -195,7 +195,7 @@ class FormShare extends Component {
                   >
                     Globle
                   </a>
-                </li>
+                </li> */}
               </ul>
             )}
           </span>
