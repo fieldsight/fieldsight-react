@@ -28,7 +28,7 @@ export default class TermAndLabel extends Component {
       region: "",
       region_supervisor: "",
       region_reviewer: "",
-      project: ""
+      project: window.project_id ? window.project_id : 137
     },
     showList: true,
     isLoading: false

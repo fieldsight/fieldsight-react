@@ -26,7 +26,7 @@ class SiteInformation extends Component {
     projects: [],
     siteBasicInfo: {},
     jsonQuestions: [],
-    projectSettings: [],
+    projectSettings: {},
     siteFeaturedImages: [],
     isLoading: false
   };
@@ -43,26 +43,45 @@ class SiteInformation extends Component {
     )
       .then(results => {
         if (this._isMounted) {
-          const modifiedJsonQuestions = results[2].data.json_questions.map(
-            question => {
-              if (question.question_type === "MCQ") {
-                let optInputField = [],
-                  options = {};
-                if (Array.isArray(question.mcq_options)) {
-                  question.mcq_options.map((opt, i) => {
-                    options[`option${i}`] = opt.option_text;
-                    optInputField.push({ tag: InputElement, val: i });
-                  });
+          let modifiedJsonQuestions = [];
+          if (results[2].data.json_questions) {
+            modifiedJsonQuestions = results[2].data.json_questions.map(
+              question => {
+                if (question.question_type === "MCQ") {
+                  let optInputField = [],
+                    options = {};
+                  if (Array.isArray(question.mcq_options)) {
+                    question.mcq_options.map((opt, i) => {
+                      options[`option${i}`] = opt.option_text;
+                      optInputField.push({ tag: InputElement, val: i });
+                    });
+                  }
+                  question.mcq_options = options;
+                  question.optInputField = optInputField;
+                  return question;
                 }
-                question.mcq_options = options;
-                question.optInputField = optInputField;
                 return question;
               }
-              return question;
-            }
-          );
+            );
+          }
+
           const modifiedProjectSettings = results[2].data.project_settings.map(
-            settings => ({ ...settings, source: source + 1 })
+            settings => {
+              if (settings.source === 2) {
+                if (settings.pull_integer_form_question) {
+                  let splitedStr = settings.pull_integer_form_question.split(
+                    "/"
+                  );
+                  if (splitedStr.length > 1) {
+                    settings.pull_integer_form_question =
+                      splitedStr[splitedStr.length - 1];
+                  }
+                  return { ...settings, source: settings.source + 1 };
+                }
+              } else {
+                return { ...settings, source: settings.source + 1 };
+              }
+            }
           );
 
           this.setState({
@@ -71,7 +90,7 @@ class SiteInformation extends Component {
             siteBasicInfo: results[2].data.site_basic_info,
             jsonQuestions: modifiedJsonQuestions,
             siteFeaturedImages: results[2].data.site_featured_images,
-            projectSettings: modifiedProjectSettings
+            projectSettings: modifiedProjectSettings[0]
           });
         }
       })
@@ -89,25 +108,32 @@ class SiteInformation extends Component {
           siteFeaturedImages,
           projectSettings
         },
-        context: { projectId }
+        context: { projectId, terms }
       } = this;
+
+      const modifiedProjectSettings = {
+        ...projectSettings,
+        source: projectSettings.source ? projectSettings.source - 1 : 0
+      };
 
       const modifiedJsonQuestions = jsonQuestions.map(question => {
         if (question.question_type === "MCQ") {
           const options = [];
-          Object.keys(question.mcq_options).map(opt => {
-            options.push({ option_text: question.mcq_options[opt] });
-          });
-          question.mcq_options = options;
+
+          if (!Array.isArray(question.mcq_options)) {
+            Object.values(question.mcq_options).map(opt => {
+              options.push({ option_text: opt });
+            });
+            question.mcq_options = options;
+          }
+
           const { optInputField, ...rest } = question;
+
           return rest;
         }
+
         return question;
       });
-
-      const modifiedProjectSettings = [
-        { ...projectSettings, source: projectSettings.source - 1 }
-      ];
 
       await Promise.all(
         [urls[2], urls[3]].map(
@@ -120,9 +146,7 @@ class SiteInformation extends Component {
                     site_basic_info: siteBasicInfo,
                     site_featured_images: siteFeaturedImages
                   }
-                : {
-                    modifiedProjectSettings
-                  }
+                : modifiedProjectSettings
             )
         )
       );
@@ -130,9 +154,11 @@ class SiteInformation extends Component {
       await this.setState({
         isLoading: false
       });
-      successToast("Site", "added");
+      successToast(
+        !isEmpty(terms) ? `${terms.site} Information` : "Site Information",
+        "added"
+      );
     } catch (err) {
-      console.log("err in site", err);
       this.setState(
         {
           isLoading: false
@@ -174,7 +200,7 @@ class SiteInformation extends Component {
 
   siteProgressHandler = progress => {
     this.setState({
-      projectSettings: [progress]
+      projectSettings: progress
     });
   };
 
@@ -210,7 +236,7 @@ class SiteInformation extends Component {
             siteBasicInfo={siteBasicInfo}
             siteIdentityHandler={siteIdentityHandler}
             terms={terms}
-            projectSettings={projectSettings[0]}
+            projectSettings={projectSettings}
             siteProgressHandler={siteProgressHandler}
           />
           <SiteInformationTable

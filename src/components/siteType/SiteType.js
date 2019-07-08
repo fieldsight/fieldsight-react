@@ -55,7 +55,7 @@ class SiteType extends Component {
   requestHandler = () => {
     const {
       state: { selectedId, selectedIdentifier, selectedName, siteType },
-      context: { projectId }
+      context: { projectId, terms }
     } = this;
 
     if (selectedId) {
@@ -76,7 +76,12 @@ class SiteType extends Component {
               ...INITIAL_STATE,
               siteType: newSiteType
             },
-            () => successToast("Site", "updated")
+            () =>
+              successToast(
+                !isEmpty(terms) ? `${terms.site} Type` : "Site Type",
+                "deleted",
+                "updated"
+              )
           );
         })
         .catch(err => {
@@ -104,7 +109,12 @@ class SiteType extends Component {
             ...INITIAL_STATE,
             siteType: [...this.state.siteType, { ...res.data }]
           },
-          () => successToast("Site", "added")
+          () =>
+            successToast(
+              !isEmpty(terms) ? `${terms.site} Type` : "Site Type",
+              "deleted",
+              "added"
+            )
         );
       })
       .catch(err => {
@@ -152,7 +162,11 @@ class SiteType extends Component {
         isLoading: true
       },
       () => {
-        const { selectedId, siteType } = this.state;
+        const {
+          state: { selectedId, siteType },
+          context: { terms }
+        } = this;
+
         const filteredSiteType = siteType.filter(
           site => site.id !== +selectedId
         );
@@ -164,7 +178,11 @@ class SiteType extends Component {
                 ...INITIAL_STATE,
                 siteType: filteredSiteType
               },
-              () => successToast("Site", "deleted")
+              () =>
+                successToast(
+                  !isEmpty(terms) ? `${terms.site} Type` : "Site Type",
+                  "deleted"
+                )
             );
           })
           .catch(err => {
@@ -274,8 +292,8 @@ class SiteType extends Component {
               <i className="la la-exclamation-triangle" />
 
               <p>
-                "All the form submissions and user roles within this site will
-                be completely removed. Do you still want to continue?"
+                Are you sure you want to delete the{" "}
+                {!isEmpty(terms) ? `${terms.site} Type` : "Site Type"} ?
               </p>
             </div>
             <div className="warning-footer text-center">

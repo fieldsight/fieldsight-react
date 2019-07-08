@@ -84,7 +84,7 @@ class SubRegion extends Component {
     return (
       <Fragment>
         <RightContentCard
-          title={!isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"}
+          title={!isEmpty(terms) ? `${terms.region}` : "Region"}
           addButton
           toggleModal={toggleModal}
         >
@@ -141,8 +141,8 @@ class SubRegion extends Component {
               <i className="la la-exclamation-triangle" />
 
               <p>
-                "All the form submissions and user roles within this site will
-                be completely removed. Do you still want to continue?"
+                Are you sure you want to delete{" "}
+                {!isEmpty(terms) ? `${terms.region}` : "Region"} ?
               </p>
             </div>
             <div className="warning-footer text-center">

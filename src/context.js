@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import { successToast, errorToast } from "./utils/toastHandler";
+import isEmpty from "./utils/isEmpty";
 
 export const RegionContext = React.createContext();
 
@@ -18,8 +19,8 @@ const INITIAL_STATE = {
   selectedId: "",
   isLoading: false,
   showDeleteConfirmation: false,
-  projectId: window.project_id ? window.project_id : 5,
-  organizationId: window.organization_id ? window.organization_id : 3
+  projectId: window.project_id ? window.project_id : 137,
+  organizationId: window.organization_id ? window.organization_id : 13
 };
 
 class RegionProvider extends Component {
@@ -40,7 +41,8 @@ class RegionProvider extends Component {
       selectedIdentifier,
       selectedName,
       region,
-      projectId
+      projectId,
+      terms
     } = this.state;
 
     if (selectedId) {
@@ -65,7 +67,11 @@ class RegionProvider extends Component {
               subRegion: [...this.state.subRegion],
               terms: { ...this.state.terms }
             },
-            () => successToast("Region", "updated")
+            () =>
+              successToast(
+                !isEmpty(terms) ? `${terms.region}` : "Region",
+                "updated"
+              )
           );
         })
         .catch(err => {
@@ -95,7 +101,11 @@ class RegionProvider extends Component {
             subRegion: [...this.state.subRegion],
             terms: { ...this.state.terms }
           },
-          () => successToast("Region", "added")
+          () =>
+            successToast(
+              !isEmpty(terms) ? `${terms.region}` : "Region",
+              "added"
+            )
         );
       })
       .catch(err => {
@@ -115,7 +125,8 @@ class RegionProvider extends Component {
       selectedName,
       subRegion,
       subRegionId,
-      projectId
+      projectId,
+      terms
     } = this.state;
 
     if (selectedId) {
@@ -142,7 +153,11 @@ class RegionProvider extends Component {
               subRegion: newSubRegion,
               subRegionId
             },
-            () => successToast("Subregion", "updated")
+            () =>
+              successToast(
+                !isEmpty(terms) ? `Sub ${terms.region}` : "Sub Region",
+                "updated"
+              )
           );
         })
         .catch(err => {
@@ -174,7 +189,11 @@ class RegionProvider extends Component {
             subRegion: [...this.state.subRegion, { ...res.data }],
             subRegionId
           },
-          () => successToast("Subregion", "added")
+          () =>
+            successToast(
+              !isEmpty(terms) ? `Sub ${terms.region}` : "Sub Region",
+              "added"
+            )
         );
       })
       .catch(err => {
@@ -256,7 +275,7 @@ class RegionProvider extends Component {
   };
 
   confirmedRemoveHandler = () => {
-    const { subRegionId } = this.state;
+    const { subRegionId, terms } = this.state;
     if (subRegionId) {
       const { selectedId, subRegion } = this.state;
       const filteredSubRegion = subRegion.filter(
@@ -269,10 +288,16 @@ class RegionProvider extends Component {
           this.setState(
             {
               ...INITIAL_STATE,
+              region: [...this.state.region],
+              terms: { ...this.state.terms },
               subRegion: filteredSubRegion,
               subRegionId
             },
-            () => successToast("Subregion", "deleted")
+            () =>
+              successToast(
+                !isEmpty(terms) ? `Sub ${terms.region}` : "Sub Region",
+                "deleted"
+              )
           );
         })
         .catch(err => {
@@ -294,9 +319,15 @@ class RegionProvider extends Component {
         this.setState(
           {
             ...INITIAL_STATE,
+            terms: { ...this.state.terms },
+            subRegion: [...this.state.subRegion],
             region: filteredRegion
           },
-          () => successToast("Region", "deleted")
+          () =>
+            successToast(
+              !isEmpty(terms) ? `${terms.region}` : "Region",
+              "deleted"
+            )
         );
       })
       .catch(err => {

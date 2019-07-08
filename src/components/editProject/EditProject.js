@@ -8,6 +8,7 @@ import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import RightContentCard from "../common/RightContentCard";
+import CheckBox from "../common/CheckBox";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
@@ -29,7 +30,16 @@ class EditProject extends Component {
   static contextType = RegionContext;
 
   state = {
-    project: {},
+    project: {
+      name: "",
+      phone: "",
+      email: "",
+      address: "",
+      website: "",
+      donor: "",
+      public_desc: "",
+      cluster_sites: false
+    },
     loaded: 0,
     sector: [],
     subSectors: [],
@@ -56,6 +66,7 @@ class EditProject extends Component {
           address,
           website,
           public_desc,
+          cluster_sites,
           donor,
           logo,
           organization
@@ -76,6 +87,7 @@ class EditProject extends Component {
       website,
       donor,
       public_desc,
+      cluster_sites,
       ...(cropResult && { logo: cropResult }),
       latitude,
       longitude,
@@ -259,7 +271,16 @@ class EditProject extends Component {
     const {
       state: {
         loaded,
-        project: { name, phone, email, address, website, donor, public_desc },
+        project: {
+          name,
+          phone,
+          email,
+          address,
+          website,
+          donor,
+          public_desc,
+          cluster_sites
+        },
         sector,
         subSectors,
         position: { latitude, longitude },
@@ -272,7 +293,7 @@ class EditProject extends Component {
       onChangeHandler,
       onSelectChangeHandler,
       onSubmitHandler,
-
+      handleCheckboxChange,
       readFile,
       closeModal,
       mapClickHandler
@@ -376,7 +397,13 @@ class EditProject extends Component {
                 />
               </div>
             </div>
-            <div className="col-xl-4 col-md-6" />
+            <div className="col-xl-4 col-md-6">
+              <CheckBox
+                checked={cluster_sites || ""}
+                label="Do you want to add to cluster sites?"
+                onChange={this.handleCheckboxChange}
+              />
+            </div>
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"
