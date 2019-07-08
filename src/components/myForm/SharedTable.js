@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import axios from "axios";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
-import FormShare from "./formShare";
+import SharedFormShare from "./SharedFormShare";
 import { DotLoader } from "./Loader";
 
-const url = "fv3/api/myforms/";
+const url = "fv3/api/sharedforms/";
 
-class MyformTable extends Component {
+class SharedTable extends Component {
   _isMounted = false;
   state = {
     project_list: [],
@@ -39,6 +39,21 @@ class MyformTable extends Component {
       });
   }
 
+  cloneHandler = (e, clone_url, id, form_id) => {
+    axios
+      .post(`${clone_url}`, { id_string: id, project: form_id })
+      .then(res => {
+        // if (res.status === 201) {
+        //   this.setState({
+        //     globalUrl: res.data.share_link,
+        //     disable: false
+        //   });
+        // }
+        successToast("Form", "cloned");
+      })
+      .catch(err => console.log("err", err));
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -56,6 +71,7 @@ class MyformTable extends Component {
                 <thead>
                   <tr>
                     <th>Form Name</th>
+                    <th>Form Owner</th>
                     <th>Create Date</th>
                     <th>Updated date</th>
                     <th>Action</th>
@@ -63,11 +79,12 @@ class MyformTable extends Component {
                 </thead>
                 <tbody>
                   {this.state.list.map((item, i) => (
-                    <FormShare
+                    <SharedFormShare
                       key={i + 1}
                       item={item}
                       OpenTabHandler={this.props.OpenTabHandler}
                       commonPopupHandler={this.props.commonPopupHandler}
+                      cloneHandler={this.cloneHandler}
                     />
                   ))}
                 </tbody>
@@ -87,4 +104,4 @@ class MyformTable extends Component {
   }
 }
 
-export default MyformTable;
+export default SharedTable;

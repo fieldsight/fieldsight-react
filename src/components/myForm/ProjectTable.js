@@ -141,7 +141,7 @@ class ProjecTable extends Component {
                               <i className="la la-edit" />{" "}
                             </a>
                           </OverlayTrigger>
-                          <OverlayTrigger
+                          {/* <OverlayTrigger
                             overlay={
                               <Tooltip id="tooltip-disabled">Replace</Tooltip>
                             }
@@ -152,7 +152,7 @@ class ProjecTable extends Component {
                               {" "}
                               <i className="la la-refresh"> </i>{" "}
                             </a>
-                          </OverlayTrigger>
+                          </OverlayTrigger> */}
                           <OverlayTrigger
                             overlay={
                               <Tooltip id="tooltip-disabled">download</Tooltip>
