@@ -220,7 +220,7 @@ class ProjectSiteTable extends Component {
                     this.state.siteList.map((item, i) => (
                       <tr key={i}>
                         <td>
-                          <a onClick={e =>this.props.OpenTabHandler(e,base_url+"/fieldsight/site-dashboard/" + project_id + "/")} className="pending table-profile">
+                          <a onClick={e =>this.props.OpenTabHandler(e,base_url+"/fieldsight/site-dashboard/" + item.id + "/")} className="pending table-profile">
                             <figure>
                               <img src={item.logo} alt="site-logo" />
                             </figure>
