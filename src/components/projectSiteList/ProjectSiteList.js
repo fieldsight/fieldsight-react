@@ -52,14 +52,8 @@ class ProjectSiteList extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a  onClick={e =>
-                this.OpenTabHandler(
-                  e,
-                  base_url+"/fieldsight/project-dashboard/" +
-                    project_id +
-                    "/"
-                )
-              }>{project_name}</a>
+              <a href={base_url+"/fieldsight/project-dashboard/"+project_id+"/"} >{project_name}</a>
+                                      
             </li>
             {/* <li className="breadcrumb-item">
               <a href="/fieldsight/organization-dashboard/13/">Site List</a>
