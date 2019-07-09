@@ -4,11 +4,14 @@ import axios from "axios";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../myForm/Loader";
+import { RegionContext } from "../../context";
+import isEmpty from "../../utils/isEmpty";
 
-const project_id = 137;
+const project_id = 310;
 const base_url="https://fieldsight.naxa.com.np"
 
 class ProjectSiteTable extends Component {
+  static contextType = RegionContext;
   _isMounted = false;
   state = {
     siteList: [],
@@ -138,6 +141,9 @@ class ProjectSiteTable extends Component {
   };
 
   render() {
+    const {
+      context: { terms }
+    } = this;
     return (
       <Fragment>
         <div className="card-header main-card-header sub-card-header">
@@ -205,10 +211,10 @@ class ProjectSiteTable extends Component {
               >
                 <thead>
                   <tr>
-                    <th>Site name</th>
+                    <th>{!isEmpty(terms) ? `${terms.site} Name` : "Site Name"}</th>
                     <th>id</th>
                     <th>Address</th>
-                    <th>Region</th>
+                    <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>

@@ -3,8 +3,9 @@ import ProjectSiteTable from "./ProjectSiteTable";
 import Zoom from "react-reveal/Zoom";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Select from "react-select";
-import AddSite from "./AddSite"
-
+import AddSite from "./AddSite";
+import { RegionContext } from "../../context";
+import isEmpty from "../../utils/isEmpty";
 
 // const options = [
 //   { value: "chocolate", label: "Chocolate" },
@@ -13,20 +14,23 @@ import AddSite from "./AddSite"
 // ];
 
 // const SelectOption = () => <Select options={options} />;
-const project_id = 137;
-const base_url="https://fieldsight.naxa.com.np"
-const project_name="test"
+const project_id = 310;
+const base_url = "https://fieldsight.naxa.com.np";
+const project_name = "test";
 
 const popUpState = {
   addModal: false,
-  uploadModal: false,
-  
+  uploadModal: false
 };
+
 class ProjectSiteList extends Component {
+  static contextType = RegionContext;
+
   state = {
     addModal: false,
     uploadModal: false
   };
+
   showPopup = (e, type) => {
     this.setState(prevState => ({
       ...popUpState,
@@ -42,33 +46,40 @@ class ProjectSiteList extends Component {
   };
 
   OpenTabHandler = (e, url) => {
+    console.log(this.context.projectId);
     window.open(url, "_self");
   };
 
-
   render() {
+    const {
+      context: { terms }
+    } = this;
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href={base_url+"/fieldsight/project-dashboard/"+project_id+"/"} >{project_name}</a>
-                                      
+              <a
+                href={
+                  base_url + "/fieldsight/project-dashboard/" + project_id + "/"
+                }
+              >
+                {project_name}
+              </a>
             </li>
             {/* <li className="breadcrumb-item">
               <a href="/fieldsight/organization-dashboard/13/">Site List</a>
             </li> */}
 
             <li className="breadcrumb-item active" aria-current="page">
-            Site List
+              {!isEmpty(terms) ? `${terms.site} List` : "Site List"}
             </li>
           </ol>
         </nav>
         <div className="card">
-          <ProjectSiteTable 
-          showPopup={this.showPopup}
-          OpenTabHandler={this.OpenTabHandler} 
-          
+          <ProjectSiteTable
+            showPopup={this.showPopup}
+            OpenTabHandler={this.OpenTabHandler}
           />
 
           {this.state.uploadModal && (
@@ -119,9 +130,7 @@ class ProjectSiteList extends Component {
             </Zoom>
           )}
 
-          {this.state.addModal && <AddSite 
-          closePopup={this.closePopup}
-          />}
+          {this.state.addModal && <AddSite closePopup={this.closePopup} />}
         </div>
       </React.Fragment>
     );

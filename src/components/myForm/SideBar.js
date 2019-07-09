@@ -69,6 +69,7 @@ class SideBar extends Component {
                 title="MyFormContent"
                 OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
+                
               />
             )}
           />
@@ -79,7 +80,7 @@ class SideBar extends Component {
             render={props => (
               <ProjectFormContent
                 {...props}
-                title="MyFormContent"
+                title="ProjectFormContent"
                 OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
               />
