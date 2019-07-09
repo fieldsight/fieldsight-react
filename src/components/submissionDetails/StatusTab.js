@@ -2,13 +2,13 @@ import React from "react";
 
 const StatusTab = ({ statusData }) => {
   let icon;
-  if (statusData.status_display === "rejected") {
+  if (statusData.status_display === "Rejected") {
     icon = "la-close";
-  } else if (statusData.status_display === "approved") {
+  } else if (statusData.status_display === "Approved") {
     icon = "la-check";
-  } else if (statusData.status_display === "flagged") {
+  } else if (statusData.status_display === "Flagged") {
     icon = "la-flag";
-  } else {
+  } else if (statusData.status_display === "Pending") {
     icon = "la-hourglass-2";
   }
 

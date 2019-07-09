@@ -12,7 +12,11 @@ const Td = ({ children, to }) => {
 };
 class TableRow extends Component {
   renderName = (dataType, id) => {
-    return this.props[dataType].find(dtype => dtype.id === +id).name;
+    const selectedData = this.props[dataType].find(dtype => dtype.id === +id);
+    if (selectedData && selectedData.name) {
+      return selectedData.name;
+    }
+    return "";
   };
 
   tableRowMethod = () => {
