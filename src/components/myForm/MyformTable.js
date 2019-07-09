@@ -135,8 +135,7 @@ class MyformTable extends Component {
               <i className="la la-exclamation-triangle" />
 
               <p>
-                "All the form submissions and user roles within this site will
-                be completely removed. Do you still want to continue?"
+                Do you still want to continue ?
               </p>
             </div>
             <div className="warning-footer text-center">
