@@ -53,6 +53,31 @@ class FormShare extends Component {
               <i className="la la-eye"> </i>{" "}
             </a>
           </OverlayTrigger>
+
+             <OverlayTrigger
+            overlay={
+              <Tooltip id="tooltip-disabled">Media</Tooltip>
+            }
+          >
+            <a
+              onClick={e =>
+                this.props.commonPopupHandler(
+                  e,
+                  PreviewModal,
+                  item.media_url,
+                  "Preview Form",
+                  "preview",
+                  null
+                )
+              }
+              className="td-view-btn td-btn"
+            >
+              {" "}
+              <i className="la la-file-image-o"> </i>{" "}
+            </a>
+          </OverlayTrigger> 
+
+
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">Edit</Tooltip>
@@ -199,18 +224,25 @@ class FormShare extends Component {
               </ul>
             )}
           </span>
-          {/* <OverlayTrigger
+          <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">Delete</Tooltip>
             }
           >
           <a
+           onClick={e =>
+            this.props.deleteHandler(
+              e,
+              item.id_string,
+             
+            )
+          }
             className="td-delete-btn td-btn"
           >
             {" "}
             <i className="la la-trash" />{" "}
           </a>
-          </OverlayTrigger> */}
+          </OverlayTrigger>
         </td>
       </tr>
     );

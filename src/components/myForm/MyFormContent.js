@@ -26,6 +26,7 @@ class MyFormContent extends Component {
                                     <MyformTable  
                                     OpenTabHandler={this.props.OpenTabHandler}
                                     commonPopupHandler={this.props.commonPopupHandler}
+                                    
                                     />
                                     
                                 </div>

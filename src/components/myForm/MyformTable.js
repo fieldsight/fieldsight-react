@@ -6,6 +6,7 @@ import FormShare from "./formShare";
 import { DotLoader } from "./Loader";
 
 const url = "fv3/api/myforms/";
+const deleteUrl="/fv3/api/form/delete/";
 
 class MyformTable extends Component {
   _isMounted = false;
@@ -39,6 +40,26 @@ class MyformTable extends Component {
       });
   }
 
+  deleteHandler = (e,id) => {
+        axios
+       .post(`${deleteUrl}`,{id_string:id})
+ 
+       .then(res => {
+        const newUserList = [...this.state.list];
+        const deletedForm = newUserList.filter(user => user.id_string != id);
+         this.setState({
+           list: deletedForm
+         });
+        
+       })
+       .catch(err => {
+         // this.setState({
+         //   dLoader: false
+         // });
+       });
+   };
+ 
+
   render() {
     return (
       <React.Fragment>
@@ -68,6 +89,8 @@ class MyformTable extends Component {
                       item={item}
                       OpenTabHandler={this.props.OpenTabHandler}
                       commonPopupHandler={this.props.commonPopupHandler}
+                      deleteHandler={this.deleteHandler}
+                      
                     />
                   ))}
                 </tbody>
