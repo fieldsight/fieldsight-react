@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component,Fragment } from "react";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import SideBar from "./SideBar";
 import CommonPopup from "./CommonPopup";
@@ -6,7 +6,7 @@ import PreviewModal from "./PreviewModal";
 import ReplaceModal from "./ReplaceModal";
 import ShareModal from "./ShareModal";
 import GlobalModel from "./GlobalModal";
-import { thisExpression } from "@babel/types";
+
 
 class MyFormMain extends Component {
   state = {
@@ -47,8 +47,8 @@ class MyFormMain extends Component {
 
   render() {
     return (
-            <div>
-            <main id="main-content">
+      <Fragment>
+            
               <nav aria-label="breadcrumb" role="navigation">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
@@ -63,7 +63,6 @@ class MyFormMain extends Component {
                   height={this.props.height}
                 />
               </div>
-            </main>
             
           
 
@@ -80,7 +79,8 @@ class MyFormMain extends Component {
             />
           </CommonPopup>
         )}
-        </div>
+       
+        </Fragment>
     );
   }
 }

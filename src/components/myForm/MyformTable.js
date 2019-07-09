@@ -4,6 +4,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import FormShare from "./formShare";
 import { DotLoader } from "./Loader";
+import Modal from "../common/Modal";
 
 const url = "fv3/api/myforms/";
 const deleteUrl="/fv3/api/form/delete/";
@@ -15,7 +16,9 @@ class MyformTable extends Component {
     list: [],
     shareOption: false,
     dLoader: true,
-    tblDiv: false
+    tblDiv: false,
+    showDeleteConfirmation:false,
+    delete_id:null,
   };
 
   componentDidMount() {
@@ -40,24 +43,45 @@ class MyformTable extends Component {
       });
   }
 
-  deleteHandler = (e,id) => {
-        axios
-       .post(`${deleteUrl}`,{id_string:id})
- 
-       .then(res => {
-        const newUserList = [...this.state.list];
-        const deletedForm = newUserList.filter(user => user.id_string != id);
-         this.setState({
-           list: deletedForm
-         });
-        
-       })
-       .catch(err => {
-         // this.setState({
-         //   dLoader: false
-         // });
-       });
+  deleteHandler = (e,ids) => {
+    this.setState({
+      delete_id:ids,
+      showDeleteConfirmation:true
+
+    })
+      
    };
+
+   cancelHandler = () => {
+    this.setState({
+      showDeleteConfirmation: false,
+            
+    });
+  };
+
+  confirmHandler =()=>{
+    const id=this.state.delete_id
+    axios
+    .post(`${deleteUrl}`,{id_string:id})
+
+    .then(res => {
+     const newUserList = [...this.state.list];
+     const deletedForm = newUserList.filter(user => user.id_string != id);
+      this.setState({
+        list: deletedForm,
+        showDeleteConfirmation: false
+      });
+     
+    })
+    .catch(err => {
+      // this.setState({
+      //   dLoader: false
+      // });
+    });
+
+  }
+
+
  
 
   render() {
@@ -102,6 +126,32 @@ class MyformTable extends Component {
        
 
         </div>
+        {this.state.showDeleteConfirmation && (
+        <Modal
+            title="Warning"
+            toggleModal={this.cancelHandler}
+          >
+            <div className="warning">
+              <i className="la la-exclamation-triangle" />
+
+              <p>
+                "All the form submissions and user roles within this site will
+                be completely removed. Do you still want to continue?"
+              </p>
+            </div>
+            <div className="warning-footer text-center">
+              <a
+                className="fieldsight-btn rejected-btn"
+                onClick={this.cancelHandler}
+              >
+                cancel
+              </a>
+              <a className="fieldsight-btn" onClick={this.confirmHandler}>
+                confirm
+              </a>
+            </div>
+          </Modal>
+        )}
       </React.Fragment>
     );
   }

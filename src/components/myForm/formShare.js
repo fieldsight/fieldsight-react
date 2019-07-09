@@ -186,7 +186,7 @@ class FormShare extends Component {
                     Project
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <a
                     onClick={e =>
                       this.props.commonPopupHandler(
@@ -202,7 +202,7 @@ class FormShare extends Component {
                   >
                     Team
                   </a>
-                </li>
+                </li> */}
 
                 {/* <li>
                   <a

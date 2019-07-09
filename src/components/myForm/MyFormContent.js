@@ -4,6 +4,7 @@ import MyformTable from './MyformTable';
 import SharedTable from './SharedTable';
 
  
+const base_url="https://fieldsight.naxa.com.np"
 
 
 class MyFormContent extends Component {
@@ -18,7 +19,7 @@ class MyFormContent extends Component {
                                 <div className="card-header main-card-header sub-card-header">
                                     <h5>My Forms</h5>
                                     <div className="add-btn">
-                                        <a  onClick={e => this.props.OpenTabHandler(e, "https://fieldsight.naxa.com.np/forms/create/")} data-tab="site-popup">Create New <span><i className="la la-plus"></i></span></a>
+                                        <a  href={base_url+"/forms/create/"} target="_blank" data-tab="site-popup">Create New <span><i className="la la-plus"></i></span></a>
                                     </div>
                                 </div>
                                 <div className="card-body">
