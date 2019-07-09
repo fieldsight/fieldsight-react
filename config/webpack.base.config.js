@@ -13,6 +13,9 @@ module.exports = env => {
   return merge([
     {
       entry: ["@babel/polyfill", APP_DIR],
+      output: {
+        publicPath: "/static/"
+      },
       module: {
         rules: [
           {
