@@ -33,7 +33,7 @@ class TableRow extends Component {
           <td>
             <a
               onClick={() => editHandler(row.id || row.question_text)}
-              className="td-edit-btn"
+              className="td-edit-btn td-btn"
             >
               <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
                 <i className="la la-edit" />
@@ -41,7 +41,7 @@ class TableRow extends Component {
             </a>
             <a
               onClick={() => removeHandler(row.id || row.question_text)}
-              className="td-delete-btn"
+              className="td-delete-btn td-btn"
             >
               <OverlayTrigger
                 placement="top"
@@ -59,12 +59,18 @@ class TableRow extends Component {
           <td>{row.identifier}</td>
           <td>{row.name}</td>
           <td>
-            <a onClick={() => editHandler(row.id)} className="td-edit-btn">
+            <a
+              onClick={() => editHandler(row.id)}
+              className="td-edit-btn td-btn"
+            >
               <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
                 <i className="la la-edit" />
               </OverlayTrigger>
             </a>
-            <a onClick={() => removeHandler(row.id)} className="td-delete-btn">
+            <a
+              onClick={() => removeHandler(row.id)}
+              className="td-delete-btn td-btn"
+            >
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>Delete</Tooltip>}
@@ -84,12 +90,18 @@ class TableRow extends Component {
             {format(row.date_created, ["MMMM Do YYYY, h:mm:ss a"])}
           </Td>
           <td>
-            <a onClick={() => editHandler(row.id)} className="td-edit-btn">
+            <a
+              onClick={() => editHandler(row.id)}
+              className="td-edit-btn td-btn"
+            >
               <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
                 <i className="la la-edit" />
               </OverlayTrigger>
             </a>
-            <a onClick={() => removeHandler(row.id)} className="td-delete-btn">
+            <a
+              onClick={() => removeHandler(row.id)}
+              className="td-delete-btn td-btn"
+            >
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>Delete</Tooltip>}

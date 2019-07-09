@@ -52,8 +52,8 @@ class SiteInformation extends Component {
                     options = {};
                   if (Array.isArray(question.mcq_options)) {
                     question.mcq_options.map((opt, i) => {
-                      options[`option${i}`] = opt.option_text;
-                      optInputField.push({ tag: InputElement, val: i });
+                      options[`option${i + 1}`] = opt.option_text;
+                      optInputField.push({ tag: InputElement, val: i + 1 });
                     });
                   }
                   question.mcq_options = options;
@@ -76,10 +76,13 @@ class SiteInformation extends Component {
                     settings.pull_integer_form_question =
                       splitedStr[splitedStr.length - 1];
                   }
-                  return { ...settings, source: settings.source + 1 };
+                  return { ...settings, source: settings.source.toString() };
                 }
               } else {
-                return { ...settings, source: settings.source + 1 };
+                return {
+                  ...settings,
+                  source: settings.source.toString()
+                };
               }
             }
           );
@@ -113,7 +116,7 @@ class SiteInformation extends Component {
 
       const modifiedProjectSettings = {
         ...projectSettings,
-        source: projectSettings.source ? projectSettings.source - 1 : 0
+        source: projectSettings.source ? +projectSettings.source : 0
       };
 
       const modifiedJsonQuestions = jsonQuestions.map(question => {
@@ -124,16 +127,17 @@ class SiteInformation extends Component {
             Object.values(question.mcq_options).map(opt => {
               options.push({ option_text: opt });
             });
-            question.mcq_options = options;
           }
 
           const { optInputField, ...rest } = question;
-
+          rest.mcq_options = options;
           return rest;
         }
 
         return question;
       });
+
+      console.log("modified question", modifiedJsonQuestions);
 
       await Promise.all(
         [urls[2], urls[3]].map(
@@ -159,6 +163,7 @@ class SiteInformation extends Component {
         "added"
       );
     } catch (err) {
+      console.log("Err", err);
       this.setState(
         {
           isLoading: false

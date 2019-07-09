@@ -32,9 +32,9 @@ const InputElement = ({
     {formType === "floatingForm" && <label htmlFor={htmlFor}>{label}</label>}
 
     {removeBtn && (
-      <button className="fieldsight-btn red" onClick={removeHandler}>
-        Remove
-      </button>
+      <span className="cross-icon" onClick={removeHandler}>
+        <i className="la la-close" />
+      </span>
     )}
   </div>
 );

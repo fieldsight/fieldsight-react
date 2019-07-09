@@ -3,18 +3,17 @@ import SelectElement from "../common/SelectElement";
 import InputElement from "../common/InputElement";
 import { DotLoader } from "../common/Loader";
 import Modal from "../common/Modal.js";
-import findQuestion from "../../utils/findQuestion";
 import isEmpty from "../../utils/isEmpty";
 import findQuestionWithGroup from "../../utils/findQuestionWithGroup";
 
 const typeOptions = {
   siteProgressCard: [
-    { id: "1", name: "Most Advanced Approved Stage" },
-    { id: "2", name: "Stages Approved / Total Stages" },
-    { id: "3", name: "Pull Progress Value from a Form" },
-    { id: "4", name: "Total Number of Submissions / Target Number" },
-    { id: "5", name: "Number of Submissions for a Form / Target Number" },
-    { id: "6", name: "Update Manually" }
+    { id: "0", name: "Most Advanced Approved Stage" },
+    { id: "1", name: "Stages Approved / Total Stages" },
+    { id: "2", name: "Pull Progress Value from a Form" },
+    { id: "3", name: "Total Number of Submissions / Target Number" },
+    { id: "4", name: "Number of Submissions for a Form / Target Number" },
+    { id: "5", name: "Update Manually" }
   ]
 };
 
@@ -25,7 +24,7 @@ const INITIAL_STATE = {
   filteredQuestions: [],
   selectedForm: {},
   selectedQuestion: {},
-  source: "1",
+  source: "0",
   targetNum: "",
   showDeleteConfirmation: false
 };
@@ -36,14 +35,14 @@ class SiteProgressCard extends Component {
   componentWillReceiveProps(nextProps) {
     let selectedForm = {};
     let selectedQuestion = {};
-    let source = "1";
+    let source = "0";
     let showForm = false;
     let showQuestion = false;
     let showTargetNum = false;
     let filteredQuestions = [];
 
     if (nextProps.projectSettings && nextProps.projectSettings.source) {
-      source = nextProps.projectSettings.source.toString();
+      source = nextProps.projectSettings.source;
     }
     if (
       nextProps.projectSettings &&
@@ -77,11 +76,11 @@ class SiteProgressCard extends Component {
       showForm = true;
     }
 
-    if (source == "3") {
+    if (source == "2") {
       showQuestion = true;
     }
 
-    if (source == "4" || source == "5") {
+    if (source == "3" || source == "4") {
       showTargetNum = true;
     }
 
@@ -101,47 +100,44 @@ class SiteProgressCard extends Component {
       state: { source, selectedForm, selectedQuestion, targetNum }
     } = this;
     this.props.siteProgressHandler({
-      pull_integer_form: source == "3" ? selectedForm.id : null,
-      no_submissions_form: source == "5" ? selectedForm.id : null,
+      pull_integer_form: source == "2" ? selectedForm.id : null,
+      no_submissions_form: source == "4" ? selectedForm.id : null,
       no_submissions_total_count: targetNum ? +targetNum : null,
       pull_integer_form_question: selectedQuestion.groupName
         ? `${selectedQuestion.groupName}/${selectedQuestion.name}`
         : selectedQuestion.name
         ? selectedQuestion.name
         : null,
-      source: +source,
+      source: source,
       deployed: true
     });
   };
 
   onChangeHandler = e => {
     const { value } = e.target;
-    if (value == "3") {
+    if (value == "2") {
       this.setState({
-        showTargetNum: false,
+        ...INITIAL_STATE,
         showForm: true,
         showQuestion: true,
         source: value
       });
-    } else if (value == "4") {
+    } else if (value == "3") {
       this.setState({
-        showForm: false,
-        showQuestion: false,
+        ...INITIAL_STATE,
         showTargetNum: true,
         source: value
       });
-    } else if (value == "5") {
+    } else if (value == "4") {
       this.setState({
-        showQuestion: false,
+        ...INITIAL_STATE,
         showForm: true,
         showTargetNum: true,
         source: value
       });
     } else {
       this.setState(
-        {
-          source: value
-        },
+        { ...INITIAL_STATE, source: value },
         this.dataChangeHandler
       );
     }

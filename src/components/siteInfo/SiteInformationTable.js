@@ -474,17 +474,17 @@ class SiteInformationTable extends Component {
                 />
               )}
               <div className="form-group display-inline text-center">
-              <CheckBox
-                checked={this.state.dashboardChecked}
-                label="Share To Dashboard"
-                onChange={e => this.handleCheckboxChange(e, "dashboard")}
-              />
+                <CheckBox
+                  checked={this.state.dashboardChecked}
+                  label="Share To Dashboard"
+                  onChange={e => this.handleCheckboxChange(e, "dashboard")}
+                />
 
-              <CheckBox
-                checked={this.state.publicChecked}
-                label="Share To Public"
-                onChange={e => this.handleCheckboxChange(e, "public")}
-              />
+                <CheckBox
+                  checked={this.state.publicChecked}
+                  label="Share To Public"
+                  onChange={e => this.handleCheckboxChange(e, "public")}
+                />
               </div>
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
