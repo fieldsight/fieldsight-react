@@ -147,7 +147,7 @@ class ProjectSiteTable extends Component {
     return (
       <Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Sites</h5>
+          <h5>{!isEmpty(terms) ? `${terms.site}` : "Sites"}</h5>
           <div className="dash-btn">
             <form className="floating-form">
               <div className="form-group mr-0">
@@ -185,7 +185,7 @@ class ProjectSiteTable extends Component {
                 )
               }
             >
-              Site Information
+              {!isEmpty(terms) ? `${terms.site} Information`  : "Site Information"}
             </button>
             <button
               className="fieldsight-btn"
@@ -214,7 +214,7 @@ class ProjectSiteTable extends Component {
                     <th>{!isEmpty(terms) ? `${terms.site} Name` : "Site Name"}</th>
                     <th>id</th>
                     <th>Address</th>
-                    <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>
+                    <th>Region</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>
