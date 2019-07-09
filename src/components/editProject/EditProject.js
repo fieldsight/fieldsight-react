@@ -398,11 +398,13 @@ class EditProject extends Component {
               </div>
             </div>
             <div className="col-xl-4 col-md-6">
-              <CheckBox
-                checked={cluster_sites || ""}
-                label="Do you want to add to cluster sites?"
-                onChange={this.handleCheckboxChange}
-              />
+              <div className="form-group">
+                <CheckBox
+                  checked={cluster_sites || ""}
+                  label="Enable/Disable Clustering into Regions"
+                  onChange={this.handleCheckboxChange}
+                />
+              </div>
             </div>
             <div className="col-xl-4 col-md-6">
               <InputElement

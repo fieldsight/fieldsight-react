@@ -8,8 +8,8 @@ import findQuestionWithGroup from "../../utils/findQuestionWithGroup";
 
 const typeOptions = {
   siteProgressCard: [
-    { id: "0", name: "Most Advanced Approved Stage" },
-    { id: "1", name: "Stages Approved / Total Stages" },
+    { id: "0", name: "Stages Approved / Total Stages" },
+    { id: "1", name: "Most Advanced Approved Stage" },
     { id: "2", name: "Pull Progress Value from a Form" },
     { id: "3", name: "Total Number of Submissions / Target Number" },
     { id: "4", name: "Number of Submissions for a Form / Target Number" },

@@ -79,7 +79,6 @@ class SiteType extends Component {
             () =>
               successToast(
                 !isEmpty(terms) ? `${terms.site} Type` : "Site Type",
-                "deleted",
                 "updated"
               )
           );
@@ -112,7 +111,6 @@ class SiteType extends Component {
           () =>
             successToast(
               !isEmpty(terms) ? `${terms.site} Type` : "Site Type",
-              "deleted",
               "added"
             )
         );
@@ -284,10 +282,7 @@ class SiteType extends Component {
           </Modal>
         )}
         {showDeleteConfirmation && (
-          <Modal
-            title="Warning"
-            toggleModal={() => this.setState({ showDeleteConfirmation: false })}
-          >
+          <Modal title="Warning" toggleModal={cancelHandler}>
             <div className="warning">
               <i className="la la-exclamation-triangle" />
 

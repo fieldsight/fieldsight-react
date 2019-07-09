@@ -12,6 +12,7 @@ import SubmissionDetails from "./submissionDetails";
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
+// import "react-perfect-scrollbar/dist/css/styles.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";

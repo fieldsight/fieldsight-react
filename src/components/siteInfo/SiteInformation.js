@@ -5,6 +5,7 @@ import SiteInformationTable from "./SiteInformationTable";
 import FeaturedPictures from "./FeaturedPictures";
 import RightContentCard from "../common/RightContentCard";
 import InputElement from "../common/InputElement";
+import Modal from "../common/Modal";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
@@ -28,7 +29,8 @@ class SiteInformation extends Component {
     jsonQuestions: [],
     projectSettings: {},
     siteFeaturedImages: [],
-    isLoading: false
+    isLoading: false,
+    showConfirmation: false
   };
 
   componentDidMount() {
@@ -174,14 +176,26 @@ class SiteInformation extends Component {
   };
 
   onSubmitHandler = () => {
+    this.setState({
+      showConfirmation: true
+    });
+  };
+
+  cancelHandler = () => {
+    this.setState({
+      showConfirmation: false
+    });
+  };
+
+  confirmHandler = () => {
     this.setState(
       {
-        isLoading: true
+        isLoading: true,
+        showConfirmation: false
       },
       this.requestHandler
     );
   };
-
   sitePicHandler = sitePic => {
     this.setState({
       siteFeaturedImages: [...sitePic]
@@ -218,14 +232,17 @@ class SiteInformation extends Component {
         jsonQuestions,
         siteFeaturedImages,
         projectSettings,
-        isLoading
+        isLoading,
+        showConfirmation
       },
       context: { terms },
       onSubmitHandler,
       sitePicHandler,
       siteInfoHandler,
       siteIdentityHandler,
-      siteProgressHandler
+      siteProgressHandler,
+      cancelHandler,
+      confirmHandler
     } = this;
     return (
       <Fragment>
@@ -267,6 +284,44 @@ class SiteInformation extends Component {
           </div>
         </RightContentCard>
         {isLoading && <Loader />}
+        {showConfirmation && (
+          <Modal title="Warning" toggleModal={cancelHandler}>
+            <div className="warning">
+              <p>Are you sure you want to save the changes?</p>
+              <p>Please Note </p>
+              <ul style={{ textAlign: "left" }}>
+                <li>
+                  {" "}
+                  Changing site information will change data in all the sites.
+                </li>
+                <li>
+                  Site pictures, featured images, locations, progress values and
+                  site information will be changed to the new preferences.
+                </li>
+                <li>
+                  Any information deleted will not be recovered later unless the
+                  same information is created again.
+                </li>
+                <li>
+                  Changes may take some time to reflect in the sites depending
+                  upon the total number of sites in the project and
+                  calculations/form answers if pulled in the information.
+                </li>
+              </ul>
+            </div>
+            <div className="warning-footer text-center">
+              <a
+                className="fieldsight-btn rejected-btn"
+                onClick={cancelHandler}
+              >
+                cancel
+              </a>
+              <a className="fieldsight-btn" onClick={confirmHandler}>
+                confirm
+              </a>
+            </div>
+          </Modal>
+        )}
       </Fragment>
     );
   }
