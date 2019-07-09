@@ -139,47 +139,47 @@
                     border-color:$color-bg;
                     padding-left: 2rem;
                     position: relative;
-                    &::before{
-                        position: absolute;
-                        color:$color-blue;
-                        opacity: 1;
-                        content: "\2191";
-                        font-size: 0.745rem;
-                        left:1rem;
-                        font-weight: 600;
-                        font-family: 'LineAwesome'
-                    }
-                    &::after{
-                        position: absolute;
-                        color:$color-bg;
-                        opacity: 1;
-                        content: "\2193";
-                        left:0.5rem;
-                        font-size: 0.745rem;
-                        font-weight: 600;
-                        font-family: 'LineAwesome'
-                    }
+                    // &::before{
+                    //     position: absolute;
+                    //     color:$color-blue;
+                    //     opacity: 1;
+                    //     content: "\2191";
+                    //     font-size: 0.745rem;
+                    //     left:1rem;
+                    //     font-weight: 600;
+                    //     font-family: 'LineAwesome'
+                    // }
+                    // &::after{
+                    //     position: absolute;
+                    //     color:$color-bg;
+                    //     opacity: 1;
+                    //     content: "\2193";
+                    //     left:0.5rem;
+                    //     font-size: 0.745rem;
+                    //     font-weight: 600;
+                    //     font-family: 'LineAwesome'
+                    // }
                 }
-                .sorting, .sorting_asc, .sorting_desc, .sorting_asc_disabled, .sorting_desc_disabled{
-                    &::before{
-                        color:$color-blue;
-                        opacity: 1;
-                        content: "\f30c";
-                        font-size: 0.745rem;
-                        right:1rem;
-                        font-weight: 600;
-                    }
-                }
-                .sorting, .sorting_asc, .sorting_desc, .sorting_asc_disabled, .sorting_desc_disabled{
-                    &::after{
-                        color:$color-bg;
-                        opacity: 1;
-                        content: "\f309";
-                        right:0.5rem;
-                        font-size: 0.745rem;
-                        font-weight: 600;
-                    }
-                }
+                // .sorting, .sorting_asc, .sorting_desc, .sorting_asc_disabled, .sorting_desc_disabled{
+                //     &::before{
+                //         color:$color-blue;
+                //         opacity: 1;
+                //         content: "\f30c";
+                //         font-size: 0.745rem;
+                //         right:1rem;
+                //         font-weight: 600;
+                //     }
+                // }
+                // .sorting, .sorting_asc, .sorting_desc, .sorting_asc_disabled, .sorting_desc_disabled{
+                //     &::after{
+                //         color:$color-bg;
+                //         opacity: 1;
+                //         content: "\f309";
+                //         right:0.5rem;
+                //         font-size: 0.745rem;
+                //         font-weight: 600;
+                //     }
+                // }
             }
             tr{
                 td{
