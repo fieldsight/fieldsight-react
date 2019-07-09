@@ -35,17 +35,16 @@ class ReplaceModal extends Component {
         
          
     },{
-        headers:{
-     "Content-Type":"multipart/form-data",
+       
         auth: {
             username:"fieldsight48",
             password:"@bcd1234"
       
-        }
+        
     }
       })
       .then(res => {
-       
+       console.log(res)
         // if (res.status === 201) {
         //   this.setState({
         //     globalUrl: res.data.share_link,

@@ -92,7 +92,7 @@ class FormShare extends Component {
           </a>
           </OverlayTrigger>
 
-          {/* <OverlayTrigger
+          <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">Replace</Tooltip>
             }
@@ -113,7 +113,7 @@ class FormShare extends Component {
             {" "}
             <i className="la la-refresh"> </i>{" "}
           </a>
-          </OverlayTrigger> */}
+          </OverlayTrigger>
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">Download</Tooltip>
