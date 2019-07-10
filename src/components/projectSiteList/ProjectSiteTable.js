@@ -6,9 +6,10 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../myForm/Loader";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
+import Iframe from "react-iframe";
 
 const project_id = 137;
-const base_url="https://fieldsight.naxa.com.np"
+const base_url = "https://fieldsight.naxa.com.np";
 
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
@@ -35,15 +36,39 @@ class ProjectSiteTable extends Component {
       .get(`${paginateUrl}`)
 
       .then(res => {
+        
         if (this._isMounted) {
           if (res.status === 200) {
-            // console.log(res.data.results)
-            this.setState({
-              siteList: res.data.results,
-              dLoader: false,
-              totalCount: res.data.count,
-              totalPage: Math.ceil(res.data.count / 200)
-            });
+
+            if(res.data.results.query === null){
+
+              console.log(res.data);
+
+              this.setState({
+                siteList: res.data.results.data,
+                dLoader: false,
+                totalCount: res.data.count,
+                textVal:null,
+                totalPage: Math.ceil(res.data.count / 200)
+              });
+            }else{
+
+              if(res.data.results.query==this.state.textVal){
+                console.log(res.data);
+                this.setState({
+                  siteList: res.data.results.data,
+                  dLoader: false,
+                  totalCount: res.data.count,
+                  textVal:null,
+                  totalPage: Math.ceil(res.data.count / 200)
+                });
+
+              }
+
+
+            }
+          
+            
           }
         }
       })
@@ -51,13 +76,13 @@ class ProjectSiteTable extends Component {
   };
 
   paginationHandler = (page_num, searchUrl) => {
-    console.log(page_num)
+    console.log(page_num);
     const toNum = page_num * 200;
     const fromNum = (page_num - 1) * 200 + 1;
     let paginateUrl;
 
     if (searchUrl != null) {
-      paginateUrl = this.state.textVal;
+      paginateUrl = searchUrl;
     } else {
       this.setState({
         textVal: null
@@ -123,28 +148,19 @@ class ProjectSiteTable extends Component {
     let searchUrl;
     if (searchValue) {
       searchUrl =
-        "/fv3/api/project-site-list/?page=1&project="+project_id+"&q=" + searchValue;
-      console.log(searchUrl)
-        axios
-        .get(`${searchUrl}`)
-  
-        .then(res => {
-          if (this._isMounted) {
-            if (res.status === 200) {
-              console.log(res.data.results)
-              this.setState({
-                siteList: res.data.results,
-                dLoader: false,
-                totalCount: res.data.count,
-                totalPage: Math.ceil(res.data.count / 200)
-              });
-            }
-          }
-        })
-        .catch(err => {});
+        "/fv3/api/project-site-list/?page=1&project=" +
+        project_id +
+        "&q=" +
+        searchValue;
+      console.log(searchUrl);
+      this.setState({
+        textVal: searchValue
+      });
+      this.paginationHandler(1,searchUrl)
     } else {
       this.setState({
-        pageNum: 1
+        pageNum: 1,
+        textVal:null
       });
       this.paginationHandler(1, null);
     }
@@ -176,9 +192,7 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url+"/fieldsight/site/add/" +
-                    project_id +
-                    "/"
+                  base_url + "/fieldsight/site/add/" + project_id + "/"
                 )
               }
             >
@@ -189,22 +203,23 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url+"/fieldsight/application/?project=" +
+                  base_url +
+                    "/fieldsight/application/?project=" +
                     project_id +
                     "#/project-settings/site-information"
                 )
               }
             >
-              {!isEmpty(terms) ? `${terms.site} Information`  : "Site Information"}
+              {!isEmpty(terms)
+                ? `${terms.site} Information`
+                : "Site Information"}
             </button>
             <button
               className="fieldsight-btn"
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url+"/fieldsight/upload/" +
-                    project_id +
-                    "/"
+                  base_url + "/fieldsight/upload/" + project_id + "/"
                 )
               }
             >
@@ -221,7 +236,9 @@ class ProjectSiteTable extends Component {
               >
                 <thead>
                   <tr>
-                    <th>{!isEmpty(terms) ? `${terms.site} Name` : "Site Name"}</th>
+                    <th>
+                      {!isEmpty(terms) ? `${terms.site} Name` : "Site Name"}
+                    </th>
                     <th>id</th>
                     <th>Address</th>
                     <th>Region</th>
@@ -236,7 +253,15 @@ class ProjectSiteTable extends Component {
                     this.state.siteList.map((item, i) => (
                       <tr key={i}>
                         <td>
-                          <a  href={base_url+"/fieldsight/site-dashboard/" + item.id + "/"}  className="pending table-profile">
+                          <a
+                            href={
+                              base_url +
+                              "/fieldsight/site-dashboard/" +
+                              item.id +
+                              "/"
+                            }
+                            className="pending table-profile"
+                          >
                             <figure>
                               <img src={item.logo} alt="site-logo" />
                             </figure>
