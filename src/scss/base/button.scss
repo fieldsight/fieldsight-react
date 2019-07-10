@@ -122,16 +122,16 @@
     outline:none;
   }
   .download{
-    color:$color-download;
+    color:$color-download !important;;
   }
   .edit, strong.approved, .approved{
-    color:$color-green;
+    color:$color-green !important;
   }
   .hide{
-    color:$color-hide;
+    color:$color-hide ;
   }
   a.pending, strong.pending, .pending {
-    color:$color-blue;
+    color:$color-blue !important;;
     text-transform: capitalize;
   }
   a.approved, strong.approved{
@@ -139,11 +139,11 @@
     text-transform: capitalize;
   }
   a.flagged, strong.flagged, .flagged{
-    color:$color-yellow;
+    color:$color-yellow !important;;
     text-transform: capitalize;
   }
   a.rejected, strong.rejected , .rejected{ 
-    color:$color-red;
+    color:$color-red !important;;
     text-transform: capitalize;
   }
 
