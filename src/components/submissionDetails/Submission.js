@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Accordion, Card, Button } from "react-bootstrap";
 import uuid from "uuid/v4";
 import format from "date-fns/format";
-
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 class Submission extends Component {
   handleRepeatedSubmission = submission => {
     return (
@@ -46,6 +46,65 @@ class Submission extends Component {
               <figure>
                 <img src={submission.answer} alt="image" />
               </figure>
+            </li>
+          </ul>
+        </div>
+      );
+    } else if (submission.type === "geopoint") {
+      const splitedGeoLocation = submission.answer.split(" ");
+      const latitude = splitedGeoLocation[0];
+      const longitude = splitedGeoLocation[1];
+      const altitude = splitedGeoLocation[2];
+      const accuracy = splitedGeoLocation[3];
+      return (
+        <div className="submission-list normal-list" key={uuid()}>
+          <ul>
+            <li>
+              <h6>{submission.question}</h6>
+              <div className="submission-map">
+                <div className="row">
+                  <div className="col-lg-4 col-md-4">
+                    <div className="map-form">
+                      <Map
+                        style={{ height: "205px", marginTop: "1rem" }}
+                        center={[latitude, longitude]}
+                        zoom={13}
+                      >
+                        <TileLayer
+                          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <Marker position={[latitude, longitude]}>
+                          <Popup>
+                            <b>Name: </b>
+                            {name}
+                          </Popup>
+                        </Marker>
+                      </Map>
+                    </div>
+                  </div>
+                  <div className="col-lg-4 col-md-4">
+                    <div className="map-legend">
+                      <p>
+                        <span>Latitude:</span>
+                        <label>{latitude}</label>
+                      </p>
+                      <p>
+                        <span>Longitude:</span>
+                        <label>{longitude}</label>
+                      </p>
+                      <p>
+                        <span>Altitude:</span>
+                        <label>{altitude}</label>
+                      </p>
+                      <p>
+                        <span>Accuracy:</span>
+                        <label>{accuracy}</label>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </li>
           </ul>
         </div>

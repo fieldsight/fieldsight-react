@@ -49,7 +49,7 @@ class EditProject extends Component {
       latitude: "",
       longitude: ""
     },
-    zoom: 1,
+    zoom: 13,
     src: "",
     showCropper: false,
     cropResult: "",
@@ -375,7 +375,6 @@ class EditProject extends Component {
                   formType="editForm"
                   tag="input"
                   type="url"
-                  required={true}
                   label="website"
                   name="website"
                   value={website}
@@ -389,7 +388,6 @@ class EditProject extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required={true}
                   label="Donor"
                   name="donor"
                   value={donor}

@@ -84,7 +84,7 @@ class SubRegion extends Component {
     return (
       <Fragment>
         <RightContentCard
-          title={!isEmpty(terms) ? `${terms.region}` : "Region"}
+          title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
           addButton
           toggleModal={toggleModal}
         >
@@ -99,7 +99,7 @@ class SubRegion extends Component {
 
         {showModal && (
           <Modal
-            title={!isEmpty(terms) ? `Manage ${terms.region}` : "Manage Region"}
+            title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
             toggleModal={toggleModal}
           >
             <form className="floating-form" onSubmit={onSubmitHandler}>
@@ -142,7 +142,7 @@ class SubRegion extends Component {
 
               <p>
                 Are you sure you want to delete{" "}
-                {!isEmpty(terms) ? `${terms.region}` : "Region"} ?
+                {!isEmpty(terms) ? `${terms.region}` : "Regions"} ?
               </p>
             </div>
             <div className="warning-footer text-center">

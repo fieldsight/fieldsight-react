@@ -9,7 +9,9 @@ const initialState = {
   status_data: {},
   form_type: {},
   form_name: "",
-  fieldsight_instance: null
+  fieldsight_instance: null,
+  edit_url: "",
+  download_url: {}
 };
 
 export default function(state = initialState, action) {
@@ -25,7 +27,9 @@ export default function(state = initialState, action) {
         status_data: { ...action.payload.status_data },
         form_type: { ...action.payload.form_type },
         form_name: action.payload.form_name,
-        fieldsight_instance: action.payload.fieldsight_instance
+        fieldsight_instance: action.payload.fieldsight_instance,
+        edit_url: action.payload.edit_url,
+        download_url: action.payload.download_url
       };
     default:
       return state;

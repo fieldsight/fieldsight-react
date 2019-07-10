@@ -276,14 +276,24 @@ export default class TermAndLabel extends Component {
                   </div>
                 </div>
                 <div className="col-sm-12">
-                  <button type="submit" className="fieldsight-btn pull-right">
-                    Save
-                  </button>
+                  <div className="display-inline pull-right">
+                    <button
+                      className="fieldsight-btn"
+                      style={{
+                        marginRight: "0.5rem",
+                        background: "#ccc",
+                        color: "#555"
+                      }}
+                      onClick={listHandler}
+                    >
+                      See List
+                    </button>
+                    <button type="submit" className="fieldsight-btn pull-right">
+                      Save
+                    </button>
+                  </div>
                 </div>
               </form>
-              <button className="fieldsight-btn" onClick={listHandler}>
-                See List
-              </button>
             </Fragment>
           )}
           {showList && (

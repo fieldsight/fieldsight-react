@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import HistoryTab from "./HistoryTab";
 import StatusTab from "./StatusTab";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-// const base_url = window.base_url ? window.base_url : ""
+const base_url = window.base_url
+  ? window.base_url
+  : "https://fieldsight.naxa.com.np";
 class RightSidebar extends Component {
   state = {
     showStatus: true
@@ -13,6 +16,8 @@ class RightSidebar extends Component {
         statusData,
         submissionHistory,
         fieldSightInstance,
+        editUrl,
+        downloadUrl,
         postSubmissionDetail
       },
       state: { showStatus }
@@ -41,21 +46,21 @@ class RightSidebar extends Component {
                 </li>
               </ul>
               <div className="head-icon">
-                <a
-                  href="#"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="Edit Submission"
-                >
-                  <i className="la la-edit" />
+                <a href={`${base_url}${editUrl}`} target="_blank">
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>Edit Submission</Tooltip>}
+                  >
+                    <i className="la la-edit" />
+                  </OverlayTrigger>
                 </a>
-                <a
-                  href="#"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="Download as PDF"
-                >
-                  <i className="la la-download" />
+                <a href={`${base_url}${downloadUrl.main}`} target="_blank">
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>Download as PDF</Tooltip>}
+                  >
+                    <i className="la la-download" />
+                  </OverlayTrigger>
                 </a>
                 <a
                   href="#"

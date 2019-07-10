@@ -13,7 +13,7 @@ import {
 
 class SubmissionDetail extends Component {
   componentDidMount() {
-    const submissionId = window.submission_id ? window.submission_id : 56588;
+    const submissionId = window.submission_id ? window.submission_id : 42124;
     this.props.getSubmissionDetail(submissionId);
   }
   render() {
@@ -27,7 +27,9 @@ class SubmissionDetail extends Component {
         submission_data,
         submission_history,
         status_data,
-        fieldsight_instance
+        fieldsight_instance,
+        edit_url,
+        download_url
       },
       postSubmissionDetail
     } = this.props;
@@ -76,6 +78,8 @@ class SubmissionDetail extends Component {
               submissionHistory={submission_history}
               fieldSightInstance={fieldsight_instance}
               postSubmissionDetail={postSubmissionDetail}
+              editUrl={edit_url}
+              downloadUrl={download_url}
             />
           </div>
         </div>
