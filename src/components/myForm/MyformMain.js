@@ -76,6 +76,7 @@ class MyFormMain extends Component {
               modalTypes={this.state.modalTypes}
               modalDatas={this.state.modalDatas}
               shareUrls={this.state.shareUrls}
+              closePopup={this.closePopup}
             />
           </CommonPopup>
         )}

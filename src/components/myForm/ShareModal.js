@@ -21,7 +21,6 @@ class ShareModal extends Component {
       .get(`${url}${modalTypes}/`)
 
       .then(res => {
-        
         const modifiedUser = res.data.map(user => ({
           ...user,
           checkbox: false
@@ -31,7 +30,7 @@ class ShareModal extends Component {
           userList: modifiedUser
         });
 
-        if (res.status==200) {
+        if (res.status == 200) {
           this.setState({
             dLoader: false,
             shareState: true
@@ -53,28 +52,25 @@ class ShareModal extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    console.log("entered")
+
     const checkedList = this.state.userList
       .map(user => (user.checkbox == true ? +user.id : null))
       .filter(Boolean);
-      console.log(checkedList)
+
     const id = this.props.modalDatas;
     const url = this.props.shareUrls;
-    console.log("id_string",id)
-    console.log(url)
-    
+
     axios
       .post(url, { id_string: id, share_id: checkedList })
       .then(res => {
         
-        successToast("Form", "shared");
+        if (res.status == 201) {
+          this.props.closePopup()
+          successToast("Form", "shared");
+        }
       })
 
-      .catch(
-        
-        err => console.log("err", err)
-      
-      );
+      .catch(err => console.log("err", err));
   };
 
   render() {
@@ -124,7 +120,7 @@ class ShareModal extends Component {
               </PerfectScrollbar>
             </ul>
             <div className="form-group mrt-30 pull-right">
-              <button type="submit" className="fieldsight-btn">
+              <button type="submit"  className="fieldsight-btn">
                 Share
               </button>
             </div>
