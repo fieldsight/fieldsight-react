@@ -6,7 +6,10 @@ import SubmissionSiteInfo from "./SubmissionSiteInfo";
 import RightSidebar from "./RightSidebar";
 import Submission from "./Submission";
 
-import { getSubmissionDetail } from "../../actions/submissionDetailActions";
+import {
+  getSubmissionDetail,
+  postSubmissionDetail
+} from "../../actions/submissionDetailActions";
 
 class SubmissionDetail extends Component {
   componentDidMount() {
@@ -23,8 +26,10 @@ class SubmissionDetail extends Component {
         submitted_by,
         submission_data,
         submission_history,
-        status_data
-      }
+        status_data,
+        fieldsight_instance
+      },
+      postSubmissionDetail
     } = this.props;
     return (
       <Fragment>
@@ -69,6 +74,8 @@ class SubmissionDetail extends Component {
             <RightSidebar
               statusData={status_data}
               submissionHistory={submission_history}
+              fieldSightInstance={fieldsight_instance}
+              postSubmissionDetail={postSubmissionDetail}
             />
           </div>
         </div>
@@ -83,5 +90,5 @@ const mapStateToProps = ({ submissionDetail }) => ({
 
 export default connect(
   mapStateToProps,
-  { getSubmissionDetail }
+  { getSubmissionDetail, postSubmissionDetail }
 )(SubmissionDetail);

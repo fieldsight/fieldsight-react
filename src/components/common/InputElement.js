@@ -11,7 +11,8 @@ const InputElement = ({
   value,
   changeHandler,
   removeBtn,
-  removeHandler
+  removeHandler,
+  ...rest
 }) => (
   <div className="form-group">
     {formType === "editForm" && (
@@ -27,6 +28,7 @@ const InputElement = ({
       value={value ? value : ""}
       onChange={changeHandler}
       name={name}
+      {...rest}
     />
 
     {formType === "floatingForm" && <label htmlFor={htmlFor}>{label}</label>}

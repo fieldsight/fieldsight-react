@@ -13,7 +13,7 @@ const setDefault = () => {
   axios.defaults.baseURL = baseURL;
   axios.defaults.headers.common["X-CSRFTOKEN"] = csrfVal;
   axios.defaults.headers.common["Authorization"] = tokenVal;
-  axios.defaults.headers.common["Content-Type"] = "application/json";
+  // axios.defaults.headers.common["Content-Type"] = "application/json";
 };
 
 export default setDefault;

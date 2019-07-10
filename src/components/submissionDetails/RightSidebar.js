@@ -2,13 +2,19 @@ import React, { Component } from "react";
 import HistoryTab from "./HistoryTab";
 import StatusTab from "./StatusTab";
 
+// const base_url = window.base_url ? window.base_url : ""
 class RightSidebar extends Component {
   state = {
     showStatus: true
   };
   render() {
     const {
-      props: { statusData, submissionHistory },
+      props: {
+        statusData,
+        submissionHistory,
+        fieldSightInstance,
+        postSubmissionDetail
+      },
       state: { showStatus }
     } = this;
     return (
@@ -63,7 +69,13 @@ class RightSidebar extends Component {
             </div>
 
             <div className="tab-content">
-              {showStatus && <StatusTab statusData={statusData} />}
+              {showStatus && (
+                <StatusTab
+                  statusData={statusData}
+                  fieldSightInstance={fieldSightInstance}
+                  postSubmissionDetail={postSubmissionDetail}
+                />
+              )}
               {!showStatus && (
                 <HistoryTab submissionHistory={submissionHistory} />
               )}

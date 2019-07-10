@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import ProjectSiteTable from "./ProjectSiteTable";
 import Zoom from "react-reveal/Zoom";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -7,13 +7,6 @@ import AddSite from "./AddSite";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 
-// const options = [
-//   { value: "chocolate", label: "Chocolate" },
-//   { value: "strawberry", label: "Strawberry" },
-//   { value: "vanilla", label: "Vanilla" }
-// ];
-
-// const SelectOption = () => <Select options={options} />;
 const project_id = 310;
 const base_url = "https://fieldsight.naxa.com.np";
 const project_name = "test";
@@ -54,8 +47,9 @@ class ProjectSiteList extends Component {
     const {
       context: { terms }
     } = this;
+
     return (
-      <React.Fragment>
+      <Fragment>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
@@ -132,7 +126,7 @@ class ProjectSiteList extends Component {
 
           {this.state.addModal && <AddSite closePopup={this.closePopup} />}
         </div>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

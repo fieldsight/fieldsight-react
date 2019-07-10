@@ -8,12 +8,12 @@ const HistoryTab = ({ submissionHistory }) => (
         {submissionHistory.map((history, i) => (
           <li key={i}>
             <figure>
-              <img src="img/pf.jpg" alt="pf" />
+              <img src={history.user_profile_picture} alt="user img" />
             </figure>
             <div className="content">
               <p>
                 <a href="#" className="name">
-                  {history.user_name}
+                  {history.user_full_name}
                 </a>{" "}
                 <span>marked this submission as</span>{" "}
                 <strong

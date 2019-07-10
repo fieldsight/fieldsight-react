@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { RegionProvider } from "../context";
+
 import setDefault from "../config";
 import Settings from "./settings/Settings";
 import MyForm from "./myForm/MyformMain";
-import ProjectSiteList from "./projectSiteList/ProjectSiteList";
+// import ProjectSiteList from "./projectSiteList/SiteList";
+import SiteList from "./projectSiteList/SiteList";
 import SubmissionDetails from "./submissionDetails";
 
 import store from "../store";
@@ -35,28 +36,26 @@ class App extends Component {
             <div className="container-fluid">
               <main id="main-content">
                 <Router>
-                  <RegionProvider>
-                    <Switch>
-                      <Route
-                        path="/project-settings"
-                        render={props => <Settings {...props} />}
-                      />
-                      <Route
-                        path="/forms"
-                        render={props => <MyForm {...props} />}
-                      />
-                      <Route
-                        path="/project-sitelist"
-                        render={props => <ProjectSiteList {...props} />}
-                      />
+                  <Switch>
+                    <Route
+                      path="/project-settings"
+                      render={props => <Settings {...props} />}
+                    />
+                    <Route
+                      path="/forms"
+                      render={props => <MyForm {...props} />}
+                    />
+                    <Route
+                      path="/project-sitelist"
+                      render={props => <SiteList {...props} />}
+                    />
 
-                      <Route
-                        path="/submission-details"
-                        render={props => <SubmissionDetails {...props} />}
-                      />
-                    </Switch>
-                    <ToastContainer />
-                  </RegionProvider>
+                    <Route
+                      path="/submission-details"
+                      render={props => <SubmissionDetails {...props} />}
+                    />
+                  </Switch>
+                  <ToastContainer />
                 </Router>
               </main>
             </div>
