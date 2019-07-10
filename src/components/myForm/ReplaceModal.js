@@ -26,7 +26,7 @@ class ReplaceModal extends Component {
     axios
       .post(
         "https://kpi.naxa.com.np/imports/", formData,{
-            headers:{"Content-Type": "multipart/form-data"}
+        headers:{"Content-Type": "multipart/form-data","Authorization":"Token 17ede4b52a21f1ec2b73525791750418113af4f1"}
         }
         
          
