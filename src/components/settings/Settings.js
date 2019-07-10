@@ -9,7 +9,7 @@ import ManageRegion from "../manageRegion/ManageRegion";
 import SubRegion from "../manageRegion/SubRegion";
 import TermsAndLabels from "../termsAndLabels/TermAndLabel";
 import MapLayer from "../mapLayer/MapLayer";
-
+import { RegionProvider } from "../../context";
 export default class Settings extends Component {
   render() {
     const {
@@ -17,7 +17,7 @@ export default class Settings extends Component {
     } = this.props;
 
     return (
-      <Fragment>
+      <RegionProvider>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
@@ -78,7 +78,7 @@ export default class Settings extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </RegionProvider>
     );
   }
 }

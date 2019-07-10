@@ -78,14 +78,14 @@ class ShareModal extends Component {
 
     return (
       <div className="thumb-list userlist">
-        {this.state.userList.length === 0 && !this.state.dLoader && (
-          <div className="card-header main-card-header sub-card-header bg-header">
+        {/* {this.state.userList.length === 0 && !this.state.dLoader && (
+          <div className="card-header">
             <h5>No Data Available</h5>
           </div>
-        )}
+        )} */}
         {this.state.shareState && (
           <form onSubmit={this.onSubmit}>
-            <ul style={{ position: "relative", height: "450px" }}>
+            <ul style={{ position: "relative", height: "355px" }}>
               <PerfectScrollbar>
                 {this.state.userList.map((user, i) => (
                   <li key={user.id}>
