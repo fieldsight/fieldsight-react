@@ -7,7 +7,7 @@ import { DotLoader } from "../myForm/Loader";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 
-const project_id = 310;
+const project_id = 137;
 const base_url="https://fieldsight.naxa.com.np"
 
 class ProjectSiteTable extends Component {
@@ -37,6 +37,7 @@ class ProjectSiteTable extends Component {
       .then(res => {
         if (this._isMounted) {
           if (res.status === 200) {
+            // console.log(res.data.results)
             this.setState({
               siteList: res.data.results,
               dLoader: false,
@@ -123,15 +124,24 @@ class ProjectSiteTable extends Component {
     if (searchValue) {
       searchUrl =
         "/fv3/api/project-site-list/?page=1&project="+project_id+"&q=" + searchValue;
-
-      console.log(searchUrl);
-
-      this.setState({
-        textVal: searchUrl,
-        pageNum: 1
-      });
-
-      this.paginationHandler(this.state.pageNum, searchUrl);
+      console.log(searchUrl)
+        axios
+        .get(`${searchUrl}`)
+  
+        .then(res => {
+          if (this._isMounted) {
+            if (res.status === 200) {
+              console.log(res.data.results)
+              this.setState({
+                siteList: res.data.results,
+                dLoader: false,
+                totalCount: res.data.count,
+                totalPage: Math.ceil(res.data.count / 200)
+              });
+            }
+          }
+        })
+        .catch(err => {});
     } else {
       this.setState({
         pageNum: 1
@@ -147,7 +157,7 @@ class ProjectSiteTable extends Component {
     return (
       <Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Sites</h5>
+          <h5>{!isEmpty(terms) ? `${terms.site}` : "Sites"}</h5>
           <div className="dash-btn">
             <form className="floating-form">
               <div className="form-group mr-0">
@@ -185,7 +195,7 @@ class ProjectSiteTable extends Component {
                 )
               }
             >
-              Site Information
+              {!isEmpty(terms) ? `${terms.site} Information`  : "Site Information"}
             </button>
             <button
               className="fieldsight-btn"
@@ -214,7 +224,7 @@ class ProjectSiteTable extends Component {
                     <th>{!isEmpty(terms) ? `${terms.site} Name` : "Site Name"}</th>
                     <th>id</th>
                     <th>Address</th>
-                    <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>
+                    <th>Region</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>
