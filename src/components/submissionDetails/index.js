@@ -21,14 +21,12 @@ class SubmissionDetail extends Component {
       }
     } = this;
     // remove two lines for production
-    const id = submissionId ? submissionId : 42124;
-    this.props.getSubmissionDetail(id);
+    // const id = submissionId ? submissionId : 42124;
+    // this.props.getSubmissionDetail(id);
     // uncomment for production
-    // this.props.getSubmissionDetail(submissionId)
+    this.props.getSubmissionDetail(submissionId);
   }
   render() {
-    console.log("submission Details props", this.props);
-
     const {
       submissionDetail: {
         site,

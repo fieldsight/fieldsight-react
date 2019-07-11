@@ -132,25 +132,13 @@ class TableRow extends Component {
 
   render() {
     const {
-      props: {
-        tableRow,
-        page,
-        editHandler,
-        removeHandler,
-        selectRegionHandler
-      },
+      props: { tableRow, page, editHandler, removeHandler },
       tableRowMethod
     } = this;
     return (
       <tbody>
         {tableRow.map((row, i) =>
-          tableRowMethod()[page](
-            row,
-            i,
-            editHandler,
-            removeHandler,
-            selectRegionHandler
-          )
+          tableRowMethod()[page](row, i, editHandler, removeHandler)
         )}
       </tbody>
     );

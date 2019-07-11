@@ -28,7 +28,8 @@ export default class TermAndLabel extends Component {
       region: "",
       region_supervisor: "",
       region_reviewer: "",
-      project: window.project_id ? window.project_id : 137
+      // project: window.project_id ? window.project_id : 137
+      project: window.project_id
     },
     showList: true,
     isLoading: false
@@ -190,7 +191,6 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      required={true}
                       label="Donor"
                       name="donor"
                       value={donor}
@@ -203,7 +203,6 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      required={true}
                       label="Site"
                       name="site"
                       value={site}
@@ -215,7 +214,6 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      required={true}
                       label="Site Supervisor"
                       name="site_supervisor"
                       value={site_supervisor}
@@ -227,7 +225,6 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      required={true}
                       label="Site Reviewer"
                       name="site_reviewer"
                       value={site_reviewer}
@@ -239,7 +236,6 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      required={true}
                       label="Region"
                       name="region"
                       value={region}
@@ -252,7 +248,6 @@ export default class TermAndLabel extends Component {
                         formType="editForm"
                         tag="input"
                         type="text"
-                        required={true}
                         label="Region Supervisor"
                         name="region_supervisor"
                         value={region_supervisor}
@@ -266,7 +261,6 @@ export default class TermAndLabel extends Component {
                         formType="editForm"
                         tag="input"
                         type="text"
-                        required={true}
                         label="Region Reviewer"
                         name="region_reviewer"
                         value={region_reviewer}

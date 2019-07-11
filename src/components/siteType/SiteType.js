@@ -217,7 +217,8 @@ class SiteType extends Component {
         siteType,
         selectedIdentifier,
         selectedName,
-        showDeleteConfirmation
+        showDeleteConfirmation,
+        showDotLoader
       },
       toggleModal,
       editHandler,

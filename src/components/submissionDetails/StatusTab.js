@@ -140,8 +140,7 @@ class StatusTab extends Component {
             <div className="form-group flexrow">
               <div className="custom-checkbox display-inline">
                 <div className="radiobox approved">
-                  {/* <label> */}
-                  {/* <input type="radio" name="radioYes" /> */}
+                  {/* <label> */} {/* <input type="radio" name="radioYes" /> */}
                   <InputElement
                     tag="input"
                     type="radio"
