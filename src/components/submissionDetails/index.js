@@ -13,8 +13,18 @@ import {
 
 class SubmissionDetail extends Component {
   componentDidMount() {
-    const submissionId = window.submission_id ? window.submission_id : 42124;
-    this.props.getSubmissionDetail(submissionId);
+    const {
+      props: {
+        match: {
+          params: { submissionId }
+        }
+      }
+    } = this;
+    // remove two lines for production
+    const id = submissionId ? submissionId : 42124;
+    this.props.getSubmissionDetail(id);
+    // uncomment for production
+    // this.props.getSubmissionDetail(submissionId)
   }
   render() {
     console.log("submission Details props", this.props);

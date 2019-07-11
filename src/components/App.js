@@ -51,7 +51,7 @@ class App extends Component {
                     />
 
                     <Route
-                      path="/submission-details"
+                      path="/submission-details/:submissionId"
                       render={props => <SubmissionDetails {...props} />}
                     />
                   </Switch>

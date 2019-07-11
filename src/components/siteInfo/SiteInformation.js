@@ -14,9 +14,10 @@ import isEmpty from "../../utils/isEmpty";
 const urls = [
   "fieldsight/api/organization/",
   "fieldsight/api/project/forms/",
-  "fv3/api/project-define-site-meta/",
-  "fv3/api/project/progress/add/"
+  "fv3/api/project-define-site-meta/"
 ];
+
+const progressUrl = "fv3/api/project/progress/add/";
 
 class SiteInformation extends Component {
   static contextType = RegionContext;
@@ -139,10 +140,13 @@ class SiteInformation extends Component {
         return question;
       });
 
-      console.log("modified question", modifiedJsonQuestions);
-
+      console.log("post data", {
+        json_questions: modifiedJsonQuestions,
+        site_basic_info: siteBasicInfo,
+        site_featured_images: siteFeaturedImages
+      });
       await Promise.all(
-        [urls[2], urls[3]].map(
+        [urls[2], progressUrl].map(
           async (url, i) =>
             await axios.post(
               `${url}${projectId}/`,
