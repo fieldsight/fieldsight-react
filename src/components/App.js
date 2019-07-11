@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import setDefault from "../config";
 import Settings from "./settings/Settings";
 import MyForm from "./myForm/MyformMain";
-// import ProjectSiteList from "./projectSiteList/SiteList";
+import SiteDashboard from "./siteDashboard/SiteDashboard";
 import SiteList from "./projectSiteList/SiteList";
 import SubmissionDetails from "./submissionDetails";
 
@@ -53,6 +53,11 @@ class App extends Component {
                     <Route
                       path="/submission-details"
                       render={props => <SubmissionDetails {...props} />}
+                    />
+
+                    <Route
+                      path="/site-dashboard"
+                      render={props => <SiteDashboard {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
