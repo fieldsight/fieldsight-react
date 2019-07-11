@@ -15,12 +15,12 @@ class ReplaceModal extends Component {
     // console.log('aaaaa')
 
     const formData = new FormData();
-    formData.append("assetUid", "a6j5SZbKGVay6dZCCwGy3k");
-    formData.append("name", "aa6j5SZbKGVay6dZCCwGy3k.xls");
+    formData.append("assetUid", "aCeR4EkKRfHwotJadpuaeX");
+    formData.append("name", "aCeR4EkKRfHwotJadpuaeX.xls");
     formData.append("file", event.target.files[0]);
     formData.append(
       "destination",
-      "https://kpi.naxa.com.np/assets/a6j5SZbKGVay6dZCCwGy3k/"
+      "https://kpi.naxa.com.np/assets/aCeR4EkKRfHwotJadpuaeX/"
     );
 
     axios
