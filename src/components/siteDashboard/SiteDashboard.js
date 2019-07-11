@@ -9,8 +9,8 @@ import DashboardCounter from './dashboardComponent/Dashboard_counter';
 import SubmissionChart from './dashboardComponent/SubmissionChart';
 import ProgressChart from './dashboardComponent/ProgressChart';
 import SiteDocument from './dashboardComponent/SiteDocument';
-import ProjectManager from './dashboardComponent/aboutSection/ProjectManager';
-import Logs from './dashboardComponent/aboutSection/Logs';
+import ProjectManager from './dashboardComponent/ProjectManager';
+import Logs from './dashboardComponent/Logs';
 
 
 
