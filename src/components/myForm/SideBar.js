@@ -69,7 +69,6 @@ class SideBar extends Component {
                 title="MyFormContent"
                 OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
-                
               />
             )}
           />

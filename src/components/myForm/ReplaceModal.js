@@ -2,51 +2,44 @@ import React, { Component } from "react";
 import axios from "axios";
 import "react-perfect-scrollbar/dist/css/styles.css";
 
+let tokenVal = window.token
+  ? window.token
+  : "91a844e62e86b6e336b8fb440340cbeaabf601fe";
+
+let kpiUrl = window.kpi_base_url
+  ? window.kpi_base_url
+  : "https://kpi.naxa.com.np/";
+
 class ReplaceModal extends Component {
   state = {};
 
   onChangeHandler = event => {
-    // const files = Array.from(event.target.files)
-    // const formData = new FormData()
-
-    // files.forEach((file, i) => {
-    //   formData.append(i, file)
-    // })
-    // console.log('aaaaa')
-
+    const id = this.props.shareUrls;
+    const editUrl = this.props.modalDatas;
+    const destinationUrl = kpiUrl + "assets/" + id + "/";
     const formData = new FormData();
-    formData.append("assetUid", "aCeR4EkKRfHwotJadpuaeX");
-    formData.append("name", "aCeR4EkKRfHwotJadpuaeX.xls");
+
+    formData.append("assetUid", id);
+    formData.append("name", event.target.files[0].name);
     formData.append("file", event.target.files[0]);
-    formData.append(
-      "destination",
-      "https://kpi.naxa.com.np/assets/aCeR4EkKRfHwotJadpuaeX/"
-    );
+    formData.append("destination", destinationUrl);
 
     axios
-      .post(
-        "https://kpi.naxa.com.np/imports/", formData,{
-        headers:{"Content-Type": "multipart/form-data","Authorization":"Token 17ede4b52a21f1ec2b73525791750418113af4f1"}
+      .post(kpiUrl + "imports/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Token " + tokenVal
         }
-        
-         
-        
-       
-      )
+      })
       .then(res => {
-        console.log(res);
-        // if (res.status === 201) {
-        //   this.setState({
-        //     globalUrl: res.data.share_link,
-        //     disable: false
-        //   });
-        // }
+        if (res.status === 201) {
+          window.open(editUrl, "_self");
+        }
       })
       .catch(err => console.log("err", err));
   };
 
   render() {
-    //    console.log("anacxa")
     return (
       <React.Fragment>
         <form>

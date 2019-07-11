@@ -7,7 +7,7 @@ import { DotLoader } from "./Loader";
 import Modal from "../common/Modal";
 
 const url = "fv3/api/myforms/";
-const deleteUrl="/fv3/api/form/delete/";
+const deleteUrl = "/fv3/api/form/delete/";
 
 class MyformTable extends Component {
   _isMounted = false;
@@ -17,8 +17,8 @@ class MyformTable extends Component {
     shareOption: false,
     dLoader: true,
     tblDiv: false,
-    showDeleteConfirmation:false,
-    delete_id:null,
+    showDeleteConfirmation: false,
+    delete_id: null
   };
 
   componentDidMount() {
@@ -43,46 +43,38 @@ class MyformTable extends Component {
       });
   }
 
-  deleteHandler = (e,ids) => {
+  deleteHandler = (e, ids) => {
     this.setState({
-      delete_id:ids,
-      showDeleteConfirmation:true
-
-    })
-      
-   };
-
-   cancelHandler = () => {
-    this.setState({
-      showDeleteConfirmation: false,
-            
+      delete_id: ids,
+      showDeleteConfirmation: true
     });
   };
 
-  confirmHandler =()=>{
-    const id=this.state.delete_id
-    axios
-    .post(`${deleteUrl}`,{id_string:id})
-
-    .then(res => {
-     const newUserList = [...this.state.list];
-     const deletedForm = newUserList.filter(user => user.id_string != id);
-      this.setState({
-        list: deletedForm,
-        showDeleteConfirmation: false
-      });
-     
-    })
-    .catch(err => {
-      // this.setState({
-      //   dLoader: false
-      // });
+  cancelHandler = () => {
+    this.setState({
+      showDeleteConfirmation: false
     });
+  };
 
-  }
+  confirmHandler = () => {
+    const id = this.state.delete_id;
+    axios
+      .post(`${deleteUrl}`, { id_string: id })
 
-
- 
+      .then(res => {
+        const newUserList = [...this.state.list];
+        const deletedForm = newUserList.filter(user => user.id_string != id);
+        this.setState({
+          list: deletedForm,
+          showDeleteConfirmation: false
+        });
+      })
+      .catch(err => {
+        // this.setState({
+        //   dLoader: false
+        // });
+      });
+  };
 
   render() {
     return (
@@ -114,7 +106,6 @@ class MyformTable extends Component {
                       OpenTabHandler={this.props.OpenTabHandler}
                       commonPopupHandler={this.props.commonPopupHandler}
                       deleteHandler={this.deleteHandler}
-                      
                     />
                   ))}
                 </tbody>
@@ -123,20 +114,13 @@ class MyformTable extends Component {
               {this.state.dLoader && <DotLoader />}
             </PerfectScrollbar>
           </div>
-       
-
         </div>
         {this.state.showDeleteConfirmation && (
-        <Modal
-            title="Warning"
-            toggleModal={this.cancelHandler}
-          >
+          <Modal title="Warning" toggleModal={this.cancelHandler}>
             <div className="warning">
               <i className="la la-exclamation-triangle" />
 
-              <p>
-                Do you still want to continue ?
-              </p>
+              <p>Do you still want to continue ?</p>
             </div>
             <div className="warning-footer text-center">
               <a
