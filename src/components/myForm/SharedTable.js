@@ -43,13 +43,7 @@ class SharedTable extends Component {
     axios
       .post(`${clone_url}`, { id_string: id, project: form_id })
       .then(res => {
-        // if (res.status === 201) {
-        //   this.setState({
-        //     globalUrl: res.data.share_link,
-        //     disable: false
-        //   });
-        // }
-        successToast("Form", "cloned");
+        // successToast("Form", "cloned");
       })
       .catch(err => console.log("err", err));
   };
@@ -58,7 +52,6 @@ class SharedTable extends Component {
     return (
       <React.Fragment>
         <div className="myform-table">
-          {/*  <div className="add-btn"><a href="#/" onClick={this.props.myFormPopup}>Add new <span><i className="la la-plus"></i></span></a></div> */}
           <div
             className="table-wrapper"
             style={{ position: "relative", height: "500px" }}
@@ -77,10 +70,8 @@ class SharedTable extends Component {
                     <th>Action</th>
                   </tr>
                 </thead>
-              
+
                 <tbody>
-                
-                 
                   {this.state.list.map((item, i) => (
                     <SharedFormShare
                       key={i + 1}
@@ -93,10 +84,10 @@ class SharedTable extends Component {
                 </tbody>
               </table>
               {this.state.list.length === 0 && !this.state.dLoader && (
-                    <div className="card-header main-card-header sub-card-header bg-header">
-                      <h5>No Form Data Available</h5>
-                    </div>
-                  )}
+                <div className="card-header main-card-header sub-card-header bg-header">
+                  <h5>No Form Data Available</h5>
+                </div>
+              )}
 
               {this.state.dLoader && <DotLoader />}
             </PerfectScrollbar>

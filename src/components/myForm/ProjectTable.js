@@ -21,12 +21,6 @@ class ProjecTable extends Component {
     axios
       .post(clone_url, { id_string: id, project: form_id })
       .then(res => {
-        // if (res.status === 201) {
-        //   this.setState({
-        //     globalUrl: res.data.share_link,
-        //     disable: false
-        //   });
-        // }
         successToast("Form", "cloned");
       })
       .catch(err => console.log("err", err));
@@ -39,10 +33,6 @@ class ProjecTable extends Component {
 
       .then(res => {
         if (this._isMounted) {
-          // this.setState({
-          //   project_list: res.data
-          // });
-          console.log("res", res);
           if (res.status === 200) {
             this.setState({
               project_list: res.data,
@@ -53,7 +43,6 @@ class ProjecTable extends Component {
       })
       .catch(err => {
         this.setState({
-          // project_list: res.data,
           dLoader: false
         });
       });
@@ -158,16 +147,16 @@ class ProjecTable extends Component {
                               <Tooltip id="tooltip-disabled">download</Tooltip>
                             }
                           >
-                            <a
-                              className="td-edit-btn td-btn"
-                            >
+                            <a className="td-edit-btn td-btn">
                               {" "}
                               <i className="la la-download"> </i>{" "}
                             </a>
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-disabled">Make a copy</Tooltip>
+                              <Tooltip id="tooltip-disabled">
+                                Make a copy
+                              </Tooltip>
                             }
                           >
                             <a

@@ -1,4 +1,4 @@
-import React, { Component,Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import SideBar from "./SideBar";
 import CommonPopup from "./CommonPopup";
@@ -6,7 +6,6 @@ import PreviewModal from "./PreviewModal";
 import ReplaceModal from "./ReplaceModal";
 import ShareModal from "./ShareModal";
 import GlobalModel from "./GlobalModal";
-
 
 class MyFormMain extends Component {
   state = {
@@ -26,7 +25,6 @@ class MyFormMain extends Component {
     });
   };
 
- 
   commonPopupHandler = (
     e,
     selectedModal,
@@ -48,23 +46,20 @@ class MyFormMain extends Component {
   render() {
     return (
       <Fragment>
-            
-              <nav aria-label="breadcrumb" role="navigation">
-                <ol className="breadcrumb">
-                  <li className="breadcrumb-item">
-                    <a>Forms</a>
-                  </li>
-                </ol>
-              </nav>
-              <div className="row">
-                <SideBar
-                  OpenTabHandler={this.OpenTabHandler}
-                  commonPopupHandler={this.commonPopupHandler}
-                  height={this.props.height}
-                />
-              </div>
-            
-          
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <a>Forms</a>
+            </li>
+          </ol>
+        </nav>
+        <div className="row">
+          <SideBar
+            OpenTabHandler={this.OpenTabHandler}
+            commonPopupHandler={this.commonPopupHandler}
+            height={this.props.height}
+          />
+        </div>
 
         {this.state.popupModal && (
           <CommonPopup
@@ -80,8 +75,7 @@ class MyFormMain extends Component {
             />
           </CommonPopup>
         )}
-       
-        </Fragment>
+      </Fragment>
     );
   }
 }
