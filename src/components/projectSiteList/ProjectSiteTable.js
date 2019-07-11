@@ -42,7 +42,7 @@ class ProjectSiteTable extends Component {
 
             if(res.data.results.query === null){
 
-              console.log(res.data);
+              
 
               this.setState({
                 siteList: res.data.results.data,
@@ -54,7 +54,7 @@ class ProjectSiteTable extends Component {
             }else{
 
               if(res.data.results.query==this.state.textVal){
-                console.log(res.data);
+                
                 this.setState({
                   siteList: res.data.results.data,
                   dLoader: false,
@@ -76,7 +76,7 @@ class ProjectSiteTable extends Component {
   };
 
   paginationHandler = (page_num, searchUrl) => {
-    console.log(page_num);
+   
     const toNum = page_num * 200;
     const fromNum = (page_num - 1) * 200 + 1;
     let paginateUrl;
@@ -137,13 +137,9 @@ class ProjectSiteTable extends Component {
     }
   };
 
-  // OpenTabHandler = (e, url) => {
-  //   window.open(url, "_self");
-  // };
-
+  
   searchHandler = e => {
-    console.log("search");
-    console.log(event.target.value);
+    
     const searchValue = event.target.value;
     let searchUrl;
     if (searchValue) {
@@ -152,7 +148,7 @@ class ProjectSiteTable extends Component {
         project_id +
         "&q=" +
         searchValue;
-      console.log(searchUrl);
+     
       this.setState({
         textVal: searchValue
       });
