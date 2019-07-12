@@ -83,6 +83,7 @@ class SubmissionDetail extends Component {
                 submittedBy={submitted_by}
                 submissionData={submission_data}
                 dotLoader={dotLoader}
+                site={site}
               />
             </div>
           </div>

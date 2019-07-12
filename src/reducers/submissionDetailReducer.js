@@ -57,7 +57,7 @@ export default function(state = initialState, action) {
     case POST_SUBMISSION_DETAIL:
       return {
         ...state,
-        submission_history: [...state.submission_history, ...res.data]
+        submission_history: [...state.submission_history]
       };
     default:
       return state;

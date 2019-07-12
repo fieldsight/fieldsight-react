@@ -5,7 +5,9 @@ const TableHeader = ({ tableHeader }) => {
     <thead>
       <tr>
         {tableHeader.map((header, i) => (
-          <th key={i}>{header}</th>
+          <th key={i} style={{ width: "20%" }}>
+            {header}
+          </th>
         ))}
       </tr>
     </thead>

@@ -36,8 +36,8 @@ class Submission extends Component {
   };
 
   handleUnrepeatedSubmission = submission => {
+    const { site } = this.props;
     if (submission.type === "photo") {
-      console.log("photo", submission);
       return (
         <div className="submission-list thumb-list" key={uuid()}>
           <ul>
@@ -77,7 +77,7 @@ class Submission extends Component {
                       <Map
                         style={{ height: "205px", marginTop: "1rem" }}
                         center={[latitude, longitude]}
-                        zoom={13}
+                        zoom={15}
                       >
                         <TileLayer
                           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -85,8 +85,14 @@ class Submission extends Component {
                         />
                         <Marker position={[latitude, longitude]}>
                           <Popup>
-                            <b>Name: </b>
-                            {name}
+                            <b>Question: </b>
+                            {submission.question}
+                          </Popup>
+                        </Marker>
+                        <Marker position={[site.latitude, site.longitude]}>
+                          <Popup>
+                            <b>Project Name: </b>
+                            {site.project_name}
                           </Popup>
                         </Marker>
                       </Map>

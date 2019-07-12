@@ -32,6 +32,7 @@ export const postSubmissionDetail = data => dispatch => {
       headers: { "Content-Type": "multipart/form-data" }
     })
     .then(res => {
+      console.log("res", res);
       dispatch({
         type: STOP_SUBMISSION_LOADER
       });
@@ -42,6 +43,7 @@ export const postSubmissionDetail = data => dispatch => {
       successToast("Status", "added");
     })
     .catch(err => {
+      console.log("err", err);
       errorToast();
     });
 };

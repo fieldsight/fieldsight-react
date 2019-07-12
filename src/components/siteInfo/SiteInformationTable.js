@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import uuid from "uuid/v4";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "../common/Table";
 import Modal from "../common/Modal";
 import RightContentCard from "../common/RightContentCard";
@@ -26,7 +27,6 @@ const INITIAL_STATE = {
   selectedQuestion: {},
   filteredQuestions: [],
   filteredMetaAttributes: [],
-  // selectedMetaAttributes: [],
   selectedProject: {},
   tableQuestions: [],
   publicChecked: false,
@@ -252,9 +252,9 @@ class SiteInformationTable extends Component {
         type === "Number" ||
         type === "Date" ||
         type === "MCQ" ||
-        type === "Link") && { question_help: helpText }),
-      share_to_dashboard: dashboardChecked,
-      share_to_public: publicChecked
+        type === "Link") && { question_help: helpText })
+      // share_to_dashboard: dashboardChecked,
+      // share_to_public: publicChecked
     };
 
     if (editMode) {
@@ -354,13 +354,13 @@ class SiteInformationTable extends Component {
         selectedTableQuestion.question_type === "MCQ" ||
         selectedTableQuestion.question_type === "Link") && {
         helpText: selectedTableQuestion.question_help
-      }),
-      ...(selectedTableQuestion.share_to_dashboard && {
-        dashboardChecked: selectedTableQuestion.share_to_dashboard
-      }),
-      ...(selectedTableQuestion.share_to_public && {
-        publicChecked: selectedTableQuestion.share_to_public
       })
+      // ...(selectedTableQuestion.share_to_dashboard && {
+      //   dashboardChecked: selectedTableQuestion.share_to_dashboard
+      // }),
+      // ...(selectedTableQuestion.share_to_public && {
+      //   publicChecked: selectedTableQuestion.share_to_public
+      // })
     };
 
     if (selectedTableQuestion.form_id) {
@@ -508,8 +508,7 @@ class SiteInformationTable extends Component {
               {(type === "Text" ||
                 type === "Number" ||
                 type === "Date" ||
-                type === "MCQ" ||
-                type === "Link") && (
+                type === "MCQ") && (
                 <InputElement
                   tag="textarea"
                   required={true}
@@ -531,18 +530,25 @@ class SiteInformationTable extends Component {
                 />
               )}
 
-              {type === "Link" &&
-                this.state.filteredMetaAttributes.map(attribute => {
-                  return (
-                    <div className="form-group" key={uuid()}>
-                      <CheckBox
-                        checked={attribute.checked}
-                        label={attribute.question_name}
-                        onChange={e => this.handleCheckboxChange(e, attribute)}
-                      />
-                    </div>
-                  );
-                })}
+              {type === "Link" && (
+                <div style={{ position: "relative", height: "250px" }}>
+                  <PerfectScrollbar>
+                    {this.state.filteredMetaAttributes.map(attribute => {
+                      return (
+                        <div className="form-group" key={uuid()}>
+                          <CheckBox
+                            checked={attribute.checked}
+                            label={attribute.question_name}
+                            onChange={e =>
+                              this.handleCheckboxChange(e, attribute)
+                            }
+                          />
+                        </div>
+                      );
+                    })}
+                  </PerfectScrollbar>
+                </div>
+              )}
               {(type === "Form" ||
                 type === "FormSubStat" ||
                 type === "FormSubCountQuestion" ||
@@ -563,7 +569,7 @@ class SiteInformationTable extends Component {
                   changeHandler={questionChangeHandler}
                 />
               )}
-              <div className="form-group display-inline text-center">
+              {/* <div className="form-group display-inline text-center">
                 <CheckBox
                   checked={this.state.dashboardChecked}
                   label="Share To Dashboard"
@@ -575,7 +581,7 @@ class SiteInformationTable extends Component {
                   label="Share To Public"
                   onChange={e => this.handleCheckboxChange(e, "public")}
                 />
-              </div>
+              </div> */}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
                   Save
