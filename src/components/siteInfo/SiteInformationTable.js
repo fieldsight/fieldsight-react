@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import uuid from "uuid/v4";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "../common/Table";
 import Modal from "../common/Modal";
 import RightContentCard from "../common/RightContentCard";
@@ -25,6 +26,7 @@ const INITIAL_STATE = {
   selectedForm: {},
   selectedQuestion: {},
   filteredQuestions: [],
+  filteredMetaAttributes: [],
   selectedProject: {},
   tableQuestions: [],
   publicChecked: false,
@@ -103,8 +105,30 @@ class SiteInformationTable extends Component {
     });
   };
 
-  handleCheckboxChange = (e, type) =>
+  handleCheckboxChange = (e, type) => {
+    if (typeof type === "object") {
+      const newMetaAttributes = this.state.filteredMetaAttributes.map(
+        attribute => ({ ...attribute })
+      );
+      const selectedAttribute = newMetaAttributes.find(
+        attribute => attribute.question_name === type.question_name
+      );
+      selectedAttribute.checked = e.target.checked;
+      return this.setState({
+        filteredMetaAttributes: newMetaAttributes
+      });
+    }
+
     this.setState({ [`${type}Checked`]: e.target.checked });
+  };
+
+  handleMultiChange = option => {
+    this.setState(state => {
+      return {
+        multiValue: option
+      };
+    });
+  };
 
   onInputChangeHandler = (e, option) => {
     const { name, value } = e.target;
@@ -139,12 +163,27 @@ class SiteInformationTable extends Component {
     const { type } = this.state;
 
     if (type === "Link") {
+      if (this.state.selectedProject === value) {
+        return;
+      }
+      const filteredMetaAttributes = this.props.projects.find(
+        project => project.id === +value
+      ).site_meta_attributes;
+
+      const modifiedMetaAttributes = filteredMetaAttributes.map(meta => ({
+        ...meta,
+        checked: false
+      }));
+
       this.setState({
-        selectedProject: value
+        selectedProject: value,
+        filteredMetaAttributes: modifiedMetaAttributes
       });
     } else {
       const selectedForm = this.props.forms.find(form => form.id === +value);
-      const filteredQuestions = findQuestion(selectedForm.json.children);
+      const filteredQuestions = selectedForm
+        ? findQuestion(selectedForm.json.children)
+        : [];
       this.setState({
         selectedForm: value,
         filteredQuestions
@@ -174,6 +213,7 @@ class SiteInformationTable extends Component {
         selectedForm,
         selectedQuestion,
         selectedProject,
+        filteredMetaAttributes,
         selectedId,
         tableQuestions,
         publicChecked,
@@ -200,6 +240,11 @@ class SiteInformationTable extends Component {
       ...(type === "Link" && {
         project_id: selectedProject
       }),
+      ...(type === "Link" && {
+        metas: filteredMetaAttributes.filter(
+          attribute => attribute.checked === true
+        )
+      }),
       ...((type === "Text" || type === "Number" || type === "Date") && {
         question_placeholder: placeholder
       }),
@@ -207,9 +252,9 @@ class SiteInformationTable extends Component {
         type === "Number" ||
         type === "Date" ||
         type === "MCQ" ||
-        type === "Link") && { question_help: helpText }),
-      share_to_dashboard: dashboardChecked,
-      share_to_public: publicChecked
+        type === "Link") && { question_help: helpText })
+      // share_to_dashboard: dashboardChecked,
+      // share_to_public: publicChecked
     };
 
     if (editMode) {
@@ -244,9 +289,34 @@ class SiteInformationTable extends Component {
   };
 
   editQuestionHandler = value => {
+    let filteredMetaAttributes = [];
+    let filteredQuestions = this.state.filteredQuestions;
     const selectedTableQuestion = this.state.tableQuestions.find(
       question => question.id === value || question.question_text === value
     );
+
+    if (selectedTableQuestion && selectedTableQuestion.project_id) {
+      const siteMetaAttributes = this.props.projects.find(
+        project => project.id === +selectedTableQuestion.project_id
+      ).site_meta_attributes;
+
+      const selectedMetaAttributes = new Set(
+        selectedTableQuestion.metas.map(({ question_name }) => question_name)
+      );
+      const nonSelectedMetaAttribute = siteMetaAttributes
+        .filter(
+          ({ question_name }) => !selectedMetaAttributes.has(question_name)
+        )
+        .map(attr => ({
+          ...attr,
+          checked: false
+        }));
+
+      filteredMetaAttributes = [
+        ...selectedTableQuestion.metas,
+        ...nonSelectedMetaAttribute
+      ];
+    }
 
     const question = {
       label: selectedTableQuestion.question_text,
@@ -270,6 +340,9 @@ class SiteInformationTable extends Component {
       ...(selectedTableQuestion.question_type === "Link" && {
         selectedProject: selectedTableQuestion.project_id
       }),
+      ...(selectedTableQuestion.question_type === "Link" && {
+        filteredMetaAttributes
+      }),
       ...((selectedTableQuestion.question_type === "Text" ||
         selectedTableQuestion.question_type === "Number" ||
         selectedTableQuestion.question_type === "Date") && {
@@ -281,22 +354,23 @@ class SiteInformationTable extends Component {
         selectedTableQuestion.question_type === "MCQ" ||
         selectedTableQuestion.question_type === "Link") && {
         helpText: selectedTableQuestion.question_help
-      }),
-      ...(selectedTableQuestion.share_to_dashboard && {
-        dashboardChecked: selectedTableQuestion.share_to_dashboard
-      }),
-      ...(selectedTableQuestion.share_to_public && {
-        publicChecked: selectedTableQuestion.share_to_public
       })
+      // ...(selectedTableQuestion.share_to_dashboard && {
+      //   dashboardChecked: selectedTableQuestion.share_to_dashboard
+      // }),
+      // ...(selectedTableQuestion.share_to_public && {
+      //   publicChecked: selectedTableQuestion.share_to_public
+      // })
     };
 
-    const filteredQuestions = selectedTableQuestion.form_id
-      ? findQuestion(
-          this.props.forms.find(
-            form => form.id === +selectedTableQuestion.form_id
-          ).json.children
-        )
-      : this.state.filteredQuestions;
+    if (selectedTableQuestion.form_id) {
+      const selectedForm = this.props.forms.find(
+        form => form.id === +selectedTableQuestion.form_id
+      );
+      if (selectedForm && selectedForm.length > 0) {
+        filteredQuestions = findQuestion(selectedForm.json.children);
+      }
+    }
 
     this.setState({
       showModal: true,
@@ -319,6 +393,7 @@ class SiteInformationTable extends Component {
       () => this.props.siteInfoHandler(this.state.tableQuestions)
     );
   };
+
   render() {
     const {
       props: { forms, terms, projects, jsonQuestions },
@@ -330,8 +405,10 @@ class SiteInformationTable extends Component {
         editMode,
         selectedForm,
         selectedQuestion,
+        selectedProject,
         optInputField,
         filteredQuestions,
+        filteredMetaAttributes,
         tableQuestions,
         showModal
       },
@@ -431,8 +508,7 @@ class SiteInformationTable extends Component {
               {(type === "Text" ||
                 type === "Number" ||
                 type === "Date" ||
-                type === "MCQ" ||
-                type === "Link") && (
+                type === "MCQ") && (
                 <InputElement
                   tag="textarea"
                   required={true}
@@ -452,6 +528,26 @@ class SiteInformationTable extends Component {
                   value={editMode && selectedProject}
                   changeHandler={formChangeHandler}
                 />
+              )}
+
+              {type === "Link" && (
+                <div style={{ position: "relative", height: "250px" }}>
+                  <PerfectScrollbar>
+                    {this.state.filteredMetaAttributes.map(attribute => {
+                      return (
+                        <div className="form-group" key={uuid()}>
+                          <CheckBox
+                            checked={attribute.checked}
+                            label={attribute.question_name}
+                            onChange={e =>
+                              this.handleCheckboxChange(e, attribute)
+                            }
+                          />
+                        </div>
+                      );
+                    })}
+                  </PerfectScrollbar>
+                </div>
               )}
               {(type === "Form" ||
                 type === "FormSubStat" ||
@@ -473,7 +569,7 @@ class SiteInformationTable extends Component {
                   changeHandler={questionChangeHandler}
                 />
               )}
-              <div className="form-group display-inline text-center">
+              {/* <div className="form-group display-inline text-center">
                 <CheckBox
                   checked={this.state.dashboardChecked}
                   label="Share To Dashboard"
@@ -485,7 +581,7 @@ class SiteInformationTable extends Component {
                   label="Share To Public"
                   onChange={e => this.handleCheckboxChange(e, "public")}
                 />
-              </div>
+              </div> */}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
                   Save

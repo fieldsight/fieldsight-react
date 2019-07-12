@@ -3,6 +3,7 @@ import { Accordion, Card, Button } from "react-bootstrap";
 import uuid from "uuid/v4";
 import format from "date-fns/format";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import { DotLoader } from "../common/Loader";
 class Submission extends Component {
   handleRepeatedSubmission = submission => {
     return (
@@ -35,6 +36,7 @@ class Submission extends Component {
   };
 
   handleUnrepeatedSubmission = submission => {
+    const { site } = this.props;
     if (submission.type === "photo") {
       return (
         <div className="submission-list thumb-list" key={uuid()}>
@@ -44,7 +46,14 @@ class Submission extends Component {
                 <h6>{submission.question}</h6>
               </div>
               <figure>
-                <img src={submission.answer} alt="image" />
+                <img
+                  src={
+                    submission.answer
+                      ? submission.answer
+                      : "https://images.freeimages.com/images/premium/previews/4335/43356756-road-construction-site.jpg"
+                  }
+                  alt="image"
+                />
               </figure>
             </li>
           </ul>
@@ -68,7 +77,7 @@ class Submission extends Component {
                       <Map
                         style={{ height: "205px", marginTop: "1rem" }}
                         center={[latitude, longitude]}
-                        zoom={13}
+                        zoom={15}
                       >
                         <TileLayer
                           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -76,8 +85,14 @@ class Submission extends Component {
                         />
                         <Marker position={[latitude, longitude]}>
                           <Popup>
-                            <b>Name: </b>
-                            {name}
+                            <b>Question: </b>
+                            {submission.question}
+                          </Popup>
+                        </Marker>
+                        <Marker position={[site.latitude, site.longitude]}>
+                          <Popup>
+                            <b>Project Name: </b>
+                            {site.project_name}
                           </Popup>
                         </Marker>
                       </Map>
@@ -144,7 +159,7 @@ class Submission extends Component {
   };
 
   render() {
-    const { dateCreated, submittedBy, submissionData } = this.props;
+    const { dateCreated, submittedBy, submissionData, dotLoader } = this.props;
 
     return (
       <div className="group-submission mrt-30">
@@ -154,19 +169,25 @@ class Submission extends Component {
               <div className="card-header main-card-header sticky-top">
                 <div className="head-right">
                   <h5>household survey</h5>
-                  <div className="submitted-header">
-                    <div className="submit-by">
-                      <label>by :</label> {submittedBy}
+
+                  {submittedBy && (
+                    <div className="submitted-header">
+                      <div className="submit-by">
+                        <label>by :</label> {submittedBy}
+                      </div>
+                      <time>
+                        <label>on:</label> {format(dateCreated, "MM-DD-YYYY")}
+                      </time>
                     </div>
-                    <time>
-                      <label>on:</label> {format(dateCreated, "MM-DD-YYYY")}
-                    </time>
-                  </div>
+                  )}
                 </div>
               </div>
-              <div className="card-body submission-card">
-                {submissionData && this.renderSubmission(submissionData)}
-              </div>
+              {!dotLoader && (
+                <div className="card-body submission-card">
+                  {submissionData && this.renderSubmission(submissionData)}
+                </div>
+              )}
+              {dotLoader && <DotLoader />}
             </div>
           </div>
         </div>

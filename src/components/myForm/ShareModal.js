@@ -63,9 +63,8 @@ class ShareModal extends Component {
     axios
       .post(url, { id_string: id, share_id: checkedList })
       .then(res => {
-        
         if (res.status == 201) {
-          this.props.closePopup()
+          this.props.closePopup();
           successToast("Form", "shared");
         }
       })
@@ -78,11 +77,6 @@ class ShareModal extends Component {
 
     return (
       <div className="thumb-list userlist">
-        {/* {this.state.userList.length === 0 && !this.state.dLoader && (
-          <div className="card-header">
-            <h5>No Data Available</h5>
-          </div>
-        )} */}
         {this.state.shareState && (
           <form onSubmit={this.onSubmit}>
             <ul style={{ position: "relative", height: "355px" }}>
@@ -120,7 +114,7 @@ class ShareModal extends Component {
               </PerfectScrollbar>
             </ul>
             <div className="form-group mrt-30 pull-right">
-              <button type="submit"  className="fieldsight-btn">
+              <button type="submit" className="fieldsight-btn">
                 Share
               </button>
             </div>

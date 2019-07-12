@@ -1,4 +1,10 @@
-import { GET_SUBMISSION_DETAIL } from "../actions/types";
+import {
+  GET_SUBMISSION_DETAIL,
+  STOP_SUBMISSION_LOADER,
+  START_SUBMISSION_LOADER,
+  POST_SUBMISSION_DETAIL,
+  SHOW_DOT_LOADER
+} from "../actions/types";
 
 const initialState = {
   submission_data: [],
@@ -11,11 +17,27 @@ const initialState = {
   form_name: "",
   fieldsight_instance: null,
   edit_url: "",
-  download_url: {}
+  download_url: {},
+  loading: false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case SHOW_DOT_LOADER:
+      return {
+        ...state,
+        dotLoader: true
+      };
+    case START_SUBMISSION_LOADER:
+      return {
+        ...state,
+        loading: true
+      };
+    case STOP_SUBMISSION_LOADER:
+      return {
+        ...state,
+        loading: false
+      };
     case GET_SUBMISSION_DETAIL:
       return {
         ...state,
@@ -29,7 +51,13 @@ export default function(state = initialState, action) {
         form_name: action.payload.form_name,
         fieldsight_instance: action.payload.fieldsight_instance,
         edit_url: action.payload.edit_url,
-        download_url: action.payload.download_url
+        download_url: action.payload.download_url,
+        dotLoader: false
+      };
+    case POST_SUBMISSION_DETAIL:
+      return {
+        ...state,
+        submission_history: [...state.submission_history]
       };
     default:
       return state;

@@ -62,6 +62,13 @@ class SiteInformation extends Component {
                   question.mcq_options = options;
                   question.optInputField = optInputField;
                   return question;
+                } else if (question.question_type === "Link") {
+                  if (question.metas) {
+                    const metaAttribute = question.metas[question.project_id];
+                    question.metas = metaAttribute;
+                  }
+
+                  return question;
                 }
                 return question;
               }
@@ -135,16 +142,23 @@ class SiteInformation extends Component {
           const { optInputField, ...rest } = question;
           rest.mcq_options = options;
           return rest;
+        } else if (question.question_type === "Link") {
+          if (question.metas) {
+            const metaAttribute = question.metas;
+            const metaObj = {
+              [question.project_id]: metaAttribute
+            };
+            const { checked, ...rest } = question;
+            rest.metas = metaObj;
+            return rest;
+          }
+
+          return question;
         }
 
         return question;
       });
 
-      console.log("post data", {
-        json_questions: modifiedJsonQuestions,
-        site_basic_info: siteBasicInfo,
-        site_featured_images: siteFeaturedImages
-      });
       await Promise.all(
         [urls[2], progressUrl].map(
           async (url, i) =>
@@ -169,7 +183,6 @@ class SiteInformation extends Component {
         "added"
       );
     } catch (err) {
-      console.log("Err", err);
       this.setState(
         {
           isLoading: false

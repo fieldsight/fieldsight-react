@@ -62,14 +62,14 @@ class RightSidebar extends Component {
                     <i className="la la-download" />
                   </OverlayTrigger>
                 </a>
-                <a
+                {/* <a
                   href="#"
                   data-toggle="tooltip"
                   data-placement="top"
                   title="Hide Null Values"
                 >
                   <i className="la la-sign-out" />
-                </a>
+                </a> */}
               </div>
             </div>
 
