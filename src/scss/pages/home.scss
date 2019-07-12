@@ -54,20 +54,20 @@
           font-style: italic;
           position: relative;
           padding:0 1rem;
-          &::after{
-            position: absolute;
-            right:0;
-            bottom:0;
-            content:"\f2ce";
-            font-family: 'LineAwesome';
-          }
-          &::before{
-            position: absolute;
-            left:0;
-            top:0;
-            content:"\f2cd";
-            font-family: 'LineAwesome';
-          }
+          // &::after{
+          //   position: absolute;
+          //   right:0;
+          //   bottom:0;
+          //   content:"\f2ce";
+          //   font-family: 'LineAwesome';
+          // }
+          // &::before{
+          //   position: absolute;
+          //   left:0;
+          //   top:0;
+          //   content:"\f2cd";
+          //   font-family: 'LineAwesome';
+          // }
         }
         &:first-child{
           padding-top:0;
@@ -100,20 +100,7 @@
       }
       
     }
-    &.submission-list{
-      ul {
-        li{
-          flex-wrap: wrap;
-          .content{
-            width:100%;
-            float: none;
-          }
-          figure{
-            margin-top:0.5rem;
-          }
-        }
-      }
-    }
+    
   }
   .normal-list{
     ul{
@@ -174,6 +161,31 @@
       }
     }
     
+}
+.submission-card{
+  .thumb-list{
+    &.submission-list{
+      ul {
+        li{
+          flex-wrap: wrap;
+          .content{
+            width:100%;
+            float: none;
+          }
+          figure{
+            margin-top:0.5rem;
+            flex: initial;
+            img{
+              max-width: 100%;
+              height: auto;
+              max-height: 200px;
+            }
+          }
+        }
+      }
+    }
+  }
+  
 }
   .right-content{
     background-color:$color-white;
