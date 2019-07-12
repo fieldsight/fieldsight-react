@@ -5,6 +5,7 @@ import SubmissionSiteDetail from "./SubmissionSiteDetail";
 import SubmissionSiteInfo from "./SubmissionSiteInfo";
 import RightSidebar from "./RightSidebar";
 import Submission from "./Submission";
+import Loader from "../common/Loader";
 
 import {
   getSubmissionDetail,
@@ -37,7 +38,9 @@ class SubmissionDetail extends Component {
         status_data,
         fieldsight_instance,
         edit_url,
-        download_url
+        download_url,
+        loading,
+        dotLoader
       },
       postSubmissionDetail
     } = this.props;
@@ -67,15 +70,19 @@ class SubmissionDetail extends Component {
           <div className="col-xl-8 col-lg-8">
             <div className="right-content no-bg">
               <div className="row">
-                <SubmissionSiteDetail site={site} />
+                <SubmissionSiteDetail site={site} dotLoader={dotLoader} />
 
-                <SubmissionSiteInfo siteInformation={site.site_information} />
+                <SubmissionSiteInfo
+                  siteInformation={site.site_information}
+                  dotLoader={dotLoader}
+                />
               </div>
 
               <Submission
                 dateCreated={date_created}
                 submittedBy={submitted_by}
                 submissionData={submission_data}
+                dotLoader={dotLoader}
               />
             </div>
           </div>
@@ -91,6 +98,7 @@ class SubmissionDetail extends Component {
             />
           </div>
         </div>
+        {loading && <Loader />}
       </Fragment>
     );
   }

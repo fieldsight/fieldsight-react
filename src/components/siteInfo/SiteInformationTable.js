@@ -1,6 +1,4 @@
 import React, { Component, Fragment } from "react";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
 import uuid from "uuid/v4";
 import Table from "../common/Table";
 import Modal from "../common/Modal";
@@ -10,8 +8,6 @@ import SelectElement from "../common/SelectElement";
 import CheckBox from "../common/CheckBox";
 import findQuestion from "../../utils/findQuestion";
 import isEmpty from "../../utils/isEmpty";
-
-const animatedComponents = makeAnimated();
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import InputElement from "../common/InputElement";
-// import { connect } from 'react-redux';
-// import {postSubmissionDetail} from '../../actions/submissionDetailActions'
+import RadioElement from "../common/RadioElement";
 class StatusTab extends Component {
   state = {
     comment: "",
@@ -50,17 +49,6 @@ class StatusTab extends Component {
     formData.append("old_status", oldStatus);
     formData.append("message", comment);
 
-    // const data = {
-    //   // method: "POST",
-    //   body: formData
-    //   // headers: {
-    //   //   "Content-Type": "multipart/form-data",
-    //   //   Authorization: "91a844e62e86b6e336b8fb440340cbeaabf601fe"
-    //   // }
-    // };
-    for (var key of formData.entries()) {
-      console.log(key[0] + ", " + key[1]);
-    }
     postSubmissionDetail(formData);
   };
 
@@ -102,17 +90,8 @@ class StatusTab extends Component {
         </div>
         <div className="status">
           <form className="edit-form" onSubmit={submitHandler}>
-            {/* <div className="form-group">
-              <label>comment</label>
-              <textarea
-                className="form-control"
-                placeholder="Please put your comment here."
-              />
-            </div> */}
-
             <InputElement
               tag="textarea"
-              required={true}
               label="Comment"
               htmlFor="comment"
               name="comment"
@@ -123,7 +102,6 @@ class StatusTab extends Component {
             <div className="form-group">
               <label>attach file</label>
               <div className="upload-form">
-                {/* <input type="file" name="userprofile_picture" id="filePhoto" /> */}
                 <div className="fieldsight-btn">
                   <label htmlFor="upload-btn">
                     upload <i className="la la-cloud-upload" />
@@ -139,54 +117,31 @@ class StatusTab extends Component {
             </div>
             <div className="form-group flexrow">
               <div className="custom-checkbox display-inline">
-                <div className="radiobox approved">
-                  {/* <label> */} {/* <input type="radio" name="radioYes" /> */}
-                  <InputElement
-                    tag="input"
-                    type="radio"
-                    label="Approved"
-                    htmlFor="Approved"
-                    name="status"
-                    value="3"
-                    checked={status === "3"}
-                    changeHandler={onChangeHandler}
-                  />
-                  {/* <i className="helper" /> */}
-                  Approve
-                  {/* </label> */}
-                </div>
-                <div className="radiobox flagged">
-                  {/* <label> */}
-                  <InputElement
-                    tag="input"
-                    type="radio"
-                    label="Flag"
-                    htmlFor="Flag"
-                    name="status"
-                    value="2"
-                    checked={status === "2"}
-                    changeHandler={onChangeHandler}
-                  />
-                  {/* <i className="helper" /> */}
-                  Flag
-                  {/* </label>  */}
-                </div>
-                <div className="radiobox rejected">
-                  {/* <label> */}
-                  <InputElement
-                    tag="input"
-                    type="radio"
-                    label="Reject"
-                    htmlFor="Reject"
-                    name="status"
-                    value="1"
-                    checked={status === "1"}
-                    changeHandler={onChangeHandler}
-                  />
-                  <i className="helper" />
-                  Reject
-                  {/* </label> */}
-                </div>
+                <RadioElement
+                  label="Approve"
+                  name="status"
+                  value="3"
+                  className="approved"
+                  checked={status === "3"}
+                  changeHandler={onChangeHandler}
+                />
+                <RadioElement
+                  label="Flag"
+                  name="status"
+                  value="2"
+                  className="flagged"
+                  checked={status === "2"}
+                  changeHandler={onChangeHandler}
+                />
+
+                <RadioElement
+                  label="Reject"
+                  name="status"
+                  value="1"
+                  className="rejected"
+                  checked={status === "1"}
+                  changeHandler={onChangeHandler}
+                />
               </div>
             </div>
             <div className="form-group pull-right">
@@ -200,4 +155,5 @@ class StatusTab extends Component {
     );
   }
 }
+
 export default StatusTab;
