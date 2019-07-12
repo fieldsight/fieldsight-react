@@ -194,6 +194,7 @@ export default class TermAndLabel extends Component {
                       label="Donor"
                       name="donor"
                       value={donor}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -206,6 +207,7 @@ export default class TermAndLabel extends Component {
                       label="Site"
                       name="site"
                       value={site}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -217,6 +219,7 @@ export default class TermAndLabel extends Component {
                       label="Site Supervisor"
                       name="site_supervisor"
                       value={site_supervisor}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -228,6 +231,7 @@ export default class TermAndLabel extends Component {
                       label="Site Reviewer"
                       name="site_reviewer"
                       value={site_reviewer}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -239,6 +243,7 @@ export default class TermAndLabel extends Component {
                       label="Region"
                       name="region"
                       value={region}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -251,6 +256,7 @@ export default class TermAndLabel extends Component {
                         label="Region Supervisor"
                         name="region_supervisor"
                         value={region_supervisor}
+                        required={true}
                         changeHandler={onChangeHandler}
                       />
                     </div>
@@ -264,6 +270,7 @@ export default class TermAndLabel extends Component {
                         label="Region Reviewer"
                         name="region_reviewer"
                         value={region_reviewer}
+                        required={true}
                         changeHandler={onChangeHandler}
                       />
                     </div>
