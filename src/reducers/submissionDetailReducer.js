@@ -3,7 +3,8 @@ import {
   STOP_SUBMISSION_LOADER,
   START_SUBMISSION_LOADER,
   POST_SUBMISSION_DETAIL,
-  SHOW_DOT_LOADER
+  SHOW_DOT_LOADER,
+  UPDATE_SUBMISSION_DETAIL
 } from "../actions/types";
 
 const initialState = {
@@ -16,7 +17,7 @@ const initialState = {
   form_type: {},
   form_name: "",
   fieldsight_instance: null,
-  edit_url: "",
+  edit_url: null,
   download_url: {},
   loading: false
 };
@@ -57,8 +58,22 @@ export default function(state = initialState, action) {
     case POST_SUBMISSION_DETAIL:
       return {
         ...state,
-        submission_history: [...state.submission_history]
+        submission_history: [action.payload, ...state.submission_history],
+        status_data: {
+          ...state.status_data,
+          status_display: action.payload.get_new_status_display
+        }
       };
+
+    case UPDATE_SUBMISSION_DETAIL: {
+      return {
+        ...state,
+        submission_data: [...action.payload.submission_data],
+        submitted_by: action.payload.submitted_by,
+        edit_url: action.payload.edit_url,
+        download_url: action.payload.download_url
+      };
+    }
     default:
       return state;
   }
