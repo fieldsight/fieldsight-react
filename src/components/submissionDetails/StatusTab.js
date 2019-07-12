@@ -1,12 +1,25 @@
 import React, { Component } from "react";
 import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
+
+const INITIAL_STATE = {
+  file: "",
+  comment: "",
+  status: "3"
+};
 class StatusTab extends Component {
-  state = {
-    comment: "",
-    file: "",
-    status: "3"
-  };
+  state = INITIAL_STATE;
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.statusData.status_display !==
+      this.props.statusData.status_display
+    ) {
+      this.setState({
+        ...INITIAL_STATE
+      });
+    }
+  }
 
   checkStatus = statusData => {
     if (statusData.status_display === "Pending") {

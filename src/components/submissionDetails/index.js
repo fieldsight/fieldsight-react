@@ -42,7 +42,8 @@ class SubmissionDetail extends Component {
         loading,
         dotLoader
       },
-      postSubmissionDetail
+      postSubmissionDetail,
+      getSubmissionDetail
     } = this.props;
     return (
       <Fragment>
@@ -94,6 +95,7 @@ class SubmissionDetail extends Component {
               submissionHistory={submission_history}
               fieldSightInstance={fieldsight_instance}
               postSubmissionDetail={postSubmissionDetail}
+              getSubmissionDetail={getSubmissionDetail}
               editUrl={edit_url}
               downloadUrl={download_url}
             />
