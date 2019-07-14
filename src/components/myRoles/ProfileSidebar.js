@@ -48,7 +48,7 @@ class ProfileSidebar extends Component {
           </div>
         </div>
         <PerfectScrollbar>
-          <div className="invite">
+          <div className="invite" >
             <h4>Invitation</h4>
             <div className="normal-list">
               <ul>

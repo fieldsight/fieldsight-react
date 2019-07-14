@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from 'react-bootstrap/Table'
 
 class YourTeamTable extends Component {
@@ -6,6 +7,11 @@ class YourTeamTable extends Component {
     render() {
         console.log(this.props.roles)
         return (
+            <div
+            className="table-wrapper"
+            style={{ position: "relative", height: "650px" }}
+          >
+            <PerfectScrollbar>
             <Table responsive="xl" className="table  table-bordered  dataTable ">
                 <thead>
                     <tr>
@@ -28,6 +34,8 @@ class YourTeamTable extends Component {
 
                 </tbody>
             </Table>
+        </PerfectScrollbar>
+        </div>
         );
 
     }
