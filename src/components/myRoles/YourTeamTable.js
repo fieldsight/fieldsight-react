@@ -4,107 +4,27 @@ import Table from 'react-bootstrap/Table'
 class YourTeamTable extends Component {
 
     render() {
+        console.log(this.props.roles)
         return (
             <Table responsive="xl" className="table  table-bordered  dataTable ">
                 <thead>
                     <tr>
-                        <th >S.N</th>
-                        <th >ID</th>
-                        <th >Regions</th>
-                        <th >Role</th>
-                        <th >Number of sites</th>
-                        <th >Action</th>
+                        <th >post</th>
+                        <th >name</th>
+                        <th >address</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>gor</td>
-                        <td><a href={`#/`} className="pending">Gorkha</a></td>
-                        <td><a href={`#/`}>supervisor/Reviewer</a></td>
-                        <td>200</td>
-                        <td>
-                            <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-edit"> </i> </a>
-                            <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                        </td>
+                {this.props.roles.map((item, i) => (
+                    <tr key={i}>
+                        <td>{item.post}</td>
+                        <td>{item.name}</td>
+                        <td>{item.address}</td>
+                        
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>gor</td>
-                        <td><a href={`#/`} className="pending">Gorkha</a></td>
-                        <td><a href={`#/`}>supervisor/Reviewer</a></td>
-                        <td>200</td>
-                        <td>
-                            <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-edit"> </i> </a>
-                            <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>gor</td>
-                        <td><a href={`#/`} className="pending">Gorkha</a></td>
-                        <td><a href={`#/`}>supervisor/Reviewer</a></td>
-                        <td>200</td>
-                        <td>
-                            <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-edit"> </i> </a>
-                            <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>gor</td>
-                        <td><a href={`#/`} className="pending">Gorkha</a></td>
-                        <td><a href={`#/`}>supervisor/Reviewer</a></td>
-                        <td>200</td>
-                        <td>
-                            <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-edit"> </i> </a>
-                            <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>gor</td>
-                        <td><a href={`#/`} className="pending">Gorkha</a></td>
-                        <td><a href={`#/`}>supervisor/Reviewer</a></td>
-                        <td>200</td>
-                        <td>
-                            <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-edit"> </i> </a>
-                            <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>gor</td>
-                        <td><a href={`#/`} className="pending">Gorkha</a></td>
-                        <td><a href={`#/`}>supervisor/Reviewer</a></td>
-                        <td>200</td>
-                        <td>
-                            <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-edit"> </i> </a>
-                            <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>gor</td>
-                        <td><a href={`#/`} className="pending">Gorkha</a></td>
-                        <td><a href={`#/`}>supervisor/Reviewer</a></td>
-                        <td>200</td>
-                        <td>
-                            <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-edit"> </i> </a>
-                            <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>gor</td>
-                        <td><a href={`#/`} className="pending">Gorkha</a></td>
-                        <td><a href={`#/`}>supervisor/Reviewer</a></td>
-                        <td>200</td>
-                        <td>
-                            <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-edit"> </i> </a>
-                            <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                        </td>
-                    </tr>
+                    ))}
+                  
 
                 </tbody>
             </Table>

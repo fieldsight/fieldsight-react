@@ -1,5 +1,6 @@
 import React , {Component} from 'react';
 import { Dropdown } from 'react-bootstrap';
+import axios from "axios";
 import CustomMap from './CustomMap';
 import ProfileSidebar from './ProfileSidebar';
 import YourTeamTable from './YourTeamTable';
@@ -11,12 +12,46 @@ const initialState = {
     roleTab:false, activityTab:false
 }
 
+const url ="fv3/api/myroles/"
 class MyRoles extends Component{
+    _isMounted = false;
+
     state ={
         roleTab:true, 
         activityTab:false,
-        height:''
+        height:'',
+        profile:[],
+        invitation:[],
+        roles:[]
     }
+
+
+    componentDidMount() {
+        this._isMounted = true;
+        axios
+          .get(`${url}`)
+    
+          .then(res => {
+              
+            if (this._isMounted) {
+              if (res.status === 200) {
+                console.log(res.data)
+                this.setState({
+                  profile: res.data.profile,
+                  invitation:res.data.invitations,
+                  roles:res.data.roles,
+                  dLoader: false
+                });
+              }
+            }
+          })
+          .catch(err => {
+            // this.setState({
+            //   dLoader: false
+            // });
+          });
+      }
+    
     
     openTab = (e,type) => {
         this.setState((prevState) => ({
@@ -52,7 +87,12 @@ class MyRoles extends Component{
                                         </div>
                                     </div>
                                     <div className="card-body">
-                                        <ProfileSidebar />
+                                        <ProfileSidebar 
+                                         
+                                         profile={this.state.profile}
+                                         invitation={this.state.invitation}
+
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +114,11 @@ class MyRoles extends Component{
                                         
                                         <div className="tab-content mrt-30" >
                                             <div className="">
-                                                {this.state.roleTab && <YourTeamTable />}
+                                                {this.state.roleTab && <YourTeamTable 
+                                                
+                                                roles={this.state.roles}
+                                                
+                                                />}
                                                 
                                             </div>
                                             {this.state.activityTab && 
@@ -186,5 +230,8 @@ class MyRoles extends Component{
             </React.Fragment>
         )
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
 }
 export default MyRoles
