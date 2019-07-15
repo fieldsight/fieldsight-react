@@ -8,8 +8,14 @@ import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 import Iframe from "react-iframe";
 
-const project_id = 137;
-const base_url = "https://fieldsight.naxa.com.np";
+let project_id = window.project_id ? window.project_id : 137;
+
+let base_url = window.base_url
+  ? window.base_url
+  : "https://fieldsight.naxa.com.np";
+
+// const project_id = 137;
+// const base_url = "https://fieldsight.naxa.com.np";
 
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
@@ -36,39 +42,27 @@ class ProjectSiteTable extends Component {
       .get(`${paginateUrl}`)
 
       .then(res => {
-        
         if (this._isMounted) {
           if (res.status === 200) {
-
-            if(res.data.results.query === null){
-
-              
-
+            if (res.data.results.query === null) {
               this.setState({
                 siteList: res.data.results.data,
                 dLoader: false,
                 totalCount: res.data.count,
-                textVal:null,
+                textVal: null,
                 totalPage: Math.ceil(res.data.count / 200)
               });
-            }else{
-
-              if(res.data.results.query==this.state.textVal){
-                
+            } else {
+              if (res.data.results.query == this.state.textVal) {
                 this.setState({
                   siteList: res.data.results.data,
                   dLoader: false,
                   totalCount: res.data.count,
-                  textVal:null,
+                  textVal: null,
                   totalPage: Math.ceil(res.data.count / 200)
                 });
-
               }
-
-
             }
-          
-            
           }
         }
       })
@@ -76,7 +70,6 @@ class ProjectSiteTable extends Component {
   };
 
   paginationHandler = (page_num, searchUrl) => {
-   
     const toNum = page_num * 200;
     const fromNum = (page_num - 1) * 200 + 1;
     let paginateUrl;
@@ -137,10 +130,9 @@ class ProjectSiteTable extends Component {
     }
   };
 
-  
   searchHandler = e => {
-    
-    const searchValue = event.target.value;
+    const searchValue = e.target.value;
+    console.log(searchValue);
     let searchUrl;
     if (searchValue) {
       searchUrl =
@@ -148,15 +140,15 @@ class ProjectSiteTable extends Component {
         project_id +
         "&q=" +
         searchValue;
-     
+
       this.setState({
         textVal: searchValue
       });
-      this.paginationHandler(1,searchUrl)
+      this.paginationHandler(1, searchUrl);
     } else {
       this.setState({
         pageNum: 1,
-        textVal:null
+        textVal: null
       });
       this.paginationHandler(1, null);
     }
@@ -171,12 +163,17 @@ class ProjectSiteTable extends Component {
         <div className="card-header main-card-header sub-card-header">
           <h5>{!isEmpty(terms) ? `${terms.site}` : "Sites"}</h5>
           <div className="dash-btn">
-            <form className="floating-form">
+            <form
+              className="floating-form"
+              onSubmit={e => {
+                e.preventDefault();
+              }}
+            >
               <div className="form-group mr-0">
                 <input
                   type="search"
                   className="form-control"
-                  onChange={e => this.searchHandler(e)}
+                  onChange={this.searchHandler}
                   required
                 />
                 <label htmlFor="input">Search</label>
