@@ -11,17 +11,17 @@ class FormShare extends Component {
     shareOption: false
   };
 
-  shareToggle = e => {
-    this.setState({
-      shareOption: !this.state.shareOption
-    });
-  };
+  // shareToggle = e => {
+  //   this.setState({
+  //     shareOption: !this.state.shareOption
+  //   });
+  // };
 
   render() {
     const item = this.props.item;
     return (
       <tr key={item.id_string}>
-        <td>{item.title}</td>
+        <td style={{ width: "50%" }}>{item.title}</td>
         <td>
           <i className="fa fa-clock-o" />
           <span>{item.date_created}</span>
@@ -125,7 +125,7 @@ class FormShare extends Component {
               overlay={<Tooltip id="tooltip-disabled">Share</Tooltip>}
             >
               <a
-                onClick={e => this.shareToggle(e)}
+                onClick={e => this.props.shareToggle(e,item.id_string)}
                 className="td-share-btn td-btn"
               >
                 {" "}
@@ -133,7 +133,7 @@ class FormShare extends Component {
               </a>
             </OverlayTrigger>
 
-            {this.state.shareOption && (
+            {item.share && (
               <ul className="share-drop">
                 <h5>Share to</h5>
                 <li>

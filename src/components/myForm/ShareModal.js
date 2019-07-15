@@ -41,7 +41,7 @@ class ShareModal extends Component {
   }
 
   checkboxHandler = (e, checkboxId) => {
-    const newUserList = [...this.state.userList];
+    const newUserList = this.state.userList.map(user => ({...user}));
     const selectedUser = newUserList.find(user => user.id === +checkboxId);
 
     selectedUser.checkbox = !selectedUser.checkbox;
