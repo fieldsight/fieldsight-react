@@ -1,13 +1,10 @@
 import React , {Component} from 'react';
-import { Dropdown } from 'react-bootstrap';
 import axios from "axios";
-import CustomMap from './CustomMap';
+import Activity from './Activity';
 import ProfileSidebar from './ProfileSidebar';
 import YourTeamTable from './YourTeamTable';
 
-const selectPeriod = [
-    "Last 7 days","Last month", "Last Year"
-]
+
 const initialState = {
     roleTab:false, activityTab:false
 }
@@ -122,101 +119,7 @@ class MyRoles extends Component{
                                                 
                                             </div>
                                             {this.state.activityTab && 
-                                                <div className="" >
-                                                    <div className="dash-btn append-btn">
-                                                        <Dropdown>
-                                                            <Dropdown.Toggle variant="" id="dropdown-Data" className="fieldsight-btn">
-                                                            <i className="fa fa-paste"></i>
-                                                            <span>Select period</span>
-                                                            </Dropdown.Toggle>
-
-                                                            <Dropdown.Menu className="dropdown-menu-right">
-                                                                {selectPeriod.map((item, i) => <Dropdown.Item href={`#/action-${i}`}>{item}</Dropdown.Item>)}
-                                                            </Dropdown.Menu>
-                                                        </Dropdown>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-xl-4 col-md-6">
-                                                            <div className="card activity-submission">
-                                                                <div className="card-header main-card-header sub-card-header">
-                                                                    <h5>Latest Submission</h5>
-                                                                </div>
-                                                                <div className="card-body">
-                                                                    <div className="thumb-list mr-0">
-                                                                        <ul>
-                                                                            <li>
-                                                                                <figure>
-                                                                                    <img src="/img/pf.jpg" alt="pf" />
-                                                                                </figure>
-                                                                                <div className="content">
-                                                                                    <h6>This is a test form for testing form.</h6>
-                                                                                    <time><i className="la la-clock"></i> March 24, 2019, 2:01 p.m.</time>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li>
-                                                                                <figure>
-                                                                                    <img src="/img/pf.jpg" alt="pf" />
-                                                                                </figure>
-                                                                                <div className="content">
-                                                                                    <h6>This is a test form for testing form.</h6>
-                                                                                    <time><i className="la la-clock"></i> March 24, 2019, 2:01 p.m.</time>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li>
-                                                                                <figure>
-                                                                                    <img src="/img/pf.jpg" alt="pf" />
-                                                                                </figure>
-                                                                                <div className="content">
-                                                                                    <h6>Santosh Khatri </h6>
-                                                                                    <time><i className="la la-clock"></i> March 24, 2019, 2:01 p.m.</time>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li>
-                                                                                <figure>
-                                                                                    <img src="/img/pf.jpg" alt="pf" />
-                                                                                </figure>
-                                                                                <div className="content">
-                                                                                    <h6>This is a test form for testing form.</h6>
-                                                                                    <time><i className="la la-clock"></i> March 24, 2019, 2:01 p.m.</time>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li>
-                                                                                <figure>
-                                                                                    <img src="/img/pf.jpg" alt="pf" />
-                                                                                </figure>
-                                                                                <div className="content">
-                                                                                    <h6>This is a test form for testing form.</h6>
-                                                                                    <time><i className="la la-clock"></i> March 24, 2019, 2:01 p.m.</time>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li>
-                                                                                <figure>
-                                                                                    <img src="/img/pf.jpg" alt="pf" />
-                                                                                </figure>
-                                                                                <div className="content">
-                                                                                    <h6>This is a test form for testing form.</h6>
-                                                                                    <time><i className="la la-clock"></i> March 24, 2019, 2:01 p.m.</time>
-                                                                                </div>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-xl-8 col-md-6">
-                                                            <div className="card">
-                                                                <div className="card-header main-card-header sub-card-header">
-                                                                    <h5>Map</h5>
-                                                                </div>
-                                                                <div className="card-body">
-                                                                    <div id="map" style={{height:'415px'}}>
-                                                                        <CustomMap />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                               <Activity />
                                             }
                                                 
                                             

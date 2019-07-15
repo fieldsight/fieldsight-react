@@ -1,7 +1,62 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import axios from "axios";
 class ProfileSidebar extends Component {
+
+
+rejectHandler=(id,user)=>{
+
+ const reject_url="fv3/api/decline-invite/"+id+"/"
+
+  axios
+  .post(`${reject_url}`)
+
+  .then(res => {
+         
+      if (res.status === 200) {
+        console.log(res.data)
+        // this.setState({
+         
+        // });
+      }
+    
+  })
+  .catch(err => {
+   
+  });
+
+  console.log(id)
+  console.log(user)
+
+}
+
+acceptHandler=(id,user)=>{
+
+  const accept_url="fv3/api/accept-invite/"+id+"/"+user+"/"
+
+  axios
+  .post(`${accept_url}`)
+
+  .then(res => {
+         
+      if (res.status === 200) {
+        console.log(res.data)
+        // this.setState({
+         
+        // });
+      }
+    
+  })
+  .catch(err => {
+   
+  });
+
+  console.log(id)
+  console.log(user)
+
+}
+
   render() {
     return (
       <React.Fragment>
@@ -59,11 +114,12 @@ class ProfileSidebar extends Component {
                     invited to join the FieldSight.
                   </p>
                   <div className="invite-btn">
-                    <a href="#" className="accept-btn">
+
+                    <a  className="accept-btn" onClick={(e)=>this.acceptHandler(item.id,item.current_user)}>
                       <i className="la la-check" />Accept
                     </a>
-                    <a href="#" className="reject-btn">
-                      <i className="la la-close" />Accept
+                    <a  className="reject-btn" onClick={(e)=>this.rejectHandler(item.id,item.current_user)}>
+                      <i className="la la-close" />Reject
                     </a>
                   </div>
                 </li>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-//import { MDBDataTable } from 'mdbreact';
 import {Map, TileLayer, LayersControl, Marker, Popup, FeatureGroup, Circle} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 
 const position = [27.7, 85.4];
+const icon="https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
 
 
 class CustomMap extends Component {
@@ -29,7 +29,7 @@ class CustomMap extends Component {
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                   </LayersControl.BaseLayer>
-                  <LayersControl.Overlay name="Marker with popup">
+                  {/* <LayersControl.Overlay name="Marker with popup"> */}
                     <Marker position={[27.7, 85.4]}>
                       <Popup>
                         <span>
@@ -37,15 +37,14 @@ class CustomMap extends Component {
                         </span>
                       </Popup>
                     </Marker>
-                  </LayersControl.Overlay>
-                  <LayersControl.Overlay name="Feature group">
-                    <FeatureGroup color="purple">
+                    <Marker position={[27.8, 85.4]}>
                       <Popup>
-                        <span>Popup in FeatureGroup</span>
+                        <span>
+                          A pretty CSS3 popup. <br /> Easily customizable.
+                        </span>
                       </Popup>
-                      <Circle center={[27.7, 85.4]} radius={200} />
-                    </FeatureGroup>
-                  </LayersControl.Overlay>
+                    </Marker>
+                
                 </LayersControl>
             </Map>
     );

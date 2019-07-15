@@ -5,7 +5,7 @@ import Table from 'react-bootstrap/Table'
 class YourTeamTable extends Component {
 
     render() {
-        console.log(this.props.roles)
+        
         return (
             <div
             className="table-wrapper"
