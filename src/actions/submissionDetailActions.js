@@ -3,24 +3,57 @@ import {
   GET_SUBMISSION_DETAIL,
   POST_SUBMISSION_DETAIL,
   START_SUBMISSION_LOADER,
+  UPDATE_SUBMISSION_DETAIL,
   STOP_SUBMISSION_LOADER,
   SHOW_DOT_LOADER
 } from "./types";
 import { successToast, errorToast } from "../utils/toastHandler";
 
 export const getSubmissionDetail = id => dispatch => {
-  dispatch({
-    type: SHOW_DOT_LOADER
-  });
-  axios
-    .get(`fv3/api/submission/${id}/`)
-    .then(res => {
-      dispatch({
-        type: GET_SUBMISSION_DETAIL,
-        payload: res.data
+  const splitedData = id.split("/");
+  console.log("splitedData", splitedData);
+  if (splitedData.length > 1) {
+    console.log("if block");
+    dispatch({
+      type: START_SUBMISSION_LOADER
+    });
+    axios
+      .get(`${id}`)
+      .then(res => {
+        dispatch({
+          type: STOP_SUBMISSION_LOADER
+        });
+        dispatch({
+          type: UPDATE_SUBMISSION_DETAIL,
+          payload: res.data
+        });
+      })
+      .catch(err => {
+        console.log("err", err);
+        dispatch({
+          type: STOP_SUBMISSION_LOADER
+        });
       });
-    })
-    .catch(err => console.log("err", err));
+  } else {
+    console.log("else block");
+    dispatch({
+      type: SHOW_DOT_LOADER
+    });
+    axios
+      .get(`fv3/api/submission/${id}/`)
+      .then(res => {
+        dispatch({
+          type: GET_SUBMISSION_DETAIL,
+          payload: res.data
+        });
+      })
+      .catch(err => {
+        console.log("err", err);
+        dispatch({
+          type: STOP_SUBMISSION_LOADER
+        });
+      });
+  }
 };
 
 export const postSubmissionDetail = data => dispatch => {
@@ -32,7 +65,6 @@ export const postSubmissionDetail = data => dispatch => {
       headers: { "Content-Type": "multipart/form-data" }
     })
     .then(res => {
-      console.log("res", res);
       dispatch({
         type: STOP_SUBMISSION_LOADER
       });
@@ -44,6 +76,9 @@ export const postSubmissionDetail = data => dispatch => {
     })
     .catch(err => {
       console.log("err", err);
+      dispatch({
+        type: STOP_SUBMISSION_LOADER
+      });
       errorToast();
     });
 };

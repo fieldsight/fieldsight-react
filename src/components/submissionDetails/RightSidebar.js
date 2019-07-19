@@ -18,7 +18,8 @@ class RightSidebar extends Component {
         fieldSightInstance,
         editUrl,
         downloadUrl,
-        postSubmissionDetail
+        postSubmissionDetail,
+        getSubmissionDetail
       },
       state: { showStatus }
     } = this;
@@ -46,22 +47,28 @@ class RightSidebar extends Component {
                 </li>
               </ul>
               <div className="head-icon">
-                <a href={`${base_url}${editUrl}`} target="_blank">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>Edit Submission</Tooltip>}
-                  >
-                    <i className="la la-edit" />
-                  </OverlayTrigger>
-                </a>
-                <a href={`${base_url}${downloadUrl.main}`} target="_blank">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>Download as PDF</Tooltip>}
-                  >
-                    <i className="la la-download" />
-                  </OverlayTrigger>
-                </a>
+                {editUrl && (
+                  <a href={`${base_url}${editUrl}`} target="_blank">
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Edit Submission</Tooltip>}
+                    >
+                      <i className="la la-edit" />
+                    </OverlayTrigger>
+                  </a>
+                )}
+
+                {Object.keys(downloadUrl).length > 0 && (
+                  <a href={`${base_url}${downloadUrl.main}`} target="_blank">
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Download as PDF</Tooltip>}
+                    >
+                      <i className="la la-download" />
+                    </OverlayTrigger>
+                  </a>
+                )}
+
                 {/* <a
                   href="#"
                   data-toggle="tooltip"
@@ -82,7 +89,10 @@ class RightSidebar extends Component {
                 />
               )}
               {!showStatus && (
-                <HistoryTab submissionHistory={submissionHistory} />
+                <HistoryTab
+                  submissionHistory={submissionHistory}
+                  getSubmissionDetail={getSubmissionDetail}
+                />
               )}
             </div>
           </div>
