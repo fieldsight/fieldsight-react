@@ -315,4 +315,109 @@
             }
         } 
     }
+    .profile-content{
+        figure{
+          max-width: 150px;
+          @include radius50;
+          display: inline-block;
+          margin:0;
+          img{
+            height:120px;
+            width:120px;
+            @include radius50;
+          }
+        }
+        .user-info{
+          width:calc(100% - 135px);
+          float:right;
+          position: relative;
+          h4{
+            font-size:0.875rem;
+            margin:0;
+            text-transform: capitalize;
+          }
+          span{
+            font-size:0.775rem;
+            margin-top:0.5rem;
+            display: inline-block;
+          }
+          .fieldsight-btn{
+              position: absolute;
+              right:0;
+              top:0;
+          }
+          .profile-social-icon{
+            a{
+              width:34px;
+              height: 34px;
+              line-height: 34px;
+              text-align: center;
+              @include boxshadow;
+              @include radius50;
+              font-size:1.2rem;
+              display: inline-block;
+              margin-right: 0.6125rem;
+              &:last-child{
+                margin-right: 0;
+              }
+            }
+          }
+        }
+        .profile-address{
+          ul{
+            li {
+              display: -webkit-box;
+              display: -moz-box;
+              display: -ms-flexbox;
+              display: -webkit-flex;
+              display: flex;
+              justify-content: flex-start;
+              flex-wrap: wrap;
+              align-items: center;
+              padding: 0.25rem 0;
+              i {
+                width: 1.5rem;
+                height: 1.5rem;
+                line-height: 1.5rem;
+                text-align: center;
+                border: 1px solid $color-bg;
+                @include radius4;
+                margin-right: 0.6125rem;
+            }
+          }
+          }
+        }
+      }
+      .contentLoading{
+        .wrapper-cell {
+            margin-bottom: 0.25rem;
+            .image {
+                height: 60px;
+                width: 60px;
+                display: inline-block;
+                background: $color-bg;
+              }
+              
+              .text {
+                width:calc(100% - 80px);
+                float: right;
+                .text-line {
+                 height: 8px;
+                 margin: 7px 0;
+                 @extend .animated-background;
+               }
+         
+              }
+         }
+      }
+     .animated-background {
+         animation-duration: 8s;
+         animation-fill-mode: forwards;
+         animation-iteration-count: infinite;
+         animation-name: placeHolderShimmer;
+         animation-timing-function: linear;
+         background: $color-bg;
+         background: linear-gradient(to right, #F6F6F6 8%, $color-bg 18%, #F6F6F6 33%);
+         position: relative;
+     }
 }

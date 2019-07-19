@@ -353,6 +353,15 @@
               right: 0;
               top: 0;
             }
+            i{
+              position: relative;
+              z-index: 99;
+              margin-left: 0.5rem;
+              color:$color-blue;
+              &:hover{
+                color:$color-green;
+              }
+            }
           }
         }
       }
