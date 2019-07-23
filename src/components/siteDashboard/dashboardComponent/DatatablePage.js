@@ -3,43 +3,16 @@ import Table from "react-bootstrap/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import format from "date-fns/format";
 import uuid from "uuid/v4";
-import ContentLoader from "react-content-loader";
-const number = [
-  0,
-  20,
-  40,
-  60,
-  80,
-  100,
-  120,
-  140,
-  160,
-  180,
-  200,
-  220,
-  240,
-  260,
-  280,
-  300
-];
-const TableLoader = ({ className, number }) => (
-  <ContentLoader>
-    {number.map((num, i) => (
-      <>
-        <rect x="0" y={num} rx="0" ry="0" width="150" height="12" />
-        <rect x="160" y={num} rx="0" ry="0" width="150" height="12" />
-        <rect x="320" y={num} rx="0" ry="0" width="150" height="12" />
-        <rect x="480" y={num} rx="0" ry="0" width="150" height="12" />
-      </>
-    ))}
-  </ContentLoader>
-);
+import { ListContentLoader } from "../../common/Loader";
 class DatatablePage extends Component {
   render() {
-    const { siteSubmissions } = this.props;
+    const { siteSubmissions, showContentLoader } = this.props;
+    console.log("siteSubmissions", siteSubmissions);
     return (
       <>
-        {/* {siteSubmissions.results && (
+        {showContentLoader ? (
+          <ListContentLoader number={19} />
+        ) : siteSubmissions.length > 0 ? (
           <PerfectScrollbar>
             <Table
               responsive="xl"
@@ -56,7 +29,7 @@ class DatatablePage extends Component {
               </thead>
 
               <tbody>
-                {siteSubmissions.results.map((submission, i) => (
+                {siteSubmissions.map((submission, i) => (
                   <tr key={uuid()}>
                     <td>{submission.form}</td>
                     <td>{submission.submitted_by}</td>
@@ -74,8 +47,9 @@ class DatatablePage extends Component {
               </tbody>
             </Table>
           </PerfectScrollbar>
-        )} */}
-        {!siteSubmissions.results && <TableLoader number={number} />}
+        ) : (
+          <p> No Data Available </p>
+        )}
       </>
     );
   }

@@ -26,9 +26,14 @@ const initialState = {
   },
   site_progress_chart_data: {},
   siteMetas: [],
-  siteSubmissions: {},
+  siteSubmissions: [],
   siteDocuments: [],
-  siteLogs: []
+  siteLogs: [],
+  siteDashboardLoader: true,
+  siteMetasLoader: true,
+  siteSubmissionsLoader: true,
+  siteDocumentsLoader: true,
+  siteLogsLoader: true
 };
 
 export default function(state = initialState, action) {
@@ -54,32 +59,37 @@ export default function(state = initialState, action) {
             ...action.payload.form_submissions_chart_data.flagged_submissions
           }
         },
-        site_progress_chart_data: { ...action.payload.site_progress_chart_data }
+        site_progress_chart_data: {
+          ...action.payload.site_progress_chart_data
+        },
+        siteDashboardLoader: false
       };
-
+    // site meta/ information
     case GET_SITE_METAS:
       return {
         ...state,
-        siteMetas: [...action.payload]
+        siteMetas: [...action.payload],
+        siteMetasLoader: false
       };
 
     case GET_SITE_SUBMISSIONS:
       return {
         ...state,
-        siteSubmissions: {
-          ...action.payload
-        }
+        siteSubmissions: [...action.payload.results],
+        siteSubmissionsLoader: false
       };
     case GET_SITE_DOCUMENTS:
       return {
         ...state,
-        siteDocuments: [...action.payload]
+        siteDocuments: [...action.payload],
+        siteDocumentsLoader: false
       };
 
     case GET_SITE_LOGS:
       return {
         ...state,
-        siteLogs: [...action.payload]
+        siteLogs: [...action.payload],
+        siteLogsLoader: false
       };
 
     default:

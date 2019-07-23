@@ -1,157 +1,33 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
-import axios from "axios";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../myForm/Loader";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
-import Iframe from "react-iframe";
 
-let project_id = window.project_id ? window.project_id : 137;
+import withPagination from "../../hoc/WithPagination";
 
 let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
 
-// const project_id = 137;
-// const base_url = "https://fieldsight.naxa.com.np";
-
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
-  _isMounted = false;
-  state = {
-    siteList: [],
-    totalCount: 0,
-    toData: 200,
-    fromData: 1,
-    pageNum: 1,
-    dLoader: true,
-    per_page: 200,
-    totalPage: null,
-    textVal: null
-  };
 
   componentDidMount() {
-    this.paginationHandler(1, null);
+    this.props.paginationHandler(1, null, "projectSiteList");
   }
 
-  requestHandler = paginateUrl => {
-    this._isMounted = true;
-    axios
-      .get(`${paginateUrl}`)
-
-      .then(res => {
-        if (this._isMounted) {
-          if (res.status === 200) {
-            if (res.data.results.query === null) {
-              this.setState({
-                siteList: res.data.results.data,
-                dLoader: false,
-                totalCount: res.data.count,
-                textVal: null,
-                totalPage: Math.ceil(res.data.count / 200)
-              });
-            } else {
-              if (res.data.results.query == this.state.textVal) {
-                this.setState({
-                  siteList: res.data.results.data,
-                  dLoader: false,
-                  totalCount: res.data.count,
-                  textVal: null,
-                  totalPage: Math.ceil(res.data.count / 200)
-                });
-              }
-            }
-          }
-        }
-      })
-      .catch(err => {});
-  };
-
-  paginationHandler = (page_num, searchUrl) => {
-    const toNum = page_num * 200;
-    const fromNum = (page_num - 1) * 200 + 1;
-    let paginateUrl;
-
-    if (searchUrl != null) {
-      paginateUrl = searchUrl;
-    } else {
-      this.setState({
-        textVal: null
-      });
-      paginateUrl =
-        "fv3/api/project-site-list/?page=" +
-        page_num +
-        "&project=" +
-        project_id;
-    }
-
-    this.setState(
-      {
-        toData: toNum,
-        fromData: fromNum,
-        pageNum: page_num,
-        dLoader: true
-      },
-      () => this.requestHandler(paginateUrl)
-    );
-  };
-
-  renderPageNumbers = () => {
-    if (this.state.totalPage) {
-      const pageNumbers = [];
-      for (let i = 1; i <= this.state.totalPage; i++) {
-        pageNumbers.push(i);
-      }
-
-      return pageNumbers.map(number => {
-        let classes = this.state.pageNum === number ? "current" : "";
-
-        if (
-          number == 1 ||
-          number == this.state.totalPage ||
-          (number >= this.state.pageNum - 2 && number <= this.state.pageNum + 2)
-        ) {
-          return (
-            <li key={number} className={classes}>
-              {" "}
-              <a
-                onClick={e =>
-                  this.paginationHandler(number, this.state.textVal)
-                }
-              >
-                {number}
-              </a>
-            </li>
-          );
-        }
-      });
-    }
-  };
-
-  searchHandler = e => {
+  onChangeHandler = e => {
     const searchValue = e.target.value;
-
-    let searchUrl;
-    if (searchValue) {
-      searchUrl =
-        "/fv3/api/project-site-list/?page=1&project=" +
-        project_id +
-        "&q=" +
-        searchValue;
-
-      this.setState({
-        textVal: searchValue
-      });
-      this.paginationHandler(1, searchUrl);
-    } else {
-      this.setState({
-        pageNum: 1,
-        textVal: null
-      });
-      this.paginationHandler(1, null);
-    }
+    this.props.searchHandler(
+      searchValue,
+      `/fv3/api/project-site-list/?page=1&project=${
+        this.props.projectId
+      }&q=${searchValue}`,
+      "projectSiteList"
+    );
   };
 
   render() {
@@ -159,7 +35,7 @@ class ProjectSiteTable extends Component {
       context: { terms }
     } = this;
     return (
-      <Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>{!isEmpty(terms) ? `${terms.site}` : "Sites"}</h5>
           <div className="dash-btn">
@@ -173,8 +49,7 @@ class ProjectSiteTable extends Component {
                 <input
                   type="search"
                   className="form-control"
-                  onChange={this.searchHandler}
-                  required
+                  onChange={this.onChangeHandler}
                 />
                 <label htmlFor="input">Search</label>
                 <i className="la la-search" />
@@ -185,7 +60,10 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/site/add/" + project_id + "/"
+                  base_url +
+                    "/fieldsight/site/add/" +
+                    this.props.projectId +
+                    "/"
                 )
               }
             >
@@ -198,7 +76,7 @@ class ProjectSiteTable extends Component {
                   e,
                   base_url +
                     "/fieldsight/application/?project=" +
-                    project_id +
+                    this.props.projectId +
                     "#/project-settings/site-information"
                 )
               }
@@ -212,7 +90,7 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/upload/" + project_id + "/"
+                  base_url + "/fieldsight/upload/" + this.props.projectId + "/"
                 )
               }
             >
@@ -242,8 +120,8 @@ class ProjectSiteTable extends Component {
                 </thead>
 
                 <tbody>
-                  {!this.state.dLoader &&
-                    this.state.siteList.map((item, i) => (
+                  {!this.props.dLoader &&
+                    this.props.siteList.map((item, i) => (
                       <tr key={i}>
                         <td>
                           <a
@@ -303,15 +181,15 @@ class ProjectSiteTable extends Component {
                     ))}
                 </tbody>
               </Table>
-              {this.state.dLoader && <DotLoader />}
+              {this.props.dLoader && <DotLoader />}
             </PerfectScrollbar>
           </div>
           <div className="table-footer">
             <div className="showing-rows">
               <p>
-                Showing <span>{this.state.fromData}</span> to{" "}
-                <span> {this.state.toData} </span> of{" "}
-                <span>{this.state.totalCount}</span> entries.
+                Showing <span>{this.props.fromData}</span> to{" "}
+                <span> {this.props.toData} </span> of{" "}
+                <span>{this.props.totalCount}</span> entries.
               </p>
             </div>
             <div className="table-pagination">
@@ -319,19 +197,19 @@ class ProjectSiteTable extends Component {
                 <li className="page-item">
                   <a
                     onClick={e =>
-                      this.paginationHandler(this.state.pageNum - 1, null)
+                      this.props.paginationHandler(this.props.pageNum - 1, null)
                     }
                   >
                     <i className="la la-long-arrow-left" />
                   </a>
                 </li>
 
-                {this.renderPageNumbers()}
+                {this.props.renderPageNumbers("projectSiteList")}
 
                 <li className="page-item ">
                   <a
                     onClick={e =>
-                      this.paginationHandler(this.state.pageNum + 1, null)
+                      this.props.paginationHandler(this.props.pageNum + 1, null)
                     }
                   >
                     <i className="la la-long-arrow-right" />
@@ -341,8 +219,8 @@ class ProjectSiteTable extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }
-export default ProjectSiteTable;
+export default withPagination(ProjectSiteTable);

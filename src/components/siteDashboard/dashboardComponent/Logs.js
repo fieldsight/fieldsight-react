@@ -1072,7 +1072,7 @@ class Logs extends Component {
                   <time>{siteLog.date}</time>
                   <ul>
                     {siteLog.logs.map(log => (
-                      <li className={getColor()} key={uuid()}>
+                      <li className="blue" key={uuid()}>
                         <div className="event-list ">
                           <figure>
                             <img src={log.source_img} alt="logo" />

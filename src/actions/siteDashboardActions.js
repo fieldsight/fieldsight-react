@@ -22,6 +22,7 @@ export const getSiteDashboard = id => dispatch => {
     });
 };
 
+// site metas/ information
 export const getSiteMetas = id => dispatch => {
   axios
     .get(`fieldsight/api/siteallmetas/${id}/`)

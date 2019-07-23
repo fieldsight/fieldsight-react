@@ -2,8 +2,8 @@ import React, { Component, Fragment } from "react";
 // import {Link} from 'react-router-dom';
 import { Dropdown } from "react-bootstrap";
 import Zoom from "react-reveal/Zoom";
-import ContentLoader from "react-content-loader";
 import CountCard from "../../common/CountCard";
+import { AvatarContentLoader } from "../../common/Loader";
 
 const ManageDropdown = ["Generate Report", "View Data"];
 const HeaderDropdown = [
@@ -12,45 +12,6 @@ const HeaderDropdown = [
   "user",
   "form"
 ];
-
-const AvatarLoader = ({ className }) => (
-  <div style={{ height: "80px", width: "300px" }}>
-    <ContentLoader
-      height="100%"
-      width="100%"
-      speed={1}
-      primaryColor="#f3f3f3"
-      secondaryColor="#ebedec"
-      className={className}
-    >
-      <rect x="0" y="0" rx="0" ry="0" width="80" height="80" />
-      <rect x="100" y="15" rx="0" ry="0" width="250" height="16" />
-      <rect x="100" y="45" rx="0" ry="0" width="250" height="16" />
-    </ContentLoader>
-  </div>
-);
-
-const Loader = () => (
-  <div className="contentLoading">
-    {/* <div className="loading-list">
-      <div className="text no-thumb">
-        <div className="loading-content"> </div>
-        <div className="loading-content" />
-        <div className="loading-content" />
-        <div className="loading-content" />
-      </div>
-    </div> */}
-    <div className="loading-list">
-      <div className="loading-image circle circle-80">​</div>
-      <div className="text">
-        <div className="loading-content"> </div>
-        <div className="loading-content" />
-        <div className="loading-content" />
-        <div className="loading-content" />
-      </div>
-    </div>
-  </div>
-);
 
 class DashboardHeader extends Component {
   state = {
@@ -76,9 +37,9 @@ class DashboardHeader extends Component {
     return (
       <div className="card mrb-30">
         <div className="card-header main-card-header dashboard-header">
-          {/* <div className="dash-pf">
-            
-            <figure>
+          {name ? (
+            <div className="dash-pf">
+              <figure>
                 <img src={logo} alt={logo} />
               </figure>
               <div className="dash-pf-content">
@@ -87,10 +48,11 @@ class DashboardHeader extends Component {
                   {region ? `${region}, ` : null}
                   {address}
                 </span>
-              </div> 
-          </div> */}
-
-          <Loader />
+              </div>
+            </div>
+          ) : (
+            <AvatarContentLoader number={1} width="300px" size="80" />
+          )}
 
           <div className="dash-btn">
             <Dropdown>

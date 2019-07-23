@@ -48,7 +48,10 @@ class SiteDashboard extends Component {
           siteDocuments,
           siteLogs,
           form_submissions_chart_data,
-          site_progress_chart_data
+          site_progress_chart_data,
+          siteDashboardLoader,
+          siteMetasLoader,
+          siteSubmissionsLoader
         }
       }
     } = this;
@@ -111,7 +114,10 @@ class SiteDashboard extends Component {
                         className="card-body site-info board-site-info"
                         style={{ position: "relative", height: "434px" }}
                       >
-                        <DashboardInfo siteMetas={siteMetas} />
+                        <DashboardInfo
+                          siteMetas={siteMetas}
+                          showContentLoader={siteMetasLoader}
+                        />
                       </div>
                     </div>
                   </div>
@@ -132,7 +138,10 @@ class SiteDashboard extends Component {
                         className="card-body"
                         style={{ position: "relative", height: "434px" }}
                       >
-                        <DatatablePage siteSubmissions={siteSubmissions} />
+                        <DatatablePage
+                          siteSubmissions={siteSubmissions}
+                          showContentLoader={siteSubmissionsLoader}
+                        />
                       </div>
                     </div>
                   </div>
@@ -214,7 +223,10 @@ class SiteDashboard extends Component {
                           className="thumb-list mr-0 "
                           style={{ position: "relative", height: "312px" }}
                         >
-                          <UsersList users={users} />
+                          <UsersList
+                            users={users}
+                            showContentLoader={siteDashboardLoader}
+                          />
                         </div>
                       </div>
                     </div>
