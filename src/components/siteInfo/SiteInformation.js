@@ -47,7 +47,7 @@ class SiteInformation extends Component {
       .then(results => {
         if (this._isMounted) {
           let modifiedJsonQuestions = [];
-          if (results[2].data.json_questions) {
+          if (results[2].data.json_questions.length > 0) {
             modifiedJsonQuestions = results[2].data.json_questions.map(
               question => {
                 if (question.question_type === "MCQ") {
@@ -103,7 +103,10 @@ class SiteInformation extends Component {
             siteBasicInfo: results[2].data.site_basic_info,
             jsonQuestions: modifiedJsonQuestions,
             siteFeaturedImages: results[2].data.site_featured_images,
-            projectSettings: modifiedProjectSettings[0]
+            projectSettings:
+              modifiedProjectSettings.length > 0
+                ? modifiedProjectSettings[0]
+                : {}
           });
         }
       })
@@ -126,7 +129,7 @@ class SiteInformation extends Component {
 
       const modifiedProjectSettings = {
         ...projectSettings,
-        source: projectSettings.source ? +projectSettings.source : 0
+        ...(projectSettings.source && { source: +projectSettings.source })
       };
 
       const modifiedJsonQuestions = jsonQuestions.map(question => {
@@ -278,17 +281,19 @@ class SiteInformation extends Component {
             projectSettings={projectSettings}
             siteProgressHandler={siteProgressHandler}
           />
+
+          <FeaturedPictures
+            forms={forms}
+            siteFeaturedImages={siteFeaturedImages}
+            sitePicHandler={sitePicHandler}
+          />
+
           <SiteInformationTable
             forms={forms}
             projects={projects}
             jsonQuestions={jsonQuestions}
             siteInfoHandler={siteInfoHandler}
             terms={terms}
-          />
-          <FeaturedPictures
-            forms={forms}
-            siteFeaturedImages={siteFeaturedImages}
-            sitePicHandler={sitePicHandler}
           />
 
           <div className="col-sm-12">

@@ -1,41 +1,102 @@
 @-webkit-keyframes scrollDown {
-    0% {
-      -webkit-transform: translateY(-20px);
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateY(0);
-      opacity: 0;
-    }
+  0% {
+    -webkit-transform: translateY(-20px);
+    opacity: 0;
   }
-  @keyframes scrollDown {
-    0% {
-      transform: translateY(-20px);
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      transform:  translateY(0);
-      opacity: 0;
-    }
-  }
-  
 
-  @keyframes scrollup {
-    0% {
-      transform: translateY(0);
-      opacity: 0;
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: translateY(0);
+    opacity: 0;
+  }
+}
+
+@keyframes scrollDown {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+
+
+@keyframes scrollup {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+}
+
+.contentLoading {
+  .loading-list {
+    margin-bottom: 0.25rem;
+    @include flex_start;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    .loading-image {
+      height: 40px;
+      flex: 0 0 40px;
+      max-width: 40px;
+      display: inline-block;
+      background: $color-bg;
+      margin-right: 1rem;
+
+      &.circle {
+        @include radius50;
+
+        &.circle-80 {
+          height: 80px;
+          flex: 0 0 80px;
+          max-width: 80px;
+        }
+
+        &.circle-60 {
+          height: 64px;
+          flex: 0 0 64px;
+          max-width: 64px;
+        }
+      }
     }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      transform:  translateY(-20px);
-      opacity: 0;
+
+    .text {
+      width: calc(100% - 1rem);
+
+      .loading-content {
+        height: 10px;
+        margin: 10px 0;
+        @extend .animated-background;
+      }
+
+      &.circle {
+        .loading-content {
+          border-radius: 8px;
+        }
+      }
+
+      &.no-thumb {
+        width: 100%;
+      }
     }
   }
+}

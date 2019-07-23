@@ -19,16 +19,17 @@ const initialState = {
   fieldsight_instance: null,
   edit_url: null,
   download_url: {},
-  loading: false
+  loading: false,
+  initialLoader: true
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case SHOW_DOT_LOADER:
-      return {
-        ...state,
-        dotLoader: true
-      };
+    // case SHOW_DOT_LOADER:
+    //   return {
+    //     ...state,
+    //     dotLoader: true
+    //   };
     case START_SUBMISSION_LOADER:
       return {
         ...state,
@@ -53,7 +54,7 @@ export default function(state = initialState, action) {
         fieldsight_instance: action.payload.fieldsight_instance,
         edit_url: action.payload.edit_url,
         download_url: action.payload.download_url,
-        dotLoader: false
+        initialLoader: false
       };
     case POST_SUBMISSION_DETAIL:
       return {

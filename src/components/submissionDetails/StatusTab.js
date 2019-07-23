@@ -2,13 +2,25 @@ import React, { Component } from "react";
 import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
 
-const INITIAL_STATE = {
-  file: "",
-  comment: "",
-  status: "3"
+const checkStatus = statusData => {
+  if (statusData.status_display === "Pending") {
+    return 0;
+  } else if (statusData.status_display === "Rejected") {
+    return 1;
+  } else if (statusData.status_display === "Flagged") {
+    return 2;
+  } else if (statusData.status_display === "Approved") {
+    return 3;
+  }
 };
 class StatusTab extends Component {
-  state = INITIAL_STATE;
+  state = {
+    file: "",
+    comment: "",
+    status: this.props.statusData.status_display
+      ? checkStatus(this.props.statusData).toString()
+      : "3"
+  };
 
   componentWillReceiveProps(nextProps) {
     if (
@@ -16,22 +28,14 @@ class StatusTab extends Component {
       this.props.statusData.status_display
     ) {
       this.setState({
-        ...INITIAL_STATE
+        file: "",
+        comment: "",
+        status: nextProps.statusData.status_display
+          ? checkStatus(nextProps.statusData).toString()
+          : "3"
       });
     }
   }
-
-  checkStatus = statusData => {
-    if (statusData.status_display === "Pending") {
-      return 0;
-    } else if (statusData.status_display === "Rejected") {
-      return 1;
-    } else if (statusData.status_display === "Flagged") {
-      return 2;
-    } else if (statusData.status_display === "Approved") {
-      return 3;
-    }
-  };
 
   onChangeHandler = (e, file) => {
     if (file) {
@@ -50,8 +54,7 @@ class StatusTab extends Component {
     e.preventDefault();
     const {
       state: { comment, status, file },
-      props: { fieldSightInstance, statusData, postSubmissionDetail },
-      checkStatus
+      props: { fieldSightInstance, statusData, postSubmissionDetail }
     } = this;
 
     let oldStatus = checkStatus(statusData);

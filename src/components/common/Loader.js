@@ -2,6 +2,38 @@ import React from "react";
 import { Fade } from "react-reveal";
 import ReactLoader from "react-loader-spinner";
 
+export const AvatarContentLoader = ({ number, width, size }) => (
+  <>
+    {Array(number)
+      .fill("")
+      .map((item, i) => (
+        <div className="contentLoading" style={{ width: width }} key={i}>
+          <div className="loading-list">
+            <div className={`loading-image circle circle-${size}`}>​</div>
+            <div className="text">
+              <div className="loading-content" />
+              <div className="loading-content" />
+            </div>
+          </div>
+        </div>
+      ))}
+  </>
+);
+export const ListContentLoader = ({ number }) => (
+  <div className="contentLoading">
+    <div className="loading-list">
+      <div className="text">
+        {Array(number)
+          .fill("")
+          .map((item, i) => (
+            <div className="loading-content" key={i} />
+          ))}
+        <div className="loading-content" />
+      </div>
+    </div>
+  </div>
+);
+
 export const DotLoader = () => (
   <div
     style={{
