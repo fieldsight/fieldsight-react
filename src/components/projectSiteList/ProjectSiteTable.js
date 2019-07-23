@@ -6,11 +6,7 @@ import { DotLoader } from "../myForm/Loader";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 
-<<<<<<< HEAD
-let project_id = window.project_id ? window.project_id : 321;
-=======
 import withPagination from "../../hoc/WithPagination";
->>>>>>> a2946f9e038cdd8da42caf07eadbe40fe248a7d1
 
 let base_url = window.base_url
   ? window.base_url
@@ -79,14 +75,10 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-<<<<<<< HEAD
-                  base_url+ "/fieldsight/bulksitesample/" + project_id +"/1/"
-=======
                   base_url +
                     "/fieldsight/application/?project=" +
                     this.props.projectId +
                     "#/project-settings/site-information"
->>>>>>> a2946f9e038cdd8da42caf07eadbe40fe248a7d1
                 )
               }
             >
