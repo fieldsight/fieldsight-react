@@ -61,11 +61,66 @@ class MyRoles extends Component{
             roleTab:true, activityTab:false
         })
     }
-    // activityOpen = () => {
-    //     this.setState({
-    //         roleTab:false, activityTab:true
-    //     })
-    // }
+
+
+    rejectHandler=(id)=>{
+
+        // const newInvitation = [...this.state.invitation];
+        // const deletedForm = newInvitation.filter(user => user.id != id);
+        // console.log(deletedForm)
+
+        const reject_url="fv3/api/decline-invite/"+id+"/"
+       
+         axios
+         .post(`${reject_url}`)
+       
+         .then(res => {
+                
+             if (res.status === 200) {
+
+               const newInvitation = [...this.state.invitation];
+               const deletedForm = newInvitation.filter(user => user.id != id);
+           
+               this.setState({
+                invitation:deletedForm,
+               });
+             }
+           
+         })
+         .catch(err => {
+          
+         });
+       
+         }
+       
+       acceptHandler=(id,user)=>{
+       
+         const accept_url="fv3/api/accept-invite/"+id+"/"+user+"/"
+       
+         axios
+         .post(`${accept_url}`)
+       
+         .then(res => {
+                
+             if (res.status === 200) {
+                const newInvitation = [...this.state.invitation];
+                const deletedForm = newInvitation.filter(user => user.id != id);
+            
+                this.setState({
+                 invitation:deletedForm,
+                });
+              
+             }
+           
+         })
+         .catch(err => {
+          
+         });
+       
+         }
+       
+
+
     render(){
         console.log(this.state.height)
         return(
@@ -88,6 +143,9 @@ class MyRoles extends Component{
                                          
                                          profile={this.state.profile}
                                          invitation={this.state.invitation}
+                                         acceptHandler={this.acceptHandler}
+                                         rejectHandler={this.rejectHandler}
+
 
                                         />
                                     </div>

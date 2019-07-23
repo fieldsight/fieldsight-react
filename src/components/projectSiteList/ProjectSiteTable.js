@@ -8,7 +8,7 @@ import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 import Iframe from "react-iframe";
 
-let project_id = window.project_id ? window.project_id : 137;
+let project_id = window.project_id ? window.project_id : 321;
 
 let base_url = window.base_url
   ? window.base_url
@@ -191,22 +191,21 @@ class ProjectSiteTable extends Component {
             >
               <i className="la la-plus" />
             </button>
-            <button
+            <a>
+            <button 
               className="fieldsight-btn"
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url +
-                    "/fieldsight/application/?project=" +
-                    project_id +
-                    "#/project-settings/site-information"
+                  base_url+ "/fieldsight/bulksitesample/" + project_id +"/1/"
                 )
               }
             >
               {!isEmpty(terms)
-                ? `${terms.site} Information`
-                : "Site Information"}
+                ?  `Export ${terms.site}s `
+                : "Export Sites"}
             </button>
+            </a>
             <button
               className="fieldsight-btn"
               onClick={e =>

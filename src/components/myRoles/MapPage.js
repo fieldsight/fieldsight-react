@@ -10,16 +10,16 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-const position = [27.7, 85.4];
-
-let baseURL = window.base_url
-  ? window.base_url
-  : "https://fieldsight.naxa.com.np/fieldsight/application";
-
-class CustomMap extends Component {
+class MapPage extends Component {
   render() {
     return (
-      <Map
+      <div
+        class="tab-pane fade"
+        id="map_type"
+        role="tabpanel"
+        aria-labelledby="map_type_tab"
+      >
+              <Map
         center={position}
         zoom={7}
         style={{ width: "100%", height: "396px" }}
@@ -61,8 +61,9 @@ class CustomMap extends Component {
           })}
         </LayersControl>
       </Map>
+      </div>
     );
   }
 }
 
-export default CustomMap;
+export default MapPage;

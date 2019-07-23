@@ -4,6 +4,9 @@ import CustomMap from './CustomMap';
 import axios from "axios";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
+let baseURL = window.base_url
+  ? window.base_url
+  : "https://fieldsight.naxa.com.np/fieldsight/application";
 
 const selectPeriod = [
     "Last 7 days","Last month", "Last Year"
@@ -16,7 +19,8 @@ class Activity extends Component {
     _isMounted = false;
 
     state={
-        activity:[]
+        activity:[],
+        map:[]
     }
     
 
@@ -29,9 +33,9 @@ class Activity extends Component {
               
             if (this._isMounted) {
               if (res.status === 200) {
-                console.log(res.data)
+                
                 this.setState({
-                    activity:res.data.latest_submissions
+                    activity:res.data
                 });
               }
             }
@@ -77,15 +81,17 @@ class Activity extends Component {
                   <ul>
                  
                       {this.state.activity.map((item,i)=>(
-                    <li key={i}>
+                     <a href={baseURL+item.properties.detail_url} target="_blank" key={i}>  
+                    <li >
                      
                       <div className="content">
-                        <h6>{item.form}</h6>
+                        <h6>{item.properties.form }</h6>
                         <time>
-                          <i className="la la-clock" /> {item.date}
+                          <i className="la la-clock" /> 
                         </time>
                       </div>
                     </li>
+                    </a>
                        ))}
               
                   </ul>
@@ -102,7 +108,11 @@ class Activity extends Component {
               </div>
               <div className="card-body">
                 <div id="map" style={{ height: "415px" }}>
-                  <CustomMap />
+                  <CustomMap 
+                  
+                  activity={this.state.activity}
+
+                  />
                 </div>
               </div>
             </div>
