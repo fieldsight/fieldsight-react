@@ -29,8 +29,13 @@ class MyformTable extends Component {
       .then(res => {
         if (this._isMounted) {
           if (res.status === 200) {
+            const modifiedList = res.data.map(user => ({
+              ...user,
+              share: false
+            }));
+
             this.setState({
-              list: res.data,
+              list: modifiedList,
               dLoader: false
             });
           }
@@ -53,6 +58,17 @@ class MyformTable extends Component {
   cancelHandler = () => {
     this.setState({
       showDeleteConfirmation: false
+    });
+  };
+
+  shareToggle = (e, id) => {
+    const formList = this.state.list.map(user =>
+      user.id_string === id
+        ? { ...user, share: !user.share }
+        : { ...user, share: false }
+    );
+    this.setState({
+      list: formList
     });
   };
 
@@ -106,6 +122,7 @@ class MyformTable extends Component {
                       OpenTabHandler={this.props.OpenTabHandler}
                       commonPopupHandler={this.props.commonPopupHandler}
                       deleteHandler={this.deleteHandler}
+                      shareToggle={this.shareToggle}
                     />
                   ))}
                 </tbody>

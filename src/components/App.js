@@ -9,6 +9,7 @@ import MyForm from "./myForm/MyformMain";
 import SiteDashboard from "./siteDashboard";
 import SiteList from "./projectSiteList/SiteList";
 import SubmissionDetails from "./submissionDetails";
+import MyRoles from "./myRoles/MyRoles";
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -58,6 +59,11 @@ class App extends Component {
                     <Route
                       path="/site-dashboard"
                       render={props => <SiteDashboard {...props} />}
+                    />
+
+                    <Route
+                      path="/my-roles"
+                      render={props => <MyRoles {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

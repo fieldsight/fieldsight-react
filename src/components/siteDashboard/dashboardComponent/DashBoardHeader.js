@@ -30,6 +30,28 @@ const AvatarLoader = ({ className }) => (
   </div>
 );
 
+const Loader = () => (
+  <div className="contentLoading">
+    {/* <div className="loading-list">
+      <div className="text no-thumb">
+        <div className="loading-content"> </div>
+        <div className="loading-content" />
+        <div className="loading-content" />
+        <div className="loading-content" />
+      </div>
+    </div> */}
+    <div className="loading-list">
+      <div className="loading-image circle circle-80">​</div>
+      <div className="text">
+        <div className="loading-content"> </div>
+        <div className="loading-content" />
+        <div className="loading-content" />
+        <div className="loading-content" />
+      </div>
+    </div>
+  </div>
+);
+
 class DashboardHeader extends Component {
   state = {
     showPopup: false,
@@ -54,9 +76,9 @@ class DashboardHeader extends Component {
     return (
       <div className="card mrb-30">
         <div className="card-header main-card-header dashboard-header">
-          {/* {address && name ? (
-            <div className="dash-pf">
-              <figure>
+          {/* <div className="dash-pf">
+            
+            <figure>
                 <img src={logo} alt={logo} />
               </figure>
               <div className="dash-pf-content">
@@ -65,11 +87,10 @@ class DashboardHeader extends Component {
                   {region ? `${region}, ` : null}
                   {address}
                 </span>
-              </div>
-            </div>
-          ) : ( */}
-          <AvatarLoader />
-          {/* )} */}
+              </div> 
+          </div> */}
+
+          <Loader />
 
           <div className="dash-btn">
             <Dropdown>

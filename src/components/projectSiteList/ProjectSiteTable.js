@@ -8,8 +8,14 @@ import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 import Iframe from "react-iframe";
 
-const project_id = 137;
-const base_url = "https://fieldsight.naxa.com.np";
+let project_id = window.project_id ? window.project_id : 137;
+
+let base_url = window.base_url
+  ? window.base_url
+  : "https://fieldsight.naxa.com.np";
+
+// const project_id = 137;
+// const base_url = "https://fieldsight.naxa.com.np";
 
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
@@ -125,7 +131,8 @@ class ProjectSiteTable extends Component {
   };
 
   searchHandler = e => {
-    const searchValue = event.target.value;
+    const searchValue = e.target.value;
+
     let searchUrl;
     if (searchValue) {
       searchUrl =
@@ -159,16 +166,14 @@ class ProjectSiteTable extends Component {
             <form
               className="floating-form"
               onSubmit={e => {
-                console.log("submitted", e.key);
-
-                return false;
+                e.preventDefault();
               }}
             >
               <div className="form-group mr-0">
                 <input
                   type="search"
                   className="form-control"
-                  onChange={e => this.searchHandler(e)}
+                  onChange={this.searchHandler}
                   required
                 />
                 <label htmlFor="input">Search</label>
