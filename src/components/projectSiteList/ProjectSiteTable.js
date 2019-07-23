@@ -36,39 +36,27 @@ class ProjectSiteTable extends Component {
       .get(`${paginateUrl}`)
 
       .then(res => {
-        
         if (this._isMounted) {
           if (res.status === 200) {
-
-            if(res.data.results.query === null){
-
-              
-
+            if (res.data.results.query === null) {
               this.setState({
                 siteList: res.data.results.data,
                 dLoader: false,
                 totalCount: res.data.count,
-                textVal:null,
+                textVal: null,
                 totalPage: Math.ceil(res.data.count / 200)
               });
-            }else{
-
-              if(res.data.results.query==this.state.textVal){
-                
+            } else {
+              if (res.data.results.query == this.state.textVal) {
                 this.setState({
                   siteList: res.data.results.data,
                   dLoader: false,
                   totalCount: res.data.count,
-                  textVal:null,
+                  textVal: null,
                   totalPage: Math.ceil(res.data.count / 200)
                 });
-
               }
-
-
             }
-          
-            
           }
         }
       })
@@ -76,7 +64,6 @@ class ProjectSiteTable extends Component {
   };
 
   paginationHandler = (page_num, searchUrl) => {
-   
     const toNum = page_num * 200;
     const fromNum = (page_num - 1) * 200 + 1;
     let paginateUrl;
@@ -137,9 +124,7 @@ class ProjectSiteTable extends Component {
     }
   };
 
-  
   searchHandler = e => {
-    
     const searchValue = event.target.value;
     let searchUrl;
     if (searchValue) {
@@ -148,15 +133,15 @@ class ProjectSiteTable extends Component {
         project_id +
         "&q=" +
         searchValue;
-     
+
       this.setState({
         textVal: searchValue
       });
-      this.paginationHandler(1,searchUrl)
+      this.paginationHandler(1, searchUrl);
     } else {
       this.setState({
         pageNum: 1,
-        textVal:null
+        textVal: null
       });
       this.paginationHandler(1, null);
     }
@@ -171,7 +156,14 @@ class ProjectSiteTable extends Component {
         <div className="card-header main-card-header sub-card-header">
           <h5>{!isEmpty(terms) ? `${terms.site}` : "Sites"}</h5>
           <div className="dash-btn">
-            <form className="floating-form">
+            <form
+              className="floating-form"
+              onSubmit={e => {
+                console.log("submitted", e.key);
+
+                return false;
+              }}
+            >
               <div className="form-group mr-0">
                 <input
                   type="search"

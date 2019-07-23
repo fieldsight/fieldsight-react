@@ -21,10 +21,7 @@ class SubmissionDetail extends Component {
         }
       }
     } = this;
-    // remove two lines for production
-    // const id = submissionId ? submissionId : 42124;
-    // this.props.getSubmissionDetail(id);
-    // uncomment for production
+
     this.props.getSubmissionDetail(submissionId);
   }
   render() {
@@ -40,68 +37,71 @@ class SubmissionDetail extends Component {
         edit_url,
         download_url,
         loading,
-        dotLoader
+        initialLoader
       },
       postSubmissionDetail,
       getSubmissionDetail
     } = this.props;
     return (
       <Fragment>
-        <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">Site's name</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">form type</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">form name</a>
-            </li>
+        {!initialLoader && (
+          <Fragment>
+            <nav aria-label="breadcrumb" role="navigation">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <a href="index.html">Home</a>
+                </li>
+                <li className="breadcrumb-item">
+                  <a href="#">Site's name</a>
+                </li>
+                <li className="breadcrumb-item">
+                  <a href="#">form type</a>
+                </li>
+                <li className="breadcrumb-item">
+                  <a href="#">form name</a>
+                </li>
 
-            <li className="breadcrumb-item active" aria-current="page">
-              Submission Details
-            </li>
-          </ol>
-        </nav>
-        <div className="row">
-          <div className="col-xl-8 col-lg-8">
-            <div className="right-content no-bg">
-              <div className="row">
-                <SubmissionSiteDetail site={site} dotLoader={dotLoader} />
+                <li className="breadcrumb-item active" aria-current="page">
+                  Submission Details
+                </li>
+              </ol>
+            </nav>
+            <div className="row">
+              <div className="col-xl-8 col-lg-8">
+                <div className="right-content no-bg">
+                  <div className="row">
+                    <SubmissionSiteDetail site={site} />
 
-                <SubmissionSiteInfo
-                  siteInformation={site.site_information}
-                  dotLoader={dotLoader}
-                />
+                    <SubmissionSiteInfo
+                      siteInformation={site.site_information}
+                    />
+                  </div>
+
+                  <Submission
+                    dateCreated={date_created}
+                    submittedBy={submitted_by}
+                    submissionData={submission_data}
+                    site={site}
+                  />
+                </div>
               </div>
 
-              <Submission
-                dateCreated={date_created}
-                submittedBy={submitted_by}
-                submissionData={submission_data}
-                dotLoader={dotLoader}
-                site={site}
-              />
+              <div className="col-xl-4 col-lg-4">
+                <RightSidebar
+                  statusData={status_data}
+                  submissionHistory={submission_history}
+                  fieldSightInstance={fieldsight_instance}
+                  postSubmissionDetail={postSubmissionDetail}
+                  getSubmissionDetail={getSubmissionDetail}
+                  editUrl={edit_url}
+                  downloadUrl={download_url}
+                />
+              </div>
             </div>
-          </div>
-
-          <div className="col-xl-4 col-lg-4">
-            <RightSidebar
-              statusData={status_data}
-              submissionHistory={submission_history}
-              fieldSightInstance={fieldsight_instance}
-              postSubmissionDetail={postSubmissionDetail}
-              getSubmissionDetail={getSubmissionDetail}
-              editUrl={edit_url}
-              downloadUrl={download_url}
-            />
-          </div>
-        </div>
-        {loading && <Loader />}
+            {loading && <Loader />}
+          </Fragment>
+        )}
+        {initialLoader && <Loader />}
       </Fragment>
     );
   }

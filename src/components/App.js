@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import setDefault from "../config";
 import Settings from "./settings/Settings";
 import MyForm from "./myForm/MyformMain";
-import SiteDashboard from "./siteDashboard/SiteDashboard";
+import SiteDashboard from "./siteDashboard";
 import SiteList from "./projectSiteList/SiteList";
 import SubmissionDetails from "./submissionDetails";
 

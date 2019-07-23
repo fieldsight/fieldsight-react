@@ -1,64 +1,136 @@
-import React, { Component } from 'react';
-import { Line } from 'react-chartjs-2';
+import React, { Component } from "react";
+import { Line } from "react-chartjs-2";
 
-  const data = {
-    labels: ['2019-04-01', '2019-04-02', '2019-04-03', '2019-04-04', '2019-04-05', '2019-04-06', '2019-04-07', '2019-04-08', '2019-04-09', '2019-04-10', '2019-04-11', '2019-04-12'],
-    datasets: [{
-        // label: '# of Votes',
-        data: [2, 3, 5, 8, 10, 12,14, 16, 18, 20, 22, 24],
-        backgroundColor: '',
-        borderColor: '#00628E',
-        fill: false,
-        steppedLine: true,
-        borderWidth: 1
-    }],
-    options: {
-        responsive: true,
-        title: {
-            display: false,
-            text: 'Chart.js Line Chart'
-        },
-        legend: {
-            display: false
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-        },
-        hover: {
-            mode: 'nearest',
-            intersect: true
-        },
-        scales: {
-            xAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Date'
-                }
-            }],
-            yAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Number Of Submissions'
-                }
-            }]
+const options = {
+  responsive: true,
+  title: {
+    display: false,
+    text: "Chart.js Line Chart"
+  },
+  legend: {
+    display: false
+  },
+  tooltips: {
+    mode: "index",
+    intersect: false
+  },
+  hover: {
+    mode: "nearest",
+    intersect: true
+  },
+  scales: {
+    xAxes: [
+      {
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: "Date"
         }
-    }
-  };
+      }
+    ],
+    yAxes: [
+      {
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: "Number Of Submissions"
+        }
+      }
+    ]
+  }
+};
+
 class SubmissionChart extends Component {
   render() {
+    const { submissionData } = this.props;
+
+    const chartData = {
+      labels: [],
+      datasets: []
+    };
+
+    if (submissionData.approved_submissions.hasOwnProperty("labels")) {
+      chartData.labels = submissionData.approved_submissions.labels;
+    }
+
+    if (submissionData.approved_submissions.hasOwnProperty("data")) {
+      chartData.datasets = [
+        ...chartData.datasets,
+        {
+          label: "Approved Submissions",
+          data: submissionData.approved_submissions.data,
+          backgroundColor: "#28a745",
+          borderColor: "#28a745",
+          fill: false,
+          borderWidth: 1
+        }
+      ];
+    }
+
+    if (submissionData.flagged_submissions.hasOwnProperty("data")) {
+      chartData.datasets = [
+        ...chartData.datasets,
+        {
+          label: "Flagged Submissions",
+          data: submissionData.flagged_submissions.data,
+          backgroundColor: "#ffc107",
+          borderColor: "#ffc107",
+          fill: false,
+          borderWidth: 1
+        }
+      ];
+    }
+
+    if (submissionData.pending_submissions.hasOwnProperty("data")) {
+      chartData.datasets = [
+        ...chartData.datasets,
+        {
+          label: "Pending Submissions",
+          data: submissionData.pending_submissions.data,
+          backgroundColor: "#00628E",
+          borderColor: "#00628E",
+          fill: false,
+          borderWidth: 1
+        }
+      ];
+    }
+
+    if (submissionData.rejected_submissions.hasOwnProperty("data")) {
+      chartData.datasets = [
+        ...chartData.datasets,
+        {
+          label: "Rejected Submissions",
+          data: submissionData.rejected_submissions.data,
+          backgroundColor: "#fc5661",
+          borderColor: "#fc5661",
+          fill: false,
+          borderWidth: 1
+        }
+      ];
+    }
+
+    if (submissionData.total_submissions.hasOwnProperty("data")) {
+      chartData.datasets = [
+        ...chartData.datasets,
+        {
+          label: "Total Submissions",
+          data: submissionData.total_submissions.data,
+          backgroundColor: "",
+          borderColor: "",
+          fill: false,
+          borderWidth: 1
+        }
+      ];
+    }
     return (
-        <Line
-        data={data}
+      <Line
+        data={chartData}
         width={100}
         height={400}
-        options={{ ...data.options, maintainAspectRatio: false }}
-        />
+        options={{ ...options, maintainAspectRatio: false }}
+      />
     );
   }
 }
-
 
 export default SubmissionChart;
