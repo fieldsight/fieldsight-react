@@ -34,6 +34,7 @@ class ProjecTable extends Component {
       .then(res => {
         if (this._isMounted) {
           if (res.status === 200) {
+            
             this.setState({
               project_list: res.data,
               dLoader: false
@@ -86,11 +87,11 @@ class ProjecTable extends Component {
                         <td style={{ width: "30%" }}>{items.title}</td>
                         <td>
                           <i className="fa fa-clock-o" />
-                          <span>2019-08-14</span>
+                          <span>{items.date_created}</span>
                         </td>
                         <td>
                           <i className="fa fa-clock-o" />
-                          <span>2019-10-14</span>
+                          <span>{items.date_modified}</span>
                         </td>
                         <td>
                           <OverlayTrigger
