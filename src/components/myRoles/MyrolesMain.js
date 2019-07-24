@@ -18,9 +18,10 @@ class MyrolesMain extends Component {
     invitation: [],
     roles: [],
     teams: [],
-    team_project_id:null,
-    site:[],
-    regions:[]
+    team_project_id: null,
+    site: [],
+    submission: [],
+    regions: []
   };
 
   componentDidMount() {
@@ -31,13 +32,12 @@ class MyrolesMain extends Component {
       .then(res => {
         if (this._isMounted) {
           if (res.status === 200) {
-            console.log(res.data.teams.length);
-            console.log(res.data.teams[0].projects[0].id);
-            // if(res.data.teams.length>0){
-              this.setState({
-                team_project_id:res.data.teams[0].projects[0].id
-              });
-            // }
+         
+            if(res.data.teams.length>0){
+            this.setState({
+              team_project_id: res.data.teams[0].projects[0].id
+            });
+            }
             this.setState({
               profile: res.data.profile,
               invitation: res.data.invitations,
@@ -49,9 +49,7 @@ class MyrolesMain extends Component {
         }
       })
       .catch(err => {
-        // this.setState({
-        //   dLoader: false
-        // });
+       
       });
   }
 
@@ -111,44 +109,53 @@ class MyrolesMain extends Component {
       .catch(err => {});
   };
 
-  request = id => {
-    const url = "fv3/api/my-regions/?project="+id;
-    const site_url="fv3/api/my-sites/?project="+id;
+  requestRegions = id => {
+    const url = "fv3/api/my-regions/?project=" + id;
+
     axios
       .get(`${url}`)
       .then(res => {
         if (res.status === 200) {
-          console.log(res.data);
+         
           this.setState({
             regions: res.data.regions
           });
         }
       })
-      .catch(err => {
-        // this.setState({
-        //   dLoader: false
-        // });
-      });
+      .catch(err => {});
+  };
 
+  requestSite = id => {
+    const site_url = "fv3/api/my-sites/?project=" + id;
 
-      axios
+    axios
       .get(`${site_url}`)
       .then(res => {
         if (res.status === 200) {
-          console.log("site",res.data);
+        
           this.setState({
             site: res.data.results
           });
         }
       })
-      .catch(err => {
-        // this.setState({
-        //   dLoader: false
-        // });
-      });
+      .catch(err => {});
+  };
 
+  requestSubmission = idd => {
+    const id =309
+    const submission_url = `fv3/api/submissions-map/?project=${id}&type=submissions`;
 
-
+    axios
+      .get(`${submission_url}`)
+      .then(res => {
+        if (res.status === 200) {
+       
+          this.setState({
+            submission: res.data
+          });
+        }
+      })
+      .catch(err => {});
   };
 
   render() {
@@ -170,14 +177,13 @@ class MyrolesMain extends Component {
                     <ul className="nav nav-tabs " id="myTab" role="tablist">
                       <li className="nav-item">
                         <a
-                         
                           className={
                             this.state.rightTab == "region"
                               ? "nav-link active"
                               : "nav-link"
                           }
                           onClick={e => this.rightTabOpen(e, "region")}
-                          href={void(0)}
+                          href={void 0}
                         >
                           Regions
                         </a>
@@ -210,7 +216,7 @@ class MyrolesMain extends Component {
                       </li>
                       <li className="nav-item">
                         <a
-                         href={void(0)}
+                          href={void 0}
                           className="nav-link"
                           id="map_type_tab"
                           data-toggle="tab"
@@ -226,18 +232,23 @@ class MyrolesMain extends Component {
                   </div>
 
                   <div className="tab-content mrt-30" id="myTabContent">
-                    {this.state.rightTab == "submission" && <Submissions />}
-                    {this.state.rightTab == "region" && <RegionTable 
-                    
-                    team_proj_id={this.state.team_project_id}
-                    request={this.request}
-                    regions={this.state.regions}
-                    
-                    />}
+                    {this.state.rightTab == "submission" && (
+                      <Submissions submission={this.state.submission} />
+                    )}
 
-                    {this.state.rightTab == "site" && <SiteTable 
-                    site={this.state.site}
-                    />}
+                    {this.state.rightTab == "region" && (
+                      <RegionTable
+                        team_proj_id={this.state.team_project_id}
+                        requestRegions={this.requestRegions}
+                        requestSite={this.requestSite}
+                        requestSubmission={this.requestSubmission}
+                        regions={this.state.regions}
+                      />
+                    )}
+
+                    {this.state.rightTab == "site" && (
+                      <SiteTable site={this.state.site} />
+                    )}
                   </div>
                 </div>
               </div>

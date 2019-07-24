@@ -3,20 +3,19 @@ import React, { Component } from "react";
 class Submissions extends Component {
   render() {
     return (
-      <div
-        className=""
-      
-      >
+      <div className="">
         <div className="thumb-list mr-0">
           <ul>
-            <li>
-              <div className="content">
-                <h6>This is a test form for testing form.</h6>
-                <time>
-                  <i className="la la-clock" /> March 24, 2019, 2:01 p.m.
-                </time>
-              </div>
-            </li>
+            {this.props.submission.map((sub, i) => (
+              <li key={i}>
+                <div className="content">
+                  <h6>{sub.submitted_by} submitted a response for <a href={sub.form_url}><b>{sub.form_name}</b></a> in <a href={sub.extra_object_url}><b>{sub.extra_object}</b></a></h6>
+                  <time>
+                    <i className="la la-clock" /> {sub.date}
+                  </time>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
