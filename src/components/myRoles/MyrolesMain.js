@@ -7,6 +7,7 @@ import RegionTable from "./RegionTable";
 import Submissions from "./Submissions";
 import InviteTab from "./InviteTab";
 import SiteTable from "./SiteTable";
+import { runInThisContext } from "vm";
 
 const url = "fv3/api/myroles/";
 
@@ -21,7 +22,8 @@ class MyrolesMain extends Component {
     team_project_id: null,
     site: [],
     submission: [],
-    regions: []
+    regions: [],
+    teamId:null
   };
 
   componentDidMount() {
@@ -111,7 +113,9 @@ class MyrolesMain extends Component {
 
   requestRegions = id => {
     const url = "fv3/api/my-regions/?project=" + id;
-
+    this.setState({
+      teamId:id
+    })
     axios
       .get(`${url}`)
       .then(res => {
@@ -119,6 +123,7 @@ class MyrolesMain extends Component {
          
           this.setState({
             regions: res.data.regions
+           
           });
         }
       })
@@ -141,8 +146,8 @@ class MyrolesMain extends Component {
       .catch(err => {});
   };
 
-  requestSubmission = idd => {
-    const id =309
+  requestSubmission = id => {
+    //const id =309
     const submission_url = `fv3/api/submissions-map/?project=${id}&type=submissions`;
 
     axios
@@ -166,7 +171,14 @@ class MyrolesMain extends Component {
         </div>
 
         <div className="row">
-          <YourTeamSideBar teams={this.state.teams} />
+          <YourTeamSideBar 
+          teams={this.state.teams} 
+          teamId={this.state.teamId}
+          requestRegions={this.requestRegions}
+          requestSite={this.requestSite}
+          requestSubmission={this.requestSubmission}
+          regions={this.state.regions}
+          />
 
           <div className="col-xl-8 col-lg-8">
             <div className="right-content">
@@ -236,7 +248,7 @@ class MyrolesMain extends Component {
                       <Submissions submission={this.state.submission} />
                     )}
 
-                    {this.state.rightTab == "region" && (
+                    {this.state.rightTab == "region" &&  (
                       <RegionTable
                         team_proj_id={this.state.team_project_id}
                         requestRegions={this.requestRegions}

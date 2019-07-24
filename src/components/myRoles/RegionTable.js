@@ -31,7 +31,7 @@ class RegionTable extends Component {
               )}
 
               {this.props.regions.map((region, i) => (
-                <tr>
+                <tr key={i}>
                   <td>{region.identifier}</td>
                   <td>{region.name}</td>
                   <td>{region.total_sites}</td>

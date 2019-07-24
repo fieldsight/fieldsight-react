@@ -9,7 +9,7 @@ class Submissions extends Component {
             {this.props.submission.map((sub, i) => (
               <li key={i}>
                 <div className="content">
-                  <h6>{sub.submitted_by} submitted a response for <a href={sub.form_url}><b>{sub.form_name}</b></a> in <a href={sub.extra_object_url}><b>{sub.extra_object}</b></a></h6>
+                  <p>{sub.submitted_by} submitted a response for <a href={sub.form_url}><b>{sub.form_name}</b></a> in <a href={sub.extra_object_url}><b>{sub.extra_object}</b></a></p>
                   <time>
                     <i className="la la-clock" /> {sub.date}
                   </time>
