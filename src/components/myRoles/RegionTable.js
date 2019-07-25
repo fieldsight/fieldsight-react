@@ -52,6 +52,7 @@ class RegionTable extends Component {
       this.props.requestRegions(this.props.team_proj_id);
       this.props.requestSite(this.props.team_proj_id);
       this.props.requestSubmission(this.props.team_proj_id);
+      this.props.requestMap(this.props.team_proj_id);
     }
   }
 }

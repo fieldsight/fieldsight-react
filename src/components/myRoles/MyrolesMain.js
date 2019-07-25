@@ -7,6 +7,7 @@ import RegionTable from "./RegionTable";
 import Submissions from "./Submissions";
 import InviteTab from "./InviteTab";
 import SiteTable from "./SiteTable";
+import MapPage from "./MapPage";
 import { runInThisContext } from "vm";
 
 const url = "fv3/api/myroles/";
@@ -23,6 +24,7 @@ class MyrolesMain extends Component {
     site: [],
     submission: [],
     regions: [],
+    mapData:[],
     teamId:null
   };
 
@@ -163,6 +165,25 @@ class MyrolesMain extends Component {
       .catch(err => {});
   };
 
+
+  requestMap = id => {
+    //const id =309
+    const submission_url = `fv3/api/submissions-map/?project=${id}&type=map`;
+
+    axios
+      .get(`${submission_url}`)
+      .then(res => {
+        if (res.status === 200) {
+       
+          this.setState({
+            mapData: res.data
+          });
+        }
+      })
+      .catch(err => {});
+  };
+
+
   render() {
     return (
       <React.Fragment>
@@ -177,6 +198,7 @@ class MyrolesMain extends Component {
           requestRegions={this.requestRegions}
           requestSite={this.requestSite}
           requestSubmission={this.requestSubmission}
+          requestMap={this.requestMap}
           regions={this.state.regions}
           />
 
@@ -228,15 +250,15 @@ class MyrolesMain extends Component {
                       </li>
                       <li className="nav-item">
                         <a
-                          href={void 0}
-                          className="nav-link"
-                          id="map_type_tab"
-                          data-toggle="tab"
-                          href="#map_type"
-                          role="tab"
-                          aria-controls="map_type"
-                          aria-selected="true"
-                        >
+                         href="javascript:void(0);"
+                         className={
+                           this.state.rightTab == "map"
+                             ? "nav-link active"
+                             : "nav-link"
+                         }
+                         onClick={e => this.rightTabOpen(e, "map")}
+                       >
+                        
                           map
                         </a>
                       </li>
@@ -254,6 +276,7 @@ class MyrolesMain extends Component {
                         requestRegions={this.requestRegions}
                         requestSite={this.requestSite}
                         requestSubmission={this.requestSubmission}
+                        requestMap={this.requestMap}
                         regions={this.state.regions}
                       />
                     )}
@@ -261,6 +284,16 @@ class MyrolesMain extends Component {
                     {this.state.rightTab == "site" && (
                       <SiteTable site={this.state.site} />
                     )}
+
+                      {this.state.rightTab == "site" && (
+                      <SiteTable site={this.state.site} />
+                    )} 
+
+                        {this.state.rightTab == "map" && (
+                      <MapPage mapData={this.state.mapData} />
+                    )} 
+                    
+
                   </div>
                 </div>
               </div>

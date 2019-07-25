@@ -48,7 +48,7 @@ class YourTeamSideBar extends Component {
                         <ul>
                         {team.projects.map((project, i) => (
                           <li className={project.id==this.props.teamId?"active":null} key={i}>
-                            <a onClick={(event) => { this.props.requestRegions(project.id); this.props.requestSite(project.id); this.props.requestSubmission(project.id)}}>
+                            <a onClick={(event) => { this.props.requestRegions(project.id); this.props.requestSite(project.id); this.props.requestSubmission(project.id);this.props.requestMap(project.id) }}>
                              {project.name}
                             </a>
                           </li>
