@@ -1053,6 +1053,15 @@ class Logs extends Component {
     return colorArr[Math.floor(Math.random() * colorArr.length)];
   };
 
+  componentDidUpdate() {
+    if (this.timeLineDiv) {
+      const anchorList = this.timeLineDiv.getElementsByTagName("a");
+      for (let i = 0; i < anchorList.length; i++) {
+        anchorList[i].setAttribute("target", "_blank");
+      }
+    }
+  }
+
   render() {
     const {
       props: { siteLogs, showContentLoader },
@@ -1066,7 +1075,7 @@ class Logs extends Component {
           <BlockContentLoader number={2} height="150px" />
         ) : (
           <PerfectScrollbar>
-            <div className="timeline">
+            <div className="timeline" ref={el => (this.timeLineDiv = el)}>
               {groupByDate(siteLogs).map(siteLog => (
                 <div className="timeline-list" key={uuid()}>
                   <time>{siteLog.date}</time>

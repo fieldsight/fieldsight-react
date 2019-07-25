@@ -1,19 +1,12 @@
-import React, { Component, Fragment } from "react";
-// import {Link} from 'react-router-dom';
+import React, { Component } from "react";
+
 import { Dropdown } from "react-bootstrap";
-import Zoom from "react-reveal/Zoom";
+
 import CountCard from "../../common/CountCard";
 import { AvatarContentLoader } from "../../common/Loader";
 import SubmissionModal from "./SubmissionModal";
 
-const ManageDropdown = ["Generate Report", "View Data"];
-const HeaderDropdown = [
-  "Edit site information",
-  "site document",
-  "user",
-  "form"
-];
-
+const projectId = window.project_id ? window.project_id : 137;
 class DashboardHeader extends Component {
   render() {
     const {
@@ -26,6 +19,7 @@ class DashboardHeader extends Component {
         totalUsers,
         totalSubmission,
         siteForms,
+        siteId,
         showModal,
         showDotLoader,
         activeTab,
@@ -34,6 +28,26 @@ class DashboardHeader extends Component {
         toggleTab
       }
     } = this;
+
+    const ManageDropdown = [
+      { title: "Generate Report", link: `/#` },
+      { title: "View Data", link: `/forms/responses/${siteId}/` }
+    ];
+    const HeaderDropdown = [
+      { title: "Edit site information", link: `/fieldsight/site/${siteId}/` },
+      {
+        title: "site document",
+        link: `/fieldsight/site/blue-prints/${siteId}/`
+      },
+      { title: "user", link: `/fieldsight/manage/people/site/${siteId}/` },
+      { title: "form", link: `/forms/setup-forms/0/${siteId}` },
+      {
+        ...(enableSubsites && {
+          title: "Add Subsites",
+          link: `/fieldsight/site/add/subsite/${projectId}/${siteId}`
+        })
+      }
+    ];
 
     return (
       <div className="card mrb-30">
@@ -66,8 +80,8 @@ class DashboardHeader extends Component {
 
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={`#/action-${i}`} key={i}>
-                    {item}
+                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                    {item.title}
                   </Dropdown.Item>
                 ))}
               </Dropdown.Menu>
@@ -83,30 +97,41 @@ class DashboardHeader extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
                 {HeaderDropdown.map((item, i) => (
-                  <Dropdown.Item href={`#/action-${i}`} key={i}>
-                    {item}
+                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                    {item.title}
                   </Dropdown.Item>
                 ))}
-                {enableSubsites && (
-                  <Dropdown.Item href={`#/action`}>Add Subsites</Dropdown.Item>
-                )}
+                {/* {enableSubsites && (
+                  <Dropdown.Item
+                    href={`/fieldsight/site/add/subsite/${projectId}/${site_id}`}
+                  >
+                    Add Subsites
+                  </Dropdown.Item>
+                )} */}
               </Dropdown.Menu>
             </Dropdown>
           </div>
         </div>
         <div className="card-body">
           <div className="header-count">
-            <CountCard
-              countName="Total"
-              countNumber={totalSubmission}
-              icon="la-map-marker"
-            />
-            <CountCard
-              countName="Users"
-              countNumber={totalUsers}
-              icon="la-user"
-              noSubmissionText={true}
-            />
+            <a
+              href={`/fieldsight/site-submission/${siteId}/2/`}
+              target="_blank"
+            >
+              <CountCard
+                countName="Total"
+                countNumber={totalSubmission}
+                icon="la-map-marker"
+              />
+            </a>
+            <a href={`/fieldsight/site-users/${siteId}/`} target="_blank">
+              <CountCard
+                countName="Users"
+                countNumber={totalUsers}
+                icon="la-user"
+                noSubmissionText={true}
+              />
+            </a>
 
             <div className="add-data">
               <a onClick={() => openModal("Header")}>

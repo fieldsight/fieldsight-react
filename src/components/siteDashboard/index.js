@@ -112,6 +112,7 @@ class SiteDashboard extends Component {
                 totalSubmission={submissions.total_submissions}
                 getSiteForms={getSiteForms}
                 showDotLoader={showDotLoader}
+                siteId={siteId}
                 siteForms={siteForms}
                 showModal={showHeaderModal}
                 activeTab={activeTab}
@@ -125,7 +126,11 @@ class SiteDashboard extends Component {
                     <div className="card-header main-card-header sub-card-header">
                       <h5>Site Map</h5>
                       <div className="dash-btn">
-                        <a href={`#/`} className="fieldsight-btn left-icon">
+                        <a
+                          href={`/fieldsight/site/response-coords/${siteId}/`}
+                          className="fieldsight-btn left-icon"
+                          target="_blank"
+                        >
                           <i className="la la-map" /> full map
                         </a>
                       </div>
@@ -144,7 +149,11 @@ class SiteDashboard extends Component {
                   <div className="card region-table">
                     <div className="card-header main-card-header sub-card-header">
                       <h5>Recent Pictures</h5>
-                      <a href={`#/`} className="fieldsight-btn">
+                      <a
+                        href={`/fieldsight/site/all-pictures/${siteId}/`}
+                        className="fieldsight-btn"
+                        target="_blank"
+                      >
                         view all
                       </a>
                     </div>
@@ -235,7 +244,11 @@ class SiteDashboard extends Component {
                       <div className="about">
                         <div className="card-header main-card-header sub-card-header">
                           <h5>Site Documents</h5>
-                          <a href={`#/`} className="fieldsight-btn">
+                          <a
+                            href={`/fieldsight/site/blue-prints/${siteId}/`}
+                            className="fieldsight-btn"
+                            target="_blank"
+                          >
                             view all
                           </a>
                         </div>
@@ -289,7 +302,11 @@ class SiteDashboard extends Component {
                     <div className="card logs">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>Logs</h5>
-                        <a href={`#/`} className="fieldsight-btn">
+                        <a
+                          href={`/events/site_logs/${siteId}/`}
+                          className="fieldsight-btn"
+                          target="_blank"
+                        >
                           view all
                         </a>
                       </div>
