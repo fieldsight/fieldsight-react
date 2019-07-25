@@ -11,6 +11,8 @@ import {
 } from "react-leaflet";
 // import "leaflet/dist/leaflet.css";
 
+import { BlockContentLoader } from "../../common/Loader";
+
 // const position = [27.7, 85.4];
 
 class SiteMap extends Component {
@@ -18,12 +20,15 @@ class SiteMap extends Component {
     const {
       location: { coordinates },
       name,
-      address
+      address,
+      showContentLoader
     } = this.props;
 
     return (
       <>
-        {coordinates && (
+        {showContentLoader ? (
+          <BlockContentLoader number={1} height="395px" />
+        ) : (
           <Map
             center={[coordinates[1], coordinates[0]]}
             zoom={7}
@@ -59,7 +64,7 @@ class SiteMap extends Component {
                 </FeatureGroup>
               </LayersControl.Overlay>
             </LayersControl>
-            {/* <LayersControl.Overlay name="Marker with popup"> */}
+
             <Marker position={[coordinates[1], coordinates[0]]}>
               <Popup>
                 <span>
@@ -67,33 +72,9 @@ class SiteMap extends Component {
                 </span>
               </Popup>
             </Marker>
-            {/* </LayersControl.Overlay> */}
           </Map>
         )}
       </>
-      // <Fragment>
-      //   {coordinates && (
-      //     <Map
-      //       style={{ height: "396px" }}
-      //       center={[coordinates[1], coordinates[0]]}
-      //       zoom={13}
-      //     >
-      //       <TileLayer
-      //         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      //         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      //       />
-      //       <Marker position={[coordinates[1], coordinates[0]]}>
-      //         <Popup>
-      //           <b>Name: </b>
-      //           {name}
-      //           <br />
-      //           <b>Address: </b>
-      //           {address}
-      //         </Popup>
-      //       </Marker>
-      //     </Map>
-      //   )}
-      // </Fragment>
     );
   }
 }

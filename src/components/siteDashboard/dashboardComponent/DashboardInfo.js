@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import uuid from "uuid/v4";
 import { ListContentLoader } from "../../common/Loader";
@@ -12,9 +12,9 @@ const DashboardInfoItem = ({ meta }) => (
 );
 
 const DashboardInfo = ({ siteMetas, showContentLoader }) => (
-  <Fragment>
+  <>
     {showContentLoader ? (
-      <ListContentLoader number={19} />
+      <ListContentLoader number={16} />
     ) : (
       <PerfectScrollbar>
         <div className="info-wrap">
@@ -30,6 +30,6 @@ const DashboardInfo = ({ siteMetas, showContentLoader }) => (
         </div>
       </PerfectScrollbar>
     )}
-  </Fragment>
+  </>
 );
 export default DashboardInfo;

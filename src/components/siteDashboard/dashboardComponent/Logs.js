@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import format from "date-fns/format";
+import { BlockContentLoader } from "../../common/Loader";
 import uuid from "uuid/v4";
+
 class Logs extends Component {
   getLog = data => {
     let content = "";
@@ -1054,17 +1055,16 @@ class Logs extends Component {
 
   render() {
     const {
-      props: { siteLogs },
+      props: { siteLogs, showContentLoader },
       groupByDate,
       getColor,
       getLog
     } = this;
     return (
-      <React.Fragment>
-        <div
-          className="logs-list"
-          style={{ position: "relative", height: "314px" }}
-        >
+      <>
+        {showContentLoader ? (
+          <BlockContentLoader number={2} height="150px" />
+        ) : (
           <PerfectScrollbar>
             <div className="timeline">
               {groupByDate(siteLogs).map(siteLog => (
@@ -1096,8 +1096,8 @@ class Logs extends Component {
               ))}
             </div>
           </PerfectScrollbar>
-        </div>
-      </React.Fragment>
+        )}
+      </>
     );
   }
 }
