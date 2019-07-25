@@ -1,128 +1,58 @@
-import React , {Component} from 'react';
-import Table from 'react-bootstrap/Table'
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import 'react-perfect-scrollbar/dist/css/styles.css';
-
-class DatatablePage extends Component{
-
-  render(){
+import React, { Component } from "react";
+import Table from "react-bootstrap/Table";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import format from "date-fns/format";
+import uuid from "uuid/v4";
+import { ListContentLoader } from "../../common/Loader";
+class DatatablePage extends Component {
+  render() {
+    const { siteSubmissions, showContentLoader } = this.props;
+    console.log("siteSubmissions", siteSubmissions);
     return (
-      <PerfectScrollbar>
-        <Table responsive="xl" className="table  table-bordered  dataTable ">
-            <thead>
+      <>
+        {showContentLoader ? (
+          <ListContentLoader number={19} />
+        ) : siteSubmissions.length > 0 ? (
+          <PerfectScrollbar>
+            <Table
+              responsive="xl"
+              className="table  table-bordered  dataTable "
+            >
+              <thead>
                 <tr>
-                    <th >Name</th>
-                    <th >Type</th>
-                    <th >Added Date</th>
-                    <th >Action</th>
+                  <th>Form</th>
+                  <th>Submitted By</th>
+                  <th>Reviewed By</th>
+                  <th>Status</th>
+                  <th>Submitted On</th>
                 </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <a href={`#/`}>
-                        <span className="td-doc-icon google">
-                            <i className="fa fa-file-pdf-o"></i>
-                        </span>
-                        Retrofitting Go/No-Go with Measurement
-                    </a>
-                </td>
-                <td>Plan</td>
-                <td><time>2018-10-02</time></td>
-                <td>
-                    <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fa fa-edit"> </i> </a>
-                    <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i class="fa fa-trash-o"> </i> </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href={`#/`}>
-                        <span className="td-doc-icon approved">
-                            <i className="fa fa-file-excel-o"></i>
-                        </span>
-                        Retrofitting Go/No-Go with Measurement
-                    </a>
-                </td>
-                <td>Plan</td>
-                <td><time>2018-10-02</time></td>
-                <td>
-                    <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fa fa-edit"> </i> </a>
-                    <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i class="fa fa-trash-o"> </i> </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href={`#/`}>
-                        <span className="td-doc-icon twitter">
-                            <i className="fa fa-file-word-o"></i>
-                        </span>
-                        Retrofitting Go/No-Go with Measurement
-                    </a>
-                </td>
-                <td>Plan</td>
-                <td><time>2018-10-02</time></td>
-                <td>
-                    <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fa fa-edit"> </i> </a>
-                    <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i class="fa fa-trash-o"> </i> </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href={`#/`}>
-                        <span className="td-doc-icon pending">
-                            <i className="fa fa-file-photo-o"></i>
-                        </span>
-                        Retrofitting Go/No-Go with Measurement
-                    </a>
-                </td>
-                <td>Plan</td>
-                <td><time>2018-10-02</time></td>
-                <td>
-                    <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fa fa-edit"> </i> </a>
-                    <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i class="fa fa-trash-o"> </i> </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href={`#/`}>
-                        <span className="td-doc-icon google">
-                            <i className="fa fa-file-pdf-o"></i>
-                        </span>
-                        Retrofitting Go/No-Go with Measurement
-                    </a>
-                </td>
-                <td>Plan</td>
-                <td><time>2018-10-02</time></td>
-                <td>
-                    <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fa fa-edit"> </i> </a>
-                    <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i class="fa fa-trash-o"> </i> </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href={`#/`}>
-                        <span className="td-doc-icon twitter">
-                            <i className="fa fa-file-word-o"></i>
-                        </span>
-                        Retrofitting Go/No-Go with Measurement
-                    </a>
-                </td>
-                <td>Plan</td>
-                <td><time>2018-10-02</time></td>
-                <td>
-                    <a href={`#/`} className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fa fa-edit"> </i> </a>
-                    <a href={`#/`} className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i class="fa fa-trash-o"> </i> </a>
-                </td>
-            </tr>
+              </thead>
 
-        </tbody>
-      </Table>
-      </PerfectScrollbar>
+              <tbody>
+                {siteSubmissions.map((submission, i) => (
+                  <tr key={uuid()}>
+                    <td>{submission.form}</td>
+                    <td>{submission.submitted_by}</td>
+                    <td>{submission.reviewed_by}</td>
+                    <td>
+                      <span className={submission.status.toLowerCase()}>
+                        {submission.status}
+                      </span>
+                    </td>
+                    <td>
+                      {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </PerfectScrollbar>
+        ) : (
+          <p> No Data Available </p>
+        )}
+      </>
     );
-    
   }
-
- 
 }
 
 export default DatatablePage;

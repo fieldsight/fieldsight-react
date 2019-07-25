@@ -4,6 +4,23 @@ import uuid from "uuid/v4";
 import format from "date-fns/format";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import { DotLoader } from "../common/Loader";
+
+function measure(lat1, lon1, lat2, lon2) {
+  // generally used geo measurement function
+  var R = 6378.137; // Radius of earth in KM
+  var dLat = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180;
+  var dLon = (lon2 * Math.PI) / 180 - (lon1 * Math.PI) / 180;
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  //return d; // kilometers
+  return d * 1000; // meters
+}
 class Submission extends Component {
   handleRepeatedSubmission = submission => {
     return (
@@ -110,11 +127,23 @@ class Submission extends Component {
                       </p>
                       <p>
                         <span>Altitude:</span>
-                        <label>{altitude}</label>
+                        <label>{altitude} meters</label>
                       </p>
                       <p>
                         <span>Accuracy:</span>
-                        <label>{accuracy}</label>
+                        <label>{accuracy} meters</label>
+                      </p>
+                      <p>
+                        <span>Distance between:</span>
+                        <label>
+                          {measure(
+                            site.latitude,
+                            site.longitude,
+                            latitude,
+                            longitude
+                          )}{" "}
+                          meters
+                        </label>
                       </p>
                     </div>
                   </div>
@@ -159,7 +188,7 @@ class Submission extends Component {
   };
 
   render() {
-    const { dateCreated, submittedBy, submissionData, dotLoader } = this.props;
+    const { dateCreated, submittedBy, submissionData } = this.props;
 
     return (
       <div className="group-submission mrt-30">
@@ -182,12 +211,10 @@ class Submission extends Component {
                   )}
                 </div>
               </div>
-              {!dotLoader && (
-                <div className="card-body submission-card">
-                  {submissionData && this.renderSubmission(submissionData)}
-                </div>
-              )}
-              {dotLoader && <DotLoader />}
+
+              <div className="card-body submission-card">
+                {submissionData && this.renderSubmission(submissionData)}
+              </div>
             </div>
           </div>
         </div>

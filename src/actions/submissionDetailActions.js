@@ -11,9 +11,8 @@ import { successToast, errorToast } from "../utils/toastHandler";
 
 export const getSubmissionDetail = id => dispatch => {
   const splitedData = id.split("/");
-  console.log("splitedData", splitedData);
+
   if (splitedData.length > 1) {
-    console.log("if block");
     dispatch({
       type: START_SUBMISSION_LOADER
     });
@@ -29,16 +28,11 @@ export const getSubmissionDetail = id => dispatch => {
         });
       })
       .catch(err => {
-        console.log("err", err);
         dispatch({
           type: STOP_SUBMISSION_LOADER
         });
       });
   } else {
-    console.log("else block");
-    dispatch({
-      type: SHOW_DOT_LOADER
-    });
     axios
       .get(`fv3/api/submission/${id}/`)
       .then(res => {
