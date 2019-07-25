@@ -4,8 +4,7 @@ import { Dropdown } from "react-bootstrap";
 import Zoom from "react-reveal/Zoom";
 import CountCard from "../../common/CountCard";
 import { AvatarContentLoader } from "../../common/Loader";
-import Modal from "../../common/Modal";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import SubmissionModal from "./SubmissionModal";
 
 const ManageDropdown = ["Generate Report", "View Data"];
 const HeaderDropdown = [
@@ -15,89 +14,7 @@ const HeaderDropdown = [
   "form"
 ];
 
-const HeaderModal = ({ formData }) => {
-  const formType = Object.keys(formData)[0];
-
-  return (
-    <PerfectScrollbar>
-      {formData[formType] && formData[formType].length > 0 ? (
-        formType === "stage_forms" ? (
-          formData[formType].map(data => (
-            <>
-              <p>
-                <b> {data.name}</b>{" "}
-              </p>
-              <table className="table table-bordered">
-                <tbody>
-                  {data.sub_stages.map(subStages => (
-                    <tr>
-                      <td style={{ width: "80%" }}>{subStages.form_name}</td>
-                      <td style={{ width: "20%" }}>
-                        <a
-                          href={subStages.new_submission_url}
-                          target={`_blank`}
-                        >
-                          <i class="la la-plus approved" />
-                        </a>{" "}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          ))
-        ) : (
-          <table className="table table-bordered">
-            <tbody>
-              {formData[formType].map(data => (
-                <tr>
-                  <td style={{ width: "80%" }}>{data.form_name}</td>
-                  <td style={{ width: "20%" }}>
-                    <a href={data.new_submission_url} target={`_blank`}>
-                      <i class="la la-plus approved" />
-                    </a>{" "}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )
-      ) : (
-        <p>No Data Available</p>
-      )}
-    </PerfectScrollbar>
-  );
-};
 class DashboardHeader extends Component {
-  state = {
-    activeTab: "general"
-  };
-
-  closeModal = () => {
-    this.setState({
-      showModal: false
-    });
-  };
-
-  openModal = () => {
-    this.setState({
-      showModal: true
-    });
-  };
-
-  componentDidMount() {
-    this.props.getSiteForms(this.props.siteId, "general");
-  }
-
-  toggleTab = type => {
-    this.setState(
-      {
-        activeTab: type
-      },
-      this.props.getSiteForms(this.props.siteId, type)
-    );
-  };
-
   render() {
     const {
       props: {
@@ -108,7 +25,13 @@ class DashboardHeader extends Component {
         region,
         totalUsers,
         totalSubmission,
-        siteForms
+        siteForms,
+        showModal,
+        showDotLoader,
+        activeTab,
+        closeModal,
+        openModal,
+        toggleTab
       }
     } = this;
 
@@ -186,61 +109,21 @@ class DashboardHeader extends Component {
             />
 
             <div className="add-data">
-              <a onClick={this.openModal}>
+              <a onClick={() => openModal("Header")}>
                 {" "}
                 add data <i className="la la-plus" />
               </a>
             </div>
           </div>
 
-          {this.state.showModal && (
-            <Modal title="Add Data" toggleModal={this.closeModal}>
-              <div className="floating-form">
-                <div className="form-group">
-                  <ul className="nav nav-tabs ">
-                    <li className="nav-item">
-                      <a
-                        className={
-                          this.state.activeTab === "general"
-                            ? "nav-link active"
-                            : "nav-link"
-                        }
-                        onClick={() => this.toggleTab("general")}
-                      >
-                        General Form
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className={
-                          this.state.activeTab === "scheduled"
-                            ? "nav-link active"
-                            : "nav-link"
-                        }
-                        onClick={() => this.toggleTab("scheduled")}
-                      >
-                        scheduled form
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className={
-                          this.state.activeTab === "stage"
-                            ? "nav-link active"
-                            : "nav-link"
-                        }
-                        onClick={() => this.toggleTab("stage")}
-                      >
-                        Staged Form
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div style={{ position: "relative", height: "434px" }}>
-                  <HeaderModal formData={siteForms} />
-                </div>
-              </div>
-            </Modal>
+          {showModal && (
+            <SubmissionModal
+              showDotLoader={showDotLoader}
+              siteForms={siteForms}
+              activeTab={activeTab}
+              closeModal={() => closeModal("Header")}
+              toggleTab={toggleTab}
+            />
           )}
         </div>
       </div>

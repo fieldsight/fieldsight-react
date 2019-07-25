@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import format from "date-fns/format";
+import { BlockContentLoader } from "../../common/Loader";
 import uuid from "uuid/v4";
+
 class Logs extends Component {
   getLog = data => {
     let content = "";
@@ -1054,19 +1055,18 @@ class Logs extends Component {
 
   render() {
     const {
-      props: { siteLogs },
+      props: { siteLogs, showContentLoader },
       groupByDate,
       getColor,
       getLog
     } = this;
     return (
-      <React.Fragment>
-        <div
-          className="logs-list"
-          style={{ position: "relative", height: "314px" }}
-        >
+      <>
+        {showContentLoader ? (
+          <BlockContentLoader number={2} height="150px" />
+        ) : (
           <PerfectScrollbar>
-            {/* <div className="timeline">
+            <div className="timeline">
               {groupByDate(siteLogs).map(siteLog => (
                 <div className="timeline-list" key={uuid()}>
                   <time>{siteLog.date}</time>
@@ -1094,34 +1094,10 @@ class Logs extends Component {
                   </ul>
                 </div>
               ))}
-            </div> */}
-            <div className="loading-list grid-list">
-              <div className="text no-thumb">
-                <div className="row">
-                  <div className="col-lg-3 col-md-6">
-                    <div className="loading-content"> </div>
-                  </div>
-                  <div className="col-lg-3 col-md-6">
-                    <div className="loading-content"> </div>
-                  </div>
-                  <div className="col-lg-3 col-md-6">
-                    <div className="loading-content"> </div>
-                  </div>
-                  <div className="col-lg-3 col-md-6">
-                    <div className="loading-content"> </div>
-                  </div>
-                  <div className="col-lg-3 col-md-6">
-                    <div className="loading-content"> </div>
-                  </div>
-                  <div className="col-lg-3 col-md-6">
-                    <div className="loading-content"> </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </PerfectScrollbar>
-        </div>
-      </React.Fragment>
+        )}
+      </>
     );
   }
 }

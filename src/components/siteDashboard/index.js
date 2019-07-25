@@ -24,12 +24,44 @@ import {
 
 const siteId = window.site_id ? window.site_id : 59602;
 class SiteDashboard extends Component {
+  state = {
+    activeTab: "general",
+    showHeaderModal: false,
+    showSubmissionModal: false
+  };
+
+  closeModal = type => {
+    this.setState(
+      {
+        [`show${type}Modal`]: false,
+        activeTab: "general"
+      },
+      () => this.props.getSiteForms(siteId, "general")
+    );
+  };
+
+  openModal = type => {
+    this.setState({
+      [`show${type}Modal`]: true
+    });
+  };
+
+  toggleTab = formType => {
+    this.setState(
+      {
+        activeTab: formType
+      },
+      this.props.getSiteForms(siteId, formType)
+    );
+  };
+
   componentDidMount() {
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
     this.props.getSiteSubmissions(siteId);
     this.props.getSiteDocuments(siteId);
     this.props.getSiteLogs(siteId);
+    this.props.getSiteForms(siteId, "general");
   }
   render() {
     const {
@@ -51,12 +83,19 @@ class SiteDashboard extends Component {
           siteForms,
           form_submissions_chart_data,
           site_progress_chart_data,
+          showDotLoader,
           siteDashboardLoader,
           siteMetasLoader,
-          siteSubmissionsLoader
+          siteSubmissionsLoader,
+          siteLogsLoader,
+          siteDocumentsLoader
         },
         getSiteForms
-      }
+      },
+      state: { showHeaderModal, showSubmissionModal, activeTab },
+      closeModal,
+      openModal,
+      toggleTab
     } = this;
     return (
       <>
@@ -72,8 +111,13 @@ class SiteDashboard extends Component {
                 enableSubsites={enable_subsites}
                 totalSubmission={submissions.total_submissions}
                 getSiteForms={getSiteForms}
-                siteId={siteId}
+                showDotLoader={showDotLoader}
                 siteForms={siteForms}
+                showModal={showHeaderModal}
+                activeTab={activeTab}
+                closeModal={closeModal}
+                openModal={openModal}
+                toggleTab={toggleTab}
               />
               <div className="row">
                 <div className="col-lg-6">
@@ -91,6 +135,7 @@ class SiteDashboard extends Component {
                         name={name}
                         address={address}
                         location={location}
+                        showContentLoader={siteDashboardLoader}
                       />
                     </div>
                   </div>
@@ -136,30 +181,18 @@ class SiteDashboard extends Component {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xl-6 col-md-12">
-                    <div className="card region-table">
-                      <div className="card-header main-card-header sub-card-header">
-                        <h5>Submissions</h5>
-                        <div className="add-btn">
-                          <a href={`#/`} data-tab="scheduled-popup">
-                            Add new{" "}
-                            <span>
-                              <i className="la la-plus" />
-                            </span>
-                          </a>
-                        </div>
-                      </div>
-                      <div
-                        className="card-body"
-                        style={{ position: "relative", height: "434px" }}
-                      >
-                        <DatatablePage
-                          siteSubmissions={siteSubmissions}
-                          showContentLoader={siteSubmissionsLoader}
-                        />
-                      </div>
-                    </div>
-                  </div>
+
+                  <DatatablePage
+                    siteSubmissions={siteSubmissions}
+                    showContentLoader={siteSubmissionsLoader}
+                    siteForms={siteForms}
+                    showDotLoader={showDotLoader}
+                    showModal={showSubmissionModal}
+                    activeTab={activeTab}
+                    closeModal={closeModal}
+                    openModal={openModal}
+                    toggleTab={toggleTab}
+                  />
                 </div>
               </div>
               <div className="dashboard-counter mrt-30">
@@ -210,7 +243,10 @@ class SiteDashboard extends Component {
                           className="card-body about-body"
                           style={{ position: "relative", height: "358px" }}
                         >
-                          <SiteDocument siteDocuments={siteDocuments} />
+                          <SiteDocument
+                            siteDocuments={siteDocuments}
+                            showContentLoader={siteDocumentsLoader}
+                          />
                         </div>
                       </div>
                     </div>
@@ -262,7 +298,10 @@ class SiteDashboard extends Component {
                           className="logs-list"
                           style={{ position: "relative", height: "314px" }}
                         >
-                          <Logs siteLogs={siteLogs} />
+                          <Logs
+                            siteLogs={siteLogs}
+                            showContentLoader={siteLogsLoader}
+                          />
                         </div>
                       </div>
                     </div>

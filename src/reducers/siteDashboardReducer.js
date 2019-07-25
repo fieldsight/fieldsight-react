@@ -4,7 +4,8 @@ import {
   GET_SITE_SUBMISSIONS,
   GET_SITE_DOCUMENTS,
   GET_SITE_LOGS,
-  GET_SITE_FORMS
+  GET_SITE_FORMS,
+  SHOW_DOT_LOADER
 } from "../actions/types";
 
 const initialState = {
@@ -97,7 +98,13 @@ export default function(state = initialState, action) {
     case GET_SITE_FORMS:
       return {
         ...state,
-        siteForms: { ...action.payload }
+        siteForms: { ...action.payload },
+        showDotLoader: false
+      };
+    case SHOW_DOT_LOADER:
+      return {
+        ...state,
+        showDotLoader: true
       };
 
     default:

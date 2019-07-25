@@ -3,56 +3,94 @@ import Table from "react-bootstrap/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import format from "date-fns/format";
 import uuid from "uuid/v4";
-import { ListContentLoader } from "../../common/Loader";
-class DatatablePage extends Component {
-  render() {
-    const { siteSubmissions, showContentLoader } = this.props;
-    console.log("siteSubmissions", siteSubmissions);
-    return (
-      <>
-        {showContentLoader ? (
-          <ListContentLoader number={19} />
-        ) : siteSubmissions.length > 0 ? (
-          <PerfectScrollbar>
-            <Table
-              responsive="xl"
-              className="table  table-bordered  dataTable "
-            >
-              <thead>
-                <tr>
-                  <th>Form</th>
-                  <th>Submitted By</th>
-                  <th>Reviewed By</th>
-                  <th>Status</th>
-                  <th>Submitted On</th>
-                </tr>
-              </thead>
+import SubmissionModal from "./SubmissionModal";
+import { TableContentLoader } from "../../common/Loader";
 
-              <tbody>
-                {siteSubmissions.map((submission, i) => (
-                  <tr key={uuid()}>
-                    <td>{submission.form}</td>
-                    <td>{submission.submitted_by}</td>
-                    <td>{submission.reviewed_by}</td>
-                    <td>
-                      <span className={submission.status.toLowerCase()}>
-                        {submission.status}
-                      </span>
-                    </td>
-                    <td>
-                      {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
-                    </td>
+const DatatablePage = ({
+  siteSubmissions,
+  showContentLoader,
+  showModal,
+  showDotLoader,
+  siteForms,
+  activeTab,
+  closeModal,
+  openModal,
+  toggleTab
+}) => (
+  <>
+    <div className="col-xl-6 col-md-12">
+      <div className="card region-table">
+        <div className="card-header main-card-header sub-card-header">
+          <h5>Submissions</h5>
+          <div className="add-btn">
+            <a
+              onClick={() => openModal("Submission")}
+              data-tab="scheduled-popup"
+            >
+              <span>
+                <i className="la la-plus" />
+              </span>
+            </a>
+          </div>
+        </div>
+        <div
+          className="card-body"
+          style={{ position: "relative", height: "434px" }}
+        >
+          {showContentLoader ? (
+            <TableContentLoader row={12} column={5} />
+          ) : siteSubmissions.length > 0 ? (
+            <PerfectScrollbar>
+              <Table
+                responsive="xl"
+                className="table  table-bordered  dataTable "
+              >
+                <thead>
+                  <tr>
+                    <th>Form</th>
+                    <th>Submitted By</th>
+                    <th>Reviewed By</th>
+                    <th>Status</th>
+                    <th>Submitted On</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-          </PerfectScrollbar>
-        ) : (
-          <p> No Data Available </p>
-        )}
-      </>
-    );
-  }
-}
+                </thead>
+
+                <tbody>
+                  {siteSubmissions.map((submission, i) => (
+                    <tr key={uuid()}>
+                      <td>{submission.form}</td>
+                      <td>{submission.submitted_by}</td>
+                      <td>{submission.reviewed_by}</td>
+                      <td>
+                        <span className={submission.status.toLowerCase()}>
+                          {submission.status}
+                        </span>
+                      </td>
+                      <td>
+                        {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </PerfectScrollbar>
+          ) : (
+            <p> No Data Available </p>
+          )}
+
+          {showModal && (
+            <SubmissionModal
+              showDotLoader={showDotLoader}
+              siteForms={siteForms}
+              activeTab={activeTab}
+              closeModal={() => closeModal("Submission")}
+              toggleTab={toggleTab}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  </>
+);
 
 export default DatatablePage;
