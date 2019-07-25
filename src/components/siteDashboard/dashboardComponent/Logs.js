@@ -1066,7 +1066,7 @@ class Logs extends Component {
           style={{ position: "relative", height: "314px" }}
         >
           <PerfectScrollbar>
-            <div className="timeline">
+            {/* <div className="timeline">
               {groupByDate(siteLogs).map(siteLog => (
                 <div className="timeline-list" key={uuid()}>
                   <time>{siteLog.date}</time>
@@ -1094,6 +1094,30 @@ class Logs extends Component {
                   </ul>
                 </div>
               ))}
+            </div> */}
+            <div className="loading-list grid-list">
+              <div className="text no-thumb">
+                <div className="row">
+                  <div className="col-lg-3 col-md-6">
+                    <div className="loading-content"> </div>
+                  </div>
+                  <div className="col-lg-3 col-md-6">
+                    <div className="loading-content"> </div>
+                  </div>
+                  <div className="col-lg-3 col-md-6">
+                    <div className="loading-content"> </div>
+                  </div>
+                  <div className="col-lg-3 col-md-6">
+                    <div className="loading-content"> </div>
+                  </div>
+                  <div className="col-lg-3 col-md-6">
+                    <div className="loading-content"> </div>
+                  </div>
+                  <div className="col-lg-3 col-md-6">
+                    <div className="loading-content"> </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </PerfectScrollbar>
         </div>

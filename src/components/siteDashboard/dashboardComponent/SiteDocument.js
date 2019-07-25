@@ -14,11 +14,14 @@ class SiteDocument extends Component {
                   <div className="doc-item">
                     <div className="doc-wrapper">
                       <figure>
-                        <img src="/img/pdf.png" alt="" />
+                        <img src={`/static/images/${doc.type}.png`} alt="" />
                       </figure>
                       <div className="doc-content">
                         <h6>
-                          <a href={doc.file}> {doc.name}</a>
+                          <a href={doc.file} target="_blank">
+                            {" "}
+                            {doc.name}
+                          </a>
                         </h6>
                       </div>
                     </div>

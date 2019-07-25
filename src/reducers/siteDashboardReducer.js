@@ -3,7 +3,8 @@ import {
   GET_SITE_METAS,
   GET_SITE_SUBMISSIONS,
   GET_SITE_DOCUMENTS,
-  GET_SITE_LOGS
+  GET_SITE_LOGS,
+  GET_SITE_FORMS
 } from "../actions/types";
 
 const initialState = {
@@ -29,6 +30,7 @@ const initialState = {
   siteSubmissions: [],
   siteDocuments: [],
   siteLogs: [],
+  siteForms: {},
   siteDashboardLoader: true,
   siteMetasLoader: true,
   siteSubmissionsLoader: true,
@@ -90,6 +92,12 @@ export default function(state = initialState, action) {
         ...state,
         siteLogs: [...action.payload],
         siteLogsLoader: false
+      };
+
+    case GET_SITE_FORMS:
+      return {
+        ...state,
+        siteForms: { ...action.payload }
       };
 
     default:

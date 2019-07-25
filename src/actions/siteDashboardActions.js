@@ -5,7 +5,8 @@ import {
   GET_SITE_METAS,
   GET_SITE_SUBMISSIONS,
   GET_SITE_DOCUMENTS,
-  GET_SITE_LOGS
+  GET_SITE_LOGS,
+  GET_SITE_FORMS
 } from "./types";
 
 export const getSiteDashboard = id => dispatch => {
@@ -67,12 +68,26 @@ export const getSiteDocuments = id => dispatch => {
 
 export const getSiteLogs = id => dispatch => {
   axios
-    .get(`/events/api/site_logs/${id}/`)
+    .get(`events/api/site_logs/${id}/`)
     .then(res => {
       console.log("getSiteLogs", res.data);
       dispatch({
         type: GET_SITE_LOGS,
         payload: res.data.results
+      });
+    })
+    .catch(err => {
+      console.log("Err", err);
+    });
+};
+
+export const getSiteForms = (id, formType) => dispatch => {
+  axios
+    .get(`fv3/api/site-forms/${id}/?type=${formType}`)
+    .then(res => {
+      dispatch({
+        type: GET_SITE_FORMS,
+        payload: res.data
       });
     })
     .catch(err => {

@@ -4,6 +4,8 @@ import { Dropdown } from "react-bootstrap";
 import Zoom from "react-reveal/Zoom";
 import CountCard from "../../common/CountCard";
 import { AvatarContentLoader } from "../../common/Loader";
+import Modal from "../../common/Modal";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 const ManageDropdown = ["Generate Report", "View Data"];
 const HeaderDropdown = [
@@ -13,12 +15,87 @@ const HeaderDropdown = [
   "form"
 ];
 
+const HeaderModal = ({ formData }) => {
+  const formType = Object.keys(formData)[0];
+
+  return (
+    <PerfectScrollbar>
+      {formData[formType] && formData[formType].length > 0 ? (
+        formType === "stage_forms" ? (
+          formData[formType].map(data => (
+            <>
+              <p>
+                <b> {data.name}</b>{" "}
+              </p>
+              <table className="table table-bordered">
+                <tbody>
+                  {data.sub_stages.map(subStages => (
+                    <tr>
+                      <td style={{ width: "80%" }}>{subStages.form_name}</td>
+                      <td style={{ width: "20%" }}>
+                        <a
+                          href={subStages.new_submission_url}
+                          target={`_blank`}
+                        >
+                          <i class="la la-plus approved" />
+                        </a>{" "}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          ))
+        ) : (
+          <table className="table table-bordered">
+            <tbody>
+              {formData[formType].map(data => (
+                <tr>
+                  <td style={{ width: "80%" }}>{data.form_name}</td>
+                  <td style={{ width: "20%" }}>
+                    <a href={data.new_submission_url} target={`_blank`}>
+                      <i class="la la-plus approved" />
+                    </a>{" "}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+      ) : (
+        <p>No Data Available</p>
+      )}
+    </PerfectScrollbar>
+  );
+};
 class DashboardHeader extends Component {
   state = {
-    showPopup: false,
-    tabOne: true,
-    tabTwo: false,
-    tabThree: false
+    activeTab: "general"
+  };
+
+  closeModal = () => {
+    this.setState({
+      showModal: false
+    });
+  };
+
+  openModal = () => {
+    this.setState({
+      showModal: true
+    });
+  };
+
+  componentDidMount() {
+    this.props.getSiteForms(this.props.siteId, "general");
+  }
+
+  toggleTab = type => {
+    this.setState(
+      {
+        activeTab: type
+      },
+      this.props.getSiteForms(this.props.siteId, type)
+    );
   };
 
   render() {
@@ -30,7 +107,8 @@ class DashboardHeader extends Component {
         logo,
         region,
         totalUsers,
-        totalSubmission
+        totalSubmission,
+        siteForms
       }
     } = this;
 
@@ -44,10 +122,8 @@ class DashboardHeader extends Component {
               </figure>
               <div className="dash-pf-content">
                 <h5>{name}</h5>
-                <span>
-                  {region ? `${region}, ` : null}
-                  {address}
-                </span>
+                <span>{address}</span>
+                <span>{region} </span>
               </div>
             </div>
           ) : (
@@ -110,192 +186,62 @@ class DashboardHeader extends Component {
             />
 
             <div className="add-data">
-              <a href={`#/`} onClick={this.togglePopup}>
+              <a onClick={this.openModal}>
                 {" "}
                 add data <i className="la la-plus" />
               </a>
             </div>
           </div>
 
-          {/* {this.state.showPopup && (
-            <Zoom duration={500}>
-              <div className="fieldsight-popup open" id="add-data">
-                <div className="popup-body">
-                  <div className="card">
-                    <div className="card-header main-card-header">
-                      <h5>Add Data</h5>
-                      <span className="popup-close" onClick={this.togglePopup}>
-                        <i className="la la-close" />
-                      </span>
-                    </div>
-                    <div className="card-body">
-                      <form className="floating-form">
-                        <div className="form-group">
-                          <ul className="nav nav-tabs ">
-                            <li className="nav-item">
-                              <a
-                                className={
-                                  this.state.tabOne
-                                    ? "nav-link active"
-                                    : "nav-link"
-                                }
-                                href={`#/`}
-                                onClick={this.openTabOne}
-                              >
-                                General Form
-                              </a>
-                            </li>
-                            <li className="nav-item">
-                              <a
-                                className={
-                                  this.state.tabTwo
-                                    ? "nav-link active"
-                                    : "nav-link"
-                                }
-                                href={`#/`}
-                                onClick={this.openTabTwo}
-                              >
-                                scheduled form
-                              </a>
-                            </li>
-                            <li className="nav-item">
-                              <a
-                                className={
-                                  this.state.tabThree
-                                    ? "nav-link active"
-                                    : "nav-link"
-                                }
-                                href={`#/`}
-                                onClick={this.openTabThree}
-                              >
-                                Staged Form
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        {this.state.tabTwo && (
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Form Name</th>
-                                <th>New</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>General Informations</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  General Information (ALL structural typ.)
-                                </td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Foundation (ALL structural typ.)</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        )}
-                        {this.state.tabOne && (
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Form Name</th>
-                                <th>New</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Vertical Members (ALL structural typ.)</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Plinth Beam (ALL structural typ.)</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>TSC Visitors - STFC</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        )}
-                        {this.state.tabThree && (
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Form Name</th>
-                                <th>New</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Retrofitting Go/No-Go with Measurement</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Retrofitting Go/No-Go Survey</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>TSC Visitors - STFC</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        )}
-
-                        <div className="form-group pull-right no-margin">
-                          <button type="submit" class="fieldsight-btn">
-                            Save
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
+          {this.state.showModal && (
+            <Modal title="Add Data" toggleModal={this.closeModal}>
+              <div className="floating-form">
+                <div className="form-group">
+                  <ul className="nav nav-tabs ">
+                    <li className="nav-item">
+                      <a
+                        className={
+                          this.state.activeTab === "general"
+                            ? "nav-link active"
+                            : "nav-link"
+                        }
+                        onClick={() => this.toggleTab("general")}
+                      >
+                        General Form
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className={
+                          this.state.activeTab === "scheduled"
+                            ? "nav-link active"
+                            : "nav-link"
+                        }
+                        onClick={() => this.toggleTab("scheduled")}
+                      >
+                        scheduled form
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className={
+                          this.state.activeTab === "stage"
+                            ? "nav-link active"
+                            : "nav-link"
+                        }
+                        onClick={() => this.toggleTab("stage")}
+                      >
+                        Staged Form
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div style={{ position: "relative", height: "434px" }}>
+                  <HeaderModal formData={siteForms} />
                 </div>
               </div>
-            </Zoom>
-          )} */}
+            </Modal>
+          )}
         </div>
       </div>
     );

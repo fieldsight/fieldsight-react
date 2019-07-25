@@ -18,12 +18,13 @@ import {
   getSiteMetas,
   getSiteSubmissions,
   getSiteDocuments,
-  getSiteLogs
+  getSiteLogs,
+  getSiteForms
 } from "../../actions/siteDashboardActions";
 
+const siteId = window.site_id ? window.site_id : 59602;
 class SiteDashboard extends Component {
   componentDidMount() {
-    const siteId = window.site_id ? window.site_id : 59602;
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
     this.props.getSiteSubmissions(siteId);
@@ -47,16 +48,18 @@ class SiteDashboard extends Component {
           siteSubmissions,
           siteDocuments,
           siteLogs,
+          siteForms,
           form_submissions_chart_data,
           site_progress_chart_data,
           siteDashboardLoader,
           siteMetasLoader,
           siteSubmissionsLoader
-        }
+        },
+        getSiteForms
       }
     } = this;
     return (
-      <React.Fragment>
+      <>
         <div className="row">
           <div className="col-xl-12">
             <div className="right-content no-bg new-dashboard">
@@ -68,12 +71,15 @@ class SiteDashboard extends Component {
                 totalUsers={total_users}
                 enableSubsites={enable_subsites}
                 totalSubmission={submissions.total_submissions}
+                getSiteForms={getSiteForms}
+                siteId={siteId}
+                siteForms={siteForms}
               />
               <div className="row">
                 <div className="col-lg-6">
                   <div className="card map">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>Project map</h5>
+                      <h5>Site Map</h5>
                       <div className="dash-btn">
                         <a href={`#/`} className="fieldsight-btn left-icon">
                           <i className="la la-map" /> full map
@@ -92,7 +98,10 @@ class SiteDashboard extends Component {
                 <div className="col-lg-6">
                   <div className="card region-table">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>Recent photo</h5>
+                      <h5>Recent Pictures</h5>
+                      <a href={`#/`} className="fieldsight-btn">
+                        view all
+                      </a>
                     </div>
                     <div
                       className="card-body"
@@ -109,6 +118,12 @@ class SiteDashboard extends Component {
                     <div className="card site_dashboard_info">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>Site information</h5>
+                        <div className="dash-btn">
+                          <a href={`#/`} className="fieldsight-btn left-icon">
+                            <i className="la la-edit" />
+                            edit
+                          </a>
+                        </div>
                       </div>
                       <div
                         className="card-body site-info board-site-info"
@@ -124,7 +139,7 @@ class SiteDashboard extends Component {
                   <div className="col-xl-6 col-md-12">
                     <div className="card region-table">
                       <div className="card-header main-card-header sub-card-header">
-                        <h5>Submission table</h5>
+                        <h5>Submissions</h5>
                         <div className="add-btn">
                           <a href={`#/`} data-tab="scheduled-popup">
                             Add new{" "}
@@ -187,6 +202,9 @@ class SiteDashboard extends Component {
                       <div className="about">
                         <div className="card-header main-card-header sub-card-header">
                           <h5>Site Documents</h5>
+                          <a href={`#/`} className="fieldsight-btn">
+                            view all
+                          </a>
                         </div>
                         <div
                           className="card-body about-body"
@@ -201,7 +219,7 @@ class SiteDashboard extends Component {
                     <div className="card mangager-list">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>Users</h5>
-                        <div className="dash-btn">
+                        {/* <div className="dash-btn">
                           <form className="floating-form">
                             <div className="form-group mr-0">
                               <input
@@ -216,7 +234,7 @@ class SiteDashboard extends Component {
                           <a href={`#/`} className="fieldsight-btn">
                             <i className="la la-plus" />
                           </a>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="card-body">
                         <div
@@ -254,7 +272,7 @@ class SiteDashboard extends Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -270,6 +288,7 @@ export default connect(
     getSiteMetas,
     getSiteSubmissions,
     getSiteDocuments,
-    getSiteLogs
+    getSiteLogs,
+    getSiteForms
   }
 )(SiteDashboard);
