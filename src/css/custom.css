@@ -1,3 +1,7 @@
 .Toastify__toast--success {
   background: #00628e;
 }
+
+#lightboxBackdrop {
+  z-index: 9999;
+}

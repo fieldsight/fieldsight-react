@@ -134,7 +134,7 @@ class Submission extends Component {
                         <label>{(+accuracy).toFixed(2)} meters</label>
                       </p>
                       <p>
-                        <span>Distance between:</span>
+                        <span>Distance From Site:</span>
                         <label>
                           {measure(
                             site.latitude,
@@ -163,9 +163,8 @@ class Submission extends Component {
               submission.type === "end" ||
               submission.type === "datetime" ? (
                 <time>
-                  <i className="la la-clock-o">
-                    {format(submission.answer, ["MMMM Do YYYY,  h:mm:ss a"])}{" "}
-                  </i>
+                  <i className="la la-clock-o" />
+                  {format(submission.answer, ["MMMM Do YYYY,  h:mm:ss a"])}
                 </time>
               ) : (
                 <p>{submission.answer}</p>

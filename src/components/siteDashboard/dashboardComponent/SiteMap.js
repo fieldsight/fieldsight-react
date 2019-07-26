@@ -31,7 +31,7 @@ class SiteMap extends Component {
         ) : (
           <Map
             center={[coordinates[1], coordinates[0]]}
-            zoom={7}
+            zoom={13}
             style={{ width: "100%", height: "396px" }}
           >
             <TileLayer
@@ -52,7 +52,7 @@ class SiteMap extends Component {
                 />
               </LayersControl.BaseLayer>
 
-              <LayersControl.Overlay name="Feature group">
+              {/* <LayersControl.Overlay name="Feature group">
                 <FeatureGroup color="purple">
                   <Popup>
                     <span>Popup in FeatureGroup</span>
@@ -62,14 +62,14 @@ class SiteMap extends Component {
                     radius={200}
                   />
                 </FeatureGroup>
-              </LayersControl.Overlay>
+              </LayersControl.Overlay> */}
             </LayersControl>
 
             <Marker position={[coordinates[1], coordinates[0]]}>
               <Popup>
-                <span>
-                  A pretty CSS3 popup. <br /> Easily customizable.
-                </span>
+                <span>Name: {name}</span>
+                <br />
+                {address && <span>Address: {address}</span>}
               </Popup>
             </Marker>
           </Map>

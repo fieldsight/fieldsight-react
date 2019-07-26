@@ -52,7 +52,7 @@ class App extends Component {
                     />
 
                     <Route
-                      path="/submission-details/:submissionId"
+                      path="/submission-details"
                       render={props => <SubmissionDetails {...props} />}
                     />
 

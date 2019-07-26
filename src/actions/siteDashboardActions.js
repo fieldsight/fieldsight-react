@@ -7,6 +7,7 @@ import {
   GET_SITE_DOCUMENTS,
   GET_SITE_LOGS,
   GET_SITE_FORMS,
+  GET_RECENT_PICTURES,
   SHOW_DOT_LOADER
 } from "./types";
 
@@ -95,5 +96,19 @@ export const getSiteForms = (id, formType) => dispatch => {
     })
     .catch(err => {
       console.log("Err", err);
+    });
+};
+
+export const getRecentPictures = id => dispatch => {
+  axios
+    .get(`/fv3/api/site-recent-pictures/?site=${id}`)
+    .then(res => {
+      dispatch({
+        type: GET_RECENT_PICTURES,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      console.log("err", err);
     });
 };
