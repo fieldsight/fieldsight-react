@@ -18,17 +18,52 @@ import {
   getSiteMetas,
   getSiteSubmissions,
   getSiteDocuments,
-  getSiteLogs
+  getSiteLogs,
+  getSiteForms,
+  getRecentPictures
 } from "../../actions/siteDashboardActions";
 
+const siteId = window.site_id ? window.site_id : 81799;
 class SiteDashboard extends Component {
+  state = {
+    activeTab: "general",
+    showHeaderModal: false,
+    showSubmissionModal: false
+  };
+
+  closeModal = type => {
+    this.setState(
+      {
+        [`show${type}Modal`]: false,
+        activeTab: "general"
+      },
+      () => this.props.getSiteForms(siteId, "general")
+    );
+  };
+
+  openModal = type => {
+    this.setState({
+      [`show${type}Modal`]: true
+    });
+  };
+
+  toggleTab = formType => {
+    this.setState(
+      {
+        activeTab: formType
+      },
+      this.props.getSiteForms(siteId, formType)
+    );
+  };
+
   componentDidMount() {
-    const siteId = window.site_id ? window.site_id : 59602;
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
     this.props.getSiteSubmissions(siteId);
     this.props.getSiteDocuments(siteId);
     this.props.getSiteLogs(siteId);
+    this.props.getSiteForms(siteId, "general");
+    this.props.getRecentPictures(siteId);
   }
   render() {
     const {
@@ -43,20 +78,32 @@ class SiteDashboard extends Component {
           total_users,
           submissions,
           users,
+          recentPictures,
           siteMetas,
           siteSubmissions,
           siteDocuments,
           siteLogs,
+          siteForms,
           form_submissions_chart_data,
           site_progress_chart_data,
+          showDotLoader,
           siteDashboardLoader,
           siteMetasLoader,
-          siteSubmissionsLoader
-        }
-      }
+          siteSubmissionsLoader,
+          siteLogsLoader,
+          siteDocumentsLoader
+        },
+        getSiteForms
+      },
+      state: { showHeaderModal, showSubmissionModal, activeTab },
+      closeModal,
+      openModal,
+      toggleTab
     } = this;
+
+    console.log("recent picture index", recentPictures);
     return (
-      <React.Fragment>
+      <>
         <div className="row">
           <div className="col-xl-12">
             <div className="right-content no-bg new-dashboard">
@@ -68,14 +115,27 @@ class SiteDashboard extends Component {
                 totalUsers={total_users}
                 enableSubsites={enable_subsites}
                 totalSubmission={submissions.total_submissions}
+                getSiteForms={getSiteForms}
+                showDotLoader={showDotLoader}
+                siteId={siteId}
+                siteForms={siteForms}
+                showModal={showHeaderModal}
+                activeTab={activeTab}
+                closeModal={closeModal}
+                openModal={openModal}
+                toggleTab={toggleTab}
               />
               <div className="row">
                 <div className="col-lg-6">
                   <div className="card map">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>Project map</h5>
+                      <h5>Site Map</h5>
                       <div className="dash-btn">
-                        <a href={`#/`} className="fieldsight-btn left-icon">
+                        <a
+                          href={`/fieldsight/site/response-coords/${siteId}/`}
+                          className="fieldsight-btn left-icon"
+                          target="_blank"
+                        >
                           <i className="la la-map" /> full map
                         </a>
                       </div>
@@ -85,6 +145,7 @@ class SiteDashboard extends Component {
                         name={name}
                         address={address}
                         location={location}
+                        showContentLoader={siteDashboardLoader}
                       />
                     </div>
                   </div>
@@ -92,13 +153,20 @@ class SiteDashboard extends Component {
                 <div className="col-lg-6">
                   <div className="card region-table">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>Recent photo</h5>
+                      <h5>Recent Pictures</h5>
+                      <a
+                        href={`/fieldsight/site/all-pictures/${siteId}/`}
+                        className="fieldsight-btn"
+                        target="_blank"
+                      >
+                        view all
+                      </a>
                     </div>
                     <div
                       className="card-body"
                       style={{ position: "relative", height: "440px" }}
                     >
-                      <PhotoGallery />
+                      <PhotoGallery recentPictures={recentPictures} />
                     </div>
                   </div>
                 </div>
@@ -109,6 +177,12 @@ class SiteDashboard extends Component {
                     <div className="card site_dashboard_info">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>Site information</h5>
+                        <div className="dash-btn">
+                          <a href={`#/`} className="fieldsight-btn left-icon">
+                            <i className="la la-edit" />
+                            edit
+                          </a>
+                        </div>
                       </div>
                       <div
                         className="card-body site-info board-site-info"
@@ -121,30 +195,18 @@ class SiteDashboard extends Component {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xl-6 col-md-12">
-                    <div className="card region-table">
-                      <div className="card-header main-card-header sub-card-header">
-                        <h5>Submission table</h5>
-                        <div className="add-btn">
-                          <a href={`#/`} data-tab="scheduled-popup">
-                            Add new{" "}
-                            <span>
-                              <i className="la la-plus" />
-                            </span>
-                          </a>
-                        </div>
-                      </div>
-                      <div
-                        className="card-body"
-                        style={{ position: "relative", height: "434px" }}
-                      >
-                        <DatatablePage
-                          siteSubmissions={siteSubmissions}
-                          showContentLoader={siteSubmissionsLoader}
-                        />
-                      </div>
-                    </div>
-                  </div>
+
+                  <DatatablePage
+                    siteSubmissions={siteSubmissions}
+                    showContentLoader={siteSubmissionsLoader}
+                    siteForms={siteForms}
+                    showDotLoader={showDotLoader}
+                    showModal={showSubmissionModal}
+                    activeTab={activeTab}
+                    closeModal={closeModal}
+                    openModal={openModal}
+                    toggleTab={toggleTab}
+                  />
                 </div>
               </div>
               <div className="dashboard-counter mrt-30">
@@ -182,26 +244,17 @@ class SiteDashboard extends Component {
               </div>
               <div className="about-section ">
                 <div className="row">
-                  <div className="col-xl-4 col-md-6">
-                    <div className="card ">
-                      <div className="about">
-                        <div className="card-header main-card-header sub-card-header">
-                          <h5>Site Documents</h5>
-                        </div>
-                        <div
-                          className="card-body about-body"
-                          style={{ position: "relative", height: "358px" }}
-                        >
-                          <SiteDocument siteDocuments={siteDocuments} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <SiteDocument
+                    siteDocuments={siteDocuments}
+                    showContentLoader={siteDocumentsLoader}
+                    siteId={siteId}
+                  />
+
                   <div className="col-xl-4 col-md-6">
                     <div className="card mangager-list">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>Users</h5>
-                        <div className="dash-btn">
+                        {/* <div className="dash-btn">
                           <form className="floating-form">
                             <div className="form-group mr-0">
                               <input
@@ -216,7 +269,7 @@ class SiteDashboard extends Component {
                           <a href={`#/`} className="fieldsight-btn">
                             <i className="la la-plus" />
                           </a>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="card-body">
                         <div
@@ -231,30 +284,18 @@ class SiteDashboard extends Component {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xl-4 col-md-12">
-                    <div className="card logs">
-                      <div className="card-header main-card-header sub-card-header">
-                        <h5>Logs</h5>
-                        <a href={`#/`} className="fieldsight-btn">
-                          view all
-                        </a>
-                      </div>
-                      <div className="card-body">
-                        <div
-                          className="logs-list"
-                          style={{ position: "relative", height: "314px" }}
-                        >
-                          <Logs siteLogs={siteLogs} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
+                  <Logs
+                    siteLogs={siteLogs}
+                    showContentLoader={siteLogsLoader}
+                    siteId={siteId}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -270,6 +311,8 @@ export default connect(
     getSiteMetas,
     getSiteSubmissions,
     getSiteDocuments,
-    getSiteLogs
+    getSiteLogs,
+    getSiteForms,
+    getRecentPictures
   }
 )(SiteDashboard);

@@ -10,7 +10,7 @@ import {
 import { successToast, errorToast } from "../utils/toastHandler";
 
 export const getSubmissionDetail = id => dispatch => {
-  const splitedData = id.split("/");
+  const splitedData = id.toString().split("/");
 
   if (splitedData.length > 1) {
     dispatch({
@@ -69,7 +69,6 @@ export const postSubmissionDetail = data => dispatch => {
       successToast("Status", "added");
     })
     .catch(err => {
-      console.log("err", err);
       dispatch({
         type: STOP_SUBMISSION_LOADER
       });

@@ -19,7 +19,7 @@ function measure(lat1, lon1, lat2, lon2) {
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c;
   //return d; // kilometers
-  return d * 1000; // meters
+  return (d * 1000).toFixed(2); // meters
 }
 class Submission extends Component {
   handleRepeatedSubmission = submission => {
@@ -131,10 +131,10 @@ class Submission extends Component {
                       </p>
                       <p>
                         <span>Accuracy:</span>
-                        <label>{accuracy} meters</label>
+                        <label>{(+accuracy).toFixed(2)} meters</label>
                       </p>
                       <p>
-                        <span>Distance between:</span>
+                        <span>Distance From Site:</span>
                         <label>
                           {measure(
                             site.latitude,
@@ -163,9 +163,8 @@ class Submission extends Component {
               submission.type === "end" ||
               submission.type === "datetime" ? (
                 <time>
-                  <i className="la la-clock-o">
-                    {format(submission.answer, ["MMMM Do YYYY,  h:mm:ss a"])}{" "}
-                  </i>
+                  <i className="la la-clock-o" />
+                  {format(submission.answer, ["MMMM Do YYYY,  h:mm:ss a"])}
                 </time>
               ) : (
                 <p>{submission.answer}</p>

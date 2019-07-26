@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import format from "date-fns/format";
+import { BlockContentLoader } from "../../common/Loader";
 import uuid from "uuid/v4";
+
 class Logs extends Component {
   getLog = data => {
     let content = "";
@@ -1052,52 +1053,88 @@ class Logs extends Component {
     return colorArr[Math.floor(Math.random() * colorArr.length)];
   };
 
+  componentDidUpdate() {
+    if (this.timeLineDiv) {
+      const anchorList = this.timeLineDiv.getElementsByTagName("a");
+      for (let i = 0; i < anchorList.length; i++) {
+        anchorList[i].setAttribute("target", "_blank");
+      }
+    }
+  }
+
   render() {
     const {
-      props: { siteLogs },
+      props: { siteLogs, showContentLoader, siteId },
       groupByDate,
       getColor,
       getLog
     } = this;
     return (
-      <React.Fragment>
-        <div
-          className="logs-list"
-          style={{ position: "relative", height: "314px" }}
-        >
-          <PerfectScrollbar>
-            <div className="timeline">
-              {groupByDate(siteLogs).map(siteLog => (
-                <div className="timeline-list" key={uuid()}>
-                  <time>{siteLog.date}</time>
-                  <ul>
-                    {siteLog.logs.map(log => (
-                      <li className="blue" key={uuid()}>
-                        <div className="event-list ">
-                          <figure>
-                            <img src={log.source_img} alt="logo" />
-                          </figure>
-                          <div className="log-content">
-                            <span className="time">
-                              {format(log.date, ["h:mm a"])}
-                            </span>
+      <div className="col-xl-4 col-md-12">
+        <div className="card logs">
+          <div className="card-header main-card-header sub-card-header">
+            <h5>Logs</h5>
+            {siteLogs.length > 0 ? (
+              <a
+                href={`/events/site_logs/${siteId}/`}
+                className="fieldsight-btn"
+                target="_blank"
+              >
+                view all
+              </a>
+            ) : null}
+          </div>
+          <div className="card-body">
+            <div
+              className="logs-list"
+              style={{ position: "relative", height: "314px" }}
+            >
+              {showContentLoader ? (
+                <BlockContentLoader number={2} height="150px" />
+              ) : (
+                <PerfectScrollbar>
+                  {siteLogs.length > 0 ? (
+                    <div
+                      className="timeline"
+                      ref={el => (this.timeLineDiv = el)}
+                    >
+                      {groupByDate(siteLogs).map(siteLog => (
+                        <div className="timeline-list" key={uuid()}>
+                          <time>{siteLog.date}</time>
+                          <ul>
+                            {siteLog.logs.map(log => (
+                              <li className="blue" key={uuid()}>
+                                <div className="event-list ">
+                                  <figure>
+                                    <img src={log.source_img} alt="logo" />
+                                  </figure>
+                                  <div className="log-content">
+                                    <span className="time">
+                                      {format(log.date, ["h:mm a"])}
+                                    </span>
 
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: getLog(log)
-                              }}
-                            />
-                          </div>
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: getLog(log)
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                      ))}
+                    </div>
+                  ) : (
+                    <p> No Data Available </p>
+                  )}
+                </PerfectScrollbar>
+              )}
             </div>
-          </PerfectScrollbar>
+          </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

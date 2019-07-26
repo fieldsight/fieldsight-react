@@ -1,26 +1,13 @@
-import React, { Component, Fragment } from "react";
-// import {Link} from 'react-router-dom';
+import React, { Component } from "react";
+
 import { Dropdown } from "react-bootstrap";
-import Zoom from "react-reveal/Zoom";
+
 import CountCard from "../../common/CountCard";
 import { AvatarContentLoader } from "../../common/Loader";
+import SubmissionModal from "./SubmissionModal";
 
-const ManageDropdown = ["Generate Report", "View Data"];
-const HeaderDropdown = [
-  "Edit site information",
-  "site document",
-  "user",
-  "form"
-];
-
+const projectId = window.project_id ? window.project_id : 137;
 class DashboardHeader extends Component {
-  state = {
-    showPopup: false,
-    tabOne: true,
-    tabTwo: false,
-    tabThree: false
-  };
-
   render() {
     const {
       props: {
@@ -30,9 +17,37 @@ class DashboardHeader extends Component {
         logo,
         region,
         totalUsers,
-        totalSubmission
+        totalSubmission,
+        siteForms,
+        siteId,
+        showModal,
+        showDotLoader,
+        activeTab,
+        closeModal,
+        openModal,
+        toggleTab
       }
     } = this;
+
+    const ManageDropdown = [
+      { title: "Generate Report", link: `/#` },
+      { title: "View Data", link: `/forms/responses/${siteId}/` }
+    ];
+    const HeaderDropdown = [
+      { title: "Edit site information", link: `/fieldsight/site/${siteId}/` },
+      {
+        title: "site document",
+        link: `/fieldsight/site/blue-prints/${siteId}/`
+      },
+      { title: "user", link: `/fieldsight/manage/people/site/${siteId}/` },
+      { title: "form", link: `/forms/setup-forms/0/${siteId}` },
+      {
+        ...(enableSubsites && {
+          title: "Add Subsites",
+          link: `/fieldsight/site/add/subsite/${projectId}/${siteId}`
+        })
+      }
+    ];
 
     return (
       <div className="card mrb-30">
@@ -44,10 +59,8 @@ class DashboardHeader extends Component {
               </figure>
               <div className="dash-pf-content">
                 <h5>{name}</h5>
-                <span>
-                  {region ? `${region}, ` : null}
-                  {address}
-                </span>
+                <span>{address}</span>
+                <span>{region} </span>
               </div>
             </div>
           ) : (
@@ -67,8 +80,8 @@ class DashboardHeader extends Component {
 
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={`#/action-${i}`} key={i}>
-                    {item}
+                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                    {item.title}
                   </Dropdown.Item>
                 ))}
               </Dropdown.Menu>
@@ -84,218 +97,59 @@ class DashboardHeader extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
                 {HeaderDropdown.map((item, i) => (
-                  <Dropdown.Item href={`#/action-${i}`} key={i}>
-                    {item}
+                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                    {item.title}
                   </Dropdown.Item>
                 ))}
-                {enableSubsites && (
-                  <Dropdown.Item href={`#/action`}>Add Subsites</Dropdown.Item>
-                )}
+                {/* {enableSubsites && (
+                  <Dropdown.Item
+                    href={`/fieldsight/site/add/subsite/${projectId}/${site_id}`}
+                  >
+                    Add Subsites
+                  </Dropdown.Item>
+                )} */}
               </Dropdown.Menu>
             </Dropdown>
           </div>
         </div>
         <div className="card-body">
           <div className="header-count">
-            <CountCard
-              countName="Total"
-              countNumber={totalSubmission}
-              icon="la-map-marker"
-            />
-            <CountCard
-              countName="Users"
-              countNumber={totalUsers}
-              icon="la-user"
-              noSubmissionText={true}
-            />
+            <a
+              href={`/fieldsight/site-submission/${siteId}/2/`}
+              target="_blank"
+            >
+              <CountCard
+                countName="Total"
+                countNumber={totalSubmission}
+                icon="la-map-marker"
+              />
+            </a>
+            <a href={`/fieldsight/site-users/${siteId}/`} target="_blank">
+              <CountCard
+                countName="Users"
+                countNumber={totalUsers}
+                icon="la-user"
+                noSubmissionText={true}
+              />
+            </a>
 
             <div className="add-data">
-              <a href={`#/`} onClick={this.togglePopup}>
+              <a onClick={() => openModal("Header")}>
                 {" "}
                 add data <i className="la la-plus" />
               </a>
             </div>
           </div>
 
-          {/* {this.state.showPopup && (
-            <Zoom duration={500}>
-              <div className="fieldsight-popup open" id="add-data">
-                <div className="popup-body">
-                  <div className="card">
-                    <div className="card-header main-card-header">
-                      <h5>Add Data</h5>
-                      <span className="popup-close" onClick={this.togglePopup}>
-                        <i className="la la-close" />
-                      </span>
-                    </div>
-                    <div className="card-body">
-                      <form className="floating-form">
-                        <div className="form-group">
-                          <ul className="nav nav-tabs ">
-                            <li className="nav-item">
-                              <a
-                                className={
-                                  this.state.tabOne
-                                    ? "nav-link active"
-                                    : "nav-link"
-                                }
-                                href={`#/`}
-                                onClick={this.openTabOne}
-                              >
-                                General Form
-                              </a>
-                            </li>
-                            <li className="nav-item">
-                              <a
-                                className={
-                                  this.state.tabTwo
-                                    ? "nav-link active"
-                                    : "nav-link"
-                                }
-                                href={`#/`}
-                                onClick={this.openTabTwo}
-                              >
-                                scheduled form
-                              </a>
-                            </li>
-                            <li className="nav-item">
-                              <a
-                                className={
-                                  this.state.tabThree
-                                    ? "nav-link active"
-                                    : "nav-link"
-                                }
-                                href={`#/`}
-                                onClick={this.openTabThree}
-                              >
-                                Staged Form
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        {this.state.tabTwo && (
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Form Name</th>
-                                <th>New</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>General Informations</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  General Information (ALL structural typ.)
-                                </td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Foundation (ALL structural typ.)</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        )}
-                        {this.state.tabOne && (
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Form Name</th>
-                                <th>New</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Vertical Members (ALL structural typ.)</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Plinth Beam (ALL structural typ.)</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>TSC Visitors - STFC</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        )}
-                        {this.state.tabThree && (
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Form Name</th>
-                                <th>New</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Retrofitting Go/No-Go with Measurement</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Retrofitting Go/No-Go Survey</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>TSC Visitors - STFC</td>
-                                <td>
-                                  <a href={`#/`} target={`_blank`}>
-                                    <i class="la la-plus approved" />
-                                  </a>{" "}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        )}
-
-                        <div className="form-group pull-right no-margin">
-                          <button type="submit" class="fieldsight-btn">
-                            Save
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Zoom>
-          )} */}
+          {showModal && (
+            <SubmissionModal
+              showDotLoader={showDotLoader}
+              siteForms={siteForms}
+              activeTab={activeTab}
+              closeModal={() => closeModal("Header")}
+              toggleTab={toggleTab}
+            />
+          )}
         </div>
       </div>
     );

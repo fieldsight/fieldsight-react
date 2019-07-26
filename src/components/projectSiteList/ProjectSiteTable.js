@@ -69,7 +69,8 @@ class ProjectSiteTable extends Component {
             >
               <i className="la la-plus" />
             </button>
-            <button
+            <a>
+            <button 
               className="fieldsight-btn"
               onClick={e =>
                 this.props.OpenTabHandler(
@@ -82,9 +83,10 @@ class ProjectSiteTable extends Component {
               }
             >
               {!isEmpty(terms)
-                ? `${terms.site} Information`
-                : "Site Information"}
+                ?  `Export ${terms.site}s `
+                : "Export Sites"}
             </button>
+            </a>
             <button
               className="fieldsight-btn"
               onClick={e =>
