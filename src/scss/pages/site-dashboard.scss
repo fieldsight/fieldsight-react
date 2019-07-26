@@ -41,5 +41,64 @@
                 }
             }
         }
+        .gallery-zoom{
+            height: 100vh;
+            background-color:rgba($color-primary,0.7);
+            .popup-close{
+                position: absolute;
+                top:0.5rem;
+                right:0.5rem;
+                width:25px;
+                height: 25px;
+                @include flexvr;
+                @include boxshadow;
+                color:$color-red;
+                @include radius50;
+                cursor:pointer;
+                background-color: $color-white;
+                @include anim05;
+                &:hover{
+                    background-color: $color-red;
+                    color:$color-white;
+                }
+            }
+            .gallery-body{
+                width:50%;
+                @include translatey;
+                left: 0;
+                right: 0;
+                margin: auto;
+                z-index: 1001;
+                text-align: center;
+                .gallery-footer{
+                    padding:0.5rem;
+                    color:$color-white;
+                    font-size:1rem;
+                }
+            }
+            @media screen and (min-width:280px){
+                .gallery-body{
+                    width:80%; 
+                }
+            }
+            @media screen and (min-width:$lg-tab){
+                .gallery-body{
+                    width:70%; 
+                }
+            }
+            
+            .gallery-nav{
+                @extend .gallery-body;
+                @include flexjust;
+                i{
+                    color:$color-white;
+                    font-size:2rem;
+                    &:hover{
+                        color:$color-secondary;
+                        cursor:pointer;
+                    }
+                }
+            }
+        }
     }
 }
