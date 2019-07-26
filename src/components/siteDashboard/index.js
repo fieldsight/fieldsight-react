@@ -19,10 +19,11 @@ import {
   getSiteSubmissions,
   getSiteDocuments,
   getSiteLogs,
-  getSiteForms
+  getSiteForms,
+  getRecentPictures
 } from "../../actions/siteDashboardActions";
 
-const siteId = window.site_id ? window.site_id : 59602;
+const siteId = window.site_id ? window.site_id : 81799;
 class SiteDashboard extends Component {
   state = {
     activeTab: "general",
@@ -62,6 +63,7 @@ class SiteDashboard extends Component {
     this.props.getSiteDocuments(siteId);
     this.props.getSiteLogs(siteId);
     this.props.getSiteForms(siteId, "general");
+    this.props.getRecentPictures(siteId);
   }
   render() {
     const {
@@ -76,6 +78,7 @@ class SiteDashboard extends Component {
           total_users,
           submissions,
           users,
+          recentPictures,
           siteMetas,
           siteSubmissions,
           siteDocuments,
@@ -97,6 +100,8 @@ class SiteDashboard extends Component {
       openModal,
       toggleTab
     } = this;
+
+    console.log("recent picture index", recentPictures);
     return (
       <>
         <div className="row">
@@ -161,7 +166,7 @@ class SiteDashboard extends Component {
                       className="card-body"
                       style={{ position: "relative", height: "440px" }}
                     >
-                      <PhotoGallery />
+                      <PhotoGallery recentPictures={recentPictures} />
                     </div>
                   </div>
                 </div>
@@ -239,31 +244,12 @@ class SiteDashboard extends Component {
               </div>
               <div className="about-section ">
                 <div className="row">
-                  <div className="col-xl-4 col-md-6">
-                    <div className="card ">
-                      <div className="about">
-                        <div className="card-header main-card-header sub-card-header">
-                          <h5>Site Documents</h5>
-                          <a
-                            href={`/fieldsight/site/blue-prints/${siteId}/`}
-                            className="fieldsight-btn"
-                            target="_blank"
-                          >
-                            view all
-                          </a>
-                        </div>
-                        <div
-                          className="card-body about-body"
-                          style={{ position: "relative", height: "358px" }}
-                        >
-                          <SiteDocument
-                            siteDocuments={siteDocuments}
-                            showContentLoader={siteDocumentsLoader}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <SiteDocument
+                    siteDocuments={siteDocuments}
+                    showContentLoader={siteDocumentsLoader}
+                    siteId={siteId}
+                  />
+
                   <div className="col-xl-4 col-md-6">
                     <div className="card mangager-list">
                       <div className="card-header main-card-header sub-card-header">
@@ -298,31 +284,12 @@ class SiteDashboard extends Component {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xl-4 col-md-12">
-                    <div className="card logs">
-                      <div className="card-header main-card-header sub-card-header">
-                        <h5>Logs</h5>
-                        <a
-                          href={`/events/site_logs/${siteId}/`}
-                          className="fieldsight-btn"
-                          target="_blank"
-                        >
-                          view all
-                        </a>
-                      </div>
-                      <div className="card-body">
-                        <div
-                          className="logs-list"
-                          style={{ position: "relative", height: "314px" }}
-                        >
-                          <Logs
-                            siteLogs={siteLogs}
-                            showContentLoader={siteLogsLoader}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
+                  <Logs
+                    siteLogs={siteLogs}
+                    showContentLoader={siteLogsLoader}
+                    siteId={siteId}
+                  />
                 </div>
               </div>
             </div>
@@ -345,6 +312,7 @@ export default connect(
     getSiteSubmissions,
     getSiteDocuments,
     getSiteLogs,
-    getSiteForms
+    getSiteForms,
+    getRecentPictures
   }
 )(SiteDashboard);

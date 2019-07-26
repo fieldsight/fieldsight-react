@@ -5,6 +5,7 @@ import {
   GET_SITE_DOCUMENTS,
   GET_SITE_LOGS,
   GET_SITE_FORMS,
+  GET_RECENT_PICTURES,
   SHOW_DOT_LOADER
 } from "../actions/types";
 
@@ -32,6 +33,7 @@ const initialState = {
   siteDocuments: [],
   siteLogs: [],
   siteForms: {},
+  recentPictures: [],
   siteDashboardLoader: true,
   siteMetasLoader: true,
   siteSubmissionsLoader: true,
@@ -100,6 +102,19 @@ export default function(state = initialState, action) {
         ...state,
         siteForms: { ...action.payload },
         showDotLoader: false
+      };
+    case GET_RECENT_PICTURES:
+      const picturesKeyArr = Object.keys(action.payload);
+      let modifiedPayload = [];
+      if (picturesKeyArr.length > 0) {
+        modifiedPayload = [
+          action.payload.site_featured_images.photo,
+          ...action.payload.recent_pictures
+        ];
+      }
+      return {
+        ...state,
+        recentPictures: modifiedPayload
       };
     case SHOW_DOT_LOADER:
       return {

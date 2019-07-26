@@ -61,7 +61,7 @@ class SubmissionChart extends Component {
           data: submissionData.approved_submissions.data,
           backgroundColor: "#28a745",
           borderColor: "#28a745",
-          fill: false,
+          fill: true,
           borderWidth: 1
         }
       ];
@@ -75,7 +75,7 @@ class SubmissionChart extends Component {
           data: submissionData.flagged_submissions.data,
           backgroundColor: "#ffc107",
           borderColor: "#ffc107",
-          fill: false,
+          fill: true,
           borderWidth: 1
         }
       ];
@@ -89,7 +89,7 @@ class SubmissionChart extends Component {
           data: submissionData.pending_submissions.data,
           backgroundColor: "#00628E",
           borderColor: "#00628E",
-          fill: false,
+          fill: true,
           borderWidth: 1
         }
       ];
@@ -103,7 +103,7 @@ class SubmissionChart extends Component {
           data: submissionData.rejected_submissions.data,
           backgroundColor: "#fc5661",
           borderColor: "#fc5661",
-          fill: false,
+          fill: true,
           borderWidth: 1
         }
       ];
@@ -115,9 +115,9 @@ class SubmissionChart extends Component {
         {
           label: "Total Submissions",
           data: submissionData.total_submissions.data,
-          backgroundColor: "",
-          borderColor: "",
-          fill: false,
+          backgroundColor: "#E9967A",
+          borderColor: "#E9967A",
+          fill: true,
           borderWidth: 1
         }
       ];

@@ -59,7 +59,7 @@ class ProgressChart extends Component {
 
           backgroundColor: "",
           borderColor: "#00628E",
-          fill: false,
+          fill: true,
 
           borderWidth: 1
         }

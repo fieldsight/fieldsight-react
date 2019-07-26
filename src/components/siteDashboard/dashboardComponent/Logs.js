@@ -1064,49 +1064,77 @@ class Logs extends Component {
 
   render() {
     const {
-      props: { siteLogs, showContentLoader },
+      props: { siteLogs, showContentLoader, siteId },
       groupByDate,
       getColor,
       getLog
     } = this;
     return (
-      <>
-        {showContentLoader ? (
-          <BlockContentLoader number={2} height="150px" />
-        ) : (
-          <PerfectScrollbar>
-            <div className="timeline" ref={el => (this.timeLineDiv = el)}>
-              {groupByDate(siteLogs).map(siteLog => (
-                <div className="timeline-list" key={uuid()}>
-                  <time>{siteLog.date}</time>
-                  <ul>
-                    {siteLog.logs.map(log => (
-                      <li className="blue" key={uuid()}>
-                        <div className="event-list ">
-                          <figure>
-                            <img src={log.source_img} alt="logo" />
-                          </figure>
-                          <div className="log-content">
-                            <span className="time">
-                              {format(log.date, ["h:mm a"])}
-                            </span>
+      <div className="col-xl-4 col-md-12">
+        <div className="card logs">
+          <div className="card-header main-card-header sub-card-header">
+            <h5>Logs</h5>
+            {siteLogs.length > 0 ? (
+              <a
+                href={`/events/site_logs/${siteId}/`}
+                className="fieldsight-btn"
+                target="_blank"
+              >
+                view all
+              </a>
+            ) : null}
+          </div>
+          <div className="card-body">
+            <div
+              className="logs-list"
+              style={{ position: "relative", height: "314px" }}
+            >
+              {showContentLoader ? (
+                <BlockContentLoader number={2} height="150px" />
+              ) : (
+                <PerfectScrollbar>
+                  {siteLogs.length > 0 ? (
+                    <div
+                      className="timeline"
+                      ref={el => (this.timeLineDiv = el)}
+                    >
+                      {groupByDate(siteLogs).map(siteLog => (
+                        <div className="timeline-list" key={uuid()}>
+                          <time>{siteLog.date}</time>
+                          <ul>
+                            {siteLog.logs.map(log => (
+                              <li className="blue" key={uuid()}>
+                                <div className="event-list ">
+                                  <figure>
+                                    <img src={log.source_img} alt="logo" />
+                                  </figure>
+                                  <div className="log-content">
+                                    <span className="time">
+                                      {format(log.date, ["h:mm a"])}
+                                    </span>
 
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: getLog(log)
-                              }}
-                            />
-                          </div>
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: getLog(log)
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                      ))}
+                    </div>
+                  ) : (
+                    <p> No Data Available </p>
+                  )}
+                </PerfectScrollbar>
+              )}
             </div>
-          </PerfectScrollbar>
-        )}
-      </>
+          </div>
+        </div>
+      </div>
     );
   }
 }
