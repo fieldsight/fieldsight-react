@@ -4,6 +4,7 @@
       @include flex_start;
       align-items: center;
       position: relative;
+
       .count-card {
         background-color: $color-bg;
         @include radius4;
@@ -11,6 +12,7 @@
         align-items: center;
         margin-right: 1rem;
         padding: 0.5rem 0.6125rem;
+
         .count-icon {
           width: 1.8rem;
           height: 1.8rem;
@@ -19,34 +21,41 @@
           background-color: $color-white;
           @include radius50;
           margin-right: 0.6125rem;
+
           i {
             color: $color-blue;
             font-size: 1rem;
           }
         }
+
         .count-content {
           text-transform: capitalize;
+
           h4 {
             font-size: 0.875rem;
             font-weight: 600;
             margin-bottom: 0rem;
           }
+
           h6 {
             font-size: 0.775rem;
             margin: 0;
           }
         }
       }
+
       .add-data {
         position: absolute;
         right: 0;
         top: 0.5rem;
         z-index: 999;
+
         a {
           text-transform: capitalize;
           font-weight: 600;
           font-size: 1rem;
           color: $color-blue;
+
           i {
             width: 34px;
             height: 34px;
@@ -57,12 +66,14 @@
             color: $color-white;
             margin-left: 0.25rem;
           }
+
           &:hover {
             color: $color-green;
           }
         }
       }
     }
+
     .dashboard-counter {
       .count-card {
         background-color: $color-white;
@@ -73,6 +84,7 @@
         padding: 2rem;
         @include boxshadow;
         margin-bottom: 2rem;
+
         .count-icon {
           width: 4rem;
           height: 4rem;
@@ -82,47 +94,59 @@
           @include radius50;
           margin-right: 1rem;
           @include anim05;
+
           i {
             font-size: 1.5rem;
           }
         }
+
         .count-content {
           text-transform: capitalize;
+
           h4 {
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 0.25rem;
           }
+
           h6 {
             font-size: 0.875rem;
             margin: 0;
           }
         }
+
         &:hover {
           cursor: pointer;
+
           .count-icon {
             color: $color-white;
+
             &.pending {
               background-color: $color-blue;
             }
+
             &.approved {
               background-color: $color-green;
             }
+
             &.flagged {
               background-color: $color-yellow;
             }
+
             &.rejected {
               background-color: $color-red;
             }
           }
         }
       }
+
       &.bg-counter {
         .count-card {
           margin-bottom: 0;
         }
       }
     }
+
     .about-section {
       .about {
         p {
@@ -130,6 +154,7 @@
           text-align: justify;
         }
       }
+
       .contact {
         ul {
           li {
@@ -137,6 +162,7 @@
             align-items: center;
             padding: 0.5rem 0;
             border-bottom: 1px solid $color-bg;
+
             i {
               width: 1.5rem;
               height: 1.5rem;
@@ -146,6 +172,7 @@
               @include radius4;
               margin-right: 0.6125rem;
             }
+
             &:last-child {
               border-bottom: 0;
               padding-bottom: 0;
@@ -153,6 +180,7 @@
           }
         }
       }
+
       .doc-body {
         .doc-item {
           background-color: $color-white;
@@ -160,22 +188,34 @@
           @include radius4;
           padding: 0.25rem;
           margin-bottom: 1rem;
+
           .doc-wrapper {
             background-color: $color-bg;
             padding: 0.6125rem;
             text-align: center;
+
             .doc-content {
               margin-top: 0.6125rem;
+
               h6 {
                 font-size: 0.875rem;
                 font-weight: 500;
                 margin: 0;
+
+                a {
+                  display: -webkit-box;
+                  -webkit-line-clamp: 1;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                }
               }
             }
           }
+
           figure {
             margin: 0;
             text-align: center;
+
             img {
               max-height: 80px;
             }
@@ -183,8 +223,10 @@
         }
       }
     }
+
     .timeline {
       position: relative;
+
       &:after {
         content: "";
         position: absolute;
@@ -209,12 +251,15 @@
           position: relative;
           z-index: 9;
         }
+
         ul {
           padding-left: 2.5rem;
+
           li {
             margin: 2rem 0;
             position: relative;
             padding-left: 3rem;
+
             .event-list {
               @include flex_start;
               flex-wrap: nowrap;
@@ -222,27 +267,32 @@
               position: relative;
               border: 1px solid $color-bg;
               @include radius4;
+
               figure {
                 max-width: 50px;
                 margin-right: 0.6125rem;
+
                 img {
                   max-width: 50px;
                   height: 50px;
                   @include radius50;
                 }
               }
+
               .log-content {
                 h5 {
                   font-size: 0.875rem;
                   font-weight: 500;
                   margin: 0.15rem 0;
                 }
+
                 span {
                   font-size: 0.775rem;
                   color: rgba($color-primary, 0.5);
                 }
               }
             }
+
             &::after {
               content: "";
               position: absolute;
@@ -253,32 +303,40 @@
               top: 5px;
               z-index: 1000;
             }
+
             &.green {
               background-color: transparent !important;
+
               &::after {
                 background-color: $color-green;
                 -moz-box-shadow: 0 0 0 5px rgba($color-green, 0.5);
                 box-shadow: 0 0 0 5px rgba($color-green, 0.5);
               }
             }
+
             &.yellow {
               background-color: transparent !important;
+
               &::after {
                 background-color: $color-yellow;
                 -moz-box-shadow: 0 0 0 5px rgba($color-yellow, 0.5);
                 box-shadow: 0 0 0 5px rgba($color-yellow, 0.5);
               }
             }
+
             &.blue {
               background-color: transparent !important;
+
               &::after {
                 background-color: $color-secondary;
                 -moz-box-shadow: 0 0 0 5px rgba($color-secondary, 0.5);
                 box-shadow: 0 0 0 5px rgba($color-secondary, 0.5);
               }
             }
+
             &.red {
               background-color: transparent !important;
+
               &::after {
                 background-color: $color-red;
                 -moz-box-shadow: 0 0 0 5px rgba($color-red, 0.5);
@@ -289,6 +347,7 @@
         }
       }
     }
+
     .leaflet-top,
     .leaflet-bottom {
       z-index: 9999;
@@ -298,15 +357,19 @@
       .logs {
         margin-top: 2rem;
       }
+
       .site_dashboard_info {
         margin-bottom: 2rem;
       }
     }
+
     @media screen and (max-width: $lg-tab) {
+
       .project-list,
       .logs {
         margin-top: 2rem;
       }
+
       .about-section {
         .admin {
           margin-top: 2rem;
@@ -314,37 +377,44 @@
       }
     }
   }
+
   .profile-content {
     figure {
       max-width: 150px;
       @include radius50;
       display: inline-block;
       margin: 0;
+
       img {
         height: 120px;
         width: 120px;
         @include radius50;
       }
     }
+
     .user-info {
       width: calc(100% - 135px);
       float: right;
       position: relative;
+
       h4 {
         font-size: 0.875rem;
         margin: 0;
         text-transform: capitalize;
       }
+
       span {
         font-size: 0.775rem;
         margin-top: 0.5rem;
         display: inline-block;
       }
+
       .fieldsight-btn {
         position: absolute;
         right: 0;
         top: 0;
       }
+
       .profile-social-icon {
         a {
           width: 34px;
@@ -356,12 +426,14 @@
           font-size: 1.2rem;
           display: inline-block;
           margin-right: 0.6125rem;
+
           &:last-child {
             margin-right: 0;
           }
         }
       }
     }
+
     .profile-address {
       ul {
         li {
@@ -374,6 +446,7 @@
           flex-wrap: wrap;
           align-items: center;
           padding: 0.25rem 0;
+
           i {
             width: 1.5rem;
             height: 1.5rem;
@@ -387,9 +460,11 @@
       }
     }
   }
+
   .contentLoading {
     .wrapper-cell {
       margin-bottom: 0.25rem;
+
       .image {
         height: 60px;
         width: 60px;
@@ -400,6 +475,7 @@
       .text {
         width: calc(100% - 80px);
         float: right;
+
         .text-line {
           height: 8px;
           margin: 7px 0;
@@ -408,6 +484,7 @@
       }
     }
   }
+
   .animated-background {
     animation-duration: 8s;
     animation-fill-mode: forwards;
@@ -415,12 +492,10 @@
     animation-name: placeHolderShimmer;
     animation-timing-function: linear;
     background: $color-bg;
-    background: linear-gradient(
-      to right,
-      #f6f6f6 8%,
-      $color-bg 18%,
-      #f6f6f6 33%
-    );
+    background: linear-gradient(to right,
+        #f6f6f6 8%,
+        $color-bg 18%,
+        #f6f6f6 33%);
     position: relative;
   }
 }
