@@ -119,8 +119,9 @@
           cursor: pointer;
 
           .count-icon {
-            color: $color-white;
-
+            i{
+              color: $color-white;
+            }
             &.pending {
               background-color: $color-blue;
             }
