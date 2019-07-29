@@ -59,9 +59,9 @@ class SubmissionChart extends Component {
         {
           label: "Approved Submissions",
           data: submissionData.approved_submissions.data,
-          backgroundColor: "#28a745",
-          borderColor: "#28a745",
-          fill: true,
+          backgroundColor: "rgba(40,167,69, 1)",
+          borderColor: "rgba(40,167,69, 1)",
+          fill: false,
           borderWidth: 1
         }
       ];
@@ -73,9 +73,9 @@ class SubmissionChart extends Component {
         {
           label: "Flagged Submissions",
           data: submissionData.flagged_submissions.data,
-          backgroundColor: "#ffc107",
-          borderColor: "#ffc107",
-          fill: true,
+          backgroundColor: "rgba(255,193,7, 1)",
+          borderColor: "rgba(255,193,7, 1)",
+          fill: false,
           borderWidth: 1
         }
       ];
@@ -87,9 +87,9 @@ class SubmissionChart extends Component {
         {
           label: "Pending Submissions",
           data: submissionData.pending_submissions.data,
-          backgroundColor: "#00628E",
-          borderColor: "#00628E",
-          fill: true,
+          backgroundColor: "rgba(0,98,142, 1)",
+          borderColor: "rgba(0,98,142, 1)",
+          fill: false,
           borderWidth: 1
         }
       ];
@@ -101,9 +101,9 @@ class SubmissionChart extends Component {
         {
           label: "Rejected Submissions",
           data: submissionData.rejected_submissions.data,
-          backgroundColor: "#fc5661",
-          borderColor: "#fc5661",
-          fill: true,
+          backgroundColor: "rgba(252,86,97, 1)",
+          borderColor: "rgba(252,86,97, 1)",
+          fill: false,
           borderWidth: 1
         }
       ];
@@ -115,9 +115,9 @@ class SubmissionChart extends Component {
         {
           label: "Total Submissions",
           data: submissionData.total_submissions.data,
-          backgroundColor: "#E9967A",
-          borderColor: "#E9967A",
-          fill: true,
+          backgroundColor: "#800080",
+          borderColor: "#800080",
+          fill: false,
           borderWidth: 1
         }
       ];
