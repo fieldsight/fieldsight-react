@@ -38,7 +38,8 @@ const initialState = {
   siteMetasLoader: true,
   siteSubmissionsLoader: true,
   siteDocumentsLoader: true,
-  siteLogsLoader: true
+  siteLogsLoader: true,
+  sitePicturesLoader: true
 };
 
 export default function(state = initialState, action) {
@@ -110,11 +111,12 @@ export default function(state = initialState, action) {
         modifiedPayload = [
           action.payload.site_featured_images.photo,
           ...action.payload.recent_pictures
-        ];
+        ].filter(Boolean);
       }
       return {
         ...state,
-        recentPictures: modifiedPayload
+        recentPictures: modifiedPayload,
+        sitePicturesLoader: false
       };
     case SHOW_DOT_LOADER:
       return {

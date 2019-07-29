@@ -9,14 +9,14 @@ const CountCard = ({
 }) => {
   return (
     <div className="count-card">
-      <div className="count-icon">
-        {className ? (
-          <div className={className}>
-            <i className={`la ${icon}`}> </i>
-          </div>
+      <div className={`count-icon ${className ? className : ""}`}>
+        {/* {className ? (
+          <div className={className}> */}
+        <i className={`la ${icon}`}> </i>
+        {/* </div>
         ) : (
           <i className={`la ${icon}`}> </i>
-        )}
+        )} */}
       </div>
       <div className="count-content">
         <h4>{countNumber}</h4>

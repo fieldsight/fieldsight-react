@@ -91,7 +91,8 @@ class SiteDashboard extends Component {
           siteMetasLoader,
           siteSubmissionsLoader,
           siteLogsLoader,
-          siteDocumentsLoader
+          siteDocumentsLoader,
+          sitePicturesLoader
         },
         getSiteForms
       },
@@ -101,7 +102,6 @@ class SiteDashboard extends Component {
       toggleTab
     } = this;
 
-    console.log("recent picture index", recentPictures);
     return (
       <>
         <div className="row">
@@ -151,7 +151,7 @@ class SiteDashboard extends Component {
                   </div>
                 </div>
                 <div className="col-lg-6">
-                  <div className="card region-table">
+                  <div className="card recent-photo">
                     <div className="card-header main-card-header sub-card-header">
                       <h5>Recent Pictures</h5>
                       <a
@@ -166,7 +166,10 @@ class SiteDashboard extends Component {
                       className="card-body"
                       style={{ position: "relative", height: "440px" }}
                     >
-                      <PhotoGallery recentPictures={recentPictures} />
+                      <PhotoGallery
+                        recentPictures={recentPictures}
+                        showContentLoader={sitePicturesLoader}
+                      />
                     </div>
                   </div>
                 </div>
@@ -177,12 +180,12 @@ class SiteDashboard extends Component {
                     <div className="card site_dashboard_info">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>Site information</h5>
-                        <div className="dash-btn">
+                        {/* <div className="dash-btn">
                           <a href={`#/`} className="fieldsight-btn left-icon">
                             <i className="la la-edit" />
                             edit
                           </a>
-                        </div>
+                        </div> */}
                       </div>
                       <div
                         className="card-body site-info board-site-info"

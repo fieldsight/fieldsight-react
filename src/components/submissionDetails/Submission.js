@@ -89,7 +89,7 @@ class Submission extends Component {
               <h6>{submission.question}</h6>
               <div className="submission-map">
                 <div className="row">
-                  <div className="col-lg-4 col-md-4">
+                  <div className="col-lg-5 col-md-5">
                     <div className="map-form">
                       <Map
                         style={{ height: "205px", marginTop: "1rem" }}
@@ -115,7 +115,7 @@ class Submission extends Component {
                       </Map>
                     </div>
                   </div>
-                  <div className="col-lg-4 col-md-4">
+                  <div className="col-lg-7 col-md-7">
                     <div className="map-legend">
                       <p>
                         <span>Latitude:</span>
