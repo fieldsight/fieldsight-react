@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
+import { TableContentLoader } from "../common/Loader";
 
 class RegionTable extends Component {
   render() {
@@ -10,6 +10,11 @@ class RegionTable extends Component {
         className="table-wrapper"
         style={{ position: "relative", height: "650px" }}
       >
+        {this.props.RegionLoader && <TableContentLoader 
+        row={15}
+        column={5}
+        />}
+        {!this.props.RegionLoader &&
         <PerfectScrollbar>
           <Table ponsive="xl" className="table  table-bordered  dataTable ">
             <thead>
@@ -25,7 +30,7 @@ class RegionTable extends Component {
               {this.props.regions.length === 0 && (
                 <tr>
                   <td>
-                    <h5>No Form Data Available</h5>
+                    <p>No Form Data Available</p>
                   </td>
                 </tr>
               )}
@@ -40,7 +45,8 @@ class RegionTable extends Component {
               ))}
             </tbody>
           </Table>
-        </PerfectScrollbar>
+        </PerfectScrollbar> 
+        }
       </div>
     );
   }
