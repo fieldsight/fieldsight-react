@@ -14,7 +14,7 @@ class InviteTab extends Component {
             <div className="card-header main-card-header sub-card-header">
                 <h5>Invitation</h5>
                 <div className="dash-btn ">
-                    <a href="#" className="fieldsight-btn left-icon"><i className="la la-check"></i>Accept
+                    <a onClick={(e) => this.props.acceptAll()} className="fieldsight-btn left-icon"><i className="la la-check"></i>Accept
                         all</a>
                 </div>
             </div>
@@ -28,8 +28,8 @@ class InviteTab extends Component {
                 {this.props.invitation.map((item, i) => (
                 <li key={item.id}>
                   <p>
-                    <a href="javascript:void(0);">{item.by_user}</a> as <span>{item.group}</span>{" "}
-                    invited to join the FieldSight.
+                    <a href="javascript:void(0);">{item.by_user}</a> has invited you to join FieldSight as <span>{item.group}</span>{" "}
+                   .
                   </p>
                   <div className="invite-btn">
 

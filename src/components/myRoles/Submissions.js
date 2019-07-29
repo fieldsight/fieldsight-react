@@ -1,11 +1,21 @@
 import React, { Component } from "react";
+import { BlockContentLoader } from "../common/Loader";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 class Submissions extends Component {
   render() {
+    console.log("data length",this.props.submission.length)
     return (
       <div className="">
-        <div className="thumb-list mr-0">
-          <ul>
+         {this.props.submissionLoader && <BlockContentLoader height="20px" number={23} />}
+         {!this.props.submissionLoader &&
+        <div className="thumb-list mr-0"  >
+          
+          <ul style={{ position: "relative", height: "650px" }}>
+            {this.props.submission.length===0 &&(
+              <p>No Data Available</p>
+            )}
+            <PerfectScrollbar>
             {this.props.submission.map((sub, i) => (
               <li key={i}>
                 {/* <figure>
@@ -20,8 +30,11 @@ class Submissions extends Component {
                 </div>
               </li>
             ))}
+             </PerfectScrollbar>
           </ul>
+         
         </div>
+         }
       </div>
     );
   }

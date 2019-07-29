@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { AvatarContentLoader } from "../common/Loader";
 
 let base_url = window.base_url
   ? window.base_url
@@ -9,15 +10,24 @@ class ProfileTab extends Component {
     return (
       <div className="card-body">
         <div className="profile-content">
+        {this.props.dLoader && <AvatarContentLoader
+        size="80"
+        width="20%"
+        number={1}
+        />}
+
+        {!this.props.dLoader &&
           <div className="row">
-            <div className="col-lg-4 col-md-6">
+           
+            
+              <div className="col-lg-4 col-md-6">
               <figure>
                 <img src={this.props.profile.profile_picture} alt="profile" />
               </figure>
               <div className="user-info">
                 <h4>{this.props.profile.fullname}</h4>
-                <span>Build Change</span>
-                <p>{this.props.profile.email}</p>
+                <span>{this.props.profile.username}</span>
+               <a href={"mailto:"+this.props.profile.email}><p>{this.props.profile.email}</p></a> 
                 <div className="profile-social-icon">
                   <a href="#" className="skype">
                     <i className="la la-skype" />
@@ -68,7 +78,10 @@ class ProfileTab extends Component {
                 </ul>
               </div>
             </div>
+           
           </div>
+
+        }
         </div>
       </div>
     );
