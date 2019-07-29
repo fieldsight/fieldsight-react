@@ -14,6 +14,7 @@
     position: relative;
     @include radius4;
     @include anim05;
+    cursor: pointer;
     i{
       margin-left:0.5rem;
     }

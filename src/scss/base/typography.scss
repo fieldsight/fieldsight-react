@@ -66,6 +66,7 @@ Version: 1.01
      text-decoration: none;
      background-color: transparent;
      @include anim05;
+     cursor:pointer;
  }
  
  a:hover {
