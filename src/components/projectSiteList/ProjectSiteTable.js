@@ -12,15 +12,15 @@ let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
 
-  const project_id = window.project_id ? window.project_id : 137;
+const project_id = window.project_id ? window.project_id : 137;
 
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
 
   componentDidMount() {
-    this.props.paginationHandler(1, null,{
-      type:"projectSiteList",
-      projectId:project_id
+    this.props.paginationHandler(1, null, {
+      type: "projectSiteList",
+      projectId: project_id
     });
   }
 
@@ -28,12 +28,10 @@ class ProjectSiteTable extends Component {
     const searchValue = e.target.value;
     this.props.searchHandler(
       searchValue,
-      `/fv3/api/project-site-list/?page=1&project=${
-        project_id
-      }&q=${searchValue}`,
+      `/fv3/api/project-site-list/?page=1&project=${project_id}&q=${searchValue}`,
       {
-        type:"projectSiteList",
-        projectId:project_id
+        type: "projectSiteList",
+        projectId: project_id
       }
     );
   };
@@ -68,10 +66,7 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url +
-                    "/fieldsight/site/add/" +
-                    project_id +
-                    "/"
+                  base_url + "/fieldsight/site/add/" + project_id + "/"
                 )
               }
             >
@@ -134,10 +129,8 @@ class ProjectSiteTable extends Component {
                         <td>
                           <a
                             href={
-                              base_url +
-                              "/fieldsight/application/?site=" +
-                              item.id +
-                              "#/site-dashboard"
+                              "/fieldsight/application/#/site-dashboard/" +
+                              item.id
                             }
                             className="pending table-profile"
                           >
@@ -205,7 +198,11 @@ class ProjectSiteTable extends Component {
                 <li className="page-item">
                   <a
                     onClick={e =>
-                      this.props.paginationHandler(this.props.pageNum - 1, null,project_id)
+                      this.props.paginationHandler(
+                        this.props.pageNum - 1,
+                        null,
+                        project_id
+                      )
                     }
                   >
                     <i className="la la-long-arrow-left" />
@@ -213,14 +210,18 @@ class ProjectSiteTable extends Component {
                 </li>
 
                 {this.props.renderPageNumbers({
-                  type:"projectSiteList",
-                  projectId:project_id
+                  type: "projectSiteList",
+                  projectId: project_id
                 })}
 
                 <li className="page-item ">
                   <a
                     onClick={e =>
-                      this.props.paginationHandler(this.props.pageNum + 1, null,project_id)
+                      this.props.paginationHandler(
+                        this.props.pageNum + 1,
+                        null,
+                        project_id
+                      )
                     }
                   >
                     <i className="la la-long-arrow-right" />

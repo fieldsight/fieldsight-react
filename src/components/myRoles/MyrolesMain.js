@@ -360,7 +360,7 @@ class MyrolesMain extends Component {
         </div>
 
         {this.state.invitation.length != 0 && (
-          <div className={"invite-popup invite " + this.state.invite}>
+          <div className={"invite-popup invite " + this.state.invite} style={{ zIndex:'1011' }}>
             <InviteTab
               invitationOpen={this.invitationOpen}
               invitation={this.state.invitation}
