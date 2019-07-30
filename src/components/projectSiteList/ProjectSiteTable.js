@@ -70,22 +70,20 @@ class ProjectSiteTable extends Component {
               <i className="la la-plus" />
             </button>
             <a>
-            <button 
-              className="fieldsight-btn"
-              onClick={e =>
-                this.props.OpenTabHandler(
-                  e,
-                  base_url +
-                    "/fieldsight/application/?project=" +
-                    this.props.projectId +
-                    "#/project-settings/site-information"
-                )
-              }
-            >
-              {!isEmpty(terms)
-                ?  `Export ${terms.site}s `
-                : "Export Sites"}
-            </button>
+              <button
+                className="fieldsight-btn"
+                onClick={e =>
+                  this.props.OpenTabHandler(
+                    e,
+                    base_url +
+                      "/fieldsight/application/?project=" +
+                      this.props.projectId +
+                      "#/project-settings/site-information"
+                  )
+                }
+              >
+                {!isEmpty(terms) ? `Export ${terms.site}s ` : "Export Sites"}
+              </button>
             </a>
             <button
               className="fieldsight-btn"
@@ -129,9 +127,9 @@ class ProjectSiteTable extends Component {
                           <a
                             href={
                               base_url +
-                              "/fieldsight/site-dashboard/" +
+                              "/fieldsight/application/?site=" +
                               item.id +
-                              "/"
+                              "#/site-dashboard"
                             }
                             className="pending table-profile"
                           >

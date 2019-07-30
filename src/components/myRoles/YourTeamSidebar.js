@@ -5,42 +5,50 @@ import Card from "react-bootstrap/Card";
 import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
 import { BlockContentLoader } from "../common/Loader";
 
+
 const url = "fv3/api/myroles";
 let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np/";
 
 class YourTeamSideBar extends Component {
-
-  OpenTabHandler = (url) => {
+  OpenTabHandler = url => {
     window.open(url, "_blank");
   };
-  render() {
-    return (
 
-      <div className="col-xl-4 col-lg-5">
+  render() {
+   
+    return (
+      <div className="col-xl-4 col-lg-5"  style={{ position: "relative", height: "500px" }}>
         <div className="left-sidebar new-sidebar sticky-top">
           <div className="card">
             <div className="card-header main-card-header">
               <h5>Your Teams</h5>
-              <div className="add-btn"><a href="">Add team<span><i className="la la-plus"></i></span></a></div>
+              <div className="add-btn">
+                <a href="">
+                  Add team
+                  <span>
+                    <i className="la la-plus" />
+                  </span>
+                </a>
+              </div>
             </div>
 
-            {this.props.dLoader && <BlockContentLoader
-              number={5}
-              height="140px"
-            />}
+            {this.props.dLoader && (
+              <BlockContentLoader number={5} height="140px" />
+            )}
 
-            {!this.props.dLoader &&
+            {!this.props.dLoader && (
               <div>
-                {this.props.teams.map((team, i) => (
                   <Accordion
                     defaultActiveKey="0"
                     className="sidebar-accordion"
                     id="accordion"
-                    key={i}
+                   
                   >
-                    <Card className="no-boxshadow">
+                {this.props.teams.map((team, i) => (
+                
+                    <Card className="no-boxshadow"  key={i}>
                       <Card.Header>
                         <figure>
                           <img src={team.logo} alt="pf" />
@@ -49,31 +57,40 @@ class YourTeamSideBar extends Component {
                           <Accordion.Toggle
                             as={Button}
                             variant="link"
-                            eventKey={i == 0 ? "0" : "1"}
+                            eventKey={i.toString()}
+                           
                           >
                             {team.name}
                             {team.has_organization_access && (
-                              <span onClick={e => this.OpenTabHandler(team.team_url)} className="goto">
+                              <span
+                                onClick={e =>  
+                                  this.OpenTabHandler(team.team_url)
+                                }
+                                className="goto"
+                              >
                                 <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>Got to dashboard</Tooltip>}>
-                                      <i className="la la-external-link"></i>
-                                  </OverlayTrigger>
-                                </span>
+                                  placement="top"
+                                  overlay={<Tooltip>Got to dashboard</Tooltip>}
+                                >
+                                  <i className="la la-external-link" />
+                                </OverlayTrigger>
+                              </span>
                             )}
                             <p>{team.address}</p>
                           </Accordion.Toggle>
                         </h5>
-
                       </Card.Header>
 
-                      <Accordion.Collapse eventKey={i == 0 ? "0" : "1"}>
+                      <Accordion.Collapse eventKey={i.toString()}>
                         <Card.Body>
                           <ul>
+                         
                             {team.projects.map((project, i) => (
                               <li
                                 className={
-                                  project.id == this.props.teamId ? "active" : null
+                                  project.id == this.props.teamId
+                                    ? "active"
+                                    : null
                                 }
                                 key={i}
                               >
@@ -87,26 +104,35 @@ class YourTeamSideBar extends Component {
                                 >
                                   {project.name}
                                 </a>
-                                {project.has_project_access &&
-                                  <a className="project-link" href={`${base_url}fieldsight/project-dashboard/${project.id}/`}>
+                                {project.has_project_access && (
+                                  <a
+                                    className="project-link"
+                                    href={`${base_url}fieldsight/project-dashboard/${
+                                      project.id
+                                    }/`}
+                                  >
                                     <OverlayTrigger
                                       placement="top"
-                                      overlay={<Tooltip>Got to dashboard</Tooltip>}>
-                                      <i className="la la-external-link"></i>
+                                      overlay={
+                                        <Tooltip>Got to dashboard</Tooltip>
+                                      }
+                                    >
+                                      <i className="la la-external-link" />
                                     </OverlayTrigger>
-
-                                  </a>}
+                                  </a>
+                                )}
                               </li>
-
                             ))}
+                             
                           </ul>
                         </Card.Body>
                       </Accordion.Collapse>
                     </Card>
-                  </Accordion>
+                
                 ))}
+                  </Accordion>
               </div>
-            }
+            )}
           </div>
         </div>
       </div>

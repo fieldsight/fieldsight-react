@@ -51,9 +51,9 @@ class SiteTable extends Component {
                       <a
                         href={
                           base_url +
-                          "/fieldsight/site-dashboard/" +
+                          "/fieldsight/application/?site=" +
                           item.id +
-                          "/"
+                          "#/site-dashboard"
                         }
                         className="pending table-profile"
                       >
@@ -62,7 +62,9 @@ class SiteTable extends Component {
                     </td>
                     <td>{item.identifier}</td>
 
-                    <td>{item.role}</td>
+                    <td>{item.role != null
+                          ? item.role
+                          : "Manager"}</td>
                     <td>
                       <a href="#" className="pending">
                         {item.region}
