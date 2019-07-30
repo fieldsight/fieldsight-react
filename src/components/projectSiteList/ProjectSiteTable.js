@@ -12,11 +12,16 @@ let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
 
+  const project_id = window.project_id ? window.project_id : 137;
+
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
 
   componentDidMount() {
-    this.props.paginationHandler(1, null, "projectSiteList");
+    this.props.paginationHandler(1, null,{
+      type:"projectSiteList",
+      projectId:project_id
+    });
   }
 
   onChangeHandler = e => {
@@ -24,9 +29,12 @@ class ProjectSiteTable extends Component {
     this.props.searchHandler(
       searchValue,
       `/fv3/api/project-site-list/?page=1&project=${
-        this.props.projectId
+        project_id
       }&q=${searchValue}`,
-      "projectSiteList"
+      {
+        type:"projectSiteList",
+        projectId:project_id
+      }
     );
   };
 
@@ -62,7 +70,7 @@ class ProjectSiteTable extends Component {
                   e,
                   base_url +
                     "/fieldsight/site/add/" +
-                    this.props.projectId +
+                    project_id +
                     "/"
                 )
               }
@@ -77,7 +85,7 @@ class ProjectSiteTable extends Component {
                     e,
                     base_url +
                       "/fieldsight/application/?project=" +
-                      this.props.projectId +
+                      project_id +
                       "#/project-settings/site-information"
                   )
                 }
@@ -90,7 +98,7 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/upload/" + this.props.projectId + "/"
+                  base_url + "/fieldsight/upload/" + project_id + "/"
                 )
               }
             >
@@ -197,19 +205,22 @@ class ProjectSiteTable extends Component {
                 <li className="page-item">
                   <a
                     onClick={e =>
-                      this.props.paginationHandler(this.props.pageNum - 1, null)
+                      this.props.paginationHandler(this.props.pageNum - 1, null,project_id)
                     }
                   >
                     <i className="la la-long-arrow-left" />
                   </a>
                 </li>
 
-                {this.props.renderPageNumbers("projectSiteList")}
+                {this.props.renderPageNumbers({
+                  type:"projectSiteList",
+                  projectId:project_id
+                })}
 
                 <li className="page-item ">
                   <a
                     onClick={e =>
-                      this.props.paginationHandler(this.props.pageNum + 1, null)
+                      this.props.paginationHandler(this.props.pageNum + 1, null,project_id)
                     }
                   >
                     <i className="la la-long-arrow-right" />

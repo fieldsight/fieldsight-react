@@ -24,14 +24,14 @@ class YourTeamSideBar extends Component {
           <div className="card">
             <div className="card-header main-card-header">
               <h5>Your Teams</h5>
-              <div className="add-btn">
-                <a href="">
+             {this.props.addPermission && <div className="add-btn">
+                <a href={base_url+"fieldsight/organization/add/"}>
                   Add team
                   <span>
                     <i className="la la-plus" />
                   </span>
                 </a>
-              </div>
+              </div>}
             </div>
 
             {this.props.dLoader && (

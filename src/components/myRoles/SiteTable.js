@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component ,Fragment } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
 import { TableContentLoader } from "../common/Loader";
@@ -10,13 +10,14 @@ let base_url = window.base_url
 class SiteTable extends Component {
   render() {
     return (
+      <Fragment>
       <div
         className="table-wrapper"
         role="tabpanel"
         aria-labelledby="region_tab"
         style={{ position: "relative", height: "650px" }}
       >
-        {this.props.siteLoader && <TableContentLoader row={15} column={5} />}
+        {this.props.siteLoader && <TableContentLoader row={20} column={5} />}
 
         {!this.props.siteLoader && (
           <PerfectScrollbar>
@@ -105,6 +106,44 @@ class SiteTable extends Component {
           </PerfectScrollbar>
         )}
       </div>
+           <div className="table-footer">
+           <div className="showing-rows">
+              <p>
+               Showing <span>{this.props.fromData}</span> to{" "}
+                <span> {this.props.toData} </span> of{" "}
+                <span>{this.props.totalCount}</span> entries.
+              </p>
+            </div>
+            <div className="table-pagination">
+              <ul>
+                <li className="page-item">
+                  <a
+                   onClick={e =>
+                     this.props.paginationHandler(this.props.pageNum - 1, null,this.props.siteId)
+                   }
+                 >
+                   <i className="la la-long-arrow-left" />
+                 </a>
+               </li>
+
+               {this.props.renderPageNumbers({
+                 type:"projectSiteList",
+                 projectId:this.props.siteId
+               })}
+
+               <li className="page-item ">
+                 <a
+                   onClick={e =>
+                     this.props.paginationHandler(this.props.pageNum + 1, null,this.props.siteId)
+                   }
+                 >
+                   <i className="la la-long-arrow-right" />
+                 </a>
+               </li>
+             </ul>
+           </div>
+        </div>
+        </Fragment>
     );
   }
 }

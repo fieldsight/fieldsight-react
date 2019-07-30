@@ -9,6 +9,7 @@ import InviteTab from "./InviteTab";
 import SiteTable from "./SiteTable";
 import MapPage from "./MapPage";
 import { successToast, errorToast } from "../../utils/toastHandler";
+import withPagination from "../../hoc/WithPagination";
 
 const url = "fv3/api/myroles/";
 
@@ -166,19 +167,28 @@ class MyrolesMain extends Component {
   requestSite = id => {
     const site_url = "fv3/api/my-sites/?project=" + id;
     this.setState({
-      siteLoader: true
+      siteLoader: true,
+      siteId:id
     });
-    axios
-      .get(`${site_url}`)
-      .then(res => {
-        if (res.status === 200) {
-          this.setState({
-            site: res.data.results,
-            siteLoader: false
-          });
-        }
-      })
-      .catch(err => {});
+    // axios
+    //   .get(`${site_url}`)
+    //   .then(res => {
+    //     if (res.status === 200) {
+    //       this.setState({
+    //         site: res.data.results.data,
+    //         siteLoader: false
+    //       });
+    //     }
+    //   })
+    //   .catch(err => {});
+
+      
+
+      this.props.paginationHandler(1, null, {
+        type:"mySiteList",
+        projectId:id
+      });
+      console.log("data",this.props.siteList.length)
   };
 
   requestSubmission = id => {
@@ -219,6 +229,7 @@ class MyrolesMain extends Component {
   
 
   render() {
+   
     return (
       <React.Fragment>
         <div className="card mrb-30">
@@ -238,6 +249,7 @@ class MyrolesMain extends Component {
             requestSubmission={this.requestSubmission}
             requestMap={this.requestMap}
             regions={this.state.regions}
+            addPermission={this.state.profile.can_create_team}
             
           />
 
@@ -325,8 +337,15 @@ class MyrolesMain extends Component {
 
                     {this.state.rightTab == "site" && (
                       <SiteTable
-                        site={this.state.site}
-                        siteLoader={this.state.siteLoader}
+                        site={this.props.siteList}
+                        siteLoader={this.props.dLoader}
+                        renderPageNumbers={this.props.renderPageNumbers}
+                        paginationHandler={this.props.paginationHandler}
+                        siteId={this.state.siteId}
+                        pageNum={this.props.pageNum}
+                        fromData={this.props.fromData}
+                        toData={this.props.toData}
+                        totalCount={this.props.totalCount}
                       />
                     )}
 
@@ -356,4 +375,4 @@ class MyrolesMain extends Component {
   }
 }
 
-export default MyrolesMain;
+export default withPagination(MyrolesMain); 

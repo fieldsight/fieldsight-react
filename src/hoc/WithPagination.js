@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-const project_id = window.project_id ? window.project_id : 137;
-
 const getDisplayName = WrappedComponent => {
   return WrappedComponent.displayName || WrappedComponent.name || "Component";
 };
@@ -21,10 +19,16 @@ const withPagination = WrappedComponent => {
       textVal: null
     };
 
-    getUrl = (page_num, type) => {
-      switch (type) {
+    getUrl = (page_num, payload) => {
+      switch (payload.type) {
         case "projectSiteList":
-          return `fv3/api/project-site-list/?page=${page_num}&project=${project_id}`;
+          return `fv3/api/project-site-list/?page=${page_num}&project=${
+            payload.projectId
+          }`;
+        case "mySiteList":
+          return `fv3/api/my-sites/?page=${page_num}&project=${
+            payload.projectId
+          }`;
       }
     };
 
@@ -36,15 +40,27 @@ const withPagination = WrappedComponent => {
         .then(res => {
           if (this._isMounted) {
             if (res.status === 200) {
-              if (res.data.results.query === null) {
-                this.setState({
-                  siteList: res.data.results.data,
-                  dLoader: false,
-                  totalCount: res.data.count,
-                  textVal: null,
-                  totalPage: Math.ceil(res.data.count / 200)
-                });
-              } else {
+              // if (res.data.results.query === null) {
+              //   this.setState({
+              //     siteList: res.data.results.data,
+              //     dLoader: false,
+              //     totalCount: res.data.count,
+              //     textVal: null,
+              //     totalPage: Math.ceil(res.data.count / 200)
+              //   });
+              // } else {
+              //   if (res.data.results.query == this.state.textVal) {
+              //     this.setState({
+              //       siteList: res.data.results.data,
+              //       dLoader: false,
+              //       totalCount: res.data.count,
+              //       textVal: null,
+              //       totalPage: Math.ceil(res.data.count / 200)
+              //     });
+              //   }
+              //}
+
+              if (res.data.results.query) {
                 if (res.data.results.query == this.state.textVal) {
                   this.setState({
                     siteList: res.data.results.data,
@@ -54,6 +70,14 @@ const withPagination = WrappedComponent => {
                     totalPage: Math.ceil(res.data.count / 200)
                   });
                 }
+              } else {
+                this.setState({
+                  siteList: res.data.results.data,
+                  dLoader: false,
+                  totalCount: res.data.count,
+                  textVal: null,
+                  totalPage: Math.ceil(res.data.count / 200)
+                });
               }
             }
           }
@@ -61,7 +85,7 @@ const withPagination = WrappedComponent => {
         .catch(err => {});
     };
 
-    paginationHandler = (page_num, searchUrl, type) => {
+    paginationHandler = (page_num, searchUrl, payload) => {
       const toNum = page_num * 200;
       const fromNum = (page_num - 1) * 200 + 1;
       let paginateUrl;
@@ -69,7 +93,7 @@ const withPagination = WrappedComponent => {
       if (searchUrl) {
         paginateUrl = searchUrl;
       } else {
-        paginateUrl = this.getUrl(page_num, type);
+        paginateUrl = this.getUrl(page_num, payload);
       }
 
       this.setState(
@@ -83,7 +107,7 @@ const withPagination = WrappedComponent => {
       );
     };
 
-    renderPageNumbers = type => {
+    renderPageNumbers = payload => {
       if (this.state.totalPage) {
         const pageNumbers = [];
         for (let i = 1; i <= this.state.totalPage; i++) {
@@ -102,7 +126,7 @@ const withPagination = WrappedComponent => {
             return (
               <li key={number} className={classes}>
                 {" "}
-                <a onClick={e => this.paginationHandler(number, null, type)}>
+                <a onClick={e => this.paginationHandler(number, null, payload)}>
                   {number}
                 </a>
               </li>
@@ -112,18 +136,18 @@ const withPagination = WrappedComponent => {
       }
     };
 
-    searchHandler = (searchValue, searchUrl, type) => {
+    searchHandler = (searchValue, searchUrl, payload) => {
       if (searchValue) {
         this.setState({
           textVal: searchValue
         });
-        this.paginationHandler(1, searchUrl);
+        this.paginationHandler(1, searchUrl, payload);
       } else {
         this.setState({
           pageNum: 1,
           textVal: null
         });
-        this.paginationHandler(1, null, type);
+        this.paginationHandler(1, null, payload);
       }
     };
 
@@ -139,7 +163,6 @@ const withPagination = WrappedComponent => {
         <WrappedComponent
           {...this.props}
           {...state}
-          projectId={project_id}
           searchHandler={searchHandler}
           renderPageNumbers={renderPageNumbers}
           paginationHandler={paginationHandler}
