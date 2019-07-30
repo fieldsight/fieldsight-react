@@ -117,6 +117,17 @@
       }
     }
   }
+  .cropper-btn{
+    @include clear;
+    margin-bottom: 1rem;
+    i{
+      margin:0;
+      font-size:1rem;
+    }
+    .fieldsight-btn:first-child{
+      margin-right: 0.5rem;
+    }
+  }
   button:focus{
     box-shadow: none;
     -webkit-outline:none;
