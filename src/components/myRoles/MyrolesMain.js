@@ -246,7 +246,7 @@ class MyrolesMain extends Component {
           regions={this.state.regions}
           />
 
-          <div className="col-xl-8 col-lg-8">
+          <div className="col-xl-8 col-lg-7">
             <div className="right-content">
               <div className="card no-boxshadow">
                 <div className="card-body">
