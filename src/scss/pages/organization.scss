@@ -427,9 +427,14 @@
           font-size: 1.2rem;
           display: inline-block;
           margin-right: 0.6125rem;
+          @include anim05;
 
           &:last-child {
             margin-right: 0;
+          }
+          &:hover{
+            background-color:$color-blue;
+            color:$color-white;
           }
         }
       }
