@@ -13,7 +13,6 @@ import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import "leaflet/dist/leaflet.css";
-import "cropperjs/dist/cropper.css";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({

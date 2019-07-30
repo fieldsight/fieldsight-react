@@ -1,13 +1,34 @@
 import React, { Component } from "react";
-
 import { Dropdown } from "react-bootstrap";
-
+import Cropper from "react-cropper";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import Table from "react-bootstrap/Table";
 import CountCard from "../../common/CountCard";
 import { AvatarContentLoader } from "../../common/Loader";
 import SubmissionModal from "./SubmissionModal";
+import Modal from "../../common/Modal";
 
 const projectId = window.project_id ? window.project_id : 137;
+
 class DashboardHeader extends Component {
+  // crop = () => {
+  //   if (typeof cropper.getCroppedCanvas() === "undefined") {
+  //     return;
+  //   }
+  //   this.setState({
+  //     cropResult: cropper.getCroppedCanvas().toDataURL(),
+  //     showCropper: false
+  //   });
+  // };
+
+  rotate = () => {
+    this.cropper.rotate(90);
+  };
+
+  rotateLeft = () => {
+    this.cropper.rotate(-90);
+  };
+
   render() {
     const {
       props: {
@@ -25,8 +46,13 @@ class DashboardHeader extends Component {
         activeTab,
         closeModal,
         openModal,
-        toggleTab
-      }
+        toggleTab,
+        showCropper,
+
+        showSubsites
+      },
+      rotate,
+      rotateLeft
     } = this;
 
     const ManageDropdown = [
@@ -55,7 +81,11 @@ class DashboardHeader extends Component {
           {name ? (
             <div className="dash-pf">
               <figure>
-                <img src={logo} alt={logo} />
+                <img
+                  src={logo}
+                  alt={logo}
+                  onClick={() => openModal("cropper")}
+                />
               </figure>
               <div className="dash-pf-content">
                 <h5>{name}</h5>
@@ -101,13 +131,6 @@ class DashboardHeader extends Component {
                     {item.title}
                   </Dropdown.Item>
                 ))}
-                {/* {enableSubsites && (
-                  <Dropdown.Item
-                    href={`/fieldsight/site/add/subsite/${projectId}/${site_id}`}
-                  >
-                    Add Subsites
-                  </Dropdown.Item>
-                )} */}
               </Dropdown.Menu>
             </Dropdown>
           </div>
@@ -132,6 +155,14 @@ class DashboardHeader extends Component {
                 noSubmissionText={true}
               />
             </a>
+            <a onClick={() => openModal("subsites")}>
+              <CountCard
+                countName="Users"
+                countNumber={totalUsers}
+                icon="la-user"
+                noSubmissionText={true}
+              />
+            </a>
 
             <div className="add-data">
               <a onClick={() => openModal("Header")}>
@@ -149,6 +180,92 @@ class DashboardHeader extends Component {
               closeModal={() => closeModal("Header")}
               toggleTab={toggleTab}
             />
+          )}
+
+          {showCropper && (
+            <Modal title="Preview" toggleModal={() => closeModal("cropper")}>
+              <div className="row">
+                <button onClick={rotate}>Rotate</button>
+                <button onClick={rotateLeft}> Rotate left </button>
+              </div>
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="card-body" style={{ padding: 0 }}>
+                    <figure>
+                      <Cropper
+                        style={{ height: 400, width: 300 }}
+                        aspectRatio={1 / 1}
+                        preview=".img-preview"
+                        guides={false}
+                        src={logo}
+                        ref={cropper => {
+                          this.cropper = cropper;
+                        }}
+                        // crop={this.crop}
+                      />
+                      <button
+                        className="fieldsight-btn"
+                        style={{ marginTop: "15px" }}
+                        // onClick={cropImage}
+                      >
+                        Save Image
+                      </button>
+                    </figure>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="card-body" style={{ padding: 0 }}>
+                    <figure>
+                      <div
+                        className="img-preview"
+                        style={{
+                          width: "100%",
+                          height: 400,
+                          overflow: "hidden"
+                        }}
+                      />
+                    </figure>
+                  </div>
+                </div>
+              </div>
+            </Modal>
+          )}
+          {showSubsites && (
+            <Modal title="Subsites" toggleModal={() => closeModal("subsites")}>
+              <PerfectScrollbar>
+                <Table
+                  responsive="xl"
+                  className="table  table-bordered  dataTable "
+                >
+                  <thead>
+                    <tr>
+                      <th>Form</th>
+                      <th>Submitted By</th>
+                      <th>Reviewed By</th>
+                      <th>Status</th>
+                      <th>Submitted On</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* {siteSubmissions.map((submission, i) => (
+                      <tr key={uuid()}>
+                        <td>{submission.form}</td>
+                        <td>{submission.submitted_by}</td>
+                        <td>{submission.reviewed_by}</td>
+                        <td>
+                          <span className={submission.status.toLowerCase()}>
+                            {submission.status}
+                          </span>
+                        </td>
+                        <td>
+                          {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
+                        </td>
+                      </tr>
+                    ))} */}
+                  </tbody>
+                </Table>
+              </PerfectScrollbar>
+            </Modal>
           )}
         </div>
       </div>

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import ProjecTable from "./ProjectTable";
 
 class ProjectFormContent extends Component {

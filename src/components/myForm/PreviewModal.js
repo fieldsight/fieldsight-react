@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import Iframe from "react-iframe";
 import PerfectScrollbar from "react-perfect-scrollbar";
 

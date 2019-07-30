@@ -1,7 +1,7 @@
 import React from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import uuid from "uuid/v4";
-import { ListContentLoader } from "../../common/Loader";
+import { BlockContentLoader } from "../../common/Loader";
 
 const DashboardInfoItem = ({ meta }) => (
   <li>
@@ -14,7 +14,7 @@ const DashboardInfoItem = ({ meta }) => (
 const DashboardInfo = ({ siteMetas, showContentLoader }) => (
   <>
     {showContentLoader ? (
-      <ListContentLoader number={16} />
+      <BlockContentLoader number={16} height="15px" />
     ) : (
       <PerfectScrollbar>
         <div className="info-wrap">
