@@ -8,10 +8,15 @@ import {
   GET_SITE_LOGS,
   GET_SITE_FORMS,
   GET_RECENT_PICTURES,
-  SHOW_DOT_LOADER
+  GET_SUBSITES,
+  SHOW_DOT_LOADER,
+  SHOW_DASHBOARD_LOADERS
 } from "./types";
 
 export const getSiteDashboard = id => dispatch => {
+  dispatch({
+    type: SHOW_DASHBOARD_LOADERS
+  });
   axios
     .get(`fv3/api/site/${id}/`)
     .then(res => {
@@ -27,6 +32,9 @@ export const getSiteDashboard = id => dispatch => {
 
 // site metas/ information
 export const getSiteMetas = id => dispatch => {
+  dispatch({
+    type: SHOW_DASHBOARD_LOADERS
+  });
   axios
     .get(`fieldsight/api/siteallmetas/${id}/`)
     .then(res => {
@@ -41,6 +49,9 @@ export const getSiteMetas = id => dispatch => {
 };
 
 export const getSiteSubmissions = id => dispatch => {
+  dispatch({
+    type: SHOW_DASHBOARD_LOADERS
+  });
   axios
     .get(`fv3/api/site-submissions/?site=${id}`)
     .then(res => {
@@ -55,6 +66,9 @@ export const getSiteSubmissions = id => dispatch => {
 };
 
 export const getSiteDocuments = id => dispatch => {
+  dispatch({
+    type: SHOW_DASHBOARD_LOADERS
+  });
   axios
     .get(`fv3/api/site/documents/?site_id=${id}`)
     .then(res => {
@@ -69,6 +83,9 @@ export const getSiteDocuments = id => dispatch => {
 };
 
 export const getSiteLogs = id => dispatch => {
+  dispatch({
+    type: SHOW_DASHBOARD_LOADERS
+  });
   axios
     .get(`events/api/site_logs/${id}/`)
     .then(res => {
@@ -100,6 +117,9 @@ export const getSiteForms = (id, formType) => dispatch => {
 };
 
 export const getRecentPictures = id => dispatch => {
+  dispatch({
+    type: SHOW_DASHBOARD_LOADERS
+  });
   axios
     .get(`/fv3/api/site-recent-pictures/?site=${id}`)
     .then(res => {
@@ -114,11 +134,13 @@ export const getRecentPictures = id => dispatch => {
 };
 
 export const getSubsites = id => dispatch => {
-  console.log("getsites");
   axios
     .get(`fv3/api/sub-site-list/?site=${id}`)
     .then(res => {
-      console.log("subsite res", res);
+      dispatch({
+        type: GET_SUBSITES,
+        payload: res.data
+      });
     })
     .catch(err => console.log("ERr", err));
 };

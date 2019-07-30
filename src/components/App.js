@@ -58,7 +58,7 @@ class App extends Component {
                     />
 
                     <Route
-                      path="/site-dashboard"
+                      path="/site-dashboard/:id"
                       render={props => <SiteDashboard {...props} />}
                     />
 

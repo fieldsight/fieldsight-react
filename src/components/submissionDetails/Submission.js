@@ -187,7 +187,7 @@ class Submission extends Component {
   };
 
   render() {
-    const { dateCreated, submittedBy, submissionData } = this.props;
+    const { dateCreated, submittedBy, submissionData, formName } = this.props;
 
     return (
       <div className="group-submission mrt-30">
@@ -196,7 +196,7 @@ class Submission extends Component {
             <div className="card">
               <div className="card-header main-card-header sticky-top">
                 <div className="head-right">
-                  <h5>household survey</h5>
+                  <h5>{formName}</h5>
 
                   {submittedBy && (
                     <div className="submitted-header">

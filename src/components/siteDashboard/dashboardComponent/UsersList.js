@@ -10,7 +10,7 @@ const UsersListItem = ({ user }) => {
         <img src={user.profile_picture} alt="user avatar" />
       </figure>
       <div className="content">
-        <h6>{user.username}</h6>
+        <h6>{user.full_name}</h6>
         <span>{user.email}</span>
       </div>
     </li>
