@@ -7,7 +7,8 @@ import {
   GET_SITE_FORMS,
   GET_RECENT_PICTURES,
   GET_SUBSITES,
-  SHOW_DOT_LOADER
+  SHOW_DOT_LOADER,
+  SHOW_DASHBOARD_LOADERS
 } from "../actions/types";
 
 const initialState = {
@@ -132,6 +133,17 @@ export default function(state = initialState, action) {
       return {
         ...state,
         showDotLoader: true
+      };
+
+    case SHOW_DASHBOARD_LOADERS:
+      return {
+        ...state,
+        siteDashboardLoader: true,
+        siteMetasLoader: true,
+        siteSubmissionsLoader: true,
+        siteDocumentsLoader: true,
+        siteLogsLoader: true,
+        sitePicturesLoader: true
       };
 
     default:

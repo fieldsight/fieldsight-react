@@ -37,6 +37,7 @@ class SubmissionDetail extends Component {
         fieldsight_instance,
         edit_url,
         download_url,
+        form_name,
         loading,
         initialLoader
       },
@@ -79,6 +80,7 @@ class SubmissionDetail extends Component {
                   </div>
 
                   <Submission
+                    formName={form_name}
                     dateCreated={date_created}
                     submittedBy={submitted_by}
                     submissionData={submission_data}

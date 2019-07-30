@@ -60,6 +60,7 @@ const SubmissionTab = ({ formData }) => {
 const SubmissionModal = ({
   showDotLoader,
   activeTab,
+  enableSubsites,
   siteForms,
   closeModal,
   toggleTab
@@ -88,14 +89,18 @@ const SubmissionModal = ({
               scheduled form
             </a>
           </li>
-          <li className="nav-item">
-            <a
-              className={activeTab === "stage" ? "nav-link active" : "nav-link"}
-              onClick={() => toggleTab("stage")}
-            >
-              Staged Form
-            </a>
-          </li>
+          {!enableSubsites && (
+            <li className="nav-item">
+              <a
+                className={
+                  activeTab === "stage" ? "nav-link active" : "nav-link"
+                }
+                onClick={() => toggleTab("stage")}
+              >
+                Staged Form
+              </a>
+            </li>
+          )}
         </ul>
       </div>
       <div style={{ position: "relative", height: "434px" }}>

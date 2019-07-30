@@ -24,17 +24,20 @@ import {
   getSubsites
 } from "../../actions/siteDashboardActions";
 
-const siteId = window.site_id ? window.site_id : 81704;
+// const siteId = window.site_id ? window.site_id : 81704;
+
+const INITIAL_STATE = {
+  activeTab: "general",
+  showHeaderModal: false,
+  showSubmissionModal: false,
+  showCropper: false,
+  showSubsites: false
+};
 class SiteDashboard extends Component {
-  state = {
-    activeTab: "general",
-    showHeaderModal: false,
-    showSubmissionModal: false,
-    showCropper: false,
-    showSubsites: false
-  };
+  state = INITIAL_STATE;
 
   closeModal = type => {
+    const { id: siteId } = this.props.match.params;
     if (type === "subsites") {
       return this.setState({
         showSubsites: false
@@ -57,6 +60,7 @@ class SiteDashboard extends Component {
   };
 
   openModal = type => {
+    const { id: siteId } = this.props.match.params;
     if (type === "subsites") {
       return this.setState(
         {
@@ -77,6 +81,7 @@ class SiteDashboard extends Component {
   };
 
   toggleTab = formType => {
+    const { id: siteId } = this.props.match.params;
     this.setState(
       {
         activeTab: formType
@@ -86,6 +91,7 @@ class SiteDashboard extends Component {
   };
 
   componentDidMount() {
+    const { id: siteId } = this.props.match.params;
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
     this.props.getSiteSubmissions(siteId);
@@ -93,6 +99,26 @@ class SiteDashboard extends Component {
     this.props.getSiteLogs(siteId);
     this.props.getSiteForms(siteId, "general");
     this.props.getRecentPictures(siteId);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      const { id: siteId } = this.props.match.params;
+      this.setState(
+        {
+          ...INITIAL_STATE
+        },
+        () => {
+          this.props.getSiteDashboard(siteId);
+          this.props.getSiteMetas(siteId);
+          this.props.getSiteSubmissions(siteId);
+          this.props.getSiteDocuments(siteId);
+          this.props.getSiteLogs(siteId);
+          this.props.getSiteForms(siteId, "general");
+          this.props.getRecentPictures(siteId);
+        }
+      );
+    }
   }
   render() {
     const {
@@ -125,7 +151,10 @@ class SiteDashboard extends Component {
           siteDocumentsLoader,
           sitePicturesLoader
         },
-        getSiteForms
+        getSiteForms,
+        match: {
+          params: { id: siteId }
+        }
       },
       state: {
         showHeaderModal,
@@ -166,6 +195,7 @@ class SiteDashboard extends Component {
                 showSubsites={showSubsites}
                 subSites={subSites}
                 totalSubsites={total_subsites}
+                showContentLoader={siteDashboardLoader}
               />
               <div className="row">
                 <div className="col-lg-6">
@@ -242,6 +272,7 @@ class SiteDashboard extends Component {
                   </div>
 
                   <DatatablePage
+                    enableSubsites={enable_subsites}
                     siteSubmissions={siteSubmissions}
                     showContentLoader={siteSubmissionsLoader}
                     siteForms={siteForms}

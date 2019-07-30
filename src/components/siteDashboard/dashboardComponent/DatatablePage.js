@@ -5,8 +5,9 @@ import format from "date-fns/format";
 import uuid from "uuid/v4";
 import SubmissionModal from "./SubmissionModal";
 import { TableContentLoader } from "../../common/Loader";
-
+import Td from "../../common/TableData";
 const DatatablePage = ({
+  enableSubsites,
   siteSubmissions,
   showContentLoader,
   showModal,
@@ -58,16 +59,59 @@ const DatatablePage = ({
                 <tbody>
                   {siteSubmissions.map((submission, i) => (
                     <tr key={uuid()}>
-                      <td>{submission.form}</td>
-                      <td>{submission.submitted_by}</td>
-                      <td>{submission.reviewed_by}</td>
+                      <td>
+                        <a
+                          href={`/fieldsight/application/?submission=${
+                            submission.instance_id
+                          }#/submission-details`}
+                          target="_blank"
+                        >
+                          {submission.form}
+                        </a>
+                      </td>
+                      <td>
+                        {" "}
+                        <a
+                          href={`/fieldsight/application/?submission=${
+                            submission.instance_id
+                          }#/submission-details`}
+                          target="_blank"
+                        >
+                          {submission.submitted_by}
+                        </a>
+                      </td>
+                      <td>
+                        {" "}
+                        <a
+                          href={`/fieldsight/application/?submission=${
+                            submission.instance_id
+                          }#/submission-details`}
+                          target="_blank"
+                        >
+                          {submission.reviewed_by}
+                        </a>
+                      </td>
                       <td>
                         <span className={submission.status.toLowerCase()}>
-                          {submission.status}
+                          <a
+                            href={`/fieldsight/application/?submission=${
+                              submission.instance_id
+                            }#/submission-details`}
+                            target="_blank"
+                          >
+                            {submission.status}{" "}
+                          </a>
                         </span>
                       </td>
                       <td>
-                        {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
+                        <a
+                          href={`/fieldsight/application/?submission=${
+                            submission.instance_id
+                          }#/submission-details`}
+                          target="_blank"
+                        >
+                          {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
+                        </a>
                       </td>
                     </tr>
                   ))}
@@ -80,6 +124,7 @@ const DatatablePage = ({
 
           {showModal && (
             <SubmissionModal
+              enableSubsites={enableSubsites}
               showDotLoader={showDotLoader}
               siteForms={siteForms}
               activeTab={activeTab}

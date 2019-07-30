@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import format from "date-fns/format";
-import { withRouter, Link } from "react-router-dom";
-
-const Td = ({ children, to }) => {
-  return (
-    <td>
-      <Link to={to}>{children}</Link>
-    </td>
-  );
-};
+import { withRouter } from "react-router-dom";
+import Td from "./TableData";
+// const Td = ({ children, to }) => {
+//   return (
+//     <td>
+//       <Link to={to}>{children}</Link>
+//     </td>
+//   );
+// };
 class TableRow extends Component {
   renderName = (dataType, id) => {
     const selectedData = this.props[dataType].find(dtype => dtype.id === +id);
@@ -88,9 +88,13 @@ class TableRow extends Component {
 
       manageRegion: (row, i, editHandler, removeHandler) => (
         <tr key={row.id}>
-          <Td to={`${url}/${row.id}/sub-region`}>{row.identifier}</Td>
-          <Td to={`${url}/${row.id}/sub-region`}>{row.name}</Td>
-          <Td to={`${url}/${row.id}/sub-region`}>
+          <Td to={`/project-settings/manage-region/${row.id}/sub-region`}>
+            {row.identifier}
+          </Td>
+          <Td to={`/project-settings/manage-region/${row.id}/sub-region`}>
+            {row.name}
+          </Td>
+          <Td to={`/project-settings/manage-region/${row.id}/sub-region`}>
             {format(row.date_created, ["MMMM Do YYYY, h:mm:ss a"])}
           </Td>
           <td>

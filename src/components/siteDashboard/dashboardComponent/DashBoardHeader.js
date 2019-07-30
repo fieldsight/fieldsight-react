@@ -7,20 +7,11 @@ import CountCard from "../../common/CountCard";
 import { AvatarContentLoader } from "../../common/Loader";
 import SubmissionModal from "./SubmissionModal";
 import Modal from "../../common/Modal";
+import Td from "../../common/TableData";
 
 const projectId = window.project_id ? window.project_id : 137;
 
 class DashboardHeader extends Component {
-  // crop = () => {
-  //   if (typeof cropper.getCroppedCanvas() === "undefined") {
-  //     return;
-  //   }
-  //   this.setState({
-  //     cropResult: cropper.getCroppedCanvas().toDataURL(),
-  //     showCropper: false
-  //   });
-  // };
-
   rotate = () => {
     this.cropper.rotate(90);
   };
@@ -50,7 +41,8 @@ class DashboardHeader extends Component {
         showCropper,
         subSites,
         showSubsites,
-        totalSubsites
+        totalSubsites,
+        showContentLoader
       },
       rotate,
       rotateLeft
@@ -79,7 +71,9 @@ class DashboardHeader extends Component {
     return (
       <div className="card mrb-30">
         <div className="card-header main-card-header dashboard-header">
-          {name ? (
+          {showContentLoader ? (
+            <AvatarContentLoader number={1} width="300px" size="80" />
+          ) : (
             <div className="dash-pf">
               <figure>
                 <img
@@ -94,9 +88,7 @@ class DashboardHeader extends Component {
                 <span>{region} </span>
               </div>
             </div>
-          ) : (
-              <AvatarContentLoader number={1} width="300px" size="80" />
-            )}
+          )}
 
           <div className="dash-btn">
             <Dropdown>
@@ -145,7 +137,7 @@ class DashboardHeader extends Component {
               <CountCard
                 countName="Total"
                 countNumber={totalSubmission}
-                icon="la-map-marker"
+                icon="la-clone"
               />
             </a>
             <a href={`/fieldsight/site-users/${siteId}/`} target="_blank">
@@ -156,14 +148,16 @@ class DashboardHeader extends Component {
                 noSubmissionText={true}
               />
             </a>
-            <a onClick={() => openModal("subsites")}>
-              <CountCard
-                countName="Subsites"
-                countNumber={totalSubsites}
-                icon="la-map-marker"
-                noSubmissionText={true}
-              />
-            </a>
+            {enableSubsites && (
+              <a onClick={() => openModal("subsites")}>
+                <CountCard
+                  countName="Subsites"
+                  countNumber={totalSubsites}
+                  icon="la-map-marker"
+                  noSubmissionText={true}
+                />
+              </a>
+            )}
 
             <div className="add-data">
               <a onClick={() => openModal("Header")}>
@@ -180,27 +174,28 @@ class DashboardHeader extends Component {
               activeTab={activeTab}
               closeModal={() => closeModal("Header")}
               toggleTab={toggleTab}
+              enableSubsites={enableSubsites}
             />
           )}
 
           {showCropper && (
             <Modal title="Preview" toggleModal={() => closeModal("cropper")}>
-              <div className="cropper-btn text-right">
-                <button onClick={rotate} className="fieldsight-btn" >
-
+              <div className="cropper-btn">
+                <button onClick={rotate} className="fieldsight-btn">
                   <OverlayTrigger
                     placement="top"
-                    overlay={<Tooltip>Rotate Left</Tooltip>}>
-                    <i className="la la-rotate-left"></i>
+                    overlay={<Tooltip>Rotate Left</Tooltip>}
+                  >
+                    <i className="la la-rotate-left" />
                   </OverlayTrigger>
                 </button>
-                <button onClick={rotateLeft} className="fieldsight-btn"> 
-                <OverlayTrigger
+                <button onClick={rotateLeft} className="fieldsight-btn">
+                  <OverlayTrigger
                     placement="top"
-                    overlay={<Tooltip>Rotate Right</Tooltip>}>
-                    <i className="la la-rotate-right"></i>
+                    overlay={<Tooltip>Rotate Right</Tooltip>}
+                  >
+                    <i className="la la-rotate-right" />
                   </OverlayTrigger>
-                 
                 </button>
               </div>
               <div className="row">
@@ -216,15 +211,8 @@ class DashboardHeader extends Component {
                         ref={cropper => {
                           this.cropper = cropper;
                         }}
-                      // crop={this.crop}
+                        // crop={this.crop}
                       />
-                      <button
-                        className="fieldsight-btn"
-                        style={{ marginTop: "15px" }}
-                      // onClick={cropImage}
-                      >
-                        Save Image
-                      </button>
                     </figure>
                   </div>
                 </div>
@@ -242,6 +230,15 @@ class DashboardHeader extends Component {
                     </figure>
                   </div>
                 </div>
+                <div className="col-md-12 text-right">
+                  <button
+                    className="fieldsight-btn"
+                    style={{ marginTop: "15px" }}
+                    // onClick={cropImage}
+                  >
+                    Save Image
+                  </button>
+                </div>
               </div>
             </Modal>
           )}
@@ -255,16 +252,45 @@ class DashboardHeader extends Component {
                   <thead>
                     <tr>
                       <th>Identifier</th>
-                      <th>Name</th>
                       <th>Address</th>
+                      <th>Region</th>
+                      <th>Progress</th>
+                      <th>Submissions</th>
+                      <th>Latest status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {subSites.map((subSite, i) => (
                       <tr key={i}>
-                        <td>{subSite.identifier}</td>
-                        <td>{subSite.name}</td>
-                        <td>{subSite.address}</td>
+                        <Td to={`/site-dashboard/${subSite.id}`}>
+                          {subSite.identifier}
+                        </Td>
+                        <Td to={`/site-dashboard/${subSite.id}`}>
+                          {subSite.name}
+                        </Td>
+                        <Td to={`/site-dashboard/${subSite.id}`}>
+                          {subSite.address}
+                        </Td>
+                        <Td to={`/site-dashboard/${subSite.id}`}>
+                          <div className="progress">
+                            <div
+                              className="progress-bar"
+                              role="progressbar"
+                              aria-valuenow="40"
+                              aria-valuemin="0"
+                              aria-valuemax="200"
+                              style={{ width: subSite.progress + "%" }}
+                            >
+                              <span className="progress-count">
+                                {subSite.progress + "%"}
+                              </span>
+                            </div>
+                          </div>
+                        </Td>
+
+                        <Td to={`/site-dashboard/${subSite.id}`}>
+                          {subSite.status}
+                        </Td>
                       </tr>
                     ))}
                   </tbody>
