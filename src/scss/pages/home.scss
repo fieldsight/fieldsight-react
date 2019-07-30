@@ -428,6 +428,11 @@
                 color: $color-green;
               }
             }
+            span{
+              i{
+                font-size:1.2rem;
+              }
+            }
           }
         }
       }
@@ -438,7 +443,7 @@
 
       .card {
         .card-header {
-          // @include flex_start;
+          @include flex_start;
           background: transparent;
           border-bottom: 1px solid $color-bg;
 
@@ -476,18 +481,23 @@
           p {
             color: rgba($color-primary, 0.5);
             font-size: 0.775rem;
-            margin: 0.7rem 0 0 0;
+            margin: 0;
             line-height: 1rem;
           }
         }
 
         ul {
           li {
+            @include flexjust;
+            margin-bottom: 0.5rem;
+            align-items: center;
+            border-bottom: 1px solid $color-bg;
             a {
               padding: 0.5rem;
               display: block;
               padding-left: 1.3rem;
               position: relative;
+              
 
               &::before {
                 content: "\f274";
@@ -495,12 +505,31 @@
                 position: absolute;
                 left: 0;
               }
+              &.project-link{
+                // width:1.2rem;
+                // height: 1.2rem;
+                // @include flexvr;
+                // background-color: $color-green;
+                // color:$color-white;
+                @include radius4;
+                padding:0;
+                cursor: pointer;
+                margin-left: 0.5rem;
+                font-size:1.2rem;
+                &::before{
+                  display: none;
+                }
+              }
             }
 
             &.active,
             &:hover {
+              border-color: $color-blue;
               a {
                 color: $color-blue;
+                &.project-link{
+                  padding:0;
+                }
               }
             }
 

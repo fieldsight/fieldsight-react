@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Dropdown } from "react-bootstrap";
+import { OverlayTrigger, Tooltip, Dropdown } from "react-bootstrap";
 import Cropper from "react-cropper";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
@@ -95,8 +95,8 @@ class DashboardHeader extends Component {
               </div>
             </div>
           ) : (
-            <AvatarContentLoader number={1} width="300px" size="80" />
-          )}
+              <AvatarContentLoader number={1} width="300px" size="80" />
+            )}
 
           <div className="dash-btn">
             <Dropdown>
@@ -185,9 +185,23 @@ class DashboardHeader extends Component {
 
           {showCropper && (
             <Modal title="Preview" toggleModal={() => closeModal("cropper")}>
-              <div className="row">
-                <button onClick={rotate}>Rotate</button>
-                <button onClick={rotateLeft}> Rotate left </button>
+              <div className="cropper-btn text-right">
+                <button onClick={rotate} className="fieldsight-btn" >
+
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>Rotate Left</Tooltip>}>
+                    <i className="la la-rotate-left"></i>
+                  </OverlayTrigger>
+                </button>
+                <button onClick={rotateLeft} className="fieldsight-btn"> 
+                <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>Rotate Right</Tooltip>}>
+                    <i className="la la-rotate-right"></i>
+                  </OverlayTrigger>
+                 
+                </button>
               </div>
               <div className="row">
                 <div className="col-md-6">
@@ -202,12 +216,12 @@ class DashboardHeader extends Component {
                         ref={cropper => {
                           this.cropper = cropper;
                         }}
-                        // crop={this.crop}
+                      // crop={this.crop}
                       />
                       <button
                         className="fieldsight-btn"
                         style={{ marginTop: "15px" }}
-                        // onClick={cropImage}
+                      // onClick={cropImage}
                       >
                         Save Image
                       </button>

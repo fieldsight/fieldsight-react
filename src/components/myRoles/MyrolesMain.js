@@ -8,13 +8,14 @@ import Submissions from "./Submissions";
 import InviteTab from "./InviteTab";
 import SiteTable from "./SiteTable";
 import MapPage from "./MapPage";
-import { runInThisContext } from "vm";
+import { successToast, errorToast } from "../../utils/toastHandler";
+
 
 const url = "fv3/api/myroles/";
 
 class MyrolesMain extends Component {
   state = {
-    invite: "hide",
+    invite: null,
     rightTab: "region",
     profile: [],
     invitation: [],
@@ -25,6 +26,10 @@ class MyrolesMain extends Component {
     submission: [],
     regions: [],
     mapData:[],
+    dLoader:true,
+    siteLoader:true,
+    RegionLoader:true,
+
     teamId:null
   };
 
@@ -42,6 +47,7 @@ class MyrolesMain extends Component {
               team_project_id: res.data.teams[0].projects[0].id
             });
             }
+           
             this.setState({
               profile: res.data.profile,
               invitation: res.data.invitations,
@@ -89,6 +95,7 @@ class MyrolesMain extends Component {
           this.setState({
             invitation: deletedForm
           });
+          successToast("Invite", "Rejected");
         }
       })
       .catch(err => {});
@@ -108,6 +115,29 @@ class MyrolesMain extends Component {
           this.setState({
             invitation: deletedForm
           });
+
+          successToast("Invite", "Accepted");
+        }
+      })
+      .catch(err => {});
+  };
+
+  acceptAll = () => {
+    const accept_all_url = "fv3/api/accept-all-invites/" + this.state.profile.username + "/" ;
+
+    axios
+      .post(`${accept_all_url}`)
+
+      .then(res => {
+        if (res.status === 200) {
+          // const newInvitation = [...this.state.invitation];
+          // const deletedForm = newInvitation.filter(user => user.id != id);
+
+          this.setState({
+            invitation: null
+          });
+
+          successToast("All Invites", "Accepted");
         }
       })
       .catch(err => {});
@@ -116,15 +146,20 @@ class MyrolesMain extends Component {
   requestRegions = id => {
     const url = "fv3/api/my-regions/?project=" + id;
     this.setState({
-      teamId:id
+      teamId:id,
+      RegionLoader:true,
+
     })
     axios
       .get(`${url}`)
       .then(res => {
+        
         if (res.status === 200) {
          
           this.setState({
-            regions: res.data.regions
+            regions: res.data.regions,
+            RegionLoader:false
+
            
           });
         }
@@ -134,14 +169,17 @@ class MyrolesMain extends Component {
 
   requestSite = id => {
     const site_url = "fv3/api/my-sites/?project=" + id;
-
+    this.setState({
+      siteLoader:true,
+    })
     axios
       .get(`${site_url}`)
       .then(res => {
         if (res.status === 200) {
         
           this.setState({
-            site: res.data.results
+            site: res.data.results,
+            siteLoader:false,
           });
         }
       })
@@ -151,14 +189,17 @@ class MyrolesMain extends Component {
   requestSubmission = id => {
     //const id =309
     const submission_url = `fv3/api/submissions-map/?project=${id}&type=submissions`;
-
+    this.setState({
+      submissionLoader:true
+    })
     axios
       .get(`${submission_url}`)
       .then(res => {
         if (res.status === 200) {
        
           this.setState({
-            submission: res.data
+            submission: res.data,
+            submissionLoader:false
           });
         }
       })
@@ -188,11 +229,14 @@ class MyrolesMain extends Component {
     return (
       <React.Fragment>
         <div className="card mrb-30">
-          <ProfileTab profile={this.state.profile} />
+          <ProfileTab 
+          dLoader={this.state.dLoader}
+          profile={this.state.profile} />
         </div>
 
         <div className="row">
-          <YourTeamSideBar 
+          <YourTeamSideBar
+          dLoader={this.state.dLoader} 
           teams={this.state.teams} 
           teamId={this.state.teamId}
           requestRegions={this.requestRegions}
@@ -202,7 +246,7 @@ class MyrolesMain extends Component {
           regions={this.state.regions}
           />
 
-          <div className="col-xl-8 col-lg-8">
+          <div className="col-xl-8 col-lg-7">
             <div className="right-content">
               <div className="card no-boxshadow">
                 <div className="card-body">
@@ -267,7 +311,9 @@ class MyrolesMain extends Component {
 
                   <div className="tab-content mrt-30" id="myTabContent">
                     {this.state.rightTab == "submission" && (
-                      <Submissions submission={this.state.submission} />
+                      <Submissions submission={this.state.submission} 
+                      submissionLoader={this.state.submissionLoader}
+                      />
                     )}
 
                     {this.state.rightTab == "region" &&  (
@@ -278,15 +324,16 @@ class MyrolesMain extends Component {
                         requestSubmission={this.requestSubmission}
                         requestMap={this.requestMap}
                         regions={this.state.regions}
+                        RegionLoader={this.state.RegionLoader}
                       />
                     )}
 
-                    {this.state.rightTab == "site" && (
-                      <SiteTable site={this.state.site} />
-                    )}
-
+                  
                       {this.state.rightTab == "site" && (
-                      <SiteTable site={this.state.site} />
+                      <SiteTable 
+                      site={this.state.site} 
+                      siteLoader={this.state.siteLoader}  
+                      />
                     )} 
 
                         {this.state.rightTab == "map" && (
@@ -301,14 +348,17 @@ class MyrolesMain extends Component {
           </div>
         </div>
 
+        {this.state.invitation.length !=0 &&              
         <div className={"invite-popup invite " + this.state.invite}>
           <InviteTab
             invitationOpen={this.invitationOpen}
             invitation={this.state.invitation}
             acceptHandler={this.acceptHandler}
             rejectHandler={this.rejectHandler}
+            acceptAll={this.acceptAll}
           />
         </div>
+         }     
       </React.Fragment>
     );
   }
