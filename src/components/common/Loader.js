@@ -80,23 +80,23 @@ export const AvatarContentLoader = ({ number, width, size }) => (
   </>
 );
 
-export const ListContentLoader = ({ number }) => (
-  <div className="contentLoading">
-    <div className="loading-list">
-      <div className="text">
-        {Array(number)
-          .fill("")
-          .map((item, i) => (
-            <div
-              className="loading-content"
-              key={i}
-              style={{ height: "15px" }}
-            />
-          ))}
-      </div>
-    </div>
-  </div>
-);
+// export const ListContentLoader = ({ number }) => (
+//   <div className="contentLoading">
+//     <div className="loading-list">
+//       <div className="text">
+//         {Array(number)
+//           .fill("")
+//           .map((item, i) => (
+//             <div
+//               className="loading-content"
+//               key={i}
+//               style={{ height: "15px" }}
+//             />
+//           ))}
+//       </div>
+//     </div>
+//   </div>
+// );
 
 export const DotLoader = ({ height }) => (
   <div

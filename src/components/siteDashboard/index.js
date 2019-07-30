@@ -20,7 +20,8 @@ import {
   getSiteDocuments,
   getSiteLogs,
   getSiteForms,
-  getRecentPictures
+  getRecentPictures,
+  getSubsites
 } from "../../actions/siteDashboardActions";
 
 const siteId = window.site_id ? window.site_id : 81799;
@@ -28,23 +29,51 @@ class SiteDashboard extends Component {
   state = {
     activeTab: "general",
     showHeaderModal: false,
-    showSubmissionModal: false
+    showSubmissionModal: false,
+    showCropper: false,
+    showSubsites: false
   };
 
   closeModal = type => {
-    this.setState(
-      {
-        [`show${type}Modal`]: false,
-        activeTab: "general"
-      },
-      () => this.props.getSiteForms(siteId, "general")
-    );
+    if (type === "subsites") {
+      return this.setState({
+        showSubsites: false
+      });
+    }
+    if (type === "cropper") {
+      return this.setState({
+        showCropper: false
+      });
+    }
+
+    if (type === "Header" || type === "Submission")
+      return this.setState(
+        {
+          [`show${type}Modal`]: false,
+          activeTab: "general"
+        },
+        () => this.props.getSiteForms(siteId, "general")
+      );
   };
 
   openModal = type => {
-    this.setState({
-      [`show${type}Modal`]: true
-    });
+    if (type === "subsites") {
+      return this.setState(
+        {
+          showSubsites: true
+        },
+        () => this.props.getSubsites(siteId)
+      );
+    }
+    if (type === "cropper") {
+      return this.setState({
+        showCropper: true
+      });
+    }
+    if (type === "Header" || type === "Submission")
+      return this.setState({
+        [`show${type}Modal`]: true
+      });
   };
 
   toggleTab = formType => {
@@ -96,7 +125,14 @@ class SiteDashboard extends Component {
         },
         getSiteForms
       },
-      state: { showHeaderModal, showSubmissionModal, activeTab },
+      state: {
+        showHeaderModal,
+        showSubmissionModal,
+        activeTab,
+        showCropper,
+
+        showSubsites
+      },
       closeModal,
       openModal,
       toggleTab
@@ -124,6 +160,8 @@ class SiteDashboard extends Component {
                 closeModal={closeModal}
                 openModal={openModal}
                 toggleTab={toggleTab}
+                showCropper={showCropper}
+                showSubsites={showSubsites}
               />
               <div className="row">
                 <div className="col-lg-6">
@@ -316,6 +354,7 @@ export default connect(
     getSiteDocuments,
     getSiteLogs,
     getSiteForms,
-    getRecentPictures
+    getRecentPictures,
+    getSubsites
   }
 )(SiteDashboard);

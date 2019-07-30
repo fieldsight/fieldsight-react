@@ -112,3 +112,13 @@ export const getRecentPictures = id => dispatch => {
       console.log("err", err);
     });
 };
+
+export const getSubsites = id => dispatch => {
+  console.log("getsites");
+  axios
+    .get(`fv3/api/sub-site-list/?site=${id}`)
+    .then(res => {
+      console.log("subsite res", res);
+    })
+    .catch(err => console.log("ERr", err));
+};

@@ -9,8 +9,8 @@ const GalleryModal = ({
   gotoNext,
   closeModal
 }) => (
-  <div class="gallery-zoom fieldsight-popup open" style={{ zIndex: 99999 }}>
-    <div class="gallery-body">
+  <div className="gallery-zoom fieldsight-popup open" style={{ zIndex: 99999 }}>
+    <div className="gallery-body">
       <img
         src={
           selectedImage._attachments.download_url
@@ -20,7 +20,7 @@ const GalleryModal = ({
         alt="infographic"
         style={{ maxHeight: "400px" }}
       />
-      <div class="gallery-footer">
+      <div className="gallery-footer">
         <p>
           {/* <span>gallery phooto </span> */}
           <span>
@@ -29,16 +29,16 @@ const GalleryModal = ({
         </p>
       </div>
     </div>
-    <span class="popup-close" onClick={closeModal}>
-      <i class="la la-close" />
+    <span className="popup-close" onClick={closeModal}>
+      <i className="la la-close" />
     </span>
-    <div class="gallery-nav">
+    <div className="gallery-nav">
       <i
-        class="la la-long-arrow-left"
+        className="la la-long-arrow-left"
         onClick={() => gotoPrevious(selectedImage.index)}
       />
       <i
-        class="la la-long-arrow-right"
+        className="la la-long-arrow-right"
         onClick={() => gotoNext(selectedImage.index)}
       />
     </div>
@@ -120,11 +120,11 @@ class PhotoGallery extends Component {
           <GridContentLoader number={window.innerWidth < 992 ? 2 : 6} />
         ) : (
           <>
-            <div class="gallery">
-              <div class="row">
+            <div className="gallery">
+              <div className="row">
                 {recentPictures.map((image, i) => (
-                  <div class="col-lg-4 col-md-6" key={i}>
-                    <div class="photo-item">
+                  <div className="col-lg-4 col-md-6" key={i}>
+                    <div className="photo-item">
                       <figure>
                         <img
                           src={
@@ -138,9 +138,9 @@ class PhotoGallery extends Component {
                       <figcaption>
                         <a
                           onClick={() => showModal(image, i)}
-                          class="photo-preview"
+                          className="photo-preview"
                         >
-                          <i class="la la-eye" />
+                          <i className="la la-eye" />
                         </a>
                       </figcaption>
                     </div>
