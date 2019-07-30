@@ -6,6 +6,7 @@ import {
   GET_SITE_LOGS,
   GET_SITE_FORMS,
   GET_RECENT_PICTURES,
+  GET_SUBSITES,
   SHOW_DOT_LOADER
 } from "../actions/types";
 
@@ -16,10 +17,11 @@ const initialState = {
   location: {},
   logo: "",
   public_desc: "",
-  region: "",
+  region: null,
   total_users: "",
   users: [],
   submissions: {},
+  total_subsites: null,
   form_submissions_chart_data: {
     pending_submissions: {},
     total_submissions: {},
@@ -33,6 +35,7 @@ const initialState = {
   siteDocuments: [],
   siteLogs: [],
   siteForms: {},
+  subSites: [],
   recentPictures: [],
   siteDashboardLoader: true,
   siteMetasLoader: true,
@@ -118,6 +121,13 @@ export default function(state = initialState, action) {
         recentPictures: modifiedPayload,
         sitePicturesLoader: false
       };
+
+    case GET_SUBSITES: {
+      return {
+        ...state,
+        subSites: action.payload.results.data
+      };
+    }
     case SHOW_DOT_LOADER:
       return {
         ...state,

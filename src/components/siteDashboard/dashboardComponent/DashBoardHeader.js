@@ -48,8 +48,9 @@ class DashboardHeader extends Component {
         openModal,
         toggleTab,
         showCropper,
-
-        showSubsites
+        subSites,
+        showSubsites,
+        totalSubsites
       },
       rotate,
       rotateLeft
@@ -157,9 +158,9 @@ class DashboardHeader extends Component {
             </a>
             <a onClick={() => openModal("subsites")}>
               <CountCard
-                countName="Users"
-                countNumber={totalUsers}
-                icon="la-user"
+                countName="Subsites"
+                countNumber={totalSubsites}
+                icon="la-map-marker"
                 noSubmissionText={true}
               />
             </a>
@@ -239,29 +240,19 @@ class DashboardHeader extends Component {
                 >
                   <thead>
                     <tr>
-                      <th>Form</th>
-                      <th>Submitted By</th>
-                      <th>Reviewed By</th>
-                      <th>Status</th>
-                      <th>Submitted On</th>
+                      <th>Identifier</th>
+                      <th>Name</th>
+                      <th>Address</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {/* {siteSubmissions.map((submission, i) => (
-                      <tr key={uuid()}>
-                        <td>{submission.form}</td>
-                        <td>{submission.submitted_by}</td>
-                        <td>{submission.reviewed_by}</td>
-                        <td>
-                          <span className={submission.status.toLowerCase()}>
-                            {submission.status}
-                          </span>
-                        </td>
-                        <td>
-                          {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
-                        </td>
+                    {subSites.map((subSite, i) => (
+                      <tr key={i}>
+                        <td>{subSite.identifier}</td>
+                        <td>{subSite.name}</td>
+                        <td>{subSite.address}</td>
                       </tr>
-                    ))} */}
+                    ))}
                   </tbody>
                 </Table>
               </PerfectScrollbar>

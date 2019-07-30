@@ -8,6 +8,7 @@ import {
   GET_SITE_LOGS,
   GET_SITE_FORMS,
   GET_RECENT_PICTURES,
+  GET_SUBSITES,
   SHOW_DOT_LOADER
 } from "./types";
 
@@ -118,7 +119,11 @@ export const getSubsites = id => dispatch => {
   axios
     .get(`fv3/api/sub-site-list/?site=${id}`)
     .then(res => {
-      console.log("subsite res", res);
+      console.log("REs", res);
+      dispatch({
+        type: GET_SUBSITES,
+        payload: res.data
+      });
     })
     .catch(err => console.log("ERr", err));
 };

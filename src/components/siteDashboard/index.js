@@ -24,7 +24,7 @@ import {
   getSubsites
 } from "../../actions/siteDashboardActions";
 
-const siteId = window.site_id ? window.site_id : 81799;
+const siteId = window.site_id ? window.site_id : 81704;
 class SiteDashboard extends Component {
   state = {
     activeTab: "general",
@@ -115,6 +115,8 @@ class SiteDashboard extends Component {
           siteForms,
           form_submissions_chart_data,
           site_progress_chart_data,
+          total_subsites,
+          subSites,
           showDotLoader,
           siteDashboardLoader,
           siteMetasLoader,
@@ -162,6 +164,8 @@ class SiteDashboard extends Component {
                 toggleTab={toggleTab}
                 showCropper={showCropper}
                 showSubsites={showSubsites}
+                subSites={subSites}
+                totalSubsites={total_subsites}
               />
               <div className="row">
                 <div className="col-lg-6">
