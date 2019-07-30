@@ -81,6 +81,7 @@
         @include flexjust;
         justify-content: center;
         align-items: center;
+        flex-wrap:nowrap;
         padding: 2rem;
         @include boxshadow;
         margin-bottom: 2rem;
