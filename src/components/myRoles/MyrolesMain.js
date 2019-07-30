@@ -9,7 +9,7 @@ import InviteTab from "./InviteTab";
 import SiteTable from "./SiteTable";
 import MapPage from "./MapPage";
 import { successToast, errorToast } from "../../utils/toastHandler";
-
+import withPagination from "../../hoc/WithPagination";
 
 const url = "fv3/api/myroles/";
 
@@ -25,12 +25,12 @@ class MyrolesMain extends Component {
     site: [],
     submission: [],
     regions: [],
-    mapData:[],
-    dLoader:true,
-    siteLoader:true,
-    RegionLoader:true,
+    mapData: [],
+    dLoader: true,
+    siteLoader: true,
+    RegionLoader: true,
 
-    teamId:null
+    teamId: null
   };
 
   componentDidMount() {
@@ -41,26 +41,27 @@ class MyrolesMain extends Component {
       .then(res => {
         if (this._isMounted) {
           if (res.status === 200) {
-         
-            if(res.data.teams.length>0){
-            this.setState({
-              team_project_id: res.data.teams[0].projects[0].id
+            const modifiedTeam = res.data.teams.map((team, i) => {
+              return i === 0 ? { ...team, accord: true } : { ...team, accord: false };
             });
+
+            if (res.data.teams.length > 0) {
+              this.setState({
+                team_project_id: res.data.teams[0].projects[0].id
+              });
             }
-           
+
             this.setState({
               profile: res.data.profile,
               invitation: res.data.invitations,
               roles: res.data.roles,
-              teams: res.data.teams,
+              teams: modifiedTeam,
               dLoader: false
             });
           }
         }
       })
-      .catch(err => {
-       
-      });
+      .catch(err => {});
   }
 
   invitationOpen = (e, data) => {
@@ -123,7 +124,8 @@ class MyrolesMain extends Component {
   };
 
   acceptAll = () => {
-    const accept_all_url = "fv3/api/accept-all-invites/" + this.state.profile.username + "/" ;
+    const accept_all_url =
+      "fv3/api/accept-all-invites/" + this.state.profile.username + "/";
 
     axios
       .post(`${accept_all_url}`)
@@ -146,21 +148,16 @@ class MyrolesMain extends Component {
   requestRegions = id => {
     const url = "fv3/api/my-regions/?project=" + id;
     this.setState({
-      teamId:id,
-      RegionLoader:true,
-
-    })
+      teamId: id,
+      RegionLoader: true
+    });
     axios
       .get(`${url}`)
       .then(res => {
-        
         if (res.status === 200) {
-         
           this.setState({
             regions: res.data.regions,
-            RegionLoader:false
-
-           
+            RegionLoader: false
           });
         }
       })
@@ -170,42 +167,48 @@ class MyrolesMain extends Component {
   requestSite = id => {
     const site_url = "fv3/api/my-sites/?project=" + id;
     this.setState({
-      siteLoader:true,
-    })
-    axios
-      .get(`${site_url}`)
-      .then(res => {
-        if (res.status === 200) {
-        
-          this.setState({
-            site: res.data.results,
-            siteLoader:false,
-          });
-        }
-      })
-      .catch(err => {});
+      siteLoader: true,
+      siteId:id
+    });
+    // axios
+    //   .get(`${site_url}`)
+    //   .then(res => {
+    //     if (res.status === 200) {
+    //       this.setState({
+    //         site: res.data.results.data,
+    //         siteLoader: false
+    //       });
+    //     }
+    //   })
+    //   .catch(err => {});
+
+      
+
+      this.props.paginationHandler(1, null, {
+        type:"mySiteList",
+        projectId:id
+      });
+      console.log("data",this.props.siteList.length)
   };
 
   requestSubmission = id => {
     //const id =309
     const submission_url = `fv3/api/submissions-map/?project=${id}&type=submissions`;
     this.setState({
-      submissionLoader:true
-    })
+      submissionLoader: true
+    });
     axios
       .get(`${submission_url}`)
       .then(res => {
         if (res.status === 200) {
-       
           this.setState({
             submission: res.data,
-            submissionLoader:false
+            submissionLoader: false
           });
         }
       })
       .catch(err => {});
   };
-
 
   requestMap = id => {
     //const id =309
@@ -215,7 +218,6 @@ class MyrolesMain extends Component {
       .get(`${submission_url}`)
       .then(res => {
         if (res.status === 200) {
-       
           this.setState({
             mapData: res.data
           });
@@ -224,26 +226,31 @@ class MyrolesMain extends Component {
       .catch(err => {});
   };
 
+  
 
   render() {
+   
     return (
       <React.Fragment>
         <div className="card mrb-30">
-          <ProfileTab 
-          dLoader={this.state.dLoader}
-          profile={this.state.profile} />
+          <ProfileTab
+            dLoader={this.state.dLoader}
+            profile={this.state.profile}
+          />
         </div>
 
         <div className="row">
           <YourTeamSideBar
-          dLoader={this.state.dLoader} 
-          teams={this.state.teams} 
-          teamId={this.state.teamId}
-          requestRegions={this.requestRegions}
-          requestSite={this.requestSite}
-          requestSubmission={this.requestSubmission}
-          requestMap={this.requestMap}
-          regions={this.state.regions}
+            dLoader={this.state.dLoader}
+            teams={this.state.teams}
+            teamId={this.state.teamId}
+            requestRegions={this.requestRegions}
+            requestSite={this.requestSite}
+            requestSubmission={this.requestSubmission}
+            requestMap={this.requestMap}
+            regions={this.state.regions}
+            addPermission={this.state.profile.can_create_team}
+            
           />
 
           <div className="col-xl-8 col-lg-7">
@@ -294,15 +301,14 @@ class MyrolesMain extends Component {
                       </li>
                       <li className="nav-item">
                         <a
-                         href="javascript:void(0);"
-                         className={
-                           this.state.rightTab == "map"
-                             ? "nav-link active"
-                             : "nav-link"
-                         }
-                         onClick={e => this.rightTabOpen(e, "map")}
-                       >
-                        
+                          href="javascript:void(0);"
+                          className={
+                            this.state.rightTab == "map"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          onClick={e => this.rightTabOpen(e, "map")}
+                        >
                           map
                         </a>
                       </li>
@@ -311,12 +317,13 @@ class MyrolesMain extends Component {
 
                   <div className="tab-content mrt-30" id="myTabContent">
                     {this.state.rightTab == "submission" && (
-                      <Submissions submission={this.state.submission} 
-                      submissionLoader={this.state.submissionLoader}
+                      <Submissions
+                        submission={this.state.submission}
+                        submissionLoader={this.state.submissionLoader}
                       />
                     )}
 
-                    {this.state.rightTab == "region" &&  (
+                    {this.state.rightTab == "region" && (
                       <RegionTable
                         team_proj_id={this.state.team_project_id}
                         requestRegions={this.requestRegions}
@@ -328,19 +335,23 @@ class MyrolesMain extends Component {
                       />
                     )}
 
-                  
-                      {this.state.rightTab == "site" && (
-                      <SiteTable 
-                      site={this.state.site} 
-                      siteLoader={this.state.siteLoader}  
+                    {this.state.rightTab == "site" && (
+                      <SiteTable
+                        site={this.props.siteList}
+                        siteLoader={this.props.dLoader}
+                        renderPageNumbers={this.props.renderPageNumbers}
+                        paginationHandler={this.props.paginationHandler}
+                        siteId={this.state.siteId}
+                        pageNum={this.props.pageNum}
+                        fromData={this.props.fromData}
+                        toData={this.props.toData}
+                        totalCount={this.props.totalCount}
                       />
-                    )} 
+                    )}
 
-                        {this.state.rightTab == "map" && (
+                    {this.state.rightTab == "map" && (
                       <MapPage mapData={this.state.mapData} />
-                    )} 
-                    
-
+                    )}
                   </div>
                 </div>
               </div>
@@ -348,20 +359,20 @@ class MyrolesMain extends Component {
           </div>
         </div>
 
-        {this.state.invitation.length !=0 &&              
-        <div className={"invite-popup invite " + this.state.invite}>
-          <InviteTab
-            invitationOpen={this.invitationOpen}
-            invitation={this.state.invitation}
-            acceptHandler={this.acceptHandler}
-            rejectHandler={this.rejectHandler}
-            acceptAll={this.acceptAll}
-          />
-        </div>
-         }     
+        {this.state.invitation.length != 0 && (
+          <div className={"invite-popup invite " + this.state.invite} style={{ zIndex:'1011' }}>
+            <InviteTab
+              invitationOpen={this.invitationOpen}
+              invitation={this.state.invitation}
+              acceptHandler={this.acceptHandler}
+              rejectHandler={this.rejectHandler}
+              acceptAll={this.acceptAll}
+            />
+          </div>
+        )}
       </React.Fragment>
     );
   }
 }
 
-export default MyrolesMain;
+export default withPagination(MyrolesMain); 

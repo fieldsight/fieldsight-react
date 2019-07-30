@@ -30,37 +30,45 @@ class ProfileTab extends Component {
                   <span>{this.props.profile.username}</span>
                   <a href={"mailto:" + this.props.profile.email}><p>{this.props.profile.email}</p></a>
                   <div className="profile-social-icon">
-                    <a href="#" className="skype">
+
+                  {this.props.profile.skype != "" &&  <a href="#" className="skype">
                       <OverlayTrigger
                         placement="top"
-                        overlay={<Tooltip>fieldsight.org</Tooltip>}>
+                        overlay={<Tooltip>{this.props.profile.skype}</Tooltip>}>
                         <i className="la la-skype" />
                       </OverlayTrigger>
-                    </a>
-                    <a href="#" className="whatsapp">
+                    </a> }
+
+                   {this.props.profile.whatsapp != "" &&  <a href="#" className="whatsapp">
                     <OverlayTrigger
                         placement="top"
-                        overlay={<Tooltip>fieldsight.org</Tooltip>}>
+                        overlay={<Tooltip>{this.props.profile.whatsapp}</Tooltip>}>
                         <i className="la la-whatsapp" />
                       </OverlayTrigger>
                       
                     </a>
-                    <a href="#" className="twitter">
+                   }
+
+                   {this.props.profile.twitter != "" &&  <a href="#" className="twitter">
                     <OverlayTrigger
                         placement="top"
-                        overlay={<Tooltip>fieldsight.org</Tooltip>}>
+                        overlay={<Tooltip>{this.props.profile.twitter}</Tooltip>}>
                         <i className="la la-twitter" />
                       </OverlayTrigger>
                       
                     </a>
-                    <a href="#" className="google">
+                   }
+
+                    {this.props.profile.google_talk != "" && <a href="#" className="google">
                     <OverlayTrigger
                         placement="top"
-                        overlay={<Tooltip>fieldsight.org</Tooltip>}>
+                        overlay={<Tooltip>{this.props.profile.google_talk}</Tooltip>}>
                         <i className="la la-google-plus" />
                       </OverlayTrigger>
                       
-                    </a>
+                  </a> 
+                }
+
                   </div>
                   <a href={base_url + "users/profile/" + this.props.profile.id + "/"} target="_self" className="fieldsight-btn">
                     Edit Profile
