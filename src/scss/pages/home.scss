@@ -428,9 +428,10 @@
                 color: $color-green;
               }
             }
-            span{
-              i{
-                font-size:1.2rem;
+
+            span {
+              i {
+                font-size: 1.2rem;
               }
             }
           }
@@ -492,12 +493,13 @@
             margin-bottom: 0.5rem;
             align-items: center;
             border-bottom: 1px solid $color-bg;
+
             a {
               padding: 0.5rem;
               display: block;
               padding-left: 1.3rem;
               position: relative;
-              
+
 
               &::before {
                 content: "\f274";
@@ -505,18 +507,20 @@
                 position: absolute;
                 left: 0;
               }
-              &.project-link{
+
+              &.project-link {
                 // width:1.2rem;
                 // height: 1.2rem;
                 // @include flexvr;
                 // background-color: $color-green;
                 // color:$color-white;
                 @include radius4;
-                padding:0;
+                padding: 0;
                 cursor: pointer;
                 margin-left: 0.5rem;
-                font-size:1.2rem;
-                &::before{
+                font-size: 1.2rem;
+
+                &::before {
                   display: none;
                 }
               }
@@ -525,10 +529,12 @@
             &.active,
             &:hover {
               border-color: $color-blue;
+
               a {
                 color: $color-blue;
-                &.project-link{
-                  padding:0;
+
+                &.project-link {
+                  padding: 0;
                 }
               }
             }
@@ -645,6 +651,42 @@
   iframe {
     width: 100%;
     border: none;
+  }
+
+  .sub-regions {
+    margin-bottom: 2rem;
+
+    .sub-regions-item {
+      background-color: $color-bg;
+      padding: 1rem;
+
+      h5 {
+        font-size: 0.875rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin:0;
+      }
+
+      h6 {
+        font-size: 0.775rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin:0.25rem 0;
+      }
+
+      p {
+        margin: 0;
+
+        label {
+          margin: 0 0.5rem 0 0;
+          font-weight: 500;
+        }
+      }
+    }
   }
 
   @media screen and (max-width: $lg-tab) {

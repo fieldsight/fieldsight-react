@@ -42,6 +42,7 @@ class RegionalSiteTable extends Component {
     } = this;
     return (
       <>
+        
         <div className="card-header main-card-header sub-card-header">
           <h5>{!isEmpty(terms) ? `${terms.site}` : "Sites"}</h5>
           <div className="dash-btn">
@@ -79,9 +80,9 @@ class RegionalSiteTable extends Component {
                   this.props.OpenTabHandler(
                     e,
                     base_url +
-                      "/fieldsight/application/?project=" +
-                      project_id +
-                      "#/project-settings/site-information"
+                    "/fieldsight/application/?project=" +
+                    project_id +
+                    "#/project-settings/site-information"
                   )
                 }
               >
