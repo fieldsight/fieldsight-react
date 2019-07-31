@@ -6,7 +6,7 @@ import Select from "react-select";
 import AddSite from "./AddSite";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
-import RegionalSiteTable from "./ProjectSiteTable";
+import RegionalSiteTable from "./RegionalSiteTable";
 
 const project_id = 137;
 const base_url = "https://fieldsight.naxa.com.np";
