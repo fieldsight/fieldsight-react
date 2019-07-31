@@ -76,7 +76,7 @@ const DatatablePage = ({
                           {submission.status}{" "}
                         </span>
                       </td>
-                      <td>
+                      <td style={{ width: "25%" }}>
                         {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
                       </td>
                     </tr>

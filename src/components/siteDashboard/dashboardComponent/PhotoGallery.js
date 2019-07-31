@@ -116,7 +116,7 @@ class PhotoGallery extends Component {
 
   render() {
     const {
-      props: { recentPictures, showContentLoader },
+      props: { recentPictures, showContentLoader, siteId },
       state: { selectedImage },
       gotoPrevious,
       gotoNext,
@@ -124,52 +124,72 @@ class PhotoGallery extends Component {
       closeModal
     } = this;
     return (
-      <>
-        {showContentLoader ? (
-          <GridContentLoader number={window.innerWidth < 992 ? 2 : 6} />
-        ) : (
-          <>
-            <div className="gallery">
-              <div className="row">
-                {recentPictures.map((image, i) => (
-                  <div className="col-lg-4 col-md-6" key={i}>
-                    <div
-                      className="photo-item"
-                      style={{
-                        backgroundImage: `url(
+      <div className="col-lg-6">
+        <div className="card recent-photo">
+          <div className="card-header main-card-header sub-card-header">
+            <h5>Recent Pictures</h5>
+            {recentPictures.length > 0 ? (
+              <a
+                href={`/fieldsight/site/all-pictures/${siteId}/`}
+                className="fieldsight-btn"
+                target="_blank"
+              >
+                view all
+              </a>
+            ) : null}
+          </div>
+          <div className="card-body">
+            {showContentLoader ? (
+              <GridContentLoader
+                number={window.innerWidth < 992 ? 2 : 6}
+                height="180px"
+              />
+            ) : (
+              <>
+                <div className="gallery">
+                  {recentPictures.length > 0 ? (
+                    <div className="row">
+                      {recentPictures.map((image, i) => (
+                        <div className="col-lg-4 col-md-6" key={i}>
+                          <div
+                            className="photo-item"
+                            style={{
+                              backgroundImage: `url(
                               ${
                                 image._attachments.download_url
                                   ? image._attachments.download_url
                                   : image._attachments
                               }
                             )`
-                      }}
-                    >
-                      <figcaption>
-                        <a
-                          onClick={() => showModal(image, i)}
-                          className="photo-preview"
-                        >
-                          <i className="la la-eye" />
-                        </a>
-                      </figcaption>
+                            }}
+                          >
+                            <figcaption onClick={() => showModal(image, i)}>
+                              <a className="photo-preview">
+                                <i className="la la-eye" />
+                              </a>
+                            </figcaption>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {Object.keys(selectedImage).length > 0 && (
-              <GalleryModal
-                selectedImage={selectedImage}
-                imagesNumber={recentPictures.length}
-                gotoNext={gotoNext}
-                gotoPrevious={gotoPrevious}
-                closeModal={closeModal}
-              />
+                  ) : (
+                    <p> No Data Available </p>
+                  )}
+                </div>
+                {Object.keys(selectedImage).length > 0 && (
+                  <GalleryModal
+                    selectedImage={selectedImage}
+                    imagesNumber={recentPictures.length}
+                    gotoNext={gotoNext}
+                    gotoPrevious={gotoPrevious}
+                    closeModal={closeModal}
+                  />
+                )}
+              </>
             )}
-          </>
-        )}
-      </>
+          </div>
+        </div>
+      </div>
     );
   }
 }

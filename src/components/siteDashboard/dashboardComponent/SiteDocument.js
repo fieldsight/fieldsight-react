@@ -28,7 +28,10 @@ const SiteDocument = ({
           style={{ position: "relative", height: "358px" }}
         >
           {showContentLoader ? (
-            <GridContentLoader number={window.innerWidth < 992 ? 2 : 6} />
+            <GridContentLoader
+              number={window.innerWidth < 992 ? 2 : 6}
+              height="140px"
+            />
           ) : (
             <PerfectScrollbar>
               <div className="doc-body">

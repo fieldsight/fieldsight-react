@@ -26,7 +26,7 @@ export const TableContentLoader = ({ row, column }) => (
   </div>
 );
 
-export const GridContentLoader = ({ number }) => (
+export const GridContentLoader = ({ number, height }) => (
   <div className="contentLoading">
     <div className="loading-list grid-list">
       <div className="text no-thumb">
@@ -35,7 +35,9 @@ export const GridContentLoader = ({ number }) => (
             .fill("")
             .map((e, i) => (
               <div className="col-lg-4 col-xs-4" key={i}>
-                <div className="loading-content"> </div>
+                <div className="loading-content" style={{ height: height }}>
+                  {" "}
+                </div>
               </div>
             ))}
         </div>
