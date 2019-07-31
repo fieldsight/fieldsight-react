@@ -6,6 +6,8 @@
             }
             .photo-item{
                 position: relative;
+                @include coverbg;
+                min-height: 190px;
                 figure{
                     img{
                         max-height: 190px;
