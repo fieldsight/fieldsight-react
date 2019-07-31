@@ -113,7 +113,7 @@ class RegionalSiteTable extends Component {
                     <th>
                       {!isEmpty(terms) ? `${terms.site} Name` : "Site Name"}
                     </th>
-                    <th>id</th>
+                    <th>ids</th>
                     <th>Address</th>
                     <th>Region</th>
                     <th>Progress</th>
