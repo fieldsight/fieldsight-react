@@ -92,6 +92,11 @@ class DashboardHeader extends Component {
                   alt={logo}
                   onClick={() => openModal("cropper")}
                 />
+                <span></span>
+                <figcaption>
+                  <a class="photo-preview"><i class="la la-eye"></i></a>
+                  <a class="photo-edit"><i className="la la-camera"></i></a>
+                </figcaption>
               </figure>
               <div className="dash-pf-content">
                 <h5>{name}</h5>
