@@ -7,6 +7,7 @@ import isEmpty from "../../utils/isEmpty";
 import RegionalSiteTable from "./RegionalSiteTable";
 import axios from "axios";
 
+
 const project_id = 137;
 const base_url = "https://fieldsight.naxa.com.np";
 const project_name = "test";
@@ -23,7 +24,8 @@ class RegionSiteList extends Component {
   state = {
     addModal: false,
     uploadModal: false,
-    subRegionList:[]
+    subRegionList:[],
+    dLoader:true
     
   };
 
@@ -51,7 +53,7 @@ class RegionSiteList extends Component {
       })
       .catch(err => {
         this.setState({
-          dLoader: false
+         // dLoader: false
         });
       });
      
@@ -84,7 +86,7 @@ class RegionSiteList extends Component {
     const {
       context: { terms }
     } = this;
-   
+   console.log(this.state.dLoader)
     return (
       <Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -114,6 +116,8 @@ class RegionSiteList extends Component {
             </div>
             <div className="card-body">
               <div className="row">
+
+              
 
               {this.state.subRegionList.map((subRegion,i) => (
 

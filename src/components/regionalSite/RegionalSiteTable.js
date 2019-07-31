@@ -5,7 +5,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../myForm/Loader";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
-
+import { TableContentLoader } from "../common/Loader";
 import withPagination from "../../hoc/WithPagination";
 
 let base_url = window.base_url
@@ -18,7 +18,7 @@ class RegionalSiteTable extends Component {
   static contextType = RegionContext;
 
   componentDidMount() {
-    console.log("table",this.props.regionId)
+    
     this.props.paginationHandler(1, null, {
       type: "regionSite",
       projectId: this.props.regionId
@@ -95,7 +95,7 @@ class RegionalSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/upload/" + this.props.regionId + "/"
+                  "/fieldsight/upload/" + this.props.regionId + "/"
                 )
               }
             >
@@ -184,7 +184,7 @@ class RegionalSiteTable extends Component {
                     ))}
                 </tbody>
               </Table>
-              {this.props.dLoader && <DotLoader />}
+              {this.props.dLoader && <TableContentLoader column={7} row={20} />}
             </PerfectScrollbar>
           </div>
           <div className="table-footer">
