@@ -6,6 +6,7 @@ import Select from "react-select";
 import AddSite from "./AddSite";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
+import RegionalSiteTable from "./ProjectSiteTable";
 
 const project_id = 137;
 const base_url = "https://fieldsight.naxa.com.np";
@@ -71,7 +72,7 @@ class ProjectSiteList extends Component {
           </ol>
         </nav>
         <div className="card">
-          <ProjectSiteTable
+          <RegionalSiteTable
             showPopup={this.showPopup}
             OpenTabHandler={this.OpenTabHandler}
           />
