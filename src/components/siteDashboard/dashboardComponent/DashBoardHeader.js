@@ -19,7 +19,7 @@ class DashboardHeader extends Component {
     }
     const croppedImage = this.cropper.getCroppedCanvas().toDataURL();
     this.props.putCropImage(this.props.siteId, croppedImage);
-    this.props.closeModal("cropper");
+    this.props.closeModal("Cropper");
   };
 
   rotate = () => {
@@ -52,6 +52,7 @@ class DashboardHeader extends Component {
         subSites,
         showSubsites,
         totalSubsites,
+        showGallery,
         showContentLoader,
         subSitesLoader,
         termsAndLabels
@@ -86,15 +87,21 @@ class DashboardHeader extends Component {
           ) : (
             <div className="dash-pf">
               <figure>
-                <img
-                  src={logo}
-                  alt={logo}
-                  onClick={() => openModal("cropper")}
-                />
-                <span></span>
+                <img src={logo} alt={logo} />
+                <span />
                 <figcaption>
-                  <a class="photo-preview"><i class="la la-eye"></i></a>
-                  <a class="photo-edit"><i className="la la-camera"></i></a>
+                  <a
+                    className="photo-preview"
+                    onClick={() => openModal("Gallery")}
+                  >
+                    <i className="la la-eye" />
+                  </a>
+                  <a
+                    className="photo-edit"
+                    onClick={() => openModal("Cropper")}
+                  >
+                    <i className="la la-camera" />
+                  </a>
                 </figcaption>
               </figure>
               <div className="dash-pf-content">
@@ -157,16 +164,16 @@ class DashboardHeader extends Component {
             </a>
             <a href={`/fieldsight/site-users/${siteId}/`} target="_blank">
               <CountCard
-                countName={totalUsers === 0 ? "User" : "User(s)"}
+                countName="User"
                 countNumber={totalUsers}
                 icon="la-user"
                 noSubmissionText={true}
               />
             </a>
             {enableSubsites && (
-              <a onClick={() => openModal("subsites")}>
+              <a onClick={() => openModal("Subsites")}>
                 <CountCard
-                  countName={totalSubsites == 0 ? "Subsite" : "Subsite(s)"}
+                  countName="Subsite"
                   countNumber={totalSubsites}
                   icon="la-map-marker"
                   noSubmissionText={true}
@@ -194,7 +201,7 @@ class DashboardHeader extends Component {
           )}
 
           {showCropper && (
-            <Modal title="Preview" toggleModal={() => closeModal("cropper")}>
+            <Modal title="Preview" toggleModal={() => closeModal("Cropper")}>
               <div className="cropper-btn">
                 <button onClick={rotate} className="fieldsight-btn">
                   <OverlayTrigger
@@ -259,7 +266,7 @@ class DashboardHeader extends Component {
           {showSubsites && (
             <Modal
               title="Subsites"
-              toggleModal={() => closeModal("subsites")}
+              toggleModal={() => closeModal("Subsites")}
               showButton={enableSubsites}
               url={`/fieldsight/site/add/subsite/${projectId}/${siteId}`}
             >
@@ -320,6 +327,27 @@ class DashboardHeader extends Component {
                 </PerfectScrollbar>
               )}
             </Modal>
+          )}
+          {showGallery && (
+            <div
+              className="gallery-zoom fieldsight-popup open"
+              style={{ zIndex: 99999 }}
+              onClick={() => closeModal("Gallery")}
+            >
+              <div className="gallery-body">
+                <img
+                  src={logo}
+                  alt="logo"
+                  style={{ minHeight: "400px", maxHeight: "400px" }}
+                />
+              </div>
+              <span
+                className="popup-close"
+                onClick={() => closeModal("Gallery")}
+              >
+                <i className="la la-close" />
+              </span>
+            </div>
           )}
         </div>
       </div>

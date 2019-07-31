@@ -32,25 +32,16 @@ const INITIAL_STATE = {
   showHeaderModal: false,
   showSubmissionModal: false,
   showCropper: false,
-  showSubsites: false
+  showSubsites: false,
+  showGallery: false
 };
 class SiteDashboard extends Component {
   state = INITIAL_STATE;
 
   closeModal = type => {
     const { id: siteId } = this.props.match.params;
-    if (type === "subsites") {
-      return this.setState({
-        showSubsites: false
-      });
-    }
-    if (type === "cropper") {
-      return this.setState({
-        showCropper: false
-      });
-    }
 
-    if (type === "Header" || type === "Submission")
+    if (type === "Header" || type === "Submission") {
       return this.setState(
         {
           [`show${type}Modal`]: false,
@@ -58,11 +49,23 @@ class SiteDashboard extends Component {
         },
         () => this.props.getSiteForms(siteId, "general")
       );
+    }
+
+    this.setState({
+      [`show${type}`]: false
+    });
   };
 
   openModal = type => {
     const { id: siteId } = this.props.match.params;
-    if (type === "subsites") {
+
+    if (type === "Header" || type === "Submission") {
+      return this.setState({
+        [`show${type}Modal`]: true
+      });
+    }
+
+    if (type === "Subsites") {
       return this.setState(
         {
           showSubsites: true
@@ -70,15 +73,10 @@ class SiteDashboard extends Component {
         () => this.props.getSubsites(siteId)
       );
     }
-    if (type === "cropper") {
-      return this.setState({
-        showCropper: true
-      });
-    }
-    if (type === "Header" || type === "Submission")
-      return this.setState({
-        [`show${type}Modal`]: true
-      });
+
+    this.setState({
+      [`show${type}`]: true
+    });
   };
 
   toggleTab = formType => {
@@ -165,7 +163,7 @@ class SiteDashboard extends Component {
         showSubmissionModal,
         activeTab,
         showCropper,
-
+        showGallery,
         showSubsites
       },
       closeModal,
@@ -220,6 +218,7 @@ class SiteDashboard extends Component {
                 subSitesLoader={subSitesLoader}
                 putCropImage={putCropImage}
                 termsAndLabels={terms_and_labels}
+                showGallery={showGallery}
               />
               <div className="row">
                 <div className="col-lg-6">
@@ -246,29 +245,11 @@ class SiteDashboard extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-6">
-                  <div className="card recent-photo">
-                    <div className="card-header main-card-header sub-card-header">
-                      <h5>Recent Pictures</h5>
-                      <a
-                        href={`/fieldsight/site/all-pictures/${siteId}/`}
-                        className="fieldsight-btn"
-                        target="_blank"
-                      >
-                        view all
-                      </a>
-                    </div>
-                    <div
-                      className="card-body"
-                      style={{ position: "relative", height: "440px" }}
-                    >
-                      <PhotoGallery
-                        recentPictures={recentPictures}
-                        showContentLoader={sitePicturesLoader}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <PhotoGallery
+                  recentPictures={recentPictures}
+                  showContentLoader={sitePicturesLoader}
+                  siteId={siteId}
+                />
               </div>
               <div className="siteinfo-section mrt-30">
                 <div className="row">

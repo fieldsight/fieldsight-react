@@ -16,10 +16,15 @@ const CountCard = ({
         <h4>{countNumber !== 0 && countNumber}</h4>
         <h6>
           {noSubmissionText
-            ? countName
+            ? countNumber === 0
+              ? `No ${countName}`
+              : `${countName}`
             : countNumber === 0
             ? `No ${countName} submission`
-            : `${countName} submission(s)`}
+            : `${countName} submission`}
+          {countNumber !== 0 && (
+            <span style={{ textTransform: "lowercase" }}>(s)</span>
+          )}
         </h6>
       </div>
     </div>
