@@ -70,7 +70,7 @@ class ProfileTab extends Component {
                 }
 
                   </div>
-                  <a href={base_url + "users/profile/" + this.props.profile.id + "/"} target="_self" className="fieldsight-btn">
+                  <a href={"/users/profile/" + this.props.profile.id + "/"} target="_self" className="fieldsight-btn">
                     Edit Profile
                 </a>
                 </div>
