@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from "react";
-import ProjectSiteTable from "./ProjectSiteTable";
 import Zoom from "react-reveal/Zoom";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import AddSite from "./AddSite";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
-
+import RegionalSiteTable from "./RegionalSiteTable";
+import axios from "axios";
 
 const project_id = 137;
 const base_url = "https://fieldsight.naxa.com.np";
@@ -13,16 +13,52 @@ const project_name = "test";
 
 const popUpState = {
   addModal: false,
-  uploadModal: false
+  uploadModal: false,
+ 
 };
 
-class ProjectSiteList extends Component {
+class RegionSiteList extends Component {
   static contextType = RegionContext;
 
   state = {
     addModal: false,
-    uploadModal: false
+    uploadModal: false,
+    subRegionList:[]
+    
   };
+
+  componentDidMount() {
+    this._isMounted = true;
+ 
+     let regionId=this.props.regionId
+     let subRegion="fv3/api/sub-regions/?region="+regionId
+    
+    
+     axios
+      .get(`${subRegion}`)
+
+      .then(res => {
+        if (this._isMounted) {
+         
+          if (res.status === 200) {
+          
+            this.setState({
+              subRegionList:res.data,
+              dLoader: false
+            });
+          }
+        }
+      })
+      .catch(err => {
+        this.setState({
+          dLoader: false
+        });
+      });
+     
+    
+
+
+  }
 
   showPopup = (e, type) => {
     this.setState(prevState => ({
@@ -36,10 +72,11 @@ class ProjectSiteList extends Component {
       addModal: false,
       uploadModal: false
     });
+   
   };
 
   OpenTabHandler = (e, url) => {
-    console.log(this.context.projectId);
+   
     window.open(url, "_self");
   };
 
@@ -47,7 +84,7 @@ class ProjectSiteList extends Component {
     const {
       context: { terms }
     } = this;
-
+   
     return (
       <Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -70,11 +107,38 @@ class ProjectSiteList extends Component {
             </li>
           </ol>
         </nav>
-       
+        <div className="sub-regions">
+          <div className="card">
+            <div className="card-header main-card-header">
+              <h5>Sub Regions</h5>
+            </div>
+            <div className="card-body">
+              <div className="row">
+
+              {this.state.subRegionList.map((subRegion,i) => (
+
+                <div className="col-xl-3 col-lg-6" key={i}>
+                  <div className="sub-regions-item ">
+                    <h5>{subRegion.name}</h5>
+                    <h6>{subRegion.identifier}</h6>
+                    <p>
+                      <label>Total:</label>{subRegion.total_sites}
+                    </p>
+                  </div>
+                </div>
+                ))}
+
+              
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="card">
-          <ProjectSiteTable
+          <RegionalSiteTable
             showPopup={this.showPopup}
             OpenTabHandler={this.OpenTabHandler}
+            regionId={this.props.regionId}
+            // regonId={this.props.match.params.id}
           />
 
           {this.state.uploadModal && (
@@ -131,4 +195,4 @@ class ProjectSiteList extends Component {
     );
   }
 }
-export default ProjectSiteList;
+export default RegionSiteList;

@@ -10,6 +10,7 @@ import SiteDashboard from "./siteDashboard";
 import SiteList from "./projectSiteList/SiteList";
 import SubmissionDetails from "./submissionDetails";
 import MyrolesMain from "./myRoles/MyrolesMain";
+import RegionSite from "./regionalSite/RegionSite";
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -19,6 +20,7 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
+
 
 class App extends Component {
   constructor(props) {
@@ -65,6 +67,11 @@ class App extends Component {
                     <Route
                       path="/my-roles"
                       render={props => <MyrolesMain {...props} />}
+                    />
+
+                    <Route
+                      path="/regional-site/:id"
+                      render={props => <RegionSite {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

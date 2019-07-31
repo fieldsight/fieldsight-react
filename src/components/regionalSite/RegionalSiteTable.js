@@ -12,15 +12,16 @@ let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
 
-const project_id = window.project_id ? window.project_id : 137;
+// const project_id = window.project_id ? window.project_id : 137;
 
 class RegionalSiteTable extends Component {
   static contextType = RegionContext;
 
   componentDidMount() {
+    console.log("table",this.props.regionId)
     this.props.paginationHandler(1, null, {
-      type: "projectSiteList",
-      projectId: project_id
+      type: "regionSite",
+      projectId: this.props.regionId
     });
   }
 
@@ -28,10 +29,10 @@ class RegionalSiteTable extends Component {
     const searchValue = e.target.value;
     this.props.searchHandler(
       searchValue,
-      `/fv3/api/project-site-list/?page=1&project=${project_id}&q=${searchValue}`,
+      `fv3/api/regional-sites/?page=1&region=${this.props.regionId}&q=${searchValue}`,
       {
-        type: "projectSiteList",
-        projectId: project_id
+        type: "regionSite",
+        projectId: this.props.regionId
       }
     );
   };
@@ -67,13 +68,13 @@ class RegionalSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/site/add/" + project_id + "/"
+                  base_url + "/fieldsight/site/add/" + this.props.regionId + "/"
                 )
               }
             >
               <i className="la la-plus" />
             </button>
-            <a>
+            {/* <a>
               <button
                 className="fieldsight-btn"
                 onClick={e =>
@@ -88,17 +89,17 @@ class RegionalSiteTable extends Component {
               >
                 {!isEmpty(terms) ? `Export ${terms.site}s ` : "Export Sites"}
               </button>
-            </a>
+            </a> */}
             <button
               className="fieldsight-btn"
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/upload/" + project_id + "/"
+                  base_url + "/fieldsight/upload/" + this.props.regionId + "/"
                 )
               }
             >
-              Bulk upload/update
+              Meta Attributes
             </button>
           </div>
         </div>
@@ -114,9 +115,9 @@ class RegionalSiteTable extends Component {
                     <th>
                       {!isEmpty(terms) ? `${terms.site} Name` : "Site Name"}
                     </th>
-                    <th>ids</th>
+                    <th>identifier</th>
                     <th>Address</th>
-                    <th>Region</th>
+                    <th>type</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>
@@ -146,7 +147,7 @@ class RegionalSiteTable extends Component {
                         <td>{item.address}</td>
                         <td>
                           <a href="#" className="pending">
-                            {item.region}
+                            {item.type}
                           </a>
                         </td>
                         <td>
@@ -202,7 +203,7 @@ class RegionalSiteTable extends Component {
                       this.props.paginationHandler(
                         this.props.pageNum - 1,
                         null,
-                        project_id
+                        this.props.regionId
                       )
                     }
                   >
@@ -211,8 +212,8 @@ class RegionalSiteTable extends Component {
                 </li>
 
                 {this.props.renderPageNumbers({
-                  type: "projectSiteList",
-                  projectId: project_id
+                  type: "regionSite",
+                  projectId: this.props.regionId
                 })}
 
                 <li className="page-item ">
@@ -221,7 +222,7 @@ class RegionalSiteTable extends Component {
                       this.props.paginationHandler(
                         this.props.pageNum + 1,
                         null,
-                        project_id
+                        this.props.regionId
                       )
                     }
                   >

@@ -29,6 +29,12 @@ const withPagination = WrappedComponent => {
           return `fv3/api/my-sites/?page=${page_num}&project=${
             payload.projectId
           }`;
+         
+          case "regionSite":
+              return `fv3/api/regional-sites/?page=${page_num}&region=${
+                payload.projectId
+              }`;
+
       }
     };
 
