@@ -2,12 +2,17 @@ import React from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { GridContentLoader } from "../../common/Loader";
 
-const SiteDocument = ({ siteDocuments, showContentLoader, siteId }) => (
+const SiteDocument = ({
+  siteDocuments,
+  showContentLoader,
+  siteId,
+  termsAndLabels
+}) => (
   <div className="col-xl-4 col-md-6">
     <div className="card ">
       <div className="about">
         <div className="card-header main-card-header sub-card-header">
-          <h5>Site Documents</h5>
+          <h5>{termsAndLabels && termsAndLabels.site} Documents</h5>
           {siteDocuments.length > 0 ? (
             <a
               href={`/fieldsight/site/blue-prints/${siteId}/`}
