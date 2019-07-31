@@ -188,14 +188,21 @@ class RegionalSiteTable extends Component {
             </PerfectScrollbar>
           </div>
           <div className="table-footer">
-            <div className="showing-rows">
-              <p>
-                Showing <span>{this.props.fromData}</span> to{" "}
-                <span> {this.props.toData} </span> of{" "}
-                <span>{this.props.totalCount}</span> entries.
-              </p>
-            </div>
-            <div className="table-pagination">
+          <div className="showing-rows">
+            <p>
+              Showing <span>{this.props.fromData}</span> to{" "}
+              <span>
+                {" "}
+                {this.props.toData > this.props.totalCount
+                  ? this.props.totalCount
+                  : this.props.toData}{" "}
+              </span>{" "}
+              of <span>{this.props.totalCount}</span> entries.
+            </p>
+          </div>
+
+          {this.props.toData < this.props.totalCount ? ( 
+              <div className="table-pagination">
               <ul>
                 <li className="page-item">
                   <a
@@ -231,6 +238,8 @@ class RegionalSiteTable extends Component {
                 </li>
               </ul>
             </div>
+          ):null}
+            
           </div>
         </div>
       </>
