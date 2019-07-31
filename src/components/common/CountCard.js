@@ -10,17 +10,17 @@ const CountCard = ({
   return (
     <div className="count-card">
       <div className={`count-icon ${className ? className : ""}`}>
-        {/* {className ? (
-          <div className={className}> */}
         <i className={`la ${icon}`}> </i>
-        {/* </div>
-        ) : (
-          <i className={`la ${icon}`}> </i>
-        )} */}
       </div>
       <div className="count-content">
-        <h4>{countNumber}</h4>
-        <h6>{noSubmissionText ? countName : `${countName} submissions`}</h6>
+        <h4>{countNumber !== 0 && countNumber}</h4>
+        <h6>
+          {noSubmissionText
+            ? countName
+            : countNumber === 0
+            ? `No ${countName} submission`
+            : `${countName} submissions`}
+        </h6>
       </div>
     </div>
   );

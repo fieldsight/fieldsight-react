@@ -8,7 +8,8 @@ import {
   GET_RECENT_PICTURES,
   GET_SUBSITES,
   SHOW_DOT_LOADER,
-  SHOW_DASHBOARD_LOADERS
+  SHOW_DASHBOARD_LOADERS,
+  UPDATE_SITE_LOGO
 } from "../actions/types";
 
 const initialState = {
@@ -43,7 +44,8 @@ const initialState = {
   siteSubmissionsLoader: true,
   siteDocumentsLoader: true,
   siteLogsLoader: true,
-  sitePicturesLoader: true
+  sitePicturesLoader: true,
+  subSitesLoader: true
 };
 
 export default function(state = initialState, action) {
@@ -126,7 +128,8 @@ export default function(state = initialState, action) {
     case GET_SUBSITES: {
       return {
         ...state,
-        subSites: action.payload.results.data
+        subSites: action.payload.results.data,
+        subSitesLoader: false
       };
     }
     case SHOW_DOT_LOADER:
@@ -144,6 +147,12 @@ export default function(state = initialState, action) {
         siteDocumentsLoader: true,
         siteLogsLoader: true,
         sitePicturesLoader: true
+      };
+
+    case UPDATE_SITE_LOGO:
+      return {
+        ...state,
+        logo: action.payload
       };
 
     default:

@@ -39,7 +39,7 @@ const DatatablePage = ({
           style={{ position: "relative", height: "434px" }}
         >
           {showContentLoader ? (
-            <TableContentLoader row={12} column={5} />
+            <TableContentLoader row={11} column={5} />
           ) : siteSubmissions.length > 0 ? (
             <PerfectScrollbar>
               <Table
@@ -69,49 +69,15 @@ const DatatablePage = ({
                           {submission.form}
                         </a>
                       </td>
-                      <td>
-                        {" "}
-                        <a
-                          href={`/fieldsight/application/?submission=${
-                            submission.instance_id
-                          }#/submission-details`}
-                          target="_blank"
-                        >
-                          {submission.submitted_by}
-                        </a>
-                      </td>
-                      <td>
-                        {" "}
-                        <a
-                          href={`/fieldsight/application/?submission=${
-                            submission.instance_id
-                          }#/submission-details`}
-                          target="_blank"
-                        >
-                          {submission.reviewed_by}
-                        </a>
-                      </td>
+                      <td>{submission.submitted_by}</td>
+                      <td>{submission.reviewed_by}</td>
                       <td>
                         <span className={submission.status.toLowerCase()}>
-                          <a
-                            href={`/fieldsight/application/?submission=${
-                              submission.instance_id
-                            }#/submission-details`}
-                            target="_blank"
-                          >
-                            {submission.status}{" "}
-                          </a>
+                          {submission.status}{" "}
                         </span>
                       </td>
                       <td>
-                        <a
-                          href={`/fieldsight/application/?submission=${
-                            submission.instance_id
-                          }#/submission-details`}
-                          target="_blank"
-                        >
-                          {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
-                        </a>
+                        {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
                       </td>
                     </tr>
                   ))}

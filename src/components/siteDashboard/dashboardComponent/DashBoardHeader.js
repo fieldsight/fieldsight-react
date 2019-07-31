@@ -8,10 +8,20 @@ import { AvatarContentLoader } from "../../common/Loader";
 import SubmissionModal from "./SubmissionModal";
 import Modal from "../../common/Modal";
 import Td from "../../common/TableData";
+import { DotLoader } from "../../common/Loader";
 
 const projectId = window.project_id ? window.project_id : 137;
 
 class DashboardHeader extends Component {
+  saveImage = () => {
+    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+      return;
+    }
+    const croppedImage = this.cropper.getCroppedCanvas().toDataURL();
+    this.props.putCropImage(this.props.siteId, croppedImage);
+    this.props.closeModal("cropper");
+  };
+
   rotate = () => {
     this.cropper.rotate(90);
   };
@@ -42,7 +52,8 @@ class DashboardHeader extends Component {
         subSites,
         showSubsites,
         totalSubsites,
-        showContentLoader
+        showContentLoader,
+        subSitesLoader
       },
       rotate,
       rotateLeft
@@ -59,13 +70,13 @@ class DashboardHeader extends Component {
         link: `/fieldsight/site/blue-prints/${siteId}/`
       },
       { title: "user", link: `/fieldsight/manage/people/site/${siteId}/` },
-      { title: "form", link: `/forms/setup-forms/0/${siteId}` },
-      {
-        ...(enableSubsites && {
-          title: "Add Subsites",
-          link: `/fieldsight/site/add/subsite/${projectId}/${siteId}`
-        })
-      }
+      { title: "form", link: `/forms/setup-forms/0/${siteId}` }
+      // {
+      //   ...(enableSubsites && {
+      //     title: "Add Subsites",
+      //     link: `/fieldsight/site/add/subsite/${projectId}/${siteId}`
+      //   })
+      // }
     ];
 
     return (
@@ -142,7 +153,7 @@ class DashboardHeader extends Component {
             </a>
             <a href={`/fieldsight/site-users/${siteId}/`} target="_blank">
               <CountCard
-                countName="Users"
+                countName={totalUsers === 0 ? "User" : "Users"}
                 countNumber={totalUsers}
                 icon="la-user"
                 noSubmissionText={true}
@@ -151,7 +162,7 @@ class DashboardHeader extends Component {
             {enableSubsites && (
               <a onClick={() => openModal("subsites")}>
                 <CountCard
-                  countName="Subsites"
+                  countName={totalSubsites == 0 ? "Subsite" : "Subsites"}
                   countNumber={totalSubsites}
                   icon="la-map-marker"
                   noSubmissionText={true}
@@ -211,7 +222,6 @@ class DashboardHeader extends Component {
                         ref={cropper => {
                           this.cropper = cropper;
                         }}
-                        // crop={this.crop}
                       />
                     </figure>
                   </div>
@@ -234,7 +244,7 @@ class DashboardHeader extends Component {
                   <button
                     className="fieldsight-btn"
                     style={{ marginTop: "15px" }}
-                    // onClick={cropImage}
+                    onClick={this.saveImage}
                   >
                     Save Image
                   </button>
@@ -243,59 +253,68 @@ class DashboardHeader extends Component {
             </Modal>
           )}
           {showSubsites && (
-            <Modal title="Subsites" toggleModal={() => closeModal("subsites")}>
-              <PerfectScrollbar>
-                <Table
-                  responsive="xl"
-                  className="table  table-bordered  dataTable "
-                >
-                  <thead>
-                    <tr>
-                      <th>Identifier</th>
-                      <th>Address</th>
-                      <th>Region</th>
-                      <th>Progress</th>
-                      <th>Submissions</th>
-                      <th>Latest status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {subSites.map((subSite, i) => (
-                      <tr key={i}>
-                        <Td to={`/site-dashboard/${subSite.id}`}>
-                          {subSite.identifier}
-                        </Td>
-                        <Td to={`/site-dashboard/${subSite.id}`}>
-                          {subSite.name}
-                        </Td>
-                        <Td to={`/site-dashboard/${subSite.id}`}>
-                          {subSite.address}
-                        </Td>
-                        <Td to={`/site-dashboard/${subSite.id}`}>
-                          <div className="progress">
-                            <div
-                              className="progress-bar"
-                              role="progressbar"
-                              aria-valuenow="40"
-                              aria-valuemin="0"
-                              aria-valuemax="200"
-                              style={{ width: subSite.progress + "%" }}
-                            >
-                              <span className="progress-count">
-                                {subSite.progress + "%"}
-                              </span>
-                            </div>
-                          </div>
-                        </Td>
+            <Modal
+              title="Subsites"
+              toggleModal={() => closeModal("subsites")}
+              showButton={enableSubsites}
+              url={`/fieldsight/site/add/subsite/${projectId}/${siteId}`}
+            >
+              {subSitesLoader ? (
+                <DotLoader />
+              ) : (
+                <PerfectScrollbar>
+                  <Table
+                    responsive="xl"
+                    className="table  table-bordered  dataTable "
+                  >
+                    <thead>
+                      <tr>
+                        <th>Identifier</th>
+                        <th>Name</th>
 
-                        <Td to={`/site-dashboard/${subSite.id}`}>
-                          {subSite.status}
-                        </Td>
+                        <th>Progress</th>
+                        <th>Submissions</th>
+                        <th>Type</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </PerfectScrollbar>
+                    </thead>
+                    <tbody>
+                      {subSites.map((subSite, i) => (
+                        <tr key={i}>
+                          <Td to={`/site-dashboard/${subSite.id}`}>
+                            {subSite.identifier}
+                          </Td>
+                          <Td to={`/site-dashboard/${subSite.id}`}>
+                            {subSite.name}
+                          </Td>
+
+                          <Td to={`/site-dashboard/${subSite.id}`}>
+                            <div className="progress">
+                              <div
+                                className="progress-bar"
+                                role="progressbar"
+                                aria-valuenow="40"
+                                aria-valuemin="0"
+                                aria-valuemax="200"
+                                style={{ width: subSite.progress + "%" }}
+                              >
+                                <span className="progress-count">
+                                  {subSite.progress + "%"}
+                                </span>
+                              </div>
+                            </div>
+                          </Td>
+                          <Td to={`/site-dashboard/${subSite.id}`}>
+                            {subSite.submission}
+                          </Td>
+                          <Td to={`/site-dashboard/${subSite.id}`}>
+                            {subSite.type}
+                          </Td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </PerfectScrollbar>
+              )}
             </Modal>
           )}
         </div>

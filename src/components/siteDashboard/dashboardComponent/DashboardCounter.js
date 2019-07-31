@@ -23,6 +23,7 @@ class DashboardCounter extends Component {
       getIcon
     } = this;
     const submissionData = Object.entries(restSubmissions);
+
     return (
       <React.Fragment>
         {submissionData &&
