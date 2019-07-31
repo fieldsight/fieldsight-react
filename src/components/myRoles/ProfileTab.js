@@ -31,7 +31,7 @@ class ProfileTab extends Component {
                   <a href={"mailto:" + this.props.profile.email}><p>{this.props.profile.email}</p></a>
                   <div className="profile-social-icon">
 
-                  {this.props.profile.skype != "" &&  <a href="#" className="skype">
+                  {this.props.profile.skype &&  <a href="#" className="skype">
                       <OverlayTrigger
                         placement="top"
                         overlay={<Tooltip>{this.props.profile.skype}</Tooltip>}>
@@ -39,7 +39,7 @@ class ProfileTab extends Component {
                       </OverlayTrigger>
                     </a> }
 
-                   {this.props.profile.whatsapp != "" &&  <a href="#" className="whatsapp">
+                   {this.props.profile.whatsapp &&  <a href="#" className="whatsapp">
                     <OverlayTrigger
                         placement="top"
                         overlay={<Tooltip>{this.props.profile.whatsapp}</Tooltip>}>
@@ -49,7 +49,7 @@ class ProfileTab extends Component {
                     </a>
                    }
 
-                   {this.props.profile.twitter != "" &&  <a href="#" className="twitter">
+                   {this.props.profile.twitter &&  <a href="#" className="twitter">
                     <OverlayTrigger
                         placement="top"
                         overlay={<Tooltip>{this.props.profile.twitter}</Tooltip>}>
@@ -59,7 +59,7 @@ class ProfileTab extends Component {
                     </a>
                    }
 
-                    {this.props.profile.google_talk != "" && <a href="#" className="google">
+                    {this.props.profile.google_talk && <a href="#" className="google">
                     <OverlayTrigger
                         placement="top"
                         overlay={<Tooltip>{this.props.profile.google_talk}</Tooltip>}>
@@ -78,31 +78,26 @@ class ProfileTab extends Component {
               <div className="col-xl-4 col-lg-6">
                 <div className="profile-address">
                   <ul>
-                    {this.props.profile.username != "" ? (
+                    {this.props.profile.username  ? (
                       <li>
                         <i className="la la-user" /> {this.props.profile.username}
                       </li>
                     ) : null}
 
-                    {this.props.profile.address != "" ? (
+                    {this.props.profile.address ? (
                       <li>
                         <i className="la la-map-marker" />
                         {this.props.profile.address}
                       </li>
                     ) : null}
 
-                    {this.props.profile.phone != "" ? (
+                    {this.props.profile.phone  ? (
                       <li>
                         <i className="la la-phone" /> {this.props.profile.phone}
                       </li>
                     ) : null}
 
-                    {this.props.profile.email != "" ? (
-                      <li>
-                        <i className="la la-envelope" />{" "}
-                        {this.props.profile.email}
-                      </li>
-                    ) : null}
+                   
                   </ul>
                 </div>
               </div>

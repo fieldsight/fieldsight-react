@@ -25,7 +25,7 @@ class YourTeamSideBar extends Component {
             <div className="card-header main-card-header">
               <h5>Your Teams</h5>
              {this.props.addPermission && <div className="add-btn">
-                <a href={base_url+"fieldsight/organization/add/"}>
+                <a href="/fieldsight/organization/add/" target="_blank">
                   Add team
                   <span>
                     <i className="la la-plus" />
@@ -70,7 +70,7 @@ class YourTeamSideBar extends Component {
                               >
                                 <OverlayTrigger
                                   placement="top"
-                                  overlay={<Tooltip>Got to dashboard</Tooltip>}
+                                  overlay={<Tooltip>Go to dashboard</Tooltip>}
                                 >
                                   <i className="la la-external-link" />
                                 </OverlayTrigger>
@@ -107,14 +107,14 @@ class YourTeamSideBar extends Component {
                                 {project.has_project_access && (
                                   <a
                                     className="project-link"
-                                    href={`${base_url}fieldsight/project-dashboard/${
+                                    href={`/fieldsight/project-dashboard/${
                                       project.id
                                     }/`}
                                   >
                                     <OverlayTrigger
                                       placement="top"
                                       overlay={
-                                        <Tooltip>Got to dashboard</Tooltip>
+                                        <Tooltip>Go to dashboard</Tooltip>
                                       }
                                     >
                                       <i className="la la-external-link" />

@@ -17,7 +17,7 @@ class SiteTable extends Component {
           aria-labelledby="region_tab"
           style={{ position: "relative", height: "650px" }}
         >
-          {this.props.siteLoader && <TableContentLoader row={20} column={5} />}
+          {this.props.siteLoader && <TableContentLoader row={18} column={5} />}
 
           {!this.props.siteLoader && (
             <PerfectScrollbar>
