@@ -19,7 +19,7 @@ class RegionTable extends Component {
           <Table ponsive="xl" className="table  table-bordered  dataTable ">
             <thead>
               <tr>
-                <th>dentifier</th>
+                <th>identifier</th>
                 <th>name</th>
                 <th>total_sites</th>
                 <th>Role</th>
