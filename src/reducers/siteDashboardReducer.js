@@ -25,11 +25,11 @@ const initialState = {
   submissions: {},
   total_subsites: null,
   form_submissions_chart_data: {
-    pending_submissions: {},
-    total_submissions: {},
-    approved_submissions: {},
-    rejected_submissions: {},
-    flagged_submissions: {}
+    // pending_submissions: {},
+    // total_submissions: {},
+    // approved_submissions: {},
+    // rejected_submissions: {},
+    // flagged_submissions: {}
   },
   site_progress_chart_data: {},
   siteMetas: [],
@@ -54,23 +54,23 @@ export default function(state = initialState, action) {
       return {
         ...state,
         ...action.payload,
-        form_submissions_chart_data: {
-          pending_submissions: {
-            ...action.payload.form_submissions_chart_data.pending_submissions
-          },
-          total_submissions: {
-            ...action.payload.form_submissions_chart_data.total_submissions
-          },
-          approved_submissions: {
-            ...action.payload.form_submissions_chart_data.approved_submissions
-          },
-          rejected_submissions: {
-            ...action.payload.form_submissions_chart_data.rejected_submissions
-          },
-          flagged_submissions: {
-            ...action.payload.form_submissions_chart_data.flagged_submissions
-          }
-        },
+        // form_submissions_chart_data: {
+        //   pending_submissions: {
+        //     ...action.payload.form_submissions_chart_data.pending_submissions
+        //   },
+        //   total_submissions: {
+        //     ...action.payload.form_submissions_chart_data.total_submissions
+        //   },
+        //   approved_submissions: {
+        //     ...action.payload.form_submissions_chart_data.approved_submissions
+        //   },
+        //   rejected_submissions: {
+        //     ...action.payload.form_submissions_chart_data.rejected_submissions
+        //   },
+        //   flagged_submissions: {
+        //     ...action.payload.form_submissions_chart_data.flagged_submissions
+        //   }
+        // },
         site_progress_chart_data: {
           ...action.payload.site_progress_chart_data
         },

@@ -19,7 +19,7 @@ const CountCard = ({
             ? countName
             : countNumber === 0
             ? `No ${countName} submission`
-            : `${countName} submissions`}
+            : `${countName} submission(s)`}
         </h6>
       </div>
     </div>

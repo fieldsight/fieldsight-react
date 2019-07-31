@@ -63,14 +63,9 @@ class Submission extends Component {
                 <h6>{submission.question}</h6>
               </div>
               <figure>
-                <img
-                  src={
-                    submission.answer
-                      ? submission.answer
-                      : "https://images.freeimages.com/images/premium/previews/4335/43356756-road-construction-site.jpg"
-                  }
-                  alt="image"
-                />
+                {submission.answer && (
+                  <img src={submission.answer} alt="image" />
+                )}
               </figure>
             </li>
           </ul>

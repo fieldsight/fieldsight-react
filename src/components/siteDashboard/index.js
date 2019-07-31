@@ -140,6 +140,7 @@ class SiteDashboard extends Component {
           siteDocuments,
           siteLogs,
           siteForms,
+          terms_and_labels,
           form_submissions_chart_data,
           site_progress_chart_data,
           total_subsites,
@@ -174,6 +175,23 @@ class SiteDashboard extends Component {
 
     return (
       <>
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <a
+                href={`/fieldsight/project-dashboard/${
+                  window.project_id ? window.project_id : 182
+                }/`}
+              >
+                {window.project_name ? window.project_name : "Project Name"}
+              </a>
+            </li>
+
+            <li className="breadcrumb-item active" aria-current="page">
+              Site Dashboard
+            </li>
+          </ol>
+        </nav>
         <div className="row">
           <div className="col-xl-12">
             <div className="right-content no-bg new-dashboard">
@@ -201,12 +219,13 @@ class SiteDashboard extends Component {
                 showContentLoader={siteDashboardLoader}
                 subSitesLoader={subSitesLoader}
                 putCropImage={putCropImage}
+                termsAndLabels={terms_and_labels}
               />
               <div className="row">
                 <div className="col-lg-6">
                   <div className="card map">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>Site Map</h5>
+                      <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
                       <div className="dash-btn">
                         <a
                           href={`/fieldsight/site/response-coords/${siteId}/`}
@@ -256,7 +275,10 @@ class SiteDashboard extends Component {
                   <div className="col-xl-6 col-md-12">
                     <div className="card site_dashboard_info">
                       <div className="card-header main-card-header sub-card-header">
-                        <h5>Site information</h5>
+                        <h5>
+                          {terms_and_labels && terms_and_labels.site}{" "}
+                          information
+                        </h5>
                         {/* <div className="dash-btn">
                           <a href={`#/`} className="fieldsight-btn left-icon">
                             <i className="la la-edit" />
@@ -312,7 +334,9 @@ class SiteDashboard extends Component {
                   <div className="col-md-6">
                     <div className="card">
                       <div className="card-header main-card-header sub-card-header">
-                        <h5>Site progress</h5>
+                        <h5>
+                          {terms_and_labels && terms_and_labels.site} progress
+                        </h5>
                       </div>
                       <div className="card-body">
                         <ProgressChart
@@ -329,6 +353,7 @@ class SiteDashboard extends Component {
                     siteDocuments={siteDocuments}
                     showContentLoader={siteDocumentsLoader}
                     siteId={siteId}
+                    termsAndLabels={terms_and_labels}
                   />
 
                   <div className="col-xl-4 col-md-6">

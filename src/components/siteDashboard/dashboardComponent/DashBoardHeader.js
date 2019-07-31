@@ -53,7 +53,8 @@ class DashboardHeader extends Component {
         showSubsites,
         totalSubsites,
         showContentLoader,
-        subSitesLoader
+        subSitesLoader,
+        termsAndLabels
       },
       rotate,
       rotateLeft
@@ -63,20 +64,18 @@ class DashboardHeader extends Component {
       { title: "Generate Report", link: `/#` },
       { title: "View Data", link: `/forms/responses/${siteId}/` }
     ];
+
     const HeaderDropdown = [
-      { title: "Edit site information", link: `/fieldsight/site/${siteId}/` },
       {
-        title: "site document",
+        title: `Edit ${termsAndLabels && termsAndLabels.site}`,
+        link: `/fieldsight/site/${siteId}/`
+      },
+      {
+        title: `${termsAndLabels && termsAndLabels.site} documents`,
         link: `/fieldsight/site/blue-prints/${siteId}/`
       },
-      { title: "user", link: `/fieldsight/manage/people/site/${siteId}/` },
-      { title: "form", link: `/forms/setup-forms/0/${siteId}` }
-      // {
-      //   ...(enableSubsites && {
-      //     title: "Add Subsites",
-      //     link: `/fieldsight/site/add/subsite/${projectId}/${siteId}`
-      //   })
-      // }
+      { title: "users", link: `/fieldsight/manage/people/site/${siteId}/` },
+      { title: "forms", link: `/forms/setup-forms/0/${siteId}` }
     ];
 
     return (
@@ -153,7 +152,7 @@ class DashboardHeader extends Component {
             </a>
             <a href={`/fieldsight/site-users/${siteId}/`} target="_blank">
               <CountCard
-                countName={totalUsers === 0 ? "User" : "Users"}
+                countName={totalUsers === 0 ? "User" : "User(s)"}
                 countNumber={totalUsers}
                 icon="la-user"
                 noSubmissionText={true}
@@ -162,7 +161,7 @@ class DashboardHeader extends Component {
             {enableSubsites && (
               <a onClick={() => openModal("subsites")}>
                 <CountCard
-                  countName={totalSubsites == 0 ? "Subsite" : "Subsites"}
+                  countName={totalSubsites == 0 ? "Subsite" : "Subsite(s)"}
                   countNumber={totalSubsites}
                   icon="la-map-marker"
                   noSubmissionText={true}
