@@ -10,8 +10,11 @@ import {
   GET_RECENT_PICTURES,
   GET_SUBSITES,
   SHOW_DOT_LOADER,
-  SHOW_DASHBOARD_LOADERS
+  SHOW_DASHBOARD_LOADERS,
+  UPDATE_SITE_LOGO
 } from "./types";
+
+import { successToast, errorToast } from "../utils/toastHandler";
 
 export const getSiteDashboard = id => dispatch => {
   dispatch({
@@ -143,4 +146,24 @@ export const getSubsites = id => dispatch => {
       });
     })
     .catch(err => console.log("ERr", err));
+};
+
+export const putCropImage = (id, cropImage) => dispatch => {
+  const formData = new FormData();
+  formData.append("logo", cropImage);
+  axios
+    .put(`fv3/api/site-crop-image/${id}/`, formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    })
+    .then(res => {
+      dispatch({
+        type: UPDATE_SITE_LOGO,
+        payload: cropImage
+      });
+
+      successToast("Logo", "updated");
+    })
+    .catch(err => {
+      console.log("err", err);
+    });
 };

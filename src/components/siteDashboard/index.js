@@ -21,7 +21,8 @@ import {
   getSiteLogs,
   getSiteForms,
   getRecentPictures,
-  getSubsites
+  getSubsites,
+  putCropImage
 } from "../../actions/siteDashboardActions";
 
 // const siteId = window.site_id ? window.site_id : 81704;
@@ -149,9 +150,11 @@ class SiteDashboard extends Component {
           siteSubmissionsLoader,
           siteLogsLoader,
           siteDocumentsLoader,
-          sitePicturesLoader
+          sitePicturesLoader,
+          subSitesLoader
         },
         getSiteForms,
+        putCropImage,
         match: {
           params: { id: siteId }
         }
@@ -196,6 +199,8 @@ class SiteDashboard extends Component {
                 subSites={subSites}
                 totalSubsites={total_subsites}
                 showContentLoader={siteDashboardLoader}
+                subSitesLoader={subSitesLoader}
+                putCropImage={putCropImage}
               />
               <div className="row">
                 <div className="col-lg-6">
@@ -390,6 +395,7 @@ export default connect(
     getSiteLogs,
     getSiteForms,
     getRecentPictures,
-    getSubsites
+    getSubsites,
+    putCropImage
   }
 )(SiteDashboard);

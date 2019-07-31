@@ -9,7 +9,11 @@ const GalleryModal = ({
   gotoNext,
   closeModal
 }) => (
-  <div className="gallery-zoom fieldsight-popup open" style={{ zIndex: 99999 }}>
+  <div
+    className="gallery-zoom fieldsight-popup open"
+    style={{ zIndex: 99999 }}
+    onClick={closeModal}
+  >
     <div className="gallery-body">
       <img
         src={
@@ -22,7 +26,6 @@ const GalleryModal = ({
       />
       <div className="gallery-footer">
         <p>
-          {/* <span>gallery phooto </span> */}
           <span>
             {selectedImage.index + 1} of {imagesNumber}{" "}
           </span>
@@ -35,11 +38,17 @@ const GalleryModal = ({
     <div className="gallery-nav">
       <i
         className="la la-long-arrow-left"
-        onClick={() => gotoPrevious(selectedImage.index)}
+        onClick={e => {
+          e.stopPropagation();
+          gotoPrevious(selectedImage.index);
+        }}
       />
       <i
         className="la la-long-arrow-right"
-        onClick={() => gotoNext(selectedImage.index)}
+        onClick={e => {
+          e.stopPropagation();
+          gotoNext(selectedImage.index);
+        }}
       />
     </div>
   </div>
@@ -124,17 +133,18 @@ class PhotoGallery extends Component {
               <div className="row">
                 {recentPictures.map((image, i) => (
                   <div className="col-lg-4 col-md-6" key={i}>
-                    <div className="photo-item">
-                      <figure>
-                        <img
-                          src={
-                            image._attachments.download_url
-                              ? image._attachments.download_url
-                              : image._attachments
-                          }
-                          alt="infographic"
-                        />
-                      </figure>
+                    <div
+                      className="photo-item"
+                      style={{
+                        backgroundImage: `url(
+                              ${
+                                image._attachments.download_url
+                                  ? image._attachments.download_url
+                                  : image._attachments
+                              }
+                            )`
+                      }}
+                    >
                       <figcaption>
                         <a
                           onClick={() => showModal(image, i)}
