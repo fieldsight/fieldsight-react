@@ -1,4 +1,5 @@
 import React from "react";
+import uuid from "uuid/v4";
 
 const SelectElement = ({
   formType,
@@ -25,7 +26,7 @@ const SelectElement = ({
           options.map((option, i) => (
             <option
               value={option.id ? option.id : option.name ? option.name : option}
-              key={`${option.name ? option.name : option}${i}`}
+              key={uuid()}
             >
               {option.name ? option.name : option}
             </option>

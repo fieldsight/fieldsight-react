@@ -38,6 +38,7 @@ class SubmissionDetail extends Component {
         edit_url,
         download_url,
         form_name,
+        has_review_permission,
         loading,
         initialLoader
       },
@@ -98,6 +99,7 @@ class SubmissionDetail extends Component {
                   getSubmissionDetail={getSubmissionDetail}
                   editUrl={edit_url}
                   downloadUrl={download_url}
+                  hasReviewPermission={has_review_permission}
                 />
               </div>
             </div>

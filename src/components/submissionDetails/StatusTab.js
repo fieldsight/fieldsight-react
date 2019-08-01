@@ -70,7 +70,7 @@ class StatusTab extends Component {
 
   render() {
     const {
-      props: { statusData },
+      props: { statusData, hasReviewPermission },
       state: { comment, file, status },
       onChangeHandler,
       submitHandler
@@ -104,69 +104,71 @@ class StatusTab extends Component {
             <i className={`la ${icon}`} />
           </a>
         </div>
-        <div className="status">
-          <form className="edit-form" onSubmit={submitHandler}>
-            <InputElement
-              tag="textarea"
-              label="Comment"
-              htmlFor="comment"
-              name="comment"
-              placeholder="Please put your comment here."
-              value={comment}
-              changeHandler={onChangeHandler}
-            />
-            <div className="form-group">
-              <label>attach file</label>
-              <div className="upload-form">
-                <div className="fieldsight-btn">
-                  <label htmlFor="upload-btn">
-                    upload <i className="la la-cloud-upload" />
-                  </label>
-                  <input
-                    type="file"
-                    id="upload-btn"
-                    onChange={e => onChangeHandler(e, "file")}
+        {hasReviewPermission && (
+          <div className="status">
+            <form className="edit-form" onSubmit={submitHandler}>
+              <InputElement
+                tag="textarea"
+                label="Comment"
+                htmlFor="comment"
+                name="comment"
+                placeholder="Please put your comment here."
+                value={comment}
+                changeHandler={onChangeHandler}
+              />
+              <div className="form-group">
+                <label>attach file</label>
+                <div className="upload-form">
+                  <div className="fieldsight-btn">
+                    <label htmlFor="upload-btn">
+                      upload <i className="la la-cloud-upload" />
+                    </label>
+                    <input
+                      type="file"
+                      id="upload-btn"
+                      onChange={e => onChangeHandler(e, "file")}
+                    />
+                  </div>
+                </div>
+                <p>{file.name}</p>
+              </div>
+              <div className="form-group flexrow">
+                <div className="custom-checkbox display-inline">
+                  <RadioElement
+                    label="Approve"
+                    name="status"
+                    value="3"
+                    className="approved"
+                    checked={status === "3"}
+                    changeHandler={onChangeHandler}
+                  />
+                  <RadioElement
+                    label="Flag"
+                    name="status"
+                    value="2"
+                    className="flagged"
+                    checked={status === "2"}
+                    changeHandler={onChangeHandler}
+                  />
+
+                  <RadioElement
+                    label="Reject"
+                    name="status"
+                    value="1"
+                    className="rejected"
+                    checked={status === "1"}
+                    changeHandler={onChangeHandler}
                   />
                 </div>
               </div>
-              <p>{file.name}</p>
-            </div>
-            <div className="form-group flexrow">
-              <div className="custom-checkbox display-inline">
-                <RadioElement
-                  label="Approve"
-                  name="status"
-                  value="3"
-                  className="approved"
-                  checked={status === "3"}
-                  changeHandler={onChangeHandler}
-                />
-                <RadioElement
-                  label="Flag"
-                  name="status"
-                  value="2"
-                  className="flagged"
-                  checked={status === "2"}
-                  changeHandler={onChangeHandler}
-                />
-
-                <RadioElement
-                  label="Reject"
-                  name="status"
-                  value="1"
-                  className="rejected"
-                  checked={status === "1"}
-                  changeHandler={onChangeHandler}
-                />
+              <div className="form-group pull-right">
+                <button type="submit" className="fieldsight-btn">
+                  Save
+                </button>
               </div>
-            </div>
-            <div className="form-group pull-right">
-              <button type="submit" className="fieldsight-btn">
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
+        )}
       </div>
     );
   }

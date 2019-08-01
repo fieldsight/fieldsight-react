@@ -12,6 +12,12 @@ import {
   SHOW_DOT_LOADER,
   SHOW_DASHBOARD_LOADERS,
   UPDATE_SITE_LOGO
+  // SITE_DASHBOARD_ERR,
+  // SITE_METAS_ERR,
+  // SITE_SUBMISSIONS_ERR,
+  // SITE_DOCUMENTS_ERR,
+  // SITE_PICTURES_ERR,
+  // SITE_LOGS_ERR
 } from "./types";
 
 import { successToast, errorToast } from "../utils/toastHandler";
@@ -29,7 +35,9 @@ export const getSiteDashboard = id => dispatch => {
       });
     })
     .catch(err => {
-      console.log("Err ", err);
+      // dispatch({
+      //   type: SITE_DASHBOARD_ERR
+      // });
     });
 };
 
@@ -47,7 +55,9 @@ export const getSiteMetas = id => dispatch => {
       });
     })
     .catch(err => {
-      console.log("Err ", err);
+      // dispatch({
+      //   type: SITE_METAS_ERR
+      // });
     });
 };
 
@@ -64,7 +74,9 @@ export const getSiteSubmissions = id => dispatch => {
       });
     })
     .catch(err => {
-      console.log("Err ", err);
+      // dispatch({
+      //   type: SITE_SUBMISSIONS_ERR
+      // });
     });
 };
 
@@ -81,7 +93,7 @@ export const getSiteDocuments = id => dispatch => {
       });
     })
     .catch(err => {
-      console.log("Err", err);
+      console.log("err", err);
     });
 };
 
@@ -98,7 +110,9 @@ export const getSiteLogs = id => dispatch => {
       });
     })
     .catch(err => {
-      console.log("Err", err);
+      // dispatch({
+      //   type: SITE_LOGS_ERR
+      // });
     });
 };
 
@@ -132,7 +146,9 @@ export const getRecentPictures = id => dispatch => {
       });
     })
     .catch(err => {
-      console.log("err", err);
+      // dispatch({
+      //   type: SITE_PICTURES_ERR
+      // });
     });
 };
 

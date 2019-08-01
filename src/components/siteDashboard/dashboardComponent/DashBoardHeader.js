@@ -10,7 +10,7 @@ import Modal from "../../common/Modal";
 import Td from "../../common/TableData";
 import { DotLoader } from "../../common/Loader";
 
-const projectId = window.project_id ? window.project_id : 137;
+// const projectId = window.project_id ? window.project_id : 137;
 
 class DashboardHeader extends Component {
   saveImage = () => {
@@ -55,7 +55,9 @@ class DashboardHeader extends Component {
         showGallery,
         showContentLoader,
         subSitesLoader,
-        termsAndLabels
+        termsAndLabels,
+        hasWritePermission,
+        projectId
       },
       rotate,
       rotateLeft
@@ -131,23 +133,26 @@ class DashboardHeader extends Component {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Manage"
-                className="fieldsight-btn"
-              >
-                <i className="fa fa-cog" />
-                <span>Manage</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                {HeaderDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+
+            {hasWritePermission && (
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Manage"
+                  className="fieldsight-btn"
+                >
+                  <i className="fa fa-cog" />
+                  <span>Manage</span>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu-right">
+                  {HeaderDropdown.map((item, i) => (
+                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
           </div>
         </div>
         <div className="card-body">
@@ -181,12 +186,14 @@ class DashboardHeader extends Component {
               </a>
             )}
 
-            <div className="add-data">
-              <a onClick={() => openModal("Header")}>
-                {" "}
-                add data <i className="la la-plus" />
-              </a>
-            </div>
+            {hasWritePermission && (
+              <div className="add-data">
+                <a onClick={() => openModal("Header")}>
+                  {" "}
+                  add data <i className="la la-plus" />
+                </a>
+              </div>
+            )}
           </div>
 
           {showModal && (
@@ -267,7 +274,7 @@ class DashboardHeader extends Component {
             <Modal
               title="Subsites"
               toggleModal={() => closeModal("Subsites")}
-              showButton={enableSubsites}
+              showButton={enableSubsites && hasWritePermission}
               url={`/fieldsight/site/add/subsite/${projectId}/${siteId}`}
             >
               {subSitesLoader ? (
