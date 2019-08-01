@@ -1,12 +1,11 @@
 import React, { Component, Fragment } from "react";
+import { Link } from "react-router-dom";
 import Zoom from "react-reveal/Zoom";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import AddSite from "./AddSite";
-import { RegionContext } from "../../context";
-import isEmpty from "../../utils/isEmpty";
 import RegionalSiteTable from "./RegionalSiteTable";
 import axios from "axios";
-
+import isEmpty from "../../utils/isEmpty";
 
 const project_id = 137;
 const base_url = "https://fieldsight.naxa.com.np";
@@ -14,52 +13,77 @@ const project_name = "test";
 
 const popUpState = {
   addModal: false,
-  uploadModal: false,
- 
+  uploadModal: false
 };
 
 class RegionSiteList extends Component {
-  static contextType = RegionContext;
-
   state = {
     addModal: false,
     uploadModal: false,
-    subRegionList:[],
-    dLoader:true
-    
+    subRegionList: [],
+    dLoader: true,
+    projectId: null,
+    terms:{}
   };
 
   componentDidMount() {
     this._isMounted = true;
- 
-     let regionId=this.props.regionId
-     let subRegion="fv3/api/sub-regions/?region="+regionId
-    
-    
-     axios
+
+    let regionId = this.props.regionId;
+    let subRegion = "fv3/api/sub-regions/?region=" + regionId;
+
+    axios
       .get(`${subRegion}`)
 
       .then(res => {
-        if (this._isMounted) {
-         
+      
+       
           if (res.status === 200) {
-          
+            // console.log(res.data.terms_and_labels.site)
             this.setState({
-              subRegionList:res.data,
-              dLoader: false
+              subRegionList: res.data.data,
+              dLoader: false,
+              projectId: res.data.project,
+              terms:res.data.terms_and_labels
+
             });
           }
-        }
+        
       })
       .catch(err => {
         this.setState({
-         // dLoader: false
+          // dLoader: false
         });
       });
-     
-    
+  }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.regionId != this.props.regionId) {
+      let regionId = this.props.regionId;
+      let subRegion = "fv3/api/sub-regions/?region=" + regionId;
 
+      axios
+        .get(`${subRegion}`)
+
+        .then(res => {
+          if (this._isMounted) {
+            if (res.status === 200) {
+              
+              this.setState({
+                subRegionList: res.data.data,
+                dLoader: false,
+                projectId: res.data.project,
+                terms:res.data.terms_and_labels
+              });
+            }
+          }
+        })
+        .catch(err => {
+          this.setState({
+            // dLoader: false
+          });
+        });
+    }
   }
 
   showPopup = (e, type) => {
@@ -74,19 +98,14 @@ class RegionSiteList extends Component {
       addModal: false,
       uploadModal: false
     });
-   
   };
 
   OpenTabHandler = (e, url) => {
-   
     window.open(url, "_self");
   };
 
   render() {
-    const {
-      context: { terms }
-    } = this;
-   console.log(this.state.dLoader)
+    
     return (
       <Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -100,39 +119,37 @@ class RegionSiteList extends Component {
                 {project_name}
               </a>
             </li>
-            {/* <li className="breadcrumb-item">
-              <a href="/fieldsight/organization-dashboard/13/">Site List</a>
-            </li> */}
 
             <li className="breadcrumb-item active" aria-current="page">
-              {!isEmpty(terms) ? `${terms.site} List` : "Site List"}
+              {!isEmpty(this.state.terms) ? `${this.state.terms.site}` : "Site"}
+            
+            
             </li>
           </ol>
         </nav>
         <div className="sub-regions">
           <div className="card">
             <div className="card-header main-card-header">
-              <h5>Sub Regions</h5>
+              <h5>{!isEmpty(this.state.terms) ? `Sub ${this.state.terms.region} `:"Sub Regions"}</h5>
             </div>
             <div className="card-body">
               <div className="row">
-
-              
-
-              {this.state.subRegionList.map((subRegion,i) => (
-
-                <div className="col-xl-3 col-lg-6" key={i}>
-                  <div className="sub-regions-item ">
-                    <h5>{subRegion.name}</h5>
-                    <h6>{subRegion.identifier}</h6>
-                    <p>
-                      <label>Total:</label>{subRegion.total_sites}
-                    </p>
+                {this.state.subRegionList.map((subRegion, i) => (
+                  <div className="col-xl-3 col-lg-6" key={i}>
+                    <Link to={"/regional-site/" + subRegion.id}>
+                    <div className="sub-regions-item ">
+                      
+                        <h5>{subRegion.name}</h5>
+                        <h6>{subRegion.identifier}</h6>
+                        <p>
+                          <label>Total:</label>
+                          {subRegion.total_sites}
+                        </p>
+                     
+                    </div>
+                    </Link>
                   </div>
-                </div>
                 ))}
-
-              
               </div>
             </div>
           </div>
@@ -142,7 +159,8 @@ class RegionSiteList extends Component {
             showPopup={this.showPopup}
             OpenTabHandler={this.OpenTabHandler}
             regionId={this.props.regionId}
-            // regonId={this.props.match.params.id}
+            projectId={this.state.projectId}
+            terms={this.state.terms}
           />
 
           {this.state.uploadModal && (
