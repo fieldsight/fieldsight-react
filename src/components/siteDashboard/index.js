@@ -128,6 +128,7 @@ class SiteDashboard extends Component {
           enable_subsites,
           location,
           logo,
+          project_id,
           region,
           total_users,
           submissions,
@@ -150,7 +151,8 @@ class SiteDashboard extends Component {
           siteLogsLoader,
           siteDocumentsLoader,
           sitePicturesLoader,
-          subSitesLoader
+          subSitesLoader,
+          has_write_permission
         },
         getSiteForms,
         putCropImage,
@@ -173,12 +175,12 @@ class SiteDashboard extends Component {
 
     return (
       <>
-        <nav aria-label="breadcrumb" role="navigation">
+        {/* <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
                 href={`/fieldsight/project-dashboard/${
-                  window.project_id ? window.project_id : 182
+                  project_id
                 }/`}
               >
                 {window.project_name ? window.project_name : "Project Name"}
@@ -189,7 +191,7 @@ class SiteDashboard extends Component {
               Site Dashboard
             </li>
           </ol>
-        </nav>
+        </nav> */}
         <div className="row">
           <div className="col-xl-12">
             <div className="right-content no-bg new-dashboard">
@@ -219,6 +221,8 @@ class SiteDashboard extends Component {
                 putCropImage={putCropImage}
                 termsAndLabels={terms_and_labels}
                 showGallery={showGallery}
+                hasWritePermission={has_write_permission}
+                projectId={project_id}
               />
               <div className="row">
                 <div className="col-lg-6">
@@ -290,6 +294,7 @@ class SiteDashboard extends Component {
                     closeModal={closeModal}
                     openModal={openModal}
                     toggleTab={toggleTab}
+                    hasWritePermission={has_write_permission}
                   />
                 </div>
               </div>

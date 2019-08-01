@@ -16,23 +16,26 @@ const DatatablePage = ({
   activeTab,
   closeModal,
   openModal,
-  toggleTab
+  toggleTab,
+  hasWritePermission
 }) => (
   <>
     <div className="col-xl-6 col-md-12">
       <div className="card region-table">
         <div className="card-header main-card-header sub-card-header">
           <h5>Submissions</h5>
-          <div className="add-btn">
-            <a
-              onClick={() => openModal("Submission")}
-              data-tab="scheduled-popup"
-            >
-              <span>
-                <i className="la la-plus" />
-              </span>
-            </a>
-          </div>
+          {hasWritePermission && (
+            <div className="add-btn">
+              <a
+                onClick={() => openModal("Submission")}
+                data-tab="scheduled-popup"
+              >
+                <span>
+                  <i className="la la-plus" />
+                </span>
+              </a>
+            </div>
+          )}
         </div>
         <div
           className="card-body"
