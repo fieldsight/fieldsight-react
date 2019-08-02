@@ -38,7 +38,7 @@ class RegionTable extends Component {
               {this.props.regions.map((region, i) => (
                 <tr key={i}>
                   <td>{region.identifier}</td>
-                  <td>{region.name}</td>
+                  <td><a href={region.region_url}>{region.name}</a></td>
                   <td>{region.total_sites}</td>
                   <td>{region.role}</td>
                 </tr>
