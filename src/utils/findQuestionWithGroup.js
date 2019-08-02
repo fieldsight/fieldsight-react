@@ -1,5 +1,7 @@
 const findQuestionWithGroup = (children, type) => {
-  const filteredQuestions = [];
+  const filteredQuestions = [
+    { bind: null, type: null, name: "--Select Question--", label: null }
+  ];
 
   const filterQuestionByType = (questions, name) => {
     // if (type) {

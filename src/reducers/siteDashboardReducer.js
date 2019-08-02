@@ -46,6 +46,7 @@ const initialState = {
   siteForms: {},
   subSites: [],
   recentPictures: [],
+  breadcrumbs: {},
   has_write_permission: false,
   siteDashboardLoader: true,
   siteMetasLoader: true,

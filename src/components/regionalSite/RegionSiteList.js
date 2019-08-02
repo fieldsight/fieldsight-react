@@ -23,7 +23,8 @@ class RegionSiteList extends Component {
     subRegionList: [],
     dLoader: true,
     projectId: null,
-    terms:{}
+    terms: {},
+    breadcrumbs: {}
   };
 
   componentDidMount() {
@@ -36,19 +37,16 @@ class RegionSiteList extends Component {
       .get(`${subRegion}`)
 
       .then(res => {
-      
-       
-          if (res.status === 200) {
-            // console.log(res.data.terms_and_labels.site)
-            this.setState({
-              subRegionList: res.data.data,
-              dLoader: false,
-              projectId: res.data.project,
-              terms:res.data.terms_and_labels
-
-            });
-          }
-        
+        if (res.status === 200) {
+          // console.log(res.data.terms_and_labels.site)
+          this.setState({
+            subRegionList: res.data.data,
+            dLoader: false,
+            projectId: res.data.project,
+            terms: res.data.terms_and_labels,
+            breadcrumbs: res.data.breadcrumbs
+          });
+        }
       })
       .catch(err => {
         this.setState({
@@ -68,12 +66,12 @@ class RegionSiteList extends Component {
         .then(res => {
           if (this._isMounted) {
             if (res.status === 200) {
-              
               this.setState({
                 subRegionList: res.data.data,
                 dLoader: false,
                 projectId: res.data.project,
-                terms:res.data.terms_and_labels
+                terms: res.data.terms_and_labels,
+                breadcrumbs: res.data.breadcrumbs
               });
             }
           }
@@ -105,48 +103,45 @@ class RegionSiteList extends Component {
   };
 
   render() {
-    
+    const { breadcrumbs } = this.state;
+
     return (
       <Fragment>
         <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a
-                href={
-                  base_url + "/fieldsight/project-dashboard/" + project_id + "/"
-                }
-              >
-                {project_name}
-              </a>
-            </li>
+          {Object.keys(breadcrumbs).length > 0 && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.project_url}>{breadcrumbs.project_name}</a>
+              </li>
 
-            <li className="breadcrumb-item active" aria-current="page">
-              {!isEmpty(this.state.terms) ? `${this.state.terms.site}` : "Site"}
-            
-            
-            </li>
-          </ol>
+              <li className="breadcrumb-item active" aria-current="page">
+                {breadcrumbs.region}
+              </li>
+            </ol>
+          )}
         </nav>
         <div className="sub-regions">
           <div className="card">
             <div className="card-header main-card-header">
-              <h5>{!isEmpty(this.state.terms) ? `Sub ${this.state.terms.region} `:"Sub Regions"}</h5>
+              <h5>
+                {!isEmpty(this.state.terms)
+                  ? `Sub ${this.state.terms.region} `
+                  : "Sub Regions"}
+              </h5>
             </div>
             <div className="card-body">
               <div className="row">
                 {this.state.subRegionList.map((subRegion, i) => (
                   <div className="col-xl-3 col-lg-6" key={i}>
                     <Link to={"/regional-site/" + subRegion.id}>
-                    <div className="sub-regions-item ">
-                      
+                      <div className="sub-regions-item ">
                         <h5>{subRegion.name}</h5>
                         <h6>{subRegion.identifier}</h6>
                         <p>
                           <label>Total:</label>
                           {subRegion.total_sites}
                         </p>
-                     
-                    </div>
+                      </div>
                     </Link>
                   </div>
                 ))}

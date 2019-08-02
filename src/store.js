@@ -5,21 +5,21 @@ import { loadState, saveState } from "./localStorage";
 
 const persistedState = loadState();
 
-// const initialState = {};
+const initialState = {};
 
 const middleware = [thunk];
 
 const store = createStore(
   rootReducer,
-  persistedState,
+  initialState,
   compose(
     applyMiddleware(...middleware),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )
 );
 
-store.subscribe(() => {
-  saveState(store.getState());
-});
+// store.subscribe(() => {
+//   saveState(store.getState());
+// });
 
 export default store;

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import SubmissionSiteDetail from "./SubmissionSiteDetail";
@@ -12,17 +12,9 @@ import {
   postSubmissionDetail
 } from "../../actions/submissionDetailActions";
 
-const submissionId = window.submission_id ? window.submission_id : 65994;
+const submissionId = window.submission_id ? window.submission_id : 66073;
 class SubmissionDetail extends Component {
   componentDidMount() {
-    // const {
-    //   props: {
-    //     match: {
-    //       params: { submissionId }
-    //     }
-    //   }
-    // } = this;
-
     this.props.getSubmissionDetail(submissionId);
   }
   render() {
@@ -46,10 +38,10 @@ class SubmissionDetail extends Component {
       getSubmissionDetail
     } = this.props;
     return (
-      <Fragment>
+      <>
         {!initialLoader && (
-          <Fragment>
-            <nav aria-label="breadcrumb" role="navigation">
+          <>
+            {/* <nav aria-label="breadcrumb" role="navigation">
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
                   <a href="index.html">Home</a>
@@ -68,7 +60,7 @@ class SubmissionDetail extends Component {
                   Submission Details
                 </li>
               </ol>
-            </nav>
+            </nav> */}
             <div className="row">
               <div className="col-xl-8 col-lg-8">
                 <div className="right-content no-bg">
@@ -104,10 +96,10 @@ class SubmissionDetail extends Component {
               </div>
             </div>
             {loading && <Loader />}
-          </Fragment>
+          </>
         )}
         {initialLoader && <Loader />}
-      </Fragment>
+      </>
     );
   }
 }

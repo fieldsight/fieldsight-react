@@ -152,7 +152,8 @@ class SiteDashboard extends Component {
           siteDocumentsLoader,
           sitePicturesLoader,
           subSitesLoader,
-          has_write_permission
+          has_write_permission,
+          breadcrumbs
         },
         getSiteForms,
         putCropImage,
@@ -175,23 +176,32 @@ class SiteDashboard extends Component {
 
     return (
       <>
-        {/* <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a
-                href={`/fieldsight/project-dashboard/${
-                  project_id
-                }/`}
-              >
-                {window.project_name ? window.project_name : "Project Name"}
-              </a>
-            </li>
+        <nav aria-label="breadcrumb" role="navigation">
+          {Object.keys(breadcrumbs).length > 0 && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.organization_url}>
+                  {breadcrumbs.organization}
+                </a>
+              </li>
 
-            <li className="breadcrumb-item active" aria-current="page">
-              Site Dashboard
-            </li>
-          </ol>
-        </nav> */}
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.project_url}>{breadcrumbs.project}</a>
+              </li>
+              {breadcrumbs.root_site && (
+                <li className="breadcrumb-item">
+                  <a href={breadcrumbs.root_site_url}>
+                    {breadcrumbs.root_site}
+                  </a>
+                </li>
+              )}
+
+              <li className="breadcrumb-item active" aria-current="page">
+                {breadcrumbs.site}
+              </li>
+            </ol>
+          )}
+        </nav>
         <div className="row">
           <div className="col-xl-12">
             <div className="right-content no-bg new-dashboard">

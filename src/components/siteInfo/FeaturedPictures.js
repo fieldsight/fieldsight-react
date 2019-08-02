@@ -120,11 +120,16 @@ class FeaturedPictures extends Component {
   formChangeHandler = e => {
     const { value } = e.target;
     const selectedForm = this.props.forms.find(form => form.id === +value);
-    const filteredQuestions = findQuestion(selectedForm.json.children, "photo");
-    this.setState({
-      selectedForm: value,
-      filteredQuestions
-    });
+    if (selectedForm) {
+      const filteredQuestions = findQuestion(
+        selectedForm.json.children,
+        "photo"
+      );
+      this.setState({
+        selectedForm: value,
+        filteredQuestions
+      });
+    }
   };
 
   questionChangeHandler = e => {
@@ -132,7 +137,10 @@ class FeaturedPictures extends Component {
     const selectedQuestion = this.state.filteredQuestions.find(
       question => question.name === value
     );
-    this.setState({ selectedQuestion });
+
+    if (selectedQuestion.type) {
+      this.setState({ selectedQuestion });
+    }
   };
 
   removePicHandler = value => {
@@ -256,7 +264,7 @@ class FeaturedPictures extends Component {
                 className="form-control"
                 label="Type"
                 options={siteFeaturedTypes}
-                value={editMode && type}
+                value={type ? type : null}
                 changeHandler={onSelectChangeHandler}
               />
 
@@ -264,16 +272,16 @@ class FeaturedPictures extends Component {
                 <SelectElement
                   className="form-control"
                   options={forms}
-                  value={editMode && selectedForm}
+                  value={selectedForm ? selectedForm : null}
                   changeHandler={formChangeHandler}
                 />
               )}
 
-              {type === "Form" && (
+              {type === "Form" && filteredQuestions.length > 0 && (
                 <SelectElement
                   className="form-control"
                   options={filteredQuestions}
-                  value={editMode && selectedQuestion.name}
+                  value={selectedQuestion.name ? selectedQuestion.name : null}
                   changeHandler={questionChangeHandler}
                 />
               )}

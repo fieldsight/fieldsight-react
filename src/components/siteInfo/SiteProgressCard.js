@@ -146,19 +146,22 @@ class SiteProgressCard extends Component {
   formChangeHandler = e => {
     const { value } = e.target;
     const selectedForm = this.props.forms.find(form => form.id == value);
-    const filteredQuestions = findQuestionWithGroup(
-      selectedForm.json.children,
-      "integer"
-    );
 
-    this.setState(
-      {
-        selectedForm,
-        filteredQuestions,
-        selectedQuestion: {}
-      },
-      this.dataChangeHandler
-    );
+    if (selectedForm) {
+      const filteredQuestions = findQuestionWithGroup(
+        selectedForm.json.children,
+        "integer"
+      );
+
+      this.setState(
+        {
+          selectedForm,
+          filteredQuestions,
+          selectedQuestion: {}
+        },
+        this.dataChangeHandler
+      );
+    }
   };
 
   questionChangeHandler = e => {
@@ -166,7 +169,10 @@ class SiteProgressCard extends Component {
     const selectedQuestion = this.state.filteredQuestions.find(
       question => question.name === value
     );
-    this.setState({ selectedQuestion }, this.dataChangeHandler);
+
+    if (selectedQuestion.type) {
+      this.setState({ selectedQuestion }, this.dataChangeHandler);
+    }
   };
 
   inputChangeHandler = e => {

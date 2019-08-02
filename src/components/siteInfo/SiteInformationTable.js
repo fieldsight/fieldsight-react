@@ -60,6 +60,7 @@ class SiteInformationTable extends Component {
   state = INITIAL_STATE;
 
   componentWillReceiveProps(nextProps) {
+    console.log("componentwillreceiveprops");
     if (nextProps.jsonQuestions) {
       this.setState({
         tableQuestions: [...nextProps.jsonQuestions]
@@ -159,8 +160,11 @@ class SiteInformationTable extends Component {
 
   formChangeHandler = e => {
     const { value } = e.target;
-
     const { type } = this.state;
+
+    // if (value === "--Select Project--" || value === "--Select Form--") {
+    //   return;
+    // }
 
     if (type === "Link") {
       if (this.state.selectedProject === value) {
@@ -168,26 +172,33 @@ class SiteInformationTable extends Component {
       }
       const filteredMetaAttributes = this.props.projects.find(
         project => project.id === +value
-      ).site_meta_attributes;
+      );
 
-      const modifiedMetaAttributes = filteredMetaAttributes.map(meta => ({
-        ...meta,
-        checked: false
-      }));
+      if (filteredMetaAttributes) {
+        const modifiedMetaAttributes = filteredMetaAttributes.site_meta_attributes.map(
+          meta => ({
+            ...meta,
+            checked: false
+          })
+        );
 
-      this.setState({
-        selectedProject: value,
-        filteredMetaAttributes: modifiedMetaAttributes
-      });
+        this.setState({
+          selectedProject: value,
+          filteredMetaAttributes: modifiedMetaAttributes
+        });
+      }
     } else {
       const selectedForm = this.props.forms.find(form => form.id === +value);
-      const filteredQuestions = selectedForm
-        ? findQuestion(selectedForm.json.children)
-        : [];
-      this.setState({
-        selectedForm: value,
-        filteredQuestions
-      });
+
+      if (selectedForm) {
+        const filteredQuestions = selectedForm
+          ? findQuestion(selectedForm.json.children)
+          : [];
+        this.setState({
+          selectedForm: value,
+          filteredQuestions
+        });
+      }
     }
   };
 
@@ -196,7 +207,10 @@ class SiteInformationTable extends Component {
     const selectedQuestion = this.state.filteredQuestions.find(
       question => question.name === value
     );
-    this.setState({ selectedQuestion });
+
+    if (selectedQuestion.type) {
+      this.setState({ selectedQuestion });
+    }
   };
 
   onSubmitHandler = e => {
@@ -298,24 +312,26 @@ class SiteInformationTable extends Component {
     if (selectedTableQuestion && selectedTableQuestion.project_id) {
       const siteMetaAttributes = this.props.projects.find(
         project => project.id === +selectedTableQuestion.project_id
-      ).site_meta_attributes;
-
-      const selectedMetaAttributes = new Set(
-        selectedTableQuestion.metas.map(({ question_name }) => question_name)
       );
-      const nonSelectedMetaAttribute = siteMetaAttributes
-        .filter(
-          ({ question_name }) => !selectedMetaAttributes.has(question_name)
-        )
-        .map(attr => ({
-          ...attr,
-          checked: false
-        }));
 
-      filteredMetaAttributes = [
-        ...selectedTableQuestion.metas,
-        ...nonSelectedMetaAttribute
-      ];
+      if (siteMetaAttributes) {
+        const selectedMetaAttributes = new Set(
+          selectedTableQuestion.metas.map(({ question_name }) => question_name)
+        );
+        const nonSelectedMetaAttribute = siteMetaAttributes.site_meta_attributes
+          .filter(
+            ({ question_name }) => !selectedMetaAttributes.has(question_name)
+          )
+          .map(attr => ({
+            ...attr,
+            checked: false
+          }));
+
+        filteredMetaAttributes = [
+          ...selectedTableQuestion.metas,
+          ...nonSelectedMetaAttribute
+        ];
+      }
     }
 
     const question = {
@@ -461,7 +477,7 @@ class SiteInformationTable extends Component {
                 className="form-control"
                 label="Type"
                 options={questionTypes}
-                value={editMode && type}
+                value={type ? type : null}
                 changeHandler={onSelectChangeHandler}
               />
               {(type === "Text" || type === "Number" || type === "Date") && (
@@ -525,8 +541,8 @@ class SiteInformationTable extends Component {
                 <SelectElement
                   className="form-control"
                   options={projects}
-                  value={editMode && selectedProject}
                   changeHandler={formChangeHandler}
+                  value={selectedProject ? selectedProject : null}
                 />
               )}
 
@@ -535,7 +551,10 @@ class SiteInformationTable extends Component {
                   <PerfectScrollbar>
                     {this.state.filteredMetaAttributes.map(attribute => {
                       return (
-                        <div className="form-group" key={uuid()}>
+                        <div
+                          className="form-group"
+                          key={attribute.question_name}
+                        >
                           <CheckBox
                             checked={attribute.checked}
                             label={attribute.question_name}
@@ -556,19 +575,20 @@ class SiteInformationTable extends Component {
                 <SelectElement
                   className="form-control"
                   options={forms}
-                  value={editMode && selectedForm}
+                  value={selectedForm ? selectedForm : null}
                   changeHandler={formChangeHandler}
                 />
               )}
 
-              {(type === "Form" || type === "FormQuestionAnswerStatus") && (
-                <SelectElement
-                  className="form-control"
-                  options={filteredQuestions}
-                  value={editMode && selectedQuestion.name}
-                  changeHandler={questionChangeHandler}
-                />
-              )}
+              {(type === "Form" || type === "FormQuestionAnswerStatus") &&
+                filteredQuestions.length > 0 && (
+                  <SelectElement
+                    className="form-control"
+                    options={filteredQuestions}
+                    value={selectedQuestion.name ? selectedQuestion.name : null}
+                    changeHandler={questionChangeHandler}
+                  />
+                )}
               {/* <div className="form-group display-inline text-center">
                 <CheckBox
                   checked={this.state.dashboardChecked}
