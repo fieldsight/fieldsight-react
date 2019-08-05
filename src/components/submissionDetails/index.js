@@ -12,7 +12,7 @@ import {
   postSubmissionDetail
 } from "../../actions/submissionDetailActions";
 
-const submissionId = window.submission_id ? window.submission_id : 66073;
+const submissionId = window.submission_id ? window.submission_id : 66074;
 class SubmissionDetail extends Component {
   componentDidMount() {
     this.props.getSubmissionDetail(submissionId);
