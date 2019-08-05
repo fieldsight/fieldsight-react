@@ -22,6 +22,13 @@ function measure(lat1, lon1, lat2, lon2) {
   return (d * 1000).toFixed(2); // meters
 }
 class Submission extends Component {
+  splitSubmissionQuestion = submissionObj => {
+    const question = Object.values(submissionObj);
+    return question.length > 0
+      ? `${question[0]}/${question[1]}`.replace(/\/undefined/, "")
+      : "";
+  };
+
   handleRepeatedSubmission = submission => {
     return (
       <Accordion key={uuid()} defaultActiveKey={submission.name}>
@@ -60,7 +67,11 @@ class Submission extends Component {
           <ul>
             <li>
               <div className="content">
-                <h6>{submission.question}</h6>
+                <h6>
+                  {typeof submission.question === "object"
+                    ? this.splitSubmissionQuestion(submission.question)
+                    : submission.question}
+                </h6>
               </div>
               <figure>
                 {submission.answer && (
@@ -72,77 +83,91 @@ class Submission extends Component {
         </div>
       );
     } else if (submission.type === "geopoint") {
-      const splitedGeoLocation = submission.answer.split(" ");
-      const latitude = splitedGeoLocation[0];
-      const longitude = splitedGeoLocation[1];
-      const altitude = splitedGeoLocation[2];
-      const accuracy = splitedGeoLocation[3];
+      let splitedGeoLocation = [];
+      let latitude = "";
+      let longitude = "";
+      let altitude = "";
+      let accuracy = "";
+      if (submission.answer) {
+        splitedGeoLocation = submission.answer.split(" ");
+        latitude = splitedGeoLocation[0];
+        longitude = splitedGeoLocation[1];
+        altitude = splitedGeoLocation[2];
+        accuracy = splitedGeoLocation[3];
+      }
+
       return (
         <div className="submission-list normal-list" key={uuid()}>
           <ul>
             <li>
-              <h6>{submission.question}</h6>
+              <h6>
+                {typeof submission.question === "object"
+                  ? this.splitSubmissionQuestion(submission.question)
+                  : submission.question}
+              </h6>
               <div className="submission-map">
-                <div className="row">
-                  <div className="col-lg-5 col-md-5">
-                    <div className="map-form">
-                      <Map
-                        style={{ height: "205px", marginTop: "1rem" }}
-                        center={[latitude, longitude]}
-                        zoom={15}
-                      >
-                        <TileLayer
-                          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <Marker position={[latitude, longitude]}>
-                          <Popup>
-                            <b>Question: </b>
-                            {submission.question}
-                          </Popup>
-                        </Marker>
-                        <Marker position={[site.latitude, site.longitude]}>
-                          <Popup>
-                            <b>Project Name: </b>
-                            {site.project_name}
-                          </Popup>
-                        </Marker>
-                      </Map>
+                {submission.answer && (
+                  <div className="row">
+                    <div className="col-lg-5 col-md-5">
+                      <div className="map-form">
+                        <Map
+                          style={{ height: "205px", marginTop: "1rem" }}
+                          center={[latitude, longitude]}
+                          zoom={15}
+                        >
+                          <TileLayer
+                            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          />
+                          <Marker position={[latitude, longitude]}>
+                            <Popup>
+                              <b>Question: </b>
+                              {submission.question}
+                            </Popup>
+                          </Marker>
+                          <Marker position={[site.latitude, site.longitude]}>
+                            <Popup>
+                              <b>Project Name: </b>
+                              {site.project_name}
+                            </Popup>
+                          </Marker>
+                        </Map>
+                      </div>
+                    </div>
+                    <div className="col-lg-7 col-md-7">
+                      <div className="map-legend">
+                        <p>
+                          <span>Latitude:</span>
+                          <label>{latitude}</label>
+                        </p>
+                        <p>
+                          <span>Longitude:</span>
+                          <label>{longitude}</label>
+                        </p>
+                        <p>
+                          <span>Altitude:</span>
+                          <label>{altitude} meters</label>
+                        </p>
+                        <p>
+                          <span>Accuracy:</span>
+                          <label>{(+accuracy).toFixed(2)} meters</label>
+                        </p>
+                        <p>
+                          <span>Distance From Site:</span>
+                          <label>
+                            {measure(
+                              site.latitude,
+                              site.longitude,
+                              latitude,
+                              longitude
+                            )}{" "}
+                            meters
+                          </label>
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <div className="col-lg-7 col-md-7">
-                    <div className="map-legend">
-                      <p>
-                        <span>Latitude:</span>
-                        <label>{latitude}</label>
-                      </p>
-                      <p>
-                        <span>Longitude:</span>
-                        <label>{longitude}</label>
-                      </p>
-                      <p>
-                        <span>Altitude:</span>
-                        <label>{altitude} meters</label>
-                      </p>
-                      <p>
-                        <span>Accuracy:</span>
-                        <label>{(+accuracy).toFixed(2)} meters</label>
-                      </p>
-                      <p>
-                        <span>Distance From Site:</span>
-                        <label>
-                          {measure(
-                            site.latitude,
-                            site.longitude,
-                            latitude,
-                            longitude
-                          )}{" "}
-                          meters
-                        </label>
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </li>
           </ul>
@@ -153,7 +178,11 @@ class Submission extends Component {
         <div className="submission-list normal-list" key={uuid()}>
           <ul>
             <li>
-              <h6>{submission.question}</h6>
+              <h6>
+                {typeof submission.question === "object"
+                  ? this.splitSubmissionQuestion(submission.question)
+                  : submission.question}
+              </h6>
               {submission.type === "start" ||
               submission.type === "end" ||
               submission.type === "datetime" ? (

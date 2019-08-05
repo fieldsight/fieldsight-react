@@ -2,11 +2,10 @@ import React, { Component, Fragment } from "react";
 import ProjectSiteTable from "./ProjectSiteTable";
 import Zoom from "react-reveal/Zoom";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import Select from "react-select";
 import AddSite from "./AddSite";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
-import RegionalSiteTable from "./RegionalSiteTable";
+
 
 const project_id = 137;
 const base_url = "https://fieldsight.naxa.com.np";
@@ -71,48 +70,9 @@ class ProjectSiteList extends Component {
             </li>
           </ol>
         </nav>
-        <div className="sub-regions">
-          <div className="card">
-            <div className="card-header main-card-header">
-              <h5>Sub Regions</h5>
-            </div>
-            <div className="card-body">
-            <div className="row">
-              <div className="col-xl-3 col-lg-6">
-                <div className="sub-regions-item ">
-                    <h5>Nuwakot</h5>
-                    <h6>Region2_fgfhfgh</h6>
-                    <p><label>Total:</label>0</p>
-                </div>
-              </div>
-              <div className="col-xl-3 col-lg-6">
-                <div className="sub-regions-item ">
-                    <h5>Nuwakot</h5>
-                    <h6>Region2_fgfhfgh</h6>
-                    <p><label>Total:</label>0</p>
-                </div>
-              </div>
-              <div className="col-xl-3 col-lg-6">
-                <div className="sub-regions-item ">
-                    <h5>Nuwakot</h5>
-                    <h6>Region2_fgfhfgh</h6>
-                    <p><label>Total:</label>0</p>
-                </div>
-              </div>
-              <div className="col-xl-3 col-lg-6">
-                <div className="sub-regions-item ">
-                    <h5>Nuwakot</h5>
-                    <h6>Region2_fgfhfgh</h6>
-                    <p><label>Total:</label>0</p>
-                </div>
-              </div>
-            </div>
-            </div>
-          </div>
-            
-        </div>
+       
         <div className="card">
-          <RegionalSiteTable
+          <ProjectSiteTable
             showPopup={this.showPopup}
             OpenTabHandler={this.OpenTabHandler}
           />

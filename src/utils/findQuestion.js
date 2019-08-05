@@ -1,5 +1,7 @@
 const findQuestion = (children, type) => {
-  const filteredQuestions = [];
+  const filteredQuestions = [
+    { bind: null, type: null, name: "--Select Question--", label: null }
+  ];
 
   const filterQuestionByType = questions => {
     if (type) {
@@ -23,6 +25,7 @@ const findQuestion = (children, type) => {
   };
 
   filterQuestionByType(children);
+
   return filteredQuestions;
 };
 

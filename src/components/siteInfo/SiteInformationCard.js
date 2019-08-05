@@ -26,6 +26,7 @@ class SiteInformationCard extends Component {
   state = INITIAL_STATE;
 
   componentWillReceiveProps(nextProps) {
+    console.log("componentwilrece");
     let selectedForm = {};
     let selectedQuestion = {};
     let type = "choose";
@@ -124,17 +125,21 @@ class SiteInformationCard extends Component {
 
   formChangeHandler = (e, type) => {
     const { value } = e.target;
-    const selectedForm = this.props.forms.find(form => form.id == value);
-    const filteredQuestions = findQuestion(selectedForm.json.children, type);
 
-    this.setState(
-      {
-        selectedForm,
-        filteredQuestions,
-        selectedQuestion: {}
-      },
-      this.dataChangeHandler
-    );
+    const selectedForm = this.props.forms.find(form => form.id == value);
+
+    if (selectedForm) {
+      const filteredQuestions = findQuestion(selectedForm.json.children, type);
+
+      this.setState(
+        {
+          selectedForm,
+          filteredQuestions,
+          selectedQuestion: {}
+        },
+        this.dataChangeHandler
+      );
+    }
   };
 
   questionChangeHandler = e => {
@@ -142,7 +147,10 @@ class SiteInformationCard extends Component {
     const selectedQuestion = this.state.filteredQuestions.find(
       question => question.name === value
     );
-    this.setState({ selectedQuestion }, this.dataChangeHandler);
+
+    if (selectedQuestion.type) {
+      this.setState({ selectedQuestion }, this.dataChangeHandler);
+    }
   };
 
   render() {

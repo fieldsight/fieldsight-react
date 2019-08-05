@@ -10,6 +10,12 @@ import {
   SHOW_DOT_LOADER,
   SHOW_DASHBOARD_LOADERS,
   UPDATE_SITE_LOGO
+  // SITE_DASHBOARD_ERR,
+  // SITE_METAS_ERR,
+  // SITE_SUBMISSIONS_ERR,
+  // SITE_DOCUMENTS_ERR,
+  // SITE_PICTURES_ERR,
+  // SITE_LOGS_ERR
 } from "../actions/types";
 
 const initialState = {
@@ -19,6 +25,7 @@ const initialState = {
   location: {},
   logo: "",
   public_desc: "",
+  project_id: "",
   region: null,
   total_users: "",
   users: [],
@@ -39,6 +46,8 @@ const initialState = {
   siteForms: {},
   subSites: [],
   recentPictures: [],
+  breadcrumbs: {},
+  has_write_permission: false,
   siteDashboardLoader: true,
   siteMetasLoader: true,
   siteSubmissionsLoader: true,
@@ -46,6 +55,12 @@ const initialState = {
   siteLogsLoader: true,
   sitePicturesLoader: true,
   subSitesLoader: true
+  // siteDashboardErr: false,
+  // siteMetasErr: false,
+  // siteSubmissionsErr: false,
+  // siteDocumentsErr: false,
+  // siteLogsErr: false,
+  // sitePicturesErr: false
 };
 
 export default function(state = initialState, action) {
@@ -154,6 +169,42 @@ export default function(state = initialState, action) {
         ...state,
         logo: action.payload
       };
+
+    // case SITE_DASHBOARD_ERR:
+    //   return {
+    //     ...state,
+    //     siteDashboardErr: true
+    //   };
+
+    // case SITE_METAS_ERR:
+    //   return {
+    //     ...state,
+    //     siteMetasErr: true
+    //   };
+
+    // case SITE_SUBMISSIONS_ERR:
+    //   return {
+    //     ...state,
+    //     siteSubmissionsErr: true
+    //   };
+
+    // case SITE_LOGS_ERR:
+    //   return {
+    //     ...state,
+    //     siteLogsErr: true
+    //   };
+
+    // case SITE_PICTURES_ERR:
+    //   return {
+    //     ...state,
+    //     sitePicturesErr: true
+    //   };
+
+    // case SITE_DOCUMENTS_ERR:
+    //   return {
+    //     ...state,
+    //     siteDocumentsErr: true
+    //   };
 
     default:
       return state;

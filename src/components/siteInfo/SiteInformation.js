@@ -98,8 +98,14 @@ class SiteInformation extends Component {
           );
 
           this.setState({
-            projects: results[0].data,
-            forms: results[1].data,
+            projects: [
+              { id: 0, name: "--Select Project--", site_meta_attributes: [] },
+              ...results[0].data
+            ],
+            forms: [
+              { id: 0, name: "--Select Form--", json: { children: [] } },
+              ...results[1].data
+            ],
             siteBasicInfo: results[2].data.site_basic_info,
             jsonQuestions: modifiedJsonQuestions,
             siteFeaturedImages: results[2].data.site_featured_images,

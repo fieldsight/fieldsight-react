@@ -1074,6 +1074,7 @@ class Logs extends Component {
         <div className="card logs">
           <div className="card-header main-card-header sub-card-header">
             <h5>Logs</h5>
+
             {siteLogs.length > 0 ? (
               <a
                 href={`/events/site_logs/${siteId}/`}

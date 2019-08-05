@@ -2,49 +2,51 @@ import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
-import { DotLoader } from "../myForm/Loader";
-import { RegionContext } from "../../context";
-import isEmpty from "../../utils/isEmpty";
-
+import { TableContentLoader } from "../common/Loader";
 import withPagination from "../../hoc/WithPagination";
+import isEmpty from "../../utils/isEmpty";
 
 let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
 
-const project_id = window.project_id ? window.project_id : 137;
-
 class RegionalSiteTable extends Component {
-  static contextType = RegionContext;
-
   componentDidMount() {
     this.props.paginationHandler(1, null, {
-      type: "projectSiteList",
-      projectId: project_id
+      type: "regionSite",
+      projectId: this.props.regionId
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.regionId != this.props.regionId) {
+      this.props.paginationHandler(1, null, {
+        type: "regionSite",
+        projectId: this.props.regionId
+      });
+    }
   }
 
   onChangeHandler = e => {
     const searchValue = e.target.value;
     this.props.searchHandler(
       searchValue,
-      `/fv3/api/project-site-list/?page=1&project=${project_id}&q=${searchValue}`,
+      `fv3/api/regional-sites/?page=1&region=${
+        this.props.regionId
+      }&q=${searchValue}`,
       {
-        type: "projectSiteList",
-        projectId: project_id
+        type: "regionSite",
+        projectId: this.props.regionId
       }
     );
   };
 
   render() {
-    const {
-      context: { terms }
-    } = this;
+    
     return (
       <>
-        
         <div className="card-header main-card-header sub-card-header">
-          <h5>{!isEmpty(terms) ? `${terms.site}` : "Sites"}</h5>
+          <h5>Sites</h5>
           <div className="dash-btn">
             <form
               className="floating-form"
@@ -67,38 +69,15 @@ class RegionalSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/site/add/" + project_id + "/"
+                  "/fieldsight/site/add/" +
+                    this.props.projectId +
+                    "/" +
+                    this.props.regionId +
+                    "/"
                 )
               }
             >
               <i className="la la-plus" />
-            </button>
-            <a>
-              <button
-                className="fieldsight-btn"
-                onClick={e =>
-                  this.props.OpenTabHandler(
-                    e,
-                    base_url +
-                    "/fieldsight/application/?project=" +
-                    project_id +
-                    "#/project-settings/site-information"
-                  )
-                }
-              >
-                {!isEmpty(terms) ? `Export ${terms.site}s ` : "Export Sites"}
-              </button>
-            </a>
-            <button
-              className="fieldsight-btn"
-              onClick={e =>
-                this.props.OpenTabHandler(
-                  e,
-                  base_url + "/fieldsight/upload/" + project_id + "/"
-                )
-              }
-            >
-              Bulk upload/update
             </button>
           </div>
         </div>
@@ -112,11 +91,12 @@ class RegionalSiteTable extends Component {
                 <thead>
                   <tr>
                     <th>
-                      {!isEmpty(terms) ? `${terms.site} Name` : "Site Name"}
+                    {!isEmpty(this.props.terms) ? `${this.props.terms.site} name` : "Site name"}
+                     
                     </th>
-                    <th>ids</th>
+                    <th>identifier</th>
                     <th>Address</th>
-                    <th>Region</th>
+                    <th>type</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>
@@ -146,7 +126,7 @@ class RegionalSiteTable extends Component {
                         <td>{item.address}</td>
                         <td>
                           <a href="#" className="pending">
-                            {item.region}
+                            {item.type}
                           </a>
                         </td>
                         <td>
@@ -183,53 +163,61 @@ class RegionalSiteTable extends Component {
                     ))}
                 </tbody>
               </Table>
-              {this.props.dLoader && <DotLoader />}
+              {this.props.dLoader && <TableContentLoader column={7} row={20} />}
             </PerfectScrollbar>
           </div>
           <div className="table-footer">
             <div className="showing-rows">
               <p>
                 Showing <span>{this.props.fromData}</span> to{" "}
-                <span> {this.props.toData} </span> of{" "}
-                <span>{this.props.totalCount}</span> entries.
+                <span>
+                  {" "}
+                  {this.props.toData > this.props.totalCount
+                    ? this.props.totalCount
+                    : this.props.toData}{" "}
+                </span>{" "}
+                of <span>{this.props.totalCount}</span> entries.
               </p>
             </div>
-            <div className="table-pagination">
-              <ul>
-                <li className="page-item">
-                  <a
-                    onClick={e =>
-                      this.props.paginationHandler(
-                        this.props.pageNum - 1,
-                        null,
-                        project_id
-                      )
-                    }
-                  >
-                    <i className="la la-long-arrow-left" />
-                  </a>
-                </li>
 
-                {this.props.renderPageNumbers({
-                  type: "projectSiteList",
-                  projectId: project_id
-                })}
+            {this.props.toData < this.props.totalCount ? (
+              <div className="table-pagination">
+                <ul>
+                  <li className="page-item">
+                    <a
+                      onClick={e =>
+                        this.props.paginationHandler(
+                          this.props.pageNum - 1,
+                          null,
+                          this.props.regionId
+                        )
+                      }
+                    >
+                      <i className="la la-long-arrow-left" />
+                    </a>
+                  </li>
 
-                <li className="page-item ">
-                  <a
-                    onClick={e =>
-                      this.props.paginationHandler(
-                        this.props.pageNum + 1,
-                        null,
-                        project_id
-                      )
-                    }
-                  >
-                    <i className="la la-long-arrow-right" />
-                  </a>
-                </li>
-              </ul>
-            </div>
+                  {this.props.renderPageNumbers({
+                    type: "regionSite",
+                    projectId: this.props.regionId
+                  })}
+
+                  <li className="page-item ">
+                    <a
+                      onClick={e =>
+                        this.props.paginationHandler(
+                          this.props.pageNum + 1,
+                          null,
+                          this.props.regionId
+                        )
+                      }
+                    >
+                      <i className="la la-long-arrow-right" />
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            ) : null}
           </div>
         </div>
       </>

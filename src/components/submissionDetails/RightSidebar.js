@@ -18,6 +18,7 @@ class RightSidebar extends Component {
         fieldSightInstance,
         editUrl,
         downloadUrl,
+        hasReviewPermission,
         postSubmissionDetail,
         getSubmissionDetail
       },
@@ -47,7 +48,7 @@ class RightSidebar extends Component {
                 </li>
               </ul>
               <div className="head-icon">
-                {editUrl && (
+                {hasReviewPermission && editUrl && (
                   <a href={`${base_url}${editUrl}`} target="_blank">
                     <OverlayTrigger
                       placement="top"
@@ -77,6 +78,7 @@ class RightSidebar extends Component {
                   statusData={statusData}
                   fieldSightInstance={fieldSightInstance}
                   postSubmissionDetail={postSubmissionDetail}
+                  hasReviewPermission={hasReviewPermission}
                 />
               )}
               {!showStatus && (
