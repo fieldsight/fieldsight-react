@@ -98,6 +98,7 @@ class Submission extends Component {
                     src={submission.answer}
                     alt="image"
                     onClick={() => this.openModal(submission.answer)}
+                    style={{ cursor: "pointer" }}
                   />
                 )}
               </figure>
