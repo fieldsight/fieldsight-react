@@ -50,7 +50,12 @@
     -o-box-shadow: 0 0 16px 0 rgba(185, 185, 185, 0.4);
     box-shadow: 0 0 16px 0 rgba(185, 185, 185, 0.4);
 }
-
+@mixin box_shadow ($boxshadow){
+    -webkit-box-shadow: $boxshadow;
+    -ms-box-shadow: $boxshadow;
+    -o-box-shadow: $boxshadow;
+    box-shadow: $boxshadow;
+}
 
 @mixin translatey {
     position: absolute;
