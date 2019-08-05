@@ -20,7 +20,8 @@ const initialState = {
   edit_url: null,
   download_url: {},
   loading: false,
-  initialLoader: true
+  initialLoader: true,
+  has_review_permission: false
 };
 
 export default function(state = initialState, action) {
@@ -54,6 +55,7 @@ export default function(state = initialState, action) {
         fieldsight_instance: action.payload.fieldsight_instance,
         edit_url: action.payload.edit_url,
         download_url: action.payload.download_url,
+        has_review_permission: action.payload.has_review_permission,
         initialLoader: false
       };
     case POST_SUBMISSION_DETAIL:

@@ -376,7 +376,7 @@ class SiteDashboard extends Component {
                       <div className="card-body">
                         <div
                           className="thumb-list mr-0 "
-                          style={{ position: "relative", height: "312px" }}
+                          style={{ position: "relative", height: "327px" }}
                         >
                           <UsersList
                             users={users}
