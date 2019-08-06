@@ -313,6 +313,8 @@
         border: 1px solid $color-bg;
         padding: 0.25rem;
         margin: 0 auto;
+        background-size: cover;
+        background-position: center;
       }
 
       .content {
@@ -666,7 +668,7 @@
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        margin:0;
+        margin: 0;
       }
 
       h6 {
@@ -675,7 +677,7 @@
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        margin:0.25rem 0;
+        margin: 0.25rem 0;
       }
 
       p {
