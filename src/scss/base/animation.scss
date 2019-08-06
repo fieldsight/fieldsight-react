@@ -50,23 +50,35 @@
 }
 
 @-webkit-keyframes loading {
-  from {
-    left: 0;
+  0% {
+    left:0;
+    opacity: 0.5;
+    @include box_shadow(0 0 1px 16px rgba($color-bg, 0.2));
+    background: linear-gradient(to right, darken($color-bg, 1%) 60%, lighten($color-bg, 1%) 40%);
   }
 
-  to {
-    left: 100%;
+  40% {
+    left:40%;
+    opacity: 0.7;
+    @include box_shadow(0 0 1px 16px rgba($color-bg, 0.4));
+    background: linear-gradient(to right, darken($color-bg, 2%) 60%, lighten($color-bg, 2%) 40%);
+  }
+  70% {
+    left:70%;
+    opacity: 0.9;
+    @include box_shadow(0 0 1px 16px rgba($color-bg, 0.6));
+    background: linear-gradient(to right, darken($color-bg, 3%) 60%, lighten($color-bg, 3%) 40%);
+  }
+
+  100% {
+    left:100%;
+    opacity: 1;
+    @include box_shadow(0 0 1px 16px rgba($color-bg, 0.8));
+    background: linear-gradient(to right, darken($color-bg, 4%) 60%, lighten($color-bg, 4%) 40%);
   }
 }
 
 @keyframes loading {
-  // from {
-  //   left: 0;
-  // }
-
-  // to {
-  //   left: 100%;
-  // }
 
   0% {
     left:0;
@@ -111,7 +123,6 @@
       background: $color-bg;
       margin-right: 1rem;
       overflow: hidden;
-      // @extend .thumb-animated;
       position: relative;
 
       &::after {
@@ -146,7 +157,6 @@
 
     .text {
       width: calc(100% - 1rem);
-
       .loading-content {
         height: 10px;
         margin: 10px 0;
@@ -163,12 +173,9 @@
           bottom: 0;
           left: 0;
           background: linear-gradient(to right, darken($color-bg, 1%) 60%, lighten($color-bg, 2%) 40%);
-          
           animation-fill-mode: forwards;
           animation: loading 3s infinite linear;
         }
-
-        // @extend .animated-background;
       }
 
       &.circle {
@@ -191,7 +198,6 @@
           margin: 10px 0;
           background: $color-bg;
           position: relative;
-          // @extend .animated-background;
         }
       }
     }
