@@ -11,8 +11,6 @@ import MapPage from "./MapPage";
 import { successToast, errorToast } from "../../utils/toastHandler";
 import withPagination from "../../hoc/WithPagination";
 
-const url = "fv3/api/myroles/";
-
 class MyrolesMain extends Component {
   state = {
     invite: null,
@@ -21,7 +19,7 @@ class MyrolesMain extends Component {
     invitation: [],
     roles: [],
     teams: [],
-    team_project_id: null,
+    initialTeamId: null,
     site: [],
     submission: [],
     regions: [],
@@ -29,11 +27,15 @@ class MyrolesMain extends Component {
     dLoader: true,
     siteLoader: true,
     RegionLoader: true,
-
-    teamId: null
+    teamId: null,
+    siteId: null
   };
 
   componentDidMount() {
+    const { profileId } = this.props.match.params;
+    let url = profileId
+      ? `fv3/api/myroles/?profile=${profileId}`
+      : `fv3/api/myroles/`;
     this._isMounted = true;
     axios
       .get(`${url}`)
@@ -42,12 +44,14 @@ class MyrolesMain extends Component {
         if (this._isMounted) {
           if (res.status === 200) {
             const modifiedTeam = res.data.teams.map((team, i) => {
-              return i === 0 ? { ...team, accord: true } : { ...team, accord: false };
+              return i === 0
+                ? { ...team, accord: true }
+                : { ...team, accord: false };
             });
 
             if (res.data.teams.length > 0) {
               this.setState({
-                team_project_id: res.data.teams[0].projects[0].id
+                initialTeamId: res.data.teams[0].projects[0].id
               });
             }
 
@@ -136,7 +140,7 @@ class MyrolesMain extends Component {
           // const deletedForm = newInvitation.filter(user => user.id != id);
 
           this.setState({
-            invitation: null
+            invitation: []
           });
 
           successToast("All Invites", "Accepted");
@@ -168,7 +172,7 @@ class MyrolesMain extends Component {
     const site_url = "fv3/api/my-sites/?project=" + id;
     this.setState({
       siteLoader: true,
-      siteId:id
+      siteId: id
     });
     // axios
     //   .get(`${site_url}`)
@@ -182,17 +186,13 @@ class MyrolesMain extends Component {
     //   })
     //   .catch(err => {});
 
-      
-
-      this.props.paginationHandler(1, null, {
-        type:"mySiteList",
-        projectId:id
-      });
-      console.log("data",this.props.siteList.length)
+    this.props.paginationHandler(1, null, {
+      type: "mySiteList",
+      projectId: id
+    });
   };
 
   requestSubmission = id => {
-    //const id =309
     const submission_url = `fv3/api/submissions-map/?project=${id}&type=submissions`;
     this.setState({
       submissionLoader: true
@@ -226,16 +226,15 @@ class MyrolesMain extends Component {
       .catch(err => {});
   };
 
-  
-
   render() {
-   
+    const { profileId } = this.props.match.params;
     return (
-      <React.Fragment>
+      <>
         <div className="card mrb-30">
           <ProfileTab
             dLoader={this.state.dLoader}
             profile={this.state.profile}
+            profileId={profileId}
           />
         </div>
 
@@ -250,7 +249,6 @@ class MyrolesMain extends Component {
             requestMap={this.requestMap}
             regions={this.state.regions}
             addPermission={this.state.profile.can_create_team}
-            
           />
 
           <div className="col-xl-8 col-lg-7">
@@ -268,14 +266,12 @@ class MyrolesMain extends Component {
                               : "nav-link"
                           }
                           onClick={e => this.rightTabOpen(e, "region")}
-                          href={void 0}
                         >
                           Regions
                         </a>
                       </li>
                       <li className="nav-item">
                         <a
-                          href="javascript:void(0);"
                           className={
                             this.state.rightTab == "site"
                               ? "nav-link active"
@@ -288,7 +284,6 @@ class MyrolesMain extends Component {
                       </li>
                       <li className="nav-item">
                         <a
-                          href="javascript:void(0);"
                           className={
                             this.state.rightTab == "submission"
                               ? "nav-link active"
@@ -301,7 +296,6 @@ class MyrolesMain extends Component {
                       </li>
                       <li className="nav-item">
                         <a
-                          href="javascript:void(0);"
                           className={
                             this.state.rightTab == "map"
                               ? "nav-link active"
@@ -325,13 +319,14 @@ class MyrolesMain extends Component {
 
                     {this.state.rightTab == "region" && (
                       <RegionTable
-                        team_proj_id={this.state.team_project_id}
+                        initialTeamId={this.state.initialTeamId}
                         requestRegions={this.requestRegions}
                         requestSite={this.requestSite}
                         requestSubmission={this.requestSubmission}
                         requestMap={this.requestMap}
                         regions={this.state.regions}
                         RegionLoader={this.state.RegionLoader}
+                        profileId={profileId}
                       />
                     )}
 
@@ -346,6 +341,7 @@ class MyrolesMain extends Component {
                         fromData={this.props.fromData}
                         toData={this.props.toData}
                         totalCount={this.props.totalCount}
+                        profileId={profileId}
                       />
                     )}
 
@@ -360,7 +356,10 @@ class MyrolesMain extends Component {
         </div>
 
         {this.state.invitation.length != 0 && (
-          <div className={"invite-popup invite " + this.state.invite} style={{ zIndex:'1011' }}>
+          <div
+            className={"invite-popup invite " + this.state.invite}
+            style={{ zIndex: "1011" }}
+          >
             <InviteTab
               invitationOpen={this.invitationOpen}
               invitation={this.state.invitation}
@@ -370,9 +369,9 @@ class MyrolesMain extends Component {
             />
           </div>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
 
-export default withPagination(MyrolesMain); 
+export default withPagination(MyrolesMain);
