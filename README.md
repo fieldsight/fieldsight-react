@@ -4,11 +4,11 @@
 
 Clone the repository
 
-    git clone https://github.com/naxadeve/fieldSight-react.git
+    git clone https://github.com/naxadeve/fieldsight-react.git
 
 Switch to the repo folder
 
-    cd fieldSight-react
+    cd fieldsight-react
 
 Install the dependencies using npm
 
