@@ -104,7 +104,6 @@ class Submission extends Component {
                   />
                 )}
               </figure>
-              )}
             </li>
           </ul>
         </div>
@@ -115,6 +114,7 @@ class Submission extends Component {
       let longitude = "";
       let altitude = "";
       let accuracy = "";
+
       if (submission.answer) {
         splitedGeoLocation = submission.answer.split(" ");
         latitude = splitedGeoLocation[0];

@@ -89,8 +89,17 @@ class DashboardHeader extends Component {
             <AvatarContentLoader number={1} width="300px" size="80" />
           ) : (
             <div className="dash-pf">
-              <figure>
-                <img src={logo} alt={logo} />
+              <figure
+                style={{
+                  backgroundImage: `url(${logo})`,
+                  height: "80px",
+                  width: "80px",
+                  borderRadius: "100%",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover"
+                }}
+              >
+                {/* <img src={logo} alt={logo} /> */}
                 <span />
                 <figcaption>
                   <a
