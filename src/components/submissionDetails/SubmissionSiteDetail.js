@@ -11,7 +11,7 @@ const SubmissionSiteDetail = ({
           <h5>site details</h5>
         </div>
         <div className="card-body site-details">
-          <figure style={{ backgroundImage: `url(${logo})`, height: "175px" }}>
+          <figure style={{ backgroundImage: `url(${logo})` }}>
             {/* <img src={logo} alt="profile" /> */}
           </figure>
           <div className="content">

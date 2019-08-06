@@ -3,13 +3,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import format from "date-fns/format";
 import { withRouter } from "react-router-dom";
 import Td from "./TableData";
-// const Td = ({ children, to }) => {
-//   return (
-//     <td>
-//       <Link to={to}>{children}</Link>
-//     </td>
-//   );
-// };
+
 class TableRow extends Component {
   renderName = (dataType, id) => {
     const selectedData = this.props[dataType].find(dtype => dtype.id === +id);

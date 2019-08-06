@@ -92,11 +92,11 @@ class DashboardHeader extends Component {
               <figure
                 style={{
                   backgroundImage: `url(${logo})`,
-                  height: "80px",
-                  width: "80px",
-                  borderRadius: "100%",
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "cover"
+                  // height: "80px",
+                  width: "80px"
+                  // borderRadius: "100%",
+                  // backgroundRepeat: "no-repeat",
+                  // backgroundSize: "cover"
                 }}
               >
                 {/* <img src={logo} alt={logo} /> */}
@@ -108,12 +108,14 @@ class DashboardHeader extends Component {
                   >
                     <i className="la la-eye" />
                   </a>
-                  <a
-                    className="photo-edit"
-                    onClick={() => openModal("Cropper")}
-                  >
-                    <i className="la la-camera" />
-                  </a>
+                  {hasWritePermission && (
+                    <a
+                      className="photo-edit"
+                      onClick={() => openModal("Cropper")}
+                    >
+                      <i className="la la-camera" />
+                    </a>
+                  )}
                 </figcaption>
               </figure>
               <div className="dash-pf-content">

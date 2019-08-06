@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { TableContentLoader } from "../common/Loader";
 
 class RegionTable extends Component {
@@ -20,6 +21,7 @@ class RegionTable extends Component {
                   <th>name</th>
                   <th>total_sites</th>
                   <th>Role</th>
+                  {this.props.profileId && <th>Action</th>}
                 </tr>
               </thead>
 
@@ -40,6 +42,18 @@ class RegionTable extends Component {
                     </td>
                     <td>{region.total_sites}</td>
                     <td>{region.role}</td>
+                    {this.props.profileId && (
+                      <td>
+                        <a className="td-delete-btn td-btn">
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip>Delete</Tooltip>}
+                          >
+                            <i className="la la-trash-o" />
+                          </OverlayTrigger>
+                        </a>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

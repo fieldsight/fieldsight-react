@@ -11,8 +11,6 @@ import MapPage from "./MapPage";
 import { successToast, errorToast } from "../../utils/toastHandler";
 import withPagination from "../../hoc/WithPagination";
 
-const url = "fv3/api/myroles/";
-
 class MyrolesMain extends Component {
   state = {
     invite: null,
@@ -34,6 +32,10 @@ class MyrolesMain extends Component {
   };
 
   componentDidMount() {
+    const { profileId } = this.props.match.params;
+    let url = profileId
+      ? `fv3/api/myroles/?profile=${profileId}`
+      : `fv3/api/myroles/`;
     this._isMounted = true;
     axios
       .get(`${url}`)
@@ -225,12 +227,14 @@ class MyrolesMain extends Component {
   };
 
   render() {
+    const { profileId } = this.props.match.params;
     return (
       <>
         <div className="card mrb-30">
           <ProfileTab
             dLoader={this.state.dLoader}
             profile={this.state.profile}
+            profileId={profileId}
           />
         </div>
 
@@ -322,6 +326,7 @@ class MyrolesMain extends Component {
                         requestMap={this.requestMap}
                         regions={this.state.regions}
                         RegionLoader={this.state.RegionLoader}
+                        profileId={profileId}
                       />
                     )}
 
@@ -336,6 +341,7 @@ class MyrolesMain extends Component {
                         fromData={this.props.fromData}
                         toData={this.props.toData}
                         totalCount={this.props.totalCount}
+                        profileId={profileId}
                       />
                     )}
 
