@@ -161,7 +161,7 @@ class ProjectSiteTable extends Component {
                             className={
                               item.status != null
                                 ? item.status.toLowerCase()
-                                : null
+                                : ""
                             }
                           >
                             {item.status != null
