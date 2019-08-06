@@ -92,14 +92,18 @@ class Submission extends Component {
                     : submission.question}
                 </h6>
               </div>
-              {submission.answer && (
-                <figure
-                  style={{
-                    backgroundImage: `url(${submission.answer})`,
-                    cursor: "pointer"
-                  }}
-                  onClick={() => this.openModal(submission.answer)}
-                />
+              <figure>
+                {submission.answer && (
+                  <img
+                    src={submission.answer}
+                    style={{
+                      backgroundImage: `url(${submission.answer})`,
+                      cursor: "pointer"
+                    }}
+                    onClick={() => this.openModal(submission.answer)}
+                  />
+                )}
+              </figure>
               )}
             </li>
           </ul>
