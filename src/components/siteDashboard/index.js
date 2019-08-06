@@ -123,6 +123,7 @@ class SiteDashboard extends Component {
     const {
       props: {
         siteDashboard: {
+          identifier,
           name,
           address,
           enable_subsites,
@@ -206,6 +207,7 @@ class SiteDashboard extends Component {
           <div className="col-xl-12">
             <div className="right-content no-bg new-dashboard">
               <DashboardHeader
+                identifier={identifier}
                 name={name}
                 address={address}
                 logo={logo}
@@ -376,7 +378,7 @@ class SiteDashboard extends Component {
                       <div className="card-body">
                         <div
                           className="thumb-list mr-0 "
-                          style={{ position: "relative", height: "312px" }}
+                          style={{ position: "relative", height: "327px" }}
                         >
                           <UsersList
                             users={users}

@@ -22,6 +22,25 @@ function measure(lat1, lon1, lat2, lon2) {
   return (d * 1000).toFixed(2); // meters
 }
 class Submission extends Component {
+  state = {
+    showGallery: false,
+    selectedImg: ""
+  };
+
+  openModal = img => {
+    this.setState({
+      showGallery: true,
+      selectedImg: img
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      showGallery: false,
+      selectedImg: ""
+    });
+  };
+
   splitSubmissionQuestion = submissionObj => {
     const question = Object.values(submissionObj);
     return question.length > 0
@@ -75,7 +94,12 @@ class Submission extends Component {
               </div>
               <figure>
                 {submission.answer && (
-                  <img src={submission.answer} alt="image" />
+                  <img
+                    src={submission.answer}
+                    alt="image"
+                    onClick={() => this.openModal(submission.answer)}
+                    style={{ cursor: "pointer" }}
+                  />
                 )}
               </figure>
             </li>
@@ -211,37 +235,60 @@ class Submission extends Component {
   };
 
   render() {
-    const { dateCreated, submittedBy, submissionData, formName } = this.props;
+    const {
+      props: { dateCreated, submittedBy, submissionData, formName },
+      state: { showGallery, selectedImg }
+    } = this;
 
     return (
-      <div className="group-submission mrt-30">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="card">
-              <div className="card-header main-card-header sticky-top">
-                <div className="head-right">
-                  <h5>{formName}</h5>
+      <>
+        <div className="group-submission mrt-30">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="card">
+                <div className="card-header main-card-header sticky-top">
+                  <div className="head-right">
+                    <h5>{formName}</h5>
 
-                  {submittedBy && (
-                    <div className="submitted-header">
-                      <div className="submit-by">
-                        <label>by :</label> {submittedBy}
+                    {submittedBy && (
+                      <div className="submitted-header">
+                        <div className="submit-by">
+                          <label>by :</label> {submittedBy}
+                        </div>
+                        <time>
+                          <label>on:</label> {format(dateCreated, "MM-DD-YYYY")}
+                        </time>
                       </div>
-                      <time>
-                        <label>on:</label> {format(dateCreated, "MM-DD-YYYY")}
-                      </time>
+                    )}
+                  </div>
+                </div>
+
+                <div className="card-body submission-card">
+                  {submissionData && this.renderSubmission(submissionData)}
+                  {showGallery && (
+                    <div
+                      className="gallery-zoom fieldsight-popup open"
+                      style={{ zIndex: 99999 }}
+                      onClick={this.closeModal}
+                    >
+                      <div className="gallery-body">
+                        <img
+                          src={selectedImg}
+                          alt="logo"
+                          style={{ minHeight: "400px", maxHeight: "400px" }}
+                        />
+                      </div>
+                      <span className="popup-close" onClick={this.closeModal}>
+                        <i className="la la-close" />
+                      </span>
                     </div>
                   )}
                 </div>
               </div>
-
-              <div className="card-body submission-card">
-                {submissionData && this.renderSubmission(submissionData)}
-              </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

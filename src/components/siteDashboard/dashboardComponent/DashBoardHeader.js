@@ -35,6 +35,7 @@ class DashboardHeader extends Component {
       props: {
         name,
         address,
+        identifier,
         enableSubsites,
         logo,
         region,
@@ -107,9 +108,10 @@ class DashboardHeader extends Component {
                 </figcaption>
               </figure>
               <div className="dash-pf-content">
-                <h5>{name}</h5>
-                <span>{address}</span>
-                <span>{region} </span>
+                {name && <h5>{name}</h5>}
+                {identifier && <span>{identifier}</span>}
+                {address && <span>{address}</span>}
+                {region && <span>{region} </span>}
               </div>
             </div>
           )}

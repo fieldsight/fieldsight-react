@@ -1,7 +1,7 @@
 import React from "react";
-import { DotLoader } from "../common/Loader";
+import { Link } from 'react-router-dom'
 
-const SubmissionSiteDetail = ({ site: { name, region, identifier, logo } }) => {
+const SubmissionSiteDetail = ({ site: { id, name, region, identifier, logo } }) => {
   return (
     <div className="col-lg-6">
       <div className="card">
@@ -13,7 +13,7 @@ const SubmissionSiteDetail = ({ site: { name, region, identifier, logo } }) => {
             <img src={logo} alt="profile" />
           </figure>
           <div className="content">
-            <h4>{name}</h4>
+            <h4><Link to={`/site-dashboard/${id}`}>{name}</Link></h4>
             <p>{region}</p>
             <time>{identifier}</time>
           </div>

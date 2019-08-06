@@ -72,21 +72,12 @@ class ProjectSiteTable extends Component {
             >
               <i className="la la-plus" />
             </button>
-            <a>
-              <button
-                className="fieldsight-btn"
-                onClick={e =>
-                  this.props.OpenTabHandler(
-                    e,
-                    base_url +
-                      "/fieldsight/application/?project=" +
-                      project_id +
-                      "#/project-settings/site-information"
-                  )
-                }
-              >
-                {!isEmpty(terms) ? `Export ${terms.site}s ` : "Export Sites"}
-              </button>
+            <a
+              className="fieldsight-btn"
+              href={`/fieldsight/bulksitesample/${project_id}/1/`}
+              target="_blank"
+            >
+              {!isEmpty(terms) ? `Export ${terms.site} ` : "Export Sites"}
             </a>
             <button
               className="fieldsight-btn"
