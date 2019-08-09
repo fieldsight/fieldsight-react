@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { TableContentLoader } from "../common/Loader";
 
 let base_url = window.base_url
@@ -34,6 +35,7 @@ class SiteTable extends Component {
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>
+                    {this.props.profileId && <th>Action</th>}
                   </tr>
                 </thead>
 
@@ -97,6 +99,18 @@ class SiteTable extends Component {
                             : "No Submission Yet"}
                         </a>
                       </td>
+                      {this.props.profileId && (
+                        <td>
+                          <a className="td-delete-btn td-btn">
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip>Delete</Tooltip>}
+                            >
+                              <i className="la la-trash-o" />
+                            </OverlayTrigger>
+                          </a>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>

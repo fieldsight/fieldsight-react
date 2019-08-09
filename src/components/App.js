@@ -21,7 +21,6 @@ import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
 
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -66,6 +65,11 @@ class App extends Component {
 
                     <Route
                       path="/my-roles"
+                      render={props => <MyrolesMain {...props} />}
+                    />
+
+                    <Route
+                      path="/profile/:profileId"
                       render={props => <MyrolesMain {...props} />}
                     />
 

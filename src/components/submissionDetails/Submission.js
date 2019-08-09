@@ -96,9 +96,11 @@ class Submission extends Component {
                 {submission.answer && (
                   <img
                     src={submission.answer}
-                    alt="image"
+                    style={{
+                      backgroundImage: `url(${submission.answer})`,
+                      cursor: "pointer"
+                    }}
                     onClick={() => this.openModal(submission.answer)}
-                    style={{ cursor: "pointer" }}
                   />
                 )}
               </figure>
@@ -112,6 +114,7 @@ class Submission extends Component {
       let longitude = "";
       let altitude = "";
       let accuracy = "";
+
       if (submission.answer) {
         splitedGeoLocation = submission.answer.split(" ");
         latitude = splitedGeoLocation[0];
