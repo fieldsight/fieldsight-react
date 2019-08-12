@@ -25,7 +25,8 @@ import {
   putCropImage
 } from "../../actions/siteDashboardActions";
 
-// const siteId = window.site_id ? window.site_id : 81704;
+//const siteId = window.site_id ? window.site_id : 81704;
+//const siteId = window.site_id ? window.site_id : 81704;
 
 const INITIAL_STATE = {
   activeTab: "general",
