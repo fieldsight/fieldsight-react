@@ -1,37 +1,93 @@
 import React from "react";
+import Cropper from "react-cropper";
 
 import pf from "../../../static/images/pf.jpg";
 import { Button, Dropdown } from "react-bootstrap";
 import CountCard from "../../common/CountCard";
+import { AvatarContentLoader } from "../../common/Loader";
+import { DotLoader } from "../../common/Loader";
 
 class DashboardHeader extends React.Component {
+  saveImage = () => {
+    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+      return;
+    }
+    const croppedImage = this.cropper.getCroppedCanvas().toDataURL();
+    this.props.putCropImage(this.props.siteId, croppedImage);
+    this.props.closeModal("Cropper");
+  };
+  rotate = () => {
+    this.cropper.rotate(90);
+  };
+
+  rotateLeft = () => {
+    this.cropper.rotate(-90);
+  };
   render() {
-    const DataDropdown = [
-      { title: "User", link: `/#` },
-      { title: "Project", link: `/#` },
-      { title: "Setting", link: `/#` }
-    ];
+    const {
+      name,
+      address,
+      logo,
+      public_desc,
+      totalUsers,
+      totalSites,
+      id,
+      showContentLoader,
+      activeTab,
+      closeModal,
+      openModal,
+      showCropper,
+      termsAndLabels,
+      showGallery
+    } = this.props;
     const ManageDropdown = [
-      { title: "User", link: `/#` },
-      { title: "Project", link: `/#` },
-      { title: "Setting", link: `/#` }
+      {
+        title: `Edit ${termsAndLabels && termsAndLabels.site}`,
+        link: `/fieldsight/site/${id}/`
+      },
+      {
+        title: `${termsAndLabels && termsAndLabels.site} documents`,
+        link: `/fieldsight/site/blue-prints/${id}/`
+      },
+      { title: "users", link: `/fieldsight/manage/people/site/${id}/` },
+      { title: "forms", link: `/forms/setup-forms/0/${id}` }
+    ];
+    const DataDropdown = [
+      { title: "Generate Report", link: `/#` },
+      { title: "View Data", link: `/forms/responses/${id}/` }
     ];
 
     return (
       <div className="card mrb-30">
         <div className="card-header main-card-header dashboard-header">
-          <div className="dash-pf">
-            <figure>
-              <img src={pf} alt="pf" />
-            </figure>
-            <div className="dash-pf-content">
-              <h5>Rapid Market Assessment (Philippine Shelter Cluster)</h5>
-              <span>
-                Unit 304 SEDCCO 1 Building 120 Rada Street, Legaspi Village
-                Makati, NCR, 1229, Philippines
-              </span>
+          {showContentLoader ? (
+            <AvatarContentLoader number={1} width="300px" size="80" />
+          ) : (
+            <div className="dash-pf">
+              <figure
+                style={{
+                  backgroundImage: `url(${logo})`,
+                  width: "80px"
+                }}
+              >
+                <span />
+                <figcaption>
+                  <a
+                    className="photo-preview"
+                    onClick={() => openModal("Gallery")}
+                  >
+                    <i className="la la-eye" />
+                  </a>
+                </figcaption>
+              </figure>
+              <div className="dash-pf-content">
+                {name && <h5>{name}</h5>}
+                {/* {identifier && <span>{identifier}</span>} */}
+                {address && <span>{address}</span>}
+                {/* {region && <span>{region} </span>} */}
+              </div>
             </div>
-          </div>
+          )}
           <div className="dash-btn">
             <Dropdown>
               <Dropdown.Toggle
@@ -72,30 +128,51 @@ class DashboardHeader extends React.Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <a href={`/#`} target="_blank">
+            {/* <a href={`/#`} target="_blank">
               <CountCard
                 countName="Submissions"
                 countNumber={50}
                 icon="la-copy"
               />
-            </a>
-            <a href={`/#`}>
+            </a> */}
+            <a href={`/fieldsight/project-users/${id}/`} target="_blank">
               <CountCard
                 countName="Total Users"
-                countNumber={12}
+                countNumber={totalUsers}
                 icon="la-user"
                 noSubmissionText={true}
               />
             </a>
-            <a href={`/#`}>
+            <a href={`/fieldsight/project-sites/${id}/`} target="_blank">
               <CountCard
                 countName="Total sites"
-                countNumber={12}
+                countNumber={totalSites}
                 icon="la-map-marker"
                 noSubmissionText={true}
               />
             </a>
           </div>
+          {showGallery && (
+            <div
+              className="gallery-zoom fieldsight-popup open"
+              style={{ zIndex: 99999 }}
+              onClick={() => closeModal("Gallery")}
+            >
+              <div className="gallery-body">
+                <img
+                  src={logo}
+                  alt="logo"
+                  style={{ minHeight: "400px", maxHeight: "400px" }}
+                />
+              </div>
+              <span
+                className="popup-close"
+                onClick={() => closeModal("Gallery")}
+              >
+                <i className="la la-close" />
+              </span>
+            </div>
+          )}
         </div>
       </div>
     );

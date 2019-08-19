@@ -13,31 +13,160 @@ import About from "./dashboardComponent/About";
 import ProjectManager from "./dashboardComponent/ProjectManager";
 import Logs from "./dashboardComponent/Logs";
 
+import { getProjectDashboard } from "../../actions/projectDashboardActions";
+
+const INITIAL_STATE = {
+  activeTab: "general",
+  showHeaderModal: false,
+  showSubmissionModal: false,
+  showCropper: false,
+  showSubsites: false,
+  showGallery: false
+};
 class ProjectDashboard extends React.Component {
+  state = INITIAL_STATE;
+
+  closeModal = type => {
+    const { id: projectId } = this.props.match.params;
+
+    if (type === "Header" || type === "Submission") {
+      return this.setState(
+        {
+          [`show${type}Modal`]: false,
+          activeTab: "general"
+        }
+        // () => this.props.getSiteForms(siteId, "general")
+      );
+    }
+
+    this.setState({
+      [`show${type}`]: false
+    });
+  };
+
+  openModal = type => {
+    const { id: projectId } = this.props.match.params;
+
+    if (type) {
+      return this.setState({
+        [`show${type}`]: true
+      });
+    }
+  };
+
+  // toggleTab = formType => {
+  //   const { id: siteId } = this.props.match.params;
+  //   this.setState(
+  //     {
+  //       activeTab: formType
+  //     },
+  //     this.props.getSiteForms(siteId, formType)
+  //   );
+  // };
+  componentWillMount() {
+    const { id: projectId } = this.props.match.params;
+    this.props.getProjectDashboard(projectId);
+  }
   render() {
     console.log("props--", this.props);
+    const {
+      projectDashboard: {
+        id,
+        name,
+        address,
+        public_desc,
+        logo,
+        contacts,
+        project_activity,
+        total_sites,
+        total_users,
+        project_managers,
+        has_region,
+        logs,
+        form_submissions_chart_data,
+        site_progress_chart_data,
+        map,
+        terms_and_labels,
+        breadcrumbs,
+        projectDashboardLoader
+      },
+      match: {
+        params: { id: projectId }
+      }
+    } = this.props;
+    const {
+      showHeaderModal,
+      showSubmissionModal,
+      activeTab,
+      showCropper,
+      showGallery,
+      showSubsites
+    } = this.state;
     const location = { coordinates: ["123455", "434245"] };
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="/fieldsight/organization/">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="/fieldsight/organization-dashboard/13/">organization</a>
-            </li>
+          {Object.keys(breadcrumbs).length > 0 && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.organization_url}>
+                  {breadcrumbs.organization}
+                </a>
+              </li>
 
-            <li className="breadcrumb-item active" aria-current="page">
-              organization dashboard
+              {/* <li className="breadcrumb-item">
+            <a href={breadcrumbs.project_url}>{breadcrumbs.project}</a>
+          </li>
+          {breadcrumbs.root_site && (
+            <li className="breadcrumb-item">
+              <a href={breadcrumbs.root_site_url}>
+                {breadcrumbs.root_site}
+              </a>
             </li>
-          </ol>
+          )}
+
+          <li className="breadcrumb-item active" aria-current="page">
+            {breadcrumbs.site}
+          </li> */}
+            </ol>
+          )}
         </nav>
         {/* <main id="main-content"> */}
         <div className="row">
           <div className="col-xl-12" />
           <div className="right-content no-bg new-dashboard">
-            <DashboardHeader />
+            <DashboardHeader
+              name={name}
+              address={address}
+              logo={logo}
+              public_desc={public_desc}
+              totalUsers={total_users}
+              totalSites={total_sites}
+              id={id}
+              showContentLoader={projectDashboardLoader}
+              activeTab={activeTab}
+              closeModal={this.closeModal}
+              openModal={this.openModal}
+              showCropper={showCropper}
+              termsAndLabels={terms_and_labels}
+              showGallery={showGallery}
+            />
+            {/* siteForms={siteForms}
+            showModal={showHeaderModal}
+            activeTab={activeTab}
+            closeModal={closeModal}
+            openModal={openModal}
+            toggleTab={toggleTab}
+            showCropper={showCropper}
+            showSubsites={showSubsites}
+            subSites={subSites}
+            totalSubsites={total_subsites}
+            showContentLoader={siteDashboardLoader}
+            subSitesLoader={subSitesLoader}
+            putCropImage={putCropImage}
+            termsAndLabels={terms_and_labels}
+            showGallery={showGallery}
+            hasWritePermission={has_write_permission} */}
             <div className="row">
               <div className="col-lg-6">
                 <div className="card map">
@@ -137,5 +266,12 @@ class ProjectDashboard extends React.Component {
     );
   }
 }
-
-export default ProjectDashboard;
+const mapStateToProps = ({ projectDashboard }) => ({
+  projectDashboard
+});
+export default connect(
+  mapStateToProps,
+  {
+    getProjectDashboard
+  }
+)(ProjectDashboard);
