@@ -1,70 +1,54 @@
 import React from "react";
+import Table from "../../common/Table";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
+import { DotLoader } from "../../myForm/Loader";
+
+import withPagination from "../../../hoc/WithPagination";
 
 class RegionsTable extends React.Component {
+  state = {
+    project_id: JSON.parse(this.props.id)
+  };
+  componentDidMount() {
+    this.props.paginationHandler(1, null, {
+      type: "projectRegionList",
+      projectId: this.state.project_id
+    });
+  }
   render() {
+    const { data, loader } = this.props;
+
+    const tableHeader = {
+      projectRegions: [
+        "Region ID",
+        "Region Name",
+        "Created Date",
+        "Total Sites"
+      ]
+    };
     return (
-      <div className="card region-table">
+      // <div className="card region-table">
+      <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Regions</h5>
-          <div className="add-btn">
-            <a href="#" data-tab="scheduled-popup">
-              Add new{" "}
-              <span>
-                <i className="la la-plus" />
-              </span>
-            </a>
-          </div>
+          <h5>Lists</h5>
         </div>
         <div className="card-body">
-          <table id="paging7_table" className="table table-bordered paging7_table">
-              <thead>
-                  <tr>
-                      <th >S.N</th>
-                      <th >ID</th>
-                      <th >Region Name</th>
-                      <th >Number of sites</th>
-                      <th >Action</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td>1</td>
-                      <td>Bageswori</td>
-                      <td><a href="#" className="pending">Bageswori</a></td>
-                      <td>200</td>
-                      <td>
-                          <a href="#" className="td-view-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-eye"> </i> </a>
-                          <a href="#" className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="View"> <i className="la la-edit"> </i> </a>
-                          <a href="#" className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>2</td>
-                      <td>balkumari</td>
-                      <td><a href="#" className="pending">Balkumari</a></td>
-                      <td>200</td>
-                      <td>
-                          <a href="#" className="td-view-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-eye"> </i> </a>
-                          <a href="#" className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="View"> <i className="la la-edit"> </i> </a>
-                          <a href="#" className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>3</td>
-                      <td>barsunchet</td>
-                      <td><a href="#" className="pending">Barsunchet</a></td>
-                      <td>200</td>
-                      <td>
-                          <a href="#" className="td-view-btn" data-toggle="tooltip" data-placement="top" title="Edit"> <i className="la la-eye"> </i> </a>
-                          <a href="#" className="td-edit-btn" data-toggle="tooltip" data-placement="top" title="View"> <i className="la la-edit"> </i> </a>
-                          <a href="#" className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete"> <i className="la la-trash-o"> </i> </a>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
-      </div>
+          <div style={{ position: "relative", height: "360px" }}>
+            <PerfectScrollbar>
+              {loader && <DotLoader />}
+              {!loader && (
+                <Table
+                  page="projectManageRegion"
+                  tableHeader={tableHeader.projectRegions}
+                  tableRow={data}
+                />
+              )}
+            </PerfectScrollbar>
+          </div>
+        </div>
+      </>
     );
   }
 }
-export default RegionsTable;
+export default withPagination(RegionsTable);

@@ -7,21 +7,26 @@ import RegionsTable from "./dashboardComponent/RegionsTable";
 import DashboardCounter from "./dashboardComponent/DashboardCounter";
 import ProjectActivity from "./dashboardComponent/ProjectActivity";
 import ProgressTable from "./dashboardComponent/ProgressTable";
-import SubmissionChart from "./dashboardComponent/SubmissionChart";
+import SubmissionChart from "../siteDashboard/dashboardComponent/SubmissionChart";
 import ProgressChart from "./dashboardComponent/ProgressChart";
 import About from "./dashboardComponent/About";
 import ProjectManager from "./dashboardComponent/ProjectManager";
-import Logs from "./dashboardComponent/Logs";
-
-import { getProjectDashboard } from "../../actions/projectDashboardActions";
+import Logs from "../siteDashboard/dashboardComponent/Logs";
+import SiteListTable from "./dashboardComponent/SiteListTable";
+import {
+  getProjectDashboard,
+  getRegionData,
+  getSiteList
+} from "../../actions/projectDashboardActions";
 
 const INITIAL_STATE = {
-  activeTab: "general",
+  activeTab: "",
   showHeaderModal: false,
   showSubmissionModal: false,
   showCropper: false,
   showSubsites: false,
-  showGallery: false
+  showGallery: false,
+  projectId: ""
 };
 class ProjectDashboard extends React.Component {
   state = INITIAL_STATE;
@@ -29,19 +34,11 @@ class ProjectDashboard extends React.Component {
   closeModal = type => {
     const { id: projectId } = this.props.match.params;
 
-    if (type === "Header" || type === "Submission") {
-      return this.setState(
-        {
-          [`show${type}Modal`]: false,
-          activeTab: "general"
-        }
-        // () => this.props.getSiteForms(siteId, "general")
-      );
+    if (type) {
+      return this.setState({
+        [`show${type}`]: false
+      });
     }
-
-    this.setState({
-      [`show${type}`]: false
-    });
   };
 
   openModal = type => {
@@ -54,21 +51,50 @@ class ProjectDashboard extends React.Component {
     }
   };
 
-  // toggleTab = formType => {
-  //   const { id: siteId } = this.props.match.params;
-  //   this.setState(
-  //     {
-  //       activeTab: formType
-  //     },
-  //     this.props.getSiteForms(siteId, formType)
-  //   );
-  // };
+  toggleTab = formType => {
+    const { projectId } = this.state;
+    this.setState(
+      {
+        activeTab: formType
+      },
+      () => {
+        if (this.state.activeTab == "region") {
+          this.props.getRegionData(projectId);
+        } else if (this.state.activeTab == "site") {
+          this.props.getSiteList(projectId);
+        }
+      }
+    );
+  };
+
   componentWillMount() {
     const { id: projectId } = this.props.match.params;
     this.props.getProjectDashboard(projectId);
+    this.setState({ projectId: projectId });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.projectDashboard != this.props.projectDashboard) {
+      const { projectId, activeTab } = this.state;
+      if (!!nextProps.projectDashboard.has_region && activeTab === "") {
+        this.setState(
+          {
+            activeTab: "region"
+          },
+          this.props.getRegionData(projectId)
+        );
+      } else if (!nextProps.projectDashboard.has_region && activeTab === "") {
+        this.setState(
+          {
+            activeTab: "site"
+          },
+          this.props.getSiteList(projectId)
+        );
+      }
+    }
   }
   render() {
-    console.log("props--", this.props);
+    // console.log("props--", this.state.activeTab);
     const {
       projectDashboard: {
         id,
@@ -88,7 +114,11 @@ class ProjectDashboard extends React.Component {
         map,
         terms_and_labels,
         breadcrumbs,
-        projectDashboardLoader
+        projectDashboardLoader,
+        regionData,
+        siteList,
+        projectRegionDataLoader,
+        projectSiteListLoader
       },
       match: {
         params: { id: projectId }
@@ -102,32 +132,23 @@ class ProjectDashboard extends React.Component {
       showGallery,
       showSubsites
     } = this.state;
-    const location = { coordinates: ["123455", "434245"] };
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           {Object.keys(breadcrumbs).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
+                <a href={"#"}>{breadcrumbs.name}</a>
+              </li>
+              <li className="breadcrumb-item">
                 <a href={breadcrumbs.organization_url}>
                   {breadcrumbs.organization}
                 </a>
               </li>
 
-              {/* <li className="breadcrumb-item">
-            <a href={breadcrumbs.project_url}>{breadcrumbs.project}</a>
-          </li>
-          {breadcrumbs.root_site && (
-            <li className="breadcrumb-item">
-              <a href={breadcrumbs.root_site_url}>
-                {breadcrumbs.root_site}
-              </a>
-            </li>
-          )}
-
-          <li className="breadcrumb-item active" aria-current="page">
-            {breadcrumbs.site}
-          </li> */}
+              <li className="breadcrumb-item active" aria-current="page">
+                {breadcrumbs.site}
+              </li>
             </ol>
           )}
         </nav>
@@ -151,30 +172,14 @@ class ProjectDashboard extends React.Component {
               termsAndLabels={terms_and_labels}
               showGallery={showGallery}
             />
-            {/* siteForms={siteForms}
-            showModal={showHeaderModal}
-            activeTab={activeTab}
-            closeModal={closeModal}
-            openModal={openModal}
-            toggleTab={toggleTab}
-            showCropper={showCropper}
-            showSubsites={showSubsites}
-            subSites={subSites}
-            totalSubsites={total_subsites}
-            showContentLoader={siteDashboardLoader}
-            subSitesLoader={subSitesLoader}
-            putCropImage={putCropImage}
-            termsAndLabels={terms_and_labels}
-            showGallery={showGallery}
-            hasWritePermission={has_write_permission} */}
             <div className="row">
               <div className="col-lg-6">
                 <div className="card map">
                   <div className="card-header main-card-header sub-card-header">
-                    <h5>Project maps</h5>
+                    <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
                     <div className="dash-btn">
                       <a
-                        href={`/#`}
+                        href={`/fieldsight/site/response-coords/${id}/`}
                         className="fieldsight-btn left-icon"
                         target="_blank"
                       >
@@ -184,20 +189,63 @@ class ProjectDashboard extends React.Component {
                   </div>
                   <div className="card-body">
                     <SiteMap
-                      name={"name"}
-                      address={"address"}
-                      location={location}
-                      showContentLoader={false}
+                      map={map}
+                      showContentLoader={projectDashboardLoader}
                     />
                   </div>
                 </div>
               </div>
               <div className="col-lg-6">
-                <RegionsTable />
+                <div className="card region-table">
+                  <div className="form-group">
+                    <ul className="nav nav-tabs ">
+                      {!!has_region && (
+                        <li className="nav-item">
+                          <a
+                            className={
+                              activeTab === "region"
+                                ? "nav-link active"
+                                : "nav-link"
+                            }
+                            onClick={() => this.toggleTab("region")}
+                          >
+                            Region
+                          </a>
+                        </li>
+                      )}
+                      <li className="nav-item">
+                        <a
+                          className={
+                            activeTab === "site"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          onClick={() => this.toggleTab("site")}
+                        >
+                          Site
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  {activeTab === "region" && (
+                    <RegionsTable
+                      id={projectId}
+                      loader={projectRegionDataLoader}
+                      data={regionData}
+                    />
+                  )}
+                  {activeTab === "site" && (
+                    <SiteListTable
+                      id={projectId}
+                      data={siteList}
+                      loader={projectSiteListLoader}
+                    />
+                  )}
+                </div>
               </div>
             </div>
-            <ProjectActivity />
-            <DashboardCounter />
+            <ProjectActivity projectActivity={project_activity} />
+            <DashboardCounter projectActivity={project_activity} />
             <div className="progress-table mrb-30">
               <div className="card">
                 <div className="card-header main-card-header sub-card-header">
@@ -213,7 +261,11 @@ class ProjectDashboard extends React.Component {
                     <div className="card-header main-card-header sub-card-header">
                       <h5>Form submissions</h5>
                     </div>
-                    <div className="card-body">{/* <SubmissionChart /> */}</div>
+                    <div className="card-body">
+                      <SubmissionChart
+                        submissionData={form_submissions_chart_data}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -221,7 +273,9 @@ class ProjectDashboard extends React.Component {
                     <div className="card-header main-card-header sub-card-header">
                       <h5>Site progress</h5>
                     </div>
-                    <div className="card-body">{/* <ProgressChart /> */}</div>
+                    <div className="card-body">
+                      <ProgressChart progressData={site_progress_chart_data} />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -229,13 +283,13 @@ class ProjectDashboard extends React.Component {
             <div className="about-section ">
               <div className="row">
                 <div className="col-xl-4 col-md-6">
-                  <About />
+                  <About contacts={contacts} desc={public_desc} />
                 </div>
                 <div className="col-xl-4 col-md-6">
                   <div className="card mangager-list">
                     <div className="card-header main-card-header sub-card-header">
                       <h5>Project manager</h5>
-                      <div className="dash-btn">
+                      {/* <div className="dash-btn">
                         <form className="floating-form">
                           <div className="form-group mr-0">
                             <input
@@ -250,13 +304,26 @@ class ProjectDashboard extends React.Component {
                         <a href="#" className="fieldsight-btn">
                           <i className="la la-plus" />
                         </a>
+                      </div> */}
+                    </div>
+                    <div className="card-body">
+                      <div
+                        className="thumb-list mr-0 "
+                        style={{ position: "relative", height: "327px" }}
+                      >
+                        <ProjectManager
+                          projectManagers={project_managers}
+                          showContentLoader={projectDashboardLoader}
+                        />
                       </div>
                     </div>
-                    <div className="card-body">{/* <ProjectManager /> */}</div>
                   </div>
                 </div>
-
-                {/* <Logs /> */}
+                <Logs
+                  siteLogs={logs}
+                  showContentLoader={projectDashboardLoader}
+                  siteId={id}
+                />
               </div>
             </div>
           </div>
@@ -272,6 +339,8 @@ const mapStateToProps = ({ projectDashboard }) => ({
 export default connect(
   mapStateToProps,
   {
-    getProjectDashboard
+    getProjectDashboard,
+    getRegionData,
+    getSiteList
   }
 )(ProjectDashboard);

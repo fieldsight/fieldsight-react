@@ -1,23 +1,28 @@
 import React from "react";
 import CountCard from "../../common/CountCard";
-import uuid from "uuid/v4";
 
-const submissionData = [
-  { key: 1, text: "Submissions In Last 7 Days", value: "approved" },
-  { key: 2, text: "Active Supervisors In Last 7 Days", value: "flagged" },
-  { key: 3, text: "Site Visits In Last 7 Days", value: "marker" }
-];
+const getIcon = submission => {
+  if (submission === "approved") {
+    return "la-thumbs-up";
+  } else if (submission === "flagged") {
+    return "la-flag";
+  } else if (submission === "marker") {
+    return "la-map-marker";
+  }
+};
+const ShowAcitivity = props => (
+  <div className="col-xl-4 col-md-6">
+    <CountCard
+      countName={props.name}
+      icon={getIcon(props.name)}
+      className={props.name}
+      countNumber={props.value}
+    />
+  </div>
+);
 class ProjectActivity extends React.Component {
-  getIcon = submission => {
-    if (submission === "approved") {
-      return "la-thumbs-up";
-    } else if (submission === "flagged") {
-      return "la-flag";
-    } else if (submission === "marker") {
-      return "la-map-marker";
-    }
-  };
   render() {
+    const { projectActivity } = this.props;
     return (
       <div className="dashboard-counter mrt-30 bg-counter">
         <div className="card">
@@ -27,16 +32,18 @@ class ProjectActivity extends React.Component {
         </div>
         <div className="card-body">
           <div className="row">
-            {submissionData.map(submission => (
-              <div className="col-xl-4 col-md-6" key={uuid()}>
-                <CountCard
-                  countName={submission.text}
-                  icon={this.getIcon(submission.value)}
-                  className={submission.value}
-                  countNumber={12}
-                />
-              </div>
-            ))}
+            <ShowAcitivity
+              name="approved"
+              value={projectActivity.submissions_in_last_7_days}
+            />
+            <ShowAcitivity
+              name="flagged"
+              value={projectActivity.active_supervisors_in_last_7_days}
+            />
+            <ShowAcitivity
+              name="marker"
+              value={projectActivity.site_visits_in_last_7_days}
+            />
           </div>
         </div>
       </div>

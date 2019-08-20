@@ -1,31 +1,25 @@
-import React, { Component } from "react";
+import React from "react";
 import Table from "react-bootstrap/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
-import { DotLoader } from "../myForm/Loader";
-import { RegionContext } from "../../context";
-import isEmpty from "../../utils/isEmpty";
+import { DotLoader } from "../../myForm/Loader";
 
-import withPagination from "../../hoc/WithPagination";
+import withPagination from "../../../hoc/WithPagination";
 
-let base_url = window.base_url
-  ? window.base_url
-  : "https://fieldsight.naxa.com.np";
-
-const project_id = window.project_id ? window.project_id : 137;
-
-class ProjectSiteTable extends Component {
-  static contextType = RegionContext;
-
+class SiteListTable extends React.Component {
+  state = {
+    project_id: JSON.parse(this.props.id)
+  };
   componentDidMount() {
     this.props.paginationHandler(1, null, {
       type: "projectSiteList",
-      projectId: project_id
+      projectId: this.state.project_id
     });
   }
 
   onChangeHandler = e => {
     const searchValue = e.target.value;
+    const { project_id } = this.state;
     this.props.searchHandler(
       searchValue,
       `/fv3/api/project-site-list/?page=1&project=${project_id}&q=${searchValue}`,
@@ -35,15 +29,15 @@ class ProjectSiteTable extends Component {
       }
     );
   };
-
   render() {
-    const {
-      context: { terms }
-    } = this;
+    const { data, loader } = this.props;
+
+    const { project_id } = this.state;
     return (
+      // <div className="card region-table">
       <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>{!isEmpty(terms) ? `${terms.site}` : "Sites"}</h5>
+          <h5>Lists</h5>
           <div className="dash-btn">
             <form
               className="floating-form"
@@ -61,39 +55,10 @@ class ProjectSiteTable extends Component {
                 <i className="la la-search" />
               </div>
             </form>
-            <button
-              className="fieldsight-btn"
-              onClick={e =>
-                this.props.OpenTabHandler(
-                  e,
-                  base_url + "/fieldsight/site/add/" + project_id + "/"
-                )
-              }
-            >
-              <i className="la la-plus" />
-            </button>
-            <a
-              className="fieldsight-btn"
-              href={`/fieldsight/bulksitesample/${project_id}/1/`}
-              target="_blank"
-            >
-              {!isEmpty(terms) ? `Export ${terms.site} ` : "Export Sites"}
-            </a>
-            <button
-              className="fieldsight-btn"
-              onClick={e =>
-                this.props.OpenTabHandler(
-                  e,
-                  base_url + "/fieldsight/upload/" + project_id + "/"
-                )
-              }
-            >
-              Bulk upload/update
-            </button>
           </div>
         </div>
         <div className="card-body">
-          <div style={{ position: "relative", height: "800px" }}>
+          <div style={{ position: "relative", height: "360px" }}>
             <PerfectScrollbar>
               <Table
                 responsive="xl"
@@ -101,9 +66,7 @@ class ProjectSiteTable extends Component {
               >
                 <thead>
                   <tr>
-                    <th>
-                      {!isEmpty(terms) ? `${terms.site} Name` : "Site Name"}
-                    </th>
+                    <th>Site Name</th>
                     <th>id</th>
                     <th>Address</th>
                     <th>Region</th>
@@ -114,16 +77,15 @@ class ProjectSiteTable extends Component {
                 </thead>
 
                 <tbody>
-                  {!this.props.dLoader && this.props.siteList.length === 0 && (
+                  {!loader && data.length === 0 && (
                     <tr>
                       <td>
                         <p>No Form Data Available</p>
                       </td>
                     </tr>
                   )}
-
-                  {!this.props.dLoader &&
-                    this.props.siteList.map((item, i) => (
+                  {!loader &&
+                    data.map((item, i) => (
                       <tr key={i}>
                         <td>
                           <a
@@ -181,10 +143,10 @@ class ProjectSiteTable extends Component {
                     ))}
                 </tbody>
               </Table>
-              {this.props.dLoader && <DotLoader />}
+              {loader && <DotLoader />}
             </PerfectScrollbar>
           </div>
-          {this.props.siteList.length > 0 && (
+          {data.length > 0 && (
             <div className="table-footer">
               <div className="showing-rows">
                 <p>
@@ -239,8 +201,9 @@ class ProjectSiteTable extends Component {
             </div>
           )}
         </div>
+        {/* </div> */}
       </>
     );
   }
 }
-export default withPagination(ProjectSiteTable);
+export default withPagination(SiteListTable);

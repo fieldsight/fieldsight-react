@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 const options = {
   responsive: true,
   title: {
     display: false,
-    text: "Chart.js Line Chart"
+    text: "Chart.js Bar Chart"
   },
   legend: {
     display: false
@@ -22,8 +22,8 @@ const options = {
       {
         display: true,
         scaleLabel: {
-          display: true,
-          labelString: "Date"
+          display: true
+          // labelString: "Date"
         }
       }
     ],
@@ -32,7 +32,7 @@ const options = {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: "Site Progress"
+          labelString: "Progress"
         }
       }
     ]
@@ -42,17 +42,17 @@ const options = {
 class ProgressChart extends Component {
   render() {
     const { progressData } = this.props;
-    const chartData = {
+    const barData = {
       labels: [],
       datasets: []
     };
 
     if (progressData.hasOwnProperty("labels")) {
-      chartData.labels = progressData.labels;
+      barData.labels = progressData.labels;
     }
 
     if (progressData.hasOwnProperty("data")) {
-      chartData.datasets = [
+      barData.datasets = [
         {
           label: "Site Progress",
           data: progressData.data,
@@ -66,8 +66,8 @@ class ProgressChart extends Component {
       ];
     }
     return (
-      <Line
-        data={chartData}
+      <Bar
+        data={barData}
         width={100}
         height={400}
         options={{ ...options, maintainAspectRatio: false }}

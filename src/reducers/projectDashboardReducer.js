@@ -1,4 +1,8 @@
-import { GET_PROJECT_DASHBOARD } from "../actions/types";
+import {
+  GET_PROJECT_DASHBOARD,
+  GET_REGION_DATA,
+  GET_SITE_LIST
+} from "../actions/types";
 
 const initialState = {
   id: "",
@@ -18,7 +22,11 @@ const initialState = {
   map: "",
   terms_and_labels: "",
   breadcrumbs: "",
-  projectDashboardLoader: true
+  projectDashboardLoader: true,
+  regionData: [],
+  siteList: [],
+  projectRegionDataLoader: true,
+  projectSiteListLoader: true
 };
 
 export default function(state = initialState, action) {
@@ -28,6 +36,18 @@ export default function(state = initialState, action) {
         ...state,
         ...action.payload,
         projectDashboardLoader: false
+      };
+    case GET_REGION_DATA:
+      return {
+        ...state,
+        regionData: [...action.payload],
+        projectRegionDataLoader: false
+      };
+    case GET_SITE_LIST:
+      return {
+        ...state,
+        siteList: [...action.payload.results.data],
+        projectSiteListLoader: false
       };
     default:
       return state;

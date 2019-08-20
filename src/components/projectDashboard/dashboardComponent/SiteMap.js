@@ -14,23 +14,76 @@ import {
 import { BlockContentLoader } from "../../common/Loader";
 
 // const position = [27.7, 85.4];
+const MyMarkersList = data => {
+  const items = data.markers.map((props, key) => (
+    <MyPopupMarker key={key} {...props} />
+  ));
+  return <Fragment>{items}</Fragment>;
+};
+
+const MyPopupMarker = props => (
+  <Marker
+    position={[props.geometry.coordinates[1], props.geometry.coordinates[0]]}
+  >
+    <Popup>{props.properties.name}</Popup>
+  </Marker>
+);
 
 class SiteMap extends Component {
   render() {
-    const {
-      location: { coordinates },
-      name,
-      address,
-      showContentLoader
-    } = this.props;
+    const { map, showContentLoader } = this.props;
 
     return (
       <>
         {showContentLoader ? (
           <BlockContentLoader number={1} height="395px" />
+        ) : !!map.features && map.features.length > 0 ? (
+          <Map
+            center={[
+              map.features[0].geometry.coordinates[1],
+              map.features[0].geometry.coordinates[0]
+            ]}
+            zoom={13}
+            style={{ width: "100%", height: "396px" }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <LayersControl position="topright">
+              <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
+                <TileLayer
+                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                />
+              </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="OpenStreetMap.Mapnik">
+                <TileLayer
+                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+              </LayersControl.BaseLayer>
+            </LayersControl>
+            <MyMarkersList markers={map.features} />
+            {/* {map.features.map((each, idx) => {
+              const name = each.properties.name;
+              const location = each.geometry.coordinates;
+              const url = each.url;
+              return (
+                <Marker position={[location[1], location[0]]} key={`map${idx}`}>
+                  <Popup>
+                    <span>
+                      <a href={url}>Name: {name}</a>
+                    </span>
+                    <br />
+                  </Popup>
+                </Marker>
+              );
+            })} */}
+          </Map>
         ) : (
           <Map
-            center={[coordinates[1], coordinates[0]]}
+            // center={[coordinates[1], coordinates[0]]}
             zoom={13}
             style={{ width: "100%", height: "396px" }}
           >
@@ -65,13 +118,13 @@ class SiteMap extends Component {
               </LayersControl.Overlay> */}
             </LayersControl>
 
-            <Marker position={[coordinates[1], coordinates[0]]}>
+            {/* <Marker position={[coordinates[1], coordinates[0]]}>
               <Popup>
                 <span>Name: {name}</span>
                 <br />
                 {address && <span>Address: {address}</span>}
               </Popup>
-            </Marker>
+            </Marker> */}
           </Map>
         )}
       </>

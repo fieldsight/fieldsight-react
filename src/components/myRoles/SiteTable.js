@@ -118,58 +118,60 @@ class SiteTable extends Component {
             </PerfectScrollbar>
           )}
         </div>
-        <div className="table-footer">
-          <div className="showing-rows">
-            <p>
-              Showing <span>{this.props.fromData}</span> to{" "}
-              <span>
-                {" "}
-                {this.props.toData > this.props.totalCount
-                  ? this.props.totalCount
-                  : this.props.toData}{" "}
-              </span>{" "}
-              of <span>{this.props.totalCount}</span> entries.
-            </p>
-          </div>
-          {this.props.toData < this.props.totalCount ? (
-            <div className="table-pagination">
-              <ul>
-                <li className="page-item">
-                  <a
-                    onClick={e =>
-                      this.props.paginationHandler(
-                        this.props.pageNum - 1,
-                        null,
-                        this.props.siteId
-                      )
-                    }
-                  >
-                    <i className="la la-long-arrow-left" />
-                  </a>
-                </li>
-
-                {this.props.renderPageNumbers({
-                  type: "projectSiteList",
-                  projectId: this.props.siteId
-                })}
-
-                <li className="page-item ">
-                  <a
-                    onClick={e =>
-                      this.props.paginationHandler(
-                        this.props.pageNum + 1,
-                        null,
-                        this.props.siteId
-                      )
-                    }
-                  >
-                    <i className="la la-long-arrow-right" />
-                  </a>
-                </li>
-              </ul>
+        {this.props.site.length > 0 && (
+          <div className="table-footer">
+            <div className="showing-rows">
+              <p>
+                Showing <span>{this.props.fromData}</span> to{" "}
+                <span>
+                  {" "}
+                  {this.props.toData > this.props.totalCount
+                    ? this.props.totalCount
+                    : this.props.toData}{" "}
+                </span>{" "}
+                of <span>{this.props.totalCount}</span> entries.
+              </p>
             </div>
-          ) : null}
-        </div>
+            {this.props.toData < this.props.totalCount ? (
+              <div className="table-pagination">
+                <ul>
+                  <li className="page-item">
+                    <a
+                      onClick={e =>
+                        this.props.paginationHandler(
+                          this.props.pageNum - 1,
+                          null,
+                          this.props.siteId
+                        )
+                      }
+                    >
+                      <i className="la la-long-arrow-left" />
+                    </a>
+                  </li>
+
+                  {this.props.renderPageNumbers({
+                    type: "projectSiteList",
+                    projectId: this.props.siteId
+                  })}
+
+                  <li className="page-item ">
+                    <a
+                      onClick={e =>
+                        this.props.paginationHandler(
+                          this.props.pageNum + 1,
+                          null,
+                          this.props.siteId
+                        )
+                      }
+                    >
+                      <i className="la la-long-arrow-right" />
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            ) : null}
+          </div>
+        )}
       </Fragment>
     );
   }
