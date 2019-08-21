@@ -21,7 +21,7 @@ const INITIAL_STATE = {
   showDeleteConfirmation: false,
   projectId: window.project_id ? window.project_id : 310,
   // projectId: window.project_id,
-  organizationId: window.organization_id ? window.organization_id : 62
+  organizationId: window.organization_id ? window.organization_id : 13
   // organizationId: window.organization_id
 };
 

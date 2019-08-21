@@ -8,6 +8,7 @@ import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import CheckBox from "../common/CheckBox";
 import findQuestion from "../../utils/findQuestion";
+
 import isEmpty from "../../utils/isEmpty";
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -60,7 +61,6 @@ class SiteInformationTable extends Component {
   state = INITIAL_STATE;
 
   componentWillReceiveProps(nextProps) {
-    console.log("componentwillreceiveprops");
     if (nextProps.jsonQuestions) {
       this.setState({
         tableQuestions: [...nextProps.jsonQuestions]
@@ -238,30 +238,41 @@ class SiteInformationTable extends Component {
 
     const question = {
       ...(!editMode && { id: uuid() }),
+
       ...(editMode && { id: pattern.test(selectedId) ? selectedId : uuid() }),
-      question_name: label,
+
+      ...(type !== "Form" && { question_name: label.replace(/ /g, "_") }),
+
       question_text: label,
       question_type: type,
+
       ...(type === "MCQ" && { mcq_options: options }),
+
       ...(type === "MCQ" && { optInputField }),
+
       ...((type === "Form" ||
         type === "FormQuestionAnswerStatus" ||
         type === "FormSubStat" ||
         type === "FormSubCountQuestion") && { form_id: selectedForm }),
+
       ...((type === "Form" || type === "FormQuestionAnswerStatus") && {
         question: restQuestion
       }),
+
       ...(type === "Link" && {
         project_id: selectedProject
       }),
+
       ...(type === "Link" && {
         metas: filteredMetaAttributes.filter(
           attribute => attribute.checked === true
         )
       }),
+
       ...((type === "Text" || type === "Number" || type === "Date") && {
         question_placeholder: placeholder
       }),
+
       ...((type === "Text" ||
         type === "Number" ||
         type === "Date" ||
@@ -336,6 +347,7 @@ class SiteInformationTable extends Component {
 
     const question = {
       label: selectedTableQuestion.question_text,
+
       type: selectedTableQuestion.question_type,
       ...(selectedTableQuestion.question_type === "MCQ" && {
         options: selectedTableQuestion.mcq_options
