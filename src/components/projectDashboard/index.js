@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { DotLoader } from "../myForm/Loader";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
 import SiteMap from "./dashboardComponent/SiteMap";
@@ -16,7 +17,8 @@ import SiteListTable from "./dashboardComponent/SiteListTable";
 import {
   getProjectDashboard,
   getRegionData,
-  getSiteList
+  getSiteList,
+  getProgressTableData
 } from "../../actions/projectDashboardActions";
 
 const INITIAL_STATE = {
@@ -70,6 +72,7 @@ class ProjectDashboard extends React.Component {
   componentWillMount() {
     const { id: projectId } = this.props.match.params;
     this.props.getProjectDashboard(projectId);
+    this.props.getProgressTableData(projectId);
     this.setState({ projectId: projectId });
   }
 
@@ -94,7 +97,7 @@ class ProjectDashboard extends React.Component {
     }
   }
   render() {
-    // console.log("props--", this.state.activeTab);
+    // console.log("props--", this.props);
     const {
       projectDashboard: {
         id,
@@ -118,7 +121,9 @@ class ProjectDashboard extends React.Component {
         regionData,
         siteList,
         projectRegionDataLoader,
-        projectSiteListLoader
+        projectSiteListLoader,
+        progressTableData,
+        progressLoader
       },
       match: {
         params: { id: projectId }
@@ -152,144 +157,146 @@ class ProjectDashboard extends React.Component {
             </ol>
           )}
         </nav>
-        {/* <main id="main-content"> */}
-        <div className="row">
-          <div className="col-xl-12" />
-          <div className="right-content no-bg new-dashboard">
-            <DashboardHeader
-              name={name}
-              address={address}
-              logo={logo}
-              public_desc={public_desc}
-              totalUsers={total_users}
-              totalSites={total_sites}
-              id={id}
-              showContentLoader={projectDashboardLoader}
-              activeTab={activeTab}
-              closeModal={this.closeModal}
-              openModal={this.openModal}
-              showCropper={showCropper}
-              termsAndLabels={terms_and_labels}
-              showGallery={showGallery}
-            />
-            <div className="row">
-              <div className="col-lg-6">
-                <div className="card map">
-                  <div className="card-header main-card-header sub-card-header">
-                    <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
-                    <div className="dash-btn">
-                      <a
-                        href={`/fieldsight/site/response-coords/${id}/`}
-                        className="fieldsight-btn left-icon"
-                        target="_blank"
-                      >
-                        <i className="la la-map" /> full map
-                      </a>
-                    </div>
-                  </div>
-                  <div className="card-body">
-                    <SiteMap
-                      map={map}
-                      showContentLoader={projectDashboardLoader}
-                    />
+        <div className="right-content no-bg new-dashboard">
+          <DashboardHeader
+            name={name}
+            address={address}
+            logo={logo}
+            public_desc={public_desc}
+            totalUsers={total_users}
+            totalSites={total_sites}
+            id={id}
+            showContentLoader={projectDashboardLoader}
+            activeTab={activeTab}
+            closeModal={this.closeModal}
+            openModal={this.openModal}
+            showCropper={showCropper}
+            termsAndLabels={terms_and_labels}
+            showGallery={showGallery}
+          />
+          <div className="row">
+            <div className="col-lg-6">
+              <div className="card map">
+                <div className="card-header main-card-header sub-card-header">
+                  <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
+                  <div className="dash-btn">
+                    <a
+                      href={`/fieldsight/site/response-coords/${id}/`}
+                      className="fieldsight-btn left-icon"
+                      target="_blank"
+                    >
+                      <i className="la la-map" /> full map
+                    </a>
                   </div>
                 </div>
+                <div className="card-body">
+                  <SiteMap
+                    map={map}
+                    showContentLoader={projectDashboardLoader}
+                  />
+                </div>
               </div>
-              <div className="col-lg-6">
-                <div className="card region-table">
-                  <div className="form-group">
-                    <ul className="nav nav-tabs ">
-                      {!!has_region && (
-                        <li className="nav-item">
-                          <a
-                            className={
-                              activeTab === "region"
-                                ? "nav-link active"
-                                : "nav-link"
-                            }
-                            onClick={() => this.toggleTab("region")}
-                          >
-                            Region
-                          </a>
-                        </li>
-                      )}
+            </div>
+            <div className="col-lg-6">
+              <div className="card region-table">
+                <div className="card-header main-card-header sub-card-header">
+                  {/* <div className="form-group"> */}
+                  <ul className="nav nav-tabs ">
+                    {!!has_region && (
                       <li className="nav-item">
                         <a
                           className={
-                            activeTab === "site"
+                            activeTab === "region"
                               ? "nav-link active"
                               : "nav-link"
                           }
-                          onClick={() => this.toggleTab("site")}
+                          onClick={() => this.toggleTab("region")}
                         >
-                          Site
+                          Region
                         </a>
                       </li>
-                    </ul>
+                    )}
+                    <li className="nav-item">
+                      <a
+                        className={
+                          activeTab === "site" ? "nav-link active" : "nav-link"
+                        }
+                        onClick={() => this.toggleTab("site")}
+                      >
+                        Site
+                      </a>
+                    </li>
+                  </ul>
+                  {/* </div> */}
+                </div>
+                {activeTab === "region" && (
+                  <RegionsTable
+                    id={projectId}
+                    loader={projectRegionDataLoader}
+                    data={regionData}
+                  />
+                )}
+                {activeTab === "site" && (
+                  <SiteListTable
+                    id={projectId}
+                    data={siteList}
+                    loader={projectSiteListLoader}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+          <ProjectActivity projectActivity={project_activity} />
+          <DashboardCounter projectActivity={project_activity} />
+          <div className="progress-table mrb-30">
+            <div className="card">
+              <div className="card-header main-card-header sub-card-header">
+                <h5>Progress table</h5>
+              </div>
+              {!!progressLoader && <DotLoader />}
+              {!progressLoader && Object.keys(progressTableData).length > 0 && (
+                <div className="card-body">
+                  <ProgressTable data={progressTableData} />
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="chart mrb-30">
+            <div className="row">
+              <div className="col-md-6">
+                <div className="card">
+                  <div className="card-header main-card-header sub-card-header">
+                    <h5>Form submissions</h5>
                   </div>
-                  {activeTab === "region" && (
-                    <RegionsTable
-                      id={projectId}
-                      loader={projectRegionDataLoader}
-                      data={regionData}
+                  <div className="card-body">
+                    <SubmissionChart
+                      submissionData={form_submissions_chart_data}
                     />
-                  )}
-                  {activeTab === "site" && (
-                    <SiteListTable
-                      id={projectId}
-                      data={siteList}
-                      loader={projectSiteListLoader}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-            <ProjectActivity projectActivity={project_activity} />
-            <DashboardCounter projectActivity={project_activity} />
-            <div className="progress-table mrb-30">
-              <div className="card">
-                <div className="card-header main-card-header sub-card-header">
-                  <h5>Progress table</h5>
-                </div>
-                <div className="card-body">{/* <ProgressTable /> */}</div>
-              </div>
-            </div>
-            <div className="chart mrb-30">
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="card">
-                    <div className="card-header main-card-header sub-card-header">
-                      <h5>Form submissions</h5>
-                    </div>
-                    <div className="card-body">
-                      <SubmissionChart
-                        submissionData={form_submissions_chart_data}
-                      />
-                    </div>
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="card">
-                    <div className="card-header main-card-header sub-card-header">
-                      <h5>Site progress</h5>
-                    </div>
-                    <div className="card-body">
-                      <ProgressChart progressData={site_progress_chart_data} />
-                    </div>
+              </div>
+              <div className="col-md-6">
+                <div className="card">
+                  <div className="card-header main-card-header sub-card-header">
+                    <h5>Site progress</h5>
+                  </div>
+                  <div className="card-body">
+                    <ProgressChart progressData={site_progress_chart_data} />
                   </div>
                 </div>
               </div>
             </div>
-            <div className="about-section ">
-              <div className="row">
-                <div className="col-xl-4 col-md-6">
-                  <About contacts={contacts} desc={public_desc} />
-                </div>
-                <div className="col-xl-4 col-md-6">
-                  <div className="card mangager-list">
-                    <div className="card-header main-card-header sub-card-header">
-                      <h5>Project manager</h5>
-                      {/* <div className="dash-btn">
+          </div>
+          <div className="about-section ">
+            <div className="row">
+              <div className="col-xl-4 col-md-6">
+                <About contacts={contacts} desc={public_desc} />
+              </div>
+              <div className="col-xl-4 col-md-6">
+                <div className="card mangager-list">
+                  <div className="card-header main-card-header sub-card-header">
+                    <h5>Project manager</h5>
+                    {/* <div className="dash-btn">
                         <form className="floating-form">
                           <div className="form-group mr-0">
                             <input
@@ -305,30 +312,28 @@ class ProjectDashboard extends React.Component {
                           <i className="la la-plus" />
                         </a>
                       </div> */}
-                    </div>
-                    <div className="card-body">
-                      <div
-                        className="thumb-list mr-0 "
-                        style={{ position: "relative", height: "327px" }}
-                      >
-                        <ProjectManager
-                          projectManagers={project_managers}
-                          showContentLoader={projectDashboardLoader}
-                        />
-                      </div>
+                  </div>
+                  <div className="card-body">
+                    <div
+                      className="thumb-list mr-0 "
+                      style={{ position: "relative", height: "327px" }}
+                    >
+                      <ProjectManager
+                        projectManagers={project_managers}
+                        showContentLoader={projectDashboardLoader}
+                      />
                     </div>
                   </div>
                 </div>
-                <Logs
-                  siteLogs={logs}
-                  showContentLoader={projectDashboardLoader}
-                  siteId={id}
-                />
               </div>
+              <Logs
+                siteLogs={logs}
+                showContentLoader={projectDashboardLoader}
+                siteId={id}
+              />
             </div>
           </div>
         </div>
-        {/* </main> */}
       </>
     );
   }
@@ -341,6 +346,7 @@ export default connect(
   {
     getProjectDashboard,
     getRegionData,
-    getSiteList
+    getSiteList,
+    getProgressTableData
   }
 )(ProjectDashboard);

@@ -1,7 +1,8 @@
 import {
   GET_PROJECT_DASHBOARD,
   GET_REGION_DATA,
-  GET_SITE_LIST
+  GET_SITE_LIST,
+  GET_PROGRESS_TABLE_DATA
 } from "../actions/types";
 
 const initialState = {
@@ -26,7 +27,9 @@ const initialState = {
   regionData: [],
   siteList: [],
   projectRegionDataLoader: true,
-  projectSiteListLoader: true
+  projectSiteListLoader: true,
+  progressLoader: true,
+  progressTableData: {}
 };
 
 export default function(state = initialState, action) {
@@ -48,6 +51,12 @@ export default function(state = initialState, action) {
         ...state,
         siteList: [...action.payload.results.data],
         projectSiteListLoader: false
+      };
+    case GET_PROGRESS_TABLE_DATA:
+      return {
+        ...state,
+        progressTableData: action.payload,
+        progressLoader: false
       };
     default:
       return state;
