@@ -37,10 +37,13 @@ class SiteInformation extends Component {
 
   groupQuestion = formQuestionsChildren => {
     const groupQuestionName = question => {
-      if (question.type === "group") {
+      if (question.type === "group" || question.type === "repeat") {
         question.children = question.children.map(childQuestion => {
           childQuestion.name = `${question.name}/${childQuestion.name}`;
-          if (childQuestion.type === "group") {
+          if (
+            childQuestion.type === "group" ||
+            childQuestion.type === "repeat"
+          ) {
             groupQuestionName(childQuestion);
           }
           return childQuestion;
