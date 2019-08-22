@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { DotLoader } from "../myForm/Loader";
+import { BlockContentLoader } from "../myForm/Loader";
 import withPagination from "../../hoc/WithPagination";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
@@ -65,7 +65,11 @@ class ProjectDashboard extends React.Component {
         if (this.state.activeTab == "region") {
           this.props.getRegionData(projectId);
         } else if (this.state.activeTab == "site") {
-          this.props.getSiteList(projectId);
+          // this.props.getSiteList(projectId);
+          this.props.paginationHandler(1, null, {
+            type: "projectSiteList",
+            projectId: projectId
+          });
         }
       }
     );
@@ -75,6 +79,7 @@ class ProjectDashboard extends React.Component {
     const { id: projectId } = this.props.match.params;
     this.props.getProjectDashboard(projectId);
     this.props.getProgressTableData(projectId);
+
     this.setState({ projectId: projectId });
   }
 
@@ -93,7 +98,13 @@ class ProjectDashboard extends React.Component {
           {
             activeTab: "site"
           },
-          this.props.getSiteList(projectId)
+          () => {
+            this.props.paginationHandler(1, null, {
+              type: "projectSiteList",
+              projectId: projectId
+            });
+          }
+          // this.props.getSiteList(projectId)
         );
       }
     }
@@ -133,12 +144,14 @@ class ProjectDashboard extends React.Component {
         breadcrumbs,
         projectDashboardLoader,
         regionData,
-        siteList,
+        // siteList,
         projectRegionDataLoader,
         projectSiteListLoader,
         progressTableData,
         progressLoader
       },
+      siteList,
+      dLoader,
       match: {
         params: { id: projectId }
       }
@@ -272,12 +285,70 @@ class ProjectDashboard extends React.Component {
                   />
                 )}
                 {activeTab === "site" && (
-                  <SiteListTable
-                    id={projectId}
-                    data={siteList}
-                    loader={projectSiteListLoader}
-                    terms={terms_and_labels}
-                  />
+                  <>
+                    <SiteListTable
+                      id={projectId}
+                      data={siteList}
+                      loader={dLoader}
+                      terms={terms_and_labels}
+                    />
+                    {this.props.siteList.length > 0 && (
+                      <div className="card-body">
+                        <div className="table-footer">
+                          <div className="showing-rows">
+                            <p>
+                              Showing <span>{this.props.fromData}</span> to{" "}
+                              <span>
+                                {" "}
+                                {this.props.toData > this.props.totalCount
+                                  ? this.props.totalCount
+                                  : this.props.toData}{" "}
+                              </span>{" "}
+                              of <span>{this.props.totalCount}</span> entries.
+                            </p>
+                          </div>
+                          {this.props.toData < this.props.totalCount ? (
+                            <div className="table-pagination">
+                              <ul>
+                                <li className="page-item">
+                                  <a
+                                    onClick={e =>
+                                      this.props.paginationHandler(
+                                        this.props.pageNum - 1,
+                                        null,
+                                        project_id
+                                      )
+                                    }
+                                  >
+                                    <i className="la la-long-arrow-left" />
+                                  </a>
+                                </li>
+
+                                {this.props.renderPageNumbers({
+                                  type: "projectSiteList",
+                                  projectId: project_id
+                                })}
+
+                                <li className="page-item ">
+                                  <a
+                                    onClick={e =>
+                                      this.props.paginationHandler(
+                                        this.props.pageNum + 1,
+                                        null,
+                                        project_id
+                                      )
+                                    }
+                                  >
+                                    <i className="la la-long-arrow-right" />
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -289,12 +360,7 @@ class ProjectDashboard extends React.Component {
               <div className="card-header main-card-header sub-card-header">
                 <h5>Progress table</h5>
               </div>
-              {!!progressLoader && <DotLoader />}
-              {!progressLoader && Object.keys(progressTableData).length > 0 && (
-                <div className="card-body">
-                  <ProgressTable data={progressTableData} />
-                </div>
-              )}
+              <ProgressTable data={progressTableData} loader={progressLoader} />
             </div>
           </div>
           <div className="chart mrb-30">

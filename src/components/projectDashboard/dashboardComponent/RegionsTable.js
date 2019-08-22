@@ -38,7 +38,7 @@ class RegionsTable extends React.Component {
       // <div className="card region-table">
       <>
         {loader ? (
-          <BlockContentLoader number={16} height="15px" />
+          <BlockContentLoader number={10} height="15px" />
         ) : (
           <div className="card-body">
             <div style={{ position: "relative", height: "400px" }}>
