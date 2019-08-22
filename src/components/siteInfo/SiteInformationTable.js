@@ -241,7 +241,7 @@ class SiteInformationTable extends Component {
 
       ...(editMode && { id: pattern.test(selectedId) ? selectedId : uuid() }),
 
-      ...(type !== "Form" && { question_name: label.replace(/ /g, "_") }),
+      question_name: label.replace(/ /g, "_"),
 
       question_text: label,
       question_type: type,
