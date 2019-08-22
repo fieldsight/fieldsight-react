@@ -11,6 +11,7 @@ import SiteList from "./projectSiteList/SiteList";
 import SubmissionDetails from "./submissionDetails";
 import MyrolesMain from "./myRoles/MyrolesMain";
 import RegionSite from "./regionalSite/RegionSite";
+import SiteDocument from "./siteDocument/siteDocument"
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -76,6 +77,10 @@ class App extends Component {
                     <Route
                       path="/regional-site/:id"
                       render={props => <RegionSite {...props} />}
+                    />
+                     <Route
+                      path="/site-documents/:id"
+                      render={props => <SiteDocument {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
