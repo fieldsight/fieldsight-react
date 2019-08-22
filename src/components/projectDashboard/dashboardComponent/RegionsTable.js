@@ -33,8 +33,11 @@ class RegionsTable extends React.Component {
         {/* <div className="card-header main-card-header sub-card-header">
           <h5>Lists</h5>
         </div> */}
+        <div className="sub-card-header">
+          <h5>Lists</h5>
+        </div>
         <div className="card-body">
-          <div style={{ position: "relative", height: "400px" }}>
+          <div style={{ position: "relative", height: "360px" }}>
             <PerfectScrollbar>
               {loader && <DotLoader />}
               {!loader && (

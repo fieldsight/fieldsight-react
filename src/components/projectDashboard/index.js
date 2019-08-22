@@ -199,7 +199,7 @@ class ProjectDashboard extends React.Component {
             </div>
             <div className="col-lg-6">
               <div className="card region-table">
-                <div className="card-header main-card-header sub-card-header">
+                <div className="card-header main-card-header">
                   {/* <div className="form-group"> */}
                   <ul className="nav nav-tabs ">
                     {!!has_region && (
@@ -330,6 +330,7 @@ class ProjectDashboard extends React.Component {
                 siteLogs={logs}
                 showContentLoader={projectDashboardLoader}
                 siteId={id}
+                type="project"
               />
             </div>
           </div>

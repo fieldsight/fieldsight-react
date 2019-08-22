@@ -41,20 +41,23 @@ class DashboardHeader extends React.Component {
       showGallery
     } = this.props;
     const ManageDropdown = [
+      { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
+      { title: "forms", link: `/forms/setup-forms/1/${id}` },
       {
-        title: `Edit ${termsAndLabels && termsAndLabels.site}`,
-        link: `/fieldsight/site/${id}/`
+        title: `settings`,
+        link: `/fieldsight/application/?project=${id}#/project-settings`
       },
       {
-        title: `${termsAndLabels && termsAndLabels.site} documents`,
-        link: `/fieldsight/site/blue-prints/${id}/`
-      },
-      { title: "users", link: `/fieldsight/manage/people/site/${id}/` },
-      { title: "forms", link: `/forms/setup-forms/0/${id}` }
+        title: `import sites`,
+        link: `/fieldsight/application/?project=${id}#/project-sitelist`
+      }
     ];
     const DataDropdown = [
-      { title: "Generate Report", link: `/#` },
-      { title: "View Data", link: `/forms/responses/${id}/` }
+      {
+        title: "Generate Report",
+        link: `/fieldsight/project-dashboard/${id}/`
+      },
+      { title: "View Data", link: `/forms/project-responses/${id}/` }
     ];
 
     return (
@@ -135,7 +138,7 @@ class DashboardHeader extends React.Component {
                 icon="la-copy"
               />
             </a> */}
-            <a href={`/fieldsight/project-users/${id}/`} target="_blank">
+            <a href={`/fieldsight/proj-users/${id}/`} target="_blank">
               <CountCard
                 countName="Total Users"
                 countNumber={totalUsers}
@@ -143,7 +146,10 @@ class DashboardHeader extends React.Component {
                 noSubmissionText={true}
               />
             </a>
-            <a href={`/fieldsight/project-sites/${id}/`} target="_blank">
+            <a
+              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+              target="_blank"
+            >
               <CountCard
                 countName="Total sites"
                 countNumber={totalSites}

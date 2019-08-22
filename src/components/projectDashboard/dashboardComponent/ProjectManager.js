@@ -9,7 +9,11 @@ const ManagersListItem = ({ manager }) => {
         <img src={manager.profile_picture} alt="user avatar" />
       </figure>
       <div className="content">
-        <h6>{manager.full_name}</h6>
+        <h6>
+          <a href={`/users/profile/${manager.id}/`} target=" _blank">
+            {manager.full_name}
+          </a>
+        </h6>
         <span>{manager.email}</span>
       </div>
     </li>

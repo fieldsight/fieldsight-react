@@ -36,27 +36,27 @@ class SiteListTable extends React.Component {
     return (
       // <div className="card region-table">
       <>
-        {/* <div className="card-header main-card-header sub-card-header">
-          <h5>Lists</h5> */}
-        <div className="dash-btn">
-          <form
-            className="floating-form"
-            onSubmit={e => {
-              e.preventDefault();
-            }}
-          >
-            <div className="form-group mr-0">
-              <input
-                type="search"
-                className="form-control"
-                onChange={this.onChangeHandler}
-              />
-              <label htmlFor="input">Search</label>
-              <i className="la la-search" />
-            </div>
-          </form>
+        <div className="sub-card-header">
+          <h5>Lists</h5>
+          <div className="dash-btn">
+            <form
+              className="floating-form"
+              onSubmit={e => {
+                e.preventDefault();
+              }}
+            >
+              <div className="form-group mr-0">
+                <input
+                  type="search"
+                  className="form-control"
+                  onChange={this.onChangeHandler}
+                />
+                <label htmlFor="input">Search</label>
+                <i className="la la-search" />
+              </div>
+            </form>
+          </div>
         </div>
-        {/* </div> */}
         <div className="card-body">
           <div style={{ position: "relative", height: "360px" }}>
             <PerfectScrollbar>
