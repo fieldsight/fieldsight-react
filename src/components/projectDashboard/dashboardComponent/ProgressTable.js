@@ -104,7 +104,7 @@ const ShowChild = ({
   rejected
 }) => {
   return (
-    <tr className="sub-row" key={`${name}_${id}`}>
+    <tr className="sub-row" key={`${sn}_${id + 1}`}>
       <td>
         {sn}.{id + 1}
       </td>

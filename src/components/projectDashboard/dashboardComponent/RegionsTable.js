@@ -1,11 +1,14 @@
 import React from "react";
-import Table from "../../common/Table";
+import Table from "react-bootstrap/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../../myForm/Loader";
 import isEmpty from "../../../utils/isEmpty";
 
 import withPagination from "../../../hoc/WithPagination";
+import { BlockContentLoader } from "../../common/Loader";
+import TableHeader from "../../common/TableHeader";
+import TableRow from "../../common/TableRow";
 
 class RegionsTable extends React.Component {
   state = {
@@ -34,26 +37,26 @@ class RegionsTable extends React.Component {
     return (
       // <div className="card region-table">
       <>
-        {/* <div className="card-header main-card-header sub-card-header">
-          <h5>Lists</h5>
-        </div> */}
-        <div className="sub-card-header">
-          <h5>Lists</h5>
-        </div>
-        <div className="card-body">
-          <div style={{ position: "relative", height: "360px" }}>
-            <PerfectScrollbar>
-              {loader && <DotLoader />}
-              {!loader && (
-                <Table
-                  page="projectManageRegion"
-                  tableHeader={tableHeader.projectRegions}
-                  tableRow={data}
-                />
-              )}
-            </PerfectScrollbar>
+        {loader ? (
+          <BlockContentLoader number={16} height="15px" />
+        ) : (
+          <div className="card-body">
+            <div style={{ position: "relative", height: "400px" }}>
+              <PerfectScrollbar>
+                {loader && <DotLoader />}
+                {!loader && (
+                  <Table
+                    responsive="xl"
+                    className="table  table-bordered  dataTable "
+                  >
+                    <TableHeader tableHeader={tableHeader.projectRegions} />
+                    <TableRow tableRow={data} page="projectManageRegion" />
+                  </Table>
+                )}
+              </PerfectScrollbar>
+            </div>
           </div>
-        </div>
+        )}
       </>
     );
   }

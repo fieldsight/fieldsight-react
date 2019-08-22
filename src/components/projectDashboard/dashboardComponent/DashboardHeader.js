@@ -44,12 +44,12 @@ class DashboardHeader extends React.Component {
       { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
       { title: "forms", link: `/forms/setup-forms/1/${id}` },
       {
-        title: `settings`,
-        link: `/fieldsight/application/?project=${id}#/project-settings`
+        title: `Import ${termsAndLabels && termsAndLabels.site}`,
+        link: `/fieldsight/application/?project=${id}#/project-sitelist`
       },
       {
-        title: `${termsAndLabels && termsAndLabels.site}`,
-        link: `/fieldsight/application/?project=${id}#/project-sitelist`
+        title: `settings`,
+        link: `/fieldsight/application/?project=${id}#/project-settings`
       }
     ];
     const DataDropdown = [

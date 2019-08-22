@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import { DotLoader } from "../myForm/Loader";
+import withPagination from "../../hoc/WithPagination";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
 import SiteMap from "./dashboardComponent/SiteMap";
@@ -96,6 +98,18 @@ class ProjectDashboard extends React.Component {
       }
     }
   }
+  onChangeHandler = e => {
+    const searchValue = e.target.value;
+    const { projectId } = this.state;
+    this.props.searchHandler(
+      searchValue,
+      `/fv3/api/project-site-list/?page=1&project=${projectId}&q=${searchValue}`,
+      {
+        type: "projectSiteList",
+        projectId
+      }
+    );
+  };
   render() {
     // console.log("props--", this.props);
     const {
@@ -199,7 +213,7 @@ class ProjectDashboard extends React.Component {
             </div>
             <div className="col-lg-6">
               <div className="card region-table">
-                <div className="card-header main-card-header">
+                <div className="card-header main-card-header sub-card-header">
                   {/* <div className="form-group"> */}
                   <ul className="nav nav-tabs ">
                     {!!has_region && (
@@ -228,6 +242,26 @@ class ProjectDashboard extends React.Component {
                     </li>
                   </ul>
                   {/* </div> */}
+                  {activeTab === "site" && (
+                    <div className="dash-btn">
+                      <form
+                        className="floating-form"
+                        onSubmit={e => {
+                          e.preventDefault();
+                        }}
+                      >
+                        <div className="form-group mr-0">
+                          <input
+                            type="search"
+                            className="form-control"
+                            onChange={this.onChangeHandler}
+                          />
+                          {/* <label htmlFor="input">Search</label> */}
+                          <i className="la la-search" />
+                        </div>
+                      </form>
+                    </div>
+                  )}
                 </div>
                 {activeTab === "region" && (
                   <RegionsTable
@@ -344,12 +378,15 @@ class ProjectDashboard extends React.Component {
 const mapStateToProps = ({ projectDashboard }) => ({
   projectDashboard
 });
-export default connect(
-  mapStateToProps,
-  {
-    getProjectDashboard,
-    getRegionData,
-    getSiteList,
-    getProgressTableData
-  }
+export default compose(
+  connect(
+    mapStateToProps,
+    {
+      getProjectDashboard,
+      getRegionData,
+      getSiteList,
+      getProgressTableData
+    }
+  ),
+  withPagination
 )(ProjectDashboard);
