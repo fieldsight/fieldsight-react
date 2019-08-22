@@ -10,8 +10,8 @@ export default class  SiteDocumentTable extends Component{
                              <tr>
                                 <th >Name</th>
                                 <th >Type</th>
-                                 <th >Added Date</th>
-                                 <th >Action</th>
+                                <th >Added Date</th>
+                                <th >Action</th>
                             </tr>
                         </thead>
                         <tbody >
