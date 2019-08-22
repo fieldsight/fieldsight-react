@@ -5,7 +5,7 @@ export default class  SiteDocumentTable extends Component{
     render(){
         const {site_document} = this.props;
         return(
-            <table id="no_paging_table" className="table  dataTable table-bordered  no_paging_table">
+            <table id="no_paging_table" className="table  dataTable table-bordered  no_paging_table"  responsive="xl">
                      <thead>
                              <tr>
                                 <th >Name</th>
@@ -21,10 +21,13 @@ export default class  SiteDocumentTable extends Component{
                                     <tr key={key}>
                                         <td>
                                         <a href={site_file.file}>
-                                                 <span className="td-doc-icon google">
-                                                    <i className="la la-file-pdf-o"></i>
-                                                                    </span>
-                                                                    {site_file.file}
+                                                    <figure>
+                                                        <img
+                                                            src={`/static/images/${site_file.type}.png`}
+                                                            alt=""
+                                                        />
+                                                        </figure>
+                                                                    {site_file.name}
                                                                 </a>
                                         </td>
                                                 <td>{site_file.doc_type}</td>

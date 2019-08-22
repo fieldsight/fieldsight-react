@@ -28,7 +28,7 @@ export default class SiteDocument extends Component{
         axios
             .get(`fv3/api/site/documents/?site_id=${id}`)
             .then(res => {
-                console.log(res.data.breadcrumbs,"res")
+                console.log(res,"res")
                 
             this.setState({
                 site_document:res.data.documents,
@@ -84,7 +84,7 @@ export default class SiteDocument extends Component{
             }
             
         }
-         handleSubmit=()=>{
+     handleSubmit=()=>{
         event.preventDefault();
         let form_data= new FormData();
         const data= this.state.files;
@@ -137,8 +137,7 @@ export default class SiteDocument extends Component{
             await this.setState({
                 [e.target.name]:e.target.value
             })
-            console.log(this.state)
-        }
+           }
     
 render(){  
         const {showConfirmation,breadcrumb} =this.state;
@@ -196,7 +195,7 @@ render(){
                                                                             <option  value="Drawing">Drawing</option>
                                                                             <option  value="Permit">Permit</option>
                                                                             <option  value="Registration"> Registration</option>
-                                                                            I<option value="dentification">dentification</option>
+                                                                            I<option value="Identification">Identification</option>
                                                                             <option  value="Contract"> Contract</option>
                                                                             <option  value="Variation"> Variation</option>
                                                                             <option  value="Manual or Instruction">Manual or Instruction</option>
