@@ -5,6 +5,7 @@ import {
   START_SUBMISSION_LOADER,
   UPDATE_SUBMISSION_DETAIL,
   STOP_SUBMISSION_LOADER,
+  TOGGLE_NULL_SUBMISSIONS_ANSWER,
   SHOW_DOT_LOADER
 } from "./types";
 import { successToast, errorToast } from "../utils/toastHandler";
@@ -74,3 +75,7 @@ export const postSubmissionDetail = data => dispatch => {
       errorToast();
     });
 };
+
+export const toggleSubmission = () => ({
+  type: TOGGLE_NULL_SUBMISSIONS_ANSWER
+});

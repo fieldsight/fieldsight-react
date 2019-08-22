@@ -4,10 +4,13 @@ import {
   START_SUBMISSION_LOADER,
   POST_SUBMISSION_DETAIL,
   SHOW_DOT_LOADER,
-  UPDATE_SUBMISSION_DETAIL
+  UPDATE_SUBMISSION_DETAIL,
+  TOGGLE_NULL_SUBMISSIONS_ANSWER
 } from "../actions/types";
 
 const initialState = {
+  master_submission_data: [],
+  toggle_submission: false,
   submission_data: [],
   date_created: "",
   submitted_by: "",
@@ -22,6 +25,28 @@ const initialState = {
   loading: false,
   initialLoader: true,
   has_review_permission: false
+};
+
+const toggleSubmission = submissions => {
+  if (submissions.length === 0) return;
+
+  const filterNullAnswer = submission => {
+    return submission.filter(sub => {
+      if (sub.type === "group" || sub.type === "repeat") {
+        const groupSubmission = {
+          ...sub,
+          elements: sub.elements.map(el => ({ ...el }))
+        };
+        groupSubmission.elements = filterNullAnswer(groupSubmission.elements);
+
+        return groupSubmission;
+      }
+
+      return sub.answer;
+    });
+  };
+
+  return filterNullAnswer(submissions);
 };
 
 export default function(state = initialState, action) {
@@ -45,6 +70,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         submission_data: [...action.payload.submission_data],
+        master_submission_data: [...action.payload.submission_data],
         date_created: action.payload.date_created,
         submitted_by: action.payload.submitted_by,
         site: { ...action.payload.site },
@@ -66,6 +92,22 @@ export default function(state = initialState, action) {
           ...state.status_data,
           status_display: action.payload.get_new_status_display
         }
+      };
+
+    case TOGGLE_NULL_SUBMISSIONS_ANSWER:
+      if (state.toggle_submission) {
+        return {
+          ...state,
+          submission_data: state.master_submission_data,
+          toggle_submission: false
+        };
+      }
+      const newSubmission = toggleSubmission(state.submission_data);
+
+      return {
+        ...state,
+        submission_data: newSubmission,
+        toggle_submission: true
       };
 
     case UPDATE_SUBMISSION_DETAIL: {
