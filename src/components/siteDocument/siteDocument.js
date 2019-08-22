@@ -18,12 +18,14 @@ export default class SiteDocument extends Component{
                 showConfirmation : true
             })
         }
-      cancelHandler = () => {
+      
+        cancelHandler = () => {
             this.setState({
             showConfirmation: false
             });
         };
-       componentDidMount(){
+       
+        componentDidMount(){
        const {match:{params:{id}}}=this.props;
         axios
             .get(`fv3/api/site/documents/?site_id=${id}`)
@@ -63,15 +65,10 @@ export default class SiteDocument extends Component{
                 axios
                     .get(`fv3/api/site/documents/?site_id=${id}`)
                     .then(res => {
-                        console.log(res.data.breadcrumbs,"res")
-                        
-                    this.setState({
+                this.setState({
                         site_document:res.data.documents,
                         breadcrumb:res.data.breadcrumbs
                     })
-                    console.log(this.state.breadcrumb,"state");
-                    
-        
                     })
                     .catch(err => {
                     return err
@@ -98,23 +95,16 @@ export default class SiteDocument extends Component{
             data: form_data,
             headers: { "Content-Type": "application/json" }
             }).then(res=>{
-                console.log(res);
-                
                 if (res.status == 201) {
                       this.setState({
                     document_name:"",
                     document_type:"Document Type",
                     files:[],
                     showConfirmation : false,
-                
-                    })
+                     })
                    this.handleUpdate(res)
-                    
-
-               }  
-              
-            
-            })
+                    }  
+                })
             .catch(err=>{
                 console.log(err)
             })
@@ -216,13 +206,9 @@ render(){
                                                                         <button type="submit" className="fieldsight-btn">Save</button>
                                                                     </div>
                                                                 </form>
-                                                          
-                                                    
-                                                
-                                                </Modal>
-                                                )
-                                            
-                                            }
+                                                           </Modal>
+                                                          )
+                                                          }
                                         </div>
                                     </div>
                                 </div>
