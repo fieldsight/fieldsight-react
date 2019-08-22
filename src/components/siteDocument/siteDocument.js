@@ -28,15 +28,10 @@ export default class SiteDocument extends Component{
         axios
             .get(`fv3/api/site/documents/?site_id=${id}`)
             .then(res => {
-                console.log(res,"res")
-                
             this.setState({
                 site_document:res.data.documents,
                 breadcrumb:res.data.breadcrumbs
             })
-            console.log(this.state.breadcrumb,"state");
-            
-
             })
             .catch(err => {
             return err

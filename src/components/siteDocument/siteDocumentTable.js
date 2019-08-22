@@ -17,8 +17,7 @@ export default class  SiteDocumentTable extends Component{
                         <tbody >
                         {site_document.map((site_file,key)=>{
                         return (
-                                
-                                    <tr key={key}>
+                                <tr key={key}>
                                         <td>
                                         <a href={site_file.file}>
                                                     <figure>
