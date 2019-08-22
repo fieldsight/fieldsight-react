@@ -3,6 +3,7 @@ import Table from "../../common/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../../myForm/Loader";
+import isEmpty from "../../../utils/isEmpty";
 
 import withPagination from "../../../hoc/WithPagination";
 
@@ -17,15 +18,18 @@ class RegionsTable extends React.Component {
     });
   }
   render() {
-    const { data, loader } = this.props;
+    const { data, loader, terms } = this.props;
 
     const tableHeader = {
-      projectRegions: [
-        "Region ID",
-        "Region Name",
-        "Created Date",
-        "Total Sites"
-      ]
+      projectRegions: !isEmpty(terms)
+        ? [
+            `${terms.region} ID`,
+            `${terms.region} Name`,
+            ,
+            "Created Date",
+            "Total Sites"
+          ]
+        : ["Region ID", "Region Name", "Created Date", "Total Sites"]
     };
     return (
       // <div className="card region-table">

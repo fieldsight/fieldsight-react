@@ -3,7 +3,7 @@ import Table from "react-bootstrap/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../../myForm/Loader";
-
+import isEmpty from "../../../utils/isEmpty";
 import withPagination from "../../../hoc/WithPagination";
 
 class SiteListTable extends React.Component {
@@ -30,7 +30,7 @@ class SiteListTable extends React.Component {
     );
   };
   render() {
-    const { data, loader } = this.props;
+    const { data, loader, terms } = this.props;
 
     const { project_id } = this.state;
     return (
@@ -66,10 +66,10 @@ class SiteListTable extends React.Component {
               >
                 <thead>
                   <tr>
-                    <th>Site Name</th>
+                    <th>{!isEmpty(terms) ? `${terms.site}` : "Sites"} Name</th>
                     <th>id</th>
                     <th>Address</th>
-                    <th>Region</th>
+                    <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>

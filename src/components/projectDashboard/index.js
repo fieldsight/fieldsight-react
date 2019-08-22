@@ -234,6 +234,7 @@ class ProjectDashboard extends React.Component {
                     id={projectId}
                     loader={projectRegionDataLoader}
                     data={regionData}
+                    terms={terms_and_labels}
                   />
                 )}
                 {activeTab === "site" && (
@@ -241,6 +242,7 @@ class ProjectDashboard extends React.Component {
                     id={projectId}
                     data={siteList}
                     loader={projectSiteListLoader}
+                    terms={terms_and_labels}
                   />
                 )}
               </div>
