@@ -12,6 +12,8 @@ import SubmissionDetails from "./submissionDetails";
 import MyrolesMain from "./myRoles/MyrolesMain";
 import RegionSite from "./regionalSite/RegionSite";
 
+import ProjectDashboard from "./projectDashboard";
+
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -76,6 +78,11 @@ class App extends Component {
                     <Route
                       path="/regional-site/:id"
                       render={props => <RegionSite {...props} />}
+                    />
+
+                    <Route
+                      path="/project-dashboard/:id"
+                      render={props => <ProjectDashboard {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

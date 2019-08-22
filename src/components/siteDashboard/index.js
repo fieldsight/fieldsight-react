@@ -394,6 +394,7 @@ class SiteDashboard extends Component {
                     siteLogs={siteLogs}
                     showContentLoader={siteLogsLoader}
                     siteId={siteId}
+                    type="site"
                   />
                 </div>
               </div>

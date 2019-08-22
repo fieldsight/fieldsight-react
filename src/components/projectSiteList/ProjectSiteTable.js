@@ -114,6 +114,14 @@ class ProjectSiteTable extends Component {
                 </thead>
 
                 <tbody>
+                  {!this.props.dLoader && this.props.siteList.length === 0 && (
+                    <tr>
+                      <td>
+                        <p>No Form Data Available</p>
+                      </td>
+                    </tr>
+                  )}
+
                   {!this.props.dLoader &&
                     this.props.siteList.map((item, i) => (
                       <tr key={i}>
@@ -176,51 +184,60 @@ class ProjectSiteTable extends Component {
               {this.props.dLoader && <DotLoader />}
             </PerfectScrollbar>
           </div>
-          <div className="table-footer">
-            <div className="showing-rows">
-              <p>
-                Showing <span>{this.props.fromData}</span> to{" "}
-                <span> {this.props.toData} </span> of{" "}
-                <span>{this.props.totalCount}</span> entries.
-              </p>
-            </div>
-            <div className="table-pagination">
-              <ul>
-                <li className="page-item">
-                  <a
-                    onClick={e =>
-                      this.props.paginationHandler(
-                        this.props.pageNum - 1,
-                        null,
-                        project_id
-                      )
-                    }
-                  >
-                    <i className="la la-long-arrow-left" />
-                  </a>
-                </li>
+          {this.props.siteList.length > 0 && (
+            <div className="table-footer">
+              <div className="showing-rows">
+                <p>
+                  Showing <span>{this.props.fromData}</span> to{" "}
+                  <span>
+                    {" "}
+                    {this.props.toData > this.props.totalCount
+                      ? this.props.totalCount
+                      : this.props.toData}{" "}
+                  </span>{" "}
+                  of <span>{this.props.totalCount}</span> entries.
+                </p>
+              </div>
+              {this.props.toData < this.props.totalCount ? (
+                <div className="table-pagination">
+                  <ul>
+                    <li className="page-item">
+                      <a
+                        onClick={e =>
+                          this.props.paginationHandler(
+                            this.props.pageNum - 1,
+                            null,
+                            project_id
+                          )
+                        }
+                      >
+                        <i className="la la-long-arrow-left" />
+                      </a>
+                    </li>
 
-                {this.props.renderPageNumbers({
-                  type: "projectSiteList",
-                  projectId: project_id
-                })}
+                    {this.props.renderPageNumbers({
+                      type: "projectSiteList",
+                      projectId: project_id
+                    })}
 
-                <li className="page-item ">
-                  <a
-                    onClick={e =>
-                      this.props.paginationHandler(
-                        this.props.pageNum + 1,
-                        null,
-                        project_id
-                      )
-                    }
-                  >
-                    <i className="la la-long-arrow-right" />
-                  </a>
-                </li>
-              </ul>
+                    <li className="page-item ">
+                      <a
+                        onClick={e =>
+                          this.props.paginationHandler(
+                            this.props.pageNum + 1,
+                            null,
+                            project_id
+                          )
+                        }
+                      >
+                        <i className="la la-long-arrow-right" />
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              ) : null}
             </div>
-          </div>
+          )}
         </div>
       </>
     );
