@@ -20,7 +20,8 @@ class RightSidebar extends Component {
         downloadUrl,
         hasReviewPermission,
         postSubmissionDetail,
-        getSubmissionDetail
+        getSubmissionDetail,
+        toggleSubmission
       },
       state: { showStatus }
     } = this;
