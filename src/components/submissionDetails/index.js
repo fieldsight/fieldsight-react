@@ -9,10 +9,11 @@ import Loader from "../common/Loader";
 
 import {
   getSubmissionDetail,
-  postSubmissionDetail
+  postSubmissionDetail,
+  toggleSubmission
 } from "../../actions/submissionDetailActions";
 
-const submissionId = window.submission_id ? window.submission_id : 66074;
+const submissionId = window.submission_id ? window.submission_id : 66106;
 class SubmissionDetail extends Component {
   componentDidMount() {
     this.props.getSubmissionDetail(submissionId);
@@ -35,7 +36,8 @@ class SubmissionDetail extends Component {
         initialLoader
       },
       postSubmissionDetail,
-      getSubmissionDetail
+      getSubmissionDetail,
+      toggleSubmission
     } = this.props;
     return (
       <>
@@ -92,6 +94,7 @@ class SubmissionDetail extends Component {
                   editUrl={edit_url}
                   downloadUrl={download_url}
                   hasReviewPermission={has_review_permission}
+                  toggleSubmission={toggleSubmission}
                 />
               </div>
             </div>
@@ -110,5 +113,5 @@ const mapStateToProps = ({ submissionDetail }) => ({
 
 export default connect(
   mapStateToProps,
-  { getSubmissionDetail, postSubmissionDetail }
+  { getSubmissionDetail, postSubmissionDetail, toggleSubmission }
 )(SubmissionDetail);

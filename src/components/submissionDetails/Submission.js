@@ -41,7 +41,7 @@ class Submission extends Component {
     });
   };
 
-  splitSubmissionQuestion = submissionObj => {
+  splitSubmissionObj = submissionObj => {
     const question = Object.values(submissionObj);
     return question.length > 0
       ? `${question[0]}/${question[1]}`.replace(/\/undefined/, "")
@@ -59,7 +59,11 @@ class Submission extends Component {
                 variant="link"
                 eventKey={submission.name}
               >
-                {submission.label ? submission.label : submission.name}
+                {submission.label
+                  ? typeof submission.label === "object"
+                    ? this.splitSubmissionObj(submission.label)
+                    : submission.label
+                  : submission.name}
               </Accordion.Toggle>
             </h5>
           </Card.Header>
@@ -88,7 +92,7 @@ class Submission extends Component {
               <div className="content">
                 <h6>
                   {typeof submission.question === "object"
-                    ? this.splitSubmissionQuestion(submission.question)
+                    ? this.splitSubmissionObj(submission.question)
                     : submission.question}
                 </h6>
               </div>
@@ -129,7 +133,7 @@ class Submission extends Component {
             <li>
               <h6>
                 {typeof submission.question === "object"
-                  ? this.splitSubmissionQuestion(submission.question)
+                  ? this.splitSubmissionObj(submission.question)
                   : submission.question}
               </h6>
               <div className="submission-map">
@@ -207,7 +211,7 @@ class Submission extends Component {
             <li>
               <h6>
                 {typeof submission.question === "object"
-                  ? this.splitSubmissionQuestion(submission.question)
+                  ? this.splitSubmissionObj(submission.question)
                   : submission.question}
               </h6>
               {submission.type === "start" ||
