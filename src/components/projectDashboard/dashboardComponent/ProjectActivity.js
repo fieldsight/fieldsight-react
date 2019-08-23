@@ -39,24 +39,24 @@ class ProjectActivity extends React.Component {
           <div className="card-header main-card-header sub-card-header">
             <h5>Project activity</h5>
           </div>
-        </div>
-        <div className="card-body">
-          <div className="row">
-            <ShowAcitivity
-              type="approved"
-              name="Submissions In Last 7 Days"
-              value={projectActivity.submissions_in_last_7_days}
-            />
-            <ShowAcitivity
-              type="flagged"
-              name="Active Supervisors In Last 7 Days"
-              value={projectActivity.active_supervisors_in_last_7_days}
-            />
-            <ShowAcitivity
-              type="marker"
-              name="Site Visits In Last 7 Days"
-              value={projectActivity.site_visits_in_last_7_days}
-            />
+          <div className="card-body">
+            <div className="row">
+              <ShowAcitivity
+                type="approved"
+                name="Submissions In Last 7 Days"
+                value={projectActivity.submissions_in_last_7_days}
+              />
+              <ShowAcitivity
+                type="flagged"
+                name="Active Supervisors In Last 7 Days"
+                value={projectActivity.active_supervisors_in_last_7_days}
+              />
+              <ShowAcitivity
+                type="marker"
+                name="Site Visits In Last 7 Days"
+                value={projectActivity.site_visits_in_last_7_days}
+              />
+            </div>
           </div>
         </div>
       </div>

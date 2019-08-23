@@ -7,7 +7,6 @@ import {
   GET_PROJECT_LOGS,
   SHOW_PROJECT_DASHBOARD_LOADERS,
   GET_REGION_DATA,
-  GET_SITE_LIST,
   GET_PROGRESS_TABLE_DATA
 } from "./types";
 import { successToast, errorToast } from "../utils/toastHandler";
@@ -40,20 +39,6 @@ export const getRegionData = id => dispatch => {
     .then(res => {
       dispatch({
         type: GET_REGION_DATA,
-        payload: res.data
-      });
-    })
-    .catch(err => {});
-};
-export const getSiteList = id => dispatch => {
-  dispatch({
-    type: SHOW_PROJECT_DASHBOARD_LOADERS
-  });
-  axios
-    .get(`fv3/api/project-site-list/?project=${id}`)
-    .then(res => {
-      dispatch({
-        type: GET_SITE_LIST,
         payload: res.data
       });
     })

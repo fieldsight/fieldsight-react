@@ -30,6 +30,10 @@ class DashboardCounter extends React.Component {
       <div className="dashboard-counter mrt-30">
         <div className="row">
           <ShowCount
+            name="pending"
+            count={projectActivity.pending_submissions}
+          />
+          <ShowCount
             name="approved"
             count={projectActivity.approved_submissions}
           />
@@ -40,10 +44,6 @@ class DashboardCounter extends React.Component {
           <ShowCount
             name="rejected"
             count={projectActivity.rejected_submissions}
-          />
-          <ShowCount
-            name="pending"
-            count={projectActivity.pending_submissions}
           />
         </div>
       </div>
