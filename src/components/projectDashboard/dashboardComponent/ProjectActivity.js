@@ -17,8 +17,8 @@ const ShowAcitivity = props => (
         <i className={`la ${getIcon(props.type)}`}> </i>
       </div>
       <div className="count-content">
-        <h4>{!!props.value && props.value}</h4>
-        <h6>{!!props.name && props.name}</h6>
+        <h4>{props.value}</h4>
+        <h6>{props.name}</h6>
       </div>
     </div>
     {/* <CountCard

@@ -57,37 +57,37 @@ const ShowChild = ({
 };
 
 const CheckCase = ({ sub, id }) => {
-  if (sub.name) {
-    return (
-      <>
-        <tr className="sub-row" key={`stage_${id}`}>
-          <td>{id}</td>
-          <td>{sub.name}</td>
-          <td />
-          <td />
-          <td />
-          <td />
-          <td />
-        </tr>
-        {sub.sub_stages &&
-          sub.sub_stages.length > 0 &&
-          sub.sub_stages.map((item, key) => {
-            return (
-              <ShowChild
-                sn={id}
-                id={key}
-                name={item.form_name}
-                progress={item.progress}
-                pending={item.pending}
-                approved={item.approved}
-                flagged={item.flagged}
-                rejected={item.rejected}
-              />
-            );
-          })}
-      </>
-    );
-  }
+  // if (sub.name) {
+  return (
+    <>
+      <tr className="sub-row" key={`stage_${id}`}>
+        <td>{id}</td>
+        <td>{sub.name}</td>
+        <td />
+        <td />
+        <td />
+        <td />
+        <td />
+      </tr>
+      {sub.sub_stages &&
+        sub.sub_stages.length > 0 &&
+        sub.sub_stages.map((item, key) => {
+          return (
+            <ShowChild
+              sn={id}
+              id={key}
+              name={item.form_name}
+              progress={item.progress}
+              pending={item.pending}
+              approved={item.approved}
+              flagged={item.flagged}
+              rejected={item.rejected}
+            />
+          );
+        })}
+    </>
+  );
+  // }
 };
 class ProgressTable extends React.Component {
   render() {
