@@ -12,12 +12,22 @@ const getIcon = submission => {
 };
 const ShowAcitivity = props => (
   <div className="col-xl-4 col-md-6">
-    <CountCard
+    <div className="count-card">
+      <div className={`count-icon ${props.type}`}>
+        <i className={`la ${getIcon(props.type)}`}> </i>
+      </div>
+      <div className="count-content">
+        <h4>{!!props.value && props.value}</h4>
+        <h6>{!!props.name && props.name}</h6>
+      </div>
+    </div>
+    {/* <CountCard
       countName={props.name}
-      icon={getIcon(props.name)}
-      className={props.name}
+      icon={getIcon(props.type)}
+      className={props.type}
       countNumber={props.value}
-    />
+      noSubmissionText=""
+    /> */}
   </div>
 );
 class ProjectActivity extends React.Component {
@@ -33,15 +43,18 @@ class ProjectActivity extends React.Component {
         <div className="card-body">
           <div className="row">
             <ShowAcitivity
-              name="approved"
+              type="approved"
+              name="Submissions In Last 7 Days"
               value={projectActivity.submissions_in_last_7_days}
             />
             <ShowAcitivity
-              name="flagged"
+              type="flagged"
+              name="Active Supervisors In Last 7 Days"
               value={projectActivity.active_supervisors_in_last_7_days}
             />
             <ShowAcitivity
-              name="marker"
+              type="marker"
+              name="Site Visits In Last 7 Days"
               value={projectActivity.site_visits_in_last_7_days}
             />
           </div>

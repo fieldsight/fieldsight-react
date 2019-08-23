@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import format from "date-fns/format";
-import { BlockContentLoader } from "../../common/Loader";
+import { BlockContentLoader } from "./Loader";
 import uuid from "uuid/v4";
 
 class Logs extends Component {

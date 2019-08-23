@@ -11,7 +11,7 @@ import SubmissionChart from "./dashboardComponent/SubmissionChart";
 import ProgressChart from "./dashboardComponent/ProgressChart";
 import SiteDocument from "./dashboardComponent/SiteDocument";
 import UsersList from "./dashboardComponent/UsersList";
-import Logs from "./dashboardComponent/Logs";
+import Logs from "../common/Logs";
 
 import {
   getSiteDashboard,
