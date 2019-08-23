@@ -13,6 +13,8 @@ import MyrolesMain from "./myRoles/MyrolesMain";
 import RegionSite from "./regionalSite/RegionSite";
 import SiteDocument from "./siteDocument/siteDocument"
 
+import ProjectDashboard from "./projectDashboard";
+
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -80,7 +82,11 @@ class App extends Component {
                     />
                      <Route
                       path="/site-documents/:id"
-                      render={props => <SiteDocument {...props} />}
+                      render={props => <SiteDocument {...props} />}/>
+
+                    <Route
+                      path="/project-dashboard/:id"
+                      render={props => <ProjectDashboard {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

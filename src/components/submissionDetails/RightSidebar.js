@@ -20,7 +20,9 @@ class RightSidebar extends Component {
         downloadUrl,
         hasReviewPermission,
         postSubmissionDetail,
-        getSubmissionDetail
+        getSubmissionDetail,
+        toggleSubmission,
+        hideNullValues
       },
       state: { showStatus }
     } = this;
@@ -60,7 +62,12 @@ class RightSidebar extends Component {
                 )}
 
                 {Object.keys(downloadUrl).length > 0 && (
-                  <a href={`${base_url}${downloadUrl.main}`} target="_blank">
+                  <a
+                    href={`${base_url}${
+                      hideNullValues ? downloadUrl.null : downloadUrl.main
+                    }`}
+                    target="_blank"
+                  >
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip>Download as PDF</Tooltip>}
@@ -69,6 +76,23 @@ class RightSidebar extends Component {
                     </OverlayTrigger>
                   </a>
                 )}
+
+                <a onClick={toggleSubmission}>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip>{`${
+                        hideNullValues ? "Show" : "Hide"
+                      } Null Values`}</Tooltip>
+                    }
+                  >
+                    <i
+                      className={`la la-${
+                        hideNullValues ? "eye" : "eye-slash"
+                      }`}
+                    />
+                  </OverlayTrigger>
+                </a>
               </div>
             </div>
 

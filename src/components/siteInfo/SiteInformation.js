@@ -10,6 +10,7 @@ import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
+import findQuestionWithGroup from "../../utils/findQuestionWithGroup";
 
 const urls = [
   "fieldsight/api/organization/",
@@ -34,6 +35,28 @@ class SiteInformation extends Component {
     showConfirmation: false
   };
 
+  groupQuestion = formQuestionsChildren => {
+    const groupQuestionName = question => {
+      if (question.type === "group" || question.type === "repeat") {
+        question.children = question.children.map(childQuestion => {
+          childQuestion.name = `${question.name}/${childQuestion.name}`;
+          if (
+            childQuestion.type === "group" ||
+            childQuestion.type === "repeat"
+          ) {
+            groupQuestionName(childQuestion);
+          }
+          return childQuestion;
+        });
+      }
+
+      return question;
+    };
+    return formQuestionsChildren.map(question => {
+      return groupQuestionName(question);
+    });
+  };
+
   componentDidMount() {
     this._isMounted = true;
     const { projectId, organizationId } = this.context;
@@ -47,6 +70,20 @@ class SiteInformation extends Component {
       .then(results => {
         if (this._isMounted) {
           let modifiedJsonQuestions = [];
+          let modifiedForm = [];
+
+          if (results[1].data) {
+            modifiedForm = results[1].data.map(formQuestions => {
+              if (formQuestions.json) {
+                formQuestions.json.children = this.groupQuestion(
+                  formQuestions.json.children
+                );
+              }
+
+              return formQuestions;
+            });
+          }
+
           if (results[2].data.json_questions.length > 0) {
             modifiedJsonQuestions = results[2].data.json_questions.map(
               question => {
@@ -67,7 +104,6 @@ class SiteInformation extends Component {
                     const metaAttribute = question.metas[question.project_id];
                     question.metas = metaAttribute;
                   }
-
                   return question;
                 }
                 return question;
@@ -104,7 +140,7 @@ class SiteInformation extends Component {
             ],
             forms: [
               { id: 0, name: "--Select Form--", json: { children: [] } },
-              ...results[1].data
+              ...modifiedForm
             ],
             siteBasicInfo: results[2].data.site_basic_info,
             jsonQuestions: modifiedJsonQuestions,

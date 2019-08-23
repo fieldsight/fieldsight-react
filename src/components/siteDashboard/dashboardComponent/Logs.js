@@ -1064,7 +1064,7 @@ class Logs extends Component {
 
   render() {
     const {
-      props: { siteLogs, showContentLoader, siteId },
+      props: { siteLogs, showContentLoader, siteId, type },
       groupByDate,
       getColor,
       getLog
@@ -1077,7 +1077,7 @@ class Logs extends Component {
 
             {siteLogs.length > 0 ? (
               <a
-                href={`/events/site_logs/${siteId}/`}
+                href={`/events/${type}_logs/${siteId}/`}
                 className="fieldsight-btn"
                 target="_blank"
               >

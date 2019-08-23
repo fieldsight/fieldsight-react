@@ -9,34 +9,41 @@ import Loader from "../common/Loader";
 
 import {
   getSubmissionDetail,
-  postSubmissionDetail
+  postSubmissionDetail,
+  toggleSubmission
 } from "../../actions/submissionDetailActions";
 
-const submissionId = window.submission_id ? window.submission_id : 66074;
+const submissionId = window.submission_id ? window.submission_id : 66106;
+
 class SubmissionDetail extends Component {
   componentDidMount() {
     this.props.getSubmissionDetail(submissionId);
   }
+
   render() {
     const {
-      submissionDetail: {
-        site,
-        date_created,
-        submitted_by,
-        submission_data,
-        submission_history,
-        status_data,
-        fieldsight_instance,
-        edit_url,
-        download_url,
-        form_name,
-        has_review_permission,
-        loading,
-        initialLoader
-      },
-      postSubmissionDetail,
-      getSubmissionDetail
-    } = this.props;
+      props: {
+        submissionDetail: {
+          site,
+          date_created,
+          submitted_by,
+          submission_data,
+          submission_history,
+          status_data,
+          fieldsight_instance,
+          edit_url,
+          download_url,
+          form_name,
+          has_review_permission,
+          loading,
+          initialLoader,
+          hideNullValues
+        },
+        postSubmissionDetail,
+        getSubmissionDetail,
+        toggleSubmission
+      }
+    } = this;
     return (
       <>
         {!initialLoader && (
@@ -92,6 +99,8 @@ class SubmissionDetail extends Component {
                   editUrl={edit_url}
                   downloadUrl={download_url}
                   hasReviewPermission={has_review_permission}
+                  toggleSubmission={toggleSubmission}
+                  hideNullValues={hideNullValues}
                 />
               </div>
             </div>
@@ -110,5 +119,5 @@ const mapStateToProps = ({ submissionDetail }) => ({
 
 export default connect(
   mapStateToProps,
-  { getSubmissionDetail, postSubmissionDetail }
+  { getSubmissionDetail, postSubmissionDetail, toggleSubmission }
 )(SubmissionDetail);

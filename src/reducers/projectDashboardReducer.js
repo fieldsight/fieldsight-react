@@ -1,0 +1,64 @@
+import {
+  GET_PROJECT_DASHBOARD,
+  GET_REGION_DATA,
+  GET_SITE_LIST,
+  GET_PROGRESS_TABLE_DATA
+} from "../actions/types";
+
+const initialState = {
+  id: "",
+  name: "",
+  address: "",
+  public_desc: "",
+  logo: "",
+  contacts: "",
+  project_activity: "",
+  total_sites: "",
+  total_users: "",
+  project_managers: "",
+  has_region: "",
+  logs: "",
+  form_submissions_chart_data: "",
+  site_progress_chart_data: "",
+  map: "",
+  terms_and_labels: "",
+  breadcrumbs: "",
+  projectDashboardLoader: true,
+  regionData: [],
+  siteList: [],
+  projectRegionDataLoader: true,
+  projectSiteListLoader: true,
+  progressLoader: true,
+  progressTableData: {}
+};
+
+export default function(state = initialState, action) {
+  switch (action.type) {
+    case GET_PROJECT_DASHBOARD:
+      return {
+        ...state,
+        ...action.payload,
+        projectDashboardLoader: false
+      };
+    case GET_REGION_DATA:
+      return {
+        ...state,
+        regionData: [...action.payload],
+        projectRegionDataLoader: false
+      };
+    case GET_SITE_LIST:
+      return {
+        ...state,
+        siteList: [...action.payload.results.data],
+        projectSiteListLoader: false
+      };
+    case GET_PROGRESS_TABLE_DATA:
+      return {
+        ...state,
+        progressTableData: action.payload,
+        progressLoader: false
+      };
+    default:
+      return state;
+  }
+}
