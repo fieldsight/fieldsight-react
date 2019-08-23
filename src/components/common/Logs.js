@@ -5,7 +5,7 @@ import { BlockContentLoader } from "./Loader";
 import uuid from "uuid/v4";
 
 class Logs extends Component {
-  getLog = data => {
+  getLog = (data, user_id) => {
     let content = "";
     const formdetail = data.get_event_name.split("form");
 
@@ -1064,7 +1064,7 @@ class Logs extends Component {
 
   render() {
     const {
-      props: { siteLogs, showContentLoader, siteId, type },
+      props: { siteLogs, showContentLoader, siteId, type, user_id },
       groupByDate,
       getColor,
       getLog
@@ -1119,7 +1119,7 @@ class Logs extends Component {
 
                                       <div
                                         dangerouslySetInnerHTML={{
-                                          __html: getLog(log)
+                                          __html: getLog(log, user_id)
                                         }}
                                       />
                                     </div>
