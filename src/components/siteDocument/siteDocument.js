@@ -52,9 +52,7 @@ export default class SiteDocument extends Component{
             });
 
        }
-       delete=(id)=>{
-           console.log(id,"id");
-           
+       delete=(id)=>{ 
         axios.post(`/fv3/api/blueprints/?blueprint=${id}`)
         .then((res) => {
            if(res.status == 204){
@@ -81,12 +79,9 @@ export default class SiteDocument extends Component{
             deleteConfirmation:true,
             id:id
 
-            },()=>console.log(this.state.id))
-            console.log(!this.state.id);
-            
-            
-
+            })
         }
+
         handleUpdate=(data)=>{
             console.log(data.status,"handle");
             if (data.status ==201){
@@ -107,6 +102,7 @@ export default class SiteDocument extends Component{
         }
         handleSubmit=()=>{
             event.preventDefault();
+            const {match:{params:{id}}}=this.props;
             let form_data= new FormData();
             const data= this.state.files;
             data.map(data=>{
@@ -120,7 +116,7 @@ export default class SiteDocument extends Component{
             }
             axios({
                 method: "post",
-                url: `fv3/api/blueprints/?site=81812`,
+                url: `fv3/api/blueprints/?site=${id}`,
                 data: form_data,
                 headers: { "Content-Type": "application/json" }
                 }).then(res=>{
