@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
+import DashboardHeader from "./dashboardComponent/DashboardHeader";
+import TeamMap from "./dashboardComponent/TeamMap";
+import ProjectList from "./dashboardComponent/ProjectList";
+import DashboardCounter from "./dashboardComponent/DashboardCounter";
+import About from "./dashboardComponent/About";
+import Admin from "./dashboardComponent/Admin";
 // import {
 //   getSiteDashboard,
 
@@ -93,25 +98,25 @@ class TeamDashboard extends Component {
     // }
   }
   render() {
-    const {
-      props: {
-        teamDashboard: { breadcrumbs },
-        match: {
-          params: { id: teamId }
-        }
-      },
-      state: {
-        showHeaderModal,
-        showSubmissionModal,
-        activeTab,
-        showCropper,
-        showGallery,
-        showSubsites
-      },
-      closeModal,
-      openModal,
-      toggleTab
-    } = this;
+    // const {
+    //   props: {
+    //     teamDashboard: { breadcrumbs },
+    //     match: {
+    //       params: { id: teamId }
+    //     }
+    //   },
+    //   state: {
+    //     showHeaderModal,
+    //     showSubmissionModal,
+    //     activeTab,
+    //     showCropper,
+    //     showGallery,
+    //     showSubsites
+    //   },
+    //   closeModal,
+    //   openModal,
+    //   toggleTab
+    // } = this;
 
     return (
       <>
@@ -129,7 +134,82 @@ class TeamDashboard extends Component {
             </li>
           </ol>
         </nav>
-        <div class="right-content no-bg new-dashboard">dashboard Header</div>
+        <div className="row">
+          <div className="col-xl-12">
+            <div className="right-content no-bg new-dashboard">
+              <DashboardHeader />
+              <div className="row">
+                <div className="col-lg-8">
+                  <div className="card map">
+                    <div className="card-header main-card-header sub-card-header">
+                      <h5>Project maps</h5>
+                      <div className="dash-btn">
+                        <a href="#" className="fieldsight-btn left-icon">
+                          <i className="la la-map" /> full map
+                        </a>
+                      </div>
+                    </div>
+                    <TeamMap />
+                  </div>
+                </div>
+                <div className="col-lg-4">
+                  <div className="card project-list">
+                    <div className="card-header main-card-header sub-card-header">
+                      <h5>Project maps</h5>
+                      <div className="dash-btn">
+                        <form className="floating-form">
+                          <div className="form-group mr-0">
+                            <input
+                              type="search"
+                              className="form-control"
+                              required
+                            />
+                            <label htmlFor="input">Search</label>
+                            <i className="la la-search" />
+                          </div>
+                        </form>
+                        <a href="#" className="fieldsight-btn">
+                          <i className="la la-plus" />
+                        </a>
+                      </div>
+                    </div>
+                    <ProjectList />
+                  </div>
+                </div>
+              </div>
+              <DashboardCounter />
+              <div className="about-section ">
+                <div className="row">
+                  <About />
+                  <div className="col-lg-4">
+                    <div className="card admin">
+                      <div className="card-header main-card-header sub-card-header">
+                        <h5>Admin</h5>
+                        <div className="dash-btn">
+                          <form className="floating-form">
+                            <div className="form-group mr-0">
+                              <input
+                                type="search"
+                                className="form-control"
+                                required
+                              />
+                              <label htmlFor="input">Search</label>
+                              <i className="la la-search" />
+                            </div>
+                          </form>
+                          <a href="#" className="fieldsight-btn">
+                            <i className="la la-plus" />
+                          </a>
+                        </div>
+                      </div>
+                      <Admin />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </>
     );
   }
@@ -139,9 +219,8 @@ const mapStateToProps = ({ teamDashboard }) => ({
   teamDashboard
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    getSiteDashboard
-  }
-)(TeamDashboard);
+export default connect()(TeamDashboard);
+// mapStateToProps,
+// {
+//   getSiteDashboard
+// }

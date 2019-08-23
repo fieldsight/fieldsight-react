@@ -1100,8 +1100,6 @@ class Logs extends Component {
                       ref={el => (this.timeLineDiv = el)}
                     >
                       {groupByDate(siteLogs).map(siteLog => {
-                        console.log("sitelog--", siteLog);
-                        debugger;
                         return (
                           <div className="timeline-list" key={uuid()}>
                             <time>{siteLog.date}</time>

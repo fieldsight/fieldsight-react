@@ -1,15 +1,15 @@
-import Reach, { Component } from "react";
+import React, { Component } from "react";
 
 class DashboardHeader extends Component {
   render() {
     return (
-      <div class="card mrb-30">
-        <div class="card-header main-card-header dashboard-header">
-          <div class="dash-pf">
+      <div className="card mrb-30">
+        <div className="card-header main-card-header dashboard-header">
+          <div className="dash-pf">
             <figure>
               <img src="img/pf.jpg" alt="pf" />
             </figure>
-            <div class="dash-pf-content">
+            <div className="dash-pf-content">
               <h5>Rapid Market Assessment (Philippine Shelter Cluster)</h5>
               <span>
                 Unit 304 SEDCCO 1 Building 120 Rada Street, Legaspi Village
@@ -17,69 +17,69 @@ class DashboardHeader extends Component {
               </span>
             </div>
           </div>
-          <div class="dash-btn">
-            <div class="dropdown">
+          <div className="dash-btn">
+            <div className="dropdown">
               <button
                 type="button"
-                class="fieldsight-btn dropdown-toggle"
+                className="fieldsight-btn dropdown-toggle"
                 data-toggle="dropdown"
               >
-                <i class="la la-paste" />
+                <i className="la la-paste" />
                 <span>Data</span>
-                <i class="la la-angle-down" />
+                <i className="la la-angle-down" />
               </button>
-              <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="#">
+              <div className="dropdown-menu dropdown-menu-right">
+                <a className="dropdown-item" href="#">
                   User
                 </a>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Project
                 </a>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Setting
                 </a>
               </div>
             </div>
-            <div class="dropdown">
+            <div className="dropdown">
               <button
                 type="button"
-                class="fieldsight-btn dropdown-toggle"
+                className="fieldsight-btn dropdown-toggle"
                 data-toggle="dropdown"
               >
-                <i class="la la-cog" />
+                <i className="la la-cog" />
                 <span>Manage</span>
-                <i class="la la-angle-down" />
+                <i className="la la-angle-down" />
               </button>
-              <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="#">
+              <div className="dropdown-menu dropdown-menu-right">
+                <a className="dropdown-item" href="#">
                   User
                 </a>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Project
                 </a>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Setting
                 </a>
               </div>
             </div>
           </div>
         </div>
-        <div class="card-body">
-          <div class="header-count">
-            <div class="count-card">
-              <div class="count-icon">
-                <i class="la la-copy" />
+        <div className="card-body">
+          <div className="header-count">
+            <div className="count-card">
+              <div className="count-icon">
+                <i className="la la-copy" />
               </div>
-              <div class="count-content">
+              <div className="count-content">
                 <h4>50</h4>
                 <h6>submissions</h6>
               </div>
             </div>
-            <div class="count-card">
-              <div class="count-icon">
-                <i class="la la-map-marker" />
+            <div className="count-card">
+              <div className="count-icon">
+                <i className="la la-map-marker" />
               </div>
-              <div class="count-content">
+              <div className="count-content">
                 <h4>13</h4>
                 <h6>Total sites</h6>
               </div>
