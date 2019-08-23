@@ -32,13 +32,7 @@ const initialState = {
   users: [],
   submissions: {},
   total_subsites: null,
-  form_submissions_chart_data: {
-    // pending_submissions: {},
-    // total_submissions: {},
-    // approved_submissions: {},
-    // rejected_submissions: {},
-    // flagged_submissions: {}
-  },
+  form_submissions_chart_data: {},
   site_progress_chart_data: {},
   siteMetas: [],
   siteSubmissions: [],
@@ -62,6 +56,22 @@ const initialState = {
   // siteDocumentsErr: false,
   // siteLogsErr: false,
   // sitePicturesErr: false
+};
+
+const getRecentPictures = (state, action) => {
+  const picturesKeyArr = Object.keys(action.payload);
+  let modifiedPayload = [];
+  if (picturesKeyArr.length > 0) {
+    modifiedPayload = [
+      action.payload.site_featured_images.photo,
+      ...action.payload.recent_pictures
+    ].filter(Boolean);
+  }
+  return {
+    ...state,
+    recentPictures: modifiedPayload,
+    sitePicturesLoader: false
+  };
 };
 
 export default function(state = initialState, action) {
@@ -111,19 +121,7 @@ export default function(state = initialState, action) {
         showDotLoader: false
       };
     case GET_RECENT_PICTURES:
-      const picturesKeyArr = Object.keys(action.payload);
-      let modifiedPayload = [];
-      if (picturesKeyArr.length > 0) {
-        modifiedPayload = [
-          action.payload.site_featured_images.photo,
-          ...action.payload.recent_pictures
-        ].filter(Boolean);
-      }
-      return {
-        ...state,
-        recentPictures: modifiedPayload,
-        sitePicturesLoader: false
-      };
+      return getRecentPictures(state, action);
 
     case GET_SUBSITES: {
       return {
