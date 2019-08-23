@@ -6,7 +6,6 @@ import AddSite from "./AddSite";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 
-
 const project_id = 137;
 const base_url = "https://fieldsight.naxa.com.np";
 const project_name = "test";
@@ -70,7 +69,7 @@ class ProjectSiteList extends Component {
             </li>
           </ol>
         </nav>
-       
+
         <div className="card">
           <ProjectSiteTable
             showPopup={this.showPopup}

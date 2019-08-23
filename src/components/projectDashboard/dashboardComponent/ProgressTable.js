@@ -3,6 +3,7 @@ import Table from "react-bootstrap/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../../myForm/Loader";
+import { BlockContentLoader } from "../../common/Loader";
 
 // const data = {
 //   stages: [
@@ -168,61 +169,75 @@ const CheckCase = ({ sub, id }) => {
 };
 class ProgressTable extends React.Component {
   render() {
-    const { data } = this.props;
-    // console.log("-------", data, Array.isArray(data.generals));
+    const { data, loader } = this.props;
     const sn = 1;
     return (
-      <div className="card-body">
-        <Table responsive="xl" className="table  table-bordered  dataTable ">
-          <thead>
-            <tr>
-              <th>SN</th>
-              <th>Name</th>
-              <th>Progress</th>
-              <th>Pending</th>
-              <th>Approved</th>
-              <th>Flagged</th>
-              <th>Rejected</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!!data.generals && <ShowParent id={sn} name="Generals" />}
-            {!!data.generals &&
-              data.generals.map((general, id) => (
-                <ShowChild
-                  sn={sn}
-                  id={id}
-                  name={general.name}
-                  progress={general.progress_data[0].progress}
-                  pending={general.progress_data[0].pending}
-                  approved={general.progress_data[0].approved}
-                  flagged={general.progress_data[0].flagged}
-                  rejected={general.progress_data[0].rejected}
-                />
-              ))}
-            {!!data.schedules && <ShowParent id={sn + 1} name="Schedules" />}
-            {!!data.schedules &&
-              data.schedules.map((schedule, id) => (
-                <ShowChild
-                  sn={sn + 1}
-                  id={id}
-                  name={schedule.name}
-                  progress={schedule.progress_data[0].progress}
-                  pending={schedule.progress_data[0].pending}
-                  approved={schedule.progress_data[0].approved}
-                  flagged={schedule.progress_data[0].flagged}
-                  rejected={schedule.progress_data[0].rejected}
-                />
-              ))}
-            {!!data.stages && <ShowParent id={sn + 2} name="Stages" />}
-            {!!data.stages &&
-              data.stages.map((sub, id) => {
-                const snId = sn + 2 + "." + (id + 1);
-                return <CheckCase sub={sub} id={snId} />;
-              })}
-          </tbody>
-        </Table>
-      </div>
+      <>
+        {loader ? (
+          <BlockContentLoader number={10} height="25px" />
+        ) : (
+          <div className="card-body">
+            <div style={{ position: "relative", height: "400px" }}>
+              <PerfectScrollbar>
+                <Table
+                  responsive="xl"
+                  className="table  table-bordered  dataTable "
+                >
+                  <thead>
+                    <tr>
+                      <th>SN</th>
+                      <th>Name</th>
+                      <th>Progress</th>
+                      <th>Pending</th>
+                      <th>Approved</th>
+                      <th>Flagged</th>
+                      <th>Rejected</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {!!data.generals && <ShowParent id={sn} name="Generals" />}
+                    {!!data.generals &&
+                      data.generals.map((general, id) => (
+                        <ShowChild
+                          sn={sn}
+                          id={id}
+                          name={general.name}
+                          progress={general.progress_data[0].progress}
+                          pending={general.progress_data[0].pending}
+                          approved={general.progress_data[0].approved}
+                          flagged={general.progress_data[0].flagged}
+                          rejected={general.progress_data[0].rejected}
+                        />
+                      ))}
+                    {!!data.schedules && (
+                      <ShowParent id={sn + 1} name="Schedules" />
+                    )}
+                    {!!data.schedules &&
+                      data.schedules.map((schedule, id) => (
+                        <ShowChild
+                          sn={sn + 1}
+                          id={id}
+                          name={schedule.name}
+                          progress={schedule.progress_data[0].progress}
+                          pending={schedule.progress_data[0].pending}
+                          approved={schedule.progress_data[0].approved}
+                          flagged={schedule.progress_data[0].flagged}
+                          rejected={schedule.progress_data[0].rejected}
+                        />
+                      ))}
+                    {!!data.stages && <ShowParent id={sn + 2} name="Stages" />}
+                    {!!data.stages &&
+                      data.stages.map((sub, id) => {
+                        const snId = sn + 2 + "." + (id + 1);
+                        return <CheckCase sub={sub} id={snId} />;
+                      })}
+                  </tbody>
+                </Table>
+              </PerfectScrollbar>
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 }
