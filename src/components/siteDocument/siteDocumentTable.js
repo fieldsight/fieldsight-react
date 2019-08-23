@@ -20,21 +20,24 @@ export default class  SiteDocumentTable extends Component{
                                 <tr key={key}>
                                         <td>
                                         <a href={site_file.file}>
-                                                    <figure>
+                                                    <span className="td-doc-icon google">
                                                         <img
                                                             src={`/static/images/${site_file.type}.png`}
                                                             alt=""
                                                         />
-                                                        </figure>
+                                                        </span>
                                                                     {site_file.name}
-                                                                </a>
+                                                     </a>
                                         </td>
                                                 <td>{site_file.doc_type}</td>
                                                 <td>{site_file.added_date}</td>
                                                 
                                         <td>
                                                                 
-                                    <button className="td-delete-btn" data-toggle="tooltip" data-placement="top" title="Delete" onClick={()=>this.props.handleDelete(site_file.id)}> <i className="la la-trash-o"> </i> </button>
+                                    <a className="td-delete-btn" 
+                                    onClick={()=>{this.props.handleDelete(site_file.id);
+                                                    this.props.openDelete}}
+                                    > <i className="la la-trash-o"> </i> </a>
                                 </td>
                                         
                                     </tr>

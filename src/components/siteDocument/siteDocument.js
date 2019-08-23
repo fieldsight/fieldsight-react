@@ -10,8 +10,10 @@ export default class SiteDocument extends Component{
         breadcrumb:[],
         files:[],
         document_name:"",
-        document_type:"Document Type"
-       }
+        document_type:"Document Type",
+        deleteConfirmation:false,
+        id:""      
+    }
 
         openModel=()=>{
             this.setState({
@@ -24,8 +26,18 @@ export default class SiteDocument extends Component{
             showConfirmation: false
             });
         };
+        cancleModel=()=>{
+            this.setState({
+                deleteConfirmation:false
+                });
+        }
+        openDelete=()=>{
+            this.setState({
+                deleteConfirmation:true
+                });
+        }
        
-        componentDidMount(){
+     componentDidMount(){
        const {match:{params:{id}}}=this.props;
         axios
             .get(`fv3/api/site/documents/?site_id=${id}`)
@@ -36,11 +48,13 @@ export default class SiteDocument extends Component{
             })
             })
             .catch(err => {
-            return err
+                return err
             });
 
        }
-       handleDelete=(id)=>{
+       delete=(id)=>{
+           console.log(id,"id");
+           
         axios.post(`/fv3/api/blueprints/?blueprint=${id}`)
         .then((res) => {
            if(res.status == 204){
@@ -50,13 +64,28 @@ export default class SiteDocument extends Component{
                     }
                 });
              this.setState({
-             site_document: delet
+             site_document: delet,
+             id:"",
+             deleteConfirmation:false
             });
             }
             }).catch(err=>{
              console.log(err)
          })
     
+        }
+    
+        handleDelete=(id)=>{
+            console.log(id ,"gh");
+        this.setState({
+            deleteConfirmation:true,
+            id:id
+
+            },()=>console.log(this.state.id))
+            console.log(!this.state.id);
+            
+            
+
         }
         handleUpdate=(data)=>{
             console.log(data.status,"handle");
@@ -76,39 +105,39 @@ export default class SiteDocument extends Component{
             }
             
         }
-     handleSubmit=()=>{
-        event.preventDefault();
-        let form_data= new FormData();
-        const data= this.state.files;
-        data.map(data=>{
-            return (
-                form_data.append("files",data)
-                )
-        })  
-        form_data.append("name",this.state.document_name);
-        form_data.append("doc_type",this.state.document_type);
-        for(var pair of form_data.entries()) {
-        }
-        axios({
-            method: "post",
-            url: `fv3/api/blueprints/?site=81812`,
-            data: form_data,
-            headers: { "Content-Type": "application/json" }
-            }).then(res=>{
-                if (res.status == 201) {
-                      this.setState({
-                    document_name:"",
-                    document_type:"Document Type",
-                    files:[],
-                    showConfirmation : false,
-                     })
-                   this.handleUpdate(res)
-                    }  
+        handleSubmit=()=>{
+            event.preventDefault();
+            let form_data= new FormData();
+            const data= this.state.files;
+            data.map(data=>{
+                return (
+                    form_data.append("files",data)
+                    )
+            })  
+            form_data.append("name",this.state.document_name);
+            form_data.append("doc_type",this.state.document_type);
+            for(var pair of form_data.entries()) {
+            }
+            axios({
+                method: "post",
+                url: `fv3/api/blueprints/?site=81812`,
+                data: form_data,
+                headers: { "Content-Type": "application/json" }
+                }).then(res=>{
+                    if (res.status == 201) {
+                        this.setState({
+                        document_name:"",
+                        document_type:"Document Type",
+                        files:[],
+                        showConfirmation : false,
+                        })
+                    this.handleUpdate(res)
+                        }  
+                    })
+                .catch(err=>{
+                    console.log(err)
                 })
-            .catch(err=>{
-                console.log(err)
-            })
-       }
+        }
        fileSelectedHandler = (e) => {
            this.setState({ 
                files: [
@@ -138,7 +167,7 @@ render(){
                           </a>
                         </li>
                         <li className="breadcrumb-item">
-                          <a href={breadcrumb.site_url}>{breadcrumb.name}</a>
+                          {breadcrumb.name}
                         </li>
                       </ol>
                    
@@ -157,8 +186,9 @@ render(){
                                                 </div>
                                             </div>
                                             <div className="card-body ">
-                                                  <SiteDocumentTable  site_document={this.state.site_document} handleDelete={(id)=>this.handleDelete(id)}/>
+                                                  <SiteDocumentTable  site_document={this.state.site_document} handleDelete={(id)=>this.handleDelete(id)} openDelete={this.openDelete}/>
                                              </div>
+                                            
                                            { showConfirmation &&
                                         (<Modal  title="Add site Document" toggleModal={this.cancelHandler}>
                                                           <form className="floating-form" onSubmit={this.handleSubmit}>
@@ -175,7 +205,7 @@ render(){
                                                                     <div className="form-group">
                                                                         <select className="wide" onChange={(e)=>this.handleChange(e)} name="document_type" value={this.state.document_type}>
                                                                             <option selected  value="Document Type">Document Type</option>
-                                                                            <option value="Blue print">Blue print</option>
+                                                                            <option  value="Blue print">Blue print</option>
                                                                             <option  value="Report">Report</option>
                                                                             <option  value="Drawing">Drawing</option>
                                                                             <option  value="Permit">Permit</option>
@@ -209,6 +239,26 @@ render(){
                                                            </Modal>
                                                           )
                                                           }
+                                        {this.state.deleteConfirmation &&
+                                                (<Modal title="Warning" toggleModal={this.cancleModel}>
+
+                                                    <div className="warning">
+                                                <p>Are you sure you want to delete?</p>
+                                                
+                                                </div>
+                                                <div className="warning-footer text-center">
+                                                <a
+                                                    className="fieldsight-btn rejected-btn"
+                                                    onClick={()=>{this.setState({deleteConfirmation:false})}}
+                                                >
+                                                    cancel
+                                                </a>
+                                                <a className="fieldsight-btn" onClick={()=>this.delete(this.state.id)}>
+                                                    confirm
+                                                </a>
+                                                </div>
+                                                </Modal>)}
+                                                          
                                         </div>
                                     </div>
                                 </div>
