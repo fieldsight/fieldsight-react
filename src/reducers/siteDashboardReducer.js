@@ -103,7 +103,7 @@ export default function(state = initialState, action) {
     case GET_SITE_DOCUMENTS:
       return {
         ...state,
-        siteDocuments: [...action.payload],
+        siteDocuments: [...action.payload.documents],
         siteDocumentsLoader: false
       };
 
