@@ -4,18 +4,22 @@ class About extends React.Component {
   render() {
     const { contacts, desc } = this.props;
     return (
-      <div className="card ">
-        <div className="about">
-          <div className="card-header main-card-header sub-card-header">
-            <h5>About</h5>
-          </div>
+      // <div className="card ">
+      <div className="about">
+        <div className="card-header main-card-header sub-card-header">
+          <h5>About</h5>
+        </div>
+        <div
+          className="thumb-list mr-0 "
+          style={{ position: "relative", height: "357px" }}
+        >
           <div className="card-body about-body">
             <div className="about-countent">
               <p>{desc}</p>
             </div>
             <div className="contact">
               <div className="card-header main-card-header sub-card-header">
-                <h5>Contact</h5>
+                <h5>Contacts</h5>
               </div>
               <div className="card-body">
                 <ul>
@@ -40,6 +44,7 @@ class About extends React.Component {
           </div>
         </div>
       </div>
+      // </div>
     );
   }
 }

@@ -44,7 +44,7 @@ class DashboardHeader extends React.Component {
       { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
       { title: "forms", link: `/forms/setup-forms/1/${id}` },
       {
-        title: `Import ${termsAndLabels && termsAndLabels.site}`,
+        title: `${termsAndLabels && termsAndLabels.site}`,
         link: `/fieldsight/application/?project=${id}#/project-sitelist`
       },
       {

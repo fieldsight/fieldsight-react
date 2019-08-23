@@ -18,7 +18,6 @@ import SiteListTable from "./dashboardComponent/SiteListTable";
 import {
   getProjectDashboard,
   getRegionData,
-  getSiteList,
   getProgressTableData
 } from "../../actions/projectDashboardActions";
 
@@ -64,7 +63,6 @@ class ProjectDashboard extends React.Component {
         if (this.state.activeTab == "region") {
           this.props.getRegionData(projectId);
         } else if (this.state.activeTab == "site") {
-          // this.props.getSiteList(projectId);
           this.props.paginationHandler(1, null, {
             type: "projectSiteList",
             projectId: projectId
@@ -103,7 +101,6 @@ class ProjectDashboard extends React.Component {
               projectId: projectId
             });
           }
-          // this.props.getSiteList(projectId)
         );
       }
     }
@@ -143,9 +140,7 @@ class ProjectDashboard extends React.Component {
         breadcrumbs,
         projectDashboardLoader,
         regionData,
-        // siteList,
         projectRegionDataLoader,
-        projectSiteListLoader,
         progressTableData,
         progressLoader
       },
@@ -236,7 +231,7 @@ class ProjectDashboard extends React.Component {
                           }
                           onClick={() => this.toggleTab("region")}
                         >
-                          Region
+                          Regions
                         </a>
                       </li>
                     )}
@@ -247,7 +242,7 @@ class ProjectDashboard extends React.Component {
                         }
                         onClick={() => this.toggleTab("site")}
                       >
-                        Site
+                        Sites
                       </a>
                     </li>
                   </ul>
@@ -389,12 +384,14 @@ class ProjectDashboard extends React.Component {
           <div className="about-section ">
             <div className="row">
               <div className="col-xl-4 col-md-6">
-                <About contacts={contacts} desc={public_desc} />
+                <div className="card ">
+                  <About contacts={contacts} desc={public_desc} />
+                </div>
               </div>
               <div className="col-xl-4 col-md-6">
                 <div className="card mangager-list">
                   <div className="card-header main-card-header sub-card-header">
-                    <h5>Project manager</h5>
+                    <h5>Project managers</h5>
                     {/* <div className="dash-btn">
                         <form className="floating-form">
                           <div className="form-group mr-0">
@@ -447,7 +444,6 @@ export default compose(
     {
       getProjectDashboard,
       getRegionData,
-      getSiteList,
       getProgressTableData
     }
   ),

@@ -5,10 +5,11 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../../myForm/Loader";
 import { BlockContentLoader } from "../../common/Loader";
 
-const ShowParent = ({ id, name }) => (
-  <tr className="heading-row">
-    <td>{id}</td>
-    <td>{name}</td>
+const ShowRow = ({ name }) => (
+  <tr>
+    <td />
+    <td>{!!name && <strong>{name}</strong>}</td>
+    <td />
     <td />
     <td />
     <td />
@@ -16,7 +17,7 @@ const ShowParent = ({ id, name }) => (
     <td />
   </tr>
 );
-const ShowChild = ({
+const ShowContentRow = ({
   sn,
   id,
   name,
@@ -27,11 +28,13 @@ const ShowChild = ({
   rejected
 }) => {
   return (
-    <tr className="sub-row" key={`${sn}_${id + 1}`}>
-      <td>
-        {sn}.{id + 1}
-      </td>
+    <tr
+      className={id ? "sub-row" : "heading-row"}
+      key={id ? `row_${sn}_${id}` : `row_${sn}`}
+    >
+      <td>{id ? `${sn}.${id}` : sn}</td>
       <td>{name}</td>
+      <td />
       <td>
         <div className="progress">
           <div
@@ -48,21 +51,78 @@ const ShowChild = ({
           </div>
         </div>
       </td>
-      <td>{pending}</td>
-      <td>{approved}</td>
-      <td>{flagged}</td>
-      <td>{rejected}</td>
+      <td>
+        <a className="pending">{pending}</a>
+      </td>
+      <td>
+        <a className="approved">{approved}</a>
+      </td>
+      <td>
+        <a className="flagged">{flagged}</a>
+      </td>
+      <td>
+        <a className="rejected">{rejected}</a>
+      </td>
     </tr>
   );
 };
+// const ShowChild = ({
+//   sn,
+//   id,
+//   name,
+//   progress,
+//   pending,
+//   approved,
+//   flagged,
+//   rejected
+// }) => {
+//   return (
+//     <tr className="sub-row" key={`childrow_${id + 1}`}>
+//       <td>
+//         {sn}.{id + 1}
+//       </td>
+//       <td>{name}</td>
+//       <td />
+//       <td>
+//         <div className="progress">
+//           <div
+//             className="progress-bar"
+//             role="progressbar"
+//             aria-valuenow="80"
+//             aria-valuemin="0"
+//             aria-valuemax="200"
+//             style={{
+//               width: progress + "%"
+//             }}
+//           >
+//             <span className="progress-count">{progress}%</span>
+//           </div>
+//         </div>
+//       </td>
+//       <td>
+//         <a className="pending">{pending}</a>
+//       </td>
+//       <td>
+//         <a className="approved">{approved}</a>
+//       </td>
+//       <td>
+//         <a className="flagged">{flagged}</a>
+//       </td>
+//       <td>
+//         <a className="rejected">{rejected}</a>
+//       </td>
+//     </tr>
+//   );
+// };
 
-const CheckCase = ({ sub, id }) => {
+const CheckCase = ({ sub, sn }) => {
   // if (sub.name) {
   return (
     <>
-      <tr className="sub-row" key={`stage_${id}`}>
-        <td>{id}</td>
+      <tr className="heading-row" key={`stage_${sn}`}>
+        <td>{sn}</td>
         <td>{sub.name}</td>
+        <td />
         <td />
         <td />
         <td />
@@ -73,9 +133,9 @@ const CheckCase = ({ sub, id }) => {
         sub.sub_stages.length > 0 &&
         sub.sub_stages.map((item, key) => {
           return (
-            <ShowChild
-              sn={id}
-              id={key}
+            <ShowContentRow
+              sn={sn}
+              id={key + 1}
               name={item.form_name}
               progress={item.progress}
               pending={item.pending}
@@ -109,6 +169,7 @@ class ProgressTable extends React.Component {
                     <tr>
                       <th>SN</th>
                       <th>Name</th>
+                      <th>View Submissions</th>
                       <th>Progress</th>
                       <th>Pending</th>
                       <th>Approved</th>
@@ -117,12 +178,12 @@ class ProgressTable extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {!!data.generals && <ShowParent id={sn} name="Generals" />}
+                    {Object.keys(!!data.generals && data.generals).length >
+                      0 && <ShowRow name="General Forms" />}
                     {!!data.generals &&
                       data.generals.map((general, id) => (
-                        <ShowChild
-                          sn={sn}
-                          id={id}
+                        <ShowContentRow
+                          sn={sn + id}
                           name={general.name}
                           progress={general.progress_data[0].progress}
                           pending={general.progress_data[0].pending}
@@ -131,14 +192,14 @@ class ProgressTable extends React.Component {
                           rejected={general.progress_data[0].rejected}
                         />
                       ))}
-                    {!!data.schedules && (
-                      <ShowParent id={sn + 1} name="Schedules" />
-                    )}
+                    {Object.keys(!!data.generals && data.generals).length >
+                      0 && <ShowRow />}
+                    {Object.keys(!!data.schedules && data.schedules).length >
+                      0 && <ShowRow name="Scheduled Forms" />}
                     {!!data.schedules &&
                       data.schedules.map((schedule, id) => (
-                        <ShowChild
-                          sn={sn + 1}
-                          id={id}
+                        <ShowContentRow
+                          sn={sn + id}
                           name={schedule.name}
                           progress={schedule.progress_data[0].progress}
                           pending={schedule.progress_data[0].pending}
@@ -147,11 +208,14 @@ class ProgressTable extends React.Component {
                           rejected={schedule.progress_data[0].rejected}
                         />
                       ))}
-                    {!!data.stages && <ShowParent id={sn + 2} name="Stages" />}
+                    {Object.keys(!!data.schedules && data.schedules).length >
+                      0 && <ShowRow />}
+                    {Object.keys(!!data.stages && data.stages).length > 0 && (
+                      <ShowRow name="Staged Forms" />
+                    )}
                     {!!data.stages &&
                       data.stages.map((sub, id) => {
-                        const snId = sn + 2 + "." + (id + 1);
-                        return <CheckCase sub={sub} id={snId} />;
+                        return <CheckCase sub={sub} sn={sn + id} />;
                       })}
                   </tbody>
                 </Table>

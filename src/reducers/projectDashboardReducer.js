@@ -25,9 +25,7 @@ const initialState = {
   breadcrumbs: "",
   projectDashboardLoader: true,
   regionData: [],
-  siteList: [],
   projectRegionDataLoader: true,
-  projectSiteListLoader: true,
   progressLoader: true,
   progressTableData: {}
 };
@@ -45,12 +43,6 @@ export default function(state = initialState, action) {
         ...state,
         regionData: [...action.payload],
         projectRegionDataLoader: false
-      };
-    case GET_SITE_LIST:
-      return {
-        ...state,
-        siteList: [...action.payload.results.data],
-        projectSiteListLoader: false
       };
     case GET_PROGRESS_TABLE_DATA:
       return {
