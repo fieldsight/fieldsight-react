@@ -4,8 +4,6 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../../myForm/Loader";
 import isEmpty from "../../../utils/isEmpty";
-// import withPagination from "../../../hoc/WithPagination";
-import { BlockContentLoader } from "../../common/Loader";
 
 class SiteListTable extends React.Component {
   state = {
@@ -16,9 +14,6 @@ class SiteListTable extends React.Component {
 
     return (
       <>
-        {/* {loader ? (
-          <BlockContentLoader number={10} height="15px" />
-        ) : ( */}
         <div className="card-body">
           <div style={{ position: "relative", height: "360px" }}>
             <PerfectScrollbar>
@@ -112,62 +107,7 @@ class SiteListTable extends React.Component {
               )}
             </PerfectScrollbar>
           </div>
-          {/* {this.props.siteList.length > 0 && (
-              <div className="table-footer">
-                <div className="showing-rows">
-                  <p>
-                    Showing <span>{this.props.fromData}</span> to{" "}
-                    <span>
-                      {" "}
-                      {this.props.toData > this.props.totalCount
-                        ? this.props.totalCount
-                        : this.props.toData}{" "}
-                    </span>{" "}
-                    of <span>{this.props.totalCount}</span> entries.
-                  </p>
-                </div>
-                {this.props.toData < this.props.totalCount ? (
-                  <div className="table-pagination">
-                    <ul>
-                      <li className="page-item">
-                        <a
-                          onClick={e =>
-                            this.props.paginationHandler(
-                              this.props.pageNum - 1,
-                              null,
-                              project_id
-                            )
-                          }
-                        >
-                          <i className="la la-long-arrow-left" />
-                        </a>
-                      </li>
-
-                      {this.props.renderPageNumbers({
-                        type: "projectSiteList",
-                        projectId: project_id
-                      })}
-
-                      <li className="page-item ">
-                        <a
-                          onClick={e =>
-                            this.props.paginationHandler(
-                              this.props.pageNum + 1,
-                              null,
-                              project_id
-                            )
-                          }
-                        >
-                          <i className="la la-long-arrow-right" />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                ) : null}
-              </div>
-            )} */}
         </div>
-        {/* )} */}
       </>
     );
   }

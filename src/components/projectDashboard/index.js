@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { BlockContentLoader } from "../myForm/Loader";
 import withPagination from "../../hoc/WithPagination";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
@@ -14,7 +13,7 @@ import SubmissionChart from "../siteDashboard/dashboardComponent/SubmissionChart
 import ProgressChart from "./dashboardComponent/ProgressChart";
 import About from "./dashboardComponent/About";
 import ProjectManager from "./dashboardComponent/ProjectManager";
-import Logs from "../siteDashboard/dashboardComponent/Logs";
+import Logs from "../common/Logs";
 import SiteListTable from "./dashboardComponent/SiteListTable";
 import {
   getProjectDashboard,
@@ -170,17 +169,15 @@ class ProjectDashboard extends React.Component {
           {Object.keys(breadcrumbs).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href={"#"}>{breadcrumbs.name}</a>
-              </li>
-              <li className="breadcrumb-item">
                 <a href={breadcrumbs.organization_url}>
                   {breadcrumbs.organization}
                 </a>
               </li>
+              <li className="breadcrumb-item">{breadcrumbs.name}</li>
 
-              <li className="breadcrumb-item active" aria-current="page">
+              {/* <li className="breadcrumb-item active" aria-current="page">
                 {breadcrumbs.site}
-              </li>
+              </li> */}
             </ol>
           )}
         </nav>
