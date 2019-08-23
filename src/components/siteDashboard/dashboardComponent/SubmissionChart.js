@@ -33,7 +33,7 @@ const options = {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: "Number Of Submissions"
+          labelString: "Number of Submissions"
         }
       }
     ]
