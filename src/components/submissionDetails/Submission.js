@@ -83,7 +83,6 @@ class Submission extends Component {
   };
 
   handleUnrepeatedSubmission = submission => {
-    const { site } = this.props;
     if (submission.type === "photo") {
       return (
         <div className="submission-list thumb-list" key={uuid()}>
