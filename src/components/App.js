@@ -11,6 +11,7 @@ import SiteList from "./projectSiteList/SiteList";
 import SubmissionDetails from "./submissionDetails";
 import MyrolesMain from "./myRoles/MyrolesMain";
 import RegionSite from "./regionalSite/RegionSite";
+import SiteDocument from "./siteDocument/siteDocument"
 
 import ProjectDashboard from "./projectDashboard";
 
@@ -79,6 +80,9 @@ class App extends Component {
                       path="/regional-site/:id"
                       render={props => <RegionSite {...props} />}
                     />
+                     <Route
+                      path="/site-documents/:id"
+                      render={props => <SiteDocument {...props} />}/>
 
                     <Route
                       path="/project-dashboard/:id"
