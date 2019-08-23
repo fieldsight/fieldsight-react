@@ -8,9 +8,11 @@ import {
   TOGGLE_NULL_SUBMISSIONS_ANSWER
 } from "../actions/types";
 
+import copy from "../utils/cloneNestedObject";
+
 const initialState = {
   master_submission_data: [],
-  toggle_submission: false,
+
   submission_data: [],
   date_created: "",
   submitted_by: "",
@@ -24,29 +26,41 @@ const initialState = {
   download_url: {},
   loading: false,
   initialLoader: true,
-  has_review_permission: false
+  has_review_permission: false,
+  hideNullValues: false
 };
 
-const toggleSubmission = submissions => {
+const getNullFilteredSubmission = submissions => {
   if (submissions.length === 0) return;
-
   const filterNullAnswer = submission => {
     return submission.filter(sub => {
       if (sub.type === "group" || sub.type === "repeat") {
-        const groupSubmission = {
-          ...sub,
-          elements: sub.elements.map(el => ({ ...el }))
-        };
-        groupSubmission.elements = filterNullAnswer(groupSubmission.elements);
-
-        return groupSubmission;
+        sub.elements = filterNullAnswer(sub.elements);
+        return sub.elements.length > 0 ? true : false;
       }
-
       return sub.answer;
     });
   };
 
   return filterNullAnswer(submissions);
+};
+
+const toggleNullSubmission = state => {
+  if (state.hideNullValues) {
+    return {
+      ...state,
+      submission_data: state.master_submission_data,
+      hideNullValues: false
+    };
+  }
+  const cloneSubmission = copy(state.submission_data);
+  const newSubmission = getNullFilteredSubmission(cloneSubmission);
+
+  return {
+    ...state,
+    submission_data: newSubmission,
+    hideNullValues: true
+  };
 };
 
 export default function(state = initialState, action) {
@@ -95,20 +109,7 @@ export default function(state = initialState, action) {
       };
 
     case TOGGLE_NULL_SUBMISSIONS_ANSWER:
-      if (state.toggle_submission) {
-        return {
-          ...state,
-          submission_data: state.master_submission_data,
-          toggle_submission: false
-        };
-      }
-      const newSubmission = toggleSubmission(state.submission_data);
-
-      return {
-        ...state,
-        submission_data: newSubmission,
-        toggle_submission: true
-      };
+      return toggleNullSubmission(state);
 
     case UPDATE_SUBMISSION_DETAIL: {
       return {

@@ -14,31 +14,36 @@ import {
 } from "../../actions/submissionDetailActions";
 
 const submissionId = window.submission_id ? window.submission_id : 66106;
+
 class SubmissionDetail extends Component {
   componentDidMount() {
     this.props.getSubmissionDetail(submissionId);
   }
+
   render() {
     const {
-      submissionDetail: {
-        site,
-        date_created,
-        submitted_by,
-        submission_data,
-        submission_history,
-        status_data,
-        fieldsight_instance,
-        edit_url,
-        download_url,
-        form_name,
-        has_review_permission,
-        loading,
-        initialLoader
-      },
-      postSubmissionDetail,
-      getSubmissionDetail,
-      toggleSubmission
-    } = this.props;
+      props: {
+        submissionDetail: {
+          site,
+          date_created,
+          submitted_by,
+          submission_data,
+          submission_history,
+          status_data,
+          fieldsight_instance,
+          edit_url,
+          download_url,
+          form_name,
+          has_review_permission,
+          loading,
+          initialLoader,
+          hideNullValues
+        },
+        postSubmissionDetail,
+        getSubmissionDetail,
+        toggleSubmission
+      }
+    } = this;
     return (
       <>
         {!initialLoader && (
@@ -95,6 +100,7 @@ class SubmissionDetail extends Component {
                   downloadUrl={download_url}
                   hasReviewPermission={has_review_permission}
                   toggleSubmission={toggleSubmission}
+                  hideNullValues={hideNullValues}
                 />
               </div>
             </div>
