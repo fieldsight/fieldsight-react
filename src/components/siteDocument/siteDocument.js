@@ -107,6 +107,8 @@ export default class SiteDocument extends Component{
         }
         handleSubmit=()=>{
             event.preventDefault();
+            const {match:{params:{id}}}=this.props;
+            console.log(id)
             let form_data= new FormData();
             const data= this.state.files;
             data.map(data=>{
@@ -120,7 +122,7 @@ export default class SiteDocument extends Component{
             }
             axios({
                 method: "post",
-                url: `fv3/api/blueprints/?site=81812`,
+                url: `fv3/api/blueprints/?site=${id}`,
                 data: form_data,
                 headers: { "Content-Type": "application/json" }
                 }).then(res=>{
