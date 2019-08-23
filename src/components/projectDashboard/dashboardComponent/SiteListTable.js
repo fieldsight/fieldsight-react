@@ -66,9 +66,9 @@ class SiteListTable extends React.Component {
 
                           <td>{item.address}</td>
                           <td>
-                            <a href="#" className="pending">
-                              {item.region}
-                            </a>
+                            {item.region}
+                            {/* <a href="#" className="pending">
+                            </a> */}
                           </td>
                           <td>
                             <div className="progress">

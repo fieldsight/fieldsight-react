@@ -30,11 +30,13 @@ const INITIAL_STATE = {
   showGallery: false,
   projectId: ""
 };
+const user_id = window.user_id ? window.user_id : 137;
+
 class ProjectDashboard extends React.Component {
   state = INITIAL_STATE;
 
   closeModal = type => {
-    const { id: projectId } = this.props.match.params;
+    // const { id: projectId } = this.props.match.params;
 
     if (type) {
       return this.setState({
@@ -44,7 +46,7 @@ class ProjectDashboard extends React.Component {
   };
 
   openModal = type => {
-    const { id: projectId } = this.props.match.params;
+    // const { id: projectId } = this.props.match.params;
 
     if (type) {
       return this.setState({
@@ -427,6 +429,7 @@ class ProjectDashboard extends React.Component {
                 showContentLoader={projectDashboardLoader}
                 siteId={id}
                 type="project"
+                user_id={user_id}
               />
             </div>
           </div>
