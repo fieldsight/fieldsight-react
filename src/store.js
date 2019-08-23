@@ -9,8 +9,6 @@ const initialState = {};
 const isDev = process.env.PLATFORM === "local";
 const middleware = [thunk];
 
-console.log("isDEv", isDev);
-
 const store = isDev
   ? createStore(
       rootReducer,
