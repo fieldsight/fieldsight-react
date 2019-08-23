@@ -25,7 +25,8 @@ const ShowContentRow = ({
   pending,
   approved,
   flagged,
-  rejected
+  rejected,
+  formUrl
 }) => {
   return (
     <tr
@@ -34,7 +35,15 @@ const ShowContentRow = ({
     >
       <td>{id ? `${sn}.${id}` : sn}</td>
       <td>{name}</td>
-      <td />
+      <td>
+        {formUrl ? (
+          <a className="badge badge-light" href={formUrl}>
+            <i className="la la-eye" />{" "}
+          </a>
+        ) : (
+          {}
+        )}
+      </td>
       <td>
         <div className="progress">
           <div
@@ -142,6 +151,7 @@ const CheckCase = ({ sub, sn }) => {
               approved={item.approved}
               flagged={item.flagged}
               rejected={item.rejected}
+              formUrl={item.form_url}
             />
           );
         })}
@@ -190,6 +200,7 @@ class ProgressTable extends React.Component {
                           approved={general.progress_data[0].approved}
                           flagged={general.progress_data[0].flagged}
                           rejected={general.progress_data[0].rejected}
+                          formUrl={general.form_url}
                         />
                       ))}
                     {Object.keys(!!data.generals && data.generals).length >
@@ -206,6 +217,7 @@ class ProgressTable extends React.Component {
                           approved={schedule.progress_data[0].approved}
                           flagged={schedule.progress_data[0].flagged}
                           rejected={schedule.progress_data[0].rejected}
+                          formUrl={schedule.form_url}
                         />
                       ))}
                     {Object.keys(!!data.schedules && data.schedules).length >
