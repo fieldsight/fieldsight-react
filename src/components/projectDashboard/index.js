@@ -104,6 +104,21 @@ class ProjectDashboard extends React.Component {
         );
       }
     }
+    if (nextProps.match.params.id !== this.props.match.params.id) {
+      const { id: projectId } = this.props.match.params;
+
+      this.setState(
+        {
+          ...INITIAL_STATE
+        },
+        () => {
+          this.props.getProjectDashboard(projectId);
+          this.props.getProgressTableData(projectId);
+
+          this.setState({ projectId: projectId });
+        }
+      );
+    }
   }
   onChangeHandler = e => {
     const searchValue = e.target.value;
