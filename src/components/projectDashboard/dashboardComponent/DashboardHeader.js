@@ -112,16 +112,16 @@ class DashboardHeader extends React.Component {
               </Dropdown.Menu>
             </Dropdown>
 
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Manage"
-                className="fieldsight-btn"
-              >
-                <i className="la la-cog" />
-                <span>Manage</span>
-              </Dropdown.Toggle>
-              {isProjectManager && (
+            {isProjectManager && (
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Manage"
+                  className="fieldsight-btn"
+                >
+                  <i className="la la-cog" />
+                  <span>Manage</span>
+                </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
                   {ManageDropdown.map((item, i) => (
                     <Dropdown.Item href={item.link} key={i} target="_blank">
@@ -129,15 +129,15 @@ class DashboardHeader extends React.Component {
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
-              )}
-            </Dropdown>
+              </Dropdown>
+            )}
           </div>
         </div>
         <div className="card-body">
           <div className="header-count">
             <a href={`/fieldsight/proj-submission/${id}/2/`} target="_blank">
               <CountCard
-                countName="Submissions"
+                countName=""
                 countNumber={totalSubmissions}
                 icon="la-copy"
                 // noSubmissionText={true}
