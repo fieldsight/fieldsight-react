@@ -949,7 +949,7 @@ class Logs extends Component {
         const messages = errormsg.split("@error");
         let readableerror = "";
         if (messages.length > 1) {
-          errors = messages[1].split("DETAIL:");
+          const errors = messages[1].split("DETAIL:");
           if (errors.length > 1) {
             readableerror = errors[1];
           } else {
