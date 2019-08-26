@@ -38,7 +38,9 @@ class DashboardHeader extends React.Component {
       openModal,
       showCropper,
       termsAndLabels,
-      showGallery
+      showGallery,
+      isProjectManager,
+      totalSubmissions
     } = this.props;
     const ManageDropdown = [
       { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
@@ -119,28 +121,31 @@ class DashboardHeader extends React.Component {
                 <i className="la la-cog" />
                 <span>Manage</span>
               </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
+              {isProjectManager && (
+                <Dropdown.Menu className="dropdown-menu-right">
+                  {ManageDropdown.map((item, i) => (
+                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              )}
             </Dropdown>
           </div>
         </div>
         <div className="card-body">
           <div className="header-count">
-            {/* <a href={`/#`} target="_blank">
+            <a href={`/fieldsight/proj-submission/${id}/2/`} target="_blank">
               <CountCard
                 countName="Submissions"
-                countNumber={50}
+                countNumber={totalSubmissions}
                 icon="la-copy"
+                // noSubmissionText={true}
               />
-            </a> */}
+            </a>
             <a href={`/fieldsight/proj-users/${id}/`} target="_blank">
               <CountCard
-                countName="Total Users"
+                countName="Users"
                 countNumber={totalUsers}
                 icon="la-user"
                 noSubmissionText={true}
@@ -151,7 +156,7 @@ class DashboardHeader extends React.Component {
               target="_blank"
             >
               <CountCard
-                countName="Total sites"
+                countName="sites"
                 countNumber={totalSites}
                 icon="la-map-marker"
                 noSubmissionText={true}

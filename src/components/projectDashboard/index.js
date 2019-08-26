@@ -144,7 +144,8 @@ class ProjectDashboard extends React.Component {
         regionData,
         projectRegionDataLoader,
         progressTableData,
-        progressLoader
+        progressLoader,
+        is_project_manager
       },
       siteList,
       dLoader,
@@ -186,6 +187,7 @@ class ProjectDashboard extends React.Component {
             public_desc={public_desc}
             totalUsers={total_users}
             totalSites={total_sites}
+            totalSubmissions={project_activity.total_submissions}
             id={id}
             showContentLoader={projectDashboardLoader}
             activeTab={activeTab}
@@ -194,6 +196,7 @@ class ProjectDashboard extends React.Component {
             showCropper={showCropper}
             termsAndLabels={terms_and_labels}
             showGallery={showGallery}
+            isProjectManager={is_project_manager}
           />
           <div className="row">
             <div className="col-lg-6">
@@ -251,6 +254,15 @@ class ProjectDashboard extends React.Component {
                   {/* </div> */}
                   {activeTab === "site" && (
                     <div className="dash-btn">
+                      {is_project_manager && (
+                        <a
+                          href={`/fieldsight/site/add/${projectId}/`}
+                          target="_blank"
+                          className="fieldsight-btn left-icon"
+                        >
+                          <i className="la la-plus" />
+                        </a>
+                      )}
                       <form
                         className="floating-form"
                         onSubmit={e => {
