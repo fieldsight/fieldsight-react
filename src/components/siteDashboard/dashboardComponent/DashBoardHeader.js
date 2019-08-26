@@ -175,7 +175,7 @@ class DashboardHeader extends Component {
               target="_blank"
             >
               <CountCard
-                countName="Total"
+                countName=""
                 countNumber={totalSubmission}
                 icon="la-clone"
               />
