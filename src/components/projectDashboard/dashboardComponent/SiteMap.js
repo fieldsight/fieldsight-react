@@ -25,7 +25,11 @@ const MyPopupMarker = props => (
   <Marker
     position={[props.geometry.coordinates[1], props.geometry.coordinates[0]]}
   >
-    <Popup>{props.properties.name}</Popup>
+    <Popup>
+      <a href={props.url} target="_blank">
+        {props.properties.name}
+      </a>
+    </Popup>
   </Marker>
 );
 
