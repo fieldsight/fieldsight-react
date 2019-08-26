@@ -1,4 +1,5 @@
 import React from "react";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 class About extends React.Component {
   render() {
@@ -13,35 +14,37 @@ class About extends React.Component {
           className="thumb-list mr-0 "
           style={{ position: "relative", height: "357px" }}
         >
-          <div className="card-body about-body">
-            <div className="about-countent">
-              <p>{desc}</p>
-            </div>
-            <div className="contact">
-              <div className="card-header main-card-header sub-card-header">
-                <h5>Contacts</h5>
+          <PerfectScrollbar>
+            <div className="card-body about-body">
+              <div className="about-countent">
+                <p>{desc}</p>
               </div>
-              <div className="card-body">
-                <ul>
-                  {contacts.phone && (
-                    <li>
-                      <i className="la la-phone" /> {contacts.phone}
-                    </li>
-                  )}
-                  {contacts.email && (
-                    <li>
-                      <i className="la la-envelope" /> {contacts.email}
-                    </li>
-                  )}
-                  {contacts.website && (
-                    <li>
-                      <i className="la la-external-link" /> {contacts.website}
-                    </li>
-                  )}
-                </ul>
+              <div className="contact">
+                <div className="card-header main-card-header sub-card-header">
+                  <h5>Contacts</h5>
+                </div>
+                <div className="card-body">
+                  <ul>
+                    {contacts.phone && (
+                      <li>
+                        <i className="la la-phone" /> {contacts.phone}
+                      </li>
+                    )}
+                    {contacts.email && (
+                      <li>
+                        <i className="la la-envelope" /> {contacts.email}
+                      </li>
+                    )}
+                    {contacts.website && (
+                      <li>
+                        <i className="la la-external-link" /> {contacts.website}
+                      </li>
+                    )}
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
+          </PerfectScrollbar>
         </div>
       </div>
       // </div>
