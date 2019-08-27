@@ -28,22 +28,15 @@ const ShowContentRow = ({
   rejected,
   formUrl
 }) => {
+  const totalSubmissions = pending + approved + flagged + rejected;
   return (
     <tr
       className={id ? "sub-row" : "heading-row"}
-      key={id ? `row_${sn}_${id}` : `row_${sn}`}
+      key={id ? `row_${name}_${sn}_${id}` : `row_${name}_${sn}`}
     >
       <td>{id ? `${sn}.${id}` : sn}</td>
       <td>{name}</td>
-      <td>
-        {formUrl ? (
-          <a className="badge badge-light" href={formUrl}>
-            <i className="la la-eye" />{" "}
-          </a>
-        ) : (
-          {}
-        )}
-      </td>
+
       <td>
         <div className="progress">
           <div
@@ -56,9 +49,22 @@ const ShowContentRow = ({
               width: progress + "%"
             }}
           >
-            <span className="progress-count">{progress}%</span>
+            <span className="progress-counts">{progress}%</span>
           </div>
         </div>
+      </td>
+      <td>
+        {formUrl ? (
+          <a className="badge badge-light" href={formUrl}>
+            <i className="la la-eye">
+              {totalSubmissions == 0
+                ? "No Submission"
+                : totalSubmissions + " Submission(s)"}
+            </i>
+          </a>
+        ) : (
+          {}
+        )}
       </td>
       <td>
         <a className="pending">{pending}</a>
@@ -179,8 +185,8 @@ class ProgressTable extends React.Component {
                     <tr>
                       <th>SN</th>
                       <th>Name</th>
-                      <th>View Submissions</th>
                       <th>Progress</th>
+                      <th>View Submissions</th>
                       <th>Pending</th>
                       <th>Approved</th>
                       <th>Flagged</th>
