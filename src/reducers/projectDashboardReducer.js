@@ -23,6 +23,7 @@ const initialState = {
   map: "",
   terms_and_labels: "",
   breadcrumbs: "",
+  is_project_manager: "",
   projectDashboardLoader: true,
   regionData: [],
   projectRegionDataLoader: true,

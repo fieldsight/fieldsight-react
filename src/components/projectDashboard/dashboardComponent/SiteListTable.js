@@ -29,7 +29,7 @@ class SiteListTable extends React.Component {
                         {!isEmpty(terms) ? `${terms.site}` : "Sites"} Name
                       </th>
                       <th>id</th>
-                      <th>Address</th>
+                      {/* <th>Address</th> */}
                       <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>
                       <th>Progress</th>
                       <th>Submissions</th>
@@ -56,15 +56,15 @@ class SiteListTable extends React.Component {
                               }
                               className="pending table-profile"
                             >
-                              <figure>
+                              {/* <figure>
                                 <img src={item.logo} alt="site-logo" />
-                              </figure>
+                              </figure> */}
                               <h5>{item.name}</h5>
                             </a>
                           </td>
                           <td>{item.identifier}</td>
 
-                          <td>{item.address}</td>
+                          {/* <td>{item.address}</td> */}
                           <td>
                             {item.region}
                             {/* <a href="#" className="pending">
@@ -80,13 +80,13 @@ class SiteListTable extends React.Component {
                                 aria-valuemax="200"
                                 style={{ width: item.progress + "%" }}
                               >
-                                <span className="progress-count">
+                                <span className="progress-counts">
                                   {item.progress + "%"}
                                 </span>
                               </div>
                             </div>
                           </td>
-                          <td>{item.submissions}</td>
+                          <td style={{ right: "-28px" }}>{item.submissions}</td>
                           <td>
                             <a
                               className={
