@@ -1,89 +1,131 @@
 import React, { Component } from "react";
+import { Button, Dropdown } from "react-bootstrap";
+
+import { AvatarContentLoader } from "../../common/Loader";
+import CountCard from "../../common/CountCard";
 
 class DashboardHeader extends Component {
   render() {
+    const {
+      name,
+      address,
+      logo,
+      public_desc,
+      totalSites,
+      totalSubmissions,
+      id,
+      showContentLoader,
+      activeTab,
+      closeModal,
+      openModal,
+      showCropper,
+      showGallery
+    } = this.props;
+
+    const ManageDropdown = [
+      { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
+      { title: "forms", link: `/forms/setup-forms/1/${id}` },
+      {
+        title: `settings`,
+        link: `/fieldsight/application/?project=${id}#/project-settings`
+      }
+    ];
+    const DataDropdown = [
+      {
+        title: "Generate Report",
+        link: `/fieldsight/project-dashboard/${id}/`
+      },
+      { title: "View Data", link: `/forms/project-responses/${id}/` }
+    ];
     return (
       <div className="card mrb-30">
         <div className="card-header main-card-header dashboard-header">
-          <div className="dash-pf">
-            <figure>
-              <img src="img/pf.jpg" alt="pf" />
-            </figure>
-            <div className="dash-pf-content">
-              <h5>Rapid Market Assessment (Philippine Shelter Cluster)</h5>
-              <span>
-                Unit 304 SEDCCO 1 Building 120 Rada Street, Legaspi Village
-                Makati, NCR, 1229, Philippines
-              </span>
+          {showContentLoader ? (
+            <AvatarContentLoader number={1} width="300px" size="80" />
+          ) : (
+            <div className="dash-pf">
+              <figure
+                style={{
+                  backgroundImage: `url(${logo})`,
+                  width: "80px"
+                }}
+              >
+                <span />
+                <figcaption>
+                  <a
+                    className="photo-preview"
+                    onClick={() => openModal("Gallery")}
+                  >
+                    <i className="la la-eye" />
+                  </a>
+                </figcaption>
+              </figure>
+              <div className="dash-pf-content">
+                {name && <h5>{name}</h5>}
+                {/* {identifier && <span>{identifier}</span>} */}
+                {address && <span>{address}</span>}
+                {/* {region && <span>{region} </span>} */}
+              </div>
             </div>
-          </div>
+          )}
           <div className="dash-btn">
-            <div className="dropdown">
-              <button
-                type="button"
-                className="fieldsight-btn dropdown-toggle"
-                data-toggle="dropdown"
+            <Dropdown>
+              <Dropdown.Toggle
+                variant=""
+                id="dropdown-Data"
+                className="fieldsight-btn"
               >
                 <i className="la la-paste" />
                 <span>Data</span>
-                <i className="la la-angle-down" />
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  User
-                </a>
-                <a className="dropdown-item" href="#">
-                  Project
-                </a>
-                <a className="dropdown-item" href="#">
-                  Setting
-                </a>
-              </div>
-            </div>
-            <div className="dropdown">
-              <button
-                type="button"
-                className="fieldsight-btn dropdown-toggle"
-                data-toggle="dropdown"
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="dropdown-menu-right">
+                {DataDropdown.map((item, i) => (
+                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                    {item.title}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown>
+              <Dropdown.Toggle
+                variant=""
+                id="dropdown-Manage"
+                className="fieldsight-btn"
               >
                 <i className="la la-cog" />
                 <span>Manage</span>
-                <i className="la la-angle-down" />
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  User
-                </a>
-                <a className="dropdown-item" href="#">
-                  Project
-                </a>
-                <a className="dropdown-item" href="#">
-                  Setting
-                </a>
-              </div>
-            </div>
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="dropdown-menu-right">
+                {ManageDropdown.map((item, i) => (
+                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                    {item.title}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         </div>
         <div className="card-body">
           <div className="header-count">
-            <div className="count-card">
-              <div className="count-icon">
-                <i className="la la-copy" />
-              </div>
-              <div className="count-content">
-                <h4>50</h4>
-                <h6>submissions</h6>
-              </div>
-            </div>
-            <div className="count-card">
-              <div className="count-icon">
-                <i className="la la-map-marker" />
-              </div>
-              <div className="count-content">
-                <h4>13</h4>
-                <h6>Total sites</h6>
-              </div>
-            </div>
+            <a href={`/fieldsight/proj-submission/${id}/2/`} target="_blank">
+              <CountCard
+                countName=""
+                countNumber={totalSubmissions}
+                icon="la-copy"
+                // noSubmissionText={true}
+              />
+            </a>
+            <a
+              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+              target="_blank"
+            >
+              <CountCard
+                countName="sites"
+                countNumber={totalSites}
+                icon="la-map-marker"
+                noSubmissionText={true}
+              />
+            </a>
           </div>
         </div>
       </div>

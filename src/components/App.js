@@ -92,7 +92,7 @@ class App extends Component {
                     />
 
                     <Route
-                      path="/team-dashboard/"
+                      path="/team-dashboard/:id"
                       render={props => <TeamDashboard {...props} />}
                     />
                   </Switch>

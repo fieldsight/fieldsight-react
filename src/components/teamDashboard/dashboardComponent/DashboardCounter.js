@@ -1,54 +1,38 @@
 import React, { Component } from "react";
+import CountCard from "../../common/CountCard";
+
+const getIcon = submission => {
+  if (submission === "rejected") {
+    return "la-close";
+  } else if (submission === "approved") {
+    return "la-thumbs-up";
+  } else if (submission === "flagged") {
+    return "la-flag";
+  } else if (submission === "pending") {
+    return "la-copy";
+  }
+};
+const ShowCount = props => (
+  <div className="col-xl-3 col-md-6">
+    <CountCard
+      countName={props.name}
+      countNumber={props.count}
+      className={props.name}
+      icon={getIcon(props.name)}
+    />
+  </div>
+);
 
 class DashboardCounter extends Component {
   render() {
+    const { submissions } = this.props;
     return (
       <div className="dashboard-counter mrt-30">
         <div className="row">
-          <div className="col-xl-3 col-md-6">
-            <div className="count-card">
-              <div className="count-icon pending">
-                <i className="la la-copy " />
-              </div>
-              <div className="count-content">
-                <h4>50</h4>
-                <h6>Pending submissions</h6>
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-3 col-md-6">
-            <div className="count-card ">
-              <div className="count-icon approved">
-                <i className="la la-thumbs-up " />
-              </div>
-              <div className="count-content">
-                <h4>50</h4>
-                <h6>approved submissions</h6>
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-3 col-md-6">
-            <div className="count-card ">
-              <div className="count-icon flagged">
-                <i className="la la-flag-o " />
-              </div>
-              <div className="count-content">
-                <h4>50</h4>
-                <h6>flagged submissions</h6>
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-3 col-md-6">
-            <div className="count-card">
-              <div className="count-icon rejected">
-                <i className="la la-close " />
-              </div>
-              <div className="count-content">
-                <h4>50</h4>
-                <h6>rejected submissions</h6>
-              </div>
-            </div>
-          </div>
+          <ShowCount name="pending" count={submissions.submissions} />
+          <ShowCount name="approved" count={submissions.approved} />
+          <ShowCount name="flagged" count={submissions.flagged} />
+          <ShowCount name="rejected" count={submissions.rejected} />
         </div>
       </div>
     );

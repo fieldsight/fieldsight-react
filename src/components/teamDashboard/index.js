@@ -6,10 +6,7 @@ import ProjectList from "./dashboardComponent/ProjectList";
 import DashboardCounter from "./dashboardComponent/DashboardCounter";
 import About from "./dashboardComponent/About";
 import Admin from "./dashboardComponent/Admin";
-// import {
-//   getSiteDashboard,
-
-// } from "../../actions/siteDashboardActions";
+import { getTeamDashboard } from "../../actions/teamDashboardActions";
 
 const INITIAL_STATE = {
   activeTab: "general",
@@ -23,15 +20,15 @@ class TeamDashboard extends Component {
   state = INITIAL_STATE;
 
   closeModal = type => {
-    const { id: siteId } = this.props.match.params;
+    const { id: teamId } = this.props.match.params;
 
     if (type === "Header" || type === "Submission") {
       return this.setState(
         {
           [`show${type}Modal`]: false,
           activeTab: "general"
-        },
-        () => this.props.getSiteForms(siteId, "general")
+        }
+        // () => this.props.getSiteForms(teamId, "general")
       );
     }
 
@@ -41,7 +38,7 @@ class TeamDashboard extends Component {
   };
 
   openModal = type => {
-    const { id: siteId } = this.props.match.params;
+    const { id: teamId } = this.props.match.params;
 
     if (type === "Header" || type === "Submission") {
       return this.setState({
@@ -53,8 +50,8 @@ class TeamDashboard extends Component {
       return this.setState(
         {
           showSubsites: true
-        },
-        () => this.props.getSubsites(siteId)
+        }
+        // () => this.props.getSubsites(teamId)
       );
     }
 
@@ -64,80 +61,97 @@ class TeamDashboard extends Component {
   };
 
   toggleTab = formType => {
-    const { id: siteId } = this.props.match.params;
-    this.setState(
-      {
-        activeTab: formType
-      },
-      this.props.getSiteForms(siteId, formType)
-    );
+    // const { id: teamId } = this.props.match.params;
+    // this.setState(
+    //   {
+    //     activeTab: formType
+    //   },
+    // );
   };
 
   componentDidMount() {
-    // const { id: siteId } = this.props.match.params;
-    // this.props.getSiteDashboard(siteId);
+    const { id: teamId } = this.props.match.params;
+    this.props.getTeamDashboard(teamId);
   }
 
   componentDidUpdate(prevProps) {
-    // if (prevProps.match.params.id !== this.props.match.params.id) {
-    //   const { id: siteId } = this.props.match.params;
-    //   this.setState(
-    //     {
-    //       ...INITIAL_STATE
-    //     },
-    //     () => {
-    //       this.props.getSiteDashboard(siteId);
-    //       this.props.getSiteMetas(siteId);
-    //       this.props.getSiteSubmissions(siteId);
-    //       this.props.getSiteDocuments(siteId);
-    //       this.props.getSiteLogs(siteId);
-    //       this.props.getSiteForms(siteId, "general");
-    //       this.props.getRecentPictures(siteId);
-    //     }
-    //   );
-    // }
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      const { id: teamId } = this.props.match.params;
+      this.setState(
+        {
+          ...INITIAL_STATE
+        },
+        () => {
+          this.props.getTeamDashboard(teamId);
+        }
+      );
+    }
   }
   render() {
-    // const {
-    //   props: {
-    //     teamDashboard: { breadcrumbs },
-    //     match: {
-    //       params: { id: teamId }
-    //     }
-    //   },
-    //   state: {
-    //     showHeaderModal,
-    //     showSubmissionModal,
-    //     activeTab,
-    //     showCropper,
-    //     showGallery,
-    //     showSubsites
-    //   },
-    //   closeModal,
-    //   openModal,
-    //   toggleTab
-    // } = this;
+    const {
+      props: {
+        teamDashboard: {
+          id,
+          name,
+          address,
+          public_desc,
+          logo,
+          contact,
+          total_sites,
+          submissions,
+          projects,
+          admin,
+          breadcrumbs,
+          teamDashboardLoader
+        },
+        match: {
+          params: { id: teamId }
+        }
+      },
+      state: {
+        showHeaderModal,
+        showSubmissionModal,
+        activeTab,
+        showCropper,
+        showGallery,
+        showSubsites
+      },
+      closeModal,
+      openModal,
+      toggleTab
+    } = this;
+    console.log("props", this.props);
 
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="/fieldsight/organization/">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="/fieldsight/organization-dashboard/13/">organization</a>
-            </li>
-
-            <li className="breadcrumb-item active" aria-current="page">
-              organization dashboard
-            </li>
-          </ol>
+          {Object.keys(breadcrumbs).length > 0 && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.teams_url}>{breadcrumbs.teams}</a>
+              </li>
+              <li className="breadcrumb-item">{breadcrumbs.name}</li>
+            </ol>
+          )}
         </nav>
         <div className="row">
           <div className="col-xl-12">
             <div className="right-content no-bg new-dashboard">
-              <DashboardHeader />
+              <DashboardHeader
+                name={name}
+                address={address}
+                logo={logo}
+                public_desc={public_desc}
+                totalSites={total_sites}
+                totalSubmissions={submissions.total_submissions}
+                id={id}
+                showContentLoader={teamDashboardLoader}
+                activeTab={activeTab}
+                closeModal={this.closeModal}
+                openModal={this.openModal}
+                showCropper={showCropper}
+                showGallery={showGallery}
+              />
               <div className="row">
                 <div className="col-lg-8">
                   <div className="card map">
@@ -173,19 +187,19 @@ class TeamDashboard extends Component {
                         </a>
                       </div>
                     </div>
-                    <ProjectList />
+                    <ProjectList projects={projects} />
                   </div>
                 </div>
               </div>
-              <DashboardCounter />
+              <DashboardCounter submissions={submissions} />
               <div className="about-section ">
                 <div className="row">
-                  <About />
+                  <About contacts={contact} desc={public_desc} />
                   <div className="col-lg-4">
                     <div className="card admin">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>Admin</h5>
-                        <div className="dash-btn">
+                        {/* <div className="dash-btn">
                           <form className="floating-form">
                             <div className="form-group mr-0">
                               <input
@@ -200,9 +214,12 @@ class TeamDashboard extends Component {
                           <a href="#" className="fieldsight-btn">
                             <i className="la la-plus" />
                           </a>
-                        </div>
+                        </div> */}
                       </div>
-                      <Admin />
+                      <Admin
+                        admin={admin}
+                        showContentLoader={teamDashboardLoader}
+                      />
                     </div>
                   </div>
                 </div>
@@ -219,8 +236,9 @@ const mapStateToProps = ({ teamDashboard }) => ({
   teamDashboard
 });
 
-export default connect()(TeamDashboard);
-// mapStateToProps,
-// {
-//   getSiteDashboard
-// }
+export default connect(
+  mapStateToProps,
+  {
+    getTeamDashboard
+  }
+)(TeamDashboard);

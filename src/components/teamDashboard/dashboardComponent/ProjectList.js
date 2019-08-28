@@ -1,84 +1,31 @@
 import React, { Component } from "react";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
+const imgUrl = "https://naxafieldsight.s3.amazonaws.com/";
 class ProjectList extends Component {
   render() {
+    const { projects } = this.props;
     return (
       <div className="card-body">
-        <div className="thumb-list mr-0">
-          <ul>
-            <li>
-              <figure>
-                <img src="img/pf.jpg" alt="pf" />
-              </figure>
-              <div className="content">
-                <h6>Housing Recovery and Reconstruction Platform Nepal </h6>
-                <span>
-                  Sein Villa – 25/E, Thirimingalar Ave. Street, Ward No. 7,
-                  Yankin Township | Yangon Myanmar
-                </span>
-              </div>
-            </li>
-            <li>
-              <figure>
-                <img src="img/pf.jpg" alt="pf" />
-              </figure>
-              <div className="content">
-                <h6>Housing Recovery and Reconstruction Platform Nepal </h6>
-                <span>
-                  Sein Villa – 25/E, Thirimingalar Ave. Street, Ward No. 7,
-                  Yankin Township | Yangon Myanmar
-                </span>
-              </div>
-            </li>
-            <li>
-              <figure>
-                <img src="img/pf.jpg" alt="pf" />
-              </figure>
-              <div className="content">
-                <h6>Housing Recovery and Reconstruction Platform Nepal </h6>
-                <span>
-                  Sein Villa – 25/E, Thirimingalar Ave. Street, Ward No. 7,
-                  Yankin Township | Yangon Myanmar
-                </span>
-              </div>
-            </li>
-            <li>
-              <figure>
-                <img src="img/pf.jpg" alt="pf" />
-              </figure>
-              <div className="content">
-                <h6>Housing Recovery and Reconstruction Platform Nepal </h6>
-                <span>
-                  Sein Villa – 25/E, Thirimingalar Ave. Street, Ward No. 7,
-                  Yankin Township | Yangon Myanmar
-                </span>
-              </div>
-            </li>
-            <li>
-              <figure>
-                <img src="img/pf.jpg" alt="pf" />
-              </figure>
-              <div className="content">
-                <h6>Housing Recovery and Reconstruction Platform Nepal </h6>
-                <span>
-                  Sein Villa – 25/E, Thirimingalar Ave. Street, Ward No. 7,
-                  Yankin Township | Yangon Myanmar
-                </span>
-              </div>
-            </li>
-            <li>
-              <figure>
-                <img src="img/pf.jpg" alt="pf" />
-              </figure>
-              <div className="content">
-                <h6>Housing Recovery and Reconstruction Platform Nepal </h6>
-                <span>
-                  Sein Villa – 25/E, Thirimingalar Ave. Street, Ward No. 7,
-                  Yankin Township | Yangon Myanmar
-                </span>
-              </div>
-            </li>
-          </ul>
+        <div
+          className="thumb-list mr-0"
+          style={{ position: "relative", height: "496px" }}
+        >
+          <PerfectScrollbar>
+            <ul>
+              {projects.length > 0 &&
+                projects.map((each, index) => (
+                  <li key={index}>
+                    <figure>
+                      <img src={`${imgUrl}${each.logo}`} alt="pf" />
+                    </figure>
+                    <div className="content">
+                      <h6>{each.name} </h6>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </PerfectScrollbar>
         </div>
       </div>
     );

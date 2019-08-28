@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 class About extends Component {
   render() {
+    const { contacts, desc } = this.props;
+
     return (
       <div className="col-lg-8">
         <div className="card ">
@@ -9,37 +12,38 @@ class About extends Component {
             <div className="card-header main-card-header sub-card-header">
               <h5>About</h5>
             </div>
-            <div className="card-body about-body">
-              <div className="about-countent">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-                  lacinia malesuada odio sed porta. Nam sed dapibus ligula. Sed
-                  ultrices rhoncus laoreet. Quisque sed tortor nec nunc pel
-                  lentesque consequat eget ac lectus. Morbi sit amet lorem vitae
-                  arcu faucibus varius. Sed in ligula sem. Sed feugiat mi eu
-                  ligula euismod, vitae fringilla mauris ullamcorper. Vestibulum
-                  ante ipsum primis in faucibus orci luctus et ultrices posuere
-                  cubilia Curae; Morbi at pellentesque est.
-                </p>
-              </div>
-              <div className="contact">
-                <div className="card-header main-card-header sub-card-header">
-                  <h5>Contact</h5>
+            <div
+              className="thumb-list mr-0 "
+              style={{ position: "relative", height: "327px" }}
+            >
+              <PerfectScrollbar>
+                <div className="card-body about-body">
+                  <div className="about-countent">
+                    <p>{desc}</p>
+                  </div>
+                  <div className="contact">
+                    <div className="card-header main-card-header sub-card-header">
+                      <h5>Contact</h5>
+                    </div>
+                    <div className="card-body">
+                      <ul>
+                        <li>
+                          <i className="la la-phone" /> {contacts.phone}
+                        </li>
+                        <li>
+                          <i className="la la-envelope" /> {contacts.email}
+                        </li>
+                        {contacts.website && (
+                          <li>
+                            <i className="la la-external-link" />{" "}
+                            {contacts.website}
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-                <div className="card-body">
-                  <ul>
-                    <li>
-                      <i className="la la-phone" /> 9856055360
-                    </li>
-                    <li>
-                      <i className="la la-envelope" /> info@naxa.com.np
-                    </li>
-                    <li>
-                      <i className="la la-map-marker" /> Kathmandu , Nepal
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              </PerfectScrollbar>
             </div>
           </div>
         </div>
