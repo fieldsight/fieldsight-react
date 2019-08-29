@@ -21,6 +21,7 @@ class ProjectList extends Component {
                     </figure>
                     <div className="content">
                       <h6>{each.name} </h6>
+                      {each.address && <span>{each.address}</span>}
                     </div>
                   </li>
                 ))}

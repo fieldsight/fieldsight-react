@@ -12,6 +12,8 @@ class DashboardHeader extends Component {
       logo,
       public_desc,
       totalSites,
+      totalUser,
+      totalProjects,
       totalSubmissions,
       id,
       showContentLoader,
@@ -30,13 +32,7 @@ class DashboardHeader extends Component {
         link: `/fieldsight/application/?project=${id}#/project-settings`
       }
     ];
-    const DataDropdown = [
-      {
-        title: "Generate Report",
-        link: `/fieldsight/project-dashboard/${id}/`
-      },
-      { title: "View Data", link: `/forms/project-responses/${id}/` }
-    ];
+
     return (
       <div className="card mrb-30">
         <div className="card-header main-card-header dashboard-header">
@@ -72,23 +68,6 @@ class DashboardHeader extends Component {
             <Dropdown>
               <Dropdown.Toggle
                 variant=""
-                id="dropdown-Data"
-                className="fieldsight-btn"
-              >
-                <i className="la la-paste" />
-                <span>Data</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                {DataDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
                 id="dropdown-Manage"
                 className="fieldsight-btn"
               >
@@ -113,6 +92,28 @@ class DashboardHeader extends Component {
                 countNumber={totalSubmissions}
                 icon="la-copy"
                 // noSubmissionText={true}
+              />
+            </a>
+            <a
+              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+              target="_blank"
+            >
+              <CountCard
+                countName="users"
+                countNumber={totalUser}
+                icon="la-user"
+                noSubmissionText={true}
+              />
+            </a>
+            <a
+              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+              target="_blank"
+            >
+              <CountCard
+                countName="projects"
+                countNumber={totalProjects}
+                icon="la la-tasks"
+                noSubmissionText={true}
               />
             </a>
             <a

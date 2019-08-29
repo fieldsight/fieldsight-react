@@ -12,7 +12,9 @@ const initialState = {
   projects: "",
   admin: "",
   breadcrumbs: "",
-  teamDashboardLoader: true
+  teamDashboardLoader: true,
+  total_projects: "",
+  total_users: ""
 };
 
 export default function(state = initialState, action) {

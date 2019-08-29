@@ -102,7 +102,9 @@ class TeamDashboard extends Component {
           projects,
           admin,
           breadcrumbs,
-          teamDashboardLoader
+          teamDashboardLoader,
+          total_projects,
+          total_users
         },
         match: {
           params: { id: teamId }
@@ -143,6 +145,8 @@ class TeamDashboard extends Component {
                 logo={logo}
                 public_desc={public_desc}
                 totalSites={total_sites}
+                totalUser={total_users}
+                totalProjects={total_projects}
                 totalSubmissions={submissions.total_submissions}
                 id={id}
                 showContentLoader={teamDashboardLoader}
