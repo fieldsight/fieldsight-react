@@ -108,6 +108,7 @@ class ProjectSiteTable extends Component {
                     <th>id</th>
                     <th>Address</th>
                     <th>Region</th>
+                    <th>Type</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>
@@ -148,6 +149,7 @@ class ProjectSiteTable extends Component {
                             {item.region}
                           </a>
                         </td>
+                        <td>{item.type}</td>
                         <td>
                           <div className="progress">
                             <div

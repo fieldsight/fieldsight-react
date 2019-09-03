@@ -32,6 +32,7 @@ class SiteTable extends Component {
                     <th>id</th>
                     <th>Role</th>
                     <th>Region</th>
+                    <th>Type</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>
@@ -69,6 +70,7 @@ class SiteTable extends Component {
                           {item.region}
                         </a>
                       </td>
+                      <td>{item.type}</td>
                       <td>
                         <div className="progress">
                           <div
