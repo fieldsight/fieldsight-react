@@ -14,7 +14,8 @@ const initialState = {
   breadcrumbs: "",
   teamDashboardLoader: true,
   total_projects: "",
-  total_users: ""
+  total_users: "",
+  package_details: []
 };
 
 export default function(state = initialState, action) {

@@ -7,6 +7,8 @@ import DashboardCounter from "./dashboardComponent/DashboardCounter";
 import About from "./dashboardComponent/About";
 import Admin from "./dashboardComponent/Admin";
 import { getTeamDashboard } from "../../actions/teamDashboardActions";
+import PricingStepOne from "./dashboardComponent/PricingStepOne";
+import Modal from "../common/Modal";
 
 const INITIAL_STATE = {
   activeTab: "general",
@@ -14,26 +16,19 @@ const INITIAL_STATE = {
   showSubmissionModal: false,
   showCropper: false,
   showSubsites: false,
-  showGallery: false
+  showGallery: false,
+  stepOne: true,
+  stepTwo: false,
+  stepThree: false
 };
 class TeamDashboard extends Component {
   state = INITIAL_STATE;
 
-  closeModal = type => {
-    const { id: teamId } = this.props.match.params;
-
-    if (type === "Header" || type === "Submission") {
-      return this.setState(
-        {
-          [`show${type}Modal`]: false,
-          activeTab: "general"
-        }
-        // () => this.props.getSiteForms(teamId, "general")
-      );
-    }
-
+  closeModal = () => {
     this.setState({
-      [`show${type}`]: false
+      stepOne: true,
+      stepTwo: false,
+      stepThree: false
     });
   };
 
@@ -87,6 +82,13 @@ class TeamDashboard extends Component {
       );
     }
   }
+
+  handleNext = step => {
+    console.log("next", step);
+  };
+  handlePrevious = () => {
+    console.log("previous");
+  };
   render() {
     const {
       props: {
@@ -104,7 +106,8 @@ class TeamDashboard extends Component {
           breadcrumbs,
           teamDashboardLoader,
           total_projects,
-          total_users
+          total_users,
+          package_details
         },
         match: {
           params: { id: teamId }
@@ -136,6 +139,14 @@ class TeamDashboard extends Component {
             </ol>
           )}
         </nav>
+        {package_details.length > 0 && (
+          <Modal title="Choose a plan" toggleModal={this.closeModal}>
+            <PricingStepOne
+              packageDetails={package_details}
+              handleNext={this.handleNext}
+            />
+          </Modal>
+        )}
         <div className="row">
           <div className="col-xl-12">
             <div className="right-content no-bg new-dashboard">
