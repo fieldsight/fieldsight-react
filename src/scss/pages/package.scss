@@ -1,0 +1,178 @@
+.bg-primary {
+    background-color: #00628E !important;
+}
+.btn-outline-primary {
+    color: #00628E;
+    background-color: transparent;
+    background-image: none;
+    border-color: #00628E;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show>.btn-outline-primary.dropdown-toggle,
+.btn-outline-primary:not(:disabled):not(.disabled):hover, .btn-outline-primary:not(:disabled):not(.disabled):hover, .show>.btn-outline-primary.dropdown-toggle {
+    color: $color-white;
+    background-color: #00628E;
+    border-color: #00628E;
+}
+.btn-primary {
+    color: $color-white;
+    background-color: #004868;
+    border-color: #003f5b;
+    &:hover{
+        color: $color-white;
+    background-color: #004868;
+    border-color: #003f5b;
+    }
+}
+.manage-gap:before {
+    content: '';
+    display: table;
+    clear: both
+}
+
+.pt-head {
+    padding: 15px 0
+}
+
+.pt-head p {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 13px;
+    margin-top: 8px
+}
+
+.text-xlight {
+    color: rgba(0, 0, 0, 0.6)
+}
+
+.table-pricing tbody tr th {
+    min-width: 230px
+}
+
+
+
+.module-pricing {
+    background: $color-white;
+    text-align: center;
+
+    .mp-head {
+        border-top: 30px solid rgba(0, 0, 0, 0.1);
+        color: $color-white;
+        padding-top: 30px;
+
+        .tri-wrap {
+                
+                .tri-left {
+                    float: left;
+                    width: 50%;
+                    background: -webkit-gradient(linear, left bottom, right top, from($color-white), color-stop(50%, $color-white), color-stop(50%, rgba(0, 0, 0, 0)));
+                    background: linear-gradient(to right top, $color-white 0%, $color-white 50%, rgba(0, 0, 0, 0) 50%);
+                    height: 50px;
+                }
+
+                .tri-right {
+                    float: right;
+                    width: 50%;
+                    background: -webkit-gradient(linear, right bottom, left top, from($color-white), color-stop(50%, $color-white), color-stop(50%, rgba(0, 0, 0, 0)));
+                    background: linear-gradient(to left top, $color-white 0%, $color-white 50%, rgba(0, 0, 0, 0) 50%);
+                    height: 50px;
+                }
+
+            &::after {
+                content: '';
+                display: table;
+                clear: both
+            }
+        }
+    }
+
+    .mp-body {
+        ul {
+            margin: 0 30px;
+
+            li {
+                font-size: 15px;
+                color: rgba(0, 0, 0, 0.6);
+                padding: 15px 5px;
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+                &:first-child {
+                    border-top: 0
+                }
+            }
+        }
+    }
+
+    .mp-footer {
+        .btn {
+            color: $color-white;
+            font-weight: bold;
+            text-transform: uppercase
+        }
+    }
+}
+
+.pbg-1 {
+    background: #2a96b7;
+    border-color: #2a96b7;
+    color: $color-white
+}
+
+.pbg-2 {
+    background: #2d8bba;
+    border-color: #2d8bba;
+    color: $color-white;
+}
+
+.pbg-3 {
+    background: #2378b7;
+    border-color: #2378b7;
+    color: $color-white;
+}
+
+.pbg-4 {
+    background: #1872b5;
+    border-color: #1872b5;
+    color: $color-white;
+}
+
+.pbg-5 {
+    background: #0054a8;
+    border-color: #0054a8;
+    color: $color-white;
+}
+
+.pbg-6 {
+    background: #004d93;
+    border-color: #004d93;
+    color: $color-white;
+}
+
+.list-icon {
+    li {
+        padding: 8px 0;
+        position: relative;
+        padding-left: 30px;
+
+        i {
+            font-size: 22px;
+            color: #00628E;
+            position: absolute;
+            left: 0;
+            top: 7px
+        }
+    }
+}
+
+ul.list-normal li {
+    padding: 8px 0
+}
+
+.card-input-wrap {
+    background: $color-white;
+    padding: 30px 30px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.1);
+    margin-right: 30px;
+    margin-left: 30px
+}
