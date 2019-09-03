@@ -205,7 +205,7 @@ class ProjectDashboard extends React.Component {
                   <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
                   <div className="dash-btn">
                     <a
-                      href={`/fieldsight/site/response-coords/${id}/`}
+                      href={`/fieldsight/proj-map/${id}/`}
                       className="fieldsight-btn left-icon"
                       target="_blank"
                     >
