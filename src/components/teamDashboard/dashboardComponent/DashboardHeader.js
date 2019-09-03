@@ -19,9 +19,7 @@ class DashboardHeader extends Component {
       showContentLoader,
       activeTab,
       closeModal,
-      openModal,
-      showCropper,
-      showGallery
+      openModal
     } = this.props;
 
     const ManageDropdown = [

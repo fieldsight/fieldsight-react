@@ -326,13 +326,13 @@ class PricingStepOne extends Component {
               <YearlyPricing data={packageDetails} />
             )}
             <div className="text-center mt-4">
-              <a
+              <button
                 title=""
                 className="btn btn-primary"
                 onClick={handleNext("second")}
               >
                 Next <i className="la la-long-arrow-right"></i>
-              </a>
+              </button>
             </div>
           </div>
         </div>

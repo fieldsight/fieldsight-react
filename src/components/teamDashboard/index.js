@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Modal from "react-bootstrap/Modal";
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
 import TeamMap from "./dashboardComponent/TeamMap";
 import ProjectList from "./dashboardComponent/ProjectList";
@@ -8,15 +9,13 @@ import About from "./dashboardComponent/About";
 import Admin from "./dashboardComponent/Admin";
 import { getTeamDashboard } from "../../actions/teamDashboardActions";
 import PricingStepOne from "./dashboardComponent/PricingStepOne";
-import Modal from "../common/Modal";
 
 const INITIAL_STATE = {
   activeTab: "general",
   showHeaderModal: false,
   showSubmissionModal: false,
-  showCropper: false,
   showSubsites: false,
-  showGallery: false,
+  showModal: false,
   stepOne: true,
   stepTwo: false,
   stepThree: false
@@ -28,7 +27,8 @@ class TeamDashboard extends Component {
     this.setState({
       stepOne: true,
       stepTwo: false,
-      stepThree: false
+      stepThree: false,
+      showModal: false
     });
   };
 
@@ -113,14 +113,7 @@ class TeamDashboard extends Component {
           params: { id: teamId }
         }
       },
-      state: {
-        showHeaderModal,
-        showSubmissionModal,
-        activeTab,
-        showCropper,
-        showGallery,
-        showSubsites
-      },
+      state: { showHeaderModal, showSubmissionModal, activeTab, showModal },
       closeModal,
       openModal,
       toggleTab
@@ -140,11 +133,21 @@ class TeamDashboard extends Component {
           )}
         </nav>
         {package_details.length > 0 && (
-          <Modal title="Choose a plan" toggleModal={this.closeModal}>
-            <PricingStepOne
-              packageDetails={package_details}
-              handleNext={this.handleNext}
-            />
+          <Modal
+            className="modal-container custom-map-modal"
+            show={showModal}
+            onHide={this.closeModal}
+            animation={true}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Choose a plan</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <PricingStepOne
+                packageDetails={package_details}
+                handleNext={this.handleNext}
+              />
+            </Modal.Body>
           </Modal>
         )}
         <div className="row">
@@ -162,10 +165,8 @@ class TeamDashboard extends Component {
                 id={id}
                 showContentLoader={teamDashboardLoader}
                 activeTab={activeTab}
-                closeModal={this.closeModal}
-                openModal={this.openModal}
-                showCropper={showCropper}
-                showGallery={showGallery}
+                closeModal={closeModal}
+                openModal={openModal}
               />
               <div className="row">
                 <div className="col-lg-8">
