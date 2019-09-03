@@ -11,7 +11,7 @@ import SubmissionChart from "./dashboardComponent/SubmissionChart";
 import ProgressChart from "./dashboardComponent/ProgressChart";
 import SiteDocument from "./dashboardComponent/SiteDocument";
 import UsersList from "./dashboardComponent/UsersList";
-import Logs from "./dashboardComponent/Logs";
+import Logs from "../common/Logs";
 
 import {
   getSiteDashboard,
@@ -27,6 +27,7 @@ import {
 
 //const siteId = window.site_id ? window.site_id : 81704;
 //const siteId = window.site_id ? window.site_id : 81704;
+const user_id = window.user_id ? window.user_id : 137;
 
 const INITIAL_STATE = {
   activeTab: "general",
@@ -395,6 +396,7 @@ class SiteDashboard extends Component {
                     showContentLoader={siteLogsLoader}
                     siteId={siteId}
                     type="site"
+                    user_id={user_id}
                   />
                 </div>
               </div>

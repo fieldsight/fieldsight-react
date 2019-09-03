@@ -57,7 +57,7 @@ class ProgressChart extends Component {
           label: "Site Progress",
           data: progressData.data,
 
-          backgroundColor: "",
+          backgroundColor: "#00628E",
           borderColor: "#00628E",
           fill: true,
 

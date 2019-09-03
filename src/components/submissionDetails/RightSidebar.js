@@ -61,22 +61,6 @@ class RightSidebar extends Component {
                   </a>
                 )}
 
-                {Object.keys(downloadUrl).length > 0 && (
-                  <a
-                    href={`${base_url}${
-                      hideNullValues ? downloadUrl.null : downloadUrl.main
-                    }`}
-                    target="_blank"
-                  >
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Download as PDF</Tooltip>}
-                    >
-                      <i className="la la-download" />
-                    </OverlayTrigger>
-                  </a>
-                )}
-
                 <a onClick={toggleSubmission}>
                   <OverlayTrigger
                     placement="top"
@@ -93,6 +77,22 @@ class RightSidebar extends Component {
                     />
                   </OverlayTrigger>
                 </a>
+
+                {Object.keys(downloadUrl).length > 0 && (
+                  <a
+                    href={`${base_url}${
+                      hideNullValues ? downloadUrl.null : downloadUrl.main
+                    }`}
+                    target="_blank"
+                  >
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Download as PDF</Tooltip>}
+                    >
+                      <i className="la la-download" />
+                    </OverlayTrigger>
+                  </a>
+                )}
               </div>
             </div>
 

@@ -12,12 +12,22 @@ const getIcon = submission => {
 };
 const ShowAcitivity = props => (
   <div className="col-xl-4 col-md-6">
-    <CountCard
+    <div className="count-card">
+      <div className={`count-icon ${props.type}`}>
+        <i className={`la ${getIcon(props.type)}`}> </i>
+      </div>
+      <div className="count-content">
+        <h4>{props.value}</h4>
+        <h6>{props.name}</h6>
+      </div>
+    </div>
+    {/* <CountCard
       countName={props.name}
-      icon={getIcon(props.name)}
-      className={props.name}
+      icon={getIcon(props.type)}
+      className={props.type}
       countNumber={props.value}
-    />
+      noSubmissionText=""
+    /> */}
   </div>
 );
 class ProjectActivity extends React.Component {
@@ -29,21 +39,24 @@ class ProjectActivity extends React.Component {
           <div className="card-header main-card-header sub-card-header">
             <h5>Project activity</h5>
           </div>
-        </div>
-        <div className="card-body">
-          <div className="row">
-            <ShowAcitivity
-              name="approved"
-              value={projectActivity.submissions_in_last_7_days}
-            />
-            <ShowAcitivity
-              name="flagged"
-              value={projectActivity.active_supervisors_in_last_7_days}
-            />
-            <ShowAcitivity
-              name="marker"
-              value={projectActivity.site_visits_in_last_7_days}
-            />
+          <div className="card-body">
+            <div className="row">
+              <ShowAcitivity
+                type="approved"
+                name="Submissions In Last 7 Days"
+                value={projectActivity.submissions_in_last_7_days}
+              />
+              <ShowAcitivity
+                type="flagged"
+                name="Active Supervisors In Last 7 Days"
+                value={projectActivity.active_supervisors_in_last_7_days}
+              />
+              <ShowAcitivity
+                type="marker"
+                name="Site Visits In Last 7 Days"
+                value={projectActivity.site_visits_in_last_7_days}
+              />
+            </div>
           </div>
         </div>
       </div>

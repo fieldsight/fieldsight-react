@@ -6,7 +6,6 @@ import { DotLoader } from "../../myForm/Loader";
 import isEmpty from "../../../utils/isEmpty";
 
 import withPagination from "../../../hoc/WithPagination";
-import { BlockContentLoader } from "../../common/Loader";
 import TableHeader from "../../common/TableHeader";
 import TableRow from "../../common/TableRow";
 
@@ -35,29 +34,22 @@ class RegionsTable extends React.Component {
         : ["Region ID", "Region Name", "Created Date", "Total Sites"]
     };
     return (
-      // <div className="card region-table">
-      <>
-        {loader ? (
-          <BlockContentLoader number={16} height="15px" />
-        ) : (
-          <div className="card-body">
-            <div style={{ position: "relative", height: "400px" }}>
-              <PerfectScrollbar>
-                {loader && <DotLoader />}
-                {!loader && (
-                  <Table
-                    responsive="xl"
-                    className="table  table-bordered  dataTable "
-                  >
-                    <TableHeader tableHeader={tableHeader.projectRegions} />
-                    <TableRow tableRow={data} page="projectManageRegion" />
-                  </Table>
-                )}
-              </PerfectScrollbar>
-            </div>
-          </div>
-        )}
-      </>
+      <div className="card-body">
+        <div style={{ position: "relative", height: "400px" }}>
+          <PerfectScrollbar>
+            {loader && <DotLoader />}
+            {!loader && (
+              <Table
+                responsive="xl"
+                className="table  table-bordered  dataTable "
+              >
+                <TableHeader tableHeader={tableHeader.projectRegions} />
+                <TableRow tableRow={data} page="projectManageRegion" />
+              </Table>
+            )}
+          </PerfectScrollbar>
+        </div>
+      </div>
     );
   }
 }

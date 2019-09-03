@@ -21,7 +21,7 @@ export default class SiteDocument extends Component{
                 showConfirmation : true
             })
         }
-      
+
         cancelHandler = () => {
             this.setState({
             showConfirmation: false
@@ -37,7 +37,7 @@ export default class SiteDocument extends Component{
                 deleteConfirmation:true
                 });
         }
-       
+
      componentDidMount(){
        const {match:{params:{id}}}=this.props;
         axios
@@ -54,7 +54,7 @@ export default class SiteDocument extends Component{
             });
 
        }
-       delete=(id)=>{ 
+       delete=(id)=>{
         axios.post(`/fv3/api/blueprints/?blueprint=${id}`)
         .then((res) => {
            if(res.status == 204){
@@ -72,9 +72,9 @@ export default class SiteDocument extends Component{
             }).catch(err=>{
              console.log(err)
          })
-    
+
         }
-    
+
         handleDelete=(id)=>{
         this.setState({
             deleteConfirmation:true,
@@ -98,7 +98,7 @@ export default class SiteDocument extends Component{
                     return err
                     });
             }
-            
+
         }
         handleSubmit=()=>{
             event.preventDefault();
@@ -109,7 +109,7 @@ export default class SiteDocument extends Component{
                 return (
                     form_data.append("files",data)
                     )
-            })  
+            })
             form_data.append("name",this.state.document_name);
             form_data.append("doc_type",this.state.document_type);
             for(var pair of form_data.entries()) {
@@ -128,18 +128,18 @@ export default class SiteDocument extends Component{
                         showConfirmation : false,
                         })
                     this.handleUpdate(res)
-                        }  
+                        }
                     })
                 .catch(err=>{
                     console.log(err)
                 })
         }
        fileSelectedHandler = (e) => {
-           this.setState({ 
+           this.setState({
                files: [
-                   ...this.state.files, 
+                   ...this.state.files,
                    ...e.target.files
-                ] 
+                ]
             })
          }
 
@@ -167,13 +167,13 @@ render(){
                           {breadcrumb.name}
                         </li>
                       </ol>
-                   
+
             }
             </nav>
              <div className="container-fluid">
                             <div className="row">
                                 <div className="col-md-12">
-                                    
+
                                     <div className="right-content">
                                         <div className="card no-boxshadow">
                                             <div className="card-header main-card-header">
@@ -185,17 +185,17 @@ render(){
                                             <div className="card-body ">
                                                   <SiteDocumentTable  site_document={this.state.site_document} handleDelete={(id)=>this.handleDelete(id)} openDelete={this.openDelete}/>
                                              </div>
-                                            
+
                                            { showConfirmation &&
                                         (<Modal  title="Add site Document" toggleModal={this.cancelHandler}>
                                                           <form className="floating-form" onSubmit={this.handleSubmit}>
                                                                    <div className="form-group">
-                                                                        <input type="text" 
-                                                                            className="form-control" 
-                                                                            name="document_name" 
-                                                                            onChange={(e)=>this.handleChange(e)} 
+                                                                        <input type="text"
+                                                                            className="form-control"
+                                                                            name="document_name"
+                                                                            onChange={(e)=>this.handleChange(e)}
                                                                                value={this.state.document_name}
-                                                                            required 
+                                                                            required
                                                                          />
                                                                         <label htmlFor="input">Document Name</label>
                                                                     </div>
@@ -216,7 +216,7 @@ render(){
                                                                             <option  value="Other">Other</option>
                                                                         </select>
                                                                     </div>
-                                                                  
+
                                                                     <div className="form-group">
                                                                         <label>
                                                                             Attach file
@@ -241,7 +241,7 @@ render(){
 
                                                     <div className="warning">
                                                 <p>Are you sure you want to delete?</p>
-                                                
+
                                                 </div>
                                                 <div className="warning-footer text-center">
                                                 <a
@@ -255,7 +255,7 @@ render(){
                                                 </a>
                                                 </div>
                                                 </Modal>)}
-                                                          
+
                                         </div>
                                     </div>
                                 </div>

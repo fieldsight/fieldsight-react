@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import format from "date-fns/format";
-import { BlockContentLoader } from "../../common/Loader";
+import { BlockContentLoader } from "./Loader";
 import uuid from "uuid/v4";
 
 class Logs extends Component {
-  getLog = data => {
+  getLog = (data, user_id) => {
     let content = "";
     const formdetail = data.get_event_name.split("form");
 
@@ -949,7 +949,7 @@ class Logs extends Component {
         const messages = errormsg.split("@error");
         let readableerror = "";
         if (messages.length > 1) {
-          errors = messages[1].split("DETAIL:");
+          const errors = messages[1].split("DETAIL:");
           if (errors.length > 1) {
             readableerror = errors[1];
           } else {
@@ -1064,7 +1064,7 @@ class Logs extends Component {
 
   render() {
     const {
-      props: { siteLogs, showContentLoader, siteId, type },
+      props: { siteLogs, showContentLoader, siteId, type, user_id },
       groupByDate,
       getColor,
       getLog
@@ -1116,7 +1116,7 @@ class Logs extends Component {
 
                                     <div
                                       dangerouslySetInnerHTML={{
-                                        __html: getLog(log)
+                                        __html: getLog(log, user_id)
                                       }}
                                     />
                                   </div>

@@ -40,6 +40,7 @@ class ProjectSiteTable extends Component {
     const {
       context: { terms }
     } = this;
+
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
