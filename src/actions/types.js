@@ -43,3 +43,15 @@ export const UPDATE_PROJECT_LOGO = "UPDATE_PROJECT_LOGO";
 //Team Dashboard Actions
 export const GET_TEAM_DASHBOARD = "GET_TEAM_DASHBOARD";
 export const SHOW_TEAM_DASHBOARD_LOADERS = "SHOW_TEAM_DASHBOARD_LOADERS";
+
+// User Document Actions
+export const GET_USER_DOCUMENT = "GET_USER_DOCUMENT";
+
+//Site Team Users
+export const GET_TEAM_USERS = "GET_TEAM_USERS";
+
+//Project List
+export const GET_PROJECT_LIST = "GET_PROJECT_LIST";
+
+// Project User List
+export const GET_PROJECT_USER = "GET_PROJECT_USER";
