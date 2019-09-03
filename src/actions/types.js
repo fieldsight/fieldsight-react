@@ -40,3 +40,17 @@ export const GET_PROGRESS_TABLE_DATA = "GET_PROGRESS_TABLE_DATA";
 // export const SHOW_DOT_LOADER = "SHOW_DOT_LOADER";
 export const SHOW_PROJECT_DASHBOARD_LOADERS = "SHOW_PROJECT_DASHBOARD_LOADERS";
 export const UPDATE_PROJECT_LOGO = "UPDATE_PROJECT_LOGO";
+
+
+// User Document Actions
+export const  GET_USER_DOCUMENT= "GET_USER_DOCUMENT";
+
+
+//Site Team Users
+export const GET_TEAM_USERS = "GET_TEAM_USERS";
+
+//Project List
+export const GET_PROJECT_LIST = "GET_PROJECT_LIST";
+
+// Project User List
+export const GET_PROJECT_USER = "GET_PROJECT_USER";

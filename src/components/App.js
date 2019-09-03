@@ -11,9 +11,13 @@ import SiteList from "./projectSiteList/SiteList";
 import SubmissionDetails from "./submissionDetails";
 import MyrolesMain from "./myRoles/MyrolesMain";
 import RegionSite from "./regionalSite/RegionSite";
-import SiteDocument from "./siteDocument/siteDocument"
-
+import SiteDocument from "./siteDocument/siteDocument";
+import SiteUsers from "./userDocument";
+import TeamUser from "./teamUsers/teamUsers";
+import ProjectUser from "./projectUsers/projectUsers";
+import ProjectList from "./projectList/projectList"
 import ProjectDashboard from "./projectDashboard";
+import ProjectLog from "./projectLogs/projectLogs"
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -87,6 +91,31 @@ class App extends Component {
                     <Route
                       path="/project-dashboard/:id"
                       render={props => <ProjectDashboard {...props} />}
+                    />
+
+                    <Route
+                      path="/site-users/:id"
+                      render={props => <SiteUsers {...props} />}
+                    />
+
+                  <Route
+                      path="/project-users/:id"
+                      render={props => <ProjectUser {...props} />}
+                    />
+                    
+                     <Route
+                      path="/team-users/:id"
+                      render={props => <TeamUser {...props} />}
+                    />
+
+                  <Route
+                      path="/project-list/:id"
+                      render={props => <ProjectList {...props} />}
+                    />
+
+                  <Route
+                      path="/project-log"
+                      render={props => <ProjectLog {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

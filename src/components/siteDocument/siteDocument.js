@@ -12,7 +12,8 @@ export default class SiteDocument extends Component{
         document_name:"",
         document_type:"Document Type",
         deleteConfirmation:false,
-        id:""      
+        id:""   ,
+        show_button:""   
     }
 
         openModel=()=>{
@@ -41,10 +42,11 @@ export default class SiteDocument extends Component{
        const {match:{params:{id}}}=this.props;
         axios
             .get(`fv3/api/site/documents/?site_id=${id}`)
-            .then(res => {
+            .then(res => {        
             this.setState({
                 site_document:res.data.documents,
-                breadcrumb:res.data.breadcrumbs
+                breadcrumb:res.data.breadcrumbs,
+                show_button:res.data.show_button
             })
             })
             .catch(err => {
@@ -74,7 +76,6 @@ export default class SiteDocument extends Component{
         }
     
         handleDelete=(id)=>{
-            console.log(id ,"gh");
         this.setState({
             deleteConfirmation:true,
             id:id
@@ -83,7 +84,6 @@ export default class SiteDocument extends Component{
         }
 
         handleUpdate=(data)=>{
-            console.log(data.status,"handle");
             if (data.status ==201){
                 const {match:{params:{id}}}=this.props;
                 axios
@@ -150,7 +150,8 @@ export default class SiteDocument extends Component{
            }
     
 render(){  
-        const {showConfirmation,breadcrumb} =this.state;
+        const {showConfirmation , breadcrumb, show_button} =this.state;
+       
        
         return(
             <>
@@ -178,8 +179,8 @@ render(){
                                             <div className="card-header main-card-header">
                                                 <h5>Site documents</h5>
                                                 <div className="add-btn">
-                                                    <button onClick={this.openModel} className="fieldsight-btn" >Add new <span><i className="la la-plus"></i></span></button>
-                                                </div>
+                                               {show_button &&  <button onClick={this.openModel} className="fieldsight-btn" >Add new <span><i className="la la-plus"></i></span></button>
+}                                                </div>
                                             </div>
                                             <div className="card-body ">
                                                   <SiteDocumentTable  site_document={this.state.site_document} handleDelete={(id)=>this.handleDelete(id)} openDelete={this.openDelete}/>
