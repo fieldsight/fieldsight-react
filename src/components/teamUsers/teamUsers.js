@@ -16,7 +16,7 @@ export default class TeamUser extends Component{
     componentDidMount(){
         const {match:{params:{id}}}=this.props;
         axios
-        .get(`fv3/api/users/?team=81`)
+        .get(`fv3/api/users/?team=${id}`)
         .then(res => {    
             this.setState({
                 users:res.data.users,
