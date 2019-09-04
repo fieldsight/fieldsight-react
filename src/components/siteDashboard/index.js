@@ -93,6 +93,8 @@ class SiteDashboard extends Component {
 
   componentDidMount() {
     const { id: siteId } = this.props.match.params;
+    console.log(this.props.match.params);
+    
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
     this.props.getSiteSubmissions(siteId);
@@ -122,6 +124,8 @@ class SiteDashboard extends Component {
     }
   }
   render() {
+    console.log(this.props.siteLogsLoader);
+    
     const {
       props: {
         siteDashboard: {
