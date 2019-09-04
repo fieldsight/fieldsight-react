@@ -114,7 +114,7 @@ class App extends Component {
                     />
 
                   <Route
-                      path="/project-log"
+                      path="/project-logs/:id"
                       render={props => <ProjectLog {...props} />}
                     />
                   </Switch>

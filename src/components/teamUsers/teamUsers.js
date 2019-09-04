@@ -88,7 +88,7 @@ export default class TeamUser extends Component{
                                            return(
                                         <tr key={key}>
                                             <td>
-                                                <a href={users.profile_picture} className="pending table-profile">
+                                                <a href={`/users/profile/${users.id}` } className="pending table-profile">
                                                     <figure>
                                                         <img src={users.profile_picture} alt="site-logo" />
                                                     </figure>

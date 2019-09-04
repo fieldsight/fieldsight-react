@@ -120,7 +120,7 @@ class ProjectDashboard extends React.Component {
     );
   };
   render() {
-    // console.log("props--", this.props);
+     console.log("props--", this.props);
     const {
       projectDashboard: {
         id,
