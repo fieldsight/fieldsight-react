@@ -159,7 +159,7 @@ class SiteTable extends Component {
                   </li>
 
                   {this.props.renderPageNumbers({
-                    type: "projectSiteList",
+                    type: "mySiteList",
                     projectId: this.props.siteId
                   })}
 

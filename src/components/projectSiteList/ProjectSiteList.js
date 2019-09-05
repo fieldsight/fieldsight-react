@@ -54,7 +54,7 @@ class ProjectSiteList extends Component {
             <li className="breadcrumb-item">
               <a
                 href={
-                  base_url + "/fieldsight/project-dashboard/" + project_id + "/"
+                  base_url + "/fieldsight/application/#/project-dashboard/" + project_id + "/"
                 }
               >
                 {project_name}
