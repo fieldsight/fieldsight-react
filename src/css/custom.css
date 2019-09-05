@@ -7,14 +7,12 @@
 }
 
 .custom-map-modal .modal-dialog {
-  width: 100%;
+  max-width: 1440px;
   height: 100%;
   margin: 0;
   padding: 0;
 }
 .custom-map-modal .modal-content {
-  height: auto;
-  min-height: 100%;
   border-radius: 0;
-  position: fixed;
+  position: relative;
 }

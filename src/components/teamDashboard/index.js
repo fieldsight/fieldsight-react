@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Modal from "react-bootstrap/Modal";
+import { StripeProvider } from "react-stripe-elements";
+
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
 import TeamMap from "./dashboardComponent/TeamMap";
 import ProjectList from "./dashboardComponent/ProjectList";
@@ -9,16 +11,25 @@ import About from "./dashboardComponent/About";
 import Admin from "./dashboardComponent/Admin";
 import { getTeamDashboard } from "../../actions/teamDashboardActions";
 import PricingStepOne from "./dashboardComponent/PricingStepOne";
+import PricingStepTwo from "./dashboardComponent/PricingStepTwo";
+import PricingStepThree from "./dashboardComponent/PricingStepThree";
 
+const now = new Date();
 const INITIAL_STATE = {
   activeTab: "general",
   showHeaderModal: false,
   showSubmissionModal: false,
   showSubsites: false,
-  showModal: false,
+  showModal: true,
   stepOne: true,
   stepTwo: false,
-  stepThree: false
+  stepThree: false,
+  plan: "",
+  stripeToken: "",
+  interval: "monthly",
+  selectedPlan: {},
+  packageStartDate: new Date(),
+  packageEndDate: new Date(now.setMonth(now.getMonth() + 2))
 };
 class TeamDashboard extends Component {
   state = INITIAL_STATE;
@@ -81,13 +92,81 @@ class TeamDashboard extends Component {
         }
       );
     }
+    if (prevProps.teamDashboard !== this.props.teamDashboard) {
+      this.setState({
+        stripeToken: this.props.teamDashboard.stripe_token
+          ? this.props.teamDashboard.stripe_token
+          : "",
+        selectedPlan: this.props.teamDashboard.package_details
+          ? this.props.teamDashboard.package_details[0]
+          : {}
+      });
+    }
   }
 
+  handleIntervalPeriod = e => {
+    const value = e.target.value;
+    const { packageStartDate } = this.state;
+    this.setState(
+      {
+        interval: value
+      },
+      () => {
+        if (value == "monthly") {
+          const endDate = packageStartDate.setMonth(
+            packageStartDate.getMonth() + 2
+          );
+          this.setState({
+            packageStartDate: new Date(),
+            packageEndDate: new Date(endDate)
+          });
+        } else if (value == "yearly") {
+          const endDate = packageStartDate.setFullYear(
+            packageStartDate.getFullYear() + 1
+          );
+          this.setState({
+            packageStartDate: new Date(),
+            packageEndDate: new Date(endDate)
+          });
+        }
+      }
+    );
+  };
   handleNext = step => {
-    console.log("next", step);
+    this.setState(state => {
+      if (step == "second") {
+        return {
+          stepOne: false,
+          stepTwo: true
+        };
+      } else if (step == "third") {
+        return {
+          stepThree: true,
+          stepTwo: false
+        };
+      } else {
+        return {
+          stepOne: true,
+          stepTwo: false,
+          stepThree: false
+        };
+      }
+    });
   };
   handlePrevious = () => {
-    console.log("previous");
+    this.setState({
+      stepOne: true,
+      stepTwo: false
+    });
+  };
+  handleFirstStepSelect = (selected, data) => {
+    this.setState({ plan: selected, selectedPlan: data });
+  };
+  handleSecondStepSelect = e => {
+    console.log("second select", e);
+  };
+  handlePriceSubmit = e => {
+    console.log("submit plan");
   };
   render() {
     const {
@@ -113,13 +192,28 @@ class TeamDashboard extends Component {
           params: { id: teamId }
         }
       },
-      state: { showHeaderModal, showSubmissionModal, activeTab, showModal },
+      state: {
+        packageStartDate,
+        packageEndDate,
+        activeTab,
+        showModal,
+        stepOne,
+        stepTwo,
+        stepThree,
+        interval,
+        stripeToken,
+        plan,
+        selectedPlan
+      },
       closeModal,
       openModal,
-      toggleTab
+      toggleTab,
+      handleFirstStepSelect,
+      handleSecondStepSelect
     } = this;
-    console.log("props", this.props);
-
+    console.log("props", this.props, packageEndDate);
+    const packageSelected =
+      Object.keys(this.state.plan).length > 0 ? true : false;
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -143,10 +237,36 @@ class TeamDashboard extends Component {
               <Modal.Title>Choose a plan</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <PricingStepOne
-                packageDetails={package_details}
-                handleNext={this.handleNext}
-              />
+              {stepOne && (
+                <PricingStepOne
+                  packageDetails={package_details}
+                  handleNext={this.handleNext}
+                  handleFirstStepSelect={handleFirstStepSelect}
+                  handleIntervalPeriod={this.handleIntervalPeriod}
+                  periodType={interval}
+                  isPackageSelected={packageSelected}
+                />
+              )}
+              {stepTwo && (
+                <StripeProvider apiKey={stripeToken}>
+                  <PricingStepTwo
+                    selectedPackage={selectedPlan}
+                    handleNext={this.handleNext}
+                    handlePrevious={this.handlePrevious}
+                    handleSecondStepSelect={handleSecondStepSelect}
+                    packageStartDate={packageStartDate}
+                    packageEndDate={packageEndDate}
+                    selectedPlan={plan}
+                    interval={interval}
+                  />
+                </StripeProvider>
+              )}
+              {stepThree && (
+                <PricingStepThree
+                  packageDetails={package_details}
+                  handleSubmit={this.handlePriceSubmit}
+                />
+              )}
             </Modal.Body>
           </Modal>
         )}

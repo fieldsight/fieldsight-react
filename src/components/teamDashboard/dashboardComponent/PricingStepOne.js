@@ -8,7 +8,7 @@ const FreePlan = ({ period, plan }) => (
         <h4>Free</h4>
         <h3>
           <strong>${plan.total_charge}</strong>
-          <sub> {period == "month" ? "/Mo" : "/Yr"}</sub>
+          <sub> {period == "monthly" ? "/Mo" : "/Yr"}</sub>
         </h3>
         <div className="tri-wrap">
           <div className="tri-left"></div>
@@ -41,14 +41,14 @@ const FreePlan = ({ period, plan }) => (
     </div>
   </div>
 );
-const StarterPlan = ({ period, plan }) => (
+const StarterPlan = ({ period, plan, handleSelect }) => (
   <div className="col-md-4">
     <div className="module-pricing mt-4" id="pk_starter">
       <div className="mp-head pbg-2">
         <h4>Starter</h4>
         <h3>
           <strong>${plan.total_charge}</strong>
-          <sub>{period == "month" ? "/Mo" : "/Yr"}</sub>
+          <sub>{period == "monthly" ? "/Mo" : "/Yr"}</sub>
         </h3>
         <div className="tri-wrap">
           <div className="tri-left"></div>
@@ -72,7 +72,11 @@ const StarterPlan = ({ period, plan }) => (
         </ul>
       </div>
       <div className="mp-footer">
-        <a href="#" title="" className="btn pbg-2 btn-block btn-lg">
+        <a
+          title=""
+          className="btn pbg-2 btn-block btn-lg"
+          onClick={() => handleSelect("starter_plan", plan)}
+        >
           Select
         </a>
       </div>
@@ -80,14 +84,14 @@ const StarterPlan = ({ period, plan }) => (
   </div>
 );
 
-const BasicPlan = ({ period, plan }) => (
+const BasicPlan = ({ period, plan, handleSelect }) => (
   <div className="col-md-4">
     <div className="module-pricing mt-4" id="pk_basic">
       <div className="mp-head pbg-3">
         <h4>Basic</h4>
         <h3>
           <strong>${plan.total_charge}</strong>
-          <sub>{period == "month" ? "/Mo" : "/Yr"}</sub>
+          <sub>{period == "monthly" ? "/Mo" : "/Yr"}</sub>
         </h3>
         <div className="tri-wrap">
           <div className="tri-left"></div>
@@ -111,7 +115,11 @@ const BasicPlan = ({ period, plan }) => (
         </ul>
       </div>
       <div className="mp-footer">
-        <a href="#" title="" className="btn pbg-3 btn-block btn-lg">
+        <a
+          title=""
+          className="btn pbg-3 btn-block btn-lg"
+          onClick={() => handleSelect("basic_plan", plan)}
+        >
           Select
         </a>
       </div>
@@ -119,14 +127,14 @@ const BasicPlan = ({ period, plan }) => (
   </div>
 );
 
-const ExtendedPlan = ({ period, plan }) => (
+const ExtendedPlan = ({ period, plan, handleSelect }) => (
   <div className="col-md-4">
     <div className="module-pricing mt-4" id="pk_extended">
       <div className="mp-head pbg-4">
         <h4>Extended</h4>
         <h3>
           <strong>${plan.total_charge}</strong>
-          <sub> {period == "month" ? "/Mo" : "/Yr"}</sub>
+          <sub> {period == "monthly" ? "/Mo" : "/Yr"}</sub>
         </h3>
         <div className="tri-wrap">
           <div className="tri-left"></div>
@@ -150,7 +158,11 @@ const ExtendedPlan = ({ period, plan }) => (
         </ul>
       </div>
       <div className="mp-footer">
-        <a href="#" title="" className="btn pbg-4 btn-block btn-lg">
+        <a
+          title=""
+          className="btn pbg-4 btn-block btn-lg"
+          onClick={() => handleSelect("extended_plan", plan)}
+        >
           Select
         </a>
       </div>
@@ -158,14 +170,14 @@ const ExtendedPlan = ({ period, plan }) => (
   </div>
 );
 
-const ProPlan = ({ period, plan }) => (
+const ProPlan = ({ period, plan, handleSelect }) => (
   <div className="col-md-4">
     <div className="module-pricing mt-4" id="pk_pro">
       <div className="mp-head pbg-5">
         <h4>Pro</h4>
         <h3>
           <strong>${plan.total_charge}</strong>
-          <sub> {period == "month" ? "/Mo" : "/Yr"}</sub>
+          <sub> {period == "monthly" ? "/Mo" : "/Yr"}</sub>
         </h3>
         <div className="tri-wrap">
           <div className="tri-left"></div>
@@ -189,7 +201,11 @@ const ProPlan = ({ period, plan }) => (
         </ul>
       </div>
       <div className="mp-footer">
-        <a href="#" title="" className="btn pbg-5 btn-block btn-lg">
+        <a
+          title=""
+          className="btn pbg-5 btn-block btn-lg"
+          onClick={() => handleSelect("pro_plan", plan)}
+        >
           Select
         </a>
       </div>
@@ -197,14 +213,14 @@ const ProPlan = ({ period, plan }) => (
   </div>
 );
 
-const ScalePlan = ({ period, plan }) => (
+const ScalePlan = ({ period, plan, handleSelect }) => (
   <div className="col-md-4">
     <div className="module-pricing mt-4" id="pk_scale">
       <div className="mp-head pbg-6">
         <h4>Scale</h4>
         <h3>
           <strong>${plan.total_charge}</strong>
-          <sub> {period == "month" ? "/Mo" : "/Yr"}</sub>
+          <sub> {period == "monthly" ? "/Mo" : "/Yr"}</sub>
         </h3>
         <div className="tri-wrap">
           <div className="tri-left"></div>
@@ -228,7 +244,11 @@ const ScalePlan = ({ period, plan }) => (
         </ul>
       </div>
       <div className="mp-footer">
-        <a href="#" title="" className="btn btn-block pbg-6 btn-lg">
+        <a
+          title=""
+          className="btn btn-block pbg-6 btn-lg"
+          onClick={() => handleSelect("scale_plan", plan)}
+        >
           Select
         </a>
       </div>
@@ -236,49 +256,59 @@ const ScalePlan = ({ period, plan }) => (
   </div>
 );
 const MonthlyPricing = props => {
-  const { data } = props;
+  const { data, handleSelect } = props;
   return (
     <div className="row">
-      <FreePlan period="month" plan={data[0]} />
-      <StarterPlan period="month" plan={data[9]} />
-      <BasicPlan period="month" plan={data[1]} />
-      <ExtendedPlan period="month" plan={data[3]} />
-      <ProPlan period="month" plan={data[5]} />
-      <ScalePlan period="month" plan={data[7]} />
+      <FreePlan period="monthly" plan={data[0]} />
+      <StarterPlan
+        period="monthly"
+        plan={data[9]}
+        handleSelect={handleSelect}
+      />
+      <BasicPlan period="monthly" plan={data[1]} handleSelect={handleSelect} />
+      <ExtendedPlan
+        period="monthly"
+        plan={data[3]}
+        handleSelect={handleSelect}
+      />
+      <ProPlan period="monthly" plan={data[5]} handleSelect={handleSelect} />
+      <ScalePlan period="monthly" plan={data[7]} handleSelect={handleSelect} />
     </div>
   );
 };
 const YearlyPricing = props => {
-  const { data } = props;
+  const { data, handleSelect } = props;
   return (
     <div className="row">
-      <FreePlan period="year" plan={data[0]} />
-      <StarterPlan period="year" plan={data[10]} />
-      <BasicPlan period="year" plan={data[2]} />
-      <ExtendedPlan period="year" plan={data[4]} />
-      <ProPlan period="year" plan={data[6]} />
-      <ScalePlan period="year" plan={data[8]} />
+      <FreePlan period="yearly" plan={data[0]} handleSelect={handleSelect} />
+      <StarterPlan
+        period="yearly"
+        plan={data[10]}
+        handleSelect={handleSelect}
+      />
+      <BasicPlan period="yearly" plan={data[2]} handleSelect={handleSelect} />
+      <ExtendedPlan
+        period="yearly"
+        plan={data[4]}
+        handleSelect={handleSelect}
+      />
+      <ProPlan period="yearly" plan={data[6]} handleSelect={handleSelect} />
+      <ScalePlan period="yearly" plan={data[8]} handleSelect={handleSelect} />
     </div>
   );
 };
 class PricingStepOne extends Component {
-  state = {
-    periodType: "month"
-  };
-
-  handleButtonChange = e => {
-    console.log("button--", e.target.value);
-
-    this.setState({
-      periodType: e.target.value
-    });
-  };
   render() {
     const {
-      props: { packageDetails, handleNext },
-      state: { periodType }
+      props: {
+        packageDetails,
+        handleNext,
+        handleFirstStepSelect,
+        handleIntervalPeriod,
+        periodType,
+        isPackageSelected
+      }
     } = this;
-    // console.log("monthly=", packageDetails);
 
     return (
       // <Modal title="Choose a plan">
@@ -301,39 +331,51 @@ class PricingStepOne extends Component {
             <div className="pb-2 text-center">
               <div className="btn-group btn-group-toggle" data-toggle="buttons">
                 <button
-                  value="month"
+                  value="monthly"
                   className={`${
-                    periodType == "month" ? "active" : ""
+                    periodType == "monthly" ? "active" : ""
                   } btn btn-pk btn-outline-primary`}
-                  onClick={this.handleButtonChange}
+                  onClick={e => {
+                    handleIntervalPeriod(e);
+                  }}
                 >
                   Monthly
                 </button>
                 <button
-                  value="year"
+                  value="yearly"
                   className={`${
-                    periodType == "year" ? "active" : ""
+                    periodType == "yearly" ? "active" : ""
                   } btn btn-pk btn-outline-primary`}
-                  onClick={this.handleButtonChange}
+                  onClick={e => {
+                    handleIntervalPeriod(e);
+                  }}
                 >
                   Yearly
                 </button>
               </div>
             </div>
-            {periodType == "month" ? (
-              <MonthlyPricing data={packageDetails} />
+            {periodType == "monthly" ? (
+              <MonthlyPricing
+                data={packageDetails}
+                handleSelect={handleFirstStepSelect}
+              />
             ) : (
-              <YearlyPricing data={packageDetails} />
+              <YearlyPricing
+                data={packageDetails}
+                handleSelect={handleFirstStepSelect}
+              />
             )}
-            <div className="text-center mt-4">
-              <button
-                title=""
-                className="btn btn-primary"
-                onClick={handleNext("second")}
-              >
-                Next <i className="la la-long-arrow-right"></i>
-              </button>
-            </div>
+            {isPackageSelected && (
+              <div className="text-center mt-4">
+                <button
+                  title=""
+                  className="btn btn-primary"
+                  onClick={() => handleNext("second")}
+                >
+                  Next <i className="la la-long-arrow-right"></i>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
