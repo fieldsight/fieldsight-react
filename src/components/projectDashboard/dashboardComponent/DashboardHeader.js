@@ -143,7 +143,7 @@ class DashboardHeader extends React.Component {
                 // noSubmissionText={true}
               />
             </a>
-            <a href={`/fieldsight/proj-users/${id}/`} target="_blank">
+            <a href={`/fieldsight/application/#/project-users/${id}/`} target="_blank">
               <CountCard
                 countName="Users"
                 countNumber={totalUsers}

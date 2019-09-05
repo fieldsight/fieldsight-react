@@ -10,6 +10,7 @@ import SiteTable from "./SiteTable";
 import MapPage from "./MapPage";
 import { successToast, errorToast } from "../../utils/toastHandler";
 import withPagination from "../../hoc/WithPagination";
+import Modal from "../common/Modal";
 
 class MyrolesMain extends Component {
   state = {
@@ -28,19 +29,22 @@ class MyrolesMain extends Component {
     siteLoader: true,
     RegionLoader: true,
     teamId: null,
-    siteId: null
+    siteId: null ,
+    myGuide:false
   };
 
   componentDidMount() {
     const { profileId } = this.props.match.params;
     let url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
-      : `fv3/api/myroles/`;
+      : `fv3/api/myroles/`  
     this._isMounted = true;
     axios
       .get(`${url}`)
 
       .then(res => {
+        console.log(res,"res");
+        
         if (this._isMounted) {
           if (res.status === 200) {
             const modifiedTeam = res.data.teams.map((team, i) => {
@@ -60,8 +64,10 @@ class MyrolesMain extends Component {
               invitation: res.data.invitations,
               roles: res.data.roles,
               teams: modifiedTeam,
-              dLoader: false
-            });
+              dLoader: false,
+              RegionLoader: false,
+              myGuide:res.data.profile.guide_popup
+            },()=>{console.log(this.state.myGuide)})
           }
         }
       })
@@ -157,12 +163,12 @@ class MyrolesMain extends Component {
     });
     axios
       .get(`${url}`)
-      .then(res => {
+      .then(res => { 
         if (res.status === 200) {
           this.setState({
             regions: res.data.regions,
             RegionLoader: false
-          });
+          },()=>{this.state,"dfghjh"});
         }
       })
       .catch(err => {});
@@ -226,8 +232,16 @@ class MyrolesMain extends Component {
       .catch(err => {});
   };
 
+  cancelHandler=()=>{
+    this.setState({
+      myGuide:false
+    })
+  }
   render() {
     const { profileId } = this.props.match.params;
+    const {myGuide} =this.state;
+   
+    
     return (
       <>
         <div className="card mrb-30">
@@ -333,7 +347,7 @@ class MyrolesMain extends Component {
                     {this.state.rightTab == "site" && (
                       <SiteTable
                         site={this.props.siteList}
-                        siteLoader={this.props.dLoader}
+                        siteLoader={this.state.dLoader}
                         renderPageNumbers={this.props.renderPageNumbers}
                         paginationHandler={this.props.paginationHandler}
                         siteId={this.state.siteId}
@@ -369,6 +383,28 @@ class MyrolesMain extends Component {
             />
           </div>
         )}
+          {(myGuide) &&
+                      (<Modal  title="My Role Guide" toggleModal={this.cancelHandler}>
+                          <div className="guide">
+                            <p>
+                            Hi, seems like you have no role yet.You can get started by creating a team in 
+                            FieldSight or contact your FieldSight manager to invite you to join the project. 
+                            </p>
+                          </div>
+                          <div className="warning-footer text-center">
+                                                <a href={"/fieldsight/organization/add/"}
+                                                    className="fieldsight-btn"
+                                                    style={{marginRight: "10px",display: "inline-block"}}
+                                                  >
+                                                    Create Team
+                                                </a>
+                                                <a className="fieldsight-btn rejected-btn"  onClick={this.cancelHandler}>
+                                                    Cancel
+                                                </a>
+                                                </div>
+                        </Modal>
+                       )
+                    }
       </>
     );
   }

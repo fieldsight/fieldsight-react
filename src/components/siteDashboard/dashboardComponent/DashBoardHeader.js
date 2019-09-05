@@ -180,7 +180,7 @@ class DashboardHeader extends Component {
                 icon="la-clone"
               />
             </a>
-            <a href={`/fieldsight/site-users/${siteId}/`} target="_blank">
+            <a href={`/fieldsight/application/#/site-users/${siteId}/`} target="_blank">
               <CountCard
                 countName="User"
                 countNumber={totalUsers}

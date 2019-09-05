@@ -59,12 +59,13 @@ class ProjectUser extends Component{
 
     render(){
          const { users , breadcrumbs } = this.state;
+         console.log(breadcrumbs.project_url)
       
          return(
             <>
             <nav aria-label="breadcrumb" role="navigation">
                        { <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href={breadcrumbs.project_ur}>{breadcrumbs.project}</a></li>
+                            <li className="breadcrumb-item"><a href={breadcrumbs.project_url}>{breadcrumbs.project}</a></li>
                             <li className="breadcrumb-item">{breadcrumbs.name}</li>
                         </ol>}
                     </nav>
@@ -98,7 +99,7 @@ class ProjectUser extends Component{
                                            return(
                                         <tr key={key}>
                                             <td>
-                                                <a href={users.profile_picture} className="pending table-profile">
+                                                <a href={`/users/profile/${users.id}` }className="pending table-profile">
                                                     <figure>
                                                         <img src={users.profile_picture} alt="site-logo" />
                                                     </figure>
