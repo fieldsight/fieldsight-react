@@ -10,6 +10,7 @@ let base_url = window.base_url
 
 class SiteTable extends Component {
   render() {
+   
     return (
       <Fragment>
         <div
@@ -20,9 +21,15 @@ class SiteTable extends Component {
         >
           {this.props.siteLoader && <TableContentLoader row={18} column={5} />}
 
-          {!this.props.siteLoader && (
+          {!this.props.siteLoader && 
+            <div>
+               <ul style={{ position: "relative", height: "650px" }}>
+            {this.props.site.length === 0 &&
+             
+              <p>No Data Available</p>
+           }
             <PerfectScrollbar>
-              <Table
+              {this.props.siteLoader && <Table
                 responsive="xl"
                 className="table  table-bordered  dataTable "
               >
@@ -40,13 +47,13 @@ class SiteTable extends Component {
                 </thead>
 
                 <tbody>
-                  {this.props.site.length === 0 && (
+                  {/*this.props.site.length === 0 && (
                     <tr>
                       <td>
                         <p>No Form Data Available</p>
                       </td>
                     </tr>
-                  )}
+                  )*/}
 
                   {this.props.site.map((item, i) => (
                     <tr key={i}>
@@ -114,9 +121,11 @@ class SiteTable extends Component {
                     </tr>
                   ))}
                 </tbody>
-              </Table>
+              </Table>}
             </PerfectScrollbar>
-          )}
+            </ul>
+            </div>
+          }
         </div>
         {this.props.site.length > 0 && (
           <div className="table-footer">

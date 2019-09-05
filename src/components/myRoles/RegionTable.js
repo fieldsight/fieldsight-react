@@ -6,15 +6,22 @@ import { TableContentLoader } from "../common/Loader";
 
 class RegionTable extends Component {
   render() {
+   
     return (
       <div
         className="table-wrapper"
         style={{ position: "relative", height: "650px" }}
       >
         {this.props.RegionLoader && <TableContentLoader row={15} column={5} />}
-        {!this.props.RegionLoader && (
+        {!this.props.RegionLoader &&
+         <div>
+            {this.props.regions.length === 0 && (
+                  
+                      <p>No Form Data Available</p>
+                   
+                )}
           <PerfectScrollbar>
-            <Table ponsive="xl" className="table  table-bordered  dataTable ">
+          { this.props.RegionLoader && <Table ponsive="xl" className="table  table-bordered  dataTable ">
               <thead>
                 <tr>
                   <th>identifier</th>
@@ -26,13 +33,13 @@ class RegionTable extends Component {
               </thead>
 
               <tbody>
-                {this.props.regions.length === 0 && (
+                {/*this.props.regions.length === 0 && (
                   <tr>
                     <td>
                       <p>No Form Data Available</p>
                     </td>
                   </tr>
-                )}
+                )*/}
 
                 {this.props.regions.map((region, i) => (
                   <tr key={i}>
@@ -58,8 +65,9 @@ class RegionTable extends Component {
                 ))}
               </tbody>
             </Table>
-          </PerfectScrollbar>
-        )}
+          }</PerfectScrollbar>
+          </div>
+        }
       </div>
     );
   }
