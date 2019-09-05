@@ -43,6 +43,8 @@ class MyrolesMain extends Component {
       .get(`${url}`)
 
       .then(res => {
+        console.log(res,"res");
+        
         if (this._isMounted) {
           if (res.status === 200) {
             const modifiedTeam = res.data.teams.map((team, i) => {
@@ -64,8 +66,8 @@ class MyrolesMain extends Component {
               teams: modifiedTeam,
               dLoader: false,
               RegionLoader: false,
-              myGuide:res.data.profile.can_create_team
-            })
+              myGuide:res.data.profile.guide_popup
+            },()=>{console.log(this.state.myGuide)})
           }
         }
       })
@@ -381,7 +383,7 @@ class MyrolesMain extends Component {
             />
           </div>
         )}
-          {myGuide &&
+          {(myGuide) &&
                       (<Modal  title="My Role Guide" toggleModal={this.cancelHandler}>
                           <div className="guide">
                             <p>
