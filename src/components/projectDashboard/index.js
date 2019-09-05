@@ -30,7 +30,7 @@ const INITIAL_STATE = {
   showGallery: false,
   projectId: ""
 };
-const user_id = window.user_id ? window.user_id : 137;
+const user_id = window.user_id ? window.user_id : 1;
 
 class ProjectDashboard extends React.Component {
   state = INITIAL_STATE;
@@ -105,6 +105,21 @@ class ProjectDashboard extends React.Component {
           }
         );
       }
+    }
+    if (nextProps.match.params.id !== this.props.match.params.id) {
+      const { id: projectId } = this.props.match.params;
+
+      this.setState(
+        {
+          ...INITIAL_STATE
+        },
+        () => {
+          this.props.getProjectDashboard(projectId);
+          this.props.getProgressTableData(projectId);
+
+          this.setState({ projectId: projectId });
+        }
+      );
     }
   }
   onChangeHandler = e => {

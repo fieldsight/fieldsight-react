@@ -31,6 +31,7 @@ class SiteListTable extends React.Component {
                       <th>id</th>
                       {/* <th>Address</th> */}
                       <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>
+                      <th>Type</th>
                       <th>Progress</th>
                       <th>Submissions</th>
                       <th>Latest status</th>
@@ -70,6 +71,7 @@ class SiteListTable extends React.Component {
                             {/* <a href="#" className="pending">
                             </a> */}
                           </td>
+                          <td>{item.type}</td>
                           <td>
                             <div className="progress">
                               <div

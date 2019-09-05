@@ -12,12 +12,13 @@ import SubmissionDetails from "./submissionDetails";
 import MyrolesMain from "./myRoles/MyrolesMain";
 import RegionSite from "./regionalSite/RegionSite";
 import SiteDocument from "./siteDocument/siteDocument";
+import TeamDashboard from "./teamDashboard";
 import SiteUsers from "./userDocument";
 import TeamUser from "./teamUsers/teamUsers";
 import ProjectUser from "./projectUsers/projectUsers";
-import ProjectList from "./projectList/projectList"
+import ProjectList from "./projectList/projectList";
 import ProjectDashboard from "./projectDashboard";
-import ProjectLog from "./projectLogs/projectLogs"
+import ProjectLog from "./projectLogs/projectLogs";
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -84,36 +85,40 @@ class App extends Component {
                       path="/regional-site/:id"
                       render={props => <RegionSite {...props} />}
                     />
-                     <Route
+                    <Route
                       path="/site-documents/:id"
-                      render={props => <SiteDocument {...props} />}/>
+                      render={props => <SiteDocument {...props} />}
+                    />
 
                     <Route
                       path="/project-dashboard/:id"
                       render={props => <ProjectDashboard {...props} />}
                     />
-
+                    <Route
+                      path="/team-dashboard/:id"
+                      render={props => <TeamDashboard {...props} />}
+                    />
                     <Route
                       path="/site-users/:id"
                       render={props => <SiteUsers {...props} />}
                     />
 
-                  <Route
+                    <Route
                       path="/project-users/:id"
                       render={props => <ProjectUser {...props} />}
                     />
-                    
-                     <Route
+
+                    <Route
                       path="/team-users/:id"
                       render={props => <TeamUser {...props} />}
                     />
 
-                  <Route
+                    <Route
                       path="/project-list/:id"
                       render={props => <ProjectList {...props} />}
                     />
 
-                  <Route
+                    <Route
                       path="/project-logs/:id"
                       render={props => <ProjectLog {...props} />}
                     />
