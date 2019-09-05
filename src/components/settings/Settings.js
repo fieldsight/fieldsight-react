@@ -22,7 +22,7 @@ export default class Settings extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`/fieldsight/project-dashboard/${
+                href={`/fieldsight/application/#/project-dashboard/${
                   window.project_id ? window.project_id : 182
                 }/`}
               >

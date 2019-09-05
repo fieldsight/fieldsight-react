@@ -23,9 +23,7 @@ export default class ProjectLogs extends Component{
          }
 
     
-    render(){
-            // console.log(this.state.siteId,"dfg");
-            
+    render(){            
         return(
             <>
            <Logs
@@ -33,6 +31,7 @@ export default class ProjectLogs extends Component{
                 type="site"
                 user_id={user_id}
                 siteLogs={this.state.siteLogs}
+                
           />
          </>
         )

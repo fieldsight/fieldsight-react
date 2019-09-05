@@ -107,9 +107,7 @@ class YourTeamSideBar extends Component {
                                 {project.has_project_access && (
                                   <a
                                     className="project-link"
-                                    href={`/fieldsight/project-dashboard/${
-                                      project.id
-                                    }/`}
+                                    href={project.project_url}
                                   >
                                     <OverlayTrigger
                                       placement="top"

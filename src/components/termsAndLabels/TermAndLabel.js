@@ -28,8 +28,8 @@ export default class TermAndLabel extends Component {
       region: "",
       region_supervisor: "",
       region_reviewer: "",
-      project: window.project_id ? window.project_id : 137
-      // project: window.project_id
+      //project: window.project_id ? window.project_id : 137
+       project: window.project_id
     },
     showList: true,
     isLoading: false
