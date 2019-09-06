@@ -9,6 +9,8 @@ import ProjectList from "./dashboardComponent/ProjectList";
 import DashboardCounter from "./dashboardComponent/DashboardCounter";
 import About from "./dashboardComponent/About";
 import Admin from "./dashboardComponent/Admin";
+import SiteMap from "../common/SiteMap";
+
 import {
   getTeamDashboard,
   postPackageSubscribe
@@ -215,6 +217,7 @@ class TeamDashboard extends Component {
           submissions,
           projects,
           admin,
+          map,
           breadcrumbs,
           teamDashboardLoader,
           total_projects,
@@ -260,7 +263,7 @@ class TeamDashboard extends Component {
             </ol>
           )}
         </nav>
-        {package_details.length > 0 && (
+        {!!package_details && package_details.length > 0 && (
           <Modal
             className="modal-container custom-map-modal"
             show={showModal}
@@ -335,7 +338,10 @@ class TeamDashboard extends Component {
                         </a>
                       </div>
                     </div>
-                    <TeamMap />
+                    <SiteMap
+                      map={map}
+                      showContentLoader={teamDashboardLoader}
+                    />
                   </div>
                 </div>
                 <div className="col-lg-4">

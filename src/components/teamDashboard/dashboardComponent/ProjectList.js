@@ -9,7 +9,7 @@ class ProjectList extends Component {
       <div className="card-body">
         <div
           className="thumb-list mr-0"
-          style={{ position: "relative", height: "496px" }}
+          style={{ position: "relative", height: "360px" }}
         >
           <PerfectScrollbar>
             <ul>

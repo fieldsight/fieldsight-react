@@ -15,6 +15,7 @@ const initialState = {
   teamDashboardLoader: true,
   total_projects: "",
   total_users: "",
+  map: {},
   package_details: [],
   postCardResponse: {}
 };
