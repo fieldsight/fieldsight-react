@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class PricingStepThree extends Component {
   render() {
     const {
-      props: { packageDetails, handleSubmit }
+      props: { cardResponse, handleSubmit }
     } = this;
     return (
       <div className="fieldsight-new">
@@ -28,12 +28,10 @@ class PricingStepThree extends Component {
                 <ul className="list-icon mt-4 mb-4">
                   <li>
                     <i className="la la-chevron-circle-right"></i>
-                    <strong>250</strong> Submissions
+                    <strong>{cardResponse.submissions}</strong> Submissions
                   </li>
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
-                    <strong>15</strong> Users, <strong>2</strong>
-                    Projects, <strong>10</strong> Sites
+                    <strong>Unlimited</strong> Users, Projects, Sites
                   </li>
                   <li>
                     <i className="la la-chevron-circle-right"></i>
@@ -57,12 +55,12 @@ class PricingStepThree extends Component {
                   <li>
                     <i className="la la-calendar-check-o"></i>
                     <strong>Starting Date</strong>
-                    <p>Sunday, March 24, 2019</p>
+                    <p>{cardResponse.starting_date}</p>
                   </li>
                   <li>
                     <i className="la la-calendar-minus-o"></i>
                     <strong>Ending Date</strong>
-                    <p>Sunday, March 24, 2020</p>
+                    <p>{cardResponse.ending_date}</p>
                   </li>
                 </ul>
               </div>
@@ -74,12 +72,12 @@ class PricingStepThree extends Component {
                   <li>
                     <i className="la la-money"></i>
                     <strong>Amount Paid</strong>
-                    <p>$3,000</p>
+                    <p>${cardResponse.amount}</p>
                   </li>
                   <li>
                     <i className="la la-cc-mastercard"></i>
                     <strong>Payment Method</strong>
-                    <p>Card: xxx xxx xxx 1234</p>
+                    <p>Card: xxx xxx xxx {cardResponse.card}</p>
                   </li>
                 </ul>
               </div>
