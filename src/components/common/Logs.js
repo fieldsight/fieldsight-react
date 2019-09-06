@@ -1099,33 +1099,35 @@ class Logs extends Component {
                       className="timeline"
                       ref={el => (this.timeLineDiv = el)}
                     >
-                      {groupByDate(siteLogs).map(siteLog => (
-                        <div className="timeline-list" key={uuid()}>
-                          <time>{siteLog.date}</time>
-                          <ul>
-                            {siteLog.logs.map(log => (
-                              <li className="blue" key={uuid()}>
-                                <div className="event-list ">
-                                  <figure>
-                                    <img src={log.source_img} alt="logo" />
-                                  </figure>
-                                  <div className="log-content">
-                                    <span className="time">
-                                      {format(log.date, ["h:mm a"])}
-                                    </span>
+                      {groupByDate(siteLogs).map(siteLog => {
+                        return (
+                          <div className="timeline-list" key={uuid()}>
+                            <time>{siteLog.date}</time>
+                            <ul>
+                              {siteLog.logs.map(log => (
+                                <li className="blue" key={uuid()}>
+                                  <div className="event-list ">
+                                    <figure>
+                                      <img src={log.source_img} alt="logo" />
+                                    </figure>
+                                    <div className="log-content">
+                                      <span className="time">
+                                        {format(log.date, ["h:mm a"])}
+                                      </span>
 
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: getLog(log, user_id)
-                                      }}
-                                    />
+                                      <div
+                                        dangerouslySetInnerHTML={{
+                                          __html: getLog(log, user_id)
+                                        }}
+                                      />
+                                    </div>
                                   </div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <p> No Data Available </p>

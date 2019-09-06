@@ -5,3 +5,14 @@
 #lightboxBackdrop {
   z-index: 9999;
 }
+
+.custom-map-modal .modal-dialog {
+  max-width: 1440px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.custom-map-modal .modal-content {
+  border-radius: 0;
+  position: relative;
+}

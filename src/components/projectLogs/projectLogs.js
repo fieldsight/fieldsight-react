@@ -24,20 +24,20 @@ export default class ProjectLogs extends Component{
        
          }
 
-    
-    render(){            
-        return(
-            <>
-           <Logs
-                siteId={this.state.siteId}
-                type="site"
-                user_id={user_id}
-                siteLogs={this.state.siteLogs}
-                
-          />
-         </>
-        )
-    }
+  
+
+  render() {
+    return (
+      <>
+        <Logs
+          siteId={this.state.siteId}
+          type="site"
+          user_id={user_id}
+          siteLogs={this.state.siteLogs}
+        />
+      </>
+    );
+  }
 }
 
 // const mapStateToProps = ({  }) => ({
