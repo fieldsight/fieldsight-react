@@ -20,7 +20,13 @@ class ProjectList extends Component {
                       <img src={`${imgUrl}${each.logo}`} alt="pf" />
                     </figure>
                     <div className="content">
-                      <h6>{each.name} </h6>
+                      <h6>
+                        <a
+                          href={`/fieldsight/application/#/project-dashboard/${each.id}`}
+                        >
+                          {each.name}{" "}
+                        </a>
+                      </h6>
                       {each.address && <span>{each.address}</span>}
                     </div>
                   </li>

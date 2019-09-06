@@ -22,22 +22,14 @@ const withPagination = WrappedComponent => {
     getUrl = (page_num, payload) => {
       switch (payload.type) {
         case "projectSiteList":
-          return `fv3/api/project-site-list/?page=${page_num}&project=${
-            payload.projectId
-          }`;
+          return `fv3/api/project-site-list/?page=${page_num}&project=${payload.projectId}`;
         case "mySiteList":
-          return `fv3/api/my-sites/?page=${page_num}&project=${
-            payload.projectId
-          }`;
+          return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}`;
 
         case "regionSite":
-          return `fv3/api/regional-sites/?page=${page_num}&region=${
-            payload.projectId
-          }`;
+          return `fv3/api/regional-sites/?page=${page_num}&region=${payload.projectId}`;
         case "projectRegionList":
-          return `fv3/api/project-regions/?page=${page_num}&project=${
-            payload.projectId
-          }`;
+          return `fv3/api/project-regions/?page=${page_num}&project=${payload.projectId}`;
       }
     };
 
