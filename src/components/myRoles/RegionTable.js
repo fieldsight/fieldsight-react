@@ -5,17 +5,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { TableContentLoader } from "../common/Loader";
 
 class RegionTable extends Component {
-
-
-  componentWillReceiveProps(nextprops){
-    console.log("nextprops");
-    
-  }
-  
   render() {
-    console.log(this.props.regions.length ,"length");
-    console.log(this.props.RegionLoader)
-    
     return (
       <div
         className="table-wrapper"

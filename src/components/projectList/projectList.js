@@ -40,6 +40,7 @@ import {
       const search = await projects.filter(project=>{
            return (
             project.name.toLowerCase().includes(value.toLowerCase())
+
                 )
        })
     
@@ -73,7 +74,7 @@ import {
                 <main id="main-content">
                     <div className="card">
                         <div className="card-header main-card-header sub-card-header">
-                            <h5>Site Manage</h5>
+                            <h5>Project List</h5>
                             <div className="dash-btn">
                                 <form className="floating-form">
                                     <div className="form-group mr-0">

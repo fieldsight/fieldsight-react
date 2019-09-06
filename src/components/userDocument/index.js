@@ -40,10 +40,17 @@ import {
              const { users }=this.state;
              if(value){
            const search = await users.filter(user=>{
-                return (
-                   user.full_name.toLowerCase().includes(value.toLowerCase())
-                     )
+                        return (
+                            user.full_name.toLowerCase().includes(value.toLowerCase())  ||
+                            user.email.toLowerCase().includes(value.toLowerCase()) ||
+                            users.username.toLowerCase().includes(value.toLowerCase())
+                              )
+                    
+                    
+                     
+           
             })
+            console.log(search);
         this.setState({
              users:search
              })
@@ -106,7 +113,7 @@ import {
                                                     <h5>{users.full_name}</h5>
                                                 </a>
                                             </td>
-                                            <td>{users.full_name}</td>
+                                            <td>{users.username}</td>
                                             <td>{users.email}</td>
                                             {(users.role !== "") && users.role.length > 0 ?
                                             ( users.role[0]?

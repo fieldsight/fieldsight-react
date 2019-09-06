@@ -70,8 +70,11 @@ class MyrolesMain extends Component {
         }
       })
       .catch(err => {});
+     
   }
 
+ 
+  
   invitationOpen = (e, data) => {
     if (this.state.invite == "hide") {
       this.setState({
@@ -238,6 +241,7 @@ class MyrolesMain extends Component {
   render() {
     const { profileId } = this.props.match.params;
     const {myGuide} =this.state;
+   console.log(this.state.profile);
    
     
     return (
@@ -382,11 +386,11 @@ class MyrolesMain extends Component {
           </div>
         )}
           {(myGuide) &&
-                      (<Modal  title="My Role Guide" toggleModal={this.cancelHandler}>
+                      (<Modal  title="Welcome to FieldSight" toggleModal={this.cancelHandler}>
                           <div className="guide">
                             <p>
-                            Hi, seems like you have no role yet.You can get started by creating a team in 
-                            FieldSight or contact your FieldSight manager to invite you to join the project. 
+                            Hi,&nbsp;<span style={{textTransform: "capitalize"}}>{this.state.profile.fullname}</span> seems like you have no role yet.&nbsp;You can get started by creating a team in 
+                            FieldSight or contact your FieldSight manager to invite you to join projects. 
                             </p>
                           </div>
                           <div className="warning-footer text-center">
