@@ -1,28 +1,30 @@
 import React, { Component } from "react";
 import Logs from "../common/Logs";
+import { connect } from "react-redux";
 
 const user_id = window.user_id ? window.user_id : 137;
 
-export default class ProjectLogs extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      siteId: "",
-      siteLogs: {}
-    };
-  }
+export default class ProjectLogs extends Component{
+    constructor(props){
+        super(props);
+        this.state={
+            siteId:"",
+            siteLogs:{}
+        }
+    }
+   
+   
+    componentDidMount(){
+        const {match:{params:{id}}}=this.props;
+        console.log(id);
+        this.setState({
+            siteId:id
+        })
+        
+       
+         }
 
-  componentDidMount() {
-    const {
-      match: {
-        params: { id }
-      }
-    } = this.props;
-    // console.log(id);
-    this.setState({
-      siteId: id
-    });
-  }
+  
 
   render() {
     return (
@@ -37,3 +39,15 @@ export default class ProjectLogs extends Component {
     );
   }
 }
+
+// const mapStateToProps = ({  }) => ({
+    
+//   });
+  
+//   export default connect(
+//     mapStateToProps,
+//     {
+//         getProjectLogs
+//     }
+//   )(ProjectLogs);
+  
