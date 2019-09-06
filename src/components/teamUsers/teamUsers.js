@@ -34,7 +34,9 @@ export default class TeamUser extends Component{
        if(value){
           const search = await this.state.users.filter(users=>{
                return (
-                  users.full_name.toLowerCase().includes(value.toLowerCase())
+                  users.full_name.toLowerCase().includes(value.toLowerCase()) ||
+                  users.email.toLowerCase().includes(value.toLowerCase()) ||
+                  users.username.toLowerCase().includes(value.toLowerCase())
                     )
            })
        this.setState({
@@ -62,7 +64,7 @@ export default class TeamUser extends Component{
                     <main id="main-content">
                         <div className="card">
                             <div className="card-header main-card-header sub-card-header">
-                                <h5>Users</h5>
+                                <h5>Team Users</h5>
                                 <div className="dash-btn" >
                                     <form className="floating-form" onSubmit={this.handleSubmit}>
                                         <div className="form-group mr-0">
@@ -95,7 +97,7 @@ export default class TeamUser extends Component{
                                                     <h5>{users.full_name}</h5>
                                                 </a>
                                             </td>
-                                            <td>{users.full_name}</td>
+                                            <td>{users.username}</td>
                                             <td>{users.email}</td>
                                             { users.role.length > 0 ?
                                             ( users.role[0]?

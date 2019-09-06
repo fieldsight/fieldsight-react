@@ -6,7 +6,6 @@ import { TableContentLoader } from "../common/Loader";
 
 class RegionTable extends Component {
   render() {
-   
     return (
       <div
         className="table-wrapper"
@@ -15,13 +14,8 @@ class RegionTable extends Component {
         {this.props.RegionLoader && <TableContentLoader row={15} column={5} />}
         {!this.props.RegionLoader &&
          <div>
-            {this.props.regions.length === 0 && (
-                  
-                      <p>No Form Data Available</p>
-                   
-                )}
           <PerfectScrollbar>
-          { this.props.RegionLoader && <Table ponsive="xl" className="table  table-bordered  dataTable ">
+         { this.props.regions.length > 0 ? (<Table ponsive="xl" className="table  table-bordered  dataTable ">
               <thead>
                 <tr>
                   <th>identifier</th>
@@ -64,8 +58,8 @@ class RegionTable extends Component {
                   </tr>
                 ))}
               </tbody>
-            </Table>
-          }</PerfectScrollbar>
+            </Table>):  <p>You do not have any region.</p>}
+          </PerfectScrollbar>
           </div>
         }
       </div>
@@ -75,6 +69,7 @@ class RegionTable extends Component {
   componentDidUpdate(prevProps) {
     const url = "fv3/api/my-regions/?project=" + this.props.initialTeamId;
     if (prevProps.initialTeamId != this.props.initialTeamId) {
+      console.log("regiodtable update")
       this.props.requestRegions(this.props.initialTeamId);
       this.props.requestSite(this.props.initialTeamId);
       this.props.requestSubmission(this.props.initialTeamId);

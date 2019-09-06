@@ -40,6 +40,7 @@ import {
       const search = await projects.filter(project=>{
            return (
             project.name.toLowerCase().includes(value.toLowerCase())
+
                 )
        })
     
@@ -64,14 +65,16 @@ import {
             <>
              <nav aria-label="breadcrumb" role="navigation">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a href={breadcrumbs.team_url}>{breadcrumbs.name}</a></li>
-                        <li className="breadcrumb-item">{breadcrumbs.team}</li>
+                        <li className="breadcrumb-item">
+                            <a href={breadcrumbs.team_url}>{breadcrumbs.team}</a>
+                        </li>
+                        <li className="breadcrumb-item">{breadcrumbs.name}</li>
                     </ol>
                 </nav>
                 <main id="main-content">
                     <div className="card">
                         <div className="card-header main-card-header sub-card-header">
-                            <h5>Site Manage</h5>
+                            <h5>Project List</h5>
                             <div className="dash-btn">
                                 <form className="floating-form">
                                     <div className="form-group mr-0">

@@ -113,9 +113,10 @@ class App extends Component {
                       render={props => <TeamUser {...props} />}
                     />
 
-                    <Route
-                      path="/project-list/:id"
-                      render={props => <ProjectList {...props} />}
+                  <Route 
+                  path="/team-project/:id"  
+                  render={props => <ProjectList {...props} 
+                  />}
                     />
 
                     <Route
