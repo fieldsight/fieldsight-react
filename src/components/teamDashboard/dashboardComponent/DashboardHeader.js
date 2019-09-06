@@ -23,11 +23,14 @@ class DashboardHeader extends Component {
     } = this.props;
 
     const ManageDropdown = [
-      { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
-      { title: "forms", link: `/forms/setup-forms/1/${id}` },
+      { title: "users", link: `/fieldsight/manage/people/organization/${id}/` },
+      {
+        title: "projects",
+        link: `/fieldsight/application/#/team-projects/${id}`
+      },
       {
         title: `settings`,
-        link: `/fieldsight/application/?project=${id}#/project-settings`
+        link: `/fieldsight/organization/${id}`
       }
     ];
 
@@ -84,7 +87,7 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <a href={`/fieldsight/proj-submission/${id}/2/`} target="_blank">
+            <a href={`#`} target="_blank">
               <CountCard
                 countName=""
                 countNumber={totalSubmissions}
@@ -93,7 +96,7 @@ class DashboardHeader extends Component {
               />
             </a>
             <a
-              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+              href={`/fieldsight/application/#/team-users/${id}`}
               target="_blank"
             >
               <CountCard
@@ -104,7 +107,7 @@ class DashboardHeader extends Component {
               />
             </a>
             <a
-              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+              href={`/fieldsight/application/#/team-projects/${id}`}
               target="_blank"
             >
               <CountCard
@@ -114,10 +117,7 @@ class DashboardHeader extends Component {
                 noSubmissionText={true}
               />
             </a>
-            <a
-              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
-              target="_blank"
-            >
+            <a href={`#`} target="_blank">
               <CountCard
                 countName="sites"
                 countNumber={totalSites}

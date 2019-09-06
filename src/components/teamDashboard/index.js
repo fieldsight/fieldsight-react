@@ -333,7 +333,10 @@ class TeamDashboard extends Component {
                     <div className="card-header main-card-header sub-card-header">
                       <h5>Project maps</h5>
                       <div className="dash-btn">
-                        <a href="#" className="fieldsight-btn left-icon">
+                        <a
+                          href={`/fieldsight/org-map/${teamId}/`}
+                          className="fieldsight-btn left-icon"
+                        >
                           <i className="la la-map" /> full map
                         </a>
                       </div>
@@ -349,7 +352,7 @@ class TeamDashboard extends Component {
                     <div className="card-header main-card-header sub-card-header">
                       <h5>Project maps</h5>
                       <div className="dash-btn">
-                        <form className="floating-form">
+                        {/* <form className="floating-form">
                           <div className="form-group mr-0">
                             <input
                               type="search"
@@ -359,8 +362,11 @@ class TeamDashboard extends Component {
                             <label htmlFor="input">Search</label>
                             <i className="la la-search" />
                           </div>
-                        </form>
-                        <a href="#" className="fieldsight-btn">
+                        </form> */}
+                        <a
+                          href={`/fieldsight/project/add/${teamId}/`}
+                          className="fieldsight-btn"
+                        >
                           <i className="la la-plus" />
                         </a>
                       </div>
