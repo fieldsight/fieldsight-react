@@ -42,9 +42,7 @@ class MyrolesMain extends Component {
     axios
       .get(`${url}`)
 
-      .then(res => {
-        console.log(res,"res");
-        
+      .then(res => {  
         if (this._isMounted) {
           if (res.status === 200) {
             const modifiedTeam = res.data.teams.map((team, i) => {
@@ -67,7 +65,7 @@ class MyrolesMain extends Component {
               dLoader: false,
               RegionLoader: false,
               myGuide:res.data.profile.guide_popup
-            },()=>{console.log(this.state.myGuide)})
+            })
           }
         }
       })

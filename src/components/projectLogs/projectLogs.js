@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Logs from "../common/Logs";
+import { connect } from "react-redux";
 
 const user_id = window.user_id ? window.user_id : 137;
 
@@ -19,6 +20,7 @@ export default class ProjectLogs extends Component{
         this.setState({
             siteId:id
         })
+        
        
          }
 
@@ -37,3 +39,15 @@ export default class ProjectLogs extends Component{
         )
     }
 }
+
+// const mapStateToProps = ({  }) => ({
+    
+//   });
+  
+//   export default connect(
+//     mapStateToProps,
+//     {
+//         getProjectLogs
+//     }
+//   )(ProjectLogs);
+  

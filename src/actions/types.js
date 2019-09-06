@@ -53,3 +53,7 @@ export const GET_PROJECT_LIST = "GET_PROJECT_LIST";
 
 // Project User List
 export const GET_PROJECT_USER = "GET_PROJECT_USER";
+
+//Project Log
+ export const GET_LOGS ="GET_LOGS";
+ 
