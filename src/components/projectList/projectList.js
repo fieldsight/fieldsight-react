@@ -28,9 +28,7 @@ import {
            masterprojects:nextprops.projectList.projects,
            breadcrumbs:nextprops.projectList.breadcrumbs
            
-        })
-        console.log(this.state.projects)
-       
+        })    
     }
       
     handleChange = async e=>{
@@ -119,8 +117,12 @@ import {
                                     <td>{project.total_submissions}</td>
                                     <td >      
                                                 
-                                    <a href={`/fieldsight/application/#/project-dashboard/${project.id}`} className="fieldsight-btn" > View </a>
-                                    <a href={`/fieldsight/application/?project=8#/project-settings/${project.id}`} className="fieldsight-btn"> Edit </a>
+                                    <a 
+                                    href={`/fieldsight/application/#/project-dashboard/${project.id}`} 
+                                    className="td-view-btn td-btn"  > <i className ="la la-eye"></i> </a>
+                                    <a 
+                                    href={`/fieldsight/application/?project=8#/project-settings/${project.id}`} 
+                                    className="td-edit-btn td-btn" > <i className ="la la-edit"></i></a>
                                     
                                     </td>
                                 </tr>
