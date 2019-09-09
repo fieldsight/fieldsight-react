@@ -3,7 +3,7 @@ import axios from "axios";
 let csrfVal = window.csrf ? window.csrf : "FasSURCaozAKo7OHtkIhiTtOag7hVBBt";
 let tokenVal = window.token
   ? window.token
-  : "78dfa7c51311f4ef574ed579b6d2f00291fd3bbc";
+  : "217146429897c6c6541bf13aa9208dd98fb2a42b";
 
 let baseURL = window.base_url
   ? window.base_url

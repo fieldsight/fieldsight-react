@@ -99,15 +99,16 @@ class SiteProgressCard extends Component {
     const {
       state: { source, selectedForm, selectedQuestion, targetNum }
     } = this;
+
     this.props.siteProgressHandler({
       pull_integer_form: source == "2" ? selectedForm.id : null,
       no_submissions_form: source == "4" ? selectedForm.id : null,
       no_submissions_total_count: targetNum ? +targetNum : null,
-      pull_integer_form_question: selectedQuestion.groupName
-        ? `${selectedQuestion.groupName}/${selectedQuestion.name}`
-        : selectedQuestion.name
-        ? selectedQuestion.name
-        : null,
+      pull_integer_form_question: selectedQuestion.name,
+      // ? selectedQuestion.name
+      // : // : selectedQuestion.name
+      //   // ? selectedQuestion.name
+      //   null,
       source: source,
       deployed: true
     });
