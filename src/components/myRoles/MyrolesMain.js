@@ -30,7 +30,8 @@ class MyrolesMain extends Component {
     RegionLoader: true,
     teamId: null,
     siteId: null,
-    myGuide: false
+    myGuide: false,
+    searchQuery: ""
   };
 
   componentDidMount() {
@@ -86,7 +87,8 @@ class MyrolesMain extends Component {
 
   rightTabOpen = (e, data) => {
     this.setState({
-      rightTab: data
+      rightTab: data,
+      searchQuery: ""
     });
   };
 
@@ -243,15 +245,17 @@ class MyrolesMain extends Component {
 
   onChangeHandler = e => {
     const searchValue = e.target.value;
-    const { initialTeamId } = this.state;
-    this.props.searchHandler(
-      searchValue,
-      `fv3/api/my-sites/?project=${initialTeamId}&q=${searchValue}`,
-      {
-        type: "mySiteList",
-        projectId: initialTeamId
-      }
-    );
+    const { siteId } = this.state;
+    this.setState({ searchQuery: searchValue }, () => {
+      this.props.searchHandler(
+        this.state.searchQuery,
+        `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`,
+        {
+          type: "mySiteList",
+          projectId: siteId
+        }
+      );
+    });
   };
   render() {
     const { profileId } = this.props.match.params;
