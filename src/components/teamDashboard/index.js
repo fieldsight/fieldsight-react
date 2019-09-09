@@ -336,6 +336,7 @@ class TeamDashboard extends Component {
                         <a
                           href={`/fieldsight/org-map/${teamId}/`}
                           className="fieldsight-btn left-icon"
+                          target="_blank"
                         >
                           <i className="la la-map" /> full map
                         </a>
@@ -366,6 +367,7 @@ class TeamDashboard extends Component {
                         <a
                           href={`/fieldsight/project/add/${teamId}/`}
                           className="fieldsight-btn"
+                          // target="_blank"
                         >
                           <i className="la la-plus" />
                         </a>

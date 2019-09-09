@@ -115,13 +115,13 @@ class SiteInformation extends Component {
             settings => {
               if (settings.source === 2) {
                 if (settings.pull_integer_form_question) {
-                  let splitedStr = settings.pull_integer_form_question.split(
-                    "/"
-                  );
-                  if (splitedStr.length > 1) {
-                    settings.pull_integer_form_question =
-                      splitedStr[splitedStr.length - 1];
-                  }
+                  // let splitedStr = settings.pull_integer_form_question.split(
+                  //   "/"
+                  // );
+                  // if (splitedStr.length > 1) {
+                  //   settings.pull_integer_form_question =
+                  //     splitedStr[splitedStr.length - 1];
+                  // }
                   return { ...settings, source: settings.source.toString() };
                 }
               } else {
