@@ -62,7 +62,7 @@ class ProjectUser extends Component{
 
     render(){
          const { users , breadcrumbs } = this.state;
-         console.log(breadcrumbs.project_url)
+        
       
          return(
             <>
