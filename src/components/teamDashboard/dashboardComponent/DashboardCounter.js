@@ -29,7 +29,7 @@ class DashboardCounter extends Component {
     return (
       <div className="dashboard-counter mrt-30">
         <div className="row">
-          <ShowCount name="pending" count={submissions.submissions} />
+          <ShowCount name="pending" count={submissions.pending} />
           <ShowCount name="approved" count={submissions.approved} />
           <ShowCount name="flagged" count={submissions.flagged} />
           <ShowCount name="rejected" count={submissions.rejected} />
