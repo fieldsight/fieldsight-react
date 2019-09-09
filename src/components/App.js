@@ -12,13 +12,15 @@ import SubmissionDetails from "./submissionDetails";
 import MyrolesMain from "./myRoles/MyrolesMain";
 import RegionSite from "./regionalSite/RegionSite";
 import SiteDocument from "./siteDocument/siteDocument";
-import TeamDashboard from "./teamDashboard";
 import SiteUsers from "./userDocument";
 import TeamUser from "./teamUsers/teamUsers";
 import ProjectUser from "./projectUsers/projectUsers";
 import ProjectList from "./projectList/projectList";
 import ProjectDashboard from "./projectDashboard";
 import ProjectLog from "./projectLogs/projectLogs";
+
+import TeamDashboard from "./teamDashboard";
+import TeamSetting from "./settings/TeamSettings";
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -51,6 +53,10 @@ class App extends Component {
                     <Route
                       path="/project-settings"
                       render={props => <Settings {...props} />}
+                    />
+                    <Route
+                      path="/team-settings/:id"
+                      render={props => <TeamSetting {...props} />}
                     />
                     <Route
                       path="/forms"
@@ -113,10 +119,9 @@ class App extends Component {
                       render={props => <TeamUser {...props} />}
                     />
 
-                  <Route 
-                  path="/team-project/:id"  
-                  render={props => <ProjectList {...props} 
-                  />}
+                    <Route
+                      path="/team-project/:id"
+                      render={props => <ProjectList {...props} />}
                     />
 
                     <Route

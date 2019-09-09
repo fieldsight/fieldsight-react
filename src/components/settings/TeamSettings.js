@@ -1,25 +1,23 @@
 import React, { Component, Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
-import LeftSidebar from "../leftSidebar/LeftSidebar";
-import EditProject from "../editProject/EditProject";
-import MapLayer from "../mapLayer/MapLayer";
-import { RegionProvider } from "../../context";
+import TeamLeftSidebar from "../leftSidebar/TeamLeftSieBar";
+import EditTeam from "../editTeam/EditTeam";
+import TeamMapLayer from "../mapLayer/TeamMapLayer";
 export default class TeamSettings extends Component {
   render() {
     const {
-      match: { path }
+      match: {
+        params: { id: teamId },
+        path
+      }
     } = this.props;
 
     return (
-      <RegionProvider>
+      <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a
-                href={`/fieldsight/application/#/team-dashboard/${
-                  window.project_id ? window.project_id : 192
-                }/`}
-              >
+              <a href={`/fieldsight/application/#/team-dashboard/${teamId}/`}>
                 {window.project_name ? window.project_name : "Team Name"}
               </a>
             </li>
@@ -37,7 +35,7 @@ export default class TeamSettings extends Component {
                   <h5>Meta Attributes</h5>
                 </div>
                 <div className="card-body">
-                  <LeftSidebar />
+                  <TeamLeftSidebar />
                 </div>
               </div>
             </div>
@@ -45,34 +43,15 @@ export default class TeamSettings extends Component {
           <div className="col-xl-9 col-lg-8">
             <div className="right-content">
               <div className="tab-content">
-                {/* <Switch>
-                  <Route exact path={`${path}`} component={EditProject} />
-                  <Route path={`${path}/site-type`} component={SiteType} />
-                  <Route
-                    path={`${path}/site-information`}
-                    component={SiteInformation}
-                  />
-                  <Route
-                    path={`${path}/manage-region/:subRegionId/sub-region`}
-                    component={SubRegion}
-                  />
-                  <Route
-                    path={`${path}/manage-region`}
-                    component={ManageRegion}
-                  />
-
-                  <Route path={`${path}/manage-site`} component={SiteManage} />
-                  <Route path={`${path}/map-layer`} component={MapLayer} />
-                  <Route
-                    path={`${path}/term-and-label`}
-                    component={TermsAndLabels}
-                  />
-                </Switch> */}
+                <Switch>
+                  <Route exact path={`${path}`} component={EditTeam} />
+                  <Route path={`${path}/map-layer`} component={TeamMapLayer} />
+                </Switch>
               </div>
             </div>
           </div>
         </div>
-      </RegionProvider>
+      </>
     );
   }
 }
