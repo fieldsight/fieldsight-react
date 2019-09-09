@@ -246,7 +246,7 @@ class MyrolesMain extends Component {
     const { initialTeamId } = this.state;
     this.props.searchHandler(
       searchValue,
-      `fv3/api/my-sites/?page=1&project=${initialTeamId}&q=${searchValue}`,
+      `fv3/api/my-sites/?project=${initialTeamId}&q=${searchValue}`,
       {
         type: "mySiteList",
         projectId: initialTeamId
@@ -256,7 +256,6 @@ class MyrolesMain extends Component {
   render() {
     const { profileId } = this.props.match.params;
     const { myGuide } = this.state;
-    console.log("check props", this.props);
 
     return (
       <>
@@ -284,6 +283,8 @@ class MyrolesMain extends Component {
           <div className="col-xl-8 col-lg-7">
             <div className="right-content">
               <div className="card no-boxshadow">
+                {/* <div className="card-header main-card-header">
+                </div> */}
                 <div className="card-body">
                   <div className="nav-wrapper">
                     {/* <!-- tab nav start --> */}
@@ -346,7 +347,14 @@ class MyrolesMain extends Component {
                           e.preventDefault();
                         }}
                       >
-                        <div className="form-group mr-0">
+                        <div
+                          className="form-group mr-0"
+                          style={{
+                            top: "-36px",
+                            right: "-585px",
+                            width: "25%"
+                          }}
+                        >
                           <input
                             type="search"
                             className="form-control"
@@ -359,7 +367,6 @@ class MyrolesMain extends Component {
                       // </div>
                     )}
                   </div>
-
                   <div className="tab-content mrt-30" id="myTabContent">
                     {this.state.rightTab == "submission" && (
                       <Submissions
