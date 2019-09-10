@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
+import { Elements, StripeProvider } from "react-stripe-elements";
 import TeamLeftSidebar from "../leftSidebar/TeamLeftSieBar";
 import EditTeam from "../editTeam/EditTeam";
 import TeamMapLayer from "../mapLayer/TeamMapLayer";
+import AccountInfo from "../accountInfo/AccountInfo";
 export default class TeamSettings extends Component {
   render() {
     const {
@@ -43,10 +45,22 @@ export default class TeamSettings extends Component {
           <div className="col-xl-9 col-lg-8">
             <div className="right-content">
               <div className="tab-content">
-                <Switch>
-                  <Route exact path={`${path}`} component={EditTeam} />
-                  <Route path={`${path}/map-layer`} component={TeamMapLayer} />
-                </Switch>
+                <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
+                  <Elements>
+                    <Switch>
+                      <Route exact path={`${path}`} component={EditTeam} />
+                      <Route
+                        path={`${path}/map-layer`}
+                        component={TeamMapLayer}
+                      />
+
+                      <Route
+                        path={`${path}/subscription/team-settings`}
+                        component={AccountInfo}
+                      />
+                    </Switch>
+                  </Elements>
+                </StripeProvider>
               </div>
             </div>
           </div>

@@ -18,7 +18,12 @@ class TeamLeftSidebar extends Component {
         path: `${url}`,
         title: "Team Information"
       },
-      { to: `${url}/map-layer`, path: `${url}/map-layer`, title: "Map Layers" }
+      { to: `${url}/map-layer`, path: `${url}/map-layer`, title: "Map Layers" },
+      {
+        to: `${url}/subscription/team-settings`,
+        path: `${url}/subscription/team-settings`,
+        title: "Account Information"
+      }
     ];
 
     return sideNavRoutes.map((route, i) => (

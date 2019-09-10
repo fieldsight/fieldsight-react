@@ -212,7 +212,8 @@ class EditTeam extends Component {
           address,
           website,
           country,
-          public_desc
+          public_desc,
+          logo
         },
         position: { latitude, longitude },
         showCropper,
