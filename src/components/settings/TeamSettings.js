@@ -45,22 +45,22 @@ export default class TeamSettings extends Component {
           <div className="col-xl-9 col-lg-8">
             <div className="right-content">
               <div className="tab-content">
-                <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
-                  <Elements>
-                    <Switch>
-                      <Route exact path={`${path}`} component={EditTeam} />
-                      <Route
-                        path={`${path}/map-layer`}
-                        component={TeamMapLayer}
-                      />
+                <Switch>
+                  <Route exact path={`${path}`} component={EditTeam} />
+                  <Route path={`${path}/map-layer`} component={TeamMapLayer} />
 
-                      <Route
-                        path={`${path}/subscription/team-settings`}
-                        component={AccountInfo}
-                      />
-                    </Switch>
-                  </Elements>
-                </StripeProvider>
+                  <Route
+                    path={`${path}/subscription/team-settings`}
+                    render={() => {
+                      <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
+                        <Elements>
+                          <AccountInfo />
+                        </Elements>
+                      </StripeProvider>;
+                    }}
+                    // component={AccountInfo}
+                  />
+                </Switch>
               </div>
             </div>
           </div>

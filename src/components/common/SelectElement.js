@@ -25,10 +25,20 @@ const SelectElement = ({
           {/* {options.length > 0 ? ( */}
           {options.map((option, i) => (
             <option
-              value={option.id ? option.id : option.name ? option.name : option}
-              key={`${option.name ? option.name : option}${i}`}
+              value={
+                option.id
+                  ? option.id
+                  : option.name
+                  ? option.name
+                  : option.key
+                  ? option.key
+                  : option
+              }
+              key={`${
+                option.name ? option.name : option.value ? option.value : option
+              }${i}`}
             >
-              {option.name ? option.name : option}
+              {option.name ? option.name : option.value ? option.value : option}
             </option>
           ))}
           {/* ) : value ? (

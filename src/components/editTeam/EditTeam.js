@@ -20,24 +20,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
 
-const teams = [
-  { team: "Govenmet" },
-  { team: "local ngo" },
-  { team: "ingo" },
-  { team: "academic" },
-  { team: "multinational" }
-];
-const countries = [
-  { name: "Nepal" },
-  { name: "China" },
-  { name: "India" },
-  { name: "Thailand" },
-  { name: "Japan" }
-];
+const urls = [`fv3/api/team-settings/`, `fv3/api/team-types-countries`];
+
 class EditTeam extends Component {
   _isMounted = false;
 
   state = {
+    teamId: this.props.match.params ? this.props.match.params.id : "",
     team: {
       name: "",
       type: "",
@@ -54,6 +43,8 @@ class EditTeam extends Component {
       latitude: "",
       longitude: ""
     },
+    teamTypes: [],
+    countryList: [],
     zoom: 13,
     src: "",
     showCropper: false,
@@ -61,73 +52,117 @@ class EditTeam extends Component {
     isLoading: false
   };
 
+  componentDidMount() {
+    this._isMounted = true;
+    const { teamId } = this.state;
+
+    axios
+      .all(
+        urls.map((url, i) => {
+          return i === 0 ? axios.get(`${url}${teamId}/`) : axios.get(url);
+        })
+      )
+      .then(
+        axios.spread((team, types) => {
+          if (this._isMounted) {
+            if (team && types) {
+              const position =
+                team.data.location && team.data.location.split(" ");
+              const longitude = position && position[1].split("(")[1];
+              const latitude = position && position[2].split(")")[0];
+              const teamType = types.data.team_types
+                ? types.data.team_types
+                : [];
+              const selectedType = team.data.type;
+              const countryList = types.data.countries
+                ? types.data.countries
+                : "";
+              const selectedCountry = team.data.country;
+
+              const newPosition =
+                position && position.length > 0
+                  ? { latitude, longitude }
+                  : { latitude: "", longitude: "" };
+
+              const newCropResult = team.data.logo ? team.data.logo : "";
+
+              this.setState({
+                team: team.data,
+                teamTypes: teamType,
+                countryList: countryList,
+                cropResult: newCropResult,
+                position: newPosition
+              });
+            }
+          }
+        })
+      )
+      .catch(err => console.log("err", err));
+  }
+
   requestHandler = () => {
     const {
       state: {
+        teamId,
         team: {
           name,
           type,
-          phone,
-          email,
           address,
+          email,
+          phone,
           website,
-          public_desc,
           country,
-          logo,
-          organization
+          public_desc,
+          logo
         },
         position: { latitude, longitude },
         cropResult
       },
-      props: {
-        match: {
-          params: { id: teamId }
-        }
-      }
+      props: {}
     } = this;
 
     const team = {
       name,
       type,
-      phone,
-      email,
       address,
+      email,
+      phone,
       website,
       country,
       public_desc,
+      logo,
       ...(cropResult && { logo: cropResult }),
       latitude,
-      longitude,
-      organization
+      longitude
     };
 
-    // axios
-    //   .put(`${urls[0]}${projectId}/`, project, {
-    //     onUploadProgress: progressEvent => {
-    //       this.setState({
-    //         loaded: Math.round(
-    //           (progressEvent.loaded * 100) / progressEvent.total
-    //         )
-    //       });
-    //     }
-    //   })
-    //   .then(res => {
-    //     this.setState(
-    //       {
-    //         isLoading: false,
-    //         loaded: 0
-    //       },
-    //       () => successToast("Project", "updated")
-    //     );
-    //   })
-    //   .catch(err => {
-    //     this.setState(
-    //       {
-    //         isLoading: false
-    //       },
-    //       errorToast
-    //     );
-    //   });
+    axios
+      .put(`${urls[0]}${teamId}/`, team, {
+        onUploadProgress: progressEvent => {
+          this.setState({
+            loaded: Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            )
+          });
+        }
+      })
+      .then(res => {
+        this.setState(
+          {
+            isLoading: false,
+            loaded: 0
+          },
+          () => successToast("Team", "updated")
+        );
+      })
+      .catch(err => {
+        this.setState(
+          {
+            isLoading: false
+          },
+          errorToast
+        );
+      });
   };
 
   onSubmitHandler = e => {
@@ -193,10 +228,24 @@ class EditTeam extends Component {
     });
   };
 
-  onSelectChangeHandler = e => {
+  onTypeSelectChangeHandler = e => {
     const { value } = e.target;
+
     this.setState({
-      [e.target.name]: value
+      team: {
+        ...this.state.team,
+        type: value
+      }
+    });
+  };
+  onCountrySelectChangeHandler = e => {
+    const { value } = e.target;
+
+    this.setState({
+      team: {
+        ...this.state.team,
+        country: value
+      }
     });
   };
 
@@ -207,9 +256,9 @@ class EditTeam extends Component {
         team: {
           name,
           type,
-          phone,
-          email,
           address,
+          email,
+          phone,
           website,
           country,
           public_desc,
@@ -218,12 +267,14 @@ class EditTeam extends Component {
         position: { latitude, longitude },
         showCropper,
         cropResult,
-        isLoading
+        isLoading,
+        countryList,
+        teamTypes
       },
       onChangeHandler,
-      onSelectChangeHandler,
+      onTypeSelectChangeHandler,
       onSubmitHandler,
-      handleCheckboxChange,
+      onCountrySelectChangeHandler,
       readFile,
       closeModal,
       mapClickHandler
@@ -249,8 +300,8 @@ class EditTeam extends Component {
                 className="form-control"
                 label="Type of Team"
                 name="type"
-                options={teams.map(team => team.team)}
-                changeHandler={e => onSelectChangeHandler(e)}
+                options={teamTypes.map(team => team)}
+                changeHandler={e => onTypeSelectChangeHandler(e)}
                 value={type && type}
               />
             </div>
@@ -282,7 +333,7 @@ class EditTeam extends Component {
               <InputElement
                 formType="editForm"
                 tag="input"
-                type="text"
+                type="url"
                 // required={true}
                 label="Website"
                 name="website"
@@ -295,8 +346,8 @@ class EditTeam extends Component {
                 className="form-control"
                 label="Country"
                 name="country"
-                options={countries.map(each => each.name)}
-                changeHandler={e => onSelectChangeHandler(e)}
+                options={countryList.map(each => each)}
+                changeHandler={e => onCountrySelectChangeHandler(e)}
                 value={country && country}
                 required={true}
               />
