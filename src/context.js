@@ -19,7 +19,7 @@ const INITIAL_STATE = {
   selectedId: "",
   isLoading: false,
   showDeleteConfirmation: false,
-  projectId: window.project_id ? window.project_id : 310,
+  projectId: window.project_id ? window.project_id : 373,
   // projectId: window.project_id,
   organizationId: window.organization_id ? window.organization_id : 13
   // organizationId: window.organization_id
