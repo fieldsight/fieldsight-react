@@ -145,7 +145,7 @@ class DashboardHeader extends React.Component {
             </a>
             <a href={`/fieldsight/application/#/project-users/${id}/`} target="_blank">
               <CountCard
-                countName="Users"
+                countName="User"
                 countNumber={totalUsers}
                 icon="la-user"
                 noSubmissionText={true}
@@ -156,7 +156,7 @@ class DashboardHeader extends React.Component {
               target="_blank"
             >
               <CountCard
-                countName="sites"
+                countName="site"
                 countNumber={totalSites}
                 icon="la-map-marker"
                 noSubmissionText={true}

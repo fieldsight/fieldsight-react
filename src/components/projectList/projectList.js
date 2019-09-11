@@ -103,7 +103,7 @@ import {
                                        return(
                                     <tr key={key}>
                                         <td>
-                                        <a href="#" className="pending table-profile">
+                                        <a href={`/fieldsight/application/#/project-dashboard/${project.id}`} className="pending table-profile">
                                             <figure>
                                                 <img src={project.logo} alt="site-logo" />
                                             </figure>
@@ -117,13 +117,13 @@ import {
                                     <td>{project.total_submissions}</td>
                                     <td >      
                                                 
-                                    <a 
+                                    <a
                                     href={`/fieldsight/application/#/project-dashboard/${project.id}`} 
                                     className="td-view-btn td-btn"  > <i className ="la la-eye"></i> </a>
                                     <a 
-                                    href={`/fieldsight/application/?project=8#/project-settings/${project.id}`} 
+                                    href={`/fieldsight/application/?project=${project.id}#/project-settings`}
                                     className="td-edit-btn td-btn" > <i className ="la la-edit"></i></a>
-                                    
+
                                     </td>
                                 </tr>
                                        )
