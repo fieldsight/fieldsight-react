@@ -33,7 +33,8 @@ class MyrolesMain extends Component {
     myGuide:false
   };
 
-  componentDidMount() {
+ // componentDidMount() {
+  componentWillMount(){
     const { profileId } = this.props.match.params;
     let url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
@@ -70,10 +71,15 @@ class MyrolesMain extends Component {
         }
       })
       .catch(err => {});
+      this.requestRegions(this.state.initialTeamId);
+    console.log(this.state.initialTeamId ,"fdghj")
      
   }
 
- 
+//  componentWillMount(){
+//    this.requestRegions(this.state.initialTeamId);
+//    console.log(this.state.initialTeamId ,"fdghj")
+//  }
   
   invitationOpen = (e, data) => {
     if (this.state.invite == "hide") {
@@ -241,7 +247,7 @@ class MyrolesMain extends Component {
   render() {
     const { profileId } = this.props.match.params;
     const {myGuide} =this.state;
-   console.log(this.state.profile);
+   
    
     
     return (

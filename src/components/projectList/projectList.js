@@ -2,6 +2,7 @@ import React,{Component} from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import {Table } from  "react-bootstrap";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import {
     getProjectList
      } from  "../../actions/projectListAction";
@@ -85,14 +86,16 @@ import {
                             </div>
                         </div>
                         <div className="card-body">
+                        <div style={{ position: "relative", height: "800px" }}>
+            <PerfectScrollbar>
                             <Table id="manage_table" className="table  table-bordered  manage_table">
                                 <thead>
                                     <tr>
                                         <th>Project Name</th>
                                         <th>Address</th>
-                                        <th>Number of regions</th>
-                                        <th>Number of Sites</th>
-                                        <th>Number of users</th>
+                                        <th>Regions</th>
+                                        <th>Sites</th>
+                                        <th>users</th>
                                         <th>Total Submissions</th>
                                         <th>Action</th>
 
@@ -133,6 +136,8 @@ import {
 
                                 </tbody>
                             </Table>
+                            </PerfectScrollbar>
+                            </div>
                         </div>
                     </div>
                    

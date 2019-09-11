@@ -2,9 +2,13 @@ import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import format from "date-fns/format";
 import { BlockContentLoader } from "./Loader";
+import {Link} from "react-router-dom"
 import uuid from "uuid/v4";
 
 class Logs extends Component {
+  state={
+    width:false
+  }
   getLog = (data, user_id) => {
     let content = "";
     const formdetail = data.get_event_name.split("form");
@@ -1064,31 +1068,32 @@ class Logs extends Component {
 
   render() {
     const {
-      props: { siteLogs, showContentLoader, siteId, type, user_id },
+      props: { siteLogs, showContentLoader, siteId, type, user_id,fullPage },
       groupByDate,
       getColor,
-      getLog
+      getLog,
+      sitewidth
     } = this;
+    
     return (
-      <div className="col-xl-4 col-md-12">
+      <div className= { fullPage ? "col-md-12" :"col-xl-4 col-md-12"}>
         <div className="card logs">
           <div className="card-header main-card-header sub-card-header">
             <h5>Logs</h5>
 
             {siteLogs.length > 0 ? (
-              <a
-                href={`/events/${type}_logs/${siteId}/`}
-                className="fieldsight-btn"
-                target="_blank"
-              >
-                view all
-              </a>
+             fullPage ? null : <Link
+             to={`/${type}_logs/${siteId}/`}
+             className="fieldsight-btn"
+               >
+                View all
+              </Link>
             ) : null}
           </div>
           <div className="card-body">
             <div
               className="logs-list"
-              style={{ position: "relative", height: "314px" }}
+              style={fullPage?{}:{ position: "relative", height: "314px" }}
             >
               {showContentLoader ? (
                 <BlockContentLoader number={2} height="150px" />
