@@ -34,7 +34,8 @@ class MyrolesMain extends Component {
     searchQuery: ""
   };
 
-  componentDidMount() {
+ // componentDidMount() {
+  componentWillMount(){
     const { profileId } = this.props.match.params;
     let url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
@@ -71,8 +72,9 @@ class MyrolesMain extends Component {
         }
       })
       .catch(err => {});
+     
   }
-
+  
   invitationOpen = (e, data) => {
     if (this.state.invite == "hide") {
       this.setState({
@@ -259,8 +261,10 @@ class MyrolesMain extends Component {
   };
   render() {
     const { profileId } = this.props.match.params;
-    const { myGuide } = this.state;
-
+    const {myGuide} =this.state;
+   
+   
+    
     return (
       <>
         <div className="card mrb-30">
