@@ -1,4 +1,4 @@
-import { GET_TEAM_DASHBOARD } from "../actions/types";
+import { GET_TEAM_DASHBOARD, POST_PACKAGE_SUBSCRIBE } from "../actions/types";
 
 const initialState = {
   id: "",
@@ -15,7 +15,9 @@ const initialState = {
   teamDashboardLoader: true,
   total_projects: "",
   total_users: "",
-  package_details: []
+  map: {},
+  package_details: [],
+  postCardResponse: {}
 };
 
 export default function(state = initialState, action) {
@@ -25,6 +27,11 @@ export default function(state = initialState, action) {
         ...state,
         ...action.payload,
         teamDashboardLoader: false
+      };
+    case POST_PACKAGE_SUBSCRIBE:
+      return {
+        ...state,
+        postCardResponse: action.response
       };
     default:
       return state;

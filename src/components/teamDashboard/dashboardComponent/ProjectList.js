@@ -9,7 +9,7 @@ class ProjectList extends Component {
       <div className="card-body">
         <div
           className="thumb-list mr-0"
-          style={{ position: "relative", height: "496px" }}
+          style={{ position: "relative", height: "360px" }}
         >
           <PerfectScrollbar>
             <ul>
@@ -20,7 +20,13 @@ class ProjectList extends Component {
                       <img src={`${imgUrl}${each.logo}`} alt="pf" />
                     </figure>
                     <div className="content">
-                      <h6>{each.name} </h6>
+                      <h6>
+                        <a
+                          href={`/fieldsight/application/#/project-dashboard/${each.id}`}
+                        >
+                          {each.name}{" "}
+                        </a>
+                      </h6>
                       {each.address && <span>{each.address}</span>}
                     </div>
                   </li>

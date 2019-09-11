@@ -1,8 +1,28 @@
 import React, { Component } from "react";
-import { Elements } from "react-stripe-elements";
-import CheckoutForm from "../../common/CheckoutForm";
+// import { Elements } from "react-stripe-elements";
+// import CheckoutForm from "../../common/CheckoutForm";
+import { CardElement, injectStripe } from "react-stripe-elements";
 
 class PricingStepTwo extends Component {
+  constructor(props) {
+    super(props);
+    this.handleCardForm = this.handleCardForm.bind(this);
+    this.state = { errors: "" };
+  }
+
+  async handleCardForm(e) {
+    const { token, error } = await this.props.stripe.createToken({
+      name: "stripeToken"
+    });
+    if (!!token) this.props.passStripeToken(token.id, "");
+    if (!!error)
+      this.setState({ errors: error }, () => {
+        this.props.passStripeToken("", this.state.errors.code);
+      });
+  }
+  handleChange = () => {
+    this.setState({ errors: "" });
+  };
   formatDate = date => {
     const monthNames = [
       "January",
@@ -47,16 +67,15 @@ class PricingStepTwo extends Component {
     const {
       props: {
         selectedPackage,
-        handleNext,
-        handleSecondStepSelect,
+        // handleNext,
         handlePrevious,
         packageStartDate,
         packageEndDate,
         selectedPlan,
         interval
-      }
+      },
+      state: { errors }
     } = this;
-    console.log(selectedPackage);
 
     return (
       <div className="fieldsight-new">
@@ -121,9 +140,13 @@ class PricingStepTwo extends Component {
               </div>
               <div className="col-md-6">
                 <div className="card-input-wrap mt-4 mb-4">
-                  <Elements>
-                    <CheckoutForm />
-                  </Elements>
+                  <div className="checkout">
+                    <p> Credit or debit card</p>
+                    <CardElement onChange={this.handleChange} />
+                    {Object.keys(errors).length > 0 && (
+                      <span className="card-error">{errors.message}</span>
+                    )}
+                  </div>
                 </div>
                 <p className="text-center">
                   <small></small>
@@ -143,9 +166,7 @@ class PricingStepTwo extends Component {
               <a
                 title=""
                 className="btn btn-primary"
-                onClick={() => {
-                  handleNext("third");
-                }}
+                onClick={this.handleCardForm}
               >
                 Next <i className="la la-long-arrow-right"></i>
               </a>
@@ -156,4 +177,4 @@ class PricingStepTwo extends Component {
     );
   }
 }
-export default PricingStepTwo;
+export default injectStripe(PricingStepTwo);

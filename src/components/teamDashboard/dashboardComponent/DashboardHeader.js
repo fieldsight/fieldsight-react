@@ -23,11 +23,14 @@ class DashboardHeader extends Component {
     } = this.props;
 
     const ManageDropdown = [
-      { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
-      { title: "forms", link: `/forms/setup-forms/1/${id}` },
+      { title: "users", link: `/fieldsight/manage/people/organization/${id}/` },
+      {
+        title: "projects",
+        link: `/fieldsight/application/#/team-projects/${id}`
+      },
       {
         title: `settings`,
-        link: `/fieldsight/application/?project=${id}#/project-settings`
+        link: `/fieldsight/organization/${id}`
       }
     ];
 
@@ -84,47 +87,41 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <a href={`/fieldsight/proj-submission/${id}/2/`} target="_blank">
+
               <CountCard
                 countName=""
                 countNumber={totalSubmissions}
                 icon="la-copy"
                 // noSubmissionText={true}
               />
-            </a>
             <a
-              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+              href={`/fieldsight/application/#/team-users/${id}`}
               target="_blank"
             >
               <CountCard
-                countName="users"
+                countName="user"
                 countNumber={totalUser}
                 icon="la-user"
                 noSubmissionText={true}
               />
             </a>
             <a
-              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+              href={`/fieldsight/application/#/team-projects/${id}`}
               target="_blank"
             >
               <CountCard
-                countName="projects"
+                countName="project"
                 countNumber={totalProjects}
                 icon="la la-tasks"
                 noSubmissionText={true}
               />
             </a>
-            <a
-              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
-              target="_blank"
-            >
               <CountCard
-                countName="sites"
+                countName="site"
                 countNumber={totalSites}
                 icon="la-map-marker"
                 noSubmissionText={true}
               />
-            </a>
           </div>
         </div>
       </div>

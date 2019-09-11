@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Modal from "react-bootstrap/Modal";
-import { StripeProvider } from "react-stripe-elements";
+import { StripeProvider, Elements } from "react-stripe-elements";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
 import TeamMap from "./dashboardComponent/TeamMap";
@@ -9,7 +9,12 @@ import ProjectList from "./dashboardComponent/ProjectList";
 import DashboardCounter from "./dashboardComponent/DashboardCounter";
 import About from "./dashboardComponent/About";
 import Admin from "./dashboardComponent/Admin";
-import { getTeamDashboard } from "../../actions/teamDashboardActions";
+import SiteMap from "../common/SiteMap";
+
+import {
+  getTeamDashboard,
+  postPackageSubscribe
+} from "../../actions/teamDashboardActions";
 import PricingStepOne from "./dashboardComponent/PricingStepOne";
 import PricingStepTwo from "./dashboardComponent/PricingStepTwo";
 import PricingStepThree from "./dashboardComponent/PricingStepThree";
@@ -29,7 +34,9 @@ const INITIAL_STATE = {
   interval: "monthly",
   selectedPlan: {},
   packageStartDate: new Date(),
-  packageEndDate: new Date(now.setMonth(now.getMonth() + 2))
+  packageEndDate: new Date(now.setMonth(now.getMonth() + 2)),
+  tokenId: "",
+  cardError: "required"
 };
 class TeamDashboard extends Component {
   state = INITIAL_STATE;
@@ -133,25 +140,43 @@ class TeamDashboard extends Component {
     );
   };
   handleNext = step => {
-    this.setState(state => {
-      if (step == "second") {
-        return {
-          stepOne: false,
-          stepTwo: true
-        };
-      } else if (step == "third") {
-        return {
-          stepThree: true,
-          stepTwo: false
-        };
-      } else {
-        return {
-          stepOne: true,
-          stepTwo: false,
-          stepThree: false
-        };
+    const { cardError } = this.state;
+
+    this.setState(
+      state => {
+        if (step == "second") {
+          return {
+            stepOne: false,
+            stepTwo: true
+          };
+        } else if (step == "third") {
+          if (Object.keys(cardError).length == 0) {
+            return {
+              stepThree: true,
+              stepTwo: false
+            };
+          }
+        } else {
+          return {
+            stepOne: true,
+            stepTwo: false,
+            stepThree: false
+          };
+        }
+      },
+      () => {
+        if (this.state.stepThree) {
+          const { tokenId, plan, interval } = this.state;
+          const { id: teamId } = this.props.match.params;
+          const payload = {
+            stripeToken: tokenId,
+            interval: interval,
+            plan_name: plan
+          };
+          this.props.postPackageSubscribe(teamId, payload);
+        }
       }
-    });
+    );
   };
   handlePrevious = () => {
     this.setState({
@@ -162,11 +187,21 @@ class TeamDashboard extends Component {
   handleFirstStepSelect = (selected, data) => {
     this.setState({ plan: selected, selectedPlan: data });
   };
-  handleSecondStepSelect = e => {
-    console.log("second select", e);
-  };
-  handlePriceSubmit = e => {
-    console.log("submit plan");
+  handlePriceSubmit = e => {};
+  passStripeToken = (id, error) => {
+    this.setState(
+      state => {
+        if (!!error) return { cardError: error };
+        else if (!!id) {
+          return { tokenId: id, cardError: "" };
+        }
+      },
+      () => {
+        if (!!id) {
+          this.handleNext("third");
+        }
+      }
+    );
   };
   render() {
     const {
@@ -182,11 +217,13 @@ class TeamDashboard extends Component {
           submissions,
           projects,
           admin,
+          map,
           breadcrumbs,
           teamDashboardLoader,
           total_projects,
           total_users,
-          package_details
+          package_details,
+          postCardResponse
         },
         match: {
           params: { id: teamId }
@@ -203,15 +240,15 @@ class TeamDashboard extends Component {
         interval,
         stripeToken,
         plan,
-        selectedPlan
+        selectedPlan,
+        cardError
       },
       closeModal,
       openModal,
       toggleTab,
-      handleFirstStepSelect,
-      handleSecondStepSelect
+      handleFirstStepSelect
     } = this;
-    console.log("props", this.props, packageEndDate);
+    // console.log("props", this.props);
     const packageSelected =
       Object.keys(this.state.plan).length > 0 ? true : false;
     return (
@@ -226,7 +263,7 @@ class TeamDashboard extends Component {
             </ol>
           )}
         </nav>
-        {package_details.length > 0 && (
+        {!!package_details && package_details.length > 0 && (
           <Modal
             className="modal-container custom-map-modal"
             show={showModal}
@@ -249,22 +286,24 @@ class TeamDashboard extends Component {
               )}
               {stepTwo && (
                 <StripeProvider apiKey={stripeToken}>
-                  <PricingStepTwo
-                    selectedPackage={selectedPlan}
-                    handleNext={this.handleNext}
-                    handlePrevious={this.handlePrevious}
-                    handleSecondStepSelect={handleSecondStepSelect}
-                    packageStartDate={packageStartDate}
-                    packageEndDate={packageEndDate}
-                    selectedPlan={plan}
-                    interval={interval}
-                  />
+                  <Elements>
+                    <PricingStepTwo
+                      selectedPackage={selectedPlan}
+                      // handleNext={this.handleNext}
+                      handlePrevious={this.handlePrevious}
+                      packageStartDate={packageStartDate}
+                      packageEndDate={packageEndDate}
+                      selectedPlan={plan}
+                      interval={interval}
+                      passStripeToken={this.passStripeToken}
+                    />
+                  </Elements>
                 </StripeProvider>
               )}
               {stepThree && (
                 <PricingStepThree
-                  packageDetails={package_details}
-                  handleSubmit={this.handlePriceSubmit}
+                  cardResponse={postCardResponse}
+                  handleSubmit={this.closeModal}
                 />
               )}
             </Modal.Body>
@@ -294,20 +333,27 @@ class TeamDashboard extends Component {
                     <div className="card-header main-card-header sub-card-header">
                       <h5>Project maps</h5>
                       <div className="dash-btn">
-                        <a href="#" className="fieldsight-btn left-icon">
+                        <a
+                          href={`/fieldsight/org-map/${teamId}/`}
+                          className="fieldsight-btn left-icon"
+                          target="_blank"
+                        >
                           <i className="la la-map" /> full map
                         </a>
                       </div>
                     </div>
-                    <TeamMap />
+                    <SiteMap
+                      map={map}
+                      showContentLoader={teamDashboardLoader}
+                    />
                   </div>
                 </div>
                 <div className="col-lg-4">
                   <div className="card project-list">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>Project maps</h5>
+                      <h5>Projects</h5>
                       <div className="dash-btn">
-                        <form className="floating-form">
+                        {/* <form className="floating-form">
                           <div className="form-group mr-0">
                             <input
                               type="search"
@@ -317,8 +363,12 @@ class TeamDashboard extends Component {
                             <label htmlFor="input">Search</label>
                             <i className="la la-search" />
                           </div>
-                        </form>
-                        <a href="#" className="fieldsight-btn">
+                        </form> */}
+                        <a
+                          href={`/fieldsight/project/add/${teamId}/`}
+                          className="fieldsight-btn"
+                          // target="_blank"
+                        >
                           <i className="la la-plus" />
                         </a>
                       </div>
@@ -375,6 +425,7 @@ const mapStateToProps = ({ teamDashboard }) => ({
 export default connect(
   mapStateToProps,
   {
-    getTeamDashboard
+    getTeamDashboard,
+    postPackageSubscribe
   }
 )(TeamDashboard);

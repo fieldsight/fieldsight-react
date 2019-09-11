@@ -26,7 +26,6 @@ class SiteInformationCard extends Component {
   state = INITIAL_STATE;
 
   componentWillReceiveProps(nextProps) {
-    console.log("componentwilrece");
     let selectedForm = {};
     let selectedQuestion = {};
     let type = "choose";

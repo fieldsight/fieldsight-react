@@ -11,7 +11,7 @@ import {
 } from "react-leaflet";
 // import "leaflet/dist/leaflet.css";
 
-import { BlockContentLoader } from "../../common/Loader";
+import { BlockContentLoader } from "./Loader";
 
 // const position = [27.7, 85.4];
 const MyMarkersList = data => {

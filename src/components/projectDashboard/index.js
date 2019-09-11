@@ -4,7 +4,7 @@ import { compose } from "redux";
 import withPagination from "../../hoc/WithPagination";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
-import SiteMap from "./dashboardComponent/SiteMap";
+import SiteMap from "../common/SiteMap";
 import RegionsTable from "./dashboardComponent/RegionsTable";
 import DashboardCounter from "./dashboardComponent/DashboardCounter";
 import ProjectActivity from "./dashboardComponent/ProjectActivity";
@@ -135,7 +135,7 @@ class ProjectDashboard extends React.Component {
     );
   };
   render() {
-     console.log("props--", this.props);
+    // console.log("props--", this.props);
     const {
       projectDashboard: {
         id,
