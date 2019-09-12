@@ -272,15 +272,7 @@ class ProjectDashboard extends React.Component {
                   {/* </div> */}
                   {activeTab === "site" && (
                     <div className="dash-btn">
-                      {is_project_manager && (
-                        <a
-                          href={`/fieldsight/site/add/${projectId}/`}
-                          target="_blank"
-                          className="fieldsight-btn left-icon"
-                        >
-                          <i className="la la-plus" />
-                        </a>
-                      )}
+                      
                       <form
                         className="floating-form"
                         onSubmit={e => {
@@ -297,6 +289,15 @@ class ProjectDashboard extends React.Component {
                           <i className="la la-search" />
                         </div>
                       </form>
+                      {is_project_manager && (
+                        <a
+                          href={`/fieldsight/site/add/${projectId}/`}
+                          target="_blank"
+                          className="fieldsight-btn left-icon"
+                        >
+                          <i className="la la-plus" />
+                        </a>
+                      )}
                     </div>
                   )}
                 </div>

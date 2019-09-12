@@ -35,7 +35,8 @@ const INITIAL_STATE = {
   showSubmissionModal: false,
   showCropper: false,
   showSubsites: false,
-  showGallery: false
+  showGallery: false,
+  
 };
 class SiteDashboard extends Component {
   state = INITIAL_STATE;
