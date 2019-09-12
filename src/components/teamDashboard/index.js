@@ -336,6 +336,7 @@ class TeamDashboard extends Component {
                         <a
                           href={`/fieldsight/org-map/${teamId}/`}
                           className="fieldsight-btn left-icon"
+                          target="_blank"
                         >
                           <i className="la la-map" /> full map
                         </a>
@@ -350,7 +351,7 @@ class TeamDashboard extends Component {
                 <div className="col-lg-4">
                   <div className="card project-list">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>Project maps</h5>
+                      <h5>Projects</h5>
                       <div className="dash-btn">
                         {/* <form className="floating-form">
                           <div className="form-group mr-0">
@@ -366,6 +367,7 @@ class TeamDashboard extends Component {
                         <a
                           href={`/fieldsight/project/add/${teamId}/`}
                           className="fieldsight-btn"
+                          // target="_blank"
                         >
                           <i className="la la-plus" />
                         </a>

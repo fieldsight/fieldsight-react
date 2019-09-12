@@ -2,6 +2,7 @@ import React,{Component} from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import {Table } from  "react-bootstrap";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import {
     getProjectList
      } from  "../../actions/projectListAction";
@@ -28,9 +29,7 @@ import {
            masterprojects:nextprops.projectList.projects,
            breadcrumbs:nextprops.projectList.breadcrumbs
            
-        })
-        console.log(this.state.projects)
-       
+        })    
     }
       
     handleChange = async e=>{
@@ -87,14 +86,16 @@ import {
                             </div>
                         </div>
                         <div className="card-body">
+                        <div style={{ position: "relative", height: "800px" }}>
+            <PerfectScrollbar>
                             <Table id="manage_table" className="table  table-bordered  manage_table">
                                 <thead>
                                     <tr>
                                         <th>Project Name</th>
                                         <th>Address</th>
-                                        <th>Number of regions</th>
-                                        <th>Number of Sites</th>
-                                        <th>Number of users</th>
+                                        <th>Regions</th>
+                                        <th>Sites</th>
+                                        <th>users</th>
                                         <th>Total Submissions</th>
                                         <th>Action</th>
 
@@ -105,7 +106,7 @@ import {
                                        return(
                                     <tr key={key}>
                                         <td>
-                                        <a href="#" className="pending table-profile">
+                                        <a href={`/fieldsight/application/#/project-dashboard/${project.id}`} className="pending table-profile">
                                             <figure>
                                                 <img src={project.logo} alt="site-logo" />
                                             </figure>
@@ -119,9 +120,13 @@ import {
                                     <td>{project.total_submissions}</td>
                                     <td >      
                                                 
-                                    <a href={`/fieldsight/application/#/project-dashboard/${project.id}`} className="fieldsight-btn" > View </a>
-                                    <a href={`/fieldsight/application/?project=8#/project-settings/${project.id}`} className="fieldsight-btn"> Edit </a>
-                                    
+                                    <a
+                                    href={`/fieldsight/application/#/project-dashboard/${project.id}`} 
+                                    className="td-view-btn td-btn"  > <i className ="la la-eye"></i> </a>
+                                    <a 
+                                    href={`/fieldsight/application/?project=${project.id}#/project-settings`}
+                                    className="td-edit-btn td-btn" > <i className ="la la-edit"></i></a>
+
                                     </td>
                                 </tr>
                                        )
@@ -131,6 +136,8 @@ import {
 
                                 </tbody>
                             </Table>
+                            </PerfectScrollbar>
+                            </div>
                         </div>
                     </div>
                    

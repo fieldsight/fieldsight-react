@@ -1,16 +1,20 @@
 import {GET_LOGS} from "../actions/types";
 
-const initialState={
+const initialState ={
     siteLogs:[],
-    siteLogsLoader:true
+    siteLogsLoader:true,
+    sitewidth:false
 }
 
-export default function(state=initialState , action){
+export default function (state = initialState, action) {
     switch(action.type){
-        case GET_LOGS:
+      case GET_LOGS: 
             return{
                 siteLogs:[...action.payload],
-                siteLogsLoader:false
+                siteLogsLoader:false,
+                sitewidth:true
             }
+            default:
+        return state;
     }
 }

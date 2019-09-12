@@ -1,7 +1,6 @@
 import React,{Component} from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import axios from "axios";
 import {
     getSiteUser
   } from "../../actions/userDocumentActions";
@@ -43,14 +42,14 @@ import {
                         return (
                             user.full_name.toLowerCase().includes(value.toLowerCase())  ||
                             user.email.toLowerCase().includes(value.toLowerCase()) ||
-                            users.username.toLowerCase().includes(value.toLowerCase())
+                            user.username.toLowerCase().includes(value.toLowerCase())
                               )
                     
                     
                      
            
             })
-            console.log(search);
+            
         this.setState({
              users:search
              })
@@ -89,7 +88,7 @@ import {
                                    
                                 </div>
                             </div>
-                            <div className="card-body">
+                            <div className="card-body" >
                                 <table id="manage_table" className="table  table-bordered  manage_table" >
                                     <thead >
                                         <tr>

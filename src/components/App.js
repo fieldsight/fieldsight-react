@@ -19,6 +19,8 @@ import ProjectUser from "./projectUsers/projectUsers";
 import ProjectList from "./projectList/projectList";
 import ProjectDashboard from "./projectDashboard";
 import ProjectLog from "./projectLogs/projectLogs";
+import Teams from "./team";
+import SiteLog from "./siteLogs"
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -114,15 +116,24 @@ class App extends Component {
                     />
 
                   <Route 
-                  path="/team-project/:id"  
+                  path="/team-projects/:id"
                   render={props => <ProjectList {...props} 
                   />}
                     />
-
-                    <Route
-                      path="/project-logs/:id"
-                      render={props => <ProjectLog {...props} />}
+                     <Route 
+                  path="/teams"  
+                  render={props => <Teams {...props} 
+                  />}
                     />
+                    <Route
+                      path="/project_logs/:id"
+                      render={props => <ProjectLog  {...props} />}
+                    />
+                     <Route
+                      path="/site_logs/:id"
+                      render={props => <SiteLog  {...props} />}
+                    />
+
                   </Switch>
                   <ToastContainer />
                 </Router>

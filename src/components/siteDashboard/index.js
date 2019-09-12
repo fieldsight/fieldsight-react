@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import DashboardHeader from "./dashboardComponent/DashboardHeader";
+import DashboardHeader from "./dashboardComponent/DashBoardHeader";
 import DatatablePage from "./dashboardComponent/DatatablePage";
 import SiteMap from "./dashboardComponent/SiteMap";
 import PhotoGallery from "./dashboardComponent/PhotoGallery";
