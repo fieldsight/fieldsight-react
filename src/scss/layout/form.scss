@@ -455,6 +455,14 @@
           margin-right: 1rem;
         }
       }
+      &.checkbox-group{
+        margin-bottom:.5rem;
+        label{
+          margin-top:.5rem;
+          width:100%;
+          @include clear;
+        }
+      }
       .cross-icon{
         color:$color-red;
         position:absolute;
@@ -687,6 +695,10 @@
             background-color: $color-red;
             color: $color-white;
           }
+        }
+        .card-body{
+          max-height: 500px;
+          overflow-y: auto;
         }
       }
 
