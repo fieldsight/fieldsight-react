@@ -246,7 +246,7 @@ class PhotoGallery extends Component {
           </div>
         </div>
         {this.state.response &&
-                                                (<Modal title="Image Sucess Message" toggleModal={()=>this.setState({response:false})}>
+                                                (<Modal title="Message" toggleModal={()=>this.setState({response:false})}>
 
                                                     <div className="response">
                                                     <p>{this.state.data}</p>
