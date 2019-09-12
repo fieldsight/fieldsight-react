@@ -2,7 +2,8 @@ import {
   GET_PROJECT_DASHBOARD,
   GET_REGION_DATA,
   GET_SITE_LIST,
-  GET_PROGRESS_TABLE_DATA
+  GET_PROGRESS_TABLE_DATA,
+  GET_SURVEY_FORM
 } from "../actions/types";
 
 const initialState = {
@@ -28,7 +29,8 @@ const initialState = {
   regionData: [],
   projectRegionDataLoader: true,
   progressLoader: true,
-  progressTableData: {}
+  progressTableData: {},
+  surveyData:[]
 };
 
 export default function(state = initialState, action) {
@@ -51,6 +53,11 @@ export default function(state = initialState, action) {
         progressTableData: action.payload,
         progressLoader: false
       };
+      case GET_SURVEY_FORM:
+        return{
+          ...state,
+          surveyData:[...action.payload]
+        }
     default:
       return state;
   }

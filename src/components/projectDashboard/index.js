@@ -18,7 +18,8 @@ import SiteListTable from "./dashboardComponent/SiteListTable";
 import {
   getProjectDashboard,
   getRegionData,
-  getProgressTableData
+  getProgressTableData,
+  getSurveyForm
 } from "../../actions/projectDashboardActions";
 
 const INITIAL_STATE = {
@@ -78,7 +79,7 @@ class ProjectDashboard extends React.Component {
     const { id: projectId } = this.props.match.params;
     this.props.getProjectDashboard(projectId);
     this.props.getProgressTableData(projectId);
-
+    this.props.getSurveyForm(projectId)
     this.setState({ projectId: projectId });
   }
 
@@ -160,7 +161,8 @@ class ProjectDashboard extends React.Component {
         projectRegionDataLoader,
         progressTableData,
         progressLoader,
-        is_project_manager
+        is_project_manager,
+        surveyData
       },
       siteList,
       dLoader,
@@ -212,6 +214,7 @@ class ProjectDashboard extends React.Component {
             termsAndLabels={terms_and_labels}
             showGallery={showGallery}
             isProjectManager={is_project_manager}
+            surveyData={surveyData}
           />
           <div className="row">
             <div className="col-lg-6">
@@ -474,7 +477,8 @@ export default compose(
     {
       getProjectDashboard,
       getRegionData,
-      getProgressTableData
+      getProgressTableData,
+      getSurveyForm
     }
   ),
   withPagination

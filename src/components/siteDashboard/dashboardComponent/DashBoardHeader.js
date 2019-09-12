@@ -63,7 +63,7 @@ class DashboardHeader extends Component {
       rotate,
       rotateLeft
     } = this;
-
+    console.log(this.props,"fdghj")
     const ManageDropdown = [
       { title: "Generate Report", link: `/#` },
       { title: "View Data", link: `/forms/responses/${siteId}/` }

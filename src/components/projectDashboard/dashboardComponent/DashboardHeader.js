@@ -6,8 +6,13 @@ import { Button, Dropdown } from "react-bootstrap";
 import CountCard from "../../common/CountCard";
 import { AvatarContentLoader } from "../../common/Loader";
 import { DotLoader } from "../../common/Loader";
+import Modal from "../../common/Modal";
+import SubmissionModal from "./SubmissionModel";
 
 class DashboardHeader extends React.Component {
+  state={
+    openmodel:false
+  }
   saveImage = () => {
     if (typeof this.cropper.getCroppedCanvas() === "undefined") {
       return;
@@ -40,8 +45,11 @@ class DashboardHeader extends React.Component {
       termsAndLabels,
       showGallery,
       isProjectManager,
-      totalSubmissions
+      totalSubmissions,
+      surveyData
     } = this.props;
+    
+    const {openmodel}=this.state;
     const ManageDropdown = [
       { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
       { title: "forms", link: `/forms/setup-forms/1/${id}` },
@@ -162,7 +170,22 @@ class DashboardHeader extends React.Component {
                 noSubmissionText={true}
               />
             </a>
+            {isProjectManager && (
+              <div className="add-data">
+                <a onClick={() => this.setState({openmodel:true})}>
+                  {" "}
+                  add data <i className="la la-plus" />
+                </a>
+              </div>
+            )}
           </div>
+          {openmodel &&
+          
+          <SubmissionModal
+          surveyData={surveyData}
+          toggleModal={() => this.setState({openmodel:false})}
+          />
+         }
           {showGallery && (
             <div
               className="gallery-zoom fieldsight-popup open"
