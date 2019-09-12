@@ -63,7 +63,6 @@ class DashboardHeader extends Component {
       rotate,
       rotateLeft
     } = this;
-    console.log(this.props,"fdghj")
     const ManageDropdown = [
       { title: "Generate Report", link: `/#` },
       { title: "View Data", link: `/forms/responses/${siteId}/` }
@@ -133,6 +132,7 @@ class DashboardHeader extends Component {
                 variant=""
                 id="dropdown-Data"
                 className="fieldsight-btn"
+                href={`/fieldsight/site-dashboard/${siteId}`}
               >
                 <i className="fa fa-paste" />
                 <span>Data</span>
