@@ -88,7 +88,7 @@ class PricingStepTwo extends Component {
               <strong>Thank you for signing up with FieldSight!</strong>
             </h6>
             <h5 className="text-center mt-2 mb-3">
-              <strong>You have selected the Free Plan</strong>
+              <strong>You have selected the {selectedPackage.plan}.</strong>
             </h5>
             <p className="text-center mb-4 text-xlight">
               To complete the signup process, please provide your payment

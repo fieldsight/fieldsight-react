@@ -3,9 +3,8 @@ import { GET_TEAMS } from "./types";
 
 export const getTeam = id => dispatch =>{
    axios
-      .get(`http://192.168.1.44:8002/fv3/api/teams/`)
+      .get(`/fv3/api/teams/`)
        .then( res => { 
-          console.log(res)
           dispatch({
            type: GET_TEAMS,
            payload: res.data
