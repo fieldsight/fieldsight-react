@@ -180,6 +180,12 @@
         margin-left:0.635rem;
       }
     }
+    &.flex-start{
+      justify-content: flex-start;
+      a{
+        margin:0;
+      }
+    }
   }
   .btn-toggle {
     border-radius: 1.5rem;
