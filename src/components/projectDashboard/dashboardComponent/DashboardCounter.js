@@ -9,7 +9,7 @@ const getIcon = submission => {
   } else if (submission === "flagged") {
     return "la-flag";
   } else if (submission === "pending") {
-    return "la-copy";
+    return "la-hourglass-2";
   }
 };
 const ShowCount = props => (

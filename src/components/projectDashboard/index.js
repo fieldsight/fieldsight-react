@@ -283,6 +283,7 @@ class ProjectDashboard extends React.Component {
                           <input
                             type="search"
                             className="form-control"
+                            placeholder="Search"
                             onChange={this.onChangeHandler}
                           />
                           {/* <label htmlFor="input">Search</label> */}

@@ -358,18 +358,23 @@ class MyrolesMain extends Component {
                         <div
                           className="form-group mr-0"
                           style={{
-                            top: "-36px",
-                            right: "-585px",
-                            width: "25%"
+                            top: "-43px",
+                            right: "-597px",
+                            width: "22%",
+                            display: "flex"
                           }}
                         >
-                          <input
+                         <input
                             type="search"
                             className="form-control"
                             onChange={this.onChangeHandler}
+                            placeholder="Search"
                           />
+                          <div style={{marginTop:" 0.6rem"}}>
+                          <i className="la la-search"  />
+                          </div>
                           {/* <label htmlFor="input">Search</label> */}
-                          <i className="la la-search" />
+                         
                         </div>
                       </form>
                       // </div>

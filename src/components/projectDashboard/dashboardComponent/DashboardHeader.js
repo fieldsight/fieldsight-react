@@ -143,7 +143,7 @@ class DashboardHeader extends React.Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <a href={`/fieldsight/proj-submission/${id}/2/`} target="_blank">
+            <a href={`/forms/project-responses/${id}/`} target="_blank">
               <CountCard
                 countName=""
                 countNumber={totalSubmissions}

@@ -11,7 +11,7 @@ class DashboardCounter extends Component {
     } else if (submission === "flagged") {
       return "la-flag";
     } else if (submission === "pending") {
-      return "la-copy";
+      return "la-hourglass-2";
     }
   };
 
