@@ -283,16 +283,20 @@ class SiteInformationTable extends Component {
     };
 
     if (editMode) {
-      let filteredTableQuestions = tableQuestions.filter(question =>
+      let selectedQuestionIndex = tableQuestions.findIndex(question =>
         question.id
-          ? question.id !== selectedId
-          : question.question_text !== selectedId
+          ? question.id == selectedId
+          : question.question_text == selectedId
       );
+
+      let newTableQuestions = tableQuestions.map(question => ({ ...question }));
+
+      newTableQuestions[selectedQuestionIndex] = question;
 
       this.setState(
         {
           ...INITIAL_STATE,
-          tableQuestions: [...filteredTableQuestions, question]
+          tableQuestions: newTableQuestions
         },
         () => this.props.siteInfoHandler(this.state.tableQuestions)
       );
