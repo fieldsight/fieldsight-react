@@ -6,8 +6,13 @@ import { Button, Dropdown } from "react-bootstrap";
 import CountCard from "../../common/CountCard";
 import { AvatarContentLoader } from "../../common/Loader";
 import { DotLoader } from "../../common/Loader";
+import Modal from "../../common/Modal";
+import SubmissionModal from "./SubmissionModel";
 
 class DashboardHeader extends React.Component {
+  state={
+    openmodel:false
+  }
   saveImage = () => {
     if (typeof this.cropper.getCroppedCanvas() === "undefined") {
       return;
@@ -40,8 +45,11 @@ class DashboardHeader extends React.Component {
       termsAndLabels,
       showGallery,
       isProjectManager,
-      totalSubmissions
+      totalSubmissions,
+      surveyData
     } = this.props;
+    
+    const {openmodel}=this.state;
     const ManageDropdown = [
       { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
       { title: "forms", link: `/forms/setup-forms/1/${id}` },
@@ -135,7 +143,7 @@ class DashboardHeader extends React.Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <a href={`/fieldsight/proj-submission/${id}/2/`} target="_blank">
+            <a href={`/forms/project-responses/${id}/`} target="_blank">
               <CountCard
                 countName=""
                 countNumber={totalSubmissions}
@@ -145,7 +153,7 @@ class DashboardHeader extends React.Component {
             </a>
             <a href={`/fieldsight/application/#/project-users/${id}/`} target="_blank">
               <CountCard
-                countName="Users"
+                countName="User"
                 countNumber={totalUsers}
                 icon="la-user"
                 noSubmissionText={true}
@@ -156,13 +164,28 @@ class DashboardHeader extends React.Component {
               target="_blank"
             >
               <CountCard
-                countName="sites"
+                countName="site"
                 countNumber={totalSites}
                 icon="la-map-marker"
                 noSubmissionText={true}
               />
             </a>
+            {isProjectManager && (
+              <div className="add-data">
+                <a onClick={() => this.setState({openmodel:true})}>
+                  {" "}
+                  add data <i className="la la-plus" />
+                </a>
+              </div>
+            )}
           </div>
+          {openmodel &&
+          
+          <SubmissionModal
+          surveyData={surveyData}
+          toggleModal={() => this.setState({openmodel:false})}
+          />
+         }
           {showGallery && (
             <div
               className="gallery-zoom fieldsight-popup open"

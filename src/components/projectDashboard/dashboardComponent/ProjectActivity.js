@@ -2,10 +2,10 @@ import React from "react";
 import CountCard from "../../common/CountCard";
 
 const getIcon = submission => {
-  if (submission === "approved") {
-    return "la-thumbs-up";
+  if (submission === "approved") { 
+    return "la-copy";
   } else if (submission === "flagged") {
-    return "la-flag";
+    return "la-users";
   } else if (submission === "marker") {
     return "la-map-marker";
   }

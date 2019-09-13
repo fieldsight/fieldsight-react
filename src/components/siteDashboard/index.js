@@ -35,7 +35,8 @@ const INITIAL_STATE = {
   showSubmissionModal: false,
   showCropper: false,
   showSubsites: false,
-  showGallery: false
+  showGallery: false,
+  
 };
 class SiteDashboard extends Component {
   state = INITIAL_STATE;
@@ -93,7 +94,7 @@ class SiteDashboard extends Component {
 
   componentDidMount() {
     const { id: siteId } = this.props.match.params;
-    console.log(this.props.match.params);
+    
     
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
@@ -123,9 +124,7 @@ class SiteDashboard extends Component {
       );
     }
   }
-  render() {
-    console.log(this.props.siteLogsLoader);
-    
+  render() { 
     const {
       props: {
         siteDashboard: {
@@ -180,6 +179,7 @@ class SiteDashboard extends Component {
       openModal,
       toggleTab
     } = this;
+
 
     return (
       <>
