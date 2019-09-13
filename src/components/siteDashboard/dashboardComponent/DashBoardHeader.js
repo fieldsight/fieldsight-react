@@ -172,7 +172,7 @@ class DashboardHeader extends Component {
         <div className="card-body">
           <div className="header-count">
             <a
-              href={`/fieldsight/site-submission/${siteId}/2/`}
+              href={`/forms/responses/${siteId}/`}
               target="_blank"
             >
               <CountCard

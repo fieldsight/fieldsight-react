@@ -57,8 +57,9 @@ class ProjectSiteTable extends Component {
                   type="search"
                   className="form-control"
                   onChange={this.onChangeHandler}
+                  placeholder="Search"
                 />
-                <label htmlFor="input">Search</label>
+               
                 <i className="la la-search" />
               </div>
             </form>

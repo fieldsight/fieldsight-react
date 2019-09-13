@@ -55,12 +55,13 @@ const ShowContentRow = ({
       </td>
       <td>
         {formUrl ? (
-          <a className="badge badge-light" href={formUrl}>
+          <a className="pending table-profile" href={formUrl}>
             <i className="la la-eye">
-              {totalSubmissions == 0
-                ? "No Submission"
-                : totalSubmissions + " Submission(s)"}
+             
             </i>
+            {totalSubmissions == 0
+                ? "No Submission"
+                : totalSubmissions + " Submission(s) "}
           </a>
         ) : (
           {}

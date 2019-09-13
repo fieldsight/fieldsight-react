@@ -87,13 +87,14 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-
+              <a>
               <CountCard
                 countName=""
                 countNumber={totalSubmissions}
                 icon="la-copy"
                 // noSubmissionText={true}
               />
+              </a>
             <a
               href={`/fieldsight/application/#/team-users/${id}`}
               target="_blank"
@@ -116,12 +117,14 @@ class DashboardHeader extends Component {
                 noSubmissionText={true}
               />
             </a>
+            <a>
               <CountCard
                 countName="site"
                 countNumber={totalSites}
                 icon="la-map-marker"
                 noSubmissionText={true}
               />
+              </a>
           </div>
         </div>
       </div>
