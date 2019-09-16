@@ -49,7 +49,8 @@ class EditTeam extends Component {
     src: "",
     showCropper: false,
     cropResult: "",
-    isLoading: false
+    isLoading: false,
+    updateLogo: false
   };
 
   componentDidMount() {
@@ -116,7 +117,8 @@ class EditTeam extends Component {
           logo
         },
         position: { latitude, longitude },
-        cropResult
+        cropResult,
+        updateLogo
       },
       props: {}
     } = this;
@@ -130,8 +132,8 @@ class EditTeam extends Component {
       website,
       country,
       public_desc,
-      logo,
-      ...(cropResult && { logo: cropResult }),
+      // logo,
+      ...(!!updateLogo && cropResult && { logo: cropResult }),
       latitude,
       longitude
     };
@@ -196,7 +198,11 @@ class EditTeam extends Component {
   readFile = file => {
     const reader = new FileReader();
     reader.onload = () => {
-      this.setState({ src: reader.result, showCropper: true });
+      this.setState({
+        src: reader.result,
+        showCropper: true,
+        updateLogo: true
+      });
     };
     reader.readAsDataURL(file[0]);
   };

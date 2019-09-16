@@ -30,7 +30,7 @@ class DashboardHeader extends Component {
       },
       {
         title: `settings`,
-        link: `/fieldsight/organization/#/team-settings/${id}`
+        link: `/fieldsight/organization/${id}`
       }
     ];
 
@@ -87,14 +87,14 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-              <a>
+            <a>
               <CountCard
                 countName=""
                 countNumber={totalSubmissions}
                 icon="la-copy"
                 // noSubmissionText={true}
               />
-              </a>
+            </a>
             <a
               href={`/fieldsight/application/#/team-users/${id}`}
               target="_blank"
@@ -124,7 +124,7 @@ class DashboardHeader extends Component {
                 icon="la-map-marker"
                 noSubmissionText={true}
               />
-              </a>
+            </a>
           </div>
         </div>
       </div>
