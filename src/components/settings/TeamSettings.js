@@ -51,14 +51,16 @@ export default class TeamSettings extends Component {
 
                   <Route
                     path={`${path}/subscription/team-settings`}
-                    render={() => {
-                      <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
-                        <Elements>
-                          <AccountInfo />
-                        </Elements>
-                      </StripeProvider>;
-                    }}
-                    // component={AccountInfo}
+                    // render={() => {
+                    //   console.log("------>>>>>>>>-------");
+
+                    //   <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
+                    //     <Elements>
+                    //       <AccountInfo />
+                    //     </Elements>
+                    //   </StripeProvider>;
+                    // }}
+                    component={AccountInfo}
                   />
                 </Switch>
               </div>
