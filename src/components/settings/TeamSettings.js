@@ -1,11 +1,31 @@
 import React, { Component, Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
 import { Elements, StripeProvider } from "react-stripe-elements";
+import Axios from "axios";
+
 import TeamLeftSidebar from "../leftSidebar/TeamLeftSieBar";
 import EditTeam from "../editTeam/EditTeam";
 import TeamMapLayer from "../mapLayer/TeamMapLayer";
-import AccountInfo from "../accountInfo/AccountInfo";
+import AccountInfoLayout from "../accountInfo/AccountInfoLayout";
+
 export default class TeamSettings extends Component {
+  state = {
+    teamData: {}
+  };
+
+  componentWillMount() {
+    const {
+      match: {
+        params: { id: teamId }
+      }
+    } = this.props;
+    Axios.get(`fv3/api/team-owner-account/${teamId}/`).then(res => {
+      this.setState({ teamData: res.data });
+    }).catch = err => {
+      // console.log('error', err);
+    };
+  }
+
   render() {
     const {
       match: {
@@ -13,6 +33,7 @@ export default class TeamSettings extends Component {
         path
       }
     } = this.props;
+    const { teamData } = this.state;
 
     return (
       <>
@@ -37,7 +58,7 @@ export default class TeamSettings extends Component {
                   <h5>Meta Attributes</h5>
                 </div>
                 <div className="card-body">
-                  <TeamLeftSidebar />
+                  <TeamLeftSidebar teamOwner={teamData.team_owner} />
                 </div>
               </div>
             </div>
@@ -51,14 +72,9 @@ export default class TeamSettings extends Component {
 
                   <Route
                     path={`${path}/subscription/team-settings`}
-                    render={() => {
-                      <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
-                        <Elements>
-                          <AccountInfo />
-                        </Elements>
-                      </StripeProvider>;
-                    }}
-                    // component={AccountInfo}
+                    render={() => (
+                      <AccountInfoLayout data={teamData} teamId={teamId} />
+                    )}
                   />
                 </Switch>
               </div>

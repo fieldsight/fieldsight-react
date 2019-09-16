@@ -6,8 +6,9 @@ let tokenVal = window.token
   : "91a844e62e86b6e336b8fb440340cbeaabf601fe";
 
 //const url="91a844e62e86b6e336b8fb440340cbeaabf601fe"
-let baseURL = window.base_url ? window.base_url : "http://192.168.1.44:8002/";
-//"https://fieldsight.naxa.com.np/";
+let baseURL = window.base_url
+  ? window.base_url
+  : "https://fieldsight.naxa.com.np/";
 
 const setDefault = () => {
   axios.defaults.baseURL = baseURL;
