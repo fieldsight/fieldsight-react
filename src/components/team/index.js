@@ -56,7 +56,6 @@ import {
 
     render(){
         const {results}=this.state;
-        
        
 
         return(
@@ -98,7 +97,8 @@ import {
                                        return(
                                     <tr key={key}>
                                         <td>
-                                                <a className="pending table-profile">
+                                                <a  href={`/fieldsight/application/#/team-dashboard/${project.id}`}
+                                                        className="pending table-profile">
                                                     <figure>
                                                         <img src={project.logo} alt="site-logo" />
                                                     </figure>
@@ -110,13 +110,18 @@ import {
                                     <td>{project.projects}</td>
                                     <td>{project.sites}</td>
                                     <td>{project.users}</td>
-                                    <td>{project.team_owner}</td>
+                                    <td>
+                                        <a href={`/users/profile/${project.team_owner_id}`} className="pending table-profile">
+
+                                            {project.team_owner}
+                                        </a>
+                                    </td>
                                     <td>      
                                         <a 
                                         href={`/fieldsight/application/#/team-dashboard/${project.id}`} 
                                         className="td-view-btn td-btn"> <i className ="la la-eye"></i> </a>
                                         <a 
-                                        href={`fieldsight/organization/${project.id}`} 
+                                        href={`/fieldsight/organization/${project.id}`}
                                         className="td-edit-btn td-btn"> <i className ="la la-edit"></i></a>
                                    </td>
                                 </tr>

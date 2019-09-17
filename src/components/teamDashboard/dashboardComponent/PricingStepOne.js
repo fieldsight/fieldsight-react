@@ -34,7 +34,7 @@ const FreePlan = ({ period, plan }) => (
         </ul>
       </div>
       <div className="mp-footer">
-        <a href="#" title="" className="btn pbg-1 btn-block btn-lg">
+        <a title="" className="btn pbg-1 btn-block btn-lg">
           Subscribed
         </a>
       </div>
