@@ -1,12 +1,10 @@
 import axios from "axios";
-import {GET_LOGS} from "./types";
+import { GET_LOGS } from "./types";
 
-export  const getProjectLogs = id =>dispatch=>{
-  console.log("iiiiiiiiiiiiiiii")
-    axios
+export const getProjectLogs = id => dispatch => {
+  axios
     .get(`/events/api/project_logs/${id}/`)
     .then(res => {
-      console.log("hhhhhhhhhhhhhhhhhhhhhhh")
       dispatch({
         type: GET_LOGS,
         payload: res.data.results
@@ -17,4 +15,4 @@ export  const getProjectLogs = id =>dispatch=>{
       //   type: SITE_LOGS_ERR
       // });
     });
-}
+};

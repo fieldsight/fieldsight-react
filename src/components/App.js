@@ -24,6 +24,8 @@ import SiteLog from "./siteLogs";
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
 
+import ManageForms from "./manageForms";
+
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -136,6 +138,10 @@ class App extends Component {
                     <Route
                       path="/site_logs/:id"
                       render={props => <SiteLog {...props} />}
+                    />
+                    <Route
+                      path="/project/manage-forms/1/:id"
+                      render={props => <ManageForms {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
