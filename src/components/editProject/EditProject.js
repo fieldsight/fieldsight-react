@@ -161,6 +161,7 @@ class EditProject extends Component {
     });
 
   onChangeHandler = (e, position) => {
+  
     const { name, value } = e.target;
     if (position) {
       return this.setState({
@@ -189,7 +190,7 @@ class EditProject extends Component {
         })
       )
       .then(
-        axios.spread((project, sector) => {
+        axios.spread((project, sector) => { 
           if (this._isMounted) {
             if (project && sector) {
               const position =
@@ -268,6 +269,7 @@ class EditProject extends Component {
   };
 
   render() {
+  
     const {
       state: {
         loaded,

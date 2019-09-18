@@ -5,7 +5,7 @@ import axios from "axios";
 export default class ProjectAdd extends Component{
     state = {
         project: {
-          name: "",
+          name:"",
           phone: "",
           email: "",
           address: "",
@@ -20,8 +20,8 @@ export default class ProjectAdd extends Component{
         selectedSector: "",
         selectedSubSector: "",
         position: {
-            latitude: "",
-            longitude: ""
+            latitude: "28.3949",
+            longitude: "-0.09"
         },
         zoom: 13,
         src: "",
@@ -39,94 +39,75 @@ export default class ProjectAdd extends Component{
                 sector:res.data,
                 id
 
-            },()=>console.log(this.state.sector))
+            })
             
             
         }).catch(err=>{
             console.log(err ,"err");
             
         }) 
+        if (this._isMounted){
+          if(sector){
+            
+          }
+        }
        
     }
    
      
-      requestHandler = () => {
-        const {
-          state: {
-            project: {
-              name,
-              phone,
-              email,
-              address,
-              website,
-              public_desc,
-              cluster_sites,
-              donor,
-              logo,
-              organization
-            },
-            position: { latitude, longitude },
-            selectedSector,
-            selectedSubSector,
-            cropResult
-          },
-          context: { projectId }
-        } = this;
     
-        const project = {
-          name,
-          phone,
-          email,
-          address,
-          website,
-          donor,
-          public_desc,
-          cluster_sites,
-          ...(cropResult && { logo: cropResult }),
-          latitude,
-          longitude,
-          sector: selectedSector,
-          sub_sector: selectedSubSector,
-          organization
-        };
-    
-        axios
-          .get(`/fv3/api/add-project/${projectId}/`, project, {
-            onUploadProgress: progressEvent => {
-              this.setState({
-                loaded: Math.round(
-                  (progressEvent.loaded * 100) / progressEvent.total
-                )
-              });
-            }
-          })
-          .then(res => {
-            this.setState(
-              {
-                isLoading: false,
-                loaded: 0
-              },
-              () => successToast("Project", "updated")
-            );
-          })
-          .catch(err => {
-            this.setState(
-              {
-                isLoading: false
-              },
-              errorToast
-            );
-          });
-      };
     
       onSubmitHandler = e => {
         e.preventDefault();
-        this.setState(
-          {
-            isLoading: true
+      
+        const data = {
+        organization:this.state.id,
+        name:this.state.project.name,
+        phone:this.state.project.phone,
+        email:this.state.project.email,
+        address:this.state.project.address,
+        website:this.state.project.website,
+        donor:this.state.project.donor,
+        public_desc:this.state.project.public_desc,
+        cluster_sites:this.state.project.cluster_sites,
+        selectedSector:this.state.selectedSector,
+        selectedSubSector:this.state.selectedSubSector,
+        latitude:this.state.position.latitude,
+        longitude: this.state.position.longitude,
+        cropResult:this.state.cropResult,
+        }
+        axios.post(`fv3/api/add-project/${this.state.id}/`, data)
+      .then(res => {
+       
+        this.setState({
+          project: {
+            name:"",
+            phone: "",
+            email: "",
+            address: "",
+            website: "",
+            donor: "",
+            public_desc: "",
+            cluster_sites: false
           },
-          this.requestHandler
-        );
+          loaded: 0,
+          sector: [],
+          subSectors: [],
+          selectedSector: "",
+          selectedSubSector: "",
+          position: {
+              latitude: "28.3949",
+              longitude: "-0.09"
+          },
+          cropResult:""
+        })
+       
+      }).catch(err=>{
+        console.log(err)
+      })
+  
+        
+       
       };
      
     
@@ -171,7 +152,7 @@ export default class ProjectAdd extends Component{
             ...this.state.project,
             [name]: value
           }
-        },()=>console.log(this.state.project));
+        });
       };
     
      
@@ -226,14 +207,14 @@ export default class ProjectAdd extends Component{
             longitude },
 
       } =this.state
-      console.log(this.state.position)
+     
       
         return(
            <>
            <Edit
             context={this.state.id}
             _isMounted={false}
-            onSubmitHandler={this.handleSubmit}
+            onSubmitHandler={this.onSubmitHandler}
             onChangeHandler={this.onChangeHandler}
             sector={this.state.sector}
             onSelectChangeHandler={this.onSelectChangeHandler}

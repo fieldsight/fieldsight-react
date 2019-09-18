@@ -69,7 +69,8 @@ class  EditProject extends Component {
       cropImage,
       isLoading,
       subSectors,readFile} =this.props;
-      console.log(name);
+     console.log(donor);
+     
       
       
   
