@@ -20,6 +20,8 @@ import ProjectDashboard from "./projectDashboard";
 import ProjectLog from "./projectLogs/projectLogs";
 import Teams from "./team";
 import SiteLog from "./siteLogs";
+import ProjectAdd from "./projectAdd";
+import TeamAdd from "./teamAdd";
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
@@ -136,6 +138,15 @@ class App extends Component {
                     <Route
                       path="/site_logs/:id"
                       render={props => <SiteLog {...props} />}
+                    />
+
+                  <Route
+                      path="/project-add/:id"
+                      render={props => <ProjectAdd  {...props} />}
+                    />
+                     <Route
+                      path="/team-add/:id"
+                      render={props => <TeamAdd  {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
