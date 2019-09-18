@@ -1,11 +1,8 @@
 import React from "react";
 import Zoom from "react-reveal/Zoom";
 
-
-const Modal = ({ title, toggleModal, children, showButton, url }) => (
-  
-<Zoom duration={500}>   
-  
+const Modal = ({ title, toggleModal, children, showButton, url, showText }) => (
+  <Zoom duration={500}>
     <div className="fieldsight-popup open" style={{ zIndex: 99999 }}>
       <div
         className={`popup-body ${title === "Preview" ? "cropbody" : ""} ${
@@ -18,6 +15,7 @@ const Modal = ({ title, toggleModal, children, showButton, url }) => (
             {showButton && (
               <div className="add-btn" style={{ marginRight: "15px" }}>
                 <a href={url} target="_blank">
+                  {showText && showText}
                   <span>
                     <i className="la la-plus" />
                   </span>
@@ -33,6 +31,6 @@ const Modal = ({ title, toggleModal, children, showButton, url }) => (
       </div>
     </div>
   </Zoom>
-            );
+);
 
 export default Modal;

@@ -6,61 +6,67 @@ import InputElement from "../common/InputElement";
 
 class EditFormGuide extends Component {
   state = {
-    data: {
+    datas: {
       images: this.props.data.em_images ? this.props.data.em_images : [],
-      file: !!this.props.data.is_pdf ? this.props.data.pdf : {},
+      pdf: !!this.props.data.is_pdf ? this.props.data.pdf : {},
       title: this.props.data.title ? this.props.data.title : "",
-      text: this.props.data.text ? this.props.data.text : ""
+      text: this.props.data.text ? this.props.data.text : "",
+      fsxf: this.props.data.fsxf ? this.props.data.fsxf : ""
     },
     fileName: "",
-    src: ""
+    imgArr: []
   };
 
   readFile = file => {
     this.setState({
-      data: {
-        ...this.state.data,
-        file: file[0]
+      datas: {
+        ...this.state.datas,
+        pdf: file[0]
       },
       fileName: file[0].name
     });
   };
 
   readImageFile = file => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.setState({
-        src: reader.result
-      });
-    };
-    reader.readAsDataURL(file);
+    this.setState({
+      datas: {
+        ...this.state.datas,
+        images: file
+      },
+      imgArr: file
+    });
   };
 
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({
-      data: {
-        ...this.state.data,
+      datas: {
+        ...this.state.datas,
         [name]: value
       }
     });
+  };
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.handleUpdateGuide(this.state.datas);
   };
   render() {
     const {
       state: {
         src,
         fileName,
-        data: { images, file, title, text }
+        datas: { images, pdf, title, text }
       },
       props: { is_pdf, handleCancel, handleUpdateGuide },
       readFile,
       readImageFile,
-      handleChange
+      handleChange,
+      handleSubmit
     } = this;
     console.log("data-", this.props.data, this.state);
 
     return (
-      <form className="edit-form" onSubmit={() => handleUpdateGuide(data)}>
+      <form className="edit-form" onSubmit={e => handleSubmit(e)}>
         <div className="row">
           <div className="col-md-6 col-md-8">
             <InputElement
@@ -90,13 +96,16 @@ class EditFormGuide extends Component {
             <div className="form-group">
               <label> Attached Images</label>
               {images.length > 0 ? (
-                <Dropzone onDrop={acceptedFile => readImageFile(acceptedFile)}>
+                <Dropzone
+                  accept="image/*"
+                  onDrop={acceptedFile => readImageFile(acceptedFile)}
+                >
                   {({ getRootProps, getInputProps }) => {
                     return images.map((each, index) => {
                       return (
                         <section key={`image_${index}`}>
                           <div className="upload-form">
-                            <img src={each.image} alt="Cropped Image" />
+                            <img src={each.image} alt="Preview Image" />
                           </div>
                           <div {...getRootProps()}>
                             <input {...getInputProps()} multiple={true} />
@@ -113,7 +122,10 @@ class EditFormGuide extends Component {
                   }}
                 </Dropzone>
               ) : (
-                <Dropzone onDrop={acceptedFile => readImageFile(acceptedFile)}>
+                <Dropzone
+                  accept="image/*"
+                  onDrop={acceptedFile => readImageFile(acceptedFile)}
+                >
                   {({ getRootProps, getInputProps }) => {
                     return (
                       <section>

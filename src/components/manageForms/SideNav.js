@@ -1,15 +1,69 @@
 import React, { Component } from "react";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
-import "react-perfect-scrollbar/dist/css/styles.css";
+// import "react-perfect-scrollbar/dist/css/styles.css";
+import axios from "axios";
 import GeneralForms from "./GeneralForms";
 import ScheduleForms from "./ScheduleForms";
 import StageForms from "./StageForms";
 
+const urls = [
+  "fv3/api/project-regions-types/",
+  "fv3/api/myforms/",
+  "fv3/api/myprojectforms/"
+];
+
 class SideNav extends Component {
+  _isMounted = false;
+  state = {
+    regionOptions: [],
+    typeOptions: [],
+    myForms: [],
+    projectForms
+  };
+
+  componentDidMount() {
+    this._isMounted = true;
+    const {
+      match: {
+        url,
+        params: { id }
+      }
+    } = this.props;
+
+    const splitArr = url.split("/");
+    const isProjectForm = splitArr.includes("project");
+
+    if (isProjectForm) {
+      axios
+        .all(
+          urls.map((url, i) => {
+            return i === 0 ? axios.get(`${urls}${id}/`) : axios.get(url);
+          })
+        )
+        .then(
+          axios.spread((list, myForms, projectForms) => {
+            if (this._isMounted) {
+              if (list && myForms && projectForms) {
+                this.setState({
+                  regionOptions: list.data.regions,
+                  typeOptions: list.data.site_types,
+                  myForms: myForms.data,
+                  projectForms: projectForms.data
+                });
+              }
+            }
+          })
+        )
+        .catch(err => console.log("err", err));
+    }
+  }
   render() {
     const {
-      match: { path, url }
-    } = this.props;
+      props: {
+        match: { path, url }
+      },
+      state: { regionOptions, typeOptions, myForms, projectForms }
+    } = this;
 
     return (
       <React.Fragment>
@@ -107,6 +161,10 @@ class SideNav extends Component {
                 commonPopupHandler={this.props.commonPopupHandler}
                 closePopup={this.props.closePopup}
                 popupModal={this.props.popupModal}
+                typeOptions={typeOptions}
+                regionOptions={regionOptions}
+                myForms={myForms}
+                projectForms={projectForms}
               />
             )}
           />
@@ -152,6 +210,9 @@ class SideNav extends Component {
         </Switch>
       </React.Fragment>
     );
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 }
 
