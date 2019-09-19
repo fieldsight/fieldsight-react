@@ -12,9 +12,10 @@
     font-size: 0.8125rem;
     cursor: pointer;
     position: relative;
-    @include radius4;
-    @include anim05;
+    @include radius(4px);
+    @include animate_all(all 0.5s);
     cursor: pointer;
+    @include box_shadow($boxshadow:0 1px 6px rgba(57, 73, 76, 0.35));
     i{
       margin-left:0.5rem;
     }
@@ -45,7 +46,7 @@
       
     &:hover{
         color:$color-white;
-        background-color: rgba($color-blue, 0.8);
+        background-color: rgba($color-green, 0.8);
     }
     &.approved-btn{
       background-color: $color-green;
@@ -176,8 +177,9 @@
         padding:5px;
         background-color: $color-blue;
         color:$color-white;
-        @include radius4;
+        @include radius(50%);
         margin-left:0.635rem;
+        @include box_shadow($boxshadow:0 1px 6px rgba(57, 73, 76, 0.35));
       }
     }
     &.flex-start{
