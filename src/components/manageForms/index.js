@@ -88,12 +88,6 @@ class ManageForms extends Component {
             popupModal={this.state.popupModal}
           />
         </div>
-
-        {/* {this.state.popupModal && (
-          <Modal title="Add General Form" toggleModal={this.closePopup}>
-            <CommonPopupForm />
-          </Modal>
-        )} */}
       </Fragment>
     );
   }

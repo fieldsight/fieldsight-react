@@ -54,7 +54,6 @@ class CommonPopupForm extends Component {
       },
       state: { optionRegion, optionType }
     } = this;
-    console.log("status", this.state, this.props);
 
     return (
       <>

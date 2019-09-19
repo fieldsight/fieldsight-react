@@ -1,69 +1,104 @@
 import React, { Component } from "react";
 import Dropzone from "react-dropzone";
-import Cropper from "react-cropper";
-
 import InputElement from "../common/InputElement";
+
+const getFilename = name => {
+  const fileName = name.split("/");
+  return fileName[fileName.length - 1];
+};
+const getImages = images => {
+  const arr = [];
+  images.map(item => {
+    arr.push(item.image);
+  });
+  return arr;
+};
 
 class EditFormGuide extends Component {
   state = {
-    datas: {
-      images: this.props.data.em_images ? this.props.data.em_images : [],
-      pdf: !!this.props.data.is_pdf ? this.props.data.pdf : {},
+    id: this.props.data.id ? this.props.data.id : "",
+    data: {
       title: this.props.data.title ? this.props.data.title : "",
       text: this.props.data.text ? this.props.data.text : "",
       fsxf: this.props.data.fsxf ? this.props.data.fsxf : ""
     },
-    fileName: "",
-    imgArr: []
+    fileName: this.props.data.pdf ? getFilename(this.props.data.pdf) : "",
+    isPdf: this.props.data.is_pdf ? this.props.data.is_pdf : false,
+    srcs: this.props.data.em_images ? getImages(this.props.data.em_images) : [],
+    file: {}
   };
 
   readFile = file => {
+    const newFile = file[0];
     this.setState({
-      datas: {
-        ...this.state.datas,
-        pdf: file[0]
+      data: {
+        ...this.state.data,
+        pdf: newFile
       },
-      fileName: file[0].name
+      fileName: newFile.name,
+      isPdf: true
     });
   };
 
   readImageFile = file => {
-    this.setState({
-      datas: {
-        ...this.state.datas,
-        images: file
+    this.setState(
+      {
+        data: {
+          ...this.state.data,
+          images: file
+        }
       },
-      imgArr: file
-    });
+      () => {
+        this.previewImg(file);
+      }
+    );
   };
 
+  previewImg = files => {
+    files.map(img => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.setState({
+          srcs: [...this.state.srcs, reader.result]
+        });
+      };
+      reader.readAsDataURL(img);
+    });
+  };
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({
-      datas: {
-        ...this.state.datas,
+      data: {
+        ...this.state.data,
         [name]: value
       }
     });
   };
   handleSubmit = e => {
     e.preventDefault();
-    this.props.handleUpdateGuide(this.state.datas);
+    const { id, data } = this.state;
+    let body = {};
+    if (!!id) {
+      body = { ...data, id };
+    } else {
+      body = { ...data };
+    }
+    this.props.handleUpdateGuide(body);
   };
   render() {
     const {
       state: {
-        src,
+        srcs,
         fileName,
-        datas: { images, pdf, title, text }
+        data: { title, text },
+        isPdf
       },
-      props: { is_pdf, handleCancel, handleUpdateGuide },
+      props: { handleCancel },
       readFile,
       readImageFile,
       handleChange,
       handleSubmit
     } = this;
-    console.log("data-", this.props.data, this.state);
 
     return (
       <form className="edit-form" onSubmit={e => handleSubmit(e)}>
@@ -95,17 +130,17 @@ class EditFormGuide extends Component {
           <div className="col-md-6 col-md-8">
             <div className="form-group">
               <label> Attached Images</label>
-              {images.length > 0 ? (
+              {srcs.length > 0 ? (
                 <Dropzone
                   accept="image/*"
                   onDrop={acceptedFile => readImageFile(acceptedFile)}
                 >
                   {({ getRootProps, getInputProps }) => {
-                    return images.map((each, index) => {
+                    return srcs.map((each, index) => {
                       return (
                         <section key={`image_${index}`}>
                           <div className="upload-form">
-                            <img src={each.image} alt="Preview Image" />
+                            <img src={each} alt="Preview Image" />
                           </div>
                           <div {...getRootProps()}>
                             <input {...getInputProps()} multiple={true} />
@@ -154,8 +189,11 @@ class EditFormGuide extends Component {
           <div className="col-md-6 col-md-8">
             <div className="form-group">
               <label>{" Attach File"}</label>
-              {is_pdf ? (
-                <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+              {isPdf ? (
+                <Dropzone
+                  accept=".pdf"
+                  onDrop={acceptedFile => readFile(acceptedFile)}
+                >
                   {({ getRootProps, getInputProps }) => {
                     return (
                       <section>
@@ -181,7 +219,10 @@ class EditFormGuide extends Component {
                   }}
                 </Dropzone>
               ) : (
-                <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                <Dropzone
+                  onDrop={acceptedFile => readFile(acceptedFile)}
+                  accept=".pdf"
+                >
                   {({ getRootProps, getInputProps }) => {
                     return (
                       <section>

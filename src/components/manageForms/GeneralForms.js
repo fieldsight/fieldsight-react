@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-// import PerfectScrollbar from "react-perfect-scrollbar";
-// import "react-perfect-scrollbar/dist/css/styles.css";
 import axios from "axios";
 import withPagination from "../../hoc/WithPagination";
 
 import { DotLoader } from "../myForm/Loader";
-import isEmpty from "../../utils/isEmpty";
 import Modal from "../common/Modal";
 import RightContentCard from "../common/RightContentCard";
 import CommonPopupForm from "./CommonPopupForm";
@@ -123,40 +120,46 @@ class GeneralForms extends Component {
       .catch(err => {});
   };
   handleEditGuide = data => {
-    console.log("clicked");
-
     this.setState({
       editGuide: !this.state.editGuide,
       guideData: data ? data : {}
     });
   };
   handleUpdateGuide = data => {
-    console.log("data chk", data);
+    const { id } = this.state;
     const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("text", data.text);
-    formData.append("is_pdf", Object.keys(data.pdf).length > 0 ? true : false);
-    formData.append("pdf", Object.keys(data.pdf).length > 0 ? data.pdf : null);
-    formData.append("fsxf", data.fsxf);
-    if (data.images.length > 0) {
+    if (data.title) formData.append("title", data.title);
+    if (data.text) formData.append("text", data.text);
+    if (data.pdf) {
+      formData.append("is_pdf", data.pdf ? true : false);
+      formData.append("pdf", data.pdf);
+    }
+    if (data.fsxf) formData.append("fsxf", data.fsxf);
+    if (data.images && data.images.length > 0) {
       data.images.map((each, i) => {
         if (!each.image) formData.append(`new_images_${i + 1}`, each);
       });
     }
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
+    if (data.id) {
+      formData.append("id", data.id);
     }
-    // debugger;
-    // axios
-    //   .post(`forms/api/save_educational_material/`, formData)
-    //   .then(res => {
-    //     console.log("post res", res);
-    //   })
-    //   .catch(err => {
-    //     errorToast(err);
-    //   });
+    axios
+      .post(`forms/api/save_educational_material/`, formData)
+      .then(res => {
+        this.setState(
+          {
+            editGuide: false
+          },
+          () => {
+            this.requestGeneralForm(id);
+            successToast("update", "successfully");
+          }
+        );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
   };
-
   toggleFormModal = () => {
     this.setState({ showFormModal: !this.state.showFormModal });
   };
@@ -212,10 +215,10 @@ class GeneralForms extends Component {
       .then(res => {
         this.setState(
           {
-            data: this.state.data.concat(res.data)
+            data: [...this.state.data, res.data]
           },
           () => {
-            this.props.closePopup;
+            this.props.closePopup();
             successToast("Add ", "successfully");
           }
         );
@@ -223,7 +226,6 @@ class GeneralForms extends Component {
       .catch(err => {
         errorToast(err);
       });
-    // console.log("general create", this.state.commonFormData);
   };
   handleRadioChange = e => {
     const { name, value } = e.target;
@@ -329,7 +331,6 @@ class GeneralForms extends Component {
         toggleModal={this.props.commonPopupHandler}
         showText={true}
       >
-        {/* <div className="card-body"> */}
         {loader && <DotLoader />}
         {!loader && (
           <GeneralFormTable
@@ -338,10 +339,8 @@ class GeneralForms extends Component {
             handleEditGuide={this.handleEditGuide}
           />
         )}
-        {/* </div> */}
         {this.props.popupModal && (
           <Modal title="Add General Form" toggleModal={this.props.closePopup}>
-            {/* <div className="card-body"> */}
             <form
               className="floating-form"
               onSubmit={this.handleCreateGeneralForm}
@@ -386,6 +385,7 @@ class GeneralForms extends Component {
               data={guideData}
               handleCancel={this.handleEditGuide}
               handleUpdateGuide={this.handleUpdateGuide}
+              handleCreateGuide={this.handleCreateGuide}
             />
           </Modal>
         )}
