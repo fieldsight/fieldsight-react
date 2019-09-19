@@ -34,25 +34,23 @@ import {
         const { target: {value }} = e;
         const { results , masterresult}=this.state;
         if(value){
+           
         const search = await results.filter(result=>{
            return (
             result.name.toLowerCase().includes(value.toLowerCase()) ||
-            result.address.toLowerCase().includes(value.toLowerCase()) 
-         
-                )
+            (result.address!== null?result.address.toLowerCase().includes(value.toLowerCase()):"") 
+           )
        })
-    
-       
-   this.setState({
-    results:search
-        })
+     this.setState({
+        results:search
+            })
 
- }else{
-         this.setState({
-            results:masterresult
-         })
-     }
-      }
+        }else{
+                this.setState({
+                    results:masterresult
+                })
+            }
+            }
 
     render(){
         const {results}=this.state;
@@ -67,8 +65,8 @@ import {
                             <div className="dash-btn">
                                 <form className="floating-form">
                                     <div className="form-group mr-0">
-                                        <input type="search" className="form-control"  onChange={(e)=>this.handleChange(e)} required=""/>
-                                        <label htmlFor="input">Search</label>
+                                        <input type="search" className="form-control"  onChange={(e)=>this.handleChange(e)} required/>
+                                        <label htmlFor="input" >Search</label>
                                         <i className="la la-search"></i>
                                     </div>
                                 </form>
@@ -78,7 +76,7 @@ import {
                         <div className="card-body">
                         <div style={{ position: "relative", height: "800px" }}>
             <PerfectScrollbar>
-                            <Table id="manage_table" className="table  table-bordered  manage_table">
+                            <Table id="manage_table" className="table  dataTable table-bordered  manage_table">
                                 <thead>
                                     <tr>
                                         <th>Teams</th>
