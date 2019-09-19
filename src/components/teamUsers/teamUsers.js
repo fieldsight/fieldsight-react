@@ -76,7 +76,7 @@ export default class TeamUser extends Component{
                                 </div>
                             </div>
                             <div className="card-body">
-                                <Table responsive="xl" className="table  table-bordered  dataTable ">
+                                <Table responsive="xl" className="table dataTable table-bordered  dataTable ">
                                     <thead >
                                         <tr>
                                             <th >Name</th>
