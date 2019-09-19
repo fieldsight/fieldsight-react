@@ -33,6 +33,8 @@ export default class TeamSettings extends Component {
         path
       }
     } = this.props;
+    console.log(this.props);
+    
     const { teamData } = this.state;
 
     return (
@@ -58,7 +60,7 @@ export default class TeamSettings extends Component {
                   <h5>Settings</h5>
                 </div>
                 <div className="card-body">
-                  <TeamLeftSidebar teamOwner={teamData.team_owner} />
+                  <TeamLeftSidebar teamOwner={teamData.team_owner} height={this.props.height} />
                 </div>
               </div>
             </div>
