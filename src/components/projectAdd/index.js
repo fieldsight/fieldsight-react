@@ -27,39 +27,25 @@ export default class ProjectAdd extends Component{
         src: "",
         showCropper: false,
         cropResult: "",
-        isLoading: false
+        isLoading: false,
+        redirect:false
       };
     componentDidMount(){
       
         const {match:{params:{id}}}=this.props;
         axios.get(`/fv3/api/sectors-subsectors/`)
         .then(res=>{
-          
-            this.setState({
+           this.setState({
                 sector:res.data,
                 id
-
-            })
-            
-            
-        }).catch(err=>{
+             })
+          }).catch(err=>{
             console.log(err ,"err");
-            
-        }) 
-        if (this._isMounted){
-          if(sector){
-            
-          }
-        }
-       
-    }
+          }) 
+       }
    
-     
-    
-    
-      onSubmitHandler = e => {
-        e.preventDefault();
-      
+     onSubmitHandler = e => {
+        e.preventDefault(); 
         const data = {
         organization:this.state.id,
         name:this.state.project.name,
@@ -78,7 +64,7 @@ export default class ProjectAdd extends Component{
         }
         axios.post(`fv3/api/add-project/${this.state.id}/`, data)
       .then(res => {
-       
+       if(res.status === 201){
         this.setState({
           project: {
             name:"",
@@ -99,8 +85,12 @@ export default class ProjectAdd extends Component{
               latitude: "28.3949",
               longitude: "-0.09"
           },
-          cropResult:""
+          cropResult:"",
+          redirect:true
         })
+        this.props.history.push(`/project-dashboard/${res.data.id}`);
+       }
+        
        
       }).catch(err=>{
         console.log(err)

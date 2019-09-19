@@ -8,7 +8,6 @@ import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import RightContentCard from "../common/RightContentCard";
-import CheckBox from "../common/CheckBox";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
@@ -23,6 +22,9 @@ L.Icon.Default.mergeOptions({
 
 
 class index extends Component {
+ 
+  _isMounted = false;
+
     state = {
         project: {
           teamName: "",
@@ -39,10 +41,9 @@ class index extends Component {
         country: [],
        
         position: {
-          latitude: "",
-          longitude: ""
-        },
-        cropResult: "",
+          latitude: "51.505",
+          longitude: "-0.09"
+               },
         zoom: 13,
         src: "",
         showCropper: false,
@@ -53,36 +54,96 @@ class index extends Component {
 
        
       };
+
+      componentDidMount(){
+        const {match:{params:{id}}}=this.props;
+        axios.get(`/fv3/api/team-types-countries`)
+        .then(res=>{ 
+            this.setState({
+              teamTypes:res.data.team_types,
+              country:res.data.countries,
+                id
+               })
+            }).catch(err=>{
+            console.log(err ,"err");
+            
+        }) 
+        if (this._isMounted){
+          if(sector){
+            
+          }
+        }
+        
+      }
      
-      onChangeHandler = (e, position) => {
-          console.log(position);
-          
+      onChangeHandler = (e, position) => { 
         const { name, value } = e.target;
-        if (position) {
+        if (position) {  
           return this.setState({
             position: {
               ...this.state.position,
               [name]: value
             }
-          },()=>console.log(this.state.position));
+          });
         }
         this.setState({
             project: {
               ...this.state.project,
               [name]: value
             }
-          },()=>console.log(this.state.project)
-          );
+          });
     }
     onSubmitHandler=(e)=>{
         e.preventDefault()
-        console.log("fghj")
-        axios.post()
+       
+        const data={
+          name:this.state.project.teamName,
+          contactnumber:this.state.project.contactnumber,
+          email:this.state.project.email,
+          address:this.state.project.address,
+          website:this.state.project.website, 
+          publicDescription:this.state.project.publicDescription,
+          selectedCountry:this.state.selectedCountry,
+          selectedteam:this.state.selectedCountry,
+          cropResult:this.state.cropResult,
+          latitude: this.state.position.latitude,
+          longitude: this.state.position.longitude
+        }
+       
+        
+        axios.post(`fv3/api/teams/`,data)
         .then(res=>{
-
+            
+            if(res.status===201){
+              this.setState({
+                project: {
+                  teamName: "",
+                  contactnumber: "",
+                  email: "",
+                  address: "",
+                  website: "", 
+                  publicDescription:"",
+                  logo:""
+                 
+                },           
+                position: {
+                  latitude: "51.505",
+                  longitude: "-0.09"
+                       },
+                zoom: 13,
+                src: "",
+                showCropper: false,
+                cropResult: "",
+                isLoading: false,
+                selectedCountry:"",
+                selectedteam:""
+        
+              })
+              this.props.history.push(`/team-dashboard/${res.data.id}`);
+            }
         })
-        .catch(errr=>{
-
+        .catch(err=>{
+          console.log(err)
         })
 
     }
@@ -95,7 +156,19 @@ class index extends Component {
           }
         });
       };
-    onSelectChangeHandler(){
+    onSelectChangeHandler=(e,data)=>{
+      const {value} =e.target;
+      if (data ==="teamTypes"){
+        this.setState({
+          selectedCountry:value
+        })
+       
+      }else if (data==="country"){
+        this.setState({
+          selectedCountry:value
+        })
+
+      }
 
     }
     closeModal = () => {
@@ -128,6 +201,7 @@ class index extends Component {
             onChangeHandler,
             onSubmitHandler, 
             mapClickHandler,
+            onSelectChangeHandler,
             readFile,
             closeModal,
             state: {
@@ -154,11 +228,6 @@ class index extends Component {
               selectedteam,
               selectedCountry,
                }}=this;
-               console.log(latitude,"latitude");
-               console.log(longitude,"longitude");
-
-               
-
         return (
             <RightContentCard title="New Team">
             <form className="edit-form" onSubmit={onSubmitHandler}>
@@ -176,13 +245,13 @@ class index extends Component {
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
-               {/* <SelectElement
+                <SelectElement
                 className="form-control"
                 label="Type of Team"
-                options={teamTypes.length>0?teamTypes.map(teamTypes => teamTypes):""}
+                options={teamTypes.length>0?teamTypes.map(teamTypes => teamTypes):teamTypes}
                 changeHandler={e => onSelectChangeHandler(e, "teamTypes")}
                 value={selectedteam}
-               />*/}
+               />
                 </div>
                 <div className="col-xl-4 col-md-6">
                   <InputElement
@@ -234,34 +303,29 @@ class index extends Component {
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
-               {/* <SelectElement
+                <SelectElement
                 className="form-control"
                 label="Country"
-                options={country.length>0?subSectors.map(country => country): ""}
-                changeHandler={e => onSelectChangeHandler(e, "subSect")}
+                options={country.length>0?country .map(country => country):country}
+                changeHandler={e => onSelectChangeHandler(e, "country")}
                 value={selectedCountry }
-               />*/}
+               />
                 </div>
-               
-               
-               
-                
                 <div className="col-xl-4 col-md-6">
                   <div className="form-group">
-                  <label className="col-form-label">Public Description</label>
-                  <textarea 
-                  className=" form-control" 
-                  cols="40" 
-                  id="id_publicDescription" 
-                  name="publicDescription" 
-                  value = {publicDescription}
-                  onChange={onChangeHandler}
-                  rows="3"
-                  />
+                  <InputElement
+                    formType="editForm"
+                    tag="input"
+                    type="text"
+                    required={true}
+                    label="Description"
+                    name="publicDescription"
+                    value={publicDescription}
+                    changeHandler={onChangeHandler}
+              />
+                
                   </div>
                 </div>
-                
-                
                 <div className="col-xl-4 col-md-6">
                   <div className="form-group">
                     <label>
