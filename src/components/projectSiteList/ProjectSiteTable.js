@@ -12,7 +12,7 @@ let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
 
-const project_id = window.project_id ? window.project_id : 137;
+//const project_id = window.project_id ? window.project_id : 137;
 
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
@@ -74,6 +74,13 @@ class ProjectSiteTable extends Component {
             >
               <i className="la la-plus" />
             </button>
+            <a
+              className="fieldsight-btn"
+              href={`fieldsight/multi-site-assign-region/${project_id}/`}
+              target="_blank"
+            >
+               Assign Sites to Regions
+            </a>
             <a
               className="fieldsight-btn"
               href={`/fieldsight/bulksitesample/${project_id}/1/`}

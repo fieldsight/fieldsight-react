@@ -55,7 +55,7 @@ export default class TeamSettings extends Component {
             <div className="left-sidebar new-sidebar sticky-top">
               <div className="card">
                 <div className="card-header main-card-header">
-                  <h5>Meta Attributes</h5>
+                  <h5>Settings</h5>
                 </div>
                 <div className="card-body">
                   <TeamLeftSidebar teamOwner={teamData.team_owner} />

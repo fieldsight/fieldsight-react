@@ -15,7 +15,7 @@ class SiteListTable extends React.Component {
     return (
       <>
         <div className="card-body">
-          <div style={{ position: "relative", height: "360px" }}>
+          <div style={{ position: "relative", height: "324px" }}>
             <PerfectScrollbar>
               {loader && <DotLoader />}
               {!loader && (
