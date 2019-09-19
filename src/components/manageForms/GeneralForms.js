@@ -17,13 +17,11 @@ class GeneralForms extends Component {
     id: this.props.match.params ? this.props.match.params.id : "",
     data: [],
     loader: false,
-    urlId: this.props.match.params ? this.props.match.params.id : "",
     deployStatus: false,
     editGuide: false,
     guideData: {},
     showFormModal: false,
     activeTab: "myForms",
-    searchQry: "",
     commonFormData: {
       status: 3,
       isDonor: false,
@@ -38,7 +36,10 @@ class GeneralForms extends Component {
     loader: false,
     loaded: 0,
     formId: "",
-    formTitle: ""
+    formTitle: "",
+    isProjectForm: "",
+    myFormList: [],
+    projectFormList: []
   };
 
   requestGeneralForm(id) {
@@ -66,18 +67,31 @@ class GeneralForms extends Component {
     if (isProjectForm) {
       this.setState(
         {
-          loader: true
+          loader: true,
+          isProjectForm
         },
         this.requestGeneralForm(id)
       );
     }
   }
 
-  changeDeployStatus = (id, isDeploy) => {
-    const { urlId } = this.state;
+  componentDidUpdate(nextProps) {
+    if (nextProps.myForms != this.props.myForms) {
+      this.setState({
+        myFormList: this.props.myForms
+      });
+    } else if (nextProps.projectForms != this.props.projectForms) {
+      this.setState({
+        projectFormList: this.props.projectForms
+      });
+    }
+  }
+
+  changeDeployStatus = (formId, isDeploy) => {
+    const { id } = this.state;
     axios
       .post(
-        `fv3/api/manage-forms/deploy/?project_id=${urlId}&type=general&id=${id}`,
+        `fv3/api/manage-forms/deploy/?project_id=${id}&type=general&id=${formId}`,
         { is_deployed: !isDeploy }
       )
       .then(res => {
@@ -100,11 +114,11 @@ class GeneralForms extends Component {
       })
       .catch(err => {});
   };
-  deleteItem = (id, isDeploy) => {
-    const { urlId } = this.state;
+  deleteItem = (formId, isDeploy) => {
+    const { id } = this.state;
     axios
       .post(
-        `fv3/api/manage-forms/delete/?project_id=${urlId}&type=general&id=${id}`,
+        `fv3/api/manage-forms/delete/?project_id=${id}&type=general&id=${formId}`,
         { is_deployed: isDeploy }
       )
       .then(res => {
@@ -169,20 +183,31 @@ class GeneralForms extends Component {
       activeTab: tab
     });
   };
-  onChangeHandler = e => {
-    // const searchValue = e.target.value;
-    // this.props.searchHandler(
-    //   searchValue,
-    //   `/fv3/api/project-site-list/?page=1&project=${project_id}&q=${searchValue}`,
-    //   {
-    //     type: "projectSiteList",
-    //     projectId: project_id
-    //   }
-    // );
 
-    this.setState({
-      searchQry: e.target.value
-    });
+  onChangeHandler = async e => {
+    const { activeTab, myFormList, projectFormList } = this.state;
+    const searchValue = e.target.value;
+
+    if (searchValue) {
+      if (activeTab == "myForms") {
+        const filteredData = await myFormList.filter(form => {
+          return (
+            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        });
+
+        this.setState({
+          myFormList: filteredData
+        });
+      }
+    } else {
+      this.setState({
+        myFormList: this.props.myForms
+      });
+    }
+
+    // });
   };
 
   handleCreateGeneralForm = e => {
@@ -315,14 +340,16 @@ class GeneralForms extends Component {
         activeTab,
         commonFormData,
         formTitle,
-        optionRegion
+        optionRegion,
+        myFormList,
+        projectFormList
       },
       props: { typeOptions, regionOptions, myForms, projectForms },
       handleRadioChange,
       handleSelectRegionChange,
       handleSelectTypeChange
     } = this;
-    // console.log("in drender", this.state.commonFormData);
+    // console.log(this.state.myFormList, "in drender", myForms);
 
     return (
       <RightContentCard
@@ -400,8 +427,8 @@ class GeneralForms extends Component {
               activeTab={activeTab}
               toggleTab={this.toggleTab}
               onChangeHandler={this.onChangeHandler}
-              formList={myForms}
-              projectList={projectForms}
+              formList={myFormList}
+              projectList={projectFormList}
               handleRadioChange={this.handleMyFormChange}
               handleSaveForm={this.handleSaveForm}
             />
