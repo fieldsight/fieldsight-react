@@ -145,7 +145,7 @@ class App extends Component {
                       render={props => <ProjectAdd  {...props} />}
                     />
                      <Route
-                      path="/team-add/:id"
+                      path="/create-team"
                       render={props => <TeamAdd  {...props} />}
                     />
                   </Switch>
