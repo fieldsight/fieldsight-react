@@ -79,11 +79,7 @@ class SideNav extends Component {
               <div className="card-body">
                 <div className="manage_group">
                   <h5>Site Specific Forms</h5>
-                  <ul
-                    className="nav nav-tabs flex-column border-tabs"
-                    id="myTab"
-                    role="tablist"
-                  >
+                  <ul className="nav nav-tabs flex-column border-tabs">
                     <li className="nav-item">
                       <Link
                         to={`${url}/generalform`}

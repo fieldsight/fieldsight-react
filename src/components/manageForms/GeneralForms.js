@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import withPagination from "../../hoc/WithPagination";
 
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
@@ -206,8 +205,6 @@ class GeneralForms extends Component {
         myFormList: this.props.myForms
       });
     }
-
-    // });
   };
 
   handleCreateGeneralForm = e => {
@@ -422,6 +419,7 @@ class GeneralForms extends Component {
             toggleModal={this.toggleFormModal}
             showButton={true}
             showText="Create Form"
+            url="/forms/create/"
           >
             <AddForm
               activeTab={activeTab}
@@ -441,4 +439,4 @@ class GeneralForms extends Component {
     this._isMounted = false;
   }
 }
-export default withPagination(GeneralForms);
+export default GeneralForms;
