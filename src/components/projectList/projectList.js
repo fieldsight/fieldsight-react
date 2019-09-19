@@ -89,7 +89,7 @@ import {
                         <div className="card-body">
                         <div style={{ position: "relative", height: "800px" }}>
             <PerfectScrollbar>
-                            <Table id="manage_table" className="table  table-bordered  manage_table">
+                            <Table id="manage_table" className="table dataTable table-bordered  manage_table">
                                 <thead>
                                     <tr>
                                         <th>Project Name</th>
