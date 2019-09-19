@@ -19,7 +19,7 @@ class YourTeamSideBar extends Component {
   render() {
    
     return (
-      <div className="col-xl-4 col-lg-5"  style={{ position: "relative", height: "500px" }}>
+      <div className="col-xl-4 col-lg-5"  >
         <div className="left-sidebar new-sidebar sticky-top">
           <div className="card">
             <div className="card-header main-card-header">
@@ -83,7 +83,7 @@ class YourTeamSideBar extends Component {
 
                       <Accordion.Collapse eventKey={i.toString()}>
                         <Card.Body>
-                          <ul>
+                          <ul style={{ position: "relative" }}>
                          
                             {team.projects.map((project, i) => (
                               <li
