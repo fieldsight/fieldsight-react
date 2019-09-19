@@ -25,7 +25,7 @@ class YourTeamSideBar extends Component {
             <div className="card-header main-card-header">
               <h5>Your Teams</h5>
              {this.props.addPermission && <div className="add-btn">
-                <a href="/fieldsight/organization/add/" target="_blank">
+                <a href="/fieldsight/application/#/create-team/" target="_blank">
                   Add team
                   <span>
                     <i className="la la-plus" />

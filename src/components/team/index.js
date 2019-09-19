@@ -72,7 +72,7 @@ import {
                                         <i className="la la-search"></i>
                                     </div>
                                 </form>
-                                <a href={`/fieldsight/organization/add/`} className="fieldsight-btn"><i className="la la-plus"></i></a>
+                                <a href={`/fieldsight/application/#/create-team/`} className="fieldsight-btn"><i className="la la-plus"></i></a>
                             </div>
                         </div>
                         <div className="card-body">

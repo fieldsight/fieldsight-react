@@ -75,7 +75,7 @@ class DashboardHeader extends Component {
       },
       {
         title: `${termsAndLabels && termsAndLabels.site} documents`,
-        link: `/fieldsight/site/blue-prints/${siteId}/`
+        link: `/fieldsight/application/#/site-documents/${siteId}/`
       },
       { title: "users", link: `/fieldsight/manage/people/site/${siteId}/` },
       { title: "forms", link: `/forms/setup-forms/0/${siteId}` }

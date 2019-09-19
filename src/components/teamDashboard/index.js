@@ -365,7 +365,7 @@ class TeamDashboard extends Component {
                           </div>
                         </form> */}
                         <a
-                          href={`/fieldsight/project/add/${teamId}/`}
+                          href={`/fieldsight/application/#/project-add/${teamId}/`}
                           className="fieldsight-btn"
                           // target="_blank"
                         >
