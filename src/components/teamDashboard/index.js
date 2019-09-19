@@ -187,7 +187,7 @@ class TeamDashboard extends Component {
   handleFirstStepSelect = (selected, data) => {
     this.setState({ plan: selected, selectedPlan: data });
   };
-  handlePriceSubmit = e => {};
+  handlePriceSubmit = e => { };
   passStripeToken = (id, error) => {
     this.setState(
       state => {
@@ -342,10 +342,13 @@ class TeamDashboard extends Component {
                         </a>
                       </div>
                     </div>
-                    <SiteMap
-                      map={map}
-                      showContentLoader={teamDashboardLoader}
-                    />
+                    <div className="card-body">
+                      <SiteMap
+                        map={map}
+                        showContentLoader={teamDashboardLoader}
+                      />
+                    </div>
+
                   </div>
                 </div>
                 <div className="col-lg-4">
@@ -367,7 +370,7 @@ class TeamDashboard extends Component {
                         <a
                           href={`/fieldsight/project/add/${teamId}/`}
                           className="fieldsight-btn"
-                          // target="_blank"
+                        // target="_blank"
                         >
                           <i className="la la-plus" />
                         </a>

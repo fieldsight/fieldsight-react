@@ -35,7 +35,7 @@ class RegionsTable extends React.Component {
     };
     return (
       <div className="card-body">
-        <div style={{ position: "relative", height: "400px" }}>
+        <div style={{ position: "relative", height: "396px" }}>
           <PerfectScrollbar>
             {loader && <DotLoader />}
             {!loader && (
