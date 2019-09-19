@@ -68,7 +68,7 @@ export default class TeamUser extends Component{
                                 <div className="dash-btn" >
                                     <form className="floating-form" onSubmit={this.handleSubmit}>
                                         <div className="form-group mr-0">
-                                            <input type="search" className="form-control"  onChange={(e)=>this.handleChange(e)}  required=""/>
+                                            <input type="search" className="form-control"  onChange={(e)=>this.handleChange(e)}  required/>
                                             <label htmlFor="input">Search</label>
                                             <i className="la la-search"></i>
                                         </div>
