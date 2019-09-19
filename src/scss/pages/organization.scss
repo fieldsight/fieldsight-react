@@ -30,11 +30,12 @@
 
         .count-content {
           text-transform: capitalize;
+          color:$color-blue;
 
           h4 {
-            font-size: 0.875rem;
+            font-size: 0.775rem;
             font-weight: 600;
-            margin-bottom: 0rem;
+            margin-bottom: .15rem;
           }
 
           h6 {
@@ -352,7 +353,7 @@
 
     .leaflet-top,
     .leaflet-bottom {
-      z-index: 9999;
+      z-index: 999;
     }
 
     @media screen and (max-width: $desktop) {

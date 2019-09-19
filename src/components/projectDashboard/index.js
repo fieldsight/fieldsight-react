@@ -294,7 +294,7 @@ class ProjectDashboard extends React.Component {
                         <a
                           href={`/fieldsight/site/add/${projectId}/`}
                           target="_blank"
-                          className="fieldsight-btn left-icon"
+                          className="fieldsight-btn"
                         >
                           <i className="la la-plus" />
                         </a>
