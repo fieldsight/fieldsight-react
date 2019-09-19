@@ -7,8 +7,9 @@
 
       .count-card {
         background-color: $color-bg;
-        @include radius4;
+        @include radius(4px);
         @include flex_start;
+        @include animate_all(all 0.5s);
         align-items: center;
         margin-right: 1rem;
         padding: 0.5rem 0.6125rem;
@@ -19,7 +20,8 @@
           text-align: center;
           line-height: 1.8rem;
           background-color: $color-white;
-          @include radius50;
+          @include box_shadow($boxshadow:0 1px 6px rgba($color-primary, 0.35));
+          @include radius(50%);
           margin-right: 0.6125rem;
 
           i {
@@ -43,6 +45,11 @@
             margin: 0;
           }
         }
+        &:hover{
+         transform:translateY(-4px);
+         background-color: lighten($color-bg, 4%);
+         
+        }
       }
 
       .add-data {
@@ -62,10 +69,12 @@
             height: 34px;
             line-height: 34px;
             text-align: center;
-            @include radius50;
+            @include radius(50%);
             background-color: $color-green;
             color: $color-white;
             margin-left: 0.25rem;
+            @include box_shadow($boxshadow:0 1px 6px rgba($color-primary, 0.35));
+            
           }
 
           &:hover {
@@ -78,13 +87,14 @@
     .dashboard-counter {
       .count-card {
         background-color: $color-white;
-        @include radius4;
+        @include radius(4px);
         @include flexjust;
         justify-content: center;
         align-items: center;
         flex-wrap:nowrap;
         padding: 2rem;
-        @include boxshadow;
+        @include animate_all(all 0.5s);
+        @include box_shadow($boxshadow:0 1px 4px rgba($color-primary, 0.15));
         margin-bottom: 2rem;
 
         .count-icon {
@@ -93,9 +103,10 @@
           text-align: center;
           line-height: 4.5rem;
           background-color: $color-bg;
-          @include radius50;
+          @include box_shadow($boxshadow:0 1px 6px rgba($color-primary, 0.35));
+          @include radius(50%);
           margin-right: 1rem;
-          @include anim05;
+          
 
           i {
             font-size: 1.5rem;
@@ -118,11 +129,13 @@
         }
 
         &:hover {
+          transform:translateY(-4px);
           cursor: pointer;
-
           .count-icon {
+            @include easein_out(all 0.3s ease-in-out);
             i{
               color: $color-white;
+              @include easein_out(all 0.3s ease-in-out);
             }
             &.pending {
               background-color: $color-blue;

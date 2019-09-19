@@ -31,6 +31,20 @@
     -ms-border-radius: 4px;
     border-radius: 4px;
 }
+@mixin linx ($link, $visit, $hover, $active) {
+    a {
+      color: $link;
+      &:visited {
+        color: $visit;
+      }
+      &:hover {
+        color: $hover;   
+      }
+      &:active {
+        color: $active;
+      }
+    }
+  }
 
 @mixin boxshadow {
     -webkit-box-shadow: 0 0 4px 0 rgba(185, 185, 185, 0.4);
@@ -50,11 +64,66 @@
     -o-box-shadow: 0 0 16px 0 rgba(185, 185, 185, 0.4);
     box-shadow: 0 0 16px 0 rgba(185, 185, 185, 0.4);
 }
+@mixin input-placeholder {
+    &.placeholder { @content; }
+    &:-moz-placeholder { @content; }
+    &::-moz-placeholder { @content; }
+    &:-ms-input-placeholder { @content; }
+    &::-webkit-input-placeholder { @content; }
+}
+@mixin radius-mix($radius...) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+}
+@mixin radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+}
 @mixin box_shadow ($boxshadow){
     -webkit-box-shadow: $boxshadow;
     -ms-box-shadow: $boxshadow;
     -o-box-shadow: $boxshadow;
     box-shadow: $boxshadow;
+}
+@mixin animate_all($animate_all){
+    -moz-transition: $animate_all;
+    -o-transition: $animate_all;
+    -webkit-transition: $animate_all;
+    transition: $animate_all;
+    // transition: all 0.5s;
+}
+
+@mixin  easein_out($easein_out){
+    -moz-transition: $easein_out;
+    -o-transition: $easein_out;
+    -webkit-transition: $easein_out;
+    transition: $easein_out;
+    // transition: all 0.3s ease-in-out;
+}
+@mixin  linear($linear){
+    -moz-transition: $linear;
+    -o-transition: $linear;
+    -webkit-transition: $linear;
+    transition: $linear;
+    // transition: all 0.3s linear;
+}
+
+@mixin transform_scale($transform_scale){
+    -moz-transform: $transform_scale;
+    -ms-transform: $transform_scale;
+    -o-transform: $transform_scale;
+    -webkit-transform: $transform_scale;
+    transform:$transform_scale;
+    // transform:scale(0);
+}
+@mixin backface($backface){
+    -moz-backface-visibility: $backface;
+    -webkit-backface-visibility: $backface;
+    backface-visibility: $backface;
 }
 
 @mixin translatey {
