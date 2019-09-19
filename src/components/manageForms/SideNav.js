@@ -18,7 +18,7 @@ class SideNav extends Component {
     regionOptions: [],
     typeOptions: [],
     myForms: [],
-    projectForms
+    projectForms: []
   };
 
   componentDidMount() {
@@ -37,7 +37,7 @@ class SideNav extends Component {
       axios
         .all(
           urls.map((url, i) => {
-            return i === 0 ? axios.get(`${urls}${id}/`) : axios.get(url);
+            return i === 0 ? axios.get(`${url}${id}/`) : axios.get(url);
           })
         )
         .then(

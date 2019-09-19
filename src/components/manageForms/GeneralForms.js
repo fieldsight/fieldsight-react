@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
 // import PerfectScrollbar from "react-perfect-scrollbar";
 // import "react-perfect-scrollbar/dist/css/styles.css";
 import axios from "axios";
+import withPagination from "../../hoc/WithPagination";
 
 import { DotLoader } from "../myForm/Loader";
 import isEmpty from "../../utils/isEmpty";
@@ -12,25 +12,7 @@ import CommonPopupForm from "./CommonPopupForm";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
-
-const getStatus = value => {
-  if (value == 0) return <span>pending</span>;
-  else if (value == 1) return <span>Rejected</span>;
-  else if (value == 2) return <span>Flagged</span>;
-  else if (value == 3) return <span>Approved</span>;
-};
-const getClass = status => {
-  if (status == 0) return "pending";
-  if (status == 1) return "rejected";
-  if (status == 2) return "flagged";
-  if (status == 3) return "approved";
-};
-const formatDate = date => {
-  const dateIdx = date.getDate();
-  const monthIndex = date.getMonth() + 1;
-  const year = date.getFullYear();
-  return year + "-" + monthIndex + "-" + dateIdx;
-};
+import GeneralFormTable from "./GeneralFormTable";
 
 class GeneralForms extends Component {
   _isMounted = false;
@@ -51,12 +33,15 @@ class GeneralForms extends Component {
       isEdit: false,
       isDelete: false,
       regionSelected: [],
-      typeSelected: []
+      typeSelected: [],
+      xf: ""
     },
     optionType: "",
     optionRegion: "",
     loader: false,
-    loaded: 0
+    loaded: 0,
+    formId: "",
+    formTitle: ""
   };
 
   requestGeneralForm(id) {
@@ -182,6 +167,16 @@ class GeneralForms extends Component {
     });
   };
   onChangeHandler = e => {
+    // const searchValue = e.target.value;
+    // this.props.searchHandler(
+    //   searchValue,
+    //   `/fv3/api/project-site-list/?page=1&project=${project_id}&q=${searchValue}`,
+    //   {
+    //     type: "projectSiteList",
+    //     projectId: project_id
+    //   }
+    // );
+
     this.setState({
       searchQry: e.target.value
     });
@@ -197,11 +192,12 @@ class GeneralForms extends Component {
         isEdit,
         isDelete,
         regionSelected,
-        typeSelected
+        typeSelected,
+        xf
       }
     } = this.state;
     const payload = {
-      // "xf":1107, myformid/projectformid
+      xf: xf,
       default_submission_status: status,
       setting: {
         types: typeSelected,
@@ -214,10 +210,18 @@ class GeneralForms extends Component {
     axios
       .post(`fv3/api/manage-forms/general/?project_id=${id}`, payload)
       .then(res => {
-        console.log("success", res.data);
+        this.setState(
+          {
+            data: this.state.data.concat(res.data)
+          },
+          () => {
+            this.props.closePopup;
+            successToast("Add ", "successfully");
+          }
+        );
       })
       .catch(err => {
-        console.log("err", err);
+        errorToast(err);
       });
     // console.log("general create", this.state.commonFormData);
   };
@@ -283,7 +287,21 @@ class GeneralForms extends Component {
       });
     });
   };
-
+  handleMyFormChange = (e, title) => {
+    this.setState({
+      formId: e.target.value,
+      formTitle: title
+    });
+  };
+  handleSaveForm = () => {
+    this.setState({
+      commonFormData: {
+        ...this.state.commonFormData,
+        xf: this.state.formId
+      },
+      showFormModal: !this.state.showFormModal
+    });
+  };
   render() {
     const {
       state: {
@@ -294,7 +312,7 @@ class GeneralForms extends Component {
         showFormModal,
         activeTab,
         commonFormData,
-        optionType,
+        formTitle,
         optionRegion
       },
       props: { typeOptions, regionOptions, myForms, projectForms },
@@ -314,98 +332,11 @@ class GeneralForms extends Component {
         {/* <div className="card-body"> */}
         {loader && <DotLoader />}
         {!loader && (
-          <Table responsive="xl" className="table  table-bordered  dataTable">
-            <thead>
-              <tr>
-                <th>form title</th>
-                <th>Responses</th>
-                <th>Form Guide</th>
-                <th>assigned date</th>
-                <th>Default status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {!loader && data.length === 0 && (
-                <tr>
-                  <td>
-                    <p>No Form Data Available</p>
-                  </td>
-                </tr>
-              )}
-              {!loader &&
-                data.map((item, i) => (
-                  <tr key={i}>
-                    <td>{item.xf.title}</td>
-                    <td>{item.responses_count}</td>
-                    <td>
-                      {item.em && (
-                        <a onClick={() => this.handleEditGuide(item.em)}>
-                          <i className="la la-book" />
-                          {item.em.title}
-                        </a>
-                      )}
-                    </td>
-                    <td>
-                      <time>
-                        <i className="la la-clock-o"></i>{" "}
-                        {formatDate(new Date(item.date_created))}
-                      </time>
-                    </td>
-                    <td>
-                      <a
-                        href="#"
-                        className={getClass(item.default_submission_status)}
-                      >
-                        {getStatus(item.default_submission_status)}
-                      </a>
-                    </td>
-                    <td>
-                      {!!item.is_deployed && (
-                        <a
-                          className="badge badge-danger"
-                          onClick={() =>
-                            this.changeDeployStatus(item.id, item.is_deployed)
-                          }
-                        >
-                          Undeployed
-                          <i className="la la-close"> </i>
-                        </a>
-                      )}
-                      {!item.is_deployed && (
-                        <div>
-                          <span>
-                            <a
-                              className="badge badge-success"
-                              onClick={() =>
-                                this.changeDeployStatus(
-                                  item.id,
-                                  item.is_deployed
-                                )
-                              }
-                            >
-                              Deploy
-                            </a>
-                          </span>
-                          <span>
-                            <a
-                              className="badge badge-danger"
-                              onClick={() =>
-                                this.deleteItem(item.id, item.is_deployed)
-                              }
-                            >
-                              Delete
-                              <i className="la la-close"> </i>
-                            </a>
-                          </span>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
+          <GeneralFormTable
+            data={data}
+            loader={loader}
+            handleEditGuide={this.handleEditGuide}
+          />
         )}
         {/* </div> */}
         {this.props.popupModal && (
@@ -419,14 +350,14 @@ class GeneralForms extends Component {
                 <div className="selected-form">
                   <div className="add-btn flex-start">
                     <a data-tab="choose-form" onClick={this.toggleFormModal}>
-                      Choose form
+                      {formTitle ? "Change form" : " Choose form"}
                       <span>
                         <i className="la la-plus"></i>
                       </span>
                     </a>
                   </div>
                   <div className="selected-text">
-                    <span>Skills for Tourism Assessment Form - Test</span>
+                    <span>{formTitle}</span>
                   </div>
                 </div>
               </div>
@@ -469,6 +400,10 @@ class GeneralForms extends Component {
               activeTab={activeTab}
               toggleTab={this.toggleTab}
               onChangeHandler={this.onChangeHandler}
+              formList={myForms}
+              projectList={projectForms}
+              handleRadioChange={this.handleMyFormChange}
+              handleSaveForm={this.handleSaveForm}
             />
           </Modal>
         )}
@@ -479,4 +414,4 @@ class GeneralForms extends Component {
     this._isMounted = false;
   }
 }
-export default GeneralForms;
+export default withPagination(GeneralForms);

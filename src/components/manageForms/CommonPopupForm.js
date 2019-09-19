@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import Select from "react-select";
+import makeAnimated from "react-select/animated";
+
 import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
 import CheckBox from "../common/CheckBox";
 import Modal from "../common/Modal";
+
+const animatedComponents = makeAnimated();
 
 const RegionType = [
   { value: "1", label: "Region 1" },
@@ -14,19 +18,23 @@ const RegionType = [
 class CommonPopupForm extends Component {
   state = {
     optionRegion: [],
-    optionType: []
+    optionType: [],
+    regionDropdown: [],
+    typeDropdown: []
   };
   componentDidMount() {
-    const newRegionArr = [];
-    const newTypeArr = [];
     const { typeOptions, regionOptions } = this.props;
+    const newRegionArr = regionOptions.map(each => ({
+      ...each,
+      value: each.identifier,
+      label: each.name
+    }));
+    const newTypeArr = typeOptions.map(each => ({
+      ...each,
+      value: each.identifier,
+      label: each.name
+    }));
 
-    regionOptions.map(each => {
-      newRegionArr.push({ ...each, value: each.identifier, label: each.name });
-    });
-    typeOptions.map(each => {
-      newTypeArr.push({ ...each, value: each.identifier, label: each.name });
-    });
     this.setState({
       optionRegion: newRegionArr,
       optionType: newTypeArr
@@ -46,7 +54,7 @@ class CommonPopupForm extends Component {
       },
       state: { optionRegion, optionType }
     } = this;
-    console.log("status", this.props);
+    console.log("status", this.state, this.props);
 
     return (
       <>
@@ -84,31 +92,26 @@ class CommonPopupForm extends Component {
         </div>
         <div className="form-group">
           <label>Regions</label>
-          {/* <Select
-            className="select2-select select2"
-            // label="Type of Team"
-            // onChange={this.handleChange}
-            options={RegionType}
-            isMulti={true}
-            defaultValue={[RegionType[2]]}
-          /> */}
           <Select
-            className="select2-select select2"
+            // closeMenuOnSelect={false}
+            // className="select2-select select2"
             onChange={handleSelectRegionChange}
             options={optionRegion}
             isMulti={true}
-            // defaultValue={[optionRegion.map((e, i) => optionRegion[i])]}
+            defaultValue={optionRegion}
+            components={animatedComponents}
           />
         </div>
         <div className="form-group">
           <label>Types</label>
           <Select
-            className="select2-select select2"
-            classNamePrefix="select"
+            // closeMenuOnSelect={false}
+            // className="select2-select select2"
             onChange={handleSelectTypeChange}
             options={optionType}
             isMulti={true}
-            // defaultValue={[optionType[0]]}
+            defaultValue={optionType}
+            components={animatedComponents}
           />
         </div>
         <div className="form-group checkbox-group">

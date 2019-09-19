@@ -25,8 +25,6 @@ class ManageForms extends Component {
       axios
         .get(`fv3/api/manage-forms/breadcrums/?project_id=${id}`)
         .then(res => {
-          console.log("url", res);
-
           this.setState({
             breadcrumb: res.data
           });
