@@ -111,7 +111,7 @@ class index extends Component {
         }
        
         
-        axios.post(`fv3/api/teams/`,data)
+        axios.post(`fv3/api/team-form/`,data)
         .then(res=>{
             
             if(res.status===201){
