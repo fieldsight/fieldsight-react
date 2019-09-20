@@ -22,6 +22,7 @@ import Teams from "./team";
 import SiteLog from "./siteLogs";
 import ProjectAdd from "./projectAdd";
 import TeamAdd from "./teamAdd";
+import SiteAdd from "./siteAdd";
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
@@ -38,14 +39,28 @@ import "../css/custom.css";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      height:0
+    };
   }
 
+  
+  
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+  
+  updateWindowDimensions=()=>{
+    return(this.state.height = window.innerHeight -181)
+  }
+       
   componentWillMount() {
     setDefault();
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
   }
 
-  render() {
+  render() {  
     return (
       <Provider store={store}>
         <div id="fieldsight-new" className="fieldsight-new">
@@ -60,7 +75,7 @@ class App extends Component {
                     />
                     <Route
                       path="/team-settings/:id"
-                      render={props => <TeamSetting {...props} />}
+                      render={props => <TeamSetting {...props} height={this.state.height} />}
                     />
                     <Route
                       path="/forms"
@@ -97,7 +112,7 @@ class App extends Component {
                     />
                     <Route
                       path="/site-documents/:id"
-                      render={props => <SiteDocument {...props} />}
+                      render={props => <SiteDocument {...props}  />}
                     />
 
                     <Route
@@ -147,6 +162,10 @@ class App extends Component {
                      <Route
                       path="/create-team"
                       render={props => <TeamAdd  {...props} />}
+                    />
+                    <Route
+                      path="/create-site/:id"
+                      render={props => <SiteAdd  {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

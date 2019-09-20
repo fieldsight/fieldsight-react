@@ -1,5 +1,5 @@
- import React,{Component} from 'react';
- import L from "leaflet";
+import React, { Component } from "react";
+import L from "leaflet";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import axios from "axios";
 import Dropzone from "react-dropzone";
@@ -20,26 +20,19 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
 
-
-class index extends Component {
- 
-  _isMounted = false;
-
+export default class SiteAdd extends Component{
     state = {
         project: {
-          teamName: "",
-          contactnumber: "",
-          email: "",
-          address: "",
-          website: "", 
-          publicDescription:"",
-          logo:""
+            name:"",
+            site_id:"",
+            phone:"",
+            address:"", 
+            publicDescription:"",
+            logo:""
          
         },
         loaded: 0,
         teamTypes: [],
-        country: [],
-       
         position: {
           latitude: "51.505",
           longitude: "-0.09"
@@ -49,9 +42,8 @@ class index extends Component {
         showCropper: false,
         cropResult: "",
         isLoading: false,
-        selectedCountry:"",
-        selectedteam:""
-
+        selectedSiteTypes:"",
+        id:""
        
       };
 
@@ -61,7 +53,7 @@ class index extends Component {
         .then(res=>{ 
             this.setState({
               teamTypes:res.data.team_types,
-              country:res.data.countries,
+             
                 id
                })
             }).catch(err=>{
@@ -95,16 +87,13 @@ class index extends Component {
     }
     onSubmitHandler=(e)=>{
         e.preventDefault()
-       
         const data={
-          name:this.state.project.teamName,
-          contactnumber:this.state.project.contactnumber,
-          email:this.state.project.email,
+          name:this.state.project.name,
+          site_id:this.state.project.site_id,
+          phone:this.state.project.emphoneail,
           address:this.state.project.address,
-          website:this.state.project.website, 
           publicDescription:this.state.project.publicDescription,
-          selectedCountry:this.state.selectedCountry,
-          selectedteam:this.state.selectedCountry,
+          selectedSiteTypes:this.state.selectedSiteTypes,
           cropResult:this.state.cropResult,
           latitude: this.state.position.latitude,
           longitude: this.state.position.longitude
@@ -117,13 +106,12 @@ class index extends Component {
             if(res.status===201){
               this.setState({
                 project: {
-                  teamName: "",
-                  contactnumber: "",
-                  email: "",
-                  address: "",
-                  website: "", 
-                  publicDescription:"",
-                  logo:""
+                    name:"",
+                    site_id:"",
+                    phone:"",
+                    address:"", 
+                    publicDescription:"",
+                    logo:""
                  
                 },           
                 position: {
@@ -206,9 +194,9 @@ class index extends Component {
             closeModal,
             state: {
             project: {
-              teamName,
-              contactnumber,
-              email,
+              name,
+              site_id,
+              phone,
               address,
               website, 
               publicDescription,
@@ -229,7 +217,7 @@ class index extends Component {
               selectedCountry,
                }}=this;
         return (
-            <RightContentCard title="New Team">
+            <RightContentCard title="New Site">
             <form className="edit-form" onSubmit={onSubmitHandler}>
               <div className="row">
                 <div className="col-xl-4 col-md-6">
@@ -238,20 +226,11 @@ class index extends Component {
                     tag="input"
                     type="text"
                     required={true}
-                    label=" Team Name"
-                    name="teamName"
-                    value={teamName}
+                    label="ID"
+                    name="site_id"
+                    value={site_id}
                     changeHandler={onChangeHandler}
                   />
-                </div>
-                <div className="col-xl-4 col-md-6">
-                <SelectElement
-                className="form-control"
-                label="Type of Team"
-                options={teamTypes.length>0?teamTypes.map(teamTypes => teamTypes):teamTypes}
-                changeHandler={e => onSelectChangeHandler(e, "teamTypes")}
-                value={selectedteam}
-               />
                 </div>
                 <div className="col-xl-4 col-md-6">
                   <InputElement
@@ -259,36 +238,33 @@ class index extends Component {
                     tag="input"
                     type="text"
                     required={true}
-                    label="Contact Number: "
-                    name="contactnumber"
-                    value={contactnumber}
+                    label="Name"
+                    name="name"
+                    value={name}
                     changeHandler={onChangeHandler}
                   />
                 </div>
+                <div className="col-xl-4 col-md-6">
+                <SelectElement
+                className="form-control"
+                label="Type of Sites"
+                options={teamTypes.length>0?teamTypes.map(teamTypes => teamTypes):teamTypes}
+                changeHandler={e => onSelectChangeHandler(e, "teamTypes")}
+                value={selectedteam}
+               />
+                </div>
+
                 <div className="col-xl-4 col-md-6">
                   <InputElement
                     formType="editForm"
                     tag="input"
-                    type="email"
+                    type="Phone"
                     required={true}
-                    label="Email"
-                    name="email"
-                    value={email}
+                    label="Phone"
+                    name="phone"
+                    value={phone}
                     changeHandler={onChangeHandler}
                   />
-                </div>
-                <div className="col-xl-4 col-md-6">
-                  <div className="form-group">
-                    <InputElement
-                      formType="editForm"
-                      tag="input"
-                      type="url"
-                      label="website"
-                      name="website"
-                      value={website}
-                      changeHandler={onChangeHandler}
-                    />
-                  </div>
                 </div>
                 <div className="col-xl-4 col-md-6">
                   <InputElement
@@ -302,15 +278,7 @@ class index extends Component {
                     changeHandler={onChangeHandler}
                   />
                 </div>
-                <div className="col-xl-4 col-md-6">
-                <SelectElement
-                className="form-control"
-                label="Country"
-                options={country.length>0?country .map(country => country):country}
-                changeHandler={e => onSelectChangeHandler(e, "country")}
-                value={selectedCountry }
-               />
-                </div>
+               
                 <div className="col-xl-4 col-md-6">
                   <div className="form-group">
                   <InputElement
@@ -326,8 +294,6 @@ class index extends Component {
                 
                   </div>
                 </div>
-                </div>
-                <div className="row">
                 <div className="col-xl-4 col-md-6">
                   <div className="form-group">
                     <label>
@@ -348,7 +314,7 @@ class index extends Component {
                         <Marker position={[latitude, longitude] }>
                           <Popup>
                             <b>Name: </b>
-                            {teamName}
+                            {name}
                           </Popup>
                         </Marker>
                       </Map>
@@ -498,5 +464,3 @@ class index extends Component {
     
     )}
 }
-
-export default index
