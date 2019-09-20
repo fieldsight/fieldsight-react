@@ -20,10 +20,10 @@ const formatDate = date => {
   return year + "-" + monthIndex + "-" + dateIdx;
 };
 
-class GeneralFormTable extends Component {
+class ScheduleFormTable extends Component {
   render() {
     const {
-      props: { data, loader, handleEditGuide, changeDeployStatus, deleteItem }
+      props: { data, loader, changeDeployStatus, deleteItem }
     } = this;
     return (
       <Table responsive="xl" className="table  table-bordered  dataTable">
@@ -53,7 +53,7 @@ class GeneralFormTable extends Component {
                 <td>{item.responses_count}</td>
                 <td>
                   {/* {item.em && ( */}
-                  <a onClick={() => handleEditGuide(item.em, item.id)}>
+                  <a onClick={() => handleEditGuide(item.em)}>
                     <i className="la la-book" />
                     {item.em ? item.em.title : ""}
                   </a>
@@ -116,4 +116,5 @@ class GeneralFormTable extends Component {
     );
   }
 }
-export default GeneralFormTable;
+
+export default ScheduleFormTable;

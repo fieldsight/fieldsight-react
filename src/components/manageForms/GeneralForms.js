@@ -19,6 +19,7 @@ class GeneralForms extends Component {
     deployStatus: false,
     editGuide: false,
     guideData: {},
+    editFormId: "",
     showFormModal: false,
     activeTab: "myForms",
     commonFormData: {
@@ -38,7 +39,8 @@ class GeneralForms extends Component {
     formTitle: "",
     isProjectForm: "",
     myFormList: [],
-    projectFormList: []
+    projectFormList: [],
+    sharedFormList: []
   };
 
   requestGeneralForm(id) {
@@ -83,6 +85,10 @@ class GeneralForms extends Component {
       this.setState({
         projectFormList: this.props.projectForms
       });
+    } else if (nextProps.sharedForms != this.props.sharedForms) {
+      this.setState({
+        sharedFormList: this.props.sharedForms
+      });
     }
   }
 
@@ -99,7 +105,8 @@ class GeneralForms extends Component {
             const newData = this.state.data;
             newData.map(each => {
               const arrItem = { ...each };
-              if (each.id == id) {
+
+              if (each.id == formId) {
                 each.is_deployed = !isDeploy;
               }
               return arrItem;
@@ -123,7 +130,7 @@ class GeneralForms extends Component {
       .then(res => {
         this.setState(
           {
-            data: this.state.data.filter(each => each.id != id)
+            data: this.state.data.filter(each => each.id != formId)
           },
           () => {
             successToast("Form", "deleted");
@@ -132,22 +139,21 @@ class GeneralForms extends Component {
       })
       .catch(err => {});
   };
-  handleEditGuide = data => {
+  handleEditGuide = (data, formId) => {
     this.setState({
       editGuide: !this.state.editGuide,
-      guideData: data ? data : {}
+      guideData: data ? data : {},
+      editFormId: formId
     });
   };
   handleUpdateGuide = data => {
-    const { id } = this.state;
+    const { id, editFormId } = this.state;
     const formData = new FormData();
     if (data.title) formData.append("title", data.title);
     if (data.text) formData.append("text", data.text);
-    if (data.pdf) {
-      formData.append("is_pdf", data.pdf ? true : false);
-      formData.append("pdf", data.pdf);
-    }
-    if (data.fsxf) formData.append("fsxf", data.fsxf);
+    if (data.pdf) formData.append("pdf", data.pdf);
+    if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
+    if (editFormId) formData.append("fsxf", editFormId);
     if (data.images && data.images.length > 0) {
       data.images.map((each, i) => {
         if (!each.image) formData.append(`new_images_${i + 1}`, each);
@@ -179,12 +185,20 @@ class GeneralForms extends Component {
 
   toggleTab = tab => {
     this.setState({
-      activeTab: tab
+      activeTab: tab,
+      myFormList: this.props.myForms,
+      sharedFormList: this.props.sharedForms,
+      projectFormList: this.props.projectForms
     });
   };
 
   onChangeHandler = async e => {
-    const { activeTab, myFormList, projectFormList } = this.state;
+    const {
+      activeTab,
+      myFormList,
+      projectFormList,
+      sharedFormList
+    } = this.state;
     const searchValue = e.target.value;
 
     if (searchValue) {
@@ -199,10 +213,34 @@ class GeneralForms extends Component {
         this.setState({
           myFormList: filteredData
         });
+      } else if (activeTab == "projectForms") {
+        const filteredData = await projectFormList.filter(form => {
+          return (
+            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        });
+
+        this.setState({
+          projectFormList: filteredData
+        });
+      } else if (activeTab == "sharedForms") {
+        const filteredData = await sharedFormList.filter(form => {
+          return (
+            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        });
+
+        this.setState({
+          sharedFormList: filteredData
+        });
       }
     } else {
       this.setState({
-        myFormList: this.props.myForms
+        myFormList: this.props.myForms,
+        sharedFormList: this.props.sharedForms,
+        projectFormList: this.props.projectForms
       });
     }
   };
@@ -339,9 +377,10 @@ class GeneralForms extends Component {
         formTitle,
         optionRegion,
         myFormList,
-        projectFormList
+        projectFormList,
+        sharedFormList
       },
-      props: { typeOptions, regionOptions, myForms, projectForms },
+      props: { typeOptions, regionOptions },
       handleRadioChange,
       handleSelectRegionChange,
       handleSelectTypeChange
@@ -361,6 +400,8 @@ class GeneralForms extends Component {
             data={data}
             loader={loader}
             handleEditGuide={this.handleEditGuide}
+            changeDeployStatus={this.changeDeployStatus}
+            deleteItem={this.deleteItem}
           />
         )}
         {this.props.popupModal && (
@@ -427,6 +468,7 @@ class GeneralForms extends Component {
               onChangeHandler={this.onChangeHandler}
               formList={myFormList}
               projectList={projectFormList}
+              sharedList={sharedFormList}
               handleRadioChange={this.handleMyFormChange}
               handleSaveForm={this.handleSaveForm}
             />

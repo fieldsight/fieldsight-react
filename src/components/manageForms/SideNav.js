@@ -9,7 +9,8 @@ import StageForms from "./StageForms";
 const urls = [
   "fv3/api/project-regions-types/",
   "fv3/api/myforms/",
-  "fv3/api/myprojectforms/"
+  "fv3/api/myprojectforms/",
+  "fv3/api/sharedforms/"
 ];
 
 class SideNav extends Component {
@@ -18,7 +19,8 @@ class SideNav extends Component {
     regionOptions: [],
     typeOptions: [],
     myForms: [],
-    projectForms: []
+    projectForms: [],
+    sharedForms: []
   };
 
   componentDidMount() {
@@ -41,14 +43,15 @@ class SideNav extends Component {
           })
         )
         .then(
-          axios.spread((list, myForms, projectForms) => {
+          axios.spread((list, myForms, projectForms, sharedForms) => {
             if (this._isMounted) {
-              if (list && myForms && projectForms) {
+              if (list && myForms && projectForms && sharedForms) {
                 this.setState({
                   regionOptions: list.data.regions,
                   typeOptions: list.data.site_types,
                   myForms: myForms.data,
-                  projectForms: projectForms.data
+                  projectForms: projectForms.data,
+                  sharedForms: sharedForms.data
                 });
               }
             }
@@ -62,7 +65,7 @@ class SideNav extends Component {
       props: {
         match: { path, url }
       },
-      state: { regionOptions, typeOptions, myForms, projectForms }
+      state: { regionOptions, typeOptions, myForms, projectForms, sharedForms }
     } = this;
 
     return (
@@ -161,6 +164,7 @@ class SideNav extends Component {
                 regionOptions={regionOptions}
                 myForms={myForms}
                 projectForms={projectForms}
+                sharedForms={sharedForms}
               />
             )}
           />
@@ -174,6 +178,13 @@ class SideNav extends Component {
                 title="ScheduleForms"
                 OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
+                closePopup={this.props.closePopup}
+                popupModal={this.props.popupModal}
+                typeOptions={typeOptions}
+                regionOptions={regionOptions}
+                myForms={myForms}
+                projectForms={projectForms}
+                sharedForms={sharedForms}
               />
             )}
           />

@@ -15,9 +15,11 @@ class AddForm extends Component {
         formList,
         handleRadioChange,
         projectList,
-        handleSaveForm
+        handleSaveForm,
+        sharedList
       }
     } = this;
+    console.log("project", projectList);
 
     return (
       <>
@@ -32,16 +34,16 @@ class AddForm extends Component {
               My Forms
             </a>
           </li>
-          {/* <li className="nav-item">
-              <a
-                className={
-                  activeTab === "sharedForms" ? "nav-link active" : "nav-link"
-                }
-                onClick={() => toggleTab("sharedForms")}
-              >
-                Shared Forms
-              </a>
-            </li> */}
+          <li className="nav-item">
+            <a
+              className={
+                activeTab === "sharedForms" ? "nav-link active" : "nav-link"
+              }
+              onClick={() => toggleTab("sharedForms")}
+            >
+              Shared Forms
+            </a>
+          </li>
           <li className="nav-item">
             <a
               className={
@@ -147,6 +149,65 @@ class AddForm extends Component {
                   <i className="la la-search" />
                 </div>
                 {projectList.map((each, i) => {
+                  return (
+                    <div className="form-group" key={`form_${i}`}>
+                      <RadioElement
+                        label={each.title}
+                        className="radiobox"
+                        name="myform"
+                        value={each.id}
+                        changeHandler={e => {
+                          handleRadioChange(e, each.title);
+                        }}
+                      />
+                      <div className="select-form-info">
+                        <span className="form-owner">{each.owner}</span>
+                        <time>
+                          <i className="la la-clock-o"></i>
+                          {each.date_created}
+                        </time>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div className="form-group pull-right no-margin">
+                  <button
+                    type="button"
+                    className="fieldsight-btn"
+                    onClick={handleSaveForm}
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        )}
+
+        {activeTab === "sharedForms" && (
+          <div
+            className="thumb-list mr-0 "
+            style={{ position: "relative", height: "327px" }}
+          >
+            {sharedList.length == 0 ? (
+              <div>No Form Available</div>
+            ) : (
+              <form
+                className="floating-form"
+                onSubmit={e => {
+                  e.preventDefault();
+                }}
+              >
+                <div className="form-group">
+                  <input
+                    type="search"
+                    className="form-control"
+                    placeholder="Search"
+                    onChange={onChangeHandler}
+                  />
+                  <i className="la la-search" />
+                </div>
+                {sharedList.map((each, i) => {
                   return (
                     <div className="form-group" key={`form_${i}`}>
                       <RadioElement

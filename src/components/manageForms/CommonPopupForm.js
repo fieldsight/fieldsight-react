@@ -9,12 +9,6 @@ import Modal from "../common/Modal";
 
 const animatedComponents = makeAnimated();
 
-const RegionType = [
-  { value: "1", label: "Region 1" },
-  { value: "2", label: "Region 2" },
-  { value: "3", label: "Region 3" }
-];
-
 class CommonPopupForm extends Component {
   state = {
     optionRegion: [],

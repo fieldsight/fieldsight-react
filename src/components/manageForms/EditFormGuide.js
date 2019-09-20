@@ -20,10 +20,11 @@ class EditFormGuide extends Component {
     data: {
       title: this.props.data.title ? this.props.data.title : "",
       text: this.props.data.text ? this.props.data.text : "",
-      fsxf: this.props.data.fsxf ? this.props.data.fsxf : ""
+      fsxf: this.props.data.fsxf ? this.props.data.fsxf : "",
+      is_pdf: this.props.data.is_pdf ? this.props.data.is_pdf : false
     },
     fileName: this.props.data.pdf ? getFilename(this.props.data.pdf) : "",
-    isPdf: this.props.data.is_pdf ? this.props.data.is_pdf : false,
+    // isPdf: this.props.data.is_pdf ? this.props.data.is_pdf : false,
     srcs: this.props.data.em_images ? getImages(this.props.data.em_images) : [],
     file: {}
   };
@@ -33,10 +34,11 @@ class EditFormGuide extends Component {
     this.setState({
       data: {
         ...this.state.data,
-        pdf: newFile
+        pdf: newFile,
+        is_pdf: true
       },
-      fileName: newFile.name,
-      isPdf: true
+      fileName: newFile.name
+      // isPdf: true
     });
   };
 
@@ -83,6 +85,7 @@ class EditFormGuide extends Component {
     } else {
       body = { ...data };
     }
+
     this.props.handleUpdateGuide(body);
   };
   render() {
@@ -90,8 +93,7 @@ class EditFormGuide extends Component {
       state: {
         srcs,
         fileName,
-        data: { title, text },
-        isPdf
+        data: { title, text, is_pdf }
       },
       props: { handleCancel },
       readFile,
@@ -189,7 +191,7 @@ class EditFormGuide extends Component {
           <div className="col-md-6 col-md-8">
             <div className="form-group">
               <label>{" Attach File"}</label>
-              {isPdf ? (
+              {is_pdf ? (
                 <Dropzone
                   accept=".pdf"
                   onDrop={acceptedFile => readFile(acceptedFile)}
