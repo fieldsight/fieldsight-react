@@ -4,7 +4,7 @@ import { Switch, Route, Link, withRouter } from "react-router-dom";
 import axios from "axios";
 import GeneralForms from "./GeneralForms";
 import ScheduleForms from "./ScheduleForms";
-import StageForms from "./StageForms";
+import StagedForms from "./StagedFoms";
 
 const urls = [
   "fv3/api/project-regions-types/",
@@ -193,11 +193,18 @@ class SideNav extends Component {
             exact
             path={`${path}/stageform`}
             render={props => (
-              <StageForms
+              <StagedForms
                 {...props}
-                title="StageForms"
+                title="StagedForms"
                 OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
+                closePopup={this.props.closePopup}
+                popupModal={this.props.popupModal}
+                typeOptions={typeOptions}
+                regionOptions={regionOptions}
+                myForms={myForms}
+                projectForms={projectForms}
+                sharedForms={sharedForms}
               />
             )}
           />
