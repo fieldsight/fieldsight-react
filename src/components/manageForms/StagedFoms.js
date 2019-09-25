@@ -5,11 +5,11 @@ import { Accordion, Card } from "react-bootstrap";
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
 import RightContentCard from "../common/RightContentCard";
-import CommonPopupForm from "./CommonPopupForm";
+import GlobalModalForm from "./GlobalModalForm";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import SubStageTable from "./subStageTable";
-import StageForm from "./StageForm";
+import AddStageForm from "./AddStageForm";
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -171,69 +171,71 @@ class StagedForms extends Component {
       handleRequestSubStage
     } = this;
     return (
-      <RightContentCard
-        title="Staged Forms"
-        addButton={true}
-        toggleModal={this.props.commonPopupHandler}
-        showText={true}
-      >
-        {loader && <DotLoader />}
-        {!loader && (
-          <Accordion defaultActiveKey={0} className="card no-boxshadow">
-            {data.length > 0 &&
-              data.map((each, index) => (
-                <Card key={`key_${index}`}>
-                  <Accordion.Toggle
-                    as={Card.Header}
-                    eventKey={`${each.order}`}
-                    className="card-header"
-                    onClick={() => {
-                      handleRequestSubStage(each.id);
-                    }}
-                  >
-                    <h5>
-                      #{index + 1} {each.name}
-                    </h5>
-                  </Accordion.Toggle>
-                  <Accordion.Collapse eventKey={`${each.order}`}>
-                    <Card.Body>
-                      <div className="add-btn pull-left">
-                        <a href="#" data-tab="addSubStage-popup">
-                          Add substage
-                          <span>
-                            <i className="la la-plus"></i>
-                          </span>
-                        </a>
-                      </div>
-                      <div className="add-btn pull-left">
-                        <a href="#" data-tab="addSubStage-popup">
-                          Edit
-                          <span>
-                            <i className="la la-edit"></i>
-                          </span>
-                        </a>
-                      </div>
-                      {!!loadSubStage && <DotLoader />}
-                      {!loadSubStage && !!subStageData && (
-                        <SubStageTable
-                          data={subStageData}
-                          handleEditGuide={this.handleEditGuide}
-                          changeDeployStatus={this.changeDeployStatus}
-                          deleteItem={this.deleteItem}
-                        />
-                      )}
-                    </Card.Body>
-                  </Accordion.Collapse>
-                </Card>
-              ))}
-          </Accordion>
-        )}
-        {this.props.popupModal && (
-          <Modal title="Stage Form" toggleModal={this.handleStageForm}>
-            <StageForm />
-          </Modal>
-        )}
-      </RightContentCard>
+      <div className="col-xl-9 col-lg-8">
+        <RightContentCard
+          title="Staged Forms"
+          addButton={true}
+          toggleModal={this.props.commonPopupHandler}
+          showText={true}
+        >
+          {loader && <DotLoader />}
+          {!loader && (
+            <Accordion defaultActiveKey={0} className="card no-boxshadow">
+              {data.length > 0 &&
+                data.map((each, index) => (
+                  <Card key={`key_${index}`}>
+                    <Accordion.Toggle
+                      as={Card.Header}
+                      eventKey={`${each.order}`}
+                      className="card-header"
+                      onClick={() => {
+                        handleRequestSubStage(each.id);
+                      }}
+                    >
+                      <h5>
+                        #{index + 1} {each.name}
+                      </h5>
+                    </Accordion.Toggle>
+                    <Accordion.Collapse eventKey={`${each.order}`}>
+                      <Card.Body>
+                        <div className="add-btn pull-left">
+                          <a href="#" data-tab="addSubStage-popup">
+                            Add substage
+                            <span>
+                              <i className="la la-plus"></i>
+                            </span>
+                          </a>
+                        </div>
+                        <div className="add-btn pull-left">
+                          <a href="#" data-tab="addSubStage-popup">
+                            Edit
+                            <span>
+                              <i className="la la-edit"></i>
+                            </span>
+                          </a>
+                        </div>
+                        {!!loadSubStage && <DotLoader />}
+                        {!loadSubStage && !!subStageData && (
+                          <SubStageTable
+                            data={subStageData}
+                            handleEditGuide={this.handleEditGuide}
+                            changeDeployStatus={this.changeDeployStatus}
+                            deleteItem={this.deleteItem}
+                          />
+                        )}
+                      </Card.Body>
+                    </Accordion.Collapse>
+                  </Card>
+                ))}
+            </Accordion>
+          )}
+          {this.props.popupModal && (
+            <Modal title="Stage Form" toggleModal={this.handleStageForm}>
+              <AddStageForm />
+            </Modal>
+          )}
+        </RightContentCard>
+      </div>
     );
   }
 }

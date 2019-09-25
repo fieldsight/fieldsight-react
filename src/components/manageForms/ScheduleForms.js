@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
 import RightContentCard from "../common/RightContentCard";
-import CommonPopupForm from "./CommonPopupForm";
+import GlobalModalForm from "./GlobalModalForm";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import ScheduleFormTable from "./ScheduleFormTable";
 import EditFormGuide from "./EditFormGuide";
@@ -303,134 +303,142 @@ class ScheduleForms extends Component {
     // console.log("props", this.props);
 
     return (
-      <RightContentCard
-        title="Schedule Forms"
-        addButton={true}
-        toggleModal={this.props.commonPopupHandler}
-        showText={true}
-      >
-        {loader && <DotLoader />}
-        {!loader && (
-          <ScheduleFormTable
-            data={data}
-            loader={loader}
-            changeDeployStatus={this.changeDeployStatus}
-            deleteItem={this.deleteItem}
-            handleEditGuide={this.handleEditGuide}
-          />
-        )}
+      <div className="col-xl-9 col-lg-8">
+        <RightContentCard
+          title="Schedule Forms"
+          addButton={true}
+          toggleModal={this.props.commonPopupHandler}
+          showText={true}
+        >
+          {loader && <DotLoader />}
+          {!loader && (
+            <ScheduleFormTable
+              data={data}
+              loader={loader}
+              changeDeployStatus={this.changeDeployStatus}
+              deleteItem={this.deleteItem}
+              handleEditGuide={this.handleEditGuide}
+            />
+          )}
 
-        {this.props.popupModal && (
-          <Modal title="Add Schedule Form" toggleModal={this.props.closePopup}>
-            <form
-              className="floating-form"
-              onSubmit={this.handleCreateGeneralForm}
+          {this.props.popupModal && (
+            <Modal
+              title="Add Schedule Form"
+              toggleModal={this.props.closePopup}
             >
-              <div className="form-form">
-                <div className="selected-form">
-                  <div className="add-btn flex-start">
-                    <a data-tab="choose-form" onClick={this.toggleFormModal}>
-                      {formTitle ? "Change form" : " Choose form"}
-                      <span>
-                        <i className="la la-plus"></i>
-                      </span>
-                    </a>
+              {/* <form
+                className="floating-form"
+                onSubmit={this.handleCreateGeneralForm}
+              >
+                <div className="form-form">
+                  <div className="selected-form">
+                    <div className="add-btn flex-start">
+                      <a data-tab="choose-form" onClick={this.toggleFormModal}>
+                        {formTitle ? "Change form" : " Choose form"}
+                        <span>
+                          <i className="la la-plus"></i>
+                        </span>
+                      </a>
+                    </div>
+                    <div className="selected-text">
+                      <span>{formTitle}</span>
+                    </div>
                   </div>
-                  <div className="selected-text">
-                    <span>{formTitle}</span>
+                </div> */}
+              {/* <div className="form-group checkbox-group">
+                  <label>Type of schedule</label>
+                  <div className="custom-checkbox display-inline">
+                    <RadioElement
+                      label="Daily"
+                      name="scheduleType"
+                      value={"daily"}
+                      changeHandler={handleRadioChange}
+                    />
+                    <RadioElement
+                      label="Weekly"
+                      name="scheduleType"
+                      value={weekly}
+                      changeHandler={handleRadioChange}
+                    />
+                    <RadioElement
+                      label="Monthly"
+                      name="scheduleType"
+                      value={"monthly"}
+                      changeHandler={handleRadioChange}
+                    />
                   </div>
-                </div>
-              </div>
-              <div className="form-group checkbox-group">
-                <label>Type of schedule</label>
-                <div className="custom-checkbox display-inline">
-                  <RadioElement
-                    label="Daily"
-                    name="scheduleType"
-                    value={"daily"}
-                    changeHandler={handleRadioChange}
-                  />
-                  <RadioElement
-                    label="Weekly"
-                    name="scheduleType"
-                    value={weekly}
-                    changeHandler={handleRadioChange}
-                  />
-                  <RadioElement
-                    label="Monthly"
-                    name="scheduleType"
-                    value={"monthly"}
-                    changeHandler={handleRadioChange}
-                  />
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-xl-6">
-                  <div className="form-group">
-                    <DatePicker />
-                    {/* <input type="text" className="form-control"
+                </div> */}
+              {/* <div className="row">
+                  <div className="col-xl-6">
+                    <div className="form-group">
+                      <DatePicker /> */}
+              {/* <input type="text" className="form-control"
                           required />
                       <label for="input">Start Date</label> */}
+              {/* </div>
                   </div>
-                </div>
-                <div className="col-xl-6">
-                  <div className="form-group">
-                    {/* <input type="text" className="form-control"
+                  <div className="col-xl-6">
+                    <div className="form-group"> */}
+              {/* <input type="text" className="form-control"
                           required />
                       <label for="input">End Date</label> */}
+              {/* </div>
                   </div>
-                </div>
-              </div>
-              <CommonPopupForm
+                </div> */}
+              <GlobalModalForm
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                handleRadioChange={handleRadioChange}
-                handleSelectRegionChange={handleSelectRegionChange}
-                handleSelectTypeChange={handleSelectTypeChange}
-                commonFormData={commonFormData}
+                myForms={this.props.myForms}
+                projectForms={this.props.projectForms}
+                sharedForms={this.props.sharedForms}
+                // handleRadioChange={handleRadioChange}
+                // handleSelectRegionChange={handleSelectRegionChange}
+                // handleSelectTypeChange={handleSelectTypeChange}
+                // commonFormData={commonFormData}
                 // optionRegion={optionRegion}
                 // optionType={optionType}
               />
-              <div className="form-group pull-right no-margin">
-                <button type="submit" className="fieldsight-btn">
-                  Add Form
-                </button>
-              </div>
-            </form>
-            {/* </div> */}
-          </Modal>
-        )}
-        {editGuide && (
-          <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
-            <EditFormGuide
-              data={guideData}
-              handleCancel={this.handleEditGuide}
-              handleUpdateGuide={this.handleUpdateGuide}
-              handleCreateGuide={this.handleCreateGuide}
-            />
-          </Modal>
-        )}
-        {showFormModal && (
-          <Modal
-            title="Add Form"
-            toggleModal={this.toggleFormModal}
-            showButton={true}
-            showText="Create Form"
-            url="/forms/create/"
-          >
-            <AddForm
-              activeTab={activeTab}
-              toggleTab={this.toggleTab}
-              onChangeHandler={this.onChangeHandler}
-              formList={myFormList}
-              projectList={projectFormList}
-              sharedList={sharedFormList}
-              handleRadioChange={this.handleMyFormChange}
-              handleSaveForm={this.handleSaveForm}
-            />
-          </Modal>
-        )}
-      </RightContentCard>
+              {/* <div className="form-group pull-right no-margin">
+                  <button type="submit" className="fieldsight-btn">
+                    Add Form
+                  </button>
+                </div>
+              </form> */}
+              {/* </div> */}
+            </Modal>
+          )}
+          {editGuide && (
+            <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
+              <EditFormGuide
+                data={guideData}
+                handleCancel={this.handleEditGuide}
+                handleUpdateGuide={this.handleUpdateGuide}
+                handleCreateGuide={this.handleCreateGuide}
+              />
+            </Modal>
+          )}
+          {/* {showFormModal && (
+            <Modal
+              title="Add Form"
+              toggleModal={this.toggleFormModal}
+              showButton={true}
+              showText="Create Form"
+              url="/forms/create/"
+            >
+              <AddForm
+                activeTab={activeTab}
+                toggleTab={this.toggleTab}
+                onChangeHandler={this.onChangeHandler}
+                formList={myFormList}
+                projectList={projectFormList}
+                sharedList={sharedFormList}
+                handleRadioChange={this.handleMyFormChange}
+                handleSaveForm={this.handleSaveForm}
+              />
+            </Modal>
+          )} */}
+        </RightContentCard>
+      </div>
     );
   }
 }

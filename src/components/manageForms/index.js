@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 import axios from "axios";
 import SideNav from "./SideNav";
 import Modal from "../common/Modal";
-import CommonPopupForm from "./CommonPopupForm";
 
 class ManageForms extends Component {
   state = {

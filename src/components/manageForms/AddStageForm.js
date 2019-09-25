@@ -6,7 +6,7 @@ import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
 const animatedComponents = makeAnimated();
 
-class StageForm extends Component {
+class AddStageForm extends Component {
   state = {
     optionRegion: [],
     optionType: [],
@@ -98,4 +98,4 @@ class StageForm extends Component {
     );
   }
 }
-export default StageForm;
+export default AddStageForm;

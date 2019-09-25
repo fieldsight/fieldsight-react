@@ -4,7 +4,7 @@ import axios from "axios";
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
 import RightContentCard from "../common/RightContentCard";
-import CommonPopupForm from "./CommonPopupForm";
+import GlobalModalForm from "./GlobalModalForm";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
@@ -412,93 +412,98 @@ class GeneralForms extends Component {
     // console.log(this.state.myFormList, "in drender", myForms);
 
     return (
-      <RightContentCard
-        title="General Forms"
-        addButton={true}
-        toggleModal={this.props.commonPopupHandler}
-        showText={true}
-      >
-        {loader && <DotLoader />}
-        {!loader && (
-          <GeneralFormTable
-            data={data}
-            loader={loader}
-            handleEditGuide={this.handleEditGuide}
-            changeDeployStatus={this.changeDeployStatus}
-            deleteItem={this.deleteItem}
-          />
-        )}
-        {this.props.popupModal && (
-          <Modal title="Add General Form" toggleModal={handleClearState}>
-            <form
-              className="floating-form"
-              onSubmit={this.handleCreateGeneralForm}
-            >
-              <div className="form-form">
-                <div className="selected-form">
-                  <div className="add-btn flex-start">
-                    <a data-tab="choose-form" onClick={this.toggleFormModal}>
-                      {formTitle ? "Change form" : " Choose form"}
-                      <span>
-                        <i className="la la-plus"></i>
-                      </span>
-                    </a>
+      <div className="col-xl-9 col-lg-8">
+        <RightContentCard
+          title="General Forms"
+          addButton={true}
+          toggleModal={this.props.commonPopupHandler}
+          showText={true}
+        >
+          {loader && <DotLoader />}
+          {!loader && (
+            <GeneralFormTable
+              data={data}
+              loader={loader}
+              handleEditGuide={this.handleEditGuide}
+              changeDeployStatus={this.changeDeployStatus}
+              deleteItem={this.deleteItem}
+            />
+          )}
+          {this.props.popupModal && (
+            <Modal title="Add General Form" toggleModal={handleClearState}>
+              {/* <form
+                className="floating-form"
+                onSubmit={this.handleCreateGeneralForm}
+              >
+                <div className="form-form">
+                  <div className="selected-form">
+                    <div className="add-btn flex-start">
+                      <a data-tab="choose-form" onClick={this.toggleFormModal}>
+                        {formTitle ? "Change form" : " Choose form"}
+                        <span>
+                          <i className="la la-plus"></i>
+                        </span>
+                      </a>
+                    </div>
+                    <div className="selected-text">
+                      <span>{formTitle}</span>
+                    </div>
                   </div>
-                  <div className="selected-text">
-                    <span>{formTitle}</span>
-                  </div>
-                </div>
-              </div>
-              <CommonPopupForm
+                </div> */}
+              <GlobalModalForm
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                handleRadioChange={handleRadioChange}
-                handleSelectRegionChange={handleSelectRegionChange}
-                handleSelectTypeChange={handleSelectTypeChange}
-                commonFormData={commonFormData}
+                myForms={this.props.myForms}
+                projectForms={this.props.projectForms}
+                sharedForms={this.props.sharedForms}
+                // handleRadioChange={handleRadioChange}
+                // handleSelectRegionChange={handleSelectRegionChange}
+                // handleSelectTypeChange={handleSelectTypeChange}
+                // commonFormData={commonFormData}
                 // optionRegion={optionRegion}
                 // optionType={optionType}
               />
-              <div className="form-group pull-right no-margin">
-                <button type="submit" className="fieldsight-btn">
-                  Add Form
-                </button>
-              </div>
-            </form>
-            {/* </div> */}
-          </Modal>
-        )}
-        {editGuide && (
-          <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
-            <EditFormGuide
-              data={guideData}
-              handleCancel={this.handleEditGuide}
-              handleUpdateGuide={this.handleUpdateGuide}
-              handleCreateGuide={this.handleCreateGuide}
-            />
-          </Modal>
-        )}
-        {showFormModal && (
-          <Modal
-            title="Add Form"
-            toggleModal={this.toggleFormModal}
-            showButton={true}
-            showText="Create Form"
-            url="/forms/create/"
-          >
-            <AddForm
-              activeTab={activeTab}
-              toggleTab={this.toggleTab}
-              onChangeHandler={this.onChangeHandler}
-              formList={myFormList}
-              projectList={projectFormList}
-              sharedList={sharedFormList}
-              handleRadioChange={this.handleMyFormChange}
-              handleSaveForm={this.handleSaveForm}
-            />
-          </Modal>
-        )}
-      </RightContentCard>
+              {/* <div className="form-group pull-right no-margin">
+                  <button type="submit" className="fieldsight-btn">
+                    Add Form
+                  </button>
+                </div>
+              </form> */}
+              {/* </div> */}
+            </Modal>
+          )}
+          {editGuide && (
+            <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
+              <EditFormGuide
+                data={guideData}
+                handleCancel={this.handleEditGuide}
+                handleUpdateGuide={this.handleUpdateGuide}
+                handleCreateGuide={this.handleCreateGuide}
+              />
+            </Modal>
+          )}
+          {/* {showFormModal && (
+            <Modal
+              title="Add Form"
+              toggleModal={this.toggleFormModal}
+              showButton={true}
+              showText="Create Form"
+              url="/forms/create/"
+            >
+              <AddForm
+                activeTab={activeTab}
+                toggleTab={this.toggleTab}
+                onChangeHandler={this.onChangeHandler}
+                formList={myFormList}
+                projectList={projectFormList}
+                sharedList={sharedFormList}
+                handleRadioChange={this.handleMyFormChange}
+                handleSaveForm={this.handleSaveForm}
+              />
+            </Modal>
+          )} */}
+        </RightContentCard>
+      </div>
     );
   }
   componentWillUnmount() {
