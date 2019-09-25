@@ -179,6 +179,29 @@ class GeneralForms extends Component {
         errorToast(err);
       });
   };
+  handleClearState = () => {
+    this.setState(
+      {
+        formId: "",
+        formTitle: "",
+        isProjectForm: "",
+        commonFormData: {
+          status: 3,
+          isDonor: false,
+          isEdit: false,
+          isDelete: false,
+          regionSelected: [],
+          typeSelected: [],
+          xf: ""
+        },
+        activeTab: "myForms",
+        showFormModal: false
+      },
+      () => {
+        this.props.closePopup();
+      }
+    );
+  };
   toggleFormModal = () => {
     this.setState({ showFormModal: !this.state.showFormModal });
   };
@@ -383,7 +406,8 @@ class GeneralForms extends Component {
       props: { typeOptions, regionOptions },
       handleRadioChange,
       handleSelectRegionChange,
-      handleSelectTypeChange
+      handleSelectTypeChange,
+      handleClearState
     } = this;
     // console.log(this.state.myFormList, "in drender", myForms);
 
@@ -405,7 +429,7 @@ class GeneralForms extends Component {
           />
         )}
         {this.props.popupModal && (
-          <Modal title="Add General Form" toggleModal={this.props.closePopup}>
+          <Modal title="Add General Form" toggleModal={handleClearState}>
             <form
               className="floating-form"
               onSubmit={this.handleCreateGeneralForm}

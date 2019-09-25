@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import DatePicker from "react-datepicker";
 
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
@@ -38,7 +39,10 @@ class ScheduleForms extends Component {
     isProjectForm: "",
     myFormList: [],
     projectFormList: [],
-    sharedFormList: []
+    sharedFormList: [],
+    scheduleType: "",
+    startDate: new Date(),
+    endDate: new Date()
   };
 
   requestScheduleForm(id) {
@@ -199,6 +203,10 @@ class ScheduleForms extends Component {
             isDelete: JSON.parse(value)
           }
         };
+      } else if (name == "scheduleType") {
+        return {
+          scheduleType: value
+        };
       }
     });
   };
@@ -255,6 +263,21 @@ class ScheduleForms extends Component {
       sharedFormList: this.props.sharedForms,
       projectFormList: this.props.projectForms
     });
+  };
+  handleStartDate = date => {
+    const { endDate } = this.state;
+    // this.setState(state => {
+    //   if(date > endDate) {
+    //     return{
+    //       startDate: endDate
+    //     }
+    //   } else{
+
+    //   }
+    // })
+  };
+  handleEndDate = date => {
+    const { startDate } = this.state;
   };
   render() {
     const {
@@ -315,6 +338,46 @@ class ScheduleForms extends Component {
                   </div>
                   <div className="selected-text">
                     <span>{formTitle}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="form-group checkbox-group">
+                <label>Type of schedule</label>
+                <div className="custom-checkbox display-inline">
+                  <RadioElement
+                    label="Daily"
+                    name="scheduleType"
+                    value={"daily"}
+                    changeHandler={handleRadioChange}
+                  />
+                  <RadioElement
+                    label="Weekly"
+                    name="scheduleType"
+                    value={weekly}
+                    changeHandler={handleRadioChange}
+                  />
+                  <RadioElement
+                    label="Monthly"
+                    name="scheduleType"
+                    value={"monthly"}
+                    changeHandler={handleRadioChange}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xl-6">
+                  <div className="form-group">
+                    <DatePicker />
+                    {/* <input type="text" className="form-control"
+                          required />
+                      <label for="input">Start Date</label> */}
+                  </div>
+                </div>
+                <div className="col-xl-6">
+                  <div className="form-group">
+                    {/* <input type="text" className="form-control"
+                          required />
+                      <label for="input">End Date</label> */}
                   </div>
                 </div>
               </div>

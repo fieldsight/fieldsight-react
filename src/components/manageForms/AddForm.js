@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import RadioElement from "../common/RadioElement";
 
 class AddForm extends Component {
@@ -19,7 +19,7 @@ class AddForm extends Component {
         sharedList
       }
     } = this;
-    console.log("project", projectList);
+    // console.log("project", projectList);
 
     return (
       <>
@@ -148,28 +148,37 @@ class AddForm extends Component {
                   />
                   <i className="la la-search" />
                 </div>
-                {projectList.map((each, i) => {
-                  return (
-                    <div className="form-group" key={`form_${i}`}>
-                      <RadioElement
-                        label={each.title}
-                        className="radiobox"
-                        name="myform"
-                        value={each.id}
-                        changeHandler={e => {
-                          handleRadioChange(e, each.title);
-                        }}
-                      />
-                      <div className="select-form-info">
-                        <span className="form-owner">{each.owner}</span>
-                        <time>
-                          <i className="la la-clock-o"></i>
-                          {each.date_created}
-                        </time>
+                {projectList.map((each, i) => (
+                  <Fragment key={`form_${i}`}>
+                    {each.forms && each.forms.length > 0 && (
+                      <div className="form-group">
+                        <div>
+                          <h5>{each.name}</h5>
+                        </div>
+                        {each.forms.map((item, i) => (
+                          <div className="form-group" key={`form_${i}`}>
+                            <RadioElement
+                              label={item.title}
+                              className="radiobox"
+                              name="myform"
+                              value={item.id}
+                              changeHandler={e => {
+                                handleRadioChange(e, item.title);
+                              }}
+                            />
+                            <div className="select-form-info">
+                              <span className="form-owner">{item.owner}</span>
+                              <time>
+                                <i className="la la-clock-o"></i>
+                                {each.date_created}
+                              </time>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                  );
-                })}
+                    )}
+                  </Fragment>
+                ))}
                 <div className="form-group pull-right no-margin">
                   <button
                     type="button"
