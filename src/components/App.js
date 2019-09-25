@@ -40,7 +40,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      height:0
+      height:0,
+      region:false
     };
   }
 
@@ -59,6 +60,14 @@ class App extends Component {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
   }
+  pathChanger=()=>{
+    if(path="/regional-site-add"){
+      console.log("hiiiiii")
+    }else if(path="/sub-site-add/:id/:id"){
+      console.log("hee")
+    }
+
+  }
 
   render() {  
     return (
@@ -67,8 +76,10 @@ class App extends Component {
           <div id="main-container">
             <div className="container-fluid">
               <main id="main-content">
+               
                 <Router>
                   <Switch>
+                   
                     <Route
                       path="/project-settings"
                       render={props => <Settings {...props} />}
@@ -165,8 +176,16 @@ class App extends Component {
                     />
                     <Route
                       path="/create-site/:id"
-                      render={props => <SiteAdd  {...props} />}
+                      render={props => <SiteAdd  {...props}  page="CreateSite"/>}
                     />
+                    <Route
+                     path="/regional-site-add/:id/:regionalId"
+                      render={props => <SiteAdd  {...props} page="regionalSite" />}
+                    />
+                     <Route
+                      path="/sub-site-add/:id/:siteId"
+                      render={props => <SiteAdd  {...props} page="subSite" />}
+                     />
                   </Switch>
                   <ToastContainer />
                 </Router>

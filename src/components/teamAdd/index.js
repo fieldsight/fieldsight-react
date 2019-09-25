@@ -278,7 +278,7 @@ class index extends Component {
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
-                  <div className="form-group">
+                <div className="form-group">
                     <InputElement
                       formType="editForm"
                       tag="input"

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import L from "leaflet";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import axios from "axios";
@@ -9,6 +9,9 @@ import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
+import CheckBox from "../common/CheckBox";
+import Select from "./Select"
+
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import "leaflet/dist/leaflet.css";
@@ -21,6 +24,7 @@ L.Icon.Default.mergeOptions({
 });
 
 export default class SiteAdd extends Component{
+  _isMounted = false;
     state = {
         project: {
             name:"",
@@ -28,11 +32,13 @@ export default class SiteAdd extends Component{
             phone:"",
             address:"", 
             publicDescription:"",
-            logo:""
+            logo:"",
+            weight:0,
+            cluster_sites:false
          
         },
         loaded: 0,
-        teamTypes: [],
+        jsondata: [],
         position: {
           latitude: "51.505",
           longitude: "-0.09"
@@ -43,33 +49,50 @@ export default class SiteAdd extends Component{
         cropResult: "",
         isLoading: false,
         selectedSiteTypes:"",
-        id:""
+        id:"",
+        selectform:[],
+        selectdata:false,
+        region:[],
+        data:{},
+        regionselected:"",
+        gender:[
+          {key:"male", name:"Male"},
+          {key:"female", name:"Female"}],
+          selectedGender:"",
+          dataSelected:"",
+          id:"",
+          siteId:"",
+          regionalId:"",
+          site_types:[],
+          Selectedtypes:""
        
       };
 
       componentDidMount(){
-        const {match:{params:{id}}}=this.props;
-        axios.get(`/fv3/api/team-types-countries`)
-        .then(res=>{ 
+        this. _isMounted = true;
+        const {match:{params:{id,siteId,regionalId}}}=this.props;
+       
+        
+        axios.get(`/fv3/api/site-form/?project=${id}`)
+        .then(res=>{    
             this.setState({
-              teamTypes:res.data.team_types,
-             
-                id
+              jsondata:res.data.json_questions,
+               id,
+               region:res.data.regions,
+               siteId,
+               regionalId,
+               site_types:res.data.site_types
                })
             }).catch(err=>{
             console.log(err ,"err");
             
         }) 
-        if (this._isMounted){
-          if(sector){
-            
-          }
-        }
+        
         
       }
      
-      onChangeHandler = (e, position) => { 
-        const { name, value } = e.target;
+   onChangeHandler = (e, position) => { 
+     const { name, value } = e.target;
         if (position) {  
           return this.setState({
             position: {
@@ -78,61 +101,201 @@ export default class SiteAdd extends Component{
             }
           });
         }
+        
         this.setState({
             project: {
               ...this.state.project,
               [name]: value
             }
-          });
+          },()=>this.state.weight,this.state);
     }
+   
     onSubmitHandler=(e)=>{
         e.preventDefault()
+         let select;
         const data={
+          project:this.state.id,
           name:this.state.project.name,
-          site_id:this.state.project.site_id,
-          phone:this.state.project.emphoneail,
+          identifier:this.state.project.site_id,
+          phone:this.state.project.phone,
           address:this.state.project.address,
-          publicDescription:this.state.project.publicDescription,
-          selectedSiteTypes:this.state.selectedSiteTypes,
-          cropResult:this.state.cropResult,
+          public_desc:this.state.project.publicDescription,
+          region:this.state.regionselected,
+          logo:this.state.cropResult,
           latitude: this.state.position.latitude,
-          longitude: this.state.position.longitude
-        }
-       
-        
-        axios.post(`fv3/api/teams/`,data)
-        .then(res=>{
-            
-            if(res.status===201){
-              this.setState({
-                project: {
+          longitude: this.state.position.longitude,
+          type:this.state.Selectedtypes,
+          enable_subsites:this.state.project.cluster_sites,
+          site_meta_attributes_ans:JSON.stringify(this.state.data, select=this.state.dataSelected),  
+
+            }
+
+            const Subsite={
+              project:this.state.id,
+              name:this.state.project.name,
+              identifier:this.state.project.site_id,
+              phone:this.state.project.phone,
+              address:this.state.project.address,
+              public_desc:this.state.project.publicDescription,
+              region:this.state.regionselected,
+              logo:this.state.cropResult,
+              latitude: this.state.position.latitude,
+              longitude: this.state.position.longitude,
+              type:this.state.Selectedtypes,
+              site:this.state.siteId,
+              weight:this.state.weight,
+              enable_subsites:this.state.project.cluster_sites,
+              site_meta_attributes_ans:JSON.stringify(this.state.data, select=this.state.dataSelected),
+              
+              
+                }
+                const region={
+                  project:this.state.id,
+                  name:this.state.project.name,
+                  identifier:this.state.project.site_id,
+                  phone:this.state.project.phone,
+                  address:this.state.project.address,
+                  public_desc:this.state.project.publicDescription,
+                  region:this.state.regionalId,
+                  logo:this.state.cropResult,
+                  latitude: this.state.position.latitude,
+                  longitude: this.state.position.longitude,
+                  type:this.state.Selectedtypes,
+                  enable_subsites:this.state.project.cluster_sites,
+                  site_meta_attributes_ans:JSON.stringify(this.state.data, select=this.state.dataSelected),
+                  subsite:this.state.siteId
+                 }
+           
+         
+      
+        if(this.props.page==="CreateSite"){
+          axios({
+            method: "POST",
+            url:`/fv3/api/site-form/?project=${this.state.id}`,
+            data,
+            headers: { 'content-type': 'application/json' },
+          }).then(req=>{
+              if(req.status===201){
+                this.setState({
+                  project: {
                     name:"",
                     site_id:"",
                     phone:"",
                     address:"", 
                     publicDescription:"",
-                    logo:""
+                    logo:"",
+                    cluster_sites:false
                  
-                },           
+                },
                 position: {
                   latitude: "51.505",
                   longitude: "-0.09"
                        },
-                zoom: 13,
                 src: "",
                 showCropper: false,
                 cropResult: "",
                 isLoading: false,
-                selectedCountry:"",
-                selectedteam:""
-        
-              })
-              this.props.history.push(`/team-dashboard/${res.data.id}`);
-            }
-        })
-        .catch(err=>{
-          console.log(err)
-        })
+                selectedSiteTypes:"",
+                id:"",
+                selectdata:false,
+                regionselected:"",
+                selectedGender:"Male",
+                dataSelected:"",
+                id:""  ,
+                data:[]  
+  
+                })
+              }
+          }).catch(err => {
+            console.log(err);
+          });
+        }else if(this.props.page==="subSite"){
+          axios({
+            method: "POST",
+            url:`/fv3/api/site-form/?project=${this.state.id}&site=${this.state.siteId}`,
+            data:Subsite,
+            headers: { 'content-type': 'application/json' },
+          }).then(req=>{
+              if(req.status===201){
+                this.setState({
+                  project: {
+                    name:"",
+                    site_id:"",
+                    phone:"",
+                    address:"", 
+                    publicDescription:"",
+                    logo:"",
+                    cluster_sites:false
+                 
+                },
+                position: {
+                  latitude: "51.505",
+                  longitude: "-0.09"
+                       },
+                src: "",
+                showCropper: false,
+                cropResult: "",
+                isLoading: false,
+                selectedSiteTypes:"",
+                id:"",
+                selectdata:false,
+                regionselected:"",
+                selectedGender:"Male",
+                dataSelected:"",
+                id:""  ,
+                data:[]  
+      
+  
+                })
+              }
+          }).catch(err => {
+            console.log(err);
+          });
+        }else if(this.props.page === "regionalSite"){
+          
+          axios({
+            method: "POST",
+            url:`/fv3/api/site-form/?project=${this.state.id}&region=${this.state.regionalId}`,
+            data:region,
+            headers: { 'content-type': 'application/json' },
+          }).then(req=>{     
+              if(req.status===201){
+                this.setState({
+                  project: {
+                    name:"",
+                    site_id:"",
+                    phone:"",
+                    address:"", 
+                    publicDescription:"",
+                    logo:"",
+                    cluster_sites:false
+                 
+                },
+                position: {
+                  latitude: "51.505",
+                  longitude: "-0.09"
+                       },
+                src: "",
+                showCropper: false,
+                cropResult: "",
+                isLoading: false,
+                selectedSiteTypes:"",
+                id:"",
+                selectdata:false,
+                regionselected:"",
+                selectedGender:"Male",
+                dataSelected:"",
+                id:""   ,
+                data:[]  
+     
+  
+                })
+              }
+          }).catch(err => {
+            console.log(err);
+          });
+        }
+      
 
     }
     mapClickHandler = e => {
@@ -146,14 +309,14 @@ export default class SiteAdd extends Component{
       };
     onSelectChangeHandler=(e,data)=>{
       const {value} =e.target;
-      if (data ==="teamTypes"){
+      if (data ==="regions"){
         this.setState({
-          selectedCountry:value
+          regionselected:value
         })
        
-      }else if (data==="country"){
-        this.setState({
-          selectedCountry:value
+      }else if(data=== "site_types"){
+       this.setState({
+          Selectedtypes:value
         })
 
       }
@@ -184,7 +347,126 @@ export default class SiteAdd extends Component{
         src: ""
       });
     };
-    render(){
+    handleCheckboxChange = e =>{
+      this.setState({
+        project: {
+          ...this.state.project,
+          cluster_sites: e.target.checked
+        }
+      });
+    }
+   
+    
+   
+    ondynamiChangeHandler=(e)=>{
+      const { target: { name, value }} =e 
+      this.setState({
+        data: {
+          ...this.state.data,
+          
+          [name]: value
+        }
+      })
+
+
+    }
+    onchange=e=>{
+     
+      
+      this.setState({
+        selectedGender:e.target.value
+      })
+    }
+    selectedValue=data=>{
+     
+      this.setState({
+        dataSelected:data
+      })
+      
+    }
+    selectform=(data)=>{     
+     if(data.question_type==="Text"){
+          return <div className="col-xl-4 col-md-6" >
+                    <InputElement
+                      formType="editForm"
+                      tag="input"
+                      type={data.question_type}
+                      id={data.id}
+                      label={data.question_text}
+                      name={data.question_name}
+                      value={this.state.data[data.question_name] || ""}
+                      placeholder={data.question_placeholder}
+                      changeHandler={this.ondynamiChangeHandler}
+                    />
+                    <span>{data.question_help}</span>
+                    </div>
+      } else if(data.question_type==="Date"){
+        return  <div className="col-xl-4 col-md-6" >
+                    <InputElement
+                      formType="editForm"
+                      tag="input"
+                      type="text"
+                      id={data.id}
+                      label={data.question_text}
+                      name={data.question_name}
+                      value={this.state.data[data.question_name]  || ""}
+                      placeholder={data.question_placeholder}
+                      changeHandler={this.ondynamiChangeHandler}
+                    />
+                    <span>{data.question_help}</span>
+                    </div>
+      }else if(data.question_type==="MCQ"){ 
+         return ( 
+       <div className="form-group col-xl-4 col-md-6" >
+         <label>{data.question_text}</label>
+         <select   
+            className="form-control" 
+            onChange={this.ondynamiChangeHandler} 
+            name={data.question_name}
+            style={{border: "0",borderBottom: "1px solid #eaeaea"}}>
+         { data.mcq_options.map((option,key)=>{
+          return(
+            <Fragment key={key}>
+               
+                  <option value={option.option_text}>{option.option_text}</option>
+               
+            </Fragment>
+          )
+        })}
+         </select>
+         <span>{data.question_help}</span>
+        </div>
+       )
+      }else if (data.question_type==="Number"){
+       return <div className="col-xl-4 col-md-6" >
+        <InputElement
+        formType="editForm"
+        tag="input"
+        type={data.question_type}
+        id={data.id}
+        label={data.question_text}
+        name={data.question_name}
+        value={this.state.data[data.question_name]  || ""}
+        placeholder={data.question_placeholder}
+        changeHandler={this.ondynamiChangeHandler}
+      />
+      <span>{data.question_help}</span>
+       </div>
+      }else if(data.question_type === "Link"){
+        return  <Select 
+                  data={data.project_id}
+                  onchange={this.ondynamiChangeHandler}
+                  value={this.state.data[data.id]||""}
+                  type={data.question_text}
+                  selectedValue={this.selectedValue}
+                  name={data.question_name}
+                  />
+        }
+      }
+    componentWillUnmount() {
+      this._isMounted = false;
+    }
+    render(){ 
         const {
             onChangeHandler,
             onSubmitHandler, 
@@ -192,6 +474,8 @@ export default class SiteAdd extends Component{
             onSelectChangeHandler,
             readFile,
             closeModal,
+            handleCheckboxChange,
+            ondynamiChangeHandler,
             state: {
             project: {
               name,
@@ -200,8 +484,12 @@ export default class SiteAdd extends Component{
               address,
               website, 
               publicDescription,
-              logo
+              logo,
+              weight,
+            cluster_sites
+
             },
+            region,
             position: {
                 latitude,
                 longitude
@@ -211,11 +499,12 @@ export default class SiteAdd extends Component{
               src,
               showCropper,
               isLoading,
-              teamTypes,
-              country,
-              selectedteam,
-              selectedCountry,
+             
+              jsondata,
+              site_types
                }}=this;
+              
+               
         return (
             <RightContentCard title="New Site">
             <form className="edit-form" onSubmit={onSubmitHandler}>
@@ -244,21 +533,29 @@ export default class SiteAdd extends Component{
                     changeHandler={onChangeHandler}
                   />
                 </div>
-                <div className="col-xl-4 col-md-6">
+              {this.props.page==="CreateSite" || this.props.page==="subSite"?<div className="col-xl-4 col-md-6">
                 <SelectElement
                 className="form-control"
-                label="Type of Sites"
-                options={teamTypes.length>0?teamTypes.map(teamTypes => teamTypes):teamTypes}
-                changeHandler={e => onSelectChangeHandler(e, "teamTypes")}
-                value={selectedteam}
+                label="Regions"
+                options={region.length>0?region.map(region => region):region}
+                changeHandler={e => onSelectChangeHandler(e, "regions")}
+                
                />
-                </div>
-
+        </div>:""}
+        <div className="col-xl-4 col-md-6">
+                <SelectElement
+                className="form-control"
+                label="Types"
+                options={site_types.length>0?site_types.map(region => region):site_types}
+                changeHandler={e => onSelectChangeHandler(e, "site_types")}
+                
+               />
+</div>
                 <div className="col-xl-4 col-md-6">
                   <InputElement
                     formType="editForm"
                     tag="input"
-                    type="Phone"
+                    type="text"
                     required={true}
                     label="Phone"
                     name="phone"
@@ -278,7 +575,27 @@ export default class SiteAdd extends Component{
                     changeHandler={onChangeHandler}
                   />
                 </div>
-               
+                <div className="col-xl-4 col-md-6">
+              <div className="form-group">
+                <CheckBox
+                  checked={this.state.project.cluster_sites || ""}
+                  label="Enable subsites"
+                  onChange={handleCheckboxChange}
+                />
+              </div>
+            </div>
+            {this.props.page==="subSite"?<div className="col-xl-4 col-md-6">
+                <InputElement
+                    formType="editForm"
+                    tag="input"
+                    type="number"
+                    required={true}
+                    label="Weight"
+                    name="weight"
+                    value={this.state.weight}
+                    changeHandler={(e)=>this.setState({weight:e.target.value})}
+                  />
+        </div>:""}
                 <div className="col-xl-4 col-md-6">
                   <div className="form-group">
                   <InputElement
@@ -408,7 +725,19 @@ export default class SiteAdd extends Component{
                     )}
                   </div>
                 </div>
-    
+                {
+               
+             jsondata.map((data,key)=>{
+               
+            return (
+             <Fragment key={key}>
+               {this.selectform(data)}
+               </Fragment>
+              )}
+              )
+              
+             
+            }
                 <div className="col-sm-12">
                   <button type="submit" className="fieldsight-btn pull-right">
                     Save
@@ -459,6 +788,8 @@ export default class SiteAdd extends Component{
                 </div>
               </Modal>
             )}
+            
+         
             {isLoading && <Loader loaded={loaded} />}
           </RightContentCard>
     
