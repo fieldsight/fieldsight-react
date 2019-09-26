@@ -86,16 +86,14 @@ export default class SiteEdit extends Component{
                         logo:response.data.logo,
                         weight:response.data.weight,
                         cluster_sites:response.data.enable_subsites,
-                        
-                    },
-                    
+                      },
                     regionselected:response.data.region,
-                        Selectedtypes:response.data.types,
+                    Selectedtypes:response.data.types,
                     data:response.data.site_meta_attributes_ans,
                     cropResult:response.data.logo
                     })
                     }).catch(err=>{
-                    console.log(err ,"err");
+                    console.log(err,"err");
                   }) 
           }).catch(err=>{
             console.log(err ,"err");
