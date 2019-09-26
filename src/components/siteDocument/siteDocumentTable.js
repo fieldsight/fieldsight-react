@@ -5,7 +5,7 @@ export default class  SiteDocumentTable extends Component{
     render(){
         const {site_document} = this.props;
         return(
-            <table id="no_paging_table" className="table  dataTable table-bordered  no_paging_table"  responsive="xl">
+            <table id="no_paging_table" className="table  dataTable table-bordered sitedoc-list"  responsive="xl">
                      <thead>
                              <tr>
                                 <th >Name</th>

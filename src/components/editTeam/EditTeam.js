@@ -56,7 +56,7 @@ class EditTeam extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { teamId } = this.state;
-
+    
     axios
       .all(
         urls.map((url, i) => {
@@ -65,6 +65,9 @@ class EditTeam extends Component {
       )
       .then(
         axios.spread((team, types) => {
+         
+          this.props.teamData(team.data.name)
+          
           if (this._isMounted) {
             if (team && types) {
               const position =
@@ -256,6 +259,7 @@ class EditTeam extends Component {
   };
 
   render() {
+    
     const {
       state: {
         loaded,

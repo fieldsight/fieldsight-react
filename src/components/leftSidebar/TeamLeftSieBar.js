@@ -58,8 +58,10 @@ class TeamLeftSidebar extends Component {
   };
 
   render() {
+    const {height} =this.props;
+    
     return (
-      <ul className="nav nav-tabs flex-column border-tabs">
+      <ul className="nav nav-tabs flex-column border-tabs" style={{ minHeight:(height > 0 ? height:"") }}>
         {this.renderNavRoutes()}
       </ul>
     );

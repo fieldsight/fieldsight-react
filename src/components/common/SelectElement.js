@@ -1,5 +1,5 @@
 import React from "react";
-import uuid from "uuid/v4";
+
 const SelectElement = ({
   formType,
   className,
@@ -18,11 +18,9 @@ const SelectElement = ({
       <div className="select-option">
         <select
           className={className}
-          onChange={changeHandler}
-          // onFocus={options.length > 0 ? changeHandler : () => {}}
+          onChange={changeHandler}     
           value={value ? value : undefined}
         >
-          {/* {options.length > 0 ? ( */}
           {options.map((option, i) => (
             <option
               value={
@@ -35,17 +33,13 @@ const SelectElement = ({
                   : option
               }
               key={`${
-                option.name ? option.name : option.value ? option.value : option
+                option.name ? option.name : option.value ? option.value : option.identifier ? option.identifier : option
               }${i}`}
             >
-              {option.name ? option.name : option.value ? option.value : option}
+              {option.name ? option.name : option.value ? option.value : option.identifier ? option.identifier : option} 
             </option>
           ))}
-          {/* ) : value ? (
-          <option>{value}</option>
-        ) : (
-          <option>--Select--</option>
-        )} */}
+          
         </select>
       </div>
     </div>
