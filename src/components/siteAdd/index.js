@@ -313,14 +313,11 @@ export default class SiteAdd extends Component{
         this.setState({
           regionselected:value
         })
-       
-      }else if(data=== "site_types"){
+       }else if(data=== "site_types"){
        this.setState({
           Selectedtypes:value
         })
-
       }
-
     }
     closeModal = () => {
         this.setState({
@@ -338,6 +335,7 @@ export default class SiteAdd extends Component{
         reader.readAsDataURL(file[0]);
       };
     cropImage = () => {
+     
         if (typeof this.cropper.getCroppedCanvas() === "undefined") {
         return;
         }
@@ -355,10 +353,7 @@ export default class SiteAdd extends Component{
         }
       });
     }
-   
-    
-   
-    ondynamiChangeHandler=(e)=>{
+   ondynamiChangeHandler=(e)=>{
       const { target: { name, value }} =e 
       this.setState({
         data: {
@@ -367,12 +362,8 @@ export default class SiteAdd extends Component{
           [name]: value
         }
       })
-
-
     }
     onchange=e=>{
-     
-      
       this.setState({
         selectedGender:e.target.value
       })
@@ -391,7 +382,7 @@ export default class SiteAdd extends Component{
                       formType="editForm"
                       tag="input"
                       type={data.question_type}
-                      id={data.id}
+                      id={data.id}g
                       label={data.question_text}
                       name={data.question_name}
                       value={this.state.data[data.question_name] || ""}
@@ -466,6 +457,8 @@ export default class SiteAdd extends Component{
     componentWillUnmount() {
       this._isMounted = false;
     }
+    
+    
     render(){ 
         const {
             onChangeHandler,
@@ -504,7 +497,7 @@ export default class SiteAdd extends Component{
               site_types
                }}=this;
               
-               
+               console.log(region);
         return (
             <RightContentCard title="New Site">
             <form className="edit-form" onSubmit={onSubmitHandler}>
@@ -621,7 +614,7 @@ export default class SiteAdd extends Component{
                       <Map
                         style={{ height: "205px", marginTop: "1rem" }}
                         center={[latitude, longitude]}
-                        zoom={this.state.zoom}
+                        zoom={this.props.zoom}
                         onClick={mapClickHandler}
                       >
                         <TileLayer
