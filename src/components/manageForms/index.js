@@ -51,12 +51,12 @@ class ManageForms extends Component {
     shareUrl
   ) => {
     this.setState({
-      popupModal: true,
-      heading: modalHeading,
-      selectedModals: selectedModal,
-      modalDatas: modalData,
-      modalTypes: modalType,
-      shareUrls: shareUrl
+      popupModal: true
+      // heading: modalHeading,
+      // selectedModals: selectedModal,
+      // modalDatas: modalData,
+      // modalTypes: modalType,
+      // shareUrls: shareUrl
     });
   };
   render() {

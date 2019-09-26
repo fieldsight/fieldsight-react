@@ -11,14 +11,16 @@ class AddStageForm extends Component {
     form: {
       selectedRegion: [],
       selectedType: [],
-      name: "",
-      desc: ""
+      name: this.props.stageData ? this.props.stageData.name : "",
+      desc: this.props.stageData ? this.props.stageData.description : "",
+      order: this.props.stageData ? this.props.stageData.order : 0,
+      id: this.props.stageData ? this.props.stageData.id : ""
     },
     regionDropdown: [],
     typeDropdown: []
   };
   componentDidMount() {
-    const { typeOptions, regionOptions } = this.props;
+    const { typeOptions, regionOptions, stageData } = this.props;
     const newRegionArr = regionOptions.map(each => ({
       ...each,
       value: each.identifier,
@@ -30,13 +32,40 @@ class AddStageForm extends Component {
       label: each.name
     }));
 
+    let selectedRegion = [];
+    let selectedType = [];
+    if (!!stageData) {
+      if (!!stageData.regions && stageData.regions.length > 0) {
+        regionOptions.map(region => {
+          if (stageData.regions.indexOf(region.id) > -1) {
+            selectedRegion.push({
+              ...region,
+              value: region.identifier,
+              label: region.name
+            });
+          }
+        });
+      } else if (stageData.tags && stageData.tags.length > 0) {
+        typeOptions.map(type => {
+          if (stageData.tags.indexOf(type.id) > -1) {
+            selectedType.push({
+              ...type,
+              value: type.identifier,
+              label: type.name
+            });
+          }
+        });
+      }
+    } else {
+      (selectedRegion = newRegionArr), (selectedType = newTypeArr);
+    }
     this.setState({
       regionDropdown: newRegionArr,
       typeDropdown: newTypeArr,
       form: {
         ...this.state.form,
-        selectedRegion: newRegionArr,
-        selectedType: newTypeArr
+        selectedRegion,
+        selectedType
       }
     });
   }

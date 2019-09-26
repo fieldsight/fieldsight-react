@@ -44,7 +44,8 @@ class StagedForms extends Component {
     sharedFormList: [],
     subStageData: [],
     loadSubStage: false,
-    isStagePop: false
+    isStagePop: false,
+    selectedStage: {}
   };
 
   componentDidMount() {
@@ -162,41 +163,99 @@ class StagedForms extends Component {
     });
   };
   handleSubmitStageForm = data => {
-    const { name, desc, selectedRegion, selectedType } = data;
+    const { name, desc, selectedRegion, selectedType, order, id } = data;
     const mapRegion = selectedRegion.map(each => each.id);
     const mapType = selectedType.map(each => each.id);
-    const order = this.state.data.length + 1;
-    const body = {
-      name: name,
-      tags: mapType,
-      regions: mapRegion,
-      order: order,
-      description: desc
-    };
+    const newOrder = order > 0 ? order : this.state.data.length + 1;
 
-    axios
-      .post(`fv3/api/manage-forms/stages/?project_id=130`, body)
-      .then(res => {
-        this.setState(
-          {
-            data: [...this.state.data, res.data]
-          },
-          () => {
-            this.props.closePopup();
-            successToast("Created", "successfully");
-          }
-        );
-      })
-      .catch(err => {
-        errorToast(err);
-      });
+    if (order > 0) {
+      const body = {
+        name: name,
+        tags: mapType,
+        regions: mapRegion,
+        order: newOrder,
+        description: desc,
+        id: id
+      };
+      axios
+        .put(
+          `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`,
+          body
+        )
+        .then(res => {
+          this.setState(
+            state => {
+              const data = this.state.data;
+              const newArr = data.map(each => {
+                if (each.id == res.data.id) {
+                  return (each = res.data);
+                } else {
+                  return each;
+                }
+              });
+              return {
+                data: newArr
+              };
+            },
+            () => {
+              this.props.closePopup();
+              successToast("Updated", "successfully");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    } else {
+      const body = {
+        name: name,
+        tags: mapType,
+        regions: mapRegion,
+        order: newOrder,
+        description: desc
+      };
+      axios
+        .post(`fv3/api/manage-forms/stages/?project_id=130`, body)
+        .then(res => {
+          this.setState(
+            {
+              data: [...this.state.data, res.data]
+            },
+            () => {
+              this.props.closePopup();
+              successToast("Created", "successfully");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    }
+  };
+  handleClickEdit = stageData => {
+    this.setState(
+      {
+        selectedStage: stageData
+      },
+      () => {
+        this.props.commonPopupHandler();
+      }
+    );
   };
   render() {
     const {
       props: { regionOptions, typeOptions },
-      state: { data, loader, subStageData, loadSubStage, isStagePop },
+      state: {
+        data,
+        loader,
+        subStageData,
+        loadSubStage,
+        isStagePop,
+        selectedStage
+      },
       handleRequestSubStage,
-      handleSubmitStageForm
+      handleSubmitStageForm,
+      handleClickEdit
     } = this;
     return (
       <div className="col-xl-9 col-lg-8">
@@ -235,7 +294,10 @@ class StagedForms extends Component {
                           </a>
                         </div>
                         <div className="add-btn pull-left">
-                          <a href="#" data-tab="addSubStage-popup">
+                          <a
+                            data-tab="addSubStage-popup"
+                            onClick={() => this.handleClickEdit(each)}
+                          >
                             Edit
                             <span>
                               <i className="la la-edit"></i>
@@ -263,6 +325,7 @@ class StagedForms extends Component {
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
                 handleSubmit={handleSubmitStageForm}
+                stageData={selectedStage}
               />
             </Modal>
           )}

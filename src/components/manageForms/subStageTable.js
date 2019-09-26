@@ -30,7 +30,7 @@ class SubStageTable extends Component {
       deleteItem,
       handleEditGuide
     } = this.props;
-    console.log("substage ma", data);
+    // console.log("substage ma", data);
 
     return (
       // <div style={{ position: "relative", height: "324px" }}>
