@@ -45,6 +45,12 @@
         .content {
           h6 {
             margin-bottom: 0.2rem;
+            font-size:.875rem;
+            a{
+              color:$color-primary;
+              font-family: $ubuntu;
+              font-weight: 500;
+            }
           }
 
           span {
@@ -135,9 +141,14 @@
         border-bottom: 1px solid $color-bg;
 
         h6 {
-          font-size: 0.875rem;
+          font-size: .875rem;
           font-weight: 500;
           margin: 0;
+          a{
+            font-size: .875rem;
+            font-family: $ubuntu;
+            font-weight: 500;
+          }
         }
 
         label {

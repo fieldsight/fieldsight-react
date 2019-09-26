@@ -11,9 +11,9 @@ Version: 1.01
  *,
  ::after,
  ::before {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+    box-sizing: border-box !important;
  }
  
  html {
@@ -57,7 +57,7 @@ Version: 1.01
      margin-bottom: .5rem;
      font-family:$ubuntu !important;
      font-weight: 500;
-     line-height: 1.2rem;
+     line-height: 1.2rem !important;
  }
 
 
@@ -65,8 +65,9 @@ Version: 1.01
      color: $color-primary;
      text-decoration: none;
      background-color: transparent;
-     @include anim05;
+     @include animate_all(all 0.5s);
      cursor:pointer;
+     font-family:$ubuntu !important;
  }
  
  a:hover {

@@ -13,6 +13,7 @@
         align-items: center;
         margin-right: 1rem;
         padding: 0.5rem 0.6125rem;
+        min-height: 54px;
 
         .count-icon {
           width: 1.8rem;
@@ -37,7 +38,7 @@
           h4 {
             font-size: 0.775rem;
             font-weight: 600;
-            margin-bottom: .15rem;
+            margin-bottom:0;
           }
 
           h6 {
@@ -96,6 +97,7 @@
         @include animate_all(all 0.5s);
         @include box_shadow($boxshadow:0 1px 4px rgba($color-primary, 0.15));
         margin-bottom: 2rem;
+
 
         .count-icon {
           width: 4rem;
@@ -272,14 +274,14 @@
           padding-left: 2.5rem;
 
           li {
-            margin: 2rem 0;
+            margin: 1rem 0;
             position: relative;
             padding-left: 3rem;
 
             .event-list {
               @include flex_start;
               flex-wrap: nowrap;
-              padding: 1rem;
+              padding: 0.6125rem;
               position: relative;
               border: 1px solid $color-bg;
               @include radius4;
@@ -305,6 +307,12 @@
                 span {
                   font-size: 0.775rem;
                   color: rgba($color-primary, 0.5);
+                }
+                b{
+                  font-weight: 400;
+                  a{
+                    color:$color-secondary;
+                  }
                 }
               }
             }
@@ -416,6 +424,7 @@
       h4 {
         font-size: 0.875rem;
         margin: 0;
+        margin-right: 6rem;
         text-transform: capitalize;
       }
 
