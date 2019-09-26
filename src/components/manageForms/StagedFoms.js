@@ -114,7 +114,7 @@ class StagedForms extends Component {
     const { id } = this.state;
     axios
       .post(
-        `fv3/api/manage-forms/deploy/?project_id=${id}&type=general&id=${formId}`,
+        `fv3/api/manage-forms/deploy/?project_id=${id}&type=substage&id=${formId}`,
         { is_deployed: !isDeploy }
       )
       .then(res => {
@@ -142,7 +142,7 @@ class StagedForms extends Component {
     const { id } = this.state;
     axios
       .post(
-        `fv3/api/manage-forms/delete/?project_id=${id}&type=general&id=${formId}`,
+        `fv3/api/manage-forms/delete/?project_id=${id}&type=substage&id=${formId}`,
         { is_deployed: isDeploy }
       )
       .then(res => {
