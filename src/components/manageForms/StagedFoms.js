@@ -9,7 +9,7 @@ import CommonPopupForm from "./CommonPopupForm";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import SubStageTable from "./subStageTable";
-import StageForm from "./StageForm";
+import AddStageForm from "./AddStageForm";
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -74,17 +74,13 @@ class StagedForms extends Component {
       .get(`fv3/api/manage-forms/stages/?project_id=${projectId}`)
       .then(res => {
         if (this._isMounted) {
-          this.setState({ data: res.data, loader: false }, () => {
-            console.log("log data", this.state.data);
-          });
+          this.setState({ data: res.data, loader: false });
         }
       })
       .catch(err => {});
   };
 
   handleRequestSubStage = stageId => {
-    console.log("id", stageId);
-
     this.setState(
       {
         loadSubStage: true
@@ -165,75 +161,113 @@ class StagedForms extends Component {
       isStagePop: !this.state.isStagePop
     });
   };
+  handleSubmitStageForm = data => {
+    const { name, desc, selectedRegion, selectedType } = data;
+    const mapRegion = selectedRegion.map(each => each.id);
+    const mapType = selectedType.map(each => each.id);
+    const order = this.state.data.length + 1;
+    const body = {
+      name: name,
+      tags: mapType,
+      regions: mapRegion,
+      order: order,
+      description: desc
+    };
+
+    axios
+      .post(`fv3/api/manage-forms/stages/?project_id=130`, body)
+      .then(res => {
+        this.setState(
+          {
+            data: [...this.state.data, res.data]
+          },
+          () => {
+            this.props.closePopup();
+            successToast("Created", "successfully");
+          }
+        );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
   render() {
     const {
+      props: { regionOptions, typeOptions },
       state: { data, loader, subStageData, loadSubStage, isStagePop },
-      handleRequestSubStage
+      handleRequestSubStage,
+      handleSubmitStageForm
     } = this;
     return (
-      <RightContentCard
-        title="Staged Forms"
-        addButton={true}
-        toggleModal={this.props.commonPopupHandler}
-        showText={true}
-      >
-        {loader && <DotLoader />}
-        {!loader && (
-          <Accordion defaultActiveKey={0} className="card no-boxshadow">
-            {data.length > 0 &&
-              data.map((each, index) => (
-                <Card key={`key_${index}`}>
-                  <Accordion.Toggle
-                    as={Card.Header}
-                    eventKey={`${each.order}`}
-                    className="card-header"
-                    onClick={() => {
-                      handleRequestSubStage(each.id);
-                    }}
-                  >
-                    <h5>
-                      #{index + 1} {each.name}
-                    </h5>
-                  </Accordion.Toggle>
-                  <Accordion.Collapse eventKey={`${each.order}`}>
-                    <Card.Body>
-                      <div className="add-btn pull-left">
-                        <a href="#" data-tab="addSubStage-popup">
-                          Add substage
-                          <span>
-                            <i className="la la-plus"></i>
-                          </span>
-                        </a>
-                      </div>
-                      <div className="add-btn pull-left">
-                        <a href="#" data-tab="addSubStage-popup">
-                          Edit
-                          <span>
-                            <i className="la la-edit"></i>
-                          </span>
-                        </a>
-                      </div>
-                      {!!loadSubStage && <DotLoader />}
-                      {!loadSubStage && !!subStageData && (
-                        <SubStageTable
-                          data={subStageData}
-                          handleEditGuide={this.handleEditGuide}
-                          changeDeployStatus={this.changeDeployStatus}
-                          deleteItem={this.deleteItem}
-                        />
-                      )}
-                    </Card.Body>
-                  </Accordion.Collapse>
-                </Card>
-              ))}
-          </Accordion>
-        )}
-        {this.props.popupModal && (
-          <Modal title="Stage Form" toggleModal={this.handleStageForm}>
-            <StageForm />
-          </Modal>
-        )}
-      </RightContentCard>
+      <div className="col-xl-9 col-lg-8">
+        <RightContentCard
+          title="Staged Forms"
+          addButton={true}
+          toggleModal={this.props.commonPopupHandler}
+          showText={true}
+        >
+          {loader && <DotLoader />}
+          {!loader && (
+            <Accordion defaultActiveKey={0} className="card no-boxshadow">
+              {data.length > 0 &&
+                data.map((each, index) => (
+                  <Card key={`key_${index}`}>
+                    <Accordion.Toggle
+                      as={Card.Header}
+                      eventKey={`${each.order}`}
+                      className="card-header"
+                      onClick={() => {
+                        handleRequestSubStage(each.id);
+                      }}
+                    >
+                      <h5>
+                        #{index + 1} {each.name}
+                      </h5>
+                    </Accordion.Toggle>
+                    <Accordion.Collapse eventKey={`${each.order}`}>
+                      <Card.Body>
+                        <div className="add-btn pull-left">
+                          <a href="#" data-tab="addSubStage-popup">
+                            Add substage
+                            <span>
+                              <i className="la la-plus"></i>
+                            </span>
+                          </a>
+                        </div>
+                        <div className="add-btn pull-left">
+                          <a href="#" data-tab="addSubStage-popup">
+                            Edit
+                            <span>
+                              <i className="la la-edit"></i>
+                            </span>
+                          </a>
+                        </div>
+                        {!!loadSubStage && <DotLoader />}
+                        {!loadSubStage && !!subStageData && (
+                          <SubStageTable
+                            data={subStageData}
+                            handleEditGuide={this.handleEditGuide}
+                            changeDeployStatus={this.changeDeployStatus}
+                            deleteItem={this.deleteItem}
+                          />
+                        )}
+                      </Card.Body>
+                    </Accordion.Collapse>
+                  </Card>
+                ))}
+            </Accordion>
+          )}
+          {this.props.popupModal && (
+            <Modal title="Stage Form" toggleModal={this.props.closePopup}>
+              <AddStageForm
+                regionOptions={regionOptions}
+                typeOptions={typeOptions}
+                handleSubmit={handleSubmitStageForm}
+              />
+            </Modal>
+          )}
+        </RightContentCard>
+      </div>
     );
   }
 }
