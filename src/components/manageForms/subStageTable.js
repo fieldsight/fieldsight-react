@@ -64,7 +64,7 @@ class SubStageTable extends Component {
                 <td>{sub.xf && sub.xf.title ? sub.xf.title : ""}</td>
                 <td>{sub.responses_count}</td>
                 <td>
-                  <a onClick={() => handleEditGuide(item.em, item.id)}>
+                  <a onClick={() => handleEditGuide(sub.em, sub.id)}>
                     <i className="la la-book" />
                     {sub.em ? sub.em.title : ""}
                   </a>
@@ -119,7 +119,7 @@ class SubStageTable extends Component {
                       </span>
                     </div>
                   )}
-                  {/* <a
+                  <a
                     className="td-edit-btn"
                     data-toggle="tooltip"
                     onClick={() => {
@@ -129,7 +129,7 @@ class SubStageTable extends Component {
                     title="Edit"
                   >
                     <i className="la la-edit"> </i>{" "}
-                  </a> */}
+                  </a>
                 </td>
               </tr>
             ))}

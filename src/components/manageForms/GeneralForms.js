@@ -171,7 +171,7 @@ class GeneralForms extends Component {
           },
           () => {
             this.requestGeneralForm(id);
-            successToast("update", "successfully");
+            successToast("updated", "successfully");
           }
         );
       })
@@ -237,15 +237,17 @@ class GeneralForms extends Component {
           myFormList: filteredData
         });
       } else if (activeTab == "projectForms") {
-        const filteredData = await projectFormList.filter(form => {
-          return (
-            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            form.owner.toLowerCase().includes(searchValue.toLowerCase())
-          );
+        const awaitedData = await projectFormList.map(project => {
+          const filteredData = project.forms.filter(form => {
+            return (
+              form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+              form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            );
+          });
+          return { ...project, forms: filteredData };
         });
-
         this.setState({
-          projectFormList: filteredData
+          projectFormList: awaitedData
         });
       } else if (activeTab == "sharedForms") {
         const filteredData = await sharedFormList.filter(form => {
@@ -475,7 +477,7 @@ class GeneralForms extends Component {
                 data={guideData}
                 handleCancel={this.handleEditGuide}
                 handleUpdateGuide={this.handleUpdateGuide}
-                handleCreateGuide={this.handleCreateGuide}
+                // handleCreateGuide={this.handleCreateGuide}
               />
             </Modal>
           )}

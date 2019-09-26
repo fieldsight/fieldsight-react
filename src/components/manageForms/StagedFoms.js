@@ -159,9 +159,7 @@ class StagedForms extends Component {
       })
       .catch(err => {});
   };
-  editSubStageForm = formData => {
-    console.log("edit data", formData);
-  };
+
   handleEditGuide = (data, formId) => {
     this.setState({
       editGuide: !this.state.editGuide,
@@ -169,6 +167,41 @@ class StagedForms extends Component {
       editFormId: formId
     });
   };
+  handleUpdateGuide = data => {
+    const { id, editFormId, stageId } = this.state;
+    const formData = new FormData();
+    if (data.title) formData.append("title", data.title);
+    if (data.text) formData.append("text", data.text);
+    if (data.pdf) formData.append("pdf", data.pdf);
+    if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
+    // if (editFormId) formData.append("fsxf", editFormId);
+    if (data.images && data.images.length > 0) {
+      data.images.map((each, i) => {
+        if (!each.image) formData.append(`new_images_${i + 1}`, each);
+      });
+    }
+    if (data.id) {
+      formData.append("id", data.id);
+    }
+    formData.append("stage", editFormId);
+    axios
+      .post(`forms/api/save_educational_material/`, formData)
+      .then(res => {
+        this.setState(
+          {
+            editGuide: false
+          },
+          () => {
+            this.handleRequestSubStage(stageId);
+            successToast("update", "successfully");
+          }
+        );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
+
   handleSubStageForm = () => {
     this.setState({
       showSubstageForm: !this.state.showSubstageForm
@@ -413,7 +446,64 @@ class StagedForms extends Component {
         errorToast(err);
       });
   };
-  onChangeHandler = () => {};
+  onChangeHandler = async e => {
+    const {
+      activeTab,
+      myFormList,
+      projectFormList,
+      sharedFormList
+    } = this.state;
+    const searchValue = e.target.value;
+
+    if (searchValue) {
+      if (activeTab == "myForms") {
+        const filteredData = await myFormList.filter(form => {
+          return (
+            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        });
+
+        this.setState({
+          myFormList: filteredData
+        });
+      } else if (activeTab == "projectForms") {
+        const awaitedData = await projectFormList.map(project => {
+          const filteredData = project.forms.filter(form => {
+            return (
+              form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+              form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            );
+          });
+          return { ...project, forms: filteredData };
+        });
+        this.setState({
+          projectFormList: awaitedData
+        });
+      } else if (activeTab == "sharedForms") {
+        const filteredData = await sharedFormList.filter(form => {
+          return (
+            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        });
+
+        this.setState({
+          sharedFormList: filteredData
+        });
+      }
+    } else {
+      this.setState({
+        myFormList: this.props.myForms,
+        sharedFormList: this.props.sharedForms,
+        projectFormList: this.props.projectForms
+      });
+    }
+  };
+
+  editSubStageForm = formData => {
+    console.log("edit data", formData);
+  };
   render() {
     const {
       props: { regionOptions, typeOptions },
@@ -433,7 +523,9 @@ class StagedForms extends Component {
         projectFormList,
         sharedFormList,
         substageTitle,
-        substageDesc
+        substageDesc,
+        editGuide,
+        guideData
       },
       handleRequestSubStage,
       handleSubmitStageForm,
@@ -612,6 +704,16 @@ class StagedForms extends Component {
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
                 handleSaveForm={this.handleSaveForm}
+              />
+            </Modal>
+          )}
+          {editGuide && (
+            <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
+              <EditFormGuide
+                data={guideData}
+                handleCancel={this.handleEditGuide}
+                handleUpdateGuide={this.handleUpdateGuide}
+                handleCreateGuide={this.handleCreateGuide}
               />
             </Modal>
           )}
