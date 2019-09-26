@@ -28,7 +28,8 @@ class SubStageTable extends Component {
       data,
       changeDeployStatus,
       deleteItem,
-      handleEditGuide
+      handleEditGuide,
+      editSubStageForm
     } = this.props;
     // console.log("substage ma", data);
 
@@ -118,6 +119,17 @@ class SubStageTable extends Component {
                       </span>
                     </div>
                   )}
+                  {/* <a
+                    className="td-edit-btn"
+                    data-toggle="tooltip"
+                    onClick={() => {
+                      editSubStageForm(sub);
+                    }}
+                    data-placement="top"
+                    title="Edit"
+                  >
+                    <i className="la la-edit"> </i>{" "}
+                  </a> */}
                 </td>
               </tr>
             ))}

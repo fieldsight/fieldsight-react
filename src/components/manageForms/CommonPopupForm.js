@@ -18,16 +18,20 @@ class CommonPopupForm extends Component {
   };
   componentDidMount() {
     const { typeOptions, regionOptions } = this.props;
-    const newRegionArr = regionOptions.map(each => ({
-      ...each,
-      value: each.identifier,
-      label: each.name
-    }));
-    const newTypeArr = typeOptions.map(each => ({
-      ...each,
-      value: each.identifier,
-      label: each.name
-    }));
+    const newRegionArr =
+      regionOptions &&
+      regionOptions.map(each => ({
+        ...each,
+        value: each.identifier,
+        label: each.name
+      }));
+    const newTypeArr =
+      typeOptions &&
+      typeOptions.map(each => ({
+        ...each,
+        value: each.identifier,
+        label: each.name
+      }));
 
     this.setState({
       optionRegion: newRegionArr,
@@ -66,6 +70,7 @@ class CommonPopupForm extends Component {
               className="pending"
               name="status"
               value={0}
+              changeHandler={handleRadioChange}
             />
             <RadioElement
               label="Flagged"

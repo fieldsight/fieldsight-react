@@ -5,11 +5,13 @@ import { Accordion, Card } from "react-bootstrap";
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
 import RightContentCard from "../common/RightContentCard";
+import InputElement from "../common/InputElement";
 import CommonPopupForm from "./CommonPopupForm";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import SubStageTable from "./subStageTable";
 import AddStageForm from "./AddStageForm";
+import AddForm from "./AddForm";
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -38,14 +40,19 @@ class StagedForms extends Component {
     loaded: 0,
     formId: "",
     formTitle: "",
+    weight: 0,
     isProjectForm: "",
     myFormList: [],
     projectFormList: [],
     sharedFormList: [],
     subStageData: [],
     loadSubStage: false,
-    isStagePop: false,
-    selectedStage: {}
+    showSubstageForm: false,
+    selectedStage: {},
+    order: 0,
+    substageTitle: "",
+    substageDesc: "",
+    stageId: ""
   };
 
   componentDidMount() {
@@ -81,10 +88,12 @@ class StagedForms extends Component {
       .catch(err => {});
   };
 
-  handleRequestSubStage = stageId => {
+  handleRequestSubStage = (stageId, order) => {
     this.setState(
       {
-        loadSubStage: true
+        loadSubStage: true,
+        order: order,
+        stageId
       },
       () => {
         axios
@@ -150,6 +159,9 @@ class StagedForms extends Component {
       })
       .catch(err => {});
   };
+  editSubStageForm = formData => {
+    console.log("edit data", formData);
+  };
   handleEditGuide = (data, formId) => {
     this.setState({
       editGuide: !this.state.editGuide,
@@ -157,9 +169,9 @@ class StagedForms extends Component {
       editFormId: formId
     });
   };
-  handleStageForm = () => {
+  handleSubStageForm = () => {
     this.setState({
-      isStagePop: !this.state.isStagePop
+      showSubstageForm: !this.state.showSubstageForm
     });
   };
   handleSubmitStageForm = data => {
@@ -242,6 +254,166 @@ class StagedForms extends Component {
       }
     );
   };
+  handleClearState = () => {
+    this.setState(
+      {
+        activeTab: "myForms",
+        commonFormData: {
+          status: 3,
+          isDonor: false,
+          isEdit: false,
+          isDelete: false,
+          regionSelected: [],
+          typeSelected: [],
+          xf: ""
+        },
+        formId: "",
+        formTitle: "",
+        weight: 0
+      },
+      () => {
+        this.handleSubStageForm();
+      }
+    );
+  };
+  handleInputChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+  toggleFormModal = () => {
+    this.setState({ showFormModal: !this.state.showFormModal });
+  };
+
+  toggleTab = tab => {
+    this.setState({
+      activeTab: tab,
+      myFormList: this.props.myForms,
+      sharedFormList: this.props.sharedForms,
+      projectFormList: this.props.projectForms
+    });
+  };
+  handleRadioChange = e => {
+    const { name, value } = e.target;
+
+    this.setState(state => {
+      if (name == "status") {
+        return {
+          commonFormData: {
+            ...this.state.commonFormData,
+            status: value
+          }
+        };
+      } else if (name == "donor") {
+        return {
+          commonFormData: {
+            ...this.state.commonFormData,
+            isDonor: JSON.parse(value)
+          }
+        };
+      } else if (name == "edit") {
+        return {
+          commonFormData: {
+            ...this.state.commonFormData,
+            isEdit: JSON.parse(value)
+          }
+        };
+      } else if (name == "delete") {
+        return {
+          commonFormData: {
+            ...this.state.commonFormData,
+            isDelete: JSON.parse(value)
+          }
+        };
+      }
+    });
+  };
+  handleSelectRegionChange = e => {
+    e.map(region => {
+      this.setState(state => {
+        return {
+          commonFormData: {
+            ...this.state.commonFormData,
+            regionSelected: [
+              ...this.state.commonFormData.regionSelected,
+              region.id
+            ]
+          }
+        };
+      });
+    });
+  };
+  handleSelectTypeChange = e => {
+    e.map(type => {
+      this.setState(state => {
+        return {
+          commonFormData: {
+            ...this.state.commonFormData,
+            typeSelected: [...this.state.commonFormData.typeSelected, type.id]
+          }
+        };
+      });
+    });
+  };
+  handleMyFormChange = (e, title) => {
+    this.setState({
+      formId: e.target.value,
+      formTitle: title
+    });
+  };
+  handleSaveForm = () => {
+    this.setState({
+      commonFormData: {
+        ...this.state.commonFormData,
+        xf: this.state.formId
+      },
+      showFormModal: !this.state.showFormModal
+    });
+  };
+  handleCreateForm = e => {
+    e.preventDefault();
+    const {
+      weight,
+      commonFormData,
+      order,
+      substageTitle,
+      substageDesc,
+      stageId
+    } = this.state;
+    const body = {
+      weight: weight,
+      name: substageTitle,
+      description: substageDesc,
+      order: order,
+      xf: commonFormData.xf,
+      default_submission_status: commonFormData.status,
+      setting: {
+        types: commonFormData.typeSelected,
+        regions: commonFormData.regionSelected,
+        donor_visibility: commonFormData.isDonor,
+        can_edit: commonFormData.isEdit,
+        can_delete: commonFormData.isDelete
+      }
+    };
+
+    axios
+      .post(`fv3/api/manage-forms/sub-stages/?stage_id=${stageId}`, body)
+      .then(res => {
+        this.setState(
+          {
+            subStageData: [...this.state.subStageData, res.data]
+          },
+          () => {
+            this.handleSubStageForm();
+            successToast("Created", "successfully");
+          }
+        );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
+  onChangeHandler = () => {};
   render() {
     const {
       props: { regionOptions, typeOptions },
@@ -250,12 +422,31 @@ class StagedForms extends Component {
         loader,
         subStageData,
         loadSubStage,
-        isStagePop,
-        selectedStage
+        showSubstageForm,
+        selectedStage,
+        weight,
+        formTitle,
+        commonFormData,
+        showFormModal,
+        activeTab,
+        myFormList,
+        projectFormList,
+        sharedFormList,
+        substageTitle,
+        substageDesc
       },
       handleRequestSubStage,
       handleSubmitStageForm,
-      handleClickEdit
+      handleClickEdit,
+      handleSubStageForm,
+      handleClearState,
+      handleInputChange,
+      handleRadioChange,
+      handleSelectRegionChange,
+      handleSelectTypeChange,
+      handleMyFormChange,
+      handleSaveForm,
+      handleCreateForm
     } = this;
     return (
       <div className="col-xl-9 col-lg-8">
@@ -276,7 +467,7 @@ class StagedForms extends Component {
                       eventKey={`${each.order}`}
                       className="card-header"
                       onClick={() => {
-                        handleRequestSubStage(each.id);
+                        handleRequestSubStage(each.id, each.order);
                       }}
                     >
                       <h5>
@@ -286,7 +477,10 @@ class StagedForms extends Component {
                     <Accordion.Collapse eventKey={`${each.order}`}>
                       <Card.Body>
                         <div className="add-btn pull-left">
-                          <a href="#" data-tab="addSubStage-popup">
+                          <a
+                            data-tab="addSubStage-popup"
+                            onClick={handleSubStageForm}
+                          >
                             Add substage
                             <span>
                               <i className="la la-plus"></i>
@@ -311,6 +505,7 @@ class StagedForms extends Component {
                             handleEditGuide={this.handleEditGuide}
                             changeDeployStatus={this.changeDeployStatus}
                             deleteItem={this.deleteItem}
+                            editSubStageForm={this.editSubStageForm}
                           />
                         )}
                       </Card.Body>
@@ -326,6 +521,97 @@ class StagedForms extends Component {
                 typeOptions={typeOptions}
                 handleSubmit={handleSubmitStageForm}
                 stageData={selectedStage}
+              />
+            </Modal>
+          )}
+          {showSubstageForm && (
+            <Modal title="Add SubStage Form" toggleModal={handleClearState}>
+              <form className="floating-form" onSubmit={this.handleCreateForm}>
+                <div className="form-form">
+                  <div className="selected-form">
+                    <div className="add-btn flex-start">
+                      <a data-tab="choose-form" onClick={this.toggleFormModal}>
+                        {formTitle ? "Change form" : " Choose form"}
+                        <span>
+                          <i className="la la-plus"></i>
+                        </span>
+                      </a>
+                    </div>
+                    <div className="selected-text">
+                      <span>{formTitle}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <InputElement
+                    formType="editForm"
+                    tag="input"
+                    type="number"
+                    //   required={true}
+                    label="Weight"
+                    name="weight"
+                    value={weight}
+                    changeHandler={handleInputChange}
+                  />
+                </div>
+                <CommonPopupForm
+                  regionOptions={regionOptions}
+                  typeOptions={typeOptions}
+                  handleRadioChange={handleRadioChange}
+                  handleSelectRegionChange={handleSelectRegionChange}
+                  handleSelectTypeChange={handleSelectTypeChange}
+                  commonFormData={commonFormData}
+                />
+                <div className="form-group">
+                  <InputElement
+                    formType="editForm"
+                    tag="input"
+                    type="text"
+                    required={true}
+                    label="Name"
+                    name="substageTitle"
+                    value={substageTitle}
+                    changeHandler={handleInputChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <InputElement
+                    formType="editForm"
+                    tag="input"
+                    type="text"
+                    //   required={true}
+                    label="Description"
+                    name="substageDesc"
+                    value={substageDesc}
+                    changeHandler={handleInputChange}
+                  />
+                </div>
+                <div className="form-group pull-right no-margin">
+                  <button type="submit" className="fieldsight-btn">
+                    Add Form
+                  </button>
+                </div>
+              </form>
+              {/* </div> */}
+            </Modal>
+          )}
+          {showFormModal && (
+            <Modal
+              title="Add Form"
+              toggleModal={this.toggleFormModal}
+              showButton={true}
+              showText="Create Form"
+              url="/forms/create/"
+            >
+              <AddForm
+                activeTab={activeTab}
+                toggleTab={this.toggleTab}
+                onChangeHandler={this.onChangeHandler}
+                formList={myFormList}
+                projectList={projectFormList}
+                sharedList={sharedFormList}
+                handleRadioChange={this.handleMyFormChange}
+                handleSaveForm={this.handleSaveForm}
               />
             </Modal>
           )}
