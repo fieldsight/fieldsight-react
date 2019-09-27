@@ -82,6 +82,8 @@ export default class SiteAdd extends Component{
                 Selectedtypes,
                 deleteConfirm
                }}=this.props;  
+               console.log(Selectedtypes);
+               
         return (
             <RightContentCard title="New Site">
               <div style={{display: "flex",justifyContent:" flex-end",position:"absolute", right: "35px",top: "4px"}}>
@@ -131,7 +133,7 @@ export default class SiteAdd extends Component{
                 label="Types"
                 options={site_types && site_types.length>0?site_types.map(region => region):site_types}
                 changeHandler={e => onSelectChangeHandler(e, "site_types")}
-                value={Selectedtypes}
+                value={Selectedtypes && Selectedtypes}
                /> 
          </div>
                 <div className="col-xl-4 col-md-6">
