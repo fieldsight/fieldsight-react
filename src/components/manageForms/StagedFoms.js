@@ -57,7 +57,10 @@ class StagedForms extends Component {
     substageId: "",
     isStageReorder: false,
     newStageOrder: [],
-    isStageReorderCancel: true
+    isStageReorderCancel: true,
+    isSubstageReorder: false,
+    isSubstageReorderCancel: true,
+    newSubstageOrder: []
   };
 
   componentDidMount() {
@@ -108,7 +111,6 @@ class StagedForms extends Component {
     axios
       .post(`fv3/api/forms/reorder/stage/`, this.state.newStageOrder)
       .then(res => {
-        console.log("------", res.data);
         this.setState(
           {
             data: res.data.data,
@@ -124,12 +126,15 @@ class StagedForms extends Component {
         errorToast(err);
       });
   };
+
   handleRequestSubStage = (stageId, order) => {
     this.setState(
       {
         loadSubStage: true,
         order: order,
-        stageId
+        stageId,
+        isSubstageReorder: false,
+        isSubstageReorderCancel: true
       },
       () => {
         axios
@@ -146,6 +151,37 @@ class StagedForms extends Component {
       }
     );
   };
+  handleSubstageReorder = () => {
+    this.setState({
+      isSubstageReorder: !this.state.isSubstageReorder,
+      isSubstageReorderCancel: !this.state.isSubstageReorderCancel
+    });
+  };
+  handleNewSubstageOrder = list => {
+    this.setState({
+      newSubstageOrder: list
+    });
+  };
+  handleSaveSubstageReorder = () => {
+    axios
+      .post(`fv3/api/forms/reorder/substage/`, this.state.newSubstageOrder)
+      .then(res => {
+        this.setState(
+          {
+            subStageData: res.data.data,
+            isSubstageReorder: false
+            // isStageReorderCancel: true
+          },
+          () => {
+            successToast("reordered", "successfully");
+          }
+        );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
+
   changeDeployStatus = (formId, isDeploy) => {
     const { id } = this.state;
     axios
@@ -640,7 +676,9 @@ class StagedForms extends Component {
         substageId,
         stageId,
         isStageReorder,
-        isStageReorderCancel
+        isStageReorderCancel,
+        isSubstageReorder,
+        isSubstageReorderCancel
       },
       handleRequestSubStage,
       handleSubmitStageForm,
@@ -651,11 +689,10 @@ class StagedForms extends Component {
       handleRadioChange,
       handleSelectRegionChange,
       handleSelectTypeChange,
-      handleMyFormChange,
-      handleSaveForm,
-      handleCreateForm,
       handleStageReorder,
-      handleSaveStageReorder
+      handleSaveStageReorder,
+      handleSubstageReorder,
+      handleSaveSubstageReorder
     } = this;
     return (
       <div className="col-xl-9 col-lg-8">
@@ -707,6 +744,11 @@ class StagedForms extends Component {
               reorder={isStageReorder}
               isStageReorderCancel={isStageReorderCancel}
               handleNewStageOrder={this.handleNewStageOrder}
+              reorderSubstage={isSubstageReorder}
+              isSubstageReorderCancel={isSubstageReorderCancel}
+              handleSubstageReorder={handleSubstageReorder}
+              handleSaveSubstageReorder={handleSaveSubstageReorder}
+              handleNewSubstageOrder={this.handleNewSubstageOrder}
             />
           )}
           {this.props.popupModal && (

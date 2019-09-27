@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
+import {
+  sortableContainer,
+  sortableElement,
+  sortableHandle
+} from "react-sortable-hoc";
+import arrayMove from "array-move";
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -22,33 +28,85 @@ const formatDate = date => {
   return year + "-" + monthIndex + "-" + dateIdx;
 };
 
+const DragHandle = sortableHandle(() => (
+  <span style={{ cursor: "pointer" }}>#</span>
+));
+
+const SortableContainer = sortableContainer(({ children }) => {
+  return (
+    <Table responsive="xl" className="table  table-bordered  dataTable">
+      <thead>
+        <tr>
+          <th>Substage Name</th>
+          <th>form Name</th>
+          <th>Responses</th>
+          <th>Form Guide</th>
+          <th>Weight</th>
+          <th>assigned date</th>
+          <th>Default status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      {children}
+    </Table>
+  );
+});
+
+const SortableItem = sortableElement(({ name }) => (
+  <>
+    <DragHandle />
+    {name}
+  </>
+));
+
 class SubStageTable extends Component {
+  state = {
+    data: this.props.data
+  };
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data != this.props.data) {
+      this.setState({
+        data: nextProps.data
+      });
+    }
+    if (
+      nextProps.isSubstageReorderCancel != this.props.isSubstageReorderCancel
+    ) {
+      this.setState(state => {
+        if (nextProps.isSubstageReorderCancel) {
+          return { data: this.props.data };
+        }
+      });
+    }
+  }
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    this.setState(
+      ({ data }) => ({
+        data: arrayMove(data, oldIndex, newIndex)
+      }),
+      () => {
+        this.props.handleNewSubstageOrder(this.state.data);
+      }
+    );
+  };
+
   render() {
     const {
-      data,
-      changeDeployStatus,
-      deleteItem,
-      handleEditGuide,
-      editSubStageForm
-    } = this.props;
-    // console.log("substage ma", data);
+      props: {
+        changeDeployStatus,
+        deleteItem,
+        handleEditGuide,
+        editSubStageForm,
+        reorderSubstage,
+        isSubstageReorderCancel
+      },
+      state: { data }
+    } = this;
 
     return (
       // <div style={{ position: "relative", height: "324px" }}>
       //   <PerfectScrollbar>
-      <Table responsive="xl" className="table  table-bordered  dataTable">
-        <thead>
-          <tr>
-            <th>Substage Name</th>
-            <th>form Name</th>
-            <th>Responses</th>
-            <th>Form Guide</th>
-            <th>Weight</th>
-            <th>assigned date</th>
-            <th>Default status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+      <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
         <tbody>
           {data.length === 0 && (
             <tr>
@@ -60,8 +118,18 @@ class SubStageTable extends Component {
           {data.length > 0 &&
             data.map((sub, index) => (
               <tr key={`sub_stage_${index}`}>
-                <td>{sub.name}</td>
-                <td>{sub.xf && sub.xf.title ? sub.xf.title : ""}</td>
+                <td>
+                  {reorderSubstage ? (
+                    <SortableItem
+                      key={`item-${sub.id}`}
+                      index={index}
+                      name={sub.name}
+                    />
+                  ) : (
+                    sub.name
+                  )}
+                </td>
+                <td>{sub.xf && sub.xf.title ? sub.xf.title : "-"}</td>
                 <td>{sub.responses_count}</td>
                 <td>
                   <a onClick={() => handleEditGuide(sub.em, sub.id)}>
@@ -134,7 +202,8 @@ class SubStageTable extends Component {
               </tr>
             ))}
         </tbody>
-      </Table>
+      </SortableContainer>
+
       //   </PerfectScrollbar>
       // </div>
     );

@@ -15,7 +15,7 @@ const DragHandle = sortableHandle(() => (
 ));
 
 const SortableItem = sortableElement(({ name }) => (
-  <h5>
+  <h5 className="dragable-stage">
     <DragHandle />
     {name}
   </h5>
@@ -63,7 +63,6 @@ class SortableStage extends Component {
     const {
       state: { data },
       props: {
-        stage,
         handleRequestSubStage,
         handleClickEdit,
         loadSubStage,
@@ -73,7 +72,10 @@ class SortableStage extends Component {
         editSubStageForm,
         subStageData,
         handleSubStageForm,
-        reorder
+        reorder,
+        reorderSubstage,
+        handleSubstageReorder,
+        handleSaveSubstageReorder
       }
     } = this;
 
@@ -101,7 +103,7 @@ class SortableStage extends Component {
               </Accordion.Toggle>
               <Accordion.Collapse eventKey={`${each.order}`}>
                 <Card.Body>
-                  <div className="add-btn pull-left">
+                  <div className="add-btn pull-right">
                     <a
                       data-tab="addSubStage-popup"
                       onClick={handleSubStageForm}
@@ -111,8 +113,6 @@ class SortableStage extends Component {
                         <i className="la la-plus"></i>
                       </span>
                     </a>
-                  </div>
-                  <div className="add-btn pull-left">
                     <a
                       data-tab="addSubStage-popup"
                       onClick={() => handleClickEdit(each)}
@@ -122,6 +122,26 @@ class SortableStage extends Component {
                         <i className="la la-edit"></i>
                       </span>
                     </a>
+                    <a onClick={handleSubstageReorder}>
+                      {!reorderSubstage ? "Reorder" : "Cancel Reorder"}
+                      {!reorderSubstage ? (
+                        <span>
+                          <i className="la la-reorder" />
+                        </span>
+                      ) : (
+                        <span>
+                          <i className="la la-close" />
+                        </span>
+                      )}
+                    </a>
+                    {reorderSubstage && (
+                      <a onClick={handleSaveSubstageReorder}>
+                        Save Order
+                        <span>
+                          <i className="la la-save" />
+                        </span>
+                      </a>
+                    )}
                   </div>
                   {!!loadSubStage && <DotLoader />}
                   {!loadSubStage && !!subStageData && (
@@ -131,6 +151,11 @@ class SortableStage extends Component {
                       changeDeployStatus={changeDeployStatus}
                       deleteItem={deleteItem}
                       editSubStageForm={editSubStageForm}
+                      reorderSubstage={this.props.reorderSubstage}
+                      isSubstageReorderCancel={
+                        this.props.isSubstageReorderCancel
+                      }
+                      handleNewSubstageOrder={this.props.handleNewSubstageOrder}
                     />
                   )}
                 </Card.Body>
