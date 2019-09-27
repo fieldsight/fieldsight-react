@@ -81,8 +81,7 @@ export default class SiteAdd extends Component{
                 selectedGender,
                 Selectedtypes,
                 deleteConfirm
-               }}=this.props;
-         
+               }}=this.props;  
         return (
             <RightContentCard title="New Site">
               <div style={{display: "flex",justifyContent:" flex-end",position:"absolute", right: "35px",top: "4px"}}>
@@ -140,7 +139,7 @@ export default class SiteAdd extends Component{
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required={true}
+                    required={false}
                     label="Phone"
                     name="phone"
                     value={phone}
@@ -152,7 +151,7 @@ export default class SiteAdd extends Component{
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required={true}
+                    required={false}
                     label="Address"
                     name="address"
                     value={address}
@@ -169,12 +168,12 @@ export default class SiteAdd extends Component{
                 />
               </div>
             </div>
-            {this.props.page==="subSite"?<div className="col-xl-4 col-md-6">
+            {weight!==undefined?<div className="col-xl-4 col-md-6">
                 <InputElement
                     formType="editForm"
                     tag="input"
                     type="number"
-                    required={true}
+                    required={false}
                     label="Weight"
                     name="weight"
                     value={weight}
@@ -187,7 +186,7 @@ export default class SiteAdd extends Component{
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required={true}
+                    required={false}
                     label="Description"
                     name="public_desc"
                     value={public_desc}
@@ -310,6 +309,7 @@ export default class SiteAdd extends Component{
                     )}
                   </div>
                 </div>
+               
                 {
                
                !!this.props.jsondata && this.props.jsondata.map((data,key)=>{
@@ -325,7 +325,7 @@ export default class SiteAdd extends Component{
                      id={data.id}
                      label={data.question_text}
                      name={data.question_name}
-                     value={this.props.project_info.name||""}
+                     value={this.props.project_info[data.question_name]}
                      placeholder={data.question_placeholder}
                      changeHandler={ondynamiChangeHandler}
                    />
@@ -340,7 +340,7 @@ export default class SiteAdd extends Component{
                      id={data.id}
                      label={data.question_text}
                      name={data.question_name}
-                     value={this.props.project_info.date || ""}
+                     value={this.props.project_info[data.question_name]}
                      placeholder={data.question_placeholder}
                      changeHandler={ondynamiChangeHandler}
                    />
@@ -355,7 +355,7 @@ export default class SiteAdd extends Component{
                       className="form-control" 
                       onChange={ondynamiChangeHandler} 
                       name={data.question_name}
-                      value={this.props.project_info.select||""}
+                      value={this.props.project_info[data.question_name]}
                       style={{border: "0",borderBottom: "1px solid #eaeaea"}}>
                    { data.mcq_options.map((option,key)=>{
                     return(
@@ -380,7 +380,7 @@ export default class SiteAdd extends Component{
                         id={data.id}
                         label={data.question_text}
                         name={data.question_name}
-                        value={this.props.project_info.ward||""}
+                        value={this.props.project_info[data.question_name]}
                         placeholder={data.question_placeholder}
                         changeHandler={ondynamiChangeHandler}
                       />
@@ -393,7 +393,7 @@ export default class SiteAdd extends Component{
                     <Select 
                       data={data.project_id}
                       onchange={ondynamiChangeHandler}
-                      value={""}
+                      value={this.props.project_info[data.question_name]}
                       type={data.question_text}
                       selectedValue={this.selectedValue}
                       name={data.question_name}

@@ -10,7 +10,7 @@ export default class SiteEdit extends Component{
             address:"", 
             public_desc:"",
             logo:"",
-            weight:0,
+            weight:"",
             cluster_sites:false
          
         },
@@ -50,7 +50,7 @@ export default class SiteEdit extends Component{
         axios.get(`/fv3/api/site-form/${id}/`)
         .then(response=>{    
           axios.get(`/fv3/api/site-form/?project=${response.data.project}`)
-             .then(res=>{    
+             .then(res=>{   
                   if(response.data.latitude && response.data.longitude){
                       this.setState({
                         position:{
@@ -89,7 +89,7 @@ export default class SiteEdit extends Component{
                       },
                     regionselected:response.data.region,
                     Selectedtypes:response.data.types,
-                    data:response.data.site_meta_attributes_ans,
+                    data:response.data.site_meta_attributes_answers,
                     cropResult:response.data.logo
                     })
                     }).catch(err=>{
@@ -100,9 +100,7 @@ export default class SiteEdit extends Component{
           }) 
     }
       onChangeHandler=(e,position)=>{
-         
-          
-        const { name, value } = e.target;
+         const { name, value } = e.target;
         if (position) {  
           return this.setState({
             position: {
@@ -113,17 +111,17 @@ export default class SiteEdit extends Component{
         }
         
         this.setState({
+          
             project: {
               ...this.state.project,
               [name]: value
             }
-          },()=>this.state.weight,this.state);
+          });
 
       }
     onSubmitHandler=(e)=>{
       e.preventDefault();
-      const {match:{params:{id}}}=this.props;
-    
+      const {match:{params:{id}}}=this.props    
       let data={
         project:this.state.project_id,
         name:this.state.project.name,
@@ -133,19 +131,22 @@ export default class SiteEdit extends Component{
         public_desc:this.state.project.public_desc,
         latitude: this.state.position.latitude,
         longitude: this.state.position.longitude,
-        weight:this.state.weight,
+        ... (this.state.weight!==undefined && { weight:this.state.project.weight}),
+        region:this.state.regionselected,
+        type:this.state.Selectedtypes,
         cluster_sites:this.state.cluster_sites,
         ...(this.state.show && {logo:this.state.cropResult}),
-        site_meta_attributes_ans:this.state.data
-      }
-      
-      
+        site_meta_attributes_ans:JSON.stringify(this.state.data)
+      }  
       axios({
         method: "PUT",
         url:`/fv3/api/site-form/${id}/`,
         data,
         headers: { 'content-type': 'application/json' },
-      }).then(req=>{
+      }).then(res=>{
+       if(res.status===200){
+          this.props.history.push(`/fieldsight/application/#/site-dashboard/${res.data.id}`)
+        }
       }).catch(err => {
         console.log(err);
       });
@@ -211,12 +212,11 @@ export default class SiteEdit extends Component{
 
     }
     ondynamiChangeHandler=(e)=>{
-      const { target: { name, value }} =e 
-      this.setState({
+      const { target: { name, value }} =e   
+       this.setState ({
         data: {
           ...this.state.data,
-          
-          [name]: value
+         [name]: value
         }
       })
     }
@@ -266,6 +266,7 @@ export default class SiteEdit extends Component{
             handleDelete={this.handleDelete}
             deleteClose={this.deleteClose}
             deleteFile={this.deleteFile}
+           
 
             />
         )

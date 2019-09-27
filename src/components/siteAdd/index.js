@@ -52,19 +52,18 @@ export default class SiteAdd extends Component{
         id:"",
         selectform:[],
         selectdata:false,
-        region:[],
+        region:[{name: '----', id: null}],
         data:{},
         regionselected:"",
-        gender:[
-          {key:"male", name:"Male"},
-          {key:"female", name:"Female"}],
+  
           selectedGender:"",
           dataSelected:"",
           id:"",
           siteId:"",
           regionalId:"",
-          site_types:[],
-          Selectedtypes:""
+          site_types:[{name: '----', id: null}],
+          Selectedtypes:"",
+          show:false
        
       };
 
@@ -75,20 +74,26 @@ export default class SiteAdd extends Component{
         
         axios.get(`/fv3/api/site-form/?project=${id}`)
         .then(res=>{    
-            this.setState({
-              jsondata:res.data.json_questions,
-               id,
-               region:res.data.regions,
-               siteId,
-               regionalId,
-               site_types:res.data.site_types
-               })
+          let regionArr =this.state.region
+          let typeArr =this.state.site_types
+            this.setState(
+              state=>{
+                res.data.regions.map(each=> regionArr.push(each))
+                res.data.site_types.map(each=>typeArr.push(each))
+                return{
+                  jsondata:res.data.json_questions,
+                  id,
+                  region:regionArr,
+                  siteId,
+                  regionalId,
+                  site_types:typeArr
+                }
+               },()=>(this.state.site_types,"0000000000")
+               )
             }).catch(err=>{
             console.log(err ,"err");
             
         }) 
-        
-        
       }
      
    onChangeHandler = (e, position) => { 
@@ -121,7 +126,7 @@ export default class SiteAdd extends Component{
           address:this.state.project.address,
           public_desc:this.state.project.publicDescription,
           region:this.state.regionselected,
-          logo:this.state.cropResult,
+          ...(this.state.show && {logo:this.state.cropResult}),
           latitude: this.state.position.latitude,
           longitude: this.state.position.longitude,
           type:this.state.Selectedtypes,
@@ -138,7 +143,7 @@ export default class SiteAdd extends Component{
               address:this.state.project.address,
               public_desc:this.state.project.publicDescription,
               region:this.state.regionselected,
-              logo:this.state.cropResult,
+              ...(this.state.show && {logo:this.state.cropResult}),
               latitude: this.state.position.latitude,
               longitude: this.state.position.longitude,
               type:this.state.Selectedtypes,
@@ -157,7 +162,7 @@ export default class SiteAdd extends Component{
                   address:this.state.project.address,
                   public_desc:this.state.project.publicDescription,
                   region:this.state.regionalId,
-                  logo:this.state.cropResult,
+                  ...(this.state.show && {logo:this.state.cropResult}),
                   latitude: this.state.position.latitude,
                   longitude: this.state.position.longitude,
                   type:this.state.Selectedtypes,
@@ -165,9 +170,6 @@ export default class SiteAdd extends Component{
                   site_meta_attributes_ans:JSON.stringify(this.state.data, select=this.state.dataSelected),
                   subsite:this.state.siteId
                  }
-           
-         
-      
         if(this.props.page==="CreateSite"){
           axios({
             method: "POST",
@@ -175,7 +177,7 @@ export default class SiteAdd extends Component{
             data,
             headers: { 'content-type': 'application/json' },
           }).then(req=>{
-              if(req.status===201){
+       if(req.status===201){
                 this.setState({
                   project: {
                     name:"",
@@ -205,6 +207,7 @@ export default class SiteAdd extends Component{
                 data:[]  
   
                 })
+                this.props.history.push(`/fieldsight/application/#/site-dashboard/${req.data.id}`)
               }
           }).catch(err => {
             console.log(err);
@@ -247,6 +250,7 @@ export default class SiteAdd extends Component{
       
   
                 })
+                this.props.history.push(`/fieldsight/application/#/site-dashboard/${req.data.id}`)
               }
           }).catch(err => {
             console.log(err);
@@ -258,7 +262,7 @@ export default class SiteAdd extends Component{
             url:`/fv3/api/site-form/?project=${this.state.id}&region=${this.state.regionalId}`,
             data:region,
             headers: { 'content-type': 'application/json' },
-          }).then(req=>{     
+          }).then(req=>{    
               if(req.status===201){
                 this.setState({
                   project: {
@@ -290,6 +294,7 @@ export default class SiteAdd extends Component{
      
   
                 })
+                this.props.history.push(`/fieldsight/application/#/site-dashboard/${req.data.id}`)
               }
           }).catch(err => {
             console.log(err);
@@ -298,7 +303,7 @@ export default class SiteAdd extends Component{
       
 
     }
-    mapClickHandler = e => {
+    mapClickHandler = e => {   
         this.setState({
           position: {
             ...this.state.position,
@@ -329,7 +334,8 @@ export default class SiteAdd extends Component{
         reader.onload = () => {
           this.setState({ 
               src: reader.result, 
-              showCropper: true 
+              showCropper: true ,
+              show:true
             });
         };
         reader.readAsDataURL(file[0]);
@@ -358,8 +364,7 @@ export default class SiteAdd extends Component{
       this.setState({
         data: {
           ...this.state.data,
-          
-          [name]: value
+           [name]: value
         }
       })
     }
@@ -494,10 +499,10 @@ export default class SiteAdd extends Component{
               isLoading,
              
               jsondata,
-              site_types
+              site_types,
+              regionselected,
+              Selectedtypes
                }}=this;
-              
-               console.log(region);
         return (
             <RightContentCard title="New Site">
             <form className="edit-form" onSubmit={onSubmitHandler}>
@@ -532,16 +537,17 @@ export default class SiteAdd extends Component{
                 label="Regions"
                 options={region.length>0?region.map(region => region):region}
                 changeHandler={e => onSelectChangeHandler(e, "regions")}
-                
+                 value={regionselected && regionselected }
                />
         </div>:""}
+       
         <div className="col-xl-4 col-md-6">
                 <SelectElement
                 className="form-control"
                 label="Types"
                 options={site_types.length>0?site_types.map(region => region):site_types}
                 changeHandler={e => onSelectChangeHandler(e, "site_types")}
-                
+                value={Selectedtypes}
                />
 </div>
                 <div className="col-xl-4 col-md-6">
@@ -549,7 +555,7 @@ export default class SiteAdd extends Component{
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required={true}
+                    required={false}
                     label="Phone"
                     name="phone"
                     value={phone}
@@ -561,7 +567,7 @@ export default class SiteAdd extends Component{
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required={true}
+                    required={false}
                     label="Address"
                     name="address"
                     value={address}
@@ -582,7 +588,7 @@ export default class SiteAdd extends Component{
                     formType="editForm"
                     tag="input"
                     type="number"
-                    required={true}
+                    required={false}
                     label="Weight"
                     name="weight"
                     value={this.state.weight}
@@ -595,7 +601,7 @@ export default class SiteAdd extends Component{
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required={true}
+                    required={false}
                     label="Description"
                     name="publicDescription"
                     value={publicDescription}
@@ -614,7 +620,7 @@ export default class SiteAdd extends Component{
                       <Map
                         style={{ height: "205px", marginTop: "1rem" }}
                         center={[latitude, longitude]}
-                        zoom={this.props.zoom}
+                        zoom={this.state.zoom}
                         onClick={mapClickHandler}
                       >
                         <TileLayer
