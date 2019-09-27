@@ -23,6 +23,7 @@ import SiteLog from "./siteLogs";
 import ProjectAdd from "./projectAdd";
 import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
+import EditSite from "./SiteEdit";
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
@@ -185,6 +186,10 @@ class App extends Component {
                      <Route
                       path="/sub-site-add/:id/:siteId"
                       render={props => <SiteAdd  {...props} page="subSite" />}
+                     />
+                      <Route
+                      path="/site-edit/:id"
+                      render={props => <EditSite  {...props} page="subSite" />}
                      />
                   </Switch>
                   <ToastContainer />
