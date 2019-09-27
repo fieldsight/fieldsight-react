@@ -12,6 +12,7 @@ import EditFormGuide from "./EditFormGuide";
 import SubStageTable from "./subStageTable";
 import AddStageForm from "./AddStageForm";
 import AddForm from "./AddForm";
+import SortableStage from "./SortableStage";
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -53,7 +54,10 @@ class StagedForms extends Component {
     substageTitle: "",
     substageDesc: "",
     stageId: "",
-    substageId: ""
+    substageId: "",
+    isStageReorder: false,
+    newStageOrder: [],
+    isStageReorderCancel: true
   };
 
   componentDidMount() {
@@ -89,6 +93,37 @@ class StagedForms extends Component {
       .catch(err => {});
   };
 
+  handleStageReorder = () => {
+    this.setState({
+      isStageReorder: !this.state.isStageReorder,
+      isStageReorderCancel: !this.state.isStageReorderCancel
+    });
+  };
+  handleNewStageOrder = list => {
+    this.setState({
+      newStageOrder: list
+    });
+  };
+  handleSaveStageReorder = () => {
+    axios
+      .post(`fv3/api/forms/reorder/stage/`, this.state.newStageOrder)
+      .then(res => {
+        console.log("------", res.data);
+        this.setState(
+          {
+            data: res.data.data,
+            isStageReorder: false
+            // isStageReorderCancel: true
+          },
+          () => {
+            successToast("reordered", "successfully");
+          }
+        );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
   handleRequestSubStage = (stageId, order) => {
     this.setState(
       {
@@ -576,8 +611,6 @@ class StagedForms extends Component {
         substageId: formData.id
       },
       () => {
-        console.log("edit data", this.state);
-
         this.handleSubStageForm();
       }
     );
@@ -605,7 +638,9 @@ class StagedForms extends Component {
         editGuide,
         guideData,
         substageId,
-        stageId
+        stageId,
+        isStageReorder,
+        isStageReorderCancel
       },
       handleRequestSubStage,
       handleSubmitStageForm,
@@ -618,73 +653,61 @@ class StagedForms extends Component {
       handleSelectTypeChange,
       handleMyFormChange,
       handleSaveForm,
-      handleCreateForm
+      handleCreateForm,
+      handleStageReorder,
+      handleSaveStageReorder
     } = this;
     return (
       <div className="col-xl-9 col-lg-8">
-        <RightContentCard
-          title="Staged Forms"
-          addButton={true}
-          toggleModal={this.props.commonPopupHandler}
-          showText={true}
-        >
+        <div className="card">
+          <div className="card-header main-card-header">
+            <h5>Staged Forms</h5>
+            <div className="add-btn">
+              <a onClick={this.props.commonPopupHandler}>
+                Add New
+                <span>
+                  <i className="la la-plus" />
+                </span>
+              </a>
+              <a onClick={handleStageReorder}>
+                {!isStageReorder ? "Reorder" : "Cancel Reorder"}
+                {!isStageReorder ? (
+                  <span>
+                    <i className="la la-reorder" />
+                  </span>
+                ) : (
+                  <span>
+                    <i className="la la-close" />
+                  </span>
+                )}
+              </a>
+              {isStageReorder && (
+                <a onClick={handleSaveStageReorder}>
+                  Save Order
+                  <span>
+                    <i className="la la-save" />
+                  </span>
+                </a>
+              )}
+            </div>
+          </div>
           {loader && <DotLoader />}
           {!loader && (
-            <Accordion defaultActiveKey={0} className="card no-boxshadow">
-              {data.length > 0 &&
-                data.map((each, index) => (
-                  <Card key={`key_${index}`}>
-                    <Accordion.Toggle
-                      as={Card.Header}
-                      eventKey={`${each.order}`}
-                      className="card-header"
-                      onClick={() => {
-                        handleRequestSubStage(each.id, each.order);
-                      }}
-                    >
-                      <h5>
-                        #{index + 1} {each.name}
-                      </h5>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey={`${each.order}`}>
-                      <Card.Body>
-                        <div className="add-btn pull-left">
-                          <a
-                            data-tab="addSubStage-popup"
-                            onClick={handleSubStageForm}
-                          >
-                            Add substage
-                            <span>
-                              <i className="la la-plus"></i>
-                            </span>
-                          </a>
-                        </div>
-                        <div className="add-btn pull-left">
-                          <a
-                            data-tab="addSubStage-popup"
-                            onClick={() => handleClickEdit(each)}
-                          >
-                            Edit
-                            <span>
-                              <i className="la la-edit"></i>
-                            </span>
-                          </a>
-                        </div>
-                        {!!loadSubStage && <DotLoader />}
-                        {!loadSubStage && !!subStageData && (
-                          <SubStageTable
-                            data={subStageData}
-                            handleEditGuide={this.handleEditGuide}
-                            changeDeployStatus={this.changeDeployStatus}
-                            deleteItem={this.deleteItem}
-                            editSubStageForm={this.editSubStageForm}
-                          />
-                        )}
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                ))}
-            </Accordion>
+            <SortableStage
+              stage={data}
+              handleRequestSubStage={handleRequestSubStage}
+              handleClickEdit={handleClickEdit}
+              loadSubStage={loadSubStage}
+              subStageData={subStageData}
+              handleEditGuide={this.handleEditGuide}
+              changeDeployStatus={this.changeDeployStatus}
+              deleteItem={this.deleteItem}
+              editSubStageForm={this.editSubStageForm}
+              handleSubStageForm={handleSubStageForm}
+              reorder={isStageReorder}
+              isStageReorderCancel={isStageReorderCancel}
+              handleNewStageOrder={this.handleNewStageOrder}
+            />
           )}
           {this.props.popupModal && (
             <Modal title="Stage Form" toggleModal={this.props.closePopup}>
@@ -797,7 +820,7 @@ class StagedForms extends Component {
               />
             </Modal>
           )}
-        </RightContentCard>
+        </div>
       </div>
     );
   }
