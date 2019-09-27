@@ -84,6 +84,19 @@ class SortableStage extends Component {
         {data.length > 0 &&
           data.map((each, index) => (
             <Card key={`key_${index}`}>
+              <Card.Header>
+                <div className="add-btn pull-right">
+                  <a
+                    data-tab="addSubStage-popup"
+                    onClick={() => handleClickEdit(each)}
+                  >
+                    {/* Edit */}
+                    <i className="la la-edit"></i>
+                    {/* <span>
+                    </span> */}
+                  </a>
+                </div>
+              </Card.Header>
               <Accordion.Toggle
                 as={Card.Header}
                 eventKey={`${each.order}`}
@@ -113,27 +126,21 @@ class SortableStage extends Component {
                         <i className="la la-plus"></i>
                       </span>
                     </a>
-                    <a
-                      data-tab="addSubStage-popup"
-                      onClick={() => handleClickEdit(each)}
-                    >
-                      Edit
-                      <span>
-                        <i className="la la-edit"></i>
-                      </span>
-                    </a>
-                    <a onClick={handleSubstageReorder}>
-                      {!reorderSubstage ? "Reorder" : "Cancel Reorder"}
-                      {!reorderSubstage ? (
-                        <span>
-                          <i className="la la-reorder" />
-                        </span>
-                      ) : (
-                        <span>
-                          <i className="la la-close" />
-                        </span>
-                      )}
-                    </a>
+
+                    {subStageData && subStageData.length > 0 && (
+                      <a onClick={handleSubstageReorder}>
+                        {!reorderSubstage ? "Reorder" : "Cancel Reorder"}
+                        {!reorderSubstage ? (
+                          <span>
+                            <i className="la la-reorder" />
+                          </span>
+                        ) : (
+                          <span>
+                            <i className="la la-close" />
+                          </span>
+                        )}
+                      </a>
+                    )}
                     {reorderSubstage && (
                       <a onClick={handleSaveSubstageReorder}>
                         Save Order
