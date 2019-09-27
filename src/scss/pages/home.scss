@@ -25,22 +25,32 @@
         flex-wrap: nowrap;
         padding: 0.5rem 0;
         border-bottom: 1px solid $color-bg;
+        @include easein_out(all 0.3s ease-in-out);
 
         figure {
           margin: 0;
-          @include radius50;
+          @include radius(50%);
           flex: 0 0 55px;
+          overflow: hidden;
 
           img {
-            @include radius50;
+            @include radius(50%);
             max-width: 40px;
             height: 40px;
+            @include easein_out(all 0.5s ease-in-out);
+            @include transform_scale(scale(1));
           }
         }
 
         .content {
           h6 {
             margin-bottom: 0.2rem;
+            font-size:.875rem;
+            a{
+              color:$color-primary;
+              font-family: $ubuntu;
+              font-weight: 500;
+            }
           }
 
           span {
@@ -88,6 +98,14 @@
           padding-bottom: 0;
           border-bottom: 0;
         }
+        &:hover{
+          background-color: lighten($color-bg, 7%);
+          figure{
+            img{
+              @include transform_scale(scale(1.1));
+            }
+          }
+        }
       }
     }
 
@@ -123,9 +141,14 @@
         border-bottom: 1px solid $color-bg;
 
         h6 {
-          font-size: 0.875rem;
+          font-size: .875rem;
           font-weight: 500;
           margin: 0;
+          a{
+            font-size: .875rem;
+            font-family: $ubuntu;
+            font-weight: 500;
+          }
         }
 
         label {

@@ -39,7 +39,7 @@ const DatatablePage = ({
         </div>
         <div
           className="card-body"
-          style={{ position: "relative", height: "430px" }}
+          style={{ position: "relative", height: "434px" }}
         >
           {showContentLoader ? (
             <TableContentLoader row={11} column={5} />

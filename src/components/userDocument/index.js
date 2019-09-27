@@ -89,7 +89,7 @@ import {
                                 </div>
                             </div>
                             <div className="card-body" >
-                                <table id="manage_table" className="table  table-bordered  manage_table" >
+                                <table id="manage_table" className="table dataTable table-bordered  manage_table" >
                                     <thead >
                                         <tr>
                                             <th >Name</th>
