@@ -27,9 +27,9 @@ class StagedForms extends Component {
     activeTab: "myForms",
     commonFormData: {
       status: 3,
-      isDonor: false,
-      isEdit: false,
-      isDelete: false,
+      isDonor: true,
+      isEdit: true,
+      isDelete: true,
       regionSelected: [],
       typeSelected: [],
       xf: ""
@@ -52,7 +52,8 @@ class StagedForms extends Component {
     order: 0,
     substageTitle: "",
     substageDesc: "",
-    stageId: ""
+    stageId: "",
+    substageId: ""
   };
 
   componentDidMount() {
@@ -411,40 +412,92 @@ class StagedForms extends Component {
       order,
       substageTitle,
       substageDesc,
-      stageId
+      stageId,
+      substageId
     } = this.state;
-    const body = {
-      weight: weight,
-      name: substageTitle,
-      description: substageDesc,
-      order: order,
-      xf: commonFormData.xf,
-      default_submission_status: commonFormData.status,
-      setting: {
-        types: commonFormData.typeSelected,
-        regions: commonFormData.regionSelected,
-        donor_visibility: commonFormData.isDonor,
-        can_edit: commonFormData.isEdit,
-        can_delete: commonFormData.isDelete
-      }
-    };
 
-    axios
-      .post(`fv3/api/manage-forms/sub-stages/?stage_id=${stageId}`, body)
-      .then(res => {
-        this.setState(
-          {
-            subStageData: [...this.state.subStageData, res.data]
-          },
-          () => {
-            this.handleSubStageForm();
-            successToast("Created", "successfully");
-          }
-        );
-      })
-      .catch(err => {
-        errorToast(err);
-      });
+    if (!!substageId) {
+      const body = {
+        id: substageId,
+        weight: weight,
+        name: substageTitle,
+        description: substageDesc,
+        order: order,
+        xf: commonFormData.xf,
+        default_submission_status: commonFormData.status,
+        setting: {
+          types: commonFormData.typeSelected,
+          regions: commonFormData.regionSelected,
+          donor_visibility: commonFormData.isDonor,
+          can_edit: commonFormData.isEdit,
+          can_delete: commonFormData.isDelete
+        }
+      };
+
+      axios
+        .put(
+          `fv3/api/manage-forms/sub-stages/${substageId}/?stage_id=${stageId}`,
+          body
+        )
+        .then(res => {
+          this.setState(
+            state => {
+              const data = this.state.subStageData;
+              const newArr = data.map(each => {
+                if (each.id == res.data.id) {
+                  return (each = res.data);
+                } else {
+                  return each;
+                }
+              });
+              return {
+                subStageData: newArr
+              };
+            },
+            () => {
+              this.handleSubStageForm();
+
+              successToast("Updated", "successfully");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    } else {
+      const body = {
+        weight: weight,
+        name: substageTitle,
+        description: substageDesc,
+        order: order,
+        xf: commonFormData.xf,
+        default_submission_status: commonFormData.status,
+        setting: {
+          types: commonFormData.typeSelected,
+          regions: commonFormData.regionSelected,
+          donor_visibility: commonFormData.isDonor,
+          can_edit: commonFormData.isEdit,
+          can_delete: commonFormData.isDelete
+        }
+      };
+
+      axios
+        .post(`fv3/api/manage-forms/sub-stages/?stage_id=${stageId}`, body)
+        .then(res => {
+          this.setState(
+            {
+              subStageData: [...this.state.subStageData, res.data]
+            },
+            () => {
+              this.handleSubStageForm();
+              successToast("Created", "successfully");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    }
   };
   onChangeHandler = async e => {
     const {
@@ -502,7 +555,32 @@ class StagedForms extends Component {
   };
 
   editSubStageForm = formData => {
-    console.log("edit data", formData);
+    this.setState(
+      {
+        formId: formData.xf && formData.xf.id,
+        formTitle: formData.xf && formData.xf.title,
+        weight: formData.weight,
+        substageTitle: formData.name,
+        substageDesc: formData.description,
+        order: formData.order,
+        commonFormData: {
+          ...this.state.commonFormData,
+          status: formData.default_submission_status,
+          isDonor: formData.setting && formData.setting.donor_visibility,
+          isEdit: formData.setting && formData.setting.can_edit,
+          isDelete: formData.setting && formData.setting.can_delete,
+          regionSelected: formData.setting && formData.setting.regions,
+          typeSelected: formData.setting && formData.setting.types,
+          xf: formData.xf && formData.xf.id
+        },
+        substageId: formData.id
+      },
+      () => {
+        console.log("edit data", this.state);
+
+        this.handleSubStageForm();
+      }
+    );
   };
   render() {
     const {
@@ -525,7 +603,9 @@ class StagedForms extends Component {
         substageTitle,
         substageDesc,
         editGuide,
-        guideData
+        guideData,
+        substageId,
+        stageId
       },
       handleRequestSubStage,
       handleSubmitStageForm,
@@ -582,7 +662,7 @@ class StagedForms extends Component {
                         <div className="add-btn pull-left">
                           <a
                             data-tab="addSubStage-popup"
-                            onClick={() => this.handleClickEdit(each)}
+                            onClick={() => handleClickEdit(each)}
                           >
                             Edit
                             <span>
@@ -617,7 +697,7 @@ class StagedForms extends Component {
             </Modal>
           )}
           {showSubstageForm && (
-            <Modal title="Add SubStage Form" toggleModal={handleClearState}>
+            <Modal title="SubStage Form" toggleModal={handleClearState}>
               <form className="floating-form" onSubmit={this.handleCreateForm}>
                 <div className="form-form">
                   <div className="selected-form">
@@ -680,7 +760,7 @@ class StagedForms extends Component {
                 </div>
                 <div className="form-group pull-right no-margin">
                   <button type="submit" className="fieldsight-btn">
-                    Add Form
+                    {!!substageId ? "Save" : "Add Form"}
                   </button>
                 </div>
               </form>

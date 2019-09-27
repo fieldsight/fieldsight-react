@@ -81,7 +81,7 @@ class GeneralFormTable extends Component {
                         changeDeployStatus(item.id, item.is_deployed)
                       }
                     >
-                      Undeployed
+                      Undeploy
                       <i className="la la-close"> </i>
                     </a>
                   )}

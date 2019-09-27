@@ -113,6 +113,8 @@ class AddStageForm extends Component {
       handleSelectTypeChange,
       handleSubmitForm
     } = this;
+    const isEdit = Object.keys(this.props.stageData).length > 0 ? true : false;
+
     return (
       <form className="floating-form " onSubmit={handleSubmitForm}>
         <div className="form-group">
@@ -164,7 +166,7 @@ class AddStageForm extends Component {
 
         <div className="form-group pull-right no-margin">
           <button type="submit" className="fieldsight-btn">
-            Add stage
+            {!!isEdit ? "Save" : "Add stage"}
           </button>
         </div>
       </form>

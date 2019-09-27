@@ -92,7 +92,7 @@ class SubStageTable extends Component {
                         changeDeployStatus(sub.id, sub.is_deployed)
                       }
                     >
-                      Undeployed
+                      Undeploy
                       <i className="la la-close"> </i>
                     </a>
                   )}

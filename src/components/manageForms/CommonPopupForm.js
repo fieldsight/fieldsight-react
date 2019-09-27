@@ -11,13 +11,17 @@ const animatedComponents = makeAnimated();
 
 class CommonPopupForm extends Component {
   state = {
-    optionRegion: [],
-    optionType: [],
+    regionSelected: [],
+    typeSelected: [],
     regionDropdown: [],
     typeDropdown: []
   };
   componentDidMount() {
-    const { typeOptions, regionOptions } = this.props;
+    const {
+      typeOptions,
+      regionOptions,
+      commonFormData: { regionSelected, typeSelected }
+    } = this.props;
     const newRegionArr =
       regionOptions &&
       regionOptions.map(each => ({
@@ -33,13 +37,44 @@ class CommonPopupForm extends Component {
         label: each.name
       }));
 
+    let selectedRegion = [];
+    let selectedType = [];
+    // if (!!stageData) {
+    if (!!regionSelected && regionSelected.length > 0) {
+      regionOptions.map(region => {
+        if (stageData.regions.indexOf(region.id) > -1) {
+          selectedRegion.push({
+            ...region,
+            value: region.identifier,
+            label: region.name
+          });
+        }
+      });
+    } else {
+      selectedRegion = newRegionArr;
+    }
+
+    if (typeSelected && typeSelected.length > 0) {
+      typeOptions.map(type => {
+        if (stageData.tags.indexOf(type.id) > -1) {
+          selectedType.push({
+            ...type,
+            value: type.identifier,
+            label: type.name
+          });
+        }
+      });
+    } else {
+      selectedType = newTypeArr;
+    }
+
     this.setState({
-      optionRegion: newRegionArr,
-      optionType: newTypeArr
+      regionDropdown: newRegionArr,
+      typeDropdown: newTypeArr,
       // commonFormData: {
-      //   ...this.state.commonFormData,
-      //   regionSelected: newRegionArr,
-      //   typeSelected: newTypeArr
+      // ...this.state.commonFormData,
+      regionSelected: newRegionArr,
+      typeSelected: newTypeArr
       // }
     });
   }
@@ -48,9 +83,10 @@ class CommonPopupForm extends Component {
       props: {
         handleRadioChange,
         handleSelectRegionChange,
-        handleSelectTypeChange
+        handleSelectTypeChange,
+        commonFormData
       },
-      state: { optionRegion, optionType }
+      state: { regionDropdown, typeDropdown, regionSelected, typeSelected }
     } = this;
 
     return (
@@ -64,6 +100,7 @@ class CommonPopupForm extends Component {
               name="status"
               value={3}
               changeHandler={handleRadioChange}
+              checked={commonFormData.status == 3}
             />
             <RadioElement
               label="Pending"
@@ -71,6 +108,7 @@ class CommonPopupForm extends Component {
               name="status"
               value={0}
               changeHandler={handleRadioChange}
+              checked={commonFormData.status == 0}
             />
             <RadioElement
               label="Flagged"
@@ -78,6 +116,7 @@ class CommonPopupForm extends Component {
               name="status"
               value={2}
               changeHandler={handleRadioChange}
+              checked={commonFormData.status == 2}
             />
             <RadioElement
               label="Rejected"
@@ -85,6 +124,7 @@ class CommonPopupForm extends Component {
               name="status"
               value={1}
               changeHandler={handleRadioChange}
+              checked={commonFormData.status == 1}
             />
           </div>
         </div>
@@ -94,9 +134,9 @@ class CommonPopupForm extends Component {
             // closeMenuOnSelect={false}
             // className="select2-select select2"
             onChange={handleSelectRegionChange}
-            options={optionRegion}
+            options={regionDropdown}
             isMulti={true}
-            defaultValue={optionRegion}
+            defaultValue={regionSelected}
             components={animatedComponents}
           />
         </div>
@@ -106,9 +146,9 @@ class CommonPopupForm extends Component {
             // closeMenuOnSelect={false}
             // className="select2-select select2"
             onChange={handleSelectTypeChange}
-            options={optionType}
+            options={typeDropdown}
             isMulti={true}
-            defaultValue={optionType}
+            defaultValue={typeSelected}
             components={animatedComponents}
           />
         </div>
@@ -120,12 +160,14 @@ class CommonPopupForm extends Component {
               name="donor"
               changeHandler={handleRadioChange}
               value={true}
+              checked={commonFormData.isDonor == true}
             />
             <RadioElement
               label="No"
               name="donor"
               changeHandler={handleRadioChange}
               value={false}
+              checked={commonFormData.isDonor == false}
             />
           </div>
         </div>
@@ -137,12 +179,14 @@ class CommonPopupForm extends Component {
               name="edit"
               changeHandler={handleRadioChange}
               value={true}
+              checked={commonFormData.isEdit == true}
             />
             <RadioElement
               label="No"
               name="edit"
               changeHandler={handleRadioChange}
               value={false}
+              checked={commonFormData.isEdit == false}
             />
           </div>
         </div>
@@ -154,12 +198,14 @@ class CommonPopupForm extends Component {
               name="delete"
               changeHandler={handleRadioChange}
               value={true}
+              checked={commonFormData.isDelete == true}
             />
             <RadioElement
               label="No"
               name="delete"
               changeHandler={handleRadioChange}
               value={false}
+              checked={commonFormData.isDelete == false}
             />
           </div>
         </div>
