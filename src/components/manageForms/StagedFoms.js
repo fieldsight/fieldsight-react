@@ -204,7 +204,7 @@ class StagedForms extends Component {
             return { subStageData: newData };
           },
           () => {
-            successToast("Form", "updated");
+            successToast("updated", "successfully");
           }
         );
       })
@@ -651,6 +651,65 @@ class StagedForms extends Component {
       }
     );
   };
+  handleDeployAllSubstages = toDeploy => {
+    const { id, stageId, subStageData } = this.state;
+    axios
+      .post(
+        `fv3/api/manage-forms/deploy/?project_id=${id}&type=stage&id=${stageId}`,
+        {
+          is_deployed: toDeploy
+        }
+      )
+      .then(res => {
+        if (!!res.data.message)
+          this.setState(
+            state => {
+              const data = subStageData;
+              data.map(sub => {
+                const arrItem = { ...sub };
+                sub.is_deployed = toDeploy;
+                return arrItem;
+              });
+              return {
+                subStageData: data
+              };
+            },
+            () => {
+              successToast("updated", "successfully");
+            }
+          );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
+  handleDeleteAllSubstages = toDeploy => {
+    // debugger;
+    const { id, stageId } = this.state;
+    // console.log(toDeploy, stageId);
+    axios
+      .post(
+        `fv3/api/manage-forms/delete/?project_id=${id}&type=stage&id=${stageId}`,
+        {
+          is_deployed: toDeploy
+        }
+      )
+      .then(res => {
+        // console.log("delete ko res", res.data);
+        if (!!res.data)
+          this.setState(
+            {
+              subStageData: []
+            },
+            () => {
+              successToast("Deleted", "successfully");
+            }
+          );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
   render() {
     const {
       props: { regionOptions, typeOptions },
@@ -692,7 +751,9 @@ class StagedForms extends Component {
       handleStageReorder,
       handleSaveStageReorder,
       handleSubstageReorder,
-      handleSaveSubstageReorder
+      handleSaveSubstageReorder,
+      handleDeployAllSubstages,
+      handleDeleteAllSubstages
     } = this;
     return (
       <div className="col-xl-9 col-lg-8">
@@ -749,6 +810,8 @@ class StagedForms extends Component {
               handleSubstageReorder={handleSubstageReorder}
               handleSaveSubstageReorder={handleSaveSubstageReorder}
               handleNewSubstageOrder={this.handleNewSubstageOrder}
+              handleDeployAll={handleDeployAllSubstages}
+              handleDeleteAll={handleDeleteAllSubstages}
             />
           )}
           {this.props.popupModal && (

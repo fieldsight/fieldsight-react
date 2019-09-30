@@ -75,9 +75,37 @@ class SortableStage extends Component {
         reorder,
         reorderSubstage,
         handleSubstageReorder,
-        handleSaveSubstageReorder
+        handleSaveSubstageReorder,
+        handleDeployAll,
+        handleDeleteAll
       }
     } = this;
+    // console.log("subStageData---", subStageData);
+    let toDeploy = "";
+    let toDelete = "";
+    const arrDeploy = subStageData.map(sub => {
+      if (sub.is_deployed) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    const arrDelete = subStageData.map(sub => {
+      if (sub.is_deployed) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    toDeploy =
+      arrDeploy.length > 0 ? (arrDeploy.indexOf(true) > -1 ? true : false) : "";
+    toDelete =
+      arrDelete.length > 0
+        ? arrDelete.indexOf(false) > -1
+          ? false
+          : true
+        : "";
 
     return (
       <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
@@ -90,10 +118,7 @@ class SortableStage extends Component {
                     data-tab="addSubStage-popup"
                     onClick={() => handleClickEdit(each)}
                   >
-                    {/* Edit */}
                     <i className="la la-edit"></i>
-                    {/* <span>
-                    </span> */}
                   </a>
                 </div>
               </Card.Header>
@@ -128,7 +153,10 @@ class SortableStage extends Component {
                     </a>
 
                     {subStageData && subStageData.length > 0 && (
-                      <a onClick={handleSubstageReorder}>
+                      <a
+                        data-tab="addSubStage-popup"
+                        onClick={handleSubstageReorder}
+                      >
                         {!reorderSubstage ? "Reorder" : "Cancel Reorder"}
                         {!reorderSubstage ? (
                           <span>
@@ -142,10 +170,46 @@ class SortableStage extends Component {
                       </a>
                     )}
                     {reorderSubstage && (
-                      <a onClick={handleSaveSubstageReorder}>
+                      <a
+                        data-tab="addSubStage-popup"
+                        onClick={handleSaveSubstageReorder}
+                      >
                         Save Order
                         <span>
                           <i className="la la-save" />
+                        </span>
+                      </a>
+                    )}
+                    {subStageData && subStageData.length > 0 && toDeploy && (
+                      <a
+                        data-tab="addSubStage-popup"
+                        onClick={() => handleDeployAll(true)}
+                      >
+                        Deploy Substages
+                        <span>
+                          <i className="badge badge-success" />
+                        </span>
+                      </a>
+                    )}
+                    {subStageData && subStageData.length > 0 && toDelete && (
+                      <a
+                        data-tab="addSubStage-popup"
+                        onClick={() => handleDeleteAll(true)}
+                      >
+                        Delete Substages
+                        <span>
+                          <i className="badge badge-danger" />
+                        </span>
+                      </a>
+                    )}
+                    {subStageData && subStageData.length > 0 && !toDeploy && (
+                      <a
+                        data-tab="addSubStage-popup"
+                        onClick={() => handleDeployAll(false)}
+                      >
+                        Undeploy Substages
+                        <span>
+                          <i className="badge badge-danger" />
                         </span>
                       </a>
                     )}
@@ -168,12 +232,6 @@ class SortableStage extends Component {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-            // <SortableCard
-            //   key={`key_${index}`}
-            //   index={index}
-            //   each={each}
-            //   handleRequestSubStage={handleRequestSubStage}
-            // />
           ))}
       </SortableContainer>
     );

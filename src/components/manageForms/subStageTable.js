@@ -53,10 +53,10 @@ const SortableContainer = sortableContainer(({ children }) => {
 });
 
 const SortableItem = sortableElement(({ name }) => (
-  <>
+  <span>
     <DragHandle />
     {name}
-  </>
+  </span>
 ));
 
 class SubStageTable extends Component {
