@@ -128,28 +128,29 @@ class StagedForms extends Component {
   };
 
   handleRequestSubStage = (stageId, order) => {
-    this.setState(
-      {
-        loadSubStage: true,
-        order: order,
-        stageId,
-        isSubstageReorder: false,
-        isSubstageReorderCancel: true
-      },
-      () => {
-        axios
-          .get(`fv3/api/manage-forms/sub-stages/?stage_id=${stageId}`)
-          .then(res => {
-            this.setState({
-              loadSubStage: false,
-              subStageData: res.data
+    if (stageId != this.state.stageId)
+      this.setState(
+        {
+          loadSubStage: true,
+          order: order,
+          stageId,
+          isSubstageReorder: false,
+          isSubstageReorderCancel: true
+        },
+        () => {
+          axios
+            .get(`fv3/api/manage-forms/sub-stages/?stage_id=${stageId}`)
+            .then(res => {
+              this.setState({
+                loadSubStage: false,
+                subStageData: res.data
+              });
+            })
+            .catch(err => {
+              errorToast(err);
             });
-          })
-          .catch(err => {
-            errorToast(err);
-          });
-      }
-    );
+        }
+      );
   };
   handleSubstageReorder = () => {
     this.setState({
@@ -675,7 +676,7 @@ class StagedForms extends Component {
               };
             },
             () => {
-              successToast("updated", "successfully");
+              successToast("updated", "");
             }
           );
       })
@@ -707,7 +708,9 @@ class StagedForms extends Component {
           );
       })
       .catch(err => {
-        errorToast(err);
+        // console.log("err", err.text);
+
+        errorToast(err.error);
       });
   };
   handleDeployAllStages = toDeploy => {
@@ -717,7 +720,8 @@ class StagedForms extends Component {
         is_deployed: toDeploy
       })
       .then(res => {
-        console.log("res", res.data);
+        // console.log("res", res.data);
+        successToast("updated", "successfully");
       })
       .catch(err => {
         errorToast(err);

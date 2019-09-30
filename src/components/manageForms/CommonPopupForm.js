@@ -10,74 +10,86 @@ import Modal from "../common/Modal";
 const animatedComponents = makeAnimated();
 
 class CommonPopupForm extends Component {
+  _isMounted = false;
   state = {
     regionSelected: [],
     typeSelected: [],
     regionDropdown: [],
-    typeDropdown: []
+    typeDropdown: [],
+    hasLoaded: false
   };
   componentDidMount() {
+    this._isMounted = true;
     const {
       typeOptions,
       regionOptions,
       commonFormData: { regionSelected, typeSelected }
     } = this.props;
-    const newRegionArr =
-      regionOptions &&
-      regionOptions.map(each => ({
-        ...each,
-        value: each.identifier,
-        label: each.name
-      }));
-    const newTypeArr =
-      typeOptions &&
-      typeOptions.map(each => ({
-        ...each,
-        value: each.identifier,
-        label: each.name
-      }));
 
-    let selectedRegion = [];
-    let selectedType = [];
-    // if (!!stageData) {
-    if (!!regionSelected && regionSelected.length > 0) {
-      regionOptions.map(region => {
-        if (stageData.regions.indexOf(region.id) > -1) {
-          selectedRegion.push({
-            ...region,
-            value: region.identifier,
-            label: region.name
-          });
-        }
+    if (this._isMounted) {
+      const newRegionArr =
+        regionOptions &&
+        regionOptions.map(each => ({
+          ...each,
+          value: each.identifier,
+          label: each.name
+        }));
+      const newTypeArr =
+        typeOptions &&
+        typeOptions.map(each => ({
+          ...each,
+          value: each.identifier,
+          label: each.name
+        }));
+
+      let selectedRegion = [];
+      let selectedType = [];
+      // if (!!stageData) {
+      if (!!regionSelected && regionSelected.length > 0) {
+        regionOptions.map(region => {
+          if (stageData.regions.indexOf(region.id) > -1) {
+            selectedRegion.push({
+              ...region,
+              value: region.identifier,
+              label: region.name
+            });
+          }
+        });
+      } else {
+        selectedRegion = newRegionArr;
+      }
+
+      if (typeSelected && typeSelected.length > 0) {
+        typeOptions.map(type => {
+          if (stageData.tags.indexOf(type.id) > -1) {
+            selectedType.push({
+              ...type,
+              value: type.identifier,
+              label: type.name
+            });
+          }
+        });
+      } else {
+        selectedType = newTypeArr;
+      }
+
+      this.setState({
+        hasLoaded: true,
+        regionDropdown: newRegionArr,
+        typeDropdown: newTypeArr,
+        // commonFormData: {
+        // ...this.state.commonFormData,
+        regionSelected: newRegionArr,
+        typeSelected: newTypeArr
+        // }
       });
-    } else {
-      selectedRegion = newRegionArr;
     }
-
-    if (typeSelected && typeSelected.length > 0) {
-      typeOptions.map(type => {
-        if (stageData.tags.indexOf(type.id) > -1) {
-          selectedType.push({
-            ...type,
-            value: type.identifier,
-            label: type.name
-          });
-        }
-      });
-    } else {
-      selectedType = newTypeArr;
-    }
-
-    this.setState({
-      regionDropdown: newRegionArr,
-      typeDropdown: newTypeArr,
-      // commonFormData: {
-      // ...this.state.commonFormData,
-      regionSelected: newRegionArr,
-      typeSelected: newTypeArr
-      // }
-    });
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   render() {
     const {
       props: {
@@ -86,8 +98,15 @@ class CommonPopupForm extends Component {
         handleSelectTypeChange,
         commonFormData
       },
-      state: { regionDropdown, typeDropdown, regionSelected, typeSelected }
+      state: {
+        regionDropdown,
+        typeDropdown,
+        regionSelected,
+        typeSelected,
+        hasLoaded
+      }
     } = this;
+    console.log(typeDropdown, "----to---------------", typeSelected, hasLoaded);
 
     return (
       <>
@@ -130,27 +149,30 @@ class CommonPopupForm extends Component {
         </div>
         <div className="form-group">
           <label>Regions</label>
-          <Select
-            // closeMenuOnSelect={false}
-            // className="select2-select select2"
-            onChange={handleSelectRegionChange}
-            options={regionDropdown}
-            isMulti={true}
-            defaultValue={regionSelected}
-            components={animatedComponents}
-          />
+          {hasLoaded && (
+            <Select
+              // closeMenuOnSelect={false}
+              // className="select2-select select2"
+              onChange={handleSelectRegionChange}
+              options={regionDropdown}
+              isMulti={true}
+              defaultValue={regionSelected}
+              components={animatedComponents}
+            />
+          )}
         </div>
         <div className="form-group">
           <label>Types</label>
-          <Select
-            // closeMenuOnSelect={false}
-            // className="select2-select select2"
-            onChange={handleSelectTypeChange}
-            options={typeDropdown}
-            isMulti={true}
-            defaultValue={typeSelected}
-            components={animatedComponents}
-          />
+          {hasLoaded && (
+            <Select
+              defaultValue={typeSelected}
+              isMulti
+              onChange={handleSelectTypeChange}
+              options={typeDropdown}
+              className="basic-multi-select"
+              classNamePrefix="select"
+            />
+          )}
         </div>
         <div className="form-group checkbox-group">
           <label>Donor visibility</label>
