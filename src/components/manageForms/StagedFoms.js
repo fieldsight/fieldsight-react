@@ -27,7 +27,7 @@ class StagedForms extends Component {
     showFormModal: false,
     activeTab: "myForms",
     commonFormData: {
-      status: 3,
+      status: 0,
       isDonor: true,
       isEdit: true,
       isDelete: true,
@@ -365,10 +365,10 @@ class StagedForms extends Component {
       {
         activeTab: "myForms",
         commonFormData: {
-          status: 3,
-          isDonor: false,
-          isEdit: false,
-          isDelete: false,
+          status: 0,
+          isDonor: true,
+          isEdit: true,
+          isDelete: true,
           regionSelected: [],
           typeSelected: [],
           xf: ""
@@ -939,7 +939,8 @@ class StagedForms extends Component {
                 </div>
                 <div className="form-group pull-right no-margin">
                   <button type="submit" className="fieldsight-btn">
-                    {!!substageId ? "Save" : "Add Form"}
+                    {/* {!!substageId ? "Save" : "Add Form"} */}
+                    Save
                   </button>
                 </div>
               </form>

@@ -96,7 +96,8 @@ class CommonPopupForm extends Component {
         handleRadioChange,
         handleSelectRegionChange,
         handleSelectTypeChange,
-        commonFormData
+        commonFormData,
+        isProjectWide
       },
       state: {
         regionDropdown,
@@ -106,7 +107,7 @@ class CommonPopupForm extends Component {
         hasLoaded
       }
     } = this;
-    console.log(typeDropdown, "----to---------------", typeSelected, hasLoaded);
+    // console.log(this.props);
 
     return (
       <>
@@ -147,33 +148,37 @@ class CommonPopupForm extends Component {
             />
           </div>
         </div>
-        <div className="form-group">
-          <label>Regions</label>
-          {hasLoaded && (
-            <Select
-              // closeMenuOnSelect={false}
-              // className="select2-select select2"
-              onChange={handleSelectRegionChange}
-              options={regionDropdown}
-              isMulti={true}
-              defaultValue={regionSelected}
-              components={animatedComponents}
-            />
-          )}
-        </div>
-        <div className="form-group">
-          <label>Types</label>
-          {hasLoaded && (
-            <Select
-              defaultValue={typeSelected}
-              isMulti
-              onChange={handleSelectTypeChange}
-              options={typeDropdown}
-              className="basic-multi-select"
-              classNamePrefix="select"
-            />
-          )}
-        </div>
+        {!isProjectWide && (
+          <div className="form-group">
+            <label>Regions</label>
+            {hasLoaded && (
+              <Select
+                // closeMenuOnSelect={false}
+                // className="select2-select select2"
+                onChange={handleSelectRegionChange}
+                options={regionDropdown}
+                isMulti={true}
+                defaultValue={regionSelected}
+                components={animatedComponents}
+              />
+            )}
+          </div>
+        )}
+        {!isProjectWide && (
+          <div className="form-group">
+            <label>Types</label>
+            {hasLoaded && (
+              <Select
+                defaultValue={typeSelected}
+                isMulti
+                onChange={handleSelectTypeChange}
+                options={typeDropdown}
+                className="basic-multi-select"
+                classNamePrefix="select"
+              />
+            )}
+          </div>
+        )}
         <div className="form-group checkbox-group">
           <label>Donor visibility</label>
           <div className="custom-checkbox display-inline">

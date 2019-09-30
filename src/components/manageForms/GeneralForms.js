@@ -23,7 +23,7 @@ class GeneralForms extends Component {
     showFormModal: false,
     activeTab: "myForms",
     commonFormData: {
-      status: 3,
+      status: 0,
       isDonor: false,
       isEdit: false,
       isDelete: false,
