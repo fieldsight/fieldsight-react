@@ -661,7 +661,7 @@ class StagedForms extends Component {
         }
       )
       .then(res => {
-        if (!!res.data.message)
+        if (res.data && !!res.data.message)
           this.setState(
             state => {
               const data = subStageData;
@@ -700,6 +700,43 @@ class StagedForms extends Component {
           this.setState(
             {
               subStageData: []
+            },
+            () => {
+              successToast("Deleted", "successfully");
+            }
+          );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
+  handleDeployAllStages = toDeploy => {
+    const { id } = this.state;
+    axios
+      .post(`fv3/api/manage-forms/deploy/?project_id=${id}&type=all&id=${id}`, {
+        is_deployed: toDeploy
+      })
+      .then(res => {
+        console.log("res", res.data);
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
+  handleDeleteAllStages = toDeploy => {
+    // debugger;
+    const { id } = this.state;
+    // console.log(toDeploy, stageId);
+    axios
+      .post(`fv3/api/manage-forms/delete/?project_id=${id}&type=all&id=${id}`, {
+        is_deployed: toDeploy
+      })
+      .then(res => {
+        // console.log("delete ko res", res.data);
+        if (!!res.data)
+          this.setState(
+            {
+              data: []
             },
             () => {
               successToast("Deleted", "successfully");
@@ -753,8 +790,12 @@ class StagedForms extends Component {
       handleSubstageReorder,
       handleSaveSubstageReorder,
       handleDeployAllSubstages,
-      handleDeleteAllSubstages
+      handleDeleteAllSubstages,
+      handleDeployAllStages,
+      handleDeleteAllStages
     } = this;
+    // console.log("data", data);
+
     return (
       <div className="col-xl-9 col-lg-8">
         <div className="card">
@@ -787,6 +828,12 @@ class StagedForms extends Component {
                   </span>
                 </a>
               )}
+              <a onClick={() => handleDeployAllStages(true)}>
+                Deploy
+                <span>
+                  <i className="la la-success" />
+                </span>
+              </a>
             </div>
           </div>
           {loader && <DotLoader />}
