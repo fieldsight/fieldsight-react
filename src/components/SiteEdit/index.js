@@ -10,7 +10,7 @@ export default class SiteEdit extends Component{
             address:"", 
             public_desc:"",
             logo:"",
-            weight:"dfygh",
+            weight:"",
             cluster_sites:false
          
         },
@@ -48,9 +48,7 @@ export default class SiteEdit extends Component{
       componentDidMount(){
        const {match:{params:{id,siteId,regionalId}}}=this.props;
         axios.get(`/fv3/api/site-form/${id}/`)
-        .then(response=>{    
-          console.log(response);
-          
+        .then(response=>{     
           axios.get(`/fv3/api/site-form/?project=${response.data.project}`)
              .then(res=>{   
                   if(response.data.latitude && response.data.longitude){
@@ -90,7 +88,7 @@ export default class SiteEdit extends Component{
                         cluster_sites:response.data.enable_subsites,
                       },
                     regionselected:response.data.region,
-                    Selectedtypes:response.data.types,
+                    Selectedtypes:response.data.type,
                     data:response.data.site_meta_attributes_answers,
                     cropResult:response.data.logo
                     })
@@ -124,8 +122,6 @@ export default class SiteEdit extends Component{
     onSubmitHandler=(e)=>{
       e.preventDefault();
       const {match:{params:{id}}}=this.props  
-      console.log(this.state.project);
-      
       let data={
         project:this.state.project_id,
         name:this.state.project.name,
@@ -135,14 +131,14 @@ export default class SiteEdit extends Component{
         public_desc:this.state.project.public_desc,
         latitude: this.state.position.latitude,
         longitude: this.state.position.longitude,
-        ...(this.state.weight !== undefined && {weight:this.state.project.weight}),
+        ...( !!this.state.project.weight && {weight:this.state.project.weight}),
         region:this.state.regionselected,
         type:this.state.Selectedtypes,
         enable_subsites:this.state.project.cluster_sites,
         ...(this.state.show && {logo:this.state.cropResult}),
         site_meta_attributes_ans:JSON.stringify(this.state.data)
       } 
-      {console.log(data,"data",this.state.project.weight)} 
+
       axios({
         method: "PUT",
         url:`/fv3/api/site-form/${id}/`,
@@ -176,7 +172,7 @@ export default class SiteEdit extends Component{
        }else if(data=== "site_types"){
        this.setState({
           Selectedtypes:value
-        },()=>console.log(this.state.Selectedtypes))
+        })
       }
     }
     readFile=(file)=>{
@@ -200,7 +196,7 @@ export default class SiteEdit extends Component{
             ...this.state.project,
             cluster_sites: e.target.checked
           }
-        },()=>console.log(this.state.project.cluster_sites,"cluster_sites"));
+        });
       }
     closeModal=()=>{
         this.setState({
