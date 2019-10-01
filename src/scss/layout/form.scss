@@ -1,4 +1,64 @@
 .fieldsight-new {
+  .select-option {
+    position: relative;
+    select {
+      width: 100%;
+      height: calc(2.25rem + 2px);
+      padding: .375rem 1.75rem .375rem 0;
+      line-height: 1.5;
+      vertical-align: middle;
+      border: 0;
+      border-bottom: 1px solid $color-bg;
+      border-radius: 0;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      font-size: 0.8125rem;
+      &:focus{
+        outline: none;
+      }
+      option{
+        padding:0.5rem;
+      }
+      
+    }
+    &.display-inline{
+      width:auto;
+      select{
+        width:auto;
+      }
+    }
+
+    &::after {
+      border-bottom: 2px solid $color-blue;
+      border-right: 2px solid $color-blue;
+      content: '';
+      display: block;
+      height: 8px;
+      width: 8px;
+      margin-top: -4px;
+      pointer-events: none;
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      -webkit-transform-origin: 66% 66%;
+      -ms-transform-origin: 66% 66%;
+      transform-origin: 66% 66%;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      -webkit-transition: all 0.15s ease-in-out;
+      transition: all 0.15s ease-in-out;
+    }
+  }
+  .flex{
+    @include flex;
+    align-items: center;
+    span{
+      margin:0 1rem;
+      text-transform: capitalize;
+    }
+  }
   form {
     .upload-form{
       position: relative;
@@ -125,17 +185,17 @@
 
         }
 
-        &::after {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          right: 7px;
-          content: "\f110";
-          font-family: 'LineAwesome';
-          z-index: 99;
-          font-size: 0.875rem;
-          pointer-events: none;
-        }
+        // &::after {
+        //   position: absolute;
+        //   top: 50%;
+        //   transform: translateY(-50%);
+        //   right: 7px;
+        //   content: "\f110";
+        //   font-family: 'LineAwesome';
+        //   z-index: 99;
+        //   font-size: 0.875rem;
+        //   pointer-events: none;
+        // }
 
         &:focus-within {
           &::after {
@@ -461,6 +521,13 @@
           margin-top:.5rem;
           width:100%;
           @include clear;
+        }
+        .strong-label{
+          label{
+            font-weight: 600;
+            color:$color-primary;
+            font-size:.875rem;
+          }
         }
       }
       .cross-icon{
