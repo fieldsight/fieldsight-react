@@ -11,30 +11,41 @@ const animatedComponents = makeAnimated();
 class GlobalModalForm extends Component {
   _isMounted = false;
   state = {
-    optionRegion: [],
-    optionType: [],
-    status: 0,
-    isDonor: true,
-    isEdit: true,
-    isDelete: true,
+    id: this.props.formData ? this.props.formData.id : "",
+    em: this.props.formData ? this.props.formData.em : null,
+    status: this.props.formData
+      ? this.props.formData.default_submission_status
+      : 0,
+    isDonor: this.props.formData
+      ? this.props.formData.setting.donor_visibility
+      : true,
+    isEdit: this.props.formData ? this.props.formData.setting.can_edit : true,
+    isDelete: this.props.formData
+      ? this.props.formData.setting.can_delete
+      : true,
     regionSelected: [],
     typeSelected: [],
-    startDate: new Date(),
-    endDate: new Date(),
-    weight: "",
-    substageTitle: "",
-    substageDesc: "",
+    startDate: this.props.formData
+      ? new Date(this.props.formData.date_range_start)
+      : new Date(),
+    endDate: this.props.formData
+      ? new Date(this.props.formData.date_range_end)
+      : new Date(),
+    weight: this.props.formData ? this.props.formData.weight : "",
+    substageTitle: this.props.formData ? this.props.formData.name : "",
+    substageDesc: this.props.formData ? this.props.formData.description : "",
     hasLoaded: false,
-    scheduleType: "daily"
+    scheduleType: "daily",
+    order: this.props.formData ? this.props.formData.order : 0,
+    settingId: this.props.formData ? this.props.formData.setting.id : "",
+    isDeploy: this.props.formData ? this.props.formData.is_deployed : false
   };
   componentDidMount() {
     this._isMounted = true;
-    const {
-      typeOptions,
-      regionOptions,
-      regionSelected,
-      typeSelected
-    } = this.props;
+    const { typeOptions, regionOptions, formData } = this.props;
+
+    const regionSelected = formData && formData.regions;
+    const typeSelected = formData && formData.types;
 
     if (this._isMounted) {
       const newRegionArr =
@@ -89,21 +100,6 @@ class GlobalModalForm extends Component {
         typeDropdown: newTypeArr,
         regionSelected: newRegionArr,
         typeSelected: newTypeArr
-      });
-    }
-  }
-  componentDidUpdate(nextProps) {
-    if (nextProps.myForms != this.props.myForms) {
-      this.setState({
-        myFormList: this.props.myForms
-      });
-    } else if (nextProps.projectForms != this.props.projectForms) {
-      this.setState({
-        projectFormList: this.props.projectForms
-      });
-    } else if (nextProps.sharedForms != this.props.sharedForms) {
-      this.setState({
-        sharedFormList: this.props.sharedForms
       });
     }
   }
@@ -162,21 +158,17 @@ class GlobalModalForm extends Component {
     });
   };
   handleSelectRegionChange = region => {
-    e.map(region => {
-      this.setState(state => {
-        return {
-          regionSelected: [...this.state.regionSelected, region.id]
-        };
-      });
+    this.setState(state => {
+      return {
+        regionSelected: region
+      };
     });
   };
   handleSelectTypeChange = type => {
-    e.map(type => {
-      this.setState(state => {
-        return {
-          typeSelected: [...this.state.typeSelected, type.id]
-        };
-      });
+    this.setState(state => {
+      return {
+        typeSelected: type
+      };
     });
   };
   handleInputChange = e => {
@@ -237,7 +229,13 @@ class GlobalModalForm extends Component {
       handleEndDateChange,
       handleInputChange,
       handleSubmit,
-      props: { formType, isProjectWide, toggleFormModal, formTitle },
+      props: {
+        formType,
+        isProjectWide,
+        toggleFormModal,
+        formTitle,
+        isEditForm
+      },
       state: {
         regionDropdown,
         regionSelected,
@@ -257,21 +255,23 @@ class GlobalModalForm extends Component {
         errors
       }
     } = this;
-    // console.log(typeDropdown, "in form", typeSelected);
+    // console.log("in form", this.props.formData);
 
     return (
       <>
         <form className="floating-form" onSubmit={handleSubmit}>
           <div className="form-form">
             <div className="selected-form">
-              <div className="add-btn flex-start">
-                <a data-tab="choose-form" onClick={toggleFormModal}>
-                  {formTitle ? "Change form" : " Choose form"}
-                  <span>
-                    <i className="la la-plus"></i>
-                  </span>
-                </a>
-              </div>
+              {!isEditForm && (
+                <div className="add-btn flex-start">
+                  <a data-tab="choose-form" onClick={toggleFormModal}>
+                    {formTitle ? "Change form" : " Choose form"}
+                    <span>
+                      <i className="la la-plus"></i>
+                    </span>
+                  </a>
+                </div>
+              )}
               <div className="selected-text">
                 <span>{formTitle}</span>
               </div>

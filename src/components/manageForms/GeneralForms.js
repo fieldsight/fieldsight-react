@@ -22,17 +22,8 @@ class GeneralForms extends Component {
     editFormId: "",
     showFormModal: false,
     activeTab: "myForms",
-    commonFormData: {
-      status: 3,
-      isDonor: false,
-      isEdit: false,
-      isDelete: false,
-      regionSelected: [],
-      typeSelected: [],
-      xf: ""
-    },
-    optionType: "",
-    optionRegion: "",
+    formData: {},
+    xf: "",
     loader: false,
     loaded: 0,
     formId: "",
@@ -40,7 +31,8 @@ class GeneralForms extends Component {
     isProjectForm: "",
     myFormList: [],
     projectFormList: [],
-    sharedFormList: []
+    sharedFormList: [],
+    isEditForm: false
   };
 
   requestGeneralForm(id) {
@@ -194,42 +186,108 @@ class GeneralForms extends Component {
   };
 
   handleCreateGeneralForm = data => {
-    // e.preventDefault();
-    const {
-      data: { status, isDonor, isEdit, isDelete, regionSelected, typeSelected },
-      id,
+    const { id, xf, isEditForm } = this.state;
+    if (!isEditForm) {
+      const payload = {
+        xf: xf,
+        default_submission_status: data.status,
+        setting: {
+          types:
+            data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : [],
+          regions:
+            data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
+          donor_visibility: data.isDonor,
+          can_edit: data.isEdit,
+          can_delete: data.isDelete
+        }
+      };
+      axios
+        .post(`fv3/api/manage-forms/general/?project_id=${id}`, payload)
+        .then(res => {
+          this.setState(
+            {
+              data: [...this.state.data, res.data]
+            },
+            () => {
+              this.props.closePopup();
+              successToast("form ", "added");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    } else {
+      const payload = {
+        id: data.id,
+        default_submission_status: data.status,
+        responses_count: 0,
+        em: data.em,
+        is_deployed: data.isDeploy,
+        setting: {
+          id: data.settingId,
 
-      xf
-    } = this.state;
-    const payload = {
-      xf: xf,
-      default_submission_status: status,
-      setting: {
-        types: typeSelected,
-        regions: regionSelected,
-        donor_visibility: isDonor,
-        can_edit: isEdit,
-        can_delete: isDelete
+          can_edit: data.isEdit,
+          donor_visibility: data.isDonor,
+          regions:
+            data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
+          can_delete: data.isDelete,
+          types:
+            data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : []
+        }
+      };
+
+      axios
+        .put(
+          `fv3/api/manage-forms/general/${data.id}/?project_id=${id}`,
+          payload
+        )
+        .then(res => {
+          this.setState(
+            state => {
+              const arr = this.state.data;
+              const newArr = arr.map(item => {
+                if (item.id == res.data.id) {
+                  return res.data;
+                } else {
+                  return item;
+                }
+              });
+              return {
+                data: newArr
+              };
+            },
+            () => {
+              this.handleClosePopup();
+              successToast("form", "updated");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    }
+  };
+
+  handleEditGeneralForm = data => {
+    this.setState(
+      {
+        formData: data,
+        isEditForm: true,
+        formTitle: data.xf.title
+      },
+      () => {
+        this.props.commonPopupHandler();
       }
-    };
-    console.log("log state", payload);
-    debugger;
-    axios
-      .post(`fv3/api/manage-forms/general/?project_id=${id}`, payload)
-      .then(res => {
-        this.setState(
-          {
-            data: [...this.state.data, res.data]
-          },
-          () => {
-            this.props.closePopup();
-            successToast("Add ", "successfully");
-          }
-        );
-      })
-      .catch(err => {
-        errorToast(err);
-      });
+    );
   };
 
   toggleFormModal = () => {
@@ -307,13 +365,11 @@ class GeneralForms extends Component {
   };
   handleSaveForm = () => {
     this.setState({
-      commonFormData: {
-        ...this.state.commonFormData,
-        xf: this.state.formId
-      },
+      xf: this.state.formId,
       showFormModal: !this.state.showFormModal
     });
   };
+
   render() {
     const {
       state: {
@@ -323,17 +379,14 @@ class GeneralForms extends Component {
         guideData,
         showFormModal,
         activeTab,
-        commonFormData,
+        formData,
         formTitle,
-        optionRegion,
         myFormList,
         projectFormList,
-        sharedFormList
+        sharedFormList,
+        isEditForm
       },
       props: { typeOptions, regionOptions },
-      handleRadioChange,
-      handleSelectRegionChange,
-      handleSelectTypeChange,
       handleClosePopup
     } = this;
     // console.log("in render", formTitle);
@@ -354,6 +407,7 @@ class GeneralForms extends Component {
               handleEditGuide={this.handleEditGuide}
               changeDeployStatus={this.changeDeployStatus}
               deleteItem={this.deleteItem}
+              handleEditForm={this.handleEditGeneralForm}
             />
           )}
           {this.props.popupModal && (
@@ -369,20 +423,9 @@ class GeneralForms extends Component {
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateGeneralForm}
-                // handleRadioChange={handleRadioChange}
-                // handleSelectRegionChange={handleSelectRegionChange}
-                // handleSelectTypeChange={handleSelectTypeChange}
-                // commonFormData={commonFormData}
-                // optionRegion={optionRegion}
-                // optionType={optionType}
+                formData={formData}
+                isEditForm={isEditForm}
               />
-              {/* <div className="form-group pull-right no-margin">
-                  <button type="submit" className="fieldsight-btn">
-                    Add Form
-                  </button>
-                </div>
-              </form> */}
-              {/* </div> */}
             </Modal>
           )}
           {editGuide && (
