@@ -425,6 +425,7 @@ class GeneralForms extends Component {
                 handleCreateForm={this.handleCreateGeneralForm}
                 formData={formData}
                 isEditForm={isEditForm}
+                isProjectWide={false}
               />
             </Modal>
           )}

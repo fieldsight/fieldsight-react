@@ -13,32 +13,58 @@ class GlobalModalForm extends Component {
   state = {
     id: this.props.formData ? this.props.formData.id : "",
     em: this.props.formData ? this.props.formData.em : null,
-    status: this.props.formData
-      ? this.props.formData.default_submission_status
-      : 0,
-    isDonor: this.props.formData
-      ? this.props.formData.setting.donor_visibility
-      : true,
-    isEdit: this.props.formData ? this.props.formData.setting.can_edit : true,
-    isDelete: this.props.formData
-      ? this.props.formData.setting.can_delete
-      : true,
+    status:
+      this.props.formData && this.props.formData.default_submission_status
+        ? this.props.formData.default_submission_status
+        : 0,
+    isDonor:
+      this.props.formData && this.props.formData.setting
+        ? this.props.formData.setting.donor_visibility
+        : true,
+    isEdit:
+      this.props.formData && this.props.formData.setting
+        ? this.props.formData.setting.can_edit
+        : true,
+    isDelete:
+      this.props.formData && this.props.formData.setting
+        ? this.props.formData.setting.can_delete
+        : true,
     regionSelected: [],
     typeSelected: [],
-    startDate: this.props.formData
-      ? new Date(this.props.formData.date_range_start)
-      : new Date(),
-    endDate: this.props.formData
-      ? new Date(this.props.formData.date_range_end)
-      : new Date(),
-    weight: this.props.formData ? this.props.formData.weight : "",
-    substageTitle: this.props.formData ? this.props.formData.name : "",
-    substageDesc: this.props.formData ? this.props.formData.description : "",
+    startDate:
+      this.props.formData && this.props.formData.date_range_start
+        ? new Date(this.props.formData.date_range_start)
+        : new Date(),
+    endDate:
+      this.props.formData && this.props.formData.date_range_end
+        ? new Date(this.props.formData.date_range_end)
+        : new Date(),
+    weight:
+      this.props.formData && this.props.formData.weight
+        ? this.props.formData.weigt
+        : "",
+    substageTitle:
+      this.props.formData && this.props.formData.name
+        ? this.props.formData.name
+        : "",
+    substageDesc:
+      this.props.formData && this.props.formData.description
+        ? this.props.formData.description
+        : "",
     hasLoaded: false,
     scheduleType: "daily",
-    order: this.props.formData ? this.props.formData.order : 0,
-    settingId: this.props.formData ? this.props.formData.setting.id : "",
-    isDeploy: this.props.formData ? this.props.formData.is_deployed : false
+    order:
+      this.props.formData && this.props.formData.order
+        ? this.props.formData.order
+        : 0,
+    settingId:
+      this.props.formData && this.props.formData.setting
+        ? this.props.formData.setting.id
+        : "",
+    isDeploy:
+      this.props.formData && this.props.formData.is_deployed
+        ? this.props.formData.is_deployed
+        : false
   };
   componentDidMount() {
     this._isMounted = true;
@@ -255,7 +281,7 @@ class GlobalModalForm extends Component {
         errors
       }
     } = this;
-    // console.log("in form", this.props.formData);
+    // console.log("in form", status);
 
     return (
       <>

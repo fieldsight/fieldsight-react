@@ -3,8 +3,8 @@ import { Switch, Route, Link, withRouter } from "react-router-dom";
 // import "react-perfect-scrollbar/dist/css/styles.css";
 import axios from "axios";
 import GeneralForms from "./GeneralForms";
-import ScheduleForms from "./ScheduleForms";
-import StagedForms from "./StagedFoms";
+// import ScheduleForms from "./ScheduleForms";
+// import StagedForms from "./StagedFoms";
 import ProjectWideForms from "./ProjectWideForms";
 
 const urls = [
@@ -170,7 +170,7 @@ class SideNav extends Component {
             )}
           />
 
-          <Route
+          {/* <Route
             exact
             path={`${path}/scheduleform`}
             render={props => (
@@ -208,7 +208,7 @@ class SideNav extends Component {
                 sharedForms={sharedForms}
               />
             )}
-          />
+          /> */}
 
           <Route
             exact
