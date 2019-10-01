@@ -5,6 +5,7 @@ import axios from "axios";
 import GeneralForms from "./GeneralForms";
 import ScheduleForms from "./ScheduleForms";
 import StagedForms from "./StagedFoms";
+import ProjectWideForms from "./ProjectWideForms";
 
 const urls = [
   "fv3/api/project-regions-types/",
@@ -213,11 +214,16 @@ class SideNav extends Component {
             exact
             path={`${path}/wide/generalform`}
             render={props => (
-              <GeneralForms
+              <ProjectWideForms
                 {...props}
-                title="GeneralForms"
+                title="ProjectWideForms"
                 OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
+                closePopup={this.props.closePopup}
+                popupModal={this.props.popupModal}
+                myForms={myForms}
+                projectForms={projectForms}
+                sharedForms={sharedForms}
               />
             )}
           />

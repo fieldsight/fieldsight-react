@@ -78,18 +78,19 @@ import {
                             <div className="dash-btn">
                                 <form className="floating-form">
                                     <div className="form-group mr-0">
-                                        <input type="search" className="form-control"  onChange={(e)=>this.handleChange(e)} required=""/>
+                                        <input type="search" className="form-control"  onChange={(e)=>this.handleChange(e)} required/>
                                         <label htmlFor="input">Search</label>
                                         <i className="la la-search"></i>
                                     </div>
                                 </form>
-                                <a href={`/fieldsight/project/add/${id}`} className="fieldsight-btn"><i className="la la-plus"></i></a>
+                                <a href={`/fieldsight/application/#/project-add/${id}`} className="fieldsight-btn"><i className="la la-plus"></i></a>
                             </div>
                         </div>
                         <div className="card-body">
                         <div style={{ position: "relative", height: "800px" }}>
             <PerfectScrollbar>
-                            <Table id="manage_table" className="table  table-bordered  manage_table">
+
+                            <Table id="manage_table" className="table  table-bordered  dataTable">
                                 <thead>
                                     <tr>
                                         <th>Project Name</th>

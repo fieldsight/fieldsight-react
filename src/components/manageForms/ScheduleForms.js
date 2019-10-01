@@ -10,6 +10,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import ScheduleFormTable from "./ScheduleFormTable";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
+import RadioElement from "../common/RadioElement";
 
 class ScheduleForms extends Component {
   _isMounted = false;
@@ -26,10 +27,10 @@ class ScheduleForms extends Component {
     showFormModal: false,
     activeTab: "myForms",
     commonFormData: {
-      status: 3,
-      isDonor: false,
-      isEdit: false,
-      isDelete: false,
+      status: 0,
+      isDonor: true,
+      isEdit: true,
+      isDelete: true,
       regionSelected: [],
       typeSelected: [],
       xf: ""

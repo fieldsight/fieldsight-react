@@ -76,7 +76,7 @@ class ProjectSiteTable extends Component {
             </button>
             <a
               className="fieldsight-btn"
-              href={`fieldsight/multi-site-assign-region/${project_id}/`}
+              href={`/fieldsight/multi-site-assign-region/${project_id}/`}
               target="_blank"
             >
                Assign Sites to Regions

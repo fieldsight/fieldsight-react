@@ -455,7 +455,7 @@ class MyrolesMain extends Component {
             </div>
             <div className="warning-footer text-center">
               <a
-                href={"/fieldsight/organization/add/"}
+                href={"/fieldsight/application/#/create-team/"}
                 className="fieldsight-btn"
                 style={{ marginRight: "10px", display: "inline-block" }}
               >

@@ -10,7 +10,8 @@ import AccountInfoLayout from "../accountInfo/AccountInfoLayout";
 
 export default class TeamSettings extends Component {
   state = {
-    teamData: {}
+    teamData: {},
+    teamName:""
   };
 
   componentWillMount() {
@@ -25,40 +26,46 @@ export default class TeamSettings extends Component {
       // console.log('error', err);
     };
   }
+  teamName=(data)=>{
+  this.setState({
+    teamName:data
+  })
+  
 
+}
   render() {
     const {
       match: {
         params: { id: teamId },
         path
       }
-    } = this.props;
-    const { teamData } = this.state;
+    } = this.props;    
+    const { teamData ,teamName} = this.state;
 
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href={`/fieldsight/application/#/team-dashboard/${teamId}/`}>
-                {window.project_name ? window.project_name : "Team Name"}
+            <li className="breadcrumb-item "  >
+              <a href={`/fieldsight/application/#/team-dashboard/${teamId}/`} style={{color:"#00628E"}}>
+                {teamName}
               </a>
             </li>
 
-            <li className="breadcrumb-item active" aria-current="page">
+            <li className="breadcrumb-item" aria-current="page">
               Team Settings
             </li>
           </ol>
         </nav>
         <div className="row">
-          <div className="col-xl-3 col-lg-4">
+          <div className="  col-xl-3 col-lg-4">
             <div className="left-sidebar new-sidebar sticky-top">
               <div className="card">
                 <div className="card-header main-card-header">
                   <h5>Settings</h5>
                 </div>
                 <div className="card-body">
-                  <TeamLeftSidebar teamOwner={teamData.team_owner} />
+                  <TeamLeftSidebar teamOwner={teamData.team_owner} height={this.props.height} />
                 </div>
               </div>
             </div>
@@ -67,7 +74,9 @@ export default class TeamSettings extends Component {
             <div className="right-content">
               <div className="tab-content">
                 <Switch>
-                  <Route exact path={`${path}`} component={EditTeam} />
+                  <Route exact path={`${path}`}  render={props =><EditTeam {...props} teamData={this.teamName}/> 
+  
+                                                            } />
                   <Route path={`${path}/map-layer`} component={TeamMapLayer} />
 
                   <Route

@@ -173,7 +173,7 @@
                     // padding-left: 2rem;
                     position: -webkit-sticky;
                     position: sticky;
-                    background-color:lighten($color-bg,4%);
+                    background-color:$color-white;
                     top: 0;
                     z-index: 99;
                     // &::before{
@@ -354,6 +354,7 @@
                 @extend .fixedHeader-floating;
                 position: absolute !important
             }
+            
         }
 
         thead {
@@ -388,7 +389,18 @@
                 }
             }
         }
-
+        &.sitedoc-list{
+           tbody{
+               tr{
+                   td{
+                       .td-doc-icon{
+                           max-width: 30px;
+                           display: inline-block;
+                       }
+                   }
+               }
+           }     
+        }
 
     }
 
