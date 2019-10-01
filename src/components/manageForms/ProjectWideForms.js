@@ -41,12 +41,14 @@ class ProjectWideForms extends Component {
     myFormList: [],
     projectFormList: [],
     sharedFormList: [],
-    isProjectWide: false
+    isProjectWide: false,
+    settingId: "",
+    isEditForm: false
   };
 
   requestGeneralForm(id) {
     axios
-      .get(`fv3/api/manage-forms/general/?project_id=${id}`)
+      .get(`fv3/api/manage-forms/survey/?project_id=${id}`)
       .then(res => {
         if (this._isMounted) {
           this.setState({ data: res.data, loader: false });
@@ -160,6 +162,7 @@ class ProjectWideForms extends Component {
     if (data.images && data.images.length > 0) {
       data.images.map((each, i) => {
         if (!each.image) formData.append(`new_images_${i + 1}`, each);
+        editFormId;
       });
     }
     if (data.id) {
@@ -277,43 +280,82 @@ class ProjectWideForms extends Component {
     e.preventDefault();
     const {
       id,
-      commonFormData: {
-        status,
-        isDonor,
-        isEdit,
-        isDelete,
-        regionSelected,
-        typeSelected,
-        xf
-      }
+      commonFormData: { status, isDonor, isEdit, isDelete, xf },
+      isEditForm,
+      editFormId,
+      settingId
     } = this.state;
-    const payload = {
-      xf: xf,
-      default_submission_status: status,
-      setting: {
-        types: typeSelected,
-        regions: regionSelected,
-        donor_visibility: isDonor,
-        can_edit: isEdit,
-        can_delete: isDelete
-      }
-    };
-    axios
-      .post(`fv3/api/manage-forms/general/?project_id=${id}`, payload)
-      .then(res => {
-        this.setState(
-          {
-            data: [...this.state.data, res.data]
-          },
-          () => {
-            this.props.closePopup();
-            successToast("Add ", "successfully");
-          }
-        );
-      })
-      .catch(err => {
-        errorToast(err);
-      });
+    if (isEditForm) {
+      const payload = {
+        id: editFormId,
+        // xf: xf,
+        default_submission_status: status,
+        setting: {
+          donor_visibility: isDonor,
+          can_edit: isEdit,
+          can_delete: isDelete,
+          form: editFormId,
+          id: settingId
+        }
+      };
+      axios
+        .put(
+          `fv3/api/manage-forms/survey/${editFormId}/?project_id=${id}`,
+          payload
+        )
+        .then(res => {
+          this.setState(
+            state => {
+              const data = this.state.data;
+              const newArr = data.map(each => {
+                if (each.id == res.data.id) {
+                  return (each = res.data);
+                } else {
+                  return each;
+                }
+              });
+              return {
+                data: newArr
+              };
+            },
+            () => {
+              this.handleClearState();
+              this.props.closePopup();
+              successToast("form ", "updated");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    } else {
+      const payload = {
+        xf: xf,
+        default_submission_status: status,
+        setting: {
+          donor_visibility: isDonor,
+          can_edit: isEdit,
+          can_delete: isDelete
+        }
+      };
+      axios
+        .post(`fv3/api/manage-forms/survey/?project_id=${id}`, payload)
+        .then(res => {
+          this.setState(
+            {
+              data: [...this.state.data, res.data]
+            },
+            () => {
+              this.handleClearState();
+              this.props.closePopup();
+              successToast("form ", "added");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    }
   };
   handleRadioChange = e => {
     const { name, value } = e.target;
@@ -350,33 +392,6 @@ class ProjectWideForms extends Component {
       }
     });
   };
-  handleSelectRegionChange = e => {
-    e.map(region => {
-      this.setState(state => {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            regionSelected: [
-              ...this.state.commonFormData.regionSelected,
-              region.id
-            ]
-          }
-        };
-      });
-    });
-  };
-  handleSelectTypeChange = e => {
-    e.map(type => {
-      this.setState(state => {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            typeSelected: [...this.state.commonFormData.typeSelected, type.id]
-          }
-        };
-      });
-    });
-  };
   handleMyFormChange = (e, title) => {
     this.setState({
       formId: e.target.value,
@@ -391,6 +406,28 @@ class ProjectWideForms extends Component {
       },
       showFormModal: !this.state.showFormModal
     });
+  };
+  editForm = data => {
+    this.setState(
+      {
+        commonFormData: {
+          ...this.state.commonFormData,
+          status: data.default_submission_status,
+          isDonor: data.setting.donor_visibility,
+          isEdit: data.setting.can_edit,
+          isDelete: data.setting.can_delete
+          // xf: data.xf.id
+        },
+        formTitle: data.xf.title,
+        // formId: data.xf.id,
+        editFormId: data.id,
+        settingId: data.setting.id,
+        isEditForm: true
+      },
+      () => {
+        this.props.commonPopupHandler();
+      }
+    );
   };
   render() {
     const {
@@ -407,15 +444,15 @@ class ProjectWideForms extends Component {
         myFormList,
         projectFormList,
         sharedFormList,
-        isProjectWide
+        isProjectWide,
+        isEditForm
       },
-      props: { typeOptions, regionOptions },
       handleRadioChange,
       handleSelectRegionChange,
       handleSelectTypeChange,
       handleClearState
     } = this;
-    // console.log(this.state.myFormList, "in drender", myForms);
+    // console.log(this.state.formId, "in drender");
 
     return (
       <div className="col-xl-9 col-lg-8">
@@ -433,6 +470,7 @@ class ProjectWideForms extends Component {
               handleEditGuide={this.handleEditGuide}
               changeDeployStatus={this.changeDeployStatus}
               deleteItem={this.deleteItem}
+              editForm={this.editForm}
             />
           )}
           {this.props.popupModal && (
@@ -443,33 +481,32 @@ class ProjectWideForms extends Component {
               >
                 <div className="form-form">
                   <div className="selected-form">
-                    <div className="add-btn flex-start">
-                      <a data-tab="choose-form" onClick={this.toggleFormModal}>
-                        {formTitle ? "Change form" : " Choose form"}
-                        <span>
-                          <i className="la la-plus"></i>
-                        </span>
-                      </a>
-                    </div>
+                    {!isEditForm && (
+                      <div className="add-btn flex-start">
+                        <a
+                          data-tab="choose-form"
+                          onClick={this.toggleFormModal}
+                        >
+                          {formTitle ? "Change form" : " Choose form"}
+                          <span>
+                            <i className="la la-plus"></i>
+                          </span>
+                        </a>
+                      </div>
+                    )}
                     <div className="selected-text">
                       <span>{formTitle}</span>
                     </div>
                   </div>
                 </div>
                 <CommonPopupForm
-                  regionOptions={regionOptions}
-                  typeOptions={typeOptions}
                   handleRadioChange={handleRadioChange}
-                  handleSelectRegionChange={handleSelectRegionChange}
-                  handleSelectTypeChange={handleSelectTypeChange}
                   commonFormData={commonFormData}
                   isProjectWide={isProjectWide}
-                  // optionRegion={optionRegion}
-                  // optionType={optionType}
                 />
                 <div className="form-group pull-right no-margin">
                   <button type="submit" className="fieldsight-btn">
-                    Add Form
+                    Save
                   </button>
                 </div>
               </form>

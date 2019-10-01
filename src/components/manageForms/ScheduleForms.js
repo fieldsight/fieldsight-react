@@ -10,6 +10,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import ScheduleFormTable from "./ScheduleFormTable";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
+import RadioElement from "../common/RadioElement";
 
 class ScheduleForms extends Component {
   _isMounted = false;
@@ -357,7 +358,7 @@ class ScheduleForms extends Component {
                     <RadioElement
                       label="Weekly"
                       name="scheduleType"
-                      value={weekly}
+                      value={"weekly"}
                       changeHandler={handleRadioChange}
                     />
                     <RadioElement

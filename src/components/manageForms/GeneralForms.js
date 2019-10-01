@@ -464,7 +464,7 @@ class GeneralForms extends Component {
                 />
                 <div className="form-group pull-right no-margin">
                   <button type="submit" className="fieldsight-btn">
-                    Add Form
+                    Save
                   </button>
                 </div>
               </form>

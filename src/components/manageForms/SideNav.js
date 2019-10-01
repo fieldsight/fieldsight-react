@@ -221,8 +221,6 @@ class SideNav extends Component {
                 commonPopupHandler={this.props.commonPopupHandler}
                 closePopup={this.props.closePopup}
                 popupModal={this.props.popupModal}
-                typeOptions={typeOptions}
-                regionOptions={regionOptions}
                 myForms={myForms}
                 projectForms={projectForms}
                 sharedForms={sharedForms}

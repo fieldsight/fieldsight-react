@@ -23,7 +23,14 @@ const formatDate = date => {
 class GeneralFormTable extends Component {
   render() {
     const {
-      props: { data, loader, handleEditGuide, changeDeployStatus, deleteItem }
+      props: {
+        data,
+        loader,
+        handleEditGuide,
+        changeDeployStatus,
+        deleteItem,
+        editForm
+      }
     } = this;
     return (
       <Table responsive="xl" className="table  table-bordered  dataTable">
@@ -108,6 +115,14 @@ class GeneralFormTable extends Component {
                       </span>
                     </div>
                   )}
+                  <div>
+                    <span>
+                      <a onClick={() => editForm(item)}>
+                        <i className="la la-edit"> </i>
+                        Edit
+                      </a>
+                    </span>
+                  </div>
                 </td>
               </tr>
             ))}
