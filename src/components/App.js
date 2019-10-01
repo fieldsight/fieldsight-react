@@ -24,6 +24,9 @@ import ProjectAdd from "./projectAdd";
 import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
+import ViewData from "./viewData"
+import SiteData from "./siteViewData"
+
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
@@ -61,14 +64,7 @@ class App extends Component {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
   }
-  pathChanger=()=>{
-    if(path="/regional-site-add"){
-      console.log("hiiiiii")
-    }else if(path="/sub-site-add/:id/:id"){
-      console.log("hee")
-    }
-
-  }
+ 
 
   render() {  
     return (
@@ -190,6 +186,15 @@ class App extends Component {
                       <Route
                       path="/site-edit/:id"
                       render={props => <EditSite  {...props} page="subSite" />}
+                     />
+                    
+                    <Route
+                      path="/project-responses/:id"
+                      render={props => <ViewData  {...props} />}
+                     />
+                      <Route
+                      path="/site-responses/:id"
+                      render={props => <SiteData  {...props} />}
                      />
                   </Switch>
                   <ToastContainer />
