@@ -179,29 +179,59 @@ class GeneralForms extends Component {
         errorToast(err);
       });
   };
-  handleClearState = () => {
-    this.setState(
-      {
-        formId: "",
-        formTitle: "",
-        isProjectForm: "",
-        commonFormData: {
-          status: 3,
-          isDonor: false,
-          isEdit: false,
-          isDelete: false,
-          regionSelected: [],
-          typeSelected: [],
-          xf: ""
-        },
-        activeTab: "myForms",
-        showFormModal: false
-      },
-      () => {
-        this.props.closePopup();
-      }
-    );
+  handleClosePopup = () => {
+    this.setState({
+      formTitle: "",
+      formId: "",
+      showFormModal: false,
+      activeTab: "myForms",
+      myFormList: [],
+      projectFormList: [],
+      sharedFormList: [],
+      xf: ""
+    });
+    this.props.closePopup();
   };
+
+  handleCreateGeneralForm = data => {
+    // e.preventDefault();
+    const {
+      data: { status, isDonor, isEdit, isDelete, regionSelected, typeSelected },
+      id,
+
+      xf
+    } = this.state;
+    const payload = {
+      xf: xf,
+      default_submission_status: status,
+      setting: {
+        types: typeSelected,
+        regions: regionSelected,
+        donor_visibility: isDonor,
+        can_edit: isEdit,
+        can_delete: isDelete
+      }
+    };
+    console.log("log state", payload);
+    debugger;
+    axios
+      .post(`fv3/api/manage-forms/general/?project_id=${id}`, payload)
+      .then(res => {
+        this.setState(
+          {
+            data: [...this.state.data, res.data]
+          },
+          () => {
+            this.props.closePopup();
+            successToast("Add ", "successfully");
+          }
+        );
+      })
+      .catch(err => {
+        errorToast(err);
+      });
+  };
+
   toggleFormModal = () => {
     this.setState({ showFormModal: !this.state.showFormModal });
   };
@@ -237,15 +267,17 @@ class GeneralForms extends Component {
           myFormList: filteredData
         });
       } else if (activeTab == "projectForms") {
-        const filteredData = await projectFormList.filter(form => {
-          return (
-            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            form.owner.toLowerCase().includes(searchValue.toLowerCase())
-          );
+        const awaitedData = await projectFormList.map(project => {
+          const filteredData = project.forms.filter(form => {
+            return (
+              form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+              form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            );
+          });
+          return { ...project, forms: filteredData };
         });
-
         this.setState({
-          projectFormList: filteredData
+          projectFormList: awaitedData
         });
       } else if (activeTab == "sharedForms") {
         const filteredData = await sharedFormList.filter(form => {
@@ -266,111 +298,6 @@ class GeneralForms extends Component {
         projectFormList: this.props.projectForms
       });
     }
-  };
-
-  handleCreateGeneralForm = e => {
-    e.preventDefault();
-    const {
-      id,
-      commonFormData: {
-        status,
-        isDonor,
-        isEdit,
-        isDelete,
-        regionSelected,
-        typeSelected,
-        xf
-      }
-    } = this.state;
-    const payload = {
-      xf: xf,
-      default_submission_status: status,
-      setting: {
-        types: typeSelected,
-        regions: regionSelected,
-        donor_visibility: isDonor,
-        can_edit: isEdit,
-        can_delete: isDelete
-      }
-    };
-    axios
-      .post(`fv3/api/manage-forms/general/?project_id=${id}`, payload)
-      .then(res => {
-        this.setState(
-          {
-            data: [...this.state.data, res.data]
-          },
-          () => {
-            this.props.closePopup();
-            successToast("Add ", "successfully");
-          }
-        );
-      })
-      .catch(err => {
-        errorToast(err);
-      });
-  };
-  handleRadioChange = e => {
-    const { name, value } = e.target;
-
-    this.setState(state => {
-      if (name == "status") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            status: value
-          }
-        };
-      } else if (name == "donor") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            isDonor: JSON.parse(value)
-          }
-        };
-      } else if (name == "edit") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            isEdit: JSON.parse(value)
-          }
-        };
-      } else if (name == "delete") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            isDelete: JSON.parse(value)
-          }
-        };
-      }
-    });
-  };
-  handleSelectRegionChange = e => {
-    e.map(region => {
-      this.setState(state => {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            regionSelected: [
-              ...this.state.commonFormData.regionSelected,
-              region.id
-            ]
-          }
-        };
-      });
-    });
-  };
-  handleSelectTypeChange = e => {
-    e.map(type => {
-      this.setState(state => {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            typeSelected: [...this.state.commonFormData.typeSelected, type.id]
-          }
-        };
-      });
-    });
   };
   handleMyFormChange = (e, title) => {
     this.setState({
@@ -407,9 +334,9 @@ class GeneralForms extends Component {
       handleRadioChange,
       handleSelectRegionChange,
       handleSelectTypeChange,
-      handleClearState
+      handleClosePopup
     } = this;
-    // console.log(this.state.myFormList, "in drender", myForms);
+    // console.log("in render", formTitle);
 
     return (
       <div className="col-xl-9 col-lg-8">
@@ -430,32 +357,18 @@ class GeneralForms extends Component {
             />
           )}
           {this.props.popupModal && (
-            <Modal title="Add General Form" toggleModal={handleClearState}>
-              {/* <form
-                className="floating-form"
-                onSubmit={this.handleCreateGeneralForm}
-              >
-                <div className="form-form">
-                  <div className="selected-form">
-                    <div className="add-btn flex-start">
-                      <a data-tab="choose-form" onClick={this.toggleFormModal}>
-                        {formTitle ? "Change form" : " Choose form"}
-                        <span>
-                          <i className="la la-plus"></i>
-                        </span>
-                      </a>
-                    </div>
-                    <div className="selected-text">
-                      <span>{formTitle}</span>
-                    </div>
-                  </div>
-                </div> */}
+            <Modal title="Add General Form" toggleModal={handleClosePopup}>
               <GlobalModalForm
+                formType="general"
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
                 myForms={this.props.myForms}
                 projectForms={this.props.projectForms}
                 sharedForms={this.props.sharedForms}
+                toggleFormModal={this.toggleFormModal}
+                handleToggleForm={handleClosePopup}
+                formTitle={formTitle}
+                handleCreateForm={this.handleCreateGeneralForm}
                 // handleRadioChange={handleRadioChange}
                 // handleSelectRegionChange={handleSelectRegionChange}
                 // handleSelectTypeChange={handleSelectTypeChange}
@@ -482,7 +395,7 @@ class GeneralForms extends Component {
               />
             </Modal>
           )}
-          {/* {showFormModal && (
+          {showFormModal && (
             <Modal
               title="Add Form"
               toggleModal={this.toggleFormModal}
@@ -501,7 +414,7 @@ class GeneralForms extends Component {
                 handleSaveForm={this.handleSaveForm}
               />
             </Modal>
-          )} */}
+          )}
         </RightContentCard>
       </div>
     );
