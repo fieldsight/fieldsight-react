@@ -8,6 +8,7 @@ const SelectElement = ({
   changeHandler,
   value
 }) => {
+ 
   return (
     <div className="form-group">
       {label && (

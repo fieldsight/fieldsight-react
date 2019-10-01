@@ -82,7 +82,7 @@ export default class SiteAdd extends Component{
                 Selectedtypes,
                 deleteConfirm
                }}=this.props;  
-               console.log(Selectedtypes);
+              
                
         return (
             <RightContentCard title="New Site">
@@ -133,7 +133,7 @@ export default class SiteAdd extends Component{
                 label="Types"
                 options={site_types && site_types.length>0?site_types.map(region => region):site_types}
                 changeHandler={e => onSelectChangeHandler(e, "site_types")}
-                value={Selectedtypes && Selectedtypes}
+                value={Selectedtypes}
                /> 
          </div>
                 <div className="col-xl-4 col-md-6">
@@ -170,7 +170,7 @@ export default class SiteAdd extends Component{
                 />
               </div>
             </div>
-            {weight!==undefined?<div className="col-xl-4 col-md-6">
+            {weight!==undefined ?<div className="col-xl-4 col-md-6">
                 <InputElement
                     formType="editForm"
                     tag="input"
