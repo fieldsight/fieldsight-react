@@ -82,6 +82,8 @@ export default class SiteAdd extends Component{
                 Selectedtypes,
                 deleteConfirm
                }}=this.props;  
+              
+               
         return (
             <RightContentCard title="New Site">
               <div style={{display: "flex",justifyContent:" flex-end",position:"absolute", right: "35px",top: "4px"}}>
@@ -168,7 +170,7 @@ export default class SiteAdd extends Component{
                 />
               </div>
             </div>
-            {weight!==undefined?<div className="col-xl-4 col-md-6">
+            {weight!==undefined ?<div className="col-xl-4 col-md-6">
                 <InputElement
                     formType="editForm"
                     tag="input"

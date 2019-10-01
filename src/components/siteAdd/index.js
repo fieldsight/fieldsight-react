@@ -29,7 +29,7 @@ export default class SiteAdd extends Component{
         project: {
             name:"",
             site_id:"",
-            phone:"",
+            phone:undefined,
             address:"", 
             publicDescription:"",
             logo:"",
@@ -88,7 +88,7 @@ export default class SiteAdd extends Component{
                   regionalId,
                   site_types:typeArr
                 }
-               },()=>(this.state.site_types,"0000000000")
+               }
                )
             }).catch(err=>{
             console.log(err ,"err");
@@ -106,7 +106,11 @@ export default class SiteAdd extends Component{
             }
           });
         }
-        
+        console.log(this.state.phone)
+       if(this.state.phone!==undefined){
+         console.log("i m idiot")
+       }
+     {  !this.state.phone?console.log("hii"):console.log("hello")}
         this.setState({
             project: {
               ...this.state.project,
