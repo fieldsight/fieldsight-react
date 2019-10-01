@@ -15,7 +15,6 @@ class GeneralForms extends Component {
   state = {
     id: this.props.match.params ? this.props.match.params.id : "",
     data: [],
-    loader: false,
     deployStatus: false,
     editGuide: false,
     guideData: {},

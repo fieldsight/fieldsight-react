@@ -17,33 +17,23 @@ class ScheduleForms extends Component {
   state = {
     id: this.props.match.params ? this.props.match.params.id : "",
     data: [],
-    loader: false,
-    optionType: "",
-    optionRegion: "",
-    loader: false,
-    isProjectForm: false,
+    deployStatus: false,
     editGuide: false,
+    guideData: {},
     editFormId: "",
     showFormModal: false,
     activeTab: "myForms",
-    commonFormData: {
-      status: 0,
-      isDonor: true,
-      isEdit: true,
-      isDelete: true,
-      regionSelected: [],
-      typeSelected: [],
-      xf: ""
-    },
+    formData: {},
+    xf: "",
+    loader: false,
+    loaded: 0,
     formId: "",
     formTitle: "",
     isProjectForm: "",
     myFormList: [],
     projectFormList: [],
     sharedFormList: [],
-    scheduleType: "",
-    startDate: new Date(),
-    endDate: new Date()
+    isEditForm: false
   };
 
   requestScheduleForm(id) {
@@ -51,7 +41,7 @@ class ScheduleForms extends Component {
       .get(`fv3/api/manage-forms/schedule/?project_id=${id}`)
       .then(res => {
         if (this._isMounted) {
-          console.log("res", res.data);
+          // console.log("res", res.data);
 
           this.setState({ data: res.data, loader: false });
         }
@@ -172,72 +162,6 @@ class ScheduleForms extends Component {
       });
   };
 
-  handleRadioChange = e => {
-    const { name, value } = e.target;
-
-    this.setState(state => {
-      if (name == "status") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            status: value
-          }
-        };
-      } else if (name == "donor") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            isDonor: JSON.parse(value)
-          }
-        };
-      } else if (name == "edit") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            isEdit: JSON.parse(value)
-          }
-        };
-      } else if (name == "delete") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            isDelete: JSON.parse(value)
-          }
-        };
-      } else if (name == "scheduleType") {
-        return {
-          scheduleType: value
-        };
-      }
-    });
-  };
-  handleSelectRegionChange = e => {
-    e.map(region => {
-      this.setState(state => {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            regionSelected: [
-              ...this.state.commonFormData.regionSelected,
-              region.id
-            ]
-          }
-        };
-      });
-    });
-  };
-  handleSelectTypeChange = e => {
-    e.map(type => {
-      this.setState(state => {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            typeSelected: [...this.state.commonFormData.typeSelected, type.id]
-          }
-        };
-      });
-    });
-  };
   handleMyFormChange = (e, title) => {
     this.setState({
       formId: e.target.value,
@@ -246,10 +170,7 @@ class ScheduleForms extends Component {
   };
   handleSaveForm = () => {
     this.setState({
-      commonFormData: {
-        ...this.state.commonFormData,
-        xf: this.state.formId
-      },
+      xf: this.state.formId,
       showFormModal: !this.state.showFormModal
     });
   };
@@ -265,20 +186,18 @@ class ScheduleForms extends Component {
       projectFormList: this.props.projectForms
     });
   };
-  handleStartDate = date => {
-    const { endDate } = this.state;
-    // this.setState(state => {
-    //   if(date > endDate) {
-    //     return{
-    //       startDate: endDate
-    //     }
-    //   } else{
-
-    //   }
-    // })
-  };
-  handleEndDate = date => {
-    const { startDate } = this.state;
+  handleClosePopup = () => {
+    this.setState({
+      formTitle: "",
+      formId: "",
+      showFormModal: false,
+      activeTab: "myForms",
+      myFormList: [],
+      projectFormList: [],
+      sharedFormList: [],
+      xf: ""
+    });
+    this.props.closePopup();
   };
   render() {
     const {
@@ -289,15 +208,16 @@ class ScheduleForms extends Component {
         guideData,
         showFormModal,
         activeTab,
-        commonFormData,
+        formData,
         formTitle,
         optionRegion,
         myFormList,
         projectFormList,
-        sharedFormList
+        sharedFormList,
+        isEditForm
       },
       props: { typeOptions, regionOptions },
-      handleRadioChange,
+      handleClosePopup,
       handleSelectRegionChange,
       handleSelectTypeChange
     } = this;
@@ -323,89 +243,22 @@ class ScheduleForms extends Component {
           )}
 
           {this.props.popupModal && (
-            <Modal
-              title="Add Schedule Form"
-              toggleModal={this.props.closePopup}
-            >
-              {/* <form
-                className="floating-form"
-                onSubmit={this.handleCreateGeneralForm}
-              >
-                <div className="form-form">
-                  <div className="selected-form">
-                    <div className="add-btn flex-start">
-                      <a data-tab="choose-form" onClick={this.toggleFormModal}>
-                        {formTitle ? "Change form" : " Choose form"}
-                        <span>
-                          <i className="la la-plus"></i>
-                        </span>
-                      </a>
-                    </div>
-                    <div className="selected-text">
-                      <span>{formTitle}</span>
-                    </div>
-                  </div>
-                </div> */}
-              {/* <div className="form-group checkbox-group">
-                  <label>Type of schedule</label>
-                  <div className="custom-checkbox display-inline">
-                    <RadioElement
-                      label="Daily"
-                      name="scheduleType"
-                      value={"daily"}
-                      changeHandler={handleRadioChange}
-                    />
-                    <RadioElement
-                      label="Weekly"
-                      name="scheduleType"
-                      value={weekly}
-                      changeHandler={handleRadioChange}
-                    />
-                    <RadioElement
-                      label="Monthly"
-                      name="scheduleType"
-                      value={"monthly"}
-                      changeHandler={handleRadioChange}
-                    />
-                  </div>
-                </div> */}
-              {/* <div className="row">
-                  <div className="col-xl-6">
-                    <div className="form-group">
-                      <DatePicker /> */}
-              {/* <input type="text" className="form-control"
-                          required />
-                      <label for="input">Start Date</label> */}
-              {/* </div>
-                  </div>
-                  <div className="col-xl-6">
-                    <div className="form-group"> */}
-              {/* <input type="text" className="form-control"
-                          required />
-                      <label for="input">End Date</label> */}
-              {/* </div>
-                  </div>
-                </div> */}
+            <Modal title="Add Schedule Form" toggleModal={handleClosePopup}>
               <GlobalModalForm
+                formType="schedule"
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
                 myForms={this.props.myForms}
                 projectForms={this.props.projectForms}
                 sharedForms={this.props.sharedForms}
-                // handleRadioChange={handleRadioChange}
-                // handleSelectRegionChange={handleSelectRegionChange}
-                // handleSelectTypeChange={handleSelectTypeChange}
-                // commonFormData={commonFormData}
-                // optionRegion={optionRegion}
-                // optionType={optionType}
+                toggleFormModal={this.toggleFormModal}
+                handleToggleForm={handleClosePopup}
+                formTitle={formTitle}
+                // handleCreateForm={this.handleCreateGeneralForm}
+                formData={formData}
+                isEditForm={isEditForm}
+                isProjectWide={false}
               />
-              {/* <div className="form-group pull-right no-margin">
-                  <button type="submit" className="fieldsight-btn">
-                    Add Form
-                  </button>
-                </div>
-              </form> */}
-              {/* </div> */}
             </Modal>
           )}
           {editGuide && (
@@ -418,7 +271,7 @@ class ScheduleForms extends Component {
               />
             </Modal>
           )}
-          {/* {showFormModal && (
+          {showFormModal && (
             <Modal
               title="Add Form"
               toggleModal={this.toggleFormModal}
@@ -437,7 +290,7 @@ class ScheduleForms extends Component {
                 handleSaveForm={this.handleSaveForm}
               />
             </Modal>
-          )} */}
+          )}
         </RightContentCard>
       </div>
     );

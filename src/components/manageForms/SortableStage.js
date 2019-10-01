@@ -152,7 +152,7 @@ class SortableStage extends Component {
                       </span>
                     </a>
 
-                    {subStageData && subStageData.length > 0 && (
+                    {subStageData && subStageData.length > 1 && (
                       <a
                         data-tab="addSubStage-popup"
                         onClick={handleSubstageReorder}

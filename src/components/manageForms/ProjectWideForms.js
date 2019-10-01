@@ -15,7 +15,6 @@ class ProjectWideForms extends Component {
   state = {
     id: this.props.match.params ? this.props.match.params.id : "",
     data: [],
-    loader: false,
     deployStatus: false,
     editGuide: false,
     guideData: {},
@@ -260,13 +259,6 @@ class ProjectWideForms extends Component {
   handleCreateGeneralForm = data => {
     const { id, xf, isEditForm } = this.state;
 
-    // const {
-    //   id,
-    //   commonFormData: { status, isDonor, isEdit, isDelete, xf },
-    //   isEditForm,
-    //   editFormId,
-    //   settingId
-    // } = this.state;
     if (isEditForm) {
       const payload = {
         id: data.id,
@@ -281,19 +273,6 @@ class ProjectWideForms extends Component {
           donor_visibility: data.isDonor
         }
       };
-
-      // const payload = {
-      //   id: editFormId,
-      //   // xf: xf,
-      //   default_submission_status: status,
-      //   setting: {
-      //     donor_visibility: isDonor,
-      //     can_edit: isEdit,
-      //     can_delete: isDelete,
-      //     form: editFormId,
-      //     id: settingId
-      //   }
-      // };
       axios
         .put(
           `fv3/api/manage-forms/survey/${data.id}/?project_id=${id}`,
@@ -376,27 +355,6 @@ class ProjectWideForms extends Component {
         this.props.commonPopupHandler();
       }
     );
-
-    // this.setState(
-    //   {
-    //     commonFormData: {
-    //       ...this.state.commonFormData,
-    //       status: data.default_submission_status,
-    //       isDonor: data.setting.donor_visibility,
-    //       isEdit: data.setting.can_edit,
-    //       isDelete: data.setting.can_delete
-    //       // xf: data.xf.id
-    //     },
-    //     formTitle: data.xf.title,
-    //     // formId: data.xf.id,
-    //     editFormId: data.id,
-    //     settingId: data.setting.id,
-    //     isEditForm: true
-    //   },
-    //   () => {
-    //     this.props.commonPopupHandler();
-    //   }
-    // );
   };
   render() {
     const {
@@ -417,12 +375,8 @@ class ProjectWideForms extends Component {
         isEditForm
       },
       props: { typeOptions, regionOptions },
-      handleRadioChange,
-      handleSelectRegionChange,
-      handleSelectTypeChange,
       handleClosePopup
     } = this;
-    // console.log(this.state.formId, "in drender");
 
     return (
       <div className="col-xl-9 col-lg-8">
@@ -445,30 +399,6 @@ class ProjectWideForms extends Component {
           )}
           {this.props.popupModal && (
             <Modal title="Add General Form" toggleModal={handleClosePopup}>
-              {/* <form
-                className="floating-form"
-                onSubmit={this.handleCreateGeneralForm}
-              >
-                <div className="form-form">
-                  <div className="selected-form">
-                    {!isEditForm && (
-                      <div className="add-btn flex-start">
-                        <a
-                          data-tab="choose-form"
-                          onClick={this.toggleFormModal}
-                        >
-                          {formTitle ? "Change form" : " Choose form"}
-                          <span>
-                            <i className="la la-plus"></i>
-                          </span>
-                        </a>
-                      </div>
-                    )}
-                    <div className="selected-text">
-                      <span>{formTitle}</span>
-                    </div>
-                  </div>
-                </div> */}
               <GlobalModalForm
                 formType="general"
                 regionOptions={regionOptions}
@@ -484,13 +414,6 @@ class ProjectWideForms extends Component {
                 isEditForm={isEditForm}
                 isProjectWide={isProjectWide}
               />
-              {/* <div className="form-group pull-right no-margin">
-                  <button type="submit" className="fieldsight-btn">
-                    Save
-                  </button>
-                </div>
-              </form> */}
-              {/* </div> */}
             </Modal>
           )}
           {editGuide && (
@@ -499,7 +422,6 @@ class ProjectWideForms extends Component {
                 data={guideData}
                 handleCancel={this.handleEditGuide}
                 handleUpdateGuide={this.handleUpdateGuide}
-                // handleCreateGuide={this.handleCreateGuide}
               />
             </Modal>
           )}

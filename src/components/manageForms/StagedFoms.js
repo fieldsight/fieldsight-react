@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Accordion, Card } from "react-bootstrap";
 
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
-import RightContentCard from "../common/RightContentCard";
 import GlobalModalForm from "./GlobalModalForm";
-import InputElement from "../common/InputElement";
-import CommonPopupForm from "./CommonPopupForm";
+import AddForm from "./AddForm";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
-import SubStageTable from "./subStageTable";
+import SortableStage from "./SortableStage";
 import AddStageForm from "./AddStageForm";
 
 class StagedForms extends Component {
@@ -18,40 +15,28 @@ class StagedForms extends Component {
   state = {
     id: this.props.match.params ? this.props.match.params.id : "",
     data: [],
-    loader: false,
     deployStatus: false,
     editGuide: false,
     guideData: {},
     editFormId: "",
     showFormModal: false,
     activeTab: "myForms",
-    commonFormData: {
-      status: 0,
-      isDonor: true,
-      isEdit: true,
-      isDelete: true,
-      regionSelected: [],
-      typeSelected: [],
-      xf: ""
-    },
-    optionType: "",
-    optionRegion: "",
+    formData: {},
+    xf: "",
     loader: false,
     loaded: 0,
     formId: "",
     formTitle: "",
-    weight: 0,
     isProjectForm: "",
     myFormList: [],
     projectFormList: [],
     sharedFormList: [],
+    isEditForm: false,
+
     subStageData: [],
-    loadSubStage: false,
     showSubstageForm: false,
     selectedStage: {},
-    order: 0,
-    substageTitle: "",
-    substageDesc: "",
+    loadSubStage: false,
     stageId: "",
     substageId: "",
     isStageReorder: false,
@@ -117,7 +102,7 @@ class StagedForms extends Component {
             // isStageReorderCancel: true
           },
           () => {
-            successToast("reordered", "successfully");
+            successToast("reorder", "updated");
           }
         );
       })
@@ -173,7 +158,7 @@ class StagedForms extends Component {
             // isStageReorderCancel: true
           },
           () => {
-            successToast("reordered", "successfully");
+            successToast("reorder", "updated");
           }
         );
       })
@@ -316,7 +301,7 @@ class StagedForms extends Component {
             },
             () => {
               this.props.closePopup();
-              successToast("Updated", "successfully");
+              successToast("form", "updated");
             }
           );
         })
@@ -340,7 +325,7 @@ class StagedForms extends Component {
             },
             () => {
               this.props.closePopup();
-              successToast("Created", "successfully");
+              successToast("form", "added");
             }
           );
         })
@@ -359,33 +344,47 @@ class StagedForms extends Component {
       }
     );
   };
-  handleClearState = () => {
-    this.setState(
-      {
-        activeTab: "myForms",
-        commonFormData: {
-          status: 0,
-          isDonor: true,
-          isEdit: true,
-          isDelete: true,
-          regionSelected: [],
-          typeSelected: [],
-          xf: ""
-        },
-        formId: "",
-        formTitle: "",
-        weight: 0
-      },
-      () => {
-        this.handleSubStageForm();
-      }
-    );
-  };
-  handleInputChange = e => {
+
+  handleClosePopup = () => {
     this.setState({
-      [e.target.name]: e.target.value
+      formTitle: "",
+      formId: "",
+      showFormModal: false,
+      activeTab: "myForms",
+      myFormList: [],
+      projectFormList: [],
+      sharedFormList: [],
+      xf: ""
     });
+    this.handleSubStageForm();
   };
+  // handleClearState = () => {
+  //   this.setState(
+  //     {
+  //       activeTab: "myForms",
+  //       commonFormData: {
+  //         status: 0,
+  //         isDonor: true,
+  //         isEdit: true,
+  //         isDelete: true,
+  //         regionSelected: [],
+  //         typeSelected: [],
+  //         xf: ""
+  //       },
+  //       formId: "",
+  //       formTitle: "",
+  //       weight: 0
+  //     },
+  //     () => {
+  //       this.handleSubStageForm();
+  //     }
+  //   );
+  // // };
+  // handleInputChange = e => {
+  //   this.setState({
+  //     [e.target.name]: e.target.value
+  //   });
+  // };
   toggleFormModal = () => {
     this.setState({ showFormModal: !this.state.showFormModal });
   };
@@ -398,68 +397,68 @@ class StagedForms extends Component {
       projectFormList: this.props.projectForms
     });
   };
-  handleRadioChange = e => {
-    const { name, value } = e.target;
+  // handleRadioChange = e => {
+  //   const { name, value } = e.target;
 
-    this.setState(state => {
-      if (name == "status") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            status: value
-          }
-        };
-      } else if (name == "donor") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            isDonor: JSON.parse(value)
-          }
-        };
-      } else if (name == "edit") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            isEdit: JSON.parse(value)
-          }
-        };
-      } else if (name == "delete") {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            isDelete: JSON.parse(value)
-          }
-        };
-      }
-    });
-  };
-  handleSelectRegionChange = e => {
-    e.map(region => {
-      this.setState(state => {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            regionSelected: [
-              ...this.state.commonFormData.regionSelected,
-              region.id
-            ]
-          }
-        };
-      });
-    });
-  };
-  handleSelectTypeChange = e => {
-    e.map(type => {
-      this.setState(state => {
-        return {
-          commonFormData: {
-            ...this.state.commonFormData,
-            typeSelected: [...this.state.commonFormData.typeSelected, type.id]
-          }
-        };
-      });
-    });
-  };
+  //   this.setState(state => {
+  //     if (name == "status") {
+  //       return {
+  //         commonFormData: {
+  //           ...this.state.commonFormData,
+  //           status: value
+  //         }
+  //       };
+  //     } else if (name == "donor") {
+  //       return {
+  //         commonFormData: {
+  //           ...this.state.commonFormData,
+  //           isDonor: JSON.parse(value)
+  //         }
+  //       };
+  //     } else if (name == "edit") {
+  //       return {
+  //         commonFormData: {
+  //           ...this.state.commonFormData,
+  //           isEdit: JSON.parse(value)
+  //         }
+  //       };
+  //     } else if (name == "delete") {
+  //       return {
+  //         commonFormData: {
+  //           ...this.state.commonFormData,
+  //           isDelete: JSON.parse(value)
+  //         }
+  //       };
+  //     }
+  //   });
+  // };
+  // handleSelectRegionChange = e => {
+  //   e.map(region => {
+  //     this.setState(state => {
+  //       return {
+  //         commonFormData: {
+  //           ...this.state.commonFormData,
+  //           regionSelected: [
+  //             ...this.state.commonFormData.regionSelected,
+  //             region.id
+  //           ]
+  //         }
+  //       };
+  //     });
+  //   });
+  // };
+  // handleSelectTypeChange = e => {
+  //   e.map(type => {
+  //     this.setState(state => {
+  //       return {
+  //         commonFormData: {
+  //           ...this.state.commonFormData,
+  //           typeSelected: [...this.state.commonFormData.typeSelected, type.id]
+  //         }
+  //       };
+  //     });
+  //   });
+  // };
   handleMyFormChange = (e, title) => {
     this.setState({
       formId: e.target.value,
@@ -468,40 +467,38 @@ class StagedForms extends Component {
   };
   handleSaveForm = () => {
     this.setState({
-      commonFormData: {
-        ...this.state.commonFormData,
-        xf: this.state.formId
-      },
+      xf: this.state.formId,
       showFormModal: !this.state.showFormModal
     });
   };
-  handleCreateForm = e => {
-    e.preventDefault();
+  handleCreateForm = data => {
+    // e.preventDefault();
     const {
-      weight,
-      commonFormData,
-      order,
-      substageTitle,
-      substageDesc,
+      // weight,
+      // formData,
+      // order,
+      // substageTitle,
+      // substageDesc,
       stageId,
-      substageId
+      substageId,
+      xf
     } = this.state;
 
     if (!!substageId) {
       const body = {
         id: substageId,
-        weight: weight,
-        name: substageTitle,
-        description: substageDesc,
-        order: order,
-        xf: commonFormData.xf,
-        default_submission_status: commonFormData.status,
+        weight: data.weight,
+        name: data.substageTitle,
+        description: data.substageDesc,
+        order: data.order,
+        xf: xf,
+        default_submission_status: data.status,
         setting: {
-          types: commonFormData.typeSelected,
-          regions: commonFormData.regionSelected,
-          donor_visibility: commonFormData.isDonor,
-          can_edit: commonFormData.isEdit,
-          can_delete: commonFormData.isDelete
+          types: data.typeSelected,
+          regions: data.regionSelected,
+          donor_visibility: data.isDonor,
+          can_edit: data.isEdit,
+          can_delete: data.isDelete
         }
       };
 
@@ -528,7 +525,7 @@ class StagedForms extends Component {
             () => {
               this.handleSubStageForm();
 
-              successToast("Updated", "successfully");
+              successToast("form", "updated");
             }
           );
         })
@@ -537,18 +534,18 @@ class StagedForms extends Component {
         });
     } else {
       const body = {
-        weight: weight,
-        name: substageTitle,
-        description: substageDesc,
-        order: order,
-        xf: commonFormData.xf,
-        default_submission_status: commonFormData.status,
+        weight: data.weight,
+        name: data.substageTitle,
+        description: data.substageDesc,
+        order: data.order,
+        xf: xf,
+        default_submission_status: data.status,
         setting: {
-          types: commonFormData.typeSelected,
-          regions: commonFormData.regionSelected,
-          donor_visibility: commonFormData.isDonor,
-          can_edit: commonFormData.isEdit,
-          can_delete: commonFormData.isDelete
+          types: data.typeSelected,
+          regions: data.regionSelected,
+          donor_visibility: data.isDonor,
+          can_edit: data.isEdit,
+          can_delete: data.isDelete
         }
       };
 
@@ -561,7 +558,7 @@ class StagedForms extends Component {
             },
             () => {
               this.handleSubStageForm();
-              successToast("Created", "successfully");
+              successToast("form", "created");
             }
           );
         })
@@ -628,22 +625,24 @@ class StagedForms extends Component {
   editSubStageForm = formData => {
     this.setState(
       {
+        formData: formData,
+        xf: formData.xf && formData.xf.id,
         formId: formData.xf && formData.xf.id,
         formTitle: formData.xf && formData.xf.title,
-        weight: formData.weight,
-        substageTitle: formData.name,
-        substageDesc: formData.description,
-        order: formData.order,
-        commonFormData: {
-          ...this.state.commonFormData,
-          status: formData.default_submission_status,
-          isDonor: formData.setting && formData.setting.donor_visibility,
-          isEdit: formData.setting && formData.setting.can_edit,
-          isDelete: formData.setting && formData.setting.can_delete,
-          regionSelected: formData.setting && formData.setting.regions,
-          typeSelected: formData.setting && formData.setting.types,
-          xf: formData.xf && formData.xf.id
-        },
+        // weight: formData.weight,
+        // substageTitle: formData.name,
+        // substageDesc: formData.description,
+        // order: formData.order,
+        // commonFormData: {
+        //   ...this.state.commonFormData,
+        //   status: formData.default_submission_status,
+        //   isDonor: formData.setting && formData.setting.donor_visibility,
+        //   isEdit: formData.setting && formData.setting.can_edit,
+        //   isDelete: formData.setting && formData.setting.can_delete,
+        //   regionSelected: formData.setting && formData.setting.regions,
+        //   typeSelected: formData.setting && formData.setting.types,
+        //   xf: formData.xf && formData.xf.id
+        // },
         substageId: formData.id
       },
       () => {
@@ -750,6 +749,7 @@ class StagedForms extends Component {
         errorToast(err);
       });
   };
+
   render() {
     const {
       props: { regionOptions, typeOptions },
@@ -762,7 +762,7 @@ class StagedForms extends Component {
         selectedStage,
         weight,
         formTitle,
-        commonFormData,
+        formData,
         showFormModal,
         activeTab,
         myFormList,
@@ -783,7 +783,7 @@ class StagedForms extends Component {
       handleSubmitStageForm,
       handleClickEdit,
       handleSubStageForm,
-      handleClearState,
+      handleClosePopup,
       handleInputChange,
       handleRadioChange,
       handleSelectRegionChange,
@@ -875,8 +875,23 @@ class StagedForms extends Component {
             </Modal>
           )}
           {showSubstageForm && (
-            <Modal title="SubStage Form" toggleModal={handleClearState}>
-              <form className="floating-form" onSubmit={this.handleCreateForm}>
+            <Modal title="SubStage Form" toggleModal={handleClosePopup}>
+              <GlobalModalForm
+                formType="substage"
+                regionOptions={regionOptions}
+                typeOptions={typeOptions}
+                myForms={this.props.myForms}
+                projectForms={this.props.projectForms}
+                sharedForms={this.props.sharedForms}
+                toggleFormModal={this.toggleFormModal}
+                handleToggleForm={handleClosePopup}
+                formTitle={formTitle}
+                handleCreateForm={this.handleCreateForm}
+                formData={formData}
+                // isEditForm={isEditForm}
+                isProjectWide={false}
+              />
+              {/* <form className="floating-form" onSubmit={this.handleCreateForm}>
                 <div className="form-form">
                   <div className="selected-form">
                     <div className="add-btn flex-start">
@@ -897,7 +912,6 @@ class StagedForms extends Component {
                     formType="editForm"
                     tag="input"
                     type="number"
-                    //   required={true}
                     label="Weight"
                     name="weight"
                     value={weight}
@@ -929,7 +943,6 @@ class StagedForms extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    //   required={true}
                     label="Description"
                     name="substageDesc"
                     value={substageDesc}
@@ -938,11 +951,10 @@ class StagedForms extends Component {
                 </div>
                 <div className="form-group pull-right no-margin">
                   <button type="submit" className="fieldsight-btn">
-                    {/* {!!substageId ? "Save" : "Add Form"} */}
                     Save
                   </button>
                 </div>
-              </form>
+              </form> */}
               {/* </div> */}
             </Modal>
           )}

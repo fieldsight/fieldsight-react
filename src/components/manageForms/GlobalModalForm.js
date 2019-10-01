@@ -41,7 +41,7 @@ class GlobalModalForm extends Component {
         : new Date(),
     weight:
       this.props.formData && this.props.formData.weight
-        ? this.props.formData.weigt
+        ? this.props.formData.weight
         : "",
     substageTitle:
       this.props.formData && this.props.formData.name
