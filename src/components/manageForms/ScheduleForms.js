@@ -10,7 +10,13 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import ScheduleFormTable from "./ScheduleFormTable";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
-import RadioElement from "../common/RadioElement";
+
+const formatDate = date => {
+  const dateIdx = date.getDate();
+  const monthIndex = date.getMonth() + 1;
+  const year = date.getFullYear();
+  return year + "-" + monthIndex + "-" + dateIdx;
+};
 
 class ScheduleForms extends Component {
   _isMounted = false;
@@ -41,8 +47,6 @@ class ScheduleForms extends Component {
       .get(`fv3/api/manage-forms/schedule/?project_id=${id}`)
       .then(res => {
         if (this._isMounted) {
-          // console.log("res", res.data);
-
           this.setState({ data: res.data, loader: false });
         }
       })
@@ -199,6 +203,122 @@ class ScheduleForms extends Component {
     });
     this.props.closePopup();
   };
+  handleScheduleForm = data => {
+    const { id, xf, isEditForm } = this.state;
+    if (!isEditForm) {
+      const payload = {
+        xf: xf,
+        default_submission_status: data.status,
+        schedule_level_id: data.scheduleType,
+        frequency: data.frequency,
+
+        selected_days: data.selectedDays,
+        date_range_start: formatDate(data.startDate),
+        date_range_end: formatDate(data.endDate),
+
+        setting: {
+          notify_incomplete_schedule: data.notifyIncomplete,
+          can_edit: data.isEdit,
+          donor_visibility: data.isDonor,
+          regions:
+            data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
+          can_delete: data.isDelete,
+          types:
+            data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : []
+        }
+      };
+
+      axios
+        .post(`fv3/api/manage-forms/schedule/?project_id=${id}`, payload)
+        .then(res => {
+          this.setState(
+            {
+              data: [...this.state.data, res.data]
+            },
+            () => {
+              this.handleClosePopup();
+              successToast("form ", "added");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    } else {
+      const payload = {
+        id: data.id,
+
+        default_submission_status: data.status,
+        schedule_level_id: data.scheduleType,
+        frequency: data.frequency,
+        selected_days: data.selectedDays,
+        date_range_start: formatDate(data.startDate),
+        date_range_end: formatDate(data.endDate),
+        setting: {
+          id: data.settingId,
+          types:
+            data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : [],
+          regions:
+            data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
+          notify_incomplete_schedule: data.notifyIncomplete,
+          can_edit: data.isEdit,
+          donor_visibility: data.isDonor,
+          can_delete: data.isDelete,
+          form: xf
+        }
+      };
+
+      axios
+        .put(
+          `fv3/api/manage-forms/schedule/${data.id}/?project_id=${id}`,
+          payload
+        )
+        .then(res => {
+          this.setState(
+            state => {
+              const arr = this.state.data;
+              const newArr = arr.map(item => {
+                if (item.id == res.data.id) {
+                  return res.data;
+                } else {
+                  return item;
+                }
+              });
+              return {
+                data: newArr
+              };
+            },
+            () => {
+              this.handleClosePopup();
+              successToast("form", "updated");
+            }
+          );
+        })
+        .catch(err => {
+          errorToast(err);
+        });
+    }
+  };
+  handleEditScheduleForm = data => {
+    this.setState(
+      {
+        formData: data,
+        isEditForm: true,
+        formTitle: data.xf.title
+      },
+      () => {
+        this.props.commonPopupHandler();
+      }
+    );
+  };
   render() {
     const {
       state: {
@@ -239,6 +359,7 @@ class ScheduleForms extends Component {
               changeDeployStatus={this.changeDeployStatus}
               deleteItem={this.deleteItem}
               handleEditGuide={this.handleEditGuide}
+              handleEditForm={this.handleEditScheduleForm}
             />
           )}
 
@@ -254,7 +375,7 @@ class ScheduleForms extends Component {
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
-                // handleCreateForm={this.handleCreateGeneralForm}
+                handleCreateForm={this.handleScheduleForm}
                 formData={formData}
                 isEditForm={isEditForm}
                 isProjectWide={false}

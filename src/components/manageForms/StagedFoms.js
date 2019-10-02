@@ -317,7 +317,7 @@ class StagedForms extends Component {
         description: desc
       };
       axios
-        .post(`fv3/api/manage-forms/stages/?project_id=130`, body)
+        .post(`fv3/api/manage-forms/stages/?project_id=${this.state.id}`, body)
         .then(res => {
           this.setState(
             {
@@ -358,33 +358,6 @@ class StagedForms extends Component {
     });
     this.handleSubStageForm();
   };
-  // handleClearState = () => {
-  //   this.setState(
-  //     {
-  //       activeTab: "myForms",
-  //       commonFormData: {
-  //         status: 0,
-  //         isDonor: true,
-  //         isEdit: true,
-  //         isDelete: true,
-  //         regionSelected: [],
-  //         typeSelected: [],
-  //         xf: ""
-  //       },
-  //       formId: "",
-  //       formTitle: "",
-  //       weight: 0
-  //     },
-  //     () => {
-  //       this.handleSubStageForm();
-  //     }
-  //   );
-  // // };
-  // handleInputChange = e => {
-  //   this.setState({
-  //     [e.target.name]: e.target.value
-  //   });
-  // };
   toggleFormModal = () => {
     this.setState({ showFormModal: !this.state.showFormModal });
   };
@@ -397,68 +370,6 @@ class StagedForms extends Component {
       projectFormList: this.props.projectForms
     });
   };
-  // handleRadioChange = e => {
-  //   const { name, value } = e.target;
-
-  //   this.setState(state => {
-  //     if (name == "status") {
-  //       return {
-  //         commonFormData: {
-  //           ...this.state.commonFormData,
-  //           status: value
-  //         }
-  //       };
-  //     } else if (name == "donor") {
-  //       return {
-  //         commonFormData: {
-  //           ...this.state.commonFormData,
-  //           isDonor: JSON.parse(value)
-  //         }
-  //       };
-  //     } else if (name == "edit") {
-  //       return {
-  //         commonFormData: {
-  //           ...this.state.commonFormData,
-  //           isEdit: JSON.parse(value)
-  //         }
-  //       };
-  //     } else if (name == "delete") {
-  //       return {
-  //         commonFormData: {
-  //           ...this.state.commonFormData,
-  //           isDelete: JSON.parse(value)
-  //         }
-  //       };
-  //     }
-  //   });
-  // };
-  // handleSelectRegionChange = e => {
-  //   e.map(region => {
-  //     this.setState(state => {
-  //       return {
-  //         commonFormData: {
-  //           ...this.state.commonFormData,
-  //           regionSelected: [
-  //             ...this.state.commonFormData.regionSelected,
-  //             region.id
-  //           ]
-  //         }
-  //       };
-  //     });
-  //   });
-  // };
-  // handleSelectTypeChange = e => {
-  //   e.map(type => {
-  //     this.setState(state => {
-  //       return {
-  //         commonFormData: {
-  //           ...this.state.commonFormData,
-  //           typeSelected: [...this.state.commonFormData.typeSelected, type.id]
-  //         }
-  //       };
-  //     });
-  //   });
-  // };
   handleMyFormChange = (e, title) => {
     this.setState({
       formId: e.target.value,
@@ -683,7 +594,6 @@ class StagedForms extends Component {
       });
   };
   handleDeleteAllSubstages = toDeploy => {
-    // debugger;
     const { id, stageId } = this.state;
     // console.log(toDeploy, stageId);
     axios
@@ -760,7 +670,6 @@ class StagedForms extends Component {
         loadSubStage,
         showSubstageForm,
         selectedStage,
-        weight,
         formTitle,
         formData,
         showFormModal,
@@ -768,12 +677,8 @@ class StagedForms extends Component {
         myFormList,
         projectFormList,
         sharedFormList,
-        substageTitle,
-        substageDesc,
         editGuide,
         guideData,
-        substageId,
-        stageId,
         isStageReorder,
         isStageReorderCancel,
         isSubstageReorder,
@@ -784,10 +689,6 @@ class StagedForms extends Component {
       handleClickEdit,
       handleSubStageForm,
       handleClosePopup,
-      handleInputChange,
-      handleRadioChange,
-      handleSelectRegionChange,
-      handleSelectTypeChange,
       handleStageReorder,
       handleSaveStageReorder,
       handleSubstageReorder,
@@ -888,74 +789,8 @@ class StagedForms extends Component {
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateForm}
                 formData={formData}
-                // isEditForm={isEditForm}
                 isProjectWide={false}
               />
-              {/* <form className="floating-form" onSubmit={this.handleCreateForm}>
-                <div className="form-form">
-                  <div className="selected-form">
-                    <div className="add-btn flex-start">
-                      <a data-tab="choose-form" onClick={this.toggleFormModal}>
-                        {formTitle ? "Change form" : " Choose form"}
-                        <span>
-                          <i className="la la-plus"></i>
-                        </span>
-                      </a>
-                    </div>
-                    <div className="selected-text">
-                      <span>{formTitle}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="number"
-                    label="Weight"
-                    name="weight"
-                    value={weight}
-                    changeHandler={handleInputChange}
-                  />
-                </div>
-                <CommonPopupForm
-                  regionOptions={regionOptions}
-                  typeOptions={typeOptions}
-                  handleRadioChange={handleRadioChange}
-                  handleSelectRegionChange={handleSelectRegionChange}
-                  handleSelectTypeChange={handleSelectTypeChange}
-                  commonFormData={commonFormData}
-                />
-                <div className="form-group">
-                  <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="text"
-                    required={true}
-                    label="Name"
-                    name="substageTitle"
-                    value={substageTitle}
-                    changeHandler={handleInputChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="text"
-                    label="Description"
-                    name="substageDesc"
-                    value={substageDesc}
-                    changeHandler={handleInputChange}
-                  />
-                </div>
-                <div className="form-group pull-right no-margin">
-                  <button type="submit" className="fieldsight-btn">
-                    Save
-                  </button>
-                </div>
-              </form> */}
-              {/* </div> */}
             </Modal>
           )}
           {showFormModal && (

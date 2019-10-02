@@ -23,7 +23,7 @@ const formatDate = date => {
 class ScheduleFormTable extends Component {
   render() {
     const {
-      props: { data, loader, changeDeployStatus, deleteItem }
+      props: { data, loader, changeDeployStatus, deleteItem, handleEditForm }
     } = this;
     return (
       <Table responsive="xl" className="table  table-bordered  dataTable">
@@ -108,6 +108,10 @@ class ScheduleFormTable extends Component {
                       </span>
                     </div>
                   )}
+                  <a onClick={() => handleEditForm(item)}>
+                    Edit
+                    <i className="la la-edit"> </i>
+                  </a>
                 </td>
               </tr>
             ))}

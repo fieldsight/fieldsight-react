@@ -30,7 +30,6 @@ class GeneralFormTable extends Component {
         changeDeployStatus,
         deleteItem,
         handleEditForm
-        // editForm
       }
     } = this;
     return (

@@ -117,7 +117,6 @@ class AddStageForm extends Component {
       handleSubmitForm
     } = this;
     const isEdit = Object.keys(this.props.stageData).length > 0 ? true : false;
-    // console.log("----", hasLoaded);
 
     return (
       <form className="floating-form " onSubmit={handleSubmitForm}>

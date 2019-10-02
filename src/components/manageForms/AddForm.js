@@ -2,10 +2,6 @@ import React, { Component, Fragment } from "react";
 import RadioElement from "../common/RadioElement";
 
 class AddForm extends Component {
-  state = {
-    // activeTab: "myForms",
-    // searchQry: ""
-  };
   render() {
     const {
       props: {
