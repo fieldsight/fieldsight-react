@@ -398,7 +398,11 @@ class ProjectWideForms extends Component {
             />
           )}
           {this.props.popupModal && (
-            <Modal title="Add General Form" toggleModal={handleClosePopup}>
+            <Modal
+              title="Add General Form"
+              toggleModal={handleClosePopup}
+              classname="md-body"
+            >
               <GlobalModalForm
                 formType="general"
                 regionOptions={regionOptions}
@@ -432,6 +436,7 @@ class ProjectWideForms extends Component {
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
+              classname="dark md-body"
             >
               <AddForm
                 activeTab={activeTab}

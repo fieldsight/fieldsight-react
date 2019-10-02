@@ -337,9 +337,7 @@ class ScheduleForms extends Component {
         isEditForm
       },
       props: { typeOptions, regionOptions },
-      handleClosePopup,
-      handleSelectRegionChange,
-      handleSelectTypeChange
+      handleClosePopup
     } = this;
     // console.log("props", this.props);
 
@@ -364,7 +362,11 @@ class ScheduleForms extends Component {
           )}
 
           {this.props.popupModal && (
-            <Modal title="Add Schedule Form" toggleModal={handleClosePopup}>
+            <Modal
+              title="Add Schedule Form"
+              toggleModal={handleClosePopup}
+              // classname="md-body"
+            >
               <GlobalModalForm
                 formType="schedule"
                 regionOptions={regionOptions}
@@ -399,6 +401,7 @@ class ScheduleForms extends Component {
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
+              // classname="dark md-body"
             >
               <AddForm
                 activeTab={activeTab}

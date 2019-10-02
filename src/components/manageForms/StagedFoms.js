@@ -749,7 +749,11 @@ class StagedForms extends Component {
             />
           )}
           {this.props.popupModal && (
-            <Modal title="Stage Form" toggleModal={this.props.closePopup}>
+            <Modal
+              title="Stage Form"
+              toggleModal={this.props.closePopup}
+              classname="md-body"
+            >
               <AddStageForm
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
@@ -759,7 +763,11 @@ class StagedForms extends Component {
             </Modal>
           )}
           {showSubstageForm && (
-            <Modal title="SubStage Form" toggleModal={handleClosePopup}>
+            <Modal
+              title="SubStage Form"
+              toggleModal={handleClosePopup}
+              classname="md-body"
+            >
               <GlobalModalForm
                 formType="substage"
                 regionOptions={regionOptions}
@@ -783,6 +791,7 @@ class StagedForms extends Component {
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
+              classname="dark md-body"
             >
               <AddForm
                 activeTab={activeTab}
