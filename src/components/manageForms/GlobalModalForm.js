@@ -749,6 +749,7 @@ class GlobalModalForm extends Component {
                       onChange={handleStartDateChange}
                       dateFormat="yyyy-MM-dd"
                       placeholderText="Start Date"
+                      className="form-control"
                     />
                     {errors && errors.startDate && (
                       <span color="red" className="error">
@@ -764,6 +765,7 @@ class GlobalModalForm extends Component {
                       onChange={handleEndDateChange}
                       dateFormat="yyyy-MM-dd"
                       placeholderText="End Date"
+                      className="form-control"
                     />
                     {errors && errors.endDate && (
                       <span color="red" className="error">

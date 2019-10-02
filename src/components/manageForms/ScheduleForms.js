@@ -365,7 +365,7 @@ class ScheduleForms extends Component {
             <Modal
               title="Add Schedule Form"
               toggleModal={handleClosePopup}
-              // classname="md-body"
+              classname="manage-body md-body"
             >
               <GlobalModalForm
                 formType="schedule"
@@ -401,7 +401,7 @@ class ScheduleForms extends Component {
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
-              // classname="dark md-body"
+              classname="manage-body md-body"
             >
               <AddForm
                 activeTab={activeTab}

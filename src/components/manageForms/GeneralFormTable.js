@@ -41,7 +41,7 @@ class GeneralFormTable extends Component {
             <th>Form Guide</th>
             <th>assigned date</th>
             <th>Default status</th>
-            <th>Action</th>
+            <th width="15%">Action</th>
           </tr>
         </thead>
 
@@ -83,40 +83,37 @@ class GeneralFormTable extends Component {
                 <td>
                   {!!item.is_deployed && (
                     <a
-                      className="badge badge-danger"
+                      className="flagged td-edit-btn"
                       onClick={() =>
                         changeDeployStatus(item.id, item.is_deployed)
                       }
                     >
-                      Undeploy
                       <i className="la la-close"> </i>
                     </a>
                   )}
                   {!item.is_deployed && (
-                    <div>
+                    <>
                       <span>
                         <a
-                          className="badge badge-success"
+                          className="td-edit-btn approved"
                           onClick={() =>
                             changeDeployStatus(item.id, item.is_deployed)
                           }
                         >
-                          Deploy
+                          <i className="la la-rocket"> </i>
                         </a>
                       </span>
                       <span>
                         <a
-                          className="badge badge-danger"
+                          className="rejected td-edit-btn"
                           onClick={() => deleteItem(item.id, item.is_deployed)}
                         >
-                          Delete
-                          <i className="la la-close"> </i>
+                          <i className="la la-trash"> </i>
                         </a>
                       </span>
-                    </div>
+                    </>
                   )}
-                  <a onClick={() => handleEditForm(item)}>
-                    Edit
+                  <a onClick={() => handleEditForm(item)} className="pending td-edit-btn">
                     <i className="la la-edit"> </i>
                   </a>
                 </td>

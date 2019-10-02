@@ -76,12 +76,11 @@ class ScheduleFormTable extends Component {
                 <td>
                   {!!item.is_deployed && (
                     <a
-                      className="badge badge-danger"
+                      className="flagged"
                       onClick={() =>
                         changeDeployStatus(item.id, item.is_deployed)
                       }
                     >
-                      Undeployed
                       <i className="la la-close"> </i>
                     </a>
                   )}
@@ -89,27 +88,25 @@ class ScheduleFormTable extends Component {
                     <div>
                       <span>
                         <a
-                          className="badge badge-success"
+                          className="pending"
                           onClick={() =>
                             changeDeployStatus(item.id, item.is_deployed)
                           }
                         >
-                          Deploy
+                          <i className="la la-rocket"> </i>
                         </a>
                       </span>
                       <span>
                         <a
-                          className="badge badge-danger"
+                          className="rejected"
                           onClick={() => deleteItem(item.id, item.is_deployed)}
                         >
-                          Delete
-                          <i className="la la-close"> </i>
+                          <i className="la la-trash"> </i>
                         </a>
                       </span>
                     </div>
                   )}
                   <a onClick={() => handleEditForm(item)}>
-                    Edit
                     <i className="la la-edit"> </i>
                   </a>
                 </td>

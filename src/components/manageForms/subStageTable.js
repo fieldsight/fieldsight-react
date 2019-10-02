@@ -155,34 +155,32 @@ class SubStageTable extends Component {
                 <td>
                   {!!sub.is_deployed && (
                     <a
-                      className="badge badge-danger"
+                      className="flagged"
                       onClick={() =>
                         changeDeployStatus(sub.id, sub.is_deployed)
                       }
                     >
-                      Undeploy
-                      <i className="la la-close"> </i>
+                      <i className="la la-rocket"> </i>
                     </a>
                   )}
                   {!sub.is_deployed && (
                     <div>
                       <span>
                         <a
-                          className="badge badge-success"
+                          className="approved"
                           onClick={() =>
                             changeDeployStatus(sub.id, sub.is_deployed)
                           }
                         >
-                          Deploy
+                          <i className="la la-rocket"> </i>
                         </a>
                       </span>
                       <span>
                         <a
-                          className="badge badge-danger"
+                          className="rejected"
                           onClick={() => deleteItem(sub.id, sub.is_deployed)}
                         >
-                          Delete
-                          <i className="la la-close"> </i>
+                          <i className="la la-trash"> </i>
                         </a>
                       </span>
                     </div>
