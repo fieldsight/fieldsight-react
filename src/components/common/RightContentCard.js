@@ -5,7 +5,8 @@ const RightContentCard = ({
   addButton,
   hideButton,
   toggleModal,
-  children
+  children,
+  showText
 }) => (
   <div className="card">
     <div className="card-header main-card-header">
@@ -13,7 +14,7 @@ const RightContentCard = ({
       {addButton && (
         <div className="add-btn">
           <a onClick={toggleModal}>
-            {" "}
+            {showText && "Add New"}
             <span>
               <i className="la la-plus" />
             </span>
