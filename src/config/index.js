@@ -3,19 +3,30 @@ import axios from "axios";
 let csrfVal = window.csrf ? window.csrf : "FasSURCaozAKo7OHtkIhiTtOag7hVBBt";
 let tokenVal = window.token
   ? window.token
+<<<<<<< HEAD
   : "91a844e62e86b6e336b8fb440340cbeaabf601fe";
 //"19380d3ca2f98db10ffdb07e9a201f832c7153f9";
+=======
+
+  : "19380d3ca2f98db10ffdb07e9a201f832c7153f9";
+>>>>>>> 1292c3fcebfeab280713d5102ee7d6aee4719179
 
 //const url="91a844e62e86b6e336b8fb440340cbeaabf601fe"
 let baseURL = window.base_url
   ? window.base_url
+<<<<<<< HEAD
   : "https://fieldsight.naxa.com.np/";
 //"http://192.168.1.44:8002/";
+=======
+
+   : "http://192.168.1.44:8002/";
+    // "https://fieldsight.naxa.com.np/";
+>>>>>>> 1292c3fcebfeab280713d5102ee7d6aee4719179
 
 const setDefault = () => {
   axios.defaults.baseURL = baseURL;
   axios.defaults.headers.common["X-CSRFTOKEN"] = csrfVal;
-  axios.defaults.headers.common["Authorization"] = tokenVal;
+ axios.defaults.headers.common["Authorization"] = tokenVal;
   // axios.defaults.headers.common["Content-Type"] = "application/json";
 };
 

@@ -68,7 +68,7 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/site/add/" + project_id + "/"
+                  base_url + "/fieldsight/application/#/create-site/" + project_id + "/"
                 )
               }
             >
@@ -76,7 +76,7 @@ class ProjectSiteTable extends Component {
             </button>
             <a
               className="fieldsight-btn"
-              href={`fieldsight/multi-site-assign-region/${project_id}/`}
+              href={`/fieldsight/multi-site-assign-region/${project_id}/`}
               target="_blank"
             >
                Assign Sites to Regions

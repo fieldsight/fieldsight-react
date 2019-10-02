@@ -146,7 +146,7 @@ export default class SiteEdit extends Component{
         headers: { 'content-type': 'application/json' },
       }).then(res=>{
        if(res.status===200){
-          this.props.history.push(`/fieldsight/application/#/site-dashboard/${res.data.id}`)
+          this.props.history.push(`/site-dashboard/${res.data.id}`)
         }
       }).catch(err => {
         console.log(err);
@@ -240,7 +240,7 @@ export default class SiteEdit extends Component{
             this.setState({
               deleteConfirm:false
             })
-            this.props.history.push(`/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`);
+            window.location.href = `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`
           }
           }).catch(err=>{
            console.log(err)

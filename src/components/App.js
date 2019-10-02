@@ -25,21 +25,27 @@ import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
 import ViewData from "./viewData"
+<<<<<<< HEAD
 import SiteData from "./siteViewData";
+=======
+//import SiteData from "./siteViewData"
+>>>>>>> 1292c3fcebfeab280713d5102ee7d6aee4719179
 
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
 
+import ManageForms from "./manageForms";
+
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -162,14 +168,18 @@ class App extends Component {
                       path="/site_logs/:id"
                       render={props => <SiteLog {...props} />}
                     />
-
-                  <Route
-                      path="/project-add/:id"
-                      render={props => <ProjectAdd  {...props} />}
+                    <Route
+                      path="/project/manage-forms/1/:id"
+                      render={props => <ManageForms {...props} />}
                     />
-                     <Route
+
+                    <Route
+                      path="/project-add/:id"
+                      render={props => <ProjectAdd {...props} />}
+                    />
+                    <Route
                       path="/create-team"
-                      render={props => <TeamAdd  {...props} />}
+                      render={props => <TeamAdd {...props} />}
                     />
                     <Route
                       path="/create-site/:id"
@@ -192,11 +202,15 @@ class App extends Component {
                       path="/project-responses/:id"
                       render={props => <ViewData  {...props} />}
                      />
+<<<<<<< HEAD
                       <Route
                       path="/site-responses/:id"
                       render={props => <SiteData  {...props} />}
                      />
                      
+=======
+
+>>>>>>> 1292c3fcebfeab280713d5102ee7d6aee4719179
                   </Switch>
                   <ToastContainer />
                 </Router>
