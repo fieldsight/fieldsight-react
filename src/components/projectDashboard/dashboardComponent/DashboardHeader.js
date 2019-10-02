@@ -10,9 +10,9 @@ import Modal from "../../common/Modal";
 import SubmissionModal from "./SubmissionModel";
 
 class DashboardHeader extends React.Component {
-  state={
-    openmodel:false
-  }
+  state = {
+    openmodel: false
+  };
   saveImage = () => {
     if (typeof this.cropper.getCroppedCanvas() === "undefined") {
       return;
@@ -48,11 +48,16 @@ class DashboardHeader extends React.Component {
       totalSubmissions,
       surveyData
     } = this.props;
-    
-    const {openmodel}=this.state;
+
+    const { openmodel } = this.state;
     const ManageDropdown = [
       { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
-      { title: "forms", link: `/forms/setup-forms/1/${id}` },
+      // { title: "forms", link: `/forms/setup-forms/1/${id}` },
+      {
+        title: "forms",
+        link: `/fieldsight/application/#/project/manage-forms/1/${id}/generalform`
+      },
+
       {
         title: `${termsAndLabels && termsAndLabels.site}`,
         link: `/fieldsight/application/?project=${id}#/project-sitelist`
@@ -151,7 +156,10 @@ class DashboardHeader extends React.Component {
                 // noSubmissionText={true}
               />
             </a>
-            <a href={`/fieldsight/application/#/project-users/${id}/`} target="_blank">
+            <a
+              href={`/fieldsight/application/#/project-users/${id}/`}
+              target="_blank"
+            >
               <CountCard
                 countName="User"
                 countNumber={totalUsers}
@@ -172,20 +180,19 @@ class DashboardHeader extends React.Component {
             </a>
             {isProjectManager && (
               <div className="add-data">
-                <a onClick={() => this.setState({openmodel:true})}>
+                <a onClick={() => this.setState({ openmodel: true })}>
                   {" "}
                   add data <i className="la la-plus" />
                 </a>
               </div>
             )}
           </div>
-          {openmodel &&
-          
-          <SubmissionModal
-          surveyData={surveyData}
-          toggleModal={() => this.setState({openmodel:false})}
-          />
-         }
+          {openmodel && (
+            <SubmissionModal
+              surveyData={surveyData}
+              toggleModal={() => this.setState({ openmodel: false })}
+            />
+          )}
           {showGallery && (
             <div
               className="gallery-zoom fieldsight-popup open"

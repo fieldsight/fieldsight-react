@@ -1,8 +1,8 @@
 import axios from "axios";
-import {GET_LOGS} from "./types";
+import { GET_LOGS } from "./types";
 
-export  const getProjectLogs = id =>dispatch=>{
-    axios
+export const getProjectLogs = id => dispatch => {
+  axios
     .get(`/events/api/project_logs/${id}/`)
     .then(res => {
       dispatch({
@@ -15,4 +15,4 @@ export  const getProjectLogs = id =>dispatch=>{
       //   type: SITE_LOGS_ERR
       // });
     });
-}
+};

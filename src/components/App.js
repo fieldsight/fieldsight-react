@@ -24,19 +24,24 @@ import ProjectAdd from "./projectAdd";
 import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
+import ViewData from "./viewData"
+import SiteData from "./siteViewData"
+
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
+
+import ManageForms from "./manageForms";
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -61,14 +66,7 @@ class App extends Component {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
   }
-  pathChanger=()=>{
-    if(path="/regional-site-add"){
-      console.log("hiiiiii")
-    }else if(path="/sub-site-add/:id/:id"){
-      console.log("hee")
-    }
-
-  }
+ 
 
   render() {  
     return (
@@ -166,14 +164,18 @@ class App extends Component {
                       path="/site_logs/:id"
                       render={props => <SiteLog {...props} />}
                     />
-
-                  <Route
-                      path="/project-add/:id"
-                      render={props => <ProjectAdd  {...props} />}
+                    <Route
+                      path="/project/manage-forms/1/:id"
+                      render={props => <ManageForms {...props} />}
                     />
-                     <Route
+
+                    <Route
+                      path="/project-add/:id"
+                      render={props => <ProjectAdd {...props} />}
+                    />
+                    <Route
                       path="/create-team"
-                      render={props => <TeamAdd  {...props} />}
+                      render={props => <TeamAdd {...props} />}
                     />
                     <Route
                       path="/create-site/:id"
@@ -190,6 +192,15 @@ class App extends Component {
                       <Route
                       path="/site-edit/:id"
                       render={props => <EditSite  {...props} page="subSite" />}
+                     />
+                    
+                    <Route
+                      path="/project-responses/:id"
+                      render={props => <ViewData  {...props} />}
+                     />
+                      <Route
+                      path="/site-responses/:id"
+                      render={props => <SiteData  {...props} />}
                      />
                   </Switch>
                   <ToastContainer />

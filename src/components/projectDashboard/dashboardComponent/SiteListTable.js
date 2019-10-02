@@ -22,11 +22,10 @@ class SiteListTable extends React.Component {
                 <Table
                   responsive="xl"
                   className="table  table-bordered  dataTable"
-
-                   >
+                >
                   <thead>
-                    <tr >
-                      <th >
+                    <tr>
+                      <th>
                         {!isEmpty(terms) ? `${terms.site}` : "Sites"} Name
                       </th>
                       <th>id</th>
