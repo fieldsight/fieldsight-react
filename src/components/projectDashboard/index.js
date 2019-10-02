@@ -292,7 +292,7 @@ class ProjectDashboard extends React.Component {
                       </form>
                       {is_project_manager && (
                         <a
-                          href={`/fieldsight/site/add/${projectId}/`}
+                          href={`/fieldsight/application/#/create-site/${projectId}/`}
                           target="_blank"
                           className="fieldsight-btn"
                         >

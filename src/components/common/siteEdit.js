@@ -459,11 +459,11 @@ export default class SiteAdd extends Component{
               </Modal>
             )}      
             {deleteConfirm && 
-            <Modal title={"Are u sure u want to delete" + name} toggleModal={deleteClose}>
+            <Modal title={"Are you sure you want to delete " + name + " ?"} toggleModal={deleteClose}>
              <div className="warning">
                                               <h3 style={{color:"red"}}>Warning</h3>
-                                                <p>All the form submission and user roles within the 
-                                                  site will be completely removed.Do yo still want to continue??</p>
+                                                <p>All the form submissions and user roles within the
+                                                  site will be completely removed.Do you still want to continue?</p>
 
                                                 </div>
                                                 <div className="warning-footer text-center">
