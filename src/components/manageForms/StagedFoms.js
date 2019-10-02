@@ -540,20 +540,6 @@ class StagedForms extends Component {
         xf: formData.xf && formData.xf.id,
         formId: formData.xf && formData.xf.id,
         formTitle: formData.xf && formData.xf.title,
-        // weight: formData.weight,
-        // substageTitle: formData.name,
-        // substageDesc: formData.description,
-        // order: formData.order,
-        // commonFormData: {
-        //   ...this.state.commonFormData,
-        //   status: formData.default_submission_status,
-        //   isDonor: formData.setting && formData.setting.donor_visibility,
-        //   isEdit: formData.setting && formData.setting.can_edit,
-        //   isDelete: formData.setting && formData.setting.can_delete,
-        //   regionSelected: formData.setting && formData.setting.regions,
-        //   typeSelected: formData.setting && formData.setting.types,
-        //   xf: formData.xf && formData.xf.id
-        // },
         substageId: formData.id
       },
       () => {
@@ -595,7 +581,6 @@ class StagedForms extends Component {
   };
   handleDeleteAllSubstages = toDeploy => {
     const { id, stageId } = this.state;
-    // console.log(toDeploy, stageId);
     axios
       .post(
         `fv3/api/manage-forms/delete/?project_id=${id}&type=stage&id=${stageId}`,
@@ -604,7 +589,6 @@ class StagedForms extends Component {
         }
       )
       .then(res => {
-        // console.log("delete ko res", res.data);
         if (!!res.data)
           this.setState(
             {
@@ -616,9 +600,7 @@ class StagedForms extends Component {
           );
       })
       .catch(err => {
-        // console.log("err", err.text);
-
-        errorToast(err.error);
+        errorToast(err);
       });
   };
   handleDeployAllStages = toDeploy => {
@@ -628,30 +610,26 @@ class StagedForms extends Component {
         is_deployed: toDeploy
       })
       .then(res => {
-        // console.log("res", res.data);
-        successToast("updated", "successfully");
+        successToast("form", "updated");
       })
       .catch(err => {
         errorToast(err);
       });
   };
   handleDeleteAllStages = toDeploy => {
-    // debugger;
     const { id } = this.state;
-    // console.log(toDeploy, stageId);
     axios
       .post(`fv3/api/manage-forms/delete/?project_id=${id}&type=all&id=${id}`, {
         is_deployed: toDeploy
       })
       .then(res => {
-        // console.log("delete ko res", res.data);
         if (!!res.data)
           this.setState(
             {
               data: []
             },
             () => {
-              successToast("Deleted", "successfully");
+              successToast("form", "deleted");
             }
           );
       })
@@ -698,7 +676,10 @@ class StagedForms extends Component {
       handleDeployAllStages,
       handleDeleteAllStages
     } = this;
-    // console.log("data", data);
+    let deployCount = 0;
+    data.map(each => {
+      deployCount += each.undeployed_count;
+    });
 
     return (
       <div className="col-xl-9 col-lg-8">
@@ -732,12 +713,14 @@ class StagedForms extends Component {
                   </span>
                 </a>
               )}
-              <a onClick={() => handleDeployAllStages(true)}>
-                Deploy
-                <span>
-                  <i className="la la-success" />
-                </span>
-              </a>
+              {deployCount > 0 && (
+                <a onClick={() => handleDeployAllStages(true)}>
+                  Deploy
+                  <span>
+                    <i className="la la-success" />
+                  </span>
+                </a>
+              )}
             </div>
           </div>
           {loader && <DotLoader />}
