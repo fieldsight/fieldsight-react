@@ -33,13 +33,10 @@ state={
                                 <td>{deleted.id}</td>
                                 <td>{deleted.last_response}</td>
                                 <td>{deleted.created_date}</td>
-                                {console.log(deleted.download_url ===null,"url")}
                                 <td>
-                                   {deleted.view_submission_url===null?<><i className="la la-eye"></i> {deleted.response_count} submission</>: <a href={deleted.view_submission_url} className="view-tag tag"><i className="la la-eye"></i> {deleted.response_count} Submission</a>}
-                                   {deleted.download_url===null ?<><i className="la la-download"></i> Download</>:
-                                    <a href={deleted.download_url}  className="edit-tag tag"><i className="la la-download"></i> Download</a>
-                                  }
-                                  {deleted.versions_url===null ?<> <i className="la la-clone"></i> Version</>:<a href={deleted.versions_url} className="pending-tag tag"><i className="la la-clone"></i> Version</a>}
+                                    <a href={deleted.view_submission_url} className="view-tag tag"><i className="la la-eye"></i> 3 submission</a>
+                                    <a href={deleted.download_url} className="edit-tag tag"><i className="la la-download"></i> Download</a>
+                                    <a href={deleted.versions_url} className="pending-tag tag"><i className="la la-clone"></i> Version</a>
                                 </td>
                             </tr>
                              )

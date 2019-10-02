@@ -25,7 +25,7 @@ import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
 import ViewData from "./viewData"
-import SiteData from "./siteViewData"
+import SiteData from "./siteViewData";
 
 
 import TeamDashboard from "./teamDashboard";
@@ -196,6 +196,7 @@ class App extends Component {
                       path="/site-responses/:id"
                       render={props => <SiteData  {...props} />}
                      />
+                     
                   </Switch>
                   <ToastContainer />
                 </Router>

@@ -79,7 +79,7 @@ class ProjectDashboard extends React.Component {
     const { id: projectId } = this.props.match.params;
     this.props.getProjectDashboard(projectId);
     this.props.getProgressTableData(projectId);
-    this.props.getSurveyForm(projectId)
+    this.props.getSurveyForm(projectId);
     this.setState({ projectId: projectId });
   }
 
@@ -272,7 +272,6 @@ class ProjectDashboard extends React.Component {
                   {/* </div> */}
                   {activeTab === "site" && (
                     <div className="dash-btn">
-                      
                       <form
                         className="floating-form"
                         onSubmit={e => {
@@ -318,6 +317,8 @@ class ProjectDashboard extends React.Component {
                       loader={dLoader}
                       terms={terms_and_labels}
                     />
+                    {console.log(this.props.siteList, "sgdfhgjh")}
+
                     {this.props.siteList.length > 0 && (
                       <div className="card-body">
                         <div className="table-footer">
