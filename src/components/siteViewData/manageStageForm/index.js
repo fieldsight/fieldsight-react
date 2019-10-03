@@ -1,34 +1,27 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import ResponseTable from "../../responded/ResponseTable";
+import ResponseTable from "../../responded/StagedFormResponseTable";
 import StatusTable from "../../responded/StatusTable";
-import Rejected from "../RejectSubmissionTable.js";
-import DeleteTable from "../deleteTable";
 import axios from "axios";
+import Rejectsubmission from "../RejectSubmissionTable.js";
+import { Link } from "react-router-dom";
 
-class ManageGeneralForm extends Component {
+class ResponseStageForm extends Component {
   state = {
-    generals_forms: [],
-    deleted_forms: [],
+    stage_forms: [],
     hide: true,
-    id: ""
+    id: "",
+    deleted_forms: []
   };
-  static getDerivedStateFromProps(props, state) {
-    return {
-      id: props.id
-    };
-  }
-
   componentDidMount() {
     if (this.props.id != "") {
       axios
-        .get(
-          `/fv3/api/view-by-forms/?project=${this.props.id}&form_type=general`
-        )
+        .get(`/fv3/api/view-by-forms/?site=${this.props.id}&form_type=stage`)
         .then(res => {
+          console.log(res, "resdff");
+
           this.setState({
-            deleted_forms: res.data.deleted_forms,
-            generals_forms: res.data.generals_forms
+            stage_forms: res.data.stage_forms,
+            deleted_forms: res.data.deleted_forms
           });
         })
         .catch(err => {
@@ -43,35 +36,26 @@ class ManageGeneralForm extends Component {
   };
 
   render() {
-    this.state.deleted_forms.length > 0
-      ? console.log("ghhkkk")
-      : console.log("sorry");
-
     const {
-      props: { data, showViewData }
+      props: { showViewData, data }
     } = this;
+
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>{!data ? "General Forms" : "Rejected Submission"}</h5>
-          <div className="dash-btn">
-            <Link to={`/project-responses/${this.props.id}/Rejected`}>
-              <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Status" : "View by Form"}
-              </button>
-            </Link>
-          </div>
+          <h5>{!data ? "Stage Forms" : "Rejected Submission"}</h5>
+          <Link to={`/site-responses/${this.props.id}/rejected`}>
+            <button onClick={showViewData} className="fieldsight-btn">
+              {data ? "View By Status" : "View by Form"}
+            </button>
+          </Link>
         </div>
         <div className="card-body">
-          {!data && (
-            <ResponseTable
-              generals_forms={this.state.generals_forms}
-              deleted_forms={this.state.deleted_forms}
-            />
-          )}
+          {!data && <ResponseTable stage_forms={this.state.stage_forms} />}
 
-          {data && <Rejected id={this.props.id} />}
+          {data && <Rejectsubmission />}
         </div>
+
         {this.state.deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
@@ -119,4 +103,4 @@ class ManageGeneralForm extends Component {
     );
   }
 }
-export default ManageGeneralForm;
+export default ResponseStageForm;

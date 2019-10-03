@@ -30,6 +30,8 @@ const withPagination = WrappedComponent => {
           return `fv3/api/regional-sites/?page=${page_num}&region=${payload.projectId}`;
         case "projectRegionList":
           return `fv3/api/project-regions/?page=${page_num}&project=${payload.projectId}`;
+        case "viewByStatus":
+          return `fv3/api/view-by-status/?page=${page_num}&project=${payload.projectId}&submission_status=${payload.status}`;
       }
     };
 

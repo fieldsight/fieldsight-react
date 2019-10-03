@@ -1,54 +1,60 @@
-import React, {Component} from 'react';
-import Table from 'react-bootstrap/Table'
+import React, { Component } from "react";
+import Table from "react-bootstrap/Table";
 export default class SurveyFormResponseTable extends Component {
-    
-    state={
-        stage_forms:[]
-    }
-    static getDerivedStateFromProps(props, state) {
-        return{
-            stage_forms:props.stage_forms,
-            deleted_forms:props.deleted_forms
-        }
-      }
-    render(){
-        return(
-            <React.Fragment>
-                <Table responsive="xl" className="table  table-bordered  dataTable ">
-                        <thead>
-                            <tr>
-                                <th >Sub Stage Name</th>
-                                <th >Last Response On</th>
-                                <th >Order</th>
-                                <th >Form Name</th>
-                                <th >Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                           {this.state.stage_forms.map((stage,key)=>{
-                               return(
-                            <tr key={key}>
-                                <td><a href={`#/`} >{stage.name}</a></td>
-                                <td>June 4, 2019, 5:19 p.m.</td>
-                                <td>June 4, 2019, 1:37 p.m.</td>
-                                <td>
-                                    <a target="_blank" href="/forms/new/0/297449">
-                                <i class="la la-plus" aria-hidden="true"></i>
-                            </a></td>
-                                <td>
-                                    <a href={`#/`} className="view-tag tag"><i className="la la-eye"></i> 3 submission</a>
-                                    <a href={`#/`} className="edit-tag tag"><i className="la la-download"></i> Download</a>
-                                    <a href={`#/`} className="pending-tag tag"><i className="la la-clone"></i> Version</a>
-                                </td>
-                            </tr>
-                               )
-                           }) }
-                          
-                           
-                          
-                        </tbody>
-                    </Table>
-            </React.Fragment>
-        )
-    }
+  state = {
+    stage_forms: []
+  };
+  static getDerivedStateFromProps(props, state) {
+    return {
+      stage_forms: props.stage_forms,
+      deleted_forms: props.deleted_forms
+    };
+  }
+  render() {
+    return (
+      <React.Fragment>
+        <div>
+          {this.state.stage_forms.map((stage, key) => {
+            return (
+              <div key={key}>
+                <div style={{ display: "flex" }}>
+                  <h6>{stage.name}</h6>
+                  <h6>{stage.id}</h6>
+                </div>
+                <Table
+                  responsive="xl"
+                  className="table  table-bordered  dataTable "
+                >
+                  <thead>
+                    <tr>
+                      <th>form_name</th>
+                      <th>Id</th>
+                      <th>last_response</th>
+                      <th>name</th>
+                      <th>response</th>
+                      <th>order</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {stage.sub_stages.map((sub_stages, key) => {
+                      return (
+                        <tr key={key}>
+                          <td>{sub_stages.id}</td>
+                          <td>{sub_stages.form_name}</td>
+                          <td>{sub_stages.last_response}</td>
+                          <td>{sub_stages.name}</td>
+                          <td>{sub_stages.response_count}</td>
+                          <td>{sub_stages.order}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </div>
+            );
+          })}
+        </div>
+      </React.Fragment>
+    );
+  }
 }

@@ -2,21 +2,20 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 
 const sideNavRoutes = [
-  { to: "/", path: "", title: "General Forms" },
+  { to: "/", title: "General Forms" },
   { to: "/scheduled", title: "Scheduled Forms" },
-  {
-    to: "/stage",
-
-    title: "Staged Forms"
-  },
-  { to: "/survey", title: "Survey Forms" }
+  { to: "/stage", title: "Stage Form" }
 ];
 
 const viewByStatus = [
-  { to: "/rejected", path: "/rejected", title: "Rejected Submissions" },
-  { to: "/flagged", path: "/flagged", title: "Flagged Submissions" },
-  { to: "/pending", path: "/pending", title: "Pending Submissions" },
-  { to: "/approved", path: "/approved", title: "Approved Submissions" }
+  { to: "/rejected", title: "Rejected Submission" },
+  { to: "/flagged", title: "Flagged Submission" },
+  {
+    to: "/pending",
+
+    title: "Pending Submission"
+  },
+  { to: "/approved", title: "Approved Submission" }
 ];
 
 class ManageFormSetting extends Component {
@@ -32,7 +31,7 @@ class ManageFormSetting extends Component {
             {sideNavRoutes.map((route, i) => (
               <li className="nav-item" key={i}>
                 <Link
-                  to={`/project-responses/${this.props.match.params.id}${route.to}`}
+                  to={`/site-responses/${this.props.match.params.id}${route.to}`}
                   className={
                     pathname === route.path ? "nav-link active" : "nav-link"
                   }
@@ -49,7 +48,7 @@ class ManageFormSetting extends Component {
             {viewByStatus.map((route, i) => (
               <li className="nav-item" key={i}>
                 <Link
-                  to={`/project-responses/${this.props.match.params.id}${route.to}`}
+                  to={`/site-responses/${this.props.match.params.id}${route.to}`}
                   className={
                     pathname === route.path ? "nav-link active" : "nav-link"
                   }

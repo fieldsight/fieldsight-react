@@ -3,7 +3,6 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
 import ManageFormSetting from "./manageFormSetting/ManageFormSetting";
 import ManageGeneralForm from "./manageGeneralForm";
-import ManageSurveyForm from "./manageSurveyForm";
 import ManageScheduledForm from "./manageScheduledForm";
 import ManageStageForm from "./manageStageForm";
 import DeleteTable from "./deleteTable";
@@ -12,7 +11,7 @@ import PendingTable from "./PendingSubmissionTable.js";
 import RejectedTable from "./RejectSubmissionTable.js";
 import FlaggedTable from "./FlagedTable.js";
 
-export default class ViewData extends Component {
+export default class SiteViewData extends Component {
   state = {
     hide: true,
     view_btn: false,
@@ -55,7 +54,7 @@ export default class ViewData extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="">project</a>
+              <a href="">Site</a>
             </li>
             <li className="breadcrumb-item">General</li>
           </ol>
@@ -111,17 +110,6 @@ export default class ViewData extends Component {
                       />
 
                       <Route
-                        path={`${this.props.match.url}/survey`}
-                        component={() => (
-                          <ManageSurveyForm
-                            showViewData={this.showViewData}
-                            data={this.state.view_btn}
-                            id={this.state.id}
-                          />
-                        )}
-                      />
-
-                      <Route
                         path={`${this.props.match.url}/approved`}
                         component={() => (
                           <ApprovedTable
@@ -154,7 +142,7 @@ export default class ViewData extends Component {
                       />
 
                       <Route
-                        path={`${this.props.match.url}/`}
+                        path={`${this.props.match.url}/rejected`}
                         component={() => (
                           <RejectedTable
                             showViewData={this.showViewData}
