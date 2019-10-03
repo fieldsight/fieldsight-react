@@ -24,18 +24,17 @@ import ProjectAdd from "./projectAdd";
 import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
-import ViewData from "./viewData"
-<<<<<<< HEAD
-import SiteData from "./siteViewData";
-=======
+import ViewData from "./viewData";
 //import SiteData from "./siteViewData"
->>>>>>> 1292c3fcebfeab280713d5102ee7d6aee4719179
-
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
 
 import ManageForms from "./manageForms";
+
+import en from "../translations/en";
+import np from "../translations/np";
+import messages from "../translations/messages";
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -46,50 +45,48 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      height:0,
-      region:false
+      height: 0,
+      region: false
     };
   }
 
-  
-  
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
+    window.removeEventListener("resize", this.updateWindowDimensions);
   }
-  
-  updateWindowDimensions=()=>{
-    return(this.state.height = window.innerHeight -181)
-  }
-       
+
+  updateWindowDimensions = () => {
+    return (this.state.height = window.innerHeight - 181);
+  };
+
   componentWillMount() {
     setDefault();
     this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
+    window.addEventListener("resize", this.updateWindowDimensions);
   }
- 
 
-  render() {  
+  render() {
     return (
       <Provider store={store}>
         <div id="fieldsight-new" className="fieldsight-new">
           <div id="main-container">
             <div className="container-fluid">
               <main id="main-content">
-               
                 <Router>
                   <Switch>
-                   
                     <Route
                       path="/project-settings"
                       render={props => <Settings {...props} />}
                     />
                     <Route
                       path="/team-settings/:id"
-                      render={props => <TeamSetting {...props} height={this.state.height} />}
+                      render={props => (
+                        <TeamSetting {...props} height={this.state.height} />
+                      )}
                     />
                     <Route
                       path="/forms"
@@ -126,7 +123,7 @@ class App extends Component {
                     />
                     <Route
                       path="/site-documents/:id"
-                      render={props => <SiteDocument {...props}  />}
+                      render={props => <SiteDocument {...props} />}
                     />
 
                     <Route
@@ -183,34 +180,27 @@ class App extends Component {
                     />
                     <Route
                       path="/create-site/:id"
-                      render={props => <SiteAdd  {...props}  page="CreateSite"/>}
+                      render={props => <SiteAdd {...props} page="CreateSite" />}
                     />
                     <Route
-                     path="/regional-site-add/:id/:regionalId"
-                      render={props => <SiteAdd  {...props} page="regionalSite" />}
+                      path="/regional-site-add/:id/:regionalId"
+                      render={props => (
+                        <SiteAdd {...props} page="regionalSite" />
+                      )}
                     />
-                     <Route
+                    <Route
                       path="/sub-site-add/:id/:siteId"
-                      render={props => <SiteAdd  {...props} page="subSite" />}
-                     />
-                      <Route
+                      render={props => <SiteAdd {...props} page="subSite" />}
+                    />
+                    <Route
                       path="/site-edit/:id"
-                      render={props => <EditSite  {...props} page="subSite" />}
-                     />
-                    
+                      render={props => <EditSite {...props} page="subSite" />}
+                    />
+
                     <Route
                       path="/project-responses/:id"
-                      render={props => <ViewData  {...props} />}
-                     />
-<<<<<<< HEAD
-                      <Route
-                      path="/site-responses/:id"
-                      render={props => <SiteData  {...props} />}
-                     />
-                     
-=======
-
->>>>>>> 1292c3fcebfeab280713d5102ee7d6aee4719179
+                      render={props => <ViewData {...props} />}
+                    />
                   </Switch>
                   <ToastContainer />
                 </Router>
