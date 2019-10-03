@@ -78,31 +78,31 @@ class GlobalModalForm extends Component {
     dailyArrDays: {
       sun:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 6)
+          ? getArrValue(this.props.formData.selected_days, 7)
           : false,
       mon:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 0)
+          ? getArrValue(this.props.formData.selected_days, 1)
           : false,
       tue:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 1)
+          ? getArrValue(this.props.formData.selected_days, 2)
           : false,
       wed:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 2)
+          ? getArrValue(this.props.formData.selected_days, 3)
           : false,
       thu:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 3)
+          ? getArrValue(this.props.formData.selected_days, 4)
           : false,
       fri:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 4)
+          ? getArrValue(this.props.formData.selected_days, 5)
           : false,
       sat:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 5)
+          ? getArrValue(this.props.formData.selected_days, 6)
           : false
     },
     selectedDays:
@@ -112,31 +112,31 @@ class GlobalModalForm extends Component {
     weeklyArrDays: {
       sun:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 6)
+          ? getArrValue(this.props.formData.selected_days, 7)
           : false,
       mon:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 0)
+          ? getArrValue(this.props.formData.selected_days, 1)
           : false,
       tue:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 1)
+          ? getArrValue(this.props.formData.selected_days, 2)
           : false,
       wed:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 2)
+          ? getArrValue(this.props.formData.selected_days, 3)
           : false,
       thu:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 3)
+          ? getArrValue(this.props.formData.selected_days, 4)
           : false,
       fri:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 4)
+          ? getArrValue(this.props.formData.selected_days, 5)
           : false,
       sat:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 5)
+          ? getArrValue(this.props.formData.selected_days, 6)
           : false
     },
     frequency:
