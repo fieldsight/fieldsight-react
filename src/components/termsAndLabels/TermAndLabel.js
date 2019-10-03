@@ -29,7 +29,7 @@ export default class TermAndLabel extends Component {
       region_supervisor: "",
       region_reviewer: "",
       //project: window.project_id ? window.project_id : 137
-       project: window.project_id
+      project: window.project_id
     },
     showList: true,
     isLoading: false
@@ -119,7 +119,6 @@ export default class TermAndLabel extends Component {
     if (!isEmpty(terms)) {
       this.setState({
         termsAndLabels: { ...terms, project: projectId }
-        // dotLoader: false
       });
     }
   }
