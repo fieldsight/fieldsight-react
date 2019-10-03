@@ -113,6 +113,23 @@ class SortableStage extends Component {
           data.map((each, index) => (
             <Card key={`key_${index}`}>
               <Card.Header>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey={`${each.order}`}
+                  className="card-header"
+                  onClick={() => {
+                    handleRequestSubStage(each.id, each.order);
+                  }}
+                >
+                  {reorder && (
+                    <SortableItem
+                      key={`item-${each.id}`}
+                      index={index}
+                      name={each.name}
+                    />
+                  )}
+                  {!reorder && <h5>{each.name}</h5>}
+                </Accordion.Toggle>
                 <div className="add-btn pull-right">
                   <a
                     data-tab="addSubStage-popup"
@@ -122,23 +139,7 @@ class SortableStage extends Component {
                   </a>
                 </div>
               </Card.Header>
-              <Accordion.Toggle
-                as={Card.Header}
-                eventKey={`${each.order}`}
-                className="card-header"
-                onClick={() => {
-                  handleRequestSubStage(each.id, each.order);
-                }}
-              >
-                {reorder && (
-                  <SortableItem
-                    key={`item-${each.id}`}
-                    index={index}
-                    name={each.name}
-                  />
-                )}
-                {!reorder && <h5>{each.name}</h5>}
-              </Accordion.Toggle>
+
               <Accordion.Collapse eventKey={`${each.order}`}>
                 <Card.Body>
                   <div className="add-btn pull-right">

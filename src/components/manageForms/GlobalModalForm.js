@@ -45,7 +45,7 @@ class GlobalModalForm extends Component {
     endDate:
       this.props.formData && this.props.formData.date_range_end
         ? new Date(this.props.formData.date_range_end)
-        : new Date(),
+        : null,
     weight:
       this.props.formData && this.props.formData.weight
         ? this.props.formData.weight
