@@ -211,7 +211,7 @@ export default class SiteAdd extends Component{
                 data:[]  
   
                 })
-                this.props.history.push(`/fieldsight/application/#/site-dashboard/${req.data.id}`)
+                this.props.history.push(`/site-dashboard/${req.data.id}`)
               }
           }).catch(err => {
             console.log(err);
@@ -254,7 +254,7 @@ export default class SiteAdd extends Component{
       
   
                 })
-                this.props.history.push(`/fieldsight/application/#/site-dashboard/${req.data.id}`)
+                this.props.history.push(`/site-dashboard/${req.data.id}`)
               }
           }).catch(err => {
             console.log(err);
@@ -298,7 +298,7 @@ export default class SiteAdd extends Component{
      
   
                 })
-                this.props.history.push(`/fieldsight/application/#/site-dashboard/${req.data.id}`)
+                this.props.history.push(`/site-dashboard/${req.data.id}`)
               }
           }).catch(err => {
             console.log(err);

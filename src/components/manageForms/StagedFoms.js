@@ -697,7 +697,7 @@ class StagedForms extends Component {
                 {!isStageReorder ? "Reorder" : "Cancel Reorder"}
                 {!isStageReorder ? (
                   <span>
-                    <i className="la la-reorder" />
+                    <i className="la la-sort-amount-desc" />
                   </span>
                 ) : (
                   <span>
@@ -717,7 +717,7 @@ class StagedForms extends Component {
                 <a onClick={() => handleDeployAllStages(true)}>
                   Deploy
                   <span>
-                    <i className="la la-success" />
+                    <i className="la la-rocket" />
                   </span>
                 </a>
               )}
@@ -752,7 +752,7 @@ class StagedForms extends Component {
             <Modal
               title="Stage Form"
               toggleModal={this.props.closePopup}
-              classname="md-body"
+              classname="manage-body md-body"
             >
               <AddStageForm
                 regionOptions={regionOptions}
@@ -766,7 +766,7 @@ class StagedForms extends Component {
             <Modal
               title="SubStage Form"
               toggleModal={handleClosePopup}
-              classname="md-body"
+              classname="manage-body md-body"
             >
               <GlobalModalForm
                 formType="substage"
@@ -791,7 +791,7 @@ class StagedForms extends Component {
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
-              classname="dark md-body"
+              classname="manage-body md-body"
             >
               <AddForm
                 activeTab={activeTab}

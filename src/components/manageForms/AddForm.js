@@ -76,10 +76,10 @@ class AddForm extends Component {
                   e.preventDefault();
                 }}
               >
-                <div className="form-group">
+                <div className="form-group search-group">
                   <input
                     type="search"
-                    className="form-control"
+                    className="form-control" 
                     placeholder="Search"
                     onChange={onChangeHandler}
                   />
@@ -135,8 +135,8 @@ class AddForm extends Component {
                   e.preventDefault();
                 }}
               >
-                <div className="form-group">
-                  <input
+                <div className="form-group search-group">
+                <input
                     type="search"
                     className="form-control"
                     placeholder="Search"
@@ -203,10 +203,11 @@ class AddForm extends Component {
                   e.preventDefault();
                 }}
               >
-                <div className="form-group">
-                  <input
+                <div className="form-group search-group">
+                <input
                     type="search"
                     className="form-control"
+                    placeholder=""
                     placeholder="Search"
                     onChange={onChangeHandler}
                   />

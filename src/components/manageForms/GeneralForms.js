@@ -449,7 +449,7 @@ class GeneralForms extends Component {
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
-              classname="dark md-body"
+              classname="manage-body md-body"
             >
               <AddForm
                 activeTab={activeTab}

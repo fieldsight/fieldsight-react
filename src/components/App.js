@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { IntlProvider, addLocaleData } from "react-intl";
 
 import setDefault from "../config";
 import Settings from "./settings/Settings";
@@ -25,6 +24,8 @@ import ProjectAdd from "./projectAdd";
 import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
+import ViewData from "./viewData";
+//import SiteData from "./siteViewData"
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
@@ -44,12 +45,6 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
-
-// addLocaleData(en);
-// addLocaleData(np);
-
-const locale = navigator.language.split(/[-_]/)[0] || "en";
-const messages = { en: en, np: np };
 
 class App extends Component {
   constructor(props) {
@@ -73,153 +68,147 @@ class App extends Component {
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
   }
-  pathChanger = () => {
-    if ((path = "/regional-site-add")) {
-      console.log("hiiiiii");
-    } else if ((path = "/sub-site-add/:id/:id")) {
-      console.log("hee");
-    }
-  };
 
   render() {
     return (
-      <IntlProvider locale={locale} messages={messages[locale]}>
-        <Provider store={store}>
-          <div id="fieldsight-new" className="fieldsight-new">
-            <div id="main-container">
-              <div className="container-fluid">
-                <main id="main-content">
-                  <Router>
-                    <Switch>
-                      <Route
-                        path="/project-settings"
-                        render={props => <Settings {...props} />}
-                      />
-                      <Route
-                        path="/team-settings/:id"
-                        render={props => (
-                          <TeamSetting {...props} height={this.state.height} />
-                        )}
-                      />
-                      <Route
-                        path="/forms"
-                        render={props => <MyForm {...props} />}
-                      />
-                      <Route
-                        path="/project-sitelist"
-                        render={props => <SiteList {...props} />}
-                      />
+      <Provider store={store}>
+        <div id="fieldsight-new" className="fieldsight-new">
+          <div id="main-container">
+            <div className="container-fluid">
+              <main id="main-content">
+                <Router>
+                  <Switch>
+                    <Route
+                      path="/project-settings"
+                      render={props => <Settings {...props} />}
+                    />
+                    <Route
+                      path="/team-settings/:id"
+                      render={props => (
+                        <TeamSetting {...props} height={this.state.height} />
+                      )}
+                    />
+                    <Route
+                      path="/forms"
+                      render={props => <MyForm {...props} />}
+                    />
+                    <Route
+                      path="/project-sitelist"
+                      render={props => <SiteList {...props} />}
+                    />
 
-                      <Route
-                        path="/submission-details"
-                        render={props => <SubmissionDetails {...props} />}
-                      />
+                    <Route
+                      path="/submission-details"
+                      render={props => <SubmissionDetails {...props} />}
+                    />
 
-                      <Route
-                        path="/site-dashboard/:id"
-                        render={props => <SiteDashboard {...props} />}
-                      />
+                    <Route
+                      path="/site-dashboard/:id"
+                      render={props => <SiteDashboard {...props} />}
+                    />
 
-                      <Route
-                        path="/my-roles"
-                        render={props => <MyrolesMain {...props} />}
-                      />
+                    <Route
+                      path="/my-roles"
+                      render={props => <MyrolesMain {...props} />}
+                    />
 
-                      <Route
-                        path="/profile/:profileId"
-                        render={props => <MyrolesMain {...props} />}
-                      />
+                    <Route
+                      path="/profile/:profileId"
+                      render={props => <MyrolesMain {...props} />}
+                    />
 
-                      <Route
-                        path="/regional-site/:id"
-                        render={props => <RegionSite {...props} />}
-                      />
-                      <Route
-                        path="/site-documents/:id"
-                        render={props => <SiteDocument {...props} />}
-                      />
+                    <Route
+                      path="/regional-site/:id"
+                      render={props => <RegionSite {...props} />}
+                    />
+                    <Route
+                      path="/site-documents/:id"
+                      render={props => <SiteDocument {...props} />}
+                    />
 
-                      <Route
-                        path="/project-dashboard/:id"
-                        render={props => <ProjectDashboard {...props} />}
-                      />
-                      <Route
-                        path="/team-dashboard/:id"
-                        render={props => <TeamDashboard {...props} />}
-                      />
-                      <Route
-                        path="/site-users/:id"
-                        render={props => <SiteUsers {...props} />}
-                      />
+                    <Route
+                      path="/project-dashboard/:id"
+                      render={props => <ProjectDashboard {...props} />}
+                    />
+                    <Route
+                      path="/team-dashboard/:id"
+                      render={props => <TeamDashboard {...props} />}
+                    />
+                    <Route
+                      path="/site-users/:id"
+                      render={props => <SiteUsers {...props} />}
+                    />
 
-                      <Route
-                        path="/project-users/:id"
-                        render={props => <ProjectUser {...props} />}
-                      />
+                    <Route
+                      path="/project-users/:id"
+                      render={props => <ProjectUser {...props} />}
+                    />
 
-                      <Route
-                        path="/team-users/:id"
-                        render={props => <TeamUser {...props} />}
-                      />
+                    <Route
+                      path="/team-users/:id"
+                      render={props => <TeamUser {...props} />}
+                    />
 
-                      <Route
-                        path="/team-projects/:id"
-                        render={props => <ProjectList {...props} />}
-                      />
-                      <Route
-                        path="/teams"
-                        render={props => <Teams {...props} />}
-                      />
-                      <Route
-                        path="/project_logs/:id"
-                        render={props => <ProjectLog {...props} />}
-                      />
-                      <Route
-                        path="/site_logs/:id"
-                        render={props => <SiteLog {...props} />}
-                      />
-                      <Route
-                        path="/project/manage-forms/1/:id"
-                        render={props => <ManageForms {...props} />}
-                      />
+                    <Route
+                      path="/team-projects/:id"
+                      render={props => <ProjectList {...props} />}
+                    />
+                    <Route
+                      path="/teams"
+                      render={props => <Teams {...props} />}
+                    />
+                    <Route
+                      path="/project_logs/:id"
+                      render={props => <ProjectLog {...props} />}
+                    />
+                    <Route
+                      path="/site_logs/:id"
+                      render={props => <SiteLog {...props} />}
+                    />
+                    <Route
+                      path="/project/manage-forms/1/:id"
+                      render={props => <ManageForms {...props} />}
+                    />
 
-                      <Route
-                        path="/project-add/:id"
-                        render={props => <ProjectAdd {...props} />}
-                      />
-                      <Route
-                        path="/create-team"
-                        render={props => <TeamAdd {...props} />}
-                      />
-                      <Route
-                        path="/create-site/:id"
-                        render={props => (
-                          <SiteAdd {...props} page="CreateSite" />
-                        )}
-                      />
-                      <Route
-                        path="/regional-site-add/:id/:regionalId"
-                        render={props => (
-                          <SiteAdd {...props} page="regionalSite" />
-                        )}
-                      />
-                      <Route
-                        path="/sub-site-add/:id/:siteId"
-                        render={props => <SiteAdd {...props} page="subSite" />}
-                      />
-                      <Route
-                        path="/site-edit/:id"
-                        render={props => <EditSite {...props} page="subSite" />}
-                      />
-                    </Switch>
-                    <ToastContainer />
-                  </Router>
-                </main>
-              </div>
+                    <Route
+                      path="/project-add/:id"
+                      render={props => <ProjectAdd {...props} />}
+                    />
+                    <Route
+                      path="/create-team"
+                      render={props => <TeamAdd {...props} />}
+                    />
+                    <Route
+                      path="/create-site/:id"
+                      render={props => <SiteAdd {...props} page="CreateSite" />}
+                    />
+                    <Route
+                      path="/regional-site-add/:id/:regionalId"
+                      render={props => (
+                        <SiteAdd {...props} page="regionalSite" />
+                      )}
+                    />
+                    <Route
+                      path="/sub-site-add/:id/:siteId"
+                      render={props => <SiteAdd {...props} page="subSite" />}
+                    />
+                    <Route
+                      path="/site-edit/:id"
+                      render={props => <EditSite {...props} page="subSite" />}
+                    />
+
+                    <Route
+                      path="/project-responses/:id"
+                      render={props => <ViewData {...props} />}
+                    />
+                  </Switch>
+                  <ToastContainer />
+                </Router>
+              </main>
             </div>
           </div>
-        </Provider>
-      </IntlProvider>
+        </div>
+      </Provider>
     );
   }
 }
