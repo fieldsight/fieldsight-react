@@ -460,6 +460,7 @@ class GeneralForms extends Component {
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
                 handleSaveForm={this.handleSaveForm}
+                loader={this.props.formLoader}
               />
             </Modal>
           )}
