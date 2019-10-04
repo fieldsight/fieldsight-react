@@ -343,7 +343,7 @@ class ScheduleForms extends Component {
     return (
       <div className="col-xl-9 col-lg-8">
         <RightContentCard
-          title="Schedule Forms"
+          title="Scheduled Forms"
           addButton={true}
           toggleModal={this.props.commonPopupHandler}
           showText={true}
@@ -362,7 +362,7 @@ class ScheduleForms extends Component {
 
           {this.props.popupModal && (
             <Modal
-              title="Add Schedule Form"
+              title="Add Scheduled Form"
               toggleModal={handleClosePopup}
               classname="manage-body md-body"
             >
