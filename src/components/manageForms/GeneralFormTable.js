@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -81,39 +82,61 @@ class GeneralFormTable extends Component {
                 <td>
                   {!!item.is_deployed && (
                     <a
-                      className="flagged td-edit-btn"
+                      className="rejected td-edit-btn td-btn"
                       onClick={() =>
                         changeDeployStatus(item.id, item.is_deployed)
                       }
                     >
-                      <i className="la la-close"> </i>
+                      
+                      <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Undeploy</Tooltip>}
+                    >
+                      <i className="la la-rocket"> </i>
+                    </OverlayTrigger>
                     </a>
                   )}
                   {!item.is_deployed && (
                     <span>
                       <a
-                        className="td-edit-btn approved"
+                        className="td-edit-btn td-btn approved"
                         onClick={() =>
                           changeDeployStatus(item.id, item.is_deployed)
                         }
                       >
-                        <i className="la la-rocket"> </i>
+                       <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Deploy</Tooltip>}
+                    >
+                      <i className="la la-rocket"> </i>
+                    </OverlayTrigger>
                       </a>
                     </span>
                   )}
                   <a
                     onClick={() => handleEditForm(item)}
-                    className="pending td-edit-btn"
+                    className="pending td-edit-btn td-btn"
                   >
-                    <i className="la la-edit"> </i>
+                    
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Edit</Tooltip>}
+                    >
+                      <i className="la la-edit"> </i>
+                    </OverlayTrigger>
                   </a>
                   {!item.is_deployed && (
                     <span>
                       <a
-                        className="rejected td-edit-btn"
+                        className="rejected td-edit-btn td-btn"
                         onClick={() => deleteItem(item.id, item.is_deployed)}
                       >
-                        <i className="la la-trash"> </i>
+                        <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Delete</Tooltip>}
+                    >
+                      <i className="la la-trash"> </i>
+                    </OverlayTrigger>
                       </a>
                     </span>
                   )}

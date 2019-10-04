@@ -9,6 +9,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import SortableStage from "./SortableStage";
 import AddStageForm from "./AddStageForm";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -77,7 +78,7 @@ class StagedForms extends Component {
           this.setState({ data: res.data, loader: false });
         }
       })
-      .catch(err => {});
+      .catch(err => { });
   };
 
   handleSubmitStageForm = data => {
@@ -386,7 +387,7 @@ class StagedForms extends Component {
           }
         );
       })
-      .catch(err => {});
+      .catch(err => { });
   };
   deleteItem = (formId, isDeploy) => {
     const { id } = this.state;
@@ -407,7 +408,7 @@ class StagedForms extends Component {
           }
         );
       })
-      .catch(err => {});
+      .catch(err => { });
   };
 
   handleEditGuide = (data, formId) => {
@@ -688,71 +689,93 @@ class StagedForms extends Component {
           <div className="card-header main-card-header">
             <h5>Staged Forms</h5>
             <div className="add-btn">
-              <a onClick={this.props.commonPopupHandler}>
-                Add New
-                <span>
-                  <i className="la la-plus" />
-                </span>
-              </a>
+
               <a onClick={handleStageReorder}>
-                {!isStageReorder ? "Reorder" : "Cancel Reorder"}
+                {/* {!isStageReorder ? "Reorder" : "Cancel Reorder"} */}
                 {!isStageReorder ? (
-                  <span>
-                    <i className="la la-sort-amount-desc" />
-                  </span>
+
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>Reorder</Tooltip>}>
+                    <span className="reorder">
+                      <i className="la la-ellipsis-v" />
+                      <i className="la la-ellipsis-v" />
+                    </span>
+                  </OverlayTrigger>
                 ) : (
-                  <span>
-                    <i className="la la-close" />
-                  </span>
-                )}
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip> Cancel Reorder</Tooltip>}>
+                      <span className="reorder">
+                        <i className="la la-close" />
+                      </span>
+                    </OverlayTrigger>
+                  )}
               </a>
               {isStageReorder && (
                 <a onClick={handleSaveStageReorder}>
-                  Save Order
+                  
+                  <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip> Save</Tooltip>}>
                   <span>
                     <i className="la la-save" />
                   </span>
+                </OverlayTrigger>
                 </a>
               )}
               {/* {deployCount > 0 && ( */}
               <a
                 className={`${
                   deployCount > 0 ? "deploy-active" : "deploy-inactive"
-                }`}
+                  }`}
                 onClick={() => handleDeployAllStages(true)}
               >
-                Deploy
-                <span>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip> Deploy</Tooltip>}>
+                  <span className="">
                   <i className="la la-rocket" />
-                </span>
+                  </span>
+                </OverlayTrigger>
               </a>
               {/* )} */}
             </div>
           </div>
           {loader && <DotLoader />}
           {!loader && (
-            <SortableStage
-              stage={data}
-              handleRequestSubStage={handleRequestSubStage}
-              handleClickEdit={handleClickEdit}
-              loadSubStage={loadSubStage}
-              subStageData={subStageData}
-              handleEditGuide={this.handleEditGuide}
-              changeDeployStatus={this.changeDeployStatus}
-              deleteItem={this.deleteItem}
-              editSubStageForm={this.editSubStageForm}
-              handleSubStageForm={handleSubStageForm}
-              reorder={isStageReorder}
-              isStageReorderCancel={isStageReorderCancel}
-              handleNewStageOrder={this.handleNewStageOrder}
-              reorderSubstage={isSubstageReorder}
-              isSubstageReorderCancel={isSubstageReorderCancel}
-              handleSubstageReorder={handleSubstageReorder}
-              handleSaveSubstageReorder={handleSaveSubstageReorder}
-              handleNewSubstageOrder={this.handleNewSubstageOrder}
-              handleDeployAll={handleDeployAllSubstages}
-              handleDeleteAll={handleDeleteAllSubstages}
-            />
+            <>
+              <SortableStage
+                stage={data}
+                handleRequestSubStage={handleRequestSubStage}
+                handleClickEdit={handleClickEdit}
+                loadSubStage={loadSubStage}
+                subStageData={subStageData}
+                handleEditGuide={this.handleEditGuide}
+                changeDeployStatus={this.changeDeployStatus}
+                deleteItem={this.deleteItem}
+                editSubStageForm={this.editSubStageForm}
+                handleSubStageForm={handleSubStageForm}
+                reorder={isStageReorder}
+                isStageReorderCancel={isStageReorderCancel}
+                handleNewStageOrder={this.handleNewStageOrder}
+                reorderSubstage={isSubstageReorder}
+                isSubstageReorderCancel={isSubstageReorderCancel}
+                handleSubstageReorder={handleSubstageReorder}
+                handleSaveSubstageReorder={handleSaveSubstageReorder}
+                handleNewSubstageOrder={this.handleNewSubstageOrder}
+                handleDeployAll={handleDeployAllSubstages}
+                handleDeleteAll={handleDeleteAllSubstages}
+              />
+              <div className="add-btn pull-right stage-add">
+                <a onClick={this.props.commonPopupHandler}>
+                  Add Stage
+                <span>
+                    <i className="la la-plus" />
+                  </span>
+                </a>
+              </div>
+            </>
           )}
           {this.props.popupModal && (
             <Modal

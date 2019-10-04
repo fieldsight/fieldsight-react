@@ -648,53 +648,51 @@ class GlobalModalForm extends Component {
               {scheduleType == 1 && (
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
-                  <div className="select-option">
                     <SelectElement
                       options={weekOptions}
                       value={frequency}
                       changeHandler={handleFrequencyChange}
                     />
-                  </div>
                   <span>weeks on</span>
                   <div className="form-group">
                     <div className="custom-checkbox display-inline">
-                      <CheckBox
+                      <RadioElement
                         label="Sun"
                         name="sun"
                         changeHandler={handleOnWeekCheckbox}
                         checked={weeklyArrDays.sun}
                       />
-                      <CheckBox
+                      <RadioElement
                         label="Mon"
                         name="mon"
                         changeHandler={handleOnWeekCheckbox}
                         checked={weeklyArrDays.mon}
                       />
-                      <CheckBox
+                      <RadioElement
                         label="Tue"
                         name="tue"
                         changeHandler={handleOnWeekCheckbox}
                         checked={weeklyArrDays.tue}
                       />
-                      <CheckBox
+                      <RadioElement
                         label="Wed"
                         name="wed"
                         changeHandler={handleOnWeekCheckbox}
                         checked={weeklyArrDays.wed}
                       />
-                      <CheckBox
+                      <RadioElement
                         label="Thu"
                         name="thu"
                         changeHandler={handleOnWeekCheckbox}
                         checked={weeklyArrDays.thu}
                       />
-                      <CheckBox
+                      <RadioElement
                         label="Fri"
                         name="fri"
                         changeHandler={handleOnWeekCheckbox}
                         checked={weeklyArrDays.fri}
                       />
-                      <CheckBox
+                      <RadioElement
                         label="Sat"
                         name="sat"
                         changeHandler={handleOnWeekCheckbox}
@@ -707,13 +705,11 @@ class GlobalModalForm extends Component {
               {scheduleType == 2 && (
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
-                  <div className="select-option">
                     <SelectElement
                       options={monthOPtions}
                       value={frequency}
                       changeHandler={handleFrequencyChange}
                     />
-                  </div>
                   <span>Month on</span>
                   <SelectElement
                     options={dayOptions}
@@ -743,7 +739,8 @@ class GlobalModalForm extends Component {
               </div>
               <div className="row">
                 <div className="col-xl-6">
-                  <div className="form-group">
+                  <div className="form-group mrt-15">
+                  <label>Start Date</label>
                     <DatePicker
                       selected={startDate}
                       onChange={handleStartDateChange}
@@ -759,12 +756,13 @@ class GlobalModalForm extends Component {
                   </div>
                 </div>
                 <div className="col-xl-6">
-                  <div className="form-group">
+                  <div className="form-group mrt-15">
+                    <label>End Date</label>
                     <DatePicker
                       selected={endDate}
                       onChange={handleEndDateChange}
                       dateFormat="yyyy-MM-dd"
-                      placeholderText="End Date"
+                      placeholderText="Not Specified"
                       className="form-control"
                     />
                     {errors && errors.endDate && (
@@ -780,7 +778,6 @@ class GlobalModalForm extends Component {
           {formType == "substage" && (
             <>
               {/* for subStage form */}
-              <div className="form-group">
                 <InputElement
                   formType="editForm"
                   tag="input"
@@ -791,7 +788,7 @@ class GlobalModalForm extends Component {
                   value={weight}
                   changeHandler={handleInputChange}
                 />
-              </div>
+              
             </>
           )}
 

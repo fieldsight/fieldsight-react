@@ -136,6 +136,9 @@
             color: $color-white;
             @include radius4;
             margin-left: 0.635rem;
+            i.la-ellipsis-v:last-child{
+              margin-left:-10px;
+            }
           }
         }
       }
@@ -340,6 +343,25 @@
       color: rgb(165, 163, 163) !important;
     }
   }
+  span.drag-icon {
+    display: inline-block;
+
+    i {
+      margin-left: -10px;
+      color: darken($color-bg, 10%);
+      font-size: 1.2rem;
+
+      &:last-child {
+        margin-left: -.875rem;
+      }
+    }
+
+    &:hover {
+      cursor: -moz-move;
+      cursor: -webkit-move;
+      cursor: move;
+    }
+  }
 
   .display-inline {
     @include flexjust;
@@ -401,4 +423,7 @@
   .cursor {
     background-color: rgba($color-green, 0.4);
   }
+}
+.border-none{
+  border:none;
 }
