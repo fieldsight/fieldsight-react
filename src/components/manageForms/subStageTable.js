@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import {
   sortableContainer,
   sortableElement,
@@ -44,7 +45,7 @@ const SortableContainer = sortableContainer(({ children }) => {
           <th>Weight</th>
           <th>assigned date</th>
           <th>Default status</th>
-          <th>Action</th>
+          <th width="15%">Action</th>
         </tr>
       </thead>
       {children}
@@ -155,44 +156,53 @@ class SubStageTable extends Component {
                 <td>
                   {!!sub.is_deployed && (
                     <a
-                      className="flagged"
+                      className="rejected td-btn"
                       onClick={() =>
                         changeDeployStatus(sub.id, sub.is_deployed)
                       }
                     >
+                      <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Undeploy</Tooltip>}
+                    >
                       <i className="la la-rocket"> </i>
+                    </OverlayTrigger>
+                      
                     </a>
                   )}
                   {!sub.is_deployed && (
-                    <div>
-                      <span>
+                    <>
                         <a
-                          className="approved"
+                          className="approved td-btn"
                           onClick={() =>
                             changeDeployStatus(sub.id, sub.is_deployed)
                           }
                         >
-                          <i className="la la-rocket"> </i>
+                          <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Deploy</Tooltip>}
+                    >
+                      <i className="la la-rocket"> </i>
+                    </OverlayTrigger>
                         </a>
-                      </span>
-                      <span>
                         <a
-                          className="rejected"
+                          className="rejected td-btn"
                           onClick={() => deleteItem(sub.id, sub.is_deployed)}
                         >
-                          <i className="la la-trash"> </i>
+                          <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Delete</Tooltip>}
+                    >
+                      <i className="la la-trash"> </i>
+                    </OverlayTrigger>
                         </a>
-                      </span>
-                    </div>
+                        </>
                   )}
                   <a
                     className="td-edit-btn"
-                    data-toggle="tooltip"
                     onClick={() => {
                       editSubStageForm(sub);
                     }}
-                    data-placement="top"
-                    title="Edit"
                   >
                     <i className="la la-edit"> </i>{" "}
                   </a>

@@ -687,17 +687,13 @@ class StagedForms extends Component {
           <div className="card-header main-card-header">
             <h5>Staged Forms</h5>
             <div className="add-btn">
-              <a onClick={this.props.commonPopupHandler}>
-                Add New
-                <span>
-                  <i className="la la-plus" />
-                </span>
-              </a>
+              
               <a onClick={handleStageReorder}>
                 {!isStageReorder ? "Reorder" : "Cancel Reorder"}
                 {!isStageReorder ? (
                   <span>
-                    <i className="la la-sort-amount-desc" />
+                    <i className="la la-ellipsis-v" />
+                    <i className="la la-ellipsis-v" />
                   </span>
                 ) : (
                   <span>
@@ -707,7 +703,6 @@ class StagedForms extends Component {
               </a>
               {isStageReorder && (
                 <a onClick={handleSaveStageReorder}>
-                  Save Order
                   <span>
                     <i className="la la-save" />
                   </span>
@@ -715,7 +710,6 @@ class StagedForms extends Component {
               )}
               {deployCount > 0 && (
                 <a onClick={() => handleDeployAllStages(true)}>
-                  Deploy
                   <span>
                     <i className="la la-rocket" />
                   </span>
@@ -725,6 +719,7 @@ class StagedForms extends Component {
           </div>
           {loader && <DotLoader />}
           {!loader && (
+            <>
             <SortableStage
               stage={data}
               handleRequestSubStage={handleRequestSubStage}
@@ -747,6 +742,15 @@ class StagedForms extends Component {
               handleDeployAll={handleDeployAllSubstages}
               handleDeleteAll={handleDeleteAllSubstages}
             />
+            <div className="add-btn pull-right stage-add">
+            <a onClick={this.props.commonPopupHandler}>
+                Add New
+                <span>
+                  <i className="la la-plus" />
+                </span>
+              </a>
+              </div>
+              </>
           )}
           {this.props.popupModal && (
             <Modal

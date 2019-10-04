@@ -45,9 +45,10 @@
         .content {
           h6 {
             margin-bottom: 0.2rem;
-            font-size:.875rem;
-            a{
-              color:$color-primary;
+            font-size: .875rem;
+
+            a {
+              color: $color-primary;
               font-family: $ubuntu;
               font-weight: 500;
             }
@@ -98,10 +99,12 @@
           padding-bottom: 0;
           border-bottom: 0;
         }
-        &:hover{
+
+        &:hover {
           background-color: lighten($color-bg, 7%);
-          figure{
-            img{
+
+          figure {
+            img {
               @include transform_scale(scale(1.1));
             }
           }
@@ -144,7 +147,8 @@
           font-size: .875rem;
           font-weight: 500;
           margin: 0;
-          a{
+
+          a {
             font-size: .875rem;
             font-family: $ubuntu;
             font-weight: 500;
@@ -332,7 +336,7 @@
 
       figure {
         max-width: 200px;
-        width:200px;
+        width: 200px;
         height: 200px;
         @include radius4;
         border: 1px solid $color-bg;
@@ -581,6 +585,55 @@
               padding-bottom: 0;
             }
           }
+        }
+      }
+    }
+
+    &.stage-accordion {
+      .card {
+        .card-header {
+          h5 {
+            display: flex;
+
+            button {
+              display: flex;
+              align-items: center;
+
+              h5 {
+                display: inline-block;
+
+                span.drag-icon {
+                  display: inline-block;
+
+                  i {
+                    margin-left: -10px;
+                    color: darken($color-bg, 10%);
+                    font-size: 1.2rem;
+
+                    &:last-child {
+                      margin-left: -.875rem;
+                    }
+                  }
+
+                  &:hover {
+                    cursor: -moz-move;
+                    cursor: -webkit-move;
+                    cursor: move;
+                  }
+                }
+                span.edit-stage {
+                  margin-left: 1rem;
+
+                  i {
+                    font-size: .875rem;
+                  }
+                }
+                
+              }
+            }
+          }
+
+
         }
       }
     }

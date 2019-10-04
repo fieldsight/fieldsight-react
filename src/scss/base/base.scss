@@ -139,6 +139,9 @@
             color: $color-white;
             @include radius4;
             margin-left: 0.635rem;
+            i.la-ellipsis-v:last-child{
+              margin-left:-10px;
+            }
           }
         }
       }
