@@ -598,10 +598,11 @@
             button {
               display: flex;
               align-items: center;
+              text-transform:capitalize;
 
               h5 {
                 display: inline-block;
-
+                font-size:.875rem;
                 span.drag-icon {
                   display: inline-block;
 
@@ -621,14 +622,15 @@
                     cursor: move;
                   }
                 }
-                span.edit-stage {
-                  margin-left: 1rem;
-
-                  i {
-                    font-size: .875rem;
-                  }
-                }
                 
+                
+              }
+              span.edit-stage {
+                margin-left: .5rem;
+
+                i {
+                  font-size: .875rem;
+                }
               }
             }
           }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -76,39 +77,59 @@ class ScheduleFormTable extends Component {
                 <td>
                   {!!item.is_deployed && (
                     <a
-                      className="flagged"
+                      className="rejected td-btn"
                       onClick={() =>
                         changeDeployStatus(item.id, item.is_deployed)
                       }
                     >
-                      <i className="la la-close"> </i>
+                      <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Undeploy</Tooltip>}
+                    >
+                      <i className="la la-rocket"> </i>
+                    </OverlayTrigger>
                     </a>
                   )}
                   {!item.is_deployed && (
-                    <div>
-                      <span>
-                        <a
-                          className="pending"
-                          onClick={() =>
-                            changeDeployStatus(item.id, item.is_deployed)
-                          }
-                        >
-                          <i className="la la-rocket"> </i>
-                        </a>
-                      </span>
-                      <span>
-                        <a
-                          className="rejected"
-                          onClick={() => deleteItem(item.id, item.is_deployed)}
-                        >
-                          <i className="la la-trash"> </i>
-                        </a>
-                      </span>
-                    </div>
+                    <span>
+                      <a
+                        className="approved td-btn"
+                        onClick={() =>
+                          changeDeployStatus(item.id, item.is_deployed)
+                        }
+                      >
+                        <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Deploy</Tooltip>}
+                    >
+                      <i className="la la-rocket"> </i>
+                    </OverlayTrigger>
+                      </a>
+                    </span>
                   )}
-                  <a onClick={() => handleEditForm(item)}>
-                    <i className="la la-edit"> </i>
+                  <a onClick={() => handleEditForm(item)} className="td-btn">
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Edit</Tooltip>}
+                    >
+                      <i className="la la-edit"> </i>
+                    </OverlayTrigger>
                   </a>
+                  {!item.is_deployed && (
+                    <span>
+                      <a
+                        className="rejected td-btn"
+                        onClick={() => deleteItem(item.id, item.is_deployed)}
+                      >
+                        <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Delete</Tooltip>}
+                    >
+                      <i className="la la-trash"> </i>
+                    </OverlayTrigger>
+                      </a>
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}

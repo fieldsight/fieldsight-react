@@ -30,7 +30,7 @@ const formatDate = date => {
 };
 
 const DragHandle = sortableHandle(() => (
-  <span style={{ cursor: "pointer" }}>#</span>
+  <span className="drag-icon"><i className="la la-ellipsis-v"></i><i className="la la-ellipsis-v"></i></span>
 ));
 
 const SortableContainer = sortableContainer(({ children }) => {
@@ -54,7 +54,7 @@ const SortableContainer = sortableContainer(({ children }) => {
 });
 
 const SortableItem = sortableElement(({ name }) => (
-  <span>
+  <span className>
     <DragHandle />
     {name}
   </span>
@@ -171,8 +171,7 @@ class SubStageTable extends Component {
                     </a>
                   )}
                   {!sub.is_deployed && (
-                    <>
-                        <a
+                      <a
                           className="approved td-btn"
                           onClick={() =>
                             changeDeployStatus(sub.id, sub.is_deployed)
@@ -185,7 +184,23 @@ class SubStageTable extends Component {
                       <i className="la la-rocket"> </i>
                     </OverlayTrigger>
                         </a>
-                        <a
+                  )}
+                  <a
+                    className="td-edit-btn td-btn"
+                    onClick={() => {
+                      editSubStageForm(sub);
+                    }}
+                  >
+                    <OverlayTrigger
+                          placement="top"
+                          overlay={<Tooltip>Edit</Tooltip>}>
+                             <i className="la la-edit"> </i>
+                        </OverlayTrigger>
+                   
+                  </a>
+                  {!sub.is_deployed && (
+                    <span>
+                      <a
                           className="rejected td-btn"
                           onClick={() => deleteItem(sub.id, sub.is_deployed)}
                         >
@@ -196,16 +211,8 @@ class SubStageTable extends Component {
                       <i className="la la-trash"> </i>
                     </OverlayTrigger>
                         </a>
-                        </>
+                    </span>
                   )}
-                  <a
-                    className="td-edit-btn"
-                    onClick={() => {
-                      editSubStageForm(sub);
-                    }}
-                  >
-                    <i className="la la-edit"> </i>{" "}
-                  </a>
                 </td>
               </tr>
             ))}

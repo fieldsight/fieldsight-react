@@ -102,11 +102,7 @@ class SortableStage extends Component {
     toDeploy =
       arrDeploy.length > 0 ? (arrDeploy.indexOf(true) > -1 ? true : false) : "";
     toDelete =
-      arrDelete.length > 0
-        ? arrDelete.indexOf(false) > -1
-          ? false
-          : true
-        : "";
+      arrDelete.length > 0 ? (arrDelete.indexOf(true) > -1 ? false : true) : "";
 
     return (
       <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
@@ -169,7 +165,7 @@ class SortableStage extends Component {
                           
                            <OverlayTrigger
                            placement="top"
-                           overlay={<Tooltip>cancel</Tooltip>}>
+                           overlay={<Tooltip>Cancel</Tooltip>}>
                              <span>
                             <i className="la la-close" />
                           </span>
@@ -190,9 +186,6 @@ class SortableStage extends Component {
                              <i className="la la-save" />
                           </span>
                          </OverlayTrigger>
-                        <span>
-                          
-                        </span>
                       </a>
                     )}
                     {subStageData && subStageData.length > 0 && toDeploy && (
@@ -203,7 +196,7 @@ class SortableStage extends Component {
                         {/* Deploy Substages */}
                         <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip>Deploy Substage</Tooltip>}>
+                      overlay={<Tooltip>Deploy Substages</Tooltip>}>
                         <span className="active deploy">
                           <i className="la la-rocket" />
                         </span>
@@ -211,13 +204,13 @@ class SortableStage extends Component {
                         
                       </a>
                     )}
-                    {subStageData && subStageData.length > 0 && toDelete && (
+                    {/* {subStageData && subStageData.length > 0 && toDelete && (
                       <a
                         data-tab="addSubStage-popup"
                         onClick={() => handleDeleteAll(true)}
                       >
                         {/* Delete Substages */}
-                        
+{/*                         
                         <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip>Delete Substage</Tooltip>}>
@@ -226,7 +219,7 @@ class SortableStage extends Component {
                         </span>
                     </OverlayTrigger>
                       </a>
-                    )}
+                    )}  */}
                     {subStageData && subStageData.length > 0 && !toDeploy && (
                       <a
                         data-tab="addSubStage-popup"
@@ -235,7 +228,7 @@ class SortableStage extends Component {
                         {/* Undeploy Substages */}
                         <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip>Undeploy Substage</Tooltip>}>
+                      overlay={<Tooltip>Undeploy Substages</Tooltip>}>
                         <span>
                           <i className="undeployed la la-rocket" />
                         </span>
@@ -266,7 +259,7 @@ class SortableStage extends Component {
                       data-tab="addSubStage-popup"
                       onClick={handleSubStageForm}
                     >
-                      Add substage
+                      Add Substage
                       <span>
                         <i className="la la-plus"></i>
                       </span>
