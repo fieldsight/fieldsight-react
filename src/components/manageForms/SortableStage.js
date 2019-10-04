@@ -23,7 +23,11 @@ const SortableItem = sortableElement(({ name }) => (
 
 const SortableContainer = sortableContainer(({ children }) => {
   return (
-    <Accordion defaultActiveKey={0} className="card no-boxshadow">
+    <Accordion
+      defaultActiveKey={0}
+      className="card no-boxshadow"
+      style={{ cursor: "pointer" }}
+    >
       {children}
     </Accordion>
   );
@@ -101,34 +105,31 @@ class SortableStage extends Component {
     toDeploy =
       arrDeploy.length > 0 ? (arrDeploy.indexOf(true) > -1 ? true : false) : "";
     toDelete =
-      arrDelete.length > 0
-        ? arrDelete.indexOf(false) > -1
-          ? false
-          : true
-        : "";
+      arrDelete.length > 0 ? (arrDelete.indexOf(true) > -1 ? false : true) : "";
 
     return (
       <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
         {data.length > 0 &&
           data.map((each, index) => (
             <Card key={`key_${index}`}>
-              {/* <Card.Header> */}
-              <Accordion.Toggle
-                as={Card.Header}
-                eventKey={`${each.order}`}
-                // className="card-header"
-                onClick={() => {
-                  handleRequestSubStage(each.id, each.order);
-                }}
-              >
-                {reorder && (
-                  <SortableItem
-                    key={`item-${each.id}`}
-                    index={index}
-                    name={each.name}
-                  />
-                )}
-                {!reorder && <h5>{each.name}</h5>}
+              <Card.Header>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey={`${each.order}`}
+                  className="card-header"
+                  onClick={() => {
+                    handleRequestSubStage(each.id, each.order);
+                  }}
+                >
+                  {reorder && (
+                    <SortableItem
+                      key={`item-${each.id}`}
+                      index={index}
+                      name={each.name}
+                    />
+                  )}
+                  {!reorder && <h5>{each.name}</h5>}
+                </Accordion.Toggle>
                 <div className="add-btn pull-right">
                   <a
                     data-tab="addSubStage-popup"
@@ -137,8 +138,7 @@ class SortableStage extends Component {
                     <i className="la la-edit"></i>
                   </a>
                 </div>
-              </Accordion.Toggle>
-              {/* </Card.Header> */}
+              </Card.Header>
 
               <Accordion.Collapse eventKey={`${each.order}`}>
                 <Card.Body>
@@ -192,7 +192,7 @@ class SortableStage extends Component {
                         </span>
                       </a>
                     )}
-                    {subStageData && subStageData.length > 0 && toDelete && (
+                    {/* {subStageData && subStageData.length > 0 && toDelete && (
                       <a
                         data-tab="addSubStage-popup"
                         onClick={() => handleDeleteAll(true)}
@@ -202,7 +202,7 @@ class SortableStage extends Component {
                           <i className="badge badge-danger" />
                         </span>
                       </a>
-                    )}
+                    )} */}
                     {subStageData && subStageData.length > 0 && !toDeploy && (
                       <a
                         data-tab="addSubStage-popup"

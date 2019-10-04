@@ -832,13 +832,11 @@ class GlobalModalForm extends Component {
               />
             </div>
           </div>
-          {!isProjectWide && (
+          {!isProjectWide && regionDropdown && regionDropdown.length > 0 && (
             <div className="form-group">
               <label>Regions</label>
               {hasLoaded && (
                 <Select
-                  // closeMenuOnSelect={false}
-                  // className="select2-select select2"
                   onChange={handleSelectRegionChange}
                   options={regionDropdown}
                   isMulti={true}
@@ -848,7 +846,7 @@ class GlobalModalForm extends Component {
               )}
             </div>
           )}
-          {!isProjectWide && (
+          {!isProjectWide && typeDropdown && typeDropdown.length > 0 && (
             <div className="form-group">
               <label>Types</label>
               {hasLoaded && (
@@ -857,8 +855,6 @@ class GlobalModalForm extends Component {
                   isMulti
                   onChange={handleSelectTypeChange}
                   options={typeDropdown}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
                 />
               )}
             </div>

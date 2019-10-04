@@ -164,26 +164,16 @@ class SubStageTable extends Component {
                     </a>
                   )}
                   {!sub.is_deployed && (
-                    <div>
-                      <span>
-                        <a
-                          className="approved"
-                          onClick={() =>
-                            changeDeployStatus(sub.id, sub.is_deployed)
-                          }
-                        >
-                          <i className="la la-rocket"> </i>
-                        </a>
-                      </span>
-                      <span>
-                        <a
-                          className="rejected"
-                          onClick={() => deleteItem(sub.id, sub.is_deployed)}
-                        >
-                          <i className="la la-trash"> </i>
-                        </a>
-                      </span>
-                    </div>
+                    <span>
+                      <a
+                        className="approved"
+                        onClick={() =>
+                          changeDeployStatus(sub.id, sub.is_deployed)
+                        }
+                      >
+                        <i className="la la-rocket"> </i>
+                      </a>
+                    </span>
                   )}
                   <a
                     className="td-edit-btn"
@@ -196,6 +186,16 @@ class SubStageTable extends Component {
                   >
                     <i className="la la-edit"> </i>{" "}
                   </a>
+                  {!sub.is_deployed && (
+                    <span>
+                      <a
+                        className="rejected"
+                        onClick={() => deleteItem(sub.id, sub.is_deployed)}
+                      >
+                        <i className="la la-trash"> </i>
+                      </a>
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}

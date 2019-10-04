@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import RadioElement from "../common/RadioElement";
-
+import { DotLoader } from "../myForm/Loader";
 class AddForm extends Component {
   render() {
     const {
@@ -12,10 +12,11 @@ class AddForm extends Component {
         handleRadioChange,
         projectList,
         handleSaveForm,
-        sharedList
+        sharedList,
+        loader
       }
     } = this;
-    // console.log("project", projectList);
+    console.log("project", loader);
 
     return (
       <>
@@ -61,8 +62,9 @@ class AddForm extends Component {
               </a>
             </li> */}
         </ul>
-        {/* <div className="dash-btn"> */}
-        {activeTab === "myForms" && (
+        {loader && <DotLoader />}
+
+        {!loader && activeTab === "myForms" && (
           <div
             className="thumb-list mr-0 "
             style={{ position: "relative", height: "327px" }}
@@ -79,7 +81,7 @@ class AddForm extends Component {
                 <div className="form-group search-group">
                   <input
                     type="search"
-                    className="form-control" 
+                    className="form-control"
                     placeholder="Search"
                     onChange={onChangeHandler}
                   />
@@ -121,7 +123,7 @@ class AddForm extends Component {
           </div>
         )}
 
-        {activeTab === "projectForms" && (
+        {!loader && activeTab === "projectForms" && (
           <div
             className="thumb-list mr-0 "
             style={{ position: "relative", height: "327px" }}
@@ -136,7 +138,7 @@ class AddForm extends Component {
                 }}
               >
                 <div className="form-group search-group">
-                <input
+                  <input
                     type="search"
                     className="form-control"
                     placeholder="Search"
@@ -189,7 +191,7 @@ class AddForm extends Component {
           </div>
         )}
 
-        {activeTab === "sharedForms" && (
+        {!loader && activeTab === "sharedForms" && (
           <div
             className="thumb-list mr-0 "
             style={{ position: "relative", height: "327px" }}
@@ -204,7 +206,7 @@ class AddForm extends Component {
                 }}
               >
                 <div className="form-group search-group">
-                <input
+                  <input
                     type="search"
                     className="form-control"
                     placeholder=""
