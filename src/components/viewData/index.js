@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
+
 import axios from "axios";
 import ManageFormSetting from "./manageFormSetting/ManageFormSetting";
 import ManageGeneralForm from "./manageGeneralForm";
@@ -16,9 +17,10 @@ export default class ViewData extends Component {
   state = {
     hide: true,
     view_btn: false,
-    id: "",
+    id: this.props.match.params && this.props.match.params.id,
     deleted_forms: [],
-    generals_forms: []
+    generals_forms: [],
+    url: this.props.match.url && this.props.match.url
   };
   toggleHide = () => {
     this.setState({
@@ -26,10 +28,26 @@ export default class ViewData extends Component {
     });
   };
   showViewData = () => {
-    console.log("gfhjh");
-    this.setState({
-      view_btn: !this.state.view_btn
-    });
+    this.setState(
+      state => {
+        if (!!this.state.view_btn) {
+          console.log("if");
+          return {
+            url: `${this.props.match.url}`,
+            view_btn: !this.state.view_btn
+          };
+        } else {
+          console.log("else");
+          return {
+            url: `${this.props.match.url}/rejected`,
+            view_btn: !this.state.view_btn
+          };
+        }
+      },
+      () => {
+        this.props.history.push(this.state.url);
+      }
+    );
   };
   componentDidMount() {
     const {
@@ -37,18 +55,19 @@ export default class ViewData extends Component {
         params: { id }
       }
     } = this.props;
+    console.log(this.props.match);
 
     this.setState({
       id
     });
   }
-
   render() {
     const {
       match: {
         params: { id }
       }
     } = this.props;
+    console.log(this.props.match.url, "hello", this.state.view_btn);
 
     return (
       <React.Fragment>
@@ -67,7 +86,10 @@ export default class ViewData extends Component {
                 <div className="card">
                   <div className="card-header main-card-header"></div>
                   <div className="card-body">
-                    <ManageFormSetting show_submission={this.state.view_btn} />
+                    <ManageFormSetting
+                      show_submission={this.state.view_btn}
+                      url={this.state.url}
+                    />
                   </div>
                 </div>
               </div>
@@ -85,6 +107,7 @@ export default class ViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -96,6 +119,7 @@ export default class ViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -106,6 +130,7 @@ export default class ViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -117,6 +142,7 @@ export default class ViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -154,12 +180,13 @@ export default class ViewData extends Component {
                       />
 
                       <Route
-                        path={`${this.props.match.url}/`}
+                        path={`${this.props.match.url}/rejected`}
                         component={() => (
                           <RejectedTable
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />

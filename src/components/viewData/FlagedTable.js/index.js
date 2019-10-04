@@ -1,37 +1,26 @@
 import React, { Component } from "react";
 import StatusTable from "../../responded/StatusTable";
 import axios from "axios";
-import withPagination from "../../../hoc/WithPagination";
+import WithPagination from "../../../hoc/WithPagination";
 
 class FlaggedTable extends Component {
   state = {
     flagged_submissions: []
   };
   componentDidMount() {
-    this.props.paginationHandler(1, null, {
-      type: "viewByStatus",
-      projectId: this.props.id,
-      status: "flagged"
-    });
-    if (this.props.id != "") {
-      axios
-        .get(
-          `fv3/api/view-by-status/?project=${this.props.id}&submission_status=flagged 
-            `
-        )
-        .then(res => {
-          this.setState({
-            flagged_submissions: res.data.results
-          });
-        })
-        .catch(err => {
-          console.log(err, "err");
-        });
+    //console.log(this.props.id, "ids");
+
+    if (!!this.props.id) {
+      this.props.paginationHandler(1, null, {
+        type: "viewByStatus",
+        projectId: this.props.id,
+        status: "flagged"
+      });
     }
   }
 
   render() {
-    console.log(this.props, "props");
+    console.log(this.props.siteList, "props");
     const {
       props: { data, showViewData }
     } = this;
@@ -46,9 +35,10 @@ class FlaggedTable extends Component {
           </div>
         </div>
         <div className="card-body">
-          <StatusTable submission={this.state.flagged_submissions} />
+          <StatusTable submission={this.props.siteList} />
         </div>
-        {this.props.siteList.length > 0 && (
+
+        {this.props.siteList && this.props.siteList.length > 0 ? (
           <div className="card-body">
             <div className="table-footer">
               <div className="showing-rows">
@@ -104,9 +94,15 @@ class FlaggedTable extends Component {
               ) : null}
             </div>
           </div>
+        ) : (
+          <div className="card-body">
+            <div className="table-footer">
+              <div className="showing-rows">Sorry No Data</div>
+            </div>
+          </div>
         )}
       </React.Fragment>
     );
   }
 }
-export default withPagination(FlaggedTable);
+export default WithPagination(FlaggedTable);
