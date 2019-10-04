@@ -214,8 +214,7 @@ class ScheduleForms extends Component {
 
         selected_days: data.selectedDays,
         date_range_start: formatDate(data.startDate),
-        date_range_end: formatDate(data.endDate),
-
+        ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
         setting: {
           notify_incomplete_schedule: data.notifyIncomplete,
           can_edit: data.isEdit,
@@ -257,7 +256,7 @@ class ScheduleForms extends Component {
         frequency: data.frequency,
         selected_days: data.selectedDays,
         date_range_start: formatDate(data.startDate),
-        date_range_end: formatDate(data.endDate),
+        ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
         setting: {
           id: data.settingId,
           types:
@@ -344,7 +343,7 @@ class ScheduleForms extends Component {
     return (
       <div className="col-xl-9 col-lg-8">
         <RightContentCard
-          title="Schedule Forms"
+          title="Scheduled Forms"
           addButton={true}
           toggleModal={this.props.commonPopupHandler}
           showText={true}
@@ -363,7 +362,7 @@ class ScheduleForms extends Component {
 
           {this.props.popupModal && (
             <Modal
-              title="Add Schedule Form"
+              title="Add Scheduled Form"
               toggleModal={handleClosePopup}
               classname="manage-body md-body"
             >

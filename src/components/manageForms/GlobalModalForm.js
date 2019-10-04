@@ -45,7 +45,7 @@ class GlobalModalForm extends Component {
     endDate:
       this.props.formData && this.props.formData.date_range_end
         ? new Date(this.props.formData.date_range_end)
-        : new Date(),
+        : null,
     weight:
       this.props.formData && this.props.formData.weight
         ? this.props.formData.weight
@@ -78,31 +78,31 @@ class GlobalModalForm extends Component {
     dailyArrDays: {
       sun:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 6)
+          ? getArrValue(this.props.formData.selected_days, 7)
           : false,
       mon:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 0)
+          ? getArrValue(this.props.formData.selected_days, 1)
           : false,
       tue:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 1)
+          ? getArrValue(this.props.formData.selected_days, 2)
           : false,
       wed:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 2)
+          ? getArrValue(this.props.formData.selected_days, 3)
           : false,
       thu:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 3)
+          ? getArrValue(this.props.formData.selected_days, 4)
           : false,
       fri:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 4)
+          ? getArrValue(this.props.formData.selected_days, 5)
           : false,
       sat:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 5)
+          ? getArrValue(this.props.formData.selected_days, 6)
           : false
     },
     selectedDays:
@@ -112,31 +112,31 @@ class GlobalModalForm extends Component {
     weeklyArrDays: {
       sun:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 6)
+          ? getArrValue(this.props.formData.selected_days, 7)
           : false,
       mon:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 0)
+          ? getArrValue(this.props.formData.selected_days, 1)
           : false,
       tue:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 1)
+          ? getArrValue(this.props.formData.selected_days, 2)
           : false,
       wed:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 2)
+          ? getArrValue(this.props.formData.selected_days, 3)
           : false,
       thu:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 3)
+          ? getArrValue(this.props.formData.selected_days, 4)
           : false,
       fri:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 4)
+          ? getArrValue(this.props.formData.selected_days, 5)
           : false,
       sat:
         this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 5)
+          ? getArrValue(this.props.formData.selected_days, 6)
           : false
     },
     frequency:
@@ -832,13 +832,11 @@ class GlobalModalForm extends Component {
               />
             </div>
           </div>
-          {!isProjectWide && (
+          {!isProjectWide && regionDropdown && regionDropdown.length > 0 && (
             <div className="form-group">
               <label>Regions</label>
               {hasLoaded && (
                 <Select
-                  // closeMenuOnSelect={false}
-                  // className="select2-select select2"
                   onChange={handleSelectRegionChange}
                   options={regionDropdown}
                   isMulti={true}
@@ -848,7 +846,7 @@ class GlobalModalForm extends Component {
               )}
             </div>
           )}
-          {!isProjectWide && (
+          {!isProjectWide && typeDropdown && typeDropdown.length > 0 && (
             <div className="form-group">
               <label>Types</label>
               {hasLoaded && (
@@ -857,8 +855,6 @@ class GlobalModalForm extends Component {
                   isMulti
                   onChange={handleSelectTypeChange}
                   options={typeDropdown}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
                 />
               )}
             </div>

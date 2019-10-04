@@ -25,12 +25,20 @@ import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
 import ViewData from "./viewData";
+<<<<<<< HEAD
 import SiteData from "./siteViewData";
+=======
+//import SiteData from "./siteViewData"
+>>>>>>> 6bf6b6fd0789ba892e1b107240272932e14b53ed
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
 
 import ManageForms from "./manageForms";
+
+import en from "../translations/en";
+import np from "../translations/np";
+import messages from "../translations/messages";
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -41,6 +49,7 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
+
 class App extends Component {
   constructor(props) {
     super(props);
