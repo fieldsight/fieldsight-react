@@ -52,10 +52,7 @@ const messages = {
   en: messages_en
 };
 const language = navigator.language.split(/[-_]/)[0]; // language without region code
-const selectLanguage = [
-  { value: "en", name: "Eng" },
-  { value: "ne", name: "Nep" }
-];
+const selectLanguage = [{ id: "en", name: "Eng" }, { id: "ne", name: "Nep" }];
 class App extends Component {
   constructor(props) {
     super(props);
@@ -81,6 +78,7 @@ class App extends Component {
   }
   onLanguageChangeHandler = e => {
     const { value } = e.target;
+
     this.setState({
       selectedLanguage: value
     });
@@ -243,5 +241,4 @@ class App extends Component {
     );
   }
 }
-App.contextType = LanguageContext;
 export default App;

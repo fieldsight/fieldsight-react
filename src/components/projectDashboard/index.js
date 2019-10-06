@@ -234,7 +234,6 @@ class ProjectDashboard extends React.Component {
                       <FormattedMessage
                         id="app.full-map"
                         defaultMessage="Full map"
-                        description="Full map"
                       />
                       {/* Full map */}
                     </a>
