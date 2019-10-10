@@ -20,6 +20,84 @@ const formatDate = date => {
   return year + "-" + monthIndex + "-" + dateIdx;
 };
 
+const GetActionForProject = props => {
+  const { formTable, item, deployAction, deleteAction, editAction } = props;
+  if (formTable == "project") {
+    return (
+      <div>
+        {!!item.is_deployed && (
+          <a
+            className="flagged td-edit-btn"
+            onClick={() => deployAction(item.id, item.is_deployed)}
+          >
+            <i className="la la-close"> </i>
+          </a>
+        )}
+        {!item.is_deployed && (
+          <span>
+            <a
+              className="td-edit-btn approved"
+              onClick={() => deployAction(item.id, item.is_deployed)}
+            >
+              <i className="la la-rocket"> </i>
+            </a>
+          </span>
+        )}
+        <a onClick={() => editAction(item)} className="pending td-edit-btn">
+          <i className="la la-edit"> </i>
+        </a>
+        {!item.is_deployed && (
+          <span>
+            <a
+              className="rejected td-edit-btn"
+              onClick={() => deleteAction(item.id, item.is_deployed)}
+            >
+              <i className="la la-trash"> </i>
+            </a>
+          </span>
+        )}
+      </div>
+    );
+  } else if (formTable == "site") {
+    return (
+      <div>
+        {!!item.site && !!item.is_deployed && (
+          <a
+            className="flagged td-edit-btn"
+            onClick={() => deployAction(item.id, item.is_deployed)}
+          >
+            <i className="la la-close"> </i>
+          </a>
+        )}
+        {!!item.site && !item.is_deployed && (
+          <span>
+            <a
+              className="td-edit-btn approved"
+              onClick={() => deployAction(item.id, item.is_deployed)}
+            >
+              <i className="la la-rocket"> </i>
+            </a>
+          </span>
+        )}
+        {!!item.site && (
+          <a onClick={() => editAction(item)} className="pending td-edit-btn">
+            <i className="la la-edit"> </i>
+          </a>
+        )}
+        {!!item.site && !item.is_deployed && (
+          <span>
+            <a
+              className="rejected td-edit-btn"
+              onClick={() => deleteAction(item.id, item.is_deployed)}
+            >
+              <i className="la la-trash"> </i>
+            </a>
+          </span>
+        )}
+      </div>
+    );
+  }
+};
 class GeneralFormTable extends Component {
   render() {
     const {
@@ -29,9 +107,12 @@ class GeneralFormTable extends Component {
         handleEditGuide,
         changeDeployStatus,
         deleteItem,
-        handleEditForm
+        handleEditForm,
+        formTable
       }
     } = this;
+    // console.log("general table", data, formTable);
+
     return (
       <Table responsive="xl" className="table  table-bordered  dataTable">
         <thead>
@@ -79,44 +160,14 @@ class GeneralFormTable extends Component {
                   </a>
                 </td>
                 <td>
-                  {!!item.is_deployed && (
-                    <a
-                      className="flagged td-edit-btn"
-                      onClick={() =>
-                        changeDeployStatus(item.id, item.is_deployed)
-                      }
-                    >
-                      <i className="la la-close"> </i>
-                    </a>
-                  )}
-                  {!item.is_deployed && (
-                    <span>
-                      <a
-                        className="td-edit-btn approved"
-                        onClick={() =>
-                          changeDeployStatus(item.id, item.is_deployed)
-                        }
-                      >
-                        <i className="la la-rocket"> </i>
-                      </a>
-                    </span>
-                  )}
-                  <a
-                    onClick={() => handleEditForm(item)}
-                    className="pending td-edit-btn"
-                  >
-                    <i className="la la-edit"> </i>
-                  </a>
-                  {!item.is_deployed && (
-                    <span>
-                      <a
-                        className="rejected td-edit-btn"
-                        onClick={() => deleteItem(item.id, item.is_deployed)}
-                      >
-                        <i className="la la-trash"> </i>
-                      </a>
-                    </span>
-                  )}
+                  <GetActionForProject
+                    formTable={formTable}
+                    item={item}
+                    deployAction={changeDeployStatus}
+                    deleteAction={deleteItem}
+                    editAction={handleEditForm}
+                  />
+                  {/* {formTable} */}
                 </td>
               </tr>
             ))}
