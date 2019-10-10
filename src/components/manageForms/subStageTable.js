@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import {
   sortableContainer,
   sortableElement,
@@ -29,7 +30,7 @@ const formatDate = date => {
 };
 
 const DragHandle = sortableHandle(() => (
-  <span style={{ cursor: "pointer" }}>#</span>
+  <span className="drag-icon"><i className="la la-ellipsis-v"></i><i className="la la-ellipsis-v"></i></span>
 ));
 
 const SortableContainer = sortableContainer(({ children }) => {
@@ -44,7 +45,7 @@ const SortableContainer = sortableContainer(({ children }) => {
           <th>Weight</th>
           <th>assigned date</th>
           <th>Default status</th>
-          <th>Action</th>
+          <th width="15%">Action</th>
         </tr>
       </thead>
       {children}
@@ -53,7 +54,7 @@ const SortableContainer = sortableContainer(({ children }) => {
 });
 
 const SortableItem = sortableElement(({ name }) => (
-  <span>
+  <span className>
     <DragHandle />
     {name}
   </span>
@@ -155,45 +156,61 @@ class SubStageTable extends Component {
                 <td>
                   {!!sub.is_deployed && (
                     <a
-                      className="flagged"
+                      className="rejected td-btn"
                       onClick={() =>
                         changeDeployStatus(sub.id, sub.is_deployed)
                       }
                     >
+                      <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Undeploy</Tooltip>}
+                    >
                       <i className="la la-rocket"> </i>
+                    </OverlayTrigger>
+                      
                     </a>
                   )}
                   {!sub.is_deployed && (
-                    <span>
                       <a
-                        className="approved"
-                        onClick={() =>
-                          changeDeployStatus(sub.id, sub.is_deployed)
-                        }
-                      >
-                        <i className="la la-rocket"> </i>
-                      </a>
-                    </span>
+                          className="approved td-btn"
+                          onClick={() =>
+                            changeDeployStatus(sub.id, sub.is_deployed)
+                          }
+                        >
+                          <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Deploy</Tooltip>}
+                    >
+                      <i className="la la-rocket"> </i>
+                    </OverlayTrigger>
+                        </a>
                   )}
                   <a
-                    className="td-edit-btn"
-                    data-toggle="tooltip"
+                    className="td-edit-btn td-btn"
                     onClick={() => {
                       editSubStageForm(sub);
                     }}
-                    data-placement="top"
-                    title="Edit"
                   >
-                    <i className="la la-edit"> </i>{" "}
+                    <OverlayTrigger
+                          placement="top"
+                          overlay={<Tooltip>Edit</Tooltip>}>
+                             <i className="la la-edit"> </i>
+                        </OverlayTrigger>
+                   
                   </a>
                   {!sub.is_deployed && (
                     <span>
                       <a
-                        className="rejected"
-                        onClick={() => deleteItem(sub.id, sub.is_deployed)}
-                      >
-                        <i className="la la-trash"> </i>
-                      </a>
+                          className="rejected td-btn"
+                          onClick={() => deleteItem(sub.id, sub.is_deployed)}
+                        >
+                          <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Delete</Tooltip>}
+                    >
+                      <i className="la la-trash"> </i>
+                    </OverlayTrigger>
+                        </a>
                     </span>
                   )}
                 </td>

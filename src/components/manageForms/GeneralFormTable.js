@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -27,32 +28,53 @@ const GetActionForProject = props => {
       <div>
         {!!item.is_deployed && (
           <a
-            className="flagged td-edit-btn"
+            className="rejected td-edit-btn td-btn"
             onClick={() => deployAction(item.id, item.is_deployed)}
           >
-            <i className="la la-close"> </i>
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Undeploy</Tooltip>}
+            >
+              <i className="la la-rocket"> </i>
+            </OverlayTrigger>
           </a>
         )}
         {!item.is_deployed && (
           <span>
             <a
-              className="td-edit-btn approved"
+              className="td-edit-btn td-btn approved"
               onClick={() => deployAction(item.id, item.is_deployed)}
             >
-              <i className="la la-rocket"> </i>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Deploy</Tooltip>}
+              >
+                <i className="la la-rocket"> </i>
+              </OverlayTrigger>
             </a>
           </span>
         )}
-        <a onClick={() => editAction(item)} className="pending td-edit-btn">
-          <i className="la la-edit"> </i>
+        <a
+          onClick={() => editAction(item)}
+          className="pending td-edit-btn td-btn"
+        >
+          <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+            <i className="la la-edit"> </i>
+          </OverlayTrigger>
         </a>
+
         {!item.is_deployed && (
           <span>
             <a
-              className="rejected td-edit-btn"
+              className="rejected td-edit-btn td-btn"
               onClick={() => deleteAction(item.id, item.is_deployed)}
             >
-              <i className="la la-trash"> </i>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Delete</Tooltip>}
+              >
+                <i className="la la-trash"> </i>
+              </OverlayTrigger>
             </a>
           </span>
         )}
@@ -63,34 +85,54 @@ const GetActionForProject = props => {
       <div>
         {!!item.site && !!item.is_deployed && (
           <a
-            className="flagged td-edit-btn"
+            className="rejected td-edit-btn td-btn"
             onClick={() => deployAction(item.id, item.is_deployed)}
           >
-            <i className="la la-close"> </i>
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Undeploy</Tooltip>}
+            >
+              <i className="la la-rocket"> </i>
+            </OverlayTrigger>
           </a>
         )}
         {!!item.site && !item.is_deployed && (
           <span>
             <a
-              className="td-edit-btn approved"
+              className="td-edit-btn td-btn approved"
               onClick={() => deployAction(item.id, item.is_deployed)}
             >
-              <i className="la la-rocket"> </i>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Deploy</Tooltip>}
+              >
+                <i className="la la-rocket"> </i>
+              </OverlayTrigger>
             </a>
           </span>
         )}
         {!!item.site && (
-          <a onClick={() => editAction(item)} className="pending td-edit-btn">
-            <i className="la la-edit"> </i>
+          <a
+            onClick={() => editAction(item)}
+            className="pending td-edit-btn td-btn"
+          >
+            <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+              <i className="la la-edit"> </i>
+            </OverlayTrigger>
           </a>
         )}
         {!!item.site && !item.is_deployed && (
           <span>
             <a
-              className="rejected td-edit-btn"
+              className="rejected td-edit-btn td-btn"
               onClick={() => deleteAction(item.id, item.is_deployed)}
             >
-              <i className="la la-trash"> </i>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Delete</Tooltip>}
+              >
+                <i className="la la-trash"> </i>
+              </OverlayTrigger>
             </a>
           </span>
         )}
@@ -167,7 +209,6 @@ class GeneralFormTable extends Component {
                     deleteAction={deleteItem}
                     editAction={handleEditForm}
                   />
-                  {/* {formTable} */}
                 </td>
               </tr>
             ))}
