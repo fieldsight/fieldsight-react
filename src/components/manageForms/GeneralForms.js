@@ -28,9 +28,9 @@ class GeneralForms extends Component {
     formId: "",
     formTitle: "",
     isProjectForm: "",
-    myFormList: [],
-    projectFormList: [],
-    sharedFormList: [],
+    myFormList: this.props.myForms,
+    projectFormList: this.props.projectForms,
+    sharedFormList: this.props.sharedForms,
     isEditForm: false
   };
 
@@ -211,9 +211,9 @@ class GeneralForms extends Component {
       formId: "",
       showFormModal: false,
       activeTab: "myForms",
-      myFormList: [],
-      projectFormList: [],
-      sharedFormList: [],
+      myFormList: this.props.myForms,
+      projectFormList: this.props.projectForms,
+      sharedFormList: this.props.sharedForms,
       xf: ""
     });
     this.props.closePopup();

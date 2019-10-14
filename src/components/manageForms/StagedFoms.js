@@ -29,9 +29,9 @@ class StagedForms extends Component {
     formId: "",
     formTitle: "",
     isProjectForm: "",
-    myFormList: [],
-    projectFormList: [],
-    sharedFormList: [],
+    myFormList: this.props.myForms,
+    projectFormList: this.props.projectForms,
+    sharedFormList: this.props.sharedForms,
     isEditForm: false,
     subStageData: [],
     showSubstageForm: false,
@@ -239,9 +239,9 @@ class StagedForms extends Component {
       formId: "",
       showFormModal: false,
       activeTab: "myForms",
-      myFormList: [],
-      projectFormList: [],
-      sharedFormList: [],
+      myFormList: this.props.myForms,
+      projectFormList: this.props.projectForms,
+      sharedFormList: this.props.sharedForms,
       xf: ""
     });
     this.handleSubStageForm();
@@ -967,6 +967,7 @@ class StagedForms extends Component {
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
                 handleSaveForm={this.handleSaveForm}
+                loader={this.props.formLoader}
               />
             </Modal>
           )}

@@ -36,9 +36,9 @@ class ScheduleForms extends Component {
     formId: "",
     formTitle: "",
     isProjectForm: "",
-    myFormList: [],
-    projectFormList: [],
-    sharedFormList: [],
+    myFormList: this.props.myForms,
+    projectFormList: this.props.projectForms,
+    sharedFormList: this.props.sharedForms,
     isEditForm: false,
     fsxf: ""
   };
@@ -232,9 +232,9 @@ class ScheduleForms extends Component {
       formId: "",
       showFormModal: false,
       activeTab: "myForms",
-      myFormList: [],
-      projectFormList: [],
-      sharedFormList: [],
+      myFormList: this.props.myForms,
+      projectFormList: this.props.projectForms,
+      sharedFormList: this.props.sharedForms,
       xf: ""
     });
     this.props.closePopup();

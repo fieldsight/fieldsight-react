@@ -178,68 +178,73 @@ class ScheduleFormTable extends Component {
         formTable
       }
     } = this;
-    console.log("schedule-----", data);
 
     return (
-      <Table responsive="xl" className="table  table-bordered  dataTable">
-        <thead>
-          <tr>
-            <th>form title</th>
-            <th>Responses</th>
-            <th>Form Guide</th>
-            <th>assigned date</th>
-            <th>Default status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {!loader && data.length === 0 && (
-            <tr>
-              <td>
-                <p>No Form Data Available</p>
-              </td>
-            </tr>
-          )}
-          {!loader &&
-            data.map((item, i) => (
-              <tr key={i}>
-                <td>{item.xf ? item.xf.title : ""}</td>
-                <td>{item.responses_count}</td>
-                <td>
-                  <EducationMaterialForProject
-                    formTable={formTable}
-                    item={item}
-                    editForm={handleEditGuide}
-                  />
-                </td>
-                <td>
-                  <time>
-                    <i className="la la-clock-o"></i>{" "}
-                    {formatDate(new Date(item.date_created))}
-                  </time>
-                </td>
-                <td>
-                  <a
-                    href="#"
-                    className={getClass(item.default_submission_status)}
-                  >
-                    {getStatus(item.default_submission_status)}
-                  </a>
-                </td>
-                <td>
-                  <GetActionForProject
-                    formTable={formTable}
-                    item={item}
-                    deployAction={changeDeployStatus}
-                    deleteAction={deleteItem}
-                    editAction={handleEditForm}
-                  />
-                </td>
+      <>
+        {!loader && data.length === 0 ? (
+          <div>No Form added yet.</div>
+        ) : (
+          <Table responsive="xl" className="table  table-bordered  dataTable">
+            <thead>
+              <tr>
+                <th>form title</th>
+                <th>Responses</th>
+                <th>Form Guide</th>
+                <th>assigned date</th>
+                <th>Default status</th>
+                <th>Action</th>
               </tr>
-            ))}
-        </tbody>
-      </Table>
+            </thead>
+
+            <tbody>
+              {/* {!loader && data.length === 0 && (
+                <tr>
+                  <td colSpan={6}>
+                    <p>No Form Data Available</p>
+                  </td>
+                </tr>
+              )} */}
+              {!loader &&
+                data.map((item, i) => (
+                  <tr key={i}>
+                    <td>{item.xf ? item.xf.title : ""}</td>
+                    <td>{item.responses_count}</td>
+                    <td>
+                      <EducationMaterialForProject
+                        formTable={formTable}
+                        item={item}
+                        editForm={handleEditGuide}
+                      />
+                    </td>
+                    <td>
+                      <time>
+                        <i className="la la-clock-o"></i>{" "}
+                        {formatDate(new Date(item.date_created))}
+                      </time>
+                    </td>
+                    <td>
+                      <a
+                        href="#"
+                        className={getClass(item.default_submission_status)}
+                      >
+                        {getStatus(item.default_submission_status)}
+                      </a>
+                    </td>
+                    <td>
+                      <GetActionForProject
+                        formTable={formTable}
+                        item={item}
+                        deployAction={changeDeployStatus}
+                        deleteAction={deleteItem}
+                        editAction={handleEditForm}
+                      />
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        )}
+      </>
     );
   }
 }

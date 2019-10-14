@@ -829,7 +829,7 @@ class GlobalModalForm extends Component {
             </div>
           </div>
           {!isProjectWide && regionDropdown && regionDropdown.length > 0 && (
-            <div className="form-group">
+            <div>
               <label>Regions</label>
               {hasLoaded && (
                 <Select
@@ -843,7 +843,7 @@ class GlobalModalForm extends Component {
             </div>
           )}
           {!isProjectWide && typeDropdown && typeDropdown.length > 0 && (
-            <div className="form-group">
+            <div>
               <label>Types</label>
               {hasLoaded && (
                 <Select
@@ -914,30 +914,30 @@ class GlobalModalForm extends Component {
           </div>
           {formType == "substage" && (
             <>
-              <div className="form-group">
-                <InputElement
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  required={true}
-                  label="Name"
-                  name="substageTitle"
-                  value={substageTitle}
-                  changeHandler={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                <InputElement
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  //   required={true}
-                  label="Description"
-                  name="substageDesc"
-                  value={substageDesc}
-                  changeHandler={handleInputChange}
-                />
-              </div>
+              {/* <div className="form-group"> */}
+              <InputElement
+                formType="editForm"
+                tag="input"
+                type="text"
+                required={true}
+                label="Name"
+                name="substageTitle"
+                value={substageTitle}
+                changeHandler={handleInputChange}
+              />
+              {/* </div> */}
+              {/* <div className="form-group"> */}
+              <InputElement
+                formType="editForm"
+                tag="input"
+                type="text"
+                //   required={true}
+                label="Description"
+                name="substageDesc"
+                value={substageDesc}
+                changeHandler={handleInputChange}
+              />
+              {/* </div> */}
             </>
           )}
           <div className="form-group pull-right no-margin">
