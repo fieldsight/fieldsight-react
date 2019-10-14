@@ -21,6 +21,30 @@ const formatDate = date => {
   return year + "-" + monthIndex + "-" + dateIdx;
 };
 
+const EducationMaterialForProject = props => {
+  const { formTable, item, editForm } = props;
+  if (formTable == "project") {
+    return (
+      <span>
+        <a onClick={() => editForm(item.em, item.id)}>
+          <i className="la la-book" />
+          {item.em ? item.em.title : ""}
+        </a>
+      </span>
+    );
+  } else if (formTable == "site") {
+    return (
+      <span>
+        {!!item.site && (
+          <a onClick={() => editForm(item.em, item.id)}>
+            <i className="la la-book" />
+            {item.em ? item.em.title : ""}
+          </a>
+        )}
+      </span>
+    );
+  }
+};
 const GetActionForProject = props => {
   const { formTable, item, deployAction, deleteAction, editAction } = props;
   if (formTable == "project") {
@@ -140,6 +164,7 @@ const GetActionForProject = props => {
     );
   }
 };
+
 class GeneralFormTable extends Component {
   render() {
     const {
@@ -182,10 +207,11 @@ class GeneralFormTable extends Component {
                 <td>{item.xf ? item.xf.title : ""}</td>
                 <td>{item.responses_count}</td>
                 <td>
-                  <a onClick={() => handleEditGuide(item.em, item.id)}>
-                    <i className="la la-book" />
-                    {item.em ? item.em.title : ""}
-                  </a>
+                  <EducationMaterialForProject
+                    formTable={formTable}
+                    item={item}
+                    editForm={handleEditGuide}
+                  />
                 </td>
                 <td>
                   <time>

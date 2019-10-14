@@ -46,7 +46,10 @@ class GeneralForms extends Component {
           this.setState({ data: res.data, loader: false });
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   }
 
   componentDidMount() {
@@ -121,7 +124,10 @@ class GeneralForms extends Component {
           }
         );
       })
-      .catch(err => {});
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
   deleteItem = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
@@ -140,7 +146,10 @@ class GeneralForms extends Component {
           }
         );
       })
-      .catch(err => {});
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
   handleEditGuide = (data, formId) => {
     this.setState({
@@ -168,18 +177,32 @@ class GeneralForms extends Component {
     axios
       .post(`forms/api/save_educational_material/`, formData)
       .then(res => {
-        this.setState(
-          {
-            editGuide: false
-          },
-          () => {
-            this.requestGeneralForm(id);
-            successToast("updated", "successfully");
-          }
-        );
+        if (res.data) {
+          this.setState(
+            state => {
+              const item = this.state.data;
+              item.map(each => {
+                const newItem = { ...each };
+                if (each.id == editFormId) {
+                  each.em = res.data;
+                }
+                return newItem;
+              });
+
+              return {
+                editGuide: false,
+                data: item
+              };
+            },
+            () => {
+              successToast("form", "updated");
+            }
+          );
+        }
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
   handleClosePopup = () => {
@@ -233,7 +256,8 @@ class GeneralForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     } else {
       const updateUrl = !!isProjectForm
@@ -286,7 +310,8 @@ class GeneralForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     }
   };
@@ -423,7 +448,7 @@ class GeneralForms extends Component {
               changeDeployStatus={this.changeDeployStatus}
               deleteItem={this.deleteItem}
               handleEditForm={this.handleEditGeneralForm}
-              formTable={"project"}
+              formTable="project"
             />
           )}
           {!loader && !isProjectForm && (

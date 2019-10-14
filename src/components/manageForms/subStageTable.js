@@ -30,8 +30,155 @@ const formatDate = date => {
 };
 
 const DragHandle = sortableHandle(() => (
-  <span className="drag-icon"><i className="la la-ellipsis-v"></i><i className="la la-ellipsis-v"></i></span>
+  <span className="drag-icon">
+    <i className="la la-ellipsis-v"></i>
+    <i className="la la-ellipsis-v"></i>
+  </span>
 ));
+
+const EducationMaterialForProject = props => {
+  const { formTable, item, editForm } = props;
+  if (formTable == "project") {
+    return (
+      <span>
+        <a onClick={() => editForm(item.em, item.id)}>
+          <i className="la la-book" />
+          {item.em ? item.em.title : ""}
+        </a>
+      </span>
+    );
+  } else if (formTable == "site") {
+    return (
+      <span>
+        {!!item.site && (
+          <a onClick={() => editForm(item.em, item.id)}>
+            <i className="la la-book" />
+            {item.em ? item.em.title : ""}
+          </a>
+        )}
+      </span>
+    );
+  }
+};
+const GetActionForProject = props => {
+  const { formTable, item, deployAction, deleteAction, editAction } = props;
+  if (formTable == "project") {
+    return (
+      <div>
+        {!!item.is_deployed && (
+          <a
+            className="rejected td-edit-btn td-btn"
+            onClick={() => deployAction(item.id, item.is_deployed)}
+          >
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Undeploy</Tooltip>}
+            >
+              <i className="la la-rocket"> </i>
+            </OverlayTrigger>
+          </a>
+        )}
+        {!item.is_deployed && (
+          <span>
+            <a
+              className="td-edit-btn td-btn approved"
+              onClick={() => deployAction(item.id, item.is_deployed)}
+            >
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Deploy</Tooltip>}
+              >
+                <i className="la la-rocket"> </i>
+              </OverlayTrigger>
+            </a>
+          </span>
+        )}
+        <a
+          onClick={() => editAction(item)}
+          className="pending td-edit-btn td-btn"
+        >
+          <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+            <i className="la la-edit"> </i>
+          </OverlayTrigger>
+        </a>
+
+        {!item.is_deployed && (
+          <span>
+            <a
+              className="rejected td-edit-btn td-btn"
+              onClick={() => deleteAction(item.id, item.is_deployed)}
+            >
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Delete</Tooltip>}
+              >
+                <i className="la la-trash"> </i>
+              </OverlayTrigger>
+            </a>
+          </span>
+        )}
+      </div>
+    );
+  } else if (formTable == "site") {
+    return (
+      <div>
+        {!!item.site && !!item.is_deployed && (
+          <a
+            className="rejected td-edit-btn td-btn"
+            onClick={() => deployAction(item.id, item.is_deployed)}
+          >
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Undeploy</Tooltip>}
+            >
+              <i className="la la-rocket"> </i>
+            </OverlayTrigger>
+          </a>
+        )}
+        {!!item.site && !item.is_deployed && (
+          <span>
+            <a
+              className="td-edit-btn td-btn approved"
+              onClick={() => deployAction(item.id, item.is_deployed)}
+            >
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Deploy</Tooltip>}
+              >
+                <i className="la la-rocket"> </i>
+              </OverlayTrigger>
+            </a>
+          </span>
+        )}
+        {!!item.site && (
+          <a
+            onClick={() => editAction(item)}
+            className="pending td-edit-btn td-btn"
+          >
+            <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+              <i className="la la-edit"> </i>
+            </OverlayTrigger>
+          </a>
+        )}
+        {!!item.site && !item.is_deployed && (
+          <span>
+            <a
+              className="rejected td-edit-btn td-btn"
+              onClick={() => deleteAction(item.id, item.is_deployed)}
+            >
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Delete</Tooltip>}
+              >
+                <i className="la la-trash"> </i>
+              </OverlayTrigger>
+            </a>
+          </span>
+        )}
+      </div>
+    );
+  }
+};
 
 const SortableContainer = sortableContainer(({ children }) => {
   return (
@@ -99,10 +246,12 @@ class SubStageTable extends Component {
         handleEditGuide,
         editSubStageForm,
         reorderSubstage,
-        isSubstageReorderCancel
+        isSubstageReorderCancel,
+        formTable
       },
       state: { data }
     } = this;
+    // console.log(formTable, "issite");
 
     return (
       // <div style={{ position: "relative", height: "324px" }}>
@@ -133,10 +282,11 @@ class SubStageTable extends Component {
                 <td>{sub.xf && sub.xf.title ? sub.xf.title : "-"}</td>
                 <td>{sub.responses_count}</td>
                 <td>
-                  <a onClick={() => handleEditGuide(sub.em, sub.id)}>
-                    <i className="la la-book" />
-                    {sub.em ? sub.em.title : ""}
-                  </a>
+                  <EducationMaterialForProject
+                    formTable={formTable}
+                    item={sub}
+                    editForm={handleEditGuide}
+                  />
                 </td>
                 <td>{sub.weight}</td>
                 <td>
@@ -147,72 +297,20 @@ class SubStageTable extends Component {
                 </td>
                 <td>
                   <a
-                    href="#"
+                    style={{ cursor: "pointer" }}
                     className={getClass(sub.default_submission_status)}
                   >
                     {getStatus(sub.default_submission_status)}
                   </a>
                 </td>
                 <td>
-                  {!!sub.is_deployed && (
-                    <a
-                      className="rejected td-btn"
-                      onClick={() =>
-                        changeDeployStatus(sub.id, sub.is_deployed)
-                      }
-                    >
-                      <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Undeploy</Tooltip>}
-                    >
-                      <i className="la la-rocket"> </i>
-                    </OverlayTrigger>
-                      
-                    </a>
-                  )}
-                  {!sub.is_deployed && (
-                      <a
-                          className="approved td-btn"
-                          onClick={() =>
-                            changeDeployStatus(sub.id, sub.is_deployed)
-                          }
-                        >
-                          <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Deploy</Tooltip>}
-                    >
-                      <i className="la la-rocket"> </i>
-                    </OverlayTrigger>
-                        </a>
-                  )}
-                  <a
-                    className="td-edit-btn td-btn"
-                    onClick={() => {
-                      editSubStageForm(sub);
-                    }}
-                  >
-                    <OverlayTrigger
-                          placement="top"
-                          overlay={<Tooltip>Edit</Tooltip>}>
-                             <i className="la la-edit"> </i>
-                        </OverlayTrigger>
-                   
-                  </a>
-                  {!sub.is_deployed && (
-                    <span>
-                      <a
-                          className="rejected td-btn"
-                          onClick={() => deleteItem(sub.id, sub.is_deployed)}
-                        >
-                          <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Delete</Tooltip>}
-                    >
-                      <i className="la la-trash"> </i>
-                    </OverlayTrigger>
-                        </a>
-                    </span>
-                  )}
+                  <GetActionForProject
+                    formTable={formTable}
+                    item={sub}
+                    deployAction={changeDeployStatus}
+                    deleteAction={deleteItem}
+                    editAction={editSubStageForm}
+                  />
                 </td>
               </tr>
             ))}

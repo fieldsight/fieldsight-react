@@ -33,7 +33,6 @@ class StagedForms extends Component {
     projectFormList: [],
     sharedFormList: [],
     isEditForm: false,
-
     subStageData: [],
     showSubstageForm: false,
     selectedStage: {},
@@ -58,36 +57,61 @@ class StagedForms extends Component {
     } = this.props;
     const splitArr = url.split("/");
     const isProjectForm = splitArr.includes("project");
-
+    const isSiteForm = splitArr.includes("site");
     if (isProjectForm) {
       this.setState(
         {
           loader: true,
           isProjectForm
         },
-        this.requestStagedData(id)
+        this.requestStagedData(id, true)
+      );
+    } else if (isSiteForm) {
+      this.setState(
+        {
+          loader: true,
+          isProjectForm: false
+        },
+        this.requestStagedData(id, false)
       );
     }
   }
 
-  requestStagedData = projectId => {
+  requestStagedData = (id, checkUrl) => {
+    const apiUrl = checkUrl
+      ? `fv3/api/manage-forms/stages/?project_id=${id}`
+      : `fv3/api/manage-forms/stages/?site_id=${id}`;
+
     axios
-      .get(`fv3/api/manage-forms/stages/?project_id=${projectId}`)
+      .get(apiUrl)
       .then(res => {
         if (this._isMounted) {
           this.setState({ data: res.data, loader: false });
         }
       })
-      .catch(err => { });
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
 
   handleSubmitStageForm = data => {
-    const { name, desc, selectedRegion, selectedType, order, id } = data;
+    const {
+      name,
+      desc,
+      selectedRegion,
+      selectedType,
+      order,
+      id,
+      isProjectForm
+    } = data;
     const mapRegion = selectedRegion.map(each => each.id);
     const mapType = selectedType.map(each => each.id);
     const newOrder = order > 0 ? order : this.state.data.length + 1;
-
     if (order > 0) {
+      const updateStageApi = !!isProjectForm
+        ? `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`
+        : `fv3/api/manage-forms/stages/${id}/?site_id=${this.state.id}`;
       const body = {
         name: name,
         tags: mapType,
@@ -97,10 +121,7 @@ class StagedForms extends Component {
         id: id
       };
       axios
-        .put(
-          `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`,
-          body
-        )
+        .put(updateStageApi, body)
         .then(res => {
           this.setState(
             state => {
@@ -123,9 +144,13 @@ class StagedForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     } else {
+      const postStageApi = !!isProjectForm
+        ? `fv3/api/manage-forms/stages/?project_id=${this.state.id}`
+        : `fv3/api/manage-forms/stages/?site_id=${this.state.id}`;
       const body = {
         name: name,
         tags: mapType,
@@ -134,7 +159,7 @@ class StagedForms extends Component {
         description: desc
       };
       axios
-        .post(`fv3/api/manage-forms/stages/?project_id=${this.state.id}`, body)
+        .post(postStageApi, body)
         .then(res => {
           this.setState(
             {
@@ -147,7 +172,8 @@ class StagedForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     }
   };
@@ -198,7 +224,8 @@ class StagedForms extends Component {
         );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
   handleSubStageForm = () => {
@@ -268,7 +295,8 @@ class StagedForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     } else {
       const body = {
@@ -301,7 +329,8 @@ class StagedForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     }
   };
@@ -325,7 +354,8 @@ class StagedForms extends Component {
               });
             })
             .catch(err => {
-              errorToast(err);
+              const errors = err.response;
+              errorToast(errors.data.error);
             });
         }
       );
@@ -357,17 +387,18 @@ class StagedForms extends Component {
         );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
 
   changeDeployStatus = (formId, isDeploy) => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deployUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=substage&id=${formId}`
+      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=substage&id=${formId}`;
     axios
-      .post(
-        `fv3/api/manage-forms/deploy/?project_id=${id}&type=substage&id=${formId}`,
-        { is_deployed: !isDeploy }
-      )
+      .post(deployUrl, { is_deployed: !isDeploy })
       .then(res => {
         this.setState(
           state => {
@@ -387,15 +418,19 @@ class StagedForms extends Component {
           }
         );
       })
-      .catch(err => { });
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
   deleteItem = (formId, isDeploy) => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deployUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/delete/?project_id=${id}&type=substage&id=${formId}`
+      : `fv3/api/manage-forms/delete/?site_id=${id}&type=substage&id=${formId}`;
+
     axios
-      .post(
-        `fv3/api/manage-forms/delete/?project_id=${id}&type=substage&id=${formId}`,
-        { is_deployed: isDeploy }
-      )
+      .post(deployUrl, { is_deployed: isDeploy })
       .then(res => {
         this.setState(
           {
@@ -408,7 +443,10 @@ class StagedForms extends Component {
           }
         );
       })
-      .catch(err => { });
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
 
   handleEditGuide = (data, formId) => {
@@ -419,7 +457,7 @@ class StagedForms extends Component {
     });
   };
   handleUpdateGuide = data => {
-    const { id, editFormId, stageId } = this.state;
+    const { editFormId } = this.state;
     const formData = new FormData();
     if (data.title) formData.append("title", data.title);
     if (data.text) formData.append("text", data.text);
@@ -438,18 +476,31 @@ class StagedForms extends Component {
     axios
       .post(`forms/api/save_educational_material/`, formData)
       .then(res => {
-        this.setState(
-          {
-            editGuide: false
-          },
-          () => {
-            this.handleRequestSubStage(stageId);
-            successToast("form", "updated");
-          }
-        );
+        if (res.data)
+          this.setState(
+            state => {
+              const item = this.state.subStageData;
+              item.map(each => {
+                const newItem = { ...each };
+                if (each.id == editFormId) {
+                  each.em = res.data;
+                }
+                return newItem;
+              });
+
+              return {
+                editGuide: false,
+                subStageData: item
+              };
+            },
+            () => {
+              successToast("form", "updated");
+            }
+          );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
 
@@ -547,14 +598,14 @@ class StagedForms extends Component {
     );
   };
   handleDeployAllSubstages = toDeploy => {
-    const { id, stageId, subStageData } = this.state;
+    const { id, stageId, subStageData, isProjectForm } = this.state;
+    const deployAllSubstageUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=stage&id=${stageId}`
+      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=stage&id=${stageId}`;
     axios
-      .post(
-        `fv3/api/manage-forms/deploy/?project_id=${id}&type=stage&id=${stageId}`,
-        {
-          is_deployed: toDeploy
-        }
-      )
+      .post(deployAllSubstageUrl, {
+        is_deployed: toDeploy
+      })
       .then(res => {
         if (res.data && !!res.data.message)
           this.setState(
@@ -575,18 +626,19 @@ class StagedForms extends Component {
           );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
   handleDeleteAllSubstages = toDeploy => {
-    const { id, stageId } = this.state;
+    const { id, stageId, isProjectForm } = this.state;
+    const deleteAllSubstageUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/delete/?project_id=${id}&type=stage&id=${stageId}`
+      : `fv3/api/manage-forms/delete/?site_id=${id}&type=stage&id=${stageId}`;
     axios
-      .post(
-        `fv3/api/manage-forms/delete/?project_id=${id}&type=stage&id=${stageId}`,
-        {
-          is_deployed: toDeploy
-        }
-      )
+      .post(deleteAllSubstageUrl, {
+        is_deployed: toDeploy
+      })
       .then(res => {
         if (!!res.data)
           this.setState(
@@ -604,23 +656,32 @@ class StagedForms extends Component {
       });
   };
   handleDeployAllStages = toDeploy => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deployAllUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=all&id=${id}`
+      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=all&id=${id}`;
     axios
-      .post(`fv3/api/manage-forms/deploy/?project_id=${id}&type=all&id=${id}`, {
+      .post(deployAllUrl, {
         is_deployed: toDeploy
       })
       .then(res => {
-        this.requestStagedData(id);
+        if (!!isProjectForm) this.requestStagedData(id, true);
+        else this.requestStagedData(id, false);
         successToast("form", "updated");
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
   handleDeleteAllStages = toDeploy => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deleteAllUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/delete/?project_id=${id}&type=all&id=${id}`
+      : `fv3/api/manage-forms/delete/?site_id=${id}&type=all&id=${id}`;
+
     axios
-      .post(`fv3/api/manage-forms/delete/?project_id=${id}&type=all&id=${id}`, {
+      .post(deleteAllUrl, {
         is_deployed: toDeploy
       })
       .then(res => {
@@ -635,7 +696,8 @@ class StagedForms extends Component {
           );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
 
@@ -661,7 +723,8 @@ class StagedForms extends Component {
         isStageReorder,
         isStageReorderCancel,
         isSubstageReorder,
-        isSubstageReorderCancel
+        isSubstageReorderCancel,
+        isProjectForm
       },
       handleRequestSubStage,
       handleSubmitStageForm,
@@ -678,69 +741,141 @@ class StagedForms extends Component {
       handleDeleteAllStages
     } = this;
     let deployCount = 0;
+    let canReorder = "";
+
     data.map(each => {
       deployCount += each.undeployed_count;
     });
     // console.log(deployCount, "deployCount");
+    const arrToReorder = data.map(each => {
+      if (!!each.site) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    canReorder =
+      arrToReorder.length > 0
+        ? arrToReorder.indexOf(false) > -1
+          ? false
+          : true
+        : "";
 
     return (
       <div className="col-xl-9 col-lg-8">
         <div className="card">
           <div className="card-header main-card-header">
             <h5>Staged Forms</h5>
-            <div className="add-btn">
-
-              <a onClick={handleStageReorder}>
-                {/* {!isStageReorder ? "Reorder" : "Cancel Reorder"} */}
-                {!isStageReorder ? (
-
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>Reorder</Tooltip>}>
-                    <span className="reorder">
-                      <i className="la la-ellipsis-v" />
-                      <i className="la la-ellipsis-v" />
-                    </span>
-                  </OverlayTrigger>
-                ) : (
+            {!!isProjectForm && (
+              <div className="add-btn">
+                <a onClick={handleStageReorder}>
+                  {!isStageReorder ? (
                     <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip> Cancel Reorder</Tooltip>}>
+                      overlay={<Tooltip>Reorder</Tooltip>}
+                    >
+                      <span className="reorder">
+                        <i className="la la-ellipsis-v" />
+                        <i className="la la-ellipsis-v" />
+                      </span>
+                    </OverlayTrigger>
+                  ) : (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip> Cancel Reorder</Tooltip>}
+                    >
                       <span className="reorder">
                         <i className="la la-close" />
                       </span>
                     </OverlayTrigger>
                   )}
-              </a>
-              {isStageReorder && (
-                <a onClick={handleSaveStageReorder}>
-                  
-                  <OverlayTrigger
-                  placement="top"
-                  overlay={<Tooltip> Save</Tooltip>}>
-                  <span>
-                    <i className="la la-save" />
-                  </span>
-                </OverlayTrigger>
                 </a>
-              )}
-              {/* {deployCount > 0 && ( */}
-              <a
-                className={`${
-                  deployCount > 0 ? "deploy-active" : "deploy-inactive"
+                {isStageReorder && (
+                  <a onClick={handleSaveStageReorder}>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip> Save</Tooltip>}
+                    >
+                      <span>
+                        <i className="la la-save" />
+                      </span>
+                    </OverlayTrigger>
+                  </a>
+                )}
+                {/* {deployCount > 0 && ( */}
+                <a
+                  className={`${
+                    deployCount > 0 ? "deploy-active" : "deploy-inactive"
                   }`}
-                onClick={() => handleDeployAllStages(true)}
-              >
-                <OverlayTrigger
-                  placement="top"
-                  overlay={<Tooltip> Deploy</Tooltip>}>
-                  <span className="">
-                  <i className="la la-rocket" />
-                  </span>
-                </OverlayTrigger>
-              </a>
-              {/* )} */}
-            </div>
+                  onClick={() => handleDeployAllStages(true)}
+                >
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip> Deploy</Tooltip>}
+                  >
+                    <span className="">
+                      <i className="la la-rocket" />
+                    </span>
+                  </OverlayTrigger>
+                </a>
+                {/* )} */}
+              </div>
+            )}
+            {!isProjectForm && canReorder && (
+              <div className="add-btn">
+                <a onClick={handleStageReorder}>
+                  {!isStageReorder ? (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Reorder</Tooltip>}
+                    >
+                      <span className="reorder">
+                        <i className="la la-ellipsis-v" />
+                        <i className="la la-ellipsis-v" />
+                      </span>
+                    </OverlayTrigger>
+                  ) : (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip> Cancel Reorder</Tooltip>}
+                    >
+                      <span className="reorder">
+                        <i className="la la-close" />
+                      </span>
+                    </OverlayTrigger>
+                  )}
+                </a>
+                {isStageReorder && (
+                  <a onClick={handleSaveStageReorder}>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip> Save</Tooltip>}
+                    >
+                      <span>
+                        <i className="la la-save" />
+                      </span>
+                    </OverlayTrigger>
+                  </a>
+                )}
+                {/* {deployCount > 0 && ( */}
+                <a
+                  className={`${
+                    deployCount > 0 ? "deploy-active" : "deploy-inactive"
+                  }`}
+                  onClick={() => handleDeployAllStages(true)}
+                >
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip> Deploy</Tooltip>}
+                  >
+                    <span className="">
+                      <i className="la la-rocket" />
+                    </span>
+                  </OverlayTrigger>
+                </a>
+                {/* )} */}
+              </div>
+            )}
           </div>
           {loader && <DotLoader />}
           {!loader && (
@@ -766,11 +901,12 @@ class StagedForms extends Component {
                 handleNewSubstageOrder={this.handleNewSubstageOrder}
                 handleDeployAll={handleDeployAllSubstages}
                 handleDeleteAll={handleDeleteAllSubstages}
+                isProjectForm={isProjectForm}
               />
               <div className="add-btn pull-right stage-add">
                 <a onClick={this.props.commonPopupHandler}>
                   Add Stage
-                <span>
+                  <span>
                     <i className="la la-plus" />
                   </span>
                 </a>

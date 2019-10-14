@@ -123,7 +123,7 @@ class SideNav extends Component {
               </div>
               <div className="card-body">
                 <div className="manage_group">
-                  <h5>Site Specific Forms</h5>
+                  {!!isProjectForm && <h5>Site Specific Forms</h5>}
                   <ul className="nav nav-tabs flex-column border-tabs">
                     <li className="nav-item">
                       <Link
