@@ -120,57 +120,58 @@ class AddStageForm extends Component {
 
     return (
       <form className="floating-form " onSubmit={handleSubmitForm}>
-        <div className="form-group">
-          <InputElement
-            formType="editForm"
-            tag="input"
-            type="text"
-            required={true}
-            label="Name"
-            name="name"
-            value={name}
-            changeHandler={handleChange}
-          />
-        </div>
-        {hasLoaded && (
-          <div className="form-group">
+        {/* <div className="form-group"> */}
+        <InputElement
+          formType="editForm"
+          tag="input"
+          type="text"
+          required={true}
+          label="Name"
+          name="name"
+          value={name}
+          changeHandler={handleChange}
+        />
+        {/* </div> */}
+        {regionDropdown && regionDropdown.length > 0 && (
+          <div>
             <label>Regions</label>
-            <Select
-              // closeMenuOnSelect={false}
-              onChange={handleSelectRegionChange}
-              options={regionDropdown}
-              isMulti={true}
-              defaultValue={selectedRegion}
-              components={animatedComponents}
-            />
+            {hasLoaded && (
+              <Select
+                // closeMenuOnSelect={false}
+                onChange={handleSelectRegionChange}
+                options={regionDropdown}
+                isMulti={true}
+                defaultValue={selectedRegion}
+                components={animatedComponents}
+              />
+            )}
           </div>
         )}
-        {hasLoaded && (
-          <div className="form-group">
+        {typeDropdown && typeDropdown.length > 0 && (
+          <div>
             <label>Types</label>
-            <Select
-              closeMenuOnSelect={true}
-              components={animatedComponents}
-              onChange={handleSelectTypeChange}
-              defaultValue={selectedType}
-              isMulti
-              options={typeDropdown}
-            />
+            {hasLoaded && (
+              <Select
+                // closeMenuOnSelect={true}
+                components={animatedComponents}
+                onChange={handleSelectTypeChange}
+                defaultValue={selectedType}
+                isMulti
+                options={typeDropdown}
+              />
+            )}
           </div>
         )}
-        <div className="form-group">
-          <InputElement
-            formType="editForm"
-            tag="input"
-            type="text"
-            required={true}
-            label="Description"
-            name="desc"
-            value={desc}
-            changeHandler={handleChange}
-          />
-        </div>
-
+        <InputElement
+          formType="editForm"
+          tag="input"
+          type="text"
+          required={true}
+          label="Description"
+          name="desc"
+          value={desc}
+          changeHandler={handleChange}
+        />
         <div className="form-group pull-right no-margin">
           <button type="submit" className="fieldsight-btn">
             {!!isEdit ? "Save" : "Add"}

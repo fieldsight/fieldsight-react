@@ -395,6 +395,7 @@ class ProjectWideForms extends Component {
               changeDeployStatus={this.changeDeployStatus}
               deleteItem={this.deleteItem}
               handleEditForm={this.editForm}
+              formTable="project"
             />
           )}
           {this.props.popupModal && (

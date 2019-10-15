@@ -5,14 +5,17 @@ import {
   sortableHandle
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
-import { Accordion, Card,Button } from "react-bootstrap";
+import { Accordion, Card, Button } from "react-bootstrap";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import SubStageTable from "./subStageTable";
 import { DotLoader } from "../myForm/Loader";
 
 const DragHandle = sortableHandle(() => (
-  <span className="drag-icon"><i className="la la-ellipsis-v"></i><i className="la la-ellipsis-v"></i></span>
+  <span className="drag-icon">
+    <i className="la la-ellipsis-v"></i>
+    <i className="la la-ellipsis-v"></i>
+  </span>
 ));
 
 const SortableItem = sortableElement(({ name }) => (
@@ -24,7 +27,10 @@ const SortableItem = sortableElement(({ name }) => (
 
 const SortableContainer = sortableContainer(({ children }) => {
   return (
-    <Accordion defaultActiveKey={0} className="accordion stage-accordion card-body">
+    <Accordion
+      defaultActiveKey={0}
+      className="accordion stage-accordion card-body"
+    >
       {children}
     </Accordion>
   );
@@ -78,26 +84,29 @@ class SortableStage extends Component {
         handleSubstageReorder,
         handleSaveSubstageReorder,
         handleDeployAll,
-        handleDeleteAll
+        isProjectForm
       }
     } = this;
-    // console.log("subStageData---", subStageData);
     let toDeploy = "";
     let toDelete = "";
-    const arrDeploy = subStageData.map(sub => {
-      if (sub.is_deployed) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-    const arrDelete = subStageData.map(sub => {
-      if (sub.is_deployed) {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    const arrDeploy =
+      subStageData.length > 0 &&
+      subStageData.map(sub => {
+        if (sub.is_deployed) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+    const arrDelete =
+      subStageData.length > 0 &&
+      subStageData.map(sub => {
+        if (sub.is_deployed) {
+          return true;
+        } else {
+          return false;
+        }
+      });
 
     toDeploy =
       arrDeploy.length > 0 ? (arrDeploy.indexOf(true) > -1 ? true : false) : "";
@@ -105,112 +114,127 @@ class SortableStage extends Component {
       arrDelete.length > 0 ? (arrDelete.indexOf(true) > -1 ? false : true) : "";
 
     return (
-      <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
-        {data.length > 0 &&
-          data.map((each, index) => (
-            <Card key={`key_${index}`} className=" no-boxshadow mrb-15">
-              <Card.Header>
-                <h5>
-              <Accordion.Toggle
-                as={Button}
-                variant="link"
-                eventKey={`${each.order}`}
-                // className="card-header"
-                onClick={() => {
-                  handleRequestSubStage(each.id, each.order);
-                }}
-              >
-                {reorder && (
-                  <SortableItem
-                    key={`item-${each.id}`}
-                    index={index}
-                    name={each.name}
-                  />
-                )}
-                {!reorder && <h5>{each.name}</h5>}
-                  <span className="edit-stage"
-                    data-tab="addSubStage-popup"
-                    onClick={() => handleClickEdit(each)}
-                  >
-                    <i className="la la-edit"></i>
-                    </span>
-                  
-              </Accordion.Toggle>
-              </h5>
-              </Card.Header>
-
-              <Accordion.Collapse eventKey={`${each.order}`}>
-                <Card.Body>
-                  <div className="add-btn pull-right outline-btn">
-                   
-
-                    {subStageData && subStageData.length > 1 && (
-                      <a className="pending"
-                        data-tab="addSubStage-popup"
-                        onClick={handleSubstageReorder}
+      <>
+        {data.length == 0 ? (
+          <div>No Stage added yet.</div>
+        ) : (
+          <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
+            {data.length > 0 &&
+              data.map((each, index) => (
+                <Card key={`key_${index}`} className=" no-boxshadow mrb-15">
+                  <Card.Header>
+                    <h5>
+                      <Accordion.Toggle
+                        as={Button}
+                        variant="link"
+                        eventKey={`${each.order}`}
+                        // className="card-header"
+                        onClick={() => {
+                          handleRequestSubStage(each.id, each.order);
+                        }}
                       >
-                        {!reorderSubstage ? "" : ""}
-                        {!reorderSubstage ? (
-                          
-                          
-                          <OverlayTrigger
-                          placement="top"
-                          overlay={<Tooltip>Reorder</Tooltip>}>
-                            <span className="reorder">
-                            <i className="la la-ellipsis-v" />
-                            <i className="la la-ellipsis-v" />
-                          </span>
-                        </OverlayTrigger>
-                        ) : (
-                          
-                           <OverlayTrigger
-                           placement="top"
-                           overlay={<Tooltip>Cancel</Tooltip>}>
-                             <span>
-                            <i className="la la-close" />
-                          </span>
-                         </OverlayTrigger>
+                        {reorder && (
+                          <SortableItem
+                            key={`item-${each.id}`}
+                            index={index}
+                            name={each.name}
+                          />
                         )}
-                      </a>
-                    )}
-                    {reorderSubstage && (
-                      <a
-                        data-tab="addSubStage-popup"
-                        onClick={handleSaveSubstageReorder}
-                      >
-                        {/* Save Order */}
-                        <OverlayTrigger
-                           placement="top"
-                           overlay={<Tooltip>Save</Tooltip>}>
-                             <span>
-                             <i className="la la-save" />
+                        {!reorder && <h5>{each.name}</h5>}
+                        {!!isProjectForm && (
+                          <span
+                            className="edit-stage"
+                            data-tab="addSubStage-popup"
+                            onClick={() => handleClickEdit(each)}
+                          >
+                            <i className="la la-edit"></i>
                           </span>
-                         </OverlayTrigger>
-                      </a>
-                    )}
-                    {subStageData && subStageData.length > 0 && toDeploy && (
-                      <a
-                        data-tab="addSubStage-popup"
-                        onClick={() => handleDeployAll(true)}
-                      >
-                        {/* Deploy Substages */}
-                        <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Deploy Substages</Tooltip>}>
-                        <span className="active deploy">
-                          <i className="la la-rocket" />
-                        </span>
-                    </OverlayTrigger>
-                        
-                      </a>
-                    )}
-                    {/* {subStageData && subStageData.length > 0 && toDelete && (
+                        )}
+                        {!isProjectForm && !!each.site && (
+                          <span
+                            className="edit-stage"
+                            data-tab="addSubStage-popup"
+                            onClick={() => handleClickEdit(each)}
+                          >
+                            <i className="la la-edit"></i>
+                          </span>
+                        )}
+                      </Accordion.Toggle>
+                    </h5>
+                  </Card.Header>
+
+                  <Accordion.Collapse eventKey={`${each.order}`}>
+                    <Card.Body>
+                      {!!isProjectForm && (
+                        <div className="add-btn pull-right outline-btn">
+                          {subStageData && subStageData.length > 1 && (
+                            <a
+                              className="pending"
+                              data-tab="addSubStage-popup"
+                              onClick={handleSubstageReorder}
+                            >
+                              {!reorderSubstage ? "" : ""}
+                              {!reorderSubstage ? (
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Reorder</Tooltip>}
+                                >
+                                  <span className="reorder">
+                                    <i className="la la-ellipsis-v" />
+                                    <i className="la la-ellipsis-v" />
+                                  </span>
+                                </OverlayTrigger>
+                              ) : (
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Cancel</Tooltip>}
+                                >
+                                  <span>
+                                    <i className="la la-close" />
+                                  </span>
+                                </OverlayTrigger>
+                              )}
+                            </a>
+                          )}
+                          {reorderSubstage && (
+                            <a
+                              data-tab="addSubStage-popup"
+                              onClick={handleSaveSubstageReorder}
+                            >
+                              {/* Save Order */}
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Save</Tooltip>}
+                              >
+                                <span>
+                                  <i className="la la-save" />
+                                </span>
+                              </OverlayTrigger>
+                            </a>
+                          )}
+                          {subStageData && subStageData.length > 0 && toDeploy && (
+                            <a
+                              data-tab="addSubStage-popup"
+                              onClick={() => handleDeployAll(true)}
+                            >
+                              {/* Deploy Substages */}
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Deploy Substages</Tooltip>}
+                              >
+                                <span className="active deploy">
+                                  <i className="la la-rocket" />
+                                </span>
+                              </OverlayTrigger>
+                            </a>
+                          )}
+                          {/* {subStageData && subStageData.length > 0 && toDelete && (
                       <a
                         data-tab="addSubStage-popup"
                         onClick={() => handleDeleteAll(true)}
                       >
                         {/* Delete Substages */}
-{/*                         
+                          {/*                         
                         <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip>Delete Substage</Tooltip>}>
@@ -220,56 +244,182 @@ class SortableStage extends Component {
                     </OverlayTrigger>
                       </a>
                     )}  */}
-                    {subStageData && subStageData.length > 0 && !toDeploy && (
-                      <a
-                        data-tab="addSubStage-popup"
-                        onClick={() => handleDeployAll(false)}
-                      >
-                        {/* Undeploy Substages */}
-                        <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Undeploy Substages</Tooltip>}>
-                        <span>
-                          <i className="undeployed la la-rocket" />
-                        </span>
-                    </OverlayTrigger>
-                        
-                      </a>
-                    )}
-                  </div>
-                  
-                  {!!loadSubStage && <DotLoader />}
-                  {!loadSubStage && !!subStageData && (
-                    <SubStageTable
-                      data={subStageData}
-                      handleEditGuide={handleEditGuide}
-                      changeDeployStatus={changeDeployStatus}
-                      deleteItem={deleteItem}
-                      editSubStageForm={editSubStageForm}
-                      reorderSubstage={this.props.reorderSubstage}
-                      isSubstageReorderCancel={
-                        this.props.isSubstageReorderCancel
-                      }
-                      handleNewSubstageOrder={this.props.handleNewSubstageOrder}
-                    />
-                    
-                  )}
-                  <div className="add-btn stage-add">
-                  <a
-                      data-tab="addSubStage-popup"
-                      onClick={handleSubStageForm}
-                    >
-                      Add Substage
-                      <span>
-                        <i className="la la-plus"></i>
-                      </span>
-                    </a>
-                    </div>
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          ))}
-      </SortableContainer>
+                          {subStageData &&
+                            subStageData.length > 0 &&
+                            !toDeploy && (
+                              <a
+                                data-tab="addSubStage-popup"
+                                onClick={() => handleDeployAll(false)}
+                              >
+                                {/* Undeploy Substages */}
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={
+                                    <Tooltip>Undeploy Substages</Tooltip>
+                                  }
+                                >
+                                  <span>
+                                    <i className="undeployed la la-rocket" />
+                                  </span>
+                                </OverlayTrigger>
+                              </a>
+                            )}
+                        </div>
+                      )}
+                      {!isProjectForm && !!each.site && (
+                        <div className="add-btn pull-right outline-btn">
+                          {subStageData && subStageData.length > 1 && (
+                            <a
+                              className="pending"
+                              data-tab="addSubStage-popup"
+                              onClick={handleSubstageReorder}
+                            >
+                              {!reorderSubstage ? "" : ""}
+                              {!reorderSubstage ? (
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Reorder</Tooltip>}
+                                >
+                                  <span className="reorder">
+                                    <i className="la la-ellipsis-v" />
+                                    <i className="la la-ellipsis-v" />
+                                  </span>
+                                </OverlayTrigger>
+                              ) : (
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Cancel</Tooltip>}
+                                >
+                                  <span>
+                                    <i className="la la-close" />
+                                  </span>
+                                </OverlayTrigger>
+                              )}
+                            </a>
+                          )}
+                          {reorderSubstage && (
+                            <a
+                              data-tab="addSubStage-popup"
+                              onClick={handleSaveSubstageReorder}
+                            >
+                              {/* Save Order */}
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Save</Tooltip>}
+                              >
+                                <span>
+                                  <i className="la la-save" />
+                                </span>
+                              </OverlayTrigger>
+                            </a>
+                          )}
+                          {subStageData && subStageData.length > 0 && toDeploy && (
+                            <a
+                              data-tab="addSubStage-popup"
+                              onClick={() => handleDeployAll(true)}
+                            >
+                              {/* Deploy Substages */}
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Deploy Substages</Tooltip>}
+                              >
+                                <span className="active deploy">
+                                  <i className="la la-rocket" />
+                                </span>
+                              </OverlayTrigger>
+                            </a>
+                          )}
+                          {subStageData &&
+                            subStageData.length > 0 &&
+                            !toDeploy && (
+                              <a
+                                data-tab="addSubStage-popup"
+                                onClick={() => handleDeployAll(false)}
+                              >
+                                {/* Undeploy Substages */}
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={
+                                    <Tooltip>Undeploy Substages</Tooltip>
+                                  }
+                                >
+                                  <span>
+                                    <i className="undeployed la la-rocket" />
+                                  </span>
+                                </OverlayTrigger>
+                              </a>
+                            )}
+                        </div>
+                      )}
+
+                      {!!loadSubStage && <DotLoader />}
+                      {!loadSubStage && !!isProjectForm && !!subStageData && (
+                        <SubStageTable
+                          data={subStageData}
+                          handleEditGuide={handleEditGuide}
+                          changeDeployStatus={changeDeployStatus}
+                          deleteItem={deleteItem}
+                          editSubStageForm={editSubStageForm}
+                          reorderSubstage={this.props.reorderSubstage}
+                          isSubstageReorderCancel={
+                            this.props.isSubstageReorderCancel
+                          }
+                          handleNewSubstageOrder={
+                            this.props.handleNewSubstageOrder
+                          }
+                          formTable="project"
+                        />
+                      )}
+                      {!loadSubStage && !isProjectForm && !!subStageData && (
+                        <SubStageTable
+                          data={subStageData}
+                          handleEditGuide={handleEditGuide}
+                          changeDeployStatus={changeDeployStatus}
+                          deleteItem={deleteItem}
+                          editSubStageForm={editSubStageForm}
+                          reorderSubstage={this.props.reorderSubstage}
+                          isSubstageReorderCancel={
+                            this.props.isSubstageReorderCancel
+                          }
+                          handleNewSubstageOrder={
+                            this.props.handleNewSubstageOrder
+                          }
+                          formTable="site"
+                        />
+                      )}
+                      {!!isProjectForm && (
+                        <div className="add-btn stage-add">
+                          <a
+                            data-tab="addSubStage-popup"
+                            onClick={handleSubStageForm}
+                          >
+                            Add Substage
+                            <span>
+                              <i className="la la-plus"></i>
+                            </span>
+                          </a>
+                        </div>
+                      )}
+                      {!isProjectForm && !!each.site && (
+                        <div className="add-btn stage-add">
+                          <a
+                            data-tab="addSubStage-popup"
+                            onClick={handleSubStageForm}
+                          >
+                            Add Substage
+                            <span>
+                              <i className="la la-plus"></i>
+                            </span>
+                          </a>
+                        </div>
+                      )}
+                    </Card.Body>
+                  </Accordion.Collapse>
+                </Card>
+              ))}
+          </SortableContainer>
+        )}
+      </>
     );
   }
 }

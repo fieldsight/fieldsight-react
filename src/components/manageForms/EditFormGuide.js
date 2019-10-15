@@ -101,6 +101,7 @@ class EditFormGuide extends Component {
       handleChange,
       handleSubmit
     } = this;
+    console.log("form ma", this.props.data);
 
     return (
       <form className="edit-form" onSubmit={e => handleSubmit(e)}>
@@ -251,10 +252,7 @@ class EditFormGuide extends Component {
             </div>
           </div>
           <div className="col-md-12">
-            <button
-              type="submit"
-              className="fieldsight-btn pull-right "
-            >
+            <button type="submit" className="fieldsight-btn pull-right ">
               Save Changes
             </button>
             <button
