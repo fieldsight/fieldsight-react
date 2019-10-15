@@ -317,7 +317,6 @@ class ProjectDashboard extends React.Component {
                       loader={dLoader}
                       terms={terms_and_labels}
                     />
-                    {console.log(this.props.siteList, "sgdfhgjh")}
 
                     {this.props.siteList.length > 0 && (
                       <div className="card-body">
