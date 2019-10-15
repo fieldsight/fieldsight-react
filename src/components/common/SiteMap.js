@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, createRef } from "react";
 //import { MDBDataTable } from 'mdbreact';
 import {
   Map,
@@ -14,34 +14,75 @@ import {
 import { BlockContentLoader } from "./Loader";
 
 // const position = [27.7, 85.4];
-const MyMarkersList = data => {
-  const items = data.markers.map((props, key) => (
-    <MyPopupMarker key={key} {...props} />
-  ));
-  return <Fragment>{items}</Fragment>;
-};
-
-const MyPopupMarker = props => (
-  <Marker
-    position={[props.geometry.coordinates[1], props.geometry.coordinates[0]]}
-  >
-    <Popup>
-      <a href={props.url} target="_blank">
-        {props.properties.name}
-      </a>
-    </Popup>
-  </Marker>
-);
 
 class SiteMap extends Component {
+  constructor(props) {
+    super(props);
+    this.mapRef = createRef();
+    this.refMarkers = createRef();
+  }
+
+  componentDidMount() {
+    this.element = this.refs;
+    console.log("elements", this.element);
+  }
+
+  getMarkerBounds = () => {
+    const map = this.refs;
+    // const boundMarker = this.refMarkers.current.leafletElement;
+    // const bounds = map.fitBounds(boundMarker.getBounds());
+    console.log("bound----", map);
+  };
+
+  myMarkersList = data => {
+    console.log("in list");
+
+    const items =
+      !!data &&
+      !!data.markers &&
+      data.markers.map((props, key) => (
+        // <MyPopupMarker key={key} {...props} ref={ref} />
+        // this.myPopupMarker(props)
+        <Marker
+          position={[
+            props.geometry.coordinates[1],
+            props.geometry.coordinates[0]
+          ]}
+          ref={"markers"}
+        >
+          <Popup>
+            <a href={props.url} target="_blank">
+              {props.properties.name}
+            </a>
+          </Popup>
+        </Marker>
+      ));
+
+    return <Fragment>{items}</Fragment>;
+  };
+
+  myPopupMarker = props => (
+    <Marker
+      position={[props.geometry.coordinates[1], props.geometry.coordinates[0]]}
+      ref={"markers"}
+    >
+      <Popup>
+        <a href={props.url} target="_blank">
+          {props.properties.name}
+        </a>
+      </Popup>
+    </Marker>
+  );
+
   render() {
     const { map, showContentLoader } = this.props;
+    // console.log("map data", map);
 
     return (
       <>
         {showContentLoader ? (
           <BlockContentLoader number={1} height="395px" />
-        ) : !!map.features && map.features.length > 0 ? (
+        ) : !!map && !!map.features && map.features.length > 0 ? (
           <Map
             center={[
               map.features[0].geometry.coordinates[1],
@@ -49,6 +90,8 @@ class SiteMap extends Component {
             ]}
             zoom={13}
             style={{ width: "100%", height: "396px" }}
+            ref={"map"}
+            onClick={this.getMarkerBounds}
           >
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -68,7 +111,8 @@ class SiteMap extends Component {
                 />
               </LayersControl.BaseLayer>
             </LayersControl>
-            <MyMarkersList markers={map.features} />
+            {this.myMarkersList(map.features)}
+            {/* <MyMarkersList markers={map.features} ref={this.refMarkers} /> */}
             {/* {map.features.map((each, idx) => {
               const name = each.properties.name;
               const location = each.geometry.coordinates;
