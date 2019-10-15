@@ -7,7 +7,7 @@ import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 
 //const project_id = 137;
-//const base_url = "https://fieldsight.naxa.com.np";
+const base_url = "https://fieldsight.naxa.com.np";
 //const project_name = "test";
 
 const popUpState = {
@@ -46,6 +46,7 @@ class ProjectSiteList extends Component {
     const {
       context: { terms }
     } = this;
+    // console.log("props-", this.props);
 
     return (
       <Fragment>
@@ -53,11 +54,14 @@ class ProjectSiteList extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={
-                  base_url + "/fieldsight/application/#/project-dashboard/" + project_id + "/"
-                }
+              // href={
+              //   base_url +
+              //   "/fieldsight/application/#/project-dashboard/" +
+              //   project_id +
+              //   "/"
+              // }
               >
-                {project_name}
+                {/* {project_name} */}
               </a>
             </li>
             {/* <li className="breadcrumb-item">

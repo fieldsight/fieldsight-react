@@ -16,7 +16,7 @@ class AddForm extends Component {
         loader
       }
     } = this;
-    console.log("project", loader);
+    console.log(loader, "project", formList, projectList);
 
     return (
       <>

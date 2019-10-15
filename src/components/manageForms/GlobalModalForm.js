@@ -76,10 +76,6 @@ class GlobalModalForm extends Component {
         ? this.props.formData.schedule_level_id
         : 0,
     dailyArrDays: {
-      sun:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 7)
-          : false,
       mon:
         this.props.formData && this.props.formData.selected_days
           ? getArrValue(this.props.formData.selected_days, 1)
@@ -103,6 +99,10 @@ class GlobalModalForm extends Component {
       sat:
         this.props.formData && this.props.formData.selected_days
           ? getArrValue(this.props.formData.selected_days, 6)
+          : false,
+      sun:
+        this.props.formData && this.props.formData.selected_days
+          ? getArrValue(this.props.formData.selected_days, 7)
           : false
     },
     selectedDays:
@@ -110,10 +110,6 @@ class GlobalModalForm extends Component {
         ? this.props.formData.selected_days
         : [],
     weeklyArrDays: {
-      sun:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 7)
-          : false,
       mon:
         this.props.formData && this.props.formData.selected_days
           ? getArrValue(this.props.formData.selected_days, 1)
@@ -137,6 +133,10 @@ class GlobalModalForm extends Component {
       sat:
         this.props.formData && this.props.formData.selected_days
           ? getArrValue(this.props.formData.selected_days, 6)
+          : false,
+      sun:
+        this.props.formData && this.props.formData.selected_days
+          ? getArrValue(this.props.formData.selected_days, 7)
           : false
     },
     frequency:
@@ -296,7 +296,7 @@ class GlobalModalForm extends Component {
     const { endDate } = this.state;
     let errors = {};
     this.setState(state => {
-      if (e > endDate) {
+      if (!!endDate && e > endDate) {
         errors.endDate = "Invalid Date";
         return {
           endDate: e,
@@ -331,13 +331,13 @@ class GlobalModalForm extends Component {
     });
   };
   getDay = day => {
-    if (day == "mon") return 0;
-    else if (day == "tue") return 1;
-    else if (day == "wed") return 2;
-    else if (day == "thu") return 3;
-    else if (day == "fri") return 4;
-    else if (day == "sat") return 5;
-    else if (day == "sun") return 6;
+    if (day == "mon") return 1;
+    else if (day == "tue") return 2;
+    else if (day == "wed") return 3;
+    else if (day == "thu") return 4;
+    else if (day == "fri") return 5;
+    else if (day == "sat") return 6;
+    else if (day == "sun") return 7;
   };
 
   handleCheckbox = e => {
@@ -648,11 +648,11 @@ class GlobalModalForm extends Component {
               {scheduleType == 1 && (
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
-                    <SelectElement
-                      options={weekOptions}
-                      value={frequency}
-                      changeHandler={handleFrequencyChange}
-                    />
+                  <SelectElement
+                    options={weekOptions}
+                    value={frequency}
+                    changeHandler={handleFrequencyChange}
+                  />
                   <span>weeks on</span>
                   <div className="form-group">
                     <div className="custom-checkbox display-inline">
@@ -705,11 +705,11 @@ class GlobalModalForm extends Component {
               {scheduleType == 2 && (
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
-                    <SelectElement
-                      options={monthOPtions}
-                      value={frequency}
-                      changeHandler={handleFrequencyChange}
-                    />
+                  <SelectElement
+                    options={monthOPtions}
+                    value={frequency}
+                    changeHandler={handleFrequencyChange}
+                  />
                   <span>Month on</span>
                   <SelectElement
                     options={dayOptions}
@@ -740,7 +740,7 @@ class GlobalModalForm extends Component {
               <div className="row">
                 <div className="col-xl-6">
                   <div className="form-group mrt-15">
-                  <label>Start Date</label>
+                    <label>Start Date</label>
                     <DatePicker
                       selected={startDate}
                       onChange={handleStartDateChange}
@@ -778,17 +778,16 @@ class GlobalModalForm extends Component {
           {formType == "substage" && (
             <>
               {/* for subStage form */}
-                <InputElement
-                  formType="editForm"
-                  tag="input"
-                  type="number"
-                  //   required={true}
-                  label="Weight"
-                  name="weight"
-                  value={weight}
-                  changeHandler={handleInputChange}
-                />
-              
+              <InputElement
+                formType="editForm"
+                tag="input"
+                type="number"
+                //   required={true}
+                label="Weight"
+                name="weight"
+                value={weight}
+                changeHandler={handleInputChange}
+              />
             </>
           )}
 
@@ -830,7 +829,7 @@ class GlobalModalForm extends Component {
             </div>
           </div>
           {!isProjectWide && regionDropdown && regionDropdown.length > 0 && (
-            <div className="form-group">
+            <div>
               <label>Regions</label>
               {hasLoaded && (
                 <Select
@@ -844,7 +843,7 @@ class GlobalModalForm extends Component {
             </div>
           )}
           {!isProjectWide && typeDropdown && typeDropdown.length > 0 && (
-            <div className="form-group">
+            <div>
               <label>Types</label>
               {hasLoaded && (
                 <Select
@@ -915,30 +914,30 @@ class GlobalModalForm extends Component {
           </div>
           {formType == "substage" && (
             <>
-              <div className="form-group">
-                <InputElement
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  required={true}
-                  label="Name"
-                  name="substageTitle"
-                  value={substageTitle}
-                  changeHandler={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                <InputElement
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  //   required={true}
-                  label="Description"
-                  name="substageDesc"
-                  value={substageDesc}
-                  changeHandler={handleInputChange}
-                />
-              </div>
+              {/* <div className="form-group"> */}
+              <InputElement
+                formType="editForm"
+                tag="input"
+                type="text"
+                required={true}
+                label="Name"
+                name="substageTitle"
+                value={substageTitle}
+                changeHandler={handleInputChange}
+              />
+              {/* </div> */}
+              {/* <div className="form-group"> */}
+              <InputElement
+                formType="editForm"
+                tag="input"
+                type="text"
+                //   required={true}
+                label="Description"
+                name="substageDesc"
+                value={substageDesc}
+                changeHandler={handleInputChange}
+              />
+              {/* </div> */}
             </>
           )}
           <div className="form-group pull-right no-margin">
