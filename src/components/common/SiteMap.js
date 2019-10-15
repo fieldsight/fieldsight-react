@@ -9,10 +9,12 @@ import {
 } from "react-leaflet";
 
 import { BlockContentLoader } from "./Loader";
+import { markerIcon } from "../common/Marker";
 
 const MyPopupMarker = props => (
   <Marker
     position={[props.geometry.coordinates[1], props.geometry.coordinates[0]]}
+    icon={markerIcon}
   >
     <Popup>
       <a href={props.url} target="_blank">
@@ -45,7 +47,9 @@ class SiteMap extends Component {
       this.refMarkers &&
       this.refMarkers.current &&
       this.refMarkers.current.leafletElement;
-    map && map.fitBounds(marker.getBounds());
+    console.log(map, "check", marker);
+
+    // !!map && !!marker && map.fitBounds(marker.getBounds());
   };
 
   render() {
