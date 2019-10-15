@@ -737,8 +737,7 @@ class StagedForms extends Component {
       handleSaveSubstageReorder,
       handleDeployAllSubstages,
       handleDeleteAllSubstages,
-      handleDeployAllStages,
-      handleDeleteAllStages
+      handleDeployAllStages
     } = this;
     let deployCount = 0;
     let canReorder = "";
@@ -746,7 +745,7 @@ class StagedForms extends Component {
     data.map(each => {
       deployCount += each.undeployed_count;
     });
-    // console.log(deployCount, "deployCount");
+
     const arrToReorder = data.map(each => {
       if (!!each.site) {
         return true;
