@@ -1,19 +1,35 @@
 import React, { Component, Fragment, createRef } from "react";
-//import { MDBDataTable } from 'mdbreact';
 import {
   Map,
   TileLayer,
   LayersControl,
   Marker,
   Popup,
-  FeatureGroup,
-  Circle
+  FeatureGroup
 } from "react-leaflet";
-// import "leaflet/dist/leaflet.css";
 
 import { BlockContentLoader } from "./Loader";
 
-// const position = [27.7, 85.4];
+const MyPopupMarker = props => (
+  <Marker
+    position={[props.geometry.coordinates[1], props.geometry.coordinates[0]]}
+  >
+    <Popup>
+      <a href={props.url} target="_blank">
+        {props.properties.name}
+      </a>
+    </Popup>
+  </Marker>
+);
+
+const MyMarkersList = data => {
+  const items =
+    !!data &&
+    !!data.markers &&
+    data.markers.map((props, key) => <MyPopupMarker key={key} {...props} />);
+
+  return <Fragment>{items}</Fragment>;
+};
 
 class SiteMap extends Component {
   constructor(props) {
@@ -22,61 +38,18 @@ class SiteMap extends Component {
     this.refMarkers = createRef();
   }
 
-  componentDidMount() {
-    this.element = this.refs;
-    console.log("elements", this.element);
-  }
-
   getMarkerBounds = () => {
-    const map = this.refs;
-    // const boundMarker = this.refMarkers.current.leafletElement;
-    // const bounds = map.fitBounds(boundMarker.getBounds());
-    console.log("bound----", map);
+    const map =
+      this.mapRef && this.mapRef.current && this.mapRef.current.leafletElement;
+    const marker =
+      this.refMarkers &&
+      this.refMarkers.current &&
+      this.refMarkers.current.leafletElement;
+    map && map.fitBounds(marker.getBounds());
   };
-
-  myMarkersList = data => {
-    console.log("in list");
-
-    const items =
-      !!data &&
-      !!data.markers &&
-      data.markers.map((props, key) => (
-        // <MyPopupMarker key={key} {...props} ref={ref} />
-        // this.myPopupMarker(props)
-        <Marker
-          position={[
-            props.geometry.coordinates[1],
-            props.geometry.coordinates[0]
-          ]}
-          ref={"markers"}
-        >
-          <Popup>
-            <a href={props.url} target="_blank">
-              {props.properties.name}
-            </a>
-          </Popup>
-        </Marker>
-      ));
-
-    return <Fragment>{items}</Fragment>;
-  };
-
-  myPopupMarker = props => (
-    <Marker
-      position={[props.geometry.coordinates[1], props.geometry.coordinates[0]]}
-      ref={"markers"}
-    >
-      <Popup>
-        <a href={props.url} target="_blank">
-          {props.properties.name}
-        </a>
-      </Popup>
-    </Marker>
-  );
 
   render() {
     const { map, showContentLoader } = this.props;
-    // console.log("map data", map);
 
     return (
       <>
@@ -90,8 +63,7 @@ class SiteMap extends Component {
             ]}
             zoom={13}
             style={{ width: "100%", height: "396px" }}
-            ref={"map"}
-            onClick={this.getMarkerBounds}
+            ref={this.mapRef}
           >
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -111,30 +83,16 @@ class SiteMap extends Component {
                 />
               </LayersControl.BaseLayer>
             </LayersControl>
-            {this.myMarkersList(map.features)}
-            {/* <MyMarkersList markers={map.features} ref={this.refMarkers} /> */}
-            {/* {map.features.map((each, idx) => {
-              const name = each.properties.name;
-              const location = each.geometry.coordinates;
-              const url = each.url;
-              return (
-                <Marker position={[location[1], location[0]]} key={`map${idx}`}>
-                  <Popup>
-                    <span>
-                      <a href={url}>Name: {name}</a>
-                    </span>
-                    <br />
-                  </Popup>
-                </Marker>
-              );
-            })} */}
+            <FeatureGroup
+              color="purple"
+              ref={this.refMarkers}
+              load={this.getMarkerBounds()}
+            >
+              <MyMarkersList markers={map.features} />
+            </FeatureGroup>
           </Map>
         ) : (
-          <Map
-            // center={[coordinates[1], coordinates[0]]}
-            zoom={13}
-            style={{ width: "100%", height: "396px" }}
-          >
+          <Map zoom={13} style={{ width: "100%", height: "396px" }}>
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -152,27 +110,7 @@ class SiteMap extends Component {
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
               </LayersControl.BaseLayer>
-
-              {/* <LayersControl.Overlay name="Feature group">
-                <FeatureGroup color="purple">
-                  <Popup>
-                    <span>Popup in FeatureGroup</span>
-                  </Popup>
-                  <Circle
-                    center={[coordinates[1], coordinates[0]]}
-                    radius={200}
-                  />
-                </FeatureGroup>
-              </LayersControl.Overlay> */}
             </LayersControl>
-
-            {/* <Marker position={[coordinates[1], coordinates[0]]}>
-              <Popup>
-                <span>Name: {name}</span>
-                <br />
-                {address && <span>Address: {address}</span>}
-              </Popup>
-            </Marker> */}
           </Map>
         )}
       </>
