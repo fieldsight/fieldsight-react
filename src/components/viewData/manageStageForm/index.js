@@ -44,7 +44,7 @@ class ResponseStageForm extends Component {
           <h5>{!data ? "Stage Forms" : "Rejected Submission"}</h5>
           <Link to={this.props.url}>
             <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Status" : "View by Form"}
+              {data ? "View By Form" : "View by Status"}
             </button>
           </Link>
         </div>

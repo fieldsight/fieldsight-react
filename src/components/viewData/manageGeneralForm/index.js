@@ -43,10 +43,10 @@ class ManageGeneralForm extends Component {
   };
 
   render() {
-    console.log("ghhkkk----general", this.props.url);
     const {
       props: { data, showViewData }
     } = this;
+
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
@@ -54,7 +54,7 @@ class ManageGeneralForm extends Component {
           <div className="dash-btn">
             <Link to={this.props.url}>
               <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Status" : "View by Form"}
+                {data ? "View By Form" : "View by Status"}
               </button>
             </Link>
           </div>
@@ -64,6 +64,7 @@ class ManageGeneralForm extends Component {
             <ResponseTable
               generals_forms={this.state.generals_forms}
               deleted_forms={this.state.deleted_forms}
+              id={this.props.id}
             />
           )}
           {/*data && <Rejected id={this.props.id} />*/}

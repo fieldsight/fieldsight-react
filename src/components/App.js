@@ -25,14 +25,12 @@ import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
 import ViewData from "./viewData";
-<<<<<<< HEAD
 import SiteData from "./siteViewData";
-=======
-//import SiteData from "./siteViewData"
->>>>>>> 6bf6b6fd0789ba892e1b107240272932e14b53ed
+import SiteSubmissionData from "./siteViewData/FormSubmission";
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
+import SubmissionData from "./viewData/SubmissionTable";
 
 import ManageForms from "./manageForms";
 
@@ -208,6 +206,14 @@ class App extends Component {
                     <Route
                       path="/site-responses/:id"
                       render={props => <SiteData {...props} />}
+                    />
+                    <Route
+                      path="/submission-data/:id/:fid"
+                      render={props => <SubmissionData {...props} />}
+                    />
+                    <Route
+                      path="/site-submission-data/:id/:fid"
+                      render={props => <SiteSubmissionData {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

@@ -40,6 +40,12 @@ class PendingTable extends Component {
             projectId={this.props.id}
           />
         </div>
+        {console.log(
+          this.props.siteList.data,
+
+          this.props.siteList,
+          "this.props.siteList"
+        )}
         {this.props.siteList && this.props.siteList.length > 0 ? (
           <div className="card-body">
             <div className="table-footer">
