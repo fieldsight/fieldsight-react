@@ -68,7 +68,7 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/application/#/create-site/" + project_id + "/"
+                  base_url + "/fieldsight/site/add/" + project_id + "/"
                 )
               }
             >
