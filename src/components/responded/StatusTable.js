@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
-import withPagination from "../../hoc/WithPagination";
 
 class StatusTable extends Component {
   state = {
@@ -12,13 +11,7 @@ class StatusTable extends Component {
       submission: props.submission
     };
   }
-  componentDidMount() {
-    this.props.paginationHandler(this.props.count, null, {
-      type: "viewByStatus",
-      projectId: this.props.id,
-      status: "approved"
-    });
-  }
+
   render() {
     return (
       <React.Fragment>
@@ -32,24 +25,26 @@ class StatusTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.submission.map((sub, key) => {
-              return (
-                <tr key={key}>
-                  <td>
-                    <a href={sub.profile_url}>{sub.name}</a>
-                  </td>
-                  <td>{sub.id}</td>
-                  <td>
-                    <a href={sub.submission_url}>{sub.submitted_by}</a>
-                  </td>
-                  <td>{sub.date}</td>
-                </tr>
-              );
-            })}
+            {!!this.state.submission &&
+              this.state.submission.length > 0 &&
+              this.state.submission.map((sub, key) => {
+                return (
+                  <tr key={key}>
+                    <td>
+                      <a href={sub.profile_url}>{sub.name}</a>
+                    </td>
+                    <td>{sub.id}</td>
+                    <td>
+                      <a href={sub.submission_url}>{sub.submitted_by}</a>
+                    </td>
+                    <td>{sub.date}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
       </React.Fragment>
     );
   }
 }
-export default withPagination(StatusTable);
+export default StatusTable;

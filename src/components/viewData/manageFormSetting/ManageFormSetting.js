@@ -4,11 +4,7 @@ import { withRouter, Link } from "react-router-dom";
 const sideNavRoutes = [
   { to: "/", path: "", title: "General Forms" },
   { to: "/scheduled", title: "Scheduled Forms" },
-  {
-    to: "/stage",
-
-    title: "Staged Forms"
-  },
+  { to: "/stage", title: "Staged Forms" },
   { to: "/survey", title: "Survey Forms" }
 ];
 
@@ -24,6 +20,7 @@ class ManageFormSetting extends Component {
     const {
       location: { pathname }
     } = this.props;
+    console.log(this.props.show_submission, "manage form");
 
     return (
       <>
@@ -44,7 +41,7 @@ class ManageFormSetting extends Component {
             ))}
           </ul>
         )}
-        {this.props.show_submission && (
+        {!!this.props.show_submission && (
           <ul className="nav nav-tabs flex-column border-tabs">
             {viewByStatus.map((route, i) => (
               <li className="nav-item" key={i}>
