@@ -26,6 +26,8 @@ class ManageGeneralForm extends Component {
           `/fv3/api/view-by-forms/?project=${this.props.id}&form_type=general`
         )
         .then(res => {
+          console.log(res, "general");
+
           this.setState({
             deleted_forms: res.data.deleted_forms,
             generals_forms: res.data.generals_forms
