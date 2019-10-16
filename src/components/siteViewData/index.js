@@ -15,33 +15,68 @@ export default class SiteViewData extends Component {
   state = {
     hide: true,
     view_btn: false,
-    id: "",
-    deleted_forms: [],
-    generals_forms: []
+    id: this.props.match.params && this.props.match.params.id,
+    url: this.props.match.url && this.props.match.url
   };
   toggleHide = () => {
     this.setState({
       hide: !this.state.hide
     });
   };
-  showViewData = () => {
-    console.log("gfhjh");
-    this.setState({
-      view_btn: !this.state.view_btn
-    });
-  };
+
+  // showViewData = () => {
+  //   this.setState({
+  //     view_btn: !this.state.view_btn
+  //   });
+  // };
+
   componentDidMount() {
     const {
       match: {
         params: { id }
       }
     } = this.props;
-
-    this.setState({
-      id
-    });
+    if (
+      this.props.location.pathname === `/site-responses/${id}/rejected` ||
+      this.props.location.pathname === `/site-responses/${id}/pending` ||
+      this.props.location.pathname === `/site-responses/${id}/flagged` ||
+      this.props.location.pathname === `/site-responses/${id}/approved`
+    ) {
+      this.setState({
+        id,
+        view_btn: true
+      });
+    } else if (
+      this.props.location.pathname === `/site-responses/${id}/general` ||
+      this.props.location.pathname === `/site-responses/${id}/stage` ||
+      this.props.location.pathname === `/site-responses/${id}/scheduled`
+    ) {
+      this.setState({
+        view_btn: false,
+        id
+      });
+    }
   }
-
+  showViewData = () => {
+    this.setState(
+      state => {
+        if (!!this.state.view_btn) {
+          return {
+            url: `${this.props.match.url}/general`,
+            view_btn: !this.state.view_btn
+          };
+        } else {
+          return {
+            url: `${this.props.match.url}/rejected`,
+            view_btn: !this.state.view_btn
+          };
+        }
+      },
+      () => {
+        this.props.history.push(this.state.url);
+      }
+    );
+  };
   render() {
     const {
       match: {
@@ -64,9 +99,14 @@ export default class SiteViewData extends Component {
             <div className="col-xl-3 col-lg-4">
               <div className="left-sidebar new-sidebar sticky-top">
                 <div className="card">
-                  <div className="card-header main-card-header"></div>
+                  <div className="card-header main-card-header">
+                    <h5>Site View Data</h5>
+                  </div>
                   <div className="card-body">
-                    <ManageFormSetting show_submission={this.state.view_btn} />
+                    <ManageFormSetting
+                      show_submission={this.state.view_btn}
+                      url={this.state.url}
+                    />
                   </div>
                 </div>
               </div>
@@ -78,12 +118,13 @@ export default class SiteViewData extends Component {
                     <Switch>
                       <Route
                         exact
-                        path={this.props.match.url}
+                        path={`${this.props.match.url}/general`}
                         component={() => (
                           <ManageGeneralForm
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -95,6 +136,7 @@ export default class SiteViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -105,6 +147,7 @@ export default class SiteViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -148,6 +191,7 @@ export default class SiteViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
