@@ -43,21 +43,18 @@ class ManageGeneralForm extends Component {
   };
 
   render() {
-    this.state.deleted_forms.length > 0
-      ? console.log("ghhkkk")
-      : console.log("sorry");
-
     const {
       props: { data, showViewData }
     } = this;
+
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
           <h5>{!data ? "General Forms" : "Rejected Submission"}</h5>
           <div className="dash-btn">
-            <Link to={`/project-responses/${this.props.id}/Rejected`}>
+            <Link to={this.props.url}>
               <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Status" : "View by Form"}
+                {data ? "View By Form" : "View by Status"}
               </button>
             </Link>
           </div>
@@ -67,10 +64,10 @@ class ManageGeneralForm extends Component {
             <ResponseTable
               generals_forms={this.state.generals_forms}
               deleted_forms={this.state.deleted_forms}
+              id={this.props.id}
             />
           )}
-
-          {data && <Rejected id={this.props.id} />}
+          {/*data && <Rejected id={this.props.id} />*/}
         </div>
         {this.state.deleted_forms.length > 0
           ? !data && (

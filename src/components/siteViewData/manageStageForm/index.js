@@ -46,14 +46,12 @@ class ResponseStageForm extends Component {
           <h5>{!data ? "Stage Forms" : "Rejected Submission"}</h5>
           <Link to={`/site-responses/${this.props.id}/rejected`}>
             <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Status" : "View by Form"}
+              {data ? "View By Form" : "View by Status"}
             </button>
           </Link>
         </div>
         <div className="card-body">
           {!data && <ResponseTable stage_forms={this.state.stage_forms} />}
-
-          {data && <Rejectsubmission />}
         </div>
 
         {this.state.deleted_forms.length > 0
