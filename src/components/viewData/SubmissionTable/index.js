@@ -2,10 +2,15 @@ import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import WithPagination from "../../../hoc/WithPagination";
+import Modal from "../../common/Modal";
 
 class SubmissionData extends Component {
   state = {
-    fid: this.props.match.params && this.props.match.params.fid
+    fid: this.props.match.params && this.props.match.params.fid,
+    id: this.props.match.params && this.props.match.params.id,
+    siteList: [],
+    mastersiteList: [],
+    showConfirmation: false
   };
 
   componentDidMount() {
@@ -17,7 +22,7 @@ class SubmissionData extends Component {
 
     this.props.paginationHandler(1, null, {
       type: "formSubmission",
-      projectId: id,
+      projectId: this.state.id,
       fsxf_id: fid,
       status: "form-submission"
     });
@@ -25,6 +30,80 @@ class SubmissionData extends Component {
       fid
     });
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.siteList != this.props.siteList) {
+      this.setState({
+        siteList: nextProps.siteList,
+        mastersiteList: nextProps.siteList
+      });
+    }
+  }
+  handleChange = async e => {
+    const {
+      target: { value }
+    } = e;
+    const { siteList, mastersiteList } = this.state;
+
+    if (value) {
+      const search = await siteList.filter(result => {
+        return (
+          result.submitted_by.toLowerCase().includes(value.toLowerCase()) ||
+          (result.site_name !== null
+            ? result.site_name.toLowerCase().includes(value.toLowerCase())
+            : "") ||
+          (result.site_identifier !== null
+            ? result.site_identifier.toLowerCase().includes(value.toLowerCase())
+            : "")
+        );
+      });
+
+      this.setState({
+        siteList: search
+      });
+    } else {
+      this.setState({
+        siteList: mastersiteList
+      });
+    }
+  };
+  cancleModel = () => {
+    this.setState({
+      showConfirmation: false
+    });
+  };
+  handleDelete = id => {
+    this.setState({
+      showConfirmation: true,
+      id: id
+    });
+  };
+  delete = id => {
+    let list = this.state.siteList;
+
+    axios
+      .get(`/fv3/api/delete-submission/${id}/`)
+      .then(res => {
+        if (res.status == 204) {
+          this.setState(state => {
+            const result = list.filter(data => {
+              if (id !== data.submission_id) {
+                return data;
+              }
+            });
+            list = result;
+
+            return {
+              id: "",
+              showConfirmation: false,
+              siteList: list
+            };
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   render() {
     return (
@@ -38,6 +117,23 @@ class SubmissionData extends Component {
           </ol>
         </nav>
         <div className="card">
+          <div className="card-header main-card-header sub-card-header">
+            <h5>Project Submissions</h5>
+            <div className="dash-btn">
+              <form className="floating-form">
+                <div className="form-group mr-0">
+                  <input
+                    type="search"
+                    className="form-control"
+                    onChange={e => this.handleChange(e)}
+                    required
+                  />
+                  <label htmlFor="input">Search</label>
+                  <i className="la la-search"></i>
+                </div>
+              </form>
+            </div>
+          </div>
           <div className="card-body">
             <Table
               responsive="xl"
@@ -56,30 +152,39 @@ class SubmissionData extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.siteList.length > 0 &&
-                  this.props.siteList.map((list, key) => {
+                {this.state.siteList.length > 0 &&
+                  this.state.siteList.map((list, key) => {
                     return (
                       <tr key={key}>
                         <td>{key + 1}</td>
                         <td>{list.site_name}</td>
-                        <td>{this.state.fid}</td>
-                        <td>{list.id}</td>
+                        <td>{list.site_identifier}</td>
+                        <td>{list.submission_id}</td>
                         <td>
                           <a href={list.profile_url}>{list.submitted_by}</a>
                         </td>
                         <td>{list.date}</td>
 
                         <td>
-                          <a>
+                          <a
+                            href={`/form/view/${this.props.form_id_string}/${list.submission_id}`}
+                          >
                             <i className="la la-eye"></i>
                           </a>
-                          <a>
+                          <a
+                            href={`/form/edit/${this.props.form_id_string}/${list.submission_id}`}
+                          >
                             <i className="la la-edit"></i>
                           </a>
                         </td>
                         <td>
-                          <a>
-                            <i className="la la-trash"></i>
+                          <a
+                            className="td-delete-btn"
+                            onClick={() => {
+                              this.handleDelete(list.submission_id);
+                            }}
+                          >
+                            <i className="la la-trash-o"> </i>{" "}
                           </a>
                         </td>
                       </tr>
@@ -123,8 +228,8 @@ class SubmissionData extends Component {
 
                         {this.props.renderPageNumbers({
                           type: "formSubmission",
-                          projectId: id,
-                          fsxf_id: fid,
+                          projectId: this.state.id,
+                          fsxf_id: this.state.fid,
                           status: "form-submission"
                         })}
 
@@ -157,6 +262,38 @@ class SubmissionData extends Component {
             )}
           </div>
         </div>
+        {this.state.showConfirmation && (
+          <Modal
+            title={`Are you sure you want to delete this submission ${this.state.id}?`}
+            toggleModal={this.cancleModel}
+          >
+            <div className="warning">
+              <h5>Warning</h5>
+            </div>
+            <div>
+              <p>
+                "All the data within the submission will be completely removed.
+                Do u still want to continue?"
+              </p>
+            </div>
+            <div className="warning-footer text-center">
+              <a
+                className="fieldsight-btn rejected-btn"
+                onClick={() => {
+                  this.setState({ showConfirmation: false });
+                }}
+              >
+                cancel
+              </a>
+              <a
+                className="fieldsight-btn"
+                onClick={() => this.delete(this.state.id)}
+              >
+                confirm
+              </a>
+            </div>
+          </Modal>
+        )}
       </React.Fragment>
     );
   }
