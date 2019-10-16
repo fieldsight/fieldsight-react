@@ -37,19 +37,18 @@ class SiteMap extends Component {
   constructor(props) {
     super(props);
     this.mapRef = createRef();
-    this.refMarkers = createRef();
+    this.featureRef = createRef();
   }
 
   getMarkerBounds = () => {
     const map =
       this.mapRef && this.mapRef.current && this.mapRef.current.leafletElement;
-    const marker =
-      this.refMarkers &&
-      this.refMarkers.current &&
-      this.refMarkers.current.leafletElement;
-    console.log(map, "check", marker);
+    const feature =
+      this.featureRef &&
+      this.featureRef.current &&
+      this.featureRef.current.leafletElement;
 
-    // !!map && !!marker && map.fitBounds(marker.getBounds());
+    !!map && !!feature && map.fitBounds(feature.getBounds());
   };
 
   render() {
@@ -74,22 +73,48 @@ class SiteMap extends Component {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <LayersControl position="topright">
-              <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
-                <TileLayer
-                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
-                />
-              </LayersControl.BaseLayer>
-              <LayersControl.BaseLayer name="OpenStreetMap.Mapnik">
+              <LayersControl.BaseLayer name="OpenStreetMap">
                 <TileLayer
                   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
               </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="google Streets">
+                <TileLayer
+                  attribution='&copy; <a href="http://maps.google.com">Google Maps</a> contributors'
+                  maxZoom="20"
+                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+                />
+              </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="google Hybrid">
+                <TileLayer
+                  attribution='&copy; <a href="http://maps.google.com">Google Maps</a> contributors'
+                  maxZoom="20"
+                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+                />
+              </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="google Satellite">
+                <TileLayer
+                  attribution='&copy; <a href="http://maps.google.com">Google Maps</a> contributors'
+                  maxZoom="20"
+                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                />
+              </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="google Terrain">
+                <TileLayer
+                  attribution='&copy; <a href="http://maps.google.com">Google Maps</a> contributors'
+                  maxZoom="20"
+                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  url="http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
+                />
+              </LayersControl.BaseLayer>
             </LayersControl>
             <FeatureGroup
               color="purple"
-              ref={this.refMarkers}
+              ref={this.featureRef}
               load={this.getMarkerBounds()}
             >
               <MyMarkersList markers={map.features} />
@@ -102,16 +127,42 @@ class SiteMap extends Component {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <LayersControl position="topright">
-              <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
-                <TileLayer
-                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
-                />
-              </LayersControl.BaseLayer>
-              <LayersControl.BaseLayer name="OpenStreetMap.Mapnik">
+              <LayersControl.BaseLayer name="OpenStreetMap">
                 <TileLayer
                   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+              </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="google Streets">
+                <TileLayer
+                  attribution='&copy; <a href="http://maps.google.com">Google Maps</a> contributors'
+                  maxZoom="20"
+                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+                />
+              </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="google Hybrid">
+                <TileLayer
+                  attribution='&copy; <a href="http://maps.google.com">Google Maps</a> contributors'
+                  maxZoom="20"
+                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+                />
+              </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="google Satellite">
+                <TileLayer
+                  attribution='&copy; <a href="http://maps.google.com">Google Maps</a> contributors'
+                  maxZoom="20"
+                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                />
+              </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="google Terrain">
+                <TileLayer
+                  attribution='&copy; <a href="http://maps.google.com">Google Maps</a> contributors'
+                  maxZoom="20"
+                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  url="http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
                 />
               </LayersControl.BaseLayer>
             </LayersControl>
