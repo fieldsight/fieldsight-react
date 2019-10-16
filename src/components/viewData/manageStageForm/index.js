@@ -42,7 +42,7 @@ class ResponseStageForm extends Component {
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
           <h5>{!data ? "Stage Forms" : "Rejected Submission"}</h5>
-          <Link to={`/project-responses/${this.props.id}/Rejected`}>
+          <Link to={this.props.url}>
             <button onClick={showViewData} className="fieldsight-btn">
               {data ? "View By Status" : "View by Form"}
             </button>
@@ -51,7 +51,7 @@ class ResponseStageForm extends Component {
         <div className="card-body">
           {!data && <ResponseTable stage_forms={this.state.stage_forms} />}
 
-          {data && <Rejectsubmission />}
+          {/*data && <Rejected id={this.props.id} />*/}
         </div>
         {!!this.state.deleted_forms && this.state.deleted_forms.length > 0
           ? !data && (

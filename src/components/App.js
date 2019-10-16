@@ -25,7 +25,11 @@ import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
 import ViewData from "./viewData";
+<<<<<<< HEAD
+import SiteData from "./siteViewData";
+=======
 //import SiteData from "./siteViewData"
+>>>>>>> 6bf6b6fd0789ba892e1b107240272932e14b53ed
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
@@ -200,6 +204,10 @@ class App extends Component {
                     <Route
                       path="/project-responses/:id"
                       render={props => <ViewData {...props} />}
+                    />
+                    <Route
+                      path="/site-responses/:id"
+                      render={props => <SiteData {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
