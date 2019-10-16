@@ -49,8 +49,6 @@ const withPagination = WrappedComponent => {
         .get(`${paginateUrl}`)
 
         .then(res => {
-          console.log(res, "res");
-
           if (this._isMounted) {
             if (res.status === 200) {
               // if (res.data.results.query === null) {
