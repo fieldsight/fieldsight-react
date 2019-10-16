@@ -48,7 +48,9 @@ class SiteMap extends Component {
       this.featureRef.current &&
       this.featureRef.current.leafletElement;
 
-    !!map && !!feature && map.fitBounds(feature.getBounds());
+    if (!!map && !!feature) {
+      map.fitBounds(feature.getBounds());
+    }
   };
 
   render() {
