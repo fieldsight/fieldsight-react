@@ -7,8 +7,10 @@ import Modal from "../../common/Modal";
 class SubmissionData extends Component {
   state = {
     fid: this.props.match.params && this.props.match.params.fid,
+    id: this.props.match.params && this.props.match.params.id,
     showConfirmation: false,
-    id: ""
+    siteList: [],
+    mastersiteList: []
   };
 
   componentDidMount() {
@@ -24,8 +26,10 @@ class SubmissionData extends Component {
       fsxf_id: fid,
       status: "form-submission"
     });
+
     this.setState({
-      fid
+      fid,
+      siteList: this.props.siteList
     });
   }
 
@@ -41,30 +45,26 @@ class SubmissionData extends Component {
     });
   };
   delete = id => {
-    console.log(id, "gfhjk");
+    let list = this.state.siteList;
 
     axios
       .get(`/fv3/api/delete-submission/${id}/`)
       .then(res => {
-        console.log(res, "delete");
-
         if (res.status == 204) {
-          console.log("delete res");
-          let delet = this.props.siteList.filter(data => {
-            if (id !== data.id) {
-              return data;
-            }
-          });
-          {
-            console.log(this.state.showConfirmation, "1");
-          }
-          this.setState(
-            {
+          this.setState(state => {
+            const result = list.filter(data => {
+              if (id !== data.submission_id) {
+                return data;
+              }
+            });
+            list = result;
+
+            return {
               id: "",
-              showConfirmation: false
-            },
-            () => console.log(this.state.showConfirmation, "2")
-          );
+              showConfirmation: false,
+              siteList: list
+            };
+          });
         }
       })
       .catch(err => {
@@ -72,6 +72,33 @@ class SubmissionData extends Component {
       });
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.siteList != this.props.siteList) {
+      this.setState({
+        siteList: nextProps.siteList,
+        mastersiteList: nextProps.siteList
+      });
+    }
+  }
+  handleChange = async e => {
+    const {
+      target: { value }
+    } = e;
+    const { siteList, mastersiteList } = this.state;
+
+    if (value) {
+      const search = await siteList.filter(result => {
+        return result.submitted_by.toLowerCase().includes(value.toLowerCase());
+      });
+      this.setState({
+        siteList: search
+      });
+    } else {
+      this.setState({
+        siteList: mastersiteList
+      });
+    }
+  };
   render() {
     return (
       <React.Fragment>
@@ -117,9 +144,8 @@ class SubmissionData extends Component {
                 </tr>
               </thead>
               <tbody>
-                {console.log(this.props.form_id_string, "ghjk")}
-                {this.props.siteList.length > 0 &&
-                  this.props.siteList.map((list, key) => {
+                {this.state.siteList.length > 0 &&
+                  this.state.siteList.map((list, key) => {
                     return (
                       <tr key={key}>
                         <td>{key + 1}</td>
@@ -148,16 +174,14 @@ class SubmissionData extends Component {
                           </a>
                         </td>
                         <td>
-                          <a>
-                            <a
-                              className="td-delete-btn"
-                              onClick={() => {
-                                this.handleDelete(list.submission_id);
-                              }}
-                            >
-                              {" "}
-                              <i className="la la-trash-o"> </i>{" "}
-                            </a>
+                          <a
+                            className="td-delete-btn"
+                            onClick={() => {
+                              this.handleDelete(list.submission_id);
+                            }}
+                          >
+                            {" "}
+                            <i className="la la-trash-o"> </i>{" "}
                           </a>
                         </td>
                       </tr>
@@ -199,8 +223,8 @@ class SubmissionData extends Component {
 
                         {this.props.renderPageNumbers({
                           type: "formSubmission",
-                          projectId: id,
-                          fsxf_id: fid,
+                          projectId: this.state.id,
+                          fsxf_id: this.state.fid,
                           status: "form-submission"
                         })}
 
