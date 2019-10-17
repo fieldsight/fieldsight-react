@@ -16,7 +16,7 @@ class AddForm extends Component {
         loader
       }
     } = this;
-    console.log(loader, "project", formList, projectList);
+    // console.log(loader, "project", formList, projectList);
 
     return (
       <>
@@ -69,57 +69,74 @@ class AddForm extends Component {
             className="thumb-list mr-0 "
             style={{ position: "relative", height: "327px" }}
           >
-            {formList.length == 0 ? (
-              <div>No Form Available</div>
-            ) : (
-              <form
-                className="floating-form"
-                onSubmit={e => {
-                  e.preventDefault();
-                }}
-              >
-                <div className="form-group search-group">
-                  <input
-                    type="search"
-                    className="form-control"
-                    placeholder="Search"
-                    onChange={onChangeHandler}
-                  />
-                  <i className="la la-search" />
-                </div>
-                {formList.map((each, i) => {
-                  return (
-                    <div className="form-group" key={`form_${i}`}>
-                      <RadioElement
-                        label={each.title}
-                        className="radiobox"
-                        name="myform"
-                        value={each.id}
-                        changeHandler={e => {
-                          handleRadioChange(e, each.title);
-                        }}
-                      />
-                      <div className="select-form-info">
-                        <span className="form-owner">{each.owner}</span>
-                        <time>
-                          <i className="la la-clock-o"></i>
-                          {each.date_created}
-                        </time>
+            <form
+              className="floating-form"
+              onSubmit={e => {
+                e.preventDefault();
+              }}
+            >
+              <div className="form-group search-group">
+                <input
+                  type="search"
+                  className="form-control"
+                  placeholder="Search"
+                  onChange={onChangeHandler}
+                />
+                <i className="la la-search" />
+              </div>
+              {formList.length == 0 ? (
+                <div>No Form Available</div>
+              ) : (
+                // <form
+                //   className="floating-form"
+                //   onSubmit={e => {
+                //     e.preventDefault();
+                //   }}
+                // >
+                //   <div className="form-group search-group">
+                //     <input
+                //       type="search"
+                //       className="form-control"
+                //       placeholder="Search"
+                //       onChange={onChangeHandler}
+                //     />
+                //     <i className="la la-search" />
+                //   </div>
+                <div>
+                  {formList.map((each, i) => {
+                    return (
+                      <div className="form-group" key={`form_${i}`}>
+                        <RadioElement
+                          label={each.title}
+                          className="radiobox"
+                          name="myform"
+                          value={each.id}
+                          changeHandler={e => {
+                            handleRadioChange(e, each.title);
+                          }}
+                        />
+                        <div className="select-form-info">
+                          <span className="form-owner">{each.owner}</span>
+                          <time>
+                            <i className="la la-clock-o"></i>
+                            {each.date_created}
+                          </time>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-                <div className="form-group pull-right no-margin">
-                  <button
-                    type="button"
-                    className="fieldsight-btn"
-                    onClick={handleSaveForm}
-                  >
-                    Save
-                  </button>
+                    );
+                  })}
+                  <div className="form-group pull-right no-margin">
+                    <button
+                      type="button"
+                      className="fieldsight-btn"
+                      onClick={handleSaveForm}
+                    >
+                      Save
+                    </button>
+                  </div>
                 </div>
-              </form>
-            )}
+              )}
+            </form>
           </div>
         )}
 
@@ -128,66 +145,68 @@ class AddForm extends Component {
             className="thumb-list mr-0 "
             style={{ position: "relative", height: "327px" }}
           >
-            {projectList.length == 0 ? (
-              <div>No Form Available</div>
-            ) : (
-              <form
-                className="floating-form"
-                onSubmit={e => {
-                  e.preventDefault();
-                }}
-              >
-                <div className="form-group search-group">
-                  <input
-                    type="search"
-                    className="form-control"
-                    placeholder="Search"
-                    onChange={onChangeHandler}
-                  />
-                  <i className="la la-search" />
-                </div>
-                {projectList.map((each, i) => (
-                  <Fragment key={`form_${i}`}>
-                    {each.forms && each.forms.length > 0 && (
-                      <div className="form-group">
-                        <div>
-                          <h5>{each.name}</h5>
-                        </div>
-                        {each.forms.map((item, i) => (
-                          <div className="form-group" key={`form_${i}`}>
-                            <RadioElement
-                              label={item.title}
-                              className="radiobox"
-                              name="myform"
-                              value={item.id}
-                              changeHandler={e => {
-                                handleRadioChange(e, item.title);
-                              }}
-                            />
-                            <div className="select-form-info">
-                              <span className="form-owner">{item.owner}</span>
-                              <time>
-                                <i className="la la-clock-o"></i>
-                                {each.date_created}
-                              </time>
-                            </div>
+            <form
+              className="floating-form"
+              onSubmit={e => {
+                e.preventDefault();
+              }}
+            >
+              <div className="form-group search-group">
+                <input
+                  type="search"
+                  className="form-control"
+                  placeholder="Search"
+                  onChange={onChangeHandler}
+                />
+                <i className="la la-search" />
+              </div>
+              {projectList.length == 0 ? (
+                <div>No Form Available</div>
+              ) : (
+                <div>
+                  {projectList.map((each, i) => (
+                    <Fragment key={`form_${i}`}>
+                      {each.forms && each.forms.length > 0 && (
+                        <div className="form-group">
+                          <div>
+                            <h5>{each.name}</h5>
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </Fragment>
-                ))}
-                <div className="form-group pull-right no-margin">
-                  <button
-                    type="button"
-                    className="fieldsight-btn"
-                    onClick={handleSaveForm}
-                  >
-                    Save
-                  </button>
+                          {each.forms.map((item, i) => (
+                            <div className="form-group" key={`form_${i}`}>
+                              <RadioElement
+                                label={item.title}
+                                className="radiobox"
+                                name="myform"
+                                value={item.id}
+                                changeHandler={e => {
+                                  handleRadioChange(e, item.title);
+                                }}
+                              />
+                              <div className="select-form-info">
+                                <span className="form-owner">{item.owner}</span>
+                                <time>
+                                  <i className="la la-clock-o"></i>
+                                  {each.date_created}
+                                </time>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </Fragment>
+                  ))}
+                  <div className="form-group pull-right no-margin">
+                    <button
+                      type="button"
+                      className="fieldsight-btn"
+                      onClick={handleSaveForm}
+                    >
+                      Save
+                    </button>
+                  </div>
                 </div>
-              </form>
-            )}
+              )}
+            </form>
           </div>
         )}
 
@@ -196,58 +215,60 @@ class AddForm extends Component {
             className="thumb-list mr-0 "
             style={{ position: "relative", height: "327px" }}
           >
-            {sharedList.length == 0 ? (
-              <div>No Form Available</div>
-            ) : (
-              <form
-                className="floating-form"
-                onSubmit={e => {
-                  e.preventDefault();
-                }}
-              >
-                <div className="form-group search-group">
-                  <input
-                    type="search"
-                    className="form-control"
-                    placeholder=""
-                    placeholder="Search"
-                    onChange={onChangeHandler}
-                  />
-                  <i className="la la-search" />
-                </div>
-                {sharedList.map((each, i) => {
-                  return (
-                    <div className="form-group" key={`form_${i}`}>
-                      <RadioElement
-                        label={each.title}
-                        className="radiobox"
-                        name="myform"
-                        value={each.id}
-                        changeHandler={e => {
-                          handleRadioChange(e, each.title);
-                        }}
-                      />
-                      <div className="select-form-info">
-                        <span className="form-owner">{each.owner}</span>
-                        <time>
-                          <i className="la la-clock-o"></i>
-                          {each.date_created}
-                        </time>
+            <form
+              className="floating-form"
+              onSubmit={e => {
+                e.preventDefault();
+              }}
+            >
+              <div className="form-group search-group">
+                <input
+                  type="search"
+                  className="form-control"
+                  placeholder=""
+                  placeholder="Search"
+                  onChange={onChangeHandler}
+                />
+                <i className="la la-search" />
+              </div>
+              {sharedList.length == 0 ? (
+                <div>No Form Available</div>
+              ) : (
+                <div>
+                  {sharedList.map((each, i) => {
+                    return (
+                      <div className="form-group" key={`form_${i}`}>
+                        <RadioElement
+                          label={each.title}
+                          className="radiobox"
+                          name="myform"
+                          value={each.id}
+                          changeHandler={e => {
+                            handleRadioChange(e, each.title);
+                          }}
+                        />
+                        <div className="select-form-info">
+                          <span className="form-owner">{each.owner}</span>
+                          <time>
+                            <i className="la la-clock-o"></i>
+                            {each.date_created}
+                          </time>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-                <div className="form-group pull-right no-margin">
-                  <button
-                    type="button"
-                    className="fieldsight-btn"
-                    onClick={handleSaveForm}
-                  >
-                    Save
-                  </button>
+                    );
+                  })}
+                  <div className="form-group pull-right no-margin">
+                    <button
+                      type="button"
+                      className="fieldsight-btn"
+                      onClick={handleSaveForm}
+                    >
+                      Save
+                    </button>
+                  </div>
                 </div>
-              </form>
-            )}
+              )}
+            </form>
           </div>
         )}
       </>
