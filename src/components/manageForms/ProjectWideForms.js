@@ -109,7 +109,7 @@ class ProjectWideForms extends Component {
             return { data: newData };
           },
           () => {
-            successToast("Form", "updated");
+            successToast("Deploy Status", "updated");
           }
         );
       })

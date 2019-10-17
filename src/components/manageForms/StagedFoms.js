@@ -422,7 +422,7 @@ class StagedForms extends Component {
             return { subStageData: newData };
           },
           () => {
-            successToast("updated", "successfully");
+            successToast("Deploy Status", "updated");
           }
         );
       })
@@ -624,7 +624,7 @@ class StagedForms extends Component {
               };
             },
             () => {
-              successToast("updated", "");
+              successToast("Deploy Status", "updated");
             }
           );
       })

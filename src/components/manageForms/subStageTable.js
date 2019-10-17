@@ -9,6 +9,7 @@ import {
   sortableHandle
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
+import DeleteModal from "../common/DeleteModal";
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -29,98 +30,92 @@ const formatDate = date => {
   return year + "-" + monthIndex + "-" + dateIdx;
 };
 
-const DragHandle = sortableHandle(
-  ({ sub, index, formTable }) => (
-    // data.map((sub, index) => (
-    <tr key={`sub_stage_${index}`}>
-      {/* <> */}
-      <td>
-        <span className="drag-icon">
-          <i className="la la-ellipsis-v"></i>
-          <i className="la la-ellipsis-v"></i>
-        </span>
-        {!!sub && sub.name}
-      </td>
-      <td>{sub && sub.xf && sub.xf.title ? sub.xf.title : "-"}</td>
-      <td>{sub && sub.responses_count}</td>
-      <td>
-        <EducationMaterialForProject
-          formTable={formTable}
-          item={sub && sub}
-          toDrag={true}
-          // editForm={handleEditGuide}
-        />
-      </td>
-      <td>{sub && sub.weight}</td>
-      <td>
-        <time>
-          <i className="la la-clock-o"></i>{" "}
-          {formatDate(new Date(sub && sub.date_created))}
-        </time>
-      </td>
-      <td>
-        <a className={getClass(sub && sub.default_submission_status)}>
-          {getStatus(sub && sub.default_submission_status)}
-        </a>
-      </td>
-      <td>
-        <GetActionForProject
-          formTable={formTable}
-          item={sub && sub}
-          // deployAction={changeDeployStatus}
-          // deleteAction={deleteItem}
-          // editAction={editSubStageForm}
-        />
-      </td>
-      {/* </> */}
-    </tr>
-  )
-  // ))
-);
+const DragHandle = sortableHandle(({ sub, index, formTable }) => (
+  <tr key={`sub_stage_${index}`}>
+    <td>
+      <span className="drag-icon">
+        <i className="la la-ellipsis-v"></i>
+        <i className="la la-ellipsis-v"></i>
+      </span>
+      {!!sub && sub.name}
+    </td>
+    <td>{sub && sub.xf && sub.xf.title ? sub.xf.title : "-"}</td>
+    <td>{sub && sub.responses_count}</td>
+    <td>
+      <EducationMaterialForProject
+        formTable={formTable}
+        item={sub && sub}
+        toDrag={true}
+        // editForm={handleEditGuide}
+      />
+    </td>
+    <td>{sub && sub.weight}</td>
+    <td>
+      <time>
+        <i className="la la-clock-o"></i>{" "}
+        {formatDate(new Date(sub && sub.date_created))}
+      </time>
+    </td>
+    <td>
+      <a className={getClass(sub && sub.default_submission_status)}>
+        {getStatus(sub && sub.default_submission_status)}
+      </a>
+    </td>
+    <td>
+      <GetActionForProject
+        formTable={formTable}
+        item={sub && sub}
+        toDrag={true}
+        // deployAction={changeDeployStatus}
+        // deleteAction={deleteItem}
+        // editAction={editSubStageForm}
+      />
+    </td>
+  </tr>
+));
 
 const EducationMaterialForProject = props => {
   const { formTable, item, editForm, toDrag } = props;
   if (formTable == "project") {
     return (
-      <>
-        {!!toDrag ? (
-          <span>
-            <i className="la la-book" />
-            {item && item.em ? item.em.title : ""}
-          </span>
-        ) : (
-          <span>
-            <a onClick={() => editForm(item.em, item.id)}>
-              <i className="la la-book" />
-              {item && item.em ? item.em.title : ""}
-            </a>
-          </span>
-        )}
-      </>
+      <span className={`${!!toDrag} ? disabled : ''`}>
+        <a onClick={() => editForm(item.em, item.id)}>
+          <i className="la la-book" />
+          {item && item.em ? item.em.title : ""}
+        </a>
+      </span>
     );
   } else if (formTable == "site") {
     return (
-      <>
-        <span>
-          {!!item.site && (
-            <a onClick={() => editForm(item.em, item.id)}>
-              <i className="la la-book" />
-              {item && item.em ? item.em.title : ""}
-            </a>
-          )}
-        </span>
-      </>
+      <span className={`${!!toDrag} ? disabled : ''`}>
+        {!!item.site && (
+          <a onClick={() => editForm(item.em, item.id)}>
+            <i className="la la-book" />
+            {item && item.em ? item.em.title : ""}
+          </a>
+        )}
+      </span>
     );
   }
 };
 const GetActionForProject = props => {
-  const { formTable, item, deployAction, deleteAction, editAction } = props;
+  const {
+    formTable,
+    item,
+    deployAction,
+    isDelete,
+    handleToggle,
+    handleCancel,
+    handleConfirm,
+    editAction,
+    toDrag
+  } = props;
   if (formTable == "project") {
     return (
       <div>
         {item && !!item.is_deployed && (
           <a
-            className="rejected td-edit-btn td-btn"
+            className={`rejected td-edit-btn td-btn ${!!toDrag} ? disabled : ''`}
             onClick={() => deployAction(item.id, item.is_deployed)}
           >
             <OverlayTrigger
@@ -134,7 +129,7 @@ const GetActionForProject = props => {
         {item && !item.is_deployed && (
           <span>
             <a
-              className="td-edit-btn td-btn approved"
+              className={`td-edit-btn td-btn approved ${!!toDrag} ? disabled : ''`}
               onClick={() => deployAction(item.id, item.is_deployed)}
             >
               <OverlayTrigger
@@ -148,7 +143,7 @@ const GetActionForProject = props => {
         )}
         <a
           onClick={() => editAction(item)}
-          className="pending td-edit-btn td-btn"
+          className={`pending td-edit-btn td-btn ${!!toDrag} ? disabled : ''`}
         >
           <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
             <i className="la la-edit"> </i>
@@ -158,8 +153,8 @@ const GetActionForProject = props => {
         {item && !item.is_deployed && (
           <span>
             <a
-              className="rejected td-edit-btn td-btn"
-              onClick={() => deleteAction(item.id, item.is_deployed)}
+              className={`rejected td-edit-btn td-btn ${!!toDrag} ? disabled : ''`}
+              onClick={() => handleToggle(item.id, item.is_deployed)}
             >
               <OverlayTrigger
                 placement="top"
@@ -170,6 +165,13 @@ const GetActionForProject = props => {
             </a>
           </span>
         )}
+        {isDelete && (
+          <DeleteModal
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            onToggle={handleToggle}
+          />
+        )}
       </div>
     );
   } else if (formTable == "site") {
@@ -177,7 +179,7 @@ const GetActionForProject = props => {
       <div>
         {item && !!item.site && !!item.is_deployed && (
           <a
-            className="rejected td-edit-btn td-btn"
+            className={`rejected td-edit-btn td-btn ${!!toDrag} ? disabled : ''`}
             onClick={() => deployAction(item.id, item.is_deployed)}
           >
             <OverlayTrigger
@@ -191,7 +193,7 @@ const GetActionForProject = props => {
         {item && !!item.site && !item.is_deployed && (
           <span>
             <a
-              className="td-edit-btn td-btn approved"
+              className={`td-edit-btn td-btn approved ${!!toDrag} ? disabled : ''`}
               onClick={() => deployAction(item.id, item.is_deployed)}
             >
               <OverlayTrigger
@@ -206,7 +208,7 @@ const GetActionForProject = props => {
         {item && !!item.site && (
           <a
             onClick={() => editAction(item)}
-            className="pending td-edit-btn td-btn"
+            className={`pending td-edit-btn td-btn ${!!toDrag} ? disabled : ''`}
           >
             <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
               <i className="la la-edit"> </i>
@@ -216,8 +218,8 @@ const GetActionForProject = props => {
         {item && !!item.site && !item.is_deployed && (
           <span>
             <a
-              className="rejected td-edit-btn td-btn"
-              onClick={() => deleteAction(item.id, item.is_deployed)}
+              className={`rejected td-edit-btn td-btn ${!!toDrag} ? disabled : ''`}
+              onClick={() => handleToggle(item.id, item.is_deployed)}
             >
               <OverlayTrigger
                 placement="top"
@@ -227,6 +229,13 @@ const GetActionForProject = props => {
               </OverlayTrigger>
             </a>
           </span>
+        )}
+        {isDelete && (
+          <DeleteModal
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            onToggle={handleToggle}
+          />
         )}
       </div>
     );
@@ -259,8 +268,34 @@ const SortableItem = sortableElement(({ sub, index, formTable }) => (
 
 class SubStageTable extends Component {
   state = {
-    data: this.props.data
+    data: this.props.data,
+    confirmDelete: false,
+    formId: "",
+    isDeploy: false
   };
+
+  handleToggle = (formId, isDeploy) => {
+    this.setState({
+      confirmDelete: !this.state.confirmDelete,
+      formId,
+      isDeploy
+    });
+  };
+
+  handleConfirm = () => {
+    this.setState(
+      {
+        confirmDelete: false
+      },
+      () => {
+        this.props.deleteItem(this.state.formId, this.state.isDeploy);
+      }
+    );
+  };
+  handleCancel = () => {
+    this.setState({ confirmDelete: false });
+  };
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.data != this.props.data) {
       this.setState({
@@ -356,7 +391,10 @@ class SubStageTable extends Component {
                           formTable={formTable}
                           item={sub}
                           deployAction={changeDeployStatus}
-                          deleteAction={deleteItem}
+                          isDelete={this.state.confirmDelete}
+                          handleConfirm={this.handleConfirm}
+                          handleToggle={this.handleToggle}
+                          handleCancel={this.handleCancel}
                           editAction={editSubStageForm}
                         />
                       </td>
