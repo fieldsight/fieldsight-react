@@ -11,18 +11,29 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import SubStageTable from "./subStageTable";
 import { DotLoader } from "../myForm/Loader";
 
-const DragHandle = sortableHandle(() => (
-  <span className="drag-icon">
-    <i className="la la-ellipsis-v"></i>
-    <i className="la la-ellipsis-v"></i>
-  </span>
+const DragHandle = sortableHandle(({ name, order }) => (
+  <Card.Header>
+    <span className="drag-icon">
+      <i className="la la-ellipsis-v"></i>
+      <i className="la la-ellipsis-v"></i>
+    </span>
+    <h5>
+      <Accordion.Toggle
+        as={Button}
+        variant="link"
+        eventKey={`${order}`}
+        style={{ pointerEvents: "none" }}
+      >
+        {name}
+      </Accordion.Toggle>
+    </h5>
+  </Card.Header>
 ));
 
-const SortableItem = sortableElement(({ name }) => (
-  <h5 className="dragable-stage">
-    <DragHandle />
-    {name}
-  </h5>
+const SortableItem = sortableElement(({ name, order }) => (
+  <div className="dragable-stage">
+    <DragHandle name={name} order={order} />
+  </div>
 ));
 
 const SortableContainer = sortableContainer(({ children }) => {
@@ -122,46 +133,47 @@ class SortableStage extends Component {
             {data.length > 0 &&
               data.map((each, index) => (
                 <Card key={`key_${index}`} className=" no-boxshadow mrb-15">
-                  <Card.Header>
-                    <h5>
-                      <Accordion.Toggle
-                        as={Button}
-                        variant="link"
-                        eventKey={`${each.order}`}
-                        // className="card-header"
-                        onClick={() => {
-                          handleRequestSubStage(each.id, each.order);
-                        }}
-                      >
-                        {reorder && (
-                          <SortableItem
-                            key={`item-${each.id}`}
-                            index={index}
-                            name={each.name}
-                          />
-                        )}
-                        {!reorder && <h5>{each.name}</h5>}
-                        {!!isProjectForm && (
-                          <span
-                            className="edit-stage"
-                            data-tab="addSubStage-popup"
-                            onClick={() => handleClickEdit(each)}
-                          >
-                            <i className="la la-edit"></i>
-                          </span>
-                        )}
-                        {!isProjectForm && !!each.site && (
-                          <span
-                            className="edit-stage"
-                            data-tab="addSubStage-popup"
-                            onClick={() => handleClickEdit(each)}
-                          >
-                            <i className="la la-edit"></i>
-                          </span>
-                        )}
-                      </Accordion.Toggle>
-                    </h5>
-                  </Card.Header>
+                  {!!reorder ? (
+                    <SortableItem
+                      key={`item-${each.id}`}
+                      index={index}
+                      name={each.name}
+                      order={each.order}
+                    />
+                  ) : (
+                    <Card.Header>
+                      <h5>
+                        <Accordion.Toggle
+                          as={Button}
+                          variant="link"
+                          eventKey={`${each.order}`}
+                          onClick={() => {
+                            handleRequestSubStage(each.id, each.order);
+                          }}
+                        >
+                          <h5>{each.name}</h5>
+                          {!!isProjectForm && (
+                            <span
+                              className="edit-stage"
+                              data-tab="addSubStage-popup"
+                              onClick={() => handleClickEdit(each)}
+                            >
+                              <i className="la la-edit"></i>
+                            </span>
+                          )}
+                          {!isProjectForm && !!each.site && (
+                            <span
+                              className="edit-stage"
+                              data-tab="addSubStage-popup"
+                              onClick={() => handleClickEdit(each)}
+                            >
+                              <i className="la la-edit"></i>
+                            </span>
+                          )}
+                        </Accordion.Toggle>
+                      </h5>
+                    </Card.Header>
+                  )}
 
                   <Accordion.Collapse eventKey={`${each.order}`}>
                     <Card.Body>

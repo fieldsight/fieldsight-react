@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import Modal from "../common/DeleteModal";
+import DeleteModal from "../common/DeleteModal";
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -46,7 +48,16 @@ const EducationMaterialForProject = props => {
   }
 };
 const GetActionForProject = props => {
-  const { formTable, item, deployAction, deleteAction, editAction } = props;
+  const {
+    formTable,
+    item,
+    deployAction,
+    isDelete,
+    handleToggle,
+    handleCancel,
+    handleConfirm,
+    editAction
+  } = props;
   if (formTable == "project") {
     return (
       <div>
@@ -91,7 +102,7 @@ const GetActionForProject = props => {
           <span>
             <a
               className="rejected td-edit-btn td-btn"
-              onClick={() => deleteAction(item.id, item.is_deployed)}
+              onClick={() => handleToggle(item.id, item.is_deployed)}
             >
               <OverlayTrigger
                 placement="top"
@@ -101,6 +112,13 @@ const GetActionForProject = props => {
               </OverlayTrigger>
             </a>
           </span>
+        )}
+        {isDelete && (
+          <DeleteModal
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            onToggle={handleToggle}
+          />
         )}
       </div>
     );
@@ -149,7 +167,7 @@ const GetActionForProject = props => {
           <span>
             <a
               className="rejected td-edit-btn td-btn"
-              onClick={() => deleteAction(item.id, item.is_deployed)}
+              onClick={() => handleToggle(item.id, item.is_deployed)}
             >
               <OverlayTrigger
                 placement="top"
@@ -160,12 +178,47 @@ const GetActionForProject = props => {
             </a>
           </span>
         )}
+        {isDelete && (
+          <DeleteModal
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            onToggle={handleToggle}
+          />
+        )}
       </div>
     );
   }
 };
 
 class GeneralFormTable extends Component {
+  state = {
+    confirmDelete: false,
+    formId: "",
+    isDeploy: false
+  };
+
+  handleToggle = (formId, isDeploy) => {
+    this.setState({
+      confirmDelete: !this.state.confirmDelete,
+      formId,
+      isDeploy
+    });
+  };
+
+  handleConfirm = () => {
+    this.setState(
+      {
+        confirmDelete: false
+      },
+      () => {
+        this.props.deleteItem(this.state.formId, this.state.isDeploy);
+      }
+    );
+  };
+  handleCancel = () => {
+    this.setState({ confirmDelete: false });
+  };
+
   render() {
     const {
       props: {
@@ -173,7 +226,6 @@ class GeneralFormTable extends Component {
         loader,
         handleEditGuide,
         changeDeployStatus,
-        deleteItem,
         handleEditForm,
         formTable
       }
@@ -236,7 +288,10 @@ class GeneralFormTable extends Component {
                         formTable={formTable}
                         item={item}
                         deployAction={changeDeployStatus}
-                        deleteAction={deleteItem}
+                        isDelete={this.state.confirmDelete}
+                        handleConfirm={this.handleConfirm}
+                        handleToggle={this.handleToggle}
+                        handleCancel={this.handleCancel}
                         editAction={handleEditForm}
                       />
                     </td>

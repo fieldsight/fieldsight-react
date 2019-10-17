@@ -91,6 +91,56 @@ class ScheduleForms extends Component {
     }
   }
 
+  onChangeHandler = async e => {
+    const { activeTab } = this.state;
+    const searchValue = e.target.value;
+
+    if (searchValue) {
+      if (activeTab == "myForms") {
+        const filteredData = await this.props.myForms.filter(form => {
+          return (
+            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        });
+
+        this.setState({
+          myFormList: filteredData
+        });
+      } else if (activeTab == "projectForms") {
+        const awaitedData = await this.props.projectForms.map(project => {
+          const filteredData = project.forms.filter(form => {
+            return (
+              form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+              form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            );
+          });
+          return { ...project, forms: filteredData };
+        });
+        this.setState({
+          projectFormList: awaitedData
+        });
+      } else if (activeTab == "sharedForms") {
+        const filteredData = await this.props.sharedForms.filter(form => {
+          return (
+            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        });
+
+        this.setState({
+          sharedFormList: filteredData
+        });
+      }
+    } else {
+      this.setState({
+        myFormList: this.props.myForms,
+        sharedFormList: this.props.sharedForms,
+        projectFormList: this.props.projectForms
+      });
+    }
+  };
+
   changeDeployStatus = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
     const deployUrl = !!isProjectForm
@@ -113,7 +163,7 @@ class ScheduleForms extends Component {
             return { data: newData };
           },
           () => {
-            successToast("Form", "updated");
+            successToast("Deploy Status", "updated");
           }
         );
       })
@@ -259,12 +309,12 @@ class ScheduleForms extends Component {
           can_edit: data.isEdit,
           donor_visibility: data.isDonor,
           regions:
-            data.regionSelected.length > 0
+            !!data.regionSelected && data.regionSelected.length > 0
               ? data.regionSelected.map(each => each.id)
               : [],
           can_delete: data.isDelete,
           types:
-            data.typeSelected.length > 0
+            !!data.typeSelected && data.typeSelected.length > 0
               ? data.typeSelected.map(each => each.id)
               : []
         }
@@ -303,11 +353,11 @@ class ScheduleForms extends Component {
         setting: {
           id: data.settingId,
           types:
-            data.typeSelected.length > 0
+            !!data.typeSelected && data.typeSelected.length > 0
               ? data.typeSelected.map(each => each.id)
               : [],
           regions:
-            data.regionSelected.length > 0
+            !!data.regionSelected && data.regionSelected.length > 0
               ? data.regionSelected.map(each => each.id)
               : [],
           notify_incomplete_schedule: data.notifyIncomplete,
@@ -359,6 +409,7 @@ class ScheduleForms extends Component {
       }
     );
   };
+
   render() {
     const {
       state: {

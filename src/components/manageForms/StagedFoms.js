@@ -62,9 +62,11 @@ class StagedForms extends Component {
       this.setState(
         {
           loader: true,
-          isProjectForm
+          isProjectForm: true
         },
-        this.requestStagedData(id, true)
+        () => {
+          this.requestStagedData(id, true);
+        }
       );
     } else if (isSiteForm) {
       this.setState(
@@ -72,7 +74,9 @@ class StagedForms extends Component {
           loader: true,
           isProjectForm: false
         },
-        this.requestStagedData(id, false)
+        () => {
+          this.requestStagedData(id, false);
+        }
       );
     }
   }
@@ -96,20 +100,12 @@ class StagedForms extends Component {
   };
 
   handleSubmitStageForm = data => {
-    const {
-      name,
-      desc,
-      selectedRegion,
-      selectedType,
-      order,
-      id,
-      isProjectForm
-    } = data;
+    const { name, desc, selectedRegion, selectedType, order, id } = data;
     const mapRegion = selectedRegion.map(each => each.id);
     const mapType = selectedType.map(each => each.id);
     const newOrder = order > 0 ? order : this.state.data.length + 1;
     if (order > 0) {
-      const updateStageApi = !!isProjectForm
+      const updateStageApi = !!this.state.isProjectForm
         ? `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`
         : `fv3/api/manage-forms/stages/${id}/?site_id=${this.state.id}`;
       const body = {
@@ -148,7 +144,7 @@ class StagedForms extends Component {
           errorToast(errors.data.error);
         });
     } else {
-      const postStageApi = !!isProjectForm
+      const postStageApi = !!this.state.isProjectForm
         ? `fv3/api/manage-forms/stages/?project_id=${this.state.id}`
         : `fv3/api/manage-forms/stages/?site_id=${this.state.id}`;
       const body = {
@@ -248,7 +244,6 @@ class StagedForms extends Component {
   };
   handleCreateForm = data => {
     const { stageId, substageId, xf } = this.state;
-// issue in creating new stage in project level
     if (!!substageId) {
       const body = {
         id: substageId,
@@ -259,13 +254,20 @@ class StagedForms extends Component {
         xf: xf,
         default_submission_status: data.status,
         setting: {
-          types: data.typeSelected,
-          regions: data.regionSelected,
+          types:
+            !!data.typeSelected && data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : [],
+          regions:
+            !!data.regionSelected && data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
           donor_visibility: data.isDonor,
           can_edit: data.isEdit,
           can_delete: data.isDelete
         }
       };
+      console.log("stage ko", data);
 
       axios
         .put(
@@ -307,8 +309,14 @@ class StagedForms extends Component {
         xf: xf,
         default_submission_status: data.status,
         setting: {
-          types: data.typeSelected,
-          regions: data.regionSelected,
+          types:
+            !!data.typeSelected && data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : [],
+          regions:
+            !!data.regionSelected && data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
           donor_visibility: data.isDonor,
           can_edit: data.isEdit,
           can_delete: data.isDelete
@@ -414,7 +422,7 @@ class StagedForms extends Component {
             return { subStageData: newData };
           },
           () => {
-            successToast("updated", "successfully");
+            successToast("Deploy Status", "updated");
           }
         );
       })
@@ -529,17 +537,12 @@ class StagedForms extends Component {
     });
   };
   onChangeHandler = async e => {
-    const {
-      activeTab,
-      myFormList,
-      projectFormList,
-      sharedFormList
-    } = this.state;
+    const { activeTab } = this.state;
     const searchValue = e.target.value;
 
     if (searchValue) {
       if (activeTab == "myForms") {
-        const filteredData = await myFormList.filter(form => {
+        const filteredData = await this.props.myForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -550,7 +553,7 @@ class StagedForms extends Component {
           myFormList: filteredData
         });
       } else if (activeTab == "projectForms") {
-        const awaitedData = await projectFormList.map(project => {
+        const awaitedData = await this.props.projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
               form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -563,7 +566,7 @@ class StagedForms extends Component {
           projectFormList: awaitedData
         });
       } else if (activeTab == "sharedForms") {
-        const filteredData = await sharedFormList.filter(form => {
+        const filteredData = await this.props.sharedForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -621,7 +624,7 @@ class StagedForms extends Component {
               };
             },
             () => {
-              successToast("updated", "");
+              successToast("Deploy Status", "updated");
             }
           );
       })
@@ -737,8 +740,7 @@ class StagedForms extends Component {
       handleSaveSubstageReorder,
       handleDeployAllSubstages,
       handleDeleteAllSubstages,
-      handleDeployAllStages,
-      handleDeleteAllStages
+      handleDeployAllStages
     } = this;
     let deployCount = 0;
     let canReorder = "";
@@ -746,7 +748,7 @@ class StagedForms extends Component {
     data.map(each => {
       deployCount += each.undeployed_count;
     });
-    // console.log(deployCount, "deployCount");
+
     const arrToReorder = data.map(each => {
       if (!!each.site) {
         return true;

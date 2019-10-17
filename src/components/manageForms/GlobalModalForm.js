@@ -154,8 +154,9 @@ class GlobalModalForm extends Component {
     this._isMounted = true;
     const { typeOptions, regionOptions, formData } = this.props;
 
-    const regionSelected = formData && formData.regions;
-    const typeSelected = formData && formData.types;
+    const regionSelected =
+      formData && formData.setting && formData.setting.regions;
+    const typeSelected = formData && formData.setting && formData.setting.types;
 
     if (this._isMounted) {
       const newRegionArr =
@@ -178,7 +179,7 @@ class GlobalModalForm extends Component {
 
       if (!!regionSelected && regionSelected.length > 0) {
         regionOptions.map(region => {
-          if (stageData.regions.indexOf(region.id) > -1) {
+          if (regionSelected.indexOf(region.id) > -1) {
             selectedRegion.push({
               ...region,
               value: region.identifier,
@@ -192,7 +193,7 @@ class GlobalModalForm extends Component {
 
       if (typeSelected && typeSelected.length > 0) {
         typeOptions.map(type => {
-          if (stageData.tags.indexOf(type.id) > -1) {
+          if (typeSelected.indexOf(type.id) > -1) {
             selectedType.push({
               ...type,
               value: type.identifier,
@@ -208,8 +209,8 @@ class GlobalModalForm extends Component {
         hasLoaded: true,
         regionDropdown: newRegionArr,
         typeDropdown: newTypeArr,
-        regionSelected: newRegionArr,
-        typeSelected: newTypeArr
+        regionSelected: selectedRegion,
+        typeSelected: selectedType
       });
     }
   }

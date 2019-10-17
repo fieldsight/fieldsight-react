@@ -109,7 +109,7 @@ class ProjectWideForms extends Component {
             return { data: newData };
           },
           () => {
-            successToast("Form", "updated");
+            successToast("Deploy Status", "updated");
           }
         );
       })
@@ -202,17 +202,12 @@ class ProjectWideForms extends Component {
   };
 
   onChangeHandler = async e => {
-    const {
-      activeTab,
-      myFormList,
-      projectFormList,
-      sharedFormList
-    } = this.state;
+    const { activeTab } = this.state;
     const searchValue = e.target.value;
 
     if (searchValue) {
       if (activeTab == "myForms") {
-        const filteredData = await myFormList.filter(form => {
+        const filteredData = await this.props.myForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -223,7 +218,7 @@ class ProjectWideForms extends Component {
           myFormList: filteredData
         });
       } else if (activeTab == "projectForms") {
-        const awaitedData = await projectFormList.map(project => {
+        const awaitedData = await this.props.projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
               form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -236,7 +231,7 @@ class ProjectWideForms extends Component {
           projectFormList: awaitedData
         });
       } else if (activeTab == "sharedForms") {
-        const filteredData = await sharedFormList.filter(form => {
+        const filteredData = await this.props.sharedForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
