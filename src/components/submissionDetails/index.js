@@ -13,7 +13,7 @@ import {
   toggleSubmission
 } from "../../actions/submissionDetailActions";
 
-const submissionId = window.submission_id ? window.submission_id : 66106;
+const submissionId = window.submission_id ? window.submission_id : 66111;
 
 class SubmissionDetail extends Component {
   componentDidMount() {

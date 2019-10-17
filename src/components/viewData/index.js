@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
+
 import axios from "axios";
 import ManageFormSetting from "./manageFormSetting/ManageFormSetting";
 import ManageGeneralForm from "./manageGeneralForm";
@@ -11,14 +12,16 @@ import ApprovedTable from "./ApprovedTable.js";
 import PendingTable from "./PendingSubmissionTable.js";
 import RejectedTable from "./RejectSubmissionTable.js";
 import FlaggedTable from "./FlagedTable.js";
+import SubmissionData from "./SubmissionTable";
 
 export default class ViewData extends Component {
   state = {
     hide: true,
     view_btn: false,
-    id: "",
+    id: this.props.match.params && this.props.match.params.id,
     deleted_forms: [],
-    generals_forms: []
+    generals_forms: [],
+    url: this.props.match.url && this.props.match.url
   };
   toggleHide = () => {
     this.setState({
@@ -26,10 +29,31 @@ export default class ViewData extends Component {
     });
   };
   showViewData = () => {
-    console.log("gfhjh");
-    this.setState({
-      view_btn: !this.state.view_btn
-    });
+    this.setState(
+      state => {
+        if (!!this.state.view_btn) {
+          return {
+            url: `${this.props.match.url}/general`,
+            view_btn: !this.state.view_btn
+          };
+        } /*else if (
+          this.props.match.url === `/project-responses/${this.state.id}`
+        ) {
+          return {
+            url: `${this.props.match.url}rejected`,
+            view_btn: !this.state.view_btn
+          };
+        }*/ else {
+          return {
+            url: `${this.props.match.url}/rejected`,
+            view_btn: !this.state.view_btn
+          };
+        }
+      },
+      () => {
+        this.props.history.push(this.state.url);
+      }
+    );
   };
   componentDidMount() {
     const {
@@ -37,12 +61,28 @@ export default class ViewData extends Component {
         params: { id }
       }
     } = this.props;
-
-    this.setState({
-      id
-    });
+    if (
+      this.props.location.pathname === `/project-responses/${id}/rejected` ||
+      this.props.location.pathname === `/project-responses/${id}/pending` ||
+      this.props.location.pathname === `/project-responses/${id}/flagged` ||
+      this.props.location.pathname === `/project-responses/${id}/approved`
+    ) {
+      this.setState({
+        id,
+        view_btn: true
+      });
+    } else if (
+      this.props.location.pathname === `/project-responses/${id}/general` ||
+      this.props.location.pathname === `/project-responses/${id}/stage` ||
+      this.props.location.pathname === `/project-responses/${id}/scheduled` ||
+      this.props.location.pathname === `/project-responses/${id}/survey`
+    ) {
+      this.setState({
+        view_btn: false,
+        id
+      });
+    }
   }
-
   render() {
     const {
       match: {
@@ -65,9 +105,14 @@ export default class ViewData extends Component {
             <div className="col-xl-3 col-lg-4">
               <div className="left-sidebar new-sidebar sticky-top">
                 <div className="card">
-                  <div className="card-header main-card-header"></div>
+                  <div className="card-header main-card-header">
+                    <h5>View Data</h5>
+                  </div>
                   <div className="card-body">
-                    <ManageFormSetting show_submission={this.state.view_btn} />
+                    <ManageFormSetting
+                      show_submission={this.state.view_btn}
+                      url={this.state.url}
+                    />
                   </div>
                 </div>
               </div>
@@ -79,12 +124,13 @@ export default class ViewData extends Component {
                     <Switch>
                       <Route
                         exact
-                        path={this.props.match.url}
+                        path={`${this.props.match.url}/general`}
                         component={() => (
                           <ManageGeneralForm
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -96,6 +142,7 @@ export default class ViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -106,6 +153,7 @@ export default class ViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -117,6 +165,7 @@ export default class ViewData extends Component {
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />
@@ -154,12 +203,13 @@ export default class ViewData extends Component {
                       />
 
                       <Route
-                        path={`${this.props.match.url}/`}
+                        path={`${this.props.match.url}/rejected`}
                         component={() => (
                           <RejectedTable
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            url={this.state.url}
                           />
                         )}
                       />

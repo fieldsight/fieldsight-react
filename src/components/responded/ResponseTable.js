@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { Link } from "react-router-dom";
 class ResponseTable extends Component {
   state = {
     generals_forms: []
@@ -17,7 +18,7 @@ class ResponseTable extends Component {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Id</th>
+              <th>Submission</th>
               <th>Last Response On</th>
               <th>Created Date</th>
               <th>Action</th>
@@ -27,17 +28,22 @@ class ResponseTable extends Component {
             {this.state.generals_forms.map((generals, key) => {
               return (
                 <tr key={key}>
-                  <td>
-                    <a href={`#/`}>{generals.name}</a>
+                  <td style={{ width: "45px" }}>
+                    <a href={`#`}>{generals.name}</a>
                   </td>
-                  <td>{generals.id}</td>
+                  <td>
+                    <Link
+                      to={`/submission-data/${this.props.id}/${generals.id}`}
+                    >
+                      {generals.response_count}
+                    </Link>
+                  </td>
                   <td>{generals.last_response}</td>
                   <td>{generals.created_date}</td>
                   <td>
                     {generals.view_submission_url === null ? (
                       <>
-                        <i className="la la-eye"></i> {generals.response_count}{" "}
-                        Submission
+                        <i className="la la-eye view-tag tag"></i>
                       </>
                     ) : (
                       <a
@@ -45,29 +51,28 @@ class ResponseTable extends Component {
                         className="view-tag tag"
                       >
                         <i className="la la-eye"></i>
-                        {generals.response_count} submission
                       </a>
                     )}
 
                     {generals.download_url === null ? (
                       <>
-                        <i className="la la-download"></i> Download
+                        <i className="la la-download edit-tag tag"></i>
                       </>
                     ) : (
                       <a href={generals.download_url} className="edit-tag tag">
-                        <i className="la la-download"></i> Download
+                        <i className="la la-download "></i>
                       </a>
                     )}
                     {generals.versions_url === null ? (
                       <>
-                        <i className="la la-clone"></i> Version
+                        <i className="la la-clone edit-tag tag"></i>
                       </>
                     ) : (
                       <a
                         href={generals.versions_url}
                         className="pending-tag tag"
                       >
-                        <i className="la la-clone"></i> Version
+                        <i className="la la-clone"></i>
                       </a>
                     )}
                   </td>

@@ -106,11 +106,6 @@ export default class SiteAdd extends Component{
             }
           });
         }
-        console.log(this.state.phone)
-       if(this.state.phone!==undefined){
-         console.log("i m idiot")
-       }
-     {  !this.state.phone?console.log("hii"):console.log("hello")}
         this.setState({
             project: {
               ...this.state.project,
@@ -174,6 +169,7 @@ export default class SiteAdd extends Component{
                   site_meta_attributes_ans:JSON.stringify(this.state.data, select=this.state.dataSelected),
                   subsite:this.state.siteId
                  }
+                
         if(this.props.page==="CreateSite"){
           axios({
             method: "POST",
@@ -583,7 +579,8 @@ export default class SiteAdd extends Component{
                 <CheckBox
                   checked={this.state.project.cluster_sites || ""}
                   label="Enable subsites"
-                  onChange={handleCheckboxChange}
+                  value={cluster_sites}
+                  changeHandler={handleCheckboxChange}
                 />
               </div>
             </div>

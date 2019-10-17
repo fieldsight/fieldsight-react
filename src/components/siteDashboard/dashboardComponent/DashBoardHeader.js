@@ -63,7 +63,6 @@ class DashboardHeader extends Component {
       rotate,
       rotateLeft
     } = this;
-    console.log("siteid-", siteId);
 
     const ManageDropdown = [
       {
