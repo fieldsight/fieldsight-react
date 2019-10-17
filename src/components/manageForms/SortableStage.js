@@ -11,24 +11,29 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import SubStageTable from "./subStageTable";
 import { DotLoader } from "../myForm/Loader";
 
-const DragHandle = sortableHandle(() => (
-  <span className="drag-icon">
-    <i className="la la-ellipsis-v"></i>
-    <i className="la la-ellipsis-v"></i>
-  </span>
+const DragHandle = sortableHandle(({ name, order }) => (
+  <Card.Header>
+    <span className="drag-icon">
+      <i className="la la-ellipsis-v"></i>
+      <i className="la la-ellipsis-v"></i>
+    </span>
+    <h5>
+      <Accordion.Toggle
+        as={Button}
+        variant="link"
+        eventKey={`${order}`}
+        style={{ pointerEvents: "none" }}
+      >
+        {name}
+      </Accordion.Toggle>
+    </h5>
+  </Card.Header>
 ));
 
 const SortableItem = sortableElement(({ name, order }) => (
-  <h5 className="dragable-stage">
-    <DragHandle />
-    {/* <Card.Header> */}
-    {/* <h5> */}
-    <Accordion.Toggle as={Button} variant="link" eventKey={`${order}`}>
-      {name}
-    </Accordion.Toggle>
-    {/* </h5> */}
-    {/* </Card.Header> */}
-  </h5>
+  <div className="dragable-stage">
+    <DragHandle name={name} order={order} />
+  </div>
 ));
 
 const SortableContainer = sortableContainer(({ children }) => {
@@ -142,7 +147,6 @@ class SortableStage extends Component {
                           as={Button}
                           variant="link"
                           eventKey={`${each.order}`}
-                          // className="card-header"
                           onClick={() => {
                             handleRequestSubStage(each.id, each.order);
                           }}

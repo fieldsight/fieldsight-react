@@ -244,7 +244,6 @@ class StagedForms extends Component {
   };
   handleCreateForm = data => {
     const { stageId, substageId, xf } = this.state;
-    // issue in creating new stage in project level
     if (!!substageId) {
       const body = {
         id: substageId,
@@ -255,13 +254,20 @@ class StagedForms extends Component {
         xf: xf,
         default_submission_status: data.status,
         setting: {
-          types: data.typeSelected,
-          regions: data.regionSelected,
+          types:
+            !!data.typeSelected && data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : [],
+          regions:
+            !!data.regionSelected && data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
           donor_visibility: data.isDonor,
           can_edit: data.isEdit,
           can_delete: data.isDelete
         }
       };
+      console.log("stage ko", data);
 
       axios
         .put(
@@ -303,8 +309,14 @@ class StagedForms extends Component {
         xf: xf,
         default_submission_status: data.status,
         setting: {
-          types: data.typeSelected,
-          regions: data.regionSelected,
+          types:
+            !!data.typeSelected && data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : [],
+          regions:
+            !!data.regionSelected && data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
           donor_visibility: data.isDonor,
           can_edit: data.isEdit,
           can_delete: data.isDelete

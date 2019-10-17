@@ -309,12 +309,12 @@ class ScheduleForms extends Component {
           can_edit: data.isEdit,
           donor_visibility: data.isDonor,
           regions:
-            data.regionSelected.length > 0
+            !!data.regionSelected && data.regionSelected.length > 0
               ? data.regionSelected.map(each => each.id)
               : [],
           can_delete: data.isDelete,
           types:
-            data.typeSelected.length > 0
+            !!data.typeSelected && data.typeSelected.length > 0
               ? data.typeSelected.map(each => each.id)
               : []
         }
@@ -353,11 +353,11 @@ class ScheduleForms extends Component {
         setting: {
           id: data.settingId,
           types:
-            data.typeSelected.length > 0
+            !!data.typeSelected && data.typeSelected.length > 0
               ? data.typeSelected.map(each => each.id)
               : [],
           regions:
-            data.regionSelected.length > 0
+            !!data.regionSelected && data.regionSelected.length > 0
               ? data.regionSelected.map(each => each.id)
               : [],
           notify_incomplete_schedule: data.notifyIncomplete,

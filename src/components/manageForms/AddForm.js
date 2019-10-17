@@ -87,21 +87,6 @@ class AddForm extends Component {
               {formList.length == 0 ? (
                 <div>No Form Available</div>
               ) : (
-                // <form
-                //   className="floating-form"
-                //   onSubmit={e => {
-                //     e.preventDefault();
-                //   }}
-                // >
-                //   <div className="form-group search-group">
-                //     <input
-                //       type="search"
-                //       className="form-control"
-                //       placeholder="Search"
-                //       onChange={onChangeHandler}
-                //     />
-                //     <i className="la la-search" />
-                //   </div>
                 <div>
                   {formList.map((each, i) => {
                     return (

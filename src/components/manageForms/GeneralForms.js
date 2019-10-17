@@ -230,11 +230,11 @@ class GeneralForms extends Component {
         default_submission_status: data.status,
         setting: {
           types:
-            data.typeSelected.length > 0
+            !!data.typeSelected && data.typeSelected.length > 0
               ? data.typeSelected.map(each => each.id)
               : [],
           regions:
-            data.regionSelected.length > 0
+            !!data.regionSelected && data.regionSelected.length > 0
               ? data.regionSelected.map(each => each.id)
               : [],
           donor_visibility: data.isDonor,
@@ -275,12 +275,12 @@ class GeneralForms extends Component {
           can_edit: data.isEdit,
           donor_visibility: data.isDonor,
           regions:
-            data.regionSelected.length > 0
+            !!data.regionSelected && data.regionSelected.length > 0
               ? data.regionSelected.map(each => each.id)
               : [],
           can_delete: data.isDelete,
           types:
-            data.typeSelected.length > 0
+            !!data.typeSelected && data.typeSelected.length > 0
               ? data.typeSelected.map(each => each.id)
               : []
         }

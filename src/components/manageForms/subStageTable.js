@@ -29,34 +29,87 @@ const formatDate = date => {
   return year + "-" + monthIndex + "-" + dateIdx;
 };
 
-const DragHandle = sortableHandle(() => (
-  <span className="drag-icon">
-    <i className="la la-ellipsis-v"></i>
-    <i className="la la-ellipsis-v"></i>
-  </span>
-));
+const DragHandle = sortableHandle(
+  ({ sub, index, formTable }) => (
+    // data.map((sub, index) => (
+    <tr key={`sub_stage_${index}`}>
+      {/* <> */}
+      <td>
+        <span className="drag-icon">
+          <i className="la la-ellipsis-v"></i>
+          <i className="la la-ellipsis-v"></i>
+        </span>
+        {!!sub && sub.name}
+      </td>
+      <td>{sub && sub.xf && sub.xf.title ? sub.xf.title : "-"}</td>
+      <td>{sub && sub.responses_count}</td>
+      <td>
+        <EducationMaterialForProject
+          formTable={formTable}
+          item={sub && sub}
+          toDrag={true}
+          // editForm={handleEditGuide}
+        />
+      </td>
+      <td>{sub && sub.weight}</td>
+      <td>
+        <time>
+          <i className="la la-clock-o"></i>{" "}
+          {formatDate(new Date(sub && sub.date_created))}
+        </time>
+      </td>
+      <td>
+        <a className={getClass(sub && sub.default_submission_status)}>
+          {getStatus(sub && sub.default_submission_status)}
+        </a>
+      </td>
+      <td>
+        <GetActionForProject
+          formTable={formTable}
+          item={sub && sub}
+          // deployAction={changeDeployStatus}
+          // deleteAction={deleteItem}
+          // editAction={editSubStageForm}
+        />
+      </td>
+      {/* </> */}
+    </tr>
+  )
+  // ))
+);
 
 const EducationMaterialForProject = props => {
-  const { formTable, item, editForm } = props;
+  const { formTable, item, editForm, toDrag } = props;
   if (formTable == "project") {
     return (
-      <span>
-        <a onClick={() => editForm(item.em, item.id)}>
-          <i className="la la-book" />
-          {item.em ? item.em.title : ""}
-        </a>
-      </span>
+      <>
+        {!!toDrag ? (
+          <span>
+            <i className="la la-book" />
+            {item && item.em ? item.em.title : ""}
+          </span>
+        ) : (
+          <span>
+            <a onClick={() => editForm(item.em, item.id)}>
+              <i className="la la-book" />
+              {item && item.em ? item.em.title : ""}
+            </a>
+          </span>
+        )}
+      </>
     );
   } else if (formTable == "site") {
     return (
-      <span>
-        {!!item.site && (
-          <a onClick={() => editForm(item.em, item.id)}>
-            <i className="la la-book" />
-            {item.em ? item.em.title : ""}
-          </a>
-        )}
-      </span>
+      <>
+        <span>
+          {!!item.site && (
+            <a onClick={() => editForm(item.em, item.id)}>
+              <i className="la la-book" />
+              {item && item.em ? item.em.title : ""}
+            </a>
+          )}
+        </span>
+      </>
     );
   }
 };
@@ -65,7 +118,7 @@ const GetActionForProject = props => {
   if (formTable == "project") {
     return (
       <div>
-        {!!item.is_deployed && (
+        {item && !!item.is_deployed && (
           <a
             className="rejected td-edit-btn td-btn"
             onClick={() => deployAction(item.id, item.is_deployed)}
@@ -78,7 +131,7 @@ const GetActionForProject = props => {
             </OverlayTrigger>
           </a>
         )}
-        {!item.is_deployed && (
+        {item && !item.is_deployed && (
           <span>
             <a
               className="td-edit-btn td-btn approved"
@@ -102,7 +155,7 @@ const GetActionForProject = props => {
           </OverlayTrigger>
         </a>
 
-        {!item.is_deployed && (
+        {item && !item.is_deployed && (
           <span>
             <a
               className="rejected td-edit-btn td-btn"
@@ -122,7 +175,7 @@ const GetActionForProject = props => {
   } else if (formTable == "site") {
     return (
       <div>
-        {!!item.site && !!item.is_deployed && (
+        {item && !!item.site && !!item.is_deployed && (
           <a
             className="rejected td-edit-btn td-btn"
             onClick={() => deployAction(item.id, item.is_deployed)}
@@ -135,7 +188,7 @@ const GetActionForProject = props => {
             </OverlayTrigger>
           </a>
         )}
-        {!!item.site && !item.is_deployed && (
+        {item && !!item.site && !item.is_deployed && (
           <span>
             <a
               className="td-edit-btn td-btn approved"
@@ -150,7 +203,7 @@ const GetActionForProject = props => {
             </a>
           </span>
         )}
-        {!!item.site && (
+        {item && !!item.site && (
           <a
             onClick={() => editAction(item)}
             className="pending td-edit-btn td-btn"
@@ -160,7 +213,7 @@ const GetActionForProject = props => {
             </OverlayTrigger>
           </a>
         )}
-        {!!item.site && !item.is_deployed && (
+        {item && !!item.site && !item.is_deployed && (
           <span>
             <a
               className="rejected td-edit-btn td-btn"
@@ -200,11 +253,8 @@ const SortableContainer = sortableContainer(({ children }) => {
   );
 });
 
-const SortableItem = sortableElement(({ name }) => (
-  <span className>
-    <DragHandle />
-    {name}
-  </span>
+const SortableItem = sortableElement(({ sub, index, formTable }) => (
+  <DragHandle sub={sub} index={index} formTable={formTable} />
 ));
 
 class SubStageTable extends Component {
@@ -228,14 +278,11 @@ class SubStageTable extends Component {
     }
   }
   onSortEnd = ({ oldIndex, newIndex }) => {
-    this.setState(
-      ({ data }) => ({
+    this.setState(({ data }) => {
+      return {
         data: arrayMove(data, oldIndex, newIndex)
-      }),
-      () => {
-        this.props.handleNewSubstageOrder(this.state.data);
-      }
-    );
+      };
+    });
   };
 
   render() {
@@ -251,7 +298,7 @@ class SubStageTable extends Component {
       },
       state: { data }
     } = this;
-    // console.log(formTable, "issite");
+    // console.log(data, "issite");
 
     return (
       <>
@@ -259,64 +306,64 @@ class SubStageTable extends Component {
           <div>No Substage added yet.</div>
         ) : (
           <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
-            <tbody>
-              {/* {data.length === 0 && (
-                <tr>
-                  <td colSpan={8}>
-                    <p>No Data Available</p>
-                  </td>
-                </tr>
-              )}
-              {data.length > 0 && */}
-              {data.map((sub, index) => (
-                <tr key={`sub_stage_${index}`}>
-                  <td>
-                    {reorderSubstage ? (
-                      <SortableItem
-                        key={`item-${sub.id}`}
-                        index={index}
-                        name={sub.name}
-                      />
-                    ) : (
-                      sub.name
-                    )}
-                  </td>
-                  <td>{sub.xf && sub.xf.title ? sub.xf.title : "-"}</td>
-                  <td>{sub.responses_count}</td>
-                  <td>
-                    <EducationMaterialForProject
+            {reorderSubstage ? (
+              <tbody>
+                {!!data &&
+                  data.map((sub, index) => (
+                    // <tr key={`sub_stage_${index}`}>
+                    <SortableItem
+                      key={`item-${index}`}
+                      index={index}
+                      // name={sub.name}
+                      sub={sub}
                       formTable={formTable}
-                      item={sub}
-                      editForm={handleEditGuide}
                     />
-                  </td>
-                  <td>{sub.weight}</td>
-                  <td>
-                    <time>
-                      <i className="la la-clock-o"></i>{" "}
-                      {formatDate(new Date(sub.date_created))}
-                    </time>
-                  </td>
-                  <td>
-                    <a
-                      style={{ cursor: "pointer" }}
-                      className={getClass(sub.default_submission_status)}
-                    >
-                      {getStatus(sub.default_submission_status)}
-                    </a>
-                  </td>
-                  <td>
-                    <GetActionForProject
-                      formTable={formTable}
-                      item={sub}
-                      deployAction={changeDeployStatus}
-                      deleteAction={deleteItem}
-                      editAction={editSubStageForm}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                    // </tr>
+                  ))}
+              </tbody>
+            ) : (
+              <tbody>
+                {!!data &&
+                  data.map((sub, index) => (
+                    <tr key={`sub_stage_${index}`}>
+                      <td>{sub.name}</td>
+                      <td>{sub.xf && sub.xf.title ? sub.xf.title : "-"}</td>
+                      <td>{sub.responses_count}</td>
+                      <td>
+                        <EducationMaterialForProject
+                          formTable={formTable}
+                          item={sub}
+                          editForm={handleEditGuide}
+                        />
+                      </td>
+                      <td>{sub.weight}</td>
+                      <td>
+                        <time>
+                          <i className="la la-clock-o"></i>{" "}
+                          {formatDate(new Date(sub.date_created))}
+                        </time>
+                      </td>
+                      <td>
+                        <a
+                          style={{ cursor: "pointer" }}
+                          className={getClass(sub.default_submission_status)}
+                        >
+                          {getStatus(sub.default_submission_status)}
+                        </a>
+                      </td>
+                      <td>
+                        <GetActionForProject
+                          formTable={formTable}
+                          item={sub}
+                          deployAction={changeDeployStatus}
+                          deleteAction={deleteItem}
+                          editAction={editSubStageForm}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            )}
           </SortableContainer>
         )}
       </>
