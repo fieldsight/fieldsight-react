@@ -526,11 +526,11 @@ class GlobalModalForm extends Component {
         notifyIncomplete
       }
     } = this;
-    console.log(
-      "in form",
-      notifyIncomplete,
-      this.props.formData.setting.notify_incomplete_schedule
-    );
+    // console.log(
+    //   "in form",
+    //   notifyIncomplete,
+    //   this.props.formData.setting.notify_incomplete_schedule
+    // );
     let weekOptions = [];
     let monthOPtions = [];
     let dayOptions = [];
