@@ -72,6 +72,8 @@ class SortableStage extends Component {
         data: arrayMove(data, oldIndex, newIndex)
       }),
       () => {
+        console.log("data", this.state.data);
+
         this.props.handleNewStageOrder(this.state.data);
       }
     );
@@ -212,6 +214,11 @@ class SortableStage extends Component {
                             <a
                               data-tab="addSubStage-popup"
                               onClick={handleSaveSubstageReorder}
+                              className={`${
+                                this.props.subStageReorderDisable
+                                  ? "disabled"
+                                  : ""
+                              }`}
                             >
                               {/* Save Order */}
                               <OverlayTrigger

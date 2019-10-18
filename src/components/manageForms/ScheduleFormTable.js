@@ -117,6 +117,9 @@ const GetActionForProject = props => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
             onToggle={handleToggle}
+            message={
+              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+            }
           />
         )}
       </div>
@@ -182,6 +185,9 @@ const GetActionForProject = props => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
             onToggle={handleToggle}
+            message={
+              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+            }
           />
         )}
       </div>
@@ -274,12 +280,11 @@ class ScheduleFormTable extends Component {
                       </time>
                     </td>
                     <td>
-                      <a
-                        href="#"
+                      <span
                         className={getClass(item.default_submission_status)}
                       >
                         {getStatus(item.default_submission_status)}
-                      </a>
+                      </span>
                     </td>
                     <td>
                       <GetActionForProject
