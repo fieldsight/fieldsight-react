@@ -21,8 +21,8 @@ const DragHandle = sortableHandle(({ name, order }) => (
       <Accordion.Toggle
         as={Button}
         variant="link"
-        eventKey={`${order}`}
-        style={{ pointerEvents: "none" }}
+        // eventKey={`${order}`}
+        // style={{ pointerEvents: "none" }}
       >
         {name}
       </Accordion.Toggle>
@@ -212,6 +212,11 @@ class SortableStage extends Component {
                             <a
                               data-tab="addSubStage-popup"
                               onClick={handleSaveSubstageReorder}
+                              className={`${
+                                this.props.subStageReorderDisable
+                                  ? "disabled"
+                                  : ""
+                              }`}
                             >
                               {/* Save Order */}
                               <OverlayTrigger
