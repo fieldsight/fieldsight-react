@@ -12,6 +12,7 @@ import ApprovedTable from "./ApprovedTable.js";
 import PendingTable from "./PendingSubmissionTable.js";
 import RejectedTable from "./RejectSubmissionTable.js";
 import FlaggedTable from "./FlagedTable.js";
+import SubmissionData from "./SubmissionTable";
 
 export default class ViewData extends Component {
   state = {
@@ -20,7 +21,8 @@ export default class ViewData extends Component {
     id: this.props.match.params && this.props.match.params.id,
     deleted_forms: [],
     generals_forms: [],
-    url: this.props.match.url && this.props.match.url
+    url: this.props.match.url && this.props.match.url,
+    breadCrumb: {}
   };
   toggleHide = () => {
     this.setState({
@@ -31,13 +33,18 @@ export default class ViewData extends Component {
     this.setState(
       state => {
         if (!!this.state.view_btn) {
-          console.log("if");
           return {
-            url: `${this.props.match.url}`,
+            url: `${this.props.match.url}/general`,
             view_btn: !this.state.view_btn
           };
-        } else {
-          console.log("else");
+        } /*else if (
+          this.props.match.url === `/project-responses/${this.state.id}`
+        ) {
+          return {
+            url: `${this.props.match.url}rejected`,
+            view_btn: !this.state.view_btn
+          };
+        }*/ else {
           return {
             url: `${this.props.match.url}/rejected`,
             view_btn: !this.state.view_btn
@@ -55,28 +62,63 @@ export default class ViewData extends Component {
         params: { id }
       }
     } = this.props;
-    console.log(this.props.match);
-
-    this.setState({
-      id
-    });
+    if (
+      this.props.location.pathname === `/project-responses/${id}/rejected` ||
+      this.props.location.pathname === `/project-responses/${id}/pending` ||
+      this.props.location.pathname === `/project-responses/${id}/flagged` ||
+      this.props.location.pathname === `/project-responses/${id}/approved`
+    ) {
+      this.setState({
+        id,
+        view_btn: true
+      });
+    } else if (
+      this.props.location.pathname === `/project-responses/${id}/general` ||
+      this.props.location.pathname === `/project-responses/${id}/stage` ||
+      this.props.location.pathname === `/project-responses/${id}/scheduled` ||
+      this.props.location.pathname === `/project-responses/${id}/survey`
+    ) {
+      this.setState({
+        view_btn: false,
+        id
+      });
+    }
   }
+  handleBreadCrumb = breadCrumb => {
+    console.log("before", breadCrumb);
+
+    if (!!breadCrumb) {
+      console.log("if true", breadCrumb);
+
+      this.setState(
+        {
+          breadCrumb
+        },
+        () => {
+          console.log("breadcrumb", this.state.breadCrumb);
+        }
+      );
+    }
+  };
   render() {
     const {
       match: {
         params: { id }
       }
     } = this.props;
-    console.log(this.props.match.url, "hello", this.state.view_btn);
 
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="">project</a>
+              <a href={this.state.breadCrumb.project_url}>
+                {this.state.breadCrumb.project_name}
+              </a>
             </li>
-            <li className="breadcrumb-item">General</li>
+            <li className="breadcrumb-item">
+              {this.state.breadCrumb.current_page}
+            </li>
           </ol>
         </nav>
         <main id="main-content">
@@ -84,7 +126,9 @@ export default class ViewData extends Component {
             <div className="col-xl-3 col-lg-4">
               <div className="left-sidebar new-sidebar sticky-top">
                 <div className="card">
-                  <div className="card-header main-card-header"></div>
+                  <div className="card-header main-card-header">
+                    <h5>View Data</h5>
+                  </div>
                   <div className="card-body">
                     <ManageFormSetting
                       show_submission={this.state.view_btn}
@@ -101,92 +145,108 @@ export default class ViewData extends Component {
                     <Switch>
                       <Route
                         exact
-                        path={this.props.match.url}
-                        component={() => (
+                        path={`${this.props.match.url}/general`}
+                        render={props => (
                           <ManageGeneralForm
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
                             url={this.state.url}
+                            handleBreadCrumb={this.handleBreadCrumb}
+                            {...props}
                           />
                         )}
                       />
 
                       <Route
                         path={`${this.props.match.url}/scheduled`}
-                        component={() => (
+                        render={props => (
                           <ManageScheduledForm
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
                             url={this.state.url}
+                            handleBreadCrumb={this.handleBreadCrumb}
+                            {...props}
                           />
                         )}
                       />
                       <Route
                         path={`${this.props.match.url}/stage`}
-                        component={() => (
+                        render={props => (
                           <ManageStageForm
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
                             url={this.state.url}
+                            handleBreadCrumb={this.handleBreadCrumb}
+                            {...props}
                           />
                         )}
                       />
 
                       <Route
                         path={`${this.props.match.url}/survey`}
-                        component={() => (
+                        render={props => (
                           <ManageSurveyForm
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
                             url={this.state.url}
+                            handleBreadCrumb={this.handleBreadCrumb}
+                            {...props}
                           />
                         )}
                       />
 
                       <Route
                         path={`${this.props.match.url}/approved`}
-                        component={() => (
+                        render={props => (
                           <ApprovedTable
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            handleBreadCrumb={this.handleBreadCrumb}
+                            {...props}
                           />
                         )}
                       />
 
                       <Route
                         path={`${this.props.match.url}/flagged`}
-                        component={() => (
+                        render={props => (
                           <FlaggedTable
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            handleBreadCrumb={this.handleBreadCrumb}
+                            {...props}
                           />
                         )}
                       />
                       <Route
                         path={`${this.props.match.url}/pending`}
-                        component={() => (
+                        render={props => (
                           <PendingTable
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
+                            handleBreadCrumb={this.handleBreadCrumb}
+                            {...props}
                           />
                         )}
                       />
 
                       <Route
                         path={`${this.props.match.url}/rejected`}
-                        component={() => (
+                        render={() => (
                           <RejectedTable
                             showViewData={this.showViewData}
                             data={this.state.view_btn}
                             id={this.state.id}
                             url={this.state.url}
+                            handleBreadCrumb={this.handleBreadCrumb}
+                            {...props}
                           />
                         )}
                       />

@@ -45,16 +45,18 @@ class ManageScheduledForm extends Component {
           <h5>{!data ? "Schedule Forms" : "Rejected Submission"}</h5>
           <Link to={`/site-responses/${this.props.id}/rejected`}>
             <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Status" : "View by Form"}
+              {data ? "View By Form" : "View by Status"}
             </button>
           </Link>
         </div>
         <div className="card-body">
           {!data && (
-            <ResponseTable generals_forms={this.state.generals_forms} />
+            <ResponseTable
+              generals_forms={this.state.generals_forms}
+              table="site"
+              id={this.props.id}
+            />
           )}
-
-          {data && <Rejectsubmission />}
         </div>
         {this.state.deleted_forms.length > 0
           ? !data && (

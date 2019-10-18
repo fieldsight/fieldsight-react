@@ -45,12 +45,17 @@ class ManageSurveyForm extends Component {
           <h5>{!data ? "Survey Forms" : "Rejected Submission"}</h5>
           <Link to={this.props.url}>
             <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Status" : "View by Form"}
+              {data ? "View By Form" : "View by Status"}
             </button>
           </Link>
         </div>
         <div className="card-body">
-          {!data && <ResponseTable survey_forms={this.state.survey_forms} />}
+          {!data && (
+            <ResponseTable
+              survey_forms={this.state.survey_forms}
+              id={this.props.id}
+            />
+          )}
           {/*data && <Rejected id={this.props.id} />*/}
         </div>
         {!data && (

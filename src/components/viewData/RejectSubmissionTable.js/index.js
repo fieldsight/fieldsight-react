@@ -22,7 +22,6 @@ class RejectedTable extends Component {
     const {
       props: { data, showViewData }
     } = this;
-    console.log(this.props.url, "rejeted");
 
     return (
       <React.Fragment>
@@ -31,7 +30,7 @@ class RejectedTable extends Component {
           <div className="dash-btn">
             <Link to={this.props.url}>
               <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Status" : "View by Form"}
+                {data ? "View By Form" : "View by Status"}
               </button>
             </Link>
           </div>

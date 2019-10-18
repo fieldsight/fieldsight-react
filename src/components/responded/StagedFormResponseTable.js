@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { Link } from "react-router-dom";
 export default class SurveyFormResponseTable extends Component {
   state = {
     stage_forms: []
@@ -7,7 +8,7 @@ export default class SurveyFormResponseTable extends Component {
   static getDerivedStateFromProps(props, state) {
     return {
       stage_forms: props.stage_forms,
-      deleted_forms: props.deleted_forms
+      table: props.table
     };
   }
   render() {
@@ -19,7 +20,6 @@ export default class SurveyFormResponseTable extends Component {
               <div key={key}>
                 <div style={{ display: "flex" }}>
                   <h6>{stage.name}</h6>
-                  <h6>{stage.id}</h6>
                 </div>
                 <Table
                   responsive="xl"
@@ -27,24 +27,77 @@ export default class SurveyFormResponseTable extends Component {
                 >
                   <thead>
                     <tr>
-                      <th>form_name</th>
-                      <th>Id</th>
-                      <th>last_response</th>
-                      <th>name</th>
-                      <th>response</th>
-                      <th>order</th>
+                      <th>sub stage name</th>
+                      <th>form name</th>
+                      <th>last response on</th>
+                      <th>Submissions</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {stage.sub_stages.map((sub_stages, key) => {
                       return (
                         <tr key={key}>
-                          <td>{sub_stages.id}</td>
-                          <td>{sub_stages.form_name}</td>
+                          <td style={{ width: "70px" }}>{sub_stages.name}</td>
+                          <td style={{ width: "183px" }}>
+                            {sub_stages.form_name}
+                          </td>
                           <td>{sub_stages.last_response}</td>
-                          <td>{sub_stages.name}</td>
-                          <td>{sub_stages.response_count}</td>
-                          <td>{sub_stages.order}</td>
+                          <td>
+                            {this.state.table === "site" ? (
+                              <Link
+                                to={`/site-submission-data/${this.props.id}/${sub_stages.id}`}
+                              >
+                                {sub_stages.response_count}
+                              </Link>
+                            ) : (
+                              <Link
+                                to={`/submission-data/${this.props.id}/${sub_stages.id}`}
+                              >
+                                {sub_stages.response_count}
+                              </Link>
+                            )}
+                          </td>
+                          <td>
+                            {sub_stages.view_submission_url === null ||
+                            sub_stages.view_submission_url !== "" ? (
+                              <>
+                                <i className="la la-eye"></i>
+                              </>
+                            ) : (
+                              <a
+                                href={sub_stages.view_submission_url}
+                                className="view-tag tag"
+                              >
+                                <i className="la la-eye"></i>
+                              </a>
+                            )}
+
+                            {sub_stages.download_url === null ? (
+                              <>
+                                <i className="la la-download"></i>
+                              </>
+                            ) : (
+                              <a
+                                href={sub_stages.download_url}
+                                className="edit-tag tag"
+                              >
+                                <i className="la la-download"></i>
+                              </a>
+                            )}
+                            {sub_stages.versions_url === null ? (
+                              <>
+                                <i className="la la-clone"></i>
+                              </>
+                            ) : (
+                              <a
+                                href={sub_stages.versions_url}
+                                className="pending-tag tag"
+                              >
+                                <i className="la la-clone"></i>
+                              </a>
+                            )}
+                          </td>
                         </tr>
                       );
                     })}

@@ -63,8 +63,12 @@ class DashboardHeader extends Component {
       rotate,
       rotateLeft
     } = this;
+
     const ManageDropdown = [
-      { title: "Generate Report", link: `/fieldsight/site-dashboard/${siteId}/` },
+      {
+        title: "Generate Report",
+        link: `/fieldsight/site-dashboard/${siteId}/`
+      },
       { title: "View Data", link: `/forms/responses/${siteId}/` }
     ];
 
@@ -78,7 +82,10 @@ class DashboardHeader extends Component {
         link: `/fieldsight/application/#/site-documents/${siteId}/`
       },
       { title: "users", link: `/fieldsight/manage/people/site/${siteId}/` },
-      { title: "forms", link: `/forms/setup-forms/0/${siteId}` }
+      {
+        title: "forms",
+        link: `/fieldsight/application/#/site/manage-forms/0/${siteId}/generalform`
+      }
     ];
 
     return (
@@ -132,7 +139,6 @@ class DashboardHeader extends Component {
                 variant=""
                 id="dropdown-Data"
                 className="fieldsight-btn"
-                
               >
                 <i className="fa fa-paste" />
                 <span>Data</span>
@@ -141,7 +147,6 @@ class DashboardHeader extends Component {
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
                   <Dropdown.Item href={item.link} key={i} target="_blank">
-                   
                     {item.title}
                   </Dropdown.Item>
                 ))}
@@ -171,17 +176,17 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <a
-              href={`/forms/responses/${siteId}/`}
-              target="_blank"
-            >
+            <a href={`/forms/responses/${siteId}/`} target="_blank">
               <CountCard
                 countName=""
                 countNumber={totalSubmission}
                 icon="la-clone"
               />
             </a>
-            <a href={`/fieldsight/application/#/site-users/${siteId}/`} target="_blank">
+            <a
+              href={`/fieldsight/application/#/site-users/${siteId}/`}
+              target="_blank"
+            >
               <CountCard
                 countName="User"
                 countNumber={totalUsers}

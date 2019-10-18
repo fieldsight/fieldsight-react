@@ -20,6 +20,8 @@ class ApprovedTable extends Component {
     const {
       props: { data, showViewData }
     } = this;
+    console.log(this.props.siteList, "========");
+
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
@@ -37,7 +39,6 @@ class ApprovedTable extends Component {
           <div className="card-body">
             <div className="table-footer">
               <div className="showing-rows">
-                {console.log("hjkk")}
                 <p>
                   Showing <span>{this.props.fromData}</span> to{" "}
                   <span>
