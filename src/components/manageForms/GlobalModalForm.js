@@ -915,7 +915,7 @@ class GlobalModalForm extends Component {
           </div>
           {formType == "substage" && (
             <>
-              <div className="form-group">
+              <div className="form-group border-0">
                 <InputElement
                   formType="editForm"
                   tag="input"
@@ -927,7 +927,7 @@ class GlobalModalForm extends Component {
                   changeHandler={handleInputChange}
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group border-0">
                 <InputElement
                   formType="editForm"
                   tag="input"

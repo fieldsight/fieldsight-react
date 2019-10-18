@@ -158,7 +158,7 @@ class AddStageForm extends Component {
             />
           </div>
         )}
-        <div className="form-group">
+        <div className="form-group border-0">
           <InputElement
             formType="editForm"
             tag="input"
