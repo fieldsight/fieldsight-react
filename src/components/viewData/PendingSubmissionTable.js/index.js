@@ -16,6 +16,11 @@ class PendingTable extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
+      this.props.handleBreadCrumb(this.props.breadcrumbs);
+    }
+  }
   render() {
     const {
       props: { data, showViewData }
@@ -40,12 +45,7 @@ class PendingTable extends Component {
             projectId={this.props.id}
           />
         </div>
-        {console.log(
-          this.props.siteList.data,
 
-          this.props.siteList,
-          "this.props.siteList"
-        )}
         {this.props.siteList && this.props.siteList.length > 0 ? (
           <div className="card-body">
             <div className="table-footer">

@@ -3,6 +3,7 @@ import ResponseTable from "../../responded/StagedFormResponseTable";
 import StatusTable from "../../responded/StatusTable";
 import axios from "axios";
 import Rejectsubmission from "../RejectSubmissionTable.js";
+import DeleteTable from "../deleteTable";
 import { Link } from "react-router-dom";
 
 class ResponseStageForm extends Component {
@@ -17,12 +18,13 @@ class ResponseStageForm extends Component {
       axios
         .get(`/fv3/api/view-by-forms/?site=${this.props.id}&form_type=stage`)
         .then(res => {
-          console.log(res, "resdff");
-
-          this.setState({
-            stage_forms: res.data.stage_forms,
-            deleted_forms: res.data.deleted_forms
-          });
+          this.setState(
+            {
+              stage_forms: res.data.stage_forms,
+              deleted_forms: res.data.deleted_forms
+            },
+            () => this.props.handleBreadCrumb(res.data.breadcrumbs)
+          );
         })
         .catch(err => {
           console.log(err, "err");
@@ -97,7 +99,10 @@ class ResponseStageForm extends Component {
                 </div>
                 <div className="card-body">
                   {!this.state.hide && (
-                    <DeleteTable deleted_forms={this.state.deleted_forms} />
+                    <DeleteTable
+                      deleted_forms={this.state.deleted_forms}
+                      id={this.props.id}
+                    />
                   )}
                 </div>
               </div>
