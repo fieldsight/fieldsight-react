@@ -171,7 +171,10 @@ class App extends Component {
                       path="/project/manage-forms/1/:id"
                       render={props => <ManageForms {...props} />}
                     />
-
+                    <Route
+                      path="/site/manage-forms/0/:id"
+                      render={props => <ManageForms {...props} />}
+                    />
                     <Route
                       path="/project-add/:id"
                       render={props => <ProjectAdd {...props} />}

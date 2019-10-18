@@ -1,5 +1,5 @@
-.fieldsight-new{
-  .fieldsight-btn{
+.fieldsight-new {
+  .fieldsight-btn {
     height: 30px;
     display: inline-block;
     vertical-align: middle;
@@ -7,7 +7,7 @@
     background: $color-blue;
     color: $color-white !important;
     box-shadow: none;
-    border:none;
+    border: none;
     text-transform: capitalize;
     font-size: 0.8125rem;
     cursor: pointer;
@@ -16,24 +16,30 @@
     @include animate_all(all 0.5s);
     cursor: pointer;
     @include box_shadow($boxshadow:0 1px 6px rgba(57, 73, 76, 0.35));
-    i{
-      margin-left:0.5rem;
+
+    i {
+      margin-left: 0.5rem;
     }
-    &.small-btn{
-        height: 24px;
-        line-height: 24px;
-        display: inline-block;
+
+    &.small-btn {
+      height: 24px;
+      line-height: 24px;
+      display: inline-block;
     }
-    &.approved-btn{
+
+    &.approved-btn {
       background: $color-green;
     }
-    &.rejected-btn{
+
+    &.rejected-btn {
       background: $color-red;
     }
-    &.flagged-btn{
+
+    &.flagged-btn {
       background: $color-yellow;
-      
+
     }
+
     // &.icon-btn{
     //   padding:1px 5px;
     //   height: auto;
@@ -41,154 +47,226 @@
     //     margin:0;
     //   }
     // }
-      
-      
-      
-    &:hover{
-        color:$color-white;
-        background-color: rgba($color-green, 0.8);
+
+
+
+    &:hover {
+      color: $color-white;
+      background-color: rgba($color-green, 0.8);
     }
-    &.approved-btn{
+
+    &.approved-btn {
       background-color: $color-green;
     }
-    &.rejected-btn{
+
+    &.rejected-btn {
       background-color: $color-red;
     }
-    &.flagged-btn{
+
+    &.flagged-btn {
       background-color: $color-yellow;
     }
-    
+
   }
-  .dash-btn{
+
+  .dash-btn {
     @include flex_end;
     align-items: center;
-    .fieldsight-btn{
+
+    .fieldsight-btn {
       margin-left: 1rem;
-      i{
-        margin:0;
+
+      i {
+        margin: 0;
 
       }
-      span{
-        margin:0 0.6125rem;
+
+      span {
+        margin: 0 0.6125rem;
       }
-      &::after{
+
+      &::after {
         display: none;
       }
-      &.left-icon{
-        i{
+
+      &.left-icon {
+        i {
           margin-right: 0.6125rem;
         }
       }
     }
-    .dropdown{
-      .dropdown-menu{
+
+    .dropdown {
+      .dropdown-menu {
         @include boxshadow;
-        border:0;
+        border: 0;
         @include animZoom-before;
         @include anim05;
-        a{
+
+        a {
           font-size: 0.8125rem;
           text-transform: capitalize;
-          padding:0.25rem 0.6125rem;
+          padding: 0.25rem 0.6125rem;
           border-bottom: 1px solid $color-bg;
-          &:first-child{
+
+          &:first-child {
             padding-top: 0;
           }
-          &:last-child{
+
+          &:last-child {
             border-bottom: 0;
             padding-bottom: 0;
           }
         }
-        &.show{
+
+        &.show {
           @include animZoom-before
         }
       }
-      .dropdown-toggle{
+
+      .dropdown-toggle {
         position: relative;
         padding-right: 1rem;
-        &:before{
-          
+
+        &:before {
+
           @include translatey;
-          right:7px;
-          content:"\f110";
+          right: 7px;
+          content: "\f110";
           font-family: 'LineAwesome';
           z-index: 99;
-          font-size:0.875rem;
+          font-size: 0.875rem;
         }
       }
     }
   }
-  .cropper-btn{
+
+  .cropper-btn {
     @include clear;
     margin-bottom: 1rem;
-    i{
-      margin:0;
-      font-size:1rem;
+
+    i {
+      margin: 0;
+      font-size: 1rem;
     }
-    .fieldsight-btn:first-child{
+
+    .fieldsight-btn:first-child {
       margin-right: 0.5rem;
     }
   }
-  button:focus{
+
+  button:focus {
     box-shadow: none;
-    -webkit-outline:none;
-    outline:none;
+    -webkit-outline: none;
+    outline: none;
   }
-  .download{
-    color:$color-download !important;;
+
+  .download {
+    color: $color-download !important;
+    ;
   }
-  .edit, strong.approved, .approved{
-    color:$color-green !important;
+
+  .edit,
+  strong.approved,
+  .approved {
+    color: $color-green !important;
   }
-  .hide{
-    color:$color-hide ;
+
+  .hide {
+    color: $color-hide;
   }
-  a.pending, strong.pending, .pending {
-    color:$color-blue !important;;
-    text-transform: capitalize;
-  }
-  a.approved, strong.approved{
-    color:$color-green;
-    text-transform: capitalize;
-  }
-  a.flagged, strong.flagged, .flagged{
-    color:$color-yellow !important;;
-    text-transform: capitalize;
-  }
-  a.rejected, strong.rejected , .rejected{ 
-    color:$color-red !important;;
+
+  a.pending,
+  strong.pending,
+  .pending {
+    color: $color-blue !important;
+    ;
     text-transform: capitalize;
   }
 
-  .add-btn{
+  a.approved,
+  strong.approved {
+    color: $color-green;
+    text-transform: capitalize;
+  }
+
+  a.flagged,
+  strong.flagged,
+  .flagged {
+    color: $color-yellow !important;
+    ;
+    text-transform: capitalize;
+  }
+
+  a.rejected,
+  strong.rejected,
+  .rejected {
+    color: $color-red !important;
+    ;
+    text-transform: capitalize;
+  }
+
+  .add-btn {
     @include flexjust;
     justify-content: center;
     align-items: center;
     @include clear;
-    a{
-      color:$color-blue;
+
+    a {
+      color: $color-blue;
       font-weight: 500;
       font-size: 0.875rem;
       margin-left: 0.625rem;
-      span{
-        width:24px;
+
+      span {
+        width: 24px;
         height: 24px;
         line-height: 24px;
-        padding:5px;
+        padding: 5px;
         background-color: $color-blue;
-        color:$color-white;
+        color: $color-white;
         @include radius(50%);
-        margin-left:0.635rem;
+        margin-left: 0.635rem;
         @include box_shadow($boxshadow:0 1px 6px rgba(57, 73, 76, 0.35));
       }
     }
-    &.flex-start{
+
+    &.flex-start {
       justify-content: flex-start;
-      a{
-        margin:0;
+
+      a {
+        margin: 0;
       }
     }
+
+    &.stage-add {
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    &.outline-btn {
+      a {
+        span {
+          background-color: transparent;
+          border: 1px solid $color-bg;
+          color:$color-blue;
+          box-shadow: none;
+          &.deploy.active{
+            border-color:$color-green;
+            background-color:$color-green;
+            color:$color-white;
+          }
+          &.reorder{
+            i:last-child{
+              margin-left:-10px;
+            }
+          }
+        }
+      }
+
+    }
   }
+
   .btn-toggle {
     border-radius: 1.5rem;
     color: #6b7381;
@@ -200,9 +278,9 @@
     width: 3.8rem;
     border-radius: 1.5rem;
     text-align: right;
-    padding:0 0.4rem;
+    padding: 0 0.4rem;
     text-transform: capitalize;
-    
+
     .handle {
       position: absolute;
       top: 0.1875rem;
