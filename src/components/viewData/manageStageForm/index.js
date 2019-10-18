@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ResponseTable from "../../responded/StagedFormResponseTable";
+import DeleteTable from "../deleteTable";
 import axios from "axios";
 import { Link } from "react-router-dom";
 

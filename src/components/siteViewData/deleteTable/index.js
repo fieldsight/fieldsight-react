@@ -18,6 +18,7 @@ class DeleteTable extends Component {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Title</th>
               <th>Last Response On</th>
               <th>Created Date</th>
               <th>Submissions</th>
@@ -29,7 +30,7 @@ class DeleteTable extends Component {
               return (
                 <tr key={key}>
                   <td>{deleted.name}</td>
-
+                  <td>{deleted.title}</td>
                   <td>{deleted.last_response}</td>
                   <td>{deleted.created_date}</td>
                   <td>
