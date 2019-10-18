@@ -151,7 +151,7 @@ class SortableStage extends Component {
                             handleRequestSubStage(each.id, each.order);
                           }}
                         >
-                          <h5>{each.name}</h5>
+                          <div>{each.name}</div>
                           {!!isProjectForm && (
                             <span
                               className="edit-stage"
@@ -178,7 +178,7 @@ class SortableStage extends Component {
                   <Accordion.Collapse eventKey={`${each.order}`}>
                     <Card.Body>
                       {!!isProjectForm && (
-                        <div className="add-btn pull-right outline-btn">
+                        <div className="add-btn  outline-btn">
                           {subStageData && subStageData.length > 1 && (
                             <a
                               className="pending"
@@ -279,7 +279,7 @@ class SortableStage extends Component {
                         </div>
                       )}
                       {!isProjectForm && !!each.site && (
-                        <div className="add-btn pull-right outline-btn">
+                        <div className="add-btn  outline-btn">
                           {subStageData && subStageData.length > 1 && (
                             <a
                               className="pending"

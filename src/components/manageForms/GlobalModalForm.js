@@ -142,8 +142,8 @@ class GlobalModalForm extends Component {
         : 1,
     notifyIncomplete:
       this.props.formData &&
-      this.props.formData.setting &&
-      this.props.formData.setting.notify_incomplete_schedule
+        this.props.formData.setting &&
+        this.props.formData.setting.notify_incomplete_schedule
         ? this.props.formData.setting.notify_incomplete_schedule
         : true
   };
@@ -546,22 +546,53 @@ class GlobalModalForm extends Component {
     }
     return (
       <>
-        <form className="floating-form" onSubmit={this.handleSubmit}>
+        {/* <form className="floating-form" onSubmit={this.handleSubmit}> */}
           <div className="form-form">
+          {formType == "substage" && (
+            <>
+              {/* <div className="form-group"> */}
+              <InputElement
+                classname="border-0"
+                formType="editForm"
+                tag="input"
+                type="text"
+                required={true}
+                label="Name"
+                name="substageTitle"
+                value={substageTitle}
+                changeHandler={this.handleInputChange}
+              />
+              {/* </div> */}
+              {/* <div className="form-group"> */}
+              <InputElement
+              classname="border-0"
+                formType="editForm"
+                tag="input"
+                type="text"
+                //   required={true}
+                label="Description"
+                name="substageDesc"
+                value={substageDesc}
+                changeHandler={this.handleInputChange}
+              />
+              {/* </div> */}
+            </>
+          )}
             <div className="selected-form">
+            <div className="selected-text">
+                <span>{formTitle}</span>
+              </div>
               {!isEditForm && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
                     {formTitle ? "Change form" : " Choose form"}
                     <span>
-                      <i className="la la-plus"></i>
+                      <i className="la la-file-text-o"></i>
                     </span>
                   </a>
                 </div>
               )}
-              <div className="selected-text">
-                <span>{formTitle}</span>
-              </div>
+              
             </div>
           </div>
 
@@ -776,6 +807,7 @@ class GlobalModalForm extends Component {
             <>
               {/* for subStage form */}
               <InputElement
+              classname="border-0"
                 formType="editForm"
                 tag="input"
                 type="number"
@@ -826,7 +858,7 @@ class GlobalModalForm extends Component {
             </div>
           </div>
           {!isProjectWide && regionDropdown && regionDropdown.length > 0 && (
-            <div>
+            <div className="form-group border-0">
               <label>Regions</label>
               {hasLoaded && (
                 <Select
@@ -839,7 +871,7 @@ class GlobalModalForm extends Component {
             </div>
           )}
           {!isProjectWide && typeDropdown && typeDropdown.length > 0 && (
-            <div>
+            <div className="form-group border-0">
               <label>Types</label>
               {hasLoaded && (
                 <Select
@@ -908,40 +940,13 @@ class GlobalModalForm extends Component {
               />
             </div>
           </div>
-          {formType == "substage" && (
-            <>
-              {/* <div className="form-group"> */}
-              <InputElement
-                formType="editForm"
-                tag="input"
-                type="text"
-                required={true}
-                label="Name"
-                name="substageTitle"
-                value={substageTitle}
-                changeHandler={this.handleInputChange}
-              />
-              {/* </div> */}
-              {/* <div className="form-group"> */}
-              <InputElement
-                formType="editForm"
-                tag="input"
-                type="text"
-                //   required={true}
-                label="Description"
-                name="substageDesc"
-                value={substageDesc}
-                changeHandler={this.handleInputChange}
-              />
-              {/* </div> */}
-            </>
-          )}
-          <div className="form-group pull-right no-margin">
+          
+          {/* <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
               Save
             </button>
           </div>
-        </form>
+        </form> */}
       </>
     );
   }

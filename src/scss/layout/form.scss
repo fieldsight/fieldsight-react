@@ -117,12 +117,13 @@
       .css-yk16xz-control {
         box-shadow: none;
         border: 0;
-        // border-bottom: 1px solid $color-bg;
+        border-bottom: 1px solid $color-bg;
+        border-radius: 0;
 
         &:hover {
           box-shadow: none;
           border: 0;
-          border-color: $color-blue;
+          border-bottom: 1px solid $color-blue;
         }
         .css-1rhbuit-multiValue{
           display:none;
@@ -918,7 +919,6 @@
         }
 
         form {
-          margin-top: 1rem;
 
           .form-group {
             padding: 0.6125rem 0;
@@ -974,13 +974,9 @@
       border-bottom: 1px solid $color-bg;
       padding-bottom: 0.6125rem;
       margin-bottom: 0.5rem;
-
-      .add-btn {
-        margin-bottom: 0.5rem;
-      }
-
       .selected-text {
         font-size: .875rem;
+        margin-bottom: 0.5rem;
       }
     }
 
