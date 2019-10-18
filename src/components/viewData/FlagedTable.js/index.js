@@ -8,8 +8,6 @@ class FlaggedTable extends Component {
     flagged_submissions: []
   };
   componentDidMount() {
-    //console.log(this.props.id, "ids");
-
     if (!!this.props.id) {
       this.props.paginationHandler(1, null, {
         type: "viewByStatus",
@@ -18,9 +16,12 @@ class FlaggedTable extends Component {
       });
     }
   }
-
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
+      this.props.handleBreadCrumb(this.props.breadcrumbs);
+    }
+  }
   render() {
-    console.log(this.props.siteList, "props");
     const {
       props: { data, showViewData }
     } = this;

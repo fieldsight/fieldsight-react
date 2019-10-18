@@ -76,7 +76,7 @@ export default class ViewData extends Component {
       this.props.location.pathname === `/project-responses/${id}/general` ||
       this.props.location.pathname === `/project-responses/${id}/stage` ||
       this.props.location.pathname === `/project-responses/${id}/scheduled` ||
-      this.props.location.pathname === `/project-responses/${id}/survey`
+      this.props.location.pathname === `/project-responses/${id}/general-survey`
     ) {
       this.setState({
         view_btn: false,
@@ -85,19 +85,10 @@ export default class ViewData extends Component {
     }
   }
   handleBreadCrumb = breadCrumb => {
-    console.log("before", breadCrumb);
-
     if (!!breadCrumb) {
-      console.log("if true", breadCrumb);
-
-      this.setState(
-        {
-          breadCrumb
-        },
-        () => {
-          console.log("breadcrumb", this.state.breadCrumb);
-        }
-      );
+      this.setState({
+        breadCrumb
+      });
     }
   };
   render() {
@@ -186,7 +177,7 @@ export default class ViewData extends Component {
                       />
 
                       <Route
-                        path={`${this.props.match.url}/survey`}
+                        path={`${this.props.match.url}/general-survey`}
                         render={props => (
                           <ManageSurveyForm
                             showViewData={this.showViewData}
@@ -239,7 +230,7 @@ export default class ViewData extends Component {
 
                       <Route
                         path={`${this.props.match.url}/rejected`}
-                        render={() => (
+                        render={props => (
                           <RejectedTable
                             showViewData={this.showViewData}
                             data={this.state.view_btn}

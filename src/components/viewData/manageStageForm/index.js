@@ -15,12 +15,13 @@ class ResponseStageForm extends Component {
       axios
         .get(`/fv3/api/view-by-forms/?project=${this.props.id}&form_type=stage`)
         .then(res => {
-          console.log(res, "res");
-
-          this.setState({
-            stage_forms: res.data.stage_forms,
-            deleted_forms: res.data.deleted_forms
-          });
+          this.setState(
+            {
+              stage_forms: res.data.stage_forms,
+              deleted_forms: res.data.deleted_forms
+            },
+            () => this.props.handleBreadCrumb(res.data.breadcrumbs)
+          );
         })
         .catch(err => {
           console.log(err, "err");
@@ -93,7 +94,10 @@ class ResponseStageForm extends Component {
                 </div>
                 <div className="card-body">
                   {!this.state.hide && (
-                    <DeleteTable deleted_forms={this.state.deleted_forms} />
+                    <DeleteTable
+                      id={this.props.id}
+                      deleted_forms={this.state.deleted_forms}
+                    />
                   )}
                 </div>
               </div>

@@ -10,18 +10,21 @@ class ResponseTable extends Component {
   static getDerivedStateFromProps(props, state) {
     return {
       generals_forms: props.generals_forms,
-      table: props.table
+      table: props.table,
+      survey: props.survey
     };
   }
-  render() {
-    console.log(this.state.table);
 
+  render() {
     return (
       <React.Fragment>
         <Table responsive="xl" className="table  table-bordered  dataTable ">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>
+                {this.state.survey === "true" ? "Schedule Name" : "Name"}{" "}
+              </th>
+              {this.state.survey === "true" ? <th> Form Name</th> : ""}
               <th>Submission</th>
               <th>Last Response On</th>
               <th>Created Date</th>
@@ -35,10 +38,29 @@ class ResponseTable extends Component {
                   <td style={{ width: "45px" }}>
                     <a href={`#`}>{generals.name}</a>
                   </td>
+                  {this.state.survey === "true" ? (
+                    <td>{generals.form_name}</td>
+                  ) : (
+                    ""
+                  )}
                   <td>
                     {this.state.table == "site" ? (
+                      generals.fsxf_id ? (
+                        <Link
+                          to={`/site-submission-data/${this.props.id}/${generals.fsxf_id}`}
+                        >
+                          {generals.response_count}
+                        </Link>
+                      ) : (
+                        <Link
+                          to={`/site-submission-data/${this.props.id}/${generals.id}`}
+                        >
+                          {generals.response_count}
+                        </Link>
+                      )
+                    ) : generals.fsxf_id ? (
                       <Link
-                        to={`/site-submission-data/${this.props.id}/${generals.id}`}
+                        to={`/site-submission-data/${this.props.id}/${generals.fsxf_id}`}
                       >
                         {generals.response_count}
                       </Link>
@@ -52,20 +74,39 @@ class ResponseTable extends Component {
                   </td>
                   <td>{generals.last_response}</td>
                   <td>{generals.created_date}</td>
-                  <td>
-                    {generals.view_submission_url === null ? (
-                      <>
-                        <i className="la la-eye view-tag tag"></i>
-                      </>
-                    ) : (
-                      <a
-                        href={generals.view_submission_url}
-                        className="view-tag tag"
-                      >
-                        <i className="la la-eye"></i>
-                      </a>
-                    )}
 
+                  <td>
+                    {this.state.table == "site" ? (
+                      generals.fsxf_id ? (
+                        <Link
+                          className="view-tag tag"
+                          to={`/site-submission-data/${this.props.id}/${generals.fsxf_id}`}
+                        >
+                          <i className="la la-eye view-tag tag"></i>
+                        </Link>
+                      ) : (
+                        <Link
+                          className="view-tag tag"
+                          to={`/site-submission-data/${this.props.id}/${generals.id}`}
+                        >
+                          <i className="la la-eye view-tag tag"></i>
+                        </Link>
+                      )
+                    ) : generals.fsxf_id ? (
+                      <Link
+                        className="view-tag tag"
+                        to={`/site-submission-data/${this.props.id}/${generals.fsxf_id}`}
+                      >
+                        <i className="la la-eye view-tag tag"></i>
+                      </Link>
+                    ) : (
+                      <Link
+                        className="view-tag tag"
+                        to={`/submission-data/${this.props.id}/${generals.id}`}
+                      >
+                        <i className="la la-eye view-tag tag"></i>
+                      </Link>
+                    )}
                     {generals.download_url === null ? (
                       <>
                         <i className="la la-download edit-tag tag"></i>

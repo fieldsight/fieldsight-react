@@ -42,7 +42,8 @@ export default class SiteEdit extends Component {
     project_id: "",
     show: false,
     deleteConfirm: false,
-    select: []
+    select: [],
+    delete_perm: ""
   };
 
   componentDidMount() {
@@ -64,6 +65,7 @@ export default class SiteEdit extends Component {
               const longitude = position && position[1].split("(")[1];
               const latitude = position && position[2].split(")")[0];
               this.setState({
+                delete_perm: response.data.delete_perm,
                 project_id: response.data.project,
                 jsondata: res.data.json_questions,
                 id,
@@ -281,6 +283,7 @@ export default class SiteEdit extends Component {
         deleteClose={this.deleteClose}
         deleteFile={this.deleteFile}
         selectedValue={this.selectedValue}
+        delete_perm={this.state.delete_perm}
       />
     );
   }

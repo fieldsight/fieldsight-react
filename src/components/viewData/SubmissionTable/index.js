@@ -10,7 +10,8 @@ class SubmissionData extends Component {
     id: this.props.match.params && this.props.match.params.id,
     siteList: [],
     mastersiteList: [],
-    showConfirmation: false
+    showConfirmation: false,
+    breadcrumbs: {}
   };
 
   componentDidMount() {
@@ -26,6 +27,7 @@ class SubmissionData extends Component {
       fsxf_id: fid,
       status: "form-submission"
     });
+
     this.setState({
       fid
     });
@@ -34,7 +36,8 @@ class SubmissionData extends Component {
     if (nextProps.siteList != this.props.siteList) {
       this.setState({
         siteList: nextProps.siteList,
-        mastersiteList: nextProps.siteList
+        mastersiteList: nextProps.siteList,
+        breadcrumbs: nextProps.breadcrumbs
       });
     }
   }
@@ -111,9 +114,18 @@ class SubmissionData extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="">Submission</a>
+              <a href={this.state.breadcrumbs.project_url}>
+                {this.state.breadcrumbs.project_name}
+              </a>
             </li>
-            <li className="breadcrumb-item">Data</li>
+            <li className="breadcrumb-item">
+              <a href={this.state.breadcrumbs.responses_url}>
+                {this.state.breadcrumbs.responses}
+              </a>
+            </li>
+            <li className="breadcrumb-item">
+              {this.state.breadcrumbs.current_page}
+            </li>
           </ol>
         </nav>
         <div className="card">
@@ -194,8 +206,6 @@ class SubmissionData extends Component {
             </Table>
             {this.props.siteList && this.props.siteList.length > 0 ? (
               <div className="card-body">
-                {console.log("hhh")}
-
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>

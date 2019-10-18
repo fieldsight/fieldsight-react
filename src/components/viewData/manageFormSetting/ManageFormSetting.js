@@ -4,7 +4,7 @@ import { withRouter, Link } from "react-router-dom";
 const sideNavRoutes = [
   { to: "/scheduled", title: "Scheduled Forms" },
   { to: "/stage", title: "Staged Forms" },
-  { to: "/survey", title: "Survey Forms" }
+  { to: "/general-survey", title: "General Forms" }
 ];
 const site_specific_forms = [
   { to: "/general", path: "", title: "General Forms" }

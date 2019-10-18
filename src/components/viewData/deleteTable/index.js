@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { Link } from "react-router-dom";
 class DeleteTable extends Component {
   state = {
     deleted_forms: []
@@ -16,7 +17,6 @@ class DeleteTable extends Component {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Id</th>
               <th>Last Response On</th>
               <th>Created Date</th>
               <th>Submissions</th>
@@ -30,10 +30,17 @@ class DeleteTable extends Component {
                   <td>
                     <a href={`#/`}>{deleted.name}</a>
                   </td>
-                  <td>{deleted.id}</td>
+
                   <td>{deleted.last_response}</td>
                   <td>{deleted.created_date}</td>
-                  <td>{deleted.response_count}</td>
+                  <td>
+                    {" "}
+                    <Link
+                      to={`/submission-data/${this.props.id}/${deleted.fsxf_id}`}
+                    >
+                      {deleted.response_count}
+                    </Link>
+                  </td>
 
                   <td>
                     {deleted.view_submission_url === null ? (
@@ -41,12 +48,12 @@ class DeleteTable extends Component {
                         <i className="la la-eye"></i> {deleted.response_count}{" "}
                       </>
                     ) : (
-                      <a
-                        href={deleted.view_submission_url}
+                      <Link
                         className="view-tag tag"
+                        to={`/submission-data/${this.props.id}/${deleted.fsxf_id}`}
                       >
                         <i className="la la-eye"></i>{" "}
-                      </a>
+                      </Link>
                     )}
                     {deleted.download_url === null ? (
                       <>

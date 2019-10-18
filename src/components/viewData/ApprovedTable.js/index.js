@@ -15,12 +15,15 @@ class ApprovedTable extends Component {
       });
     }
   }
-
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
+      this.props.handleBreadCrumb(this.props.breadcrumbs);
+    }
+  }
   render() {
     const {
       props: { data, showViewData }
     } = this;
-    console.log(this.props.siteList, "========");
 
     return (
       <React.Fragment>

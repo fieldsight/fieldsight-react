@@ -46,31 +46,34 @@ export default class SurveyFormResponseTable extends Component {
                           <td>
                             {this.state.table === "site" ? (
                               <Link
-                                to={`/site-submission-data/${this.props.id}/${sub_stages.id}`}
+                                to={`/site-submission-data/${this.props.id}/${sub_stages.fsxf_id}`}
                               >
                                 {sub_stages.response_count}
                               </Link>
                             ) : (
                               <Link
-                                to={`/submission-data/${this.props.id}/${sub_stages.id}`}
+                                to={`/submission-data/${this.props.id}/${sub_stages.fsxf_id}`}
                               >
                                 {sub_stages.response_count}
                               </Link>
                             )}
                           </td>
+
                           <td>
-                            {sub_stages.view_submission_url === null ||
-                            sub_stages.view_submission_url !== "" ? (
-                              <>
-                                <i className="la la-eye"></i>
-                              </>
-                            ) : (
-                              <a
-                                href={sub_stages.view_submission_url}
+                            {this.state.table === "site" ? (
+                              <Link
                                 className="view-tag tag"
+                                to={`/site-submission-data/${this.props.id}/${sub_stages.fsxf_id}`}
                               >
                                 <i className="la la-eye"></i>
-                              </a>
+                              </Link>
+                            ) : (
+                              <Link
+                                className="view-tag tag"
+                                to={`/submission-data/${this.props.id}/${sub_stages.fsxf_id}`}
+                              >
+                                <i className="la la-eye"></i>
+                              </Link>
                             )}
 
                             {sub_stages.download_url === null ? (

@@ -18,6 +18,11 @@ class RejectedTable extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
+      this.props.handleBreadCrumb(this.props.breadcrumbs);
+    }
+  }
   render() {
     const {
       props: { data, showViewData }
@@ -43,7 +48,6 @@ class RejectedTable extends Component {
           <div className="card-body">
             <div className="table-footer">
               <div className="showing-rows">
-                {console.log("hjkk")}
                 <p>
                   Showing <span>{this.props.fromData}</span> to{" "}
                   <span>
