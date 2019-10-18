@@ -23,12 +23,15 @@ class ManageGeneralForm extends Component {
       axios
         .get(`/fv3/api/view-by-forms/?site=${this.props.id}&form_type=general`)
         .then(res => {
-          console.log(res, "ress");
+          console.log(res);
 
-          this.setState({
-            deleted_forms: res.data.deleted_forms,
-            generals_forms: res.data.generals_forms
-          });
+          this.setState(
+            {
+              deleted_forms: res.data.deleted_forms,
+              generals_forms: res.data.generals_forms
+            },
+            () => this.props.handleBreadCrumb(res.data.breadcrumbs)
+          );
         })
         .catch(err => {
           console.log(err, "err");
@@ -67,47 +70,52 @@ class ManageGeneralForm extends Component {
             />
           )}
         </div>
-        {!data && (
-          <div className="card no-boxshadow">
-            <div className="card-header main-card-header sub-card-header">
-              <h5>Deleted Forms</h5>
-              <div className="dash-btn">
-                {this.state.hide ? (
-                  <button
-                    type="button"
-                    className="btn-toggle"
-                    onClick={this.toggleHide}
-                  >
-                    show
-                    <div className="handle"></div>
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="btn-toggle"
-                    onClick={this.toggleHide}
-                    style={{
-                      backgroundColor: "#28a745",
-                      color: "white",
-                      textAlign: "left"
-                    }}
-                  >
-                    hide
-                    <div
-                      className="handle"
-                      style={{ left: "auto", right: "0.1875rem" }}
-                    ></div>
-                  </button>
-                )}
+        {this.state.deleted_forms.length > 0
+          ? !data && (
+              <div className="card no-boxshadow">
+                <div className="card-header main-card-header sub-card-header">
+                  <h5>Deleted Forms</h5>
+                  <div className="dash-btn">
+                    {this.state.hide ? (
+                      <button
+                        type="button"
+                        className="btn-toggle"
+                        onClick={this.toggleHide}
+                      >
+                        show
+                        <div className="handle"></div>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn-toggle"
+                        onClick={this.toggleHide}
+                        style={{
+                          backgroundColor: "#28a745",
+                          color: "white",
+                          textAlign: "left"
+                        }}
+                      >
+                        hide
+                        <div
+                          className="handle"
+                          style={{ left: "auto", right: "0.1875rem" }}
+                        ></div>
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div className="card-body">
+                  {!this.state.hide && (
+                    <DeleteTable
+                      deleted_forms={this.state.deleted_forms}
+                      id={this.props.id}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="card-body">
-              {!this.state.hide && (
-                <DeleteTable deleted_forms={this.state.deleted_forms} />
-              )}
-            </div>
-          </div>
-        )}
+            )
+          : ""}
       </React.Fragment>
     );
   }

@@ -28,7 +28,6 @@ class ManageGeneralForm extends Component {
         )
         .then(res => {
           if (!!res.data) {
-            console.log(res, "res");
             this.setState(
               {
                 deleted_forms: res.data.deleted_forms,
@@ -46,14 +45,6 @@ class ManageGeneralForm extends Component {
         });
     }
   }
-  // componentWillReceiveProps(nextprops) {
-  //   console.log(nextprops);
-
-  //   nextprops.handleBreadCrumb(this.state.breadcrumbs);
-  //   this.setState({
-  //     id: nextprops.id
-  //   });
-  // }
 
   toggleHide = () => {
     this.setState({
@@ -65,7 +56,6 @@ class ManageGeneralForm extends Component {
     const {
       props: { data, showViewData }
     } = this;
-    // console.log(this.state.generals_forms, "general");
 
     return (
       <React.Fragment>
@@ -125,7 +115,10 @@ class ManageGeneralForm extends Component {
                 </div>
                 <div className="card-body">
                   {!this.state.hide && (
-                    <DeleteTable deleted_forms={this.state.deleted_forms} />
+                    <DeleteTable
+                      deleted_forms={this.state.deleted_forms}
+                      id={this.props.id}
+                    />
                   )}
                 </div>
               </div>

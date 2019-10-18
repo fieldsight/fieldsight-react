@@ -8,8 +8,6 @@ export default class SurveyFormResponseTable extends Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    console.log(props, "props");
-
     return {
       survey_forms: props.survey_forms
     };
@@ -56,12 +54,12 @@ export default class SurveyFormResponseTable extends Component {
                         <i className="la la-eye"></i>submission
                       </>
                     ) : (
-                      <a
-                        href={survey.view_submission_url}
+                      <Link
                         className="view-tag tag"
+                        to={`/submission-data/${this.props.id}/${survey.id}`}
                       >
                         <i className="la la-eye"></i>
-                      </a>
+                      </Link>
                     )}
                     {survey.download_url === null ? (
                       <>

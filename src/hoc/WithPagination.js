@@ -35,7 +35,8 @@ const withPagination = WrappedComponent => {
 
         case "viewByStatus":
           return `fv3/api/view-by-status/?page=${page_num}&project=${payload.projectId}&submission_status=${payload.status}`;
-
+        case "siteStatus":
+          return `fv3/api/view-by-status/?page=${page_num}&site=${payload.projectId}&submission_status=${payload.status}`;
         case "formSubmission":
           return `/fv3/api/forms-submissions/?project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
         case "siteSubmission":
@@ -51,6 +52,8 @@ const withPagination = WrappedComponent => {
         .then(res => {
           if (this._isMounted) {
             if (res.status === 200) {
+              console.log(res, "ress");
+
               // if (res.data.results.query === null) {
               //   this.setState({
               //     siteList: res.data.results.data,
@@ -88,6 +91,7 @@ const withPagination = WrappedComponent => {
                   totalCount: res.data.count,
                   textVal: null,
                   form_id_string: res.data.results.form_id_string,
+                  breadcrumbs: res.data.results.breadcrumbs,
                   totalPage: Math.ceil(res.data.count / 200)
                 });
               }

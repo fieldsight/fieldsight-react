@@ -42,6 +42,7 @@ export default class SiteAdd extends Component {
   };
 
   render() {
+    console.log(this.props);
     const {
       onChangeHandler,
       onSubmitHandler,
