@@ -21,7 +21,8 @@ class ManageScheduledForm extends Component {
         .then(res => {
           this.setState({
             deleted_forms: res.data.deleted_forms,
-            generals_forms: res.data.scheduled_forms
+            generals_forms: res.data.scheduled_forms,
+            breadcrumbs: res.data.breadcrumbs
           });
         })
         .catch(err => {

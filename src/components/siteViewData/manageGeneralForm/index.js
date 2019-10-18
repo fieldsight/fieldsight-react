@@ -62,6 +62,8 @@ class ManageGeneralForm extends Component {
             <ResponseTable
               generals_forms={this.state.generals_forms}
               deleted_forms={this.state.deleted_forms}
+              table="site"
+              id={this.props.id}
             />
           )}
         </div>

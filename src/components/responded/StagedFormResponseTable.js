@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { Link } from "react-router-dom";
 export default class SurveyFormResponseTable extends Component {
   state = {
     stage_forms: []
@@ -7,7 +8,7 @@ export default class SurveyFormResponseTable extends Component {
   static getDerivedStateFromProps(props, state) {
     return {
       stage_forms: props.stage_forms,
-      deleted_forms: props.deleted_forms
+      table: props.table
     };
   }
   render() {
@@ -29,7 +30,7 @@ export default class SurveyFormResponseTable extends Component {
                       <th>sub stage name</th>
                       <th>form name</th>
                       <th>last response on</th>
-                      <th>responses</th>
+                      <th>Submissions</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -42,7 +43,21 @@ export default class SurveyFormResponseTable extends Component {
                             {sub_stages.form_name}
                           </td>
                           <td>{sub_stages.last_response}</td>
-                          <td>{sub_stages.response_count}</td>
+                          <td>
+                            {this.state.table === "site" ? (
+                              <Link
+                                to={`/site-submission-data/${this.props.id}/${sub_stages.id}`}
+                              >
+                                {sub_stages.response_count}
+                              </Link>
+                            ) : (
+                              <Link
+                                to={`/submission-data/${this.props.id}/${sub_stages.id}`}
+                              >
+                                {sub_stages.response_count}
+                              </Link>
+                            )}
+                          </td>
                           <td>
                             {sub_stages.view_submission_url === null ||
                             sub_stages.view_submission_url !== "" ? (
