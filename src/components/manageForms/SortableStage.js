@@ -232,7 +232,7 @@ class SortableStage extends Component {
                               {/* Deploy Substages */}
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Deploy Substages</Tooltip>}
+                                overlay={<Tooltip>Deploy All Substages</Tooltip>}
                               >
                                 <span className="active deploy">
                                   <i className="la la-rocket" />
@@ -267,7 +267,7 @@ class SortableStage extends Component {
                                 <OverlayTrigger
                                   placement="top"
                                   overlay={
-                                    <Tooltip>Undeploy Substages</Tooltip>
+                                    <Tooltip>Undeploy All Substages</Tooltip>
                                   }
                                 >
                                   <span>
@@ -333,7 +333,7 @@ class SortableStage extends Component {
                               {/* Deploy Substages */}
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Deploy Substages</Tooltip>}
+                                overlay={<Tooltip>Deploy All Substages</Tooltip>}
                               >
                                 <span className="active deploy">
                                   <i className="la la-rocket" />
@@ -352,7 +352,7 @@ class SortableStage extends Component {
                                 <OverlayTrigger
                                   placement="top"
                                   overlay={
-                                    <Tooltip>Undeploy Substages</Tooltip>
+                                    <Tooltip>Undeploy All Substages</Tooltip>
                                   }
                                 >
                                   <span>

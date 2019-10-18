@@ -618,11 +618,13 @@
 
 
         }
-        .card-body{
-          .add-btn{
+
+        .card-body {
+          .add-btn {
             justify-content: flex-end;
           }
-          table{
+
+          table {
             margin-top: .25rem;
           }
         }
@@ -630,10 +632,23 @@
         .dragable-stage {
           .card-header {
             h5 {
-              width:calc(100% - 30px);
-              button {
+              width: calc(100% - 30px);
+
+              button.btn-link {
                 pointer-events: none;
+                span.edit-stage,&::after {
+                  display: none;
+                }
+                // &::after{
+                //   display:none;
+                // }
               }
+            }
+
+            &:hover {
+              cursor: -moz-move;
+              cursor: -webkit-move;
+              cursor: move;
             }
           }
         }

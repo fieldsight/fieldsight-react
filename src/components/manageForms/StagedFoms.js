@@ -814,7 +814,7 @@ class StagedForms extends Component {
                 >
                   <OverlayTrigger
                     placement="top"
-                    overlay={<Tooltip> Deploy</Tooltip>}
+                    overlay={<Tooltip> Deploy All Stages</Tooltip>}
                   >
                     <span className="">
                       <i className="la la-rocket" />
@@ -830,7 +830,7 @@ class StagedForms extends Component {
                   {!isStageReorder ? (
                     <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip>Reorder</Tooltip>}
+                      overlay={<Tooltip>Reorder Stages</Tooltip>}
                     >
                       <span className="reorder">
                         <i className="la la-ellipsis-v" />
@@ -869,7 +869,7 @@ class StagedForms extends Component {
                 >
                   <OverlayTrigger
                     placement="top"
-                    overlay={<Tooltip> Deploy</Tooltip>}
+                    overlay={<Tooltip> Deploy All Stages</Tooltip>}
                   >
                     <span className="">
                       <i className="la la-rocket" />
@@ -906,7 +906,8 @@ class StagedForms extends Component {
                 handleDeleteAll={handleDeleteAllSubstages}
                 isProjectForm={isProjectForm}
               />
-              <div className="add-btn pull-right stage-add">
+              <div className="card-body pdt-0" >
+              <div className="add-btn  stage-add">
                 <a onClick={this.props.commonPopupHandler}>
                   Add Stage
                   <span>
@@ -914,6 +915,8 @@ class StagedForms extends Component {
                   </span>
                 </a>
               </div>
+              </div>
+              
             </>
           )}
           {this.props.popupModal && (

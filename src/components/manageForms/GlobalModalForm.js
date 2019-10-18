@@ -542,7 +542,7 @@ class GlobalModalForm extends Component {
     }
     for (var i = 1; i <= 31; i++) {
       if (i <= 30) dayOptions.push({ key: i, name: i });
-      else dayOptions.push({ key: 0, name: "last day" });
+      else dayOptions.push({ key: 0, name: "Last" });
     }
     return (
       <>
@@ -677,6 +677,7 @@ class GlobalModalForm extends Component {
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
                   <SelectElement
+                  classname="border-0"
                     options={weekOptions}
                     value={frequency}
                     changeHandler={this.handleFrequencyChange}
@@ -734,11 +735,12 @@ class GlobalModalForm extends Component {
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
                   <SelectElement
+                  classname="border-0"
                     options={monthOPtions}
                     value={frequency}
                     changeHandler={this.handleFrequencyChange}
                   />
-                  <span>Month on</span>
+                  <span>Months on day</span>
                   <SelectElement
                     options={dayOptions}
                     value={selectedDays[0]}
