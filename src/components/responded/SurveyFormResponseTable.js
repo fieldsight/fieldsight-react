@@ -32,9 +32,7 @@ export default class SurveyFormResponseTable extends Component {
             {this.state.survey_forms.map((survey, key) => {
               return (
                 <tr key={key}>
-                  <td>
-                    <a href={`#/`}>{survey.name}</a>
-                  </td>
+                  <td>{survey.name}</td>
                   <td>{survey.title}</td>
                   <td>{survey.last_response}</td>
                   <td>{survey.created_date}</td>

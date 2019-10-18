@@ -35,9 +35,7 @@ class ResponseTable extends Component {
             {this.state.generals_forms.map((generals, key) => {
               return (
                 <tr key={key}>
-                  <td style={{ width: "45px" }}>
-                    <a href={`#`}>{generals.name}</a>
-                  </td>
+                  <td style={{ width: "45px" }}>{generals.name}</td>
                   {this.state.survey === "true" ? (
                     <td>{generals.form_name}</td>
                   ) : (
