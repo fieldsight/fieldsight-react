@@ -133,7 +133,6 @@ class EditProject extends Component {
       this.requestHandler
     );
   };
- 
 
   onSelectChangeHandler = (e, subSect) => {
     const { value } = e.target;
@@ -161,10 +160,10 @@ class EditProject extends Component {
     });
 
   onChangeHandler = (e, position) => {
-  
     const { name, value } = e.target;
+    // debugger;
     if (position) {
-      return this.setState({
+      this.setState({
         position: {
           ...this.state.position,
           [name]: value
@@ -190,7 +189,7 @@ class EditProject extends Component {
         })
       )
       .then(
-        axios.spread((project, sector) => { 
+        axios.spread((project, sector) => {
           if (this._isMounted) {
             if (project && sector) {
               const position =
@@ -242,10 +241,10 @@ class EditProject extends Component {
   };
 
   cropImage = () => {
-      if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
       return;
-      }
-   this.setState({
+    }
+    this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
       src: ""
@@ -269,7 +268,6 @@ class EditProject extends Component {
   };
 
   render() {
-  
     const {
       state: {
         loaded,
@@ -448,6 +446,7 @@ class EditProject extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
+                        // step="any"
                         required={true}
                         label="Latitude"
                         name="latitude"
@@ -476,7 +475,7 @@ class EditProject extends Component {
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label> {cropResult ? "Preview" : "Attach File"}</label>
-               
+
                 {cropResult ? (
                   <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
                     {({ getRootProps, getInputProps }) => {
@@ -488,7 +487,7 @@ class EditProject extends Component {
                               alt="Cropped Image"
                             />
                           </div>
-                          
+
                           <div {...getRootProps()}>
                             <input {...getInputProps()} multiple={false} />
                             <div className="upload-icon" />
