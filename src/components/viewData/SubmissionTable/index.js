@@ -159,8 +159,7 @@ class SubmissionData extends Component {
                   <th>Submission Id</th>
                   <th>Submitted By</th>
                   <th>Submission Date</th>
-                  <th>Enketo</th>
-                  <th>Delete</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -188,8 +187,7 @@ class SubmissionData extends Component {
                           >
                             <i className="la la-edit"></i>
                           </a>
-                        </td>
-                        <td>
+
                           <a
                             className="td-delete-btn"
                             onClick={() => {

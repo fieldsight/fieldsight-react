@@ -152,8 +152,7 @@ class SubmissionData extends Component {
                   <th>Submission Id</th>
                   <th>Submitted By</th>
                   <th>Submission Date</th>
-                  <th>Enketo</th>
-                  <th>Delete</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -162,13 +161,7 @@ class SubmissionData extends Component {
                     return (
                       <tr key={key}>
                         <td>{key + 1}</td>
-                        <td>
-                          <a
-                            href={`/fieldsight/application/?submission=${list.id}#/submission-details`}
-                          >
-                            {list.submission_id}
-                          </a>
-                        </td>
+                        <td>{list.submission_id}</td>
                         <td>
                           <a href={list.profile_url}>{list.submitted_by}</a>
                         </td>
@@ -176,7 +169,7 @@ class SubmissionData extends Component {
 
                         <td>
                           <a
-                            href={`/form/view/${this.props.form_id_string}/${list.submission_id}`}
+                            href={`/fieldsight/application/?submission=${list.id}#/submission-details`}
                           >
                             <i className="la la-eye"></i>
                           </a>
@@ -185,8 +178,7 @@ class SubmissionData extends Component {
                           >
                             <i className="la la-edit"></i>
                           </a>
-                        </td>
-                        <td>
+
                           <a
                             className="td-delete-btn"
                             onClick={() => {
