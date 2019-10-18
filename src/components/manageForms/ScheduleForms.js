@@ -10,6 +10,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import ScheduleFormTable from "./ScheduleFormTable";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
+import ManageModal from './ManageModal';
 
 const formatDate = date => {
   const dateIdx = date.getDate();
@@ -465,10 +466,11 @@ class ScheduleForms extends Component {
             />
           )}
           {this.props.popupModal && (
-            <Modal
+            <ManageModal
               title="Add Scheduled Form"
               toggleModal={handleClosePopup}
               classname="manage-body md-body"
+              handleSubmit={this.handleScheduleForm}
             >
               <GlobalModalForm
                 formType="schedule"
@@ -480,12 +482,12 @@ class ScheduleForms extends Component {
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
-                handleCreateForm={this.handleScheduleForm}
+                // handleCreateForm={this.handleScheduleForm}
                 formData={formData}
                 isEditForm={isEditForm}
                 isProjectWide={false}
               />
-            </Modal>
+            </ManageModal>
           )}
           {editGuide && (
             <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
@@ -498,13 +500,14 @@ class ScheduleForms extends Component {
             </Modal>
           )}
           {showFormModal && (
-            <Modal
+            <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
               classname="manage-body md-body"
+              handleSubmit={this.handleSaveForm}
             >
               <AddForm
                 activeTab={activeTab}
@@ -514,10 +517,10 @@ class ScheduleForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                handleSaveForm={this.handleSaveForm}
+                // handleSaveForm={this.handleSaveForm}
                 loader={this.props.formLoader}
               />
-            </Modal>
+            </ManageModal>
           )}
         </RightContentCard>
       </div>

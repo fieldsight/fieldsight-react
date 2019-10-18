@@ -75,7 +75,7 @@ class DashboardHeader extends Component {
     const HeaderDropdown = [
       {
         title: `Edit ${termsAndLabels && termsAndLabels.site}`,
-        link: `/fieldsight/application/#/site-edit/${siteId}/`
+        link: `/fieldsight/site/${siteId}/`
       },
       {
         title: `${termsAndLabels && termsAndLabels.site} documents`,
@@ -294,7 +294,7 @@ class DashboardHeader extends Component {
               title="Subsites"
               toggleModal={() => closeModal("Subsites")}
               showButton={enableSubsites && hasWritePermission}
-              url={`/fieldsight/application/#/sub-site-add/${projectId}/${siteId}`}
+              url={`/fieldsight/site/add/subsite/${projectId}/${siteId}`}
             >
               {subSitesLoader ? (
                 <DotLoader />

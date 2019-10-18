@@ -69,7 +69,7 @@ class RegionalSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  "/fieldsight/application/#/regional-site-add/" +
+                  "/fieldsight/site/add/" +
                     this.props.projectId +
                     "/" +
                     this.props.regionId +
