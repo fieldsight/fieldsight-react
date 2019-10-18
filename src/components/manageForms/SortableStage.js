@@ -21,8 +21,8 @@ const DragHandle = sortableHandle(({ name, order }) => (
       <Accordion.Toggle
         as={Button}
         variant="link"
-        eventKey={`${order}`}
-        style={{ pointerEvents: "none" }}
+        // eventKey={`${order}`}
+        // style={{ pointerEvents: "none" }}
       >
         {name}
       </Accordion.Toggle>
@@ -72,8 +72,6 @@ class SortableStage extends Component {
         data: arrayMove(data, oldIndex, newIndex)
       }),
       () => {
-        console.log("data", this.state.data);
-
         this.props.handleNewStageOrder(this.state.data);
       }
     );
