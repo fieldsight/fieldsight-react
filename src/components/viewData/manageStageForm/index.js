@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import ResponseTable from "../../responded/StagedFormResponseTable";
-import StatusTable from "../../responded/StatusTable";
 import axios from "axios";
-import Rejectsubmission from "../RejectSubmissionTable.js";
 import { Link } from "react-router-dom";
 
 class ResponseStageForm extends Component {
@@ -17,6 +15,8 @@ class ResponseStageForm extends Component {
       axios
         .get(`/fv3/api/view-by-forms/?project=${this.props.id}&form_type=stage`)
         .then(res => {
+          console.log(res, "res");
+
           this.setState({
             stage_forms: res.data.stage_forms,
             deleted_forms: res.data.deleted_forms
@@ -49,9 +49,12 @@ class ResponseStageForm extends Component {
           </Link>
         </div>
         <div className="card-body">
-          {!data && <ResponseTable stage_forms={this.state.stage_forms} />}
-
-          {/*data && <Rejected id={this.props.id} />*/}
+          {!data && (
+            <ResponseTable
+              stage_forms={this.state.stage_forms}
+              id={this.props.id}
+            />
+          )}
         </div>
         {!!this.state.deleted_forms && this.state.deleted_forms.length > 0
           ? !data && (

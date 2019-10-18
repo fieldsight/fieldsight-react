@@ -10,34 +10,51 @@ class ManageGeneralForm extends Component {
   state = {
     generals_forms: [],
     deleted_forms: [],
+    breadcrumbs: [],
     hide: true,
     id: ""
   };
-  static getDerivedStateFromProps(props, state) {
-    return {
-      id: props.id
-    };
-  }
+  // static getDerivedStateFromProps(props, state) {
+  //   return {
+  //     id: props.id
+  //   };
+  // }
 
   componentDidMount() {
-    if (this.props.id != "") {
+    if (this.props.id !== "") {
       axios
         .get(
           `/fv3/api/view-by-forms/?project=${this.props.id}&form_type=general`
         )
         .then(res => {
-          console.log(res, "general");
-
-          this.setState({
-            deleted_forms: res.data.deleted_forms,
-            generals_forms: res.data.generals_forms
-          });
+          if (!!res.data) {
+            console.log(res, "res");
+            this.setState(
+              {
+                deleted_forms: res.data.deleted_forms,
+                generals_forms: res.data.generals_forms,
+                breadcrumbs: res.data.breadcrumbs
+              },
+              () => {
+                this.props.handleBreadCrumb(res.data.breadcrumbs);
+              }
+            );
+          }
         })
         .catch(err => {
           console.log(err, "err");
         });
     }
   }
+  // componentWillReceiveProps(nextprops) {
+  //   console.log(nextprops);
+
+  //   nextprops.handleBreadCrumb(this.state.breadcrumbs);
+  //   this.setState({
+  //     id: nextprops.id
+  //   });
+  // }
+
   toggleHide = () => {
     this.setState({
       hide: !this.state.hide
@@ -48,11 +65,12 @@ class ManageGeneralForm extends Component {
     const {
       props: { data, showViewData }
     } = this;
+    // console.log(this.state.generals_forms, "general");
 
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>{!data ? "General Forms" : "Rejected Submission"}</h5>
+          <h5>General Forms</h5>
           <div className="dash-btn">
             <Link to={this.props.url}>
               <button onClick={showViewData} className="fieldsight-btn">
@@ -69,7 +87,6 @@ class ManageGeneralForm extends Component {
               id={this.props.id}
             />
           )}
-          {/*data && <Rejected id={this.props.id} />*/}
         </div>
         {this.state.deleted_forms.length > 0
           ? !data && (

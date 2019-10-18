@@ -51,10 +51,16 @@ class ResponseStageForm extends Component {
           </Link>
         </div>
         <div className="card-body">
-          {!data && <ResponseTable stage_forms={this.state.stage_forms} />}
+          {!data && (
+            <ResponseTable
+              stage_forms={this.state.stage_forms}
+              table="site"
+              id={this.props.id}
+            />
+          )}
         </div>
 
-        {this.state.deleted_forms.length > 0
+        {this.state.deleted_forms && this.state.deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">

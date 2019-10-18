@@ -8,7 +8,6 @@ const SelectElement = ({
   changeHandler,
   value
 }) => {
- 
   return (
     <div className="form-group">
       {label && (
@@ -19,8 +18,9 @@ const SelectElement = ({
       <div className="select-option">
         <select
           className={className}
-          onChange={changeHandler}     
+          onChange={changeHandler}
           value={value ? value : undefined}
+          // value="81881"
         >
           {options.map((option, i) => (
             <option
@@ -34,13 +34,24 @@ const SelectElement = ({
                   : option
               }
               key={`${
-                option.name ? option.name : option.value ? option.value : option.identifier ? option.identifier : option
+                option.name
+                  ? option.name
+                  : option.value
+                  ? option.value
+                  : option.identifier
+                  ? option.identifier
+                  : option
               }${i}`}
             >
-              {option.name ? option.name : option.value ? option.value : option.identifier ? option.identifier : option} 
+              {option.name
+                ? option.name
+                : option.value
+                ? option.value
+                : option.identifier
+                ? option.identifier
+                : option}
             </option>
           ))}
-          
         </select>
       </div>
     </div>

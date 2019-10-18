@@ -73,9 +73,15 @@ export default class SiteAdd extends Component{
        
         
         axios.get(`/fv3/api/site-form/?project=${id}`)
-        .then(res=>{    
+        .then(res=>{  
           let regionArr =this.state.region
           let typeArr =this.state.site_types
+
+          if (this._isMounted) {
+            const position=res.data.location && res.data.location.split(" ");
+            const longitude = position && position[1].split("(")[1];
+            const latitude = position && position[2].split(")")[0]; 
+         
             this.setState(
               state=>{
                 res.data.regions.map(each=> regionArr.push(each))
@@ -86,10 +92,16 @@ export default class SiteAdd extends Component{
                   region:regionArr,
                   siteId,
                   regionalId,
-                  site_types:typeArr
+                  site_types:typeArr,
+                  position:{
+                    longitude,
+                    latitude
+                  }
                 }
                }
                )
+          }
+          
             }).catch(err=>{
             console.log(err ,"err");
             
@@ -504,7 +516,7 @@ export default class SiteAdd extends Component{
               Selectedtypes
                }}=this;
         return (
-            <RightContentCard title="New Site">
+            <RightContentCard title="Site Form">
             <form className="edit-form" onSubmit={onSubmitHandler}>
               <div className="row">
                 <div className="col-xl-4 col-md-6">
