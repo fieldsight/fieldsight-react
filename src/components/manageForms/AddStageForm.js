@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
-import makeAnimated from "react-select/animated";
 
 import InputElement from "../common/InputElement";
-import RadioElement from "../common/RadioElement";
-const animatedComponents = makeAnimated();
 
 class AddStageForm extends Component {
   state = {
@@ -47,9 +44,9 @@ class AddStageForm extends Component {
               });
             }
           });
-        } else {
-          selectedRegion = newRegionArr;
         }
+      } else {
+        selectedRegion = newRegionArr;
       }
       if (!!stageData.tags) {
         if (stageData.tags.length > 0) {
@@ -62,9 +59,9 @@ class AddStageForm extends Component {
               });
             }
           });
-        } else {
-          selectedType = newTypeArr;
         }
+      } else {
+        selectedType = newTypeArr;
       }
     } else {
       (selectedRegion = newRegionArr), (selectedType = newTypeArr);
@@ -129,7 +126,6 @@ class AddStageForm extends Component {
 
     return (
       <form className="floating-form " onSubmit={handleSubmitForm}>
-        {/* <div className="form-group"> */}
         <InputElement
           formType="editForm"
           tag="input"
@@ -146,12 +142,10 @@ class AddStageForm extends Component {
             <label>Regions</label>
             {hasLoaded && (
               <Select
-                // closeMenuOnSelect={false}
                 onChange={handleSelectRegionChange}
                 options={regionDropdown}
                 isMulti={true}
                 defaultValue={selectedRegion}
-                components={animatedComponents}
               />
             )}
           </div>
@@ -161,8 +155,6 @@ class AddStageForm extends Component {
             <label>Types</label>
             {hasLoaded && (
               <Select
-                // closeMenuOnSelect={true}
-                components={animatedComponents}
                 onChange={handleSelectTypeChange}
                 defaultValue={selectedType}
                 isMulti

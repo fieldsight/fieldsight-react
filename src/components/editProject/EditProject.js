@@ -161,8 +161,9 @@ class EditProject extends Component {
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
+    // debugger;
     if (position) {
-      return this.setState({
+      this.setState({
         position: {
           ...this.state.position,
           [name]: value
@@ -189,13 +190,6 @@ class EditProject extends Component {
       )
       .then(
         axios.spread((project, sector) => {
-          console.log(
-            project,
-            sector,
-            project.data.location,
-            "project.data.location"
-          );
-
           if (this._isMounted) {
             if (project && sector) {
               const position =
@@ -452,6 +446,7 @@ class EditProject extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
+                        // step="any"
                         required={true}
                         label="Latitude"
                         name="latitude"
