@@ -59,8 +59,10 @@ export const GET_PROJECT_LIST = "GET_PROJECT_LIST";
 export const GET_PROJECT_USER = "GET_PROJECT_USER";
 
 //Project Log
- export const GET_LOGS ="GET_LOGS";
+export const GET_LOGS = "GET_LOGS";
 
- //Teams
- export const GET_TEAMS = "GET_TEAMS";
- 
+//Teams
+export const GET_TEAMS = "GET_TEAMS";
+
+//ProjectViewData
+export const GET_PROJECT_VIEW = "GET_PROJECT_VIEW";

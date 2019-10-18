@@ -3,15 +3,19 @@ import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 class ResponseTable extends Component {
   state = {
-    generals_forms: []
+    generals_forms: [],
+    table: ""
   };
 
   static getDerivedStateFromProps(props, state) {
     return {
-      generals_forms: props.generals_forms
+      generals_forms: props.generals_forms,
+      table: props.table
     };
   }
   render() {
+    console.log(this.state.table);
+
     return (
       <React.Fragment>
         <Table responsive="xl" className="table  table-bordered  dataTable ">
@@ -32,11 +36,19 @@ class ResponseTable extends Component {
                     <a href={`#`}>{generals.name}</a>
                   </td>
                   <td>
-                    <Link
-                      to={`/submission-data/${this.props.id}/${generals.id}`}
-                    >
-                      {generals.response_count}
-                    </Link>
+                    {this.state.table == "site" ? (
+                      <Link
+                        to={`/site-submission-data/${this.props.id}/${generals.id}`}
+                      >
+                        {generals.response_count}
+                      </Link>
+                    ) : (
+                      <Link
+                        to={`/submission-data/${this.props.id}/${generals.id}`}
+                      >
+                        {generals.response_count}
+                      </Link>
+                    )}
                   </td>
                   <td>{generals.last_response}</td>
                   <td>{generals.created_date}</td>

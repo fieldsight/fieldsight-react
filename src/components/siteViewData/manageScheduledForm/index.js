@@ -51,7 +51,11 @@ class ManageScheduledForm extends Component {
         </div>
         <div className="card-body">
           {!data && (
-            <ResponseTable generals_forms={this.state.generals_forms} />
+            <ResponseTable
+              generals_forms={this.state.generals_forms}
+              table="site"
+              id={this.props.id}
+            />
           )}
         </div>
         {this.state.deleted_forms.length > 0

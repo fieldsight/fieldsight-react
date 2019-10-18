@@ -40,6 +40,7 @@ export default class SiteAdd extends Component {
       }
     );
   };
+
   render() {
     const {
       onChangeHandler,
@@ -84,7 +85,7 @@ export default class SiteAdd extends Component {
     } = this.props;
 
     return (
-      <RightContentCard title="New Site">
+      <RightContentCard title=" Site Form">
         <div
           style={{
             display: "flex",
@@ -94,13 +95,17 @@ export default class SiteAdd extends Component {
             top: "4px"
           }}
         >
-          <a
-            className="fieldsight-btn rejected-btn"
-            style={{ boxShadow: "none" }}
-            onClick={handleDelete}
-          >
-            Delete
-          </a>
+          {this.props.delete_perm === true ? (
+            <a
+              className="fieldsight-btn rejected-btn"
+              style={{ boxShadow: "none" }}
+              onClick={handleDelete}
+            >
+              Delete
+            </a>
+          ) : (
+            ""
+          )}
         </div>
         <form className="edit-form" onSubmit={onSubmitHandler}>
           <div className="row">
@@ -115,6 +120,7 @@ export default class SiteAdd extends Component {
                 value={site_id}
                 changeHandler={onChangeHandler}
               />
+              {console.log(site_id, "site_id")}
             </div>
             <div className="col-xl-4 col-md-6">
               <InputElement
@@ -423,14 +429,15 @@ export default class SiteAdd extends Component {
                     ) : (
                       ""
                     )}
+
                     {data.question_type === "Link" ? (
                       <Select
                         data={data.project_id}
-                        onchange={ondynamiChangeHandler}
+                        //onchange={ondynamiChangeHandler}
                         value={this.props.project_info[data.question_name]}
                         type={data.question_text}
-                        selectedValue={this.selectedValue}
                         name={data.question_name}
+                        selectedValue={this.props.selectedValue}
                       />
                     ) : (
                       ""
@@ -488,6 +495,7 @@ export default class SiteAdd extends Component {
             </div>
           </Modal>
         )}
+
         {deleteConfirm && (
           <Modal
             title={"Are you sure you want to delete " + name + " ?"}
