@@ -10,6 +10,7 @@ import EditFormGuide from "./EditFormGuide";
 import SortableStage from "./SortableStage";
 import AddStageForm from "./AddStageForm";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import ManageModal from './ManageModal';
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -826,7 +827,7 @@ class StagedForms extends Component {
                 >
                   <OverlayTrigger
                     placement="top"
-                    overlay={<Tooltip> Deploy</Tooltip>}
+                    overlay={<Tooltip> Deploy All Stages</Tooltip>}
                   >
                     <span className="">
                       <i className="la la-rocket" />
@@ -842,7 +843,7 @@ class StagedForms extends Component {
                   {!isStageReorder ? (
                     <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip>Reorder</Tooltip>}
+                      overlay={<Tooltip>Reorder Stages</Tooltip>}
                     >
                       <span className="reorder">
                         <i className="la la-ellipsis-v" />
@@ -884,7 +885,7 @@ class StagedForms extends Component {
                 >
                   <OverlayTrigger
                     placement="top"
-                    overlay={<Tooltip> Deploy</Tooltip>}
+                    overlay={<Tooltip> Deploy All Stages</Tooltip>}
                   >
                     <span className="">
                       <i className="la la-rocket" />
@@ -922,7 +923,8 @@ class StagedForms extends Component {
                 isProjectForm={isProjectForm}
                 subStageReorderDisable={subStageReorderDisable}
               />
-              <div className="add-btn pull-right stage-add">
+              <div className="card-body pdt-0" >
+              <div className="add-btn  stage-add">
                 <a onClick={this.props.commonPopupHandler}>
                   Add Stage
                   <span>
@@ -930,27 +932,31 @@ class StagedForms extends Component {
                   </span>
                 </a>
               </div>
+              </div>
+              
             </>
           )}
           {this.props.popupModal && (
-            <Modal
+            <ManageModal
               title="Stage Form"
               toggleModal={this.handleClearStageForm}
               classname="manage-body md-body"
+              handleSubmit={handleSubmitStageForm}
             >
               <AddStageForm
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                handleSubmit={this.handleSubmitStageForm}
+                // handleSubmit={handleSubmitStageForm}
                 stageData={selectedStage}
               />
-            </Modal>
+            </ManageModal>
           )}
           {showSubstageForm && (
-            <Modal
+            <ManageModal
               title="SubStage Form"
               toggleModal={this.handleClosePopup}
               classname="manage-body md-body"
+              handleSubmit={this.handleCreateForm}
             >
               <GlobalModalForm
                 formType="substage"
@@ -962,20 +968,21 @@ class StagedForms extends Component {
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={this.handleClosePopup}
                 formTitle={formTitle}
-                handleCreateForm={this.handleCreateForm}
+                // handleCreateForm={this.handleCreateForm}
                 formData={formData}
                 isProjectWide={false}
               />
-            </Modal>
+            </ManageModal>
           )}
           {showFormModal && (
-            <Modal
+            <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
               classname="manage-body md-body"
+              handleSubmit={this.handleSaveForm}
             >
               <AddForm
                 activeTab={activeTab}
@@ -985,10 +992,10 @@ class StagedForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                handleSaveForm={this.handleSaveForm}
+                // handleSaveForm={this.handleSaveForm}
                 loader={this.props.formLoader}
               />
-            </Modal>
+            </ManageModal>
           )}
           {editGuide && (
             <Modal title="Form Guide" toggleModal={this.handleEditGuide}>

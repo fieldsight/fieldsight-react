@@ -125,7 +125,9 @@ class AddStageForm extends Component {
     const isEdit = Object.keys(this.props.stageData).length > 0 ? true : false;
 
     return (
-      <form className="floating-form " onSubmit={handleSubmitForm}>
+      // <form className="floating-form " onSubmit={handleSubmitForm}>
+      <div>
+
         <InputElement
           formType="editForm"
           tag="input"
@@ -151,7 +153,7 @@ class AddStageForm extends Component {
           </div>
         )}
         {typeDropdown && typeDropdown.length > 0 && (
-          <div>
+          <div className="form-group border-0">
             <label>Types</label>
             {hasLoaded && (
               <Select
@@ -164,6 +166,7 @@ class AddStageForm extends Component {
           </div>
         )}
         <InputElement
+          classname="border-0"
           formType="editForm"
           tag="input"
           type="text"
@@ -173,12 +176,7 @@ class AddStageForm extends Component {
           value={desc}
           changeHandler={handleChange}
         />
-        <div className="form-group pull-right no-margin">
-          <button type="submit" className="fieldsight-btn">
-            {!!isEdit ? "Save" : "Add"}
-          </button>
-        </div>
-      </form>
+      </div>
     );
   }
 }

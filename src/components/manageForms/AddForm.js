@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import RadioElement from "../common/RadioElement";
 import { DotLoader } from "../myForm/Loader";
+
 class AddForm extends Component {
   render() {
     const {
@@ -66,16 +67,14 @@ class AddForm extends Component {
 
         {!loader && activeTab === "myForms" && (
           <div
-            className="thumb-list mr-0 "
-            style={{ position: "relative", height: "327px" }}
-          >
-            <form
+            className="thumb-list mr-0 ">
+            {/* <form
               className="floating-form"
               onSubmit={e => {
                 e.preventDefault();
               }}
-            >
-              <div className="form-group search-group">
+            > */}
+              <div className="form-group search-group mrt-15">
                 <input
                   type="search"
                   className="form-control"
@@ -110,7 +109,7 @@ class AddForm extends Component {
                       </div>
                     );
                   })}
-                  <div className="form-group pull-right no-margin">
+                  {/* <div className="form-group pull-right no-margin">
                     <button
                       type="button"
                       className="fieldsight-btn"
@@ -118,25 +117,23 @@ class AddForm extends Component {
                     >
                       Save
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               )}
-            </form>
+            {/* </form> */}
           </div>
         )}
 
         {!loader && activeTab === "projectForms" && (
           <div
-            className="thumb-list mr-0 "
-            style={{ position: "relative", height: "327px" }}
-          >
-            <form
+            className="thumb-list mr-0 ">
+            {/* <form
               className="floating-form"
               onSubmit={e => {
                 e.preventDefault();
               }}
-            >
-              <div className="form-group search-group">
+            > */}
+              <div className="form-group search-group mrt-15">
                 <input
                   type="search"
                   className="form-control"
@@ -180,7 +177,7 @@ class AddForm extends Component {
                       )}
                     </Fragment>
                   ))}
-                  <div className="form-group pull-right no-margin">
+                  {/* <div className="form-group pull-right no-margin">
                     <button
                       type="button"
                       className="fieldsight-btn"
@@ -188,25 +185,23 @@ class AddForm extends Component {
                     >
                       Save
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               )}
-            </form>
+            {/* </form> */}
           </div>
         )}
 
         {!loader && activeTab === "sharedForms" && (
           <div
-            className="thumb-list mr-0 "
-            style={{ position: "relative", height: "327px" }}
-          >
-            <form
+            className="thumb-list mr-0 ">
+            {/* <form
               className="floating-form"
               onSubmit={e => {
                 e.preventDefault();
               }}
-            >
-              <div className="form-group search-group">
+            > */}
+              <div className="form-group search-group mrt-15">
                 <input
                   type="search"
                   className="form-control"
@@ -242,7 +237,7 @@ class AddForm extends Component {
                       </div>
                     );
                   })}
-                  <div className="form-group pull-right no-margin">
+                  {/* <div className="form-group pull-right no-margin">
                     <button
                       type="button"
                       className="fieldsight-btn"
@@ -250,10 +245,10 @@ class AddForm extends Component {
                     >
                       Save
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               )}
-            </form>
+            {/* </form> */}
           </div>
         )}
       </>

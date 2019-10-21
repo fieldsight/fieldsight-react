@@ -29,20 +29,21 @@ export default class SiteEdit extends Component {
     id: "",
     selectform: [],
     selectdata: false,
-    region: [],
+    region: [{ name: "----", id: null }],
     data: [],
     regionselected: "",
     dataSelected: "",
     id: "",
     siteId: "",
     regionalId: "",
-    site_types: [],
+    site_types: [{ name: "----", id: null }],
     Selectedtypes: "",
     project_info: [],
     project_id: "",
     show: false,
     deleteConfirm: false,
-    select: []
+    select: [],
+    delete_perm: ""
   };
 
   componentDidMount() {
@@ -58,38 +59,46 @@ export default class SiteEdit extends Component {
         axios
           .get(`/fv3/api/site-form/?project=${response.data.project}`)
           .then(res => {
+            let regionArr = this.state.region;
+            let typeArr = this.state.site_types;
+
             if (this._isMounted) {
               const position =
                 res.data.location && res.data.location.split(" ");
               const longitude = position && position[1].split("(")[1];
               const latitude = position && position[2].split(")")[0];
-              this.setState({
-                project_id: response.data.project,
-                jsondata: res.data.json_questions,
-                id,
-                region: res.data.regions,
-                siteId,
-                regionalId,
-                site_types: res.data.site_types,
-                data: response.data,
-                project: {
-                  name: response.data.name,
-                  site_id: response.data.identifier,
-                  phone: response.data.phone,
-                  address: response.data.address,
-                  public_desc: response.data.public_desc,
-                  logo: response.data.logo,
-                  weight: response.data.weight,
-                  cluster_sites: response.data.enable_subsites
-                },
-                regionselected: response.data.region,
-                Selectedtypes: response.data.type,
-                data: response.data.site_meta_attributes_answers,
-                cropResult: response.data.logo,
-                position: {
-                  longitude,
-                  latitude
-                }
+              this.setState(state => {
+                res.data.regions.map(each => regionArr.push(each));
+                res.data.site_types.map(each => typeArr.push(each));
+                return {
+                  delete_perm: response.data.delete_perm,
+                  project_id: response.data.project,
+                  jsondata: res.data.json_questions,
+                  id,
+                  region: regionArr,
+                  siteId,
+                  regionalId,
+                  site_types: typeArr,
+                  data: response.data,
+                  project: {
+                    name: response.data.name,
+                    site_id: response.data.identifier,
+                    phone: response.data.phone,
+                    address: response.data.address,
+                    public_desc: response.data.public_desc,
+                    logo: response.data.logo,
+                    weight: response.data.weight,
+                    cluster_sites: response.data.enable_subsites
+                  },
+                  regionselected: response.data.region,
+                  Selectedtypes: response.data.type,
+                  data: response.data.site_meta_attributes_answers,
+                  cropResult: response.data.logo,
+                  position: {
+                    longitude,
+                    latitude
+                  }
+                };
               });
             }
           })
@@ -281,6 +290,7 @@ export default class SiteEdit extends Component {
         deleteClose={this.deleteClose}
         deleteFile={this.deleteFile}
         selectedValue={this.selectedValue}
+        delete_perm={this.state.delete_perm}
       />
     );
   }

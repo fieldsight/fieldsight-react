@@ -8,8 +8,6 @@ export default class SurveyFormResponseTable extends Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    console.log(props, "props");
-
     return {
       survey_forms: props.survey_forms
     };
@@ -34,9 +32,7 @@ export default class SurveyFormResponseTable extends Component {
             {this.state.survey_forms.map((survey, key) => {
               return (
                 <tr key={key}>
-                  <td>
-                    <a href={`#/`}>{survey.name}</a>
-                  </td>
+                  <td>{survey.name}</td>
                   <td>{survey.title}</td>
                   <td>{survey.last_response}</td>
                   <td>{survey.created_date}</td>
@@ -56,12 +52,12 @@ export default class SurveyFormResponseTable extends Component {
                         <i className="la la-eye"></i>submission
                       </>
                     ) : (
-                      <a
-                        href={survey.view_submission_url}
+                      <Link
                         className="view-tag tag"
+                        to={`/submission-data/${this.props.id}/${survey.id}`}
                       >
                         <i className="la la-eye"></i>
-                      </a>
+                      </Link>
                     )}
                     {survey.download_url === null ? (
                       <>
