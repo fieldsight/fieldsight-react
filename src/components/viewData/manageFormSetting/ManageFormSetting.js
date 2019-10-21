@@ -2,13 +2,11 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 
 const sideNavRoutes = [
+  { to: "/general", path: "", title: "General Forms" },
   { to: "/scheduled", title: "Scheduled Forms" },
-  { to: "/stage", title: "Staged Forms" },
-  { to: "/general-survey", title: "General Forms" }
+  { to: "/stage", title: "Staged Forms" }
 ];
-const site_specific_forms = [
-  { to: "/general", path: "", title: "General Forms" }
-];
+const site_specific_forms = [{ to: "/general-survey", title: "General Forms" }];
 
 const viewByStatus = [
   { to: "/rejected", path: "/rejected", title: "Rejected Submissions" },
@@ -28,9 +26,9 @@ class ManageFormSetting extends Component {
         {!this.props.show_submission && (
           <>
             <div className="manage_group">
-              <h5>Project wide Forms</h5>
+              <h5>Site Specific Forms</h5>
               <ul className="nav nav-tabs flex-column border-tabs">
-                {site_specific_forms.map((route, i) => (
+                {sideNavRoutes.map((route, i) => (
                   <li className="nav-item" key={i}>
                     <Link
                       to={`/project-responses/${this.props.match.params.id}${route.to}`}
@@ -45,9 +43,9 @@ class ManageFormSetting extends Component {
               </ul>
             </div>
             <div className="manage_group">
-              <h5>Site Specific Forms</h5>
+              <h5>Project wide Forms</h5>
               <ul className="nav nav-tabs flex-column border-tabs">
-                {sideNavRoutes.map((route, i) => (
+                {site_specific_forms.map((route, i) => (
                   <li className="nav-item" key={i}>
                     <Link
                       to={`/project-responses/${this.props.match.params.id}${route.to}`}

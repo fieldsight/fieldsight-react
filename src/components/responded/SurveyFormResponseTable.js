@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import format from "date-fns/format";
 
 export default class SurveyFormResponseTable extends Component {
   state = {
@@ -34,7 +35,13 @@ export default class SurveyFormResponseTable extends Component {
                 <tr key={key}>
                   <td>{survey.name}</td>
                   <td>{survey.title}</td>
-                  <td>{survey.last_response}</td>
+                  <td>
+                    {survey.last_response.length > 0
+                      ? format(survey.last_response, [
+                          "MMMM Do YYYY, h:mm:ss a"
+                        ])
+                      : ""}
+                  </td>
                   <td>{survey.created_date}</td>
                   <td>
                     <a target="_blank" href="/forms/new/0/297449">

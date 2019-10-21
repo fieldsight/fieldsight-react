@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import format from "date-fns/format";
+
 class ResponseTable extends Component {
   state = {
     generals_forms: [],
@@ -58,7 +60,7 @@ class ResponseTable extends Component {
                       )
                     ) : generals.fsxf_id ? (
                       <Link
-                        to={`/site-submission-data/${this.props.id}/${generals.fsxf_id}`}
+                        to={`/submission-data/${this.props.id}/${generals.fsxf_id}`}
                       >
                         {generals.response_count}
                       </Link>
@@ -70,7 +72,13 @@ class ResponseTable extends Component {
                       </Link>
                     )}
                   </td>
-                  <td>{generals.last_response}</td>
+                  <td>
+                    {generals.last_response.length > 0
+                      ? format(generals.last_response, [
+                          "MMMM Do YYYY, h:mm:ss a"
+                        ])
+                      : ""}
+                  </td>
                   <td>{generals.created_date}</td>
 
                   <td>
@@ -85,7 +93,7 @@ class ResponseTable extends Component {
                       ) : (
                         <Link
                           className="view-tag tag"
-                          to={`/site-submission-data/${this.props.id}/${generals.id}`}
+                          to={`submission-data/${this.props.id}/${generals.id}`}
                         >
                           <i className="la la-eye view-tag tag"></i>
                         </Link>

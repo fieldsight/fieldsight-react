@@ -161,7 +161,14 @@ class SubmissionData extends Component {
                     return (
                       <tr key={key}>
                         <td>{key + 1}</td>
-                        <td>{list.submission_id}</td>
+                        <td>
+                          {" "}
+                          <a
+                            href={`/fieldsight/application/?submission=${list.submission_id}#/submission-details`}
+                          >
+                            {list.submission_id}
+                          </a>
+                        </td>
                         <td>
                           <a href={list.profile_url}>{list.submitted_by}</a>
                         </td>

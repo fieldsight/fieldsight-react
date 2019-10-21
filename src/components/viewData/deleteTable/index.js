@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import format from "date-fns/format";
+
 class DeleteTable extends Component {
   state = {
     deleted_forms: []
@@ -32,7 +34,13 @@ class DeleteTable extends Component {
                     <a href={`#/`}>{deleted.name}</a>
                   </td>
                   <td>{deleted.title}</td>
-                  <td>{deleted.last_response}</td>
+                  <td>
+                    {deleted.last_response.length > 0
+                      ? format(deleted.last_response, [
+                          "MMMM Do YYYY, h:mm:ss a"
+                        ])
+                      : ""}
+                  </td>
                   <td>{deleted.created_date}</td>
                   <td>
                     {" "}
