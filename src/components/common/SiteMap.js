@@ -12,6 +12,7 @@ import {
 // import "leaflet/dist/leaflet.css";
 
 import { BlockContentLoader } from "./Loader";
+import { markerIcon } from "./Marker";
 
 // const position = [27.7, 85.4];
 const MyMarkersList = data => {
@@ -24,6 +25,7 @@ const MyMarkersList = data => {
 const MyPopupMarker = props => (
   <Marker
     position={[props.geometry.coordinates[1], props.geometry.coordinates[0]]}
+    icon={markerIcon}
   >
     <Popup>
       <a href={props.url} target="_blank">

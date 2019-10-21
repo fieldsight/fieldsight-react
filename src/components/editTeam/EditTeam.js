@@ -12,6 +12,7 @@ import CheckBox from "../common/CheckBox";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import "leaflet/dist/leaflet.css";
+import { markerIcon } from "../common/Marker";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -56,7 +57,7 @@ class EditTeam extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { teamId } = this.state;
-    
+
     axios
       .all(
         urls.map((url, i) => {
@@ -65,9 +66,8 @@ class EditTeam extends Component {
       )
       .then(
         axios.spread((team, types) => {
-         
-          this.props.teamData(team.data.name)
-          
+          this.props.teamData(team.data.name);
+
           if (this._isMounted) {
             if (team && types) {
               const position =
@@ -259,7 +259,6 @@ class EditTeam extends Component {
   };
 
   render() {
-    
     const {
       state: {
         loaded,
@@ -404,7 +403,7 @@ class EditTeam extends Component {
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[latitude, longitude]}>
+                    <Marker position={[latitude, longitude]} icon={markerIcon}>
                       <Popup>
                         <b>Name: </b>
                         {name}

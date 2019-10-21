@@ -10,7 +10,7 @@ import {
   Circle
 } from "react-leaflet";
 // import "leaflet/dist/leaflet.css";
-
+import { markerIcon } from "../../common/Marker";
 import { BlockContentLoader } from "../../common/Loader";
 
 // const position = [27.7, 85.4];
@@ -65,7 +65,10 @@ class SiteMap extends Component {
               </LayersControl.Overlay> */}
             </LayersControl>
 
-            <Marker position={[coordinates[1], coordinates[0]]}>
+            <Marker
+              position={[coordinates[1], coordinates[0]]}
+              icon={markerIcon}
+            >
               <Popup>
                 <span>Name: {name}</span>
                 <br />
