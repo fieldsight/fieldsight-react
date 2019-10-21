@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import SideNav from "./SideNav";
-import Modal from "../common/Modal";
 
 class ManageForms extends Component {
   state = {
@@ -42,30 +41,14 @@ class ManageForms extends Component {
     }
   }
 
-  OpenTabHandler = (e, url) => {
-    window.open(url, "_blank");
-  };
-
   closePopup = () => {
     this.setState({
       popupModal: false
     });
   };
-  commonPopupHandler = (
-    e,
-    selectedModal,
-    modalData,
-    modalHeading,
-    modalType,
-    shareUrl
-  ) => {
+  commonPopupHandler = () => {
     this.setState({
       popupModal: true
-      // heading: modalHeading,
-      // selectedModals: selectedModal,
-      // modalDatas: modalData,
-      // modalTypes: modalType,
-      // shareUrls: shareUrl
     });
   };
   render() {
@@ -91,7 +74,7 @@ class ManageForms extends Component {
         </nav>
         <div className="row">
           <SideNav
-            OpenTabHandler={this.OpenTabHandler}
+            // OpenTabHandler={this.OpenTabHandler}
             commonPopupHandler={this.commonPopupHandler}
             closePopup={this.closePopup}
             popupModal={this.state.popupModal}

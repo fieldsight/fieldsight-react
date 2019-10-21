@@ -1,11 +1,18 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { compose } from "redux";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
-// import "react-perfect-scrollbar/dist/css/styles.css";
 import axios from "axios";
 import GeneralForms from "./GeneralForms";
 import ScheduleForms from "./ScheduleForms";
 import StagedForms from "./StagedFoms";
 import ProjectWideForms from "./ProjectWideForms";
+import {
+  getRegionsAndTypes,
+  getMyFormList,
+  getProjectFormList,
+  getSharedFormList
+} from "../../actions/manageFormActions";
 
 const urls = [
   "fv3/api/project-regions-types/",
@@ -200,7 +207,7 @@ class SideNav extends Component {
               <GeneralForms
                 {...props}
                 title="GeneralForms"
-                OpenTabHandler={this.props.OpenTabHandler}
+                // OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
                 closePopup={this.props.closePopup}
                 popupModal={this.props.popupModal}
@@ -221,7 +228,7 @@ class SideNav extends Component {
               <ScheduleForms
                 {...props}
                 title="ScheduleForms"
-                OpenTabHandler={this.props.OpenTabHandler}
+                // OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
                 closePopup={this.props.closePopup}
                 popupModal={this.props.popupModal}
@@ -242,7 +249,7 @@ class SideNav extends Component {
               <StagedForms
                 {...props}
                 title="StagedForms"
-                OpenTabHandler={this.props.OpenTabHandler}
+                // OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
                 closePopup={this.props.closePopup}
                 popupModal={this.props.popupModal}
@@ -263,7 +270,7 @@ class SideNav extends Component {
               <ProjectWideForms
                 {...props}
                 title="ProjectWideForms"
-                OpenTabHandler={this.props.OpenTabHandler}
+                // OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={this.props.commonPopupHandler}
                 closePopup={this.props.closePopup}
                 popupModal={this.props.popupModal}
@@ -283,4 +290,19 @@ class SideNav extends Component {
   }
 }
 
-export default withRouter(SideNav);
+const mapStateToProps = ({ sideNav }) => ({
+  sideNav
+});
+
+export default compose(
+  connect(
+    mapStateToProps,
+    {
+      getRegionsAndTypes,
+      getMyFormList,
+      getProjectFormList,
+      getSharedFormList
+    }
+  ),
+  withRouter
+)(SideNav);

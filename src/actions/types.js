@@ -66,3 +66,10 @@ export const GET_TEAMS = "GET_TEAMS";
 
 //ProjectViewData
 export const GET_PROJECT_VIEW = "GET_PROJECT_VIEW";
+
+// ManageForms
+export const FORM_LOADER = "FORM_LOADER";
+export const GET_MY_FORM_LIST = "GET_MY_FORM_LIST";
+export const GET_PROJECT_FORM_LIST = "GET_PROJECT_FORM_LIST";
+export const GET_SHARED_FORM_LIST = "GET_SHARED_FORM_LIST";
+export const GET_REGIONS_AND_TYPES = "GET_REGIONS_AND_TYPES";
