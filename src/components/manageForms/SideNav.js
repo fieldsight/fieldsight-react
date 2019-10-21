@@ -30,46 +30,53 @@ class SideNav extends Component {
     projectForms: [],
     sharedForms: [],
     loader: false,
-    isProjectForm: false
+    isProjectForm: false,
+    formProps: {}
   };
 
   requestForms(id) {
-    axios
-      .all(
-        urls.map((url, i) => {
-          if (this.state.isProjectForm) {
-            return i === 0 ? axios.get(`${url}${id}/`) : axios.get(url);
-          } else {
-            return i > 0 ? axios.get(url) : "";
-          }
-        })
-      )
-      .then(
-        axios.spread((list, myForms, projectForms, sharedForms) => {
-          if (this._isMounted) {
-            this.setState(state => {
-              if (!!this.state.isProjectForm) {
-                return {
-                  regionOptions: list.data.regions,
-                  typeOptions: list.data.site_types,
-                  myForms: myForms.data,
-                  projectForms: projectForms.data,
-                  sharedForms: sharedForms.data,
-                  loader: false
-                };
-              } else {
-                return {
-                  myForms: myForms.data,
-                  projectForms: projectForms.data,
-                  sharedForms: sharedForms.data,
-                  loader: false
-                };
-              }
-            });
-          }
-        })
-      )
-      .catch(err => console.log("err", err));
+    this.props.getMyFormList();
+    this.props.getProjectFormList();
+    this.props.getSharedFormList();
+    if (this.state.isProjectForm) {
+      this.props.getRegionsAndTypes(id);
+    }
+    // axios
+    //   .all(
+    //     urls.map((url, i) => {
+    //       if (this.state.isProjectForm) {
+    //         return i === 0 ? axios.get(`${url}${id}/`) : axios.get(url);
+    //       } else {
+    //         return i > 0 ? axios.get(url) : "";
+    //       }
+    //     })
+    //   )
+    //   .then(
+    //     axios.spread((list, myForms, projectForms, sharedForms) => {
+    //       if (this._isMounted) {
+    //         this.setState(state => {
+    //           if (!!this.state.isProjectForm) {
+    //             return {
+    //               regionOptions: list.data.regions,
+    //               typeOptions: list.data.site_types,
+    //               myForms: myForms.data,
+    //               projectForms: projectForms.data,
+    //               sharedForms: sharedForms.data,
+    //               loader: false
+    //             };
+    //           } else {
+    //             return {
+    //               myForms: myForms.data,
+    //               projectForms: projectForms.data,
+    //               sharedForms: sharedForms.data,
+    //               loader: false
+    //             };
+    //           }
+    //         });
+    //       }
+    //     })
+    //   )
+    //   .catch(err => console.log("err", err));
   }
   componentDidMount() {
     this._isMounted = true;
@@ -101,6 +108,13 @@ class SideNav extends Component {
       }
     );
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.manageForms !== this.props.manageForms) {
+      this.setState({
+        formProps: this.props.manageForms
+      });
+    }
+  }
   render() {
     const {
       props: {
@@ -113,9 +127,14 @@ class SideNav extends Component {
         projectForms,
         sharedForms,
         loader,
-        isProjectForm
+        isProjectForm,
+        formProps
       }
     } = this;
+    // console.log(
+    //   "props in sidenav",
+    //   this.state.formProps && this.state.formProps.projectForms
+    // );
 
     return (
       <React.Fragment>
@@ -211,12 +230,13 @@ class SideNav extends Component {
                 commonPopupHandler={this.props.commonPopupHandler}
                 closePopup={this.props.closePopup}
                 popupModal={this.props.popupModal}
-                typeOptions={typeOptions}
-                regionOptions={regionOptions}
-                myForms={myForms}
-                projectForms={projectForms}
-                sharedForms={sharedForms}
-                formLoader={loader}
+                // formResponse={formProps}
+                typeOptions={formProps && formProps.types}
+                regionOptions={formProps && formProps.regions}
+                myForms={formProps && formProps.myForms}
+                projectForms={formProps && formProps.projectForms}
+                sharedForms={formProps && formProps.sharedForms}
+                formLoader={formProps && formProps.formLoader}
               />
             )}
           />
@@ -290,8 +310,8 @@ class SideNav extends Component {
   }
 }
 
-const mapStateToProps = ({ sideNav }) => ({
-  sideNav
+const mapStateToProps = ({ manageForms }) => ({
+  manageForms
 });
 
 export default compose(

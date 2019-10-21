@@ -8,12 +8,12 @@ import {
   GET_REGIONS_AND_TYPES
 } from "./types";
 
-export const getRegionsAndTypes = () => dispatch => {
+export const getRegionsAndTypes = id => dispatch => {
   dispatch({
     type: FORM_LOADER
   });
   axios
-    .get(`fv3/api/project-regions-types/`)
+    .get(`fv3/api/project-regions-types/${id}/`)
     .then(res => {
       dispatch({
         type: GET_REGIONS_AND_TYPES,
