@@ -10,7 +10,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import ScheduleFormTable from "./ScheduleFormTable";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
-import ManageModal from './ManageModal';
+import ManageModal from "./ManageModal";
 
 const formatDate = date => {
   const dateIdx = date.getDate();
@@ -466,11 +466,11 @@ class ScheduleForms extends Component {
             />
           )}
           {this.props.popupModal && (
-            <ManageModal
+            <Modal
               title="Add Scheduled Form"
               toggleModal={handleClosePopup}
               classname="manage-body md-body"
-              handleSubmit={this.handleScheduleForm}
+              // handleSubmit={this.handleScheduleForm}
             >
               <GlobalModalForm
                 formType="schedule"
@@ -482,12 +482,12 @@ class ScheduleForms extends Component {
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
-                // handleCreateForm={this.handleScheduleForm}
+                handleCreateForm={this.handleScheduleForm}
                 formData={formData}
                 isEditForm={isEditForm}
                 isProjectWide={false}
               />
-            </ManageModal>
+            </Modal>
           )}
           {editGuide && (
             <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
