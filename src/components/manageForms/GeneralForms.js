@@ -264,6 +264,7 @@ class GeneralForms extends Component {
       const updateUrl = !!isProjectForm
         ? `fv3/api/manage-forms/general/${data.id}/?project_id=${id}`
         : `fv3/api/manage-forms/general/${data.id}/?site_id=${id}`;
+
       const payload = {
         id: data.id,
         default_submission_status: data.status,

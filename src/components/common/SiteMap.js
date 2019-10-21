@@ -47,10 +47,15 @@ class SiteMap extends Component {
       this.featureRef &&
       this.featureRef.current &&
       this.featureRef.current.leafletElement;
-
     if (!!map && !!feature) {
       map.fitBounds(feature.getBounds());
     }
+    // const delay = !!feature && feature.getBounds();
+    // // debugger;
+    // if (!!map && delay.isValid()) {
+    //   map.fitBounds(delay);
+    //   // setTimeout(map.fitBounds(feature.getBounds()), 2000);
+    // }
   };
 
   render() {
