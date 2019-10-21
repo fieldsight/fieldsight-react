@@ -540,40 +540,36 @@ class GlobalModalForm extends Component {
     }
     return (
       <>
-        {/* <form className="floating-form" onSubmit={this.handleSubmit}> */}
+        <form className="floating-form" onSubmit={this.handleSubmit}>
           <div className="form-form">
-          {formType == "substage" && (
-            <>
-              {/* <div className="form-group"> */}
-              <InputElement
-                classname="border-0"
-                formType="editForm"
-                tag="input"
-                type="text"
-                required={true}
-                label="Name"
-                name="substageTitle"
-                value={substageTitle}
-                changeHandler={this.handleInputChange}
-              />
-              {/* </div> */}
-              {/* <div className="form-group"> */}
-              <InputElement
-              classname="border-0"
-                formType="editForm"
-                tag="input"
-                type="text"
-                //   required={true}
-                label="Description"
-                name="substageDesc"
-                value={substageDesc}
-                changeHandler={this.handleInputChange}
-              />
-              {/* </div> */}
-            </>
-          )}
+            {formType == "substage" && (
+              <>
+                <InputElement
+                  classname="border-0"
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  required={true}
+                  label="Name"
+                  name="substageTitle"
+                  value={substageTitle}
+                  changeHandler={this.handleInputChange}
+                />
+                <InputElement
+                  classname="border-0"
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  //   required={true}
+                  label="Description"
+                  name="substageDesc"
+                  value={substageDesc}
+                  changeHandler={this.handleInputChange}
+                />
+              </>
+            )}
             <div className="selected-form">
-            <div className="selected-text">
+              <div className="selected-text">
                 <span>{formTitle}</span>
               </div>
               {!isEditForm && (
@@ -586,7 +582,6 @@ class GlobalModalForm extends Component {
                   </a>
                 </div>
               )}
-              
             </div>
           </div>
 
@@ -671,7 +666,7 @@ class GlobalModalForm extends Component {
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
                   <SelectElement
-                  classname="border-0"
+                    classname="border-0"
                     options={weekOptions}
                     value={frequency}
                     changeHandler={this.handleFrequencyChange}
@@ -729,7 +724,7 @@ class GlobalModalForm extends Component {
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
                   <SelectElement
-                  classname="border-0"
+                    classname="border-0"
                     options={monthOPtions}
                     value={frequency}
                     changeHandler={this.handleFrequencyChange}
@@ -803,7 +798,7 @@ class GlobalModalForm extends Component {
             <>
               {/* for subStage form */}
               <InputElement
-              classname="border-0"
+                classname="border-0"
                 formType="editForm"
                 tag="input"
                 type="number"
@@ -854,27 +849,27 @@ class GlobalModalForm extends Component {
             </div>
           </div>
           {!isProjectWide && regionDropdown && regionDropdown.length > 0 && (
-            <div className="form-group border-0">
+            <div>
               <label>Regions</label>
               {hasLoaded && (
                 <Select
-                  onChange={this.handleSelectRegionChange}
-                  options={regionDropdown}
-                  isMulti={true}
                   defaultValue={regionSelected}
+                  isMulti={true}
+                  options={regionDropdown}
+                  onChange={this.handleSelectRegionChange}
                 />
               )}
             </div>
           )}
           {!isProjectWide && typeDropdown && typeDropdown.length > 0 && (
-            <div className="form-group border-0">
+            <div>
               <label>Types</label>
               {hasLoaded && (
                 <Select
                   defaultValue={typeSelected}
                   isMulti
-                  onChange={this.handleSelectTypeChange}
                   options={typeDropdown}
+                  onChange={this.handleSelectTypeChange}
                 />
               )}
             </div>
@@ -936,13 +931,13 @@ class GlobalModalForm extends Component {
               />
             </div>
           </div>
-          
-          {/* <div className="form-group pull-right no-margin">
+
+          <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
               Save
             </button>
           </div>
-        </form> */}
+        </form>
       </>
     );
   }

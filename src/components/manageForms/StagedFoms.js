@@ -10,7 +10,7 @@ import EditFormGuide from "./EditFormGuide";
 import SortableStage from "./SortableStage";
 import AddStageForm from "./AddStageForm";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import ManageModal from './ManageModal';
+import ManageModal from "./ManageModal";
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -923,40 +923,39 @@ class StagedForms extends Component {
                 isProjectForm={isProjectForm}
                 subStageReorderDisable={subStageReorderDisable}
               />
-              <div className="card-body pdt-0" >
-              <div className="add-btn  stage-add">
-                <a onClick={this.props.commonPopupHandler}>
-                  Add Stage
-                  <span>
-                    <i className="la la-plus" />
-                  </span>
-                </a>
+              <div className="card-body pdt-0">
+                <div className="add-btn  stage-add">
+                  <a onClick={this.props.commonPopupHandler}>
+                    Add Stage
+                    <span>
+                      <i className="la la-plus" />
+                    </span>
+                  </a>
+                </div>
               </div>
-              </div>
-              
             </>
           )}
           {this.props.popupModal && (
-            <ManageModal
+            <Modal
               title="Stage Form"
               toggleModal={this.handleClearStageForm}
               classname="manage-body md-body"
-              handleSubmit={handleSubmitStageForm}
+              // handleSubmit={this.handleSubmitStageForm}
             >
               <AddStageForm
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                // handleSubmit={handleSubmitStageForm}
+                handleSubmit={this.handleSubmitStageForm}
                 stageData={selectedStage}
               />
-            </ManageModal>
+            </Modal>
           )}
           {showSubstageForm && (
-            <ManageModal
+            <Modal
               title="SubStage Form"
               toggleModal={this.handleClosePopup}
               classname="manage-body md-body"
-              handleSubmit={this.handleCreateForm}
+              // handleSubmit={this.handleCreateForm}
             >
               <GlobalModalForm
                 formType="substage"
@@ -968,11 +967,11 @@ class StagedForms extends Component {
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={this.handleClosePopup}
                 formTitle={formTitle}
-                // handleCreateForm={this.handleCreateForm}
+                handleCreateForm={this.handleCreateForm}
                 formData={formData}
                 isProjectWide={false}
               />
-            </ManageModal>
+            </Modal>
           )}
           {showFormModal && (
             <ManageModal
