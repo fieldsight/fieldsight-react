@@ -72,7 +72,7 @@ class DashboardHeader extends React.Component {
         title: "Generate Report",
         link: `/fieldsight/project-dashboard/${id}/`
       },
-      { title: "View Data", link: `/forms/project-responses/${id}/` }
+      { title: "View Data", link: `/fieldsight/application/#/project-responses/${id}/general/` }
     ];
 
     return (
