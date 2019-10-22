@@ -112,7 +112,7 @@ export default class SiteViewData extends Component {
               <div className="left-sidebar new-sidebar sticky-top">
                 <div className="card">
                   <div className="card-header main-card-header">
-                    <h5>Site View Data</h5>
+                    <h5>View Data</h5>
                   </div>
                   <div className="card-body">
                     <ManageFormSetting

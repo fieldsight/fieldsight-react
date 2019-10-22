@@ -64,18 +64,21 @@ export default class SiteEdit extends Component {
 
             if (this._isMounted) {
               const position =
-                res.data.location && res.data.location.split(" ");
+                res.data.location !== "None"
+                  ? res.data.location && res.data.location.split(" ")
+                  : "";
               const longitude = position && position[1].split("(")[1];
               const latitude = position && position[2].split(")")[0];
               this.setState(state => {
-                res.data.regions.map(each => regionArr.push(each));
+                res.data.regions !== undefined &&
+                  res.data.regions.map(each => regionArr.push(each));
                 res.data.site_types.map(each => typeArr.push(each));
                 return {
                   delete_perm: response.data.delete_perm,
                   project_id: response.data.project,
                   jsondata: res.data.json_questions,
                   id,
-                  region: regionArr,
+                  region: res.data.regions !== undefined || "" ? regionArr : [],
                   siteId,
                   regionalId,
                   site_types: typeArr,
@@ -269,6 +272,8 @@ export default class SiteEdit extends Component {
     });
   };
   render() {
+    console.log(this.state.site_types, "region");
+
     return (
       <SiteEditForm
         project={this.state}

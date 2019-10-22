@@ -136,7 +136,6 @@ class ProjectDashboard extends React.Component {
     );
   };
   render() {
-    // console.log("props--", this.props);
     const {
       projectDashboard: {
         id,
@@ -386,7 +385,12 @@ class ProjectDashboard extends React.Component {
               <div className="card-header main-card-header sub-card-header">
                 <h5>Progress table</h5>
               </div>
-              <ProgressTable data={progressTableData} loader={progressLoader} />
+
+              <ProgressTable
+                data={progressTableData}
+                loader={progressLoader}
+                id={this.props.match.params.id}
+              />
             </div>
           </div>
           <div className="chart mrb-30">

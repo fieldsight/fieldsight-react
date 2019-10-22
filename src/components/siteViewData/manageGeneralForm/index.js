@@ -23,8 +23,6 @@ class ManageGeneralForm extends Component {
       axios
         .get(`/fv3/api/view-by-forms/?site=${this.props.id}&form_type=general`)
         .then(res => {
-          console.log(res);
-
           this.setState(
             {
               deleted_forms: res.data.deleted_forms,
