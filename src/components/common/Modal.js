@@ -35,6 +35,7 @@ const Modal = ({
             </span>
           </div>
           <div className="card-body">{children}</div>
+          
         </div>
       </div>
     </div>

@@ -123,7 +123,7 @@ class SideNav extends Component {
               </div>
               <div className="card-body">
                 <div className="manage_group">
-                  {!!isProjectForm && <h5>Site Specific Forms</h5>}
+                  {!!isProjectForm && <h5>Site-Specific Forms</h5>}
                   <ul className="nav nav-tabs flex-column border-tabs">
                     <li className="nav-item">
                       <Link
@@ -165,7 +165,7 @@ class SideNav extends Component {
                 </div>
                 {isProjectForm && (
                   <div className="manage_group mrt-15">
-                    <h5>Project wide Forms</h5>
+                    <h5>Project-Wide Forms</h5>
                     <ul
                       className="nav nav-tabs flex-column border-tabs"
                       id="myTab"

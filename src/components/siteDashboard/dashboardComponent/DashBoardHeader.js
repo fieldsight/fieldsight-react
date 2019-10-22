@@ -69,7 +69,7 @@ class DashboardHeader extends Component {
         title: "Generate Report",
         link: `/fieldsight/site-dashboard/${siteId}/`
       },
-      { title: "View Data", link: `/forms/responses/${siteId}/` }
+      { title: "View Data", link: `/fieldsight/application/#/site-responses/${siteId}/general/` }
     ];
 
     const HeaderDropdown = [

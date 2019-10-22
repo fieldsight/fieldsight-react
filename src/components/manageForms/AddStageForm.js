@@ -125,59 +125,73 @@ class AddStageForm extends Component {
     const isEdit = Object.keys(this.props.stageData).length > 0 ? true : false;
 
     return (
-      <form className="floating-form " onSubmit={handleSubmitForm}>
-        <InputElement
-          formType="editForm"
-          tag="input"
-          type="text"
-          required={true}
-          label="Name"
-          name="name"
-          value={name}
-          changeHandler={handleChange}
-        />
-        {/* </div> */}
-        {regionDropdown && regionDropdown.length > 0 && (
-          <div>
-            <label>Regions</label>
-            {hasLoaded && (
-              <Select
-                onChange={handleSelectRegionChange}
-                options={regionDropdown}
-                isMulti={true}
-                defaultValue={selectedRegion}
-              />
-            )}
-          </div>
-        )}
-        {typeDropdown && typeDropdown.length > 0 && (
-          <div>
-            <label>Types</label>
-            {hasLoaded && (
-              <Select
-                onChange={handleSelectTypeChange}
-                defaultValue={selectedType}
-                isMulti
-                options={typeDropdown}
-              />
-            )}
-          </div>
-        )}
-        <InputElement
-          formType="editForm"
-          tag="input"
-          type="text"
-          required={true}
-          label="Description"
-          name="desc"
-          value={desc}
-          changeHandler={handleChange}
-        />
+      <form
+        className="floating-form "
+        onSubmit={e => {
+          e.preventDefault();
+        }}
+      >
+        <div>
+          <InputElement
+            formType="editForm"
+            tag="input"
+            type="text"
+            required={true}
+            label="Name"
+            name="name"
+            value={name}
+            changeHandler={handleChange}
+          />
+          {/* </div> */}
+          {regionDropdown && regionDropdown.length > 0 && (
+            <div>
+              <label>Regions</label>
+              {hasLoaded && (
+                <Select
+                  defaultValue={selectedRegion}
+                  isMulti={true}
+                  options={regionDropdown}
+                  onChange={handleSelectRegionChange}
+                />
+              )}
+            </div>
+          )}
+          {typeDropdown && typeDropdown.length > 0 && (
+            <div>
+              <label>Types</label>
+              {hasLoaded && (
+                <Select
+                  defaultValue={selectedType}
+                  isMulti
+                  options={typeDropdown}
+                  onChange={handleSelectTypeChange}
+                />
+              )}
+            </div>
+          )}
+          <InputElement
+            classname="border-0"
+            formType="editForm"
+            tag="input"
+            type="text"
+            required={true}
+            label="Description"
+            name="desc"
+            value={desc}
+            changeHandler={handleChange}
+          />
+        </div>
+        {/* <div className="modal-footer"> */}
         <div className="form-group pull-right no-margin">
-          <button type="submit" className="fieldsight-btn">
-            {!!isEdit ? "Save" : "Add"}
+          <button
+            type="button"
+            className="fieldsight-btn"
+            onClick={handleSubmitForm}
+          >
+            Save
           </button>
         </div>
+        {/* </div> */}
       </form>
     );
   }

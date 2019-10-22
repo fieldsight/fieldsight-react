@@ -11,7 +11,7 @@ import {
 // import "leaflet/dist/leaflet.css";
 
 import { BlockContentLoader } from "../../common/Loader";
-
+import { markerIcon } from "../../common/Marker";
 // const position = [27.7, 85.4];
 
 class SiteMap extends Component {
@@ -100,7 +100,10 @@ class SiteMap extends Component {
               ref={this.featureRef}
               // load={this.getMarkerBounds()}
             >
-              <Marker position={[coordinates[1], coordinates[0]]}>
+              <Marker
+                position={[coordinates[1], coordinates[0]]}
+                icon={markerIcon}
+              >
                 <Popup>
                   <span>Name: {name}</span>
                   <br />

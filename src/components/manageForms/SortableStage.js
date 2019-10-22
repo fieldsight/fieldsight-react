@@ -21,8 +21,8 @@ const DragHandle = sortableHandle(({ name, order }) => (
       <Accordion.Toggle
         as={Button}
         variant="link"
-        eventKey={`${order}`}
-        style={{ pointerEvents: "none" }}
+        // eventKey={`${order}`}
+        // style={{ pointerEvents: "none" }}
       >
         {name}
       </Accordion.Toggle>
@@ -151,7 +151,7 @@ class SortableStage extends Component {
                             handleRequestSubStage(each.id, each.order);
                           }}
                         >
-                          <h5>{each.name}</h5>
+                          <div>{each.name}</div>
                           {!!isProjectForm && (
                             <span
                               className="edit-stage"
@@ -178,7 +178,7 @@ class SortableStage extends Component {
                   <Accordion.Collapse eventKey={`${each.order}`}>
                     <Card.Body>
                       {!!isProjectForm && (
-                        <div className="add-btn pull-right outline-btn">
+                        <div className="add-btn  outline-btn">
                           {subStageData && subStageData.length > 1 && (
                             <a
                               className="pending"
@@ -212,6 +212,11 @@ class SortableStage extends Component {
                             <a
                               data-tab="addSubStage-popup"
                               onClick={handleSaveSubstageReorder}
+                              className={`${
+                                this.props.subStageReorderDisable
+                                  ? "disabled"
+                                  : ""
+                              }`}
                             >
                               {/* Save Order */}
                               <OverlayTrigger
@@ -232,7 +237,7 @@ class SortableStage extends Component {
                               {/* Deploy Substages */}
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Deploy Substages</Tooltip>}
+                                overlay={<Tooltip>Deploy All Substages</Tooltip>}
                               >
                                 <span className="active deploy">
                                   <i className="la la-rocket" />
@@ -267,7 +272,7 @@ class SortableStage extends Component {
                                 <OverlayTrigger
                                   placement="top"
                                   overlay={
-                                    <Tooltip>Undeploy Substages</Tooltip>
+                                    <Tooltip>Undeploy All Substages</Tooltip>
                                   }
                                 >
                                   <span>
@@ -279,7 +284,7 @@ class SortableStage extends Component {
                         </div>
                       )}
                       {!isProjectForm && !!each.site && (
-                        <div className="add-btn pull-right outline-btn">
+                        <div className="add-btn  outline-btn">
                           {subStageData && subStageData.length > 1 && (
                             <a
                               className="pending"
@@ -333,7 +338,7 @@ class SortableStage extends Component {
                               {/* Deploy Substages */}
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Deploy Substages</Tooltip>}
+                                overlay={<Tooltip>Deploy All Substages</Tooltip>}
                               >
                                 <span className="active deploy">
                                   <i className="la la-rocket" />
@@ -352,7 +357,7 @@ class SortableStage extends Component {
                                 <OverlayTrigger
                                   placement="top"
                                   overlay={
-                                    <Tooltip>Undeploy Substages</Tooltip>
+                                    <Tooltip>Undeploy All Substages</Tooltip>
                                   }
                                 >
                                   <span>

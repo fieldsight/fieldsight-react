@@ -141,9 +141,7 @@ class GlobalModalForm extends Component {
         ? this.props.formData.frequency
         : 1,
     notifyIncomplete:
-      this.props.formData &&
-      this.props.formData.setting &&
-      this.props.formData.setting.notify_incomplete_schedule
+      this.props.formData && this.props.formData.setting
         ? this.props.formData.setting.notify_incomplete_schedule
         : true
   };
@@ -526,11 +524,7 @@ class GlobalModalForm extends Component {
         notifyIncomplete
       }
     } = this;
-    // console.log(
-    //   "in form",
-    //   notifyIncomplete,
-    //   this.props.formData.setting.notify_incomplete_schedule
-    // );
+
     let weekOptions = [];
     let monthOPtions = [];
     let dayOptions = [];
@@ -542,26 +536,52 @@ class GlobalModalForm extends Component {
     }
     for (var i = 1; i <= 31; i++) {
       if (i <= 30) dayOptions.push({ key: i, name: i });
-      else dayOptions.push({ key: 0, name: "last day" });
+      else dayOptions.push({ key: 0, name: "Last" });
     }
     return (
       <>
         <form className="floating-form" onSubmit={this.handleSubmit}>
           <div className="form-form">
+            {formType == "substage" && (
+              <>
+                <InputElement
+                  classname="border-0"
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  required={true}
+                  label="Name"
+                  name="substageTitle"
+                  value={substageTitle}
+                  changeHandler={this.handleInputChange}
+                />
+                <InputElement
+                  classname="border-0"
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  //   required={true}
+                  label="Description"
+                  name="substageDesc"
+                  value={substageDesc}
+                  changeHandler={this.handleInputChange}
+                />
+              </>
+            )}
             <div className="selected-form">
+              <div className="selected-text">
+                <span>{formTitle}</span>
+              </div>
               {!isEditForm && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
                     {formTitle ? "Change form" : " Choose form"}
                     <span>
-                      <i className="la la-plus"></i>
+                      <i className="la la-file-text-o"></i>
                     </span>
                   </a>
                 </div>
               )}
-              <div className="selected-text">
-                <span>{formTitle}</span>
-              </div>
             </div>
           </div>
 
@@ -646,6 +666,7 @@ class GlobalModalForm extends Component {
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
                   <SelectElement
+                    classname="border-0"
                     options={weekOptions}
                     value={frequency}
                     changeHandler={this.handleFrequencyChange}
@@ -703,11 +724,12 @@ class GlobalModalForm extends Component {
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
                   <SelectElement
+                    classname="border-0"
                     options={monthOPtions}
                     value={frequency}
                     changeHandler={this.handleFrequencyChange}
                   />
-                  <span>Month on</span>
+                  <span>Months on day</span>
                   <SelectElement
                     options={dayOptions}
                     value={selectedDays[0]}
@@ -776,6 +798,7 @@ class GlobalModalForm extends Component {
             <>
               {/* for subStage form */}
               <InputElement
+                classname="border-0"
                 formType="editForm"
                 tag="input"
                 type="number"
@@ -830,10 +853,10 @@ class GlobalModalForm extends Component {
               <label>Regions</label>
               {hasLoaded && (
                 <Select
-                  onChange={this.handleSelectRegionChange}
-                  options={regionDropdown}
-                  isMulti={true}
                   defaultValue={regionSelected}
+                  isMulti={true}
+                  options={regionDropdown}
+                  onChange={this.handleSelectRegionChange}
                 />
               )}
             </div>
@@ -845,8 +868,8 @@ class GlobalModalForm extends Component {
                 <Select
                   defaultValue={typeSelected}
                   isMulti
-                  onChange={this.handleSelectTypeChange}
                   options={typeDropdown}
+                  onChange={this.handleSelectTypeChange}
                 />
               )}
             </div>
@@ -908,34 +931,7 @@ class GlobalModalForm extends Component {
               />
             </div>
           </div>
-          {formType == "substage" && (
-            <>
-              {/* <div className="form-group"> */}
-              <InputElement
-                formType="editForm"
-                tag="input"
-                type="text"
-                required={true}
-                label="Name"
-                name="substageTitle"
-                value={substageTitle}
-                changeHandler={this.handleInputChange}
-              />
-              {/* </div> */}
-              {/* <div className="form-group"> */}
-              <InputElement
-                formType="editForm"
-                tag="input"
-                type="text"
-                //   required={true}
-                label="Description"
-                name="substageDesc"
-                value={substageDesc}
-                changeHandler={this.handleInputChange}
-              />
-              {/* </div> */}
-            </>
-          )}
+
           <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
               Save

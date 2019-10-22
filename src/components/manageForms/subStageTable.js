@@ -57,9 +57,9 @@ const DragHandle = sortableHandle(({ sub, index, formTable }) => (
       </time>
     </td>
     <td>
-      <a className={getClass(sub && sub.default_submission_status)}>
+      <span className={getClass(sub && sub.default_submission_status)}>
         {getStatus(sub && sub.default_submission_status)}
-      </a>
+      </span>
     </td>
     <td>
       <GetActionForProject
@@ -170,6 +170,9 @@ const GetActionForProject = props => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
             onToggle={handleToggle}
+            message={
+              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+            }
           />
         )}
       </div>
@@ -235,6 +238,9 @@ const GetActionForProject = props => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
             onToggle={handleToggle}
+            message={
+              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+            }
           />
         )}
       </div>
@@ -379,12 +385,11 @@ class SubStageTable extends Component {
                         </time>
                       </td>
                       <td>
-                        <a
-                          style={{ cursor: "pointer" }}
+                        <span
                           className={getClass(sub.default_submission_status)}
                         >
                           {getStatus(sub.default_submission_status)}
-                        </a>
+                        </span>
                       </td>
                       <td>
                         <GetActionForProject

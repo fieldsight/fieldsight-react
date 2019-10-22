@@ -9,6 +9,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
 import GeneralFormTable from "./GeneralFormTable";
+import ManageModal from "./ManageModal";
 
 class GeneralForms extends Component {
   _isMounted = false;
@@ -462,6 +463,7 @@ class GeneralForms extends Component {
               title="Add General Form"
               toggleModal={handleClosePopup}
               classname="md-body"
+              // handleSubmit={this.handleCreateGeneralForm}
             >
               <GlobalModalForm
                 formType="general"
@@ -491,13 +493,14 @@ class GeneralForms extends Component {
             </Modal>
           )}
           {showFormModal && (
-            <Modal
+            <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
               classname="manage-body md-body"
+              handleSubmit={this.handleSaveForm}
             >
               <AddForm
                 activeTab={activeTab}
@@ -507,10 +510,10 @@ class GeneralForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                handleSaveForm={this.handleSaveForm}
+                // handleSaveForm={this.handleSaveForm}
                 loader={this.props.formLoader}
               />
-            </Modal>
+            </ManageModal>
           )}
         </RightContentCard>
       </div>

@@ -3,7 +3,10 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 class FeaturedPicturesCard extends Component {
   renderName = id => {
-    return this.props.forms.find(form => form.id === +id).name;
+    const selectedForm = this.props.forms.find(form => form.id === +id);
+    if (selectedForm) {
+      return selectedForm.name;
+    }
   };
   render() {
     const {
