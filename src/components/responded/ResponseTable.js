@@ -28,7 +28,7 @@ class ResponseTable extends Component {
               <th>Submission</th>
               <th>Last Response On</th>
               <th>Created Date</th>
-              <th>Action</th>
+              <th style={{ width: "13%" }}>Action</th>
             </tr>
           </thead>
           <tbody>

@@ -9,10 +9,7 @@ class VersionTable extends Component {
     breadcrumbs: {}
   };
   componentDidMount() {
-    console.log(this.props);
     let data = this.props.project == "project" ? 1 : 0;
-    console.log(data);
-
     axios
       .get(
         `/fv3/api/submissions-versions/${
@@ -78,7 +75,7 @@ class VersionTable extends Component {
                 <tr>
                   <td>{latest.title}</td>
                   <td>{latest.version}</td>
-                  <td>{latest.overridden_date}</td>
+                  <td>{latest.overidden_date}</td>
                   <td>{latest.last_response}</td>
                   <td>{latest.total_submissions}</td>
                   <td>
@@ -97,7 +94,7 @@ class VersionTable extends Component {
                       <tr key={key}>
                         <td>{version.title}</td>
                         <td>{version.version}</td>
-                        <td>{version.overridden_date}</td>
+                        <td>{version.overidden_date}</td>
                         <td>{version.last_response}</td>
                         <td>{version.total_submissions}</td>
                         <td>
