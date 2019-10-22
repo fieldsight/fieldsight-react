@@ -291,7 +291,7 @@ class ProjectDashboard extends React.Component {
                       </form>
                       {is_project_manager && (
                         <a
-                          href={`/fieldsight/site/add/${projectId}/`}
+                          href={`/fieldsight/application/#/create-site/${projectId}/`}
                           target="_blank"
                           className="fieldsight-btn"
                         >
@@ -317,7 +317,6 @@ class ProjectDashboard extends React.Component {
                       loader={dLoader}
                       terms={terms_and_labels}
                     />
-                    {console.log(this.props.siteList, "sgdfhgjh")}
 
                     {this.props.siteList.length > 0 && (
                       <div className="card-body">

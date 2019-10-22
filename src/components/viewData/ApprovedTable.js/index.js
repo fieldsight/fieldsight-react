@@ -15,11 +15,16 @@ class ApprovedTable extends Component {
       });
     }
   }
-
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
+      this.props.handleBreadCrumb(this.props.breadcrumbs);
+    }
+  }
   render() {
     const {
       props: { data, showViewData }
     } = this;
+
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
@@ -37,7 +42,6 @@ class ApprovedTable extends Component {
           <div className="card-body">
             <div className="table-footer">
               <div className="showing-rows">
-                {console.log("hjkk")}
                 <p>
                   Showing <span>{this.props.fromData}</span> to{" "}
                   <span>

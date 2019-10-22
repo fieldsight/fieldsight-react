@@ -19,7 +19,6 @@ class StatusTable extends Component {
           <thead>
             <tr>
               <th>Name</th>
-              <th>ID</th>
               <th>Submitted By</th>
               <th>Time</th>
             </tr>
@@ -30,12 +29,11 @@ class StatusTable extends Component {
               this.state.submission.map((sub, key) => {
                 return (
                   <tr key={key}>
-                    <td>
-                      <a href={sub.profile_url}>{sub.name}</a>
+                    <td style={{ width: "380px" }}>
+                      <a href={sub.submission_url}>{sub.name}</a>
                     </td>
-                    <td>{sub.id}</td>
                     <td>
-                      <a href={sub.submission_url}>{sub.submitted_by}</a>
+                      <a href={sub.profile_url}>{sub.submitted_by}</a>
                     </td>
                     <td>{sub.date}</td>
                   </tr>

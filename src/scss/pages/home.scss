@@ -280,26 +280,6 @@
         @include clear;
       }
 
-      .nice-select {
-        background-color: $color-white;
-        border: none;
-        border-radius: 0;
-        font-size: 0.8125rem;
-        padding-left: 0;
-        border-bottom: 1px solid $color-bg;
-
-        ul {
-          @include boxshadow;
-        }
-
-        &::after {
-          border-bottom: 1.5px solid $color-secondary;
-          border-right: 1.5px solid $color-secondary;
-          height: 10px;
-          width: 10px;
-        }
-      }
-
       .hide-form {
         display: none;
       }
@@ -591,40 +571,41 @@
 
     &.stage-accordion {
       .card {
+
         .card-header {
+          @include flexjust;
+          justify-content: flex-start;
+          align-items: center;
+
+          span.drag-icon {
+            display: inline-block;
+
+            i {
+              margin-left: -10px;
+              color: darken($color-bg, 10%);
+              font-size: 1.2rem;
+
+              &:last-child {
+                margin-left: -.875rem;
+              }
+            }
+
+            &:hover {
+              cursor: -moz-move;
+              cursor: -webkit-move;
+              cursor: move;
+            }
+          }
+
           h5 {
             display: flex;
+            width: 100%;
 
-            button {
+            button.btn-link {
               display: flex;
               align-items: center;
-              text-transform:capitalize;
+              text-transform: capitalize;
 
-              h5 {
-                display: inline-block;
-                font-size:.875rem;
-                span.drag-icon {
-                  display: inline-block;
-
-                  i {
-                    margin-left: -10px;
-                    color: darken($color-bg, 10%);
-                    font-size: 1.2rem;
-
-                    &:last-child {
-                      margin-left: -.875rem;
-                    }
-                  }
-
-                  &:hover {
-                    cursor: -moz-move;
-                    cursor: -webkit-move;
-                    cursor: move;
-                  }
-                }
-                
-                
-              }
               span.edit-stage {
                 margin-left: .5rem;
 
@@ -636,6 +617,40 @@
           }
 
 
+        }
+
+        .card-body {
+          .add-btn {
+            justify-content: flex-end;
+          }
+
+          table {
+            margin-top: .25rem;
+          }
+        }
+
+        .dragable-stage {
+          .card-header {
+            h5 {
+              width: calc(100% - 30px);
+
+              button.btn-link {
+                pointer-events: none;
+                span.edit-stage,&::after {
+                  display: none;
+                }
+                // &::after{
+                //   display:none;
+                // }
+              }
+            }
+
+            &:hover {
+              cursor: -moz-move;
+              cursor: -webkit-move;
+              cursor: move;
+            }
+          }
         }
       }
     }

@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { Accordion, Card, Button } from "react-bootstrap";
 import uuid from "uuid/v4";
 import format from "date-fns/format";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import { Map, TileLayer, Marker, Popup, FeatureGroup } from "react-leaflet";
 import { DotLoader } from "../common/Loader";
 
 function measure(lat1, lon1, lat2, lon2) {
@@ -22,9 +22,30 @@ function measure(lat1, lon1, lat2, lon2) {
   return (d * 1000).toFixed(2); // meters
 }
 class Submission extends Component {
+  constructor(props) {
+    super(props);
+    this.mapRef = createRef();
+    this.featureRef = createRef();
+  }
+
   state = {
     showGallery: false,
     selectedImg: ""
+  };
+
+  getMarkerBounds = () => {
+    // console.log("to fitbound", this.mapRef.current, this.featureRef);
+
+    const map =
+      this.mapRef && this.mapRef.current && this.mapRef.current.leafletElement;
+    const feature =
+      this.featureRef &&
+      this.featureRef.current &&
+      this.featureRef.current.leafletElement;
+    // debugger;
+    if (!!map && !!feature) {
+      map.fitBounds(feature.getBounds());
+    }
   };
 
   openModal = img => {
@@ -145,23 +166,31 @@ class Submission extends Component {
                           style={{ height: "205px", marginTop: "1rem" }}
                           center={[latitude, longitude]}
                           zoom={15}
+                          ref={this.mapRef}
+                          onmouseover={() => this.getMarkerBounds()}
                         >
                           <TileLayer
                             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                           />
-                          <Marker position={[latitude, longitude]}>
-                            <Popup>
-                              <b>Question: </b>
-                              {submission.question}
-                            </Popup>
-                          </Marker>
-                          <Marker position={[site.latitude, site.longitude]}>
-                            <Popup>
-                              <b>Project Name: </b>
-                              {site.project_name}
-                            </Popup>
-                          </Marker>
+                          <FeatureGroup
+                            color="purple"
+                            ref={this.featureRef}
+                            // onadd={() => this.getMarkerBounds()}
+                          >
+                            <Marker position={[latitude, longitude]}>
+                              <Popup>
+                                <b>Question: </b>
+                                {submission.question}
+                              </Popup>
+                            </Marker>
+                            <Marker position={[site.latitude, site.longitude]}>
+                              <Popup>
+                                <b>Project Name: </b>
+                                {site.project_name}
+                              </Popup>
+                            </Marker>
+                          </FeatureGroup>
                         </Map>
                       </div>
                     </div>

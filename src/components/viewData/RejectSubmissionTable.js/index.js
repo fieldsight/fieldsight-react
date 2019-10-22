@@ -18,11 +18,15 @@ class RejectedTable extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
+      this.props.handleBreadCrumb(this.props.breadcrumbs);
+    }
+  }
   render() {
     const {
       props: { data, showViewData }
     } = this;
-    console.log(this.props.url, "rejeted");
 
     return (
       <React.Fragment>
@@ -31,7 +35,7 @@ class RejectedTable extends Component {
           <div className="dash-btn">
             <Link to={this.props.url}>
               <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Status" : "View by Form"}
+                {data ? "View By Form" : "View by Status"}
               </button>
             </Link>
           </div>
@@ -44,7 +48,6 @@ class RejectedTable extends Component {
           <div className="card-body">
             <div className="table-footer">
               <div className="showing-rows">
-                {console.log("hjkk")}
                 <p>
                   Showing <span>{this.props.fromData}</span> to{" "}
                   <span>
