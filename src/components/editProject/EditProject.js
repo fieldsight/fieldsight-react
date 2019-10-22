@@ -400,7 +400,7 @@ class EditProject extends Component {
                 <CheckBox
                   checked={cluster_sites || ""}
                   label="Enable/Disable Clustering into Regions"
-                  onChange={this.handleCheckboxChange}
+                  changeHandler={this.handleCheckboxChange}
                 />
               </div>
             </div>

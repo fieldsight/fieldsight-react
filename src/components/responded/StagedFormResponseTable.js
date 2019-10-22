@@ -42,7 +42,9 @@ export default class SurveyFormResponseTable extends Component {
                       {stage.sub_stages.map((sub_stages, key) => {
                         return (
                           <tr key={key}>
-                            <td style={{ width: "70px" }}>{sub_stages.name}</td>
+                            <td style={{ width: "269px" }}>
+                              {sub_stages.name}
+                            </td>
                             <td style={{ width: "183px" }}>
                               {sub_stages.form_name}
                             </td>
@@ -87,9 +89,9 @@ export default class SurveyFormResponseTable extends Component {
                               )}
 
                               {sub_stages.download_url === null ? (
-                                <>
+                                <a className="edit-tag tag disable pointer">
                                   <i className="la la-download"></i>
-                                </>
+                                </a>
                               ) : (
                                 <a
                                   href={sub_stages.download_url}
@@ -98,17 +100,20 @@ export default class SurveyFormResponseTable extends Component {
                                   <i className="la la-download"></i>
                                 </a>
                               )}
-                              {sub_stages.versions_url === null ? (
-                                <>
-                                  <i className="la la-clone"></i>
-                                </>
-                              ) : (
-                                <a
-                                  href={sub_stages.versions_url}
-                                  className="pending-tag tag"
+                              {this.state.table === "site" ? (
+                                <Link
+                                  className="view-tag tag"
+                                  to={`/site-version-submission/${this.props.id}/${sub_stages.fsxf_id}`}
                                 >
                                   <i className="la la-clone"></i>
-                                </a>
+                                </Link>
+                              ) : (
+                                <Link
+                                  className="view-tag tag"
+                                  to={`/project-version-submission/${this.props.id}/${sub_stages.fsxf_id}`}
+                                >
+                                  <i className="la la-clone"></i>
+                                </Link>
                               )}
                             </td>
                           </tr>

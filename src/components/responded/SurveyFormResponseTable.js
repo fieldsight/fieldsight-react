@@ -54,36 +54,31 @@ export default class SurveyFormResponseTable extends Component {
                     </Link>
                   </td>
                   <td>
-                    {survey.view_submission_url === null ? (
-                      <>
-                        <i className="la la-eye"></i>submission
-                      </>
-                    ) : (
+                    {
                       <Link
                         className="view-tag tag"
                         to={`/submission-data/${this.props.id}/${survey.id}`}
                       >
                         <i className="la la-eye"></i>
                       </Link>
-                    )}
+                    }
                     {survey.download_url === null ? (
-                      <>
+                      <a className="edit-tag tag disable pointer">
                         <i className="la la-download"></i>
-                      </>
+                      </a>
                     ) : (
                       <a href={survey.download_url} className="edit-tag tag">
                         <i className="la la-download"></i>
                       </a>
                     )}
-                    {survey.versions_url === null ? (
-                      <>
-                        <i className="la la-clone"></i>
-                      </>
-                    ) : (
-                      <a href={survey.versions_url} className="pending-tag tag">
-                        <i className="la la-clone"></i>
-                      </a>
-                    )}
+                    {
+                      <Link
+                        className="pending-tag tag"
+                        to={`/project-version-submission/${this.props.id}/${survey.id}`}
+                      >
+                        <i className="la la-clone "></i>
+                      </Link>
+                    }
                   </td>
                 </tr>
               );

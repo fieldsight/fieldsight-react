@@ -52,8 +52,6 @@ const withPagination = WrappedComponent => {
         .then(res => {
           if (this._isMounted) {
             if (res.status === 200) {
-              console.log(res, "ress");
-
               // if (res.data.results.query === null) {
               //   this.setState({
               //     siteList: res.data.results.data,
