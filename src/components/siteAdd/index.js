@@ -335,11 +335,11 @@ export default class SiteAdd extends Component{
       if (data ==="regions"){
         this.setState({
           regionselected:value
-        })
+        },()=>console.log(this.state.regionselected,"regionselected"))
        }else if(data=== "site_types"){
        this.setState({
           Selectedtypes:value
-        })
+        },()=>console.log(this.state.Selectedtypes,"Selectedtypes"))
       }
     }
     closeModal = () => {

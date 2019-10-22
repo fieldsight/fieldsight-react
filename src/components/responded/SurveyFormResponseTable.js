@@ -26,7 +26,7 @@ export default class SurveyFormResponseTable extends Component {
               <th>Created Date</th>
               <th>New Submission</th>
               <th>Submission</th>
-              <th>Action</th>
+              <th style={{ width: "13%" }}>Action</th>
             </tr>
           </thead>
           <tbody>

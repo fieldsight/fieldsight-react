@@ -29,14 +29,14 @@ export default class SiteEdit extends Component {
     id: "",
     selectform: [],
     selectdata: false,
-    region: [{ name: "----", id: null }],
+    region: [{ id: null, name: "----" }],
     data: [],
     regionselected: "",
     dataSelected: "",
     id: "",
     siteId: "",
     regionalId: "",
-    site_types: [{ name: "----", id: null }],
+    site_types: [{ id: null, name: "----" }],
     Selectedtypes: "",
     project_info: [],
     project_id: "",
@@ -69,40 +69,45 @@ export default class SiteEdit extends Component {
                   : "";
               const longitude = position && position[1].split("(")[1];
               const latitude = position && position[2].split(")")[0];
-              this.setState(state => {
-                res.data.regions !== undefined &&
-                  res.data.regions.map(each => regionArr.push(each));
-                res.data.site_types.map(each => typeArr.push(each));
-                return {
-                  delete_perm: response.data.delete_perm,
-                  project_id: response.data.project,
-                  jsondata: res.data.json_questions,
-                  id,
-                  region: res.data.regions !== undefined || "" ? regionArr : [],
-                  siteId,
-                  regionalId,
-                  site_types: typeArr,
-                  data: response.data,
-                  project: {
-                    name: response.data.name,
-                    site_id: response.data.identifier,
-                    phone: response.data.phone,
-                    address: response.data.address,
-                    public_desc: response.data.public_desc,
-                    logo: response.data.logo,
-                    weight: response.data.weight,
-                    cluster_sites: response.data.enable_subsites
-                  },
-                  regionselected: response.data.region,
-                  Selectedtypes: response.data.type,
-                  data: response.data.site_meta_attributes_answers,
-                  cropResult: response.data.logo,
-                  position: {
-                    longitude,
-                    latitude
-                  }
-                };
-              });
+              this.setState(
+                state => {
+                  res.data.regions !== undefined &&
+                    res.data.regions.map(each => regionArr.push(each));
+                  res.data.site_types.map(each => typeArr.push(each));
+                  return {
+                    delete_perm: response.data.delete_perm,
+                    project_id: response.data.project,
+                    jsondata: res.data.json_questions,
+                    id,
+                    region:
+                      res.data.regions !== undefined || "" ? regionArr : [],
+                    siteId,
+                    regionalId,
+                    site_types:
+                      res.data.site_types !== undefined || "" ? typeArr : [],
+                    data: response.data,
+                    project: {
+                      name: response.data.name,
+                      site_id: response.data.identifier,
+                      phone: response.data.phone,
+                      address: response.data.address,
+                      public_desc: response.data.public_desc,
+                      logo: response.data.logo,
+                      weight: response.data.weight,
+                      cluster_sites: response.data.enable_subsites
+                    },
+                    regionselected: response.data.region,
+                    Selectedtypes: response.data.type,
+                    data: response.data.site_meta_attributes_answers,
+                    cropResult: response.data.logo,
+                    position: {
+                      longitude,
+                      latitude
+                    }
+                  };
+                },
+                () => console.log(this.state)
+              );
             }
           })
           .catch(err => {
@@ -148,8 +153,10 @@ export default class SiteEdit extends Component {
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude,
       ...(!!this.state.project.weight && { weight: this.state.project.weight }),
-      region: this.state.regionselected,
-      type: this.state.Selectedtypes,
+      region:
+        this.state.regionselected === "----" ? null : this.state.regionselected,
+      type:
+        this.state.Selectedtypes === "----" ? null : this.state.Selectedtypes,
       enable_subsites: this.state.project.cluster_sites,
       ...(this.state.show && { logo: this.state.cropResult }),
       site_meta_attributes_ans: JSON.stringify(this.state.data)
@@ -272,8 +279,6 @@ export default class SiteEdit extends Component {
     });
   };
   render() {
-    console.log(this.state.site_types, "region");
-
     return (
       <SiteEditForm
         project={this.state}
