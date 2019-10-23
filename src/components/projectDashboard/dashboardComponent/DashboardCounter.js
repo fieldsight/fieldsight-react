@@ -1,5 +1,6 @@
 import React from "react";
 import CountCard from "../../common/CountCard";
+import { Link } from "react-router-dom";
 
 const getIcon = submission => {
   if (submission === "rejected") {
@@ -14,17 +15,19 @@ const getIcon = submission => {
 };
 const ShowCount = props => (
   <div className="col-xl-3 col-md-6">
-    <CountCard
-      countName={props.name}
-      countNumber={props.count}
-      className={props.name}
-      icon={getIcon(props.name)}
-    />
+    <Link to={props.link}>
+      <CountCard
+        countName={props.name}
+        countNumber={props.count}
+        className={props.name}
+        icon={getIcon(props.name)}
+      />
+    </Link>
   </div>
 );
 class DashboardCounter extends React.Component {
   render() {
-    const { projectActivity } = this.props;
+    const { projectActivity, id } = this.props;
 
     return (
       <div className="dashboard-counter mrt-30">
@@ -32,18 +35,22 @@ class DashboardCounter extends React.Component {
           <ShowCount
             name="pending"
             count={projectActivity.pending_submissions}
+            link={`/project-responses/${id}/pending`}
           />
           <ShowCount
             name="approved"
             count={projectActivity.approved_submissions}
+            link={`/project-responses/${id}/approved`}
           />
           <ShowCount
             name="flagged"
             count={projectActivity.flagged_submissions}
+            link={`/project-responses/${id}/flagged`}
           />
           <ShowCount
             name="rejected"
             count={projectActivity.rejected_submissions}
+            link={`/project-responses/${id}/rejected`}
           />
         </div>
       </div>

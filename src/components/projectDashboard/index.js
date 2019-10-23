@@ -379,7 +379,10 @@ class ProjectDashboard extends React.Component {
             </div>
           </div>
           <ProjectActivity projectActivity={project_activity} />
-          <DashboardCounter projectActivity={project_activity} />
+          <DashboardCounter
+            projectActivity={project_activity}
+            id={this.state.projectId}
+          />
           <div className="progress-table mrb-30">
             <div className="card">
               <div className="card-header main-card-header sub-card-header">

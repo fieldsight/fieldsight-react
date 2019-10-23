@@ -156,8 +156,6 @@ class SubmissionData extends Component {
               <tbody>
                 {this.state.siteList.length > 0 &&
                   this.state.siteList.map((list, key) => {
-                    console.log(list);
-
                     return (
                       <tr key={key}>
                         <td>{key + 1}</td>
@@ -169,18 +167,20 @@ class SubmissionData extends Component {
 
                         <td>
                           <a
+                            className="view-tag tag"
                             href={`/fieldsight/application/?submission=${list.submission_id}#/submission-details`}
                           >
                             <i className="la la-eye"></i>
                           </a>
                           <a
+                            className="edit-tag tag"
                             href={`/form/edit/${this.props.form_id_string}/${list.submission_id}`}
                           >
                             <i className="la la-edit"></i>
                           </a>
 
                           <a
-                            className="td-delete-btn"
+                            className="delete-tag tag"
                             onClick={() => {
                               this.handleDelete(list.submission_id);
                             }}
