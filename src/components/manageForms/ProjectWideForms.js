@@ -9,6 +9,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
 import GeneralFormTable from "./GeneralFormTable";
+import ManageModal from "./ManageModal";
 
 class ProjectWideForms extends Component {
   _isMounted = false;
@@ -109,7 +110,7 @@ class ProjectWideForms extends Component {
             return { data: newData };
           },
           () => {
-            successToast("Form", "updated");
+            successToast("Deploy Status", "updated");
           }
         );
       })
@@ -202,17 +203,12 @@ class ProjectWideForms extends Component {
   };
 
   onChangeHandler = async e => {
-    const {
-      activeTab,
-      myFormList,
-      projectFormList,
-      sharedFormList
-    } = this.state;
+    const { activeTab } = this.state;
     const searchValue = e.target.value;
 
     if (searchValue) {
       if (activeTab == "myForms") {
-        const filteredData = await myFormList.filter(form => {
+        const filteredData = await this.props.myForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -223,7 +219,7 @@ class ProjectWideForms extends Component {
           myFormList: filteredData
         });
       } else if (activeTab == "projectForms") {
-        const awaitedData = await projectFormList.map(project => {
+        const awaitedData = await this.props.projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
               form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -236,7 +232,7 @@ class ProjectWideForms extends Component {
           projectFormList: awaitedData
         });
       } else if (activeTab == "sharedForms") {
-        const filteredData = await sharedFormList.filter(form => {
+        const filteredData = await this.props.sharedForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -395,6 +391,7 @@ class ProjectWideForms extends Component {
               changeDeployStatus={this.changeDeployStatus}
               deleteItem={this.deleteItem}
               handleEditForm={this.editForm}
+              formTable="project"
             />
           )}
           {this.props.popupModal && (
@@ -402,6 +399,7 @@ class ProjectWideForms extends Component {
               title="Add General Form"
               toggleModal={handleClosePopup}
               classname="md-body"
+              // handleSubmit={this.handleCreateGeneralForm}
             >
               <GlobalModalForm
                 formType="general"
@@ -430,13 +428,14 @@ class ProjectWideForms extends Component {
             </Modal>
           )}
           {showFormModal && (
-            <Modal
+            <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
-              classname="dark md-body"
+              classname="dark md-body manage-body"
+              handleSubmit={this.handleSaveForm}
             >
               <AddForm
                 activeTab={activeTab}
@@ -446,9 +445,9 @@ class ProjectWideForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                handleSaveForm={this.handleSaveForm}
+                // handleSaveForm={this.handleSaveForm}
               />
-            </Modal>
+            </ManageModal>
           )}
         </RightContentCard>
       </div>

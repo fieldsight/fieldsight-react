@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { Link } from "react-router-dom";
+import format from "date-fns/format";
 
 export default class SurveyFormResponseTable extends Component {
   state = {
@@ -7,8 +9,6 @@ export default class SurveyFormResponseTable extends Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    console.log(props, "props");
-
     return {
       survey_forms: props.survey_forms
     };
@@ -21,24 +21,27 @@ export default class SurveyFormResponseTable extends Component {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Id</th>
               <th>Title</th>
               <th>Last Response On</th>
               <th>Created Date</th>
               <th>New Submission</th>
-              <th>Action</th>
+              <th>Submission</th>
+              <th style={{ width: "13%" }}>Action</th>
             </tr>
           </thead>
           <tbody>
             {this.state.survey_forms.map((survey, key) => {
               return (
                 <tr key={key}>
-                  <td>
-                    <a href={`#/`}>{survey.name}</a>
-                  </td>
-                  <td>{survey.id}</td>
+                  <td>{survey.name}</td>
                   <td>{survey.title}</td>
-                  <td>{survey.last_response}</td>
+                  <td>
+                    {survey.last_response.length > 0
+                      ? format(survey.last_response, [
+                          "MMMM Do YYYY, h:mm:ss a"
+                        ])
+                      : ""}
+                  </td>
                   <td>{survey.created_date}</td>
                   <td>
                     <a target="_blank" href="/forms/new/0/297449">
@@ -46,37 +49,36 @@ export default class SurveyFormResponseTable extends Component {
                     </a>
                   </td>
                   <td>
-                    {survey.view_submission_url === null ? (
-                      <>
-                        <i className="la la-eye"></i>submission
-                      </>
-                    ) : (
-                      <a
-                        href={survey.view_submission_url}
+                    <Link to={`/submission-data/${this.props.id}/${survey.id}`}>
+                      {survey.response_count}
+                    </Link>
+                  </td>
+                  <td>
+                    {
+                      <Link
                         className="view-tag tag"
+                        to={`/submission-data/${this.props.id}/${survey.id}`}
                       >
                         <i className="la la-eye"></i>
-                        {survey.response_count}submission
-                      </a>
-                    )}
+                      </Link>
+                    }
                     {survey.download_url === null ? (
-                      <>
-                        <i className="la la-download"></i>Download
-                      </>
+                      <a className="edit-tag tag disable pointer">
+                        <i className="la la-download"></i>
+                      </a>
                     ) : (
                       <a href={survey.download_url} className="edit-tag tag">
-                        <i className="la la-download"></i> Download
+                        <i className="la la-download"></i>
                       </a>
                     )}
-                    {survey.versions_url === null ? (
-                      <>
-                        <i className="la la-clone"></i>Version
-                      </>
-                    ) : (
-                      <a href={survey.versions_url} className="pending-tag tag">
-                        <i className="la la-clone"></i> Version
-                      </a>
-                    )}
+                    {
+                      <Link
+                        className="pending-tag tag"
+                        to={`/project-version-submission/${this.props.id}/${survey.id}`}
+                      >
+                        <i className="la la-clone "></i>
+                      </Link>
+                    }
                   </td>
                 </tr>
               );

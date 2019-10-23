@@ -86,7 +86,8 @@ module.exports = env => {
         }),
         new CopyWebpackPlugin([{ from: "src/static/" }]),
         new DashboardPlugin()
-      ]
+      ],
+      devtool: "eval-source-map"
     }
   ]);
 };

@@ -2,20 +2,16 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 
 const sideNavRoutes = [
-  { to: "/", title: "General Forms" },
-  { to: "/scheduled", title: "Scheduled Forms" },
-  { to: "/stage", title: "Stage Form" }
+  { to: "/general", path: "/general", title: "General Forms" },
+  { to: "/scheduled", path: "/scheduled", title: "Scheduled Forms" },
+  { to: "/stage", path: "/stage", title: "Stage Form" }
 ];
 
 const viewByStatus = [
-  { to: "/rejected", title: "Rejected Submission" },
-  { to: "/flagged", title: "Flagged Submission" },
-  {
-    to: "/pending",
-
-    title: "Pending Submission"
-  },
-  { to: "/approved", title: "Approved Submission" }
+  { to: "/rejected", path: "/rejected", title: "Rejected Submission" },
+  { to: "/flagged", path: "/flagged", title: "Flagged Submission" },
+  { to: "/pending", path: "/pending", title: "Pending Submission" },
+  { to: "/approved", path: "/approved", title: "Approved Submission" }
 ];
 
 class ManageFormSetting extends Component {
@@ -33,12 +29,14 @@ class ManageFormSetting extends Component {
                 <Link
                   to={`/site-responses/${this.props.match.params.id}${route.to}`}
                   className={
-                    pathname === route.path ? "nav-link active" : "nav-link"
+                    this.props.location.pathname ==
+                    `/site-responses/${this.props.match.params.id}${route.path}`
+                      ? "nav-link active"
+                      : "nav-link"
                   }
                 >
                   {route.title}
                 </Link>
-                <h5>{route.heading}</h5>
               </li>
             ))}
           </ul>
@@ -50,12 +48,14 @@ class ManageFormSetting extends Component {
                 <Link
                   to={`/site-responses/${this.props.match.params.id}${route.to}`}
                   className={
-                    pathname === route.path ? "nav-link active" : "nav-link"
+                    this.props.location.pathname ==
+                    `/site-responses/${this.props.match.params.id}${route.path}`
+                      ? "nav-link active"
+                      : "nav-link"
                   }
                 >
                   {route.title}
                 </Link>
-                <h5>{route.heading}</h5>
               </li>
             ))}
           </ul>

@@ -12,7 +12,7 @@ import {
 import L, { latLngBounds } from "leaflet";
 // import "leaflet/dist/leaflet.css";
 import { BlockContentLoader } from "../../common/Loader";
-
+import { markerIcon } from "../../common/Marker";
 // const position = [27.7, 85.4];
 const { BaseLayer } = LayersControl;
 
@@ -167,16 +167,6 @@ class SiteMap extends Component {
                 pointToLayer={this.pointToLayer.bind(this)}
                 ref={this.groupRef}
               />
-              {/* <Marker
-                position={[coordinates[1], coordinates[0]]}
-                icon={markerIcon}
-              >
-                <Popup>
-                  <span>Name: {name}</span>
-                  <br />
-                  {address && <span>Address: {address}</span>}
-                </Popup>
-              </Marker> */}
             </Map>
           )
         )}

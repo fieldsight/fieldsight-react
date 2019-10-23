@@ -16,7 +16,8 @@ const withPagination = WrappedComponent => {
       dLoader: true,
       per_page: 200,
       totalPage: null,
-      textVal: null
+      textVal: null,
+      form_id_string: ""
     };
 
     getUrl = (page_num, payload) => {
@@ -34,6 +35,12 @@ const withPagination = WrappedComponent => {
 
         case "viewByStatus":
           return `fv3/api/view-by-status/?page=${page_num}&project=${payload.projectId}&submission_status=${payload.status}`;
+        case "siteStatus":
+          return `fv3/api/view-by-status/?page=${page_num}&site=${payload.projectId}&submission_status=${payload.status}`;
+        case "formSubmission":
+          return `/fv3/api/forms-submissions/?project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+        case "siteSubmission":
+          return `/fv3/api/forms-submissions/?site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
       }
     };
 
@@ -81,6 +88,8 @@ const withPagination = WrappedComponent => {
                   dLoader: false,
                   totalCount: res.data.count,
                   textVal: null,
+                  form_id_string: res.data.results.form_id_string,
+                  breadcrumbs: res.data.results.breadcrumbs,
                   totalPage: Math.ceil(res.data.count / 200)
                 });
               }

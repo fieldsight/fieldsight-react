@@ -87,14 +87,27 @@ class SiteMap extends Component {
     } = this;
 
     let bounds = latLngBounds();
-    mapData &&
-      mapData.features &&
-      mapData.features.forEach(data => {
-        bounds.extend([
-          data.geometry.coordinates[1],
-          data.geometry.coordinates[0]
-        ]);
-      });
+    if (mapData && mapData.features) {
+      if (mapData.features.length == 1) {
+        bounds = latLngBounds(
+          [
+            mapData.features[0].geometry.coordinates[1] + 0.002,
+            mapData.features[0].geometry.coordinates[0] + 0.002
+          ],
+          [
+            mapData.features[0].geometry.coordinates[1] - 0.002,
+            mapData.features[0].geometry.coordinates[0] - 0.002
+          ]
+        );
+      } else if (mapData.features.length > 1) {
+        mapData.features.forEach(data => {
+          bounds.extend([
+            data.geometry.coordinates[1],
+            data.geometry.coordinates[0]
+          ]);
+        });
+      }
+    }
 
     return (
       <>
@@ -118,6 +131,7 @@ class SiteMap extends Component {
             bounds={bounds}
             ref={this.mapRef}
             style={{ width: "100%", height: "396px" }}
+            ref={this.mapRef}
           >
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -188,11 +202,7 @@ class SiteMap extends Component {
             })} */}
           </Map>
         ) : (
-          <Map
-            // center={[coordinates[1], coordinates[0]]}
-            zoom={13}
-            style={{ width: "100%", height: "396px" }}
-          >
+          <Map zoom={13} style={{ width: "100%", height: "396px" }}>
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

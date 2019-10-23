@@ -162,8 +162,9 @@ class EditProject extends Component {
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
+    // debugger;
     if (position) {
-      return this.setState({
+      this.setState({
         position: {
           ...this.state.position,
           [name]: value
@@ -400,7 +401,7 @@ class EditProject extends Component {
                 <CheckBox
                   checked={cluster_sites || ""}
                   label="Enable/Disable Clustering into Regions"
-                  onChange={this.handleCheckboxChange}
+                  changeHandler={this.handleCheckboxChange}
                 />
               </div>
             </div>
@@ -446,6 +447,7 @@ class EditProject extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
+                        // step="any"
                         required={true}
                         label="Latitude"
                         name="latitude"

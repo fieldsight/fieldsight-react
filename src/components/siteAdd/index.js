@@ -52,7 +52,7 @@ export default class SiteAdd extends Component{
         id:"",
         selectform:[],
         selectdata:false,
-        region:[{name: '----', id: null}],
+        region:[{name: '----', id: ""}],
         data:{},
         regionselected:"",
   
@@ -61,9 +61,10 @@ export default class SiteAdd extends Component{
           id:"",
           siteId:"",
           regionalId:"",
-          site_types:[{name: '----', id: null}],
+          site_types:[{name: '----', id: ""}],
           Selectedtypes:"",
-          show:false
+          show:false,
+          jsdata:""
        
       };
 
@@ -74,22 +75,39 @@ export default class SiteAdd extends Component{
         
         axios.get(`/fv3/api/site-form/?project=${id}`)
         .then(res=>{    
+         
+                  
           let regionArr =this.state.region
           let typeArr =this.state.site_types
+
+          if (this._isMounted) {
+            
+           const position = res.data.location!== "None" ? res.data.location&& res.data.location.split(" "):""
+           const longitude = position && position[1].split("(")[1];
+            const latitude = position && position[2].split(")")[0]; 
+          
             this.setState(
               state=>{
-                res.data.regions.map(each=> regionArr.push(each))
+                res.data.regions!== undefined && res.data.regions.map(each=> regionArr.push(each))
                 res.data.site_types.map(each=>typeArr.push(each))
                 return{
+                  jsdata:res.data.hello,
                   jsondata:res.data.json_questions,
                   id,
-                  region:regionArr,
+                  region:res.data.regions !== undefined || "" ? regionArr:[],
                   siteId,
                   regionalId,
-                  site_types:typeArr
+                  site_types:typeArr,
+                   position:{
+                    longitude,
+                    latitude
+                  },
+                 
                 }
                }
                )
+          }
+          
             }).catch(err=>{
             console.log(err ,"err");
             
@@ -106,11 +124,6 @@ export default class SiteAdd extends Component{
             }
           });
         }
-        console.log(this.state.phone)
-       if(this.state.phone!==undefined){
-         console.log("i m idiot")
-       }
-     {  !this.state.phone?console.log("hii"):console.log("hello")}
         this.setState({
             project: {
               ...this.state.project,
@@ -174,6 +187,7 @@ export default class SiteAdd extends Component{
                   site_meta_attributes_ans:JSON.stringify(this.state.data, select=this.state.dataSelected),
                   subsite:this.state.siteId
                  }
+                
         if(this.props.page==="CreateSite"){
           axios({
             method: "POST",
@@ -321,11 +335,11 @@ export default class SiteAdd extends Component{
       if (data ==="regions"){
         this.setState({
           regionselected:value
-        })
+        },()=>console.log(this.state.regionselected,"regionselected"))
        }else if(data=== "site_types"){
        this.setState({
           Selectedtypes:value
-        })
+        },()=>console.log(this.state.Selectedtypes,"Selectedtypes"))
       }
     }
     closeModal = () => {
@@ -469,6 +483,7 @@ export default class SiteAdd extends Component{
     
     
     render(){ 
+     
         const {
             onChangeHandler,
             onSubmitHandler, 
@@ -508,7 +523,7 @@ export default class SiteAdd extends Component{
               Selectedtypes
                }}=this;
         return (
-            <RightContentCard title="New Site">
+            <RightContentCard title="Site Form">
             <form className="edit-form" onSubmit={onSubmitHandler}>
               <div className="row">
                 <div className="col-xl-4 col-md-6">
@@ -535,7 +550,7 @@ export default class SiteAdd extends Component{
                     changeHandler={onChangeHandler}
                   />
                 </div>
-              {this.props.page==="CreateSite" || this.props.page==="subSite"?<div className="col-xl-4 col-md-6">
+              {region.length>0 ?  (this.props.page==="CreateSite" || this.props.page==="subSite"?<div className="col-xl-4 col-md-6">
                 <SelectElement
                 className="form-control"
                 label="Regions"
@@ -543,9 +558,9 @@ export default class SiteAdd extends Component{
                 changeHandler={e => onSelectChangeHandler(e, "regions")}
                  value={regionselected && regionselected }
                />
-        </div>:""}
+        </div>:""):""}
        
-        <div className="col-xl-4 col-md-6">
+       <div className="col-xl-4 col-md-6">
                 <SelectElement
                 className="form-control"
                 label="Types"
@@ -583,7 +598,8 @@ export default class SiteAdd extends Component{
                 <CheckBox
                   checked={this.state.project.cluster_sites || ""}
                   label="Enable subsites"
-                  onChange={handleCheckboxChange}
+                  value={cluster_sites}
+                  changeHandler={handleCheckboxChange}
                 />
               </div>
             </div>

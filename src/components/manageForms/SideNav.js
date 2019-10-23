@@ -17,34 +17,50 @@ const urls = [
 class SideNav extends Component {
   _isMounted = false;
   state = {
-    regionOptions: [],
-    typeOptions: [],
+    regionOptions: [{ id: 0, identifier: "unassigned", name: "unassigned" }],
+    typeOptions: [{ id: 0, identifier: "unassigned", name: "unassigned" }],
     myForms: [],
     projectForms: [],
     sharedForms: [],
-    loader: false
+    loader: false,
+    isProjectForm: false
   };
 
   requestForms(id) {
     axios
       .all(
         urls.map((url, i) => {
-          return i === 0 ? axios.get(`${url}${id}/`) : axios.get(url);
+          if (this.state.isProjectForm) {
+            return i === 0 ? axios.get(`${url}${id}/`) : axios.get(url);
+          } else {
+            return i > 0 ? axios.get(url) : "";
+          }
         })
       )
       .then(
         axios.spread((list, myForms, projectForms, sharedForms) => {
           if (this._isMounted) {
-            if (list && myForms && projectForms && sharedForms) {
-              this.setState({
-                regionOptions: list.data.regions,
-                typeOptions: list.data.site_types,
-                myForms: myForms.data,
-                projectForms: projectForms.data,
-                sharedForms: sharedForms.data,
-                loader: false
-              });
-            }
+            this.setState(state => {
+              if (!!this.state.isProjectForm) {
+                const regions = this.state.regionOptions;
+                const types = this.state.typeOptions;
+                return {
+                  regionOptions: [...regions, ...list.data.regions],
+                  typeOptions: [...types, ...list.data.site_types],
+                  myForms: myForms.data,
+                  projectForms: projectForms.data,
+                  sharedForms: sharedForms.data,
+                  loader: false
+                };
+              } else {
+                return {
+                  myForms: myForms.data,
+                  projectForms: projectForms.data,
+                  sharedForms: sharedForms.data,
+                  loader: false
+                };
+              }
+            });
           }
         })
       )
@@ -53,25 +69,32 @@ class SideNav extends Component {
   componentDidMount() {
     this._isMounted = true;
     const {
-      match: {
-        url,
-        params: { id }
+      props: {
+        match: {
+          url,
+          params: { id }
+        }
       }
-    } = this.props;
+    } = this;
 
     const splitArr = url.split("/");
     const isProjectForm = splitArr.includes("project");
-
-    if (isProjectForm) {
-      this.setState(
-        {
-          loader: true
-        },
-        () => {
-          this.requestForms(id);
+    const isSiteForm = splitArr.includes("site");
+    this.setState(
+      state => {
+        if (isProjectForm) {
+          return {
+            loader: true,
+            isProjectForm
+          };
+        } else if (isSiteForm) {
+          return { loader: true, isProjectForm: false };
         }
-      );
-    }
+      },
+      () => {
+        this.requestForms(id);
+      }
+    );
   }
   render() {
     const {
@@ -84,7 +107,8 @@ class SideNav extends Component {
         myForms,
         projectForms,
         sharedForms,
-        loader
+        loader,
+        isProjectForm
       }
     } = this;
 
@@ -101,7 +125,7 @@ class SideNav extends Component {
               </div>
               <div className="card-body">
                 <div className="manage_group">
-                  <h5>Site Specific Forms</h5>
+                  {!!isProjectForm && <h5>Site-Specific Forms</h5>}
                   <ul className="nav nav-tabs flex-column border-tabs">
                     <li className="nav-item">
                       <Link
@@ -141,28 +165,30 @@ class SideNav extends Component {
                     </li>
                   </ul>
                 </div>
-                <div className="manage_group mrt-15">
-                  <h5>Project wide Forms</h5>
-                  <ul
-                    className="nav nav-tabs flex-column border-tabs"
-                    id="myTab"
-                    role="tablist"
-                  >
-                    <li className="nav-item">
-                      <Link
-                        to={`${url}/wide/generalform`}
-                        className={
-                          this.props.location.pathname ==
-                          `${url}/wide/generalform`
-                            ? "nav-link active"
-                            : "nav-link"
-                        }
-                      >
-                        General forms
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
+                {isProjectForm && (
+                  <div className="manage_group mrt-15">
+                    <h5>Project-Wide Forms</h5>
+                    <ul
+                      className="nav nav-tabs flex-column border-tabs"
+                      id="myTab"
+                      role="tablist"
+                    >
+                      <li className="nav-item">
+                        <Link
+                          to={`${url}/wide/generalform`}
+                          className={
+                            this.props.location.pathname ==
+                            `${url}/wide/generalform`
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                        >
+                          General forms
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           </div>

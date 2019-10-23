@@ -42,6 +42,21 @@ class Submission extends Component {
     };
   }
 
+  getMarkerBounds = () => {
+    // console.log("to fitbound", this.mapRef.current, this.featureRef);
+
+    const map =
+      this.mapRef && this.mapRef.current && this.mapRef.current.leafletElement;
+    const feature =
+      this.featureRef &&
+      this.featureRef.current &&
+      this.featureRef.current.leafletElement;
+    // debugger;
+    if (!!map && !!feature) {
+      map.fitBounds(feature.getBounds());
+    }
+  };
+
   openModal = img => {
     this.setState({
       showGallery: true,

@@ -10,6 +10,7 @@ import EditFormGuide from "./EditFormGuide";
 import SortableStage from "./SortableStage";
 import AddStageForm from "./AddStageForm";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import ManageModal from "./ManageModal";
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -29,11 +30,10 @@ class StagedForms extends Component {
     formId: "",
     formTitle: "",
     isProjectForm: "",
-    myFormList: [],
-    projectFormList: [],
-    sharedFormList: [],
+    myFormList: this.props.myForms,
+    projectFormList: this.props.projectForms,
+    sharedFormList: this.props.sharedForms,
     isEditForm: false,
-
     subStageData: [],
     showSubstageForm: false,
     selectedStage: {},
@@ -45,7 +45,9 @@ class StagedForms extends Component {
     isStageReorderCancel: true,
     isSubstageReorder: false,
     isSubstageReorderCancel: true,
-    newSubstageOrder: []
+    newSubstageOrder: [],
+    reOrderDisable: true,
+    subStageReorderDisable: true
   };
 
   componentDidMount() {
@@ -58,36 +60,63 @@ class StagedForms extends Component {
     } = this.props;
     const splitArr = url.split("/");
     const isProjectForm = splitArr.includes("project");
-
+    const isSiteForm = splitArr.includes("site");
     if (isProjectForm) {
       this.setState(
         {
           loader: true,
-          isProjectForm
+          isProjectForm: true
         },
-        this.requestStagedData(id)
+        () => {
+          this.requestStagedData(id, true);
+        }
+      );
+    } else if (isSiteForm) {
+      this.setState(
+        {
+          loader: true,
+          isProjectForm: false
+        },
+        () => {
+          this.requestStagedData(id, false);
+        }
       );
     }
   }
 
-  requestStagedData = projectId => {
+  requestStagedData = (id, checkUrl) => {
+    const apiUrl = checkUrl
+      ? `fv3/api/manage-forms/stages/?project_id=${id}`
+      : `fv3/api/manage-forms/stages/?site_id=${id}`;
+
     axios
-      .get(`fv3/api/manage-forms/stages/?project_id=${projectId}`)
+      .get(apiUrl)
       .then(res => {
         if (this._isMounted) {
           this.setState({ data: res.data, loader: false });
         }
       })
-      .catch(err => { });
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
 
   handleSubmitStageForm = data => {
     const { name, desc, selectedRegion, selectedType, order, id } = data;
-    const mapRegion = selectedRegion.map(each => each.id);
-    const mapType = selectedType.map(each => each.id);
+    const mapRegion =
+      !!selectedRegion && !!selectedRegion.length > 0
+        ? selectedRegion.map(each => each.id)
+        : [];
+    const mapType =
+      !!selectedType && !!selectedType.length > 0
+        ? selectedType.map(each => each.id)
+        : [];
     const newOrder = order > 0 ? order : this.state.data.length + 1;
-
     if (order > 0) {
+      const updateStageApi = !!this.state.isProjectForm
+        ? `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`
+        : `fv3/api/manage-forms/stages/${id}/?site_id=${this.state.id}`;
       const body = {
         name: name,
         tags: mapType,
@@ -97,10 +126,7 @@ class StagedForms extends Component {
         id: id
       };
       axios
-        .put(
-          `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`,
-          body
-        )
+        .put(updateStageApi, body)
         .then(res => {
           this.setState(
             state => {
@@ -123,9 +149,13 @@ class StagedForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     } else {
+      const postStageApi = !!this.state.isProjectForm
+        ? `fv3/api/manage-forms/stages/?project_id=${this.state.id}`
+        : `fv3/api/manage-forms/stages/?site_id=${this.state.id}`;
       const body = {
         name: name,
         tags: mapType,
@@ -134,7 +164,7 @@ class StagedForms extends Component {
         description: desc
       };
       axios
-        .post(`fv3/api/manage-forms/stages/?project_id=${this.state.id}`, body)
+        .post(postStageApi, body)
         .then(res => {
           this.setState(
             {
@@ -147,10 +177,12 @@ class StagedForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     }
   };
+
   handleClickEdit = stageData => {
     this.setState(
       {
@@ -179,9 +211,11 @@ class StagedForms extends Component {
   };
   handleNewStageOrder = list => {
     this.setState({
-      newStageOrder: list
+      newStageOrder: list,
+      reOrderDisable: false
     });
   };
+
   handleSaveStageReorder = () => {
     axios
       .post(`fv3/api/forms/reorder/stage/`, this.state.newStageOrder)
@@ -189,7 +223,8 @@ class StagedForms extends Component {
         this.setState(
           {
             data: res.data.data,
-            isStageReorder: false
+            isStageReorder: false,
+            reOrderDisable: true
             // isStageReorderCancel: true
           },
           () => {
@@ -198,7 +233,8 @@ class StagedForms extends Component {
         );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
   handleSubStageForm = () => {
@@ -212,16 +248,17 @@ class StagedForms extends Component {
       formId: "",
       showFormModal: false,
       activeTab: "myForms",
-      myFormList: [],
-      projectFormList: [],
-      sharedFormList: [],
-      xf: ""
+      myFormList: this.props.myForms,
+      projectFormList: this.props.projectForms,
+      sharedFormList: this.props.sharedForms,
+      xf: "",
+      isEditForm: false
     });
     this.handleSubStageForm();
   };
+
   handleCreateForm = data => {
     const { stageId, substageId, xf } = this.state;
-
     if (!!substageId) {
       const body = {
         id: substageId,
@@ -232,8 +269,14 @@ class StagedForms extends Component {
         xf: xf,
         default_submission_status: data.status,
         setting: {
-          types: data.typeSelected,
-          regions: data.regionSelected,
+          types:
+            !!data.typeSelected && data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : [],
+          regions:
+            !!data.regionSelected && data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
           donor_visibility: data.isDonor,
           can_edit: data.isEdit,
           can_delete: data.isDelete
@@ -268,7 +311,8 @@ class StagedForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     } else {
       const body = {
@@ -279,8 +323,14 @@ class StagedForms extends Component {
         xf: xf,
         default_submission_status: data.status,
         setting: {
-          types: data.typeSelected,
-          regions: data.regionSelected,
+          types:
+            !!data.typeSelected && data.typeSelected.length > 0
+              ? data.typeSelected.map(each => each.id)
+              : [],
+          regions:
+            !!data.regionSelected && data.regionSelected.length > 0
+              ? data.regionSelected.map(each => each.id)
+              : [],
           donor_visibility: data.isDonor,
           can_edit: data.isEdit,
           can_delete: data.isDelete
@@ -301,10 +351,12 @@ class StagedForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     }
   };
+
   handleRequestSubStage = (stageId, order) => {
     if (stageId != this.state.stageId)
       this.setState(
@@ -325,22 +377,27 @@ class StagedForms extends Component {
               });
             })
             .catch(err => {
-              errorToast(err);
+              const errors = err.response;
+              errorToast(errors.data.error);
             });
         }
       );
   };
+
   handleSubstageReorder = () => {
     this.setState({
       isSubstageReorder: !this.state.isSubstageReorder,
       isSubstageReorderCancel: !this.state.isSubstageReorderCancel
     });
   };
+
   handleNewSubstageOrder = list => {
     this.setState({
-      newSubstageOrder: list
+      newSubstageOrder: list,
+      subStageReorderDisable: false
     });
   };
+
   handleSaveSubstageReorder = () => {
     axios
       .post(`fv3/api/forms/reorder/substage/`, this.state.newSubstageOrder)
@@ -357,17 +414,18 @@ class StagedForms extends Component {
         );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
 
   changeDeployStatus = (formId, isDeploy) => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deployUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=substage&id=${formId}`
+      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=substage&id=${formId}`;
     axios
-      .post(
-        `fv3/api/manage-forms/deploy/?project_id=${id}&type=substage&id=${formId}`,
-        { is_deployed: !isDeploy }
-      )
+      .post(deployUrl, { is_deployed: !isDeploy })
       .then(res => {
         this.setState(
           state => {
@@ -383,19 +441,24 @@ class StagedForms extends Component {
             return { subStageData: newData };
           },
           () => {
-            successToast("updated", "successfully");
+            successToast("Deploy Status", "updated");
           }
         );
       })
-      .catch(err => { });
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
+
   deleteItem = (formId, isDeploy) => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deployUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/delete/?project_id=${id}&type=substage&id=${formId}`
+      : `fv3/api/manage-forms/delete/?site_id=${id}&type=substage&id=${formId}`;
+
     axios
-      .post(
-        `fv3/api/manage-forms/delete/?project_id=${id}&type=substage&id=${formId}`,
-        { is_deployed: isDeploy }
-      )
+      .post(deployUrl, { is_deployed: isDeploy })
       .then(res => {
         this.setState(
           {
@@ -408,7 +471,10 @@ class StagedForms extends Component {
           }
         );
       })
-      .catch(err => { });
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
 
   handleEditGuide = (data, formId) => {
@@ -418,8 +484,9 @@ class StagedForms extends Component {
       editFormId: formId
     });
   };
+
   handleUpdateGuide = data => {
-    const { id, editFormId, stageId } = this.state;
+    const { editFormId } = this.state;
     const formData = new FormData();
     if (data.title) formData.append("title", data.title);
     if (data.text) formData.append("text", data.text);
@@ -438,18 +505,31 @@ class StagedForms extends Component {
     axios
       .post(`forms/api/save_educational_material/`, formData)
       .then(res => {
-        this.setState(
-          {
-            editGuide: false
-          },
-          () => {
-            this.handleRequestSubStage(stageId);
-            successToast("form", "updated");
-          }
-        );
+        if (res.data)
+          this.setState(
+            state => {
+              const item = this.state.subStageData;
+              item.map(each => {
+                const newItem = { ...each };
+                if (each.id == editFormId) {
+                  each.em = res.data;
+                }
+                return newItem;
+              });
+
+              return {
+                editGuide: false,
+                subStageData: item
+              };
+            },
+            () => {
+              successToast("form", "updated");
+            }
+          );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
 
@@ -465,30 +545,28 @@ class StagedForms extends Component {
       projectFormList: this.props.projectForms
     });
   };
+
   handleMyFormChange = (e, title) => {
     this.setState({
       formId: e.target.value,
       formTitle: title
     });
   };
+
   handleSaveForm = () => {
     this.setState({
       xf: this.state.formId,
       showFormModal: !this.state.showFormModal
     });
   };
+
   onChangeHandler = async e => {
-    const {
-      activeTab,
-      myFormList,
-      projectFormList,
-      sharedFormList
-    } = this.state;
+    const { activeTab } = this.state;
     const searchValue = e.target.value;
 
     if (searchValue) {
       if (activeTab == "myForms") {
-        const filteredData = await myFormList.filter(form => {
+        const filteredData = await this.props.myForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -499,7 +577,7 @@ class StagedForms extends Component {
           myFormList: filteredData
         });
       } else if (activeTab == "projectForms") {
-        const awaitedData = await projectFormList.map(project => {
+        const awaitedData = await this.props.projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
               form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -512,7 +590,7 @@ class StagedForms extends Component {
           projectFormList: awaitedData
         });
       } else if (activeTab == "sharedForms") {
-        const filteredData = await sharedFormList.filter(form => {
+        const filteredData = await this.props.sharedForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -539,22 +617,24 @@ class StagedForms extends Component {
         xf: formData.xf && formData.xf.id,
         formId: formData.xf && formData.xf.id,
         formTitle: formData.xf && formData.xf.title,
-        substageId: formData.id
+        substageId: formData.id,
+        isEditForm: true
       },
       () => {
         this.handleSubStageForm();
       }
     );
   };
+
   handleDeployAllSubstages = toDeploy => {
-    const { id, stageId, subStageData } = this.state;
+    const { id, stageId, subStageData, isProjectForm } = this.state;
+    const deployAllSubstageUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=stage&id=${stageId}`
+      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=stage&id=${stageId}`;
     axios
-      .post(
-        `fv3/api/manage-forms/deploy/?project_id=${id}&type=stage&id=${stageId}`,
-        {
-          is_deployed: toDeploy
-        }
-      )
+      .post(deployAllSubstageUrl, {
+        is_deployed: toDeploy
+      })
       .then(res => {
         if (res.data && !!res.data.message)
           this.setState(
@@ -570,23 +650,25 @@ class StagedForms extends Component {
               };
             },
             () => {
-              successToast("updated", "");
+              successToast("Deploy Status", "updated");
             }
           );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
+
   handleDeleteAllSubstages = toDeploy => {
-    const { id, stageId } = this.state;
+    const { id, stageId, isProjectForm } = this.state;
+    const deleteAllSubstageUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/delete/?project_id=${id}&type=stage&id=${stageId}`
+      : `fv3/api/manage-forms/delete/?site_id=${id}&type=stage&id=${stageId}`;
     axios
-      .post(
-        `fv3/api/manage-forms/delete/?project_id=${id}&type=stage&id=${stageId}`,
-        {
-          is_deployed: toDeploy
-        }
-      )
+      .post(deleteAllSubstageUrl, {
+        is_deployed: toDeploy
+      })
       .then(res => {
         if (!!res.data)
           this.setState(
@@ -603,24 +685,35 @@ class StagedForms extends Component {
         errorToast(errorRes);
       });
   };
+
   handleDeployAllStages = toDeploy => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deployAllUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=all&id=${id}`
+      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=all&id=${id}`;
     axios
-      .post(`fv3/api/manage-forms/deploy/?project_id=${id}&type=all&id=${id}`, {
+      .post(deployAllUrl, {
         is_deployed: toDeploy
       })
       .then(res => {
-        this.requestStagedData(id);
+        if (!!isProjectForm) this.requestStagedData(id, true);
+        else this.requestStagedData(id, false);
         successToast("form", "updated");
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
+
   handleDeleteAllStages = toDeploy => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deleteAllUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/delete/?project_id=${id}&type=all&id=${id}`
+      : `fv3/api/manage-forms/delete/?site_id=${id}&type=all&id=${id}`;
+
     axios
-      .post(`fv3/api/manage-forms/delete/?project_id=${id}&type=all&id=${id}`, {
+      .post(deleteAllUrl, {
         is_deployed: toDeploy
       })
       .then(res => {
@@ -635,7 +728,8 @@ class StagedForms extends Component {
           );
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
 
@@ -661,119 +755,192 @@ class StagedForms extends Component {
         isStageReorder,
         isStageReorderCancel,
         isSubstageReorder,
-        isSubstageReorderCancel
-      },
-      handleRequestSubStage,
-      handleSubmitStageForm,
-      handleClickEdit,
-      handleSubStageForm,
-      handleClosePopup,
-      handleStageReorder,
-      handleSaveStageReorder,
-      handleSubstageReorder,
-      handleSaveSubstageReorder,
-      handleDeployAllSubstages,
-      handleDeleteAllSubstages,
-      handleDeployAllStages,
-      handleDeleteAllStages
+        isSubstageReorderCancel,
+        isProjectForm,
+        reOrderDisable,
+        subStageReorderDisable,
+        isEditForm
+      }
     } = this;
     let deployCount = 0;
+    let canReorder = "";
+
     data.map(each => {
       deployCount += each.undeployed_count;
     });
-    // console.log(deployCount, "deployCount");
+
+    const arrToReorder = data.map(each => {
+      if (!!each.site) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    canReorder =
+      arrToReorder.length > 0
+        ? arrToReorder.indexOf(false) > -1
+          ? false
+          : true
+        : "";
 
     return (
       <div className="col-xl-9 col-lg-8">
         <div className="card">
           <div className="card-header main-card-header">
             <h5>Staged Forms</h5>
-            <div className="add-btn">
-
-              <a onClick={handleStageReorder}>
-                {/* {!isStageReorder ? "Reorder" : "Cancel Reorder"} */}
-                {!isStageReorder ? (
-
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>Reorder</Tooltip>}>
-                    <span className="reorder">
-                      <i className="la la-ellipsis-v" />
-                      <i className="la la-ellipsis-v" />
-                    </span>
-                  </OverlayTrigger>
-                ) : (
+            {!!isProjectForm && (
+              <div className="add-btn">
+                <a onClick={this.handleStageReorder}>
+                  {!isStageReorder ? (
                     <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip> Cancel Reorder</Tooltip>}>
+                      overlay={<Tooltip>Reorder</Tooltip>}
+                    >
+                      <span className="reorder">
+                        <i className="la la-ellipsis-v" />
+                        <i className="la la-ellipsis-v" />
+                      </span>
+                    </OverlayTrigger>
+                  ) : (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip> Cancel Reorder</Tooltip>}
+                    >
                       <span className="reorder">
                         <i className="la la-close" />
                       </span>
                     </OverlayTrigger>
                   )}
-              </a>
-              {isStageReorder && (
-                <a onClick={handleSaveStageReorder}>
-                  
-                  <OverlayTrigger
-                  placement="top"
-                  overlay={<Tooltip> Save</Tooltip>}>
-                  <span>
-                    <i className="la la-save" />
-                  </span>
-                </OverlayTrigger>
                 </a>
-              )}
-              {/* {deployCount > 0 && ( */}
-              <a
-                className={`${
-                  deployCount > 0 ? "deploy-active" : "deploy-inactive"
+                {isStageReorder && (
+                  <a
+                    onClick={this.handleSaveStageReorder}
+                    className={`${reOrderDisable ? "disabled" : ""}`}
+                  >
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip> Save</Tooltip>}
+                    >
+                      <span>
+                        <i className="la la-save" />
+                      </span>
+                    </OverlayTrigger>
+                  </a>
+                )}
+                {/* {deployCount > 0 && ( */}
+                <a
+                  className={`${
+                    deployCount > 0 ? "deploy-active" : "deploy-inactive"
                   }`}
-                onClick={() => handleDeployAllStages(true)}
-              >
-                <OverlayTrigger
-                  placement="top"
-                  overlay={<Tooltip> Deploy</Tooltip>}>
-                  <span className="">
-                  <i className="la la-rocket" />
-                  </span>
-                </OverlayTrigger>
-              </a>
-              {/* )} */}
-            </div>
+                  onClick={() => this.handleDeployAllStages(true)}
+                >
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip> Deploy All Stages</Tooltip>}
+                  >
+                    <span className="">
+                      <i className="la la-rocket" />
+                    </span>
+                  </OverlayTrigger>
+                </a>
+                {/* )} */}
+              </div>
+            )}
+            {!isProjectForm && canReorder && (
+              <div className="add-btn">
+                <a onClick={this.handleStageReorder}>
+                  {!isStageReorder ? (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Reorder Stages</Tooltip>}
+                    >
+                      <span className="reorder">
+                        <i className="la la-ellipsis-v" />
+                        <i className="la la-ellipsis-v" />
+                      </span>
+                    </OverlayTrigger>
+                  ) : (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip> Cancel Reorder</Tooltip>}
+                    >
+                      <span className="reorder">
+                        <i className="la la-close" />
+                      </span>
+                    </OverlayTrigger>
+                  )}
+                </a>
+                {isStageReorder && (
+                  <a
+                    onClick={this.handleSaveStageReorder}
+                    className={`${reOrderDisable ? "disabled" : ""}`}
+                  >
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip> Save</Tooltip>}
+                    >
+                      <span>
+                        <i className="la la-save" />
+                      </span>
+                    </OverlayTrigger>
+                  </a>
+                )}
+
+                <a
+                  className={`${
+                    deployCount > 0 ? "deploy-active" : "deploy-inactive"
+                  }`}
+                  onClick={() => this.handleDeployAllStages(true)}
+                >
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip> Deploy All Stages</Tooltip>}
+                  >
+                    <span className="">
+                      <i className="la la-rocket" />
+                    </span>
+                  </OverlayTrigger>
+                </a>
+                {/* )} */}
+              </div>
+            )}
           </div>
           {loader && <DotLoader />}
           {!loader && (
             <>
               <SortableStage
                 stage={data}
-                handleRequestSubStage={handleRequestSubStage}
-                handleClickEdit={handleClickEdit}
+                handleRequestSubStage={this.handleRequestSubStage}
+                handleClickEdit={this.handleClickEdit}
                 loadSubStage={loadSubStage}
                 subStageData={subStageData}
                 handleEditGuide={this.handleEditGuide}
                 changeDeployStatus={this.changeDeployStatus}
                 deleteItem={this.deleteItem}
                 editSubStageForm={this.editSubStageForm}
-                handleSubStageForm={handleSubStageForm}
+                handleSubStageForm={this.handleSubStageForm}
                 reorder={isStageReorder}
                 isStageReorderCancel={isStageReorderCancel}
                 handleNewStageOrder={this.handleNewStageOrder}
                 reorderSubstage={isSubstageReorder}
                 isSubstageReorderCancel={isSubstageReorderCancel}
-                handleSubstageReorder={handleSubstageReorder}
-                handleSaveSubstageReorder={handleSaveSubstageReorder}
+                handleSubstageReorder={this.handleSubstageReorder}
+                handleSaveSubstageReorder={this.handleSaveSubstageReorder}
                 handleNewSubstageOrder={this.handleNewSubstageOrder}
-                handleDeployAll={handleDeployAllSubstages}
-                handleDeleteAll={handleDeleteAllSubstages}
+                handleDeployAll={this.handleDeployAllSubstages}
+                handleDeleteAll={this.handleDeleteAllSubstages}
+                isProjectForm={isProjectForm}
+                subStageReorderDisable={subStageReorderDisable}
               />
-              <div className="add-btn pull-right stage-add">
-                <a onClick={this.props.commonPopupHandler}>
-                  Add Stage
-                <span>
-                    <i className="la la-plus" />
-                  </span>
-                </a>
+              <div className="card-body pdt-0">
+                <div className="add-btn  stage-add">
+                  <a onClick={this.props.commonPopupHandler}>
+                    Add Stage
+                    <span>
+                      <i className="la la-plus" />
+                    </span>
+                  </a>
+                </div>
               </div>
             </>
           )}
@@ -782,11 +949,12 @@ class StagedForms extends Component {
               title="Stage Form"
               toggleModal={this.handleClearStageForm}
               classname="manage-body md-body"
+              // handleSubmit={this.handleSubmitStageForm}
             >
               <AddStageForm
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                handleSubmit={handleSubmitStageForm}
+                handleSubmit={this.handleSubmitStageForm}
                 stageData={selectedStage}
               />
             </Modal>
@@ -794,8 +962,9 @@ class StagedForms extends Component {
           {showSubstageForm && (
             <Modal
               title="SubStage Form"
-              toggleModal={handleClosePopup}
+              toggleModal={this.handleClosePopup}
               classname="manage-body md-body"
+              // handleSubmit={this.handleCreateForm}
             >
               <GlobalModalForm
                 formType="substage"
@@ -805,22 +974,24 @@ class StagedForms extends Component {
                 projectForms={this.props.projectForms}
                 sharedForms={this.props.sharedForms}
                 toggleFormModal={this.toggleFormModal}
-                handleToggleForm={handleClosePopup}
+                handleToggleForm={this.handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateForm}
-                formData={formData}
+                formData={!!isEditForm && formData}
                 isProjectWide={false}
+                isEditForm={isEditForm}
               />
             </Modal>
           )}
           {showFormModal && (
-            <Modal
+            <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
               classname="manage-body md-body"
+              handleSubmit={this.handleSaveForm}
             >
               <AddForm
                 activeTab={activeTab}
@@ -830,9 +1001,10 @@ class StagedForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                handleSaveForm={this.handleSaveForm}
+                // handleSaveForm={this.handleSaveForm}
+                loader={this.props.formLoader}
               />
-            </Modal>
+            </ManageModal>
           )}
           {editGuide && (
             <Modal title="Form Guide" toggleModal={this.handleEditGuide}>

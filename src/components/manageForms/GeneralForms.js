@@ -9,6 +9,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
 import GeneralFormTable from "./GeneralFormTable";
+import ManageModal from "./ManageModal";
 
 class GeneralForms extends Component {
   _isMounted = false;
@@ -28,21 +29,28 @@ class GeneralForms extends Component {
     formId: "",
     formTitle: "",
     isProjectForm: "",
-    myFormList: [],
-    projectFormList: [],
-    sharedFormList: [],
+    myFormList: this.props.myForms,
+    projectFormList: this.props.projectForms,
+    sharedFormList: this.props.sharedForms,
     isEditForm: false
   };
 
-  requestGeneralForm(id) {
+  requestGeneralForm(id, checkUrl) {
+    const apiUrl = checkUrl
+      ? `fv3/api/manage-forms/general/?project_id=${id}`
+      : `fv3/api/manage-forms/general/?site_id=${id}`;
+
     axios
-      .get(`fv3/api/manage-forms/general/?project_id=${id}`)
+      .get(apiUrl)
       .then(res => {
         if (this._isMounted) {
           this.setState({ data: res.data, loader: false });
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   }
 
   componentDidMount() {
@@ -55,14 +63,22 @@ class GeneralForms extends Component {
     } = this.props;
     const splitArr = url.split("/");
     const isProjectForm = splitArr.includes("project");
-
+    const isSiteForm = splitArr.includes("site");
     if (isProjectForm) {
       this.setState(
         {
           loader: true,
           isProjectForm
         },
-        this.requestGeneralForm(id)
+        this.requestGeneralForm(id, true)
+      );
+    } else if (isSiteForm) {
+      this.setState(
+        {
+          loader: true,
+          isProjectForm: false
+        },
+        this.requestGeneralForm(id, false)
       );
     }
   }
@@ -84,12 +100,12 @@ class GeneralForms extends Component {
   }
 
   changeDeployStatus = (formId, isDeploy) => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deployUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=general&id=${formId}`
+      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=general&id=${formId}`;
     axios
-      .post(
-        `fv3/api/manage-forms/deploy/?project_id=${id}&type=general&id=${formId}`,
-        { is_deployed: !isDeploy }
-      )
+      .post(deployUrl, { is_deployed: !isDeploy })
       .then(res => {
         this.setState(
           state => {
@@ -105,19 +121,22 @@ class GeneralForms extends Component {
             return { data: newData };
           },
           () => {
-            successToast("Form", "updated");
+            successToast("Deploy Status", "updated");
           }
         );
       })
-      .catch(err => {});
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
   deleteItem = (formId, isDeploy) => {
-    const { id } = this.state;
+    const { id, isProjectForm } = this.state;
+    const deleteUrl = !!isProjectForm
+      ? `fv3/api/manage-forms/delete/?project_id=${id}&type=general&id=${formId}`
+      : `fv3/api/manage-forms/delete/?site_id=${id}&type=general&id=${formId}`;
     axios
-      .post(
-        `fv3/api/manage-forms/delete/?project_id=${id}&type=general&id=${formId}`,
-        { is_deployed: isDeploy }
-      )
+      .post(deleteUrl, { is_deployed: isDeploy })
       .then(res => {
         this.setState(
           {
@@ -128,7 +147,10 @@ class GeneralForms extends Component {
           }
         );
       })
-      .catch(err => {});
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   };
   handleEditGuide = (data, formId) => {
     this.setState({
@@ -156,47 +178,69 @@ class GeneralForms extends Component {
     axios
       .post(`forms/api/save_educational_material/`, formData)
       .then(res => {
-        this.setState(
-          {
-            editGuide: false
-          },
-          () => {
-            this.requestGeneralForm(id);
-            successToast("updated", "successfully");
-          }
-        );
+        if (res.data) {
+          this.setState(
+            state => {
+              const item = this.state.data;
+              item.map(each => {
+                const newItem = { ...each };
+                if (each.id == editFormId) {
+                  each.em = res.data;
+                }
+                return newItem;
+              });
+
+              return {
+                editGuide: false,
+                data: item
+              };
+            },
+            () => {
+              successToast("form", "updated");
+            }
+          );
+        }
       })
       .catch(err => {
-        errorToast(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
   handleClosePopup = () => {
-    this.setState({
-      formTitle: "",
-      formId: "",
-      showFormModal: false,
-      activeTab: "myForms",
-      myFormList: [],
-      projectFormList: [],
-      sharedFormList: [],
-      xf: ""
-    });
-    this.props.closePopup();
+    this.setState(
+      {
+        formTitle: "",
+        formId: "",
+        showFormModal: false,
+        activeTab: "myForms",
+        myFormList: this.props.myForms,
+        projectFormList: this.props.projectForms,
+        sharedFormList: this.props.sharedForms,
+        xf: "",
+        isEditForm: false
+      },
+      () => {
+        this.props.closePopup();
+      }
+    );
   };
 
   handleCreateGeneralForm = data => {
-    const { id, xf, isEditForm } = this.state;
+    const { id, xf, isEditForm, isProjectForm } = this.state;
     if (!isEditForm) {
+      const postUrl = !!isProjectForm
+        ? `fv3/api/manage-forms/general/?project_id=${id}`
+        : `fv3/api/manage-forms/general/?site_id=${id}`;
       const payload = {
         xf: xf,
         default_submission_status: data.status,
         setting: {
           types:
-            data.typeSelected.length > 0
+            !!data.typeSelected && data.typeSelected.length > 0
               ? data.typeSelected.map(each => each.id)
               : [],
           regions:
-            data.regionSelected.length > 0
+            !!data.regionSelected && data.regionSelected.length > 0
               ? data.regionSelected.map(each => each.id)
               : [],
           donor_visibility: data.isDonor,
@@ -205,7 +249,7 @@ class GeneralForms extends Component {
         }
       };
       axios
-        .post(`fv3/api/manage-forms/general/?project_id=${id}`, payload)
+        .post(postUrl, payload)
         .then(res => {
           this.setState(
             {
@@ -218,9 +262,14 @@ class GeneralForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     } else {
+      const updateUrl = !!isProjectForm
+        ? `fv3/api/manage-forms/general/${data.id}/?project_id=${id}`
+        : `fv3/api/manage-forms/general/${data.id}/?site_id=${id}`;
+
       const payload = {
         id: data.id,
         default_submission_status: data.status,
@@ -233,22 +282,19 @@ class GeneralForms extends Component {
           can_edit: data.isEdit,
           donor_visibility: data.isDonor,
           regions:
-            data.regionSelected.length > 0
+            !!data.regionSelected && data.regionSelected.length > 0
               ? data.regionSelected.map(each => each.id)
               : [],
           can_delete: data.isDelete,
           types:
-            data.typeSelected.length > 0
+            !!data.typeSelected && data.typeSelected.length > 0
               ? data.typeSelected.map(each => each.id)
               : []
         }
       };
 
       axios
-        .put(
-          `fv3/api/manage-forms/general/${data.id}/?project_id=${id}`,
-          payload
-        )
+        .put(updateUrl, payload)
         .then(res => {
           this.setState(
             state => {
@@ -271,7 +317,8 @@ class GeneralForms extends Component {
           );
         })
         .catch(err => {
-          errorToast(err);
+          const errors = err.response;
+          errorToast(errors.data.error);
         });
     }
   };
@@ -303,17 +350,12 @@ class GeneralForms extends Component {
   };
 
   onChangeHandler = async e => {
-    const {
-      activeTab,
-      myFormList,
-      projectFormList,
-      sharedFormList
-    } = this.state;
+    const { activeTab } = this.state;
     const searchValue = e.target.value;
 
     if (searchValue) {
       if (activeTab == "myForms") {
-        const filteredData = await myFormList.filter(form => {
+        const filteredData = await this.props.myForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -324,7 +366,7 @@ class GeneralForms extends Component {
           myFormList: filteredData
         });
       } else if (activeTab == "projectForms") {
-        const awaitedData = await projectFormList.map(project => {
+        const awaitedData = await this.props.projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
               form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -337,7 +379,7 @@ class GeneralForms extends Component {
           projectFormList: awaitedData
         });
       } else if (activeTab == "sharedForms") {
-        const filteredData = await sharedFormList.filter(form => {
+        const filteredData = await this.props.sharedForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -383,12 +425,13 @@ class GeneralForms extends Component {
         myFormList,
         projectFormList,
         sharedFormList,
-        isEditForm
+        isEditForm,
+        isProjectForm
       },
       props: { typeOptions, regionOptions },
       handleClosePopup
     } = this;
-    // console.log("in render", formTitle);
+    // console.log("in render", isProjectForm);
 
     return (
       <div className="col-xl-9 col-lg-8">
@@ -399,7 +442,7 @@ class GeneralForms extends Component {
           showText={true}
         >
           {loader && <DotLoader />}
-          {!loader && (
+          {!loader && !!isProjectForm && (
             <GeneralFormTable
               data={data}
               loader={loader}
@@ -407,6 +450,18 @@ class GeneralForms extends Component {
               changeDeployStatus={this.changeDeployStatus}
               deleteItem={this.deleteItem}
               handleEditForm={this.handleEditGeneralForm}
+              formTable="project"
+            />
+          )}
+          {!loader && !isProjectForm && (
+            <GeneralFormTable
+              data={data}
+              loader={loader}
+              handleEditGuide={this.handleEditGuide}
+              changeDeployStatus={this.changeDeployStatus}
+              deleteItem={this.deleteItem}
+              handleEditForm={this.handleEditGeneralForm}
+              formTable="site"
             />
           )}
           {this.props.popupModal && (
@@ -414,6 +469,7 @@ class GeneralForms extends Component {
               title="Add General Form"
               toggleModal={handleClosePopup}
               classname="md-body"
+              // handleSubmit={this.handleCreateGeneralForm}
             >
               <GlobalModalForm
                 formType="general"
@@ -426,7 +482,7 @@ class GeneralForms extends Component {
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateGeneralForm}
-                formData={formData}
+                formData={!!isEditForm && formData}
                 isEditForm={isEditForm}
                 isProjectWide={false}
               />
@@ -443,13 +499,14 @@ class GeneralForms extends Component {
             </Modal>
           )}
           {showFormModal && (
-            <Modal
+            <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
               classname="manage-body md-body"
+              handleSubmit={this.handleSaveForm}
             >
               <AddForm
                 activeTab={activeTab}
@@ -459,10 +516,10 @@ class GeneralForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                handleSaveForm={this.handleSaveForm}
+                // handleSaveForm={this.handleSaveForm}
                 loader={this.props.formLoader}
               />
-            </Modal>
+            </ManageModal>
           )}
         </RightContentCard>
       </div>
