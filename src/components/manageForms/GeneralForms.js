@@ -207,17 +207,22 @@ class GeneralForms extends Component {
       });
   };
   handleClosePopup = () => {
-    this.setState({
-      formTitle: "",
-      formId: "",
-      showFormModal: false,
-      activeTab: "myForms",
-      myFormList: this.props.myForms,
-      projectFormList: this.props.projectForms,
-      sharedFormList: this.props.sharedForms,
-      xf: ""
-    });
-    this.props.closePopup();
+    this.setState(
+      {
+        formTitle: "",
+        formId: "",
+        showFormModal: false,
+        activeTab: "myForms",
+        myFormList: this.props.myForms,
+        projectFormList: this.props.projectForms,
+        sharedFormList: this.props.sharedForms,
+        xf: "",
+        isEditForm: false
+      },
+      () => {
+        this.props.closePopup();
+      }
+    );
   };
 
   handleCreateGeneralForm = data => {
@@ -264,6 +269,7 @@ class GeneralForms extends Component {
       const updateUrl = !!isProjectForm
         ? `fv3/api/manage-forms/general/${data.id}/?project_id=${id}`
         : `fv3/api/manage-forms/general/${data.id}/?site_id=${id}`;
+
       const payload = {
         id: data.id,
         default_submission_status: data.status,
@@ -476,7 +482,7 @@ class GeneralForms extends Component {
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateGeneralForm}
-                formData={formData}
+                formData={!!isEditForm && formData}
                 isEditForm={isEditForm}
                 isProjectWide={false}
               />
