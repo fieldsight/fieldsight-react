@@ -104,8 +104,14 @@ class StagedForms extends Component {
 
   handleSubmitStageForm = data => {
     const { name, desc, selectedRegion, selectedType, order, id } = data;
-    const mapRegion = selectedRegion.map(each => each.id);
-    const mapType = selectedType.map(each => each.id);
+    const mapRegion =
+      !!selectedRegion && !!selectedRegion.length > 0
+        ? selectedRegion.map(each => each.id)
+        : [];
+    const mapType =
+      !!selectedType && !!selectedType.length > 0
+        ? selectedType.map(each => each.id)
+        : [];
     const newOrder = order > 0 ? order : this.state.data.length + 1;
     if (order > 0) {
       const updateStageApi = !!this.state.isProjectForm

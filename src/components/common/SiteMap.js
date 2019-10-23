@@ -87,14 +87,27 @@ class SiteMap extends Component {
     } = this;
 
     let bounds = latLngBounds();
-    mapData &&
-      mapData.features &&
-      mapData.features.forEach(data => {
-        bounds.extend([
-          data.geometry.coordinates[1],
-          data.geometry.coordinates[0]
-        ]);
-      });
+    if (mapData && mapData.features) {
+      if (mapData.features.length == 1) {
+        bounds = latLngBounds(
+          [
+            mapData.features[0].geometry.coordinates[1] + 0.002,
+            mapData.features[0].geometry.coordinates[0] + 0.002
+          ],
+          [
+            mapData.features[0].geometry.coordinates[1] - 0.002,
+            mapData.features[0].geometry.coordinates[0] - 0.002
+          ]
+        );
+      } else if (mapData.features.length > 1) {
+        mapData.features.forEach(data => {
+          bounds.extend([
+            data.geometry.coordinates[1],
+            data.geometry.coordinates[0]
+          ]);
+        });
+      }
+    }
 
     return (
       <>
