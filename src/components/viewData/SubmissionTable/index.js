@@ -156,6 +156,7 @@ class SubmissionData extends Component {
                   <th>S.N.</th>
                   <th>Site Name</th>
                   <th>Site Id</th>
+                  <th>submission id</th>
                   <th>Submitted By</th>
                   <th>Submission Date</th>
                   <th>Action</th>
@@ -169,7 +170,7 @@ class SubmissionData extends Component {
                         <td>{key + 1}</td>
                         <td>{list.site_name}</td>
                         <td>{list.site_identifier}</td>
-
+                        <td>{list.submission_id}</td>
                         <td>
                           <a href={list.profile_url}>{list.submitted_by}</a>
                         </td>
