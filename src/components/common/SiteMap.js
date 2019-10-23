@@ -52,6 +52,12 @@ class SiteMap extends Component {
       // debugger;
       // map.fitBounds(bound);
     }
+    // const delay = !!feature && feature.getBounds();
+    // // debugger;
+    // if (!!map && delay.isValid()) {
+    //   map.fitBounds(delay);
+    //   // setTimeout(map.fitBounds(feature.getBounds()), 2000);
+    // }
   };
 
   render() {

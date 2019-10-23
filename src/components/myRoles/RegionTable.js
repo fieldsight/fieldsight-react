@@ -9,9 +9,12 @@ class RegionTable extends Component {
     return (
       <div
         className="table-wrapper"
+        role="tabpanel"
+        aria-labelledby="region_tab"
         style={{ position: "relative", height: "650px" }}
       >
-        {this.props.RegionLoader && <TableContentLoader row={15} column={5} />}
+        {this.props.RegionLoader && <TableContentLoader row={10} column={5} />}
+
         {!this.props.RegionLoader && (
           <PerfectScrollbar>
             {this.props.regions.length > 0 ? (

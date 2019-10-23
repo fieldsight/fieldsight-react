@@ -245,7 +245,8 @@ class StagedForms extends Component {
       myFormList: this.props.myForms,
       projectFormList: this.props.projectForms,
       sharedFormList: this.props.sharedForms,
-      xf: ""
+      xf: "",
+      isEditForm: false
     });
     this.handleSubStageForm();
   };
@@ -610,7 +611,8 @@ class StagedForms extends Component {
         xf: formData.xf && formData.xf.id,
         formId: formData.xf && formData.xf.id,
         formTitle: formData.xf && formData.xf.title,
-        substageId: formData.id
+        substageId: formData.id,
+        isEditForm: true
       },
       () => {
         this.handleSubStageForm();
@@ -750,7 +752,8 @@ class StagedForms extends Component {
         isSubstageReorderCancel,
         isProjectForm,
         reOrderDisable,
-        subStageReorderDisable
+        subStageReorderDisable,
+        isEditForm
       }
     } = this;
     let deployCount = 0;
@@ -968,8 +971,9 @@ class StagedForms extends Component {
                 handleToggleForm={this.handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateForm}
-                formData={formData}
+                formData={!!isEditForm && formData}
                 isProjectWide={false}
+                isEditForm={isEditForm}
               />
             </Modal>
           )}

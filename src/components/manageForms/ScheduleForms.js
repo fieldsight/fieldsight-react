@@ -286,7 +286,8 @@ class ScheduleForms extends Component {
       myFormList: this.props.myForms,
       projectFormList: this.props.projectForms,
       sharedFormList: this.props.sharedForms,
-      xf: ""
+      xf: "",
+      isEditForm: false
     });
     this.props.closePopup();
   };
@@ -483,7 +484,7 @@ class ScheduleForms extends Component {
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleScheduleForm}
-                formData={formData}
+                formData={!!isEditForm && formData}
                 isEditForm={isEditForm}
                 isProjectWide={false}
               />
