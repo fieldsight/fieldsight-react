@@ -46,7 +46,7 @@ class SiteInformationCard extends Component {
       type = nextProps.siteInfo.question_type;
     }
 
-    if (!isEmpty(selectedForm)) {
+    if (selectedForm && !isEmpty(selectedForm)) {
       showForm = true;
       filteredQuestions = findQuestion(
         selectedForm.json.children,

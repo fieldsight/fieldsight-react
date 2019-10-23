@@ -42,7 +42,6 @@ export default class SiteAdd extends Component {
   };
 
   render() {
-    console.log(this.props);
     const {
       onChangeHandler,
       onSubmitHandler,
@@ -121,7 +120,6 @@ export default class SiteAdd extends Component {
                 value={site_id}
                 changeHandler={onChangeHandler}
               />
-              {console.log(site_id, "site_id")}
             </div>
             <div className="col-xl-4 col-md-6">
               <InputElement
@@ -135,6 +133,7 @@ export default class SiteAdd extends Component {
                 changeHandler={onChangeHandler}
               />
             </div>
+
             {this.props.region !== "" ? (
               <div className="col-xl-4 col-md-6">
                 <SelectElement

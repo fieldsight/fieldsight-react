@@ -25,6 +25,7 @@ class RegionTable extends Component {
                     <th>name</th>
                     <th>total_sites</th>
                     <th>Role</th>
+
                     {this.props.profileId && <th>Action</th>}
                   </tr>
                 </thead>

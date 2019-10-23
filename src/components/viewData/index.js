@@ -116,7 +116,10 @@ export default class ViewData extends Component {
           <div className="row">
             <div className="col-xl-3 col-lg-4">
               <div className="left-sidebar new-sidebar sticky-top">
-                <div className="card">
+                <div
+                  className="card no-boxshadow"
+                  style={{ minHeight: this.props.height }}
+                >
                   <div className="card-header main-card-header">
                     <h5>View Data</h5>
                   </div>

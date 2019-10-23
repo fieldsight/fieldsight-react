@@ -48,7 +48,9 @@ class SiteMap extends Component {
       this.featureRef.current &&
       this.featureRef.current.leafletElement;
     if (!!map && !!feature) {
-      map.fitBounds(feature.getBounds());
+      const bound = feature.getBounds();
+      // debugger;
+      // map.fitBounds(bound);
     }
     // const delay = !!feature && feature.getBounds();
     // // debugger;
@@ -74,6 +76,7 @@ class SiteMap extends Component {
             zoom={13}
             style={{ width: "100%", height: "396px" }}
             ref={this.mapRef}
+            // onmouseover={() => this.getMarkerBounds()}
           >
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

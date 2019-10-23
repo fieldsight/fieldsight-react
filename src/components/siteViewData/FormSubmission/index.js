@@ -89,7 +89,7 @@ class SubmissionData extends Component {
     const { siteList, mastersiteList } = this.state;
 
     if (value) {
-      const search = await siteList.filter(result => {
+      const search = siteList.filter(result => {
         return result.submitted_by.toLowerCase().includes(value.toLowerCase());
       });
       this.setState({
@@ -102,8 +102,6 @@ class SubmissionData extends Component {
     }
   };
   render() {
-    console.log(this.state.siteList, "this.state.siteList");
-
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -149,7 +147,6 @@ class SubmissionData extends Component {
               <thead>
                 <tr>
                   <th>S.N.</th>
-                  <th>Submission Id</th>
                   <th>Submitted By</th>
                   <th>Submission Date</th>
                   <th>Action</th>
@@ -161,7 +158,7 @@ class SubmissionData extends Component {
                     return (
                       <tr key={key}>
                         <td>{key + 1}</td>
-                        <td>{list.submission_id}</td>
+
                         <td>
                           <a href={list.profile_url}>{list.submitted_by}</a>
                         </td>
@@ -169,7 +166,7 @@ class SubmissionData extends Component {
 
                         <td>
                           <a
-                            href={`/fieldsight/application/?submission=${list.id}#/submission-details`}
+                            href={`/fieldsight/application/?submission=${list.submission_id}#/submission-details`}
                           >
                             <i className="la la-eye"></i>
                           </a>
@@ -185,8 +182,7 @@ class SubmissionData extends Component {
                               this.handleDelete(list.submission_id);
                             }}
                           >
-                            {" "}
-                            <i className="la la-trash-o"> </i>{" "}
+                            <i className="la la-trash-o"> </i>
                           </a>
                         </td>
                       </tr>
