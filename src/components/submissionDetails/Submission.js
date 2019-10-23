@@ -57,8 +57,6 @@ class Submission extends Component {
   };
 
   onEachFeaturePoint(feature, layer) {
-    console.log(feature, "feature");
-
     layer.bindPopup(`<b>Project Name: </b>
     ${feature.properties.project_name}`);
   }
@@ -80,7 +78,6 @@ class Submission extends Component {
   }
 
   getGeoJson = data => {
-    // console.log(data, "submission");
     return {
       type: "FeatureCollection",
       features: [
@@ -110,7 +107,12 @@ class Submission extends Component {
   };
 
   getSmallBound = latlng => {
-    // console.log("small");
+    const { siteLat, siteLng, ansLat, ansLng } = latlng;
+    const bounds = latLngBounds(
+      [siteLat + 0.002, siteLng + 0.002],
+      [ansLat - 0.002, ansLng - 0.002]
+    );
+    return bounds;
   };
   getLargeBound = latlng => {
     const { siteLat, siteLng, ansLat, ansLng } = latlng;
@@ -195,7 +197,7 @@ class Submission extends Component {
       let altitude = "";
       let accuracy = "";
       let bounds = {};
-
+      let latlngObj = {};
       if (submission.answer) {
         splitedGeoLocation = submission.answer.split(" ");
         latitude = splitedGeoLocation[0];
@@ -203,17 +205,12 @@ class Submission extends Component {
         altitude = splitedGeoLocation[2];
         accuracy = splitedGeoLocation[3];
 
-        const latlngObj = {
+        latlngObj = {
           siteLat: site.latitude,
           siteLng: site.longitude,
           ansLat: JSON.parse(latitude),
           ansLng: JSON.parse(longitude)
         };
-        // if (distance < 500) {
-        //   bounds = this.getSmallBound(latlngObj);
-        // } else {
-        bounds = this.getLargeBound(latlngObj);
-        // }
       }
 
       const question =
@@ -226,6 +223,11 @@ class Submission extends Component {
         latitude,
         longitude
       );
+      if (distance < 500) {
+        bounds = this.getSmallBound(latlngObj);
+      } else {
+        bounds = this.getLargeBound(latlngObj);
+      }
       return (
         <div className="submission-list normal-list" key={uuid()}>
           <ul>
@@ -271,12 +273,6 @@ class Submission extends Component {
                               {question}
                             </Popup>
                           </CircleMarker>
-                          {/* <Marker position={[site.latitude, site.longitude]}>
-                            <Popup>
-                              <b>Project Name: </b>
-                              {site.project_name}
-                            </Popup>
-                          </Marker> */}
                         </Map>
                       </div>
                     </div>
