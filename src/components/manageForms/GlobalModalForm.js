@@ -571,7 +571,7 @@ class GlobalModalForm extends Component {
               {formType !== "substage" && !isEditForm && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
-                    Choose form
+                    {!!formTitle ? "Change form" : " Choose form"}
                     <span>
                       <i className="la la-file-text-o"></i>
                     </span>
@@ -581,7 +581,7 @@ class GlobalModalForm extends Component {
               {formType == "substage" && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
-                    {!!isEditForm ? "Change form" : " Choose form"}
+                    {!!isEditForm || formTitle ? "Change form" : " Choose form"}
                     <span>
                       <i className="la la-file-text-o"></i>
                     </span>
