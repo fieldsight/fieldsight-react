@@ -128,14 +128,12 @@ class Teams extends Component {
                                 href={`/fieldsight/application/#/team-dashboard/${project.id}`}
                                 className="td-view-btn td-btn"
                               >
-                                {" "}
-                                <i className="la la-eye"></i>{" "}
+                                <i className="la la-eye"></i>
                               </a>
                               <a
                                 href={`/fieldsight/organization/${project.id}`}
                                 className="td-edit-btn td-btn"
                               >
-                                {" "}
                                 <i className="la la-edit"></i>
                               </a>
                             </td>
