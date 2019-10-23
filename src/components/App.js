@@ -47,6 +47,7 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
+import TeamMap from "./team/TeamMap";
 
 class App extends Component {
   constructor(props) {
@@ -159,6 +160,12 @@ class App extends Component {
                       path="/teams"
                       render={props => <Teams {...props} />}
                     />
+
+                    <Route
+                      path="/map"
+                      render={props => <TeamMap {...props} />}
+                    />
+
                     <Route
                       path="/project_logs/:id"
                       render={props => <ProjectLog {...props} />}
@@ -218,6 +225,7 @@ class App extends Component {
                       path="/site-submission-data/:id/:fid"
                       render={props => <SiteSubmissionData {...props} />}
                     />
+
                   </Switch>
                   <ToastContainer />
                 </Router>
