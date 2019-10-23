@@ -524,7 +524,6 @@ class GlobalModalForm extends Component {
         notifyIncomplete
       }
     } = this;
-    console.log("globla", typeDropdown);
 
     let weekOptions = [];
     let monthOPtions = [];
