@@ -13,6 +13,7 @@ import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import "leaflet/dist/leaflet.css";
+import { markerIcon } from "../common/Marker";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -433,7 +434,7 @@ class EditProject extends Component {
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[latitude, longitude]}>
+                    <Marker position={[latitude, longitude]} icon={markerIcon}>
                       <Popup>
                         <b>Name: </b>
                         {name}
