@@ -1,6 +1,6 @@
 import React from "react";
 import Cropper from "react-cropper";
-
+import { Link } from "react-router-dom";
 import pf from "../../../static/images/pf.jpg";
 import { Button, Dropdown } from "react-bootstrap";
 import CountCard from "../../common/CountCard";
@@ -72,7 +72,10 @@ class DashboardHeader extends React.Component {
         title: "Generate Report",
         link: `/fieldsight/project-dashboard/${id}/`
       },
-      { title: "View Data", link: `/fieldsight/application/#/project-responses/${id}/general/` }
+      {
+        title: "View Data",
+        link: `/fieldsight/application/#/project-responses/${id}/general/`
+      }
     ];
 
     return (
@@ -148,14 +151,14 @@ class DashboardHeader extends React.Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <a href={`/forms/project-responses/${id}/`} target="_blank">
+            <Link to={`/project-responses/${id}/general`} target="_blank">
               <CountCard
                 countName=""
                 countNumber={totalSubmissions}
                 icon="la-copy"
-                // noSubmissionText={true}
+                //noSubmissionText={true}
               />
-            </a>
+            </Link>
             <a
               href={`/fieldsight/application/#/project-users/${id}/`}
               target="_blank"

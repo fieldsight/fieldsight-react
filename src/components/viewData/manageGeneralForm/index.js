@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import ResponseTable from "../../responded/ResponseTable";
-import StatusTable from "../../responded/StatusTable";
-import Rejected from "../RejectSubmissionTable.js";
+import { connect } from "react-redux";
+import { compose } from "redux";
 import DeleteTable from "../deleteTable";
 import axios from "axios";
+import { getProjectViewData } from "../../../actions/viewDataActions";
 
 class ManageGeneralForm extends Component {
   state = {
@@ -21,6 +22,7 @@ class ManageGeneralForm extends Component {
   // }
 
   componentDidMount() {
+    this.props.getProjectViewData(this.props.id, "general");
     if (this.props.id !== "") {
       axios
         .get(
@@ -54,7 +56,7 @@ class ManageGeneralForm extends Component {
 
   render() {
     const {
-      props: { data, showViewData }
+      props: { data, showViewData, generals_forms, deleted_forms, breadcrumbs }
     } = this;
 
     return (
@@ -71,11 +73,7 @@ class ManageGeneralForm extends Component {
         </div>
         <div className="card-body">
           {!data && (
-            <ResponseTable
-              generals_forms={this.state.generals_forms}
-              deleted_forms={this.state.deleted_forms}
-              id={this.props.id}
-            />
+            <ResponseTable generals_forms={generals_forms} id={this.props.id} />
           )}
         </div>
         {this.state.deleted_forms.length > 0
@@ -116,7 +114,7 @@ class ManageGeneralForm extends Component {
                 <div className="card-body">
                   {!this.state.hide && (
                     <DeleteTable
-                      deleted_forms={this.state.deleted_forms}
+                      deleted_forms={deleted_forms}
                       id={this.props.id}
                     />
                   )}
@@ -128,4 +126,21 @@ class ManageGeneralForm extends Component {
     );
   }
 }
-export default ManageGeneralForm;
+
+const mapStateToProps = ({ projectViewData }) => {
+  const { generals_forms, deleted_forms, breadcrumbs } = projectViewData;
+
+  return {
+    generals_forms,
+    deleted_forms,
+    breadcrumbs
+  };
+};
+export default compose(
+  connect(
+    mapStateToProps,
+    {
+      getProjectViewData
+    }
+  )
+)(ManageGeneralForm);
