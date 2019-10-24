@@ -257,10 +257,10 @@ class Submission extends Component {
               <div className="submission-map">
                 {submission.answer && (
                   <div className="row">
-                    <div className="col-lg-5 col-md-5">
+                    <div className="col-lg-6 col-md-6">
                       <div className="map-form">
                         <Map
-                          style={{ height: "205px", marginTop: "1rem" }}
+                          style={{ height: "258px", marginTop: "1rem" }}
                           center={[latitude, longitude]}
                           zoom={15}
                           maxZoom={19}
@@ -297,7 +297,7 @@ class Submission extends Component {
                         </Map>
                       </div>
                     </div>
-                    <div className="col-lg-7 col-md-7">
+                    <div className="col-lg-4 col-md-4">
                       <div className="map-legend">
                         <p>
                           <span>Latitude:</span>
