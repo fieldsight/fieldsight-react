@@ -148,7 +148,7 @@ class SortableStage extends Component {
                           variant="link"
                           eventKey={`${each.id}`}
                           onClick={() => {
-                            handleRequestSubStage(each.id, each.order);
+                            handleRequestSubStage(each);
                           }}
                         >
                           <div>{each.name}</div>

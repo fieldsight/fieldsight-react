@@ -432,7 +432,6 @@ class ScheduleForms extends Component {
       props: { typeOptions, regionOptions },
       handleClosePopup
     } = this;
-    // console.log("props", this.props);
 
     return (
       <div className="col-xl-9 col-lg-8">
@@ -477,9 +476,6 @@ class ScheduleForms extends Component {
                 formType="schedule"
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                myForms={this.props.myForms}
-                projectForms={this.props.projectForms}
-                sharedForms={this.props.sharedForms}
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
