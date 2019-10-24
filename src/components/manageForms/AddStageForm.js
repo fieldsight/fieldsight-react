@@ -33,33 +33,30 @@ class AddStageForm extends Component {
     let selectedRegion = [];
     let selectedType = [];
     if (Object.keys(stageData).length > 0) {
-      if (!!stageData.regions) {
-        if (stageData.regions.length > 0) {
-          regionOptions.map(region => {
-            if (stageData.regions.indexOf(region.id) > -1) {
-              selectedRegion.push({
-                ...region,
-                value: region.identifier,
-                label: region.name
-              });
-            }
-          });
-        }
+      if (stageData.regions.length > 0) {
+        regionOptions.map(region => {
+          if (stageData.regions.indexOf(region.id) > -1) {
+            selectedRegion.push({
+              ...region,
+              value: region.identifier,
+              label: region.name
+            });
+          }
+        });
       } else {
         selectedRegion = newRegionArr;
       }
-      if (!!stageData.tags) {
-        if (stageData.tags.length > 0) {
-          typeOptions.map(type => {
-            if (stageData.tags.indexOf(type.id) > -1) {
-              selectedType.push({
-                ...type,
-                value: type.identifier,
-                label: type.name
-              });
-            }
-          });
-        }
+
+      if (stageData.tags.length > 0) {
+        typeOptions.map(type => {
+          if (stageData.tags.indexOf(type.id) > -1) {
+            selectedType.push({
+              ...type,
+              value: type.identifier,
+              label: type.name
+            });
+          }
+        });
       } else {
         selectedType = newTypeArr;
       }

@@ -127,8 +127,6 @@ class SiteDashboard extends Component {
     }
   }
   render() {
-    console.log(this.state.siteId, "siteid");
-
     const {
       props: {
         siteDashboard: {
