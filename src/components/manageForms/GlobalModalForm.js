@@ -148,66 +148,68 @@ class GlobalModalForm extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    const { typeOptions, regionOptions, formData } = this.props;
+    const { typeOptions, regionOptions, formData, isProjectWide } = this.props;
+    if (!!isProjectWide) {
+      const regionSelected =
+        formData && formData.setting && formData.setting.regions;
+      const typeSelected =
+        formData && formData.setting && formData.setting.types;
 
-    const regionSelected =
-      formData && formData.setting && formData.setting.regions;
-    const typeSelected = formData && formData.setting && formData.setting.types;
+      if (this._isMounted) {
+        const newRegionArr =
+          regionOptions &&
+          regionOptions.map(each => ({
+            ...each,
+            value: each.identifier,
+            label: each.name
+          }));
+        const newTypeArr =
+          typeOptions &&
+          typeOptions.map(each => ({
+            ...each,
+            value: each.identifier,
+            label: each.name
+          }));
 
-    if (this._isMounted) {
-      const newRegionArr =
-        regionOptions &&
-        regionOptions.map(each => ({
-          ...each,
-          value: each.identifier,
-          label: each.name
-        }));
-      const newTypeArr =
-        typeOptions &&
-        typeOptions.map(each => ({
-          ...each,
-          value: each.identifier,
-          label: each.name
-        }));
+        let selectedRegion = [];
+        let selectedType = [];
 
-      let selectedRegion = [];
-      let selectedType = [];
+        if (regionSelected && regionSelected.length > 0) {
+          regionOptions.map(region => {
+            if (regionSelected.indexOf(region.id) > -1) {
+              selectedRegion.push({
+                ...region,
+                value: region.identifier,
+                label: region.name
+              });
+            }
+          });
+        } else {
+          selectedRegion = newRegionArr;
+        }
 
-      if (regionSelected.length > 0) {
-        regionOptions.map(region => {
-          if (regionSelected.indexOf(region.id) > -1) {
-            selectedRegion.push({
-              ...region,
-              value: region.identifier,
-              label: region.name
-            });
-          }
+        if (typeSelected && typeSelected.length > 0) {
+          typeOptions.map(type => {
+            if (typeSelected.indexOf(type.id) > -1) {
+              selectedType.push({
+                ...type,
+                value: type.identifier,
+                label: type.name
+              });
+            }
+          });
+        } else {
+          selectedType = newTypeArr;
+        }
+
+        this.setState({
+          hasLoaded: true,
+          regionDropdown: newRegionArr,
+          typeDropdown: newTypeArr,
+          regionSelected: selectedRegion,
+          typeSelected: selectedType
         });
-      } else {
-        selectedRegion = newRegionArr;
       }
-
-      if (typeSelected.length > 0) {
-        typeOptions.map(type => {
-          if (typeSelected.indexOf(type.id) > -1) {
-            selectedType.push({
-              ...type,
-              value: type.identifier,
-              label: type.name
-            });
-          }
-        });
-      } else {
-        selectedType = newTypeArr;
-      }
-
-      this.setState({
-        hasLoaded: true,
-        regionDropdown: newRegionArr,
-        typeDropdown: newTypeArr,
-        regionSelected: selectedRegion,
-        typeSelected: selectedType
-      });
     }
   }
 
