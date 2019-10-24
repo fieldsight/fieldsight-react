@@ -173,34 +173,30 @@ class GlobalModalForm extends Component {
       let selectedRegion = [];
       let selectedType = [];
 
-      if (!!regionSelected) {
-        if (regionSelected.length > 0) {
-          regionOptions.map(region => {
-            if (regionSelected.indexOf(region.id) > -1) {
-              selectedRegion.push({
-                ...region,
-                value: region.identifier,
-                label: region.name
-              });
-            }
-          });
-        }
+      if (regionSelected.length > 0) {
+        regionOptions.map(region => {
+          if (regionSelected.indexOf(region.id) > -1) {
+            selectedRegion.push({
+              ...region,
+              value: region.identifier,
+              label: region.name
+            });
+          }
+        });
       } else {
         selectedRegion = newRegionArr;
       }
 
-      if (!!typeSelected) {
-        if (typeSelected.length > 0) {
-          typeOptions.map(type => {
-            if (typeSelected.indexOf(type.id) > -1) {
-              selectedType.push({
-                ...type,
-                value: type.identifier,
-                label: type.name
-              });
-            }
-          });
-        }
+      if (typeSelected.length > 0) {
+        typeOptions.map(type => {
+          if (typeSelected.indexOf(type.id) > -1) {
+            selectedType.push({
+              ...type,
+              value: type.identifier,
+              label: type.name
+            });
+          }
+        });
       } else {
         selectedType = newTypeArr;
       }
@@ -524,7 +520,6 @@ class GlobalModalForm extends Component {
         notifyIncomplete
       }
     } = this;
-    console.log("globla", typeDropdown);
 
     let weekOptions = [];
     let monthOPtions = [];
@@ -576,7 +571,7 @@ class GlobalModalForm extends Component {
               {formType !== "substage" && !isEditForm && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
-                    Choose form
+                    {!!formTitle ? "Change form" : " Choose form"}
                     <span>
                       <i className="la la-file-text-o"></i>
                     </span>
@@ -586,7 +581,7 @@ class GlobalModalForm extends Component {
               {formType == "substage" && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
-                    {!!isEditForm ? "Change form" : " Choose form"}
+                    {!!isEditForm || formTitle ? "Change form" : " Choose form"}
                     <span>
                       <i className="la la-file-text-o"></i>
                     </span>
