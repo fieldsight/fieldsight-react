@@ -53,7 +53,7 @@ class Submission extends Component {
       this.featureRef.current.leafletElement;
     // debugger;
     if (!!map && !!feature) {
-      map.fitBounds(feature.getBounds());
+      // map.fitBounds(feature.getBounds());
     }
   };
 
@@ -122,21 +122,25 @@ class Submission extends Component {
   };
 
   getSmallBound = latlng => {
-    const { siteLat, siteLng, ansLat, ansLng } = latlng;
-    const bounds = latLngBounds(
-      [siteLat + 0.002, siteLng + 0.002],
-      [ansLat - 0.002, ansLng - 0.002]
-    );
-    return bounds;
+    if (Object.entries(latlng).length > 0) {
+      const { siteLat, siteLng, ansLat, ansLng } = latlng;
+      const bounds = latLngBounds(
+        [siteLat + 0.002, siteLng + 0.002],
+        [ansLat - 0.002, ansLng - 0.002]
+      );
+      return bounds;
+    }
   };
   getLargeBound = latlng => {
-    const { siteLat, siteLng, ansLat, ansLng } = latlng;
-    let bounds = latLngBounds();
+    if (Object.entries(latlng).length > 0) {
+      const { siteLat, siteLng, ansLat, ansLng } = latlng;
+      let bounds = latLngBounds();
 
-    bounds.extend([siteLat, siteLng]);
-    bounds.extend([ansLat, ansLng]);
+      bounds.extend([siteLat, siteLng]);
+      bounds.extend([ansLat && ansLat, ansLng && ansLng]);
 
-    return bounds;
+      return bounds;
+    }
   };
 
   handleRepeatedSubmission = submission => {
@@ -213,7 +217,8 @@ class Submission extends Component {
       let accuracy = "";
       let bounds = {};
       let latlngObj = {};
-      if (submission.answer) {
+
+      if (!!submission.answer === true) {
         splitedGeoLocation = submission.answer.split(" ");
         latitude = splitedGeoLocation[0];
         longitude = splitedGeoLocation[1];
@@ -221,8 +226,8 @@ class Submission extends Component {
         accuracy = splitedGeoLocation[3];
 
         latlngObj = {
-          siteLat: site.latitude,
-          siteLng: site.longitude,
+          siteLat: site && site.latitude,
+          siteLng: site && site.longitude,
           ansLat: JSON.parse(latitude),
           ansLng: JSON.parse(longitude)
         };
@@ -235,9 +240,10 @@ class Submission extends Component {
       const distance = measure(
         site.latitude,
         site.longitude,
-        latitude,
-        longitude
+        latitude && latitude,
+        longitude && longitude
       );
+
       if (distance < 500) {
         bounds = this.getSmallBound(latlngObj);
       } else {
