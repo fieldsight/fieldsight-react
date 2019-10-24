@@ -149,7 +149,7 @@ class GlobalModalForm extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { typeOptions, regionOptions, formData, isProjectWide } = this.props;
-    if (!!isProjectWide) {
+    if (!isProjectWide) {
       const regionSelected =
         formData && formData.setting && formData.setting.regions;
       const typeSelected =
@@ -202,13 +202,18 @@ class GlobalModalForm extends Component {
           selectedType = newTypeArr;
         }
 
-        this.setState({
-          hasLoaded: true,
-          regionDropdown: newRegionArr,
-          typeDropdown: newTypeArr,
-          regionSelected: selectedRegion,
-          typeSelected: selectedType
-        });
+        this.setState(
+          {
+            hasLoaded: true,
+            regionDropdown: newRegionArr,
+            typeDropdown: newTypeArr,
+            regionSelected: selectedRegion,
+            typeSelected: selectedType
+          },
+          () => {
+            console.log("region", this.state.regionDropdown);
+          }
+        );
       }
     }
   }
@@ -522,6 +527,7 @@ class GlobalModalForm extends Component {
         notifyIncomplete
       }
     } = this;
+    console.log("common form");
 
     let weekOptions = [];
     let monthOPtions = [];
