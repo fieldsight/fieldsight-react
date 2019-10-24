@@ -146,7 +146,7 @@ class SortableStage extends Component {
                         <Accordion.Toggle
                           as={Button}
                           variant="link"
-                          eventKey={`${each.order}`}
+                          eventKey={`${each.id}`}
                           onClick={() => {
                             handleRequestSubStage(each.id, each.order);
                           }}
@@ -175,7 +175,7 @@ class SortableStage extends Component {
                     </Card.Header>
                   )}
 
-                  <Accordion.Collapse eventKey={`${each.order}`}>
+                  <Accordion.Collapse eventKey={`${each.id}`}>
                     <Card.Body>
                       {!!isProjectForm && (
                         <div className="add-btn  outline-btn">
@@ -237,7 +237,9 @@ class SortableStage extends Component {
                               {/* Deploy Substages */}
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Deploy All Substages</Tooltip>}
+                                overlay={
+                                  <Tooltip>Deploy All Substages</Tooltip>
+                                }
                               >
                                 <span className="active deploy">
                                   <i className="la la-rocket" />
@@ -338,7 +340,9 @@ class SortableStage extends Component {
                               {/* Deploy Substages */}
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Deploy All Substages</Tooltip>}
+                                overlay={
+                                  <Tooltip>Deploy All Substages</Tooltip>
+                                }
                               >
                                 <span className="active deploy">
                                   <i className="la la-rocket" />
