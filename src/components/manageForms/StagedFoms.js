@@ -86,6 +86,22 @@ class StagedForms extends Component {
     }
   }
 
+  componentDidUpdate(nextProps) {
+    if (nextProps.myForms != this.props.myForms) {
+      this.setState({
+        myFormList: this.props.myForms
+      });
+    } else if (nextProps.projectForms != this.props.projectForms) {
+      this.setState({
+        projectFormList: this.props.projectForms
+      });
+    } else if (nextProps.sharedForms != this.props.sharedForms) {
+      this.setState({
+        sharedFormList: this.props.sharedForms
+      });
+    }
+  }
+
   requestStagedData = (id, checkUrl) => {
     const apiUrl = checkUrl
       ? `fv3/api/manage-forms/stages/?project_id=${id}`
