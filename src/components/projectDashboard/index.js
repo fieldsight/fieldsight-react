@@ -136,7 +136,6 @@ class ProjectDashboard extends React.Component {
     );
   };
   render() {
-    // console.log("props--", this.props);
     const {
       projectDashboard: {
         id,
@@ -291,7 +290,7 @@ class ProjectDashboard extends React.Component {
                       </form>
                       {is_project_manager && (
                         <a
-                          href={`/fieldsight/site/add/${projectId}/`}
+                          href={`/fieldsight/application/#/create-site/${projectId}/`}
                           target="_blank"
                           className="fieldsight-btn"
                         >
@@ -380,13 +379,21 @@ class ProjectDashboard extends React.Component {
             </div>
           </div>
           <ProjectActivity projectActivity={project_activity} />
-          <DashboardCounter projectActivity={project_activity} />
+          <DashboardCounter
+            projectActivity={project_activity}
+            id={this.state.projectId}
+          />
           <div className="progress-table mrb-30">
             <div className="card">
               <div className="card-header main-card-header sub-card-header">
                 <h5>Progress table</h5>
               </div>
-              <ProgressTable data={progressTableData} loader={progressLoader} />
+
+              <ProgressTable
+                data={progressTableData}
+                loader={progressLoader}
+                id={this.props.match.params.id}
+              />
             </div>
           </div>
           <div className="chart mrb-30">

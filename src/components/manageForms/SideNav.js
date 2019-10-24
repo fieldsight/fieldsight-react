@@ -17,8 +17,8 @@ const urls = [
 class SideNav extends Component {
   _isMounted = false;
   state = {
-    regionOptions: [],
-    typeOptions: [],
+    regionOptions: [{ id: 0, identifier: "unassigned", name: "unassigned" }],
+    typeOptions: [{ id: 0, identifier: "unassigned", name: "unassigned" }],
     myForms: [],
     projectForms: [],
     sharedForms: [],
@@ -42,9 +42,11 @@ class SideNav extends Component {
           if (this._isMounted) {
             this.setState(state => {
               if (!!this.state.isProjectForm) {
+                const regions = this.state.regionOptions;
+                const types = this.state.typeOptions;
                 return {
-                  regionOptions: list.data.regions,
-                  typeOptions: list.data.site_types,
+                  regionOptions: [...regions, ...list.data.regions],
+                  typeOptions: [...types, ...list.data.site_types],
                   myForms: myForms.data,
                   projectForms: projectForms.data,
                   sharedForms: sharedForms.data,

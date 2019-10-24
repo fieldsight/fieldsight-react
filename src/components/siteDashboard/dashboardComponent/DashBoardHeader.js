@@ -9,6 +9,7 @@ import SubmissionModal from "./SubmissionModal";
 import Modal from "../../common/Modal";
 import Td from "../../common/TableData";
 import { DotLoader } from "../../common/Loader";
+import { Link } from "react-router-dom";
 
 // const projectId = window.project_id ? window.project_id : 137;
 
@@ -69,13 +70,16 @@ class DashboardHeader extends Component {
         title: "Generate Report",
         link: `/fieldsight/site-dashboard/${siteId}/`
       },
-      { title: "View Data", link: `/fieldsight/application/#/site-responses/${siteId}/general/` }
+      {
+        title: "View Data",
+        link: `/fieldsight/application/#/site-responses/${siteId}/general/`
+      }
     ];
 
     const HeaderDropdown = [
       {
         title: `Edit ${termsAndLabels && termsAndLabels.site}`,
-        link: `/fieldsight/site/${siteId}/`
+        link: `/fieldsight/application/#/site-edit/${siteId}/`
       },
       {
         title: `${termsAndLabels && termsAndLabels.site} documents`,
@@ -176,13 +180,13 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <a href={`/forms/responses/${siteId}/`} target="_blank">
+            <Link to={`/site-responses/${siteId}/general`} target="_blank">
               <CountCard
                 countName=""
                 countNumber={totalSubmission}
                 icon="la-clone"
               />
-            </a>
+            </Link>
             <a
               href={`/fieldsight/application/#/site-users/${siteId}/`}
               target="_blank"
@@ -294,7 +298,7 @@ class DashboardHeader extends Component {
               title="Subsites"
               toggleModal={() => closeModal("Subsites")}
               showButton={enableSubsites && hasWritePermission}
-              url={`/fieldsight/site/add/subsite/${projectId}/${siteId}`}
+              url={`/fieldsight/application/#/sub-site-add/${projectId}/${siteId}`}
             >
               {subSitesLoader ? (
                 <DotLoader />

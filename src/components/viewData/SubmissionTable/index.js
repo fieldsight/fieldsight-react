@@ -156,7 +156,7 @@ class SubmissionData extends Component {
                   <th>S.N.</th>
                   <th>Site Name</th>
                   <th>Site Id</th>
-                  <th>Submission Id</th>
+                  <th>submission id</th>
                   <th>Submitted By</th>
                   <th>Submission Date</th>
                   <th>Action</th>
@@ -170,13 +170,7 @@ class SubmissionData extends Component {
                         <td>{key + 1}</td>
                         <td>{list.site_name}</td>
                         <td>{list.site_identifier}</td>
-                        <td>
-                          <a
-                            href={`/fieldsight/application/?submission=${list.submission_id}#/submission-details`}
-                          >
-                            {list.submission_id}
-                          </a>
-                        </td>
+                        <td>{list.submission_id}</td>
                         <td>
                           <a href={list.profile_url}>{list.submitted_by}</a>
                         </td>
@@ -184,18 +178,20 @@ class SubmissionData extends Component {
 
                         <td>
                           <a
-                            href={`/form/view/${this.props.form_id_string}/${list.submission_id}`}
+                            className="view-tag tag"
+                            href={`/fieldsight/application/?submission=${list.submission_id}#/submission-details`}
                           >
                             <i className="la la-eye"></i>
                           </a>
                           <a
+                            className="edit-tag tag"
                             href={`/form/edit/${this.props.form_id_string}/${list.submission_id}`}
                           >
                             <i className="la la-edit"></i>
                           </a>
 
                           <a
-                            className="td-delete-btn"
+                            className="delete-tag tag"
                             onClick={() => {
                               this.handleDelete(list.submission_id);
                             }}

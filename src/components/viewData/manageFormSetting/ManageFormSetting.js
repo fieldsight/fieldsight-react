@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 
 const sideNavRoutes = [
-  { to: "/general", path: "", title: "General Forms" },
-  { to: "/scheduled", title: "Scheduled Forms" },
-  { to: "/stage", title: "Staged Forms" }
+  { to: "/general", path: "/general", title: "General Forms" },
+  { to: "/scheduled", path: "/scheduled", title: "Scheduled Forms" },
+  { to: "/stage", path: "/stage", title: "Staged Forms" }
 ];
-const site_specific_forms = [{ to: "/general-survey", title: "General Forms" }];
+const site_specific_forms = [
+  { to: "/general-survey", path: "/general-survey", title: "General Forms" }
+];
 
 const viewByStatus = [
   { to: "/rejected", path: "/rejected", title: "Rejected Submissions" },
@@ -33,7 +35,10 @@ class ManageFormSetting extends Component {
                     <Link
                       to={`/project-responses/${this.props.match.params.id}${route.to}`}
                       className={
-                        pathname === route.path ? "nav-link active" : "nav-link"
+                        this.props.location.pathname ==
+                        `/project-responses/${this.props.match.params.id}${route.path}`
+                          ? "nav-link active"
+                          : "nav-link"
                       }
                     >
                       {route.title}
@@ -50,7 +55,10 @@ class ManageFormSetting extends Component {
                     <Link
                       to={`/project-responses/${this.props.match.params.id}${route.to}`}
                       className={
-                        pathname === route.path ? "nav-link active" : "nav-link"
+                        this.props.location.pathname ==
+                        `/project-responses/${this.props.match.params.id}${route.path}`
+                          ? "nav-link active"
+                          : "nav-link"
                       }
                     >
                       {route.title}
@@ -68,7 +76,10 @@ class ManageFormSetting extends Component {
                 <Link
                   to={`/project-responses/${this.props.match.params.id}${route.to}`}
                   className={
-                    pathname === route.path ? "nav-link active" : "nav-link"
+                    this.props.location.pathname ==
+                    `/project-responses/${this.props.match.params.id}${route.path}`
+                      ? "nav-link active"
+                      : "nav-link"
                   }
                 >
                   {route.title}

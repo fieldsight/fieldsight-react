@@ -27,6 +27,8 @@ import EditSite from "./SiteEdit";
 import ViewData from "./viewData";
 import SiteData from "./siteViewData";
 import SiteSubmissionData from "./siteViewData/FormSubmission";
+import VersionSubmissionData from "./viewData/VersionTable";
+import VersionSiteSubmission from "./siteViewData/VersionTable";
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
@@ -217,6 +219,14 @@ class App extends Component {
                     <Route
                       path="/site-submission-data/:id/:fid"
                       render={props => <SiteSubmissionData {...props} />}
+                    />
+                    <Route
+                      path="/site-version-submission/:id/:fid"
+                      render={props => <VersionSiteSubmission {...props} />}
+                    />
+                    <Route
+                      path="/project-version-submission/:id/:fid"
+                      render={props => <VersionSubmissionData {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

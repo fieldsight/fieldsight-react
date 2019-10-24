@@ -10,7 +10,7 @@ const SelectElement = ({
   classname
 }) => {
   return (
-    <div  className={`form-group ${classname}`}>
+    <div className={`form-group ${classname}`}>
       {label && (
         <label>
           {label} {formType === "editForm" && <sup>*</sup>}

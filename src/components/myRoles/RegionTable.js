@@ -9,29 +9,29 @@ class RegionTable extends Component {
     return (
       <div
         className="table-wrapper"
+        role="tabpanel"
+        aria-labelledby="region_tab"
         style={{ position: "relative", height: "650px" }}
       >
-        {this.props.RegionLoader && <TableContentLoader row={15} column={5} />}
-        {!this.props.RegionLoader && (
-          <div>
-            <PerfectScrollbar>
-              {this.props.regions.length > 0 ? (
-                <Table
-                  ponsive="xl"
-                  className="table  table-bordered  dataTable "
-                >
-                  <thead>
-                    <tr>
-                      <th>identifier</th>
-                      <th>name</th>
-                      <th>total_sites</th>
-                      <th>Role</th>
-                      {this.props.profileId && <th>Action</th>}
-                    </tr>
-                  </thead>
+        {this.props.RegionLoader && <TableContentLoader row={10} column={5} />}
 
-                  <tbody>
-                    {/*this.props.regions.length === 0 && (
+        {!this.props.RegionLoader && (
+          <PerfectScrollbar>
+            {this.props.regions.length > 0 ? (
+              <Table ponsive="xl" className="table  table-bordered  dataTable ">
+                <thead>
+                  <tr>
+                    <th>identifier</th>
+                    <th>name</th>
+                    <th>total_sites</th>
+                    <th>Role</th>
+
+                    {this.props.profileId && <th>Action</th>}
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {/*this.props.regions.length === 0 && (
                   <tr>
                     <td>
                       <p>No Form Data Available</p>
@@ -39,35 +39,34 @@ class RegionTable extends Component {
                   </tr>
                 )*/}
 
-                    {this.props.regions.map((region, i) => (
-                      <tr key={i}>
-                        <td>{region.identifier}</td>
+                  {this.props.regions.map((region, i) => (
+                    <tr key={i}>
+                      <td>{region.identifier}</td>
+                      <td>
+                        <a href={region.region_url}>{region.name}</a>
+                      </td>
+                      <td>{region.total_sites}</td>
+                      <td>{region.role}</td>
+                      {this.props.profileId && (
                         <td>
-                          <a href={region.region_url}>{region.name}</a>
+                          <a className="td-delete-btn td-btn">
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip>Delete</Tooltip>}
+                            >
+                              <i className="la la-trash-o" />
+                            </OverlayTrigger>
+                          </a>
                         </td>
-                        <td>{region.total_sites}</td>
-                        <td>{region.role}</td>
-                        {this.props.profileId && (
-                          <td>
-                            <a className="td-delete-btn td-btn">
-                              <OverlayTrigger
-                                placement="top"
-                                overlay={<Tooltip>Delete</Tooltip>}
-                              >
-                                <i className="la la-trash-o" />
-                              </OverlayTrigger>
-                            </a>
-                          </td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              ) : (
-                <p>You do not have any region.</p>
-              )}
-            </PerfectScrollbar>
-          </div>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            ) : (
+              <p>You do not have any region.</p>
+            )}
+          </PerfectScrollbar>
         )}
       </div>
     );

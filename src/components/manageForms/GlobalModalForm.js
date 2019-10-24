@@ -524,6 +524,7 @@ class GlobalModalForm extends Component {
         notifyIncomplete
       }
     } = this;
+    console.log("globla", typeDropdown);
 
     let weekOptions = [];
     let monthOPtions = [];
@@ -572,10 +573,20 @@ class GlobalModalForm extends Component {
               <div className="selected-text">
                 <span>{formTitle}</span>
               </div>
-              {!isEditForm && (
+              {formType !== "substage" && !isEditForm && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
-                    {formTitle ? "Change form" : " Choose form"}
+                    Choose form
+                    <span>
+                      <i className="la la-file-text-o"></i>
+                    </span>
+                  </a>
+                </div>
+              )}
+              {formType == "substage" && (
+                <div className="add-btn flex-start">
+                  <a data-tab="choose-form" onClick={toggleFormModal}>
+                    {!!isEditForm ? "Change form" : " Choose form"}
                     <span>
                       <i className="la la-file-text-o"></i>
                     </span>
