@@ -43,18 +43,6 @@ class GlobalModalForm extends Component {
       this.props.formData && this.props.formData.date_range_end
         ? new Date(this.props.formData.date_range_end)
         : null,
-    weight:
-      this.props.formData && this.props.formData.weight
-        ? this.props.formData.weight
-        : "",
-    substageTitle:
-      this.props.formData && this.props.formData.name
-        ? this.props.formData.name
-        : "",
-    substageDesc:
-      this.props.formData && this.props.formData.description
-        ? this.props.formData.description
-        : "",
     hasLoaded: false,
     order:
       this.props.formData && this.props.formData.order
@@ -202,18 +190,13 @@ class GlobalModalForm extends Component {
           selectedType = newTypeArr;
         }
 
-        this.setState(
-          {
-            hasLoaded: true,
-            regionDropdown: newRegionArr,
-            typeDropdown: newTypeArr,
-            regionSelected: selectedRegion,
-            typeSelected: selectedType
-          },
-          () => {
-            console.log("region", this.state.regionDropdown);
-          }
-        );
+        this.setState({
+          hasLoaded: true,
+          regionDropdown: newRegionArr,
+          typeDropdown: newTypeArr,
+          regionSelected: selectedRegion,
+          typeSelected: selectedType
+        });
       }
     }
   }
@@ -232,10 +215,7 @@ class GlobalModalForm extends Component {
         regionSelected: [],
         typeSelected: [],
         startDate: new Date(),
-        endDate: new Date(),
-        weight: "",
-        substageTitle: "",
-        substageDesc: "",
+        endDate: null,
         hasLoaded: false,
         errors: {}
       },
@@ -512,9 +492,6 @@ class GlobalModalForm extends Component {
         isDonor,
         isEdit,
         isDelete,
-        weight,
-        substageTitle,
-        substageDesc,
         hasLoaded,
         startDate,
         endDate,
@@ -527,7 +504,6 @@ class GlobalModalForm extends Component {
         notifyIncomplete
       }
     } = this;
-    console.log("common form");
 
     let weekOptions = [];
     let monthOPtions = [];
@@ -546,50 +522,14 @@ class GlobalModalForm extends Component {
       <>
         <form className="floating-form" onSubmit={this.handleSubmit}>
           <div className="form-form">
-            {formType == "substage" && (
-              <>
-                <InputElement
-                  classname="border-0"
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  required={true}
-                  label="Name"
-                  name="substageTitle"
-                  value={substageTitle}
-                  changeHandler={this.handleInputChange}
-                />
-                <InputElement
-                  classname="border-0"
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  //   required={true}
-                  label="Description"
-                  name="substageDesc"
-                  value={substageDesc}
-                  changeHandler={this.handleInputChange}
-                />
-              </>
-            )}
             <div className="selected-form">
               <div className="selected-text">
                 <span>{formTitle}</span>
               </div>
-              {formType !== "substage" && !isEditForm && (
+              {!isEditForm && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
                     {!!formTitle ? "Change form" : " Choose form"}
-                    <span>
-                      <i className="la la-file-text-o"></i>
-                    </span>
-                  </a>
-                </div>
-              )}
-              {formType == "substage" && (
-                <div className="add-btn flex-start">
-                  <a data-tab="choose-form" onClick={toggleFormModal}>
-                    {!!isEditForm || formTitle ? "Change form" : " Choose form"}
                     <span>
                       <i className="la la-file-text-o"></i>
                     </span>
@@ -808,22 +748,6 @@ class GlobalModalForm extends Component {
               </div>
             </>
           )}
-          {formType == "substage" && (
-            <>
-              {/* for subStage form */}
-              <InputElement
-                classname="border-0"
-                formType="editForm"
-                tag="input"
-                type="number"
-                //   required={true}
-                label="Weight"
-                name="weight"
-                value={weight}
-                changeHandler={this.handleInputChange}
-              />
-            </>
-          )}
 
           <div className="form-group flexrow checkbox-group">
             <label>Default submission status</label>
@@ -945,7 +869,6 @@ class GlobalModalForm extends Component {
               />
             </div>
           </div>
-
           <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
               Save

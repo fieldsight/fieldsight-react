@@ -10,7 +10,7 @@ class AddStageForm extends Component {
       selectedType: [],
       name: this.props.stageData ? this.props.stageData.name : "",
       desc: this.props.stageData ? this.props.stageData.description : "",
-      order: this.props.stageData ? this.props.stageData.order : 0,
+      order: this.props.stageData ? this.props.stageData.order : null,
       id: this.props.stageData ? this.props.stageData.id : ""
     },
     regionDropdown: [],
