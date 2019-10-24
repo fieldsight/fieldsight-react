@@ -1,20 +1,20 @@
 import React, { Component } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
-import axios from "axios";
+import { connect } from "react-redux";
+import { compose } from "redux";
 import ManageFormSetting from "./manageFormSetting/ManageFormSetting";
 import ManageGeneralForm from "./manageGeneralForm";
 import ManageSurveyForm from "./manageSurveyForm";
 import ManageScheduledForm from "./manageScheduledForm";
 import ManageStageForm from "./manageStageForm";
-import DeleteTable from "./deleteTable";
+
 import ApprovedTable from "./ApprovedTable.js";
 import PendingTable from "./PendingSubmissionTable.js";
 import RejectedTable from "./RejectSubmissionTable.js";
 import FlaggedTable from "./FlagedTable.js";
-import SubmissionData from "./SubmissionTable";
 
-export default class ViewData extends Component {
+class ViewData extends Component {
   state = {
     hide: true,
     view_btn: false,
@@ -95,7 +95,8 @@ export default class ViewData extends Component {
     const {
       match: {
         params: { id }
-      }
+      },
+      breadcrumbs
     } = this.props;
 
     return (
@@ -120,7 +121,6 @@ export default class ViewData extends Component {
                 className="card no-boxshadow"
                 style={{ minHeight: this.props.height }}
               >
-                {console.log(this.props.height, "this.props.height")}
                 <div className="card-header main-card-header">
                   <h5>View Data</h5>
                 </div>
@@ -255,3 +255,12 @@ export default class ViewData extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ projectViewData }) => {
+  const { breadcrumbs } = projectViewData;
+
+  return {
+    breadcrumbs
+  };
+};
+export default compose(connect(mapStateToProps))(ViewData);

@@ -25,7 +25,7 @@ class ResponseTable extends Component {
             <tr>
               <th>{this.state.survey === "true" ? "Form Name" : "Name"} </th>
 
-              <th>Submission</th>
+              <th>Submissions</th>
               <th>Last Response On</th>
               <th>Created Date</th>
               <th style={{ width: "13%" }}>Action</th>

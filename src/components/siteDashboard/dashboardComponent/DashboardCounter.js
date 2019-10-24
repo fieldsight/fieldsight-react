@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import uuid from "uuid/v4";
 import CountCard from "../../common/CountCard";
+import { Link } from "react-router-dom";
 
 class DashboardCounter extends Component {
   getIcon = submission => {
@@ -18,7 +19,8 @@ class DashboardCounter extends Component {
   render() {
     const {
       props: {
-        submissions: { total_submissions, ...restSubmissions }
+        submissions: { total_submissions, ...restSubmissions },
+        siteid
       },
       getIcon
     } = this;
@@ -28,14 +30,18 @@ class DashboardCounter extends Component {
       <React.Fragment>
         {submissionData &&
           submissionData.map(submission => (
-            <div className="col-xl-3 col-md-6" key={uuid()}>
+            <Link
+              to={`/site-responses/${siteid}/${submission[0]}`}
+              className="col-xl-3 col-md-6"
+              key={uuid()}
+            >
               <CountCard
                 countName={submission[0]}
                 countNumber={submission[1]}
                 className={submission[0]}
                 icon={getIcon(submission[0])}
               />
-            </div>
+            </Link>
           ))}
       </React.Fragment>
     );
