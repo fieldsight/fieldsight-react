@@ -185,7 +185,8 @@ class ProjectWideForms extends Component {
       myFormList: [],
       projectFormList: [],
       sharedFormList: [],
-      xf: ""
+      xf: "",
+      isEditForm: false
     });
     this.props.closePopup();
   };
@@ -412,7 +413,7 @@ class ProjectWideForms extends Component {
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateGeneralForm}
-                formData={formData}
+                formData={isEditForm && formData}
                 isEditForm={isEditForm}
                 isProjectWide={isProjectWide}
               />
