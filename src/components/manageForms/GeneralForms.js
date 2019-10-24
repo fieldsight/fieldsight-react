@@ -431,7 +431,6 @@ class GeneralForms extends Component {
       props: { typeOptions, regionOptions },
       handleClosePopup
     } = this;
-    // console.log("in render", isProjectForm);
 
     return (
       <div className="col-xl-9 col-lg-8">
