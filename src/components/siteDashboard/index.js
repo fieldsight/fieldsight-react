@@ -35,7 +35,8 @@ const INITIAL_STATE = {
   showSubmissionModal: false,
   showCropper: false,
   showSubsites: false,
-  showGallery: false
+  showGallery: false,
+  siteId: ""
 };
 class SiteDashboard extends Component {
   state = INITIAL_STATE;
@@ -101,6 +102,9 @@ class SiteDashboard extends Component {
     this.props.getSiteLogs(siteId);
     this.props.getSiteForms(siteId, "general");
     this.props.getRecentPictures(siteId);
+    this.setState({
+      siteId
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -315,7 +319,10 @@ class SiteDashboard extends Component {
               </div>
               <div className="dashboard-counter mrt-30">
                 <div className="row">
-                  <DashboardCounter submissions={submissions} />
+                  <DashboardCounter
+                    submissions={submissions}
+                    siteid={this.state.siteId}
+                  />
                 </div>
               </div>
               <div className="chart mrb-30">
