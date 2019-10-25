@@ -25,22 +25,34 @@
         flex-wrap: nowrap;
         padding: 0.5rem 0;
         border-bottom: 1px solid $color-bg;
+        @include easein_out(all 0.3s ease-in-out);
 
         figure {
           margin: 0;
-          @include radius50;
-          flex: 0 0 55px;
+          @include radius(50%);
+          flex: 0 0 40px;
+          overflow: hidden;
+          margin-right: 1rem;
 
           img {
-            @include radius50;
-            max-width: 40px;
+            @include radius(50%);
+            width: 40px;
             height: 40px;
+            @include easein_out(all 0.5s ease-in-out);
+            @include transform_scale(scale(1));
           }
         }
 
         .content {
           h6 {
             margin-bottom: 0.2rem;
+            font-size: .845rem;
+
+            a {
+              color: $color-primary;
+              font-family: $ubuntu;
+              font-weight: 500;
+            }
           }
 
           span {
@@ -53,7 +65,7 @@
           margin: 0;
 
           a {
-            font-weight: 600;
+            font-weight: 500;
             color: $color-blue;
           }
         }
@@ -87,6 +99,16 @@
         &:last-child {
           padding-bottom: 0;
           border-bottom: 0;
+        }
+
+        &:hover {
+          background-color: lighten($color-bg, 7%);
+
+          figure {
+            img {
+              @include transform_scale(scale(1.1));
+            }
+          }
         }
       }
     }
@@ -123,9 +145,15 @@
         border-bottom: 1px solid $color-bg;
 
         h6 {
-          font-size: 0.875rem;
+          font-size: .875rem;
           font-weight: 500;
           margin: 0;
+
+          a {
+            font-size: .875rem;
+            font-family: $ubuntu;
+            font-weight: 500;
+          }
         }
 
         label {
@@ -228,6 +256,7 @@
             figure {
               margin-top: 0.5rem;
               flex: initial;
+              border-radius: 0;
 
               img {
                 max-width: 100%;
@@ -251,26 +280,6 @@
       // padding:1rem;
       .form-group {
         @include clear;
-      }
-
-      .nice-select {
-        background-color: $color-white;
-        border: none;
-        border-radius: 0;
-        font-size: 0.8125rem;
-        padding-left: 0;
-        border-bottom: 1px solid $color-bg;
-
-        ul {
-          @include boxshadow;
-        }
-
-        &::after {
-          border-bottom: 1.5px solid $color-secondary;
-          border-right: 1.5px solid $color-secondary;
-          height: 10px;
-          width: 10px;
-        }
       }
 
       .hide-form {
@@ -309,7 +318,7 @@
 
       figure {
         max-width: 200px;
-        width:200px;
+        width: 200px;
         height: 200px;
         @include radius4;
         border: 1px solid $color-bg;
@@ -374,6 +383,10 @@
               padding: 0.25rem 0;
               margin: 0;
               border-bottom: 1px solid $color-bg;
+              word-break: break-all;
+              label{
+                word-break: break-all;
+              }
             }
           }
         }
@@ -557,6 +570,99 @@
             &:last-child {
               padding-bottom: 0;
             }
+          }
+        }
+      }
+    }
+
+    &.stage-accordion {
+      .card {
+
+        .card-header {
+          @include flexjust;
+          justify-content: flex-start;
+          align-items: center;
+
+          span.drag-icon {
+            display: inline-block;
+
+            i {
+              margin-left: -10px;
+              color: darken($color-bg, 10%);
+              font-size: 1.2rem;
+
+              &:last-child {
+                margin-left: -.875rem;
+              }
+            }
+
+            &:hover {
+              cursor: -moz-move;
+              cursor: -webkit-move;
+              cursor: move;
+            }
+          }
+
+          h5 {
+            display: flex;
+            width: 100%;
+
+            button.btn-link {
+              display: flex;
+              align-items: center;
+              text-transform: capitalize;
+
+              span.edit-stage {
+                margin-left: .5rem;
+
+                i {
+                  font-size: .875rem;
+                }
+              }
+            }
+          }
+
+
+        }
+
+        .card-body {
+          .add-btn {
+            justify-content: flex-end;
+          }
+
+          table {
+            margin-top: .25rem;
+          }
+        }
+
+        .dragable-stage {
+          padding:0;
+          background:transparent;
+          margin:0;
+          border:0;
+          .card-header {
+            h5 {
+              width: calc(100% - 30px);
+
+              button.btn-link {
+                pointer-events: none;
+                span.edit-stage,&::after {
+                  display: none;
+                }
+                // &::after{
+                //   display:none;
+                // }
+              }
+            }
+
+            &:hover {
+              cursor: -moz-move;
+              cursor: -webkit-move;
+              cursor: move;
+            }
+          }
+          &::before{
+            display: none;
           }
         }
       }

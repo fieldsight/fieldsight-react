@@ -8,8 +8,8 @@ export const successToast = (title, action) =>
     closeOnClick: true
   });
 
-export const errorToast = () =>
-  toast.error("Oops, something went wrong", {
+export const errorToast = error =>
+  toast.error(!!error ? error : "Oops, something went wrong", {
     position: "top-right",
     autoClose: 5000,
     hideProgressBar: false,

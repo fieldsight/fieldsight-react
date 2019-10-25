@@ -1,8 +1,17 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { Accordion, Card, Button } from "react-bootstrap";
 import uuid from "uuid/v4";
 import format from "date-fns/format";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  Map,
+  TileLayer,
+  Marker,
+  Popup,
+  GeoJSON,
+  CircleMarker
+} from "react-leaflet";
+import L, { latLngBounds } from "leaflet";
+import Legend from "./Legend";
 import { DotLoader } from "../common/Loader";
 
 function measure(lat1, lon1, lat2, lon2) {
@@ -22,10 +31,16 @@ function measure(lat1, lon1, lat2, lon2) {
   return (d * 1000).toFixed(2); // meters
 }
 class Submission extends Component {
-  state = {
-    showGallery: false,
-    selectedImg: ""
-  };
+  constructor(props) {
+    super(props);
+    this.mapRef = createRef();
+    this.groupRef = createRef();
+    this.state = {
+      showGallery: false,
+      selectedImg: "",
+      siteData: props.site
+    };
+  }
 
   openModal = img => {
     this.setState({
@@ -41,11 +56,76 @@ class Submission extends Component {
     });
   };
 
-  splitSubmissionQuestion = submissionObj => {
+  onEachFeaturePoint(feature, layer) {
+    layer.bindPopup(`<b>Project Name: </b>
+    ${feature.properties.project_name}`);
+  }
+
+  pointToLayer(feature, latlng) {
+    const icon = new L.Icon({
+      iconUrl: require("../../static/images/marker.png"),
+      iconRetinaUrl: require("../../static/images/marker.png"),
+      iconSize: [28, 28],
+      iconAnchor: [13, 27],
+      popupAnchor: [2, -24],
+      shadowUrl: null,
+      shadowSize: null,
+      shadowAnchor: null
+      //iconSize: new L.Point(60, 75)
+      //className: "leaflet-div-icon"
+    });
+    return L.marker(latlng, { icon: icon });
+  }
+
+  getGeoJson = data => {
+    return {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            id: data.id,
+            identifier: data.identifier,
+            logo: data.logo,
+            project_name: data.project_name,
+            name: data.name,
+            site_information: data.site_information
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [data.longitude, data.latitude]
+          }
+        }
+      ]
+    };
+  };
+  splitSubmissionObj = submissionObj => {
     const question = Object.values(submissionObj);
     return question.length > 0
       ? `${question[0]}/${question[1]}`.replace(/\/undefined/, "")
       : "";
+  };
+
+  getSmallBound = latlng => {
+    if (Object.entries(latlng).length > 0) {
+      const { siteLat, siteLng, ansLat, ansLng } = latlng;
+      const bounds = latLngBounds(
+        [siteLat + 0.002, siteLng + 0.002],
+        [ansLat - 0.002, ansLng - 0.002]
+      );
+      return bounds;
+    }
+  };
+  getLargeBound = latlng => {
+    if (Object.entries(latlng).length > 0) {
+      const { siteLat, siteLng, ansLat, ansLng } = latlng;
+      let bounds = latLngBounds();
+
+      bounds.extend([siteLat, siteLng]);
+      bounds.extend([ansLat && ansLat, ansLng && ansLng]);
+
+      return bounds;
+    }
   };
 
   handleRepeatedSubmission = submission => {
@@ -59,7 +139,11 @@ class Submission extends Component {
                 variant="link"
                 eventKey={submission.name}
               >
-                {submission.label ? submission.label : submission.name}
+                {submission.label
+                  ? typeof submission.label === "object"
+                    ? this.splitSubmissionObj(submission.label)
+                    : submission.label
+                  : submission.name}
               </Accordion.Toggle>
             </h5>
           </Card.Header>
@@ -80,6 +164,8 @@ class Submission extends Component {
 
   handleUnrepeatedSubmission = submission => {
     const { site } = this.props;
+    const geoData = this.getGeoJson(this.state.siteData);
+
     if (submission.type === "photo") {
       return (
         <div className="submission-list thumb-list" key={uuid()}>
@@ -88,7 +174,7 @@ class Submission extends Component {
               <div className="content">
                 <h6>
                   {typeof submission.question === "object"
-                    ? this.splitSubmissionQuestion(submission.question)
+                    ? this.splitSubmissionObj(submission.question)
                     : submission.question}
                 </h6>
               </div>
@@ -114,54 +200,89 @@ class Submission extends Component {
       let longitude = "";
       let altitude = "";
       let accuracy = "";
+      let bounds = {};
+      let latlngObj = {};
 
-      if (submission.answer) {
+      if (!!submission.answer === true) {
         splitedGeoLocation = submission.answer.split(" ");
         latitude = splitedGeoLocation[0];
         longitude = splitedGeoLocation[1];
         altitude = splitedGeoLocation[2];
         accuracy = splitedGeoLocation[3];
+
+        latlngObj = {
+          siteLat: site && site.latitude,
+          siteLng: site && site.longitude,
+          ansLat: JSON.parse(latitude),
+          ansLng: JSON.parse(longitude)
+        };
       }
 
+      const question =
+        typeof submission.question === "object"
+          ? this.splitSubmissionObj(submission.question)
+          : submission.question;
+      const distance = measure(
+        site.latitude,
+        site.longitude,
+        latitude && latitude,
+        longitude && longitude
+      );
+
+      if (distance < 500) {
+        bounds = this.getSmallBound(latlngObj);
+      } else {
+        bounds = this.getLargeBound(latlngObj);
+      }
       return (
         <div className="submission-list normal-list" key={uuid()}>
           <ul>
             <li>
-              <h6>
-                {typeof submission.question === "object"
-                  ? this.splitSubmissionQuestion(submission.question)
-                  : submission.question}
-              </h6>
+              <h6>{question}</h6>
               <div className="submission-map">
                 {submission.answer && (
                   <div className="row">
-                    <div className="col-lg-5 col-md-5">
+                    <div className="col-lg-6 col-md-6">
                       <div className="map-form">
                         <Map
-                          style={{ height: "205px", marginTop: "1rem" }}
+                          style={{ height: "258px", marginTop: "1rem" }}
                           center={[latitude, longitude]}
                           zoom={15}
+                          maxZoom={19}
+                          bounds={bounds}
+                          ref={this.mapRef}
+                          attributionControl={true}
+                          zoomControl={true}
+                          doubleClickZoom={true}
+                          scrollWheelZoom={true}
+                          dragging={true}
+                          animate={true}
+                          easeLinearity={0.35}
                         >
                           <TileLayer
-                            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            // attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                           />
-                          <Marker position={[latitude, longitude]}>
+                          <GeoJSON
+                            data={geoData}
+                            onEachFeature={this.onEachFeaturePoint.bind(this)}
+                            pointToLayer={this.pointToLayer.bind(this)}
+                            ref={this.groupRef}
+                          />
+                          <Legend />
+                          <CircleMarker
+                            center={[latitude, longitude]}
+                            radius={8}
+                          >
                             <Popup>
                               <b>Question: </b>
-                              {submission.question}
+                              {question}
                             </Popup>
-                          </Marker>
-                          <Marker position={[site.latitude, site.longitude]}>
-                            <Popup>
-                              <b>Project Name: </b>
-                              {site.project_name}
-                            </Popup>
-                          </Marker>
+                          </CircleMarker>
                         </Map>
                       </div>
                     </div>
-                    <div className="col-lg-7 col-md-7">
+                    <div className="col-lg-4 col-md-4">
                       <div className="map-legend">
                         <p>
                           <span>Latitude:</span>
@@ -181,15 +302,7 @@ class Submission extends Component {
                         </p>
                         <p>
                           <span>Distance From Site:</span>
-                          <label>
-                            {measure(
-                              site.latitude,
-                              site.longitude,
-                              latitude,
-                              longitude
-                            )}{" "}
-                            meters
-                          </label>
+                          <label>{distance} meters</label>
                         </p>
                       </div>
                     </div>
@@ -207,7 +320,7 @@ class Submission extends Component {
             <li>
               <h6>
                 {typeof submission.question === "object"
-                  ? this.splitSubmissionQuestion(submission.question)
+                  ? this.splitSubmissionObj(submission.question)
                   : submission.question}
               </h6>
               {submission.type === "start" ||

@@ -26,7 +26,6 @@ class SiteInformationCard extends Component {
   state = INITIAL_STATE;
 
   componentWillReceiveProps(nextProps) {
-    console.log("componentwilrece");
     let selectedForm = {};
     let selectedQuestion = {};
     let type = "choose";
@@ -47,7 +46,7 @@ class SiteInformationCard extends Component {
       type = nextProps.siteInfo.question_type;
     }
 
-    if (!isEmpty(selectedForm)) {
+    if (selectedForm && !isEmpty(selectedForm)) {
       showForm = true;
       filteredQuestions = findQuestion(
         selectedForm.json.children,

@@ -15,7 +15,7 @@ const SiteDocument = ({
           <h5>{termsAndLabels && termsAndLabels.site} Documents</h5>
           {siteDocuments.length > 0 ? (
             <a
-              href={`/fieldsight/site/blue-prints/${siteId}/`}
+              href={`/fieldsight/application/#/site-documents/${siteId}/`}
               className="fieldsight-btn"
               target="_blank"
             >

@@ -40,6 +40,7 @@ class ProjectSiteTable extends Component {
     const {
       context: { terms }
     } = this;
+
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
@@ -56,8 +57,9 @@ class ProjectSiteTable extends Component {
                   type="search"
                   className="form-control"
                   onChange={this.onChangeHandler}
+                  placeholder="Search"
                 />
-                <label htmlFor="input">Search</label>
+
                 <i className="la la-search" />
               </div>
             </form>
@@ -66,12 +68,22 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/site/add/" + project_id + "/"
+                  base_url +
+                    "/fieldsight/application/#/create-site/" +
+                    project_id +
+                    "/"
                 )
               }
             >
               <i className="la la-plus" />
             </button>
+            <a
+              className="fieldsight-btn"
+              href={`/fieldsight/multi-site-assign-region/${project_id}/`}
+              target="_blank"
+            >
+              Assign Sites to Regions
+            </a>
             <a
               className="fieldsight-btn"
               href={`/fieldsight/bulksitesample/${project_id}/1/`}
@@ -107,6 +119,7 @@ class ProjectSiteTable extends Component {
                     <th>id</th>
                     <th>Address</th>
                     <th>Region</th>
+                    <th>Type</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>
@@ -114,6 +127,14 @@ class ProjectSiteTable extends Component {
                 </thead>
 
                 <tbody>
+                  {!this.props.dLoader && this.props.siteList.length === 0 && (
+                    <tr>
+                      <td>
+                        <p>No Form Data Available</p>
+                      </td>
+                    </tr>
+                  )}
+
                   {!this.props.dLoader &&
                     this.props.siteList.map((item, i) => (
                       <tr key={i}>
@@ -139,6 +160,7 @@ class ProjectSiteTable extends Component {
                             {item.region}
                           </a>
                         </td>
+                        <td>{item.type}</td>
                         <td>
                           <div className="progress">
                             <div
@@ -176,51 +198,60 @@ class ProjectSiteTable extends Component {
               {this.props.dLoader && <DotLoader />}
             </PerfectScrollbar>
           </div>
-          <div className="table-footer">
-            <div className="showing-rows">
-              <p>
-                Showing <span>{this.props.fromData}</span> to{" "}
-                <span> {this.props.toData} </span> of{" "}
-                <span>{this.props.totalCount}</span> entries.
-              </p>
-            </div>
-            <div className="table-pagination">
-              <ul>
-                <li className="page-item">
-                  <a
-                    onClick={e =>
-                      this.props.paginationHandler(
-                        this.props.pageNum - 1,
-                        null,
-                        project_id
-                      )
-                    }
-                  >
-                    <i className="la la-long-arrow-left" />
-                  </a>
-                </li>
+          {this.props.siteList.length > 0 && (
+            <div className="table-footer">
+              <div className="showing-rows">
+                <p>
+                  Showing <span>{this.props.fromData}</span> to{" "}
+                  <span>
+                    {" "}
+                    {this.props.toData > this.props.totalCount
+                      ? this.props.totalCount
+                      : this.props.toData}{" "}
+                  </span>{" "}
+                  of <span>{this.props.totalCount}</span> entries.
+                </p>
+              </div>
+              {this.props.toData < this.props.totalCount ? (
+                <div className="table-pagination">
+                  <ul>
+                    <li className="page-item">
+                      <a
+                        onClick={e =>
+                          this.props.paginationHandler(
+                            this.props.pageNum - 1,
+                            null,
+                            project_id
+                          )
+                        }
+                      >
+                        <i className="la la-long-arrow-left" />
+                      </a>
+                    </li>
 
-                {this.props.renderPageNumbers({
-                  type: "projectSiteList",
-                  projectId: project_id
-                })}
+                    {this.props.renderPageNumbers({
+                      type: "projectSiteList",
+                      projectId: project_id
+                    })}
 
-                <li className="page-item ">
-                  <a
-                    onClick={e =>
-                      this.props.paginationHandler(
-                        this.props.pageNum + 1,
-                        null,
-                        project_id
-                      )
-                    }
-                  >
-                    <i className="la la-long-arrow-right" />
-                  </a>
-                </li>
-              </ul>
+                    <li className="page-item ">
+                      <a
+                        onClick={e =>
+                          this.props.paginationHandler(
+                            this.props.pageNum + 1,
+                            null,
+                            project_id
+                          )
+                        }
+                      >
+                        <i className="la la-long-arrow-right" />
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              ) : null}
             </div>
-          </div>
+          )}
         </div>
       </>
     );

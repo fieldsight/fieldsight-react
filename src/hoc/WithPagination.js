@@ -16,25 +16,31 @@ const withPagination = WrappedComponent => {
       dLoader: true,
       per_page: 200,
       totalPage: null,
-      textVal: null
+      textVal: null,
+      form_id_string: ""
     };
 
     getUrl = (page_num, payload) => {
       switch (payload.type) {
         case "projectSiteList":
-          return `fv3/api/project-site-list/?page=${page_num}&project=${
-            payload.projectId
-          }`;
+          return `fv3/api/project-site-list/?page=${page_num}&project=${payload.projectId}`;
         case "mySiteList":
-          return `fv3/api/my-sites/?page=${page_num}&project=${
-            payload.projectId
-          }`;
-         
-          case "regionSite":
-              return `fv3/api/regional-sites/?page=${page_num}&region=${
-                payload.projectId
-              }`;
+          return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}`;
 
+        case "regionSite":
+          return `fv3/api/regional-sites/?page=${page_num}&region=${payload.projectId}`;
+
+        case "projectRegionList":
+          return `fv3/api/project-regions/?page=${page_num}&project=${payload.projectId}`;
+
+        case "viewByStatus":
+          return `fv3/api/view-by-status/?page=${page_num}&project=${payload.projectId}&submission_status=${payload.status}`;
+        case "siteStatus":
+          return `fv3/api/view-by-status/?page=${page_num}&site=${payload.projectId}&submission_status=${payload.status}`;
+        case "formSubmission":
+          return `/fv3/api/forms-submissions/?project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+        case "siteSubmission":
+          return `/fv3/api/forms-submissions/?site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
       }
     };
 
@@ -82,6 +88,8 @@ const withPagination = WrappedComponent => {
                   dLoader: false,
                   totalCount: res.data.count,
                   textVal: null,
+                  form_id_string: res.data.results.form_id_string,
+                  breadcrumbs: res.data.results.breadcrumbs,
                   totalPage: Math.ceil(res.data.count / 200)
                 });
               }
@@ -101,7 +109,6 @@ const withPagination = WrappedComponent => {
       } else {
         paginateUrl = this.getUrl(page_num, payload);
       }
-
       this.setState(
         {
           toData: toNum,

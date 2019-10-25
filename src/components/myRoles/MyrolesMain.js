@@ -10,6 +10,7 @@ import SiteTable from "./SiteTable";
 import MapPage from "./MapPage";
 import { successToast, errorToast } from "../../utils/toastHandler";
 import withPagination from "../../hoc/WithPagination";
+import Modal from "../common/Modal";
 
 class MyrolesMain extends Component {
   state = {
@@ -28,10 +29,13 @@ class MyrolesMain extends Component {
     siteLoader: true,
     RegionLoader: true,
     teamId: null,
-    siteId: null
+    siteId: null,
+    myGuide: false,
+    searchQuery: ""
   };
 
-  componentDidMount() {
+ // componentDidMount() {
+  componentWillMount(){
     const { profileId } = this.props.match.params;
     let url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
@@ -60,14 +64,17 @@ class MyrolesMain extends Component {
               invitation: res.data.invitations,
               roles: res.data.roles,
               teams: modifiedTeam,
-              dLoader: false
+              dLoader: false,
+              RegionLoader: false,
+              myGuide: res.data.profile.guide_popup
             });
           }
         }
       })
       .catch(err => {});
+     
   }
-
+  
   invitationOpen = (e, data) => {
     if (this.state.invite == "hide") {
       this.setState({
@@ -82,7 +89,8 @@ class MyrolesMain extends Component {
 
   rightTabOpen = (e, data) => {
     this.setState({
-      rightTab: data
+      rightTab: data,
+      searchQuery: ""
     });
   };
 
@@ -159,10 +167,15 @@ class MyrolesMain extends Component {
       .get(`${url}`)
       .then(res => {
         if (res.status === 200) {
-          this.setState({
-            regions: res.data.regions,
-            RegionLoader: false
-          });
+          this.setState(
+            {
+              regions: res.data.regions,
+              RegionLoader: false
+            },
+            () => {
+              this.state, "dfghjh";
+            }
+          );
         }
       })
       .catch(err => {});
@@ -226,8 +239,32 @@ class MyrolesMain extends Component {
       .catch(err => {});
   };
 
+  cancelHandler = () => {
+    this.setState({
+      myGuide: false
+    });
+  };
+
+  onChangeHandler = e => {
+    const searchValue = e.target.value;
+    const { siteId } = this.state;
+    this.setState({ searchQuery: searchValue }, () => {
+      this.props.searchHandler(
+        this.state.searchQuery,
+        `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`,
+        {
+          type: "mySiteList",
+          projectId: siteId
+        }
+      );
+    });
+  };
   render() {
     const { profileId } = this.props.match.params;
+    const {myGuide} =this.state;
+   
+   
+    
     return (
       <>
         <div className="card mrb-30">
@@ -254,6 +291,8 @@ class MyrolesMain extends Component {
           <div className="col-xl-8 col-lg-7">
             <div className="right-content">
               <div className="card no-boxshadow">
+                {/* <div className="card-header main-card-header">
+                </div> */}
                 <div className="card-body">
                   <div className="nav-wrapper">
                     {/* <!-- tab nav start --> */}
@@ -307,8 +346,40 @@ class MyrolesMain extends Component {
                         </a>
                       </li>
                     </ul>
-                  </div>
 
+                    {this.state.rightTab == "site" && (
+                      // <div className="dash-btn">
+                      <form
+                        className="floating-form"
+                        onSubmit={e => {
+                          e.preventDefault();
+                        }}
+                      >
+                        <div
+                          className="form-group mr-0"
+                          style={{
+                            top: "-43px",
+                            right: "-597px",
+                            width: "22%",
+                            display: "flex"
+                          }}
+                        >
+                         <input
+                            type="search"
+                            className="form-control"
+                            onChange={this.onChangeHandler}
+                            placeholder="Search"
+                          />
+                          <div style={{marginTop:" 0.6rem"}}>
+                          <i className="la la-search"  />
+                          </div>
+                          {/* <label htmlFor="input">Search</label> */}
+                         
+                        </div>
+                      </form>
+                      // </div>
+                    )}
+                  </div>
                   <div className="tab-content mrt-30" id="myTabContent">
                     {this.state.rightTab == "submission" && (
                       <Submissions
@@ -333,7 +404,7 @@ class MyrolesMain extends Component {
                     {this.state.rightTab == "site" && (
                       <SiteTable
                         site={this.props.siteList}
-                        siteLoader={this.props.dLoader}
+                        siteLoader={this.state.dLoader}
                         renderPageNumbers={this.props.renderPageNumbers}
                         paginationHandler={this.props.paginationHandler}
                         siteId={this.state.siteId}
@@ -368,6 +439,36 @@ class MyrolesMain extends Component {
               acceptAll={this.acceptAll}
             />
           </div>
+        )}
+        {myGuide && (
+          <Modal title="Welcome to FieldSight" toggleModal={this.cancelHandler}>
+            <div className="guide">
+              <p>
+                Hi,&nbsp;
+                <span style={{ textTransform: "capitalize" }}>
+                  {this.state.profile.fullname}
+                </span>{" "}
+                seems like you have no role yet.&nbsp;You can get started by
+                creating a team in FieldSight or contact your FieldSight manager
+                to invite you to join projects.
+              </p>
+            </div>
+            <div className="warning-footer text-center">
+              <a
+                href={"/fieldsight/application/#/create-team/"}
+                className="fieldsight-btn"
+                style={{ marginRight: "10px", display: "inline-block" }}
+              >
+                Create Team
+              </a>
+              <a
+                className="fieldsight-btn rejected-btn"
+                onClick={this.cancelHandler}
+              >
+                Cancel
+              </a>
+            </div>
+          </Modal>
         )}
       </>
     );

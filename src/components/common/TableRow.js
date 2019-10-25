@@ -124,6 +124,22 @@ class TableRow extends Component {
             {row[1] || row[0].replace("_", " ")}{" "}
           </td>
         </tr>
+      ),
+
+      projectManageRegion: (row, i) => (
+        <tr key={row.id}>
+          <td>{row.identifier}</td>
+          <td>
+            <a
+              href={`/fieldsight/application/#/regional-site/${row.id}`}
+              className="pending table-profile"
+            >
+              <h5>{row.name}</h5>
+            </a>
+          </td>
+          <td>{format(row.date_created, ["MMMM Do YYYY, h:mm:ss a"])}</td>
+          <td>{row.number_of_sites}</td>
+        </tr>
       )
     };
   };
