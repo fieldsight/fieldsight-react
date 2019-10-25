@@ -67,3 +67,6 @@ export const GET_TEAMS = "GET_TEAMS";
 
 //ProjectViewData
 export const GET_PROJECT_VIEW = "GET_PROJECT_VIEW";
+
+//SiteviewData
+export const GET_SITE_VIEW = "GET_SITE_VIEW";
