@@ -48,6 +48,7 @@ import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
 import TeamMap from "./team/TeamMap";
+import Mapparent from "./team/Mapparent";
 
 class App extends Component {
   constructor(props) {
@@ -163,7 +164,7 @@ class App extends Component {
 
                     <Route
                       path="/map"
-                      render={props => <TeamMap {...props} />}
+                      render={props => <Mapparent {...props} />}
                     />
 
                     <Route

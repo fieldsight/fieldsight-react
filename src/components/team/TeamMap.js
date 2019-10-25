@@ -13,7 +13,7 @@ import { Button } from "react-bootstrap";
 import Select from 'react-select';
 import './teamCss.css'
 import axios from 'axios'
-// const Multiselect = require('react-bootstrap-multiselect')
+import { List } from 'react-content-loader'
 
 
 require('leaflet.vectorgrid/dist/Leaflet.VectorGrid.bundled');
@@ -71,7 +71,8 @@ class TeamMap extends React.Component {
         selectedOptionOrg: [],
         // countriesSelection:false,
         ProjectsData: null,
-        layerGroup: ''
+        layerGroup: L.featureGroup(),
+        loader: true
 
     };
 
@@ -130,7 +131,8 @@ class TeamMap extends React.Component {
 
     }
 
-    Markerloader = () => {
+    popUpClick = (e) => {
+        this.props.popupCLick('detailsmap', e)
 
 
 
@@ -141,25 +143,25 @@ class TeamMap extends React.Component {
 
         const newData = this.state.ProjectsData.filter((e) => {
             // console.log(this.state.selectedOption.includes(e.organization__country), e.organization__country)
-            if (this.state.selectedOption.length > 0 && this.state.selectedOptionOrg.length>0) {
-                console.log("BOTH",this.state.selectedOption.includes(e.organization__country)&&this.state.selectedOptionOrg.includes(e.organization))
+            if (this.state.selectedOption.length > 0 && this.state.selectedOptionOrg.length > 0) {
+                console.log("BOTH", this.state.selectedOption.includes(e.organization__country) && this.state.selectedOptionOrg.includes(e.organization))
 
 
-                
-                return this.state.selectedOption.includes(e.organization__country)||this.state.selectedOptionOrg.includes(e.organization)
+
+                return this.state.selectedOption.includes(e.organization__country) || this.state.selectedOptionOrg.includes(e.organization)
             }
-            else if(this.state.selectedOption.length ==0 && this.state.selectedOptionOrg.length>0){
+            else if (this.state.selectedOption.length == 0 && this.state.selectedOptionOrg.length > 0) {
                 console.log("ORG")
 
                 return this.state.selectedOptionOrg.includes(e.organization)
             }
-            else if(this.state.selectedOption.length >0 && this.state.selectedOptionOrg.length==0){
+            else if (this.state.selectedOption.length > 0 && this.state.selectedOptionOrg.length == 0) {
                 console.log("CNTRY")
 
                 return this.state.selectedOption.includes(e.organization__country)
             }
-            else if(this.state.selectedOption.length ==0 && this.state.selectedOptionOrg.length==0){
-                
+            else if (this.state.selectedOption.length == 0 && this.state.selectedOptionOrg.length == 0) {
+
 
                 return true
             }
@@ -172,9 +174,16 @@ class TeamMap extends React.Component {
 
         // console.log("NEW DATA",newData)
         newData.map((e) => {
-            var mrk = L.marker(e.latlng).bindPopup(e.organization__country)
+            var popup = "<div class='popup'><h6><strong>Name: </strong>" + e.name + "</h6>" +
+                "<h6><strong>Address: </strong>" + e.address + "</h6>" +
+                "<h6><strong>Sites: </strong> " + e.sites_count + "</h6>" +
+                "<button id='popButton'>View Details</button>" + "</div>"
+            var mrk = L.marker(e.latlng).bindPopup(popup)
+            mrk.on('click', () => document.getElementById('popButton').addEventListener('click', () => this.popUpClick(e.pk)))
+
 
             mrk.addTo(this.state.layerGroup)
+            // map.fitBounds(this.state.layerGroup.getBounds())
 
         })
         // map.addLayer(this.state.layerGroup)
@@ -190,23 +199,41 @@ class TeamMap extends React.Component {
         const map = this.mapRef.current.leafletElement;
         map.createPane('world_shp');
         map.getPane('world_shp').style.zIndex = 250;
+        map.addLayer(this.state.layerGroup)
+        this.state.layerGroup.on('click', (e) => {
+            console.log(e, "event", document.getElementsByClassName('popButton'));
+            var a = document.getElementsByClassName('popButton')
+
+
+            // document.getElementsByClassName('popButton').addEventListener('click', () => {
+
+            //     console.log("inside")
+            //     this.popUpClick(this.state.prjidtosend)
+            // })
+            for (var i = 0; i < a.length; i++) {
+                a[i].addEventListener('click', () => this.popUpClick(this.state.prjidtosend));
+            }
+        })
+
+
 
         var vectorTileOptions = {
-            tms: true,
+
             vectorTileLayerStyles: {
                 'world': function () {
                     return {
                         fillColor: "red",
-                        fillOpacity: 0,
-                        weight: 2,
+                        fillOpacity: 0.02,
+                        weight: 1,
                         opacity: 1,
-                        color: '#a3b7e3',
+                        color: 'red',
                         fill: true,
                     }
                 },
                 zIndex: 1000
 
             },
+            tms: true,
             interactive: true, // Make sure that this VectorGrid fires mouse/pointer events
             pane: "world_shp",
             getFeatureId: function (feature) {
@@ -215,11 +242,13 @@ class TeamMap extends React.Component {
             }
         }
 
-        const url = 'http://localhost:8585/geoserver/gwc/service/tms/1.0.0/Naxa:world@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf'
-        map.on('baselayerchange')
+        const url = 'http://139.59.67.104:8080/geoserver/gwc/service/tms/1.0.0/Naxa:world@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf'
+        const url1 = 'http://139.59.67.104:8080/geoserver/gwc/service/tms/1.0.0/Naxa:River_Shankharapur@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf '
+        // map.on('baselayerchange')
 
 
-        var world = L.vectorGrid.protobuf(url, vectorTileOptions);
+        var world = L.vectorGrid.protobuf(url, vectorTileOptions        )
+
         world.addTo(map);
 
 
@@ -251,18 +280,34 @@ class TeamMap extends React.Component {
 
         axios.get('fv3/api/map/projects/')
             .then(response => {
+                console.log(response)
                 this.setState({ ProjectsData: response.data.data })
                 const map = this.mapRef.current.leafletElement;
-                var layerGroup = L.featureGroup()
-                map.addLayer(layerGroup)
                 response.data.data.map((e) => {
-                    var mrk = L.marker(e.latlng).bindPopup(e.organization__country)
+                    const name = e.name
 
-                    mrk.addTo(layerGroup)
+
+
+                    var popup = "<div class='popup'><h6><strong>Name: </strong>" + name + "</h6>" +
+                        "<h6><strong>Address: </strong>" + e.address + "</h6>" +
+                        "<h6><strong>Sites: </strong> " + e.sites_count + "</h6>" +
+                        "<button class='popButton'>View Details</button>" + "</div>"
+                    var mrk = L.marker(e.latlng).bindPopup(popup)
+                    mrk.on('click', () => {
+
+                        this.setState({ prjidtosend: e.pk })
+                    })
+
+                    mrk.addTo(this.state.layerGroup)
+                    // map.fitBounds(layerGroup.getBounds())
+
 
                 })
 
-                this.setState({ layerGroup: layerGroup })
+                this.setState({ loader: false })
+
+
+
 
             })
 
@@ -274,21 +319,25 @@ class TeamMap extends React.Component {
 
 
 
+
+
+
     }
     render() {
-        const bounds = latLngBounds(
-            [29.38217507514529, 87.5390625],
-            [27.293689224852407, 81.474609375]
-        );
-        this.state.point[0].features.forEach(data => {
-            bounds.extend([
-                data.geometry.coordinates[1],
-                data.geometry.coordinates[0]
-            ]);
-        });
+
+        // this.state.point[0].features.forEach(data => {
+        //     bounds.extend([
+        //         data.geometry.coordinates[1],
+        //         data.geometry.coordinates[0]
+        //     ]);
+        // });
 
         return (
             <>
+                {this.state.loader && <div className='loader'>
+                    <img src={require('./loaderr.gif')}></img>
+
+                </div>}
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: 'grey' }}>
 
                     {this.state.Countries !== null ? <Select
@@ -297,6 +346,7 @@ class TeamMap extends React.Component {
                         options={this.state.Countries}
                         placeholder="Countries"
                         className='multiselect'
+                        onSelectResetsInput={false}
                         isMulti
                     /> : <img src={require('./giphy.gif')} style={{ height: 30, width: 30 }} alt="loading..." />}
                     {this.state.Oraganization !== null ? <Select
@@ -317,7 +367,7 @@ class TeamMap extends React.Component {
 
                 <LeafletMap
                     center={[27, 85]}
-                    zoom={15}
+                    zoom={2}
                     maxZoom={15}
                     attributionControl={true}
                     zoomControl={true}
@@ -326,7 +376,7 @@ class TeamMap extends React.Component {
                     dragging={true}
                     animate={true}
                     easeLinearity={0.35}
-                    bounds={bounds}
+                    // bounds={bounds}
                     ref={this.mapRef}
                     style={{ height: 700, width: '100%' }}
 

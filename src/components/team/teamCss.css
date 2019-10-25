@@ -1,6 +1,41 @@
 .multiselect{
     min-width:200px;
     max-width: 500px;
-    z-index: 1500;
+    z-index: 1001;
 
+}
+.popup{
+    width:auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+.popup h6{
+    font-size: 13px;
+    color: grey;
+    width: auto;
+    text-align: start;
+    border-bottom: rgba(0,0,0,0.15) solid 1px;
+}
+.popup h6 strong{
+    color: black;
+}
+.popup button{
+    color: white;
+    background-color: grey;
+    border-radius: 10px;
+}
+.loader{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(3, 3, 3, 0.5);
+    z-index: 1500;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
 }
