@@ -37,8 +37,7 @@ class Submission extends Component {
     this.groupRef = createRef();
     this.state = {
       showGallery: false,
-      selectedImg: "",
-      siteData: props.site
+      selectedImg: ""
     };
   }
 
@@ -164,7 +163,7 @@ class Submission extends Component {
 
   handleUnrepeatedSubmission = submission => {
     const { site } = this.props;
-    const geoData = this.getGeoJson(this.state.siteData);
+    const geoData = this.getGeoJson(site);
 
     if (submission.type === "photo") {
       return (
@@ -234,6 +233,7 @@ class Submission extends Component {
       } else {
         bounds = this.getLargeBound(latlngObj);
       }
+
       return (
         <div className="submission-list normal-list" key={uuid()}>
           <ul>
