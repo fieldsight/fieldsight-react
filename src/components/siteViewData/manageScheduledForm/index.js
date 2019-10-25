@@ -1,37 +1,19 @@
 import React, { Component } from "react";
 import ResponseTable from "../../responded/ResponseTable";
-import StatusTable from "../../responded/StatusTable";
 import axios from "axios";
 import DeleteTable from "../deleteTable";
-import Rejectsubmission from "../RejectSubmissionTable.js";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { getsiteViewData } from "../../../actions/siteViewDataAction";
+
 class ManageScheduledForm extends Component {
   state = {
-    generals_forms: [],
-    deleted_forms: [],
-    hide: true,
-    id: ""
+    hide: true
   };
   componentDidMount() {
     if (this.props.id != "") {
-      axios
-        .get(
-          `/fv3/api/view-by-forms/?site=${this.props.id}&form_type=scheduled`
-        )
-        .then(res => {
-          console.log(res);
-
-          this.setState(
-            {
-              deleted_forms: res.data.deleted_forms,
-              generals_forms: res.data.scheduled_forms
-            },
-            () => this.props.handleBreadCrumb(res.data.breadcrumbs)
-          );
-        })
-        .catch(err => {
-          console.log(err, "err");
-        });
+      this.props.getsiteViewData(this.props.id, "scheduled");
     }
   }
   toggleHide = () => {
@@ -42,7 +24,7 @@ class ManageScheduledForm extends Component {
 
   render() {
     const {
-      props: { showViewData, data, id }
+      props: { showViewData, data, generals_forms, deleted_forms, loading }
     } = this;
 
     return (
@@ -58,14 +40,15 @@ class ManageScheduledForm extends Component {
         <div className="card-body">
           {!data && (
             <ResponseTable
-              generals_forms={this.state.generals_forms}
+              generals_forms={generals_forms}
               table="site"
               id={this.props.id}
               survey="true"
+              loader={loading}
             />
           )}
         </div>
-        {this.state.deleted_forms.length > 0
+        {deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">
@@ -103,8 +86,9 @@ class ManageScheduledForm extends Component {
                 <div className="card-body">
                   {!this.state.hide && (
                     <DeleteTable
-                      deleted_forms={this.state.deleted_forms}
+                      deleted_forms={deleted_forms}
                       id={this.props.id}
+                      loader={loading}
                     />
                   )}
                 </div>
@@ -115,4 +99,21 @@ class ManageScheduledForm extends Component {
     );
   }
 }
-export default ManageScheduledForm;
+//export default ManageScheduledForm;
+const mapStateToProps = ({ siteViewData }) => {
+  const { generals_forms, deleted_forms, loading } = siteViewData;
+
+  return {
+    generals_forms,
+    deleted_forms,
+    loading
+  };
+};
+export default compose(
+  connect(
+    mapStateToProps,
+    {
+      getsiteViewData
+    }
+  )
+)(ManageScheduledForm);

@@ -37,6 +37,7 @@ class SubmissionDetail extends Component {
           has_review_permission,
           loading,
           initialLoader,
+          submission_err,
           hideNullValues
         },
         postSubmissionDetail,
@@ -46,28 +47,8 @@ class SubmissionDetail extends Component {
     } = this;
     return (
       <>
-        {!initialLoader && (
+        {!loading && !submission_err && (
           <>
-            {/* <nav aria-label="breadcrumb" role="navigation">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <a href="index.html">Home</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">Site's name</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">form type</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">form name</a>
-                </li>
-
-                <li className="breadcrumb-item active" aria-current="page">
-                  Submission Details
-                </li>
-              </ol>
-            </nav> */}
             <div className="row">
               <div className="col-xl-8 col-lg-8">
                 <div className="right-content no-bg">
@@ -104,10 +85,29 @@ class SubmissionDetail extends Component {
                 />
               </div>
             </div>
-            {loading && <Loader />}
+            {/* {loading && <Loader />} */}
           </>
         )}
-        {initialLoader && <Loader />}
+
+        {submission_err && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100vh",
+              flexDirection: "column"
+            }}
+          >
+            <h1>{submission_err.status}</h1>
+            <p>{submission_err.msg}</p>
+
+            <a onClick={() => window.history.back()}>
+              <b>Back</b>
+            </a>
+          </div>
+        )}
+        {loading && <Loader />}
       </>
     );
   }

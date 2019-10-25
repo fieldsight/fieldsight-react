@@ -201,7 +201,8 @@ render(){
                                                                         <label htmlFor="input">Document Name</label>
                                                                     </div>
                                                                     <div className="form-group">
-                                                                        <select className="wide" onChange={(e)=>this.handleChange(e)} name="document_type" value={this.state.document_type}>
+                                                                    <div class="select-option">
+                                                                        <select className="form-control" onChange={(e)=>this.handleChange(e)} name="document_type" value={this.state.document_type}>
                                                                             <option selected  value="Document Type">Document Type</option>
                                                                             <option  value="Blue print">Blue print</option>
                                                                             <option  value="Report">Report</option>
@@ -216,6 +217,7 @@ render(){
                                                                             <option  value="Notes">Notes</option>
                                                                             <option  value="Other">Other</option>
                                                                         </select>
+                                                                    </div>
                                                                     </div>
 
                                                                     <div className="form-group">

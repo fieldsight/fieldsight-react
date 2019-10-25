@@ -4,13 +4,13 @@ import ResponseTable from "../../responded/ResponseTable";
 import Rejected from "../RejectSubmissionTable.js";
 import DeleteTable from "../deleteTable";
 import axios from "axios";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { getsiteViewData } from "../../../actions/siteViewDataAction";
 
 class ManageGeneralForm extends Component {
   state = {
-    generals_forms: [],
-    deleted_forms: [],
-    hide: true,
-    id: ""
+    hide: true
   };
   static getDerivedStateFromProps(props, state) {
     return {
@@ -20,20 +20,7 @@ class ManageGeneralForm extends Component {
 
   componentDidMount() {
     if (this.props.id != "") {
-      axios
-        .get(`/fv3/api/view-by-forms/?site=${this.props.id}&form_type=general`)
-        .then(res => {
-          this.setState(
-            {
-              deleted_forms: res.data.deleted_forms,
-              generals_forms: res.data.generals_forms
-            },
-            () => this.props.handleBreadCrumb(res.data.breadcrumbs)
-          );
-        })
-        .catch(err => {
-          console.log(err, "err");
-        });
+      this.props.getsiteViewData(this.props.id, "general");
     }
   }
   toggleHide = () => {
@@ -44,8 +31,9 @@ class ManageGeneralForm extends Component {
 
   render() {
     const {
-      props: { data, showViewData }
+      props: { data, showViewData, generals_forms, deleted_forms, loading }
     } = this;
+
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
@@ -61,14 +49,14 @@ class ManageGeneralForm extends Component {
         <div className="card-body">
           {!data && (
             <ResponseTable
-              generals_forms={this.state.generals_forms}
-              deleted_forms={this.state.deleted_forms}
+              generals_forms={generals_forms}
               table="site"
               id={this.props.id}
+              loader={loading}
             />
           )}
         </div>
-        {this.state.deleted_forms.length > 0
+        {deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">
@@ -106,8 +94,9 @@ class ManageGeneralForm extends Component {
                 <div className="card-body">
                   {!this.state.hide && (
                     <DeleteTable
-                      deleted_forms={this.state.deleted_forms}
+                      deleted_forms={deleted_forms}
                       id={this.props.id}
+                      loader={loading}
                     />
                   )}
                 </div>
@@ -118,4 +107,21 @@ class ManageGeneralForm extends Component {
     );
   }
 }
-export default ManageGeneralForm;
+//export default ManageGeneralForm;
+const mapStateToProps = ({ siteViewData }) => {
+  const { generals_forms, deleted_forms, loading } = siteViewData;
+
+  return {
+    generals_forms,
+    deleted_forms,
+    loading
+  };
+};
+export default compose(
+  connect(
+    mapStateToProps,
+    {
+      getsiteViewData
+    }
+  )
+)(ManageGeneralForm);

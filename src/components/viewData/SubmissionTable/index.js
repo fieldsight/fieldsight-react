@@ -185,7 +185,7 @@ class SubmissionData extends Component {
                           </a>
                           <a
                             className="edit-tag tag"
-                            href={`/form/edit/${this.props.form_id_string}/${list.submission_id}`}
+                            href={`/forms/edit/${this.props.form_id_string}/${list.submission_id}`}
                           >
                             <i className="la la-edit"></i>
                           </a>

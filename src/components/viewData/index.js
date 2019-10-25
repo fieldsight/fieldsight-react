@@ -104,12 +104,16 @@ class ViewData extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href={this.state.breadCrumb.project_url}>
-                {this.state.breadCrumb.project_name}
+              <a
+                href={
+                  breadcrumbs.project_url || this.state.breadCrumb.project_url
+                }
+              >
+                {breadcrumbs.project_name || this.state.breadCrumb.project_name}
               </a>
             </li>
             <li className="breadcrumb-item">
-              {this.state.breadCrumb.current_page}
+              {breadcrumbs.current_page || this.state.breadCrumb.current_page}
             </li>
           </ol>
         </nav>
