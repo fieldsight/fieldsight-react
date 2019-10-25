@@ -80,6 +80,36 @@ class SiteMap extends Component {
     return L.marker(latlng, { icon: icon });
   }
 
+  getSmallBound = latlng => {
+    if (Object.entries(latlng).length > 0) {
+      const { lat, lng } = latlng;
+      const bounds = latLngBounds(
+        [lat + 0.002, lng + 0.002],
+        [lat - 0.002, lng - 0.002]
+      );
+      return bounds;
+    }
+  };
+  getLargeBound = latlng => {
+    let bounds = latLngBounds();
+    latlng.forEach(data => {
+      bounds.extend([
+        data.geometry.coordinates[1],
+        data.geometry.coordinates[0]
+      ]);
+    });
+    return bounds;
+  };
+  returnGeoArr = (loc1, loc2) => {
+    if (
+      loc1.geometry.coordinates[0] == loc2.geometry.coordinates[0] &&
+      loc1.geometry.coordinates[1] == loc2.geometry.coordinates[1]
+    ) {
+      return null;
+    } else {
+      return loc1;
+    }
+  };
   render() {
     const {
       props: { showContentLoader },
@@ -87,25 +117,44 @@ class SiteMap extends Component {
     } = this;
 
     let bounds = latLngBounds();
-    if (mapData && mapData.features) {
+
+    if (mapData && mapData.features && mapData.features.length > 0) {
       if (mapData.features.length == 1) {
-        bounds = latLngBounds(
-          [
-            mapData.features[0].geometry.coordinates[1] + 0.002,
-            mapData.features[0].geometry.coordinates[0] + 0.002
-          ],
-          [
-            mapData.features[0].geometry.coordinates[1] - 0.002,
-            mapData.features[0].geometry.coordinates[0] - 0.002
-          ]
-        );
+        const latlng = {
+          lat: mapData.features[0].geometry.coordinates[1],
+          lng: mapData.features[0].geometry.coordinates[0]
+        };
+        bounds = this.getSmallBound(latlng);
       } else if (mapData.features.length > 1) {
-        mapData.features.forEach(data => {
-          bounds.extend([
-            data.geometry.coordinates[1],
-            data.geometry.coordinates[0]
-          ]);
+        let newArr = [];
+
+        mapData.features.forEach((data, index) => {
+          newArr.length == 0 && newArr.push(data);
+          if (!!mapData.features[index] && mapData.features[index + 1]) {
+            const objGeo = this.returnGeoArr(
+              mapData.features[index],
+              mapData.features[index + 1]
+            );
+            if (!!objGeo) {
+              newArr.push(objGeo);
+            }
+          }
         });
+
+        if (newArr.length == 1) {
+          const latlng = {
+            lat: newArr[0].geometry.coordinates[1],
+            lng: newArr[0].geometry.coordinates[0]
+          };
+          bounds = this.getSmallBound(latlng);
+        } else {
+          newArr.map(data => {
+            bounds.extend([
+              data.geometry.coordinates[1],
+              data.geometry.coordinates[0]
+            ]);
+          });
+        }
       }
     }
 
@@ -133,15 +182,16 @@ class SiteMap extends Component {
             style={{ width: "100%", height: "396px" }}
             ref={this.mapRef}
           >
-            <TileLayer
+            {/* <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+            /> */}
             <LayersControl position="topright">
               <BaseLayer checked name="OpenStreetMap">
                 <TileLayer
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  maxZoom={20}
                 />
               </BaseLayer>
               <BaseLayer name="Google Streets">
