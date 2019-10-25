@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
+import DotLoader from "../myForm/Loader";
 
 class VersionTable extends Component {
   state = {
     latest: [],
     versions: [],
-    breadcrumbs: {}
+    breadcrumbs: {},
+    loader: false
   };
   componentDidMount() {
     let data = this.props.project == "project" ? 1 : 0;
@@ -20,7 +22,8 @@ class VersionTable extends Component {
         this.setState({
           latest: res.data.data.latest,
           versions: res.data.data.versions,
-          breadcrumbs: res.data.data.breadcrumbs
+          breadcrumbs: res.data.data.breadcrumbs,
+          loader: true
         });
       })
       .catch(err => {
@@ -28,7 +31,7 @@ class VersionTable extends Component {
       });
   }
   render() {
-    const { latest, versions, breadcrumbs } = this.state;
+    const { latest, versions, breadcrumbs, loader } = this.state;
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -57,63 +60,67 @@ class VersionTable extends Component {
             <h5>Version Submissions</h5>
           </div>
           <div className="card-body">
-            <Table
-              responsive="xl"
-              className="table  table-bordered  dataTable "
-            >
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Version</th>
-                  <th>Overidden Date</th>
-                  <th>Last Response On</th>
-                  <th>No of Submissions</th>
-                  <th>Download Excel</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{latest.title}</td>
-                  <td>{latest.version}</td>
-                  <td>{latest.overidden_date}</td>
-                  <td>{latest.last_response}</td>
-                  <td>{latest.total_submissions}</td>
-                  <td>
-                    {latest.total_submissions > 0 ? (
-                      <a className="td-delete-btn" href={latest.download_url}>
-                        <i className="la la-download "></i>
-                      </a>
-                    ) : (
-                      ""
-                    )}
-                  </td>
-                </tr>
-                {versions.length > 0 &&
-                  versions.map((version, key) => {
-                    return (
-                      <tr key={key}>
-                        <td>{version.title}</td>
-                        <td>{version.version}</td>
-                        <td>{version.overidden_date}</td>
-                        <td>{version.last_response}</td>
-                        <td>{version.total_submissions}</td>
-                        <td>
-                          {version.total_submissions > 0 ? (
-                            <a
-                              className="td-delete-btn"
-                              href={version.download_url}
-                            >
-                              <i className="la la-download "></i>
-                            </a>
-                          ) : (
-                            ""
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
+            {loader == true ? (
+              <Table
+                responsive="xl"
+                className="table  table-bordered  dataTable "
+              >
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Version</th>
+                    <th>Overidden Date</th>
+                    <th>Last Response On</th>
+                    <th>No of Submissions</th>
+                    <th>Download Excel</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{latest.title}</td>
+                    <td>{latest.version}</td>
+                    <td>{latest.overidden_date}</td>
+                    <td>{latest.last_response}</td>
+                    <td>{latest.total_submissions}</td>
+                    <td>
+                      {latest.total_submissions > 0 ? (
+                        <a className="td-delete-btn" href={latest.download_url}>
+                          <i className="la la-download "></i>
+                        </a>
+                      ) : (
+                        ""
+                      )}
+                    </td>
+                  </tr>
+                  {versions.length > 0 &&
+                    versions.map((version, key) => {
+                      return (
+                        <tr key={key}>
+                          <td>{version.title}</td>
+                          <td>{version.version}</td>
+                          <td>{version.overidden_date}</td>
+                          <td>{version.last_response}</td>
+                          <td>{version.total_submissions}</td>
+                          <td>
+                            {version.total_submissions > 0 ? (
+                              <a
+                                className="td-delete-btn"
+                                href={version.download_url}
+                              >
+                                <i className="la la-download "></i>
+                              </a>
+                            ) : (
+                              ""
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+            ) : (
+              <DotLoader />
+            )}
           </div>
         </div>
       </React.Fragment>
