@@ -5,6 +5,7 @@ import SubmissionSiteDetail from "./SubmissionSiteDetail";
 import SubmissionSiteInfo from "./SubmissionSiteInfo";
 import RightSidebar from "./RightSidebar";
 import Submission from "./Submission";
+import SubmissionError from "./SubmissionError";
 import Loader from "../common/Loader";
 
 import {
@@ -98,7 +99,13 @@ class SubmissionDetail extends Component {
             {loading && <Loader />}
           </>
         )}
+<<<<<<< Updated upstream
         {initialLoader && <Loader />}
+=======
+
+        {submission_err && <SubmissionError submissionErr={submission_err} />}
+        {loading && <Loader />}
+>>>>>>> Stashed changes
       </>
     );
   }

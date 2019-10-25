@@ -5,6 +5,7 @@ let tokenVal = window.token
   ? window.token
   : "217146429897c6c6541bf13aa9208dd98fb2a42b";
 
+//const url="91a844e62e86b6e336b8fb440340cbeaabf601fe"
 let baseURL = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np/";
