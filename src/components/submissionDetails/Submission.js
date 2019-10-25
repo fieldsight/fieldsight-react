@@ -42,21 +42,6 @@ class Submission extends Component {
     };
   }
 
-  getMarkerBounds = () => {
-    // console.log("to fitbound", this.mapRef.current, this.featureRef);
-
-    const map =
-      this.mapRef && this.mapRef.current && this.mapRef.current.leafletElement;
-    const feature =
-      this.featureRef &&
-      this.featureRef.current &&
-      this.featureRef.current.leafletElement;
-    // debugger;
-    if (!!map && !!feature) {
-      map.fitBounds(feature.getBounds());
-    }
-  };
-
   openModal = img => {
     this.setState({
       showGallery: true,
@@ -122,21 +107,25 @@ class Submission extends Component {
   };
 
   getSmallBound = latlng => {
-    const { siteLat, siteLng, ansLat, ansLng } = latlng;
-    const bounds = latLngBounds(
-      [siteLat + 0.002, siteLng + 0.002],
-      [ansLat - 0.002, ansLng - 0.002]
-    );
-    return bounds;
+    if (Object.entries(latlng).length > 0) {
+      const { siteLat, siteLng, ansLat, ansLng } = latlng;
+      const bounds = latLngBounds(
+        [siteLat + 0.002, siteLng + 0.002],
+        [ansLat - 0.002, ansLng - 0.002]
+      );
+      return bounds;
+    }
   };
   getLargeBound = latlng => {
-    const { siteLat, siteLng, ansLat, ansLng } = latlng;
-    let bounds = latLngBounds();
+    if (Object.entries(latlng).length > 0) {
+      const { siteLat, siteLng, ansLat, ansLng } = latlng;
+      let bounds = latLngBounds();
 
-    bounds.extend([siteLat, siteLng]);
-    bounds.extend([ansLat, ansLng]);
+      bounds.extend([siteLat, siteLng]);
+      bounds.extend([ansLat && ansLat, ansLng && ansLng]);
 
-    return bounds;
+      return bounds;
+    }
   };
 
   handleRepeatedSubmission = submission => {
@@ -213,7 +202,8 @@ class Submission extends Component {
       let accuracy = "";
       let bounds = {};
       let latlngObj = {};
-      if (submission.answer) {
+
+      if (!!submission.answer === true) {
         splitedGeoLocation = submission.answer.split(" ");
         latitude = splitedGeoLocation[0];
         longitude = splitedGeoLocation[1];
@@ -221,8 +211,8 @@ class Submission extends Component {
         accuracy = splitedGeoLocation[3];
 
         latlngObj = {
-          siteLat: site.latitude,
-          siteLng: site.longitude,
+          siteLat: site && site.latitude,
+          siteLng: site && site.longitude,
           ansLat: JSON.parse(latitude),
           ansLng: JSON.parse(longitude)
         };
@@ -235,9 +225,10 @@ class Submission extends Component {
       const distance = measure(
         site.latitude,
         site.longitude,
-        latitude,
-        longitude
+        latitude && latitude,
+        longitude && longitude
       );
+
       if (distance < 500) {
         bounds = this.getSmallBound(latlngObj);
       } else {
@@ -251,10 +242,10 @@ class Submission extends Component {
               <div className="submission-map">
                 {submission.answer && (
                   <div className="row">
-                    <div className="col-lg-5 col-md-5">
+                    <div className="col-lg-6 col-md-6">
                       <div className="map-form">
                         <Map
-                          style={{ height: "205px", marginTop: "1rem" }}
+                          style={{ height: "258px", marginTop: "1rem" }}
                           center={[latitude, longitude]}
                           zoom={15}
                           maxZoom={19}
@@ -269,7 +260,7 @@ class Submission extends Component {
                           easeLinearity={0.35}
                         >
                           <TileLayer
-                            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            // attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                           />
                           <GeoJSON
@@ -291,7 +282,7 @@ class Submission extends Component {
                         </Map>
                       </div>
                     </div>
-                    <div className="col-lg-7 col-md-7">
+                    <div className="col-lg-4 col-md-4">
                       <div className="map-legend">
                         <p>
                           <span>Latitude:</span>

@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
-import GlobalModalForm from "./GlobalModalForm";
+import AddSubstageForm from "./AddSubstageForm";
 import AddForm from "./AddForm";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
@@ -47,7 +47,9 @@ class StagedForms extends Component {
     isSubstageReorderCancel: true,
     newSubstageOrder: [],
     reOrderDisable: true,
-    subStageReorderDisable: true
+    subStageReorderDisable: true,
+    stagedRegions: [],
+    stagedTypes: []
   };
 
   componentDidMount() {
@@ -84,6 +86,22 @@ class StagedForms extends Component {
     }
   }
 
+  componentDidUpdate(nextProps) {
+    if (nextProps.myForms != this.props.myForms) {
+      this.setState({
+        myFormList: this.props.myForms
+      });
+    } else if (nextProps.projectForms != this.props.projectForms) {
+      this.setState({
+        projectFormList: this.props.projectForms
+      });
+    } else if (nextProps.sharedForms != this.props.sharedForms) {
+      this.setState({
+        sharedFormList: this.props.sharedForms
+      });
+    }
+  }
+
   requestStagedData = (id, checkUrl) => {
     const apiUrl = checkUrl
       ? `fv3/api/manage-forms/stages/?project_id=${id}`
@@ -112,8 +130,9 @@ class StagedForms extends Component {
       !!selectedType && !!selectedType.length > 0
         ? selectedType.map(each => each.id)
         : [];
-    const newOrder = order > 0 ? order : this.state.data.length + 1;
-    if (order > 0) {
+    const newOrder = !!order ? order : this.state.data.length + 1;
+
+    if (this.props.popupModal && !!order) {
       const updateStageApi = !!this.state.isProjectForm
         ? `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`
         : `fv3/api/manage-forms/stages/${id}/?site_id=${this.state.id}`;
@@ -357,19 +376,21 @@ class StagedForms extends Component {
     }
   };
 
-  handleRequestSubStage = (stageId, order) => {
-    if (stageId != this.state.stageId)
+  handleRequestSubStage = stage => {
+    if (stage.id != this.state.stageId)
       this.setState(
         {
           loadSubStage: true,
-          order: order,
-          stageId,
+          order: stage.order,
+          stageId: stage.id,
           isSubstageReorder: false,
-          isSubstageReorderCancel: true
+          isSubstageReorderCancel: true,
+          stagedRegions: stage.regions,
+          stagedTypes: stage.tags
         },
         () => {
           axios
-            .get(`fv3/api/manage-forms/sub-stages/?stage_id=${stageId}`)
+            .get(`fv3/api/manage-forms/sub-stages/?stage_id=${stage.id}`)
             .then(res => {
               this.setState({
                 loadSubStage: false,
@@ -759,7 +780,9 @@ class StagedForms extends Component {
         isProjectForm,
         reOrderDisable,
         subStageReorderDisable,
-        isEditForm
+        isEditForm,
+        stagedRegions,
+        stagedTypes
       }
     } = this;
     let deployCount = 0;
@@ -901,7 +924,6 @@ class StagedForms extends Component {
                     </span>
                   </OverlayTrigger>
                 </a>
-                {/* )} */}
               </div>
             )}
           </div>
@@ -966,20 +988,17 @@ class StagedForms extends Component {
               classname="manage-body md-body"
               // handleSubmit={this.handleCreateForm}
             >
-              <GlobalModalForm
-                formType="substage"
+              <AddSubstageForm
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                myForms={this.props.myForms}
-                projectForms={this.props.projectForms}
-                sharedForms={this.props.sharedForms}
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={this.handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateForm}
                 formData={!!isEditForm && formData}
-                isProjectWide={false}
                 isEditForm={isEditForm}
+                stagedRegions={stagedRegions}
+                stagedTypes={stagedTypes}
               />
             </Modal>
           )}
