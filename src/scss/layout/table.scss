@@ -70,15 +70,15 @@
                 }
 
                 h5 {
-                    font-size: 0.875rem;
-                    font-weight: 500;
+                    font-size: 0.845rem;
+                    font-weight: 400;
                 }
             }
 
             a.tag {
                 margin-right: 0.7rem;
                 @include radius4;
-                font-size: 0.875rem;
+                font-size: 0.845rem;
 
                 i {
                     font-size: 1rem;
@@ -319,7 +319,9 @@
 
                 &.selected {
                     background-color: $color-bg;
-                    ;
+                }
+                &:hover{
+                    background-color: lighten($color-bg,7%);
                 }
 
             }

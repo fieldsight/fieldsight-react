@@ -46,7 +46,7 @@
         .content {
           h6 {
             margin-bottom: 0.2rem;
-            font-size: .875rem;
+            font-size: .845rem;
 
             a {
               color: $color-primary;
@@ -256,6 +256,7 @@
             figure {
               margin-top: 0.5rem;
               flex: initial;
+              border-radius: 0;
 
               img {
                 max-width: 100%;
@@ -635,6 +636,10 @@
         }
 
         .dragable-stage {
+          padding:0;
+          background:transparent;
+          margin:0;
+          border:0;
           .card-header {
             h5 {
               width: calc(100% - 30px);
@@ -655,6 +660,9 @@
               cursor: -webkit-move;
               cursor: move;
             }
+          }
+          &::before{
+            display: none;
           }
         }
       }
