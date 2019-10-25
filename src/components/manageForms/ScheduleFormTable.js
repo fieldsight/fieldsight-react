@@ -241,7 +241,10 @@ class ScheduleFormTable extends Component {
         {!loader && data.length === 0 ? (
           <div>No Form added yet.</div>
         ) : (
-          <Table responsive="xl" className="table  table-bordered  dataTable">
+          <Table
+            responsive="xl"
+            className="table  table-bordered  dataTable table-responsive"
+          >
             <thead>
               <tr>
                 <th>form title</th>
