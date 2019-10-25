@@ -1,38 +1,21 @@
 import React, { Component } from "react";
 import ResponseTable from "../../responded/SurveyFormResponseTable";
-import StatusTable from "../../responded/StatusTable";
-import axios from "axios";
 import DeleteTable from "../deleteTable";
-import Rejectsubmission from "../RejectSubmissionTable.js";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { getProjectViewData } from "../../../actions/viewDataActions";
 
 class ManageSurveyForm extends Component {
   state = {
-    survey_forms: [],
-    deleted_forms: [],
-    hide: true,
-    id: ""
+    hide: true
   };
   componentDidMount() {
     if (this.props.id != "") {
-      axios
-        .get(
-          `/fv3/api/view-by-forms/?project=${this.props.id}&form_type=survey`
-        )
-        .then(res => {
-          this.setState(
-            {
-              survey_forms: res.data.survey_forms,
-              deleted_forms: res.data.deleted_forms
-            },
-            () => this.props.handleBreadCrumb(res.data.breadcrumbs)
-          );
-        })
-        .catch(err => {
-          console.log(err, "err");
-        });
+      this.props.getProjectViewData(this.props.id, "survey");
     }
   }
+
   toggleHide = () => {
     this.setState({
       hide: !this.state.hide
@@ -40,7 +23,7 @@ class ManageSurveyForm extends Component {
   };
   render() {
     const {
-      props: { showViewData, data }
+      props: { showViewData, data, generals_forms, deleted_forms, loader }
     } = this;
     return (
       <React.Fragment>
@@ -55,13 +38,14 @@ class ManageSurveyForm extends Component {
         <div className="card-body">
           {!data && (
             <ResponseTable
-              survey_forms={this.state.survey_forms}
+              survey_forms={generals_forms}
               id={this.props.id}
+              loader={loader}
             />
           )}
           {/*data && <Rejected id={this.props.id} />*/}
         </div>
-        {this.state.deleted_forms.length > 0
+        {deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">
@@ -100,7 +84,8 @@ class ManageSurveyForm extends Component {
                   {!this.state.hide && (
                     <DeleteTable
                       id={this.props.id}
-                      deleted_forms={this.state.deleted_forms}
+                      deleted_forms={deleted_forms}
+                      loader={loader}
                     />
                   )}
                 </div>
@@ -111,4 +96,21 @@ class ManageSurveyForm extends Component {
     );
   }
 }
-export default ManageSurveyForm;
+//export default ManageSurveyForm;
+const mapStateToProps = ({ projectViewData }) => {
+  const { generals_forms, deleted_forms, loader } = projectViewData;
+
+  return {
+    generals_forms,
+    deleted_forms,
+    loader
+  };
+};
+export default compose(
+  connect(
+    mapStateToProps,
+    {
+      getProjectViewData
+    }
+  )
+)(ManageSurveyForm);

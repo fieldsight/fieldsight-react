@@ -47,7 +47,7 @@ class ManageFormSetting extends Component {
                 ))}
               </ul>
             </div>
-            <div className="manage_group">
+            <div className="manage_group mrt-15">
               <h5>Project wide Forms</h5>
               <ul className="nav nav-tabs flex-column border-tabs">
                 {site_specific_forms.map((route, i) => (

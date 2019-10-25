@@ -4,47 +4,17 @@ import ResponseTable from "../../responded/ResponseTable";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import DeleteTable from "../deleteTable";
-import axios from "axios";
+import { DotLoader } from "../../myForm/Loader";
 import { getProjectViewData } from "../../../actions/viewDataActions";
 
 class ManageGeneralForm extends Component {
   state = {
-    generals_forms: [],
-    deleted_forms: [],
-    breadcrumbs: [],
-    hide: true,
-    id: ""
+    hide: true
   };
-  // static getDerivedStateFromProps(props, state) {
-  //   return {
-  //     id: props.id
-  //   };
-  // }
 
   componentDidMount() {
-    this.props.getProjectViewData(this.props.id, "general");
     if (this.props.id !== "") {
-      axios
-        .get(
-          `/fv3/api/view-by-forms/?project=${this.props.id}&form_type=general`
-        )
-        .then(res => {
-          if (!!res.data) {
-            this.setState(
-              {
-                deleted_forms: res.data.deleted_forms,
-                generals_forms: res.data.generals_forms,
-                breadcrumbs: res.data.breadcrumbs
-              },
-              () => {
-                this.props.handleBreadCrumb(res.data.breadcrumbs);
-              }
-            );
-          }
-        })
-        .catch(err => {
-          console.log(err, "err");
-        });
+      this.props.getProjectViewData(this.props.id, "general");
     }
   }
 
@@ -56,7 +26,7 @@ class ManageGeneralForm extends Component {
 
   render() {
     const {
-      props: { data, showViewData, generals_forms, deleted_forms, breadcrumbs }
+      props: { data, showViewData, generals_forms, deleted_forms, loader }
     } = this;
 
     return (
@@ -73,10 +43,14 @@ class ManageGeneralForm extends Component {
         </div>
         <div className="card-body">
           {!data && (
-            <ResponseTable generals_forms={generals_forms} id={this.props.id} />
+            <ResponseTable
+              generals_forms={generals_forms}
+              id={this.props.id}
+              loader={loader}
+            />
           )}
         </div>
-        {this.state.deleted_forms.length > 0
+        {deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">
@@ -116,6 +90,7 @@ class ManageGeneralForm extends Component {
                     <DeleteTable
                       deleted_forms={deleted_forms}
                       id={this.props.id}
+                      loader={loader}
                     />
                   )}
                 </div>
@@ -128,12 +103,12 @@ class ManageGeneralForm extends Component {
 }
 
 const mapStateToProps = ({ projectViewData }) => {
-  const { generals_forms, deleted_forms, breadcrumbs } = projectViewData;
+  const { generals_forms, deleted_forms, loader } = projectViewData;
 
   return {
     generals_forms,
     deleted_forms,
-    breadcrumbs
+    loader
   };
 };
 export default compose(

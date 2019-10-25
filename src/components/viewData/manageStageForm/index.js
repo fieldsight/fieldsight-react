@@ -1,32 +1,18 @@
 import React, { Component } from "react";
 import ResponseTable from "../../responded/StagedFormResponseTable";
 import DeleteTable from "../deleteTable";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { getProjectViewData } from "../../../actions/viewDataActions";
 
 class ResponseStageForm extends Component {
   state = {
-    stage_forms: [],
-    hide: true,
-    id: "",
-    deleted_forms: []
+    hide: true
   };
   componentDidMount() {
     if (this.props.id != "") {
-      axios
-        .get(`/fv3/api/view-by-forms/?project=${this.props.id}&form_type=stage`)
-        .then(res => {
-          this.setState(
-            {
-              stage_forms: res.data.stage_forms,
-              deleted_forms: res.data.deleted_forms
-            },
-            () => this.props.handleBreadCrumb(res.data.breadcrumbs)
-          );
-        })
-        .catch(err => {
-          console.log(err, "err");
-        });
+      this.props.getProjectViewData(this.props.id, "stage");
     }
   }
   toggleHide = () => {
@@ -37,7 +23,7 @@ class ResponseStageForm extends Component {
 
   render() {
     const {
-      props: { showViewData, data }
+      props: { showViewData, data, generals_forms, deleted_forms, loader }
     } = this;
 
     return (
@@ -53,12 +39,13 @@ class ResponseStageForm extends Component {
         <div className="card-body">
           {!data && (
             <ResponseTable
-              stage_forms={this.state.stage_forms}
+              stage_forms={generals_forms}
               id={this.props.id}
+              loader={loader}
             />
           )}
         </div>
-        {!!this.state.deleted_forms && this.state.deleted_forms.length > 0
+        {!!deleted_forms && deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">
@@ -97,7 +84,8 @@ class ResponseStageForm extends Component {
                   {!this.state.hide && (
                     <DeleteTable
                       id={this.props.id}
-                      deleted_forms={this.state.deleted_forms}
+                      deleted_forms={deleted_forms}
+                      loader={loader}
                     />
                   )}
                 </div>
@@ -108,4 +96,21 @@ class ResponseStageForm extends Component {
     );
   }
 }
-export default ResponseStageForm;
+//export default ResponseStageForm;
+const mapStateToProps = ({ projectViewData }) => {
+  const { generals_forms, deleted_forms, loader } = projectViewData;
+
+  return {
+    generals_forms,
+    deleted_forms,
+    loader
+  };
+};
+export default compose(
+  connect(
+    mapStateToProps,
+    {
+      getProjectViewData
+    }
+  )
+)(ResponseStageForm);
