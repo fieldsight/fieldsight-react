@@ -1,12 +1,9 @@
 import axios from "axios";
 
-let csrfVal = window.csrf ? window.csrf : "FasSURCaozAKo7OHtkIhiTtOag7hVBBt";
-let tokenVal = window.token
-  ? window.token
-  : "91a844e62e86b6e336b8fb440340cbeaabf601fe";
-//"3f70407e649778bfa9a5d748e5b59e89d2f6ca44";
+// use your token in place of "xxxx-xxxx-xxxx-xxxx"
+// remove your token before pushing to github
+let tokenVal = window.token ? window.token : "xxxx-xxxx-xxxx-xxxx";
 
-//const url="91a844e62e86b6e336b8fb440340cbeaabf601fe"
 let baseURL = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np/";
