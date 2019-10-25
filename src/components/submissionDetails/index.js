@@ -89,36 +89,9 @@ class SubmissionDetail extends Component {
             {/* {loading && <Loader />} */}
           </>
         )}
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-        {initialLoader && <Loader />}
-=======
 
         {submission_err && <SubmissionError submissionErr={submission_err} />}
         {loading && <Loader />}
->>>>>>> Stashed changes
-=======
-
-        {submission_err && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100vh",
-              flexDirection: "column"
-            }}
-          >
-            <h1>{submission_err.status}</h1>
-            <p>{submission_err.msg}</p>
-
-            <a onClick={() => window.history.back()}>
-              <b>Back</b>
-            </a>
-          </div>
-        )}
-        {loading && <Loader />}
->>>>>>> acba6026d23f1415db581b26146218dfda3955e4
       </>
     );
   }
