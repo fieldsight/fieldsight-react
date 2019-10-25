@@ -635,6 +635,10 @@
         }
 
         .dragable-stage {
+          padding:0;
+          background:transparent;
+          margin:0;
+          border:0;
           .card-header {
             h5 {
               width: calc(100% - 30px);
@@ -655,6 +659,9 @@
               cursor: -webkit-move;
               cursor: move;
             }
+          }
+          &::before{
+            display: none;
           }
         }
       }
