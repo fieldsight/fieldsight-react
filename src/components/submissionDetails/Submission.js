@@ -37,8 +37,7 @@ class Submission extends Component {
     this.groupRef = createRef();
     this.state = {
       showGallery: false,
-      selectedImg: "",
-      siteData: props.site
+      selectedImg: ""
     };
   }
 
@@ -164,7 +163,7 @@ class Submission extends Component {
 
   handleUnrepeatedSubmission = submission => {
     const { site } = this.props;
-    const geoData = this.getGeoJson(this.state.siteData);
+    const geoData = this.getGeoJson(site);
 
     if (submission.type === "photo") {
       return (
@@ -234,6 +233,7 @@ class Submission extends Component {
       } else {
         bounds = this.getLargeBound(latlngObj);
       }
+
       return (
         <div className="submission-list normal-list" key={uuid()}>
           <ul>
@@ -260,7 +260,7 @@ class Submission extends Component {
                           easeLinearity={0.35}
                         >
                           <TileLayer
-                            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            // attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                           />
                           <GeoJSON

@@ -812,7 +812,7 @@ class GlobalModalForm extends Component {
               )}
             </div>
           )}
-          <div className="form-group checkbox-group">
+          {/* <div className="form-group checkbox-group">
             <label>Donor visibility</label>
             <div className="custom-checkbox display-inline">
               <RadioElement
@@ -868,7 +868,7 @@ class GlobalModalForm extends Component {
                 checked={isDelete == false}
               />
             </div>
-          </div>
+          </div> */}
           <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
               Save

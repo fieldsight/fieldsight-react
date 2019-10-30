@@ -250,7 +250,10 @@ const GetActionForProject = props => {
 
 const SortableContainer = sortableContainer(({ children }) => {
   return (
-    <Table responsive="xl" className="table  table-bordered  dataTable">
+    <Table
+      responsive="xl"
+      className="table  table-bordered  dataTable table-responsive"
+    >
       <thead>
         <tr>
           <th>Substage Name</th>

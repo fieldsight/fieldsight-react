@@ -70,19 +70,19 @@
                 }
 
                 h5 {
-                    font-size: 0.875rem;
-                    font-weight: 500;
+                    font-size: 0.845rem;
+                    font-weight: 400;
                 }
             }
 
             a.tag {
                 margin-right: 0.7rem;
                 @include radius4;
-                font-size: 0.875rem;
+                font-size: 0.845rem;
 
                 i {
                     font-size: 1rem;
-                    font-weight: 600;
+                    font-weight: 400;
                     margin-right: 0.2rem;
                 }
 
@@ -319,7 +319,9 @@
 
                 &.selected {
                     background-color: $color-bg;
-                    ;
+                }
+                &:hover{
+                    background-color: lighten($color-bg,7%);
                 }
 
             }
@@ -449,7 +451,7 @@
 
             h4 {
                 font-size: 1rem;
-                font-weight: 500;
+                font-weight: 400;
                 text-transform: capitalize;
                 padding-bottom: 0.5rem;
                 border-bottom: 1px solid $color-bg;

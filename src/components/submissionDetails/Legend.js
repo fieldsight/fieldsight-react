@@ -8,14 +8,13 @@ class Legend extends MapControl {
       onAdd: map => {
         this.panelDiv = L.DomUtil.create("div", "info");
         this.panelDiv.innerHTML =
-          '<table style="background:white; padding: 2px;"><tr><td><img src="../../static/images/marker.png" style="width:20px; height:20px; display: inline"/></td><td style="padding:5px;"><div class = "locations" style = "display: inline; font-size:10px !important;">' +
+          '<table style="background:rgba(255, 255, 255, 0.75); padding: 2px;"><tr><td><img src="../../static/images/marker.png" style="width:20px; height:20px; display: inline"/></td><td style="padding:5px;"><div class = "locations" style = "display: inline; font-size:10px !important;">' +
           "Site Location" +
           "</div></td>" +
-          "</tr>" +
-          '<tr><td><span class="dot" style="height: 15px;width: 15px;background-color: #c1cae4;border-radius: 50%;display: inline-block; border: 3px solid #3686fb;"></span></td><td style="padding:5px;"><div class = "locations" style = "display: inline; font-size:10px !important;">' +
+          '<td><span class="dot" style="height: 13px;width: 13px;background-color: #c1cae4;border-radius: 50%;display: inline-block; border: 2px solid #3686fb;margin-left: 4px;"></span></td><td style="padding:5px;"><div class = "locations" style = "display: inline; font-size:10px !important;">' +
           "Submission Location" +
           "</div></td>" +
-          "</tr>" +
+          "</<td>" +
           "</table>";
         return this.panelDiv;
       }

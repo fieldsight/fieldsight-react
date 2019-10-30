@@ -5,6 +5,7 @@ import SubmissionSiteDetail from "./SubmissionSiteDetail";
 import SubmissionSiteInfo from "./SubmissionSiteInfo";
 import RightSidebar from "./RightSidebar";
 import Submission from "./Submission";
+import SubmissionError from "./SubmissionError";
 import Loader from "../common/Loader";
 
 import {
@@ -37,6 +38,7 @@ class SubmissionDetail extends Component {
           has_review_permission,
           loading,
           initialLoader,
+          submission_err,
           hideNullValues
         },
         postSubmissionDetail,
@@ -46,28 +48,8 @@ class SubmissionDetail extends Component {
     } = this;
     return (
       <>
-        {!initialLoader && (
+        {!loading && !submission_err && (
           <>
-            {/* <nav aria-label="breadcrumb" role="navigation">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <a href="index.html">Home</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">Site's name</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">form type</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">form name</a>
-                </li>
-
-                <li className="breadcrumb-item active" aria-current="page">
-                  Submission Details
-                </li>
-              </ol>
-            </nav> */}
             <div className="row">
               <div className="col-xl-8 col-lg-8">
                 <div className="right-content no-bg">
@@ -104,10 +86,12 @@ class SubmissionDetail extends Component {
                 />
               </div>
             </div>
-            {loading && <Loader />}
+            {/* {loading && <Loader />} */}
           </>
         )}
-        {initialLoader && <Loader />}
+
+        {submission_err && <SubmissionError submissionErr={submission_err} />}
+        {loading && <Loader />}
       </>
     );
   }
