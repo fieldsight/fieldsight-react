@@ -49,7 +49,8 @@ class StagedForms extends Component {
     reOrderDisable: true,
     subStageReorderDisable: true,
     stagedRegions: [],
-    stagedTypes: []
+    stagedTypes: [],
+    require: false
   };
 
   componentDidMount() {
@@ -271,21 +272,25 @@ class StagedForms extends Component {
       projectFormList: this.props.projectForms,
       sharedFormList: this.props.sharedForms,
       xf: "",
-      isEditForm: false
+      isEditForm: false,
+      require: false
     });
     this.handleSubStageForm();
   };
 
   handleCreateForm = data => {
     const { stageId, substageId, xf } = this.state;
-    if (!!substageId) {
+    if (!!xf == false) {
+      this.setState({ require: true });
+    }
+    if (!!substageId && !!xf == true) {
       const body = {
         id: substageId,
-        weight: data.weight,
+        weight: JSON.parse(data.weight),
         name: data.substageTitle,
         description: data.substageDesc,
         order: data.order,
-        xf: xf,
+        xf: JSON.parse(xf),
         default_submission_status: data.status,
         setting: {
           types:
@@ -335,11 +340,11 @@ class StagedForms extends Component {
         });
     } else {
       const body = {
-        weight: data.weight,
+        weight: JSON.parse(data.weight),
         name: data.substageTitle,
         description: data.substageDesc,
         order: this.state.subStageData.length + 1,
-        xf: xf,
+        xf: JSON.parse(xf),
         default_submission_status: data.status,
         setting: {
           types:
@@ -377,7 +382,7 @@ class StagedForms extends Component {
   };
 
   handleRequestSubStage = stage => {
-    if (stage.id != this.state.stageId)
+    if (stage.id != this.state.stageId) {
       this.setState(
         {
           loadSubStage: true,
@@ -403,6 +408,7 @@ class StagedForms extends Component {
             });
         }
       );
+    }
   };
 
   handleSubstageReorder = () => {
@@ -999,6 +1005,7 @@ class StagedForms extends Component {
                 isEditForm={isEditForm}
                 stagedRegions={stagedRegions}
                 stagedTypes={stagedTypes}
+                require={this.state.require}
               />
             </Modal>
           )}
