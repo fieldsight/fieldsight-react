@@ -87,32 +87,32 @@ class AddSubstageForm extends Component {
 
       let selectedRegion = [];
       let selectedType = [];
+      if (formData && formData.setting) {
+        if (regionSelected && regionSelected.length > 0) {
+          regionOptions.map(region => {
+            if (regionSelected.indexOf(region.id) > -1) {
+              selectedRegion.push({
+                ...region,
+                value: region.identifier,
+                label: region.name
+              });
+            }
+          });
+        }
 
-      if (regionSelected && regionSelected.length > 0) {
-        regionOptions.map(region => {
-          if (regionSelected.indexOf(region.id) > -1) {
-            selectedRegion.push({
-              ...region,
-              value: region.identifier,
-              label: region.name
-            });
-          }
-        });
+        if (typeSelected && typeSelected.length > 0) {
+          typeOptions.map(type => {
+            if (typeSelected.indexOf(type.id) > -1) {
+              selectedType.push({
+                ...type,
+                value: type.identifier,
+                label: type.name
+              });
+            }
+          });
+        }
       } else {
         selectedRegion = newRegionArr;
-      }
-
-      if (typeSelected && typeSelected.length > 0) {
-        typeOptions.map(type => {
-          if (typeSelected.indexOf(type.id) > -1) {
-            selectedType.push({
-              ...type,
-              value: type.identifier,
-              label: type.name
-            });
-          }
-        });
-      } else {
         selectedType = newTypeArr;
       }
 
@@ -217,7 +217,7 @@ class AddSubstageForm extends Component {
         hasLoaded
       }
     } = this;
-    // console.log("render", weight);
+    console.log("render", this.props.stagedRegions);
 
     return (
       <>

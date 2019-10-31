@@ -158,10 +158,18 @@ class StagedForms extends Component {
                 }
               });
               return {
-                data: newArr
+                data: newArr,
+                stagedRegions: res.data.regions,
+                stagedTypes: res.data.tags
               };
             },
             () => {
+              // if (res.data) {
+              //   !!this.state.isProjectForm &&
+              //     this.requestStagedData(this.state.id, true);
+              //   !this.state.isProjectForm &&
+              //     this.requestStagedData(this.state.id, false);
+              // }
               this.handleClearStageForm();
               successToast("form", "updated");
             }
@@ -185,9 +193,19 @@ class StagedForms extends Component {
       axios
         .post(postStageApi, body)
         .then(res => {
+          // if (res.data) {
+          //   !!this.state.isProjectForm &&
+          //     this.requestStagedData(this.state.id, true);
+          //   !this.state.isProjectForm &&
+          //     this.requestStagedData(this.state.id, false);
+          // }
+          // this.handleClearStageForm();
+          // successToast("form", "added");
           this.setState(
             {
-              data: [...this.state.data, res.data]
+              data: [...this.state.data, res.data],
+              stageRegions: res.data.regions,
+              stagedTypes: res.data.tags
             },
             () => {
               this.handleClearStageForm();
@@ -298,7 +316,8 @@ class StagedForms extends Component {
               : [],
           donor_visibility: data.isDonor,
           can_edit: data.isEdit,
-          can_delete: data.isDelete
+          can_delete: data.isDelete,
+          id: data.settingId && data.settingId
         }
       };
 
@@ -806,6 +825,7 @@ class StagedForms extends Component {
           ? false
           : true
         : "";
+    console.log("ppppppppppp", this.props.popupModal);
 
     return (
       <div className="col-xl-9 col-lg-8">
