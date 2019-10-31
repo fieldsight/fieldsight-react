@@ -91,6 +91,38 @@ class ViewData extends Component {
       });
     }
   };
+  componentDidUpdate(preState) {
+    const {
+      match: {
+        params: { id }
+      }
+    } = this.props;
+
+    if (preState.location.pathname !== this.props.location.pathname) {
+      if (
+        this.props.location.pathname === `/project-responses/${id}/rejected` ||
+        this.props.location.pathname === `/project-responses/${id}/pending` ||
+        this.props.location.pathname === `/project-responses/${id}/flagged` ||
+        this.props.location.pathname === `/project-responses/${id}/approved`
+      ) {
+        this.setState({
+          id,
+          view_btn: true
+        });
+      } else if (
+        this.props.location.pathname === `/project-responses/${id}/general` ||
+        this.props.location.pathname === `/project-responses/${id}/stage` ||
+        this.props.location.pathname === `/project-responses/${id}/scheduled` ||
+        this.props.location.pathname ===
+          `/project-responses/${id}/general-survey`
+      ) {
+        this.setState({
+          view_btn: false,
+          id
+        });
+      }
+    }
+  }
   render() {
     const {
       match: {
