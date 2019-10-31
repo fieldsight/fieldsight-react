@@ -280,7 +280,7 @@ class SubmissionData extends Component {
             <div>
               <p>
                 "All the data within the submission will be completely removed.
-                Do u still want to continue?"
+                Do you still want to continue?"
               </p>
             </div>
             <div className="warning-footer text-center">
