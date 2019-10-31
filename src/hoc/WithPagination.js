@@ -38,9 +38,9 @@ const withPagination = WrappedComponent => {
         case "siteStatus":
           return `fv3/api/view-by-status/?page=${page_num}&site=${payload.projectId}&submission_status=${payload.status}`;
         case "formSubmission":
-          return `/fv3/api/forms-submissions/?project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+          return `/fv3/api/forms-submissions/?page=${page_num}&project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
         case "siteSubmission":
-          return `/fv3/api/forms-submissions/?site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+          return `/fv3/api/forms-submissions/?page=${page_num}&site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
       }
     };
 
