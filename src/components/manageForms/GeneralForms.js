@@ -52,6 +52,7 @@ class GeneralForms extends Component {
         errorToast(errors.data.error);
       });
   }
+
   componentDidMount() {
     this._isMounted = true;
     const {

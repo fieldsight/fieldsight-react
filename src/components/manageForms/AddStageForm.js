@@ -171,7 +171,7 @@ class AddStageForm extends Component {
             formType="editForm"
             tag="input"
             type="text"
-            required={true}
+            // required={true}
             label="Description"
             name="desc"
             value={desc}

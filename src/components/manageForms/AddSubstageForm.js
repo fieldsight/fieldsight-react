@@ -267,10 +267,10 @@ class AddSubstageForm extends Component {
             formType="editForm"
             tag="input"
             type="number"
-            //   required={true}
+            required={true}
             label="Weight"
             name="weight"
-            value={weight == 0 ? "0" : weight}
+            value={weight}
             changeHandler={this.handleInputChange}
           />
 
