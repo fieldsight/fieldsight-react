@@ -49,8 +49,7 @@ class StagedForms extends Component {
     reOrderDisable: true,
     subStageReorderDisable: true,
     stagedRegions: [],
-    stagedTypes: [],
-    require: false
+    stagedTypes: []
   };
 
   componentDidMount() {
@@ -272,25 +271,21 @@ class StagedForms extends Component {
       projectFormList: this.props.projectForms,
       sharedFormList: this.props.sharedForms,
       xf: "",
-      isEditForm: false,
-      require: false
+      isEditForm: false
     });
     this.handleSubStageForm();
   };
 
   handleCreateForm = data => {
     const { stageId, substageId, xf } = this.state;
-    if (!!xf == false) {
-      this.setState({ require: true });
-    }
-    if (!!substageId && !!xf == true) {
+    if (!!substageId) {
       const body = {
         id: substageId,
         weight: JSON.parse(data.weight),
         name: data.substageTitle,
         description: data.substageDesc,
         order: data.order,
-        xf: JSON.parse(xf),
+        xf: !!xf == true ? JSON.parse(xf) : "",
         default_submission_status: data.status,
         setting: {
           types:
@@ -344,7 +339,7 @@ class StagedForms extends Component {
         name: data.substageTitle,
         description: data.substageDesc,
         order: this.state.subStageData.length + 1,
-        xf: JSON.parse(xf),
+        xf: !!xf == true ? JSON.parse(xf) : "",
         default_submission_status: data.status,
         setting: {
           types:
@@ -1005,7 +1000,6 @@ class StagedForms extends Component {
                 isEditForm={isEditForm}
                 stagedRegions={stagedRegions}
                 stagedTypes={stagedTypes}
-                require={this.state.require}
               />
             </Modal>
           )}

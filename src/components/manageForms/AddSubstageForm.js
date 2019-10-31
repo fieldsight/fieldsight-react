@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Select from "react-select";
-import DatePicker from "react-datepicker";
 
 import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
@@ -202,7 +201,7 @@ class AddSubstageForm extends Component {
 
   render() {
     const {
-      props: { toggleFormModal, formTitle, isEditForm, require },
+      props: { toggleFormModal, formTitle, isEditForm },
       state: {
         regionDropdown,
         regionSelected,
@@ -218,7 +217,7 @@ class AddSubstageForm extends Component {
         hasLoaded
       }
     } = this;
-    console.log("render", weight);
+    // console.log("render", weight);
 
     return (
       <>
