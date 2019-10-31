@@ -267,7 +267,7 @@ class AddSubstageForm extends Component {
             formType="editForm"
             tag="input"
             type="number"
-            required={true}
+            // required={true}
             label="Weight"
             name="weight"
             value={weight}
