@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
-
 import { connect } from "react-redux";
 import { compose } from "redux";
+
 import ManageFormSetting from "./manageFormSetting/ManageFormSetting";
 import ManageGeneralForm from "./manageGeneralForm";
 import ManageSurveyForm from "./manageSurveyForm";
 import ManageScheduledForm from "./manageScheduledForm";
 import ManageStageForm from "./manageStageForm";
 
-import ApprovedTable from "./ApprovedTable.js";
-import PendingTable from "./PendingSubmissionTable.js";
-import RejectedTable from "./RejectSubmissionTable.js";
-import FlaggedTable from "./FlagedTable.js";
+import ApprovedTable from "./ApprovedTable";
+import PendingTable from "./PendingSubmissionTable";
+import RejectedTable from "./RejectSubmissionTable";
+import FlaggedTable from "./FlagedTable";
 
 class ViewData extends Component {
   state = {

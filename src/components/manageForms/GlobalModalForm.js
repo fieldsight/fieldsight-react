@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
-
-import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
 import CheckBox from "../common/CheckBox";
 import SelectElement from "../common/SelectElement";

@@ -1,16 +1,10 @@
 import React, { Component } from "react";
 import Select from "react-select";
-import DatePicker from "react-datepicker";
 
 import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
 import CheckBox from "../common/CheckBox";
 import SelectElement from "../common/SelectElement";
-
-const getArrValue = (arr, value) => {
-  if (arr.includes(value)) return true;
-  else return false;
-};
 
 class AddSubstageForm extends Component {
   _isMounted = false;
@@ -35,10 +29,7 @@ class AddSubstageForm extends Component {
         : true,
     regionSelected: [],
     typeSelected: [],
-    weight:
-      this.props.formData && this.props.formData.weight
-        ? this.props.formData.weight
-        : "",
+    weight: this.props.formData ? this.props.formData.weight : 0,
     substageTitle:
       this.props.formData && this.props.formData.name
         ? this.props.formData.name
@@ -148,7 +139,7 @@ class AddSubstageForm extends Component {
         isDelete: true,
         regionSelected: [],
         typeSelected: [],
-        weight: "",
+        weight: 0,
         substageTitle: "",
         substageDesc: "",
         hasLoaded: false
@@ -226,6 +217,7 @@ class AddSubstageForm extends Component {
         hasLoaded
       }
     } = this;
+    // console.log("render", weight);
 
     return (
       <>
@@ -261,6 +253,7 @@ class AddSubstageForm extends Component {
               <div className="add-btn flex-start">
                 <a data-tab="choose-form" onClick={toggleFormModal}>
                   {!!isEditForm || formTitle ? "Change form" : " Choose form"}
+                  {!formTitle && <sup style={{ color: "#ed5261" }}>*</sup>}
                   <span>
                     <i className="la la-file-text-o"></i>
                   </span>
@@ -277,7 +270,7 @@ class AddSubstageForm extends Component {
             //   required={true}
             label="Weight"
             name="weight"
-            value={weight}
+            value={weight == 0 ? "0" : weight}
             changeHandler={this.handleInputChange}
           />
 

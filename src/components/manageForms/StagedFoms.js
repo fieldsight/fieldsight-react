@@ -281,11 +281,11 @@ class StagedForms extends Component {
     if (!!substageId) {
       const body = {
         id: substageId,
-        weight: data.weight,
+        weight: JSON.parse(data.weight),
         name: data.substageTitle,
         description: data.substageDesc,
         order: data.order,
-        xf: xf,
+        xf: !!xf == true ? JSON.parse(xf) : "",
         default_submission_status: data.status,
         setting: {
           types:
@@ -335,11 +335,11 @@ class StagedForms extends Component {
         });
     } else {
       const body = {
-        weight: data.weight,
+        weight: JSON.parse(data.weight),
         name: data.substageTitle,
         description: data.substageDesc,
         order: this.state.subStageData.length + 1,
-        xf: xf,
+        xf: !!xf == true ? JSON.parse(xf) : "",
         default_submission_status: data.status,
         setting: {
           types:
@@ -377,7 +377,7 @@ class StagedForms extends Component {
   };
 
   handleRequestSubStage = stage => {
-    if (stage.id != this.state.stageId)
+    if (stage.id != this.state.stageId) {
       this.setState(
         {
           loadSubStage: true,
@@ -403,6 +403,7 @@ class StagedForms extends Component {
             });
         }
       );
+    }
   };
 
   handleSubstageReorder = () => {
