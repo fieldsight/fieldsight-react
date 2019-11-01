@@ -3,12 +3,13 @@ import axios from "axios";
 let csrfVal = window.csrf ? window.csrf : "FasSURCaozAKo7OHtkIhiTtOag7hVBBt";
 let tokenVal = window.token
   ? window.token
-  : "3f70407e649778bfa9a5d748e5b59e89d2f6ca44";
-//"91a844e62e86b6e336b8fb440340cbeaabf601fe";
+  : //"3f70407e649778bfa9a5d748e5b59e89d2f6ca44";
+    "91a844e62e86b6e336b8fb440340cbeaabf601fe";
 
 //const url="91a844e62e86b6e336b8fb440340cbeaabf601fe"
-let baseURL = window.base_url ? window.base_url : "http://192.168.1.44:8002";
-// : "https://fieldsight.naxa.com.np/";
+let baseURL = window.base_url
+  ? window.base_url //"http://192.168.1.44:8002";
+  : "https://fieldsight.naxa.com.np/";
 //"https://app.fieldsight.org/";
 
 const setDefault = () => {

@@ -68,6 +68,7 @@ class SubmissionData extends Component {
       });
     }
   };
+
   cancleModel = () => {
     this.setState({
       showConfirmation: false
@@ -219,6 +220,7 @@ class SubmissionData extends Component {
                       of <span>{this.props.totalCount}</span> entries.
                     </p>
                   </div>
+
                   {this.props.toData < this.props.totalCount ? (
                     <div className="table-pagination">
                       <ul>
@@ -232,7 +234,10 @@ class SubmissionData extends Component {
                               )
                             }
                           >
-                            <i className="la la-long-arrow-left" />
+                            <i
+                              className={`la la-long-arrow-left ${this.props
+                                .fromData == 1}?disable-btn :""`}
+                            />
                           </a>
                         </li>
 

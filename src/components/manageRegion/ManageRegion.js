@@ -27,7 +27,7 @@ class ManageRegion extends Component {
       .get(`/fv3/api/enable-project-cluster-sites/${projectId}/`)
       .then(res => {
         this.setState({
-          cluster_sites: res.data.cluster_sites,
+          cluster_sites: !res.data.cluster_sites,
           hide: res.data.cluster_sites
         });
       })
@@ -49,7 +49,8 @@ class ManageRegion extends Component {
             this.setState({
               hide: !this.state.hide,
               response: res.data.detail,
-              model: true
+              model: true,
+              cluster_sites: res.data.cluster_sites
             });
           })
           .catch(err => {
@@ -61,7 +62,8 @@ class ManageRegion extends Component {
             this.setState({
               hide: !this.state.hide,
               response: res.data.detail,
-              model: false
+              model: false,
+              cluster_sites: res.data.cluster_sites
             });
           })
           .catch(err => {
