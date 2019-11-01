@@ -151,7 +151,7 @@ class SubmissionData extends Component {
               >
                 <thead>
                   <tr>
-                    <th>S.N.</th>
+                    {/*<th>S.N.</th>*/}
                     <th>submission id</th>
                     <th>Submitted By</th>
                     <th>Submission Date</th>
@@ -163,7 +163,7 @@ class SubmissionData extends Component {
                     this.state.siteList.map((list, key) => {
                       return (
                         <tr key={key}>
-                          <td>{key + 1}</td>
+                          {/*<td>{key + 1}</td>*/}
                           <td>{list.submission_id}</td>
                           <td>
                             <a href={list.profile_url}>{list.submitted_by}</a>
@@ -219,11 +219,13 @@ class SubmissionData extends Component {
                           <li className="page-item">
                             <a
                               onClick={e =>
-                                this.props.paginationHandler(
-                                  this.props.pageNum - 1,
-                                  null,
-                                  project_id
-                                )
+                                this.props.paginationHandler({
+                                  pageNum: this.props.pageNum - 1,
+                                  type: "siteSubmission",
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: "form-submission"
+                                })
                               }
                             >
                               <i className="la la-long-arrow-left" />
@@ -240,11 +242,13 @@ class SubmissionData extends Component {
                           <li className="page-item ">
                             <a
                               onClick={e =>
-                                this.props.paginationHandler(
-                                  this.props.pageNum + 1,
-                                  null,
-                                  project_id
-                                )
+                                this.props.paginationHandler({
+                                  pageNum: this.props.pageNum + 1,
+                                  type: "siteSubmission",
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: "form-submission"
+                                })
                               }
                             >
                               <i className="la la-long-arrow-right" />

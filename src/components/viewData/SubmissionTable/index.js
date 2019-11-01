@@ -109,6 +109,7 @@ class SubmissionData extends Component {
   };
 
   render() {
+    console.log("hhh", this.props.toData);
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -153,7 +154,7 @@ class SubmissionData extends Component {
             >
               <thead>
                 <tr>
-                  <th>S.N.</th>
+                  {/*<th>S.N.</th>*/}
                   <th>Site Name</th>
                   <th>Site Id</th>
                   <th>submission id</th>
@@ -167,7 +168,11 @@ class SubmissionData extends Component {
                   this.state.siteList.map((list, key) => {
                     return (
                       <tr key={key}>
-                        <td>{key + 1}</td>
+                        {/* <td>
+                          {key < this.props.toData
+                            ? key + 1
+                            : this.props.toData + 1}
+                          </td>*/}
                         <td>{list.site_name}</td>
                         <td>{list.site_identifier}</td>
                         <td>{list.submission_id}</td>
@@ -225,11 +230,13 @@ class SubmissionData extends Component {
                         <li className="page-item">
                           <a
                             onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum - 1,
-                                null,
-                                project_id
-                              )
+                              this.props.paginationHandler({
+                                pageNum: this.props.pageNum - 1,
+                                type: "formSubmission",
+                                projectId: this.state.id,
+                                fsxf_id: this.state.fid,
+                                status: "form-submission"
+                              })
                             }
                           >
                             <i className="la la-long-arrow-left" />
@@ -246,11 +253,13 @@ class SubmissionData extends Component {
                         <li className="page-item ">
                           <a
                             onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum + 1,
-                                null,
-                                project_id
-                              )
+                              this.props.paginationHandler({
+                                pageNum: this.props.pageNum + 1,
+                                type: "formSubmission",
+                                projectId: this.state.id,
+                                fsxf_id: this.state.fid,
+                                status: "form-submission"
+                              })
                             }
                           >
                             <i className="la la-long-arrow-right" />
