@@ -131,10 +131,10 @@ class ManageRegion extends Component {
                   backgroundColor: "#28a745",
                   color: "white",
                   textAlign: "left",
-                  width: "122px"
+                  width: "83px"
                 }}
               >
-                Enable Cluster
+                Turn OFF
                 <div
                   className="handle"
                   style={{ left: "auto", right: "0.1875rem" }}
@@ -146,10 +146,10 @@ class ManageRegion extends Component {
                 className="btn-toggle"
                 onClick={this.region}
                 style={{
-                  width: "122px"
+                  width: "83px"
                 }}
               >
-                Disable Cluster
+                Turn ON
                 <div className="handle"></div>
               </button>
             )}

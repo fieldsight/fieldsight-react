@@ -105,6 +105,7 @@ class SubmissionData extends Component {
     }
   };
   render() {
+    const projectId = this.state.id;
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -151,7 +152,7 @@ class SubmissionData extends Component {
               >
                 <thead>
                   <tr>
-                    <th>S.N.</th>
+                    {/*<th>S.N.</th>*/}
                     <th>submission id</th>
                     <th>Submitted By</th>
                     <th>Submission Date</th>
@@ -163,7 +164,7 @@ class SubmissionData extends Component {
                     this.state.siteList.map((list, key) => {
                       return (
                         <tr key={key}>
-                          <td>{key + this.props.fromData}</td>
+                          {/*<td>{key + this.props.fromData}</td>*/}
                           <td>{list.submission_id}</td>
                           <td>
                             <a href={list.profile_url}>{list.submitted_by}</a>
@@ -219,13 +220,11 @@ class SubmissionData extends Component {
                           <li className="page-item">
                             <a
                               onClick={e =>
-                                this.props.paginationHandler({
-                                  pageNum: this.props.pageNum - 1,
-                                  type: "siteSubmission",
-                                  projectId: id,
-                                  fsxf_id: fid,
-                                  status: "form-submission"
-                                })
+                                this.props.paginationHandler(
+                                  this.props.pageNum - 1,
+                                  null,
+                                  projectId
+                                )
                               }
                             >
                               <i className="la la-long-arrow-left" />
@@ -242,13 +241,11 @@ class SubmissionData extends Component {
                           <li className="page-item ">
                             <a
                               onClick={e =>
-                                this.props.paginationHandler({
-                                  pageNum: this.props.pageNum + 1,
-                                  type: "siteSubmission",
-                                  projectId: id,
-                                  fsxf_id: fid,
-                                  status: "form-submission"
-                                })
+                                this.props.paginationHandler(
+                                  this.props.pageNum + 1,
+                                  null,
+                                  projectId
+                                )
                               }
                             >
                               <i className="la la-long-arrow-right" />
