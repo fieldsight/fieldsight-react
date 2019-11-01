@@ -236,7 +236,6 @@ class GeneralFormTable extends Component {
         formTable
       }
     } = this;
-    // console.log("general table", data, formTable);
 
     return (
       <>

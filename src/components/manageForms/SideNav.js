@@ -70,7 +70,7 @@ class SideNav extends Component {
           }
         })
       )
-      .catch(err => console.log("err", err));
+      .catch(err => {});
   }
   componentDidMount() {
     this._isMounted = true;
