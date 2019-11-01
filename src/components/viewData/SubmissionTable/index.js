@@ -230,7 +230,12 @@ class SubmissionData extends Component {
                               this.props.paginationHandler(
                                 this.props.pageNum - 1,
                                 null,
-                                projectId
+                                {
+                                  type: "formSubmission",
+                                  projectId: this.state.id,
+                                  fsxf_id: this.state.fid,
+                                  status: "form-submission"
+                                }
                               )
                             }
                           >
@@ -254,7 +259,12 @@ class SubmissionData extends Component {
                               this.props.paginationHandler(
                                 this.props.pageNum + 1,
                                 null,
-                                projectId
+                                {
+                                  type: "formSubmission",
+                                  projectId: this.state.id,
+                                  fsxf_id: this.state.fid,
+                                  status: "form-submission"
+                                }
                               )
                             }
                           >
