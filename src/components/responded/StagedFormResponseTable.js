@@ -52,8 +52,10 @@ export default class SurveyFormResponseTable extends Component {
                                 <td style={{ width: "183px" }}>
                                   {sub_stages.form_name}
                                 </td>
+
                                 <td>
-                                  {sub_stages.last_response.length > 0
+                                  {sub_stages.last_response !== null &&
+                                  sub_stages.last_response.length > 0
                                     ? format(sub_stages.last_response, [
                                         "MMMM Do YYYY, h:mm:ss a"
                                       ])
