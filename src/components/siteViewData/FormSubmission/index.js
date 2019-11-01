@@ -151,7 +151,7 @@ class SubmissionData extends Component {
               >
                 <thead>
                   <tr>
-                    {/*<th>S.N.</th>*/}
+                    <th>S.N.</th>
                     <th>submission id</th>
                     <th>Submitted By</th>
                     <th>Submission Date</th>
@@ -163,7 +163,7 @@ class SubmissionData extends Component {
                     this.state.siteList.map((list, key) => {
                       return (
                         <tr key={key}>
-                          {/*<td>{key + 1}</td>*/}
+                          <td>{key + this.props.fromData}</td>
                           <td>{list.submission_id}</td>
                           <td>
                             <a href={list.profile_url}>{list.submitted_by}</a>

@@ -20,7 +20,6 @@ class SubmissionData extends Component {
         params: { id, fid }
       }
     } = this.props;
-
     this.props.paginationHandler(1, null, {
       type: "formSubmission",
       projectId: this.state.id,
@@ -109,7 +108,6 @@ class SubmissionData extends Component {
   };
 
   render() {
-    console.log("hhh", this.props.toData);
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -154,7 +152,7 @@ class SubmissionData extends Component {
             >
               <thead>
                 <tr>
-                  {/*<th>S.N.</th>*/}
+                  <th>S.N.</th>
                   <th>Site Name</th>
                   <th>Site Id</th>
                   <th>submission id</th>
@@ -168,11 +166,7 @@ class SubmissionData extends Component {
                   this.state.siteList.map((list, key) => {
                     return (
                       <tr key={key}>
-                        {/* <td>
-                          {key < this.props.toData
-                            ? key + 1
-                            : this.props.toData + 1}
-                          </td>*/}
+                        <td>{key + this.props.fromData}</td>
                         <td>{list.site_name}</td>
                         <td>{list.site_identifier}</td>
                         <td>{list.submission_id}</td>
