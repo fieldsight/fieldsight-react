@@ -107,7 +107,7 @@ class SiteMap extends Component {
     ) {
       return null;
     } else {
-      return loc1;
+      return loc2;
     }
   };
   render() {
@@ -130,11 +130,12 @@ class SiteMap extends Component {
 
         mapData.features.forEach((data, index) => {
           newArr.length == 0 && newArr.push(data);
-          if (!!mapData.features[index] && mapData.features[index + 1]) {
+          if (!!mapData.features[index] && !!mapData.features[index + 1]) {
             const objGeo = this.returnGeoArr(
               mapData.features[index],
               mapData.features[index + 1]
             );
+
             if (!!objGeo) {
               newArr.push(objGeo);
             }
