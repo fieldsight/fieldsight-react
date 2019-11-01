@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import DotLoader from "../myForm/Loader";
+import { Link } from "react-router-dom";
 
 class VersionTable extends Component {
   state = {
@@ -103,12 +104,14 @@ class VersionTable extends Component {
                           <td>{version.total_submissions}</td>
                           <td>
                             {version.total_submissions > 0 ? (
-                              <a
+                              <Link
+                                to
                                 className="td-delete-btn"
                                 href={version.download_url}
+                                target="_blank"
                               >
                                 <i className="la la-download "></i>
-                              </a>
+                              </Link>
                             ) : (
                               ""
                             )}

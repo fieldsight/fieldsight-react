@@ -27,7 +27,7 @@ class ManageRegion extends Component {
       .get(`/fv3/api/enable-project-cluster-sites/${projectId}/`)
       .then(res => {
         this.setState({
-          cluster_sites: res.data.cluster_sites,
+          cluster_sites: !res.data.cluster_sites,
           hide: res.data.cluster_sites
         });
       })
@@ -42,43 +42,33 @@ class ManageRegion extends Component {
     data.cluster_sites = this.state.cluster_sites;
     data.Project = projectId;
 
-    // this.state.model
-    //   ? axios
-    //       .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
-    //       .then(res => {
-    //         this.setState({
-    //           hide: !this.state.hide,
-    //           response: res.data.detail,
-    //           model: true
-    //         });
-    //       })
-    //       .catch(err => {
-    //         console.log(err);
-    //       })
-    //   : axios
-    //       .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
-    //       .then(res => {
-    //         this.setState({
-    //           hide: !this.state.hide,
-    //           response: res.data.detail,
-    //           model: true
-    //         });
-    //       })
-    //       .catch(err => {
-    //         console.log(err);
-    //       });
-    axios
-      .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
-      .then(res => {
-        this.setState({
-          hide: !this.state.hide,
-          response: res.data.detail,
-          model: true
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    !this.state.model
+      ? axios
+          .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+          .then(res => {
+            this.setState({
+              hide: !this.state.hide,
+              response: res.data.detail,
+              model: true,
+              cluster_sites: res.data.cluster_sites
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      : axios
+          .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+          .then(res => {
+            this.setState({
+              hide: !this.state.hide,
+              response: res.data.detail,
+              model: false,
+              cluster_sites: res.data.cluster_sites
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
   };
 
   toast() {

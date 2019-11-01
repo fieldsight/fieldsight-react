@@ -99,12 +99,13 @@ export default class SurveyFormResponseTable extends Component {
                                       <i className="la la-download"></i>
                                     </a>
                                   ) : (
-                                    <a
-                                      href={sub_stages.download_url}
+                                    <Link
+                                      to={sub_stages.download_url}
                                       className="edit-tag tag"
+                                      target="_blank"
                                     >
                                       <i className="la la-download"></i>
-                                    </a>
+                                    </Link>
                                   )}
                                   {this.state.table === "site" ? (
                                     <Link
