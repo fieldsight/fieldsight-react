@@ -217,7 +217,6 @@ class AddSubstageForm extends Component {
         hasLoaded
       }
     } = this;
-    console.log("render", this.props.stagedRegions);
 
     return (
       <>

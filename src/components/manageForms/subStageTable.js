@@ -342,7 +342,6 @@ class SubStageTable extends Component {
       },
       state: { data }
     } = this;
-    // console.log(data, "issite");
 
     return (
       <>
