@@ -11,7 +11,7 @@ export default class Select extends Component {
   componentDidMount() {
     this._isMounted = true;
     axios
-      .get(`/fieldsight/api/project/sites/${this.props.data}/`)
+      .get(`/fv3/api/project-sites-for-metas/${this.props.data}/`)
       .then(res => {
         if (this._isMounted) {
           this.setState({
