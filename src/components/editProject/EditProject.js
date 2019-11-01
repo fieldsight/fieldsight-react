@@ -182,7 +182,7 @@ class EditProject extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { projectId } = this.context;
-    console.log(this.context, "context");
+
     axios
       .all(
         urls.map((url, i) => {
