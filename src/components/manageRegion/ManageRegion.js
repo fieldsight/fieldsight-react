@@ -40,32 +40,45 @@ class ManageRegion extends Component {
 
     let data = {};
     data.cluster_sites = this.state.cluster_sites;
+    data.Project = projectId;
 
-    !this.state.model
-      ? axios
-          .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
-          .then(res => {
-            this.setState({
-              hide: !this.state.hide,
-              response: res.data.detail,
-              model: true
-            });
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      : axios
-          .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
-          .then(res => {
-            this.setState({
-              hide: !this.state.hide,
-              response: res.data.detail,
-              model: true
-            });
-          })
-          .catch(err => {
-            console.log(err);
-          });
+    // this.state.model
+    //   ? axios
+    //       .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+    //       .then(res => {
+    //         this.setState({
+    //           hide: !this.state.hide,
+    //           response: res.data.detail,
+    //           model: true
+    //         });
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //       })
+    //   : axios
+    //       .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+    //       .then(res => {
+    //         this.setState({
+    //           hide: !this.state.hide,
+    //           response: res.data.detail,
+    //           model: true
+    //         });
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //       });
+    axios
+      .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+      .then(res => {
+        this.setState({
+          hide: !this.state.hide,
+          response: res.data.detail,
+          model: true
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   toast() {

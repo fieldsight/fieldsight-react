@@ -56,6 +56,8 @@ export default class SiteEdit extends Component {
     axios
       .get(`/fv3/api/site-form/${id}/`)
       .then(response => {
+        console.log(response, "response");
+
         axios
           .get(`/fv3/api/site-form/?project=${response.data.project}`)
           .then(res => {
