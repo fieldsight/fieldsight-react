@@ -54,9 +54,18 @@ class ManageRegion extends Component {
           .catch(err => {
             console.log(err);
           })
-      : this.setState({
-          hide: !this.state.hide
-        });
+      : axios
+          .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+          .then(res => {
+            this.setState({
+              hide: !this.state.hide,
+              response: res.data.detail,
+              model: true
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
   };
 
   toast() {

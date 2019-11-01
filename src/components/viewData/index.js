@@ -92,6 +92,13 @@ class ViewData extends Component {
     }
   };
   componentDidUpdate(preState) {
+    console.log(
+      preState.location.pathname,
+      "=",
+      this.props.location.pathname,
+      "preState"
+    );
+
     const {
       match: {
         params: { id }
