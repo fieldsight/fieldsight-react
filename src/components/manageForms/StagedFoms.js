@@ -130,9 +130,9 @@ class StagedForms extends Component {
       !!selectedType && !!selectedType.length > 0
         ? selectedType.map(each => each.id)
         : [];
-    const newOrder = !!order ? order : this.state.data.length + 1;
-
-    if (this.props.popupModal && !!order) {
+    const newOrder =
+      typeof order == "number" ? order : this.state.data.length + 1;
+    if (this.props.popupModal && order == newOrder) {
       const updateStageApi = !!this.state.isProjectForm
         ? `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`
         : `fv3/api/manage-forms/stages/${id}/?site_id=${this.state.id}`;
@@ -164,12 +164,6 @@ class StagedForms extends Component {
               };
             },
             () => {
-              // if (res.data) {
-              //   !!this.state.isProjectForm &&
-              //     this.requestStagedData(this.state.id, true);
-              //   !this.state.isProjectForm &&
-              //     this.requestStagedData(this.state.id, false);
-              // }
               this.handleClearStageForm();
               successToast("form", "updated");
             }
@@ -193,14 +187,6 @@ class StagedForms extends Component {
       axios
         .post(postStageApi, body)
         .then(res => {
-          // if (res.data) {
-          //   !!this.state.isProjectForm &&
-          //     this.requestStagedData(this.state.id, true);
-          //   !this.state.isProjectForm &&
-          //     this.requestStagedData(this.state.id, false);
-          // }
-          // this.handleClearStageForm();
-          // successToast("form", "added");
           this.setState(
             {
               data: [...this.state.data, res.data],
@@ -825,7 +811,6 @@ class StagedForms extends Component {
           ? false
           : true
         : "";
-    console.log("ppppppppppp", this.props.popupModal);
 
     return (
       <div className="col-xl-9 col-lg-8">
