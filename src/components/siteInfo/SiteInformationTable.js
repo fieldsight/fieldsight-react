@@ -561,7 +561,6 @@ class SiteInformationTable extends Component {
                   value={selectedProject ? selectedProject : null}
                 />
               )}
-
               {type === "Link" && (
                 <div style={{ position: "relative", height: "250px" }}>
                   <PerfectScrollbar>
@@ -569,12 +568,12 @@ class SiteInformationTable extends Component {
                       return (
                         <div
                           className="form-group"
-                          key={attribute.question_name}
+                          key={`${attribute.question_name}`}
                         >
                           <CheckBox
                             checked={attribute.checked}
                             label={attribute.question_name}
-                            onChange={e =>
+                            changeHandler={e =>
                               this.handleCheckboxChange(e, attribute)
                             }
                           />

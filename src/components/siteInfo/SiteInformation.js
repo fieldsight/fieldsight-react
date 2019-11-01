@@ -11,6 +11,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 import findQuestionWithGroup from "../../utils/findQuestionWithGroup";
+import { DotLoader } from "../myForm/Loader";
 
 const urls = [
   "fieldsight/api/organization/",
@@ -32,7 +33,8 @@ class SiteInformation extends Component {
     projectSettings: {},
     siteFeaturedImages: [],
     isLoading: false,
-    showConfirmation: false
+    showConfirmation: false,
+    loader: false
   };
 
   groupQuestion = formQuestionsChildren => {
@@ -60,101 +62,118 @@ class SiteInformation extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { projectId, organizationId } = this.context;
-    Promise.all(
-      urls.map((url, i) => {
-        return i === 0
-          ? axios.get(`${url}${organizationId}/my_projects/${projectId}/`)
-          : axios.get(`${url}${projectId}/`);
-      })
-    )
-      .then(results => {
-        if (this._isMounted) {
-          let modifiedJsonQuestions = [];
-          let modifiedForm = [];
+    this.setState(
+      {
+        loader: true
+      },
+      () => {
+        Promise.all(
+          urls.map((url, i) => {
+            return i === 0
+              ? axios.get(`${url}${organizationId}/my_projects/${projectId}/`)
+              : axios.get(`${url}${projectId}/`);
+          })
+        )
+          .then(results => {
+            if (this._isMounted) {
+              let modifiedJsonQuestions = [];
+              let modifiedForm = [];
 
-          if (results[1].data) {
-            modifiedForm = results[1].data.map(formQuestions => {
-              if (formQuestions.json) {
-                formQuestions.json.children = this.groupQuestion(
-                  formQuestions.json.children
+              if (results[1].data) {
+                modifiedForm = results[1].data.map(formQuestions => {
+                  if (formQuestions.json) {
+                    formQuestions.json.children = this.groupQuestion(
+                      formQuestions.json.children
+                    );
+                  }
+
+                  return formQuestions;
+                });
+              }
+
+              if (results[2].data.json_questions.length > 0) {
+                modifiedJsonQuestions = results[2].data.json_questions.map(
+                  question => {
+                    if (question.question_type === "MCQ") {
+                      let optInputField = [],
+                        options = {};
+                      if (Array.isArray(question.mcq_options)) {
+                        question.mcq_options.map((opt, i) => {
+                          options[`option${i + 1}`] = opt.option_text;
+                          optInputField.push({ tag: InputElement, val: i + 1 });
+                        });
+                      }
+                      question.mcq_options = options;
+                      question.optInputField = optInputField;
+                      return question;
+                    } else if (question.question_type === "Link") {
+                      if (question.metas) {
+                        const metaAttribute =
+                          question.metas[question.project_id];
+                        question.metas = metaAttribute;
+                      }
+                      return question;
+                    }
+                    return question;
+                  }
                 );
               }
 
-              return formQuestions;
-            });
-          }
-
-          if (results[2].data.json_questions.length > 0) {
-            modifiedJsonQuestions = results[2].data.json_questions.map(
-              question => {
-                if (question.question_type === "MCQ") {
-                  let optInputField = [],
-                    options = {};
-                  if (Array.isArray(question.mcq_options)) {
-                    question.mcq_options.map((opt, i) => {
-                      options[`option${i + 1}`] = opt.option_text;
-                      optInputField.push({ tag: InputElement, val: i + 1 });
-                    });
+              const modifiedProjectSettings = results[2].data.project_settings.map(
+                settings => {
+                  if (settings.source === 2) {
+                    if (settings.pull_integer_form_question) {
+                      // let splitedStr = settings.pull_integer_form_question.split(
+                      //   "/"
+                      // );
+                      // if (splitedStr.length > 1) {
+                      //   settings.pull_integer_form_question =
+                      //     splitedStr[splitedStr.length - 1];
+                      // }
+                      return {
+                        ...settings,
+                        source: settings.source.toString()
+                      };
+                    }
+                  } else {
+                    return {
+                      ...settings,
+                      source: settings.source.toString()
+                    };
                   }
-                  question.mcq_options = options;
-                  question.optInputField = optInputField;
-                  return question;
-                } else if (question.question_type === "Link") {
-                  if (question.metas) {
-                    const metaAttribute = question.metas[question.project_id];
-                    question.metas = metaAttribute;
-                  }
-                  return question;
                 }
-                return question;
-              }
-            );
-          }
+              );
 
-          const modifiedProjectSettings = results[2].data.project_settings.map(
-            settings => {
-              if (settings.source === 2) {
-                if (settings.pull_integer_form_question) {
-                  // let splitedStr = settings.pull_integer_form_question.split(
-                  //   "/"
-                  // );
-                  // if (splitedStr.length > 1) {
-                  //   settings.pull_integer_form_question =
-                  //     splitedStr[splitedStr.length - 1];
-                  // }
-                  return { ...settings, source: settings.source.toString() };
-                }
-              } else {
-                return {
-                  ...settings,
-                  source: settings.source.toString()
-                };
-              }
+              this.setState({
+                projects: [
+                  {
+                    id: 0,
+                    name: "--Select Project--",
+                    site_meta_attributes: []
+                  },
+                  ...results[0].data
+                ],
+                forms: [
+                  { id: 0, name: "--Select Form--", json: { children: [] } },
+                  ...modifiedForm
+                ],
+                siteBasicInfo: results[2].data.site_basic_info,
+                jsonQuestions: modifiedJsonQuestions,
+                siteFeaturedImages: results[2].data.site_featured_images,
+                projectSettings:
+                  modifiedProjectSettings.length > 0
+                    ? modifiedProjectSettings[0]
+                    : {},
+                loader: false
+              });
             }
-          );
-
-          this.setState({
-            projects: [
-              { id: 0, name: "--Select Project--", site_meta_attributes: [] },
-              ...results[0].data
-            ],
-            forms: [
-              { id: 0, name: "--Select Form--", json: { children: [] } },
-              ...modifiedForm
-            ],
-            siteBasicInfo: results[2].data.site_basic_info,
-            jsonQuestions: modifiedJsonQuestions,
-            siteFeaturedImages: results[2].data.site_featured_images,
-            projectSettings:
-              modifiedProjectSettings.length > 0
-                ? modifiedProjectSettings[0]
-                : {}
+          })
+          .catch(error => {
+            console.log("error", error);
+            this.setState({ loader: false });
           });
-        }
-      })
-      .catch(error => {
-        console.log("error", error);
-      });
+      }
+    );
   }
 
   requestHandler = async () => {
@@ -295,7 +314,8 @@ class SiteInformation extends Component {
         siteFeaturedImages,
         projectSettings,
         isLoading,
-        showConfirmation
+        showConfirmation,
+        loader
       },
       context: { terms },
       onSubmitHandler,
@@ -347,6 +367,7 @@ class SiteInformation extends Component {
             </button>
           </div>
         </RightContentCard>
+        {loader && <DotLoader />}
         {isLoading && <Loader />}
         {showConfirmation && (
           <Modal title="Warning" toggleModal={cancelHandler}>
