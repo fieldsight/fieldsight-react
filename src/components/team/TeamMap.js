@@ -186,6 +186,7 @@ class TeamMap extends React.Component {
             // map.fitBounds(this.state.layerGroup.getBounds())
 
         })
+        map.fitBounds(this.state.layerGroup.getBounds());
         // map.addLayer(this.state.layerGroup)
         // this.setState({layerGroup:layerGroup})
 
@@ -194,12 +195,21 @@ class TeamMap extends React.Component {
 
 
     }
+    getColor = (d) => {
+        return d > 250 ? '#800026' :
+            d > 200 ? '#BD0026' :
+                d > 150 ? '#E31A1C' :
+                    d > 100 ? '#FC4E2A' :
+                        d > 50 ? '#FD8D3C' :
+                            '#FFEDA0';
+    }
+
     componentDidMount() {
         console.log("DIdmount");
         const map = this.mapRef.current.leafletElement;
         map.createPane('world_shp');
         map.getPane('world_shp').style.zIndex = 250;
-        map.addLayer(this.state.layerGroup)
+        // map.addLayer(this.state.layerGroup)
         this.state.layerGroup.on('click', (e) => {
             console.log(e, "event", document.getElementsByClassName('popButton'));
             var a = document.getElementsByClassName('popButton')
@@ -224,8 +234,8 @@ class TeamMap extends React.Component {
                     return {
                         fillColor: "red",
                         fillOpacity: 0.02,
-                        weight: 1,
-                        opacity: 1,
+                        weight: 0.3,
+                        opacity: 0.0,
                         color: 'red',
                         fill: true,
                     }
@@ -243,11 +253,22 @@ class TeamMap extends React.Component {
         }
 
         const url = 'http://139.59.67.104:8080/geoserver/gwc/service/tms/1.0.0/Naxa:world@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf'
-        const url1 = 'http://139.59.67.104:8080/geoserver/gwc/service/tms/1.0.0/Naxa:River_Shankharapur@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf '
         // map.on('baselayerchange')
 
+        var world = L.vectorGrid.protobuf(url, vectorTileOptions)
+        for (var i = 1; i <= 252; i++) {
 
-        var world = L.vectorGrid.protobuf(url, vectorTileOptions        )
+            world.setFeatureStyle(i, {
+                fillColor: this.getColor(i),
+                fillOpacity: 0.4,
+                fill: true,
+                opacity: 0.4,
+                color: 'black',
+                weight: 0.3
+            })
+
+        }
+
 
         world.addTo(map);
 
@@ -311,6 +332,46 @@ class TeamMap extends React.Component {
 
             })
 
+
+        var legend = L.control({ position: 'bottomright' });
+
+        legend.onAdd =  (map) =>{
+
+            var div = L.DomUtil.create('div', 'info legend'),
+                grades = [0,50, 100,150, 200, 250],
+                labels = [];
+            div.innerHTML+="<h6>Legend</h6>"
+
+            // loop through our density intervals and generate a label with a colored square for each interval
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + this.getColor(grades[i] + 1) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            }
+
+            return div;
+        };
+
+        legend.addTo(map);
+
+        map.on('zoomend', ()=> {
+            var zoomlevel = map.getZoom();
+                if (zoomlevel  <= 2){
+                    if (map.hasLayer(this.state.layerGroup)) {
+                        map.removeLayer(this.state.layerGroup);
+                    } 
+                        
+                        
+                    }
+                    else{
+                        if (!map.hasLayer(this.state.layerGroup)) {
+                            map.addLayer(this.state.layerGroup);
+                        } 
+
+                    }
+                    
+                
+            });
 
 
 
