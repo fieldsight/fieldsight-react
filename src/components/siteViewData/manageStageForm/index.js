@@ -1,34 +1,19 @@
 import React, { Component } from "react";
 import ResponseTable from "../../responded/StagedFormResponseTable";
-import StatusTable from "../../responded/StatusTable";
 import axios from "axios";
-import Rejectsubmission from "../RejectSubmissionTable.js";
 import DeleteTable from "../deleteTable";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { getsiteViewData } from "../../../actions/siteViewDataAction";
 
 class ResponseStageForm extends Component {
   state = {
-    stage_forms: [],
-    hide: true,
-    id: "",
-    deleted_forms: []
+    hide: true
   };
   componentDidMount() {
     if (this.props.id != "") {
-      axios
-        .get(`/fv3/api/view-by-forms/?site=${this.props.id}&form_type=stage`)
-        .then(res => {
-          this.setState(
-            {
-              stage_forms: res.data.stage_forms,
-              deleted_forms: res.data.deleted_forms
-            },
-            () => this.props.handleBreadCrumb(res.data.breadcrumbs)
-          );
-        })
-        .catch(err => {
-          console.log(err, "err");
-        });
+      this.props.getsiteViewData(this.props.id, "stage");
     }
   }
   toggleHide = () => {
@@ -39,7 +24,7 @@ class ResponseStageForm extends Component {
 
   render() {
     const {
-      props: { showViewData, data }
+      props: { showViewData, data, generals_forms, deleted_forms, loading }
     } = this;
 
     return (
@@ -55,14 +40,15 @@ class ResponseStageForm extends Component {
         <div className="card-body">
           {!data && (
             <ResponseTable
-              stage_forms={this.state.stage_forms}
+              stage_forms={generals_forms}
               table="site"
               id={this.props.id}
+              loader={loading}
             />
           )}
         </div>
 
-        {this.state.deleted_forms && this.state.deleted_forms.length > 0
+        {deleted_forms && deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">
@@ -100,8 +86,9 @@ class ResponseStageForm extends Component {
                 <div className="card-body">
                   {!this.state.hide && (
                     <DeleteTable
-                      deleted_forms={this.state.deleted_forms}
+                      deleted_forms={deleted_forms}
                       id={this.props.id}
+                      loader={loading}
                     />
                   )}
                 </div>
@@ -112,4 +99,21 @@ class ResponseStageForm extends Component {
     );
   }
 }
-export default ResponseStageForm;
+//export default ResponseStageForm;
+const mapStateToProps = ({ siteViewData }) => {
+  const { generals_forms, deleted_forms, loading } = siteViewData;
+
+  return {
+    generals_forms,
+    deleted_forms,
+    loading
+  };
+};
+export default compose(
+  connect(
+    mapStateToProps,
+    {
+      getsiteViewData
+    }
+  )
+)(ResponseStageForm);

@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
-
-import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
 import CheckBox from "../common/CheckBox";
 import SelectElement from "../common/SelectElement";
@@ -43,18 +41,6 @@ class GlobalModalForm extends Component {
       this.props.formData && this.props.formData.date_range_end
         ? new Date(this.props.formData.date_range_end)
         : null,
-    weight:
-      this.props.formData && this.props.formData.weight
-        ? this.props.formData.weight
-        : "",
-    substageTitle:
-      this.props.formData && this.props.formData.name
-        ? this.props.formData.name
-        : "",
-    substageDesc:
-      this.props.formData && this.props.formData.description
-        ? this.props.formData.description
-        : "",
     hasLoaded: false,
     order:
       this.props.formData && this.props.formData.order
@@ -148,70 +134,69 @@ class GlobalModalForm extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    const { typeOptions, regionOptions, formData } = this.props;
+    const { typeOptions, regionOptions, formData, isProjectWide } = this.props;
+    if (!isProjectWide) {
+      const regionSelected =
+        formData && formData.setting && formData.setting.regions;
+      const typeSelected =
+        formData && formData.setting && formData.setting.types;
 
-    const regionSelected =
-      formData && formData.setting && formData.setting.regions;
-    const typeSelected = formData && formData.setting && formData.setting.types;
+      if (this._isMounted) {
+        const newRegionArr =
+          regionOptions &&
+          regionOptions.map(each => ({
+            ...each,
+            value: each.identifier,
+            label: each.name
+          }));
+        const newTypeArr =
+          typeOptions &&
+          typeOptions.map(each => ({
+            ...each,
+            value: each.identifier,
+            label: each.name
+          }));
 
-    if (this._isMounted) {
-      const newRegionArr =
-        regionOptions &&
-        regionOptions.map(each => ({
-          ...each,
-          value: each.identifier,
-          label: each.name
-        }));
-      const newTypeArr =
-        typeOptions &&
-        typeOptions.map(each => ({
-          ...each,
-          value: each.identifier,
-          label: each.name
-        }));
+        let selectedRegion = [];
+        let selectedType = [];
 
-      let selectedRegion = [];
-      let selectedType = [];
+        if (formData && formData.setting) {
+          if (regionSelected && regionSelected.length > 0) {
+            regionOptions.map(region => {
+              if (regionSelected.indexOf(region.id) > -1) {
+                selectedRegion.push({
+                  ...region,
+                  value: region.identifier,
+                  label: region.name
+                });
+              }
+            });
+          }
 
-      if (!!regionSelected) {
-        if (regionSelected.length > 0) {
-          regionOptions.map(region => {
-            if (regionSelected.indexOf(region.id) > -1) {
-              selectedRegion.push({
-                ...region,
-                value: region.identifier,
-                label: region.name
-              });
-            }
-          });
+          if (typeSelected && typeSelected.length > 0) {
+            typeOptions.map(type => {
+              if (typeSelected.indexOf(type.id) > -1) {
+                selectedType.push({
+                  ...type,
+                  value: type.identifier,
+                  label: type.name
+                });
+              }
+            });
+          }
+        } else {
+          selectedRegion = newRegionArr;
+          selectedType = newTypeArr;
         }
-      } else {
-        selectedRegion = newRegionArr;
-      }
 
-      if (!!typeSelected) {
-        if (typeSelected.length > 0) {
-          typeOptions.map(type => {
-            if (typeSelected.indexOf(type.id) > -1) {
-              selectedType.push({
-                ...type,
-                value: type.identifier,
-                label: type.name
-              });
-            }
-          });
-        }
-      } else {
-        selectedType = newTypeArr;
+        this.setState({
+          hasLoaded: true,
+          regionDropdown: newRegionArr,
+          typeDropdown: newTypeArr,
+          regionSelected: selectedRegion,
+          typeSelected: selectedType
+        });
       }
-
-      this.setState({
-        hasLoaded: true,
-        regionDropdown: newRegionArr,
-        typeDropdown: newTypeArr,
-        regionSelected: selectedRegion,
-        typeSelected: selectedType
-      });
     }
   }
 
@@ -229,10 +214,7 @@ class GlobalModalForm extends Component {
         regionSelected: [],
         typeSelected: [],
         startDate: new Date(),
-        endDate: new Date(),
-        weight: "",
-        substageTitle: "",
-        substageDesc: "",
+        endDate: null,
         hasLoaded: false,
         errors: {}
       },
@@ -509,9 +491,6 @@ class GlobalModalForm extends Component {
         isDonor,
         isEdit,
         isDelete,
-        weight,
-        substageTitle,
-        substageDesc,
         hasLoaded,
         startDate,
         endDate,
@@ -542,32 +521,6 @@ class GlobalModalForm extends Component {
       <>
         <form className="floating-form" onSubmit={this.handleSubmit}>
           <div className="form-form">
-            {formType == "substage" && (
-              <>
-                <InputElement
-                  classname="border-0"
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  required={true}
-                  label="Name"
-                  name="substageTitle"
-                  value={substageTitle}
-                  changeHandler={this.handleInputChange}
-                />
-                <InputElement
-                  classname="border-0"
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  //   required={true}
-                  label="Description"
-                  name="substageDesc"
-                  value={substageDesc}
-                  changeHandler={this.handleInputChange}
-                />
-              </>
-            )}
             <div className="selected-form">
               <div className="selected-text">
                 <span>{formTitle}</span>
@@ -575,7 +528,7 @@ class GlobalModalForm extends Component {
               {!isEditForm && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
-                    {formTitle ? "Change form" : " Choose form"}
+                    {!!formTitle ? "Change form" : " Choose form"}
                     <span>
                       <i className="la la-file-text-o"></i>
                     </span>
@@ -794,22 +747,6 @@ class GlobalModalForm extends Component {
               </div>
             </>
           )}
-          {formType == "substage" && (
-            <>
-              {/* for subStage form */}
-              <InputElement
-                classname="border-0"
-                formType="editForm"
-                tag="input"
-                type="number"
-                //   required={true}
-                label="Weight"
-                name="weight"
-                value={weight}
-                changeHandler={this.handleInputChange}
-              />
-            </>
-          )}
 
           <div className="form-group flexrow checkbox-group">
             <label>Default submission status</label>
@@ -874,7 +811,7 @@ class GlobalModalForm extends Component {
               )}
             </div>
           )}
-          <div className="form-group checkbox-group">
+          {/* <div className="form-group checkbox-group">
             <label>Donor visibility</label>
             <div className="custom-checkbox display-inline">
               <RadioElement
@@ -930,8 +867,7 @@ class GlobalModalForm extends Component {
                 checked={isDelete == false}
               />
             </div>
-          </div>
-
+          </div> */}
           <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
               Save

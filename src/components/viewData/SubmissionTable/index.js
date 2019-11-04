@@ -20,7 +20,6 @@ class SubmissionData extends Component {
         params: { id, fid }
       }
     } = this.props;
-
     this.props.paginationHandler(1, null, {
       type: "formSubmission",
       projectId: this.state.id,
@@ -69,6 +68,7 @@ class SubmissionData extends Component {
       });
     }
   };
+
   cancleModel = () => {
     this.setState({
       showConfirmation: false
@@ -109,6 +109,7 @@ class SubmissionData extends Component {
   };
 
   render() {
+    const projectId = this.state.id;
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -153,10 +154,10 @@ class SubmissionData extends Component {
             >
               <thead>
                 <tr>
-                  <th>S.N.</th>
+                  {/* <th>S.N.</th>*/}
                   <th>Site Name</th>
                   <th>Site Id</th>
-                  <th>Submission Id</th>
+                  <th>submission id</th>
                   <th>Submitted By</th>
                   <th>Submission Date</th>
                   <th>Action</th>
@@ -167,7 +168,7 @@ class SubmissionData extends Component {
                   this.state.siteList.map((list, key) => {
                     return (
                       <tr key={key}>
-                        <td>{key + 1}</td>
+                        {/*<td>{key + this.props.fromData}</td>*/}
                         <td>{list.site_name}</td>
                         <td>{list.site_identifier}</td>
                         <td>{list.submission_id}</td>
@@ -178,18 +179,20 @@ class SubmissionData extends Component {
 
                         <td>
                           <a
-                            href={`/form/view/${this.props.form_id_string}/${list.submission_id}`}
+                            className="view-tag tag"
+                            href={`/fieldsight/application/?submission=${list.submission_id}#/submission-details`}
                           >
                             <i className="la la-eye"></i>
                           </a>
                           <a
-                            href={`/form/edit/${this.props.form_id_string}/${list.submission_id}`}
+                            className="edit-tag tag"
+                            href={`/forms/edit/${this.props.form_id_string}/${list.submission_id}`}
                           >
                             <i className="la la-edit"></i>
                           </a>
 
                           <a
-                            className="td-delete-btn"
+                            className="delete-tag tag"
                             onClick={() => {
                               this.handleDelete(list.submission_id);
                             }}
@@ -217,6 +220,7 @@ class SubmissionData extends Component {
                       of <span>{this.props.totalCount}</span> entries.
                     </p>
                   </div>
+
                   {this.props.toData < this.props.totalCount ? (
                     <div className="table-pagination">
                       <ul>
@@ -226,11 +230,19 @@ class SubmissionData extends Component {
                               this.props.paginationHandler(
                                 this.props.pageNum - 1,
                                 null,
-                                project_id
+                                {
+                                  type: "formSubmission",
+                                  projectId: this.state.id,
+                                  fsxf_id: this.state.fid,
+                                  status: "form-submission"
+                                }
                               )
                             }
                           >
-                            <i className="la la-long-arrow-left" />
+                            <i
+                              className={`la la-long-arrow-left ${this.props
+                                .fromData == 1}?disable-btn :""`}
+                            />
                           </a>
                         </li>
 
@@ -247,7 +259,12 @@ class SubmissionData extends Component {
                               this.props.paginationHandler(
                                 this.props.pageNum + 1,
                                 null,
-                                project_id
+                                {
+                                  type: "formSubmission",
+                                  projectId: this.state.id,
+                                  fsxf_id: this.state.fid,
+                                  status: "form-submission"
+                                }
                               )
                             }
                           >
@@ -281,7 +298,7 @@ class SubmissionData extends Component {
             <div>
               <p>
                 "All the data within the submission will be completely removed.
-                Do u still want to continue?"
+                Do you still want to continue?"
               </p>
             </div>
             <div className="warning-footer text-center">

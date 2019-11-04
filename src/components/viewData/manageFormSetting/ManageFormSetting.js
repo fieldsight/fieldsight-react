@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 
 const sideNavRoutes = [
-  { to: "/scheduled", title: "Scheduled Forms" },
-  { to: "/stage", title: "Staged Forms" },
-  { to: "/general-survey", title: "General Forms" }
+  { to: "/general", path: "/general", title: "General Forms" },
+  { to: "/scheduled", path: "/scheduled", title: "Scheduled Forms" },
+  { to: "/stage", path: "/stage", title: "Staged Forms" }
 ];
 const site_specific_forms = [
-  { to: "/general", path: "", title: "General Forms" }
+  { to: "/general-survey", path: "/general-survey", title: "General Forms" }
 ];
 
 const viewByStatus = [
@@ -28,14 +28,17 @@ class ManageFormSetting extends Component {
         {!this.props.show_submission && (
           <>
             <div className="manage_group">
-              <h5>Project wide Forms</h5>
+              <h5>Site Specific Forms</h5>
               <ul className="nav nav-tabs flex-column border-tabs">
-                {site_specific_forms.map((route, i) => (
+                {sideNavRoutes.map((route, i) => (
                   <li className="nav-item" key={i}>
                     <Link
                       to={`/project-responses/${this.props.match.params.id}${route.to}`}
                       className={
-                        pathname === route.path ? "nav-link active" : "nav-link"
+                        this.props.location.pathname ==
+                        `/project-responses/${this.props.match.params.id}${route.path}`
+                          ? "nav-link active"
+                          : "nav-link"
                       }
                     >
                       {route.title}
@@ -44,15 +47,18 @@ class ManageFormSetting extends Component {
                 ))}
               </ul>
             </div>
-            <div className="manage_group">
-              <h5>Site Specific Forms</h5>
+            <div className="manage_group mrt-15">
+              <h5>Project wide Forms</h5>
               <ul className="nav nav-tabs flex-column border-tabs">
-                {sideNavRoutes.map((route, i) => (
+                {site_specific_forms.map((route, i) => (
                   <li className="nav-item" key={i}>
                     <Link
                       to={`/project-responses/${this.props.match.params.id}${route.to}`}
                       className={
-                        pathname === route.path ? "nav-link active" : "nav-link"
+                        this.props.location.pathname ==
+                        `/project-responses/${this.props.match.params.id}${route.path}`
+                          ? "nav-link active"
+                          : "nav-link"
                       }
                     >
                       {route.title}
@@ -70,7 +76,10 @@ class ManageFormSetting extends Component {
                 <Link
                   to={`/project-responses/${this.props.match.params.id}${route.to}`}
                   className={
-                    pathname === route.path ? "nav-link active" : "nav-link"
+                    this.props.location.pathname ==
+                    `/project-responses/${this.props.match.params.id}${route.path}`
+                      ? "nav-link active"
+                      : "nav-link"
                   }
                 >
                   {route.title}

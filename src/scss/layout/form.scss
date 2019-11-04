@@ -200,17 +200,6 @@
 
         }
 
-        // &::after {
-        //   position: absolute;
-        //   top: 50%;
-        //   transform: translateY(-50%);
-        //   right: 7px;
-        //   content: "\f110";
-        //   font-family: 'LineAwesome';
-        //   z-index: 99;
-        //   font-size: 0.875rem;
-        //   pointer-events: none;
-        // }
 
         &:focus-within {
           &::after {
@@ -839,8 +828,11 @@
         }
 
         .card-body {
-          max-height: 500px;
+          max-height: 450px;
           overflow-y: auto;
+          @media screen and (max-width:$ls-tab){
+            height:350px;
+          }
         }
       }
 
@@ -910,10 +902,13 @@
       &.manage-body {
         .card {
           .card-body {
-            height: 500px;
+            height: 450px;
 
             h5 {
               font-size: .875rem;
+            }
+            @media screen and (max-width:$desktop){
+              height:350px;
             }
           }
         }

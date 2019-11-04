@@ -10,8 +10,10 @@ import ApprovedTable from "./ApprovedTable.js";
 import PendingTable from "./PendingSubmissionTable.js";
 import RejectedTable from "./RejectSubmissionTable.js";
 import FlaggedTable from "./FlagedTable.js";
+import { connect } from "react-redux";
+import { compose } from "redux";
 
-export default class SiteViewData extends Component {
+class SiteViewData extends Component {
   state = {
     hide: true,
     view_btn: false,
@@ -85,11 +87,43 @@ export default class SiteViewData extends Component {
       });
     }
   };
-  render() {
+  componentDidUpdate(preState) {
     const {
       match: {
         params: { id }
       }
+    } = this.props;
+
+    if (preState.location.pathname !== this.props.location.pathname) {
+      if (
+        this.props.location.pathname === `/site-responses/${id}/rejected` ||
+        this.props.location.pathname === `/site-responses/${id}/pending` ||
+        this.props.location.pathname === `/site-responses/${id}/flagged` ||
+        this.props.location.pathname === `/site-responses/${id}/approved`
+      ) {
+        this.setState({
+          id,
+          view_btn: true
+        });
+      } else if (
+        this.props.location.pathname === `/site-responses/${id}/general` ||
+        this.props.location.pathname === `/site-responses/${id}/stage` ||
+        this.props.location.pathname === `/site-responses/${id}/scheduled`
+      ) {
+        this.setState({
+          view_btn: false,
+          id
+        });
+      }
+    }
+  }
+
+  render() {
+    const {
+      match: {
+        params: { id }
+      },
+      breadcrumbs
     } = this.props;
 
     return (
@@ -97,12 +131,12 @@ export default class SiteViewData extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href={this.state.breadCrumb.site_url}>
-                {this.state.breadCrumb.site_name}
+              <a href={breadcrumbs.site_url || this.state.breadCrumb.site_url}>
+                {breadcrumbs.site_name || this.state.breadCrumb.site_name}
               </a>
             </li>
             <li className="breadcrumb-item">
-              {this.state.breadCrumb.current_page}
+              {breadcrumbs.current_page || this.state.breadCrumb.site_name}
             </li>
           </ol>
         </nav>
@@ -112,7 +146,7 @@ export default class SiteViewData extends Component {
               <div className="left-sidebar new-sidebar sticky-top">
                 <div className="card">
                   <div className="card-header main-card-header">
-                    <h5>Site View Data</h5>
+                    <h5>View Data</h5>
                   </div>
                   <div className="card-body">
                     <ManageFormSetting
@@ -232,3 +266,12 @@ export default class SiteViewData extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ siteViewData }) => {
+  const { breadcrumbs } = siteViewData;
+
+  return {
+    breadcrumbs
+  };
+};
+export default compose(connect(mapStateToProps))(SiteViewData);

@@ -87,7 +87,7 @@ class EditProject extends Component {
       website,
       donor,
       public_desc,
-      cluster_sites,
+      // cluster_sites,
       ...(cropResult && { logo: cropResult }),
       latitude,
       longitude,
@@ -95,7 +95,6 @@ class EditProject extends Component {
       sub_sector: selectedSubSector,
       organization
     };
-
     axios
       .put(`${urls[0]}${projectId}/`, project, {
         onUploadProgress: progressEvent => {
@@ -183,6 +182,7 @@ class EditProject extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { projectId } = this.context;
+
     axios
       .all(
         urls.map((url, i) => {
@@ -396,15 +396,15 @@ class EditProject extends Component {
                 />
               </div>
             </div>
-            <div className="col-xl-4 col-md-6">
+            {/*  <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <CheckBox
                   checked={cluster_sites || ""}
                   label="Enable/Disable Clustering into Regions"
-                  onChange={this.handleCheckboxChange}
+                  changeHandler={this.handleCheckboxChange}
                 />
               </div>
-            </div>
+    </div>*/}
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"

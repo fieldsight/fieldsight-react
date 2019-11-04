@@ -42,9 +42,17 @@ class SideNav extends Component {
           if (this._isMounted) {
             this.setState(state => {
               if (!!this.state.isProjectForm) {
+                const regions = list.data.regions;
+                const types = list.data.site_types;
                 return {
-                  regionOptions: list.data.regions,
-                  typeOptions: list.data.site_types,
+                  regionOptions: [
+                    ...regions,
+                    { id: 0, identifier: "unassigned", name: "unassigned" }
+                  ],
+                  typeOptions: [
+                    ...types,
+                    { id: 0, identifier: "undefined", name: "undefined" }
+                  ],
                   myForms: myForms.data,
                   projectForms: projectForms.data,
                   sharedForms: sharedForms.data,
@@ -62,7 +70,7 @@ class SideNav extends Component {
           }
         })
       )
-      .catch(err => console.log("err", err));
+      .catch(err => {});
   }
   componentDidMount() {
     this._isMounted = true;

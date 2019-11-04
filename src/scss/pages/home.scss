@@ -30,12 +30,13 @@
         figure {
           margin: 0;
           @include radius(50%);
-          flex: 0 0 55px;
+          flex: 0 0 40px;
           overflow: hidden;
+          margin-right: 1rem;
 
           img {
             @include radius(50%);
-            max-width: 40px;
+            width: 40px;
             height: 40px;
             @include easein_out(all 0.5s ease-in-out);
             @include transform_scale(scale(1));
@@ -45,7 +46,7 @@
         .content {
           h6 {
             margin-bottom: 0.2rem;
-            font-size: .875rem;
+            font-size: .845rem;
 
             a {
               color: $color-primary;
@@ -64,7 +65,7 @@
           margin: 0;
 
           a {
-            font-weight: 600;
+            font-weight: 500;
             color: $color-blue;
           }
         }
@@ -255,6 +256,7 @@
             figure {
               margin-top: 0.5rem;
               flex: initial;
+              border-radius: 0;
 
               img {
                 max-width: 100%;
@@ -381,6 +383,10 @@
               padding: 0.25rem 0;
               margin: 0;
               border-bottom: 1px solid $color-bg;
+              word-break: break-all;
+              label{
+                word-break: break-all;
+              }
             }
           }
         }
@@ -630,6 +636,10 @@
         }
 
         .dragable-stage {
+          padding:0;
+          background:transparent;
+          margin:0;
+          border:0;
           .card-header {
             h5 {
               width: calc(100% - 30px);
@@ -650,6 +660,9 @@
               cursor: -webkit-move;
               cursor: move;
             }
+          }
+          &::before{
+            display: none;
           }
         }
       }

@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
-import GlobalModalForm from "./GlobalModalForm";
+import AddSubstageForm from "./AddSubstageForm";
 import AddForm from "./AddForm";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
@@ -11,6 +11,7 @@ import SortableStage from "./SortableStage";
 import AddStageForm from "./AddStageForm";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import ManageModal from "./ManageModal";
+import Loader from "../common/Loader";
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -47,7 +48,10 @@ class StagedForms extends Component {
     isSubstageReorderCancel: true,
     newSubstageOrder: [],
     reOrderDisable: true,
-    subStageReorderDisable: true
+    subStageReorderDisable: true,
+    stagedRegions: [],
+    stagedTypes: [],
+    loadReq: false
   };
 
   componentDidMount() {
@@ -84,6 +88,22 @@ class StagedForms extends Component {
     }
   }
 
+  componentDidUpdate(nextProps) {
+    if (nextProps.myForms != this.props.myForms) {
+      this.setState({
+        myFormList: this.props.myForms
+      });
+    } else if (nextProps.projectForms != this.props.projectForms) {
+      this.setState({
+        projectFormList: this.props.projectForms
+      });
+    } else if (nextProps.sharedForms != this.props.sharedForms) {
+      this.setState({
+        sharedFormList: this.props.sharedForms
+      });
+    }
+  }
+
   requestStagedData = (id, checkUrl) => {
     const apiUrl = checkUrl
       ? `fv3/api/manage-forms/stages/?project_id=${id}`
@@ -104,77 +124,96 @@ class StagedForms extends Component {
 
   handleSubmitStageForm = data => {
     const { name, desc, selectedRegion, selectedType, order, id } = data;
-    const mapRegion = selectedRegion.map(each => each.id);
-    const mapType = selectedType.map(each => each.id);
-    const newOrder = order > 0 ? order : this.state.data.length + 1;
-    if (order > 0) {
-      const updateStageApi = !!this.state.isProjectForm
-        ? `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`
-        : `fv3/api/manage-forms/stages/${id}/?site_id=${this.state.id}`;
-      const body = {
-        name: name,
-        tags: mapType,
-        regions: mapRegion,
-        order: newOrder,
-        description: desc,
-        id: id
-      };
-      axios
-        .put(updateStageApi, body)
-        .then(res => {
-          this.setState(
-            state => {
-              const data = this.state.data;
-              const newArr = data.map(each => {
-                if (each.id == res.data.id) {
-                  return (each = res.data);
-                } else {
-                  return each;
-                }
-              });
-              return {
-                data: newArr
-              };
-            },
-            () => {
-              this.handleClearStageForm();
-              successToast("form", "updated");
-            }
-          );
-        })
-        .catch(err => {
-          const errors = err.response;
-          errorToast(errors.data.error);
-        });
-    } else {
-      const postStageApi = !!this.state.isProjectForm
-        ? `fv3/api/manage-forms/stages/?project_id=${this.state.id}`
-        : `fv3/api/manage-forms/stages/?site_id=${this.state.id}`;
-      const body = {
-        name: name,
-        tags: mapType,
-        regions: mapRegion,
-        order: newOrder,
-        description: desc
-      };
-      axios
-        .post(postStageApi, body)
-        .then(res => {
-          this.setState(
-            {
-              data: [...this.state.data, res.data]
-            },
-            () => {
-              this.handleClearStageForm();
-              successToast("form", "added");
-            }
-          );
-        })
-        .catch(err => {
-          const errors = err.response;
-          errorToast(errors.data.error);
-        });
-    }
+    this.setState({ loadReq: true }, () => {
+      const mapRegion =
+        !!selectedRegion && !!selectedRegion.length > 0
+          ? selectedRegion.map(each => each.id)
+          : [];
+      const mapType =
+        !!selectedType && !!selectedType.length > 0
+          ? selectedType.map(each => each.id)
+          : [];
+      const newOrder =
+        typeof order == "number" ? order : this.state.data.length + 1;
+      if (this.props.popupModal && order == newOrder) {
+        const updateStageApi = !!this.state.isProjectForm
+          ? `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`
+          : `fv3/api/manage-forms/stages/${id}/?site_id=${this.state.id}`;
+        const body = {
+          name: name,
+          tags: mapType,
+          regions: mapRegion,
+          order: newOrder,
+          description: desc,
+          id: id
+        };
+        axios
+          .put(updateStageApi, body)
+          .then(res => {
+            this.setState(
+              state => {
+                const data = this.state.data;
+                const newArr = data.map(each => {
+                  if (each.id == res.data.id) {
+                    return (each = res.data);
+                  } else {
+                    return each;
+                  }
+                });
+                return {
+                  data: newArr,
+                  stagedRegions: res.data.regions,
+                  stagedTypes: res.data.tags,
+                  loadReq: false
+                };
+              },
+              () => {
+                this.handleClearStageForm();
+                successToast("form", "updated");
+              }
+            );
+          })
+          .catch(err => {
+            this.setState({ loadReq: false }, () => {
+              const errors = err.response;
+              errorToast(errors.data.error);
+            });
+          });
+      } else {
+        const postStageApi = !!this.state.isProjectForm
+          ? `fv3/api/manage-forms/stages/?project_id=${this.state.id}`
+          : `fv3/api/manage-forms/stages/?site_id=${this.state.id}`;
+        const body = {
+          name: name,
+          tags: mapType,
+          regions: mapRegion,
+          order: newOrder,
+          description: desc
+        };
+        axios
+          .post(postStageApi, body)
+          .then(res => {
+            this.setState(
+              {
+                data: [...this.state.data, res.data],
+                stageRegions: res.data.regions,
+                stagedTypes: res.data.tags,
+                loadReq: false
+              },
+              () => {
+                this.handleClearStageForm();
+                successToast("form", "added");
+              }
+            );
+          })
+          .catch(err => {
+            this.setState({ loadReq: false }, () => {
+              const errors = err.response;
+              errorToast(errors.data.error);
+            });
+          });
+      }
+    });
   };
 
   handleClickEdit = stageData => {
@@ -245,124 +284,136 @@ class StagedForms extends Component {
       myFormList: this.props.myForms,
       projectFormList: this.props.projectForms,
       sharedFormList: this.props.sharedForms,
-      xf: ""
+      xf: "",
+      isEditForm: false
     });
     this.handleSubStageForm();
   };
 
   handleCreateForm = data => {
     const { stageId, substageId, xf } = this.state;
-    if (!!substageId) {
-      const body = {
-        id: substageId,
-        weight: data.weight,
-        name: data.substageTitle,
-        description: data.substageDesc,
-        order: data.order,
-        xf: xf,
-        default_submission_status: data.status,
-        setting: {
-          types:
-            !!data.typeSelected && data.typeSelected.length > 0
-              ? data.typeSelected.map(each => each.id)
-              : [],
-          regions:
-            !!data.regionSelected && data.regionSelected.length > 0
-              ? data.regionSelected.map(each => each.id)
-              : [],
-          donor_visibility: data.isDonor,
-          can_edit: data.isEdit,
-          can_delete: data.isDelete
-        }
-      };
+    this.setState({ loadReq: true }, () => {
+      if (!!substageId) {
+        const body = {
+          id: substageId,
+          weight: JSON.parse(data.weight),
+          name: data.substageTitle,
+          description: data.substageDesc,
+          order: data.order,
+          xf: !!xf == true ? JSON.parse(xf) : "",
+          default_submission_status: data.status,
+          setting: {
+            types:
+              !!data.typeSelected && data.typeSelected.length > 0
+                ? data.typeSelected.map(each => each.id)
+                : [],
+            regions:
+              !!data.regionSelected && data.regionSelected.length > 0
+                ? data.regionSelected.map(each => each.id)
+                : [],
+            donor_visibility: data.isDonor,
+            can_edit: data.isEdit,
+            can_delete: data.isDelete,
+            id: data.settingId && data.settingId
+          }
+        };
 
-      axios
-        .put(
-          `fv3/api/manage-forms/sub-stages/${substageId}/?stage_id=${stageId}`,
-          body
-        )
-        .then(res => {
-          this.setState(
-            state => {
-              const data = this.state.subStageData;
-              const newArr = data.map(each => {
-                if (each.id == res.data.id) {
-                  return (each = res.data);
-                } else {
-                  return each;
-                }
-              });
-              return {
-                subStageData: newArr
-              };
-            },
-            () => {
-              this.handleClosePopup();
+        axios
+          .put(
+            `fv3/api/manage-forms/sub-stages/${substageId}/?stage_id=${stageId}`,
+            body
+          )
+          .then(res => {
+            this.setState(
+              state => {
+                const data = this.state.subStageData;
+                const newArr = data.map(each => {
+                  if (each.id == res.data.id) {
+                    return (each = res.data);
+                  } else {
+                    return each;
+                  }
+                });
+                return {
+                  subStageData: newArr,
+                  loadReq: false
+                };
+              },
+              () => {
+                this.handleClosePopup();
 
-              successToast("form", "updated");
-            }
-          );
-        })
-        .catch(err => {
-          const errors = err.response;
-          errorToast(errors.data.error);
-        });
-    } else {
-      const body = {
-        weight: data.weight,
-        name: data.substageTitle,
-        description: data.substageDesc,
-        order: this.state.subStageData.length + 1,
-        xf: xf,
-        default_submission_status: data.status,
-        setting: {
-          types:
-            !!data.typeSelected && data.typeSelected.length > 0
-              ? data.typeSelected.map(each => each.id)
-              : [],
-          regions:
-            !!data.regionSelected && data.regionSelected.length > 0
-              ? data.regionSelected.map(each => each.id)
-              : [],
-          donor_visibility: data.isDonor,
-          can_edit: data.isEdit,
-          can_delete: data.isDelete
-        }
-      };
+                successToast("form", "updated");
+              }
+            );
+          })
+          .catch(err => {
+            this.setState({ loadReq: false }, () => {
+              const errors = err.response;
+              errorToast(errors.data.error);
+            });
+          });
+      } else {
+        const body = {
+          weight: JSON.parse(data.weight),
+          name: data.substageTitle,
+          description: data.substageDesc,
+          order: this.state.subStageData.length + 1,
+          xf: !!xf == true ? JSON.parse(xf) : "",
+          default_submission_status: data.status,
+          setting: {
+            types:
+              !!data.typeSelected && data.typeSelected.length > 0
+                ? data.typeSelected.map(each => each.id)
+                : [],
+            regions:
+              !!data.regionSelected && data.regionSelected.length > 0
+                ? data.regionSelected.map(each => each.id)
+                : [],
+            donor_visibility: data.isDonor,
+            can_edit: data.isEdit,
+            can_delete: data.isDelete
+          }
+        };
 
-      axios
-        .post(`fv3/api/manage-forms/sub-stages/?stage_id=${stageId}`, body)
-        .then(res => {
-          this.setState(
-            {
-              subStageData: [...this.state.subStageData, res.data]
-            },
-            () => {
-              this.handleClosePopup();
-              successToast("form", "created");
-            }
-          );
-        })
-        .catch(err => {
-          const errors = err.response;
-          errorToast(errors.data.error);
-        });
-    }
+        axios
+          .post(`fv3/api/manage-forms/sub-stages/?stage_id=${stageId}`, body)
+          .then(res => {
+            this.setState(
+              {
+                subStageData: [...this.state.subStageData, res.data],
+                loadReq: false
+              },
+              () => {
+                this.handleClosePopup();
+                successToast("form", "created");
+              }
+            );
+          })
+          .catch(err => {
+            this.setState({ loadReq: false }, () => {
+              const errors = err.response;
+              errorToast(errors.data.error);
+            });
+          });
+      }
+    });
   };
 
-  handleRequestSubStage = (stageId, order) => {
-    if (stageId != this.state.stageId)
+  handleRequestSubStage = stage => {
+    if (stage.id != this.state.stageId) {
       this.setState(
         {
           loadSubStage: true,
-          order: order,
-          stageId,
+          order: stage.order,
+          stageId: stage.id,
           isSubstageReorder: false,
-          isSubstageReorderCancel: true
+          isSubstageReorderCancel: true,
+          stagedRegions: stage.regions,
+          stagedTypes: stage.tags
         },
         () => {
           axios
-            .get(`fv3/api/manage-forms/sub-stages/?stage_id=${stageId}`)
+            .get(`fv3/api/manage-forms/sub-stages/?stage_id=${stage.id}`)
             .then(res => {
               this.setState({
                 loadSubStage: false,
@@ -375,6 +426,7 @@ class StagedForms extends Component {
             });
         }
       );
+    }
   };
 
   handleSubstageReorder = () => {
@@ -414,60 +466,69 @@ class StagedForms extends Component {
 
   changeDeployStatus = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
-    const deployUrl = !!isProjectForm
-      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=substage&id=${formId}`
-      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=substage&id=${formId}`;
-    axios
-      .post(deployUrl, { is_deployed: !isDeploy })
-      .then(res => {
-        this.setState(
-          state => {
-            const newData = this.state.subStageData;
-            newData.map(each => {
-              const arrItem = { ...each };
+    this.setState({ loadReq: true }, () => {
+      const deployUrl = !!isProjectForm
+        ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=substage&id=${formId}`
+        : `fv3/api/manage-forms/deploy/?site_id=${id}&type=substage&id=${formId}`;
+      axios
+        .post(deployUrl, { is_deployed: !isDeploy })
+        .then(res => {
+          this.setState(
+            state => {
+              const newData = this.state.subStageData;
+              newData.map(each => {
+                const arrItem = { ...each };
 
-              if (each.id == formId) {
-                each.is_deployed = !isDeploy;
-              }
-              return arrItem;
-            });
-            return { subStageData: newData };
-          },
-          () => {
-            successToast("Deploy Status", "updated");
-          }
-        );
-      })
-      .catch(err => {
-        const errors = err.response;
-        errorToast(errors.data.error);
-      });
+                if (each.id == formId) {
+                  each.is_deployed = !isDeploy;
+                }
+                return arrItem;
+              });
+              return { subStageData: newData, loadReq: false };
+            },
+            () => {
+              successToast("Deploy Status", "updated");
+            }
+          );
+        })
+        .catch(err => {
+          this.setState({ loadReq: false }, () => {
+            const errors = err.response;
+            errorToast(errors.data.error);
+          });
+        });
+    });
   };
 
   deleteItem = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
-    const deployUrl = !!isProjectForm
-      ? `fv3/api/manage-forms/delete/?project_id=${id}&type=substage&id=${formId}`
-      : `fv3/api/manage-forms/delete/?site_id=${id}&type=substage&id=${formId}`;
+    this.setState({ loadReq: true }, () => {
+      const deployUrl = !!isProjectForm
+        ? `fv3/api/manage-forms/delete/?project_id=${id}&type=substage&id=${formId}`
+        : `fv3/api/manage-forms/delete/?site_id=${id}&type=substage&id=${formId}`;
 
-    axios
-      .post(deployUrl, { is_deployed: isDeploy })
-      .then(res => {
-        this.setState(
-          {
-            subStageData: this.state.subStageData.filter(
-              each => each.id != formId
-            )
-          },
-          () => {
-            successToast("Form", "deleted");
-          }
-        );
-      })
-      .catch(err => {
-        const errors = err.response;
-        errorToast(errors.data.error);
-      });
+      axios
+        .post(deployUrl, { is_deployed: isDeploy })
+        .then(res => {
+          this.setState(
+            {
+              subStageData: this.state.subStageData.filter(
+                each => each.id != formId
+              ),
+              loadReq: false
+            },
+            () => {
+              successToast("Form", "deleted");
+            }
+          );
+        })
+        .catch(err => {
+          this.setState({ loadReq: false }, () => {
+            const errors = err.response;
+            errorToast(errors.data.error);
+          });
+        });
+    });
   };
 
   handleEditGuide = (data, formId) => {
@@ -480,50 +541,55 @@ class StagedForms extends Component {
 
   handleUpdateGuide = data => {
     const { editFormId } = this.state;
-    const formData = new FormData();
-    if (data.title) formData.append("title", data.title);
-    if (data.text) formData.append("text", data.text);
-    if (data.pdf) formData.append("pdf", data.pdf);
-    if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
-    // if (editFormId) formData.append("fsxf", editFormId);
-    if (data.images && data.images.length > 0) {
-      data.images.map((each, i) => {
-        if (!each.image) formData.append(`new_images_${i + 1}`, each);
-      });
-    }
-    if (data.id) {
-      formData.append("id", data.id);
-    }
-    formData.append("stage", editFormId);
-    axios
-      .post(`forms/api/save_educational_material/`, formData)
-      .then(res => {
-        if (res.data)
-          this.setState(
-            state => {
-              const item = this.state.subStageData;
-              item.map(each => {
-                const newItem = { ...each };
-                if (each.id == editFormId) {
-                  each.em = res.data;
-                }
-                return newItem;
-              });
+    this.setState({ loadReq: true }, () => {
+      const formData = new FormData();
+      if (data.title) formData.append("title", data.title);
+      if (data.text) formData.append("text", data.text);
+      if (data.pdf) formData.append("pdf", data.pdf);
+      if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
+      // if (editFormId) formData.append("fsxf", editFormId);
+      if (data.images && data.images.length > 0) {
+        data.images.map((each, i) => {
+          if (!each.image) formData.append(`new_images_${i + 1}`, each);
+        });
+      }
+      if (data.id) {
+        formData.append("id", data.id);
+      }
+      formData.append("stage", editFormId);
+      axios
+        .post(`forms/api/save_educational_material/`, formData)
+        .then(res => {
+          if (res.data)
+            this.setState(
+              state => {
+                const item = this.state.subStageData;
+                item.map(each => {
+                  const newItem = { ...each };
+                  if (each.id == editFormId) {
+                    each.em = res.data;
+                  }
+                  return newItem;
+                });
 
-              return {
-                editGuide: false,
-                subStageData: item
-              };
-            },
-            () => {
-              successToast("form", "updated");
-            }
-          );
-      })
-      .catch(err => {
-        const errors = err.response;
-        errorToast(errors.data.error);
-      });
+                return {
+                  editGuide: false,
+                  subStageData: item,
+                  loadReq: false
+                };
+              },
+              () => {
+                successToast("form", "updated");
+              }
+            );
+        })
+        .catch(err => {
+          this.setState({ loadReq: false }, () => {
+            const errors = err.response;
+            errorToast(errors.data.error);
+          });
+        });
+    });
   };
 
   toggleFormModal = () => {
@@ -610,7 +676,8 @@ class StagedForms extends Component {
         xf: formData.xf && formData.xf.id,
         formId: formData.xf && formData.xf.id,
         formTitle: formData.xf && formData.xf.title,
-        substageId: formData.id
+        substageId: formData.id,
+        isEditForm: true
       },
       () => {
         this.handleSubStageForm();
@@ -620,82 +687,103 @@ class StagedForms extends Component {
 
   handleDeployAllSubstages = toDeploy => {
     const { id, stageId, subStageData, isProjectForm } = this.state;
-    const deployAllSubstageUrl = !!isProjectForm
-      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=stage&id=${stageId}`
-      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=stage&id=${stageId}`;
-    axios
-      .post(deployAllSubstageUrl, {
-        is_deployed: toDeploy
-      })
-      .then(res => {
-        if (res.data && !!res.data.message)
-          this.setState(
-            state => {
-              const data = subStageData;
-              data.map(sub => {
-                const arrItem = { ...sub };
-                sub.is_deployed = toDeploy;
-                return arrItem;
-              });
-              return {
-                subStageData: data
-              };
-            },
-            () => {
-              successToast("Deploy Status", "updated");
-            }
-          );
-      })
-      .catch(err => {
-        const errors = err.response;
-        errorToast(errors.data.error);
-      });
+    this.setState({ loadReq: true }, () => {
+      const deployAllSubstageUrl = !!isProjectForm
+        ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=stage&id=${stageId}`
+        : `fv3/api/manage-forms/deploy/?site_id=${id}&type=stage&id=${stageId}`;
+      axios
+        .post(deployAllSubstageUrl, {
+          is_deployed: toDeploy
+        })
+        .then(res => {
+          if (res.data && !!res.data.message)
+            this.setState(
+              state => {
+                const data = subStageData;
+                data.map(sub => {
+                  const arrItem = { ...sub };
+                  sub.is_deployed = toDeploy;
+                  return arrItem;
+                });
+                return {
+                  subStageData: data,
+                  loadReq: false
+                };
+              },
+              () => {
+                successToast("Deploy Status", "updated");
+              }
+            );
+        })
+        .catch(err => {
+          this.setState({ loadReq: false }, () => {
+            const errors = err.response;
+            errorToast(errors.data.error);
+          });
+        });
+    });
   };
 
   handleDeleteAllSubstages = toDeploy => {
     const { id, stageId, isProjectForm } = this.state;
-    const deleteAllSubstageUrl = !!isProjectForm
-      ? `fv3/api/manage-forms/delete/?project_id=${id}&type=stage&id=${stageId}`
-      : `fv3/api/manage-forms/delete/?site_id=${id}&type=stage&id=${stageId}`;
-    axios
-      .post(deleteAllSubstageUrl, {
-        is_deployed: toDeploy
-      })
-      .then(res => {
-        if (!!res.data)
-          this.setState(
-            {
-              subStageData: []
-            },
-            () => {
-              successToast("Deleted", "successfully");
-            }
-          );
-      })
-      .catch(err => {
-        const errorRes = err.response.data.error;
-        errorToast(errorRes);
-      });
+    this.setState({ loadReq: true }, () => {
+      const deleteAllSubstageUrl = !!isProjectForm
+        ? `fv3/api/manage-forms/delete/?project_id=${id}&type=stage&id=${stageId}`
+        : `fv3/api/manage-forms/delete/?site_id=${id}&type=stage&id=${stageId}`;
+      axios
+        .post(deleteAllSubstageUrl, {
+          is_deployed: toDeploy
+        })
+        .then(res => {
+          if (!!res.data)
+            this.setState(
+              {
+                subStageData: [],
+                loadReq: false
+              },
+              () => {
+                successToast("Deleted", "successfully");
+              }
+            );
+        })
+        .catch(err => {
+          this.setState({ loadReq: false }, () => {
+            const errors = err.response;
+            errorToast(errors.data.error);
+          });
+        });
+    });
   };
 
   handleDeployAllStages = toDeploy => {
     const { id, isProjectForm } = this.state;
-    const deployAllUrl = !!isProjectForm
-      ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=all&id=${id}`
-      : `fv3/api/manage-forms/deploy/?site_id=${id}&type=all&id=${id}`;
-    axios
-      .post(deployAllUrl, {
-        is_deployed: toDeploy
-      })
-      .then(res => {
-        if (!!isProjectForm) this.requestStagedData(id, true);
-        else this.requestStagedData(id, false);
-        successToast("form", "updated");
-      })
-      .catch(err => {
-        const errors = err.response;
-        errorToast(errors.data.error);
-      });
+    this.setState({ loadReq: true }, () => {
+      const deployAllUrl = !!isProjectForm
+        ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=all&id=${id}`
+        : `fv3/api/manage-forms/deploy/?site_id=${id}&type=all&id=${id}`;
+      axios
+        .post(deployAllUrl, {
+          is_deployed: toDeploy
+        })
+        .then(res => {
+          this.setState(
+            {
+              loadReq: false
+            },
+            () => {
+              if (!!isProjectForm) this.requestStagedData(id, true);
+              else this.requestStagedData(id, false);
+              successToast("form", "updated");
+            }
+          );
+        })
+        .catch(err => {
+          this.setState({ loadReq: false }, () => {
+            const errors = err.response;
+            errorToast(errors.data.error);
+          });
+        });
+    });
   };
 
   handleDeleteAllStages = toDeploy => {
@@ -750,7 +838,10 @@ class StagedForms extends Component {
         isSubstageReorderCancel,
         isProjectForm,
         reOrderDisable,
-        subStageReorderDisable
+        subStageReorderDisable,
+        isEditForm,
+        stagedRegions,
+        stagedTypes
       }
     } = this;
     let deployCount = 0;
@@ -892,7 +983,6 @@ class StagedForms extends Component {
                     </span>
                   </OverlayTrigger>
                 </a>
-                {/* )} */}
               </div>
             )}
           </div>
@@ -957,19 +1047,17 @@ class StagedForms extends Component {
               classname="manage-body md-body"
               // handleSubmit={this.handleCreateForm}
             >
-              <GlobalModalForm
-                formType="substage"
+              <AddSubstageForm
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                myForms={this.props.myForms}
-                projectForms={this.props.projectForms}
-                sharedForms={this.props.sharedForms}
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={this.handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateForm}
-                formData={formData}
-                isProjectWide={false}
+                formData={!!isEditForm && formData}
+                isEditForm={isEditForm}
+                stagedRegions={stagedRegions}
+                stagedTypes={stagedTypes}
               />
             </Modal>
           )}
@@ -1006,6 +1094,7 @@ class StagedForms extends Component {
               />
             </Modal>
           )}
+          {this.state.loadReq && <Loader />}
         </div>
       </div>
     );
