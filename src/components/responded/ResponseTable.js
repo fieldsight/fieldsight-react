@@ -125,12 +125,13 @@ class ResponseTable extends Component {
                             <i className="la la-download"></i>
                           </a>
                         ) : (
-                          <a
-                            href={generals.download_url}
+                          <Link
+                            to={generals.download_url}
                             className="edit-tag tag"
+                            target="_blank"
                           >
                             <i className="la la-download "></i>
-                          </a>
+                          </Link>
                         )}
                         {this.state.table == "site" ? (
                           generals.fsxf_id ? (

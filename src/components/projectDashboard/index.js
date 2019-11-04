@@ -331,7 +331,10 @@ class ProjectDashboard extends React.Component {
                                       this.props.paginationHandler(
                                         this.props.pageNum - 1,
                                         null,
-                                        projectId
+                                        {
+                                          type: "projectSiteList",
+                                          projectId: projectId
+                                        }
                                       )
                                     }
                                   >
@@ -350,7 +353,10 @@ class ProjectDashboard extends React.Component {
                                       this.props.paginationHandler(
                                         this.props.pageNum + 1,
                                         null,
-                                        projectId
+                                        {
+                                          type: "projectSiteList",
+                                          projectId: projectId
+                                        }
                                       )
                                     }
                                   >
