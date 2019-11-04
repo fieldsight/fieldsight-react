@@ -112,9 +112,13 @@ class DeleteTable extends Component {
                         <i className="la la-download"></i>
                       </a>
                     ) : (
-                      <a href={deleted.download_url} className="edit-tag tag">
+                      <Link
+                        to={deleted.download_url}
+                        className="edit-tag tag"
+                        target="_blank"
+                      >
                         <i className="la la-download"></i>{" "}
-                      </a>
+                      </Link>
                     )}
                     {this.state.table == "site" ? (
                       deleted.fsxf_id ? (

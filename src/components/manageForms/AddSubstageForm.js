@@ -1,16 +1,10 @@
 import React, { Component } from "react";
 import Select from "react-select";
-import DatePicker from "react-datepicker";
 
 import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
 import CheckBox from "../common/CheckBox";
 import SelectElement from "../common/SelectElement";
-
-const getArrValue = (arr, value) => {
-  if (arr.includes(value)) return true;
-  else return false;
-};
 
 class AddSubstageForm extends Component {
   _isMounted = false;
@@ -35,10 +29,7 @@ class AddSubstageForm extends Component {
         : true,
     regionSelected: [],
     typeSelected: [],
-    weight:
-      this.props.formData && this.props.formData.weight
-        ? this.props.formData.weight
-        : "",
+    weight: this.props.formData ? this.props.formData.weight : 0,
     substageTitle:
       this.props.formData && this.props.formData.name
         ? this.props.formData.name
@@ -96,32 +87,32 @@ class AddSubstageForm extends Component {
 
       let selectedRegion = [];
       let selectedType = [];
+      if (formData && formData.setting) {
+        if (regionSelected && regionSelected.length > 0) {
+          regionOptions.map(region => {
+            if (regionSelected.indexOf(region.id) > -1) {
+              selectedRegion.push({
+                ...region,
+                value: region.identifier,
+                label: region.name
+              });
+            }
+          });
+        }
 
-      if (regionSelected && regionSelected.length > 0) {
-        regionOptions.map(region => {
-          if (regionSelected.indexOf(region.id) > -1) {
-            selectedRegion.push({
-              ...region,
-              value: region.identifier,
-              label: region.name
-            });
-          }
-        });
+        if (typeSelected && typeSelected.length > 0) {
+          typeOptions.map(type => {
+            if (typeSelected.indexOf(type.id) > -1) {
+              selectedType.push({
+                ...type,
+                value: type.identifier,
+                label: type.name
+              });
+            }
+          });
+        }
       } else {
         selectedRegion = newRegionArr;
-      }
-
-      if (typeSelected && typeSelected.length > 0) {
-        typeOptions.map(type => {
-          if (typeSelected.indexOf(type.id) > -1) {
-            selectedType.push({
-              ...type,
-              value: type.identifier,
-              label: type.name
-            });
-          }
-        });
-      } else {
         selectedType = newTypeArr;
       }
 
@@ -148,7 +139,7 @@ class AddSubstageForm extends Component {
         isDelete: true,
         regionSelected: [],
         typeSelected: [],
-        weight: "",
+        weight: 0,
         substageTitle: "",
         substageDesc: "",
         hasLoaded: false
@@ -261,6 +252,7 @@ class AddSubstageForm extends Component {
               <div className="add-btn flex-start">
                 <a data-tab="choose-form" onClick={toggleFormModal}>
                   {!!isEditForm || formTitle ? "Change form" : " Choose form"}
+                  {!formTitle && <sup style={{ color: "#ed5261" }}>*</sup>}
                   <span>
                     <i className="la la-file-text-o"></i>
                   </span>
@@ -274,7 +266,7 @@ class AddSubstageForm extends Component {
             formType="editForm"
             tag="input"
             type="number"
-            //   required={true}
+            // required={true}
             label="Weight"
             name="weight"
             value={weight}

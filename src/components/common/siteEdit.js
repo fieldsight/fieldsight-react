@@ -134,7 +134,7 @@ export default class SiteAdd extends Component {
               />
             </div>
 
-            {this.props.region !== "" ? (
+            {this.props.region !== undefined ? (
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"

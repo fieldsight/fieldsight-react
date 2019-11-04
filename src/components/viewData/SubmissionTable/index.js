@@ -20,7 +20,6 @@ class SubmissionData extends Component {
         params: { id, fid }
       }
     } = this.props;
-
     this.props.paginationHandler(1, null, {
       type: "formSubmission",
       projectId: this.state.id,
@@ -69,6 +68,7 @@ class SubmissionData extends Component {
       });
     }
   };
+
   cancleModel = () => {
     this.setState({
       showConfirmation: false
@@ -109,6 +109,7 @@ class SubmissionData extends Component {
   };
 
   render() {
+    const projectId = this.state.id;
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -153,7 +154,7 @@ class SubmissionData extends Component {
             >
               <thead>
                 <tr>
-                  <th>S.N.</th>
+                  {/* <th>S.N.</th>*/}
                   <th>Site Name</th>
                   <th>Site Id</th>
                   <th>submission id</th>
@@ -167,7 +168,7 @@ class SubmissionData extends Component {
                   this.state.siteList.map((list, key) => {
                     return (
                       <tr key={key}>
-                        <td>{key + 1}</td>
+                        {/*<td>{key + this.props.fromData}</td>*/}
                         <td>{list.site_name}</td>
                         <td>{list.site_identifier}</td>
                         <td>{list.submission_id}</td>
@@ -219,6 +220,7 @@ class SubmissionData extends Component {
                       of <span>{this.props.totalCount}</span> entries.
                     </p>
                   </div>
+
                   {this.props.toData < this.props.totalCount ? (
                     <div className="table-pagination">
                       <ul>
@@ -228,11 +230,19 @@ class SubmissionData extends Component {
                               this.props.paginationHandler(
                                 this.props.pageNum - 1,
                                 null,
-                                project_id
+                                {
+                                  type: "formSubmission",
+                                  projectId: this.state.id,
+                                  fsxf_id: this.state.fid,
+                                  status: "form-submission"
+                                }
                               )
                             }
                           >
-                            <i className="la la-long-arrow-left" />
+                            <i
+                              className={`la la-long-arrow-left ${this.props
+                                .fromData == 1}?disable-btn :""`}
+                            />
                           </a>
                         </li>
 
@@ -249,7 +259,12 @@ class SubmissionData extends Component {
                               this.props.paginationHandler(
                                 this.props.pageNum + 1,
                                 null,
-                                project_id
+                                {
+                                  type: "formSubmission",
+                                  projectId: this.state.id,
+                                  fsxf_id: this.state.fid,
+                                  status: "form-submission"
+                                }
                               )
                             }
                           >
@@ -283,7 +298,7 @@ class SubmissionData extends Component {
             <div>
               <p>
                 "All the data within the submission will be completely removed.
-                Do u still want to continue?"
+                Do you still want to continue?"
               </p>
             </div>
             <div className="warning-footer text-center">

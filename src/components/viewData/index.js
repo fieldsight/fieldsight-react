@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
-
 import { connect } from "react-redux";
 import { compose } from "redux";
+
 import ManageFormSetting from "./manageFormSetting/ManageFormSetting";
 import ManageGeneralForm from "./manageGeneralForm";
 import ManageSurveyForm from "./manageSurveyForm";
 import ManageScheduledForm from "./manageScheduledForm";
 import ManageStageForm from "./manageStageForm";
 
-import ApprovedTable from "./ApprovedTable.js";
-import PendingTable from "./PendingSubmissionTable.js";
-import RejectedTable from "./RejectSubmissionTable.js";
-import FlaggedTable from "./FlagedTable.js";
+import ApprovedTable from "./ApprovedTable";
+import PendingTable from "./PendingSubmissionTable";
+import RejectedTable from "./RejectSubmissionTable";
+import FlaggedTable from "./FlagedTable";
 
 class ViewData extends Component {
   state = {
@@ -91,6 +91,45 @@ class ViewData extends Component {
       });
     }
   };
+  componentDidUpdate(preState) {
+    console.log(
+      preState.location.pathname,
+      "=",
+      this.props.location.pathname,
+      "preState"
+    );
+
+    const {
+      match: {
+        params: { id }
+      }
+    } = this.props;
+
+    if (preState.location.pathname !== this.props.location.pathname) {
+      if (
+        this.props.location.pathname === `/project-responses/${id}/rejected` ||
+        this.props.location.pathname === `/project-responses/${id}/pending` ||
+        this.props.location.pathname === `/project-responses/${id}/flagged` ||
+        this.props.location.pathname === `/project-responses/${id}/approved`
+      ) {
+        this.setState({
+          id,
+          view_btn: true
+        });
+      } else if (
+        this.props.location.pathname === `/project-responses/${id}/general` ||
+        this.props.location.pathname === `/project-responses/${id}/stage` ||
+        this.props.location.pathname === `/project-responses/${id}/scheduled` ||
+        this.props.location.pathname ===
+          `/project-responses/${id}/general-survey`
+      ) {
+        this.setState({
+          view_btn: false,
+          id
+        });
+      }
+    }
+  }
   render() {
     const {
       match: {

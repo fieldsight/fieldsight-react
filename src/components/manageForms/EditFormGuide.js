@@ -101,7 +101,6 @@ class EditFormGuide extends Component {
       handleChange,
       handleSubmit
     } = this;
-    console.log("form ma", this.props.data);
 
     return (
       <form className="edit-form" onSubmit={e => handleSubmit(e)}>

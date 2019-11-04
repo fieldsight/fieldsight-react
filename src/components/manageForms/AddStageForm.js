@@ -43,8 +43,8 @@ class AddStageForm extends Component {
             });
           }
         });
-      } else {
-        selectedRegion = newRegionArr;
+        // } else {
+        //   selectedRegion = newRegionArr;
       }
 
       if (stageData.tags.length > 0) {
@@ -57,8 +57,8 @@ class AddStageForm extends Component {
             });
           }
         });
-      } else {
-        selectedType = newTypeArr;
+        // } else {
+        //   selectedType = newTypeArr;
       }
     } else {
       (selectedRegion = newRegionArr), (selectedType = newTypeArr);
@@ -171,7 +171,7 @@ class AddStageForm extends Component {
             formType="editForm"
             tag="input"
             type="text"
-            required={true}
+            // required={true}
             label="Description"
             name="desc"
             value={desc}

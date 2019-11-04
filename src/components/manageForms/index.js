@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import SideNav from "./SideNav";
-import Modal from "../common/Modal";
 
 class ManageForms extends Component {
   state = {
@@ -51,21 +50,9 @@ class ManageForms extends Component {
       popupModal: false
     });
   };
-  commonPopupHandler = (
-    e,
-    selectedModal,
-    modalData,
-    modalHeading,
-    modalType,
-    shareUrl
-  ) => {
+  commonPopupHandler = () => {
     this.setState({
       popupModal: true
-      // heading: modalHeading,
-      // selectedModals: selectedModal,
-      // modalDatas: modalData,
-      // modalTypes: modalType,
-      // shareUrls: shareUrl
     });
   };
   render() {
