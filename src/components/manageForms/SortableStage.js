@@ -143,6 +143,24 @@ class SortableStage extends Component {
                   ) : (
                     <Card.Header>
                       <h5>
+                        {!!isProjectForm && (
+                          <span
+                            className="edit-stage"
+                            data-tab="addSubStage-popup"
+                            onClick={() => handleClickEdit(each)}
+                          >
+                            <i className="la la-edit"></i>
+                          </span>
+                        )}
+                        {!isProjectForm && !!each.site && (
+                          <span
+                            className="edit-stage"
+                            data-tab="addSubStage-popup"
+                            onClick={() => handleClickEdit(each)}
+                          >
+                            <i className="la la-edit"></i>
+                          </span>
+                        )}
                         <Accordion.Toggle
                           as={Button}
                           variant="link"
@@ -152,24 +170,6 @@ class SortableStage extends Component {
                           }}
                         >
                           <div>{each.name}</div>
-                          {!!isProjectForm && (
-                            <span
-                              className="edit-stage"
-                              data-tab="addSubStage-popup"
-                              onClick={() => handleClickEdit(each)}
-                            >
-                              <i className="la la-edit"></i>
-                            </span>
-                          )}
-                          {!isProjectForm && !!each.site && (
-                            <span
-                              className="edit-stage"
-                              data-tab="addSubStage-popup"
-                              onClick={() => handleClickEdit(each)}
-                            >
-                              <i className="la la-edit"></i>
-                            </span>
-                          )}
                         </Accordion.Toggle>
                       </h5>
                     </Card.Header>

@@ -236,7 +236,6 @@ class GeneralFormTable extends Component {
         formTable
       }
     } = this;
-    // console.log("general table", data, formTable);
 
     return (
       <>
@@ -245,7 +244,7 @@ class GeneralFormTable extends Component {
         ) : (
           <Table
             responsive="xl"
-            className="table  table-bordered  dataTable table-responsive"
+            className="table  table-bordered  dataTable "
           >
             <thead>
               <tr>

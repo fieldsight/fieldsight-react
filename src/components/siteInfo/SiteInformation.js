@@ -11,6 +11,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 import findQuestionWithGroup from "../../utils/findQuestionWithGroup";
+import { DotLoader } from "../myForm/Loader";
 
 const urls = [
   "fieldsight/api/organization/",
@@ -136,7 +137,10 @@ class SiteInformation extends Component {
                   //   settings.pull_integer_form_question =
                   //     splitedStr[splitedStr.length - 1];
                   // }
-                  return { ...settings, source: settings.source.toString() };
+                  return {
+                    ...settings,
+                    source: settings.source.toString()
+                  };
                 }
               } else {
                 return {
@@ -372,6 +376,11 @@ class SiteInformation extends Component {
     });
   };
 
+  handleSaveReorder = newOrder => {
+    this.setState({
+      jsonQuestions: newOrder
+    });
+  };
   render() {
     const {
       state: {
@@ -423,6 +432,7 @@ class SiteInformation extends Component {
             jsonQuestions={jsonQuestions}
             siteInfoHandler={siteInfoHandler}
             terms={terms}
+            handleSaveReorder={this.handleSaveReorder}
           />
 
           <div className="col-sm-12">

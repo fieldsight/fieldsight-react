@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
-
-import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
 import CheckBox from "../common/CheckBox";
 import SelectElement from "../common/SelectElement";
@@ -162,31 +160,32 @@ class GlobalModalForm extends Component {
         let selectedRegion = [];
         let selectedType = [];
 
-        if (regionSelected && regionSelected.length > 0) {
-          regionOptions.map(region => {
-            if (regionSelected.indexOf(region.id) > -1) {
-              selectedRegion.push({
-                ...region,
-                value: region.identifier,
-                label: region.name
-              });
-            }
-          });
+        if (formData && formData.setting) {
+          if (regionSelected && regionSelected.length > 0) {
+            regionOptions.map(region => {
+              if (regionSelected.indexOf(region.id) > -1) {
+                selectedRegion.push({
+                  ...region,
+                  value: region.identifier,
+                  label: region.name
+                });
+              }
+            });
+          }
+
+          if (typeSelected && typeSelected.length > 0) {
+            typeOptions.map(type => {
+              if (typeSelected.indexOf(type.id) > -1) {
+                selectedType.push({
+                  ...type,
+                  value: type.identifier,
+                  label: type.name
+                });
+              }
+            });
+          }
         } else {
           selectedRegion = newRegionArr;
-        }
-
-        if (typeSelected && typeSelected.length > 0) {
-          typeOptions.map(type => {
-            if (typeSelected.indexOf(type.id) > -1) {
-              selectedType.push({
-                ...type,
-                value: type.identifier,
-                label: type.name
-              });
-            }
-          });
-        } else {
           selectedType = newTypeArr;
         }
 
