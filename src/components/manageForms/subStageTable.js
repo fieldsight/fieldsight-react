@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import {
@@ -319,11 +317,16 @@ class SubStageTable extends Component {
     }
   }
   onSortEnd = ({ oldIndex, newIndex }) => {
-    this.setState(({ data }) => {
-      return {
-        data: arrayMove(data, oldIndex, newIndex)
-      };
-    });
+    this.setState(
+      ({ data }) => {
+        return {
+          data: arrayMove(data, oldIndex, newIndex)
+        };
+      },
+      () => {
+        this.props.handleNewSubstageOrder(this.state.data);
+      }
+    );
   };
 
   render() {

@@ -304,6 +304,9 @@ class SiteInformation extends Component {
     });
   };
 
+  handleSaveReorder = newOrder => {
+    console.log("new list", newOrder);
+  };
   render() {
     const {
       state: {
@@ -356,6 +359,8 @@ class SiteInformation extends Component {
             jsonQuestions={jsonQuestions}
             siteInfoHandler={siteInfoHandler}
             terms={terms}
+            loader={loader}
+            handleSaveReorder={this.handleSaveReorder}
           />
 
           <div className="col-sm-12">
@@ -367,7 +372,6 @@ class SiteInformation extends Component {
             </button>
           </div>
         </RightContentCard>
-        {loader && <DotLoader />}
         {isLoading && <Loader />}
         {showConfirmation && (
           <Modal title="Warning" toggleModal={cancelHandler}>

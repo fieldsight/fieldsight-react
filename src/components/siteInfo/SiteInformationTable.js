@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from "react";
 import uuid from "uuid/v4";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+
 import Table from "../common/Table";
 import Modal from "../common/Modal";
 import RightContentCard from "../common/RightContentCard";
@@ -10,6 +12,7 @@ import CheckBox from "../common/CheckBox";
 import findQuestion from "../../utils/findQuestion";
 
 import isEmpty from "../../utils/isEmpty";
+import SortableSiteInfo from "./SortableSiteInfo";
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -31,7 +34,9 @@ const INITIAL_STATE = {
   selectedProject: {},
   tableQuestions: [],
   publicChecked: false,
-  dashboardChecked: false
+  dashboardChecked: false,
+  reOrder: false,
+  isReorderCancel: true
 };
 
 const questionTypes = [
@@ -45,17 +50,6 @@ const questionTypes = [
   { id: "FormSubCountQuestion", name: "Form submissions count" },
   { id: "FormQuestionAnswerStatus", name: "Form question answer status" }
 ];
-
-const tableHeader = {
-  siteInformationTable: [
-    "Attribute",
-    "Type",
-    "Form",
-    "Question",
-    "Project",
-    "Action"
-  ]
-};
 
 class SiteInformationTable extends Component {
   state = INITIAL_STATE;
@@ -425,6 +419,12 @@ class SiteInformationTable extends Component {
       () => this.props.siteInfoHandler(this.state.tableQuestions)
     );
   };
+  handleReorderToogle = () => {
+    this.setState({
+      reOrder: !this.state.reOrder,
+      isReorderCancel: !this.state.isReorderCancel
+    });
+  };
 
   render() {
     const {
@@ -442,42 +442,90 @@ class SiteInformationTable extends Component {
         filteredQuestions,
         filteredMetaAttributes,
         tableQuestions,
-        showModal
+        showModal,
+        reOrder,
+        isReorderCancel
       },
-      removeInputHandler,
-      onSelectChangeHandler,
-      onInputChangeHandler,
-      questionChangeHandler,
-      formChangeHandler,
-      onSubmitHandler,
       removeQuestionHandler,
       editQuestionHandler,
-      generateOptField,
-      closeModal,
       toggleModal
     } = this;
+    const title = !isEmpty(terms)
+      ? `${terms.site} Information`
+      : "Site Information";
 
     return (
       <Fragment>
-        <RightContentCard
-          title={
-            !isEmpty(terms) ? `${terms.site} Information` : "Site Information"
-          }
-          addButton
-          toggleModal={toggleModal}
-        >
-          <Table
-            tableHeader={tableHeader.siteInformationTable}
-            tableRow={tableQuestions}
-            page="siteInfo"
-            removeHandler={removeQuestionHandler}
-            editHandler={editQuestionHandler}
-            forms={forms}
-          />
-        </RightContentCard>
+        <div className="card">
+          <div className="card-header main-card-header">
+            <h5>{title}</h5>
+            <div className="add-btn outline-btn">
+              {tableQuestions && tableQuestions.length > 1 && (
+                <a
+                  className="pending"
+                  data-tab="addSubStage-popup"
+                  onClick={this.handleReorderToogle}
+                >
+                  {!reOrder ? (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Reorder</Tooltip>}
+                    >
+                      <span className="reorder">
+                        <i className="la la-ellipsis-v" />
+                        <i className="la la-ellipsis-v" />
+                      </span>
+                    </OverlayTrigger>
+                  ) : (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Cancel</Tooltip>}
+                    >
+                      <span>
+                        <i className="la la-close" />
+                      </span>
+                    </OverlayTrigger>
+                  )}
+                </a>
+              )}
+              {reOrder && (
+                <a
+                  data-tab="addSubStage-popup"
+                  onClick={this.handleSaveReorder}
+                >
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>Save</Tooltip>}
+                  >
+                    <span>
+                      <i className="la la-save" />
+                    </span>
+                  </OverlayTrigger>
+                </a>
+              )}
+              <a onClick={toggleModal}>
+                <span>
+                  <i className="la la-plus" />
+                </span>
+              </a>
+            </div>
+          </div>
+          <div className="card-body">
+            <SortableSiteInfo
+              rowData={tableQuestions}
+              page="siteInfo"
+              removeHandler={removeQuestionHandler}
+              editHandler={editQuestionHandler}
+              forms={forms}
+              reOrder={reOrder}
+              isReorderCancel={isReorderCancel}
+              handleSaveReorder={this.props.handleSaveReorder}
+            />
+          </div>
+        </div>
         {showModal && (
-          <Modal title="Add Information" toggleModal={closeModal}>
-            <form className="floating-form" onSubmit={onSubmitHandler}>
+          <Modal title="Add Information" toggleModal={this.closeModal}>
+            <form className="floating-form" onSubmit={this.onSubmitHandler}>
               <InputElement
                 tag="input"
                 type="text"
@@ -487,14 +535,14 @@ class SiteInformationTable extends Component {
                 htmlFor="label"
                 value={label}
                 name="label"
-                changeHandler={onInputChangeHandler}
+                changeHandler={this.onInputChangeHandler}
               />
               <SelectElement
                 className="form-control"
                 label="Type"
                 options={questionTypes}
                 value={type ? type : null}
-                changeHandler={onSelectChangeHandler}
+                changeHandler={this.onSelectChangeHandler}
               />
               {(type === "Text" || type === "Number" || type === "Date") && (
                 <InputElement
@@ -506,7 +554,7 @@ class SiteInformationTable extends Component {
                   htmlFor="placeholder"
                   name="placeholder"
                   value={placeholder}
-                  changeHandler={onInputChangeHandler}
+                  changeHandler={this.onInputChangeHandler}
                 />
               )}
 
@@ -523,15 +571,18 @@ class SiteInformationTable extends Component {
                     htmlFor={`option${el.val}`}
                     required={true}
                     removeBtn
-                    removeHandler={() => removeInputHandler(el.val)}
+                    removeHandler={() => this.removeInputHandler(el.val)}
                     name={`option${el.val}`}
                     value={this.state.options[`option${el.val}`] || ""}
-                    changeHandler={e => onInputChangeHandler(e, "option")}
+                    changeHandler={e => this.onInputChangeHandler(e, "option")}
                   />
                 ))}
               {type === "MCQ" && (
                 <div className="form-group">
-                  <button className="fieldsight-btn" onClick={generateOptField}>
+                  <button
+                    className="fieldsight-btn"
+                    onClick={this.generateOptField}
+                  >
                     Option+
                   </button>
                 </div>
@@ -549,7 +600,7 @@ class SiteInformationTable extends Component {
                   htmlFor="helpText"
                   name="helpText"
                   value={helpText}
-                  changeHandler={onInputChangeHandler}
+                  changeHandler={this.onInputChangeHandler}
                 />
               )}
 
@@ -557,7 +608,7 @@ class SiteInformationTable extends Component {
                 <SelectElement
                   className="form-control"
                   options={projects}
-                  changeHandler={formChangeHandler}
+                  changeHandler={this.formChangeHandler}
                   value={selectedProject ? selectedProject : null}
                 />
               )}
@@ -591,7 +642,7 @@ class SiteInformationTable extends Component {
                   className="form-control"
                   options={forms}
                   value={selectedForm ? selectedForm : null}
-                  changeHandler={formChangeHandler}
+                  changeHandler={this.formChangeHandler}
                 />
               )}
 
@@ -601,7 +652,7 @@ class SiteInformationTable extends Component {
                     className="form-control"
                     options={filteredQuestions}
                     value={selectedQuestion.name ? selectedQuestion.name : null}
-                    changeHandler={questionChangeHandler}
+                    changeHandler={this.questionChangeHandler}
                   />
                 )}
               {/* <div className="form-group display-inline text-center">
