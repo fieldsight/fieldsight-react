@@ -16,9 +16,7 @@ Install the dependencies using npm
 
 ## Initial Setup For Develpment
 
-Add .env file at the root of the folder
-
-Use .env.sample file as reference
+Add .env file at the root of the folder (use .env.sample file as reference)
 
 ## Development server
 
