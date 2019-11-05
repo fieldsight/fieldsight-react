@@ -99,6 +99,7 @@ class App extends Component {
       this.state.selectedLanguage,
       localStorage.getItem("language")
     );
+    console.log(process.env);
 
     return (
       <Provider store={store}>
