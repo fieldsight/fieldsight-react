@@ -305,7 +305,9 @@ class SiteInformation extends Component {
   };
 
   handleSaveReorder = newOrder => {
-    console.log("new list", newOrder);
+    this.setState({
+      jsonQuestions: newOrder
+    });
   };
   render() {
     const {

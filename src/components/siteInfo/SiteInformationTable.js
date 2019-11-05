@@ -420,12 +420,25 @@ class SiteInformationTable extends Component {
     );
   };
   handleReorderToogle = () => {
-    this.setState({
-      reOrder: !this.state.reOrder,
-      isReorderCancel: !this.state.isReorderCancel
-    });
+    this.setState(
+      {
+        reOrder: !this.state.reOrder,
+        isReorderCancel: !this.state.isReorderCancel
+      },
+      () => {
+        if (this.state.isReorderCancel) {
+          this.setState({ tableQuestions: this.props.jsonQuestions });
+        }
+      }
+    );
   };
-
+  handleSave = () => {
+    this.props.handleSaveReorder(this.state.tableQuestions);
+    this.handleReorderToogle();
+  };
+  handleReOrder = list => {
+    this.setState({ tableQuestions: list });
+  };
   render() {
     const {
       props: { forms, terms, projects, jsonQuestions },
@@ -489,10 +502,7 @@ class SiteInformationTable extends Component {
                 </a>
               )}
               {reOrder && (
-                <a
-                  data-tab="addSubStage-popup"
-                  onClick={this.handleSaveReorder}
-                >
+                <a data-tab="addSubStage-popup" onClick={this.handleSave}>
                   <OverlayTrigger
                     placement="top"
                     overlay={<Tooltip>Save</Tooltip>}
@@ -519,7 +529,8 @@ class SiteInformationTable extends Component {
               forms={forms}
               reOrder={reOrder}
               isReorderCancel={isReorderCancel}
-              handleSaveReorder={this.props.handleSaveReorder}
+              handleSaveReorder={this.handleReOrder}
+              loader={this.props.loader}
             />
           </div>
         </div>

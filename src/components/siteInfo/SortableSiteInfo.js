@@ -116,12 +116,13 @@ class SortableSiteInfo extends Component {
       props: { removeHandler, editHandler, forms, page, loader, reOrder },
       state: { data }
     } = this;
-    console.log("data", data, this.props.reOrder);
 
     return (
       <div style={{ position: "relative", height: "290px" }}>
         <PerfectScrollbar>
-          {data.length == 0 ? (
+          {loader && <DotLoader />}
+
+          {!loader && data.length == 0 ? (
             <div>No Data added yet.</div>
           ) : (
             <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
@@ -150,7 +151,6 @@ class SortableSiteInfo extends Component {
             </SortableContainer>
           )}
         </PerfectScrollbar>
-        {loader && <DotLoader />}
       </div>
     );
   }
