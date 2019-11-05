@@ -120,36 +120,30 @@ class SortableSiteInfo extends Component {
     return (
       <div style={{ position: "relative", height: "290px" }}>
         <PerfectScrollbar>
-          {loader && <DotLoader />}
-
-          {!loader && data.length == 0 ? (
-            <div>No Data added yet.</div>
-          ) : (
-            <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
-              {reOrder ? (
-                <tbody>
-                  {data.map((each, index) => (
-                    <SortableItem
-                      key={`item-${index}`}
-                      index={index}
-                      // name={sub.name}
-                      each={each}
-                      removeHandler={removeHandler}
-                      editHandler={editHandler}
-                    />
-                  ))}
-                </tbody>
-              ) : (
-                <TableRow
-                  tableRow={data}
-                  page={page}
-                  forms={forms}
-                  removeHandler={removeHandler}
-                  editHandler={editHandler}
-                />
-              )}
-            </SortableContainer>
-          )}
+          <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
+            {reOrder ? (
+              <tbody>
+                {data.map((each, index) => (
+                  <SortableItem
+                    key={`item-${index}`}
+                    index={index}
+                    // name={sub.name}
+                    each={each}
+                    removeHandler={removeHandler}
+                    editHandler={editHandler}
+                  />
+                ))}
+              </tbody>
+            ) : (
+              <TableRow
+                tableRow={data}
+                page={page}
+                forms={forms}
+                removeHandler={removeHandler}
+                editHandler={editHandler}
+              />
+            )}
+          </SortableContainer>
         </PerfectScrollbar>
       </div>
     );
