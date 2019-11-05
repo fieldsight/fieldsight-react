@@ -10,6 +10,7 @@ import CheckBox from "../common/CheckBox";
 import findQuestion from "../../utils/findQuestion";
 
 import isEmpty from "../../utils/isEmpty";
+import { errorToast } from "../../utils/toastHandler";
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -24,7 +25,7 @@ const INITIAL_STATE = {
   options: {},
   optInputField: [],
   selectedId: null,
-  selectedForm: {},
+  selectedForm: null,
   selectedQuestion: {},
   filteredQuestions: [],
   filteredMetaAttributes: [],
@@ -213,8 +214,69 @@ class SiteInformationTable extends Component {
     }
   };
 
+  checkSelectedLength = filteredMetaAttributes => {
+    return filteredMetaAttributes.filter(attribute => attribute.checked).length;
+  };
+
+  validateForm = () => {
+    const {
+      state: {
+        type,
+        options,
+        selectedForm,
+        selectedQuestion,
+        selectedProject,
+        filteredMetaAttributes
+      }
+    } = this;
+
+    if (type === "MCQ") {
+      if (Object.keys(options).length <= 0) {
+        errorToast("Please add options for this type.");
+        return false;
+      }
+    }
+
+    if (
+      type === "Form" ||
+      type === "FormSubStat" ||
+      type === "FormSubCountQuestion" ||
+      type === "FormQuestionAnswerStatus"
+    ) {
+      if (!selectedForm) {
+        errorToast("Please select a form.");
+        return false;
+      }
+    }
+
+    if (type === "Form" || type === "FormQuestionAnswerStatus") {
+      if (Object.keys(selectedQuestion).length <= 0) {
+        errorToast("Please select a question.");
+        return false;
+      }
+    }
+
+    if (type === "Link") {
+      if (!selectedProject) {
+        errorToast("Please select a project.");
+        return false;
+      }
+    }
+
+    if (this.checkSelectedLength(filteredMetaAttributes) <= 0) {
+      errorToast("Please select a attribute.");
+      return false;
+    }
+
+    return true;
+  };
+
   onSubmitHandler = e => {
     e.preventDefault();
+    const isValid = this.validateForm();
+
+    if (!isValid) return;
+
     const {
       state: {
         label,
@@ -234,6 +296,7 @@ class SiteInformationTable extends Component {
         dashboardChecked
       }
     } = this;
+
     const { bind, children, ...restQuestion } = selectedQuestion;
 
     const question = {
@@ -567,14 +630,11 @@ class SiteInformationTable extends Component {
                   <PerfectScrollbar>
                     {this.state.filteredMetaAttributes.map(attribute => {
                       return (
-                        <div
-                          className="form-group"
-                          key={attribute.question_name}
-                        >
+                        <div className="form-group" key={attribute.id}>
                           <CheckBox
                             checked={attribute.checked}
                             label={attribute.question_name}
-                            onChange={e =>
+                            changeHandler={e =>
                               this.handleCheckboxChange(e, attribute)
                             }
                           />
