@@ -319,11 +319,16 @@ class SubStageTable extends Component {
     }
   }
   onSortEnd = ({ oldIndex, newIndex }) => {
-    this.setState(({ data }) => {
-      return {
-        data: arrayMove(data, oldIndex, newIndex)
-      };
-    });
+    this.setState(
+      ({ data }) => {
+        return {
+          data: arrayMove(data, oldIndex, newIndex)
+        };
+      },
+      () => {
+        this.props.handleNewSubstageOrder(this.state.data);
+      }
+    );
   };
 
   render() {
