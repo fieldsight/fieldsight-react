@@ -18,7 +18,8 @@ const SubmissionSiteInfo = ({ siteInformation }) => (
             <ul>
               {Object.entries(siteInformation).map((info, i) => {
                 if (info[0] == "From_Another_Project") {
-                  const childEntries = Object.entries(info[1].children);
+                  const childEntries =
+                    info[1].children && Object.entries(info[1].children);
                   return childEntries.map((child, i) => {
                     return (
                       <li key={`${child[0]}${i}`}>
