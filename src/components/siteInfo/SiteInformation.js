@@ -222,18 +222,6 @@ class SiteInformation extends Component {
         return question;
       });
 
-      console.log(
-        "object",
-
-        {
-          json_questions: modifiedJsonQuestions,
-          site_basic_info: siteBasicInfo,
-          site_featured_images: siteFeaturedImages
-        }
-      );
-
-      debugger;
-
       await Promise.all(
         [urls[2], progressUrl].map(
           async (url, i) =>
@@ -304,8 +292,6 @@ class SiteInformation extends Component {
         return false;
       }
     }
-
-    console.log("progress settings", this.state.projectSettings);
 
     if (projectSettings.source === "2") {
       if (!projectSettings.pull_integer_form) {
