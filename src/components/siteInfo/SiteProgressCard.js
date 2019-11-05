@@ -42,8 +42,6 @@ class SiteProgressCard extends Component {
     let showTargetNum = false;
     let filteredQuestions = [];
 
-    console.log("nextProps", nextProps);
-
     if (nextProps.projectSettings && nextProps.projectSettings.source) {
       source = nextProps.projectSettings.source;
     }
