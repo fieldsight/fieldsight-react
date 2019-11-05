@@ -88,7 +88,7 @@ module.exports = env => {
         new DashboardPlugin(),
         new Dotenv()
       ],
-      devtool: "eval-source-map"
+      devtool: PLATFORM === "production" ? "" : "eval-source-map"
     }
   ]);
 };
