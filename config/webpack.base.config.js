@@ -15,8 +15,7 @@ module.exports = env => {
     {
       entry: ["@babel/polyfill", APP_DIR],
       output: {
-        // To run locally use publicPath: "/"
-        publicPath: "/static/"
+        publicPath: PLATFORM === "production" ? "/static/" : "/"
       },
       module: {
         rules: [
