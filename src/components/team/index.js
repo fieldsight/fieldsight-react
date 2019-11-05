@@ -3,13 +3,16 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { Table } from "react-bootstrap";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { getTeam } from "../../actions/teamAction";
+import { getTeam, getTranslate } from "../../actions/teamAction";
+
+import SelectElement from "../common/SelectElement";
 
 class Teams extends Component {
   state = {
     results: [],
     masterresult: [],
-    count: ""
+    count: "",
+    selectedLanguage: "en"
   };
 
   componentDidMount() {
@@ -47,12 +50,37 @@ class Teams extends Component {
     }
   };
 
+  onLanguageChangeHandler = e => {
+    const { value } = e.target;
+    console.log("target", e.target.value, e.target.name);
+    this.props.getTranslate(value);
+    // this.setState(
+    //   {
+    //     selectedLanguage: value
+    //   },
+    //   ()=>this.props
+    // );
+  };
+
   render() {
     const { results } = this.state;
 
+    const selectLanguage = [
+      { id: "en", name: "Eng" },
+      { id: "ne", name: "Nep" }
+    ];
+    const { selected } = this.props;
     return (
       <>
         <div className="card">
+          <div>
+            <SelectElement
+              options={selectLanguage}
+              label="Select Language"
+              changeHandler={this.onLanguageChangeHandler}
+              value={selected}
+            />
+          </div>
           <div className="card-header main-card-header sub-card-header">
             <h5>Team List</h5>
             <div className="dash-btn">
@@ -95,7 +123,7 @@ class Teams extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {results.length > 0 &&
+                    {/*results.length > 0 &&
                       results.map((project, key) => {
                         return (
                           <tr key={key}>
@@ -139,7 +167,7 @@ class Teams extends Component {
                             </td>
                           </tr>
                         );
-                      })}
+                      })*/}
                   </tbody>
                 </Table>
               </PerfectScrollbar>
@@ -152,15 +180,20 @@ class Teams extends Component {
 }
 
 const mapStateToProps = ({ teams }) => {
+  const { selected } = teams;
+  // console.log(teams, selected, "========");
+
   return {
-    teams
+    teams,
+    selected
   };
 };
 export default compose(
   connect(
     mapStateToProps,
     {
-      getTeam
+      getTeam,
+      getTranslate
     }
   )
 )(Teams);
