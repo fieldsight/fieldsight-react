@@ -61,7 +61,7 @@ const ShowContentRow = ({
             {totalSubmissions == 0
               ? "No Submission"
               : totalSubmissions > 1
-              ? totalSubmissions + " Submission(s)"
+              ? totalSubmissions + " Submissions"
               : totalSubmissions + " Submission "}
           </a>
         ) : (
