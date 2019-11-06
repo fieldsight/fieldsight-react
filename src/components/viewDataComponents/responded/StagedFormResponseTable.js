@@ -90,7 +90,7 @@ export default class SurveyFormResponseTable extends Component {
                                     </a>
                                   ) : (
                                     <a
-                                      hrefo={sub_stages.download_url}
+                                      href={sub_stages.download_url}
                                       className="edit-tag tag"
                                       target="_blank"
                                     >
