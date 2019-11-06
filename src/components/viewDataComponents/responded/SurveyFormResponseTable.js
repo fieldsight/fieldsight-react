@@ -75,13 +75,13 @@ export default class SurveyFormResponseTable extends Component {
                             <i className="la la-download"></i>
                           </a>
                         ) : (
-                          <Link
-                            to={survey.download_url}
+                          <a
+                            href={survey.download_url}
                             className="edit-tag tag"
                             target="_blank"
                           >
                             <i className="la la-download"></i>
-                          </Link>
+                          </a>
                         )}
                         {
                           <Link
