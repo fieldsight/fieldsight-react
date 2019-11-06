@@ -17,7 +17,7 @@ const SubmissionSiteInfo = ({ siteInformation }) => (
           <PerfectScrollbar>
             <ul>
               {Object.entries(siteInformation).map((info, i) => {
-                if (info[0] == "From_Another_Project") {
+                if (info[1].children) {
                   const childEntries = Object.entries(info[1].children);
                   return childEntries.map((child, i) => {
                     return (

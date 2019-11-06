@@ -10,7 +10,7 @@ let tokenVal = window.token
 let baseURL = window.base_url
   ? window.base_url //"http://192.168.1.44:8002";
   : "https://fieldsight.naxa.com.np/";
-//"https://app.fieldsight.org/";
+// "https://app.fieldsight.org/";
 
 const setDefault = () => {
   axios.defaults.baseURL = baseURL;
