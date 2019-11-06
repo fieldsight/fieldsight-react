@@ -473,6 +473,7 @@ class SiteInformation extends Component {
               <a
                 className="fieldsight-btn rejected-btn"
                 onClick={cancelHandler}
+                style={{ marginRight: "10px" }}
               >
                 cancel
               </a>
