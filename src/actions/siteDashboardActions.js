@@ -49,6 +49,7 @@ export const getSiteMetas = id => dispatch => {
   axios
     .get(`fieldsight/api/siteallmetas/${id}/`)
     .then(res => {
+     
       dispatch({
         type: GET_SITE_METAS,
         payload: res.data
