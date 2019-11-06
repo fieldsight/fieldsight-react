@@ -177,6 +177,7 @@ class ProjectDashboard extends React.Component {
       }
     } = this.props;
     const { activeTab, showCropper, showGallery } = this.state;
+
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -226,13 +227,7 @@ class ProjectDashboard extends React.Component {
                       className="fieldsight-btn left-icon"
                       target="_blank"
                     >
-                      <i className="la la-map" />{" "}
-                      <FormattedMessage
-                        id="app.full-map"
-                        defaultMessage="Full map"
-                        description="Full map"
-                      />
-                      {/* Full map */}
+                      <i className="la la-map" /> Full map
                     </a>
                   </div>
                 </div>

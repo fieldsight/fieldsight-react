@@ -57,9 +57,12 @@ const ShowContentRow = ({
         {formUrl ? (
           <a className="pending table-profile" href={formUrl}>
             <i className="la la-eye"></i>
+
             {totalSubmissions == 0
               ? "No Submission"
-              : totalSubmissions + " Submission(s) "}
+              : totalSubmissions > 1
+              ? totalSubmissions + " Submission(s)"
+              : totalSubmissions + " Submission "}
           </a>
         ) : (
           {}
