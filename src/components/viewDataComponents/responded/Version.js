@@ -104,14 +104,14 @@ class VersionTable extends Component {
                           <td>{version.total_submissions}</td>
                           <td>
                             {version.total_submissions > 0 ? (
-                              <Link
-                                to
+                              <a
+                                href
                                 className="td-delete-btn"
                                 href={version.download_url}
                                 target="_blank"
                               >
                                 <i className="la la-download "></i>
-                              </Link>
+                              </a>
                             ) : (
                               ""
                             )}
