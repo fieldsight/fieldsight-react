@@ -29,7 +29,8 @@ const initialState = {
   initialLoader: true,
   has_review_permission: false,
   hideNullValues: false,
-  submission_err: null
+  submission_err: null,
+  breadcrumb: {}
 };
 
 const getNullFilteredSubmission = submissions => {
@@ -98,7 +99,8 @@ export default function(state = initialState, action) {
         fieldsight_instance: action.payload.fieldsight_instance,
         edit_url: action.payload.edit_url,
         download_url: action.payload.download_url,
-        has_review_permission: action.payload.has_review_permission
+        has_review_permission: action.payload.has_review_permission,
+        breadcrumb: action.payload.breadcrumbs
         // initialLoader: false
       };
     case POST_SUBMISSION_DETAIL:
