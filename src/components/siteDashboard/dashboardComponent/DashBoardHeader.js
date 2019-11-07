@@ -352,7 +352,7 @@ class DashboardHeader extends Component {
                             </div>
                           </Td>
                           <Td to={`/site-dashboard/${subSite.id}`}>
-                            {subSite.submission}
+                            {subSite.submissions}
                           </Td>
                           <Td to={`/site-dashboard/${subSite.id}`}>
                             {subSite.type}
