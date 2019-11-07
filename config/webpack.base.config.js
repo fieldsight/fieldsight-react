@@ -15,8 +15,7 @@ module.exports = env => {
     {
       entry: ["@babel/polyfill", APP_DIR],
       output: {
-        // To run locally use publicPath: "/"
-        publicPath: "/static/"
+        publicPath: PLATFORM === "production" ? "/static/" : "/"
       },
       module: {
         rules: [
@@ -89,7 +88,7 @@ module.exports = env => {
         new DashboardPlugin(),
         new Dotenv()
       ],
-      devtool: "eval-source-map"
+      devtool: PLATFORM === "production" ? "" : "eval-source-map"
     }
   ]);
 };

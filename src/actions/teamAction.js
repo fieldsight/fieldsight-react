@@ -18,8 +18,6 @@ export const getTeam = id => dispatch => {
 };
 
 export const getTranslate = value => dispatch => {
-  console.log(dispatch, value);
-
   dispatch({
     type: GET_TRANSLATION,
     payload: value

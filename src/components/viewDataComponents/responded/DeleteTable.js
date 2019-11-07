@@ -104,13 +104,13 @@ class DeleteTable extends Component {
                         <i className="la la-download"></i>
                       </a>
                     ) : (
-                      <Link
-                        to={deleted.download_url}
+                      <a
+                        href={deleted.download_url}
                         className="edit-tag tag"
                         target="_blank"
                       >
                         <i className="la la-download"></i>{" "}
-                      </Link>
+                      </a>
                     )}
                     {table == "site" ? (
                       deleted.fsxf_id ? (
