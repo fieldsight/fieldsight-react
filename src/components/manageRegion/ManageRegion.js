@@ -18,7 +18,8 @@ class ManageRegion extends Component {
     hide: "",
     response: "",
     model: false,
-    cluster_sites: ""
+    cluster_sites: "",
+    data: false
   };
   componentDidMount() {
     const { projectId } = this.context;
@@ -26,8 +27,6 @@ class ManageRegion extends Component {
     axios
       .get(`/fv3/api/enable-project-cluster-sites/${projectId}/`)
       .then(res => {
-        console.log(res.data.cluster_sites, "cluster_sites");
-
         this.setState({
           cluster_sites: !res.data.cluster_sites,
           hide: res.data.cluster_sites
@@ -48,12 +47,16 @@ class ManageRegion extends Component {
       ? axios
           .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
           .then(res => {
-            this.setState({
-              hide: !this.state.hide,
-              response: res.data.detail,
-              model: true,
-              cluster_sites: res.data.cluster_sites
-            });
+            this.setState(
+              {
+                hide: !this.state.hide,
+                response: res.data.detail,
+                model: true,
+                cluster_sites: res.data.cluster_sites,
+                data: true
+              },
+              () => this.toast()
+            );
           })
           .catch(err => {
             console.log(err);
@@ -61,12 +64,16 @@ class ManageRegion extends Component {
       : axios
           .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
           .then(res => {
-            this.setState({
-              hide: !this.state.hide,
-              response: res.data.detail,
-              model: false,
-              cluster_sites: res.data.cluster_sites
-            });
+            this.setState(
+              {
+                hide: !this.state.hide,
+                response: res.data.detail,
+                model: false,
+                cluster_sites: res.data.cluster_sites,
+                data: true
+              },
+              () => this.toast()
+            );
           })
           .catch(err => {
             console.log(err);
@@ -74,7 +81,9 @@ class ManageRegion extends Component {
   };
 
   toast() {
-    toast.success(this.state.response);
+    if (this.state.data) {
+      toast.success(this.state.response);
+    }
   }
   render() {
     const {
@@ -230,13 +239,6 @@ class ManageRegion extends Component {
             </div>
           </Modal>
         )}
-        {this.state.model && this.toast()}
-
-        {/*this.state.model && (
-          <Modal title="response" toggleModal={this.closeModel}>
-            <p>{this.state.response}</p>
-          </Modal>
-        )*/}
       </Fragment>
     );
   }

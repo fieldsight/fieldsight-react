@@ -3,6 +3,7 @@ import Table from "react-bootstrap/Table";
 import axios from "axios";
 import WithPagination from "../../../../hoc/WithPagination";
 import Modal from "../../../common/Modal";
+import { DotLoader } from "../../../myForm/Loader";
 
 class SubmissionData extends Component {
   state = {
@@ -147,145 +148,149 @@ class SubmissionData extends Component {
               </form>
             </div>
           </div>
-          <div className="card-body">
-            <Table
-              responsive="xl"
-              className="table  table-bordered  dataTable "
-            >
-              <thead>
-                <tr>
-                  {/* <th>S.N.</th>*/}
-                  <th>Site Name</th>
-                  <th>Site Id</th>
-                  <th>submission id</th>
-                  <th>Submitted By</th>
-                  <th>Submission Date</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.siteList.length > 0 &&
-                  this.state.siteList.map((list, key) => {
-                    return (
-                      <tr key={key}>
-                        {/*<td>{key + this.props.fromData}</td>*/}
-                        <td>{list.site_name}</td>
-                        <td>{list.site_identifier}</td>
-                        <td>{list.submission_id}</td>
-                        <td>
-                          <a href={list.profile_url}>{list.submitted_by}</a>
-                        </td>
-                        <td>{list.date}</td>
+          {this.props.dLoader == false ? (
+            <div className="card-body">
+              <Table
+                responsive="xl"
+                className="table  table-bordered  dataTable "
+              >
+                <thead>
+                  <tr>
+                    {/* <th>S.N.</th>*/}
+                    <th>Site Name</th>
+                    <th>Site Id</th>
+                    <th>submission id</th>
+                    <th>Submitted By</th>
+                    <th>Submission Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.siteList.length > 0 &&
+                    this.state.siteList.map((list, key) => {
+                      return (
+                        <tr key={key}>
+                          {/*<td>{key + this.props.fromData}</td>*/}
+                          <td>{list.site_name}</td>
+                          <td>{list.site_identifier}</td>
+                          <td>{list.submission_id}</td>
+                          <td>
+                            <a href={list.profile_url}>{list.submitted_by}</a>
+                          </td>
+                          <td>{list.date}</td>
 
-                        <td>
-                          <a
-                            className="view-tag tag"
-                            href={`/fieldsight/application/?submission=${list.submission_id}#/submission-details`}
-                          >
-                            <i className="la la-eye"></i>
-                          </a>
-                          <a
-                            className="edit-tag tag"
-                            href={`/forms/edit/${this.props.form_id_string}/${list.submission_id}`}
-                          >
-                            <i className="la la-edit"></i>
-                          </a>
+                          <td>
+                            <a
+                              className="view-tag tag"
+                              href={`/fieldsight/application/?submission=${list.submission_id}#/submission-details`}
+                            >
+                              <i className="la la-eye"></i>
+                            </a>
+                            <a
+                              className="edit-tag tag"
+                              href={`/forms/edit/${this.props.form_id_string}/${list.submission_id}`}
+                            >
+                              <i className="la la-edit"></i>
+                            </a>
 
-                          <a
-                            className="delete-tag tag"
-                            onClick={() => {
-                              this.handleDelete(list.submission_id);
-                            }}
-                          >
-                            <i className="la la-trash-o"> </i>{" "}
-                          </a>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
-            {this.props.siteList && this.props.siteList.length > 0 ? (
-              <div className="card-body">
-                <div className="table-footer">
-                  <div className="showing-rows">
-                    <p>
-                      Showing <span>{this.props.fromData}</span> to{" "}
-                      <span>
-                        {" "}
-                        {this.props.toData > this.props.totalCount
-                          ? this.props.totalCount
-                          : this.props.toData}{" "}
-                      </span>{" "}
-                      of <span>{this.props.totalCount}</span> entries.
-                    </p>
-                  </div>
-
-                  {this.props.toData < this.props.totalCount ? (
-                    <div className="table-pagination">
-                      <ul>
-                        <li className="page-item">
-                          <a
-                            onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum - 1,
-                                null,
-                                {
-                                  type: "formSubmission",
-                                  projectId: this.state.id,
-                                  fsxf_id: this.state.fid,
-                                  status: "form-submission"
-                                }
-                              )
-                            }
-                          >
-                            <i
-                              className={`la la-long-arrow-left ${this.props
-                                .fromData == 1}?disable-btn :""`}
-                            />
-                          </a>
-                        </li>
-
-                        {this.props.renderPageNumbers({
-                          type: "formSubmission",
-                          projectId: this.state.id,
-                          fsxf_id: this.state.fid,
-                          status: "form-submission"
-                        })}
-
-                        <li className="page-item ">
-                          <a
-                            onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum + 1,
-                                null,
-                                {
-                                  type: "formSubmission",
-                                  projectId: this.state.id,
-                                  fsxf_id: this.state.fid,
-                                  status: "form-submission"
-                                }
-                              )
-                            }
-                          >
-                            <i className="la la-long-arrow-right" />
-                          </a>
-                        </li>
-                      </ul>
+                            <a
+                              className="delete-tag tag"
+                              onClick={() => {
+                                this.handleDelete(list.submission_id);
+                              }}
+                            >
+                              <i className="la la-trash-o"> </i>{" "}
+                            </a>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+              {this.props.siteList && this.props.siteList.length > 0 ? (
+                <div className="card-body">
+                  <div className="table-footer">
+                    <div className="showing-rows">
+                      <p>
+                        Showing <span>{this.props.fromData}</span> to{" "}
+                        <span>
+                          {" "}
+                          {this.props.toData > this.props.totalCount
+                            ? this.props.totalCount
+                            : this.props.toData}{" "}
+                        </span>{" "}
+                        of <span>{this.props.totalCount}</span> entries.
+                      </p>
                     </div>
-                  ) : null}
-                </div>
-              </div>
-            ) : (
-              <div className="card-body">
-                <div className="table-footer">
-                  <div className="showing-rows">
-                    <p>Sorry No Data</p>
+
+                    {this.props.toData < this.props.totalCount ? (
+                      <div className="table-pagination">
+                        <ul>
+                          <li className="page-item">
+                            <a
+                              onClick={e =>
+                                this.props.paginationHandler(
+                                  this.props.pageNum - 1,
+                                  null,
+                                  {
+                                    type: "formSubmission",
+                                    projectId: this.state.id,
+                                    fsxf_id: this.state.fid,
+                                    status: "form-submission"
+                                  }
+                                )
+                              }
+                            >
+                              <i
+                                className={`la la-long-arrow-left ${this.props
+                                  .fromData == 1}?disable-btn :""`}
+                              />
+                            </a>
+                          </li>
+
+                          {this.props.renderPageNumbers({
+                            type: "formSubmission",
+                            projectId: this.state.id,
+                            fsxf_id: this.state.fid,
+                            status: "form-submission"
+                          })}
+
+                          <li className="page-item ">
+                            <a
+                              onClick={e =>
+                                this.props.paginationHandler(
+                                  this.props.pageNum + 1,
+                                  null,
+                                  {
+                                    type: "formSubmission",
+                                    projectId: this.state.id,
+                                    fsxf_id: this.state.fid,
+                                    status: "form-submission"
+                                  }
+                                )
+                              }
+                            >
+                              <i className="la la-long-arrow-right" />
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
+              ) : (
+                <div className="card-body">
+                  <div className="table-footer">
+                    <div className="showing-rows">
+                      <p>Sorry No Data</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <DotLoader />
+          )}
         </div>
         {this.state.showConfirmation && (
           <Modal

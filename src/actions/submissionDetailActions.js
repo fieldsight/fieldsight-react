@@ -21,6 +21,8 @@ export const getSubmissionDetail = id => dispatch => {
     axios
       .get(`${id}`)
       .then(res => {
+        console.log(res, "STOP_SUBMISSION_LOADER");
+
         dispatch({
           type: STOP_SUBMISSION_LOADER
         });
