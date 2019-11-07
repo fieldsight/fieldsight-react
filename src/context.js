@@ -366,6 +366,7 @@ class RegionProvider extends Component {
 
   componentDidMount() {
     const { projectId } = this.state;
+
     axios
       .all(urls.map(url => axios.get(`${url}?project=${projectId}`)))
       .then(
