@@ -39,7 +39,8 @@ class SubmissionDetail extends Component {
           loading,
           initialLoader,
           submission_err,
-          hideNullValues
+          hideNullValues,
+          breadcrumb
         },
         postSubmissionDetail,
         getSubmissionDetail,
@@ -50,6 +51,21 @@ class SubmissionDetail extends Component {
       <>
         {!loading && !submission_err && (
           <>
+            <nav aria-label="breadcrumb" role="navigation">
+              {Object.keys(breadcrumb).length > 0 && (
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <a href={breadcrumb.name_url}>{breadcrumb.name}</a>
+                  </li>
+                  <li className="breadcrumb-item">{breadcrumb.current_page}</li>
+                </ol>
+              )}
+              {/* <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <a>Forms</a>
+            </li>
+          </ol> */}
+            </nav>
             <div className="row">
               <div className="col-xl-8 col-lg-8">
                 <div className="right-content no-bg">

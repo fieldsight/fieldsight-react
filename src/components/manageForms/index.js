@@ -63,11 +63,9 @@ class ManageForms extends Component {
           {Object.keys(breadcrumb).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href={breadcrumb.organization_url}>
-                  {breadcrumb.organization}
-                </a>
+                <a href={breadcrumb.name_url}>{breadcrumb.name}</a>
               </li>
-              <li className="breadcrumb-item">{breadcrumb.name}</li>
+              <li className="breadcrumb-item">{breadcrumb.current_page}</li>
             </ol>
           )}
           {/* <ol className="breadcrumb">
