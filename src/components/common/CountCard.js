@@ -13,7 +13,10 @@ const CountCard = ({
         <i className={`la ${icon}`}> </i>
       </div>
       <div className="count-content">
-        <h4>{countNumber !== 0 && countNumber}</h4>
+        {countName != "Progress" && <h4>{countNumber !== 0 && countNumber}</h4>}
+        {countName == "Progress" && (
+          <h4>{countNumber !== 0 && countNumber + "%"}</h4>
+        )}
         <h6>
           {noSubmissionText
             ? countNumber === 0

@@ -49,7 +49,8 @@ const initialState = {
   siteDocumentsLoader: true,
   siteLogsLoader: true,
   sitePicturesLoader: true,
-  subSitesLoader: true
+  subSitesLoader: true,
+  current_progress: 0
   // siteDashboardErr: false,
   // siteMetasErr: false,
   // siteSubmissionsErr: false,

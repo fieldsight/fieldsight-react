@@ -59,7 +59,8 @@ class DashboardHeader extends Component {
         subSitesLoader,
         termsAndLabels,
         hasWritePermission,
-        projectId
+        projectId,
+        currentProgress
       },
       rotate,
       rotateLeft
@@ -217,6 +218,12 @@ class DashboardHeader extends Component {
                 </a>
               </div>
             )}
+            <CountCard
+              countName="Progress"
+              icon="la-signal"
+              countNumber={currentProgress}
+              noSubmissionText={true}
+            />
           </div>
 
           {showModal && (
