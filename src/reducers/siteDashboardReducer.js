@@ -50,7 +50,8 @@ const initialState = {
   siteLogsLoader: true,
   sitePicturesLoader: true,
   subSitesLoader: true,
-  current_progress: 0
+  current_progress: 0,
+  type: null
   // siteDashboardErr: false,
   // siteMetasErr: false,
   // siteSubmissionsErr: false,

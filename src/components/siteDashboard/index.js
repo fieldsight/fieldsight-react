@@ -162,7 +162,8 @@ class SiteDashboard extends Component {
           subSitesLoader,
           has_write_permission,
           breadcrumbs,
-          current_progress
+          current_progress,
+          type
         },
         getSiteForms,
         putCropImage,
@@ -244,6 +245,7 @@ class SiteDashboard extends Component {
                 hasWritePermission={has_write_permission}
                 projectId={project_id}
                 currentProgress={current_progress}
+                type={type}
               />
               <div className="row">
                 <div className="col-lg-6">

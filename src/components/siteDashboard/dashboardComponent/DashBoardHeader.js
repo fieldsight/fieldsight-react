@@ -60,7 +60,8 @@ class DashboardHeader extends Component {
         termsAndLabels,
         hasWritePermission,
         projectId,
-        currentProgress
+        currentProgress,
+        type
       },
       rotate,
       rotateLeft
@@ -131,9 +132,48 @@ class DashboardHeader extends Component {
               </figure>
               <div className="dash-pf-content">
                 {name && <h5>{name}</h5>}
-                {identifier && <span>{identifier}</span>}
-                {address && <span>{address}</span>}
-                {region && <span>{region} </span>}
+                <div className="flex">
+                  {identifier && (
+                    <div className="col-sm-8">
+                      <label>
+                        <strong>Identifier:</strong>
+                      </label>
+                      &nbsp;
+                      <span>{identifier}</span>
+                    </div>
+                  )}
+                  {region && (
+                    <div className="col-sm-8">
+                      <label>
+                        <strong>Region:</strong>
+                      </label>
+                      &nbsp;
+                      <span>{region}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex">
+                  {address && (
+                    <div className="col-sm-8">
+                      <label>
+                        <strong>Address:</strong>
+                      </label>
+                      &nbsp;
+                      <span>{address}</span>
+                    </div>
+                  )}
+                  {type && (
+                    <div className="col-sm-8">
+                      <label>
+                        <strong>Type:</strong>
+                      </label>
+                      &nbsp;
+                      <span>{type}</span>
+                    </div>
+                  )}
+                </div>
+                {/* {address && <span>{address}</span>}
+                {region && <span>{region} </span>} */}
               </div>
             </div>
           )}
