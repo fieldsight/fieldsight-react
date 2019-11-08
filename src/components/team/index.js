@@ -6,8 +6,6 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { getTeam, getTranslate } from "../../actions/teamAction";
 import { FormattedMessage } from "react-intl";
 
-import SelectElement from "../common/SelectElement";
-
 class Teams extends Component {
   state = {
     results: [],
@@ -171,7 +169,7 @@ class Teams extends Component {
                                 <i className="la la-eye"></i>
                               </a>
                               <a
-                                href={`/fieldsight/organization/${project.id}`}
+                                href={`/fieldsight/application/#/team-settings/${project.id}`}
                                 className="td-edit-btn td-btn"
                               >
                                 <i className="la la-edit"></i>
