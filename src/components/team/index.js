@@ -65,7 +65,9 @@ class Teams extends Component {
                     <div className="card">
                         <div className='card-body'>
                             {/* <TeamMap /> */}
-                            <Button onClick={()=>this.props.history.push('/map')}>Map</Button>
+                            <Button  style ={{float:'right'}}onClick={()=>this.props.history.push('/map')}>
+                            <i class="la la-map"></i>&nbsp;
+                            Map</Button>
 
                         </div>
 
