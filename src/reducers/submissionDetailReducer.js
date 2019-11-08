@@ -30,7 +30,8 @@ const initialState = {
   has_review_permission: false,
   hideNullValues: false,
   submission_err: null,
-  breadcrumb: {}
+  breadcrumb: {},
+  is_survey: false
 };
 
 const getNullFilteredSubmission = submissions => {
@@ -100,7 +101,8 @@ export default function(state = initialState, action) {
         edit_url: action.payload.edit_url,
         download_url: action.payload.download_url,
         has_review_permission: action.payload.has_review_permission,
-        breadcrumb: action.payload.breadcrumbs
+        breadcrumb: action.payload.breadcrumbs,
+        is_survey: action.payload.is_survey
         // initialLoader: false
       };
     case POST_SUBMISSION_DETAIL:

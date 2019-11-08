@@ -17,7 +17,9 @@ const withPagination = WrappedComponent => {
       per_page: 200,
       totalPage: null,
       textVal: null,
-      form_id_string: ""
+      form_id_string: "",
+      is_survey: false,
+      breadcrumbs: {}
     };
 
     getUrl = (page_num, payload) => {
@@ -90,7 +92,8 @@ const withPagination = WrappedComponent => {
                   textVal: null,
                   form_id_string: res.data.results.form_id_string,
                   breadcrumbs: res.data.results.breadcrumbs,
-                  totalPage: Math.ceil(res.data.count / 200)
+                  totalPage: Math.ceil(res.data.count / 200),
+                  is_survey: res.data.results.is_survey
                 });
               }
             }

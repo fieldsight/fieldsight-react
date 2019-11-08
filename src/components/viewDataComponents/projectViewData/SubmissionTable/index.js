@@ -12,7 +12,8 @@ class SubmissionData extends Component {
     siteList: [],
     mastersiteList: [],
     showConfirmation: false,
-    breadcrumbs: {}
+    breadcrumbs: {},
+    isSurvey: false
   };
 
   componentDidMount() {
@@ -37,7 +38,8 @@ class SubmissionData extends Component {
       this.setState({
         siteList: nextProps.siteList,
         mastersiteList: nextProps.siteList,
-        breadcrumbs: nextProps.breadcrumbs
+        breadcrumbs: nextProps.breadcrumbs,
+        isSurvey: nextProps.is_survey
       });
     }
   }
@@ -157,8 +159,8 @@ class SubmissionData extends Component {
                 <thead>
                   <tr>
                     {/* <th>S.N.</th>*/}
-                    <th>Site Name</th>
-                    <th>Site Id</th>
+                    {!this.state.isSurvey && <th>Site Name</th>}
+                    {!this.state.isSurvey && <th>Site Id</th>}
                     <th>submission id</th>
                     <th>Submitted By</th>
                     <th>Submission Date</th>
@@ -171,8 +173,10 @@ class SubmissionData extends Component {
                       return (
                         <tr key={key}>
                           {/*<td>{key + this.props.fromData}</td>*/}
-                          <td>{list.site_name}</td>
-                          <td>{list.site_identifier}</td>
+                          {!this.state.isSurvey && <td>{list.site_name}</td>}
+                          {!this.state.isSurvey && (
+                            <td>{list.site_identifier}</td>
+                          )}
                           <td>{list.submission_id}</td>
                           <td>
                             <a href={list.profile_url}>{list.submitted_by}</a>

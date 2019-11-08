@@ -14,7 +14,7 @@ import {
   toggleSubmission
 } from "../../actions/submissionDetailActions";
 
-const submissionId = window.submission_id ? window.submission_id : 66202;
+const submissionId = window.submission_id ? window.submission_id : 17730;
 
 class SubmissionDetail extends Component {
   componentDidMount() {
@@ -40,7 +40,8 @@ class SubmissionDetail extends Component {
           initialLoader,
           submission_err,
           hideNullValues,
-          breadcrumb
+          breadcrumb,
+          is_survey
         },
         postSubmissionDetail,
         getSubmissionDetail,
@@ -69,13 +70,15 @@ class SubmissionDetail extends Component {
             <div className="row">
               <div className="col-xl-8 col-lg-8">
                 <div className="right-content no-bg">
-                  <div className="row">
-                    <SubmissionSiteDetail site={site} />
+                  {!is_survey && (
+                    <div className="row">
+                      <SubmissionSiteDetail site={site} />
 
-                    <SubmissionSiteInfo
-                      siteInformation={site.site_information}
-                    />
-                  </div>
+                      <SubmissionSiteInfo
+                        siteInformation={site.site_information}
+                      />
+                    </div>
+                  )}
 
                   <Submission
                     formName={form_name}
