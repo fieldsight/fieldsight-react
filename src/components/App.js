@@ -48,6 +48,8 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
+import TeamMap from "./team/TeamMap";
+import Mapparent from "./team/Mapparent";
 
 import messages_en from "../translations/en.json";
 import messages_ne from "../translations/ne.json";
@@ -173,6 +175,12 @@ class App extends Component {
                       path="/teams"
                       render={props => <Teams {...props} />}
                     />
+
+                    <Route
+                      path="/map"
+                      render={props => <Mapparent {...props} />}
+                    />
+
                     <Route
                       path="/project_logs/:id"
                       render={props => <ProjectLog {...props} />}

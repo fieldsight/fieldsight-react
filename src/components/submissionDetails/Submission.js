@@ -352,13 +352,18 @@ class Submission extends Component {
 
   render() {
     const {
-      props: { dateCreated, submittedBy, submissionData, formName },
+      props: { dateCreated, submittedBy, submissionData, formName, is_survey },
       state: { showGallery, selectedImg }
     } = this;
 
     return (
       <>
-        <div className="group-submission mrt-30">
+        <div
+          className={`${
+            !is_survey ? "group-submission mrt-30" : "group-submission"
+          }`}
+        >
+          {/* <div className="group-submission mrt-30"> */}
           <div className="row">
             <div className="col-lg-12">
               <div className="card">

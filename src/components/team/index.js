@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { Table } from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { getTeam, getTranslate } from "../../actions/teamAction";
 import { FormattedMessage } from "react-intl";
+import { useHistory } from "react-router-dom";
 
 class Teams extends Component {
   state = {
@@ -61,6 +62,11 @@ class Teams extends Component {
     // );
   };
 
+  showMap = () => {
+    console.log("clicked");
+
+    this.props.history.push("/map");
+  };
   render() {
     const { results } = this.state;
 
@@ -111,8 +117,12 @@ class Teams extends Component {
               >
                 <i className="la la-plus"></i>
               </a>
+              <Button className="fieldsight-btn" onClick={() => this.showMap()}>
+                <i className="la la-map"></i>&nbsp; Map
+              </Button>
             </div>
           </div>
+
           <div className="card-body">
             <div style={{ position: "relative", height: "800px" }}>
               <PerfectScrollbar>
