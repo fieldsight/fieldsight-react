@@ -172,7 +172,7 @@ class TeamMap extends React.Component {
         }
     }
     onProjectcountload = () => {
-        const url = 'http://139.59.67.104:8080/geoserver/gwc/service/tms/1.0.0/Naxa:final_world@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf'
+        const url = 'https://apps.naxa.com.np/geoserver/gwc/service/tms/1.0.0/Naxa:final_world@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf'
         // map.on('baselayerchange')
         const map = this.mapRef.current.leafletElement;
 
