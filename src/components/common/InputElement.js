@@ -12,9 +12,10 @@ const InputElement = ({
   changeHandler,
   removeBtn,
   removeHandler,
+  classname,
   ...rest
 }) => (
-  <div className="form-group">
+  <div className={`form-group ${classname}`}>
     {formType === "editForm" && (
       <label htmlFor={htmlFor}>
         {label} {required && <sup>*</sup>}

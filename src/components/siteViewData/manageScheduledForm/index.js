@@ -19,10 +19,15 @@ class ManageScheduledForm extends Component {
           `/fv3/api/view-by-forms/?site=${this.props.id}&form_type=scheduled`
         )
         .then(res => {
-          this.setState({
-            deleted_forms: res.data.deleted_forms,
-            generals_forms: res.data.scheduled_forms
-          });
+          console.log(res);
+
+          this.setState(
+            {
+              deleted_forms: res.data.deleted_forms,
+              generals_forms: res.data.scheduled_forms
+            },
+            () => this.props.handleBreadCrumb(res.data.breadcrumbs)
+          );
         })
         .catch(err => {
           console.log(err, "err");
@@ -39,22 +44,26 @@ class ManageScheduledForm extends Component {
     const {
       props: { showViewData, data, id }
     } = this;
+
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
           <h5>{!data ? "Schedule Forms" : "Rejected Submission"}</h5>
           <Link to={`/site-responses/${this.props.id}/rejected`}>
             <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Status" : "View by Form"}
+              {data ? "View By Form" : "View by Status"}
             </button>
           </Link>
         </div>
         <div className="card-body">
           {!data && (
-            <ResponseTable generals_forms={this.state.generals_forms} />
+            <ResponseTable
+              generals_forms={this.state.generals_forms}
+              table="site"
+              id={this.props.id}
+              survey="true"
+            />
           )}
-
-          {data && <Rejectsubmission />}
         </div>
         {this.state.deleted_forms.length > 0
           ? !data && (
@@ -93,7 +102,10 @@ class ManageScheduledForm extends Component {
                 </div>
                 <div className="card-body">
                   {!this.state.hide && (
-                    <DeleteTable deleted_forms={this.state.deleted_forms} />
+                    <DeleteTable
+                      deleted_forms={this.state.deleted_forms}
+                      id={this.props.id}
+                    />
                   )}
                 </div>
               </div>

@@ -20,9 +20,19 @@ class ManageForms extends Component {
     } = this.props;
     const splitArr = url.split("/");
     const isProjectForm = splitArr.includes("project");
+    const isSiteForm = splitArr.includes("site");
     if (isProjectForm) {
       axios
         .get(`fv3/api/manage-forms/breadcrums/?project_id=${id}`)
+        .then(res => {
+          this.setState({
+            breadcrumb: res.data
+          });
+        })
+        .catch(err => {});
+    } else if (isSiteForm) {
+      axios
+        .get(`fv3/api/manage-forms/breadcrums/?site_id=${id}`)
         .then(res => {
           this.setState({
             breadcrumb: res.data

@@ -25,10 +25,12 @@ import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
 import ViewData from "./viewData";
-//import SiteData from "./siteViewData"
+import SiteData from "./siteViewData";
+import SiteSubmissionData from "./siteViewData/FormSubmission";
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
+import SubmissionData from "./viewData/SubmissionTable";
 
 import ManageForms from "./manageForms";
 
@@ -45,6 +47,8 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
+import TeamMap from "./team/TeamMap";
+import Mapparent from "./team/Mapparent";
 
 class App extends Component {
   constructor(props) {
@@ -157,6 +161,12 @@ class App extends Component {
                       path="/teams"
                       render={props => <Teams {...props} />}
                     />
+
+                    <Route
+                      path="/map"
+                      render={props => <Mapparent {...props} />}
+                    />
+
                     <Route
                       path="/project_logs/:id"
                       render={props => <ProjectLog {...props} />}
@@ -169,7 +179,10 @@ class App extends Component {
                       path="/project/manage-forms/1/:id"
                       render={props => <ManageForms {...props} />}
                     />
-
+                    <Route
+                      path="/site/manage-forms/0/:id"
+                      render={props => <ManageForms {...props} />}
+                    />
                     <Route
                       path="/project-add/:id"
                       render={props => <ProjectAdd {...props} />}
@@ -205,6 +218,15 @@ class App extends Component {
                       path="/site-responses/:id"
                       render={props => <SiteData {...props} />}
                     />
+                    <Route
+                      path="/submission-data/:id/:fid"
+                      render={props => <SubmissionData {...props} />}
+                    />
+                    <Route
+                      path="/site-submission-data/:id/:fid"
+                      render={props => <SiteSubmissionData {...props} />}
+                    />
+
                   </Switch>
                   <ToastContainer />
                 </Router>
