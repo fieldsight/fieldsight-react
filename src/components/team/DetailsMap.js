@@ -101,21 +101,16 @@ class DetailsMap extends React.Component {
     // `fv3/api/map/sites/?project_id=${this.props.projectpk}`
     fetchigAPI = (url) => {
 
-        console.log("url", url);
-
-
         Axios.get(url)
             .then(response => {
                 const map = this.mapRef.current.leafletElement;
 
-                console.log("1st", response.data.results)
-
-
                 response.data.results.map((e) => {
+                    
                     var popup = "<div class='popup'>" + "<strong><h5>" + e.name + "</h5></strong>" +
                         "<h6> Region: " + e.region + "</h6>" +
                         "<h6>Site type: : " + e.type + "</h6>" +
-                        "<button><a style='color:white' href=`/fieldsight/application/#/site-dashboard/" + e.pk + "`/>Go to Site</button>"
+                        "<button><a style='color:white' href='/fieldsight/application/#/site-dashboard/" + e.pk + "'/>Go to Site</button>"
                         + "</div>"
                     console.log(e, "e")
                     var mrk = L.circleMarker(e.latlng, {
