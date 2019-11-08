@@ -112,7 +112,7 @@ class DetailsMap extends React.Component {
                         "<h6>Site type: : " + e.type + "</h6>" +
                         "<button><a style='color:white' href='/fieldsight/application/#/site-dashboard/" + e.pk + "'/>Go to Site</button>"
                         + "</div>"
-                    console.log(e, "e")
+                    // console.log(e, "e")
                     var mrk = L.circleMarker(e.latlng, {
                         radius: 6, 
                         fillColor: this.changeColor(e, "Site Progress"),
