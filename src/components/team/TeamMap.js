@@ -243,7 +243,7 @@ class TeamMap extends React.Component {
                     count = this.state.projectcount[i]['projects']
                 }
             }
-            var p = count <= 1 ? "Project" : "Projects"
+            var p = count <= 1 ? " Project" : " Projects"
             document.getElementsByClassName('hoverinfo')[0].innerHTML = "<text > <strong>" + e.layer.properties.COUNTRY + " </strong></text><br>" +
                 "<text><strong> " + count + "</strong></text><h7>" + p + "</h7>"
             // L.popup().setLatLng(e.latlng).setContent("<h6>Country: " + e.layer.properties.COUNTRY + "</h6>" +
