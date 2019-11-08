@@ -14,7 +14,7 @@ import {
   toggleSubmission
 } from "../../actions/submissionDetailActions";
 
-const submissionId = window.submission_id ? window.submission_id : 17730;
+const submissionId = window.submission_id ? window.submission_id : 18752;
 
 class SubmissionDetail extends Component {
   componentDidMount() {
