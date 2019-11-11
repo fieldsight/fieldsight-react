@@ -100,7 +100,7 @@ class DeleteTable extends Component {
                       </Link>
                     )}
                     {deleted.download_url === null ? (
-                      <a className="edit-tag tag disable pointer">
+                      <a className="edit-tag tag disable-pointer">
                         <i className="la la-download"></i>
                       </a>
                     ) : (
