@@ -9,6 +9,17 @@ let base_url = window.base_url
   : "https://fieldsight.naxa.com.np";
 
 class SiteTable extends Component {
+  componentDidUpdate(prevProps) {
+    // const url = "fv3/api/my-sites/?project=" + this.props.initialTeamId;
+    if (prevProps.initialTeamId != this.props.initialTeamId) {
+      // console.log("regiodtable update")
+      this.props.requestSite(this.props.initialTeamId);
+      this.props.requestRegions(this.props.initialTeamId);
+      this.props.requestSubmission(this.props.initialTeamId);
+      this.props.requestMap(this.props.initialTeamId);
+    }
+  }
+
   render() {
     return (
       <Fragment>
@@ -146,7 +157,11 @@ class SiteTable extends Component {
             {this.props.fromData < this.props.totalCount ? (
               <div className="table-pagination">
                 <ul>
-                  <li className="page-item">
+                  <li
+                    className={` page-item ${
+                      this.props.pageNum == 1 ? "disable-btn" : ""
+                    }`}
+                  >
                     <a
                       onClick={e =>
                         this.props.paginationHandler(
@@ -156,10 +171,7 @@ class SiteTable extends Component {
                         )
                       }
                     >
-                      <i
-                        className={`la la-long-arrow-left ${this.props
-                          .fromData == 1}? disable-btn :""`}
-                      />
+                      <i className={`la la-long-arrow-left `} />
                     </a>
                   </li>
 
@@ -168,7 +180,14 @@ class SiteTable extends Component {
                     projectId: this.props.siteId
                   })}
 
-                  <li className="page-item ">
+                  <li
+                    className={`page-item  ${
+                      this.props.pageNum ==
+                      Math.ceil(this.props.totalCount / 200)
+                        ? " disable-btn"
+                        : ""
+                    }`}
+                  >
                     <a
                       onClick={e =>
                         this.props.paginationHandler(
@@ -178,13 +197,7 @@ class SiteTable extends Component {
                         )
                       }
                     >
-                      <i
-                        className={`la la-long-arrow-right ${this.props
-                          .pageNum ==
-                          Math.ceil(
-                            this.props.totalCount / 200
-                          )}? disable-btn :""`}
-                      />
+                      <i className={`la la-long-arrow-right`} />
                     </a>
                   </li>
                 </ul>
