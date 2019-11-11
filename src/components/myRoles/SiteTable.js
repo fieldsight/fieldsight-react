@@ -10,19 +10,17 @@ let base_url = window.base_url
 
 class SiteTable extends Component {
   componentDidUpdate(prevProps) {
-    const url = "fv3/api/my-sites/?project=" + this.props.initialTeamId;
+    // const url = "fv3/api/my-sites/?project=" + this.props.initialTeamId;
     if (prevProps.initialTeamId != this.props.initialTeamId) {
       // console.log("regiodtable update")
-      this.props.requestRegions(this.props.initialTeamId);
       this.props.requestSite(this.props.initialTeamId);
+      this.props.requestRegions(this.props.initialTeamId);
       this.props.requestSubmission(this.props.initialTeamId);
       this.props.requestMap(this.props.initialTeamId);
     }
   }
 
   render() {
-    console.log(this.props.siteLoader, "loader");
-
     return (
       <Fragment>
         <div
@@ -160,8 +158,9 @@ class SiteTable extends Component {
               <div className="table-pagination">
                 <ul>
                   <li
-                    className={`page-item ${this.props.fromData ==
-                      1}? disable-btn :""`}
+                    className={` page-item ${
+                      this.props.pageNum == 1 ? "disable-btn" : ""
+                    }`}
                   >
                     <a
                       onClick={e =>
@@ -182,8 +181,12 @@ class SiteTable extends Component {
                   })}
 
                   <li
-                    className={`page-item  ${this.props.pageNum ==
-                      Math.ceil(this.props.totalCount / 200)}? disable-btn :""`}
+                    className={`page-item  ${
+                      this.props.pageNum ==
+                      Math.ceil(this.props.totalCount / 200)
+                        ? " disable-btn"
+                        : ""
+                    }`}
                   >
                     <a
                       onClick={e =>
