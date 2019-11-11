@@ -169,6 +169,7 @@ class MyrolesMain extends Component {
     const url = !!profileId
       ? "fv3/api/my-regions/?project=" + id + "&profile=" + profileId
       : "fv3/api/my-regions/?project=" + id;
+
     this.setState({
       teamId: id,
       RegionLoader: true
@@ -183,7 +184,7 @@ class MyrolesMain extends Component {
               RegionLoader: false
             },
             () => {
-              this.state, "dfghjh";
+              // this.state, "dfghjh";
             }
           );
         }
@@ -197,6 +198,7 @@ class MyrolesMain extends Component {
     const site_url = !!profileId
       ? "fv3/api/my-sites/?project=" + id + "&profile=" + profileId
       : "fv3/api/my-sites/?project=" + id;
+
     this.setState({
       siteLoader: true,
       siteId: id
@@ -212,11 +214,18 @@ class MyrolesMain extends Component {
         }
       })
       .catch(err => {});
-
-    this.props.paginationHandler(1, null, {
-      type: "mySiteList",
-      projectId: id
-    });
+    if (!!profileId) {
+      this.props.paginationHandler(1, null, {
+        type: "siteListByProfileId",
+        projectId: id,
+        profileId
+      });
+    } else {
+      this.props.paginationHandler(1, null, {
+        type: "mySiteList",
+        projectId: id
+      });
+    }
   };
 
   requestSubmission = id => {
@@ -225,6 +234,7 @@ class MyrolesMain extends Component {
     const submission_url = !!profileId
       ? `fv3/api/submissions-map/?project=${id}&type=submissions&profile=${profileId}`
       : `fv3/api/submissions-map/?project=${id}&type=submissions`;
+
     this.setState({
       submissionLoader: true
     });
@@ -271,6 +281,7 @@ class MyrolesMain extends Component {
     const url = !!profileId
       ? `fv3/api/my-sites/?project=${siteId}&profile=${profileId}&q=${this.state.searchQuery}`
       : `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`;
+
     this.setState({ searchQuery: searchValue }, () => {
       this.props.searchHandler(this.state.searchQuery, url, {
         type: "mySiteList",

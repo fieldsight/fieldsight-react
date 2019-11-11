@@ -20,6 +20,20 @@ class SiteTable extends Component {
     }
   }
 
+  pageHandler = (pageNum, payload) => {
+    if (!!this.props.projectId) {
+      this.props.paginationHandler(1, null, {
+        type: "siteListByProfileId",
+        projectId: id,
+        profileId: this.props.projectId
+      });
+    } else {
+      this.props.paginationHandler(1, null, {
+        type: "mySiteList",
+        projectId: id
+      });
+    }
+  };
   render() {
     return (
       <Fragment>
@@ -158,27 +172,47 @@ class SiteTable extends Component {
               <div className="table-pagination">
                 <ul>
                   <li
+                    disable
                     className={` page-item ${
                       this.props.pageNum == 1 ? "disable-btn" : ""
                     }`}
                   >
                     <a
                       onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum - 1,
-                          null,
-                          { type: "mySiteList", projectId: this.props.siteId }
-                        )
+                        !!this.props.profileId
+                          ? this.props.paginationHandler(
+                              this.props.pageNum - 1,
+                              null,
+                              {
+                                type: "siteListByProfileId",
+                                projectId: this.props.siteId,
+                                profileId: this.props.profileId
+                              }
+                            )
+                          : this.props.paginationHandler(
+                              this.props.pageNum - 1,
+                              null,
+                              {
+                                type: "mySiteList",
+                                projectId: this.props.siteId
+                              }
+                            )
                       }
                     >
                       <i className={`la la-long-arrow-left `} />
                     </a>
                   </li>
 
-                  {this.props.renderPageNumbers({
-                    type: "mySiteList",
-                    projectId: this.props.siteId
-                  })}
+                  {!!this.props.profileId
+                    ? this.props.renderPageNumbers({
+                        type: "siteListByProfileId",
+                        projectId: this.props.siteId,
+                        profileId: this.props.profileId
+                      })
+                    : this.props.renderPageNumbers({
+                        type: "mySiteList",
+                        projectId: this.props.siteId
+                      })}
 
                   <li
                     className={`page-item  ${
@@ -190,11 +224,24 @@ class SiteTable extends Component {
                   >
                     <a
                       onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum + 1,
-                          null,
-                          { type: "mySiteList", projectId: this.props.siteId }
-                        )
+                        !!this.props.profileId
+                          ? this.props.paginationHandler(
+                              this.props.pageNum + 1,
+                              null,
+                              {
+                                type: "siteListByProfileId",
+                                projectId: this.props.siteId,
+                                profileId: this.props.profileId
+                              }
+                            )
+                          : this.props.paginationHandler(
+                              this.props.pageNum + 1,
+                              null,
+                              {
+                                type: "mySiteList",
+                                projectId: this.props.siteId
+                              }
+                            )
                       }
                     >
                       <i className={`la la-long-arrow-right`} />

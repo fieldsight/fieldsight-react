@@ -101,8 +101,8 @@ class YourTeamSideBar extends Component {
                                 >
                                   <a
                                     onClick={event => {
-                                      this.props.requestRegions(project.id);
                                       this.props.requestSite(project.id);
+                                      this.props.requestRegions(project.id);
                                       this.props.requestSubmission(project.id);
                                       this.props.requestMap(project.id);
                                     }}
