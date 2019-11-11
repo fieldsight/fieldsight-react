@@ -66,6 +66,10 @@
     &.flagged-btn {
       background-color: $color-yellow;
     }
+    &.disable-btn{
+      background-color:$color-bg;
+      color:darken($color-bg,10%);
+    }
 
   }
 
@@ -292,4 +296,7 @@
       transition: right 0.25s;
     }
   }
+}
+.disable{
+  color:$color-bg;
 }
