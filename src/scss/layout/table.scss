@@ -440,6 +440,12 @@
                             color: $color-white !important;
                         }
                     }
+                    &.disable-btn{
+                        background-color:$color-bg;
+                        a{
+                            color:darken($color-bg,10%);
+                        }
+                    }
                 }
             }
         }
