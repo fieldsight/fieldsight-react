@@ -203,20 +203,20 @@ class MyrolesMain extends Component {
       siteLoader: true,
       siteId: id
     });
-    axios
-      .get(`${site_url}`)
-      .then(res => {
-        if (res.status === 200) {
-          this.setState({
-            site: res.data.results.data,
-            siteLoader: false
-          });
-        }
-      })
-      .catch(err => {});
+    // axios
+    //   .get(`${site_url}`)
+    //   .then(res => {
+    //     if (res.status === 200) {
+    //       this.setState({
+    //         site: res.data.results.data,
+    //         siteLoader: false
+    //       });
+    //     }
+    //   })
+    //   .catch(err => {});
     if (!!profileId) {
       this.props.paginationHandler(1, null, {
-        type: "siteListByProfileId",
+        type: "mySiteList",
         projectId: id,
         profileId
       });

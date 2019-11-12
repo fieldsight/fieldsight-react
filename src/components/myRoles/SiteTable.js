@@ -169,7 +169,7 @@ class SiteTable extends Component {
                               this.props.pageNum - 1,
                               null,
                               {
-                                type: "siteListByProfileId",
+                                type: "mySiteList",
                                 projectId: this.props.siteId,
                                 profileId: this.props.profileId
                               }
@@ -214,7 +214,7 @@ class SiteTable extends Component {
                               this.props.pageNum + 1,
                               null,
                               {
-                                type: "siteListByProfileId",
+                                type: "mySiteList",
                                 projectId: this.props.siteId,
                                 profileId: this.props.profileId
                               }
