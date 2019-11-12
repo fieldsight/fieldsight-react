@@ -68,7 +68,8 @@
     }
     &.disable-btn{
       background-color:$color-bg;
-      color:darken($color-bg,10%);
+      opacity: .75;
+      cursor:not-allowed;
     }
 
   }
