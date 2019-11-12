@@ -72,16 +72,16 @@ class RegionTable extends Component {
     );
   }
 
-  componentDidUpdate(prevProps) {
-    const url = "fv3/api/my-regions/?project=" + this.props.initialTeamId;
-    if (prevProps.initialTeamId != this.props.initialTeamId) {
-      // console.log("regiodtable update")
-      this.props.requestRegions(this.props.initialTeamId);
-      this.props.requestSite(this.props.initialTeamId);
-      this.props.requestSubmission(this.props.initialTeamId);
-      this.props.requestMap(this.props.initialTeamId);
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   const url = "fv3/api/my-regions/?project=" + this.props.initialTeamId;
+  //   if (prevProps.initialTeamId != this.props.initialTeamId) {
+  //     // console.log("regiodtable update")
+  //     this.props.requestRegions(this.props.initialTeamId);
+  //     this.props.requestSite(this.props.initialTeamId);
+  //     this.props.requestSubmission(this.props.initialTeamId);
+  //     this.props.requestMap(this.props.initialTeamId);
+  //   }
+  // }
 }
 
 export default RegionTable;
