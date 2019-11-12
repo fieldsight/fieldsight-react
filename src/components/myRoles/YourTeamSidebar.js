@@ -67,6 +67,16 @@ class YourTeamSideBar extends Component {
                               eventKey={i.toString()}
                             >
                               {team.name}
+                              {!!team.delete_role_url && (
+                                <a className="td-delete-btn td-btn">
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>Delete</Tooltip>}
+                                  >
+                                    <i className="la la-trash-o" />
+                                  </OverlayTrigger>
+                                </a>
+                              )}
                               {team.has_organization_access && (
                                 <span
                                   onClick={e =>
