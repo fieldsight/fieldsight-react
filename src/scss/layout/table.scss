@@ -442,8 +442,10 @@
                     }
                     &.disable-btn{
                         background-color:$color-bg;
+                        opacity: .75;
+                        cursor:not-allowed;
                         a{
-                            color:darken($color-bg,10%);
+                            cursor:not-allowed;
                         }
                     }
                 }
