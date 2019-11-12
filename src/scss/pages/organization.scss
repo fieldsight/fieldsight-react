@@ -16,6 +16,9 @@
         min-height: 54px;
 
         .count-icon {
+          flex:0 0 1.8rem;
+          -ms-flex:0 0 1.8rem;
+          max-width: 1.8rem;
           width: 1.8rem;
           height: 1.8rem;
           text-align: center;
@@ -102,6 +105,10 @@
         .count-icon {
           width: 4rem;
           height: 4rem;
+          flex: 0 0 4rem;
+          -ms-flex:0 0 4rem;
+          max-width: 4rem;
+          
           text-align: center;
           line-height: 4.5rem;
           background-color: $color-bg;
@@ -287,6 +294,8 @@
               @include radius4;
 
               figure {
+                flex:0 0 50px;
+                -ms-flex:0 0 50px;
                 max-width: 50px;
                 margin-right: 0.6125rem;
 

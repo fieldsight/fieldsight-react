@@ -56,6 +56,8 @@
                 flex-wrap: nowrap;
 
                 figure {
+                    flex: 0 0 40px;
+                    -ms-flex: 0 0 40px;
                     max-width: 40px;
                     margin: 0;
                     overflow: hidden;
@@ -442,8 +444,10 @@
                     }
                     &.disable-btn{
                         background-color:$color-bg;
+                        opacity: .75;
+                        cursor:not-allowed;
                         a{
-                            color:darken($color-bg,10%);
+                            cursor:not-allowed;
                         }
                     }
                 }
