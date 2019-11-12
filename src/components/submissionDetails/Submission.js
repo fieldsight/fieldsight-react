@@ -98,10 +98,10 @@ class Submission extends Component {
       ]
     };
   };
-  splitSubmissionObj = submissionObj => {
+  splitSubmissionObj = (submissionObj, name) => {
     const question = Object.values(submissionObj);
     return question.length > 0
-      ? `${question[0]}/${question[1]}`.replace(/\/undefined/, "")
+      ? `${question[0]}/${question[1]} ${name}`.replace(/\/undefined/, "")
       : "";
   };
 
@@ -173,8 +173,11 @@ class Submission extends Component {
               <div className="content">
                 <h6>
                   {typeof submission.question === "object"
-                    ? this.splitSubmissionObj(submission.question)
-                    : submission.question}
+                    ? this.splitSubmissionObj(
+                        submission.question,
+                        submission.name
+                      )
+                    : `${submission.question} (${submission.name})`}
                 </h6>
               </div>
               <figure>
@@ -320,8 +323,11 @@ class Submission extends Component {
             <li>
               <h6>
                 {typeof submission.question === "object"
-                  ? this.splitSubmissionObj(submission.question)
-                  : submission.question}
+                  ? this.splitSubmissionObj(
+                      submission.question,
+                      submission.name
+                    )
+                  : `${submission.question} (${submission.name})`}
               </h6>
               {submission.type === "start" ||
               submission.type === "end" ||
