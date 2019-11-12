@@ -121,8 +121,10 @@ class YourTeamSideBar extends Component {
                                   </a>
                                   {project.has_project_access && (
                                     <span
+                                      onClick={e =>
+                                        this.OpenTabHandler(project.project_url)
+                                      }
                                       className="project-link"
-                                      href={project.project_url}
                                     >
                                       <OverlayTrigger
                                         placement="top"
