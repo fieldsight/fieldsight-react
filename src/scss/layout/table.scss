@@ -56,6 +56,8 @@
                 flex-wrap: nowrap;
 
                 figure {
+                    flex: 0 0 40px;
+                    -ms-flex: 0 0 40px;
                     max-width: 40px;
                     margin: 0;
                     overflow: hidden;
