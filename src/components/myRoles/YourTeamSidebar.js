@@ -68,14 +68,14 @@ class YourTeamSideBar extends Component {
                             >
                               {team.name}
                               {!!team.delete_role_url && (
-                                <a className="td-delete-btn td-btn">
+                                <span className="td-delete-btn td-btn">
                                   <OverlayTrigger
                                     placement="top"
                                     overlay={<Tooltip>Delete</Tooltip>}
                                   >
                                     <i className="la la-trash-o" />
                                   </OverlayTrigger>
-                                </a>
+                                </span>
                               )}
                               {team.has_organization_access && (
                                 <span
@@ -120,7 +120,7 @@ class YourTeamSideBar extends Component {
                                     {project.name}
                                   </a>
                                   {project.has_project_access && (
-                                    <a
+                                    <span
                                       className="project-link"
                                       href={project.project_url}
                                     >
@@ -132,7 +132,17 @@ class YourTeamSideBar extends Component {
                                       >
                                         <i className="la la-external-link" />
                                       </OverlayTrigger>
-                                    </a>
+                                    </span>
+                                  )}
+                                  {!!project.delete_role_url && (
+                                    <span className="td-delete-btn td-btn">
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip>Delete</Tooltip>}
+                                      >
+                                        <i className="la la-trash-o" />
+                                      </OverlayTrigger>
+                                    </span>
                                   )}
                                 </li>
                               ))}
