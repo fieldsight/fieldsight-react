@@ -20,20 +20,6 @@ class SiteTable extends Component {
     }
   }
 
-  pageHandler = (pageNum, payload) => {
-    if (!!this.props.projectId) {
-      this.props.paginationHandler(1, null, {
-        type: "siteListByProfileId",
-        projectId: id,
-        profileId: this.props.projectId
-      });
-    } else {
-      this.props.paginationHandler(1, null, {
-        type: "mySiteList",
-        projectId: id
-      });
-    }
-  };
   render() {
     return (
       <Fragment>
@@ -172,9 +158,8 @@ class SiteTable extends Component {
               <div className="table-pagination">
                 <ul>
                   <li
-                    disable
                     className={` page-item ${
-                      this.props.pageNum == 1 ? "disable-btn" : ""
+                      this.props.pageNum == 1 ? "disabled" : ""
                     }`}
                   >
                     <a
@@ -218,7 +203,7 @@ class SiteTable extends Component {
                     className={`page-item  ${
                       this.props.pageNum ==
                       Math.ceil(this.props.totalCount / 200)
-                        ? " disable-btn"
+                        ? " disabled"
                         : ""
                     }`}
                   >
