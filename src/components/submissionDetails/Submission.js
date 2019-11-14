@@ -100,9 +100,12 @@ class Submission extends Component {
   };
   splitSubmissionObj = (submissionObj, name) => {
     const question = Object.values(submissionObj);
-    return question.length > 0
-      ? `${question[0]}/${question[1]} ${name}`.replace(/\/undefined/, "")
-      : "";
+
+    const label =
+      question.length > 0
+        ? `${question[0]}/${question[1]}`.replace(/\/undefined/, "")
+        : "";
+    return this.getLabelAndName(label, name);
   };
 
   getSmallBound = latlng => {
@@ -127,6 +130,12 @@ class Submission extends Component {
     }
   };
 
+  getLabelAndName = (label, name) => (
+    <span>
+      {label}
+      {name && <i>({name})</i>}
+    </span>
+  );
   handleRepeatedSubmission = submission => {
     return (
       <Accordion key={uuid()} defaultActiveKey={submission.name}>
@@ -140,9 +149,10 @@ class Submission extends Component {
               >
                 {submission.label
                   ? typeof submission.label === "object"
-                    ? this.splitSubmissionObj(submission.label)
-                    : submission.label
-                  : submission.name}
+                    ? this.splitSubmissionObj(submission.label, submission.name)
+                    : this.getLabelAndName(submission.label, submission.name)
+                  : // )submission.label
+                    submission.name}
               </Accordion.Toggle>
             </h5>
           </Card.Header>
@@ -177,7 +187,10 @@ class Submission extends Component {
                         submission.question,
                         submission.name
                       )
-                    : `${submission.question} (${submission.name})`}
+                    : this.getLabelAndName(
+                        submission.question,
+                        submission.name
+                      )}
                 </h6>
               </div>
               <figure>
@@ -222,8 +235,8 @@ class Submission extends Component {
 
       const question =
         typeof submission.question === "object"
-          ? this.splitSubmissionObj(submission.question)
-          : submission.question;
+          ? this.splitSubmissionObj(submission.question, submission.name)
+          : this.getLabelAndName(submission.question, submission.name);
       const distance = measure(
         site.latitude,
         site.longitude,
@@ -327,7 +340,7 @@ class Submission extends Component {
                       submission.question,
                       submission.name
                     )
-                  : `${submission.question} (${submission.name})`}
+                  : this.getLabelAndName(submission.question, submission.name)}
               </h6>
               {submission.type === "start" ||
               submission.type === "end" ||
@@ -336,6 +349,17 @@ class Submission extends Component {
                   <i className="la la-clock-o" />
                   {format(submission.answer, ["MMMM Do YYYY,  h:mm:ss a"])}
                 </time>
+              ) : submission.type == "select one" ? (
+                this.splitSubmissionObj(
+                  submission.selected["one-one"]["label"],
+                  submission.selected["one-one"]["name"]
+                )
+              ) : submission.type == "select all that apply" ? (
+                Object.entries(submission.selected).map(many => (
+                  <p key={uuid()}>
+                    {this.splitSubmissionObj(many[1].label, many[1].name)}
+                  </p>
+                ))
               ) : (
                 <p>{submission.answer}</p>
               )}
