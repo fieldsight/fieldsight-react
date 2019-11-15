@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import Dropzone from "react-dropzone";
-import InputElement from "../common/InputElement";
+import React, { Component } from 'react';
+import Dropzone from 'react-dropzone';
+import InputElement from '../common/InputElement';
 
 const getFilename = name => {
-  const fileName = name.split("/");
+  const fileName = name.split('/');
   return fileName[fileName.length - 1];
 };
 const getImages = images => {
@@ -15,19 +15,26 @@ const getImages = images => {
 };
 
 class EditFormGuide extends Component {
-  state = {
-    id: this.props.data.id ? this.props.data.id : "",
-    data: {
-      title: this.props.data.title ? this.props.data.title : "",
-      text: this.props.data.text ? this.props.data.text : "",
-      fsxf: this.props.data.fsxf ? this.props.data.fsxf : "",
-      is_pdf: this.props.data.is_pdf ? this.props.data.is_pdf : false
-    },
-    fileName: this.props.data.pdf ? getFilename(this.props.data.pdf) : "",
-    // isPdf: this.props.data.is_pdf ? this.props.data.is_pdf : false,
-    srcs: this.props.data.em_images ? getImages(this.props.data.em_images) : [],
-    file: {}
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: props.data.id ? props.data.id : '',
+      data: {
+        title: props.data.title ? props.data.title : '',
+        text: props.data.text ? props.data.text : '',
+        fsxf: props.data.fsxf ? props.data.fsxf : '',
+        is_pdf: props.data.is_pdf ? props.data.is_pdf : false,
+      },
+      fileName: props.data.pdf
+        ? getFilename(this.props.data.pdf)
+        : '',
+      // isPdf: this.props.data.is_pdf ? this.props.data.is_pdf : false,
+      srcs: props.data.em_images
+        ? getImages(this.props.data.em_images)
+        : [],
+      file: {},
+    };
+  }
 
   readFile = file => {
     const newFile = file[0];
@@ -35,9 +42,9 @@ class EditFormGuide extends Component {
       data: {
         ...this.state.data,
         pdf: newFile,
-        is_pdf: true
+        is_pdf: true,
       },
-      fileName: newFile.name
+      fileName: newFile.name,
       // isPdf: true
     });
   };
@@ -47,12 +54,12 @@ class EditFormGuide extends Component {
       {
         data: {
           ...this.state.data,
-          images: file
-        }
+          images: file,
+        },
       },
       () => {
         this.previewImg(file);
-      }
+      },
     );
   };
 
@@ -61,45 +68,50 @@ class EditFormGuide extends Component {
       const reader = new FileReader();
       reader.onload = () => {
         this.setState({
-          srcs: [...this.state.srcs, reader.result]
+          srcs: [...this.state.srcs, reader.result],
         });
       };
       reader.readAsDataURL(img);
     });
   };
+
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({
       data: {
         ...this.state.data,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   };
+
   handleSubmit = e => {
     e.preventDefault();
-    const { id, data } = this.state;
+    const {
+      state: { id, data },
+      props: { handleUpdateGuide },
+    } = this;
     let body = {};
     if (!!id) {
       body = { ...data, id };
     } else {
       body = { ...data };
     }
-
-    this.props.handleUpdateGuide(body);
+    handleUpdateGuide(body);
   };
+
   render() {
     const {
       state: {
         srcs,
         fileName,
-        data: { title, text, is_pdf }
+        data: { title, text, is_pdf },
       },
       props: { handleCancel },
       readFile,
       readImageFile,
       handleChange,
-      handleSubmit
+      handleSubmit,
     } = this;
 
     return (
@@ -145,7 +157,10 @@ class EditFormGuide extends Component {
                             <img src={each} alt="Preview Image" />
                           </div>
                           <div {...getRootProps()}>
-                            <input {...getInputProps()} multiple={true} />
+                            <input
+                              {...getInputProps()}
+                              multiple={true}
+                            />
                             <div className="upload-icon" />
 
                             <button className="fieldsight-btn">
@@ -170,7 +185,10 @@ class EditFormGuide extends Component {
                           <div className="upload-wrap">
                             <div className="content">
                               <div {...getRootProps()}>
-                                <input {...getInputProps()} multiple={true} />
+                                <input
+                                  {...getInputProps()}
+                                  multiple={true}
+                                />
                                 <div className="upload-icon" />
                                 <h3>Drag & Drop an image</h3>
                                 <button className="fieldsight-btn">
@@ -190,7 +208,7 @@ class EditFormGuide extends Component {
           </div>
           <div className="col-md-12">
             <div className="form-group">
-              <label>{" Attach File"}</label>
+              <label>{' Attach File'}</label>
               {is_pdf ? (
                 <Dropzone
                   accept=".pdf"
@@ -232,7 +250,10 @@ class EditFormGuide extends Component {
                           <div className="upload-wrap">
                             <div className="content">
                               <div {...getRootProps()}>
-                                <input {...getInputProps()} multiple={false} />
+                                <input
+                                  {...getInputProps()}
+                                  multiple={false}
+                                />
                                 <div className="upload-icon" />
                                 <h3>Drag & Drop a file</h3>
                                 <button className="fieldsight-btn">
@@ -251,7 +272,10 @@ class EditFormGuide extends Component {
             </div>
           </div>
           <div className="col-md-12">
-            <button type="submit" className="fieldsight-btn pull-right ">
+            <button
+              type="submit"
+              className="fieldsight-btn pull-right "
+            >
               Save Changes
             </button>
             <button

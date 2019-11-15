@@ -1,58 +1,63 @@
-import React, { Component } from "react";
-import L from "leaflet";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import Cropper from "react-cropper";
-import Modal from "../common/Modal";
-import InputElement from "../common/InputElement";
-import SelectElement from "../common/SelectElement";
-import RightContentCard from "../common/RightContentCard";
-import CheckBox from "../common/CheckBox";
-import Loader from "../common/Loader";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import "leaflet/dist/leaflet.css";
-import { markerIcon } from "../common/Marker";
+import React, { Component } from 'react';
+import L from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import Cropper from 'react-cropper';
+import Modal from '../common/Modal';
+import InputElement from '../common/InputElement';
+import SelectElement from '../common/SelectElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import { errorToast, successToast } from '../../utils/toastHandler';
+import 'leaflet/dist/leaflet.css';
+import { markerIcon } from '../common/Marker';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-  iconUrl: require("leaflet/dist/images/marker-icon.png"),
-  shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-const urls = [`fv3/api/team-settings/`, `fv3/api/team-types-countries`];
+const urls = [
+  `fv3/api/team-settings/`,
+  `fv3/api/team-types-countries`,
+];
 
 class EditTeam extends Component {
   _isMounted = false;
+  constructor(props) {
+    super(props);
 
-  state = {
-    teamId: this.props.match.params ? this.props.match.params.id : "",
-    team: {
-      name: "",
-      type: "",
-      address: "",
-      email: "",
-      phone: "",
-      website: "",
-      country: "",
-      public_desc: "",
-      logo: ""
-    },
-    loaded: 0,
-    position: {
-      latitude: "",
-      longitude: ""
-    },
-    teamTypes: [],
-    countryList: [],
-    zoom: 13,
-    src: "",
-    showCropper: false,
-    cropResult: "",
-    isLoading: false,
-    updateLogo: false
-  };
+    this.state = {
+      teamId: props.match.params ? props.match.params.id : '',
+      team: {
+        name: '',
+        type: '',
+        address: '',
+        email: '',
+        phone: '',
+        website: '',
+        country: '',
+        public_desc: '',
+        logo: '',
+      },
+      loaded: 0,
+      position: {
+        latitude: '',
+        longitude: '',
+      },
+      teamTypes: [],
+      countryList: [],
+      zoom: 13,
+      src: '',
+      showCropper: false,
+      cropResult: '',
+      isLoading: false,
+      updateLogo: false,
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -61,47 +66,51 @@ class EditTeam extends Component {
     axios
       .all(
         urls.map((url, i) => {
-          return i === 0 ? axios.get(`${url}${teamId}/`) : axios.get(url);
-        })
+          return i === 0
+            ? axios.get(`${url}${teamId}/`)
+            : axios.get(url);
+        }),
       )
       .then(
         axios.spread((team, types) => {
-          this.props.teamData(team.data.name);
+          teamData(team.data.name);
 
           if (this._isMounted) {
             if (team && types) {
               const position =
-                team.data.location && team.data.location.split(" ");
-              const longitude = position && position[1].split("(")[1];
-              const latitude = position && position[2].split(")")[0];
+                team.data.location && team.data.location.split(' ');
+              const longitude = position && position[1].split('(')[1];
+              const latitude = position && position[2].split(')')[0];
               const teamType = types.data.team_types
                 ? types.data.team_types
                 : [];
               const selectedType = team.data.type;
               const countryList = types.data.countries
                 ? types.data.countries
-                : "";
+                : '';
               const selectedCountry = team.data.country;
 
               const newPosition =
                 position && position.length > 0
                   ? { latitude, longitude }
-                  : { latitude: "", longitude: "" };
+                  : { latitude: '', longitude: '' };
 
-              const newCropResult = team.data.logo ? team.data.logo : "";
+              const newCropResult = team.data.logo
+                ? team.data.logo
+                : '';
 
               this.setState({
                 team: team.data,
                 teamTypes: teamType,
                 countryList: countryList,
                 cropResult: newCropResult,
-                position: newPosition
+                position: newPosition,
               });
             }
           }
-        })
+        }),
       )
-      .catch(err => console.log("err", err));
+      .catch(err => console.log('err', err));
   }
 
   requestHandler = () => {
@@ -117,13 +126,13 @@ class EditTeam extends Component {
           website,
           country,
           public_desc,
-          logo
+          logo,
         },
         position: { latitude, longitude },
         cropResult,
-        updateLogo
+        updateLogo,
       },
-      props: {}
+      props: {},
     } = this;
 
     const team = {
@@ -138,7 +147,7 @@ class EditTeam extends Component {
       // logo,
       ...(!!updateLogo && cropResult && { logo: cropResult }),
       latitude,
-      longitude
+      longitude,
     };
 
     axios
@@ -146,26 +155,26 @@ class EditTeam extends Component {
         onUploadProgress: progressEvent => {
           this.setState({
             loaded: Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            )
+              (progressEvent.loaded * 100) / progressEvent.total,
+            ),
           });
-        }
+        },
       })
       .then(res => {
         this.setState(
           {
             isLoading: false,
-            loaded: 0
+            loaded: 0,
           },
-          () => successToast("Team", "updated")
+          () => successToast('Team', 'updated'),
         );
       })
       .catch(err => {
         this.setState(
           {
-            isLoading: false
+            isLoading: false,
           },
-          errorToast
+          errorToast,
         );
       });
   };
@@ -174,9 +183,9 @@ class EditTeam extends Component {
     e.preventDefault();
     this.setState(
       {
-        isLoading: true
+        isLoading: true,
       },
-      this.requestHandler
+      this.requestHandler,
     );
   };
 
@@ -186,15 +195,15 @@ class EditTeam extends Component {
       return this.setState({
         position: {
           ...this.state.position,
-          [name]: value
-        }
+          [name]: value,
+        },
       });
     }
     this.setState({
       team: {
         ...this.state.team,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   };
 
@@ -204,26 +213,26 @@ class EditTeam extends Component {
       this.setState({
         src: reader.result,
         showCropper: true,
-        updateLogo: true
+        updateLogo: true,
       });
     };
     reader.readAsDataURL(file[0]);
   };
 
   cropImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
 
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
 
@@ -232,8 +241,8 @@ class EditTeam extends Component {
       position: {
         ...this.state.position,
         latitude: e.latlng.lat,
-        longitude: e.latlng.lng
-      }
+        longitude: e.latlng.lng,
+      },
     });
   };
 
@@ -243,18 +252,19 @@ class EditTeam extends Component {
     this.setState({
       team: {
         ...this.state.team,
-        type: value
-      }
+        type: value,
+      },
     });
   };
+
   onCountrySelectChangeHandler = e => {
     const { value } = e.target;
 
     this.setState({
       team: {
         ...this.state.team,
-        country: value
-      }
+        country: value,
+      },
     });
   };
 
@@ -271,14 +281,14 @@ class EditTeam extends Component {
           website,
           country,
           public_desc,
-          logo
+          logo,
         },
         position: { latitude, longitude },
         showCropper,
         cropResult,
         isLoading,
         countryList,
-        teamTypes
+        teamTypes,
       },
       onChangeHandler,
       onTypeSelectChangeHandler,
@@ -286,8 +296,9 @@ class EditTeam extends Component {
       onCountrySelectChangeHandler,
       readFile,
       closeModal,
-      mapClickHandler
+      mapClickHandler,
     } = this;
+
     return (
       <RightContentCard title="Edit Team">
         <form className="edit-form" onSubmit={onSubmitHandler}>
@@ -394,7 +405,7 @@ class EditTeam extends Component {
 
                 <div className="map-form">
                   <Map
-                    style={{ height: "205px", marginTop: "1rem" }}
+                    style={{ height: '205px', marginTop: '1rem' }}
                     center={[latitude, longitude]}
                     zoom={this.state.zoom}
                     onClick={mapClickHandler}
@@ -403,7 +414,10 @@ class EditTeam extends Component {
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[latitude, longitude]} icon={markerIcon}>
+                    <Marker
+                      position={[latitude, longitude]}
+                      icon={markerIcon}
+                    >
                       <Popup>
                         <b>Name: </b>
                         {name}
@@ -420,7 +434,9 @@ class EditTeam extends Component {
                         label="Latitude"
                         name="latitude"
                         value={latitude}
-                        changeHandler={e => onChangeHandler(e, "latitude")}
+                        changeHandler={e =>
+                          onChangeHandler(e, 'latitude')
+                        }
                       />
                     </div>
 
@@ -433,7 +449,9 @@ class EditTeam extends Component {
                         label="Longitude"
                         name="longitude"
                         value={longitude}
-                        changeHandler={e => onChangeHandler(e, "longitude")}
+                        changeHandler={e =>
+                          onChangeHandler(e, 'longitude')
+                        }
                       />
                     </div>
                   </div>
@@ -443,9 +461,11 @@ class EditTeam extends Component {
 
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
-                <label> {cropResult ? "Logo" : "Attach File"}</label>
+                <label> {cropResult ? 'Logo' : 'Attach File'}</label>
                 {cropResult ? (
-                  <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                  <Dropzone
+                    onDrop={acceptedFile => readFile(acceptedFile)}
+                  >
                     {({ getRootProps, getInputProps }) => {
                       return (
                         <section>
@@ -456,7 +476,10 @@ class EditTeam extends Component {
                             />
                           </div>
                           <div {...getRootProps()}>
-                            <input {...getInputProps()} multiple={false} />
+                            <input
+                              {...getInputProps()}
+                              multiple={false}
+                            />
                             <div className="upload-icon" />
 
                             <button className="fieldsight-btn">
@@ -469,7 +492,9 @@ class EditTeam extends Component {
                     }}
                   </Dropzone>
                 ) : (
-                  <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                  <Dropzone
+                    onDrop={acceptedFile => readFile(acceptedFile)}
+                  >
                     {({ getRootProps, getInputProps }) => {
                       return (
                         <section>
@@ -500,7 +525,10 @@ class EditTeam extends Component {
             </div>
 
             <div className="col-sm-12">
-              <button type="submit" className="fieldsight-btn pull-right">
+              <button
+                type="submit"
+                className="fieldsight-btn pull-right"
+              >
                 Save
               </button>
             </div>
@@ -524,7 +552,7 @@ class EditTeam extends Component {
                     />
                     <button
                       className="fieldsight-btn"
-                      style={{ marginTop: "15px" }}
+                      style={{ marginTop: '15px' }}
                       onClick={this.cropImage}
                     >
                       Save Image
@@ -538,9 +566,9 @@ class EditTeam extends Component {
                     <div
                       className="img-preview"
                       style={{
-                        width: "100%",
+                        width: '100%',
                         height: 400,
-                        overflow: "hidden"
+                        overflow: 'hidden',
                       }}
                     />
                   </figure>

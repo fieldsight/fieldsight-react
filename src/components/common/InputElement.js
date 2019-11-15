@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const InputElement = ({
   tag: Tag,
@@ -16,7 +16,7 @@ const InputElement = ({
   ...rest
 }) => (
   <div className={`form-group ${classname}`}>
-    {formType === "editForm" && (
+    {formType === 'editForm' && (
       <label htmlFor={htmlFor}>
         {label} {required && <sup>*</sup>}
       </label>
@@ -26,13 +26,15 @@ const InputElement = ({
       type={type}
       className="form-control"
       required={required}
-      value={value ? value : ""}
+      value={value ? value : ''}
       onChange={changeHandler}
       name={name}
       {...rest}
     />
 
-    {formType === "floatingForm" && <label htmlFor={htmlFor}>{label}</label>}
+    {formType === 'floatingForm' && (
+      <label htmlFor={htmlFor}>{label}</label>
+    )}
 
     {removeBtn && (
       <span className="cross-icon" onClick={removeHandler}>

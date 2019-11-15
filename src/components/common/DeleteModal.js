@@ -1,5 +1,5 @@
-import React from "react";
-import Modal from "./Modal";
+import React from 'react';
+import Modal from './Modal';
 
 const DeleteModal = props => {
   const { onCancel, onConfirm, onToggle, message } = props;
@@ -12,7 +12,10 @@ const DeleteModal = props => {
       </div>
       <div className="warning-footer text-center">
         <span className="col-4">
-          <a className="fieldsight-btn rejected-btn" onClick={onCancel}>
+          <a
+            className="fieldsight-btn rejected-btn"
+            onClick={onCancel}
+          >
             cancel
           </a>
         </span>

@@ -1,53 +1,55 @@
-import React, { Component } from "react";
-import Select from "react-select";
+import React, { Component } from 'react';
+import Select from 'react-select';
 
-import InputElement from "../common/InputElement";
-import RadioElement from "../common/RadioElement";
-import CheckBox from "../common/CheckBox";
-import SelectElement from "../common/SelectElement";
+import InputElement from '../common/InputElement';
+import RadioElement from '../common/RadioElement';
 
 class AddSubstageForm extends Component {
   _isMounted = false;
-  state = {
-    id: this.props.formData ? this.props.formData.id : "",
-    em: this.props.formData ? this.props.formData.em : null,
-    status:
-      this.props.formData && this.props.formData.default_submission_status
-        ? this.props.formData.default_submission_status
-        : 0,
-    isDonor:
-      this.props.formData && this.props.formData.setting
-        ? this.props.formData.setting.donor_visibility
-        : true,
-    isEdit:
-      this.props.formData && this.props.formData.setting
-        ? this.props.formData.setting.can_edit
-        : true,
-    isDelete:
-      this.props.formData && this.props.formData.setting
-        ? this.props.formData.setting.can_delete
-        : true,
-    regionSelected: [],
-    typeSelected: [],
-    weight: this.props.formData ? this.props.formData.weight : 0,
-    substageTitle:
-      this.props.formData && this.props.formData.name
-        ? this.props.formData.name
-        : "",
-    substageDesc:
-      this.props.formData && this.props.formData.description
-        ? this.props.formData.description
-        : "",
-    hasLoaded: false,
-    order:
-      this.props.formData && this.props.formData.order
-        ? this.props.formData.order
-        : 0,
-    settingId:
-      this.props.formData && this.props.formData.setting
-        ? this.props.formData.setting.id
-        : ""
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      id: props.formData ? props.formData.id : '',
+      em: props.formData ? props.formData.em : null,
+      status:
+        props.formData && props.formData.default_submission_status
+          ? props.formData.default_submission_status
+          : 0,
+      isDonor:
+        props.formData && props.formData.setting
+          ? props.formData.setting.donor_visibility
+          : true,
+      isEdit:
+        props.formData && props.formData.setting
+          ? props.formData.setting.can_edit
+          : true,
+      isDelete:
+        props.formData && props.formData.setting
+          ? props.formData.setting.can_delete
+          : true,
+      regionSelected: [],
+      typeSelected: [],
+      weight: props.formData ? props.formData.weight : 0,
+      substageTitle:
+        props.formData && props.formData.name
+          ? props.formData.name
+          : '',
+      substageDesc:
+        props.formData && props.formData.description
+          ? props.formData.description
+          : '',
+      hasLoaded: false,
+      order:
+        props.formData && props.formData.order
+          ? props.formData.order
+          : 0,
+      settingId:
+        props.formData && props.formData.setting
+          ? props.formData.setting.id
+          : '',
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -56,11 +58,12 @@ class AddSubstageForm extends Component {
       regionOptions,
       formData,
       stagedRegions,
-      stagedTypes
+      stagedTypes,
     } = this.props;
     const regionSelected =
       formData && formData.setting && formData.setting.regions;
-    const typeSelected = formData && formData.setting && formData.setting.types;
+    const typeSelected =
+      formData && formData.setting && formData.setting.types;
 
     if (this._isMounted) {
       let newRegionArr = [];
@@ -70,7 +73,7 @@ class AddSubstageForm extends Component {
           newRegionArr.push({
             ...each,
             value: each.identifier,
-            label: each.name
+            label: each.name,
           });
         }
       });
@@ -80,7 +83,7 @@ class AddSubstageForm extends Component {
           newTypeArr.push({
             ...each,
             value: each.identifier,
-            label: each.name
+            label: each.name,
           });
         }
       });
@@ -94,7 +97,7 @@ class AddSubstageForm extends Component {
               selectedRegion.push({
                 ...region,
                 value: region.identifier,
-                label: region.name
+                label: region.name,
               });
             }
           });
@@ -106,7 +109,7 @@ class AddSubstageForm extends Component {
               selectedType.push({
                 ...type,
                 value: type.identifier,
-                label: type.name
+                label: type.name,
               });
             }
           });
@@ -121,7 +124,7 @@ class AddSubstageForm extends Component {
         regionDropdown: newRegionArr,
         typeDropdown: newTypeArr,
         regionSelected: selectedRegion,
-        typeSelected: selectedType
+        typeSelected: selectedType,
       });
     }
   }
@@ -131,6 +134,7 @@ class AddSubstageForm extends Component {
   }
 
   handleClearState = () => {
+    const { handleToggleForm } = this.props;
     this.setState(
       {
         status: 0,
@@ -140,13 +144,13 @@ class AddSubstageForm extends Component {
         regionSelected: [],
         typeSelected: [],
         weight: 0,
-        substageTitle: "",
-        substageDesc: "",
-        hasLoaded: false
+        substageTitle: '',
+        substageDesc: '',
+        hasLoaded: false,
       },
       () => {
-        this.props.handleToggleForm();
-      }
+        handleToggleForm();
+      },
     );
   };
 
@@ -154,21 +158,21 @@ class AddSubstageForm extends Component {
     const { name, value } = e.target;
 
     this.setState(state => {
-      if (name == "status") {
+      if (name == 'status') {
         return {
-          status: value
+          status: value,
         };
-      } else if (name == "donor") {
+      } else if (name == 'donor') {
         return {
-          isDonor: JSON.parse(value)
+          isDonor: JSON.parse(value),
         };
-      } else if (name == "edit") {
+      } else if (name == 'edit') {
         return {
-          isEdit: JSON.parse(value)
+          isEdit: JSON.parse(value),
         };
-      } else if (name == "delete") {
+      } else if (name == 'delete') {
         return {
-          isDelete: JSON.parse(value)
+          isDelete: JSON.parse(value),
         };
       }
     });
@@ -176,27 +180,28 @@ class AddSubstageForm extends Component {
   handleSelectRegionChange = region => {
     this.setState(state => {
       return {
-        regionSelected: region
+        regionSelected: region,
       };
     });
   };
   handleSelectTypeChange = type => {
     this.setState(state => {
       return {
-        typeSelected: type
+        typeSelected: type,
       };
     });
   };
   handleInputChange = e => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   handleSubmit = e => {
     e.preventDefault();
+    const { handleCreateForm } = this.props;
 
-    this.props.handleCreateForm(this.state);
+    handleCreateForm(this.state);
   };
 
   render() {
@@ -214,8 +219,8 @@ class AddSubstageForm extends Component {
         weight,
         substageTitle,
         substageDesc,
-        hasLoaded
-      }
+        hasLoaded,
+      },
     } = this;
 
     return (
@@ -251,8 +256,12 @@ class AddSubstageForm extends Component {
 
               <div className="add-btn flex-start">
                 <a data-tab="choose-form" onClick={toggleFormModal}>
-                  {!!isEditForm || formTitle ? "Change form" : " Choose form"}
-                  {!formTitle && <sup style={{ color: "#ed5261" }}>*</sup>}
+                  {!!isEditForm || formTitle
+                    ? 'Change form'
+                    : ' Choose form'}
+                  {!formTitle && (
+                    <sup style={{ color: '#ed5261' }}>*</sup>
+                  )}
                   <span>
                     <i className="la la-file-text-o"></i>
                   </span>

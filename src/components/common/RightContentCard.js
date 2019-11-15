@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 const RightContentCard = ({
   title,
   addButton,
   hideButton,
   toggleModal,
-  children
+  children,
 }) => (
   <div className="card">
     <div className="card-header main-card-header">

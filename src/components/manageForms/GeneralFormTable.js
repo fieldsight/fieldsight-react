@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Modal from "../common/DeleteModal";
-import DeleteModal from "../common/DeleteModal";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import DeleteModal from '../common/DeleteModal';
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -10,37 +9,39 @@ const getStatus = value => {
   else if (value == 2) return <span>Flagged</span>;
   else if (value == 3) return <span>Approved</span>;
 };
+
 const getClass = status => {
-  if (status == 0) return "pending";
-  if (status == 1) return "rejected";
-  if (status == 2) return "flagged";
-  if (status == 3) return "approved";
+  if (status == 0) return 'pending';
+  if (status == 1) return 'rejected';
+  if (status == 2) return 'flagged';
+  if (status == 3) return 'approved';
 };
+
 const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  return year + "-" + monthIndex + "-" + dateIdx;
+  return year + '-' + monthIndex + '-' + dateIdx;
 };
 
 const EducationMaterialForProject = props => {
   const { formTable, item, editForm } = props;
-  if (formTable == "project") {
+  if (formTable == 'project') {
     return (
       <span>
         <a onClick={() => editForm(item.em, item.id)}>
           <i className="la la-book" />
-          {item.em ? item.em.title : ""}
+          {item.em ? item.em.title : ''}
         </a>
       </span>
     );
-  } else if (formTable == "site") {
+  } else if (formTable == 'site') {
     return (
       <span>
         {!!item.site && (
           <a onClick={() => editForm(item.em, item.id)}>
             <i className="la la-book" />
-            {item.em ? item.em.title : ""}
+            {item.em ? item.em.title : ''}
           </a>
         )}
       </span>
@@ -56,9 +57,9 @@ const GetActionForProject = props => {
     handleToggle,
     handleCancel,
     handleConfirm,
-    editAction
+    editAction,
   } = props;
-  if (formTable == "project") {
+  if (formTable == 'project') {
     return (
       <div>
         {!!item.is_deployed && (
@@ -93,7 +94,10 @@ const GetActionForProject = props => {
           onClick={() => editAction(item)}
           className="pending td-edit-btn td-btn"
         >
-          <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip>Edit</Tooltip>}
+          >
             <i className="la la-edit"> </i>
           </OverlayTrigger>
         </a>
@@ -119,13 +123,13 @@ const GetActionForProject = props => {
             onCancel={handleCancel}
             onToggle={handleToggle}
             message={
-              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+              'Deleting this form will also delete submissions to this form. Do you want to proceed?'
             }
           />
         )}
       </div>
     );
-  } else if (formTable == "site") {
+  } else if (formTable == 'site') {
     return (
       <div>
         {!!item.site && !!item.is_deployed && (
@@ -161,7 +165,10 @@ const GetActionForProject = props => {
             onClick={() => editAction(item)}
             className="pending td-edit-btn td-btn"
           >
-            <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Edit</Tooltip>}
+            >
               <i className="la la-edit"> </i>
             </OverlayTrigger>
           </a>
@@ -187,7 +194,7 @@ const GetActionForProject = props => {
             onCancel={handleCancel}
             onToggle={handleToggle}
             message={
-              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+              'Deleting this form will also delete submissions to this form. Do you want to proceed?'
             }
           />
         )}
@@ -197,30 +204,35 @@ const GetActionForProject = props => {
 };
 
 class GeneralFormTable extends Component {
-  state = {
-    confirmDelete: false,
-    formId: "",
-    isDeploy: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      confirmDelete: false,
+      formId: '',
+      isDeploy: false,
+    };
+  }
 
   handleToggle = (formId, isDeploy) => {
     this.setState({
       confirmDelete: !this.state.confirmDelete,
       formId,
-      isDeploy
+      isDeploy,
     });
   };
 
   handleConfirm = () => {
+    const { deleteItem } = this.props;
     this.setState(
       {
-        confirmDelete: false
+        confirmDelete: false,
       },
       () => {
-        this.props.deleteItem(this.state.formId, this.state.isDeploy);
-      }
+        deleteItem(this.state.formId, this.state.isDeploy);
+      },
     );
   };
+
   handleCancel = () => {
     this.setState({ confirmDelete: false });
   };
@@ -233,8 +245,8 @@ class GeneralFormTable extends Component {
         handleEditGuide,
         changeDeployStatus,
         handleEditForm,
-        formTable
-      }
+        formTable,
+      },
     } = this;
 
     return (
@@ -268,7 +280,7 @@ class GeneralFormTable extends Component {
               {!loader &&
                 data.map((item, i) => (
                   <tr key={i}>
-                    <td>{item.xf ? item.xf.title : ""}</td>
+                    <td>{item.xf ? item.xf.title : ''}</td>
                     <td>{item.responses_count}</td>
                     <td>
                       <EducationMaterialForProject
@@ -279,13 +291,15 @@ class GeneralFormTable extends Component {
                     </td>
                     <td>
                       <time>
-                        <i className="la la-clock-o"></i>{" "}
+                        <i className="la la-clock-o"></i>{' '}
                         {formatDate(new Date(item.date_created))}
                       </time>
                     </td>
                     <td>
                       <span
-                        className={getClass(item.default_submission_status)}
+                        className={getClass(
+                          item.default_submission_status,
+                        )}
                       >
                         {getStatus(item.default_submission_status)}
                       </span>

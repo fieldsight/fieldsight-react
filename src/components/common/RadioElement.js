@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const RadioElement = ({
   name,
@@ -6,11 +6,11 @@ const RadioElement = ({
   className,
   changeHandler,
   label,
-  value
+  value,
 }) => (
   <div className={`radiobox ${className}`}>
     <label>
-      {" "}
+      {' '}
       <input
         type="radio"
         name={name}

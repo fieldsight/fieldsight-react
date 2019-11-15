@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const SelectElement = ({
   formType,
@@ -7,13 +7,13 @@ const SelectElement = ({
   options,
   changeHandler,
   value,
-  classname
+  classname,
 }) => {
   return (
     <div className={`form-group ${classname}`}>
       {label && (
         <label>
-          {label} {formType === "editForm" && <sup>*</sup>}
+          {label} {formType === 'editForm' && <sup>*</sup>}
         </label>
       )}
       <div className="select-option">

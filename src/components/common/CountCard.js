@@ -1,21 +1,23 @@
-import React from "react";
+import React from 'react';
 
 const CountCard = ({
   countName,
   countNumber,
   icon,
   className,
-  noSubmissionText
+  noSubmissionText,
 }) => {
   return (
     <div className="count-card">
-      <div className={`count-icon ${className ? className : ""}`}>
+      <div className={`count-icon ${className ? className : ''}`}>
         <i className={`la ${icon}`}> </i>
       </div>
       <div className="count-content">
-        {countName != "Progress" && <h4>{countNumber !== 0 && countNumber}</h4>}
-        {countName == "Progress" && (
-          <h4>{countNumber !== 0 && countNumber + "%"}</h4>
+        {countName != 'Progress' && (
+          <h4>{countNumber !== 0 && countNumber}</h4>
+        )}
+        {countName == 'Progress' && (
+          <h4>{countNumber !== 0 && countNumber + '%'}</h4>
         )}
         <h6>
           {noSubmissionText
@@ -26,7 +28,7 @@ const CountCard = ({
             ? `No ${countName} submission`
             : `${countName} submission`}
           {countNumber !== 0 && countNumber > 1 && (
-            <span style={{ textTransform: "lowercase" }}>s</span>
+            <span style={{ textTransform: 'lowercase' }}>s</span>
           )}
         </h6>
       </div>

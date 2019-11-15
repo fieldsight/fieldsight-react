@@ -34,7 +34,6 @@ class MyrolesMain extends Component {
     searchQuery: '',
   };
 
-  // componentDidMount() {
   componentWillMount() {
     const { profileId } = this.props.match.params;
     let url = profileId
@@ -75,7 +74,8 @@ class MyrolesMain extends Component {
   }
 
   invitationOpen = (e, data) => {
-    if (this.state.invite == 'hide') {
+    const { invite } = this.state;
+    if (invite == 'hide') {
       this.setState({
         invite: null,
       });
@@ -188,24 +188,13 @@ class MyrolesMain extends Component {
   };
 
   requestSite = id => {
-    const site_url = 'fv3/api/my-sites/?project=' + id;
+    const { paginationHandler } = this.props;
     this.setState({
       siteLoader: true,
       siteId: id,
     });
-    // axios
-    //   .get(`${site_url}`)
-    //   .then(res => {
-    //     if (res.status === 200) {
-    //       this.setState({
-    //         site: res.data.results.data,
-    //         siteLoader: false
-    //       });
-    //     }
-    //   })
-    //   .catch(err => {});
 
-    this.props.paginationHandler(1, null, {
+    paginationHandler(1, null, {
       type: 'mySiteList',
       projectId: id,
     });
@@ -230,7 +219,6 @@ class MyrolesMain extends Component {
   };
 
   requestMap = id => {
-    //const id =309
     const submission_url = `fv3/api/submissions-map/?project=${id}&type=map`;
 
     axios
@@ -255,9 +243,13 @@ class MyrolesMain extends Component {
     const searchValue = e.target.value;
     const { siteId } = this.state;
     this.setState({ searchQuery: searchValue }, () => {
-      this.props.searchHandler(
-        this.state.searchQuery,
-        `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`,
+      const {
+        props: { searchHandler },
+        state: { searchQuery },
+      } = this;
+      searchHandler(
+        searchQuery,
+        `fv3/api/my-sites/?project=${siteId}&q=${searchQuery}`,
         {
           type: 'mySiteList',
           projectId: siteId,
@@ -266,30 +258,58 @@ class MyrolesMain extends Component {
     });
   };
   render() {
-    const { profileId } = this.props.match.params;
-    const { myGuide } = this.state;
+    const {
+      match: {
+        params: { profileId },
+      },
+      siteList,
+      renderPageNumbers,
+      pageNum,
+      paginationHandler,
+      fromData,
+      toData,
+      totalCount,
+    } = this.props;
+    const {
+      myGuide,
+      dLoader,
+      profile,
+      teams,
+      teamId,
+      regions,
+      rightTab,
+      submission,
+      invitation,
+      invite,
+      submissionLoader,
+      regions,
+      RegionLoader,
+      initialTeamId,
+      siteId,
+      mapData,
+    } = this.state;
 
     return (
       <>
         <div className="card mrb-30">
           <ProfileTab
-            dLoader={this.state.dLoader}
-            profile={this.state.profile}
+            dLoader={dLoader}
+            profile={profile}
             profileId={profileId}
           />
         </div>
 
         <div className="row">
           <YourTeamSideBar
-            dLoader={this.state.dLoader}
-            teams={this.state.teams}
-            teamId={this.state.teamId}
+            dLoader={dLoader}
+            teams={teams}
+            teamId={teamId}
             requestRegions={this.requestRegions}
             requestSite={this.requestSite}
             requestSubmission={this.requestSubmission}
             requestMap={this.requestMap}
-            regions={this.state.regions}
-            addPermission={this.state.profile.can_create_team}
+            regions={regions}
+            addPermission={profile.can_create_team}
           />
 
           <div className="col-xl-8 col-lg-7">
@@ -308,7 +328,7 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == 'site'
+                            rightTab == 'site'
                               ? 'nav-link active'
                               : 'nav-link'
                           }
@@ -320,7 +340,7 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == 'region'
+                            rightTab == 'region'
                               ? 'nav-link active'
                               : 'nav-link'
                           }
@@ -334,7 +354,7 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == 'submission'
+                            rightTab == 'submission'
                               ? 'nav-link active'
                               : 'nav-link'
                           }
@@ -348,7 +368,7 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == 'map'
+                            rightTab == 'map'
                               ? 'nav-link active'
                               : 'nav-link'
                           }
@@ -359,7 +379,7 @@ class MyrolesMain extends Component {
                       </li>
                     </ul>
 
-                    {this.state.rightTab == 'site' && (
+                    {rightTab == 'site' && (
                       // <div className="dash-btn">
                       <form
                         className="floating-form"
@@ -395,51 +415,47 @@ class MyrolesMain extends Component {
                     className="tab-content mrt-30"
                     id="myTabContent"
                   >
-                    {this.state.rightTab == 'submission' && (
+                    {rightTab == 'submission' && (
                       <Submissions
-                        submission={this.state.submission}
-                        submissionLoader={this.state.submissionLoader}
+                        submission={submission}
+                        submissionLoader={submissionLoader}
                       />
                     )}
 
-                    {this.state.rightTab == 'region' && (
+                    {rightTab == 'region' && (
                       <RegionTable
-                        // initialTeamId={this.state.initialTeamId}
+                        // initialTeamId={initialTeamId}
                         // requestRegions={this.requestRegions}
                         // requestSite={this.requestSite}
                         // requestSubmission={this.requestSubmission}
                         // requestMap={this.requestMap}
-                        regions={this.state.regions}
-                        RegionLoader={this.state.RegionLoader}
+                        regions={regions}
+                        RegionLoader={RegionLoader}
                         profileId={profileId}
                       />
                     )}
-                    {this.state.rightTab == 'site' && (
+                    {rightTab == 'site' && (
                       <SiteTable
-                        initialTeamId={this.state.initialTeamId}
+                        initialTeamId={initialTeamId}
                         requestRegions={this.requestRegions}
                         requestSite={this.requestSite}
                         requestSubmission={this.requestSubmission}
                         requestMap={this.requestMap}
-                        site={this.props.siteList}
-                        siteLoader={this.state.dLoader}
-                        renderPageNumbers={
-                          this.props.renderPageNumbers
-                        }
-                        paginationHandler={
-                          this.props.paginationHandler
-                        }
-                        siteId={this.state.siteId}
-                        pageNum={this.props.pageNum}
-                        fromData={this.props.fromData}
-                        toData={this.props.toData}
-                        totalCount={this.props.totalCount}
+                        site={siteList}
+                        siteLoader={dLoader}
+                        renderPageNumbers={renderPageNumbers}
+                        paginationHandler={paginationHandler}
+                        siteId={siteId}
+                        pageNum={pageNum}
+                        fromData={fromData}
+                        toData={toData}
+                        totalCount={totalCount}
                         profileId={profileId}
                       />
                     )}
 
-                    {this.state.rightTab == 'map' && (
-                      <MapPage mapData={this.state.mapData} />
+                    {rightTab == 'map' && (
+                      <MapPage mapData={mapData} />
                     )}
                   </div>
                 </div>
@@ -448,14 +464,14 @@ class MyrolesMain extends Component {
           </div>
         </div>
 
-        {this.state.invitation.length != 0 && (
+        {invitation.length != 0 && (
           <div
-            className={'invite-popup invite ' + this.state.invite}
+            className={'invite-popup invite ' + invite}
             style={{ zIndex: '1011' }}
           >
             <InviteTab
               invitationOpen={this.invitationOpen}
-              invitation={this.state.invitation}
+              invitation={invitation}
               acceptHandler={this.acceptHandler}
               rejectHandler={this.rejectHandler}
               acceptAll={this.acceptAll}
@@ -471,7 +487,7 @@ class MyrolesMain extends Component {
               <p>
                 Hi,&nbsp;
                 <span style={{ textTransform: 'capitalize' }}>
-                  {this.state.profile.fullname}
+                  {profile.fullname}
                 </span>{' '}
                 seems like you have no role yet.&nbsp;You can get
                 started by creating a team in FieldSight or contact

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import L from "leaflet";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import axios from "axios";
+import "leaflet/dist/leaflet.css";
 import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
 import Modal from "../common/Modal";
@@ -12,10 +12,6 @@ import Loader from "../common/Loader";
 import CheckBox from "../common/CheckBox";
 import Select from "../siteAdd/Select";
 
-import { errorToast, successToast } from "../../utils/toastHandler";
-import { RegionContext } from "../../context";
-import "leaflet/dist/leaflet.css";
-
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
@@ -24,10 +20,15 @@ L.Icon.Default.mergeOptions({
 });
 
 export default class SiteAdd extends Component {
-  state = {
-    data: ""
-  };
+  constructor(props) {
+    super(props) 
+      this.state = {
+        data: ""
+      };
+  }
+
   cropImage = () => {
+    const {props:{ cropImage}, state:{data}}
     if (typeof this.cropper.getCroppedCanvas() === "undefined") {
       return;
     }
@@ -36,7 +37,7 @@ export default class SiteAdd extends Component {
         data: this.cropper.getCroppedCanvas().toDataURL()
       },
       () => {
-        this.props.cropImage(this.state.data);
+        cropImage(data);
       }
     );
   };
@@ -72,7 +73,6 @@ export default class SiteAdd extends Component {
         src,
         showCropper,
         isLoading,
-
         jsondata,
         site_types,
         data,
@@ -80,7 +80,9 @@ export default class SiteAdd extends Component {
         selectdata,
         selectedGender,
         Selectedtypes,
-        deleteConfirm
+        deleteConfirm,
+        delete_perm, 
+        project_info,
       }
     } = this.props;
     // console.log(jsondata, "jsondata");
@@ -96,7 +98,7 @@ export default class SiteAdd extends Component {
             top: "4px"
           }}
         >
-          {this.props.delete_perm === true ? (
+          {delete_perm === true ? (
             <a
               className="fieldsight-btn rejected-btn"
               style={{ boxShadow: "none" }}
@@ -135,7 +137,7 @@ export default class SiteAdd extends Component {
               />
             </div>
 
-            {this.props.region !== undefined ? (
+            {region !== undefined ? (
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
@@ -239,7 +241,7 @@ export default class SiteAdd extends Component {
                   <Map
                     style={{ height: "205px", marginTop: "1rem" }}
                     center={[latitude, longitude]}
-                    zoom={this.props.zoom}
+                    zoom={zoom}
                     onClick={mapClickHandler}
                   >
                     <TileLayer
@@ -295,7 +297,7 @@ export default class SiteAdd extends Component {
                         <section>
                           <div className="upload-form">
                             <img
-                              src={this.props.cropResult}
+                              src={cropResult}
                               alt="Cropped Image"
                             />
                           </div>
@@ -345,8 +347,8 @@ export default class SiteAdd extends Component {
             </div>
           </div>
           <div className="row">
-            {!!this.props.jsondata &&
-              this.props.jsondata.map((data, key) => {
+            {!!jsondata &&
+              jsondata.map((data, key) => {
                 return (
                   <Fragment key={key}>
                     {data.question_type === "Text" ? (
@@ -361,7 +363,7 @@ export default class SiteAdd extends Component {
                           id={data.id}
                           label={data.question_text}
                           name={data.question_name}
-                          value={this.props.project_info[data.question_name]}
+                          value={project_info[data.question_name]}
                           placeholder={data.question_placeholder}
                           changeHandler={ondynamiChangeHandler}
                         />
@@ -382,7 +384,7 @@ export default class SiteAdd extends Component {
                           id={data.id}
                           label={data.question_text}
                           name={data.question_name}
-                          value={this.props.project_info[data.question_name]}
+                          value={project_info[data.question_name]}
                           placeholder={data.question_placeholder}
                           changeHandler={ondynamiChangeHandler}
                         />
@@ -401,7 +403,7 @@ export default class SiteAdd extends Component {
                           className="form-control"
                           onChange={ondynamiChangeHandler}
                           name={data.question_name}
-                          value={this.props.project_info[data.question_name]}
+                          value={project_info[data.question_name]}
                           style={{
                             border: "0",
                             borderBottom: "1px solid #eaeaea"
@@ -431,7 +433,7 @@ export default class SiteAdd extends Component {
                           id={data.id}
                           label={data.question_text}
                           name={data.question_name}
-                          value={this.props.project_info[data.question_name]}
+                          value={project_info[data.question_name]}
                           placeholder={data.question_placeholder}
                           changeHandler={ondynamiChangeHandler}
                         />
@@ -445,10 +447,10 @@ export default class SiteAdd extends Component {
                       <Select
                         data={data.project_id}
                         //onchange={ondynamiChangeHandler}
-                        value={this.props.project_info[data.question_name]}
+                        value={project_info[data.question_name]}
                         type={data.question_text}
                         name={data.question_name}
-                        selectedValue={this.props.selectedValue}
+                        selectedValue={selectedValue}
                       />
                     ) : (
                       ""
@@ -474,7 +476,7 @@ export default class SiteAdd extends Component {
                       aspectRatio={1 / 1}
                       preview=".img-preview"
                       guides={false}
-                      src={this.props.src}
+                      src={src}
                       ref={cropper => {
                         this.cropper = cropper;
                       }}

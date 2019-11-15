@@ -1,33 +1,37 @@
-import React, { Component } from "react";
-import Select from "react-select";
+import React, { Component } from 'react';
+import Select from 'react-select';
 
-import InputElement from "../common/InputElement";
+import InputElement from '../common/InputElement';
 
 class AddStageForm extends Component {
-  state = {
-    form: {
-      selectedRegion: [],
-      selectedType: [],
-      name: this.props.stageData ? this.props.stageData.name : "",
-      desc: this.props.stageData ? this.props.stageData.description : "",
-      order: this.props.stageData ? this.props.stageData.order : null,
-      id: this.props.stageData ? this.props.stageData.id : ""
-    },
-    regionDropdown: [],
-    typeDropdown: [],
-    hasLoaded: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      form: {
+        selectedRegion: [],
+        selectedType: [],
+        name: props.stageData ? props.stageData.name : '',
+        desc: props.stageData ? props.stageData.description : '',
+        order: props.stageData ? props.stageData.order : null,
+        id: props.stageData ? props.stageData.id : '',
+      },
+      regionDropdown: [],
+      typeDropdown: [],
+      hasLoaded: false,
+    };
+  }
+
   componentDidMount() {
     const { typeOptions, regionOptions, stageData } = this.props;
     const newRegionArr = regionOptions.map(each => ({
       ...each,
       value: each.identifier,
-      label: each.name
+      label: each.name,
     }));
     const newTypeArr = typeOptions.map(each => ({
       ...each,
       value: each.identifier,
-      label: each.name
+      label: each.name,
     }));
 
     let selectedRegion = [];
@@ -39,7 +43,7 @@ class AddStageForm extends Component {
             selectedRegion.push({
               ...region,
               value: region.identifier,
-              label: region.name
+              label: region.name,
             });
           }
         });
@@ -53,7 +57,7 @@ class AddStageForm extends Component {
             selectedType.push({
               ...type,
               value: type.identifier,
-              label: type.name
+              label: type.name,
             });
           }
         });
@@ -70,56 +74,65 @@ class AddStageForm extends Component {
       form: {
         ...this.state.form,
         selectedRegion,
-        selectedType
-      }
+        selectedType,
+      },
     });
   }
 
   handleChange = e => {
     const { name, value } = e.target;
-
     this.setState({
       form: {
         ...this.state.form,
 
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   };
+
   handleSelectRegionChange = region => {
     this.setState({
       form: {
         ...this.state.form,
-        selectedRegion: region
-      }
+        selectedRegion: region,
+      },
     });
   };
+
   handleSelectTypeChange = type => {
     this.setState({
       form: {
         ...this.state.form,
-        selectedType: type
-      }
+        selectedType: type,
+      },
     });
   };
+
   handleSubmitForm = e => {
     e.preventDefault();
-    this.props.handleSubmit(this.state.form);
+    const {
+      props: { handleSubmit },
+      state: { form },
+    } = this;
+    handleSubmit(form);
   };
+
   render() {
     const {
       state: {
         regionDropdown,
         typeDropdown,
         form: { name, desc, selectedRegion, selectedType },
-        hasLoaded
+        hasLoaded,
       },
       handleChange,
       handleSelectRegionChange,
       handleSelectTypeChange,
-      handleSubmitForm
+      handleSubmitForm,
     } = this;
-    const isEdit = Object.keys(this.props.stageData).length > 0 ? true : false;
+
+    // const isEdit =
+    //   Object.keys(this.props.stageData).length > 0 ? true : false;
 
     return (
       <form
