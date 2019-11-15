@@ -1,5 +1,5 @@
-import axios from "axios";
-import { GET_SITE_VIEW } from "./types";
+import axios from 'axios';
+import { GET_SITE_VIEW } from './types';
 
 export const getsiteViewData = (id, type) => dispatch => {
   axios
@@ -7,7 +7,7 @@ export const getsiteViewData = (id, type) => dispatch => {
     .then(res => {
       dispatch({
         type: GET_SITE_VIEW,
-        payload: res.data
+        payload: res.data,
       });
     })
     .catch(err => {

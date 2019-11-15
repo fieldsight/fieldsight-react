@@ -1,6 +1,11 @@
 const findQuestionWithGroup = (children, type) => {
   const filteredQuestions = [
-    { bind: null, type: null, name: "--Select Question--", label: null }
+    {
+      bind: null,
+      type: null,
+      name: '--Select Question--',
+      label: null,
+    },
   ];
 
   const filterQuestionByType = (questions, name) => {
@@ -9,14 +14,14 @@ const findQuestionWithGroup = (children, type) => {
       if (question.type === type) {
         filteredQuestions.push({
           ...question,
-          groupName: name ? name : null
+          groupName: name ? name : null,
         });
       }
 
-      if (question.type === "group" || question.type === "repeat") {
+      if (question.type === 'group' || question.type === 'repeat') {
         filterQuestionByType(
           question.children,
-          name ? `${name}/${question.name}` : question.name
+          name ? `${name}/${question.name}` : question.name,
         );
       }
     });

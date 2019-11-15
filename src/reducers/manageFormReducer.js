@@ -2,8 +2,8 @@ import {
   GET_MY_FORM_LIST,
   GET_PROJECT_FORM_LIST,
   GET_SHARED_FORM_LIST,
-  GET_REGIONS_AND_TYPES
-} from "../actions/types";
+  GET_REGIONS_AND_TYPES,
+} from '../actions/types';
 
 const initialState = {
   formLoader: true,
@@ -11,7 +11,7 @@ const initialState = {
   projectForms: [],
   sharedForms: [],
   regions: [],
-  types: []
+  types: [],
 };
 
 export default function(state = initialState, action) {
@@ -20,26 +20,26 @@ export default function(state = initialState, action) {
       return {
         ...state,
         myForms: [...action.payload],
-        formLoader: false
+        formLoader: false,
       };
     case GET_PROJECT_FORM_LIST:
       return {
         ...state,
         projectForms: [...action.payload],
-        formLoader: false
+        formLoader: false,
       };
     case GET_SHARED_FORM_LIST:
       return {
         ...state,
         sharedForms: [...action.payload],
-        formLoader: false
+        formLoader: false,
       };
     case GET_REGIONS_AND_TYPES:
       return {
         ...state,
         regions: [action.payload && action.payload.regions],
         types: [action.payload && action.payload.site_types],
-        formLoader: false
+        formLoader: false,
       };
 
     default:

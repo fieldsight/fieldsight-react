@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import ResponseTable from "../../responded/ResponseTable";
-import Rejected from "../RejectSubmissionTable.js";
 import DeleteTable from "../deleteTable";
-import axios from "axios";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { getsiteViewData } from "../../../../actions/siteViewDataAction";
@@ -13,15 +11,16 @@ class ManageGeneralForm extends Component {
   state = {
     hide: true
   };
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props) {
     return {
       id: props.id
     };
   }
 
   componentDidMount() {
-    if (this.props.id != "") {
-      this.props.getsiteViewData(this.props.id, "general");
+    const {id, getsiteViewData  = this.props}
+    if (id != "") {
+      getsiteViewData(id, "general");
     }
   }
   toggleHide = () => {
@@ -37,8 +36,10 @@ class ManageGeneralForm extends Component {
         showViewData,
         generals_forms,
         deleted_forms,
-        generals_loading
-      }
+        generals_loading,
+        id
+      },
+      state: {hide}
     } = this;
 
     return (
@@ -46,7 +47,7 @@ class ManageGeneralForm extends Component {
         <div className="card-header main-card-header sub-card-header">
           <h5>General Forms</h5>
           <div className="dash-btn">
-            <Link to={`/site-responses/${this.props.id}/rejected`}>
+            <Link to={`/site-responses/${id}/rejected`}>
               <button onClick={showViewData} className="fieldsight-btn">
                 {data ? "View By Form" : "View by Status"}
               </button>
@@ -59,7 +60,7 @@ class ManageGeneralForm extends Component {
               <ResponseTable
                 generals_forms={generals_forms}
                 table="site"
-                id={this.props.id}
+                id={id}
               />
             ) : (
               <DotLoader />
@@ -71,7 +72,7 @@ class ManageGeneralForm extends Component {
                 <div className="card-header main-card-header sub-card-header">
                   <h5>Deleted Forms</h5>
                   <div className="dash-btn">
-                    {this.state.hide ? (
+                    {hide ? (
                       <button
                         type="button"
                         className="btn-toggle"
@@ -101,10 +102,10 @@ class ManageGeneralForm extends Component {
                   </div>
                 </div>
                 <div className="card-body">
-                  {!this.state.hide && (
+                  {!hide && (
                     <DeleteTable
                       deleted_forms={deleted_forms}
-                      id={this.props.id}
+                      id={id}
                       loader={generals_loading}
                     />
                   )}
