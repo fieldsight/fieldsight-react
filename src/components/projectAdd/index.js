@@ -29,7 +29,8 @@ export default class ProjectAdd extends Component {
     showCropper: false,
     cropResult: "",
     isLoading: false,
-    redirect: false
+    redirect: false,
+    breadcrumbs: {}
   };
   componentDidMount() {
     this._isMounted = true;
@@ -49,13 +50,15 @@ export default class ProjectAdd extends Component {
                 location.data.location && location.data.location.split(" ");
               const longitude = position && position[1].split("(")[1];
               const latitude = position && position[2].split(")")[0];
+              const breadcrumbs = location.data.breadcrumbs;
               this.setState({
                 sector: res.data,
                 id,
                 position: {
                   longitude,
                   latitude
-                }
+                },
+                breadcrumbs
               });
             }
           })
@@ -214,11 +217,22 @@ export default class ProjectAdd extends Component {
         logo,
         organization
       },
-      position: { latitude, longitude }
+      position: { latitude, longitude },
+      breadcrumbs
     } = this.state;
 
     return (
       <>
+        <nav aria-label="breadcrumb" role="navigation">
+          {Object.keys(breadcrumbs).length > 0 && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.name_url}>{breadcrumbs.name}</a>
+              </li>
+              <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+            </ol>
+          )}
+        </nav>
         <Edit
           context={this.state.id}
           _isMounted={false}

@@ -4,12 +4,10 @@ import Modal from "./Modal";
 const DeleteModal = props => {
   const { onCancel, onConfirm, onToggle, message } = props;
   return (
-    <Modal
-      //   title={"Are you sure you want to delete " + name && name + " ?"}
-      toggleModal={onToggle}
-    >
+    <Modal title="Warning" toggleModal={onToggle}>
       <div className="warning">
-        <h3 style={{ color: "red" }}>Warning</h3>
+        <i className="la la-exclamation-triangle" />
+
         <p>{message}</p>
       </div>
       <div className="warning-footer text-center">

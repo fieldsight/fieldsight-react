@@ -9,6 +9,7 @@ import SubmissionModal from "./SubmissionModal";
 import Modal from "../../common/Modal";
 import Td from "../../common/TableData";
 import { DotLoader } from "../../common/Loader";
+import { Link } from "react-router-dom";
 
 // const projectId = window.project_id ? window.project_id : 137;
 
@@ -58,7 +59,9 @@ class DashboardHeader extends Component {
         subSitesLoader,
         termsAndLabels,
         hasWritePermission,
-        projectId
+        projectId,
+        currentProgress,
+        type
       },
       rotate,
       rotateLeft
@@ -69,7 +72,10 @@ class DashboardHeader extends Component {
         title: "Generate Report",
         link: `/fieldsight/site-dashboard/${siteId}/`
       },
-      { title: "View Data", link: `/forms/responses/${siteId}/` }
+      {
+        title: "View Data",
+        link: `/fieldsight/application/#/site-responses/${siteId}/general/`
+      }
     ];
 
     const HeaderDropdown = [
@@ -126,9 +132,48 @@ class DashboardHeader extends Component {
               </figure>
               <div className="dash-pf-content">
                 {name && <h5>{name}</h5>}
-                {identifier && <span>{identifier}</span>}
-                {address && <span>{address}</span>}
-                {region && <span>{region} </span>}
+                <div className="flex">
+                  {identifier && (
+                    <div className="col-sm-8">
+                      <label>
+                        <strong>Identifier:</strong>
+                      </label>
+                      &nbsp;
+                      <span>{identifier}</span>
+                    </div>
+                  )}
+                  {region && (
+                    <div className="col-sm-8">
+                      <label>
+                        <strong>Region:</strong>
+                      </label>
+                      &nbsp;
+                      <span>{region}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex">
+                  {address && (
+                    <div className="col-sm-8">
+                      <label>
+                        <strong>Address:</strong>
+                      </label>
+                      &nbsp;
+                      <span>{address}</span>
+                    </div>
+                  )}
+                  {type && (
+                    <div className="col-sm-8">
+                      <label>
+                        <strong>Type:</strong>
+                      </label>
+                      &nbsp;
+                      <span>{type}</span>
+                    </div>
+                  )}
+                </div>
+                {/* {address && <span>{address}</span>}
+                {region && <span>{region} </span>} */}
               </div>
             </div>
           )}
@@ -176,13 +221,13 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <a href={`/forms/responses/${siteId}/`} target="_blank">
+            <Link to={`/site-responses/${siteId}/general`} target="_blank">
               <CountCard
                 countName=""
                 countNumber={totalSubmission}
                 icon="la-clone"
               />
-            </a>
+            </Link>
             <a
               href={`/fieldsight/application/#/site-users/${siteId}/`}
               target="_blank"
@@ -213,6 +258,12 @@ class DashboardHeader extends Component {
                 </a>
               </div>
             )}
+            <CountCard
+              countName="Progress"
+              icon="la-signal"
+              countNumber={currentProgress}
+              noSubmissionText={true}
+            />
           </div>
 
           {showModal && (
@@ -341,7 +392,7 @@ class DashboardHeader extends Component {
                             </div>
                           </Td>
                           <Td to={`/site-dashboard/${subSite.id}`}>
-                            {subSite.submission}
+                            {subSite.submissions}
                           </Td>
                           <Td to={`/site-dashboard/${subSite.id}`}>
                             {subSite.type}

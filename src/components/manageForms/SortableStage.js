@@ -143,42 +143,42 @@ class SortableStage extends Component {
                   ) : (
                     <Card.Header>
                       <h5>
+                        {!!isProjectForm && (
+                          <span
+                            className="edit-stage"
+                            data-tab="addSubStage-popup"
+                            onClick={() => handleClickEdit(each)}
+                          >
+                            <i className="la la-edit"></i>
+                          </span>
+                        )}
+                        {!isProjectForm && !!each.site && (
+                          <span
+                            className="edit-stage"
+                            data-tab="addSubStage-popup"
+                            onClick={() => handleClickEdit(each)}
+                          >
+                            <i className="la la-edit"></i>
+                          </span>
+                        )}
                         <Accordion.Toggle
                           as={Button}
                           variant="link"
-                          eventKey={`${each.order}`}
+                          eventKey={`${each.id}`}
                           onClick={() => {
-                            handleRequestSubStage(each.id, each.order);
+                            handleRequestSubStage(each);
                           }}
                         >
-                          <h5>{each.name}</h5>
-                          {!!isProjectForm && (
-                            <span
-                              className="edit-stage"
-                              data-tab="addSubStage-popup"
-                              onClick={() => handleClickEdit(each)}
-                            >
-                              <i className="la la-edit"></i>
-                            </span>
-                          )}
-                          {!isProjectForm && !!each.site && (
-                            <span
-                              className="edit-stage"
-                              data-tab="addSubStage-popup"
-                              onClick={() => handleClickEdit(each)}
-                            >
-                              <i className="la la-edit"></i>
-                            </span>
-                          )}
+                          <div>{each.name}</div>
                         </Accordion.Toggle>
                       </h5>
                     </Card.Header>
                   )}
 
-                  <Accordion.Collapse eventKey={`${each.order}`}>
+                  <Accordion.Collapse eventKey={`${each.id}`}>
                     <Card.Body>
                       {!!isProjectForm && (
-                        <div className="add-btn pull-right outline-btn">
+                        <div className="add-btn  outline-btn">
                           {subStageData && subStageData.length > 1 && (
                             <a
                               className="pending"
@@ -237,7 +237,9 @@ class SortableStage extends Component {
                               {/* Deploy Substages */}
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Deploy Substages</Tooltip>}
+                                overlay={
+                                  <Tooltip>Deploy All Substages</Tooltip>
+                                }
                               >
                                 <span className="active deploy">
                                   <i className="la la-rocket" />
@@ -272,7 +274,7 @@ class SortableStage extends Component {
                                 <OverlayTrigger
                                   placement="top"
                                   overlay={
-                                    <Tooltip>Undeploy Substages</Tooltip>
+                                    <Tooltip>Undeploy All Substages</Tooltip>
                                   }
                                 >
                                   <span>
@@ -284,7 +286,7 @@ class SortableStage extends Component {
                         </div>
                       )}
                       {!isProjectForm && !!each.site && (
-                        <div className="add-btn pull-right outline-btn">
+                        <div className="add-btn  outline-btn">
                           {subStageData && subStageData.length > 1 && (
                             <a
                               className="pending"
@@ -338,7 +340,9 @@ class SortableStage extends Component {
                               {/* Deploy Substages */}
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Deploy Substages</Tooltip>}
+                                overlay={
+                                  <Tooltip>Deploy All Substages</Tooltip>
+                                }
                               >
                                 <span className="active deploy">
                                   <i className="la la-rocket" />
@@ -357,7 +361,7 @@ class SortableStage extends Component {
                                 <OverlayTrigger
                                   placement="top"
                                   overlay={
-                                    <Tooltip>Undeploy Substages</Tooltip>
+                                    <Tooltip>Undeploy All Substages</Tooltip>
                                   }
                                 >
                                   <span>

@@ -52,7 +52,7 @@ export default class SiteAdd extends Component{
         id:"",
         selectform:[],
         selectdata:false,
-        region:[{name: '----', id: null}],
+        region:[{name: '----', id: ""}],
         data:{},
         regionselected:"",
   
@@ -61,51 +61,102 @@ export default class SiteAdd extends Component{
           id:"",
           siteId:"",
           regionalId:"",
-          site_types:[{name: '----', id: null}],
+          site_types:[{name: '----', id: ""}],
           Selectedtypes:"",
-          show:false
+          show:false,
+          jsdata:"",
+          breadcrumbs:{}
        
       };
 
       componentDidMount(){
         this. _isMounted = true;
         const {match:{params:{id,siteId,regionalId}}}=this.props;
+        const urls = [`/fv3/api/site-form/?project=${id}`, `fv3/api/site-forms-breadcrumbs/?project=${id}&type=create`]
        
-        
-        axios.get(`/fv3/api/site-form/?project=${id}`)
-        .then(res=>{  
-          let regionArr =this.state.region
-          let typeArr =this.state.site_types
+        axios
+        .all(
+          urls.map((url, i) => {
+            return axios.get(url)
+          })
+        ).then(
+          axios.spread((siteForm, breadcrumbRes) => {
+            let regionArr =this.state.region
+                  let typeArr =this.state.site_types
 
-          if (this._isMounted) {
-            const position=res.data.location && res.data.location.split(" ");
-            const longitude = position && position[1].split("(")[1];
-            const latitude = position && position[2].split(")")[0]; 
-         
-            this.setState(
-              state=>{
-                res.data.regions.map(each=> regionArr.push(each))
-                res.data.site_types.map(each=>typeArr.push(each))
-                return{
-                  jsondata:res.data.json_questions,
-                  id,
-                  region:regionArr,
-                  siteId,
-                  regionalId,
-                  site_types:typeArr,
-                  position:{
-                    longitude,
-                    latitude
+                  if (this._isMounted) {
+                    const position = siteForm.data.location!== "None" ? siteForm.data.location&& siteForm.data.location.split(" "):""
+                    const longitude = position && position[1].split("(")[1];
+                    const latitude = position && position[2].split(")")[0]; 
+                    const breadcrumbs = breadcrumbRes.data;
+                  
+                    this.setState(
+                      state=>{
+                        siteForm.data.regions!== undefined && siteForm.data.regions.map(each=> regionArr.push(each))
+                        siteForm.data.site_types.map(each=>typeArr.push(each))
+                        return{
+                          jsdata:siteForm.data.hello,
+                          jsondata:siteForm.data.json_questions,
+                          id,
+                          region:siteForm.data.regions !== undefined || "" ? regionArr:[],
+                          siteId,
+                          regionalId,
+                          site_types:typeArr,
+                            position:{
+                            longitude,
+                            latitude
+                          },
+                          breadcrumbs
+                        }
+                        }, () => {
+                          
+                        }
+                        )
                   }
-                }
-               }
-               )
-          }
-          
-            }).catch(err=>{
+          })).catch(err=>{
             console.log(err ,"err");
             
         }) 
+
+        // axios.get(`/fv3/api/site-form/?project=${id}`)
+        // .then(res=>{    
+         
+                  
+        //   let regionArr =this.state.region
+        //   let typeArr =this.state.site_types
+
+        //   if (this._isMounted) {
+            
+        //    const position = res.data.location!== "None" ? res.data.location&& res.data.location.split(" "):""
+        //    const longitude = position && position[1].split("(")[1];
+        //     const latitude = position && position[2].split(")")[0]; 
+          
+        //     this.setState(
+        //       state=>{
+        //         res.data.regions!== undefined && res.data.regions.map(each=> regionArr.push(each))
+        //         res.data.site_types.map(each=>typeArr.push(each))
+        //         return{
+        //           jsdata:res.data.hello,
+        //           jsondata:res.data.json_questions,
+        //           id,
+        //           region:res.data.regions !== undefined || "" ? regionArr:[],
+        //           siteId,
+        //           regionalId,
+        //           site_types:typeArr,
+        //            position:{
+        //             longitude,
+        //             latitude
+        //           },
+                 
+        //         }
+        //        }
+        //        )
+        //   }
+          
+        //     }).catch(err=>{
+        //     console.log(err ,"err");
+            
+        // }) 
       }
      
    onChangeHandler = (e, position) => { 
@@ -329,11 +380,11 @@ export default class SiteAdd extends Component{
       if (data ==="regions"){
         this.setState({
           regionselected:value
-        })
+        },()=>console.log(this.state.regionselected,"regionselected"))
        }else if(data=== "site_types"){
        this.setState({
           Selectedtypes:value
-        })
+        },()=>console.log(this.state.Selectedtypes,"Selectedtypes"))
       }
     }
     closeModal = () => {
@@ -475,8 +526,10 @@ export default class SiteAdd extends Component{
       this._isMounted = false;
     }
     
+   
     
     render(){ 
+     
         const {
             onChangeHandler,
             onSubmitHandler, 
@@ -509,16 +562,30 @@ export default class SiteAdd extends Component{
               src,
               showCropper,
               isLoading,
-             
+              breadcrumbs,
               jsondata,
               site_types,
               regionselected,
               Selectedtypes
                }}=this;
+              
         return (
+          <>
+          <nav aria-label="breadcrumb" role="navigation">
+              {breadcrumbs && Object.keys(breadcrumbs).length > 0 && (
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <a href={breadcrumbs.name_url}>{breadcrumbs.name}</a>
+                  </li>
+                  <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+                </ol>
+              )}
+            </nav>
             <RightContentCard title="Site Form">
             <form className="edit-form" onSubmit={onSubmitHandler}>
+
               <div className="row">
+               
                 <div className="col-xl-4 col-md-6">
                   <InputElement
                     formType="editForm"
@@ -543,20 +610,20 @@ export default class SiteAdd extends Component{
                     changeHandler={onChangeHandler}
                   />
                 </div>
-              {this.props.page==="CreateSite" || this.props.page==="subSite"?<div className="col-xl-4 col-md-6">
+              {region.length>0 ?  (this.props.page==="CreateSite" || this.props.page==="subSite"?<div className="col-xl-4 col-md-6">
                 <SelectElement
                 className="form-control"
-                label="Regions"
+                label="Region"
                 options={region.length>0?region.map(region => region):region}
                 changeHandler={e => onSelectChangeHandler(e, "regions")}
                  value={regionselected && regionselected }
                />
-        </div>:""}
+        </div>:""):""}
        
-        <div className="col-xl-4 col-md-6">
+       <div className="col-xl-4 col-md-6">
                 <SelectElement
                 className="form-control"
-                label="Types"
+                label=" Site Type"
                 options={site_types.length>0?site_types.map(region => region):site_types}
                 changeHandler={e => onSelectChangeHandler(e, "site_types")}
                 value={Selectedtypes}
@@ -804,6 +871,6 @@ export default class SiteAdd extends Component{
          
             {isLoading && <Loader loaded={loaded} />}
           </RightContentCard>
-    
+    </>
     )}
 }

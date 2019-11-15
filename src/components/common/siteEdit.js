@@ -42,7 +42,6 @@ export default class SiteAdd extends Component {
   };
 
   render() {
-    console.log(this.props);
     const {
       onChangeHandler,
       onSubmitHandler,
@@ -84,6 +83,7 @@ export default class SiteAdd extends Component {
         deleteConfirm
       }
     } = this.props;
+    // console.log(jsondata, "jsondata");
 
     return (
       <RightContentCard title=" Site Form">
@@ -121,7 +121,6 @@ export default class SiteAdd extends Component {
                 value={site_id}
                 changeHandler={onChangeHandler}
               />
-              {console.log(site_id, "site_id")}
             </div>
             <div className="col-xl-4 col-md-6">
               <InputElement
@@ -135,11 +134,12 @@ export default class SiteAdd extends Component {
                 changeHandler={onChangeHandler}
               />
             </div>
-            {this.props.region !== "" ? (
+
+            {this.props.region !== undefined ? (
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
-                  label="Regions"
+                  label="Region"
                   options={
                     !!region && region.length > 0
                       ? region.map(region => region)
@@ -155,7 +155,7 @@ export default class SiteAdd extends Component {
             <div className="col-xl-4 col-md-6">
               <SelectElement
                 className="form-control"
-                label="Types"
+                label="Site Type"
                 options={
                   site_types && site_types.length > 0
                     ? site_types.map(region => region)
@@ -343,13 +343,17 @@ export default class SiteAdd extends Component {
                 )}
               </div>
             </div>
-
+          </div>
+          <div className="row">
             {!!this.props.jsondata &&
               this.props.jsondata.map((data, key) => {
                 return (
                   <Fragment key={key}>
                     {data.question_type === "Text" ? (
-                      <div className="col-xl-4 col-md-6">
+                      <div
+                        className="col-xl-4 col-md-6"
+                        style={{ paddingBottom: "16px" }}
+                      >
                         <InputElement
                           formType="editForm"
                           tag="input"
@@ -367,7 +371,10 @@ export default class SiteAdd extends Component {
                       ""
                     )}
                     {data.question_type === "Date" ? (
-                      <div className="col-xl-4 col-md-6">
+                      <div
+                        className="col-xl-4 col-md-6"
+                        style={{ paddingBottom: "16px" }}
+                      >
                         <InputElement
                           formType="editForm"
                           tag="input"
@@ -385,7 +392,10 @@ export default class SiteAdd extends Component {
                       ""
                     )}
                     {data.question_type === "MCQ" ? (
-                      <div className="form-group col-xl-4 col-md-6">
+                      <div
+                        className="form-group col-xl-4 col-md-6"
+                        style={{ paddingBottom: "16px" }}
+                      >
                         <label>{data.question_text}</label>
                         <select
                           className="form-control"

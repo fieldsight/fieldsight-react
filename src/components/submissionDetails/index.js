@@ -5,6 +5,7 @@ import SubmissionSiteDetail from "./SubmissionSiteDetail";
 import SubmissionSiteInfo from "./SubmissionSiteInfo";
 import RightSidebar from "./RightSidebar";
 import Submission from "./Submission";
+import SubmissionError from "./SubmissionError";
 import Loader from "../common/Loader";
 
 import {
@@ -13,7 +14,7 @@ import {
   toggleSubmission
 } from "../../actions/submissionDetailActions";
 
-const submissionId = window.submission_id ? window.submission_id : 66111;
+const submissionId = window.submission_id ? window.submission_id : 66259;
 
 class SubmissionDetail extends Component {
   componentDidMount() {
@@ -37,7 +38,10 @@ class SubmissionDetail extends Component {
           has_review_permission,
           loading,
           initialLoader,
-          hideNullValues
+          submission_err,
+          hideNullValues,
+          breadcrumb,
+          is_survey
         },
         postSubmissionDetail,
         getSubmissionDetail,
@@ -46,38 +50,35 @@ class SubmissionDetail extends Component {
     } = this;
     return (
       <>
-        {!initialLoader && (
+        {!loading && !submission_err && (
           <>
-            {/* <nav aria-label="breadcrumb" role="navigation">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <a href="index.html">Home</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">Site's name</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">form type</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">form name</a>
-                </li>
-
-                <li className="breadcrumb-item active" aria-current="page">
-                  Submission Details
-                </li>
-              </ol>
-            </nav> */}
+            <nav aria-label="breadcrumb" role="navigation">
+              {Object.keys(breadcrumb).length > 0 && (
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <a href={breadcrumb.name_url}>{breadcrumb.name}</a>
+                  </li>
+                  <li className="breadcrumb-item">{breadcrumb.current_page}</li>
+                </ol>
+              )}
+              {/* <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <a>Forms</a>
+            </li>
+          </ol> */}
+            </nav>
             <div className="row">
               <div className="col-xl-8 col-lg-8">
                 <div className="right-content no-bg">
-                  <div className="row">
-                    <SubmissionSiteDetail site={site} />
+                  {!is_survey && (
+                    <div className="row">
+                      <SubmissionSiteDetail site={site} />
 
-                    <SubmissionSiteInfo
-                      siteInformation={site.site_information}
-                    />
-                  </div>
+                      <SubmissionSiteInfo
+                        siteInformation={site.site_information}
+                      />
+                    </div>
+                  )}
 
                   <Submission
                     formName={form_name}
@@ -85,6 +86,7 @@ class SubmissionDetail extends Component {
                     submittedBy={submitted_by}
                     submissionData={submission_data}
                     site={site}
+                    is_survey={is_survey}
                   />
                 </div>
               </div>
@@ -104,10 +106,12 @@ class SubmissionDetail extends Component {
                 />
               </div>
             </div>
-            {loading && <Loader />}
+            {/* {loading && <Loader />} */}
           </>
         )}
-        {initialLoader && <Loader />}
+
+        {submission_err && <SubmissionError submissionErr={submission_err} />}
+        {loading && <Loader />}
       </>
     );
   }
@@ -117,7 +121,8 @@ const mapStateToProps = ({ submissionDetail }) => ({
   submissionDetail
 });
 
-export default connect(
-  mapStateToProps,
-  { getSubmissionDetail, postSubmissionDetail, toggleSubmission }
-)(SubmissionDetail);
+export default connect(mapStateToProps, {
+  getSubmissionDetail,
+  postSubmissionDetail,
+  toggleSubmission
+})(SubmissionDetail);

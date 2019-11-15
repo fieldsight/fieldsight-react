@@ -236,14 +236,16 @@ class GeneralFormTable extends Component {
         formTable
       }
     } = this;
-    // console.log("general table", data, formTable);
 
     return (
       <>
         {!loader && data.length === 0 ? (
           <div>No Form added yet.</div>
         ) : (
-          <Table responsive="xl" className="table  table-bordered  dataTable">
+          <Table
+            responsive="xl"
+            className="table  table-bordered  dataTable "
+          >
             <thead>
               <tr>
                 <th>form title</th>

@@ -29,21 +29,22 @@ export default class SiteEdit extends Component {
     id: "",
     selectform: [],
     selectdata: false,
-    region: [{ name: "----", id: null }],
+    region: [{ id: null, name: "----" }],
     data: [],
     regionselected: "",
     dataSelected: "",
     id: "",
     siteId: "",
     regionalId: "",
-    site_types: [{ name: "----", id: null }],
+    site_types: [{ id: null, name: "----" }],
     Selectedtypes: "",
     project_info: [],
     project_id: "",
     show: false,
     deleteConfirm: false,
     select: [],
-    delete_perm: ""
+    delete_perm: "",
+    breadcrumbs: {}
   };
 
   componentDidMount() {
@@ -53,62 +54,145 @@ export default class SiteEdit extends Component {
         params: { id, siteId, regionalId }
       }
     } = this.props;
-    axios
-      .get(`/fv3/api/site-form/${id}/`)
-      .then(response => {
-        axios
-          .get(`/fv3/api/site-form/?project=${response.data.project}`)
-          .then(res => {
-            let regionArr = this.state.region;
-            let typeArr = this.state.site_types;
+    const urls = [
+      `/fv3/api/site-form/${id}/`,
+      `/fv3/api/site-forms-breadcrumbs/?site=${id}&type=edit`
+    ];
 
-            if (this._isMounted) {
-              const position =
-                res.data.location && res.data.location.split(" ");
-              const longitude = position && position[1].split("(")[1];
-              const latitude = position && position[2].split(")")[0];
-              this.setState(state => {
-                res.data.regions.map(each => regionArr.push(each));
-                res.data.site_types.map(each => typeArr.push(each));
-                return {
-                  delete_perm: response.data.delete_perm,
-                  project_id: response.data.project,
-                  jsondata: res.data.json_questions,
-                  id,
-                  region: regionArr,
-                  siteId,
-                  regionalId,
-                  site_types: typeArr,
-                  data: response.data,
-                  project: {
-                    name: response.data.name,
-                    site_id: response.data.identifier,
-                    phone: response.data.phone,
-                    address: response.data.address,
-                    public_desc: response.data.public_desc,
-                    logo: response.data.logo,
-                    weight: response.data.weight,
-                    cluster_sites: response.data.enable_subsites
-                  },
-                  regionselected: response.data.region,
-                  Selectedtypes: response.data.type,
-                  data: response.data.site_meta_attributes_answers,
-                  cropResult: response.data.logo,
-                  position: {
-                    longitude,
-                    latitude
-                  }
-                };
-              });
+    axios
+      .all(
+        urls.map((url, i) => {
+          return axios.get(url);
+        })
+      )
+      .then(
+        axios.spread((siteForm, breadcrumbRes) => {
+          // console.log("res", siteForm, breadcrumbRes);
+
+          if (this._isMounted) {
+            if (siteForm && breadcrumbRes) {
+              axios
+                .get(`/fv3/api/site-form/?project=${siteForm.data.project}`)
+                .then(res => {
+                  let regionArr = this.state.region;
+                  let typeArr = this.state.site_types;
+                  const position =
+                    res.data.location !== "None"
+                      ? res.data.location && res.data.location.split(" ")
+                      : "";
+                  const longitude = position && position[1].split("(")[1];
+                  const latitude = position && position[2].split(")")[0];
+                  this.setState(state => {
+                    res.data.regions !== undefined &&
+                      res.data.regions.map(each => regionArr.push(each));
+                    res.data.site_types.map(each => typeArr.push(each));
+                    return {
+                      delete_perm: siteForm.data.delete_perm,
+                      project_id: siteForm.data.project,
+                      jsondata: res.data.json_questions,
+                      id,
+                      region:
+                        res.data.regions !== undefined || "" ? regionArr : [],
+                      siteId,
+                      regionalId,
+                      site_types:
+                        res.data.site_types !== undefined || "" ? typeArr : [],
+                      data: siteForm.data,
+                      project: {
+                        name: siteForm.data.name,
+                        site_id: siteForm.data.identifier,
+                        phone: siteForm.data.phone,
+                        address: siteForm.data.address,
+                        public_desc: siteForm.data.public_desc,
+                        logo: siteForm.data.logo,
+                        weight: siteForm.data.weight,
+                        cluster_sites: siteForm.data.enable_subsites
+                      },
+                      regionselected: siteForm.data.region,
+                      Selectedtypes: siteForm.data.type,
+                      data: siteForm.data.site_meta_attributes_answers,
+                      cropResult: siteForm.data.logo,
+                      position: {
+                        longitude,
+                        latitude
+                      },
+                      breadcrumbs: breadcrumbRes.data
+                    };
+                  });
+                })
+                .catch(err => {
+                  console.log(err, "err");
+                });
             }
-          })
-          .catch(err => {
-            console.log(err, "err");
-          });
-      })
+          }
+        })
+      )
       .catch(err => {
         console.log(err, "err");
       });
+
+    // axios
+    //   .get(`/fv3/api/site-form/${id}/`)
+    //   .then(response => {
+    //     console.log(response, "response");
+
+    //     axios
+    //       .get(`/fv3/api/site-form/?project=${response.data.project}`)
+    //       .then(res => {
+    //         let regionArr = this.state.region;
+    //         let typeArr = this.state.site_types;
+
+    //         if (this._isMounted) {
+    //           const position =
+    //             res.data.location !== "None"
+    //               ? res.data.location && res.data.location.split(" ")
+    //               : "";
+    //           const longitude = position && position[1].split("(")[1];
+    //           const latitude = position && position[2].split(")")[0];
+    //           this.setState(state => {
+    //             res.data.regions !== undefined &&
+    //               res.data.regions.map(each => regionArr.push(each));
+    //             res.data.site_types.map(each => typeArr.push(each));
+    //             return {
+    //               delete_perm: response.data.delete_perm,
+    //               project_id: response.data.project,
+    //               jsondata: res.data.json_questions,
+    //               id,
+    //               region: res.data.regions !== undefined || "" ? regionArr : [],
+    //               siteId,
+    //               regionalId,
+    //               site_types:
+    //                 res.data.site_types !== undefined || "" ? typeArr : [],
+    //               data: response.data,
+    //               project: {
+    //                 name: response.data.name,
+    //                 site_id: response.data.identifier,
+    //                 phone: response.data.phone,
+    //                 address: response.data.address,
+    //                 public_desc: response.data.public_desc,
+    //                 logo: response.data.logo,
+    //                 weight: response.data.weight,
+    //                 cluster_sites: response.data.enable_subsites
+    //               },
+    //               regionselected: response.data.region,
+    //               Selectedtypes: response.data.type,
+    //               data: response.data.site_meta_attributes_answers,
+    //               cropResult: response.data.logo,
+    //               position: {
+    //                 longitude,
+    //                 latitude
+    //               }
+    //             };
+    //           });
+    //         }
+    //       })
+    //       .catch(err => {
+    //         console.log(err, "err");
+    //       });
+    //   })
+    //   .catch(err => {
+    //     console.log(err, "err");
+    //   });
   }
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
@@ -145,8 +229,10 @@ export default class SiteEdit extends Component {
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude,
       ...(!!this.state.project.weight && { weight: this.state.project.weight }),
-      region: this.state.regionselected,
-      type: this.state.Selectedtypes,
+      region:
+        this.state.regionselected === "----" ? null : this.state.regionselected,
+      type:
+        this.state.Selectedtypes === "----" ? null : this.state.Selectedtypes,
       enable_subsites: this.state.project.cluster_sites,
       ...(this.state.show && { logo: this.state.cropResult }),
       site_meta_attributes_ans: JSON.stringify(this.state.data)
@@ -269,29 +355,42 @@ export default class SiteEdit extends Component {
     });
   };
   render() {
+    const { breadcrumbs } = this.state;
     return (
-      <SiteEditForm
-        project={this.state}
-        onChangeHandler={this.onChangeHandler}
-        onSubmitHandler={this.onSubmitHandler}
-        mapClickHandler={this.mapClickHandler}
-        onSelectChangeHandler={this.onSelectChangeHandler}
-        readFile={this.readFile}
-        closeModal={this.closeModal}
-        handleCheckboxChange={this.handleCheckboxChange}
-        zoom={13}
-        src={this.state.src}
-        project_info={this.state.data}
-        jsondata={this.state.jsondata}
-        cropImage={this.cropImage}
-        cropResult={this.state.cropResult}
-        ondynamiChangeHandler={this.ondynamiChangeHandler}
-        handleDelete={this.handleDelete}
-        deleteClose={this.deleteClose}
-        deleteFile={this.deleteFile}
-        selectedValue={this.selectedValue}
-        delete_perm={this.state.delete_perm}
-      />
+      <>
+        <nav aria-label="breadcrumb" role="navigation">
+          {breadcrumbs && Object.keys(breadcrumbs).length > 0 && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.name_url}>{breadcrumbs.name}</a>
+              </li>
+              <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+            </ol>
+          )}
+        </nav>
+        <SiteEditForm
+          project={this.state}
+          onChangeHandler={this.onChangeHandler}
+          onSubmitHandler={this.onSubmitHandler}
+          mapClickHandler={this.mapClickHandler}
+          onSelectChangeHandler={this.onSelectChangeHandler}
+          readFile={this.readFile}
+          closeModal={this.closeModal}
+          handleCheckboxChange={this.handleCheckboxChange}
+          zoom={13}
+          src={this.state.src}
+          project_info={this.state.data}
+          jsondata={this.state.jsondata}
+          cropImage={this.cropImage}
+          cropResult={this.state.cropResult}
+          ondynamiChangeHandler={this.ondynamiChangeHandler}
+          handleDelete={this.handleDelete}
+          deleteClose={this.deleteClose}
+          deleteFile={this.deleteFile}
+          selectedValue={this.selectedValue}
+          delete_perm={this.state.delete_perm}
+        />
+      </>
     );
   }
 }

@@ -24,6 +24,11 @@ class ProjectSiteTable extends Component {
     });
   }
 
+  componentWillUpdate(prevProps) {
+    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
+      prevProps.breadcrumbhandler(prevProps.breadcrumbs);
+    }
+  }
   onChangeHandler = e => {
     const searchValue = e.target.value;
     this.props.searchHandler(

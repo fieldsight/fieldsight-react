@@ -13,6 +13,7 @@ import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import "leaflet/dist/leaflet.css";
+import { markerIcon } from "../common/Marker";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -86,7 +87,7 @@ class EditProject extends Component {
       website,
       donor,
       public_desc,
-      cluster_sites,
+      // cluster_sites,
       ...(cropResult && { logo: cropResult }),
       latitude,
       longitude,
@@ -94,7 +95,6 @@ class EditProject extends Component {
       sub_sector: selectedSubSector,
       organization
     };
-
     axios
       .put(`${urls[0]}${projectId}/`, project, {
         onUploadProgress: progressEvent => {
@@ -182,6 +182,7 @@ class EditProject extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { projectId } = this.context;
+
     axios
       .all(
         urls.map((url, i) => {
@@ -395,15 +396,15 @@ class EditProject extends Component {
                 />
               </div>
             </div>
-            <div className="col-xl-4 col-md-6">
+            {/*  <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <CheckBox
                   checked={cluster_sites || ""}
                   label="Enable/Disable Clustering into Regions"
-                  onChange={this.handleCheckboxChange}
+                  changeHandler={this.handleCheckboxChange}
                 />
               </div>
-            </div>
+    </div>*/}
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"
@@ -433,7 +434,7 @@ class EditProject extends Component {
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[latitude, longitude]}>
+                    <Marker position={[latitude, longitude]} icon={markerIcon}>
                       <Popup>
                         <b>Name: </b>
                         {name}

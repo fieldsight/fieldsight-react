@@ -35,48 +35,50 @@ class SideNav extends Component {
   };
 
   requestForms(id) {
-    this.props.getMyFormList();
-    this.props.getProjectFormList();
-    this.props.getSharedFormList();
-    if (this.state.isProjectForm) {
-      this.props.getRegionsAndTypes(id);
-    }
-    // axios
-    //   .all(
-    //     urls.map((url, i) => {
-    //       if (this.state.isProjectForm) {
-    //         return i === 0 ? axios.get(`${url}${id}/`) : axios.get(url);
-    //       } else {
-    //         return i > 0 ? axios.get(url) : "";
-    //       }
-    //     })
-    //   )
-    //   .then(
-    //     axios.spread((list, myForms, projectForms, sharedForms) => {
-    //       if (this._isMounted) {
-    //         this.setState(state => {
-    //           if (!!this.state.isProjectForm) {
-    //             return {
-    //               regionOptions: list.data.regions,
-    //               typeOptions: list.data.site_types,
-    //               myForms: myForms.data,
-    //               projectForms: projectForms.data,
-    //               sharedForms: sharedForms.data,
-    //               loader: false
-    //             };
-    //           } else {
-    //             return {
-    //               myForms: myForms.data,
-    //               projectForms: projectForms.data,
-    //               sharedForms: sharedForms.data,
-    //               loader: false
-    //             };
-    //           }
-    //         });
-    //       }
-    //     })
-    //   )
-    //   .catch(err => console.log("err", err));
+    axios
+      .all(
+        urls.map((url, i) => {
+          if (this.state.isProjectForm) {
+            return i === 0 ? axios.get(`${url}${id}/`) : axios.get(url);
+          } else {
+            return i > 0 ? axios.get(url) : "";
+          }
+        })
+      )
+      .then(
+        axios.spread((list, myForms, projectForms, sharedForms) => {
+          if (this._isMounted) {
+            this.setState(state => {
+              if (!!this.state.isProjectForm) {
+                const regions = list.data.regions;
+                const types = list.data.site_types;
+                return {
+                  regionOptions: [
+                    ...regions,
+                    { id: 0, identifier: "unassigned", name: "unassigned" }
+                  ],
+                  typeOptions: [
+                    ...types,
+                    { id: 0, identifier: "undefined", name: "undefined" }
+                  ],
+                  myForms: myForms.data,
+                  projectForms: projectForms.data,
+                  sharedForms: sharedForms.data,
+                  loader: false
+                };
+              } else {
+                return {
+                  myForms: myForms.data,
+                  projectForms: projectForms.data,
+                  sharedForms: sharedForms.data,
+                  loader: false
+                };
+              }
+            });
+          }
+        })
+      )
+      .catch(err => {});
   }
   componentDidMount() {
     this._isMounted = true;
@@ -149,7 +151,7 @@ class SideNav extends Component {
               </div>
               <div className="card-body">
                 <div className="manage_group">
-                  {!!isProjectForm && <h5>Site Specific Forms</h5>}
+                  {!!isProjectForm && <h5>Site-Specific Forms</h5>}
                   <ul className="nav nav-tabs flex-column border-tabs">
                     <li className="nav-item">
                       <Link
@@ -191,7 +193,7 @@ class SideNav extends Component {
                 </div>
                 {isProjectForm && (
                   <div className="manage_group mrt-15">
-                    <h5>Project wide Forms</h5>
+                    <h5>Project-Wide Forms</h5>
                     <ul
                       className="nav nav-tabs flex-column border-tabs"
                       id="myTab"
@@ -315,14 +317,11 @@ const mapStateToProps = ({ manageForms }) => ({
 });
 
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getRegionsAndTypes,
-      getMyFormList,
-      getProjectFormList,
-      getSharedFormList
-    }
-  ),
+  connect(mapStateToProps, {
+    getRegionsAndTypes,
+    getMyFormList,
+    getProjectFormList,
+    getSharedFormList
+  }),
   withRouter
 )(SideNav);

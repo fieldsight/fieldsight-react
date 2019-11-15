@@ -6,10 +6,11 @@ const SelectElement = ({
   label,
   options,
   changeHandler,
-  value
+  value,
+  classname
 }) => {
   return (
-    <div className="form-group">
+    <div className={`form-group ${classname}`}>
       {label && (
         <label>
           {label} {formType === "editForm" && <sup>*</sup>}

@@ -9,6 +9,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
 import GeneralFormTable from "./GeneralFormTable";
+import ManageModal from "./ManageModal";
 
 class ProjectWideForms extends Component {
   _isMounted = false;
@@ -184,7 +185,8 @@ class ProjectWideForms extends Component {
       myFormList: [],
       projectFormList: [],
       sharedFormList: [],
-      xf: ""
+      xf: "",
+      isEditForm: false
     });
     this.props.closePopup();
   };
@@ -398,19 +400,17 @@ class ProjectWideForms extends Component {
               title="Add General Form"
               toggleModal={handleClosePopup}
               classname="md-body"
+              // handleSubmit={this.handleCreateGeneralForm}
             >
               <GlobalModalForm
                 formType="general"
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                myForms={this.props.myForms}
-                projectForms={this.props.projectForms}
-                sharedForms={this.props.sharedForms}
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateGeneralForm}
-                formData={formData}
+                formData={isEditForm && formData}
                 isEditForm={isEditForm}
                 isProjectWide={isProjectWide}
               />
@@ -426,13 +426,14 @@ class ProjectWideForms extends Component {
             </Modal>
           )}
           {showFormModal && (
-            <Modal
+            <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
-              classname="dark md-body"
+              classname="dark md-body manage-body"
+              handleSubmit={this.handleSaveForm}
             >
               <AddForm
                 activeTab={activeTab}
@@ -442,9 +443,9 @@ class ProjectWideForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                handleSaveForm={this.handleSaveForm}
+                // handleSaveForm={this.handleSaveForm}
               />
-            </Modal>
+            </ManageModal>
           )}
         </RightContentCard>
       </div>

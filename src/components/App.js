@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
+import { compose } from "redux";
+import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import { IntlProvider } from "react-intl";
 
 import setDefault from "../config";
 import Settings from "./settings/Settings";
@@ -24,19 +27,17 @@ import ProjectAdd from "./projectAdd";
 import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
-import ViewData from "./viewData";
-import SiteData from "./siteViewData";
-import SiteSubmissionData from "./siteViewData/FormSubmission";
+import ViewData from "./viewDataComponents/projectViewData/index";
+import SiteData from "./viewDataComponents/siteViewData";
+import SiteSubmissionData from "./viewDataComponents/siteViewData/FormSubmission";
+import VersionSubmissionData from "./viewDataComponents/projectViewData/VersionTable";
+import VersionSiteSubmission from "./viewDataComponents/siteViewData/VersionTable";
 
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
-import SubmissionData from "./viewData/SubmissionTable";
+import SubmissionData from "./viewDataComponents/projectViewData/SubmissionTable";
 
 import ManageForms from "./manageForms";
-
-import en from "../translations/en";
-import np from "../translations/np";
-import messages from "../translations/messages";
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -47,13 +48,27 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
+import TeamMap from "./team/TeamMap";
+import Mapparent from "./team/Mapparent";
+
+import messages_en from "../translations/en.json";
+import messages_ne from "../translations/ne.json";
+import SelectElement from "../components/common/SelectElement";
+
+const messages = {
+  ne: messages_ne,
+  en: messages_en
+};
+const language = navigator.language.split(/[-_]/)[0]; // language without region code
+const selectLanguage = [{ id: "en", name: "Eng" }, { id: "ne", name: "Nep" }];
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       height: 0,
-      region: false
+      region: false,
+      selectedLanguage: language
     };
   }
 
@@ -70,10 +85,11 @@ class App extends Component {
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
   }
-
   render() {
+    const { selected } = this.props;
+
     return (
-      <Provider store={store}>
+      <IntlProvider locale={language} messages={messages[selected]}>
         <div id="fieldsight-new" className="fieldsight-new">
           <div id="main-container">
             <div className="container-fluid">
@@ -159,6 +175,12 @@ class App extends Component {
                       path="/teams"
                       render={props => <Teams {...props} />}
                     />
+
+                    <Route
+                      path="/map"
+                      render={props => <Mapparent {...props} />}
+                    />
+
                     <Route
                       path="/project_logs/:id"
                       render={props => <ProjectLog {...props} />}
@@ -218,6 +240,14 @@ class App extends Component {
                       path="/site-submission-data/:id/:fid"
                       render={props => <SiteSubmissionData {...props} />}
                     />
+                    <Route
+                      path="/site-version-submission/:id/:fid"
+                      render={props => <VersionSiteSubmission {...props} />}
+                    />
+                    <Route
+                      path="/project-version-submission/:id/:fid"
+                      render={props => <VersionSubmissionData {...props} />}
+                    />
                   </Switch>
                   <ToastContainer />
                 </Router>
@@ -225,8 +255,17 @@ class App extends Component {
             </div>
           </div>
         </div>
-      </Provider>
+      </IntlProvider>
     );
   }
 }
-export default App;
+
+//export default App;
+const mapStateToProps = ({ teams }) => {
+  const { selected } = teams;
+
+  return {
+    selected
+  };
+};
+export default compose(connect(mapStateToProps))(App);
