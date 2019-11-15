@@ -14,7 +14,7 @@ import {
   toggleSubmission
 } from "../../actions/submissionDetailActions";
 
-const submissionId = window.submission_id ? window.submission_id : 17693;
+const submissionId = window.submission_id ? window.submission_id : 66259;
 
 class SubmissionDetail extends Component {
   componentDidMount() {
@@ -121,7 +121,8 @@ const mapStateToProps = ({ submissionDetail }) => ({
   submissionDetail
 });
 
-export default connect(
-  mapStateToProps,
-  { getSubmissionDetail, postSubmissionDetail, toggleSubmission }
-)(SubmissionDetail);
+export default connect(mapStateToProps, {
+  getSubmissionDetail,
+  postSubmissionDetail,
+  toggleSubmission
+})(SubmissionDetail);
