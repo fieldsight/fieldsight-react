@@ -40,7 +40,7 @@ class ResponseStageForm extends Component {
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>{!data ? 'Stage Forms' : 'Rejected Submission'}</h5>
           <Link to={`/site-responses/${id}/rejected`}>
@@ -107,7 +107,7 @@ class ResponseStageForm extends Component {
               </div>
             )
           : ''}
-      </React.Fragment>
+      </>
     );
   }
 }

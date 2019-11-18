@@ -1,28 +1,28 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import { TableContentLoader } from "../common/Loader";
-import withPagination from "../../hoc/WithPagination";
-import isEmpty from "../../utils/isEmpty";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { TableContentLoader } from '../common/Loader';
+import withPagination from '../../hoc/WithPagination';
+import isEmpty from '../../utils/isEmpty';
 
-let base_url = window.base_url
-  ? window.base_url
-  : "https://fieldsight.naxa.com.np";
+// let base_url = window.base_url
+//   ? window.base_url
+//   : "https://fieldsight.naxa.com.np";
 
 class RegionalSiteTable extends Component {
   componentDidMount() {
     this.props.paginationHandler(1, null, {
-      type: "regionSite",
-      projectId: this.props.regionId
+      type: 'regionSite',
+      projectId: this.props.regionId,
     });
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.regionId != this.props.regionId) {
       this.props.paginationHandler(1, null, {
-        type: "regionSite",
-        projectId: this.props.regionId
+        type: 'regionSite',
+        projectId: this.props.regionId,
       });
     }
   }
@@ -31,18 +31,30 @@ class RegionalSiteTable extends Component {
     const searchValue = e.target.value;
     this.props.searchHandler(
       searchValue,
-      `fv3/api/regional-sites/?page=1&region=${
-        this.props.regionId
-      }&q=${searchValue}`,
+      `fv3/api/regional-sites/?page=1&region=${this.props.regionId}&q=${searchValue}`,
       {
-        type: "regionSite",
-        projectId: this.props.regionId
-      }
+        type: 'regionSite',
+        projectId: this.props.regionId,
+      },
     );
   };
 
   render() {
-    
+    const {
+      OpenTabHandler,
+      projectId,
+      regionId,
+      terms,
+      dLoader,
+      siteList,
+      fromData,
+      toData,
+      totalCount,
+      pageNum,
+      paginationHandler,
+      renderPageNumbers,
+    } = this.props;
+
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
@@ -67,13 +79,13 @@ class RegionalSiteTable extends Component {
             <button
               className="fieldsight-btn"
               onClick={e =>
-                this.props.OpenTabHandler(
+                OpenTabHandler(
                   e,
-                  "/fieldsight/application/#/regional-site-add/" +
-                    this.props.projectId +
-                    "/" +
-                    this.props.regionId +
-                    "/"
+                  '/fieldsight/application/#/regional-site-add/' +
+                    projectId +
+                    '/' +
+                    regionId +
+                    '/',
                 )
               }
             >
@@ -82,7 +94,7 @@ class RegionalSiteTable extends Component {
           </div>
         </div>
         <div className="card-body">
-          <div style={{ position: "relative", height: "800px" }}>
+          <div style={{ position: 'relative', height: '800px' }}>
             <PerfectScrollbar>
               <Table
                 responsive="xl"
@@ -91,8 +103,9 @@ class RegionalSiteTable extends Component {
                 <thead>
                   <tr>
                     <th>
-                    {!isEmpty(this.props.terms) ? `${this.props.terms.site} name` : "Site name"}
-                     
+                      {!isEmpty(terms)
+                        ? `${terms.site} name`
+                        : 'Site name'}
                     </th>
                     <th>identifier</th>
                     <th>Address</th>
@@ -104,13 +117,13 @@ class RegionalSiteTable extends Component {
                 </thead>
 
                 <tbody>
-                  {!this.props.dLoader &&
-                    this.props.siteList.map((item, i) => (
+                  {!dLoader &&
+                    siteList.map((item, i) => (
                       <tr key={i}>
                         <td>
                           <a
                             href={
-                              "/fieldsight/application/#/site-dashboard/" +
+                              '/fieldsight/application/#/site-dashboard/' +
                               item.id
                             }
                             className="pending table-profile"
@@ -137,10 +150,10 @@ class RegionalSiteTable extends Component {
                               aria-valuenow="40"
                               aria-valuemin="0"
                               aria-valuemax="200"
-                              style={{ width: item.progress + "%" }}
+                              style={{ width: item.progress + '%' }}
                             >
                               <span className="progress-count">
-                                {item.progress + "%"}
+                                {item.progress + '%'}
                               </span>
                             </div>
                           </div>
@@ -156,60 +169,50 @@ class RegionalSiteTable extends Component {
                           >
                             {item.status != null
                               ? item.status
-                              : "No Submission Yet"}
+                              : 'No Submission Yet'}
                           </a>
                         </td>
                       </tr>
                     ))}
                 </tbody>
               </Table>
-              {this.props.dLoader && <TableContentLoader column={7} row={20} />}
+              {dLoader && <TableContentLoader column={7} row={20} />}
             </PerfectScrollbar>
           </div>
           <div className="table-footer">
             <div className="showing-rows">
               <p>
-                Showing <span>{this.props.fromData}</span> to{" "}
+                Showing <span>{fromData}</span> to{' '}
                 <span>
-                  {" "}
-                  {this.props.toData > this.props.totalCount
-                    ? this.props.totalCount
-                    : this.props.toData}{" "}
-                </span>{" "}
-                of <span>{this.props.totalCount}</span> entries.
+                  {' '}
+                  {toData > totalCount ? totalCount : toData}{' '}
+                </span>{' '}
+                of <span>{totalCount}</span> entries.
               </p>
             </div>
 
-            {this.props.toData < this.props.totalCount ? (
+            {toData < totalCount ? (
               <div className="table-pagination">
                 <ul>
                   <li className="page-item">
                     <a
                       onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum - 1,
-                          null,
-                          this.props.regionId
-                        )
+                        paginationHandler(pageNum - 1, null, regionId)
                       }
                     >
                       <i className="la la-long-arrow-left" />
                     </a>
                   </li>
 
-                  {this.props.renderPageNumbers({
-                    type: "regionSite",
-                    projectId: this.props.regionId
+                  {renderPageNumbers({
+                    type: 'regionSite',
+                    projectId: regionId,
                   })}
 
                   <li className="page-item ">
                     <a
                       onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum + 1,
-                          null,
-                          this.props.regionId
-                        )
+                        paginationHandler(pageNum + 1, null, regionId)
                       }
                     >
                       <i className="la la-long-arrow-right" />

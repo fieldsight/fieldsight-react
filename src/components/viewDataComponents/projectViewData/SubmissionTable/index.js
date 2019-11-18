@@ -1,88 +1,103 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import axios from "axios";
-import WithPagination from "../../../../hoc/WithPagination";
-import Modal from "../../../common/Modal";
-import { DotLoader } from "../../../myForm/Loader";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import axios from 'axios';
+import WithPagination from '../../../../hoc/WithPagination';
+import Modal from '../../../common/Modal';
+import { DotLoader } from '../../../myForm/Loader';
 
 class SubmissionData extends Component {
-  state = {
-    fid: this.props.match.params && this.props.match.params.fid,
-    id: this.props.match.params && this.props.match.params.id,
-    siteList: [],
-    mastersiteList: [],
-    showConfirmation: false,
-    breadcrumbs: {},
-    isSurvey: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      fid: props.match.params && props.match.params.fid,
+      id: props.match.params && props.match.params.id,
+      siteList: [],
+      mastersiteList: [],
+      showConfirmation: false,
+      breadcrumbs: {},
+      isSurvey: false,
+    };
+  }
 
   componentDidMount() {
     const {
       match: {
-        params: { id, fid }
-      }
+        params: { id, fid },
+      },
+      paginationHandler,
     } = this.props;
-    this.props.paginationHandler(1, null, {
-      type: "formSubmission",
+    paginationHandler(1, null, {
+      type: 'formSubmission',
       projectId: this.state.id,
       fsxf_id: fid,
-      status: "form-submission"
+      status: 'form-submission',
     });
 
     this.setState({
-      fid
+      fid,
     });
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.siteList != this.props.siteList) {
       this.setState({
         siteList: nextProps.siteList,
         mastersiteList: nextProps.siteList,
         breadcrumbs: nextProps.breadcrumbs,
-        isSurvey: nextProps.is_survey
+        isSurvey: nextProps.is_survey,
       });
     }
   }
+
   handleChange = async e => {
     const {
-      target: { value }
+      target: { value },
     } = e;
     const { siteList, mastersiteList } = this.state;
 
     if (value) {
       const search = await siteList.filter(result => {
         return (
-          result.submitted_by.toLowerCase().includes(value.toLowerCase()) ||
+          result.submitted_by
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           (result.site_name !== null
-            ? result.site_name.toLowerCase().includes(value.toLowerCase())
-            : "") ||
+            ? result.site_name
+                .toLowerCase()
+                .includes(value.toLowerCase())
+            : '') ||
           (result.site_identifier !== null
-            ? result.site_identifier.toLowerCase().includes(value.toLowerCase())
-            : "")
+            ? result.site_identifier
+                .toLowerCase()
+                .includes(value.toLowerCase())
+            : '')
         );
       });
 
       this.setState({
-        siteList: search
+        siteList: search,
       });
     } else {
       this.setState({
-        siteList: mastersiteList
+        siteList: mastersiteList,
       });
     }
   };
 
   cancleModel = () => {
     this.setState({
-      showConfirmation: false
+      showConfirmation: false,
     });
   };
+
   handleDelete = id => {
     this.setState({
       showConfirmation: true,
-      id: id
+      id: id,
     });
   };
+
   delete = id => {
     let list = this.state.siteList;
 
@@ -99,9 +114,9 @@ class SubmissionData extends Component {
             list = result;
 
             return {
-              id: "",
+              id: '',
               showConfirmation: false,
-              siteList: list
+              siteList: list,
             };
           });
         }
@@ -112,23 +127,42 @@ class SubmissionData extends Component {
   };
 
   render() {
-    const projectId = this.state.id;
+    const {
+      state: {
+        breadcrumbs,
+        siteList,
+        isSurvey,
+        id,
+        fid,
+        showConfirmation,
+      },
+      props: {
+        dLoader,
+        form_id_string,
+        fromData,
+        toData,
+        totalCount,
+        pageNum,
+        paginationHandler,
+        renderPageNumbers,
+      },
+    } = this;
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href={this.state.breadcrumbs.project_url}>
-                {this.state.breadcrumbs.project_name}
+              <a href={breadcrumbs.project_url}>
+                {breadcrumbs.project_name}
               </a>
             </li>
             <li className="breadcrumb-item">
-              <a href={this.state.breadcrumbs.responses_url}>
-                {this.state.breadcrumbs.responses}
+              <a href={breadcrumbs.responses_url}>
+                {breadcrumbs.responses}
               </a>
             </li>
             <li className="breadcrumb-item">
-              {this.state.breadcrumbs.current_page}
+              {breadcrumbs.current_page}
             </li>
           </ol>
         </nav>
@@ -150,7 +184,7 @@ class SubmissionData extends Component {
               </form>
             </div>
           </div>
-          {this.props.dLoader == false ? (
+          {dLoader == false ? (
             <div className="card-body">
               <Table
                 responsive="xl"
@@ -159,8 +193,8 @@ class SubmissionData extends Component {
                 <thead>
                   <tr>
                     {/* <th>S.N.</th>*/}
-                    {!this.state.isSurvey && <th>Site Name</th>}
-                    {!this.state.isSurvey && <th>Site Id</th>}
+                    {!isSurvey && <th>Site Name</th>}
+                    {!isSurvey && <th>Site Id</th>}
                     <th>submission id</th>
                     <th>Submitted By</th>
                     <th>Submission Date</th>
@@ -168,18 +202,20 @@ class SubmissionData extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.siteList.length > 0 &&
-                    this.state.siteList.map((list, key) => {
+                  {siteList.length > 0 &&
+                    siteList.map((list, key) => {
                       return (
                         <tr key={key}>
                           {/*<td>{key + this.props.fromData}</td>*/}
-                          {!this.state.isSurvey && <td>{list.site_name}</td>}
-                          {!this.state.isSurvey && (
+                          {!isSurvey && <td>{list.site_name}</td>}
+                          {!isSurvey && (
                             <td>{list.site_identifier}</td>
                           )}
                           <td>{list.submission_id}</td>
                           <td>
-                            <a href={list.profile_url}>{list.submitted_by}</a>
+                            <a href={list.profile_url}>
+                              {list.submitted_by}
+                            </a>
                           </td>
                           <td>{list.date}</td>
 
@@ -192,7 +228,7 @@ class SubmissionData extends Component {
                             </a>
                             <a
                               className="edit-tag tag"
-                              href={`/forms/edit/${this.props.form_id_string}/${list.submission_id}`}
+                              href={`/forms/edit/${form_id_string}/${list.submission_id}`}
                             >
                               <i className="la la-edit"></i>
                             </a>
@@ -203,7 +239,7 @@ class SubmissionData extends Component {
                                 this.handleDelete(list.submission_id);
                               }}
                             >
-                              <i className="la la-trash-o"> </i>{" "}
+                              <i className="la la-trash-o"> </i>{' '}
                             </a>
                           </td>
                         </tr>
@@ -211,67 +247,60 @@ class SubmissionData extends Component {
                     })}
                 </tbody>
               </Table>
-              {this.props.siteList && this.props.siteList.length > 0 ? (
+              {props.siteList && props.siteList.length > 0 ? (
                 <div className="card-body">
                   <div className="table-footer">
                     <div className="showing-rows">
                       <p>
-                        Showing <span>{this.props.fromData}</span> to{" "}
+                        Showing <span>{fromData}</span> to{' '}
                         <span>
-                          {" "}
-                          {this.props.toData > this.props.totalCount
-                            ? this.props.totalCount
-                            : this.props.toData}{" "}
-                        </span>{" "}
-                        of <span>{this.props.totalCount}</span> entries.
+                          {' '}
+                          {toData > totalCount
+                            ? totalCount
+                            : toData}{' '}
+                        </span>{' '}
+                        of <span>{totalCount}</span> entries.
                       </p>
                     </div>
 
-                    {this.props.toData < this.props.totalCount ? (
+                    {toData < totalCount ? (
                       <div className="table-pagination">
                         <ul>
                           <li className="page-item">
                             <a
                               onClick={e =>
-                                this.props.paginationHandler(
-                                  this.props.pageNum - 1,
-                                  null,
-                                  {
-                                    type: "formSubmission",
-                                    projectId: this.state.id,
-                                    fsxf_id: this.state.fid,
-                                    status: "form-submission"
-                                  }
-                                )
+                                paginationHandler(pageNum - 1, null, {
+                                  type: 'formSubmission',
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: 'form-submission',
+                                })
                               }
                             >
                               <i
-                                className={`la la-long-arrow-left ${this.props
-                                  .fromData == 1}?disable-btn :""`}
+                                className={`la la-long-arrow-left ${this
+                                  .props.fromData ==
+                                  1}?disable-btn :""`}
                               />
                             </a>
                           </li>
 
-                          {this.props.renderPageNumbers({
-                            type: "formSubmission",
-                            projectId: this.state.id,
-                            fsxf_id: this.state.fid,
-                            status: "form-submission"
+                          {renderPageNumbers({
+                            type: 'formSubmission',
+                            projectId: id,
+                            fsxf_id: fid,
+                            status: 'form-submission',
                           })}
 
                           <li className="page-item ">
                             <a
                               onClick={e =>
-                                this.props.paginationHandler(
-                                  this.props.pageNum + 1,
-                                  null,
-                                  {
-                                    type: "formSubmission",
-                                    projectId: this.state.id,
-                                    fsxf_id: this.state.fid,
-                                    status: "form-submission"
-                                  }
-                                )
+                                paginationHandler(pageNum + 1, null, {
+                                  type: 'formSubmission',
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: 'form-submission',
+                                })
                               }
                             >
                               <i className="la la-long-arrow-right" />
@@ -296,9 +325,9 @@ class SubmissionData extends Component {
             <DotLoader />
           )}
         </div>
-        {this.state.showConfirmation && (
+        {showConfirmation && (
           <Modal
-            title={`Are you sure you want to delete this submission ${this.state.id}?`}
+            title={`Are you sure you want to delete this submission ${id}?`}
             toggleModal={this.cancleModel}
           >
             <div className="warning">
@@ -306,8 +335,8 @@ class SubmissionData extends Component {
             </div>
             <div>
               <p>
-                "All the data within the submission will be completely removed.
-                Do you still want to continue?"
+                "All the data within the submission will be completely
+                removed. Do you still want to continue?"
               </p>
             </div>
             <div className="warning-footer text-center">
@@ -321,7 +350,7 @@ class SubmissionData extends Component {
               </a>
               <a
                 className="fieldsight-btn"
-                onClick={() => this.delete(this.state.id)}
+                onClick={() => this.delete(id)}
               >
                 confirm
               </a>

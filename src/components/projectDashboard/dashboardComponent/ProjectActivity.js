@@ -1,15 +1,15 @@
-import React from "react";
-import CountCard from "../../common/CountCard";
+import React from 'react';
 
 const getIcon = submission => {
-  if (submission === "approved") { 
-    return "la-copy";
-  } else if (submission === "flagged") {
-    return "la-users";
-  } else if (submission === "marker") {
-    return "la-map-marker";
+  if (submission === 'approved') {
+    return 'la-copy';
+  } else if (submission === 'flagged') {
+    return 'la-users';
+  } else if (submission === 'marker') {
+    return 'la-map-marker';
   }
 };
+
 const ShowAcitivity = props => (
   <div className="col-xl-4 col-md-6">
     <div className="count-card">
@@ -21,15 +21,9 @@ const ShowAcitivity = props => (
         <h6>{props.name}</h6>
       </div>
     </div>
-    {/* <CountCard
-      countName={props.name}
-      icon={getIcon(props.type)}
-      className={props.type}
-      countNumber={props.value}
-      noSubmissionText=""
-    /> */}
   </div>
 );
+
 class ProjectActivity extends React.Component {
   render() {
     const { projectActivity } = this.props;
@@ -49,7 +43,9 @@ class ProjectActivity extends React.Component {
               <ShowAcitivity
                 type="flagged"
                 name="Active Supervisors In Last 7 Days"
-                value={projectActivity.active_supervisors_in_last_7_days}
+                value={
+                  projectActivity.active_supervisors_in_last_7_days
+                }
               />
               <ShowAcitivity
                 type="marker"

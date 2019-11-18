@@ -17,8 +17,8 @@ class SiteViewData extends Component {
     this.state = {
       hide: true,
       view_btn: false,
-      id: this.props.match.params && this.props.match.params.id,
-      url: this.props.match.url && this.props.match.url,
+      id: props.match.params && props.match.params.id,
+      url: props.match.url && props.match.url,
       breadCrumb: {},
     };
   }

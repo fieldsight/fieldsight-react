@@ -1,15 +1,21 @@
-import React, { Component } from "react";
-import HistoryTab from "./HistoryTab";
-import StatusTab from "./StatusTab";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, { Component } from 'react';
+import HistoryTab from './HistoryTab';
+import StatusTab from './StatusTab';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const base_url = window.base_url
   ? window.base_url
-  : "https://fieldsight.naxa.com.np";
+  : 'https://fieldsight.naxa.com.np';
+
 class RightSidebar extends Component {
-  state = {
-    showStatus: true
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showStatus: true,
+    };
+  }
+
   render() {
     const {
       props: {
@@ -22,9 +28,9 @@ class RightSidebar extends Component {
         postSubmissionDetail,
         getSubmissionDetail,
         toggleSubmission,
-        hideNullValues
+        hideNullValues,
       },
-      state: { showStatus }
+      state: { showStatus },
     } = this;
     return (
       <div className="new-sidebar submission-sidebar sticky-top">
@@ -34,16 +40,24 @@ class RightSidebar extends Component {
               <ul className="nav nav-tabs " id="myTab" role="tablist">
                 <li className="nav-item">
                   <a
-                    className={`nav-link ${showStatus ? "active" : ""}`}
-                    onClick={() => this.setState({ showStatus: true })}
+                    className={`nav-link ${
+                      showStatus ? 'active' : ''
+                    }`}
+                    onClick={() =>
+                      this.setState({ showStatus: true })
+                    }
                   >
                     Status
                   </a>
                 </li>
                 <li className="nav-item">
                   <a
-                    className={`nav-link ${!showStatus ? "active" : ""}`}
-                    onClick={() => this.setState({ showStatus: false })}
+                    className={`nav-link ${
+                      !showStatus ? 'active' : ''
+                    }`}
+                    onClick={() =>
+                      this.setState({ showStatus: false })
+                    }
                   >
                     History
                   </a>
@@ -66,13 +80,13 @@ class RightSidebar extends Component {
                     placement="top"
                     overlay={
                       <Tooltip>{`${
-                        hideNullValues ? "Show" : "Hide"
+                        hideNullValues ? 'Show' : 'Hide'
                       } Null Values`}</Tooltip>
                     }
                   >
                     <i
                       className={`la la-${
-                        hideNullValues ? "eye" : "eye-slash"
+                        hideNullValues ? 'eye' : 'eye-slash'
                       }`}
                     />
                   </OverlayTrigger>
@@ -81,7 +95,9 @@ class RightSidebar extends Component {
                 {Object.keys(downloadUrl).length > 0 && (
                   <a
                     href={`${base_url}${
-                      hideNullValues ? downloadUrl.null : downloadUrl.main
+                      hideNullValues
+                        ? downloadUrl.null
+                        : downloadUrl.main
                     }`}
                     target="_blank"
                   >

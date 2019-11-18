@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class PricingStepThree extends Component {
   render() {
     const {
-      props: { cardResponse, handleSubmit }
+      props: { cardResponse, handleSubmit },
     } = this;
     return (
       <div className="fieldsight-new">
@@ -11,7 +11,9 @@ class PricingStepThree extends Component {
           <div className="bg-light p-4 m-4">
             <div className="pb-2"></div>
             <h6 className="text-center mt-4">
-              <strong>Thank you for signing up with FieldSight!</strong>
+              <strong>
+                Thank you for signing up with FieldSight!
+              </strong>
             </h6>
             <h5 className="text-center mt-2 mb-3">
               <strong>You have selected the Free Plan</strong>
@@ -28,18 +30,21 @@ class PricingStepThree extends Component {
                 <ul className="list-icon mt-4 mb-4">
                   <li>
                     <i className="la la-chevron-circle-right"></i>
-                    <strong>{cardResponse.submissions}</strong> Submissions
+                    <strong>{cardResponse.submissions}</strong>{' '}
+                    Submissions
                   </li>
                   <li>
                     <strong>Unlimited</strong> Users, Projects, Sites
                   </li>
                   <li>
                     <i className="la la-chevron-circle-right"></i>
-                    <strong>Unlimited</strong> Forms, Stages & Schedules
+                    <strong>Unlimited</strong> Forms, Stages &
+                    Schedules
                   </li>
                   <li>
                     <i className="la la-chevron-circle-right"></i>
-                    <strong>Unlimited</strong> Reports, Dashboards & Maps
+                    <strong>Unlimited</strong> Reports, Dashboards &
+                    Maps
                   </li>
                   <li>
                     <i className="la la-chevron-circle-right"></i>
@@ -87,7 +92,7 @@ class PricingStepThree extends Component {
                 title=""
                 className="btn btn-primary"
                 onClick={() => {
-                  handleSubmit("finish");
+                  handleSubmit('finish');
                 }}
               >
                 Finish <i className="la la-check-circle"></i>

@@ -1,40 +1,44 @@
-import React, { Component, Fragment } from "react";
-import SelectElement from "../common/SelectElement";
-import { DotLoader } from "../common/Loader";
-import findQuestion from "../../utils/findQuestion";
-import isEmpty from "../../utils/isEmpty";
+import React, { Component, Fragment } from 'react';
+import SelectElement from '../common/SelectElement';
+import { DotLoader } from '../common/Loader';
+import findQuestion from '../../utils/findQuestion';
+import isEmpty from '../../utils/isEmpty';
 
 const typeOptions = {
   sitePictureTypes: [
-    { id: "choose", name: "Upload / Choose From Gallery" },
-    { id: "Form", name: "Choose From A Form" }
+    { id: 'choose', name: 'Upload / Choose From Gallery' },
+    { id: 'Form', name: 'Choose From A Form' },
   ],
   siteLocationTypes: [
-    { id: "choose", name: "Enter A Location/ Choose On Map" },
-    { id: "Form", name: "Choose From A Form" }
-  ]
+    { id: 'choose', name: 'Enter A Location/ Choose On Map' },
+    { id: 'Form', name: 'Choose From A Form' },
+  ],
 };
 
 const INITIAL_STATE = {
   showForm: false,
-  type: "choose",
+  type: 'choose',
   selectedForm: {},
   selectedQuestion: {},
-  filteredQuestions: []
+  filteredQuestions: [],
 };
 class SiteInformationCard extends Component {
-  state = INITIAL_STATE;
+  constructor(props) {
+    super(props);
+
+    this.state = INITIAL_STATE;
+  }
 
   componentWillReceiveProps(nextProps) {
     let selectedForm = {};
     let selectedQuestion = {};
-    let type = "choose";
+    let type = 'choose';
     let showForm;
     let filteredQuestions = [];
 
     if (nextProps.siteInfo && nextProps.siteInfo.form_id) {
       selectedForm = nextProps.forms.find(
-        form => form.id === nextProps.siteInfo.form_id
+        form => form.id === nextProps.siteInfo.form_id,
       );
     }
 
@@ -50,7 +54,7 @@ class SiteInformationCard extends Component {
       showForm = true;
       filteredQuestions = findQuestion(
         selectedForm.json.children,
-        nextProps.infoType
+        nextProps.infoType,
       );
     }
 
@@ -59,50 +63,50 @@ class SiteInformationCard extends Component {
       selectedQuestion,
       filteredQuestions,
       type,
-      ...(showForm && { showForm })
+      ...(showForm && { showForm }),
     });
   }
 
   dataChangeHandler = () => {
     const {
       state: { selectedForm, selectedQuestion, type },
-      props: { infoType }
+      props: { infoType },
     } = this;
-    if (type === "Form") {
-      if (infoType === "photo") {
+    if (type === 'Form') {
+      if (infoType === 'photo') {
         return this.props.siteIdentityHandler({
           site_picture: {
             question_type: type,
             form_id: selectedForm.id ? selectedForm.id : 0,
-            question: selectedQuestion
-          }
+            question: selectedQuestion,
+          },
         });
       } else {
         return this.props.siteIdentityHandler({
           site_location: {
             question_type: type,
             form_id: selectedForm.id ? selectedForm.id : 0,
-            question: selectedQuestion
-          }
+            question: selectedQuestion,
+          },
         });
       }
     }
 
-    if (infoType === "photo") {
+    if (infoType === 'photo') {
       this.props.siteIdentityHandler({
         site_picture: {
           question_type: type,
           form_id: 0,
-          question: {}
-        }
+          question: {},
+        },
       });
     } else {
       this.props.siteIdentityHandler({
         site_location: {
           question_type: type,
           form_id: 0,
-          question: {}
-        }
+          question: {},
+        },
       });
     }
   };
@@ -110,36 +114,41 @@ class SiteInformationCard extends Component {
   onChangeHandler = e => {
     const { value } = e.target;
 
-    if (value === "Form") {
+    if (value === 'Form') {
       return this.setState(
         { type: value, showForm: true },
-        this.dataChangeHandler
+        this.dataChangeHandler,
       );
     }
     this.setState(
       {
         type: value,
-        showForm: false
+        showForm: false,
       },
-      this.dataChangeHandler
+      this.dataChangeHandler,
     );
   };
 
   formChangeHandler = (e, type) => {
     const { value } = e.target;
 
-    const selectedForm = this.props.forms.find(form => form.id == value);
+    const selectedForm = this.props.forms.find(
+      form => form.id == value,
+    );
 
     if (selectedForm) {
-      const filteredQuestions = findQuestion(selectedForm.json.children, type);
+      const filteredQuestions = findQuestion(
+        selectedForm.json.children,
+        type,
+      );
 
       this.setState(
         {
           selectedForm,
           filteredQuestions,
-          selectedQuestion: {}
+          selectedQuestion: {},
         },
-        this.dataChangeHandler
+        this.dataChangeHandler,
       );
     }
   };
@@ -147,7 +156,7 @@ class SiteInformationCard extends Component {
   questionChangeHandler = e => {
     const { value } = e.target;
     const selectedQuestion = this.state.filteredQuestions.find(
-      question => question.name === value
+      question => question.name === value,
     );
 
     if (selectedQuestion.type) {
@@ -163,12 +172,12 @@ class SiteInformationCard extends Component {
         filteredQuestions,
         selectedForm,
         selectedQuestion,
-        type
+        type,
       },
       props: { title, infoType, forms, siteInfo },
       onChangeHandler,
       formChangeHandler,
-      questionChangeHandler
+      questionChangeHandler,
     } = this;
 
     const { sitePictureTypes, siteLocationTypes } = typeOptions;
@@ -183,7 +192,9 @@ class SiteInformationCard extends Component {
             <SelectElement
               className="form-control"
               options={
-                infoType === "photo" ? sitePictureTypes : siteLocationTypes
+                infoType === 'photo'
+                  ? sitePictureTypes
+                  : siteLocationTypes
               }
               changeHandler={onChangeHandler}
               value={type}
@@ -205,7 +216,10 @@ class SiteInformationCard extends Component {
                     className="form-control"
                     options={filteredQuestions}
                     changeHandler={questionChangeHandler}
-                    value={!isEmpty(selectedQuestion) && selectedQuestion.name}
+                    value={
+                      !isEmpty(selectedQuestion) &&
+                      selectedQuestion.name
+                    }
                   />
                 )}
               </Fragment>

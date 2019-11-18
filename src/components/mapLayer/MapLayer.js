@@ -1,28 +1,31 @@
-import React, { Component, Fragment } from "react";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-import axios from "axios";
-import { DotLoader } from "../common/Loader";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import { RegionContext } from "../../context";
+import React, { Component } from 'react';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import axios from 'axios';
+import { DotLoader } from '../common/Loader';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import { errorToast, successToast } from '../../utils/toastHandler';
+import { RegionContext } from '../../context';
 
 const animatedComponents = makeAnimated();
 
-const urls = ["fv3/api/geolayer/", "fv3/api/organization-geolayer/"];
+const urls = ['fv3/api/geolayer/', 'fv3/api/organization-geolayer/'];
 
 export default class MapLayer extends Component {
   static contextType = RegionContext;
   _isMounted = false;
-  state = {
-    geoLayer: [],
-    initialData: [],
-    dropdownData: [],
-    multiValue: [],
-    isLoading: false,
-    dotLoader: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      geoLayer: [],
+      initialData: [],
+      dropdownData: [],
+      multiValue: [],
+      isLoading: false,
+      dotLoader: true,
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -32,29 +35,33 @@ export default class MapLayer extends Component {
       .then(
         axios.spread((initialData, dropdownData) => {
           if (this._isMounted) {
-            const modifiedInitialData = initialData.data.map(item => ({
-              ...item,
-              value: item.id,
-              label: item.title
-            }));
+            const modifiedInitialData = initialData.data.map(
+              item => ({
+                ...item,
+                value: item.id,
+                label: item.title,
+              }),
+            );
 
-            const modifiedDropdownData = dropdownData.data.map(item => ({
-              ...item,
-              value: item.id,
-              label: item.title
-            }));
+            const modifiedDropdownData = dropdownData.data.map(
+              item => ({
+                ...item,
+                value: item.id,
+                label: item.title,
+              }),
+            );
             this.setState({
               initialData: modifiedInitialData,
               dropdownData: modifiedDropdownData,
-              dotLoader: false
+              dotLoader: false,
             });
           }
-        })
+        }),
       )
       .catch(err => {
         this._isMounted &&
           this.setState({
-            dotLoader: false
+            dotLoader: false,
           });
       });
   }
@@ -62,7 +69,7 @@ export default class MapLayer extends Component {
   handleMultiChange = option => {
     this.setState(state => {
       return {
-        multiValue: option
+        multiValue: option,
       };
     });
   };
@@ -73,22 +80,22 @@ export default class MapLayer extends Component {
     axios
       .post(`${urls[0]}?project=${projectId}`, {
         project: projectId,
-        geo_layers: idArray
+        geo_layers: idArray,
       })
       .then(res => {
         this.setState(
           {
-            isLoading: false
+            isLoading: false,
           },
-          () => successToast("Map Layer", "added")
+          () => successToast('Map Layer', 'added'),
         );
       })
       .catch(err => {
         this.setState(
           {
-            isLoading: false
+            isLoading: false,
           },
-          errorToast()
+          errorToast(),
         );
       });
   };
@@ -97,9 +104,9 @@ export default class MapLayer extends Component {
     e.preventDefault();
     this.setState(
       {
-        isLoading: true
+        isLoading: true,
       },
-      this.requestHandler
+      this.requestHandler,
     );
   };
 
@@ -107,11 +114,11 @@ export default class MapLayer extends Component {
     const {
       state: { initialData, dropdownData, isLoading, dotLoader },
       onSubmitHandler,
-      handleMultiChange
+      handleMultiChange,
     } = this;
 
     return (
-      <Fragment>
+      <>
         <RightContentCard title="Map Layer">
           {dotLoader && <DotLoader />}
           {!dotLoader && (
@@ -129,7 +136,7 @@ export default class MapLayer extends Component {
                 <button
                   type="submit"
                   className="fieldsight-btn pull-right"
-                  style={{ marginTop: "15px" }}
+                  style={{ marginTop: '15px' }}
                 >
                   Save
                 </button>
@@ -138,7 +145,7 @@ export default class MapLayer extends Component {
           )}
         </RightContentCard>
         {isLoading && <Loader />}
-      </Fragment>
+      </>
     );
   }
 

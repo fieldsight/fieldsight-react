@@ -1,17 +1,20 @@
-import React, { Component } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, { Component } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 class FeaturedPicturesCard extends Component {
   renderName = id => {
-    const selectedForm = this.props.forms.find(form => form.id === +id);
+    const selectedForm = this.props.forms.find(
+      form => form.id === +id,
+    );
     if (selectedForm) {
       return selectedForm.name;
     }
   };
+
   render() {
     const {
       props: { picture, editPicHandler, removePicHandler },
-      renderName
+      renderName,
     } = this;
     return (
       <div className="col-lg-6 col-md-6">
@@ -34,7 +37,9 @@ class FeaturedPicturesCard extends Component {
               </a>
               <a
                 onClick={() =>
-                  removePicHandler(picture.id || picture.question_name)
+                  removePicHandler(
+                    picture.id || picture.question_name,
+                  )
                 }
                 className="td-delete-btn"
               >
@@ -51,17 +56,18 @@ class FeaturedPicturesCard extends Component {
             <div className="before-content">
               <ul>
                 <li>
-                  <label>Type:</label> <span>{picture.question_type}</span>
+                  <label>Type:</label>{' '}
+                  <span>{picture.question_type}</span>
                 </li>
                 {picture.form_id && (
                   <li>
-                    <label>Form :</label>{" "}
+                    <label>Form :</label>{' '}
                     <span>{renderName(picture.form_id)}</span>
                   </li>
                 )}
                 {picture.question && (
                   <li>
-                    <label>Question :</label>{" "}
+                    <label>Question :</label>{' '}
                     <span>{picture.question.name}</span>
                   </li>
                 )}

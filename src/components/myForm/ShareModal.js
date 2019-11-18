@@ -1,18 +1,21 @@
-import React, { Component } from "react";
-import axios from "axios";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { DotLoader } from "./Loader";
-import { successToast, errorToast } from "./toastHandler";
+import React, { Component } from 'react';
+import axios from 'axios';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { DotLoader } from './Loader';
+import { successToast } from './toastHandler';
 
-const url = "fv3/api/form/";
+const url = 'fv3/api/form/';
 
 class ShareModal extends Component {
-  state = {
-    userList: [],
-    dLoader: true,
-    shareState: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      userList: [],
+      dLoader: true,
+      shareState: false,
+    };
+  }
 
   componentDidMount() {
     const { modalTypes } = this.props;
@@ -23,77 +26,90 @@ class ShareModal extends Component {
       .then(res => {
         const modifiedUser = res.data.map(user => ({
           ...user,
-          checkbox: false
+          checkbox: false,
         }));
 
         this.setState({
-          userList: modifiedUser
+          userList: modifiedUser,
         });
 
         if (res.status == 200) {
           this.setState({
             dLoader: false,
-            shareState: true
+            shareState: true,
           });
         }
       })
-      .catch(err => console.log("err", err));
+      .catch(err => console.log('err', err));
   }
 
   checkboxHandler = (e, checkboxId) => {
-    const newUserList = this.state.userList.map(user => ({...user}));
-    const selectedUser = newUserList.find(user => user.id === +checkboxId);
+    const newUserList = this.state.userList.map(user => ({
+      ...user,
+    }));
+    const selectedUser = newUserList.find(
+      user => user.id === +checkboxId,
+    );
 
     selectedUser.checkbox = !selectedUser.checkbox;
     this.setState({
-      userList: newUserList
+      userList: newUserList,
     });
   };
 
   onSubmit = e => {
     e.preventDefault();
-
+    const { modalDatas, shareUrls, closePopup } = this.props;
     const checkedList = this.state.userList
       .map(user => (user.checkbox == true ? +user.id : null))
       .filter(Boolean);
 
-    const id = this.props.modalDatas;
-    const url = this.props.shareUrls;
+    const id = modalDatas;
+    const url = shareUrls;
 
     axios
       .post(url, { id_string: id, share_id: checkedList })
       .then(res => {
         if (res.status == 201) {
-          this.props.closePopup();
-          successToast("Form", "shared");
+          closePopup();
+          successToast('Form', 'shared');
         }
       })
 
-      .catch(err => console.log("err", err));
+      .catch(err => console.log('err', err));
   };
 
   render() {
+    const { shareState, userList, dLoader } = this.state;
     const type = this.props.modalTypes;
 
     return (
       <div className="thumb-list userlist">
-        {this.state.shareState && (
+        {shareState && (
           <form onSubmit={this.onSubmit}>
-            <ul style={{ position: "relative", height: "355px" }}>
+            <ul style={{ position: 'relative', height: '355px' }}>
               <PerfectScrollbar>
-                {this.state.userList.map((user, i) => (
+                {userList.map((user, i) => (
                   <li key={user.id}>
                     <figure>
                       <img
                         src={
-                          type === "users" ? user.profile_picture : user.logo
+                          type === 'users'
+                            ? user.profile_picture
+                            : user.logo
                         }
                         alt="image"
                       />
                     </figure>
                     <div className="content">
-                      <h6>{type === "users" ? user.first_name : user.name} </h6>
-                      {type == "users" ? <span>{user.email}</span> : null}
+                      <h6>
+                        {type === 'users'
+                          ? user.first_name
+                          : user.name}{' '}
+                      </h6>
+                      {type == 'users' ? (
+                        <span>{user.email}</span>
+                      ) : null}
                     </div>
                     <div className="form-group checkbox-btn">
                       <div className="custom-checkbox">
@@ -101,7 +117,9 @@ class ShareModal extends Component {
                           <label>
                             <input
                               type="checkbox"
-                              onChange={e => this.checkboxHandler(e, user.id)}
+                              onChange={e =>
+                                this.checkboxHandler(e, user.id)
+                              }
                               checked={user.checkbox}
                             />
                             <i className="helper" />
@@ -120,7 +138,7 @@ class ShareModal extends Component {
             </div>
           </form>
         )}
-        {this.state.dLoader && <DotLoader />}
+        {dLoader && <DotLoader />}
       </div>
     );
   }

@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import DashboardHeader from "./dashboardComponent/DashBoardHeader";
-import DatatablePage from "./dashboardComponent/DatatablePage";
-import SiteMap from "./dashboardComponent/SiteMap";
-import PhotoGallery from "./dashboardComponent/PhotoGallery";
-import DashboardInfo from "./dashboardComponent/DashboardInfo";
-import DashboardCounter from "./dashboardComponent/DashboardCounter";
-import SubmissionChart from "./dashboardComponent/SubmissionChart";
-import ProgressChart from "./dashboardComponent/ProgressChart";
-import SiteDocument from "./dashboardComponent/SiteDocument";
-import UsersList from "./dashboardComponent/UsersList";
-import Logs from "../common/Logs";
+import DashboardHeader from './dashboardComponent/DashBoardHeader';
+import DatatablePage from './dashboardComponent/DatatablePage';
+import SiteMap from './dashboardComponent/SiteMap';
+import PhotoGallery from './dashboardComponent/PhotoGallery';
+import DashboardInfo from './dashboardComponent/DashboardInfo';
+import DashboardCounter from './dashboardComponent/DashboardCounter';
+import SubmissionChart from './dashboardComponent/SubmissionChart';
+import ProgressChart from './dashboardComponent/ProgressChart';
+import SiteDocument from './dashboardComponent/SiteDocument';
+import UsersList from './dashboardComponent/UsersList';
+import Logs from '../common/Logs';
 
 import {
   getSiteDashboard,
@@ -22,21 +22,19 @@ import {
   getSiteForms,
   getRecentPictures,
   getSubsites,
-  putCropImage
-} from "../../actions/siteDashboardActions";
+  putCropImage,
+} from '../../actions/siteDashboardActions';
 
-//const siteId = window.site_id ? window.site_id : 81704;
-//const siteId = window.site_id ? window.site_id : 81704;
 const user_id = window.user_id ? window.user_id : 1;
 
 const INITIAL_STATE = {
-  activeTab: "general",
+  activeTab: 'general',
   showHeaderModal: false,
   showSubmissionModal: false,
   showCropper: false,
   showSubsites: false,
   showGallery: false,
-  siteId: ""
+  siteId: '',
 };
 class SiteDashboard extends Component {
   state = INITIAL_STATE;
@@ -44,41 +42,41 @@ class SiteDashboard extends Component {
   closeModal = type => {
     const { id: siteId } = this.props.match.params;
 
-    if (type === "Header" || type === "Submission") {
+    if (type === 'Header' || type === 'Submission') {
       return this.setState(
         {
           [`show${type}Modal`]: false,
-          activeTab: "general"
+          activeTab: 'general',
         },
-        () => this.props.getSiteForms(siteId, "general")
+        () => this.props.getSiteForms(siteId, 'general'),
       );
     }
 
     this.setState({
-      [`show${type}`]: false
+      [`show${type}`]: false,
     });
   };
 
   openModal = type => {
     const { id: siteId } = this.props.match.params;
 
-    if (type === "Header" || type === "Submission") {
+    if (type === 'Header' || type === 'Submission') {
       return this.setState({
-        [`show${type}Modal`]: true
+        [`show${type}Modal`]: true,
       });
     }
 
-    if (type === "Subsites") {
+    if (type === 'Subsites') {
       return this.setState(
         {
-          showSubsites: true
+          showSubsites: true,
         },
-        () => this.props.getSubsites(siteId)
+        () => this.props.getSubsites(siteId),
       );
     }
 
     this.setState({
-      [`show${type}`]: true
+      [`show${type}`]: true,
     });
   };
 
@@ -86,46 +84,70 @@ class SiteDashboard extends Component {
     const { id: siteId } = this.props.match.params;
     this.setState(
       {
-        activeTab: formType
+        activeTab: formType,
       },
-      this.props.getSiteForms(siteId, formType)
+      this.props.getSiteForms(siteId, formType),
     );
   };
 
   componentDidMount() {
-    const { id: siteId } = this.props.match.params;
+    const {
+      params: {
+        match: { id: siteId },
+      },
+      getSiteDashboard,
+      getSiteMetas,
+      getSiteSubmissions,
+      getSiteDocuments,
+      getSiteLogs,
+      getSiteForms,
+      getRecentPictures,
+    } = this.props;
 
-    this.props.getSiteDashboard(siteId);
-    this.props.getSiteMetas(siteId);
-    this.props.getSiteSubmissions(siteId);
-    this.props.getSiteDocuments(siteId);
-    this.props.getSiteLogs(siteId);
-    this.props.getSiteForms(siteId, "general");
-    this.props.getRecentPictures(siteId);
+    getSiteDashboard(siteId);
+    getSiteMetas(siteId);
+    getSiteSubmissions(siteId);
+    getSiteDocuments(siteId);
+    getSiteLogs(siteId);
+    getSiteForms(siteId, 'general');
+    getRecentPictures(siteId);
     this.setState({
-      siteId
+      siteId,
     });
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.id !== this.props.match.params.id) {
-      const { id: siteId } = this.props.match.params;
+      const {
+        params: {
+          match: { id: siteId },
+        },
+        getSiteDashboard,
+        getSiteMetas,
+        getSiteSubmissions,
+        getSiteDocuments,
+        getSiteLogs,
+        getSiteForms,
+        getRecentPictures,
+      } = this.props;
+
       this.setState(
         {
-          ...INITIAL_STATE
+          ...INITIAL_STATE,
         },
         () => {
-          this.props.getSiteDashboard(siteId);
-          this.props.getSiteMetas(siteId);
-          this.props.getSiteSubmissions(siteId);
-          this.props.getSiteDocuments(siteId);
-          this.props.getSiteLogs(siteId);
-          this.props.getSiteForms(siteId, "general");
-          this.props.getRecentPictures(siteId);
-        }
+          getSiteDashboard(siteId);
+          getSiteMetas(siteId);
+          getSiteSubmissions(siteId);
+          getSiteDocuments(siteId);
+          getSiteLogs(siteId);
+          getSiteForms(siteId, 'general');
+          getRecentPictures(siteId);
+        },
       );
     }
   }
+
   render() {
     const {
       props: {
@@ -163,13 +185,13 @@ class SiteDashboard extends Component {
           has_write_permission,
           breadcrumbs,
           current_progress,
-          type
+          type,
         },
         getSiteForms,
         putCropImage,
         match: {
-          params: { id: siteId }
-        }
+          params: { id: siteId },
+        },
       },
       state: {
         showHeaderModal,
@@ -177,11 +199,11 @@ class SiteDashboard extends Component {
         activeTab,
         showCropper,
         showGallery,
-        showSubsites
+        showSubsites,
       },
       closeModal,
       openModal,
-      toggleTab
+      toggleTab,
     } = this;
 
     return (
@@ -196,7 +218,9 @@ class SiteDashboard extends Component {
               </li>
 
               <li className="breadcrumb-item">
-                <a href={breadcrumbs.project_url}>{breadcrumbs.project}</a>
+                <a href={breadcrumbs.project_url}>
+                  {breadcrumbs.project}
+                </a>
               </li>
               {breadcrumbs.root_site && (
                 <li className="breadcrumb-item">
@@ -206,7 +230,10 @@ class SiteDashboard extends Component {
                 </li>
               )}
 
-              <li className="breadcrumb-item active" aria-current="page">
+              <li
+                className="breadcrumb-item active"
+                aria-current="page"
+              >
                 {breadcrumbs.site}
               </li>
             </ol>
@@ -251,7 +278,10 @@ class SiteDashboard extends Component {
                 <div className="col-lg-6">
                   <div className="card map">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
+                      <h5>
+                        {terms_and_labels && terms_and_labels.site}{' '}
+                        Map
+                      </h5>
                       <div className="dash-btn">
                         <a
                           href={`/fieldsight/site/response-coords/${siteId}/`}
@@ -284,19 +314,16 @@ class SiteDashboard extends Component {
                     <div className="card site_dashboard_info">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>
-                          {terms_and_labels && terms_and_labels.site}{" "}
+                          {terms_and_labels && terms_and_labels.site}{' '}
                           information
                         </h5>
-                        {/* <div className="dash-btn">
-                          <a href={`#/`} className="fieldsight-btn left-icon">
-                            <i className="la la-edit" />
-                            edit
-                          </a>
-                        </div> */}
                       </div>
                       <div
                         className="card-body site-info board-site-info"
-                        style={{ position: "relative", height: "434px" }}
+                        style={{
+                          position: 'relative',
+                          height: '434px',
+                        }}
                       >
                         <DashboardInfo
                           siteMetas={siteMetas}
@@ -347,7 +374,8 @@ class SiteDashboard extends Component {
                     <div className="card">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>
-                          {terms_and_labels && terms_and_labels.site} progress
+                          {terms_and_labels && terms_and_labels.site}{' '}
+                          progress
                         </h5>
                       </div>
                       <div className="card-body">
@@ -392,7 +420,10 @@ class SiteDashboard extends Component {
                       <div className="card-body">
                         <div
                           className="thumb-list mr-0 "
-                          style={{ position: "relative", height: "327px" }}
+                          style={{
+                            position: 'relative',
+                            height: '327px',
+                          }}
                         >
                           <UsersList
                             users={users}
@@ -421,20 +452,17 @@ class SiteDashboard extends Component {
 }
 
 const mapStateToProps = ({ siteDashboard }) => ({
-  siteDashboard
+  siteDashboard,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    getSiteDashboard,
-    getSiteMetas,
-    getSiteSubmissions,
-    getSiteDocuments,
-    getSiteLogs,
-    getSiteForms,
-    getRecentPictures,
-    getSubsites,
-    putCropImage
-  }
-)(SiteDashboard);
+export default connect(mapStateToProps, {
+  getSiteDashboard,
+  getSiteMetas,
+  getSiteSubmissions,
+  getSiteDocuments,
+  getSiteLogs,
+  getSiteForms,
+  getRecentPictures,
+  getSubsites,
+  putCropImage,
+})(SiteDashboard);

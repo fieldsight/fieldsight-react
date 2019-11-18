@@ -1,31 +1,26 @@
-import React, { Component, Fragment, createRef } from "react";
-//import { MDBDataTable } from 'mdbreact';
+import React, { Component, createRef } from 'react';
 import {
   Map,
   TileLayer,
   LayersControl,
-  Marker,
-  Popup,
   GeoJSON,
-  Circle
-} from "react-leaflet";
-import L, { latLngBounds } from "leaflet";
-// import "leaflet/dist/leaflet.css";
-import { BlockContentLoader } from "../../common/Loader";
-import { markerIcon } from "../../common/Marker";
-// const position = [27.7, 85.4];
+} from 'react-leaflet';
+import L, { latLngBounds } from 'leaflet';
+import { BlockContentLoader } from '../../common/Loader';
+
 const { BaseLayer } = LayersControl;
 
 class SiteMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {}
+      data: {},
     };
 
     this.mapRef = createRef();
     this.groupRef = createRef();
   }
+
   componentDidUpdate(prevProps) {
     if (prevProps !== this.props) {
       this.setState({ data: this.props });
@@ -40,57 +35,58 @@ class SiteMap extends Component {
 
   pointToLayer(feature, latlng) {
     const icon = new L.Icon({
-      iconUrl: require("../../../static/images/marker.png"),
-      iconRetinaUrl: require("../../../static/images/marker.png"),
+      iconUrl: require('../../../static/images/marker.png'),
+      iconRetinaUrl: require('../../../static/images/marker.png'),
       iconSize: [28, 28],
       iconAnchor: [13, 27],
       popupAnchor: [2, -24],
       shadowUrl: null,
       shadowSize: null,
-      shadowAnchor: null
-      //iconSize: new L.Point(60, 75)
-      //className: "leaflet-div-icon"
+      shadowAnchor: null,
     });
     return L.marker(latlng, { icon: icon });
   }
 
   getGeoJson = data => {
     return {
-      type: "FeatureCollection",
+      type: 'FeatureCollection',
       features: [
         {
-          type: "Feature",
+          type: 'Feature',
           properties: {
             name: data && data.name,
-            address: data && data.address
+            address: data && data.address,
           },
           geometry: {
-            type: "Point",
-            coordinates: data && data.location && data.location.coordinates
-          }
-        }
-      ]
+            type: 'Point',
+            coordinates:
+              data && data.location && data.location.coordinates,
+          },
+        },
+      ],
     };
   };
 
   render() {
     const {
       location: { coordinates },
-      showContentLoader
+      showContentLoader,
     } = this.props;
-    const geoFormat = this.getGeoJson(this.state.data && this.state.data);
+    const geoFormat = this.getGeoJson(
+      this.state.data && this.state.data,
+    );
 
     let bounds =
       !!geoFormat.features[0].geometry.coordinates &&
       latLngBounds(
         [
           geoFormat.features[0].geometry.coordinates[1] + 0.002,
-          geoFormat.features[0].geometry.coordinates[0] + 0.002
+          geoFormat.features[0].geometry.coordinates[0] + 0.002,
         ],
         [
           geoFormat.features[0].geometry.coordinates[1] - 0.002,
-          geoFormat.features[0].geometry.coordinates[0] - 0.002
-        ]
+          geoFormat.features[0].geometry.coordinates[0] - 0.002,
+        ],
       );
 
     return (
@@ -114,7 +110,7 @@ class SiteMap extends Component {
               bounds={bounds}
               ref={this.mapRef}
               zoom={13}
-              style={{ width: "100%", height: "396px" }}
+              style={{ width: '100%', height: '396px' }}
             >
               <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -132,7 +128,7 @@ class SiteMap extends Component {
                     attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                     url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
                     maxZoom={20}
-                    subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                    subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                   />
                 </BaseLayer>
                 <BaseLayer name="Google Hybrid">
@@ -140,7 +136,7 @@ class SiteMap extends Component {
                     attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                     url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
                     maxZoom={20}
-                    subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                    subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                   />
                 </BaseLayer>
                 <BaseLayer name="Google Satellite">
@@ -148,7 +144,7 @@ class SiteMap extends Component {
                     attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                     url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
                     maxZoom={20}
-                    subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                    subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                   />
                 </BaseLayer>
                 <BaseLayer name="Google Terrain">
@@ -156,7 +152,7 @@ class SiteMap extends Component {
                     attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                     url="http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
                     maxZoom={20}
-                    subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                    subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                   />
                 </BaseLayer>
               </LayersControl>

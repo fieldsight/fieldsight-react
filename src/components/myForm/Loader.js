@@ -1,18 +1,23 @@
-import React from "react";
-import { Fade } from "react-reveal";
-import ReactLoader from "react-loader-spinner";
+import React from 'react';
+import { Fade } from 'react-reveal';
+import ReactLoader from 'react-loader-spinner';
 
 export const DotLoader = () => (
   <div
     style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      height:"500px"
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '500px',
     }}
   >
-    <ReactLoader type="ThreeDots" color="#00628E" height="50" width="50" />
+    <ReactLoader
+      type="ThreeDots"
+      color="#00628E"
+      height="50"
+      width="50"
+    />
   </div>
 );
 
@@ -21,15 +26,15 @@ export default () => (
     <div className="fieldsight-popup open">
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          top: "0",
-          left: "0",
-          right: "0",
-          bottom: "0"
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
         }}
       >
         <ReactLoader
@@ -39,7 +44,7 @@ export default () => (
           width="50"
         />
 
-        <h6 style={{ color: "#00628E", marginTop: "20px" }}>
+        <h6 style={{ color: '#00628E', marginTop: '20px' }}>
           Loading... Please wait!
         </h6>
       </div>

@@ -12,8 +12,6 @@ import Loader from "../common/Loader";
 import CheckBox from "../common/CheckBox";
 import Select from "./Select"
 
-import { errorToast, successToast } from "../../utils/toastHandler";
-import { RegionContext } from "../../context";
 import "leaflet/dist/leaflet.css";
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -25,7 +23,9 @@ L.Icon.Default.mergeOptions({
 
 export default class SiteAdd extends Component{
   _isMounted = false;
-    state = {
+  constructor(props){
+    super(props)
+    this.state = {
         project: {
             name:"",
             site_id:"",
@@ -68,6 +68,7 @@ export default class SiteAdd extends Component{
           breadcrumbs:{}
        
       };
+  }
 
       componentDidMount(){
         this. _isMounted = true;
@@ -117,46 +118,6 @@ export default class SiteAdd extends Component{
             console.log(err ,"err");
             
         }) 
-
-        // axios.get(`/fv3/api/site-form/?project=${id}`)
-        // .then(res=>{    
-         
-                  
-        //   let regionArr =this.state.region
-        //   let typeArr =this.state.site_types
-
-        //   if (this._isMounted) {
-            
-        //    const position = res.data.location!== "None" ? res.data.location&& res.data.location.split(" "):""
-        //    const longitude = position && position[1].split("(")[1];
-        //     const latitude = position && position[2].split(")")[0]; 
-          
-        //     this.setState(
-        //       state=>{
-        //         res.data.regions!== undefined && res.data.regions.map(each=> regionArr.push(each))
-        //         res.data.site_types.map(each=>typeArr.push(each))
-        //         return{
-        //           jsdata:res.data.hello,
-        //           jsondata:res.data.json_questions,
-        //           id,
-        //           region:res.data.regions !== undefined || "" ? regionArr:[],
-        //           siteId,
-        //           regionalId,
-        //           site_types:typeArr,
-        //            position:{
-        //             longitude,
-        //             latitude
-        //           },
-                 
-        //         }
-        //        }
-        //        )
-        //   }
-          
-        //     }).catch(err=>{
-        //     console.log(err ,"err");
-            
-        // }) 
       }
      
    onChangeHandler = (e, position) => { 
@@ -174,12 +135,13 @@ export default class SiteAdd extends Component{
               ...this.state.project,
               [name]: value
             }
-          },()=>this.state.weight,this.state);
+          });
     }
    
     onSubmitHandler=(e)=>{
         e.preventDefault()
          let select;
+         const {page} = this.props
         const data={
           project:this.state.id,
           name:this.state.project.name,
@@ -233,7 +195,7 @@ export default class SiteAdd extends Component{
                   subsite:this.state.siteId
                  }
                 
-        if(this.props.page==="CreateSite"){
+        if(page==="CreateSite"){
           axios({
             method: "POST",
             url:`/fv3/api/site-form/?project=${this.state.id}`,
@@ -275,7 +237,7 @@ export default class SiteAdd extends Component{
           }).catch(err => {
             console.log(err);
           });
-        }else if(this.props.page==="subSite"){
+        }else if(page==="subSite"){
           axios({
             method: "POST",
             url:`/fv3/api/site-form/?project=${this.state.id}&site=${this.state.siteId}`,
@@ -318,7 +280,7 @@ export default class SiteAdd extends Component{
           }).catch(err => {
             console.log(err);
           });
-        }else if(this.props.page === "regionalSite"){
+        }else if(page === "regionalSite"){
           
           axios({
             method: "POST",
@@ -354,8 +316,6 @@ export default class SiteAdd extends Component{
                 dataSelected:"",
                 id:""   ,
                 data:[]  
-     
-  
                 })
                 this.props.history.push(`/site-dashboard/${req.data.id}`)
               }
@@ -363,9 +323,8 @@ export default class SiteAdd extends Component{
             console.log(err);
           });
         }
-      
-
     }
+
     mapClickHandler = e => {   
         this.setState({
           position: {
@@ -375,6 +334,7 @@ export default class SiteAdd extends Component{
           }
         });
       };
+
     onSelectChangeHandler=(e,data)=>{
       const {value} =e.target;
       if (data ==="regions"){
@@ -387,11 +347,13 @@ export default class SiteAdd extends Component{
         },()=>console.log(this.state.Selectedtypes,"Selectedtypes"))
       }
     }
+
     closeModal = () => {
         this.setState({
           showCropper: false
         });
       };
+
     readFile = file => {
         const reader = new FileReader();
         reader.onload = () => {
@@ -403,6 +365,7 @@ export default class SiteAdd extends Component{
         };
         reader.readAsDataURL(file[0]);
       };
+
     cropImage = () => {
      
         if (typeof this.cropper.getCroppedCanvas() === "undefined") {
@@ -414,6 +377,7 @@ export default class SiteAdd extends Component{
         src: ""
       });
     };
+
     handleCheckboxChange = e =>{
       this.setState({
         project: {
@@ -422,6 +386,7 @@ export default class SiteAdd extends Component{
         }
       });
     }
+
    ondynamiChangeHandler=(e)=>{
       const { target: { name, value }} =e 
       this.setState({
@@ -431,87 +396,95 @@ export default class SiteAdd extends Component{
         }
       })
     }
+
     onchange=e=>{
       this.setState({
         selectedGender:e.target.value
       })
     }
+
     selectedValue=data=>{
      
       this.setState({
         dataSelected:data
       })
-      
     }
+
     selectform=(data)=>{     
      if(data.question_type==="Text"){
-          return <div className="col-xl-4 col-md-6" >
-                    <InputElement
-                      formType="editForm"
-                      tag="input"
-                      type={data.question_type}
-                      id={data.id}g
-                      label={data.question_text}
-                      name={data.question_name}
-                      value={this.state.data[data.question_name] || ""}
-                      placeholder={data.question_placeholder}
-                      changeHandler={this.ondynamiChangeHandler}
-                    />
-                    <span>{data.question_help}</span>
-                    </div>
-      } else if(data.question_type==="Date"){
-        return  <div className="col-xl-4 col-md-6" >
-                    <InputElement
-                      formType="editForm"
-                      tag="input"
-                      type="text"
-                      id={data.id}
-                      label={data.question_text}
-                      name={data.question_name}
-                      value={this.state.data[data.question_name]  || ""}
-                      placeholder={data.question_placeholder}
-                      changeHandler={this.ondynamiChangeHandler}
-                    />
-                    <span>{data.question_help}</span>
-                    </div>
-      }else if(data.question_type==="MCQ"){ 
-         return ( 
-       <div className="form-group col-xl-4 col-md-6" >
-         <label>{data.question_text}</label>
-         <select   
-            className="form-control" 
-            onChange={this.ondynamiChangeHandler} 
-            name={data.question_name}
-            style={{border: "0",borderBottom: "1px solid #eaeaea"}}>
-         { data.mcq_options.map((option,key)=>{
-          return(
-            <Fragment key={key}>
-               
-                  <option value={option.option_text}>{option.option_text}</option>
-               
-            </Fragment>
+        return (
+          <div className="col-xl-4 col-md-6" >
+            <InputElement
+              formType="editForm"
+              tag="input"
+              type={data.question_type}
+              id={data.id}g
+              label={data.question_text}
+              name={data.question_name}
+              value={this.state.data[data.question_name] || ""}
+              placeholder={data.question_placeholder}
+              changeHandler={this.ondynamiChangeHandler}
+            />
+            <span>{data.question_help}</span>
+          </div>
           )
-        })}
-         </select>
-         <span>{data.question_help}</span>
-        </div>
-       )
-      }else if (data.question_type==="Number"){
-       return <div className="col-xl-4 col-md-6" >
-        <InputElement
-        formType="editForm"
-        tag="input"
-        type={data.question_type}
-        id={data.id}
-        label={data.question_text}
-        name={data.question_name}
-        value={this.state.data[data.question_name]  || ""}
-        placeholder={data.question_placeholder}
-        changeHandler={this.ondynamiChangeHandler}
-      />
-      <span>{data.question_help}</span>
+      } else if(data.question_type==="Date"){
+         return (
+         <div className="col-xl-4 col-md-6" >
+            <InputElement
+              formType="editForm"
+              tag="input"
+              type="text"
+              id={data.id}
+              label={data.question_text}
+              name={data.question_name}
+              value={this.state.data[data.question_name]  || ""}
+              placeholder={data.question_placeholder}
+              changeHandler={this.ondynamiChangeHandler}
+            />
+            <span>{data.question_help}</span>
+          </div>
+        )
+      } else if(data.question_type==="MCQ") { 
+         return ( 
+          <div className="form-group col-xl-4 col-md-6" >
+            <label>{data.question_text}</label>
+            <select   
+                className="form-control" 
+                onChange={this.ondynamiChangeHandler} 
+                name={data.question_name}
+                style={{border: "0",borderBottom: "1px solid #eaeaea"}}>
+                {data.mcq_options.map((option,key)=>{
+                  return(
+                    <Fragment key={key}>
+                      
+                          <option value={option.option_text}>{option.option_text}</option>
+                      
+                    </Fragment>
+                  )
+                })}
+            </select>
+            <span>{data.question_help}</span>
+          </div>
+          )
+      } else if (data.question_type==="Number") {
+       return (
+        <div className="col-xl-4 col-md-6" >
+            <InputElement
+            formType="editForm"
+            tag="input"
+            type={data.question_type}
+            id={data.id}
+            label={data.question_text}
+            name={data.question_name}
+            value={this.state.data[data.question_name]  || ""}
+            placeholder={data.question_placeholder}
+            changeHandler={this.ondynamiChangeHandler}
+          />
+          <span>{data.question_help}</span>
        </div>
-      }else if(data.question_type === "Link"){
+       )
+      } else if(data.question_type === "Link") {
         return  <Select 
                   data={data.project_id}
                   onchange={this.ondynamiChangeHandler}
@@ -525,8 +498,6 @@ export default class SiteAdd extends Component{
     componentWillUnmount() {
       this._isMounted = false;
     }
-    
-   
     
     render(){ 
      
@@ -567,7 +538,7 @@ export default class SiteAdd extends Component{
               site_types,
               regionselected,
               Selectedtypes
-               }}=this;
+               }, props:{page}}=this;
               
         return (
           <>
@@ -610,7 +581,7 @@ export default class SiteAdd extends Component{
                     changeHandler={onChangeHandler}
                   />
                 </div>
-              {region.length>0 ?  (this.props.page==="CreateSite" || this.props.page==="subSite"?<div className="col-xl-4 col-md-6">
+              {region.length>0 ?  (page==="CreateSite" || page==="subSite"?<div className="col-xl-4 col-md-6">
                 <SelectElement
                 className="form-control"
                 label="Region"
@@ -663,31 +634,33 @@ export default class SiteAdd extends Component{
                 />
               </div>
             </div>
-            {this.props.page==="subSite"?<div className="col-xl-4 col-md-6">
-                <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="number"
-                    required={false}
-                    label="Weight"
-                    name="weight"
-                    value={this.state.weight}
-                    changeHandler={(e)=>this.setState({weight:e.target.value})}
-                  />
-        </div>:""}
+            {page==="subSite"?
+              <div className="col-xl-4 col-md-6">
+                  <InputElement
+                      formType="editForm"
+                      tag="input"
+                      type="number"
+                      required={false}
+                      label="Weight"
+                      name="weight"
+                      value={this.state.weight}
+                      changeHandler={(e)=>this.setState({weight:e.target.value})}
+                    />
+                </div>:
+                ""
+                }
                 <div className="col-xl-4 col-md-6">
                   <div className="form-group">
-                  <InputElement
-                    formType="editForm"
-                    tag="input"
-                    type="text"
-                    required={false}
-                    label="Description"
-                    name="publicDescription"
-                    value={publicDescription}
-                    changeHandler={onChangeHandler}
-              />
-                
+                    <InputElement
+                      formType="editForm"
+                      tag="input"
+                      type="text"
+                      required={false}
+                      label="Description"
+                      name="publicDescription"
+                      value={publicDescription}
+                      changeHandler={onChangeHandler}
+                    />
                   </div>
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -815,7 +788,6 @@ export default class SiteAdd extends Component{
               )}
               )
               
-             
             }
                 <div className="col-sm-12">
                   <button type="submit" className="fieldsight-btn pull-right">
@@ -867,8 +839,6 @@ export default class SiteAdd extends Component{
                 </div>
               </Modal>
             )}
-            
-         
             {isLoading && <Loader loaded={loaded} />}
           </RightContentCard>
     </>

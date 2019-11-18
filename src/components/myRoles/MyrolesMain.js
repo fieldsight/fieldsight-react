@@ -13,29 +13,33 @@ import withPagination from '../../hoc/WithPagination';
 import Modal from '../common/Modal';
 
 class MyrolesMain extends Component {
-  state = {
-    invite: null,
-    rightTab: 'site',
-    profile: [],
-    invitation: [],
-    roles: [],
-    teams: [],
-    initialTeamId: null,
-    site: [],
-    submission: [],
-    regions: [],
-    mapData: [],
-    dLoader: true,
-    siteLoader: true,
-    RegionLoader: true,
-    teamId: null,
-    siteId: null,
-    myGuide: false,
-    searchQuery: '',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      invite: null,
+      rightTab: 'site',
+      profile: [],
+      invitation: [],
+      roles: [],
+      teams: [],
+      initialTeamId: null,
+      site: [],
+      submission: [],
+      regions: [],
+      mapData: [],
+      dLoader: true,
+      siteLoader: true,
+      RegionLoader: true,
+      teamId: null,
+      siteId: null,
+      myGuide: false,
+      searchQuery: '',
+    };
+  }
 
   componentWillMount() {
-    const { profileId } = this.props.match.params;
+    const { props } = this;
+    const { profileId } = props.match.params;
     let url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
       : `fv3/api/myroles/`;
@@ -150,9 +154,6 @@ class MyrolesMain extends Component {
 
       .then(res => {
         if (res.status === 200) {
-          // const newInvitation = [...this.state.invitation];
-          // const deletedForm = newInvitation.filter(user => user.id != id);
-
           this.setState({
             invitation: [],
           });
@@ -257,6 +258,7 @@ class MyrolesMain extends Component {
       );
     });
   };
+
   render() {
     const {
       match: {

@@ -1,21 +1,30 @@
-import React from "react";
-import Table from "react-bootstrap/Table";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import { DotLoader } from "../../myForm/Loader";
-import isEmpty from "../../../utils/isEmpty";
+import React from 'react';
+import Table from 'react-bootstrap/Table';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { DotLoader } from '../../myForm/Loader';
+import isEmpty from '../../../utils/isEmpty';
 
 class SiteListTable extends React.Component {
-  state = {
-    project_id: JSON.parse(this.props.id)
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      project_id: JSON.parse(props.id),
+    };
+  }
+
   render() {
     const { data, loader, terms } = this.props;
-    const tableHeight = data.length > 0 ? "324px" : "396px";
+    const tableHeight = data.length > 0 ? '324px' : '396px';
     return (
       <>
         <div className="card-body">
-          <div style={{ position: "relative", height: `${tableHeight} ` }}>
+          <div
+            style={{
+              position: 'relative',
+              height: `${tableHeight} `,
+            }}
+          >
             <PerfectScrollbar>
               {loader && <DotLoader />}
               {!loader && (
@@ -26,11 +35,16 @@ class SiteListTable extends React.Component {
                   <thead>
                     <tr>
                       <th>
-                        {!isEmpty(terms) ? `${terms.site}` : "Sites"} Name
+                        {!isEmpty(terms) ? `${terms.site}` : 'Sites'}{' '}
+                        Name
                       </th>
                       <th>id</th>
                       {/* <th>Address</th> */}
-                      <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>
+                      <th>
+                        {!isEmpty(terms)
+                          ? `${terms.region}`
+                          : 'Region'}
+                      </th>
                       <th>Type</th>
                       <th>Progress</th>
                       <th>Submissions</th>
@@ -52,7 +66,7 @@ class SiteListTable extends React.Component {
                           <td>
                             <a
                               href={
-                                "/fieldsight/application/#/site-dashboard/" +
+                                '/fieldsight/application/#/site-dashboard/' +
                                 item.id
                               }
                               className="pending table-profile"
@@ -80,26 +94,28 @@ class SiteListTable extends React.Component {
                                 aria-valuenow="40"
                                 aria-valuemin="0"
                                 aria-valuemax="200"
-                                style={{ width: item.progress + "%" }}
+                                style={{ width: item.progress + '%' }}
                               >
                                 <span className="progress-counts">
-                                  {item.progress + "%"}
+                                  {item.progress + '%'}
                                 </span>
                               </div>
                             </div>
                           </td>
-                          <td style={{ right: "-28px" }}>{item.submissions}</td>
+                          <td style={{ right: '-28px' }}>
+                            {item.submissions}
+                          </td>
                           <td>
                             <a
                               className={
                                 item.status != null
                                   ? item.status.toLowerCase()
-                                  : ""
+                                  : ''
                               }
                             >
                               {item.status != null
                                 ? item.status
-                                : "No Submission Yet"}
+                                : 'No Submission Yet'}
                             </a>
                           </td>
                         </tr>

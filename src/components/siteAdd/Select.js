@@ -1,37 +1,45 @@
-import React, { Component, Fragment } from "react";
-import SelectElement from "../common/SelectElement";
-import axios from "axios";
+import React, { Component } from 'react';
+import SelectElement from '../common/SelectElement';
+import axios from 'axios';
 
 export default class Select extends Component {
-  state = {
-    selectform: [],
-    selected: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectform: [],
+      selected: '',
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
+    const { data, value } = this.props;
     axios
-      .get(`/fv3/api/project-sites-for-metas/${this.props.data}/`)
+      .get(`/fv3/api/project-sites-for-metas/${data}/`)
       .then(res => {
         if (this._isMounted) {
           this.setState({
             selectform: res.data,
-            selected: this.props.value
+            selected: value,
           });
         }
       })
       .catch(err => {
-        console.log(err, "err");
+        console.log(err, 'err');
       });
   }
+
   onchange = e => {
+    const { selectedValue, name } = this.props;
+
     this.setState(
       {
-        selected: e.target.value
+        selected: e.target.value,
       },
-      () => this.props.selectedValue(this.state.selected, this.props.name)
+      () => selectedValue(this.state.selected, name),
     );
   };
+
   render() {
     return (
       <>
@@ -41,7 +49,7 @@ export default class Select extends Component {
             options={
               this.state.selectform.length > 0
                 ? this.state.selectform
-                : [{ value: "-", name: "-" }]
+                : [{ value: '-', name: '-' }]
             }
             changeHandler={this.onchange}
             label={this.props.type}

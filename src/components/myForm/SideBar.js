@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import MyFormContent from "./MyFormContent";
-import ProjectFormContent from "./ProjectFormContent";
+import React, { Component } from 'react';
+import { Switch, Route, Link, withRouter } from 'react-router-dom';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import MyFormContent from './MyFormContent';
+import ProjectFormContent from './ProjectFormContent';
 
 // import MyformTable from '../components/MyForm/MyformTable';
 // import UserSelectForm from '../components/MyForm/UserSelectForm';
@@ -10,7 +10,11 @@ import ProjectFormContent from "./ProjectFormContent";
 class SideBar extends Component {
   render() {
     const {
-      match: { path, url }
+      match: { path, url },
+      height,
+      location: { pathname },
+      OpenTabHandler,
+      commonPopupHandler,
     } = this.props;
 
     return (
@@ -19,7 +23,7 @@ class SideBar extends Component {
           <div className="left-sidebar new-sidebar sticky-top">
             <div
               className="card no-boxshadow"
-              style={{ minHeight: this.props.height }}
+              style={{ minHeight: height }}
             >
               <div className="card-header main-card-header sub-card-header">
                 <h5>Forms</h5>
@@ -34,9 +38,9 @@ class SideBar extends Component {
                     <Link
                       to={`${url}/myform`}
                       className={
-                        this.props.location.pathname == `${url}/myform`
-                          ? "nav-link active"
-                          : "nav-link"
+                        pathname == `${url}/myform`
+                          ? 'nav-link active'
+                          : 'nav-link'
                       }
                     >
                       My Forms
@@ -46,9 +50,9 @@ class SideBar extends Component {
                     <Link
                       to={`${url}/projectform`}
                       className={
-                        this.props.location.pathname == `${url}/projectform`
-                          ? "nav-link active"
-                          : "nav-link"
+                        pathname == `${url}/projectform`
+                          ? 'nav-link active'
+                          : 'nav-link'
                       }
                     >
                       Project Forms
@@ -68,8 +72,8 @@ class SideBar extends Component {
               <MyFormContent
                 {...props}
                 title="MyFormContent"
-                OpenTabHandler={this.props.OpenTabHandler}
-                commonPopupHandler={this.props.commonPopupHandler}
+                OpenTabHandler={OpenTabHandler}
+                commonPopupHandler={commonPopupHandler}
               />
             )}
           />
@@ -81,8 +85,8 @@ class SideBar extends Component {
               <ProjectFormContent
                 {...props}
                 title="ProjectFormContent"
-                OpenTabHandler={this.props.OpenTabHandler}
-                commonPopupHandler={this.props.commonPopupHandler}
+                OpenTabHandler={OpenTabHandler}
+                commonPopupHandler={commonPopupHandler}
               />
             )}
           />

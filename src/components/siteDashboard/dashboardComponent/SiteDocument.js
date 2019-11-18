@@ -1,12 +1,12 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { GridContentLoader } from "../../common/Loader";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { GridContentLoader } from '../../common/Loader';
 
 const SiteDocument = ({
   siteDocuments,
   showContentLoader,
   siteId,
-  termsAndLabels
+  termsAndLabels,
 }) => (
   <div className="col-xl-4 col-md-6">
     <div className="card ">
@@ -25,7 +25,7 @@ const SiteDocument = ({
         </div>
         <div
           className="card-body about-body"
-          style={{ position: "relative", height: "358px" }}
+          style={{ position: 'relative', height: '358px' }}
         >
           {showContentLoader ? (
             <GridContentLoader
@@ -38,7 +38,10 @@ const SiteDocument = ({
                 {siteDocuments.length > 0 ? (
                   <div className="row">
                     {siteDocuments.map((doc, i) => (
-                      <div className="col-lg-4 col-md-6 col-sm-4" key={i}>
+                      <div
+                        className="col-lg-4 col-md-6 col-sm-4"
+                        key={i}
+                      >
                         <div className="doc-item">
                           <div className="doc-wrapper">
                             <figure>
@@ -50,7 +53,7 @@ const SiteDocument = ({
                             <div className="doc-content">
                               <h6>
                                 <a href={doc.file} target="_blank">
-                                  {" "}
+                                  {' '}
                                   {doc.name}
                                 </a>
                               </h6>

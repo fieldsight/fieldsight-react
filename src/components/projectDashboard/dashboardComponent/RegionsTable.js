@@ -1,24 +1,30 @@
-import React from "react";
-import Table from "react-bootstrap/Table";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import { DotLoader } from "../../myForm/Loader";
-import isEmpty from "../../../utils/isEmpty";
+import React from 'react';
+import Table from 'react-bootstrap/Table';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { DotLoader } from '../../myForm/Loader';
+import isEmpty from '../../../utils/isEmpty';
 
-import withPagination from "../../../hoc/WithPagination";
-import TableHeader from "../../common/TableHeader";
-import TableRow from "../../common/TableRow";
+import withPagination from '../../../hoc/WithPagination';
+import TableHeader from '../../common/TableHeader';
+import TableRow from '../../common/TableRow';
 
 class RegionsTable extends React.Component {
-  state = {
-    project_id: JSON.parse(this.props.id)
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      project_id: JSON.parse(props.id),
+    };
+  }
+
   componentDidMount() {
     this.props.paginationHandler(1, null, {
-      type: "projectRegionList",
-      projectId: this.state.project_id
+      type: 'projectRegionList',
+      projectId: this.state.project_id,
     });
   }
+
   render() {
     const { data, loader, terms } = this.props;
 
@@ -28,14 +34,14 @@ class RegionsTable extends React.Component {
             `${terms.region} ID`,
             `${terms.region} Name`,
             ,
-            "Created Date",
-            "Total Sites"
+            'Created Date',
+            'Total Sites',
           ]
-        : ["Region ID", "Region Name", "Created Date", "Total Sites"]
+        : ['Region ID', 'Region Name', 'Created Date', 'Total Sites'],
     };
     return (
       <div className="card-body">
-        <div style={{ position: "relative", height: "396px" }}>
+        <div style={{ position: 'relative', height: '396px' }}>
           <PerfectScrollbar>
             {loader && <DotLoader />}
             {!loader && (
@@ -43,9 +49,14 @@ class RegionsTable extends React.Component {
                 responsive="xl"
                 className="table  table-bordered  dataTable "
               >
-                <TableHeader tableHeader={tableHeader.projectRegions} />
+                <TableHeader
+                  tableHeader={tableHeader.projectRegions}
+                />
                 {data.length > 0 ? (
-                  <TableRow tableRow={data} page="projectManageRegion" />
+                  <TableRow
+                    tableRow={data}
+                    page="projectManageRegion"
+                  />
                 ) : (
                   <tbody>
                     <tr>

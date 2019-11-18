@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import format from "date-fns/format";
-import uuid from "uuid/v4";
-import SubmissionModal from "./SubmissionModal";
-import { TableContentLoader } from "../../common/Loader";
-import Td from "../../common/TableData";
+import React from 'react';
+import Table from 'react-bootstrap/Table';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import format from 'date-fns/format';
+import uuid from 'uuid/v4';
+import SubmissionModal from './SubmissionModal';
+import { TableContentLoader } from '../../common/Loader';
+
 const DatatablePage = ({
   enableSubsites,
   siteSubmissions,
@@ -17,7 +17,7 @@ const DatatablePage = ({
   closeModal,
   openModal,
   toggleTab,
-  hasWritePermission
+  hasWritePermission,
 }) => (
   <>
     <div className="col-xl-6 col-md-12">
@@ -27,7 +27,7 @@ const DatatablePage = ({
           {hasWritePermission && (
             <div className="add-btn">
               <a
-                onClick={() => openModal("Submission")}
+                onClick={() => openModal('Submission')}
                 data-tab="scheduled-popup"
               >
                 <span>
@@ -39,7 +39,7 @@ const DatatablePage = ({
         </div>
         <div
           className="card-body"
-          style={{ position: "relative", height: "434px" }}
+          style={{ position: 'relative', height: '434px' }}
         >
           {showContentLoader ? (
             <TableContentLoader row={11} column={5} />
@@ -64,9 +64,7 @@ const DatatablePage = ({
                     <tr key={uuid()}>
                       <td>
                         <a
-                          href={`/fieldsight/application/?submission=${
-                            submission.instance_id
-                          }#/submission-details`}
+                          href={`/fieldsight/application/?submission=${submission.instance_id}#/submission-details`}
                           target="_blank"
                         >
                           {submission.form}
@@ -75,12 +73,16 @@ const DatatablePage = ({
                       <td>{submission.submitted_by}</td>
                       <td>{submission.reviewed_by}</td>
                       <td>
-                        <span className={submission.status.toLowerCase()}>
-                          {submission.status}{" "}
+                        <span
+                          className={submission.status.toLowerCase()}
+                        >
+                          {submission.status}{' '}
                         </span>
                       </td>
-                      <td style={{ width: "25%" }}>
-                        {format(submission.date, ["MMMM Do YYYY, h:mm:ss a"])}
+                      <td style={{ width: '25%' }}>
+                        {format(submission.date, [
+                          'MMMM Do YYYY, h:mm:ss a',
+                        ])}
                       </td>
                     </tr>
                   ))}
@@ -97,7 +99,7 @@ const DatatablePage = ({
               showDotLoader={showDotLoader}
               siteForms={siteForms}
               activeTab={activeTab}
-              closeModal={() => closeModal("Submission")}
+              closeModal={() => closeModal('Submission')}
               toggleTab={toggleTab}
             />
           )}

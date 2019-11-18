@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import MyformTable from "./MyformTable";
-import SharedTable from "./SharedTable";
+import React, { Component } from 'react';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import MyformTable from './MyformTable';
+import SharedTable from './SharedTable';
 
 // const base_url = "https://fieldsight.naxa.com.np";
 
 class MyFormContent extends Component {
   render() {
+    const { OpenTabHandler, commonPopupHandler } = this.props;
     return (
-      <React.Fragment>
+      <>
         <div className="col-xl-9 col-lg-8">
           <div className="right-content">
             <div className="tab-content">
@@ -18,11 +19,11 @@ class MyFormContent extends Component {
                     <h5>My Forms</h5>
                     <div className="add-btn">
                       <a
-                        href={base_url + "/forms/create/"}
+                        href={base_url + '/forms/create/'}
                         target="_blank"
                         data-tab="site-popup"
                       >
-                        Create New{" "}
+                        Create New{' '}
                         <span>
                           <i className="la la-plus" />
                         </span>
@@ -31,8 +32,8 @@ class MyFormContent extends Component {
                   </div>
                   <div className="card-body">
                     <MyformTable
-                      OpenTabHandler={this.props.OpenTabHandler}
-                      commonPopupHandler={this.props.commonPopupHandler}
+                      OpenTabHandler={OpenTabHandler}
+                      commonPopupHandler={commonPopupHandler}
                     />
                   </div>
                 </div>
@@ -43,8 +44,8 @@ class MyFormContent extends Component {
                   </div>
                   <div className="card-body">
                     <SharedTable
-                      OpenTabHandler={this.props.OpenTabHandler}
-                      commonPopupHandler={this.props.commonPopupHandler}
+                      OpenTabHandler={OpenTabHandler}
+                      commonPopupHandler={commonPopupHandler}
                     />
                   </div>
                 </div>
@@ -52,7 +53,7 @@ class MyFormContent extends Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

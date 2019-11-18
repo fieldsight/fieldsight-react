@@ -1,18 +1,16 @@
-import React, { Component, createRef } from "react";
-import { Accordion, Card, Button } from "react-bootstrap";
-import uuid from "uuid/v4";
-import format from "date-fns/format";
+import React, { Component, createRef } from 'react';
+import { Accordion, Card, Button } from 'react-bootstrap';
+import format from 'date-fns/format';
+import uuid from 'uuid/v4';
 import {
   Map,
   TileLayer,
-  Marker,
   Popup,
   GeoJSON,
-  CircleMarker
-} from "react-leaflet";
-import L, { latLngBounds } from "leaflet";
-import Legend from "./Legend";
-import { DotLoader } from "../common/Loader";
+  CircleMarker,
+} from 'react-leaflet';
+import L, { latLngBounds } from 'leaflet';
+import Legend from './Legend';
 
 function measure(lat1, lon1, lat2, lon2) {
   // generally used geo measurement function
@@ -30,6 +28,7 @@ function measure(lat1, lon1, lat2, lon2) {
   //return d; // kilometers
   return (d * 1000).toFixed(2); // meters
 }
+
 class Submission extends Component {
   constructor(props) {
     super(props);
@@ -37,21 +36,21 @@ class Submission extends Component {
     this.groupRef = createRef();
     this.state = {
       showGallery: false,
-      selectedImg: ""
+      selectedImg: '',
     };
   }
 
   openModal = img => {
     this.setState({
       showGallery: true,
-      selectedImg: img
+      selectedImg: img,
     });
   };
 
   closeModal = () => {
     this.setState({
       showGallery: false,
-      selectedImg: ""
+      selectedImg: '',
     });
   };
 
@@ -62,14 +61,14 @@ class Submission extends Component {
 
   pointToLayer(feature, latlng) {
     const icon = new L.Icon({
-      iconUrl: require("../../static/images/marker.png"),
-      iconRetinaUrl: require("../../static/images/marker.png"),
+      iconUrl: require('../../static/images/marker.png'),
+      iconRetinaUrl: require('../../static/images/marker.png'),
       iconSize: [28, 28],
       iconAnchor: [13, 27],
       popupAnchor: [2, -24],
       shadowUrl: null,
       shadowSize: null,
-      shadowAnchor: null
+      shadowAnchor: null,
       //iconSize: new L.Point(60, 75)
       //className: "leaflet-div-icon"
     });
@@ -78,33 +77,33 @@ class Submission extends Component {
 
   getGeoJson = data => {
     return {
-      type: "FeatureCollection",
+      type: 'FeatureCollection',
       features: [
         {
-          type: "Feature",
+          type: 'Feature',
           properties: {
             id: data.id,
             identifier: data.identifier,
             logo: data.logo,
             project_name: data.project_name,
             name: data.name,
-            site_information: data.site_information
+            site_information: data.site_information,
           },
           geometry: {
-            type: "Point",
-            coordinates: [data.longitude, data.latitude]
-          }
-        }
-      ]
+            type: 'Point',
+            coordinates: [data.longitude, data.latitude],
+          },
+        },
+      ],
     };
   };
+
   splitSubmissionObj = (submissionObj, name) => {
     const question = Object.values(submissionObj);
-
     const label =
       question.length > 0
-        ? `${question[0]}/${question[1]}`.replace(/\/undefined/, "")
-        : "";
+        ? `${question[0]}/${question[1]}`.replace(/\/undefined/, '')
+        : '';
     return this.getLabelAndName(label, name);
   };
 
@@ -113,11 +112,12 @@ class Submission extends Component {
       const { siteLat, siteLng, ansLat, ansLng } = latlng;
       const bounds = latLngBounds(
         [siteLat + 0.002, siteLng + 0.002],
-        [ansLat - 0.002, ansLng - 0.002]
+        [ansLat - 0.002, ansLng - 0.002],
       );
       return bounds;
     }
   };
+
   getLargeBound = latlng => {
     if (Object.entries(latlng).length > 0) {
       const { siteLat, siteLng, ansLat, ansLng } = latlng;
@@ -136,6 +136,7 @@ class Submission extends Component {
       {name && <i>({name})</i>}
     </span>
   );
+
   handleRepeatedSubmission = submission => {
     return (
       <Accordion key={uuid()} defaultActiveKey={submission.name}>
@@ -148,9 +149,15 @@ class Submission extends Component {
                 eventKey={submission.name}
               >
                 {submission.label
-                  ? typeof submission.label === "object"
-                    ? this.splitSubmissionObj(submission.label, submission.name)
-                    : this.getLabelAndName(submission.label, submission.name)
+                  ? typeof submission.label === 'object'
+                    ? this.splitSubmissionObj(
+                        submission.label,
+                        submission.name,
+                      )
+                    : this.getLabelAndName(
+                        submission.label,
+                        submission.name,
+                      )
                   : // )submission.label
                     submission.name}
               </Accordion.Toggle>
@@ -160,7 +167,8 @@ class Submission extends Component {
             <Card.Body>
               {submission.elements &&
                 submission.elements.map(sub => {
-                  return sub.type === "group" || sub.type === "repeated"
+                  return sub.type === 'group' ||
+                    sub.type === 'repeated'
                     ? this.handleRepeatedSubmission(sub)
                     : this.handleUnrepeatedSubmission(sub);
                 })}
@@ -175,21 +183,21 @@ class Submission extends Component {
     const { site } = this.props;
     const geoData = this.getGeoJson(site);
 
-    if (submission.type === "photo") {
+    if (submission.type === 'photo') {
       return (
         <div className="submission-list thumb-list" key={uuid()}>
           <ul>
             <li>
               <div className="content">
                 <h6>
-                  {typeof submission.question === "object"
+                  {typeof submission.question === 'object'
                     ? this.splitSubmissionObj(
                         submission.question,
-                        submission.name
+                        submission.name,
                       )
                     : this.getLabelAndName(
                         submission.question,
-                        submission.name
+                        submission.name,
                       )}
                 </h6>
               </div>
@@ -199,7 +207,7 @@ class Submission extends Component {
                     src={submission.answer}
                     style={{
                       backgroundImage: `url(${submission.answer})`,
-                      cursor: "pointer"
+                      cursor: 'pointer',
                     }}
                     onClick={() => this.openModal(submission.answer)}
                   />
@@ -209,17 +217,17 @@ class Submission extends Component {
           </ul>
         </div>
       );
-    } else if (submission.type === "geopoint") {
+    } else if (submission.type === 'geopoint') {
       let splitedGeoLocation = [];
-      let latitude = "";
-      let longitude = "";
-      let altitude = "";
-      let accuracy = "";
+      let latitude = '';
+      let longitude = '';
+      let altitude = '';
+      let accuracy = '';
       let bounds = {};
       let latlngObj = {};
 
       if (!!submission.answer === true) {
-        splitedGeoLocation = submission.answer.split(" ");
+        splitedGeoLocation = submission.answer.split(' ');
         latitude = splitedGeoLocation[0];
         longitude = splitedGeoLocation[1];
         altitude = splitedGeoLocation[2];
@@ -229,19 +237,25 @@ class Submission extends Component {
           siteLat: site && site.latitude,
           siteLng: site && site.longitude,
           ansLat: JSON.parse(latitude),
-          ansLng: JSON.parse(longitude)
+          ansLng: JSON.parse(longitude),
         };
       }
 
       const question =
-        typeof submission.question === "object"
-          ? this.splitSubmissionObj(submission.question, submission.name)
-          : this.getLabelAndName(submission.question, submission.name);
+        typeof submission.question === 'object'
+          ? this.splitSubmissionObj(
+              submission.question,
+              submission.name,
+            )
+          : this.getLabelAndName(
+              submission.question,
+              submission.name,
+            );
       const distance = measure(
         site.latitude,
         site.longitude,
         latitude && latitude,
-        longitude && longitude
+        longitude && longitude,
       );
 
       if (distance < 500) {
@@ -261,7 +275,10 @@ class Submission extends Component {
                     <div className="col-lg-6 col-md-6">
                       <div className="map-form">
                         <Map
-                          style={{ height: "258px", marginTop: "1rem" }}
+                          style={{
+                            height: '258px',
+                            marginTop: '1rem',
+                          }}
                           center={[latitude, longitude]}
                           zoom={15}
                           maxZoom={19}
@@ -281,8 +298,12 @@ class Submission extends Component {
                           />
                           <GeoJSON
                             data={geoData}
-                            onEachFeature={this.onEachFeaturePoint.bind(this)}
-                            pointToLayer={this.pointToLayer.bind(this)}
+                            onEachFeature={this.onEachFeaturePoint.bind(
+                              this,
+                            )}
+                            pointToLayer={this.pointToLayer.bind(
+                              this,
+                            )}
                             ref={this.groupRef}
                           />
                           <Legend />
@@ -314,7 +335,9 @@ class Submission extends Component {
                         </p>
                         <p>
                           <span>Accuracy:</span>
-                          <label>{(+accuracy).toFixed(2)} meters</label>
+                          <label>
+                            {(+accuracy).toFixed(2)} meters
+                          </label>
                         </p>
                         <p>
                           <span>Distance From Site:</span>
@@ -335,29 +358,37 @@ class Submission extends Component {
           <ul>
             <li>
               <h6>
-                {typeof submission.question === "object"
+                {typeof submission.question === 'object'
                   ? this.splitSubmissionObj(
                       submission.question,
-                      submission.name
+                      submission.name,
                     )
-                  : this.getLabelAndName(submission.question, submission.name)}
+                  : this.getLabelAndName(
+                      submission.question,
+                      submission.name,
+                    )}
               </h6>
-              {submission.type === "start" ||
-              submission.type === "end" ||
-              submission.type === "datetime" ? (
+              {submission.type === 'start' ||
+              submission.type === 'end' ||
+              submission.type === 'datetime' ? (
                 <time>
                   <i className="la la-clock-o" />
-                  {format(submission.answer, ["MMMM Do YYYY,  h:mm:ss a"])}
+                  {format(submission.answer, [
+                    'MMMM Do YYYY,  h:mm:ss a',
+                  ])}
                 </time>
-              ) : submission.type == "select one" ? (
+              ) : submission.type == 'select one' ? (
                 this.splitSubmissionObj(
-                  submission.selected["one-one"]["label"],
-                  submission.selected["one-one"]["name"]
+                  submission.selected['one-one']['label'],
+                  submission.selected['one-one']['name'],
                 )
-              ) : submission.type == "select all that apply" ? (
+              ) : submission.type == 'select all that apply' ? (
                 Object.entries(submission.selected).map(many => (
                   <p key={uuid()}>
-                    {this.splitSubmissionObj(many[1].label, many[1].name)}
+                    {this.splitSubmissionObj(
+                      many[1].label,
+                      many[1].name,
+                    )}
                   </p>
                 ))
               ) : (
@@ -372,7 +403,10 @@ class Submission extends Component {
 
   renderSubmission = submissionData => {
     return submissionData.map((submission, i) => {
-      if (submission.type === "group" || submission.type === "repeat") {
+      if (
+        submission.type === 'group' ||
+        submission.type === 'repeat'
+      ) {
         return this.handleRepeatedSubmission(submission);
       } else {
         return this.handleUnrepeatedSubmission(submission);
@@ -382,18 +416,25 @@ class Submission extends Component {
 
   render() {
     const {
-      props: { dateCreated, submittedBy, submissionData, formName, is_survey },
-      state: { showGallery, selectedImg }
+      props: {
+        dateCreated,
+        submittedBy,
+        submissionData,
+        formName,
+        is_survey,
+      },
+      state: { showGallery, selectedImg },
     } = this;
 
     return (
       <>
         <div
           className={`${
-            !is_survey ? "group-submission mrt-30" : "group-submission"
+            !is_survey
+              ? 'group-submission mrt-30'
+              : 'group-submission'
           }`}
         >
-          {/* <div className="group-submission mrt-30"> */}
           <div className="row">
             <div className="col-lg-12">
               <div className="card">
@@ -407,7 +448,8 @@ class Submission extends Component {
                           <label>by :</label> {submittedBy}
                         </div>
                         <time>
-                          <label>on:</label> {format(dateCreated, "MM-DD-YYYY")}
+                          <label>on:</label>{' '}
+                          {format(dateCreated, 'MM-DD-YYYY')}
                         </time>
                       </div>
                     )}
@@ -415,7 +457,8 @@ class Submission extends Component {
                 </div>
 
                 <div className="card-body submission-card">
-                  {submissionData && this.renderSubmission(submissionData)}
+                  {submissionData &&
+                    this.renderSubmission(submissionData)}
                   {showGallery && (
                     <div
                       className="gallery-zoom fieldsight-popup open"
@@ -426,10 +469,16 @@ class Submission extends Component {
                         <img
                           src={selectedImg}
                           alt="logo"
-                          style={{ minHeight: "400px", maxHeight: "400px" }}
+                          style={{
+                            minHeight: '400px',
+                            maxHeight: '400px',
+                          }}
                         />
                       </div>
-                      <span className="popup-close" onClick={this.closeModal}>
+                      <span
+                        className="popup-close"
+                        onClick={this.closeModal}
+                      >
                         <i className="la la-close" />
                       </span>
                     </div>

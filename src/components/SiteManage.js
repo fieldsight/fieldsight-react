@@ -1,24 +1,28 @@
-import React, { Component, Fragment } from "react";
-import Table from "./common/Table";
-import Modal from "./common/Modal";
-import InputElement from "./common/InputElement";
-import RightContentCard from "./common/RightContentCard";
+import React, { Component, Fragment } from 'react';
+import Table from './common/Table';
+import Modal from './common/Modal';
+import InputElement from './common/InputElement';
+import RightContentCard from './common/RightContentCard';
 
 class SiteManage extends Component {
-  state = {
-    showModal: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showModal: false,
+    };
+  }
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({
-      showModal: !showModal
+      showModal: !showModal,
     }));
   };
 
   render() {
     const {
       state: { showModal },
-      toggleModal
+      toggleModal,
     } = this;
     return (
       <Fragment>
@@ -31,7 +35,10 @@ class SiteManage extends Component {
         </RightContentCard>
         {showModal && (
           <Modal title="Add site" toggleModal={toggleModal}>
-            <form className="floating-form" onSubmit={onSubmitHandler}>
+            <form
+              className="floating-form"
+              onSubmit={onSubmitHandler}
+            >
               <InputElement
                 tag="input"
                 type="text"

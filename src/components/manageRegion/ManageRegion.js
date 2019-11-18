@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Table from '../common/Table';
 import Modal from '../common/Modal';
 import InputElement from '../common/InputElement';

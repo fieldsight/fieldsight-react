@@ -1,21 +1,22 @@
-import React, { Component } from "react";
-import { Line } from "react-chartjs-2";
+import React, { Component } from 'react';
+import { Line } from 'react-chartjs-2';
+
 const options = {
   responsive: true,
   title: {
     display: false,
-    text: "Chart.js Line Chart"
+    text: 'Chart.js Line Chart',
   },
   legend: {
-    display: false
+    display: false,
   },
   tooltips: {
-    mode: "index",
-    intersect: false
+    mode: 'index',
+    intersect: false,
   },
   hover: {
-    mode: "nearest",
-    intersect: true
+    mode: 'nearest',
+    intersect: true,
   },
   scales: {
     xAxes: [
@@ -23,20 +24,20 @@ const options = {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: "Date"
-        }
-      }
+          labelString: 'Date',
+        },
+      },
     ],
     yAxes: [
       {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: "Site Progress"
-        }
-      }
-    ]
-  }
+          labelString: 'Site Progress',
+        },
+      },
+    ],
+  },
 };
 
 class ProgressChart extends Component {
@@ -44,25 +45,25 @@ class ProgressChart extends Component {
     const { progressData } = this.props;
     const chartData = {
       labels: [],
-      datasets: []
+      datasets: [],
     };
 
-    if (progressData.hasOwnProperty("labels")) {
+    if (progressData.hasOwnProperty('labels')) {
       chartData.labels = progressData.labels;
     }
 
-    if (progressData.hasOwnProperty("data")) {
+    if (progressData.hasOwnProperty('data')) {
       chartData.datasets = [
         {
-          label: "Site Progress",
+          label: 'Site Progress',
           data: progressData.data,
 
-          backgroundColor: "",
-          borderColor: "#00628E",
+          backgroundColor: '',
+          borderColor: '#00628E',
           fill: true,
 
-          borderWidth: 1
-        }
+          borderWidth: 1,
+        },
       ];
     }
     return (

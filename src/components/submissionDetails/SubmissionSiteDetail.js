@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const SubmissionSiteDetail = ({
-  site: { id, name, region, identifier, logo }
+  site: { id, name, region, identifier, logo },
 }) => {
   return (
     <div className="col-lg-6">

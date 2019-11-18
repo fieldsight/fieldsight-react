@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
-import ResponseTable from '../../responded/ResponseTable';
-import axios from 'axios';
-import DeleteTable from '../deleteTable';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import ResponseTable from '../../responded/ResponseTable';
+import DeleteTable from '../deleteTable';
 import { getsiteViewData } from '../../../../actions/siteViewDataAction';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
 class ManageScheduledForm extends Component {
-  state = {
-    hide: true,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hide: true,
+    };
+  }
+
   componentDidMount() {
     if (this.props.id != '') {
       this.props.getsiteViewData(this.props.id, 'scheduled');
     }
   }
+
   toggleHide = () => {
     this.setState({
       hide: !this.state.hide,
@@ -31,14 +36,15 @@ class ManageScheduledForm extends Component {
         scheduled_forms,
         deleted_forms,
         scheduled_loading,
+        id,
       },
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>{!data ? 'Schedule Forms' : 'Rejected Submission'}</h5>
-          <Link to={`/site-responses/${this.props.id}/rejected`}>
+          <Link to={`/site-responses/${id}/rejected`}>
             <button onClick={showViewData} className="fieldsight-btn">
               {data ? 'View By Form' : 'View by Status'}
             </button>
@@ -50,7 +56,7 @@ class ManageScheduledForm extends Component {
               <ResponseTable
                 generals_forms={scheduled_forms}
                 table="site"
-                id={this.props.id}
+                id={id}
                 survey="true"
               />
             ) : (
@@ -96,7 +102,7 @@ class ManageScheduledForm extends Component {
                   {!this.state.hide && (
                     <DeleteTable
                       deleted_forms={deleted_forms}
-                      id={this.props.id}
+                      id={id}
                       loader={scheduled_loading}
                     />
                   )}
@@ -104,7 +110,7 @@ class ManageScheduledForm extends Component {
               </div>
             )
           : ''}
-      </React.Fragment>
+      </>
     );
   }
 }

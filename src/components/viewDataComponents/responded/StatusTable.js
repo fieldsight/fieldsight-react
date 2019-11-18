@@ -1,21 +1,29 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
 
 class StatusTable extends Component {
-  state = {
-    submission: []
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      submission: [],
+    };
+  }
 
   static getDerivedStateFromProps(props, state) {
     return {
-      submission: props.submission
+      submission: props.submission,
     };
   }
 
   render() {
+    const { submission } = this.state;
     return (
-      <React.Fragment>
-        <Table responsive="xl" className="table  table-bordered  dataTable ">
+      <>
+        <Table
+          responsive="xl"
+          className="table  table-bordered  dataTable "
+        >
           <thead>
             <tr>
               <th>Name</th>
@@ -24,12 +32,12 @@ class StatusTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {!!this.state.submission &&
-              this.state.submission.length > 0 &&
-              this.state.submission.map((sub, key) => {
+            {!!submission &&
+              submission.length > 0 &&
+              submission.map((sub, key) => {
                 return (
                   <tr key={key}>
-                    <td style={{ width: "380px" }}>
+                    <td style={{ width: '380px' }}>
                       <a href={sub.submission_url}>{sub.name}</a>
                     </td>
                     <td>
@@ -41,7 +49,7 @@ class StatusTable extends Component {
               })}
           </tbody>
         </Table>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class InviteTab extends Component {
   render() {
@@ -6,7 +6,7 @@ class InviteTab extends Component {
       <>
         <span
           className="popup-close"
-          onClick={e => this.props.invitationOpen(e, "role")}
+          onClick={e => this.props.invitationOpen(e, 'role')}
         >
           <i className="la la-close" />
         </span>
@@ -26,9 +26,9 @@ class InviteTab extends Component {
           <div className="card-body">
             <div className="invitation-title">
               <span>
-                You have been invited to join FieldSight. You may Accept or
-                Decline each invitations or Accept all the invitations as per
-                required.
+                You have been invited to join FieldSight. You may
+                Accept or Decline each invitations or Accept all the
+                invitations as per required.
               </span>
             </div>
             <div className="normal-list">
@@ -36,8 +36,8 @@ class InviteTab extends Component {
                 {this.props.invitation.map((item, i) => (
                   <li key={item.id}>
                     <p>
-                      <a href="javascript:void(0);">{item.by_user}</a> has
-                      invited you to join FieldSight as{" "}
+                      <a href="javascript:void(0);">{item.by_user}</a>{' '}
+                      has invited you to join FieldSight as{' '}
                       <span>{item.group}</span> .
                     </p>
                     <div className="invite-btn">
@@ -45,7 +45,10 @@ class InviteTab extends Component {
                         href="javascript:void(0);"
                         className="accept-btn"
                         onClick={e =>
-                          this.props.acceptHandler(item.id, item.current_user)
+                          this.props.acceptHandler(
+                            item.id,
+                            item.current_user,
+                          )
                         }
                       >
                         <i className="la la-check" />
@@ -54,7 +57,9 @@ class InviteTab extends Component {
                       <a
                         href="javascript:void(0);"
                         className="reject-btn"
-                        onClick={e => this.props.rejectHandler(item.id)}
+                        onClick={e =>
+                          this.props.rejectHandler(item.id)
+                        }
                       >
                         <i className="la la-close" />
                         Reject

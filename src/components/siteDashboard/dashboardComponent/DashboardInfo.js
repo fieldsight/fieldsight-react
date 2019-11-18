@@ -1,7 +1,7 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import uuid from "uuid/v4";
-import { BlockContentLoader } from "../../common/Loader";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import uuid from 'uuid/v4';
+import { BlockContentLoader } from '../../common/Loader';
 
 const DashboardInfoItem = ({ meta, siteKey }) => (
   <li>
@@ -10,6 +10,7 @@ const DashboardInfoItem = ({ meta, siteKey }) => (
     </p>
   </li>
 );
+
 const Array = ({ siteMetas, showContentLoader }) => {
   return (
     <>
@@ -22,7 +23,8 @@ const Array = ({ siteMetas, showContentLoader }) => {
               {Object.entries(siteMetas).map(meta => {
                 if (meta[1].children) {
                   const data =
-                    meta[1].children && Object.entries(meta[1].children);
+                    meta[1].children &&
+                    Object.entries(meta[1].children);
 
                   return (
                     data &&
@@ -56,7 +58,10 @@ const Array = ({ siteMetas, showContentLoader }) => {
 
 const DashboardInfo = ({ siteMetas, showContentLoader }) => (
   <>
-    <Array siteMetas={siteMetas} showContentLoader={showContentLoader} />
+    <Array
+      siteMetas={siteMetas}
+      showContentLoader={showContentLoader}
+    />
     {/*showContentLoader ? (
       <BlockContentLoader number={16} height="15px" />
     ) : (

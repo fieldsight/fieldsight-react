@@ -1,26 +1,27 @@
-import React, { Component } from "react";
-import { OverlayTrigger, Tooltip, Dropdown } from "react-bootstrap";
-import Cropper from "react-cropper";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import Table from "react-bootstrap/Table";
-import CountCard from "../../common/CountCard";
-import { AvatarContentLoader } from "../../common/Loader";
-import SubmissionModal from "./SubmissionModal";
-import Modal from "../../common/Modal";
-import Td from "../../common/TableData";
-import { DotLoader } from "../../common/Loader";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
+import Cropper from 'react-cropper';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import Table from 'react-bootstrap/Table';
+import CountCard from '../../common/CountCard';
+import { AvatarContentLoader } from '../../common/Loader';
+import SubmissionModal from './SubmissionModal';
+import Modal from '../../common/Modal';
+import Td from '../../common/TableData';
+import { DotLoader } from '../../common/Loader';
+import { Link } from 'react-router-dom';
 
 // const projectId = window.project_id ? window.project_id : 137;
 
 class DashboardHeader extends Component {
   saveImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    const { siteId, closeModal, putCropImage } = this.props;
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     const croppedImage = this.cropper.getCroppedCanvas().toDataURL();
-    this.props.putCropImage(this.props.siteId, croppedImage);
-    this.props.closeModal("Cropper");
+    putCropImage(siteId, croppedImage);
+    closeModal('Cropper');
   };
 
   rotate = () => {
@@ -61,37 +62,40 @@ class DashboardHeader extends Component {
         hasWritePermission,
         projectId,
         currentProgress,
-        type
+        type,
       },
       rotate,
-      rotateLeft
+      rotateLeft,
     } = this;
 
     const ManageDropdown = [
       {
-        title: "Generate Report",
-        link: `/fieldsight/site-dashboard/${siteId}/`
+        title: 'Generate Report',
+        link: `/fieldsight/site-dashboard/${siteId}/`,
       },
       {
-        title: "View Data",
-        link: `/fieldsight/application/#/site-responses/${siteId}/general/`
-      }
+        title: 'View Data',
+        link: `/fieldsight/application/#/site-responses/${siteId}/general/`,
+      },
     ];
 
     const HeaderDropdown = [
       {
         title: `Edit ${termsAndLabels && termsAndLabels.site}`,
-        link: `/fieldsight/application/#/site-edit/${siteId}/`
+        link: `/fieldsight/application/#/site-edit/${siteId}/`,
       },
       {
         title: `${termsAndLabels && termsAndLabels.site} documents`,
-        link: `/fieldsight/application/#/site-documents/${siteId}/`
+        link: `/fieldsight/application/#/site-documents/${siteId}/`,
       },
-      { title: "users", link: `/fieldsight/manage/people/site/${siteId}/` },
       {
-        title: "forms",
-        link: `/fieldsight/application/#/site/manage-forms/0/${siteId}/generalform`
-      }
+        title: 'users',
+        link: `/fieldsight/manage/people/site/${siteId}/`,
+      },
+      {
+        title: 'forms',
+        link: `/fieldsight/application/#/site/manage-forms/0/${siteId}/generalform`,
+      },
     ];
 
     return (
@@ -105,7 +109,7 @@ class DashboardHeader extends Component {
                 style={{
                   backgroundImage: `url(${logo})`,
                   // height: "80px",
-                  width: "80px"
+                  width: '80px',
                   // borderRadius: "100%",
                   // backgroundRepeat: "no-repeat",
                   // backgroundSize: "cover"
@@ -116,14 +120,14 @@ class DashboardHeader extends Component {
                 <figcaption>
                   <a
                     className="photo-preview"
-                    onClick={() => openModal("Gallery")}
+                    onClick={() => openModal('Gallery')}
                   >
                     <i className="la la-eye" />
                   </a>
                   {hasWritePermission && (
                     <a
                       className="photo-edit"
-                      onClick={() => openModal("Cropper")}
+                      onClick={() => openModal('Cropper')}
                     >
                       <i className="la la-camera" />
                     </a>
@@ -191,7 +195,11 @@ class DashboardHeader extends Component {
 
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                  <Dropdown.Item
+                    href={item.link}
+                    key={i}
+                    target="_blank"
+                  >
                     {item.title}
                   </Dropdown.Item>
                 ))}
@@ -210,7 +218,11 @@ class DashboardHeader extends Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
                   {HeaderDropdown.map((item, i) => (
-                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                    <Dropdown.Item
+                      href={item.link}
+                      key={i}
+                      target="_blank"
+                    >
                       {item.title}
                     </Dropdown.Item>
                   ))}
@@ -221,7 +233,10 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <Link to={`/site-responses/${siteId}/general`} target="_blank">
+            <Link
+              to={`/site-responses/${siteId}/general`}
+              target="_blank"
+            >
               <CountCard
                 countName=""
                 countNumber={totalSubmission}
@@ -240,7 +255,7 @@ class DashboardHeader extends Component {
               />
             </a>
             {enableSubsites && (
-              <a onClick={() => openModal("Subsites")}>
+              <a onClick={() => openModal('Subsites')}>
                 <CountCard
                   countName="Subsite"
                   countNumber={totalSubsites}
@@ -252,8 +267,8 @@ class DashboardHeader extends Component {
 
             {hasWritePermission && (
               <div className="add-data">
-                <a onClick={() => openModal("Header")}>
-                  {" "}
+                <a onClick={() => openModal('Header')}>
+                  {' '}
                   add data <i className="la la-plus" />
                 </a>
               </div>
@@ -271,14 +286,17 @@ class DashboardHeader extends Component {
               showDotLoader={showDotLoader}
               siteForms={siteForms}
               activeTab={activeTab}
-              closeModal={() => closeModal("Header")}
+              closeModal={() => closeModal('Header')}
               toggleTab={toggleTab}
               enableSubsites={enableSubsites}
             />
           )}
 
           {showCropper && (
-            <Modal title="Preview" toggleModal={() => closeModal("Cropper")}>
+            <Modal
+              title="Preview"
+              toggleModal={() => closeModal('Cropper')}
+            >
               <div className="cropper-btn">
                 <button onClick={rotate} className="fieldsight-btn">
                   <OverlayTrigger
@@ -288,7 +306,10 @@ class DashboardHeader extends Component {
                     <i className="la la-rotate-left" />
                   </OverlayTrigger>
                 </button>
-                <button onClick={rotateLeft} className="fieldsight-btn">
+                <button
+                  onClick={rotateLeft}
+                  className="fieldsight-btn"
+                >
                   <OverlayTrigger
                     placement="top"
                     overlay={<Tooltip>Rotate Right</Tooltip>}
@@ -320,9 +341,9 @@ class DashboardHeader extends Component {
                       <div
                         className="img-preview"
                         style={{
-                          width: "100%",
+                          width: '100%',
                           height: 400,
-                          overflow: "hidden"
+                          overflow: 'hidden',
                         }}
                       />
                     </figure>
@@ -331,7 +352,7 @@ class DashboardHeader extends Component {
                 <div className="col-md-12 text-right">
                   <button
                     className="fieldsight-btn"
-                    style={{ marginTop: "15px" }}
+                    style={{ marginTop: '15px' }}
                     onClick={this.saveImage}
                   >
                     Save Image
@@ -343,7 +364,7 @@ class DashboardHeader extends Component {
           {showSubsites && (
             <Modal
               title="Subsites"
-              toggleModal={() => closeModal("Subsites")}
+              toggleModal={() => closeModal('Subsites')}
               showButton={enableSubsites && hasWritePermission}
               url={`/fieldsight/application/#/sub-site-add/${projectId}/${siteId}`}
             >
@@ -383,10 +404,12 @@ class DashboardHeader extends Component {
                                 aria-valuenow="40"
                                 aria-valuemin="0"
                                 aria-valuemax="200"
-                                style={{ width: subSite.progress + "%" }}
+                                style={{
+                                  width: subSite.progress + '%',
+                                }}
                               >
                                 <span className="progress-count">
-                                  {subSite.progress + "%"}
+                                  {subSite.progress + '%'}
                                 </span>
                               </div>
                             </div>
@@ -409,18 +432,18 @@ class DashboardHeader extends Component {
             <div
               className="gallery-zoom fieldsight-popup open"
               style={{ zIndex: 99999 }}
-              onClick={() => closeModal("Gallery")}
+              onClick={() => closeModal('Gallery')}
             >
               <div className="gallery-body">
                 <img
                   src={logo}
                   alt="logo"
-                  style={{ minHeight: "400px", maxHeight: "400px" }}
+                  style={{ minHeight: '400px', maxHeight: '400px' }}
                 />
               </div>
               <span
                 className="popup-close"
-                onClick={() => closeModal("Gallery")}
+                onClick={() => closeModal('Gallery')}
               >
                 <i className="la la-close" />
               </span>

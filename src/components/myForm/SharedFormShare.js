@@ -1,24 +1,24 @@
-import React, { Component } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import PreviewModal from "./PreviewModal";
-import ReplaceModal from "./ReplaceModal";
-import ShareModal from "./ShareModal";
-import GlobalModel from "./GlobalModal";
+import React, { Component } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PreviewModal from './PreviewModal';
 
 class SharedFormShare extends Component {
-  state = {
-    shareOption: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      shareOption: false,
+    };
+  }
 
   shareToggle = e => {
     this.setState({
-      shareOption: !this.state.shareOption
+      shareOption: !this.state.shareOption,
     });
   };
 
   render() {
-    const item = this.props.item;
+    const { item, commonPopupHandler, OpenTabHandler } = this.props;
     return (
       <tr key={item.id_string}>
         <td>{item.title}</td>
@@ -37,30 +37,30 @@ class SharedFormShare extends Component {
           >
             <a
               onClick={e =>
-                this.props.commonPopupHandler(
+                commonPopupHandler(
                   e,
                   PreviewModal,
                   item.preview_url,
-                  "Preview Form",
-                  "preview",
-                  null
+                  'Preview Form',
+                  'preview',
+                  null,
                 )
               }
               className="td-view-btn td-btn"
             >
-              {" "}
-              <i className="la la-eye"> </i>{" "}
+              {' '}
+              <i className="la la-eye"> </i>{' '}
             </a>
           </OverlayTrigger>
           <OverlayTrigger
             overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
           >
             <a
-              onClick={e => this.props.OpenTabHandler(e, item.edit_url)}
+              onClick={e => OpenTabHandler(e, item.edit_url)}
               className="td-edit-btn td-btn"
             >
-              {" "}
-              <i className="la la-edit" />{" "}
+              {' '}
+              <i className="la la-edit" />{' '}
             </a>
           </OverlayTrigger>
 
@@ -87,17 +87,19 @@ class SharedFormShare extends Component {
           </a>
           </OverlayTrigger> */}
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Download</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">Download</Tooltip>
+            }
           >
             <a
-              onClick={e => this.props.OpenTabHandler(e, item.download_url)}
+              onClick={e => OpenTabHandler(e, item.download_url)}
               className="td-edit-btn td-btn"
               data-toggle="tooltip"
               data-placement="top"
               title="Edit"
             >
-              {" "}
-              <i className="la la-download" />{" "}
+              {' '}
+              <i className="la la-download" />{' '}
             </a>
           </OverlayTrigger>
 

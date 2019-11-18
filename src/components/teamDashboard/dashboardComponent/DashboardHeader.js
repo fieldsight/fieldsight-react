@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Button, Dropdown } from "react-bootstrap";
+import React, { Component } from 'react';
+import { Dropdown } from 'react-bootstrap';
 
-import { AvatarContentLoader } from "../../common/Loader";
-import CountCard from "../../common/CountCard";
+import { AvatarContentLoader } from '../../common/Loader';
+import CountCard from '../../common/CountCard';
 
 class DashboardHeader extends Component {
   render() {
@@ -19,19 +19,22 @@ class DashboardHeader extends Component {
       showContentLoader,
       activeTab,
       closeModal,
-      openModal
+      openModal,
     } = this.props;
 
     const ManageDropdown = [
-      { title: "users", link: `/fieldsight/manage/people/organization/${id}/` },
       {
-        title: "projects",
-        link: `/fieldsight/application/#/team-projects/${id}`
+        title: 'users',
+        link: `/fieldsight/manage/people/organization/${id}/`,
+      },
+      {
+        title: 'projects',
+        link: `/fieldsight/application/#/team-projects/${id}`,
       },
       {
         title: `settings`,
-        link: `/fieldsight/application/#/team-settings/${id}`
-      }
+        link: `/fieldsight/application/#/team-settings/${id}`,
+      },
     ];
 
     return (
@@ -44,14 +47,14 @@ class DashboardHeader extends Component {
               <figure
                 style={{
                   backgroundImage: `url(${logo})`,
-                  width: "80px"
+                  width: '80px',
                 }}
               >
                 <span />
                 <figcaption>
                   <a
                     className="photo-preview"
-                    onClick={() => openModal("Gallery")}
+                    onClick={() => openModal('Gallery')}
                   >
                     <i className="la la-eye" />
                   </a>
@@ -77,7 +80,11 @@ class DashboardHeader extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                  <Dropdown.Item
+                    href={item.link}
+                    key={i}
+                    target="_blank"
+                  >
                     {item.title}
                   </Dropdown.Item>
                 ))}

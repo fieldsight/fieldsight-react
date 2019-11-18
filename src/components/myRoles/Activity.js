@@ -1,52 +1,47 @@
-import React , {Component} from 'react';
+import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import CustomMap from './CustomMap';
-import axios from "axios";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import axios from 'axios';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 let baseURL = window.base_url
   ? window.base_url
-  : "https://fieldsight.naxa.com.np/fieldsight/application";
+  : 'https://fieldsight.naxa.com.np/fieldsight/application';
 
-const selectPeriod = [
-    "Last 7 days","Last month", "Last Year"
-]
+const selectPeriod = ['Last 7 days', 'Last month', 'Last Year'];
 
-const url ="fv3/api/latestsubmissions/"
-
+const url = 'fv3/api/latestsubmissions/';
 
 class Activity extends Component {
-    _isMounted = false;
+  _isMounted = false;
+  constructor(props) {
+    super(props);
+    this.state = {
+      activity: [],
+      map: [],
+    };
+  }
 
-    state={
-        activity:[],
-        map:[]
-    }
-    
+  componentDidMount() {
+    this._isMounted = true;
+    axios
+      .get(`${url}`)
 
-    componentDidMount() {
-        this._isMounted = true;
-        axios
-          .get(`${url}`)
-    
-          .then(res => {
-              
-            if (this._isMounted) {
-              if (res.status === 200) {
-                
-                this.setState({
-                    activity:res.data
-                });
-              }
-            }
-          })
-          .catch(err => {
-            // this.setState({
-            //   dLoader: false
-            // });
-          });
-      }
-
+      .then(res => {
+        if (this._isMounted) {
+          if (res.status === 200) {
+            this.setState({
+              activity: res.data,
+            });
+          }
+        }
+      })
+      .catch(err => {
+        // this.setState({
+        //   dLoader: false
+        // });
+      });
+  }
 
   render() {
     return (
@@ -64,7 +59,9 @@ class Activity extends Component {
 
             <Dropdown.Menu className="dropdown-menu-right">
               {selectPeriod.map((item, i) => (
-                <Dropdown.Item href={`#/action-${i}`} key={i}>{item}</Dropdown.Item>
+                <Dropdown.Item href={`#/action-${i}`} key={i}>
+                  {item}
+                </Dropdown.Item>
               ))}
             </Dropdown.Menu>
           </Dropdown>
@@ -76,27 +73,30 @@ class Activity extends Component {
                 <h5>Latest Submission</h5>
               </div>
               <div className="card-body">
-                <div className="thumb-list mr-0"  style={{ position: "relative", height: "655px" }}>
-                <PerfectScrollbar>
-                  <ul>
-                 
-                      {this.state.activity.map((item,i)=>(
-                     <a href={baseURL+item.properties.detail_url} target="_blank" key={i}>  
-                    <li >
-                     
-                      <div className="content">
-                        <h6>{item.properties.form }</h6>
-                        <time>
-                          <i className="la la-clock" /> 
-                        </time>
-                      </div>
-                    </li>
-                    </a>
-                       ))}
-              
-                  </ul>
+                <div
+                  className="thumb-list mr-0"
+                  style={{ position: 'relative', height: '655px' }}
+                >
+                  <PerfectScrollbar>
+                    <ul>
+                      {this.state.activity.map((item, i) => (
+                        <a
+                          href={baseURL + item.properties.detail_url}
+                          target="_blank"
+                          key={i}
+                        >
+                          <li>
+                            <div className="content">
+                              <h6>{item.properties.form}</h6>
+                              <time>
+                                <i className="la la-clock" />
+                              </time>
+                            </div>
+                          </li>
+                        </a>
+                      ))}
+                    </ul>
                   </PerfectScrollbar>
-              
                 </div>
               </div>
             </div>
@@ -107,23 +107,19 @@ class Activity extends Component {
                 <h5>Map</h5>
               </div>
               <div className="card-body">
-                <div id="map" style={{ height: "415px" }}>
-                  <CustomMap 
-                  
-                  activity={this.state.activity}
-
-                  />
+                <div id="map" style={{ height: '415px' }}>
+                  <CustomMap activity={this.state.activity} />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
   componentWillUnmount() {
     this._isMounted = false;
   }
 }
 
-export default Activity
+export default Activity;

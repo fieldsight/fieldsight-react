@@ -1,5 +1,5 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 class About extends React.Component {
   render() {
@@ -12,7 +12,7 @@ class About extends React.Component {
         </div>
         <div
           className="thumb-list mr-0 "
-          style={{ position: "relative", height: "357px" }}
+          style={{ position: 'relative', height: '357px' }}
         >
           <PerfectScrollbar>
             <div className="card-body about-body">
@@ -32,12 +32,14 @@ class About extends React.Component {
                     )}
                     {contacts.email && (
                       <li>
-                        <i className="la la-envelope" /> {contacts.email}
+                        <i className="la la-envelope" />{' '}
+                        {contacts.email}
                       </li>
                     )}
                     {contacts.website && (
                       <li>
-                        <i className="la la-external-link" /> {contacts.website}
+                        <i className="la la-external-link" />{' '}
+                        {contacts.website}
                       </li>
                     )}
                   </ul>

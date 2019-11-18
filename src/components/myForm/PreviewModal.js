@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import Iframe from "react-iframe";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import React, { Component } from 'react';
+import Iframe from 'react-iframe';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 class PreviewModal extends Component {
   state = {};

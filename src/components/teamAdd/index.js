@@ -1,60 +1,61 @@
-import React, { Component } from "react";
-import L from "leaflet";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import Cropper from "react-cropper";
-import Modal from "../common/Modal";
-import InputElement from "../common/InputElement";
-import SelectElement from "../common/SelectElement";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import { RegionContext } from "../../context";
-import "leaflet/dist/leaflet.css";
+import React, { Component } from 'react';
+import L from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import Cropper from 'react-cropper';
+import Modal from '../common/Modal';
+import InputElement from '../common/InputElement';
+import SelectElement from '../common/SelectElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import 'leaflet/dist/leaflet.css';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-  iconUrl: require("leaflet/dist/images/marker-icon.png"),
-  shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
 class index extends Component {
   _isMounted = false;
+  constructor(props) {
+    super(props);
 
-  state = {
-    project: {
-      teamName: "",
-      contactnumber: "",
-      email: "",
-      address: "",
-      website: "",
-      publicDescription: "",
-      logo: ""
-    },
-    loaded: 0,
-    teamTypes: [],
-    country: [],
+    this.state = {
+      project: {
+        teamName: '',
+        contactnumber: '',
+        email: '',
+        address: '',
+        website: '',
+        publicDescription: '',
+        logo: '',
+      },
+      loaded: 0,
+      teamTypes: [],
+      country: [],
 
-    position: {
-      latitude: "51.505",
-      longitude: "-0.09"
-    },
-    zoom: 13,
-    src: "",
-    showCropper: false,
-    cropResult: "",
-    isLoading: false,
-    selectedCountry: "",
-    selectedteam: ""
-  };
+      position: {
+        latitude: '51.505',
+        longitude: '-0.09',
+      },
+      zoom: 13,
+      src: '',
+      showCropper: false,
+      cropResult: '',
+      isLoading: false,
+      selectedCountry: '',
+      selectedteam: '',
+    };
+  }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
     axios
       .get(`/fv3/api/team-types-countries`)
@@ -62,11 +63,11 @@ class index extends Component {
         this.setState({
           teamTypes: res.data.team_types,
           country: res.data.countries,
-          id
+          id,
         });
       })
       .catch(err => {
-        console.log(err, "err");
+        console.log(err, 'err');
       });
     if (this._isMounted) {
       if (sector) {
@@ -80,17 +81,18 @@ class index extends Component {
       return this.setState({
         position: {
           ...this.state.position,
-          [name]: value
-        }
+          [name]: value,
+        },
       });
     }
     this.setState({
       project: {
         ...this.state.project,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   };
+
   onSubmitHandler = e => {
     e.preventDefault();
 
@@ -105,7 +107,7 @@ class index extends Component {
       selectedteam: this.state.selectedCountry,
       cropResult: this.state.cropResult,
       latitude: this.state.position.latitude,
-      longitude: this.state.position.longitude
+      longitude: this.state.position.longitude,
     };
 
     axios
@@ -114,25 +116,25 @@ class index extends Component {
         if (res.status === 201) {
           this.setState({
             project: {
-              teamName: "",
-              contactnumber: "",
-              email: "",
-              address: "",
-              website: "",
-              publicDescription: "",
-              logo: ""
+              teamName: '',
+              contactnumber: '',
+              email: '',
+              address: '',
+              website: '',
+              publicDescription: '',
+              logo: '',
             },
             position: {
-              latitude: "51.505",
-              longitude: "-0.09"
+              latitude: '51.505',
+              longitude: '-0.09',
             },
             zoom: 13,
-            src: "",
+            src: '',
             showCropper: false,
-            cropResult: "",
+            cropResult: '',
             isLoading: false,
-            selectedCountry: "",
-            selectedteam: ""
+            selectedCountry: '',
+            selectedteam: '',
           });
           this.props.history.push(`/team-dashboard/${res.data.id}`);
         }
@@ -141,52 +143,58 @@ class index extends Component {
         console.log(err);
       });
   };
+
   mapClickHandler = e => {
     this.setState({
       position: {
         ...this.state.position,
         latitude: e.latlng.lat,
-        longitude: e.latlng.lng
-      }
+        longitude: e.latlng.lng,
+      },
     });
   };
+
   onSelectChangeHandler = (e, data) => {
     const { value } = e.target;
-    if (data === "teamTypes") {
+    if (data === 'teamTypes') {
       this.setState({
-        selectedCountry: value
+        selectedCountry: value,
       });
-    } else if (data === "country") {
+    } else if (data === 'country') {
       this.setState({
-        selectedCountry: value
+        selectedCountry: value,
       });
     }
   };
+
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
+
   readFile = file => {
     const reader = new FileReader();
     reader.onload = () => {
       this.setState({
         src: reader.result,
-        showCropper: true
+        showCropper: true,
       });
     };
     reader.readAsDataURL(file[0]);
   };
+
   cropImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
+
   render() {
     const {
       onChangeHandler,
@@ -203,7 +211,7 @@ class index extends Component {
           address,
           website,
           publicDescription,
-          logo
+          logo,
         },
         position: { latitude, longitude },
         cropResult,
@@ -214,14 +222,17 @@ class index extends Component {
         teamTypes,
         country,
         selectedteam,
-        selectedCountry
-      }
+        selectedCountry,
+      },
     } = this;
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item active" aria-current="page">
+            <li
+              className="breadcrumb-item active"
+              aria-current="page"
+            >
               Create Team
             </li>
           </ol>
@@ -250,7 +261,9 @@ class index extends Component {
                       ? teamTypes.map(teamTypes => teamTypes)
                       : teamTypes
                   }
-                  changeHandler={e => onSelectChangeHandler(e, "teamTypes")}
+                  changeHandler={e =>
+                    onSelectChangeHandler(e, 'teamTypes')
+                  }
                   value={selectedteam}
                 />
               </div>
@@ -312,7 +325,9 @@ class index extends Component {
                       ? country.map(country => country)
                       : country
                   }
-                  changeHandler={e => onSelectChangeHandler(e, "country")}
+                  changeHandler={e =>
+                    onSelectChangeHandler(e, 'country')
+                  }
                   value={selectedCountry}
                 />
               </div>
@@ -340,7 +355,7 @@ class index extends Component {
 
                   <div className="map-form">
                     <Map
-                      style={{ height: "205px", marginTop: "1rem" }}
+                      style={{ height: '205px', marginTop: '1rem' }}
                       center={[latitude, longitude]}
                       zoom={this.state.zoom}
                       onClick={mapClickHandler}
@@ -366,7 +381,9 @@ class index extends Component {
                           label="Latitude"
                           name="latitude"
                           value={latitude}
-                          changeHandler={e => onChangeHandler(e, "latitude")}
+                          changeHandler={e =>
+                            onChangeHandler(e, 'latitude')
+                          }
                         />
                       </div>
 
@@ -379,7 +396,9 @@ class index extends Component {
                           label="Longitude"
                           name="longitude"
                           value={longitude}
-                          changeHandler={e => onChangeHandler(e, "longitude")}
+                          changeHandler={e =>
+                            onChangeHandler(e, 'longitude')
+                          }
                         />
                       </div>
                     </div>
@@ -389,10 +408,15 @@ class index extends Component {
 
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
-                  <label> {cropResult ? "Preview" : "Attach File"}</label>
+                  <label>
+                    {' '}
+                    {cropResult ? 'Preview' : 'Attach File'}
+                  </label>
 
                   {cropResult ? (
-                    <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                    <Dropzone
+                      onDrop={acceptedFile => readFile(acceptedFile)}
+                    >
                       {({ getRootProps, getInputProps }) => {
                         return (
                           <section>
@@ -404,7 +428,10 @@ class index extends Component {
                             </div>
 
                             <div {...getRootProps()}>
-                              <input {...getInputProps()} multiple={false} />
+                              <input
+                                {...getInputProps()}
+                                multiple={false}
+                              />
                               <div className="upload-icon" />
 
                               <button className="fieldsight-btn">
@@ -417,7 +444,9 @@ class index extends Component {
                       }}
                     </Dropzone>
                   ) : (
-                    <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                    <Dropzone
+                      onDrop={acceptedFile => readFile(acceptedFile)}
+                    >
                       {({ getRootProps, getInputProps }) => {
                         return (
                           <section>
@@ -448,7 +477,10 @@ class index extends Component {
               </div>
 
               <div className="col-sm-12">
-                <button type="submit" className="fieldsight-btn pull-right">
+                <button
+                  type="submit"
+                  className="fieldsight-btn pull-right"
+                >
                   Save
                 </button>
               </div>
@@ -472,7 +504,7 @@ class index extends Component {
                       />
                       <button
                         className="fieldsight-btn"
-                        style={{ marginTop: "15px" }}
+                        style={{ marginTop: '15px' }}
                         onClick={this.cropImage}
                       >
                         Save Image
@@ -486,9 +518,9 @@ class index extends Component {
                       <div
                         className="img-preview"
                         style={{
-                          width: "100%",
+                          width: '100%',
                           height: 400,
-                          overflow: "hidden"
+                          overflow: 'hidden',
                         }}
                       />
                     </figure>

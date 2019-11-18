@@ -1,14 +1,17 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
-import format from "date-fns/format";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
+import format from 'date-fns/format';
 
 class DeleteTable extends Component {
   render() {
-    const { deleted_forms, table } = this.props;
+    const { deleted_forms, table, id } = this.props;
     return (
       <React.Fragment>
-        <Table responsive="xl" className="table  table-bordered  dataTable ">
+        <Table
+          responsive="xl"
+          className="table  table-bordered  dataTable "
+        >
           <thead>
             <tr>
               <th>Name</th>
@@ -26,27 +29,27 @@ class DeleteTable extends Component {
                   <td>{deleted.name}</td>
                   <td>{deleted.title}</td>
                   <td>
-                    {" "}
+                    {' '}
                     {deleted.last_response.length > 0
                       ? format(deleted.last_response, [
-                          "MMMM Do YYYY, h:mm:ss a"
+                          'MMMM Do YYYY, h:mm:ss a',
                         ])
-                      : ""}
+                      : ''}
                   </td>
                   <td>{deleted.created_date}</td>
                   <td>
-                    {table == "site" ? (
+                    {table == 'site' ? (
                       deleted.fsxf_id ? (
                         <Link
                           className="view-tag tag"
-                          to={`/site-submission-data/${this.props.id}/${deleted.fsxf_id}`}
+                          to={`/site-submission-data/${id}/${deleted.fsxf_id}`}
                         >
                           {deleted.response_count}
                         </Link>
                       ) : (
                         <Link
                           className="view-tag tag"
-                          to={`/site-submission-data/${this.props.id}/${deleted.id}`}
+                          to={`/site-submission-data/${id}/${deleted.id}`}
                         >
                           {deleted.response_count}
                         </Link>
@@ -54,32 +57,32 @@ class DeleteTable extends Component {
                     ) : deleted.fsxf_id ? (
                       <Link
                         className="view-tag tag"
-                        to={`/submission-data/${this.props.id}/${deleted.fsxf_id}`}
+                        to={`/submission-data/${id}/${deleted.fsxf_id}`}
                       >
                         {deleted.response_count}
                       </Link>
                     ) : (
                       <Link
                         className="view-tag tag"
-                        to={`/submission-data/${this.props.id}/${deleted.id}`}
+                        to={`/submission-data/${id}/${deleted.id}`}
                       >
                         {deleted.response_count}
                       </Link>
                     )}
                   </td>
                   <td>
-                    {table == "site" ? (
+                    {table == 'site' ? (
                       deleted.fsxf_id ? (
                         <Link
                           className="view-tag tag"
-                          to={`/site-submission-data/${this.props.id}/${deleted.fsxf_id}`}
+                          to={`/site-submission-data/${id}/${deleted.fsxf_id}`}
                         >
                           <i className="la la-eye view-tag tag"></i>
                         </Link>
                       ) : (
                         <Link
                           className="view-tag tag"
-                          to={`/site-submission-data/${this.props.id}/${deleted.id}`}
+                          to={`/site-submission-data/${id}/${deleted.id}`}
                         >
                           <i className="la la-eye view-tag tag"></i>
                         </Link>
@@ -87,14 +90,14 @@ class DeleteTable extends Component {
                     ) : deleted.fsxf_id ? (
                       <Link
                         className="view-tag tag"
-                        to={`/submission-data/${this.props.id}/${deleted.fsxf_id}`}
+                        to={`/submission-data/${id}/${deleted.fsxf_id}`}
                       >
                         <i className="la la-eye view-tag tag"></i>
                       </Link>
                     ) : (
                       <Link
                         className="view-tag tag"
-                        to={`/submission-data/${this.props.id}/${deleted.id}`}
+                        to={`/submission-data/${id}/${deleted.id}`}
                       >
                         <i className="la la-eye view-tag tag"></i>
                       </Link>
@@ -109,21 +112,21 @@ class DeleteTable extends Component {
                         className="edit-tag tag"
                         target="_blank"
                       >
-                        <i className="la la-download"></i>{" "}
+                        <i className="la la-download"></i>{' '}
                       </a>
                     )}
-                    {table == "site" ? (
+                    {table == 'site' ? (
                       deleted.fsxf_id ? (
                         <Link
                           className="pending-tag tag"
-                          to={`/site-version-submission/${this.props.id}/${deleted.fsxf_id}`}
+                          to={`/site-version-submission/${id}/${deleted.fsxf_id}`}
                         >
                           <i className="la la-clone edit-tag tag"></i>
                         </Link>
                       ) : (
                         <Link
                           className="pending-tag tag"
-                          to={`/site-version-submission/${this.props.id}/${deleted.id}`}
+                          to={`/site-version-submission/${id}/${deleted.id}`}
                         >
                           <i className="la la-clone edit-tag tag"></i>
                         </Link>
@@ -131,14 +134,14 @@ class DeleteTable extends Component {
                     ) : deleted.fsxf_id ? (
                       <Link
                         className="pending-tag tag"
-                        to={`/project-version-submission/${this.props.id}/${deleted.fsxf_id}`}
+                        to={`/project-version-submission/${id}/${deleted.fsxf_id}`}
                       >
                         <i className="la la-clone edit-tag tag"></i>
                       </Link>
                     ) : (
                       <Link
                         className="pending-tag tag"
-                        to={`/project-version-submission/${this.props.id}/${deleted.id}`}
+                        to={`/project-version-submission/${id}/${deleted.id}`}
                       >
                         <i className="la la-clone edit-tag tag"></i>
                       </Link>

@@ -1,14 +1,14 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
-import WithContext from "../../hoc/WithContext";
-import Modal from "../common/Modal";
-import Table from "../common/Table";
-import InputElement from "../common/InputElement";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import isEmpty from "../../utils/isEmpty";
+import React, { Component } from 'react';
+import axios from 'axios';
+import WithContext from '../../hoc/WithContext';
+import Modal from '../common/Modal';
+import Table from '../common/Table';
+import InputElement from '../common/InputElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import isEmpty from '../../utils/isEmpty';
 
-const url = "fv3/api/project-regions/";
+const url = 'fv3/api/project-regions/';
 
 class SubRegion extends Component {
   _isMounted = false;
@@ -17,9 +17,9 @@ class SubRegion extends Component {
     this._isMounted = true;
     const {
       match: {
-        params: { subRegionId }
+        params: { subRegionId },
       },
-      value: { setSubRegion, projectId }
+      value: { setSubRegion, projectId },
     } = this.props;
     if (subRegionId) {
       axios
@@ -27,16 +27,16 @@ class SubRegion extends Component {
         .then(res => {
           this._isMounted && setSubRegion(res.data, subRegionId);
         })
-        .catch(err => console.log("Err", err));
+        .catch(err => console.log('Err', err));
     }
   }
 
   componentDidUpdate(prevProps) {
     const {
       match: {
-        params: { subRegionId }
+        params: { subRegionId },
       },
-      value: { setSubRegion, projectId }
+      value: { setSubRegion, projectId },
     } = this.props;
     if (prevProps.match.params.subRegionId !== subRegionId) {
       axios
@@ -44,7 +44,7 @@ class SubRegion extends Component {
         .then(res => {
           this._isMounted && setSubRegion(res.data, subRegionId);
         })
-        .catch(err => console.log("Err", err));
+        .catch(err => console.log('Err', err));
     }
   }
 
@@ -65,9 +65,9 @@ class SubRegion extends Component {
           removeHandler,
           confirmHandler,
           cancelHandler,
-          onSubmitHandler
-        }
-      }
+          onSubmitHandler,
+        },
+      },
     } = this;
 
     const tableHeader = {
@@ -76,15 +76,15 @@ class SubRegion extends Component {
             `${terms.region} ID`,
             `${terms.region} Name`,
             ,
-            "Created Date",
-            "Action"
+            'Created Date',
+            'Action',
           ]
-        : ["Region ID", "Region Name", "Created Date", "Action"]
+        : ['Region ID', 'Region Name', 'Created Date', 'Action'],
     };
     return (
-      <Fragment>
+      <>
         <RightContentCard
-          title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+          title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
           addButton
           toggleModal={toggleModal}
         >
@@ -99,10 +99,13 @@ class SubRegion extends Component {
 
         {showModal && (
           <Modal
-            title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+            title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
             toggleModal={toggleModal}
           >
-            <form className="floating-form" onSubmit={onSubmitHandler}>
+            <form
+              className="floating-form"
+              onSubmit={onSubmitHandler}
+            >
               <InputElement
                 tag="input"
                 type="text"
@@ -124,7 +127,7 @@ class SubRegion extends Component {
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-              />{" "}
+              />{' '}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
                   Save
@@ -141,8 +144,8 @@ class SubRegion extends Component {
               <i className="la la-exclamation-triangle" />
 
               <p>
-                Are you sure you want to delete{" "}
-                {!isEmpty(terms) ? `${terms.region}` : "Regions"} ?
+                Are you sure you want to delete{' '}
+                {!isEmpty(terms) ? `${terms.region}` : 'Regions'} ?
               </p>
             </div>
             <div className="warning-footer text-center">
@@ -158,13 +161,13 @@ class SubRegion extends Component {
             </div>
           </Modal>
         )}
-      </Fragment>
+      </>
     );
   }
 
   componentWillUnmount() {
     this._isMounted = false;
-    this.props.setSubRegion && this.props.setSubRegion([], "");
+    this.props.setSubRegion && this.props.setSubRegion([], '');
   }
 }
 

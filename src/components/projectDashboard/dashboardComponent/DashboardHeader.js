@@ -1,26 +1,28 @@
-import React from "react";
-import Cropper from "react-cropper";
-import { Link } from "react-router-dom";
-import pf from "../../../static/images/pf.jpg";
-import { Button, Dropdown } from "react-bootstrap";
-import CountCard from "../../common/CountCard";
-import { AvatarContentLoader } from "../../common/Loader";
-import { DotLoader } from "../../common/Loader";
-import Modal from "../../common/Modal";
-import SubmissionModal from "./SubmissionModel";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Dropdown } from 'react-bootstrap';
+import CountCard from '../../common/CountCard';
+import { AvatarContentLoader } from '../../common/Loader';
+import SubmissionModal from './SubmissionModel';
 
 class DashboardHeader extends React.Component {
-  state = {
-    openmodel: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      openmodel: false,
+    };
+  }
+
   saveImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    const { siteId, putCropImage, closeModal } = this.props;
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     const croppedImage = this.cropper.getCroppedCanvas().toDataURL();
-    this.props.putCropImage(this.props.siteId, croppedImage);
-    this.props.closeModal("Cropper");
+    putCropImage(siteId, croppedImage);
+    closeModal('Cropper');
   };
+
   rotate = () => {
     this.cropper.rotate(90);
   };
@@ -28,6 +30,7 @@ class DashboardHeader extends React.Component {
   rotateLeft = () => {
     this.cropper.rotate(-90);
   };
+
   render() {
     const {
       name,
@@ -46,36 +49,39 @@ class DashboardHeader extends React.Component {
       showGallery,
       isProjectManager,
       totalSubmissions,
-      surveyData
+      surveyData,
     } = this.props;
 
     const { openmodel } = this.state;
     const ManageDropdown = [
-      { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
+      {
+        title: 'users',
+        link: `/fieldsight/manage/people/project/${id}/`,
+      },
       // { title: "forms", link: `/forms/setup-forms/1/${id}` },
       {
-        title: "forms",
-        link: `/fieldsight/application/#/project/manage-forms/1/${id}/generalform`
+        title: 'forms',
+        link: `/fieldsight/application/#/project/manage-forms/1/${id}/generalform`,
       },
 
       {
         title: `${termsAndLabels && termsAndLabels.site}`,
-        link: `/fieldsight/application/?project=${id}#/project-sitelist`
+        link: `/fieldsight/application/?project=${id}#/project-sitelist`,
       },
       {
         title: `settings`,
-        link: `/fieldsight/application/?project=${id}#/project-settings`
-      }
+        link: `/fieldsight/application/?project=${id}#/project-settings`,
+      },
     ];
     const DataDropdown = [
       {
-        title: "Generate Report",
-        link: `/fieldsight/project-dashboard/${id}/`
+        title: 'Generate Report',
+        link: `/fieldsight/project-dashboard/${id}/`,
       },
       {
-        title: "View Data",
-        link: `/fieldsight/application/#/project-responses/${id}/general/`
-      }
+        title: 'View Data',
+        link: `/fieldsight/application/#/project-responses/${id}/general/`,
+      },
     ];
 
     return (
@@ -88,14 +94,14 @@ class DashboardHeader extends React.Component {
               <figure
                 style={{
                   backgroundImage: `url(${logo})`,
-                  width: "80px"
+                  width: '80px',
                 }}
               >
                 <span />
                 <figcaption>
                   <a
                     className="photo-preview"
-                    onClick={() => openModal("Gallery")}
+                    onClick={() => openModal('Gallery')}
                   >
                     <i className="la la-eye" />
                   </a>
@@ -121,7 +127,11 @@ class DashboardHeader extends React.Component {
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
                 {DataDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                  <Dropdown.Item
+                    href={item.link}
+                    key={i}
+                    target="_blank"
+                  >
                     {item.title}
                   </Dropdown.Item>
                 ))}
@@ -140,7 +150,11 @@ class DashboardHeader extends React.Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
                   {ManageDropdown.map((item, i) => (
-                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                    <Dropdown.Item
+                      href={item.link}
+                      key={i}
+                      target="_blank"
+                    >
                       {item.title}
                     </Dropdown.Item>
                   ))}
@@ -151,7 +165,10 @@ class DashboardHeader extends React.Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <Link to={`/project-responses/${id}/general`} target="_blank">
+            <Link
+              to={`/project-responses/${id}/general`}
+              target="_blank"
+            >
               <CountCard
                 countName=""
                 countNumber={totalSubmissions}
@@ -184,7 +201,7 @@ class DashboardHeader extends React.Component {
             {isProjectManager && (
               <div className="add-data">
                 <a onClick={() => this.setState({ openmodel: true })}>
-                  {" "}
+                  {' '}
                   add data <i className="la la-plus" />
                 </a>
               </div>
@@ -200,18 +217,18 @@ class DashboardHeader extends React.Component {
             <div
               className="gallery-zoom fieldsight-popup open"
               style={{ zIndex: 99999 }}
-              onClick={() => closeModal("Gallery")}
+              onClick={() => closeModal('Gallery')}
             >
               <div className="gallery-body">
                 <img
                   src={logo}
                   alt="logo"
-                  style={{ minHeight: "400px", maxHeight: "400px" }}
+                  style={{ minHeight: '400px', maxHeight: '400px' }}
                 />
               </div>
               <span
                 className="popup-close"
-                onClick={() => closeModal("Gallery")}
+                onClick={() => closeModal('Gallery')}
               >
                 <i className="la la-close" />
               </span>

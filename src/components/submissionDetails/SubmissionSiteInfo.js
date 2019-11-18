@@ -1,6 +1,5 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { DotLoader } from "../common/Loader";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 const SubmissionSiteInfo = ({ siteInformation }) => (
   <div className="col-lg-6">
@@ -11,14 +10,17 @@ const SubmissionSiteInfo = ({ siteInformation }) => (
 
       <div
         className="card-body site-info submission-site-info"
-        style={{ position: "relative", height: "290px" }}
+        style={{ position: 'relative', height: '290px' }}
       >
-        {siteInformation && Object.keys(siteInformation).length > 0 ? (
+        {siteInformation &&
+        Object.keys(siteInformation).length > 0 ? (
           <PerfectScrollbar>
             <ul>
               {Object.entries(siteInformation).map((info, i) => {
                 if (info[1].children) {
-                  const childEntries = Object.entries(info[1].children);
+                  const childEntries = Object.entries(
+                    info[1].children,
+                  );
                   return childEntries.map((child, i) => {
                     return (
                       <li key={`${child[0]}${i}`}>

@@ -1,27 +1,30 @@
-import React, { Component } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import PreviewModal from "./PreviewModal";
-import ReplaceModal from "./ReplaceModal";
-import ShareModal from "./ShareModal";
-import GlobalModel from "./GlobalModal";
+import React, { Component } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PreviewModal from './PreviewModal';
+import ReplaceModal from './ReplaceModal';
+import ShareModal from './ShareModal';
 
 class FormShare extends Component {
-  state = {
-    shareOption: false
-  };
-
-  // shareToggle = e => {
-  //   this.setState({
-  //     shareOption: !this.state.shareOption
-  //   });
-  // };
+  constructor(props) {
+    super(props);
+    this.state = {
+      shareOption: false,
+    };
+  }
 
   render() {
-    const item = this.props.item;
+    const {
+      item,
+      commonPopupHandler,
+      OpenTabHandler,
+      shareToggle,
+      deleteHandler,
+    } = this.props;
+    // const item = this.props.item;
     return (
       <tr key={item.id_string}>
-        <td style={{ width: "50%" }}>{item.title}</td>
+        <td style={{ width: '50%' }}>{item.title}</td>
         <td>
           <i className="fa fa-clock-o" />
           <span>{item.date_created}</span>
@@ -36,19 +39,19 @@ class FormShare extends Component {
           >
             <a
               onClick={e =>
-                this.props.commonPopupHandler(
+                commonPopupHandler(
                   e,
                   PreviewModal,
                   item.preview_url,
-                  "Preview Form",
-                  "preview",
-                  null
+                  'Preview Form',
+                  'preview',
+                  null,
                 )
               }
               className="td-view-btn td-btn"
             >
-              {" "}
-              <i className="la la-eye"> </i>{" "}
+              {' '}
+              <i className="la la-eye"> </i>{' '}
             </a>
           </OverlayTrigger>
 
@@ -57,19 +60,19 @@ class FormShare extends Component {
           >
             <a
               onClick={e =>
-                this.props.commonPopupHandler(
+                commonPopupHandler(
                   e,
                   PreviewModal,
                   item.media_url,
-                  "Preview Form",
-                  "preview",
-                  null
+                  'Preview Form',
+                  'preview',
+                  null,
                 )
               }
               className="td-view-btn td-btn"
             >
-              {" "}
-              <i className="la la-file-image-o"> </i>{" "}
+              {' '}
+              <i className="la la-file-image-o"> </i>{' '}
             </a>
           </OverlayTrigger>
 
@@ -77,11 +80,11 @@ class FormShare extends Component {
             overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
           >
             <a
-              onClick={e => this.props.OpenTabHandler(e, item.edit_url)}
+              onClick={e => OpenTabHandler(e, item.edit_url)}
               className="td-edit-btn td-btn"
             >
-              {" "}
-              <i className="la la-edit" />{" "}
+              {' '}
+              <i className="la la-edit" />{' '}
             </a>
           </OverlayTrigger>
 
@@ -90,33 +93,35 @@ class FormShare extends Component {
           >
             <a
               onClick={e =>
-                this.props.commonPopupHandler(
+                commonPopupHandler(
                   e,
                   ReplaceModal,
                   item.edit_url,
-                  "Replace Form",
-                  "replace",
-                  item.id_string
+                  'Replace Form',
+                  'replace',
+                  item.id_string,
                 )
               }
               className="td-edit-btn td-btn"
             >
-              {" "}
-              <i className="la la-refresh"> </i>{" "}
+              {' '}
+              <i className="la la-refresh"> </i>{' '}
             </a>
           </OverlayTrigger>
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Download</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">Download</Tooltip>
+            }
           >
             <a
-              onClick={e => this.props.OpenTabHandler(e, item.download_url)}
+              onClick={e => OpenTabHandler(e, item.download_url)}
               className="td-edit-btn td-btn"
               data-toggle="tooltip"
               data-placement="top"
               title="Edit"
             >
-              {" "}
-              <i className="la la-download" />{" "}
+              {' '}
+              <i className="la la-download" />{' '}
             </a>
           </OverlayTrigger>
 
@@ -125,10 +130,10 @@ class FormShare extends Component {
               overlay={<Tooltip id="tooltip-disabled">Share</Tooltip>}
             >
               <a
-                onClick={e => this.props.shareToggle(e,item.id_string)}
+                onClick={e => shareToggle(e, item.id_string)}
                 className="td-share-btn td-btn"
               >
-                {" "}
+                {' '}
                 <i className="la la-share-alt"> </i>
               </a>
             </OverlayTrigger>
@@ -139,13 +144,13 @@ class FormShare extends Component {
                 <li>
                   <a
                     onClick={e =>
-                      this.props.commonPopupHandler(
+                      commonPopupHandler(
                         e,
                         ShareModal,
                         item.id_string,
-                        "Select User",
-                        "users",
-                        item.share_users_url
+                        'Select User',
+                        'users',
+                        item.share_users_url,
                       )
                     }
                     data-tab="user-share"
@@ -156,13 +161,13 @@ class FormShare extends Component {
                 <li>
                   <a
                     onClick={e =>
-                      this.props.commonPopupHandler(
+                      commonPopupHandler(
                         e,
                         ShareModal,
                         item.id_string,
-                        "Select Projects",
-                        "projects",
-                        item.share_project_url
+                        'Select Projects',
+                        'projects',
+                        item.share_project_url,
                       )
                     }
                     data-tab="project-share"
@@ -212,11 +217,11 @@ class FormShare extends Component {
             overlay={<Tooltip id="tooltip-disabled">Delete</Tooltip>}
           >
             <a
-              onClick={e => this.props.deleteHandler(e, item.id_string)}
+              onClick={e => deleteHandler(e, item.id_string)}
               className="td-delete-btn td-btn"
             >
-              {" "}
-              <i className="la la-trash" />{" "}
+              {' '}
+              <i className="la la-trash" />{' '}
             </a>
           </OverlayTrigger>
         </td>

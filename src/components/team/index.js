@@ -1,34 +1,34 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { Table, Button } from "react-bootstrap";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { getTeam, getTranslate } from "../../actions/teamAction";
-import { FormattedMessage } from "react-intl";
-import { useHistory } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { Table, Button } from 'react-bootstrap';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { getTeam, getTranslate } from '../../actions/teamAction';
+import { FormattedMessage } from 'react-intl';
 
 class Teams extends Component {
   state = {
     results: [],
     masterresult: [],
-    count: "",
-    selectedLanguage: "en"
+    count: '',
+    selectedLanguage: 'en',
   };
 
   componentDidMount() {
     this.props.getTeam();
   }
+
   componentWillReceiveProps(nextprops) {
     this.setState({
       results: nextprops.teams.teams,
       masterresult: nextprops.teams.teams,
-      count: nextprops.teams.count
+      count: nextprops.teams.count,
     });
   }
 
   handleChange = async e => {
     const {
-      target: { value }
+      target: { value },
     } = e;
     const { results, masterresult } = this.state;
     if (value) {
@@ -36,43 +36,40 @@ class Teams extends Component {
         return (
           result.name.toLowerCase().includes(value.toLowerCase()) ||
           (result.address !== null
-            ? result.address.toLowerCase().includes(value.toLowerCase())
-            : "")
+            ? result.address
+                .toLowerCase()
+                .includes(value.toLowerCase())
+            : '')
         );
       });
       this.setState({
-        results: search
+        results: search,
       });
     } else {
       this.setState({
-        results: masterresult
+        results: masterresult,
       });
     }
   };
 
   onLanguageChangeHandler = e => {
     const { value } = e.target;
-    console.log("target", e.target.value, e.target.name);
+    console.log('target', e.target.value, e.target.name);
     this.props.getTranslate(value);
-    // this.setState(
-    //   {
-    //     selectedLanguage: value
-    //   },
-    //   ()=>this.props
-    // );
   };
 
   showMap = () => {
-    console.log("clicked");
+    console.log('clicked');
 
-    this.props.history.push("/map");
+    this.props.history.push('/map');
   };
+
   render() {
     const { results } = this.state;
 
     const selectLanguage = [
-      { id: "en", name: "Eng" },
-      { id: "ne", name: "Nep" }
+      { id: 'en', name: 'Eng' },
+      { id: 'ne', name: 'Nep' },
     ];
     const { selected } = this.props;
     return (
@@ -117,14 +114,17 @@ class Teams extends Component {
               >
                 <i className="la la-plus"></i>
               </a>
-              <Button className="fieldsight-btn" onClick={() => this.showMap()}>
+              <Button
+                className="fieldsight-btn"
+                onClick={() => this.showMap()}
+              >
                 <i className="la la-map"></i>&nbsp; Map
               </Button>
             </div>
           </div>
 
           <div className="card-body">
-            <div style={{ position: "relative", height: "800px" }}>
+            <div style={{ position: 'relative', height: '800px' }}>
               <PerfectScrollbar>
                 <Table
                   id="manage_table"
@@ -153,7 +153,10 @@ class Teams extends Component {
                                 className="pending table-profile"
                               >
                                 <figure>
-                                  <img src={project.logo} alt="site-logo" />
+                                  <img
+                                    src={project.logo}
+                                    alt="site-logo"
+                                  />
                                 </figure>
                                 <h5>{project.name}</h5>
                               </a>
@@ -205,15 +208,12 @@ const mapStateToProps = ({ teams }) => {
 
   return {
     teams,
-    selected
+    selected,
   };
 };
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getTeam,
-      getTranslate
-    }
-  )
+  connect(mapStateToProps, {
+    getTeam,
+    getTranslate,
+  }),
 )(Teams);

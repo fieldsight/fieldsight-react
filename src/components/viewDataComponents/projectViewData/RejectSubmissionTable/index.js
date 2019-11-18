@@ -1,20 +1,25 @@
-import React, { Component } from "react";
-import StatusTable from "../../responded/StatusTable";
-import axios from "axios";
-import WithPagination from "../../../../hoc/WithPagination";
-import { Link } from "react-router-dom";
-import { DotLoader } from "../../../myForm/Loader";
+import React, { Component } from 'react';
+import StatusTable from '../../responded/StatusTable';
+import axios from 'axios';
+import WithPagination from '../../../../hoc/WithPagination';
+import { Link } from 'react-router-dom';
+import { DotLoader } from '../../../myForm/Loader';
 
 class RejectedTable extends Component {
-  state = {
-    rejected_submissions: []
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      rejected_submissions: [],
+    };
+  }
+
   componentDidMount() {
     if (!!this.props.id) {
       this.props.paginationHandler(1, null, {
-        type: "viewByStatus",
+        type: 'viewByStatus',
         projectId: this.props.id,
-        status: "rejected"
+        status: 'rejected',
       });
     }
   }
@@ -24,9 +29,22 @@ class RejectedTable extends Component {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
   }
+
   render() {
     const {
-      props: { data, showViewData, dLoader }
+      props: {
+        data,
+        showViewData,
+        dLoader,
+        url,
+        siteList,
+        fromData,
+        toData,
+        totalCount,
+        pageNum,
+        paginationHandler,
+        renderPageNumbers,
+      },
     } = this;
 
     return (
@@ -34,9 +52,12 @@ class RejectedTable extends Component {
         <div className="card-header main-card-header sub-card-header">
           <h5>Rejected Submissions</h5>
           <div className="dash-btn">
-            <Link to={this.props.url}>
-              <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Form" : "View by Status"}
+            <Link to={url}>
+              <button
+                onClick={showViewData}
+                className="fieldsight-btn"
+              >
+                {data ? 'View By Form' : 'View by Status'}
               </button>
             </Link>
           </div>
@@ -44,34 +65,34 @@ class RejectedTable extends Component {
         {dLoader == false ? (
           <>
             <div className="card-body">
-              <StatusTable submission={this.props.siteList} />
+              <StatusTable submission={siteList} />
             </div>
 
-            {this.props.siteList && this.props.siteList.length > 0 ? (
+            {siteList && siteList.length > 0 ? (
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing <span>{this.props.fromData}</span> to{" "}
+                      Showing <span>{fromData}</span> to{' '}
                       <span>
-                        {" "}
-                        {this.props.toData > this.props.totalCount
-                          ? this.props.totalCount
-                          : this.props.toData}{" "}
-                      </span>{" "}
-                      of <span>{this.props.totalCount}</span> entries.
+                        {' '}
+                        {toData > totalCount
+                          ? totalCount
+                          : toData}{' '}
+                      </span>{' '}
+                      of <span>{totalCount}</span> entries.
                     </p>
                   </div>
-                  {this.props.toData < this.props.totalCount ? (
+                  {toData < totalCount ? (
                     <div className="table-pagination">
                       <ul>
                         <li className="page-item">
                           <a
                             onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum - 1,
+                              paginationHandler(
+                                pageNum - 1,
                                 null,
-                                project_id
+                                project_id,
                               )
                             }
                           >
@@ -79,19 +100,19 @@ class RejectedTable extends Component {
                           </a>
                         </li>
 
-                        {this.props.renderPageNumbers({
-                          type: "viewByStatus",
-                          projectId: this.props.id,
-                          status: "flagged"
+                        {renderPageNumbers({
+                          type: 'viewByStatus',
+                          projectId: id,
+                          status: 'flagged',
                         })}
 
                         <li className="page-item ">
                           <a
                             onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum + 1,
+                              paginationHandler(
+                                pageNum + 1,
                                 null,
-                                project_id
+                                project_id,
                               )
                             }
                           >

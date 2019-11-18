@@ -1,20 +1,22 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import SubmissionSiteDetail from "./SubmissionSiteDetail";
-import SubmissionSiteInfo from "./SubmissionSiteInfo";
-import RightSidebar from "./RightSidebar";
-import Submission from "./Submission";
-import SubmissionError from "./SubmissionError";
-import Loader from "../common/Loader";
+import SubmissionSiteDetail from './SubmissionSiteDetail';
+import SubmissionSiteInfo from './SubmissionSiteInfo';
+import RightSidebar from './RightSidebar';
+import Submission from './Submission';
+import SubmissionError from './SubmissionError';
+import Loader from '../common/Loader';
 
 import {
   getSubmissionDetail,
   postSubmissionDetail,
-  toggleSubmission
-} from "../../actions/submissionDetailActions";
+  toggleSubmission,
+} from '../../actions/submissionDetailActions';
 
-const submissionId = window.submission_id ? window.submission_id : 66259;
+const submissionId = window.submission_id
+  ? window.submission_id
+  : 66259;
 
 class SubmissionDetail extends Component {
   componentDidMount() {
@@ -41,12 +43,12 @@ class SubmissionDetail extends Component {
           submission_err,
           hideNullValues,
           breadcrumb,
-          is_survey
+          is_survey,
         },
         postSubmissionDetail,
         getSubmissionDetail,
-        toggleSubmission
-      }
+        toggleSubmission,
+      },
     } = this;
     return (
       <>
@@ -56,9 +58,13 @@ class SubmissionDetail extends Component {
               {Object.keys(breadcrumb).length > 0 && (
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <a href={breadcrumb.name_url}>{breadcrumb.name}</a>
+                    <a href={breadcrumb.name_url}>
+                      {breadcrumb.name}
+                    </a>
                   </li>
-                  <li className="breadcrumb-item">{breadcrumb.current_page}</li>
+                  <li className="breadcrumb-item">
+                    {breadcrumb.current_page}
+                  </li>
                 </ol>
               )}
               {/* <ol className="breadcrumb">
@@ -110,7 +116,9 @@ class SubmissionDetail extends Component {
           </>
         )}
 
-        {submission_err && <SubmissionError submissionErr={submission_err} />}
+        {submission_err && (
+          <SubmissionError submissionErr={submission_err} />
+        )}
         {loading && <Loader />}
       </>
     );
@@ -118,11 +126,11 @@ class SubmissionDetail extends Component {
 }
 
 const mapStateToProps = ({ submissionDetail }) => ({
-  submissionDetail
+  submissionDetail,
 });
 
 export default connect(mapStateToProps, {
   getSubmissionDetail,
   postSubmissionDetail,
-  toggleSubmission
+  toggleSubmission,
 })(SubmissionDetail);

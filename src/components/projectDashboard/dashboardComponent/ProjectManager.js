@@ -1,24 +1,22 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { AvatarContentLoader } from "../../common/Loader";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { AvatarContentLoader } from '../../common/Loader';
 
-const ManagersListItem = ({ manager }) => {
-  return (
-    <li>
-      <figure>
-        <img src={manager.profile_picture} alt="user avatar" />
-      </figure>
-      <div className="content">
-        <h6>
-          <a href={`/users/profile/${manager.id}/`} target=" _blank">
-            {manager.full_name}
-          </a>
-        </h6>
-        <span>{manager.email}</span>
-      </div>
-    </li>
-  );
-};
+const ManagersListItem = ({ manager }) => (
+  <li>
+    <figure>
+      <img src={manager.profile_picture} alt="user avatar" />
+    </figure>
+    <div className="content">
+      <h6>
+        <a href={`/users/profile/${manager.id}/`} target=" _blank">
+          {manager.full_name}
+        </a>
+      </h6>
+      <span>{manager.email}</span>
+    </div>
+  </li>
+);
 
 class ProjectManager extends React.Component {
   render() {
@@ -32,7 +30,10 @@ class ProjectManager extends React.Component {
             <ul>
               {projectManagers.length > 0 ? (
                 projectManagers.map((manager, i) => (
-                  <ManagersListItem manager={manager} key={`manager_${i}`} />
+                  <ManagersListItem
+                    manager={manager}
+                    key={`manager_${i}`}
+                  />
                 ))
               ) : (
                 <p> No Data Available </p>

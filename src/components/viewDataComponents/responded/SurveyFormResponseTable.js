@@ -1,28 +1,35 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
-import format from "date-fns/format";
-import { DotLoader } from "../../myForm/Loader";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
+import format from 'date-fns/format';
+import { DotLoader } from '../../myForm/Loader';
 
 export default class SurveyFormResponseTable extends Component {
-  state = {
-    survey_forms: [],
-    loader: ""
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      survey_forms: [],
+      loader: '',
+    };
+  }
 
   static getDerivedStateFromProps(props, state) {
     return {
       survey_forms: props.survey_forms,
-      loader: props.loader
+      loader: props.loader,
     };
   }
 
   render() {
-    const { loader, survey_forms } = this.props;
+    const { loader, survey_forms, id } = this.props;
     return (
       <React.Fragment>
         {loader == true ? (
-          <Table responsive="xl" className="table  table-bordered  dataTable ">
+          <Table
+            responsive="xl"
+            className="table  table-bordered  dataTable "
+          >
             <thead>
               <tr>
                 <th>Name</th>
@@ -31,7 +38,7 @@ export default class SurveyFormResponseTable extends Component {
                 <th>Created Date</th>
                 <th>New Submission</th>
                 <th>Submission</th>
-                <th style={{ width: "13%" }}>Action</th>
+                <th style={{ width: '13%' }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -42,21 +49,25 @@ export default class SurveyFormResponseTable extends Component {
                       <td>{survey.name}</td>
                       <td>{survey.title}</td>
                       <td>
-                        {survey.last_response && survey.last_response.length > 0
+                        {survey.last_response &&
+                        survey.last_response.length > 0
                           ? format(survey.last_response, [
-                              "MMMM Do YYYY, h:mm:ss a"
+                              'MMMM Do YYYY, h:mm:ss a',
                             ])
-                          : ""}
+                          : ''}
                       </td>
                       <td>{survey.created_date}</td>
                       <td>
                         <a target="_blank" href="/forms/new/0/297449">
-                          <i className="la la-plus" aria-hidden="true"></i>
+                          <i
+                            className="la la-plus"
+                            aria-hidden="true"
+                          ></i>
                         </a>
                       </td>
                       <td>
                         <Link
-                          to={`/submission-data/${this.props.id}/${survey.id}`}
+                          to={`/submission-data/${id}/${survey.id}`}
                         >
                           {survey.response_count}
                         </Link>
@@ -65,7 +76,7 @@ export default class SurveyFormResponseTable extends Component {
                         {
                           <Link
                             className="view-tag tag"
-                            to={`/submission-data/${this.props.id}/${survey.id}`}
+                            to={`/submission-data/${id}/${survey.id}`}
                           >
                             <i className="la la-eye"></i>
                           </Link>
@@ -86,7 +97,7 @@ export default class SurveyFormResponseTable extends Component {
                         {
                           <Link
                             className="pending-tag tag"
-                            to={`/project-version-submission/${this.props.id}/${survey.id}`}
+                            to={`/project-version-submission/${id}/${survey.id}`}
                           >
                             <i className="la la-clone "></i>
                           </Link>

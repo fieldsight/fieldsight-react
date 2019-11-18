@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import React, { Component } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 //const imgUrl = "https://naxafieldsight.s3.amazonaws.com/";
 class ProjectList extends Component {
@@ -9,7 +9,7 @@ class ProjectList extends Component {
       <div className="card-body">
         <div
           className="thumb-list mr-0"
-          style={{ position: "relative", height: "396px" }}
+          style={{ position: 'relative', height: '396px' }}
         >
           <PerfectScrollbar>
             <ul>
@@ -24,7 +24,7 @@ class ProjectList extends Component {
                         <a
                           href={`/fieldsight/application/#/project-dashboard/${each.id}`}
                         >
-                          {each.name}{" "}
+                          {each.name}{' '}
                         </a>
                       </h6>
                       {each.address && <span>{each.address}</span>}

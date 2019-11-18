@@ -1,53 +1,56 @@
-import React, { Component, Fragment } from "react";
-import { Route, Switch } from "react-router-dom";
-import { Elements, StripeProvider } from "react-stripe-elements";
-import Axios from "axios";
+import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import Axios from 'axios';
 
-import TeamLeftSidebar from "../leftSidebar/TeamLeftSieBar";
-import EditTeam from "../editTeam/EditTeam";
-import TeamMapLayer from "../mapLayer/TeamMapLayer";
-import AccountInfoLayout from "../accountInfo/AccountInfoLayout";
+import TeamLeftSidebar from '../leftSidebar/TeamLeftSieBar';
+import EditTeam from '../editTeam/EditTeam';
+import TeamMapLayer from '../mapLayer/TeamMapLayer';
+import AccountInfoLayout from '../accountInfo/AccountInfoLayout';
 
 export default class TeamSettings extends Component {
-  state = {
-    teamData: {},
-    teamName:""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      teamData: {},
+      teamName: '',
+    };
+  }
 
   componentWillMount() {
     const {
       match: {
-        params: { id: teamId }
-      }
+        params: { id: teamId },
+      },
     } = this.props;
     Axios.get(`fv3/api/team-owner-account/${teamId}/`).then(res => {
       this.setState({ teamData: res.data });
-    }).catch = err => {
-      // console.log('error', err);
-    };
+    }).catch = err => {};
   }
-  teamName=(data)=>{
-  this.setState({
-    teamName:data
-  })
-  
 
-}
+  teamName = data => {
+    this.setState({
+      teamName: data,
+    });
+  };
   render() {
     const {
       match: {
         params: { id: teamId },
-        path
-      }
-    } = this.props;    
-    const { teamData ,teamName} = this.state;
+        path,
+      },
+      height,
+    } = this.props;
+    const { teamData, teamName } = this.state;
 
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item "  >
-              <a href={`/fieldsight/application/#/team-dashboard/${teamId}/`} style={{color:"#00628E"}}>
+            <li className="breadcrumb-item ">
+              <a
+                href={`/fieldsight/application/#/team-dashboard/${teamId}/`}
+                style={{ color: '#00628E' }}
+              >
                 {teamName}
               </a>
             </li>
@@ -65,7 +68,10 @@ export default class TeamSettings extends Component {
                   <h5>Settings</h5>
                 </div>
                 <div className="card-body">
-                  <TeamLeftSidebar teamOwner={teamData.team_owner} height={this.props.height} />
+                  <TeamLeftSidebar
+                    teamOwner={teamData.team_owner}
+                    height={height}
+                  />
                 </div>
               </div>
             </div>
@@ -74,15 +80,25 @@ export default class TeamSettings extends Component {
             <div className="right-content">
               <div className="tab-content">
                 <Switch>
-                  <Route exact path={`${path}`}  render={props =><EditTeam {...props} teamData={this.teamName}/> 
-  
-                                                            } />
-                  <Route path={`${path}/map-layer`} component={TeamMapLayer} />
+                  <Route
+                    exact
+                    path={`${path}`}
+                    render={props => (
+                      <EditTeam {...props} teamData={this.teamName} />
+                    )}
+                  />
+                  <Route
+                    path={`${path}/map-layer`}
+                    component={TeamMapLayer}
+                  />
 
                   <Route
                     path={`${path}/subscription/team-settings`}
                     render={() => (
-                      <AccountInfoLayout data={teamData} teamId={teamId} />
+                      <AccountInfoLayout
+                        data={teamData}
+                        teamId={teamId}
+                      />
                     )}
                   />
                 </Switch>

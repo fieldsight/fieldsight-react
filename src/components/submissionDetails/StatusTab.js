@@ -1,25 +1,26 @@
-import React, { Component } from "react";
-import InputElement from "../common/InputElement";
-import RadioElement from "../common/RadioElement";
+import React, { Component } from 'react';
+import InputElement from '../common/InputElement';
+import RadioElement from '../common/RadioElement';
 
 const checkStatus = statusData => {
-  if (statusData.status_display === "Pending") {
+  if (statusData.status_display === 'Pending') {
     return 0;
-  } else if (statusData.status_display === "Rejected") {
+  } else if (statusData.status_display === 'Rejected') {
     return 1;
-  } else if (statusData.status_display === "Flagged") {
+  } else if (statusData.status_display === 'Flagged') {
     return 2;
-  } else if (statusData.status_display === "Approved") {
+  } else if (statusData.status_display === 'Approved') {
     return 3;
   }
 };
+
 class StatusTab extends Component {
   state = {
-    file: "",
-    comment: "",
+    file: '',
+    comment: '',
     status: this.props.statusData.status_display
       ? checkStatus(this.props.statusData).toString()
-      : "3"
+      : '3',
   };
 
   componentWillReceiveProps(nextProps) {
@@ -28,11 +29,11 @@ class StatusTab extends Component {
       this.props.statusData.status_display
     ) {
       this.setState({
-        file: "",
-        comment: "",
+        file: '',
+        comment: '',
         status: nextProps.statusData.status_display
           ? checkStatus(nextProps.statusData).toString()
-          : "3"
+          : '3',
       });
     }
   }
@@ -40,13 +41,13 @@ class StatusTab extends Component {
   onChangeHandler = (e, file) => {
     if (file) {
       return this.setState({
-        file: e.target.files[0]
+        file: e.target.files[0],
       });
     }
     const { name, value } = e.target;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -54,16 +55,16 @@ class StatusTab extends Component {
     e.preventDefault();
     const {
       state: { comment, status, file },
-      props: { fieldSightInstance, statusData, postSubmissionDetail }
+      props: { fieldSightInstance, statusData, postSubmissionDetail },
     } = this;
 
     let oldStatus = checkStatus(statusData);
     const formData = new FormData();
-    formData.append("image_1", file);
-    formData.append("finstance", fieldSightInstance);
-    formData.append("new_status", status);
-    formData.append("old_status", oldStatus);
-    formData.append("message", comment);
+    formData.append('image_1', file);
+    formData.append('finstance', fieldSightInstance);
+    formData.append('new_status', status);
+    formData.append('old_status', oldStatus);
+    formData.append('message', comment);
 
     postSubmissionDetail(formData);
   };
@@ -73,17 +74,17 @@ class StatusTab extends Component {
       props: { statusData, hasReviewPermission },
       state: { comment, file, status },
       onChangeHandler,
-      submitHandler
+      submitHandler,
     } = this;
     let icon;
-    if (statusData.status_display === "Rejected") {
-      icon = "la-close";
-    } else if (statusData.status_display === "Approved") {
-      icon = "la-check";
-    } else if (statusData.status_display === "Flagged") {
-      icon = "la-flag";
-    } else if (statusData.status_display === "Pending") {
-      icon = "la-hourglass-2";
+    if (statusData.status_display === 'Rejected') {
+      icon = 'la-close';
+    } else if (statusData.status_display === 'Approved') {
+      icon = 'la-check';
+    } else if (statusData.status_display === 'Flagged') {
+      icon = 'la-flag';
+    } else if (statusData.status_display === 'Pending') {
+      icon = 'la-hourglass-2';
     }
     return (
       <div
@@ -126,7 +127,7 @@ class StatusTab extends Component {
                     <input
                       type="file"
                       id="upload-btn"
-                      onChange={e => onChangeHandler(e, "file")}
+                      onChange={e => onChangeHandler(e, 'file')}
                     />
                   </div>
                 </div>
@@ -139,7 +140,7 @@ class StatusTab extends Component {
                     name="status"
                     value="3"
                     className="approved"
-                    checked={status === "3"}
+                    checked={status === '3'}
                     changeHandler={onChangeHandler}
                   />
                   <RadioElement
@@ -147,7 +148,7 @@ class StatusTab extends Component {
                     name="status"
                     value="2"
                     className="flagged"
-                    checked={status === "2"}
+                    checked={status === '2'}
                     changeHandler={onChangeHandler}
                   />
 
@@ -156,7 +157,7 @@ class StatusTab extends Component {
                     name="status"
                     value="1"
                     className="rejected"
-                    checked={status === "1"}
+                    checked={status === '1'}
                     changeHandler={onChangeHandler}
                   />
                 </div>

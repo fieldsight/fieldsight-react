@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class UserSelectForm extends Component {
   render() {
     return (
-      <React.Fragment>
+      <>
         <form>
           <ul>
             <li>
@@ -51,7 +51,7 @@ class UserSelectForm extends Component {
             </button>
           </div>
         </form>
-      </React.Fragment>
+      </>
     );
   }
 }

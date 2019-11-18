@@ -1,139 +1,154 @@
-import React, { Component } from "react";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import { connect } from "react-redux";
-import { compose } from "redux";
+import React, { Component } from 'react';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
-import ManageFormSetting from "./manageFormSetting/ManageFormSetting";
-import ManageGeneralForm from "./manageGeneralForm";
-import ManageSurveyForm from "./manageSurveyForm";
-import ManageScheduledForm from "./manageScheduledForm";
-import ManageStageForm from "./manageStageForm";
+import ManageFormSetting from './manageFormSetting/ManageFormSetting';
+import ManageGeneralForm from './manageGeneralForm';
+import ManageSurveyForm from './manageSurveyForm';
+import ManageScheduledForm from './manageScheduledForm';
+import ManageStageForm from './manageStageForm';
 
-import ApprovedTable from "./ApprovedTable";
-import PendingTable from "./PendingSubmissionTable";
-import RejectedTable from "./RejectSubmissionTable";
-import FlaggedTable from "./FlagedTable";
+import ApprovedTable from './ApprovedTable';
+import PendingTable from './PendingSubmissionTable';
+import RejectedTable from './RejectSubmissionTable';
+import FlaggedTable from './FlagedTable';
 
 class ViewData extends Component {
-  state = {
-    hide: true,
-    view_btn: false,
-    id: this.props.match.params && this.props.match.params.id,
-    deleted_forms: [],
-    generals_forms: [],
-    url: this.props.match.url && this.props.match.url,
-    breadCrumb: {}
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hide: true,
+      view_btn: false,
+      id: props.match.params && props.match.params.id,
+      deleted_forms: [],
+      generals_forms: [],
+      url: props.match.url && props.match.url,
+      breadCrumb: {},
+    };
+  }
+
   toggleHide = () => {
     this.setState({
-      hide: !this.state.hide
+      hide: !this.state.hide,
     });
   };
+
   showViewData = () => {
+    const {
+      match: { url },
+    } = this.props;
     this.setState(
       state => {
         if (!!this.state.view_btn) {
           return {
-            url: `${this.props.match.url}/general`,
-            view_btn: !this.state.view_btn
+            url: `${url}/general`,
+            view_btn: !this.state.view_btn,
           };
-        } /*else if (
-          this.props.match.url === `/project-responses/${this.state.id}`
-        ) {
+        } else {
           return {
-            url: `${this.props.match.url}rejected`,
-            view_btn: !this.state.view_btn
-          };
-        }*/ else {
-          return {
-            url: `${this.props.match.url}/rejected`,
-            view_btn: !this.state.view_btn
+            url: `${url}/rejected`,
+            view_btn: !this.state.view_btn,
           };
         }
       },
       () => {
         this.props.history.push(this.state.url);
-      }
+      },
     );
   };
+
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
+      location: { pathname },
     } = this.props;
     if (
-      this.props.location.pathname === `/project-responses/${id}/rejected` ||
-      this.props.location.pathname === `/project-responses/${id}/pending` ||
-      this.props.location.pathname === `/project-responses/${id}/flagged` ||
-      this.props.location.pathname === `/project-responses/${id}/approved`
+      pathname === `/project-responses/${id}/rejected` ||
+      pathname === `/project-responses/${id}/pending` ||
+      pathname === `/project-responses/${id}/flagged` ||
+      pathname === `/project-responses/${id}/approved`
     ) {
       this.setState({
         id,
-        view_btn: true
+        view_btn: true,
       });
     } else if (
-      this.props.location.pathname === `/project-responses/${id}/general` ||
-      this.props.location.pathname === `/project-responses/${id}/stage` ||
-      this.props.location.pathname === `/project-responses/${id}/scheduled` ||
-      this.props.location.pathname === `/project-responses/${id}/general-survey`
+      pathname === `/project-responses/${id}/general` ||
+      pathname === `/project-responses/${id}/stage` ||
+      pathname === `/project-responses/${id}/scheduled` ||
+      pathname === `/project-responses/${id}/general-survey`
     ) {
       this.setState({
         view_btn: false,
-        id
+        id,
       });
     }
   }
+
   handleBreadCrumb = breadCrumb => {
     if (!!breadCrumb) {
       this.setState({
-        breadCrumb
+        breadCrumb,
       });
     }
   };
+
   componentDidUpdate(preState) {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
+      location: { pathname },
     } = this.props;
 
-    if (preState.location.pathname !== this.props.location.pathname) {
+    if (preState.location.pathname !== pathname) {
       if (
-        this.props.location.pathname === `/project-responses/${id}/rejected` ||
-        this.props.location.pathname === `/project-responses/${id}/pending` ||
-        this.props.location.pathname === `/project-responses/${id}/flagged` ||
-        this.props.location.pathname === `/project-responses/${id}/approved`
+        pathname === `/project-responses/${id}/rejected` ||
+        pathname === `/project-responses/${id}/pending` ||
+        pathname === `/project-responses/${id}/flagged` ||
+        pathname === `/project-responses/${id}/approved`
       ) {
         this.setState({
           id,
-          view_btn: true
+          view_btn: true,
         });
       } else if (
-        this.props.location.pathname === `/project-responses/${id}/general` ||
-        this.props.location.pathname === `/project-responses/${id}/stage` ||
-        this.props.location.pathname === `/project-responses/${id}/scheduled` ||
-        this.props.location.pathname ===
-          `/project-responses/${id}/general-survey`
+        pathname === `/project-responses/${id}/general` ||
+        pathname === `/project-responses/${id}/stage` ||
+        pathname === `/project-responses/${id}/scheduled` ||
+        pathname === `/project-responses/${id}/general-survey`
       ) {
         this.setState({
           view_btn: false,
-          id
+          id,
         });
-      } else if (this.props.location.pathname == `/project-responses/${id}`) {
+      } else if (pathname == `/project-responses/${id}`) {
         this.props.history.push(`/project-responses/${id}/general`) ||
-          this.props.history.push(`/project-responses/${id}/rejected`);
+          this.props.history.push(
+            `/project-responses/${id}/rejected`,
+          );
       }
     }
   }
+
   render() {
     const {
       match: {
-        params: { id }
+        url: siteUrl,
+        // params: { id },
       },
-      breadcrumbs
+      breadcrumbs,
+      height,
     } = this.props;
-
+    const { breadCrumb, view_btn, url, id } = this.state;
     return (
       <React.Fragment>
         <nav aria-label="breadcrumb" role="navigation">
@@ -141,14 +156,14 @@ class ViewData extends Component {
             <li className="breadcrumb-item">
               <a
                 href={
-                  breadcrumbs.project_url || this.state.breadCrumb.project_url
+                  breadcrumbs.project_url || breadCrumb.project_url
                 }
               >
-                {breadcrumbs.project_name || this.state.breadCrumb.project_name}
+                {breadcrumbs.project_name || breadCrumb.project_name}
               </a>
             </li>
             <li className="breadcrumb-item">
-              {breadcrumbs.current_page || this.state.breadCrumb.current_page}
+              {breadcrumbs.current_page || breadCrumb.current_page}
             </li>
           </ol>
         </nav>
@@ -158,15 +173,15 @@ class ViewData extends Component {
             <div className="left-sidebar new-sidebar sticky-top">
               <div
                 className="card no-boxshadow"
-                style={{ minHeight: this.props.height }}
+                style={{ minHeight: height }}
               >
                 <div className="card-header main-card-header">
                   <h5>View Data</h5>
                 </div>
                 <div className="card-body">
                   <ManageFormSetting
-                    show_submission={this.state.view_btn}
-                    url={this.state.url}
+                    show_submission={view_btn}
+                    url={url}
                   />
                 </div>
               </div>
@@ -179,13 +194,13 @@ class ViewData extends Component {
                   <Switch>
                     <Route
                       exact
-                      path={`${this.props.match.url}/general`}
+                      path={`${siteUrl}/general`}
                       render={props => (
                         <ManageGeneralForm
                           showViewData={this.showViewData}
-                          data={this.state.view_btn}
-                          id={this.state.id}
-                          url={this.state.url}
+                          data={view_btn}
+                          id={id}
+                          url={url}
                           handleBreadCrumb={this.handleBreadCrumb}
                           {...props}
                         />
@@ -193,26 +208,26 @@ class ViewData extends Component {
                     />
 
                     <Route
-                      path={`${this.props.match.url}/scheduled`}
+                      path={`${siteUrl}/scheduled`}
                       render={props => (
                         <ManageScheduledForm
                           showViewData={this.showViewData}
-                          data={this.state.view_btn}
-                          id={this.state.id}
-                          url={this.state.url}
+                          data={view_btn}
+                          id={id}
+                          url={url}
                           handleBreadCrumb={this.handleBreadCrumb}
                           {...props}
                         />
                       )}
                     />
                     <Route
-                      path={`${this.props.match.url}/stage`}
+                      path={`${siteUrl}/stage`}
                       render={props => (
                         <ManageStageForm
                           showViewData={this.showViewData}
-                          data={this.state.view_btn}
-                          id={this.state.id}
-                          url={this.state.url}
+                          data={view_btn}
+                          id={id}
+                          url={url}
                           handleBreadCrumb={this.handleBreadCrumb}
                           {...props}
                         />
@@ -220,13 +235,13 @@ class ViewData extends Component {
                     />
 
                     <Route
-                      path={`${this.props.match.url}/general-survey`}
+                      path={`${siteUrl}/general-survey`}
                       render={props => (
                         <ManageSurveyForm
                           showViewData={this.showViewData}
-                          data={this.state.view_btn}
-                          id={this.state.id}
-                          url={this.state.url}
+                          data={view_btn}
+                          id={id}
+                          url={url}
                           handleBreadCrumb={this.handleBreadCrumb}
                           {...props}
                         />
@@ -234,12 +249,12 @@ class ViewData extends Component {
                     />
 
                     <Route
-                      path={`${this.props.match.url}/approved`}
+                      path={`${siteUrl}/approved`}
                       render={props => (
                         <ApprovedTable
                           showViewData={this.showViewData}
-                          data={this.state.view_btn}
-                          id={this.state.id}
+                          data={view_btn}
+                          id={id}
                           handleBreadCrumb={this.handleBreadCrumb}
                           {...props}
                         />
@@ -247,24 +262,24 @@ class ViewData extends Component {
                     />
 
                     <Route
-                      path={`${this.props.match.url}/flagged`}
+                      path={`${siteUrl}/flagged`}
                       render={props => (
                         <FlaggedTable
                           showViewData={this.showViewData}
-                          data={this.state.view_btn}
-                          id={this.state.id}
+                          data={view_btn}
+                          id={id}
                           handleBreadCrumb={this.handleBreadCrumb}
                           {...props}
                         />
                       )}
                     />
                     <Route
-                      path={`${this.props.match.url}/pending`}
+                      path={`${siteUrl}/pending`}
                       render={props => (
                         <PendingTable
                           showViewData={this.showViewData}
-                          data={this.state.view_btn}
-                          id={this.state.id}
+                          data={view_btn}
+                          id={id}
                           handleBreadCrumb={this.handleBreadCrumb}
                           {...props}
                         />
@@ -272,13 +287,13 @@ class ViewData extends Component {
                     />
 
                     <Route
-                      path={`${this.props.match.url}/rejected`}
+                      path={`${siteUrl}/rejected`}
                       render={props => (
                         <RejectedTable
                           showViewData={this.showViewData}
-                          data={this.state.view_btn}
-                          id={this.state.id}
-                          url={this.state.url}
+                          data={view_btn}
+                          id={id}
+                          url={url}
                           handleBreadCrumb={this.handleBreadCrumb}
                           {...props}
                         />
@@ -299,7 +314,7 @@ const mapStateToProps = ({ projectViewData }) => {
   const { breadcrumbs } = projectViewData;
 
   return {
-    breadcrumbs
+    breadcrumbs,
   };
 };
 export default compose(connect(mapStateToProps))(ViewData);

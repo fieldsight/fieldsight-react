@@ -1,31 +1,47 @@
-import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
 
 const sideNavRoutes = [
-  { to: "/general", path: "/general", title: "General Forms" },
-  { to: "/scheduled", path: "/scheduled", title: "Scheduled Forms" },
-  { to: "/stage", path: "/stage", title: "Staged Forms" }
+  { to: '/general', path: '/general', title: 'General Forms' },
+  { to: '/scheduled', path: '/scheduled', title: 'Scheduled Forms' },
+  { to: '/stage', path: '/stage', title: 'Staged Forms' },
 ];
 const site_specific_forms = [
-  { to: "/general-survey", path: "/general-survey", title: "General Forms" }
+  {
+    to: '/general-survey',
+    path: '/general-survey',
+    title: 'General Forms',
+  },
 ];
 
 const viewByStatus = [
-  { to: "/rejected", path: "/rejected", title: "Rejected Submissions" },
-  { to: "/flagged", path: "/flagged", title: "Flagged Submissions" },
-  { to: "/pending", path: "/pending", title: "Pending Submissions" },
-  { to: "/approved", path: "/approved", title: "Approved Submissions" }
+  {
+    to: '/rejected',
+    path: '/rejected',
+    title: 'Rejected Submissions',
+  },
+  { to: '/flagged', path: '/flagged', title: 'Flagged Submissions' },
+  { to: '/pending', path: '/pending', title: 'Pending Submissions' },
+  {
+    to: '/approved',
+    path: '/approved',
+    title: 'Approved Submissions',
+  },
 ];
 
 class ManageFormSetting extends Component {
   render() {
     const {
-      location: { pathname }
+      location: { pathname },
+      match: {
+        params: { id },
+      },
+      show_submission,
     } = this.props;
 
     return (
       <>
-        {!this.props.show_submission && (
+        {!show_submission && (
           <>
             <div className="manage_group">
               <h5>Site Specific Forms</h5>
@@ -33,12 +49,12 @@ class ManageFormSetting extends Component {
                 {sideNavRoutes.map((route, i) => (
                   <li className="nav-item" key={i}>
                     <Link
-                      to={`/project-responses/${this.props.match.params.id}${route.to}`}
+                      to={`/project-responses/${id}${route.to}`}
                       className={
-                        this.props.location.pathname ==
-                        `/project-responses/${this.props.match.params.id}${route.path}`
-                          ? "nav-link active"
-                          : "nav-link"
+                        location.pathname ==
+                        `/project-responses/${id}${route.path}`
+                          ? 'nav-link active'
+                          : 'nav-link'
                       }
                     >
                       {route.title}
@@ -53,12 +69,12 @@ class ManageFormSetting extends Component {
                 {site_specific_forms.map((route, i) => (
                   <li className="nav-item" key={i}>
                     <Link
-                      to={`/project-responses/${this.props.match.params.id}${route.to}`}
+                      to={`/project-responses/${id}${route.to}`}
                       className={
-                        this.props.location.pathname ==
-                        `/project-responses/${this.props.match.params.id}${route.path}`
-                          ? "nav-link active"
-                          : "nav-link"
+                        pathname ==
+                        `/project-responses/${id}${route.path}`
+                          ? 'nav-link active'
+                          : 'nav-link'
                       }
                     >
                       {route.title}
@@ -69,17 +85,17 @@ class ManageFormSetting extends Component {
             </div>
           </>
         )}
-        {!!this.props.show_submission && (
+        {!!show_submission && (
           <ul className="nav nav-tabs flex-column border-tabs">
             {viewByStatus.map((route, i) => (
               <li className="nav-item" key={i}>
                 <Link
-                  to={`/project-responses/${this.props.match.params.id}${route.to}`}
+                  to={`/project-responses/${id}${route.to}`}
                   className={
-                    this.props.location.pathname ==
-                    `/project-responses/${this.props.match.params.id}${route.path}`
-                      ? "nav-link active"
-                      : "nav-link"
+                    pathname ==
+                    `/project-responses/${id}${route.path}`
+                      ? 'nav-link active'
+                      : 'nav-link'
                   }
                 >
                   {route.title}

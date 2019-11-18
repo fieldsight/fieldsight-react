@@ -1,38 +1,45 @@
-import React, { Component } from "react";
-import StatusTable from "../../responded/StatusTable";
-import WithPagination from "../../../../hoc/WithPagination";
-import { DotLoader } from "../../../myForm/Loader";
+import React, { Component } from 'react';
+import StatusTable from '../../responded/StatusTable';
+import WithPagination from '../../../../hoc/WithPagination';
+import { DotLoader } from '../../../myForm/Loader';
 
 class ApprovedTable extends Component {
-  state = {
-    approved_submissions: []
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      approved_submissions: [],
+    };
+  }
+
   componentDidMount() {
-    if (this.props.id != "") {
+    if (this.props.id != '') {
       this.props.paginationHandler(1, null, {
-        type: "viewByStatus",
+        type: 'viewByStatus',
         projectId: this.props.id,
-        status: "approved"
+        status: 'approved',
       });
     }
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
   }
+
   render() {
     const {
-      props: { data, showViewData, dLoader }
+      props: { data, showViewData, dLoader },
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>Approved Submissions</h5>
           <div className="dash-btn">
             <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
+              {data ? 'View By Form' : 'View by Status'}
             </button>
           </div>
         </div>
@@ -46,13 +53,13 @@ class ApprovedTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing <span>{this.props.fromData}</span> to{" "}
+                      Showing <span>{this.props.fromData}</span> to{' '}
                       <span>
-                        {" "}
+                        {' '}
                         {this.props.toData > this.props.totalCount
                           ? this.props.totalCount
-                          : this.props.toData}{" "}
-                      </span>{" "}
+                          : this.props.toData}{' '}
+                      </span>{' '}
                       of <span>{this.props.totalCount}</span> entries.
                     </p>
                   </div>
@@ -65,7 +72,7 @@ class ApprovedTable extends Component {
                               this.props.paginationHandler(
                                 this.props.pageNum - 1,
                                 null,
-                                project_id
+                                project_id,
                               )
                             }
                           >
@@ -74,9 +81,9 @@ class ApprovedTable extends Component {
                         </li>
 
                         {this.props.renderPageNumbers({
-                          type: "viewByStatus",
+                          type: 'viewByStatus',
                           projectId: this.props.id,
-                          status: "flagged"
+                          status: 'flagged',
                         })}
 
                         <li className="page-item ">
@@ -85,7 +92,7 @@ class ApprovedTable extends Component {
                               this.props.paginationHandler(
                                 this.props.pageNum + 1,
                                 null,
-                                project_id
+                                project_id,
                               )
                             }
                           >
@@ -110,7 +117,7 @@ class ApprovedTable extends Component {
         ) : (
           <DotLoader />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
