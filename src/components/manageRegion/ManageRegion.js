@@ -1,26 +1,28 @@
-import React, { Component, Fragment } from "react";
-import Table from "../common/Table";
-import Modal from "../common/Modal";
-import InputElement from "../common/InputElement";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import WithContext from "../../hoc/WithContext";
-import isEmpty from "../../utils/isEmpty";
-import axios from "axios";
-import { RegionContext } from "../../context";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { Component, Fragment } from 'react';
+import Table from '../common/Table';
+import Modal from '../common/Modal';
+import InputElement from '../common/InputElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import WithContext from '../../hoc/WithContext';
+import isEmpty from '../../utils/isEmpty';
+import axios from 'axios';
+import { RegionContext } from '../../context';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class ManageRegion extends Component {
   static contextType = RegionContext;
-
-  state = {
-    hide: "",
-    response: "",
-    model: false,
-    cluster_sites: "",
-    data: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      hide: '',
+      response: '',
+      model: false,
+      cluster_sites: '',
+      data: false,
+    };
+  }
   componentDidMount() {
     const { projectId } = this.context;
 
@@ -29,50 +31,60 @@ class ManageRegion extends Component {
       .then(res => {
         this.setState({
           cluster_sites: !res.data.cluster_sites,
-          hide: res.data.cluster_sites
+          hide: res.data.cluster_sites,
         });
       })
       .catch(err => {
         console.log(err);
       });
   }
+
   region = () => {
-    const { projectId } = this.context;
+    const {
+      context: { projectId },
+      state: { model, hide, cluster_sites },
+    } = this;
 
     let data = {};
-    data.cluster_sites = this.state.cluster_sites;
+    data.cluster_sites = cluster_sites;
     data.Project = projectId;
 
-    !this.state.model
+    !model
       ? axios
-          .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+          .post(
+            `/fv3/api/enable-project-cluster-sites/${projectId}/`,
+            data,
+          )
           .then(res => {
             this.setState(
               {
-                hide: !this.state.hide,
+                hide: !hide,
                 response: res.data.detail,
                 model: true,
                 cluster_sites: res.data.cluster_sites,
-                data: true
+                data: true,
               },
-              () => this.toast()
+              () => this.toast(),
             );
           })
           .catch(err => {
             console.log(err);
           })
       : axios
-          .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+          .post(
+            `/fv3/api/enable-project-cluster-sites/${projectId}/`,
+            data,
+          )
           .then(res => {
             this.setState(
               {
-                hide: !this.state.hide,
+                hide: !hide,
                 response: res.data.detail,
                 model: false,
                 cluster_sites: res.data.cluster_sites,
-                data: true
+                data: true,
               },
-              () => this.toast()
+              () => this.toast(),
             );
           })
           .catch(err => {
@@ -85,6 +97,7 @@ class ManageRegion extends Component {
       toast.success(this.state.response);
     }
   }
+
   render() {
     const {
       props: {
@@ -103,9 +116,9 @@ class ManageRegion extends Component {
           confirmHandler,
           cancelHandler,
           onSubmitHandler,
-          selectRegionHandler
-        }
-      }
+          selectRegionHandler,
+        },
+      },
     } = this;
 
     const tableHeader = {
@@ -114,26 +127,26 @@ class ManageRegion extends Component {
             `${terms.region} ID`,
             `${terms.region} Name`,
             ,
-            "Created Date",
-            "Action"
+            'Created Date',
+            'Action',
           ]
-        : ["Region ID", "Region Name", "Created Date", "Action"]
+        : ['Region ID', 'Region Name', 'Created Date', 'Action'],
     };
 
     return (
-      <Fragment>
+      <>
         <RightContentCard
-          title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+          title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
           addButton
           toggleModal={toggleModal}
         >
           <div
             className="add-btn"
             style={{
-              justifyContent: "flex-end",
-              position: "relative",
-              bottom: "52px",
-              marginRight: "44px"
+              justifyContent: 'flex-end',
+              position: 'relative',
+              bottom: '52px',
+              marginRight: '44px',
             }}
           >
             {this.state.hide ? (
@@ -142,16 +155,16 @@ class ManageRegion extends Component {
                 className="btn-toggle"
                 onClick={this.region}
                 style={{
-                  backgroundColor: "#28a745",
-                  color: "white",
-                  textAlign: "left",
-                  width: "83px"
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  textAlign: 'left',
+                  width: '83px',
                 }}
               >
                 Turn OFF
                 <div
                   className="handle"
-                  style={{ left: "auto", right: "0.1875rem" }}
+                  style={{ left: 'auto', right: '0.1875rem' }}
                 ></div>
               </button>
             ) : (
@@ -160,7 +173,7 @@ class ManageRegion extends Component {
                 className="btn-toggle"
                 onClick={this.region}
                 style={{
-                  width: "83px"
+                  width: '83px',
                 }}
               >
                 Turn ON
@@ -180,10 +193,13 @@ class ManageRegion extends Component {
 
         {showModal && (
           <Modal
-            title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+            title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
             toggleModal={toggleModal}
           >
-            <form className="floating-form" onSubmit={onSubmitHandler}>
+            <form
+              className="floating-form"
+              onSubmit={onSubmitHandler}
+            >
               <InputElement
                 tag="input"
                 type="text"
@@ -205,7 +221,7 @@ class ManageRegion extends Component {
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-              />{" "}
+              />{' '}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
                   Save
@@ -222,8 +238,8 @@ class ManageRegion extends Component {
               <i className="la la-exclamation-triangle" />
 
               <p>
-                Are you sure you want to delete{" "}
-                {!isEmpty(terms) ? `${terms.region}` : "Regions"} ?
+                Are you sure you want to delete{' '}
+                {!isEmpty(terms) ? `${terms.region}` : 'Regions'} ?
               </p>
             </div>
             <div className="warning-footer text-center">
@@ -239,7 +255,7 @@ class ManageRegion extends Component {
             </div>
           </Modal>
         )}
-      </Fragment>
+      </>
     );
   }
 }
