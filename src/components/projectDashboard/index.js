@@ -21,7 +21,6 @@ import {
   getProgressTableData,
   getSurveyForm,
 } from '../../actions/projectDashboardActions';
-import { LanguageContext } from '../../languageContext';
 
 const INITIAL_STATE = {
   activeTab: 'site',

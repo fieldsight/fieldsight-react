@@ -114,7 +114,7 @@ export default class SiteEdit extends Component {
                         res.data.site_types !== undefined || ''
                           ? typeArr
                           : [],
-                      data: siteForm.data,
+                      // data: siteForm.data,
                       project: {
                         name: siteForm.data.name,
                         site_id: siteForm.data.identifier,
@@ -148,69 +148,6 @@ export default class SiteEdit extends Component {
       .catch(err => {
         console.log(err, 'err');
       });
-
-    // axios
-    //   .get(`/fv3/api/site-form/${id}/`)
-    //   .then(response => {
-    //     console.log(response, "response");
-
-    //     axios
-    //       .get(`/fv3/api/site-form/?project=${response.data.project}`)
-    //       .then(res => {
-    //         let regionArr = this.state.region;
-    //         let typeArr = this.state.site_types;
-
-    //         if (this._isMounted) {
-    //           const position =
-    //             res.data.location !== "None"
-    //               ? res.data.location && res.data.location.split(" ")
-    //               : "";
-    //           const longitude = position && position[1].split("(")[1];
-    //           const latitude = position && position[2].split(")")[0];
-    //           this.setState(state => {
-    //             res.data.regions !== undefined &&
-    //               res.data.regions.map(each => regionArr.push(each));
-    //             res.data.site_types.map(each => typeArr.push(each));
-    //             return {
-    //               delete_perm: response.data.delete_perm,
-    //               project_id: response.data.project,
-    //               jsondata: res.data.json_questions,
-    //               id,
-    //               region: res.data.regions !== undefined || "" ? regionArr : [],
-    //               siteId,
-    //               regionalId,
-    //               site_types:
-    //                 res.data.site_types !== undefined || "" ? typeArr : [],
-    //               data: response.data,
-    //               project: {
-    //                 name: response.data.name,
-    //                 site_id: response.data.identifier,
-    //                 phone: response.data.phone,
-    //                 address: response.data.address,
-    //                 public_desc: response.data.public_desc,
-    //                 logo: response.data.logo,
-    //                 weight: response.data.weight,
-    //                 cluster_sites: response.data.enable_subsites
-    //               },
-    //               regionselected: response.data.region,
-    //               Selectedtypes: response.data.type,
-    //               data: response.data.site_meta_attributes_answers,
-    //               cropResult: response.data.logo,
-    //               position: {
-    //                 longitude,
-    //                 latitude
-    //               }
-    //             };
-    //           });
-    //         }
-    //       })
-    //       .catch(err => {
-    //         console.log(err, "err");
-    //       });
-    //   })
-    //   .catch(err => {
-    //     console.log(err, "err");
-    //   });
   }
 
   onChangeHandler = (e, position) => {
@@ -251,7 +188,7 @@ export default class SiteEdit extends Component {
       data,
     } = this.state;
 
-    let data = {
+    let body = {
       project: project_id,
       name: project.name,
       identifier: project.site_id,
@@ -271,7 +208,7 @@ export default class SiteEdit extends Component {
     axios({
       method: 'PUT',
       url: `/fv3/api/site-form/${id}/`,
-      data,
+      body,
       headers: { 'content-type': 'application/json' },
     })
       .then(res => {

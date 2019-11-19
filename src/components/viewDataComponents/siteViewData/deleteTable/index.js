@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import SiteDeleteTable from '../../responded/DeleteTable';
 
 class DeleteTable extends Component {
@@ -31,4 +32,14 @@ class DeleteTable extends Component {
     );
   }
 }
+
+DeleteTable.propTypes = {
+  deletedForms: PropTypes.arrayOf,
+  id: PropTypes.string,
+};
+
+DeleteTable.defaultProps = {
+  deletedForms: [],
+  id: {},
+};
 export default DeleteTable;

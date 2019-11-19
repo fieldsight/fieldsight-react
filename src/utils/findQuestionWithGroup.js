@@ -14,7 +14,7 @@ const findQuestionWithGroup = (children, type) => {
       if (question.type === type) {
         filteredQuestions.push({
           ...question,
-          groupName: name ? name : null,
+          groupName: name && name,
         });
       }
 

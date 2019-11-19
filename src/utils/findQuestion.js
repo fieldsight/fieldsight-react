@@ -24,7 +24,7 @@ const findQuestion = (children, type) => {
         if (question.type === 'group' || question.type === 'repeat') {
           return filterQuestionByType(question.children);
         }
-        filteredQuestions.push(question);
+        return filteredQuestions.push(question);
       });
     }
   };

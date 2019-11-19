@@ -278,7 +278,6 @@ class MyrolesMain extends Component {
       profile,
       teams,
       teamId,
-      regions,
       rightTab,
       submission,
       invitation,

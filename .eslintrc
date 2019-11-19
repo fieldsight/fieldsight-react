@@ -16,7 +16,18 @@
     ],
     "react/jsx-props-no-spreading": "off",
     "no-unused-vars": "warn",
-    "no-console": 1
+    "no-console": 1,
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": [
+      "warn",
+      { "aspects": ["invalidHref"] }
+    ],
+    "no-nested-ternary": "warn",
+    "no-underscore-dangle": [
+      "error",
+      { "allow": ["__REDUX_DEVTOOLS_EXTENSION__"] }
+    ],
+    "react/destructuring-assignment": "warn"
   },
   "env": {
     "browser": true

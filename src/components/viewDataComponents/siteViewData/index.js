@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import ManageFormSetting from './manageFormSetting/ManageFormSetting';
 import ManageGeneralForm from './manageGeneralForm';
 import ManageScheduledForm from './manageScheduledForm';
@@ -22,12 +24,6 @@ class SiteViewData extends Component {
       breadCrumb: {},
     };
   }
-
-  toggleHide = () => {
-    this.setState({
-      hide: !this.state.hide,
-    });
-  };
 
   componentDidMount() {
     const {
@@ -57,41 +53,6 @@ class SiteViewData extends Component {
       });
     }
   }
-
-  showViewData = () => {
-    const {
-      state: { view_btn },
-      props: {
-        match: { url },
-      },
-    } = this;
-    this.setState(
-      state => {
-        if (!!view_btn) {
-          return {
-            url: `${url}/general`,
-            view_btn: !view_btn,
-          };
-        } else {
-          return {
-            url: `${url}/rejected`,
-            view_btn: !view_btn,
-          };
-        }
-      },
-      () => {
-        this.props.history.push(url);
-      },
-    );
-  };
-
-  handleBreadCrumb = breadCrumb => {
-    if (!!breadCrumb) {
-      this.setState({
-        breadCrumb,
-      });
-    }
-  };
 
   componentDidUpdate(preState) {
     const {
@@ -128,6 +89,47 @@ class SiteViewData extends Component {
     }
   }
 
+  toggleHide = () => {
+    this.setState({
+      hide: !this.state.hide,
+    });
+  };
+
+  showViewData = () => {
+    const {
+      state: { view_btn },
+      props: {
+        match: { url },
+      },
+    } = this;
+    this.setState(
+      state => {
+        if (view_btn) {
+          return {
+            url: `${url}/general`,
+            view_btn: !view_btn,
+          };
+        } else {
+          return {
+            url: `${url}/rejected`,
+            view_btn: !view_btn,
+          };
+        }
+      },
+      () => {
+        this.props.history.push(url);
+      },
+    );
+  };
+
+  handleBreadCrumb = breadCrumb => {
+    if (!!breadCrumb) {
+      this.setState({
+        breadCrumb,
+      });
+    }
+  };
+
   render() {
     const {
       props: { match, breadcrumbs },
@@ -135,7 +137,7 @@ class SiteViewData extends Component {
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
@@ -270,7 +272,7 @@ class SiteViewData extends Component {
             </div>
           </div>
         </main>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -281,5 +283,17 @@ const mapStateToProps = ({ siteViewData }) => {
   return {
     breadcrumbs,
   };
+};
+
+SiteViewData.propTypes = {
+  match: PropTypes.object,
+  id: PropTypes.string,
+  location: PropTypes.object,
+};
+
+SiteViewData.defaultProps = {
+  match: {},
+  id: '',
+  location: {},
 };
 export default compose(connect(mapStateToProps))(SiteViewData);

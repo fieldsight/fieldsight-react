@@ -11,6 +11,8 @@ import {
 import copy from '../utils/cloneNestedObject';
 /* eslint-disable camelcase */
 
+/* eslint-disable no-param-reassign */
+
 const initialState = {
   master_submission_data: [],
 
@@ -36,17 +38,17 @@ const initialState = {
 
 const getNullFilteredSubmission = submissions => {
   if (submissions.length === 0) return;
-  const filterNullAnswer = submission => {
+  const FilterNullAnswer = submission => {
     return submission.filter(sub => {
       if (sub.type === 'group' || sub.type === 'repeat') {
-        sub.elements = filterNullAnswer(sub.elements);
-        return sub.elements.length > 0 ? true : false;
+        sub.elements = FilterNullAnswer(sub.elements);
+        if (sub.elements.length > 0) return true;
       }
       return sub.answer;
     });
   };
 
-  return filterNullAnswer(submissions);
+  // return new FilterNullAnswer(submissions);
 };
 
 const toggleNullSubmission = state => {

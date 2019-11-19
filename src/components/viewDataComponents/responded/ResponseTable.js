@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
+/* eslint-disable camelcase */
 
-class ResponseTable extends Component {
+class ResponseTable extends PureComponent {
   render() {
     const { generals_forms, table, survey, id } = this.props;
 
@@ -16,7 +18,7 @@ class ResponseTable extends Component {
           <thead>
             <tr>
               <th style={{ width: '15%' }}>
-                {survey === 'true' ? 'Form Name' : 'Name'}{' '}
+                {survey === 'true' ? 'Form Name' : 'Name'}
               </th>
 
               <th>Submissions</th>
@@ -30,7 +32,7 @@ class ResponseTable extends Component {
             {generals_forms &&
               generals_forms.map((generals, key) => {
                 return (
-                  <tr key={key}>
+                  <tr key={generals.id}>
                     {survey === 'true' ? (
                       <td>{generals.form_name}</td>
                     ) : (
@@ -39,7 +41,7 @@ class ResponseTable extends Component {
                       </td>
                     )}
                     <td>
-                      {table == 'site' ? (
+                      {table === 'site' ? (
                         generals.fsxf_id ? (
                           <Link
                             to={`/site-submission-data/${id}/${generals.fsxf_id}`}
@@ -78,7 +80,7 @@ class ResponseTable extends Component {
                     <td>{generals.created_date}</td>
 
                     <td>
-                      {table == 'site' ? (
+                      {table === 'site' ? (
                         generals.fsxf_id ? (
                           <Link
                             className="view-tag tag"
@@ -99,7 +101,7 @@ class ResponseTable extends Component {
                           className="view-tag tag"
                           to={`/submission-data/${id}/${generals.fsxf_id}`}
                         >
-                          <i className="la la-eye view-tag tag"></i>
+                          <i className="la la-eye view-tag tag" />
                         </Link>
                       ) : (
                         <Link
@@ -119,7 +121,7 @@ class ResponseTable extends Component {
                           className="edit-tag tag"
                           target="_blank"
                         >
-                          <i className="la la-download "></i>
+                          <i className="la la-download " />
                         </a>
                       )}
                       {table == 'site' ? (
@@ -150,7 +152,7 @@ class ResponseTable extends Component {
                           className="pending-tag tag"
                           to={`/project-version-submission/${id}/${generals.id}`}
                         >
-                          <i className="la la-clone edit-tag tag"></i>
+                          <i className="la la-clone edit-tag tag" />
                         </Link>
                       )}
                     </td>
@@ -163,4 +165,19 @@ class ResponseTable extends Component {
     );
   }
 }
+
+ResponseTable.prototype = {
+  generals_forms: PropTypes.arrayOf,
+  table: PropTypes.string,
+  survey: PropTypes.bool,
+  id: PropTypes.string,
+};
+
+ResponseTable.defaultProps = {
+  generals_forms: [],
+  table: '',
+  survey: false,
+  id: '',
+};
+
 export default ResponseTable;

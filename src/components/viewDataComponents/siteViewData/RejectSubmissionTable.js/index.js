@@ -1,30 +1,25 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
 import { DotLoader } from '../../../myForm/Loader';
-
+// eslint-disable-next-line anchor-is-valid
 class RejectedTable extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      rejected_submissions: [],
-    };
-  }
-
   componentDidMount() {
-    if (this.props.id != '') {
-      this.props.paginationHandler(1, null, {
+    const { id, paginationHandler } = this.props;
+    if (id !== '') {
+      paginationHandler(1, null, {
         type: 'siteStatus',
-        projectId: this.props.id,
+        projectId: id,
         status: 'rejected',
       });
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
-      this.props.handleBreadCrumb(this.props.breadcrumbs);
+  componentDidUpdate(prevProps) {
+    const { props } = this;
+    if (prevProps.breadcrumbs !== props.breadcrumbs) {
+      props.handleBreadCrumb(props.breadcrumbs);
     }
   }
 
@@ -45,16 +40,20 @@ class RejectedTable extends Component {
       },
     } = this;
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>Rejected Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
+            <button
+              type="button"
+              onClick={showViewData}
+              className="fieldsight-btn"
+            >
               {data ? 'View By Form' : 'View by Status'}
             </button>
           </div>
         </div>
-        {dLoader == false ? (
+        {dLoader === false ? (
           <>
             {' '}
             <div className="card-body">
@@ -65,14 +64,15 @@ class RejectedTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing <span>{fromData}</span> to{' '}
+                      Showing
+                      <span>{fromData}</span>
+                      to
                       <span>
-                        {' '}
-                        {toData > totalCount
-                          ? totalCount
-                          : toData}{' '}
-                      </span>{' '}
-                      of <span>{totalCount}</span> entries.
+                        {toData > totalCount ? totalCount : toData}
+                      </span>
+                      of
+                      <span>{totalCount}</span>
+                      entries.
                     </p>
                   </div>
                   {toData < totalCount ? (
@@ -81,11 +81,9 @@ class RejectedTable extends Component {
                         <li className="page-item">
                           <a
                             onClick={e =>
-                              paginationHandler(
-                                pageNum - 1,
-                                null,
-                                project_id,
-                              )
+                              paginationHandler(pageNum - 1, null, {
+                                projectId: id,
+                              })
                             }
                           >
                             <i className="la la-long-arrow-left" />
@@ -101,11 +99,9 @@ class RejectedTable extends Component {
                         <li className="page-item ">
                           <a
                             onClick={e =>
-                              paginationHandler(
-                                pageNum + 1,
-                                null,
-                                project_id,
-                              )
+                              paginationHandler(pageNum + 1, null, {
+                                projectId: id,
+                              })
                             }
                           >
                             <i className="la la-long-arrow-right" />
@@ -129,8 +125,45 @@ class RejectedTable extends Component {
         ) : (
           <DotLoader />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
+RejectedTable.propTypes = {
+  id: PropTypes.string,
+  paginationHandler: PropTypes.func,
+  breadcrumbs: PropTypes.object,
+  handleBreadCrumb: PropTypes.func,
+  data: PropTypes.object,
+  showViewData: PropTypes.bool,
+  dLoader: PropTypes.bool,
+  siteList: PropTypes.arrayOf,
+  fromData: PropTypes.number,
+  toData: PropTypes.number,
+  totalCount: PropTypes.number,
+  pageNum: PropTypes.number,
+  renderPageNumbers: PropTypes.func,
+};
+
+RejectedTable.defaultProps = {
+  id: '',
+  paginationHandler: () => {
+    return;
+  },
+  breadcrumbs: PropTypes.object,
+  handleBreadCrumb: () => {
+    return;
+  },
+  data: {},
+  showViewData: false,
+  dLoader: false,
+  siteList: [],
+  fromData: 0,
+  toData: 0,
+  totalCount: 0,
+  pageNum: 0,
+  renderPageNumbers: () => {
+    return;
+  },
+};
 export default WithPagination(RejectedTable);

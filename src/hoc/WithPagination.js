@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+
 /* eslint-disable camelcase */
+
+/*eslint-disable consistent-return */
 
 const getDisplayName = WrappedComponent => {
   return (
@@ -12,20 +15,28 @@ const getDisplayName = WrappedComponent => {
 
 const withPagination = WrappedComponent => {
   class WithPagination extends Component {
-    state = {
-      siteList: [],
-      totalCount: 0,
-      toData: 200,
-      fromData: 1,
-      pageNum: 1,
-      dLoader: true,
-      per_page: 200,
-      totalPage: null,
-      textVal: null,
-      form_id_string: '',
-      is_survey: false,
-      breadcrumbs: {},
-    };
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        siteList: [],
+        totalCount: 0,
+        toData: 200,
+        fromData: 1,
+        pageNum: 1,
+        dLoader: true,
+        per_page: 200,
+        totalPage: null,
+        textVal: null,
+        form_id_string: '',
+        is_survey: false,
+        breadcrumbs: {},
+      };
+    }
+
+    componentWillUnmount() {
+      this.isMounted = false;
+    }
 
     getUrl = (page_num, payload) => {
       switch (payload.type) {
@@ -48,16 +59,18 @@ const withPagination = WrappedComponent => {
           return `/fv3/api/forms-submissions/?page=${page_num}&project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
         case 'siteSubmission':
           return `/fv3/api/forms-submissions/?page=${page_num}&site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+        default:
+          return null;
       }
     };
 
     requestHandler = paginateUrl => {
-      this._isMounted = true;
+      this.isMounted = true;
       axios
         .get(`${paginateUrl}`)
 
         .then(res => {
-          if (this._isMounted) {
+          if (this.isMounted) {
             if (res.status === 200) {
               // if (res.data.results.query === null) {
               //   this.setState({
@@ -77,10 +90,10 @@ const withPagination = WrappedComponent => {
               //       totalPage: Math.ceil(res.data.count / 200)
               //     });
               //   }
-              //}
+              // }
 
               if (res.data.results.query) {
-                if (res.data.results.query == this.state.textVal) {
+                if (res.data.results.query === this.state.textVal) {
                   this.setState({
                     siteList: res.data.results.data,
                     dLoader: false,
@@ -131,26 +144,27 @@ const withPagination = WrappedComponent => {
     renderPageNumbers = payload => {
       if (this.state.totalPage) {
         const pageNumbers = [];
-        for (let i = 1; i <= this.state.totalPage; i++) {
+        for (let i = 1; i <= this.state.totalPage; i += 1) {
           pageNumbers.push(i);
         }
 
         return pageNumbers.map(number => {
-          let classes =
+          const classes =
             this.state.pageNum === number ? 'current' : '';
 
           if (
-            number == 1 ||
-            number == this.state.totalPage ||
+            number === 1 ||
+            number === this.state.totalPage ||
             (number >= this.state.pageNum - 2 &&
               number <= this.state.pageNum + 2)
           ) {
             return (
               <li key={number} className={classes}>
                 <a
-                  onClick={e =>
-                    this.paginationHandler(number, null, payload)
-                  }
+                  href="#"
+                  onClick={() => {
+                    this.paginationHandler(number, null, payload);
+                  }}
                 >
                   {number}
                 </a>
@@ -194,10 +208,6 @@ const withPagination = WrappedComponent => {
           requestHandler={requestHandler}
         />
       );
-    }
-
-    componentWillUnmount() {
-      this._isMounted = false;
     }
   }
 

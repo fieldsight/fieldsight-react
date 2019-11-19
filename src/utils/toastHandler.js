@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+/* eslint-disable no-unneeded-ternary */
 
 export const successToast = (title, action) =>
   toast.success(`${title} was successfully ${action}`, {
@@ -9,7 +10,7 @@ export const successToast = (title, action) =>
   });
 
 export const errorToast = error =>
-  toast.error(!!error ? error : 'Oops, something went wrong', {
+  toast.error(error ? error : 'Oops, something went wrong', {
     position: 'top-right',
     autoClose: 5000,
     hideProgressBar: false,
