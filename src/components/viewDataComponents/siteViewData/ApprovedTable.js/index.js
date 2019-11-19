@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import StatusTable from '../../responded/StatusTable';
 import { DotLoader } from '../../../myForm/Loader';
 import WithPagination from '../../../../hoc/WithPagination';
 
 class ApprovedTable extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      approved_submissions: [],
-    };
-  }
-
   componentDidMount() {
-    if (this.props.id != '') {
+    if (this.props.id !== '') {
       this.props.paginationHandler(1, null, {
         type: 'siteStatus',
         projectId: this.props.id,
@@ -22,7 +15,7 @@ class ApprovedTable extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
@@ -45,18 +38,21 @@ class ApprovedTable extends Component {
       },
     } = this;
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>Approved Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
+            <button
+              type="button"
+              onClick={showViewData}
+              className="fieldsight-btn"
+            >
               {data ? 'View By Form' : 'View by Status'}
             </button>
           </div>
         </div>
-        {dLoader == false ? (
+        {dLoader === false ? (
           <>
-            {' '}
             <div className="card-body">
               <StatusTable submission={siteList} />
             </div>
@@ -65,14 +61,15 @@ class ApprovedTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing <span>{fromData}</span> to{' '}
+                      Showing
+                      <span>{fromData}</span>
+                      to
                       <span>
-                        {' '}
-                        {toData > totalCount
-                          ? totalCount
-                          : toData}{' '}
-                      </span>{' '}
-                      of <span>{totalCount}</span> entries.
+                        {toData > totalCount ? totalCount : toData}
+                      </span>
+                      of
+                      <span>{totalCount}</span>
+                      entries.
                     </p>
                   </div>
                   {toData < totalCount ? (
@@ -80,13 +77,12 @@ class ApprovedTable extends Component {
                       <ul>
                         <li className="page-item">
                           <a
-                            onClick={e =>
-                              paginationHandler(
-                                pageNum - 1,
-                                null,
-                                project_id,
-                              )
-                            }
+                            href="#"
+                            onClick={() => {
+                              paginationHandler(pageNum - 1, null, {
+                                projectId: id,
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-left" />
                           </a>
@@ -100,13 +96,12 @@ class ApprovedTable extends Component {
 
                         <li className="page-item ">
                           <a
-                            onClick={e =>
-                              paginationHandler(
-                                pageNum + 1,
-                                null,
-                                project_id,
-                              )
-                            }
+                            href="#"
+                            onClick={() => {
+                              paginationHandler(pageNum + 1, null, {
+                                projectId: id,
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-right" />
                           </a>
@@ -124,13 +119,28 @@ class ApprovedTable extends Component {
                   </div>
                 </div>
               </div>
-            )}{' '}
+            )}
           </>
         ) : (
           <DotLoader />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
+ApprovedTable.propTypes = {
+  id: PropTypes.string.isRequired,
+  paginationHandler: PropTypes.func.isRequired,
+  breadcrumbs: PropTypes.objectOf.isRequired,
+  data: PropTypes.objectOf.isRequired,
+  showViewData: PropTypes.bool.isRequired,
+  dLoader: PropTypes.bool.isRequired,
+  siteList: PropTypes.arrayOf.isRequired,
+  fromData: PropTypes.number.isRequired,
+  toData: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  pageNum: PropTypes.number.isRequired,
+  handleBreadCrumb: PropTypes.func.isRequired,
+  renderPageNumbers: PropTypes.func.isRequired,
+};
 export default WithPagination(ApprovedTable);

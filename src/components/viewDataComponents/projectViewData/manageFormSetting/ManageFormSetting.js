@@ -1,13 +1,26 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
+/* eslint-disable camelcase */
 
 const sideNavRoutes = [
-  { to: '/general', path: '/general', title: 'General Forms' },
-  { to: '/scheduled', path: '/scheduled', title: 'Scheduled Forms' },
-  { to: '/stage', path: '/stage', title: 'Staged Forms' },
+  {
+    key: 0,
+    to: '/general',
+    path: '/general',
+    title: 'General Forms',
+  },
+  {
+    key: 1,
+    to: '/scheduled',
+    path: '/scheduled',
+    title: 'Scheduled Forms',
+  },
+  { key: 2, to: '/stage', path: '/stage', title: 'Staged Forms' },
 ];
 const site_specific_forms = [
   {
+    key: 0,
     to: '/general-survey',
     path: '/general-survey',
     title: 'General Forms',
@@ -16,20 +29,32 @@ const site_specific_forms = [
 
 const viewByStatus = [
   {
+    key: 0,
     to: '/rejected',
     path: '/rejected',
     title: 'Rejected Submissions',
   },
-  { to: '/flagged', path: '/flagged', title: 'Flagged Submissions' },
-  { to: '/pending', path: '/pending', title: 'Pending Submissions' },
   {
+    key: 1,
+    to: '/flagged',
+    path: '/flagged',
+    title: 'Flagged Submissions',
+  },
+  {
+    key: 2,
+    to: '/pending',
+    path: '/pending',
+    title: 'Pending Submissions',
+  },
+  {
+    key: 3,
     to: '/approved',
     path: '/approved',
     title: 'Approved Submissions',
   },
 ];
 
-class ManageFormSetting extends Component {
+class ManageFormSetting extends PureComponent {
   render() {
     const {
       location: { pathname },
@@ -46,12 +71,12 @@ class ManageFormSetting extends Component {
             <div className="manage_group">
               <h5>Site Specific Forms</h5>
               <ul className="nav nav-tabs flex-column border-tabs">
-                {sideNavRoutes.map((route, i) => (
-                  <li className="nav-item" key={i}>
+                {sideNavRoutes.map(route => (
+                  <li className="nav-item" key={route.key}>
                     <Link
                       to={`/project-responses/${id}${route.to}`}
                       className={
-                        location.pathname ==
+                        pathname ===
                         `/project-responses/${id}${route.path}`
                           ? 'nav-link active'
                           : 'nav-link'
@@ -66,12 +91,12 @@ class ManageFormSetting extends Component {
             <div className="manage_group mrt-15">
               <h5>Project wide Forms</h5>
               <ul className="nav nav-tabs flex-column border-tabs">
-                {site_specific_forms.map((route, i) => (
-                  <li className="nav-item" key={i}>
+                {site_specific_forms.map(route => (
+                  <li className="nav-item" key={route.key}>
                     <Link
                       to={`/project-responses/${id}${route.to}`}
                       className={
-                        pathname ==
+                        pathname ===
                         `/project-responses/${id}${route.path}`
                           ? 'nav-link active'
                           : 'nav-link'
@@ -87,12 +112,12 @@ class ManageFormSetting extends Component {
         )}
         {!!show_submission && (
           <ul className="nav nav-tabs flex-column border-tabs">
-            {viewByStatus.map((route, i) => (
-              <li className="nav-item" key={i}>
+            {viewByStatus.map(route => (
+              <li className="nav-item" key={route.key}>
                 <Link
                   to={`/project-responses/${id}${route.to}`}
                   className={
-                    pathname ==
+                    pathname ===
                     `/project-responses/${id}${route.path}`
                       ? 'nav-link active'
                       : 'nav-link'
@@ -109,5 +134,10 @@ class ManageFormSetting extends Component {
     );
   }
 }
+ManageFormSetting.propTypes = {
+  location: PropTypes.objectOf.isRequired,
+  match: PropTypes.objectOf.isRequired,
+  show_submission: PropTypes.bool.isRequired,
+};
 
 export default withRouter(ManageFormSetting);

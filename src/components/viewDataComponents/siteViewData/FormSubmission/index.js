@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
-import DotLoader from '../../../myForm/Loader';
+import { DotLoader } from '../../../myForm/Loader';
 
 class SubmissionData extends Component {
   constructor(props) {
@@ -38,8 +39,19 @@ class SubmissionData extends Component {
 
     this.setState({
       fid,
-      siteList: siteList,
+      siteList,
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.siteList !== this.props.siteList) {
+      this.setState({
+        siteList: nextProps.siteList,
+        mastersiteList: nextProps.siteList,
+        breadcrumbs: nextProps.breadcrumbs,
+        dLoader: nextProps.dLoader,
+      });
+    }
   }
 
   cancleModel = () => {
@@ -51,7 +63,7 @@ class SubmissionData extends Component {
   handleDelete = id => {
     this.setState({
       showConfirmation: true,
-      id: id,
+      id,
     });
   };
 
@@ -61,13 +73,16 @@ class SubmissionData extends Component {
     axios
       .get(`/fv3/api/delete-submission/${id}/`)
       .then(res => {
-        if (res.status == 204) {
+        if (res.status === 204) {
           this.setState(state => {
-            const result = list.filter(data => {
-              if (id !== data.submission_id) {
-                return data;
-              }
-            });
+            const result = list.filter(
+              data => data.submission_id !== id,
+            );
+            // (data => {
+            //   if (id !== data.submission_id) {
+            //     return data;
+            //   }
+            // });
             list = result;
 
             return {
@@ -82,17 +97,6 @@ class SubmissionData extends Component {
         console.log(err);
       });
   };
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.siteList != this.props.siteList) {
-      this.setState({
-        siteList: nextProps.siteList,
-        mastersiteList: nextProps.siteList,
-        breadcrumbs: nextProps.breadcrumbs,
-        dLoader: nextProps.dLoader,
-      });
-    }
-  }
 
   handleChange = async e => {
     const {
@@ -125,7 +129,7 @@ class SubmissionData extends Component {
       id,
     } = this.state;
     return (
-      <React.Fragment>
+      <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
@@ -149,20 +153,23 @@ class SubmissionData extends Component {
             <div className="dash-btn">
               <form className="floating-form">
                 <div className="form-group mr-0">
-                  <input
-                    type="search"
-                    className="form-control"
-                    onChange={e => this.handleChange(e)}
-                    required
-                  />
-                  <label htmlFor="input">Search</label>
-                  <i className="la la-search"></i>
+                  <label htmlFor="search">
+                    Search
+                    <input
+                      id="search"
+                      type="search"
+                      className="form-control"
+                      onChange={e => this.handleChange(e)}
+                      required
+                    />
+                  </label>
+                  <i className="la la-search" />
                 </div>
               </form>
             </div>
           </div>
 
-          {dLoader == false ? (
+          {dLoader === false ? (
             <div className="card-body">
               <Table
                 responsive="xl"
@@ -170,7 +177,6 @@ class SubmissionData extends Component {
               >
                 <thead>
                   <tr>
-                    {/*<th>S.N.</th>*/}
                     <th>submission id</th>
                     <th>Submitted By</th>
                     <th>Submission Date</th>
@@ -179,10 +185,9 @@ class SubmissionData extends Component {
                 </thead>
                 <tbody>
                   {siteList.length > 0 &&
-                    siteList.map((list, key) => {
+                    siteList.map(list => {
                       return (
-                        <tr key={key}>
-                          {/*<td>{key + this.props.fromData}</td>*/}
+                        <tr key={list.id}>
                           <td>{list.submission_id}</td>
                           <td>
                             <a href={list.profile_url}>
@@ -196,22 +201,23 @@ class SubmissionData extends Component {
                               className="view-tag tag"
                               href={`/fieldsight/application/?submission=${list.submission_id}#/submission-details`}
                             >
-                              <i className="la la-eye"></i>
+                              <i className="la la-eye" />
                             </a>
                             <a
                               className="edit-tag tag"
                               href={`/forms/edit/${this.props.form_id_string}/${list.submission_id}`}
                             >
-                              <i className="la la-edit"></i>
+                              <i className="la la-edit" />
                             </a>
 
                             <a
+                              href="#"
                               className="delete-tag tag"
                               onClick={() => {
                                 this.handleDelete(list.submission_id);
                               }}
                             >
-                              <i className="la la-trash-o"> </i>
+                              <i className="la la-trash-o" />
                             </a>
                           </td>
                         </tr>
@@ -225,14 +231,16 @@ class SubmissionData extends Component {
                   <div className="table-footer">
                     <div className="showing-rows">
                       <p>
-                        Showing <span>{this.props.fromData}</span> to{' '}
+                        Showing
+                        <span>{this.props.fromData}</span>
+                        to
                         <span>
-                          {' '}
                           {this.props.toData > this.props.totalCount
                             ? this.props.totalCount
-                            : this.props.toData}{' '}
-                        </span>{' '}
-                        of <span>{this.props.totalCount}</span>{' '}
+                            : this.props.toData}
+                        </span>
+                        of
+                        <span>{this.props.totalCount}</span>
                         entries.
                       </p>
                     </div>
@@ -241,7 +249,8 @@ class SubmissionData extends Component {
                         <ul>
                           <li className="page-item">
                             <a
-                              onClick={e =>
+                              href="#"
+                              onClick={() => {
                                 this.props.paginationHandler(
                                   this.props.pageNum - 1,
                                   null,
@@ -251,8 +260,8 @@ class SubmissionData extends Component {
                                     fsxf_id: this.state.fid,
                                     status: 'form-submission',
                                   },
-                                )
-                              }
+                                );
+                              }}
                             >
                               <i className="la la-long-arrow-left" />
                             </a>
@@ -267,7 +276,8 @@ class SubmissionData extends Component {
 
                           <li className="page-item ">
                             <a
-                              onClick={e =>
+                              href="#"
+                              onClick={() => {
                                 this.props.paginationHandler(
                                   this.props.pageNum + 1,
                                   null,
@@ -277,8 +287,8 @@ class SubmissionData extends Component {
                                     fsxf_id: this.state.fid,
                                     status: 'form-submission',
                                   },
-                                )
-                              }
+                                );
+                              }}
                             >
                               <i className="la la-long-arrow-right" />
                             </a>
@@ -312,12 +322,14 @@ class SubmissionData extends Component {
             </div>
             <div>
               <p>
-                "All the data within the submission will be completely
-                removed. Do you still want to continue?"
+                &quot;All the data within the submission will be
+                completely removed. Do you still want to
+                continue?&quot;
               </p>
             </div>
             <div className="warning-footer text-center">
               <a
+                href="#"
                 className="fieldsight-btn rejected-btn"
                 onClick={() => {
                   this.setState({ showConfirmation: false });
@@ -326,6 +338,7 @@ class SubmissionData extends Component {
                 cancel
               </a>
               <a
+                href="#"
                 className="fieldsight-btn"
                 onClick={() => this.delete(id)}
               >
@@ -334,9 +347,22 @@ class SubmissionData extends Component {
             </div>
           </Modal>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
-
+SubmissionData.propTypes = {
+  id: PropTypes.string.isRequired,
+  paginationHandler: PropTypes.func.isRequired,
+  breadcrumbs: PropTypes.objectOf.isRequired,
+  form_id_string: PropTypes.string.isRequired,
+  dLoader: PropTypes.bool.isRequired,
+  siteList: PropTypes.arrayOf.isRequired,
+  fromData: PropTypes.number.isRequired,
+  toData: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  pageNum: PropTypes.number.isRequired,
+  renderPageNumbers: PropTypes.func.isRequired,
+  match: PropTypes.objectOf.isRequired,
+};
 export default WithPagination(SubmissionData);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
+import PropTypes from 'prop-types';
 
 class StatusTable extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class StatusTable extends Component {
     };
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props) {
     return {
       submission: props.submission,
     };
@@ -34,9 +35,9 @@ class StatusTable extends Component {
           <tbody>
             {!!submission &&
               submission.length > 0 &&
-              submission.map((sub, key) => {
+              submission.map(sub => {
                 return (
-                  <tr key={key}>
+                  <tr key={sub.id}>
                     <td style={{ width: '380px' }}>
                       <a href={sub.submission_url}>{sub.name}</a>
                     </td>
@@ -53,4 +54,7 @@ class StatusTable extends Component {
     );
   }
 }
+StatusTable.propTypes = {
+  submission: PropTypes.arrayOf.isRequired,
+};
 export default StatusTable;

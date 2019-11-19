@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import VersionTable from '../../responded/Version';
 
 class ProjectVersionTable extends Component {
@@ -19,5 +20,9 @@ class ProjectVersionTable extends Component {
     );
   }
 }
+
+ProjectVersionTable.propTypes = {
+  match: PropTypes.objectOf.isRequired,
+};
 
 export default ProjectVersionTable;

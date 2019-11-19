@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
 import { DotLoader } from '../../../myForm/Loader';
-// eslint-disable-next-line anchor-is-valid
+
 class RejectedTable extends Component {
   componentDidMount() {
     const { id, paginationHandler } = this.props;
@@ -80,11 +80,12 @@ class RejectedTable extends Component {
                       <ul>
                         <li className="page-item">
                           <a
-                            onClick={e =>
+                            href="#"
+                            onClick={() => {
                               paginationHandler(pageNum - 1, null, {
                                 projectId: id,
-                              })
-                            }
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-left" />
                           </a>
@@ -98,11 +99,12 @@ class RejectedTable extends Component {
 
                         <li className="page-item ">
                           <a
-                            onClick={e =>
+                            href="#"
+                            onClick={() => {
                               paginationHandler(pageNum + 1, null, {
                                 projectId: id,
-                              })
-                            }
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-right" />
                           </a>
@@ -130,40 +132,19 @@ class RejectedTable extends Component {
   }
 }
 RejectedTable.propTypes = {
-  id: PropTypes.string,
-  paginationHandler: PropTypes.func,
-  breadcrumbs: PropTypes.object,
-  handleBreadCrumb: PropTypes.func,
-  data: PropTypes.object,
-  showViewData: PropTypes.bool,
-  dLoader: PropTypes.bool,
-  siteList: PropTypes.arrayOf,
-  fromData: PropTypes.number,
-  toData: PropTypes.number,
-  totalCount: PropTypes.number,
-  pageNum: PropTypes.number,
-  renderPageNumbers: PropTypes.func,
+  id: PropTypes.string.isRequired,
+  paginationHandler: PropTypes.func.isRequired,
+  breadcrumbs: PropTypes.objectOf.isRequired,
+  handleBreadCrumb: PropTypes.func.isRequired,
+  data: PropTypes.objectOf.isRequired,
+  showViewData: PropTypes.bool.isRequired,
+  dLoader: PropTypes.bool.isRequired,
+  siteList: PropTypes.arrayOf.isRequired,
+  fromData: PropTypes.number.isRequired,
+  toData: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  pageNum: PropTypes.number.isRequired,
+  renderPageNumbers: PropTypes.func.isRequired,
 };
 
-RejectedTable.defaultProps = {
-  id: '',
-  paginationHandler: () => {
-    return;
-  },
-  breadcrumbs: PropTypes.object,
-  handleBreadCrumb: () => {
-    return;
-  },
-  data: {},
-  showViewData: false,
-  dLoader: false,
-  siteList: [],
-  fromData: 0,
-  toData: 0,
-  totalCount: 0,
-  pageNum: 0,
-  renderPageNumbers: () => {
-    return;
-  },
-};
 export default WithPagination(RejectedTable);

@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import format from 'date-fns/format';
+/* eslint-disable camelcase */
 
-class DeleteTable extends Component {
+class DeleteTable extends PureComponent {
   render() {
     const { deleted_forms, table, id } = this.props;
     return (
-      <React.Fragment>
+      <>
         <Table
           responsive="xl"
           className="table  table-bordered  dataTable "
@@ -23,13 +25,12 @@ class DeleteTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {deleted_forms.map((deleted, key) => {
+            {deleted_forms.map(deleted => {
               return (
-                <tr key={key}>
+                <tr key={deleted.id}>
                   <td>{deleted.name}</td>
                   <td>{deleted.title}</td>
                   <td>
-                    {' '}
                     {deleted.last_response.length > 0
                       ? format(deleted.last_response, [
                           'MMMM Do YYYY, h:mm:ss a',
@@ -38,7 +39,7 @@ class DeleteTable extends Component {
                   </td>
                   <td>{deleted.created_date}</td>
                   <td>
-                    {table == 'site' ? (
+                    {table === 'site' ? (
                       deleted.fsxf_id ? (
                         <Link
                           className="view-tag tag"
@@ -71,20 +72,20 @@ class DeleteTable extends Component {
                     )}
                   </td>
                   <td>
-                    {table == 'site' ? (
+                    {table === 'site' ? (
                       deleted.fsxf_id ? (
                         <Link
                           className="view-tag tag"
                           to={`/site-submission-data/${id}/${deleted.fsxf_id}`}
                         >
-                          <i className="la la-eye view-tag tag"></i>
+                          <i className="la la-eye view-tag tag" />
                         </Link>
                       ) : (
                         <Link
                           className="view-tag tag"
                           to={`/site-submission-data/${id}/${deleted.id}`}
                         >
-                          <i className="la la-eye view-tag tag"></i>
+                          <i className="la la-eye view-tag tag" />
                         </Link>
                       )
                     ) : deleted.fsxf_id ? (
@@ -92,43 +93,44 @@ class DeleteTable extends Component {
                         className="view-tag tag"
                         to={`/submission-data/${id}/${deleted.fsxf_id}`}
                       >
-                        <i className="la la-eye view-tag tag"></i>
+                        <i className="la la-eye view-tag tag" />
                       </Link>
                     ) : (
                       <Link
                         className="view-tag tag"
                         to={`/submission-data/${id}/${deleted.id}`}
                       >
-                        <i className="la la-eye view-tag tag"></i>
+                        <i className="la la-eye view-tag tag" />
                       </Link>
                     )}
                     {deleted.download_url === null ? (
                       <a className="edit-tag tag disable-pointer">
-                        <i className="la la-download"></i>
+                        <i className="la la-download" />
                       </a>
                     ) : (
                       <a
                         href={deleted.download_url}
                         className="edit-tag tag"
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        <i className="la la-download"></i>{' '}
+                        <i className="la la-download" />
                       </a>
                     )}
-                    {table == 'site' ? (
+                    {table === 'site' ? (
                       deleted.fsxf_id ? (
                         <Link
                           className="pending-tag tag"
                           to={`/site-version-submission/${id}/${deleted.fsxf_id}`}
                         >
-                          <i className="la la-clone edit-tag tag"></i>
+                          <i className="la la-clone edit-tag tag" />
                         </Link>
                       ) : (
                         <Link
                           className="pending-tag tag"
                           to={`/site-version-submission/${id}/${deleted.id}`}
                         >
-                          <i className="la la-clone edit-tag tag"></i>
+                          <i className="la la-clone edit-tag tag" />
                         </Link>
                       )
                     ) : deleted.fsxf_id ? (
@@ -136,14 +138,14 @@ class DeleteTable extends Component {
                         className="pending-tag tag"
                         to={`/project-version-submission/${id}/${deleted.fsxf_id}`}
                       >
-                        <i className="la la-clone edit-tag tag"></i>
+                        <i className="la la-clone edit-tag tag" />
                       </Link>
                     ) : (
                       <Link
                         className="pending-tag tag"
                         to={`/project-version-submission/${id}/${deleted.id}`}
                       >
-                        <i className="la la-clone edit-tag tag"></i>
+                        <i className="la la-clone edit-tag tag" />
                       </Link>
                     )}
                   </td>
@@ -152,8 +154,13 @@ class DeleteTable extends Component {
             })}
           </tbody>
         </Table>
-      </React.Fragment>
+      </>
     );
   }
 }
+DeleteTable.propTypes = {
+  deleted_forms: PropTypes.arrayOf.isRequired,
+  table: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+};
 export default DeleteTable;

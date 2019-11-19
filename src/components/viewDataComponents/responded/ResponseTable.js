@@ -30,7 +30,7 @@ class ResponseTable extends PureComponent {
 
           <tbody>
             {generals_forms &&
-              generals_forms.map((generals, key) => {
+              generals_forms.map(generals => {
                 return (
                   <tr key={generals.id}>
                     {survey === 'true' ? (
@@ -86,14 +86,14 @@ class ResponseTable extends PureComponent {
                             className="view-tag tag"
                             to={`/site-submission-data/${id}/${generals.fsxf_id}`}
                           >
-                            <i className="la la-eye view-tag tag"></i>
+                            <i className="la la-eye view-tag tag" />
                           </Link>
                         ) : (
                           <Link
                             className="view-tag tag"
                             to={`/site-submission-data/${id}/${generals.id}`}
                           >
-                            <i className="la la-eye view-tag tag"></i>
+                            <i className="la la-eye view-tag tag" />
                           </Link>
                         )
                       ) : generals.fsxf_id ? (
@@ -108,36 +108,37 @@ class ResponseTable extends PureComponent {
                           className="view-tag tag"
                           to={`/submission-data/${id}/${generals.id}`}
                         >
-                          <i className="la la-eye view-tag tag"></i>
+                          <i className="la la-eye view-tag tag" />
                         </Link>
                       )}
                       {generals.download_url === null ? (
                         <a className="edit-tag tag disable-pointer">
-                          <i className="la la-download"></i>
+                          <i className="la la-download" />
                         </a>
                       ) : (
                         <a
                           href={generals.download_url}
                           className="edit-tag tag"
                           target="_blank"
+                          rel="noopener noreferrer"
                         >
                           <i className="la la-download " />
                         </a>
                       )}
-                      {table == 'site' ? (
+                      {table === 'site' ? (
                         generals.fsxf_id ? (
                           <Link
                             className="pending-tag tag"
                             to={`/site-version-submission/${id}/${generals.fsxf_id}`}
                           >
-                            <i className="la la-clone edit-tag tag"></i>
+                            <i className="la la-clone edit-tag tag" />
                           </Link>
                         ) : (
                           <Link
                             className="pending-tag tag"
                             to={`/site-version-submission/${id}/${generals.id}`}
                           >
-                            <i className="la la-clone edit-tag tag"></i>
+                            <i className="la la-clone edit-tag tag" />
                           </Link>
                         )
                       ) : generals.fsxf_id ? (
@@ -145,7 +146,7 @@ class ResponseTable extends PureComponent {
                           className="pending-tag tag"
                           to={`/project-version-submission/${id}/${generals.fsxf_id}`}
                         >
-                          <i className="la la-clone edit-tag tag"></i>
+                          <i className="la la-clone edit-tag tag" />
                         </Link>
                       ) : (
                         <Link
@@ -166,18 +167,11 @@ class ResponseTable extends PureComponent {
   }
 }
 
-ResponseTable.prototype = {
-  generals_forms: PropTypes.arrayOf,
-  table: PropTypes.string,
-  survey: PropTypes.bool,
-  id: PropTypes.string,
-};
-
-ResponseTable.defaultProps = {
-  generals_forms: [],
-  table: '',
-  survey: false,
-  id: '',
+ResponseTable.propTypes = {
+  generals_forms: PropTypes.arrayOf.isRequired,
+  table: PropTypes.string.isRequired,
+  survey: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default ResponseTable;

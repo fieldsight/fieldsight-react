@@ -2,19 +2,11 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
+import PropTypes from 'prop-types';
 import { DotLoader } from '../../myForm/Loader';
-
+/* eslint-disable camelcase */
 export default class SurveyFormResponseTable extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      survey_forms: [],
-      loader: '',
-    };
-  }
-
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props) {
     return {
       survey_forms: props.survey_forms,
       loader: props.loader,
@@ -24,8 +16,8 @@ export default class SurveyFormResponseTable extends Component {
   render() {
     const { loader, survey_forms, id } = this.props;
     return (
-      <React.Fragment>
-        {loader == true ? (
+      <>
+        {loader === true ? (
           <Table
             responsive="xl"
             className="table  table-bordered  dataTable "
@@ -43,9 +35,9 @@ export default class SurveyFormResponseTable extends Component {
             </thead>
             <tbody>
               {survey_forms.length > 0 &&
-                survey_forms.map((survey, key) => {
+                survey_forms.map(survey => {
                   return (
-                    <tr key={key}>
+                    <tr key={survey.id}>
                       <td>{survey.name}</td>
                       <td>{survey.title}</td>
                       <td>
@@ -62,7 +54,7 @@ export default class SurveyFormResponseTable extends Component {
                           <i
                             className="la la-plus"
                             aria-hidden="true"
-                          ></i>
+                          />
                         </a>
                       </td>
                       <td>
@@ -78,20 +70,24 @@ export default class SurveyFormResponseTable extends Component {
                             className="view-tag tag"
                             to={`/submission-data/${id}/${survey.id}`}
                           >
-                            <i className="la la-eye"></i>
+                            <i className="la la-eye" />
                           </Link>
                         }
                         {survey.download_url === null ? (
-                          <a className="edit-tag tag disable-pointer">
-                            <i className="la la-download"></i>
+                          <a
+                            href="#"
+                            className="edit-tag tag disable-pointer"
+                          >
+                            <i className="la la-download" />
                           </a>
                         ) : (
                           <a
                             href={survey.download_url}
                             className="edit-tag tag"
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
-                            <i className="la la-download"></i>
+                            <i className="la la-download" />
                           </a>
                         )}
                         {
@@ -99,7 +95,7 @@ export default class SurveyFormResponseTable extends Component {
                             className="pending-tag tag"
                             to={`/project-version-submission/${id}/${survey.id}`}
                           >
-                            <i className="la la-clone "></i>
+                            <i className="la la-clone " />
                           </Link>
                         }
                       </td>
@@ -111,7 +107,13 @@ export default class SurveyFormResponseTable extends Component {
         ) : (
           <DotLoader />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
+
+SurveyFormResponseTable.propTypes = {
+  survey_forms: PropTypes.arrayOf.isRequired,
+  loader: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
+};

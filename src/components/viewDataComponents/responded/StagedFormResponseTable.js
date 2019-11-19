@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
+import PropTypes from 'prop-types';
 import { DotLoader } from '../../myForm/Loader';
+/* eslint-disable camelcase */
 
-export default class SurveyFormResponseTable extends Component {
+export default class SurveyFormResponseTable extends PureComponent {
   render() {
     const { stage_forms, table, loader, id } = this.props;
     return (
       <>
-        {loader == true ? (
+        {loader === true ? (
           <div>
             {stage_forms &&
-              stage_forms.map((stage, key) => {
+              stage_forms.map(stage => {
                 return (
-                  <div key={key}>
+                  <div key={stage.id}>
                     <div style={{ display: 'flex' }}>
                       <h6>{stage.name}</h6>
                     </div>
@@ -33,9 +35,9 @@ export default class SurveyFormResponseTable extends Component {
                       </thead>
                       <tbody>
                         {stage.sub_stages &&
-                          stage.sub_stages.map((sub_stages, key) => {
+                          stage.sub_stages.map(sub_stages => {
                             return (
-                              <tr key={key}>
+                              <tr key={sub_stages.id}>
                                 <td style={{ width: '269px' }}>
                                   {sub_stages.name}
                                 </td>
@@ -75,29 +77,30 @@ export default class SurveyFormResponseTable extends Component {
                                       className="view-tag tag"
                                       to={`/site-submission-data/${id}/${sub_stages.fsxf_id}`}
                                     >
-                                      <i className="la la-eye"></i>
+                                      <i className="la la-eye" />
                                     </Link>
                                   ) : (
                                     <Link
                                       className="view-tag tag"
                                       to={`/submission-data/${id}/${sub_stages.fsxf_id}`}
                                     >
-                                      <i className="la la-eye"></i>
+                                      <i className="la la-eye" />
                                     </Link>
                                   )}
 
                                   {sub_stages.download_url ===
                                   null ? (
                                     <a className="edit-tag tag disable-pointer">
-                                      <i className="la la-download"></i>
+                                      <i className="la la-download" />
                                     </a>
                                   ) : (
                                     <a
                                       href={sub_stages.download_url}
                                       className="edit-tag tag"
                                       target="_blank"
+                                      rel="noopener noreferrer"
                                     >
-                                      <i className="la la-download"></i>
+                                      <i className="la la-download" />
                                     </a>
                                   )}
                                   {table === 'site' ? (
@@ -105,14 +108,14 @@ export default class SurveyFormResponseTable extends Component {
                                       className="pending-tag tag"
                                       to={`/site-version-submission/${id}/${sub_stages.fsxf_id}`}
                                     >
-                                      <i className="la la-clone"></i>
+                                      <i className="la la-clone" />
                                     </Link>
                                   ) : (
                                     <Link
                                       className="pending-tag tag"
                                       to={`/project-version-submission/${id}/${sub_stages.fsxf_id}`}
                                     >
-                                      <i className="la la-clone"></i>
+                                      <i className="la la-clone" />
                                     </Link>
                                   )}
                                 </td>
@@ -132,3 +135,10 @@ export default class SurveyFormResponseTable extends Component {
     );
   }
 }
+
+SurveyFormResponseTable.propTypes = {
+  stage_forms: PropTypes.arrayOf.isRequired,
+  table: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  loader: PropTypes.bool.isRequired,
+};

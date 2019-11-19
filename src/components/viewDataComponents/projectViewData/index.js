@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import PropTypes from 'prop-types';
 
 import ManageFormSetting from './manageFormSetting/ManageFormSetting';
 import ManageGeneralForm from './manageGeneralForm';
@@ -17,6 +14,7 @@ import ApprovedTable from './ApprovedTable';
 import PendingTable from './PendingSubmissionTable';
 import RejectedTable from './RejectSubmissionTable';
 import FlaggedTable from './FlagedTable';
+/* eslint-disable camelcase */
 
 class ViewData extends Component {
   constructor(props) {
@@ -26,42 +24,10 @@ class ViewData extends Component {
       hide: true,
       view_btn: false,
       id: props.match.params && props.match.params.id,
-      deleted_forms: [],
-      generals_forms: [],
       url: props.match.url && props.match.url,
       breadCrumb: {},
     };
   }
-
-  toggleHide = () => {
-    this.setState({
-      hide: !this.state.hide,
-    });
-  };
-
-  showViewData = () => {
-    const {
-      match: { url },
-    } = this.props;
-    this.setState(
-      state => {
-        if (!!this.state.view_btn) {
-          return {
-            url: `${url}/general`,
-            view_btn: !this.state.view_btn,
-          };
-        } else {
-          return {
-            url: `${url}/rejected`,
-            view_btn: !this.state.view_btn,
-          };
-        }
-      },
-      () => {
-        this.props.history.push(this.state.url);
-      },
-    );
-  };
 
   componentDidMount() {
     const {
@@ -93,14 +59,6 @@ class ViewData extends Component {
     }
   }
 
-  handleBreadCrumb = breadCrumb => {
-    if (!!breadCrumb) {
-      this.setState({
-        breadCrumb,
-      });
-    }
-  };
-
   componentDidUpdate(preState) {
     const {
       match: {
@@ -110,34 +68,75 @@ class ViewData extends Component {
     } = this.props;
 
     if (preState.location.pathname !== pathname) {
-      if (
-        pathname === `/project-responses/${id}/rejected` ||
-        pathname === `/project-responses/${id}/pending` ||
-        pathname === `/project-responses/${id}/flagged` ||
-        pathname === `/project-responses/${id}/approved`
-      ) {
-        this.setState({
-          id,
-          view_btn: true,
-        });
-      } else if (
-        pathname === `/project-responses/${id}/general` ||
-        pathname === `/project-responses/${id}/stage` ||
-        pathname === `/project-responses/${id}/scheduled` ||
-        pathname === `/project-responses/${id}/general-survey`
-      ) {
-        this.setState({
-          view_btn: false,
-          id,
-        });
-      } else if (pathname == `/project-responses/${id}`) {
-        this.props.history.push(`/project-responses/${id}/general`) ||
-          this.props.history.push(
-            `/project-responses/${id}/rejected`,
-          );
-      }
+      this.getPath(pathname, id);
     }
   }
+
+  getPath = (pathname, id) => {
+    if (
+      pathname === `/project-responses/${id}/rejected` ||
+      pathname === `/project-responses/${id}/pending` ||
+      pathname === `/project-responses/${id}/flagged` ||
+      pathname === `/project-responses/${id}/approved`
+    ) {
+      this.setState({
+        id,
+        view_btn: true,
+      });
+    } else if (
+      pathname === `/project-responses/${id}/general` ||
+      pathname === `/project-responses/${id}/stage` ||
+      pathname === `/project-responses/${id}/scheduled` ||
+      pathname === `/project-responses/${id}/general-survey`
+    ) {
+      this.setState({
+        view_btn: false,
+        id,
+      });
+    } else if (pathname === `/project-responses/${id}`) {
+      const url =
+        `/project-responses/${id}/general` ||
+        `/project-responses/${id}/rejected`;
+      this.pushHistory(url);
+    }
+  };
+
+  pushHistory = url => {
+    this.props.history.push(url);
+  };
+
+  toggleHide = () => {
+    this.setState(state => ({
+      hide: !state.hide,
+    }));
+  };
+
+  showViewData = () => {
+    const {
+      match: { url },
+    } = this.props;
+    if (this.state.view_btn) {
+      this.setState(state => ({
+        url: `${url}/general`,
+        view_btn: !state.view_btn,
+      }));
+    } else {
+      this.setState(state => ({
+        url: `${url}/rejected`,
+        view_btn: !state.view_btn,
+      }));
+    }
+
+    this.pushHistory(this.state.url);
+  };
+
+  handleBreadCrumb = breadCrumb => {
+    if (breadCrumb) {
+      this.setState({
+        breadCrumb,
+      });
+    }
+  };
 
   render() {
     const {
@@ -150,7 +149,7 @@ class ViewData extends Component {
     } = this.props;
     const { breadCrumb, view_btn, url, id } = this.state;
     return (
-      <React.Fragment>
+      <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
@@ -305,7 +304,7 @@ class ViewData extends Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -316,5 +315,13 @@ const mapStateToProps = ({ projectViewData }) => {
   return {
     breadcrumbs,
   };
+};
+
+ViewData.propTypes = {
+  match: PropTypes.objectOf.isRequired,
+  history: PropTypes.objectOf.isRequired,
+  location: PropTypes.objectOf.isRequired,
+  breadcrumbs: PropTypes.objectOf.isRequired,
+  height: PropTypes.string.isRequired,
 };
 export default compose(connect(mapStateToProps))(ViewData);

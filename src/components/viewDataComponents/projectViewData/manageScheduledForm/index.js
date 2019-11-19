@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import ResponseTable from '../../responded/ResponseTable';
-import DeleteTable from '../deleteTable';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import PropTypes from 'prop-types';
+import ResponseTable from '../../responded/ResponseTable';
+import DeleteTable from '../deleteTable';
 import { getProjectViewData } from '../../../../actions/viewDataActions';
 import { DotLoader } from '../../../myForm/Loader';
+/* eslint-disable camelcase */
 
 class ManageScheduledForm extends Component {
   constructor(props) {
@@ -17,15 +19,15 @@ class ManageScheduledForm extends Component {
   }
 
   componentDidMount() {
-    if (this.props.id != '') {
+    if (this.props.id !== '') {
       this.props.getProjectViewData(this.props.id, 'scheduled');
     }
   }
 
   toggleHide = () => {
-    this.setState({
-      hide: !this.state.hide,
-    });
+    this.setState(state => ({
+      hide: !state.hide,
+    }));
   };
 
   render() {
@@ -42,11 +44,15 @@ class ManageScheduledForm extends Component {
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>{!data ? 'Schedule Forms' : 'Rejected Submission'}</h5>
           <Link to={url}>
-            <button onClick={showViewData} className="fieldsight-btn">
+            <button
+              type="button"
+              onClick={showViewData}
+              className="fieldsight-btn"
+            >
               {data ? 'View By Form' : 'View by Status'}
             </button>
           </Link>
@@ -62,61 +68,56 @@ class ManageScheduledForm extends Component {
             ) : (
               <DotLoader />
             ))}
-
-          {/* {!!data && <Rejected id={this.props.id} />} */}
         </div>
-        {deleted_forms.length > 0
-          ? !data && (
-              <div className="card no-boxshadow">
-                <div className="card-header main-card-header sub-card-header">
-                  <h5>Deleted Forms</h5>
-                  <div className="dash-btn">
-                    {this.state.hide ? (
-                      <button
-                        type="button"
-                        className="btn-toggle"
-                        onClick={this.toggleHide}
-                      >
-                        show
-                        <div className="handle"></div>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className="btn-toggle"
-                        onClick={this.toggleHide}
-                        style={{
-                          backgroundColor: '#28a745',
-                          color: 'white',
-                          textAlign: 'left',
-                        }}
-                      >
-                        hide
-                        <div
-                          className="handle"
-                          style={{ left: 'auto', right: '0.1875rem' }}
-                        ></div>
-                      </button>
-                    )}
-                  </div>
-                </div>
-                <div className="card-body">
-                  {!this.state.hide && (
-                    <DeleteTable
-                      id={id}
-                      deleted_forms={deleted_forms}
-                      loader={scheduled_loader}
+        {deleted_forms.length > 0 && !data && (
+          <div className="card no-boxshadow">
+            <div className="card-header main-card-header sub-card-header">
+              <h5>Deleted Forms</h5>
+              <div className="dash-btn">
+                {this.state.hide ? (
+                  <button
+                    type="button"
+                    className="btn-toggle"
+                    onClick={this.toggleHide}
+                  >
+                    show
+                    <div className="handle" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn-toggle"
+                    onClick={this.toggleHide}
+                    style={{
+                      backgroundColor: '#28a745',
+                      color: 'white',
+                      textAlign: 'left',
+                    }}
+                  >
+                    hide
+                    <div
+                      className="handle"
+                      style={{ left: 'auto', right: '0.1875rem' }}
                     />
-                  )}
-                </div>
+                  </button>
+                )}
               </div>
-            )
-          : ''}
-      </React.Fragment>
+            </div>
+            <div className="card-body">
+              {!this.state.hide && (
+                <DeleteTable
+                  id={id}
+                  deleted_forms={deleted_forms}
+                  loader={scheduled_loader}
+                />
+              )}
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 }
-//export default ManageScheduledForm;
 const mapStateToProps = ({ projectViewData }) => {
   const {
     scheduled_forms,
@@ -129,6 +130,16 @@ const mapStateToProps = ({ projectViewData }) => {
     deleted_forms,
     scheduled_loader,
   };
+};
+ManageScheduledForm.propTypes = {
+  deleted_forms: PropTypes.arrayOf.isRequired,
+  showViewData: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  getProjectViewData: PropTypes.func.isRequired,
+  data: PropTypes.string.isRequired,
+  scheduled_forms: PropTypes.arrayOf.isRequired,
+  url: PropTypes.string.isRequired,
+  scheduled_loader: PropTypes.bool.isRequired,
 };
 export default compose(
   connect(mapStateToProps, {

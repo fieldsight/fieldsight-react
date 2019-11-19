@@ -3,7 +3,9 @@ import axios from 'axios';
 
 /* eslint-disable camelcase */
 
-/*eslint-disable consistent-return */
+/* eslint-disable consistent-return */
+
+/* esling-disable array-callback-return */
 
 const getDisplayName = WrappedComponent => {
   return (

@@ -27,7 +27,18 @@
       "error",
       { "allow": ["__REDUX_DEVTOOLS_EXTENSION__"] }
     ],
-    "react/destructuring-assignment": "warn"
+    "react/destructuring-assignment": "warn",
+    "array-callback-return": "warn",
+    "jsx-a11y/label-has-for": [
+      2,
+      {
+        "components": ["label"],
+        "required": {
+          "some": ["nesting", "id"]
+        },
+        "allowChildren": false
+      }
+    ]
   },
   "env": {
     "browser": true
