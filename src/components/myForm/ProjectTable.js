@@ -6,6 +6,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import PreviewModal from "./PreviewModal";
 import { DotLoader } from "./Loader";
 import { successToast, errorToast } from "./toastHandler";
+import { FormattedMessage } from "react-intl";
 
 const url = "fv3/api/myprojectforms/";
 
@@ -34,7 +35,6 @@ class ProjecTable extends Component {
       .then(res => {
         if (this._isMounted) {
           if (res.status === 200) {
-            
             this.setState({
               project_list: res.data,
               dLoader: false
@@ -54,7 +54,12 @@ class ProjecTable extends Component {
       <React.Fragment>
         {this.state.project_list.length === 0 && !this.state.dLoader && (
           <div className="card-header main-card-header sub-card-header bg-header">
-            <h5>No Form Data Available</h5>
+            <h5>
+              <FormattedMessage
+                id="app.noFormDataAvailable"
+                defaultMessage="No Form Data Available"
+              />
+            </h5>
           </div>
         )}
         {this.state.project_list.map((item, i) => (
@@ -73,11 +78,36 @@ class ProjecTable extends Component {
                 >
                   <thead>
                     <tr>
-                      <th> S.N</th>
-                      <th>Form Name</th>
-                      <th>Create Date</th>
-                      <th>Updated date</th>
-                      <th>Action</th>
+                      <th>
+                        <FormattedMessage id="app.sn" defaultMessage="S.N" />{" "}
+                      </th>
+                      <th>
+                        {" "}
+                        <FormattedMessage
+                          id="app.form-name"
+                          defaultMessage="Form Name"
+                        />
+                      </th>
+                      <th>
+                        {" "}
+                        <FormattedMessage
+                          id="app.create-date"
+                          defaultMessage="Create Date"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.updatedDate"
+                          defaultMessage="Updated date"
+                        />
+                      </th>
+                      <th>
+                        {" "}
+                        <FormattedMessage
+                          id="app.action"
+                          defaultMessage="Action"
+                        />
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -96,7 +126,12 @@ class ProjecTable extends Component {
                         <td>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-disabled">Preview</Tooltip>
+                              <Tooltip id="tooltip-disabled">
+                                <FormattedMessage
+                                  id="app.preview"
+                                  defaultMessage="Preview"
+                                />
+                              </Tooltip>
                             }
                           >
                             <a
@@ -118,7 +153,12 @@ class ProjecTable extends Component {
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-disabled">Edit</Tooltip>
+                              <Tooltip id="tooltip-disabled">
+                                <FormattedMessage
+                                  id="app.edit"
+                                  defaultMessage="Edit"
+                                />
+                              </Tooltip>
                             }
                           >
                             <a
@@ -145,7 +185,12 @@ class ProjecTable extends Component {
                           </OverlayTrigger> */}
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-disabled">download</Tooltip>
+                              <Tooltip id="tooltip-disabled">
+                                <FormattedMessage
+                                  id="app.download"
+                                  defaultMessage="download"
+                                />
+                              </Tooltip>
                             }
                           >
                             <a className="td-edit-btn td-btn">
@@ -156,7 +201,10 @@ class ProjecTable extends Component {
                           <OverlayTrigger
                             overlay={
                               <Tooltip id="tooltip-disabled">
-                                Make a copy
+                                <FormattedMessage
+                                  id="app.makeAcopy"
+                                  defaultMessage="Make a copy"
+                                />
                               </Tooltip>
                             }
                           >

@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import MyformTable from "./MyformTable";
 import SharedTable from "./SharedTable";
+import { FormattedMessage } from "react-intl";
 
-// const base_url = "https://fieldsight.naxa.com.np";
+const base_url = "https://fieldsight.naxa.com.np";
 
 class MyFormContent extends Component {
   render() {
@@ -15,14 +16,23 @@ class MyFormContent extends Component {
               <div className="tab-pane fade show active">
                 <div className="card no-boxshadow">
                   <div className="card-header main-card-header sub-card-header">
-                    <h5>My Forms</h5>
+                    {/* <h5>My Forms</h5>*/}
+                    <h5>
+                      <FormattedMessage
+                        id="app.my-forms"
+                        defaultMessage="My Forms"
+                      />
+                    </h5>
                     <div className="add-btn">
                       <a
                         href={base_url + "/forms/create/"}
                         target="_blank"
                         data-tab="site-popup"
                       >
-                        Create New{" "}
+                        <FormattedMessage
+                          id="app.create-new"
+                          defaultMessage="Create New"
+                        />{" "}
                         <span>
                           <i className="la la-plus" />
                         </span>
@@ -39,7 +49,13 @@ class MyFormContent extends Component {
 
                 <div className="card no-boxshadow mrt-30">
                   <div className="card-header main-card-header sub-card-header">
-                    <h5>Forms Shared With Me</h5>
+                    <h5>
+                      {" "}
+                      <FormattedMessage
+                        id="app.formsSharedWithMe"
+                        defaultMessage="Forms Shared With Me"
+                      />
+                    </h5>
                   </div>
                   <div className="card-body">
                     <SharedTable

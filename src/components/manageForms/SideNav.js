@@ -6,6 +6,7 @@ import GeneralForms from "./GeneralForms";
 import ScheduleForms from "./ScheduleForms";
 import StagedForms from "./StagedFoms";
 import ProjectWideForms from "./ProjectWideForms";
+import { FormattedMessage } from "react-intl";
 
 const urls = [
   "fv3/api/project-regions-types/",
@@ -127,11 +128,25 @@ class SideNav extends Component {
               style={{ minHeight: this.props.height }}
             >
               <div className="card-header main-card-header">
-                <h5>Manage Forms</h5>
+                {/*<h5>Manage Forms</h5>*/}
+                <FormattedMessage
+                  id="app.manage-forms"
+                  defaultMessage="Manage Forms"
+                />
               </div>
               <div className="card-body">
                 <div className="manage_group">
-                  {!!isProjectForm && <h5>Site-Specific Forms</h5>}
+                  {!!isProjectForm && (
+                    <h5>
+                      {
+                        /*Site-Specific Forms*/
+                        <FormattedMessage
+                          id="app.site-specific-forms"
+                          defaultMessage="Site Specific Forms"
+                        />
+                      }
+                    </h5>
+                  )}
                   <ul className="nav nav-tabs flex-column border-tabs">
                     <li className="nav-item">
                       <Link
@@ -142,7 +157,11 @@ class SideNav extends Component {
                             : "nav-link"
                         }
                       >
-                        General forms
+                        {/*General forms*/}
+                        <FormattedMessage
+                          id="app.general-forms"
+                          defaultMessage="General forms"
+                        />
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -154,7 +173,11 @@ class SideNav extends Component {
                             : "nav-link"
                         }
                       >
-                        Scheduled forms
+                        {/*Scheduled forms*/}
+                        <FormattedMessage
+                          id="app.scheduled-form"
+                          defaultMessage="Scheduled forms"
+                        />
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -166,14 +189,24 @@ class SideNav extends Component {
                             : "nav-link"
                         }
                       >
-                        Staged forms
+                        {/* Staged forms*/}
+                        <FormattedMessage
+                          id="app.staged-form"
+                          defaultMessage="Staged Forms"
+                        />
                       </Link>
                     </li>
                   </ul>
                 </div>
                 {isProjectForm && (
                   <div className="manage_group mrt-15">
-                    <h5>Project-Wide Forms</h5>
+                    {/*<h5>Project-Wide Forms</h5>*/}
+                    <h5>
+                      <FormattedMessage
+                        id="app.project-wide-forms"
+                        defaultMessage="Project-Wide Forms"
+                      />
+                    </h5>
                     <ul
                       className="nav nav-tabs flex-column border-tabs"
                       id="myTab"
@@ -189,7 +222,11 @@ class SideNav extends Component {
                               : "nav-link"
                           }
                         >
-                          General forms
+                          {/*General forms*/}
+                          <FormattedMessage
+                            id="app.general-forms"
+                            defaultMessage="General forms"
+                          />
                         </Link>
                       </li>
                     </ul>

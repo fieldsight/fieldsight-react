@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { FormattedMessage } from "react-intl";
 
 class StatusTable extends Component {
   state = {
@@ -18,9 +19,19 @@ class StatusTable extends Component {
         <Table responsive="xl" className="table  table-bordered  dataTable ">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Submitted By</th>
-              <th>Time</th>
+              <th>
+                <FormattedMessage id="app.name" defaultMessage="Name" />
+              </th>
+              <th>
+                <FormattedMessage
+                  id="app.submitted-by"
+                  defaultMessage="Submitted By"
+                />
+              </th>
+              <th>
+                {" "}
+                <FormattedMessage id="app.time" defaultMessage="Time" />
+              </th>
             </tr>
           </thead>
           <tbody>

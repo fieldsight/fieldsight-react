@@ -6,6 +6,7 @@ import FormShare from "./formShare";
 import { DotLoader } from "./Loader";
 import Modal from "../common/Modal";
 import DeleteModal from "../common/DeleteModal";
+import { FormattedMessage } from "react-intl";
 
 const url = "fv3/api/myforms/";
 const deleteUrl = "/fv3/api/form/delete/";
@@ -109,10 +110,32 @@ class MyformTable extends Component {
               >
                 <thead>
                   <tr>
-                    <th>Form Name</th>
-                    <th>Create Date</th>
-                    <th>Updated date</th>
-                    <th>Action</th>
+                    <th>
+                      <FormattedMessage
+                        id="app.form-name"
+                        defaultMessage="Form Name"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.create-date"
+                        defaultMessage="Create Date"
+                      />
+                    </th>
+                    <th>
+                      {" "}
+                      <FormattedMessage
+                        id="app.updatedDate"
+                        defaultMessage="Updated date"
+                      />
+                    </th>
+                    <th>
+                      {" "}
+                      <FormattedMessage
+                        id="app.action"
+                        defaultMessage="Action"
+                      />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

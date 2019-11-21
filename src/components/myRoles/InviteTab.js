@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { FormattedMessage } from "react-intl";
 
 class InviteTab extends Component {
   render() {
@@ -12,23 +13,34 @@ class InviteTab extends Component {
         </span>
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            <h5>Invitation</h5>
+            <h5>
+              <FormattedMessage
+                id="app.invitation"
+                defaultMessage="Invitation"
+              />
+            </h5>
             <div className="dash-btn ">
               <a
                 onClick={e => this.props.acceptAll()}
                 className="fieldsight-btn left-icon"
               >
                 <i className="la la-check" />
-                Accept all
+                <FormattedMessage
+                  id="app.acceptAll"
+                  defaultMessage="Accept all"
+                />
               </a>
             </div>
           </div>
           <div className="card-body">
             <div className="invitation-title">
               <span>
-                You have been invited to join FieldSight. You may Accept or
-                Decline each invitations or Accept all the invitations as per
-                required.
+                <FormattedMessage
+                  id="app.invitationTitle"
+                  defaultMessage=" You have been invited to join FieldSight. You may Accept or
+                            Decline each invitations or Accept all the invitations as per
+                            required."
+                />
               </span>
             </div>
             <div className="normal-list">
@@ -36,8 +48,12 @@ class InviteTab extends Component {
                 {this.props.invitation.map((item, i) => (
                   <li key={item.id}>
                     <p>
-                      <a href="javascript:void(0);">{item.by_user}</a> has
-                      invited you to join FieldSight as{" "}
+                      <a href="javascript:void(0);">{item.by_user}</a>
+                      <FormattedMessage
+                        id="app.acceptAll"
+                        defaultMessage=" has
+                            invited you to join FieldSight as"
+                      />{" "}
                       <span>{item.group}</span> .
                     </p>
                     <div className="invite-btn">
@@ -49,7 +65,10 @@ class InviteTab extends Component {
                         }
                       >
                         <i className="la la-check" />
-                        Accept
+                        <FormattedMessage
+                          id="app.accept"
+                          defaultMessage="Accept"
+                        />
                       </a>
                       <a
                         href="javascript:void(0);"
@@ -57,7 +76,11 @@ class InviteTab extends Component {
                         onClick={e => this.props.rejectHandler(item.id)}
                       >
                         <i className="la la-close" />
-                        Reject
+
+                        <FormattedMessage
+                          id="app.reject"
+                          defaultMessage="Reject"
+                        />
                       </a>
                     </div>
                   </li>

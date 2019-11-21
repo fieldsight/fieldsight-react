@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import StatusTable from "../../responded/StatusTable";
 import WithPagination from "../../../../hoc/WithPagination";
 import { DotLoader } from "../../../myForm/Loader";
+import { FormattedMessage } from "react-intl";
 
 class FlaggedTable extends Component {
   state = {
@@ -29,10 +30,26 @@ class FlaggedTable extends Component {
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Flagged Submissions</h5>
+          <h5>
+            {/*Flagged Submissions*/}
+            <FormattedMessage
+              id="app.flagged-submissions"
+              defaultMessage="Flagged Submissions"
+            />
+          </h5>
           <div className="dash-btn">
             <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
+              {data ? (
+                <FormattedMessage
+                  id="app.view-by-form"
+                  defaultMessage="View By Form"
+                />
+              ) : (
+                <FormattedMessage
+                  id="app.view-by-status"
+                  defaultMessage="View By Status"
+                />
+              )}
             </button>
           </div>
         </div>

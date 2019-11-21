@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import StatusTable from "../../responded/StatusTable";
 import WithPagination from "../../../../hoc/WithPagination";
 import { DotLoader } from "../../../myForm/Loader";
+import { FormattedMessage } from "react-intl";
 
 class ApprovedTable extends Component {
   state = {
@@ -29,10 +30,26 @@ class ApprovedTable extends Component {
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Approved Submissions</h5>
+          <h5>
+            {/*Approved Submissions*/}
+            <FormattedMessage
+              id="app.approved-submissions"
+              defaultMessage="Approved Submissions"
+            />
+          </h5>
           <div className="dash-btn">
             <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
+              {data ? (
+                <FormattedMessage
+                  id="app.view-by-form"
+                  defaultMessage="View By Form"
+                />
+              ) : (
+                <FormattedMessage
+                  id="app.view-by-status"
+                  defaultMessage="View By Status"
+                />
+              )}
             </button>
           </div>
         </div>

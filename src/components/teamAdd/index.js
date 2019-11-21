@@ -12,6 +12,7 @@ import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import "leaflet/dist/leaflet.css";
+import { FormattedMessage } from "react-intl";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -222,11 +223,14 @@ class index extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item active" aria-current="page">
-              Create Team
+              <FormattedMessage
+                id="app.createTeam"
+                defaultMessage="Create Team"
+              />
             </li>
           </ol>
         </nav>
-        <RightContentCard title="New Team">
+        <RightContentCard title="app.newTeam">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">
               <div className="col-xl-4 col-md-6">
@@ -235,16 +239,18 @@ class index extends Component {
                   tag="input"
                   type="text"
                   required={true}
-                  label=" Team Name"
+                  label="app.teamName"
                   name="teamName"
                   value={teamName}
                   changeHandler={onChangeHandler}
+                  translation={true}
                 />
               </div>
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
-                  label="Type of Team"
+                  label="app.typeOfTeam"
+                  translation={true}
                   options={
                     teamTypes.length > 0
                       ? teamTypes.map(teamTypes => teamTypes)
@@ -260,10 +266,11 @@ class index extends Component {
                   tag="input"
                   type="text"
                   required={true}
-                  label="Contact Number: "
+                  label="app.contactNumber"
                   name="contactnumber"
                   value={contactnumber}
                   changeHandler={onChangeHandler}
+                  translation={true}
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -272,10 +279,11 @@ class index extends Component {
                   tag="input"
                   type="email"
                   required={true}
-                  label="Email"
+                  label="app.email"
                   name="email"
                   value={email}
                   changeHandler={onChangeHandler}
+                  translation={true}
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -284,10 +292,11 @@ class index extends Component {
                     formType="editForm"
                     tag="input"
                     type="url"
-                    label="website"
+                    label="app.website"
                     name="website"
                     value={website}
                     changeHandler={onChangeHandler}
+                    translation={true}
                   />
                 </div>
               </div>
@@ -297,16 +306,18 @@ class index extends Component {
                   tag="input"
                   type="text"
                   required={true}
-                  label="Address"
+                  label="app.address"
                   name="address"
                   value={address}
                   changeHandler={onChangeHandler}
+                  translation={true}
                 />
               </div>
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
-                  label="Country"
+                  label="app.country"
+                  translation={true}
                   options={
                     country.length > 0
                       ? country.map(country => country)
@@ -323,10 +334,11 @@ class index extends Component {
                     tag="input"
                     type="text"
                     required={true}
-                    label="Description"
+                    label="app.description"
                     name="publicDescription"
                     value={publicDescription}
                     changeHandler={onChangeHandler}
+                    translation={true}
                   />
                 </div>
               </div>
@@ -335,7 +347,8 @@ class index extends Component {
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
                   <label>
-                    Map <sup>*</sup>
+                    <FormattedMessage id="app.map" defaultMessage="Map" />{" "}
+                    <sup>*</sup>
                   </label>
 
                   <div className="map-form">
@@ -351,7 +364,13 @@ class index extends Component {
                       />
                       <Marker position={[latitude, longitude]}>
                         <Popup>
-                          <b>Name: </b>
+                          <b>
+                            <FormattedMessage
+                              id="app.name"
+                              defaultMessage="Name"
+                            />
+                            :{" "}
+                          </b>
                           {teamName}
                         </Popup>
                       </Marker>
@@ -363,10 +382,11 @@ class index extends Component {
                           tag="input"
                           type="number"
                           required={true}
-                          label="Latitude"
+                          label="app.latitude"
                           name="latitude"
                           value={latitude}
                           changeHandler={e => onChangeHandler(e, "latitude")}
+                          translation={true}
                         />
                       </div>
 
@@ -376,10 +396,11 @@ class index extends Component {
                           tag="input"
                           type="number"
                           required={true}
-                          label="Longitude"
+                          label="app.longitude"
                           name="longitude"
                           value={longitude}
                           changeHandler={e => onChangeHandler(e, "longitude")}
+                          translation={true}
                         />
                       </div>
                     </div>
@@ -389,7 +410,20 @@ class index extends Component {
 
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
-                  <label> {cropResult ? "Preview" : "Attach File"}</label>
+                  <label>
+                    {" "}
+                    {cropResult ? (
+                      <FormattedMessage
+                        id="app.preview"
+                        defaultMessage="Preview"
+                      />
+                    ) : (
+                      <FormattedMessage
+                        id="app.attatchFile"
+                        defaultMessage="Attach File"
+                      />
+                    )}
+                  </label>
 
                   {cropResult ? (
                     <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
@@ -408,7 +442,10 @@ class index extends Component {
                               <div className="upload-icon" />
 
                               <button className="fieldsight-btn">
-                                Upload
+                                <FormattedMessage
+                                  id="app.upload"
+                                  defaultMessage="Upload"
+                                />
                                 <i className="la la-cloud-upload" />
                               </button>
                             </div>
@@ -430,9 +467,17 @@ class index extends Component {
                                       multiple={false}
                                     />
                                     <div className="upload-icon" />
-                                    <h3>Drag & Drop an image</h3>
+                                    <h3>
+                                      <FormattedMessage
+                                        id="app.drag&DropAnImage"
+                                        defaultMessage="Drag & Drop an image"
+                                      />
+                                    </h3>
                                     <button className="fieldsight-btn">
-                                      Upload
+                                      <FormattedMessage
+                                        id="app.upload"
+                                        defaultMessage="Upload"
+                                      />
                                       <i className="la la-cloud-upload" />
                                     </button>
                                   </div>
@@ -449,7 +494,7 @@ class index extends Component {
 
               <div className="col-sm-12">
                 <button type="submit" className="fieldsight-btn pull-right">
-                  Save
+                  <FormattedMessage id="app.save" defaultMessage="Save" />
                 </button>
               </div>
             </div>
@@ -475,7 +520,10 @@ class index extends Component {
                         style={{ marginTop: "15px" }}
                         onClick={this.cropImage}
                       >
-                        Save Image
+                        <FormattedMessage
+                          id="app.saveImage"
+                          defaultMessage="Save Image"
+                        />
                       </button>
                     </figure>
                   </div>

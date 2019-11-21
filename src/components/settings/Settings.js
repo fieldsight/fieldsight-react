@@ -10,6 +10,8 @@ import SubRegion from "../manageRegion/SubRegion";
 import TermsAndLabels from "../termsAndLabels/TermAndLabel";
 import MapLayer from "../mapLayer/MapLayer";
 import { RegionProvider } from "../../context";
+import { FormattedMessage } from "react-intl";
+
 export default class Settings extends Component {
   render() {
     const {
@@ -31,7 +33,10 @@ export default class Settings extends Component {
             </li>
 
             <li className="breadcrumb-item active" aria-current="page">
-              Project Settings
+              <FormattedMessage
+                id="app.projectSettings"
+                defaultMessage="Project Settings"
+              />
             </li>
           </ol>
         </nav>
@@ -40,7 +45,12 @@ export default class Settings extends Component {
             <div className="left-sidebar new-sidebar sticky-top">
               <div className="card">
                 <div className="card-header main-card-header">
-                  <h5>Project Settings</h5>
+                  <h5>
+                    <FormattedMessage
+                      id="app.projectSettings"
+                      defaultMessage="Project Settings"
+                    />
+                  </h5>
                 </div>
                 <div className="card-body">
                   <LeftSidebar />

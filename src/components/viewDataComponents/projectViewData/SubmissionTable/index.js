@@ -4,6 +4,7 @@ import axios from "axios";
 import WithPagination from "../../../../hoc/WithPagination";
 import Modal from "../../../common/Modal";
 import { DotLoader } from "../../../myForm/Loader";
+import { FormattedMessage } from "react-intl";
 
 class SubmissionData extends Component {
   state = {
@@ -134,7 +135,13 @@ class SubmissionData extends Component {
         </nav>
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            <h5>Project Submissions</h5>
+            {/* <h5>Project Submissions</h5>*/}
+            <h5>
+              <FormattedMessage
+                id="app.project-submission"
+                defaultMessage="Project Submissions"
+              />
+            </h5>
             <div className="dash-btn">
               <form className="floating-form">
                 <div className="form-group mr-0">
@@ -144,7 +151,12 @@ class SubmissionData extends Component {
                     onChange={e => this.handleChange(e)}
                     required
                   />
-                  <label htmlFor="input">Search</label>
+                  <label htmlFor="input">
+                    <FormattedMessage
+                      id="app.teams-search"
+                      defaultMessage="Search"
+                    />
+                  </label>
                   <i className="la la-search"></i>
                 </div>
               </form>
@@ -159,12 +171,49 @@ class SubmissionData extends Component {
                 <thead>
                   <tr>
                     {/* <th>S.N.</th>*/}
-                    {!this.state.isSurvey && <th>Site Name</th>}
-                    {!this.state.isSurvey && <th>Site Id</th>}
-                    <th>submission id</th>
-                    <th>Submitted By</th>
-                    <th>Submission Date</th>
-                    <th>Action</th>
+                    {!this.state.isSurvey && (
+                      <th>
+                        <FormattedMessage
+                          id="app.site-name"
+                          defaultMessage="Site Name"
+                        />
+                      </th>
+                    )}
+                    {!this.state.isSurvey && (
+                      <th>
+                        <FormattedMessage
+                          id="app.site.id"
+                          defaultMessage="Site Id"
+                        />
+                      </th>
+                    )}
+                    <th>
+                      <FormattedMessage
+                        id="app.submission-id"
+                        defaultMessage="submission id"
+                      />
+                    </th>
+                    <th>
+                      {" "}
+                      <FormattedMessage
+                        id="app.submission-by"
+                        defaultMessage="Submission By"
+                      />
+                    </th>
+                    <th>
+                      {" "}
+                      <FormattedMessage
+                        id="app.submission-date"
+                        defaultMessage="Submission Date"
+                      />
+                    </th>
+                    <th>
+                      {" "}
+                      <FormattedMessage
+                        id="app.action"
+                        defaultMessage="Action"
+                      />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { FormattedMessage } from "react-intl";
 
 class PricingStepThree extends Component {
   render() {
@@ -11,73 +12,170 @@ class PricingStepThree extends Component {
           <div className="bg-light p-4 m-4">
             <div className="pb-2"></div>
             <h6 className="text-center mt-4">
-              <strong>Thank you for signing up with FieldSight!</strong>
+              <strong>
+                {" "}
+                <FormattedMessage
+                  id="app.thankuMessage"
+                  defaultMessage="Thank you for signing up with FieldSight!"
+                />
+              </strong>
             </h6>
             <h5 className="text-center mt-2 mb-3">
-              <strong>You have selected the Free Plan</strong>
+              <strong>
+                <FormattedMessage
+                  id="app.uhaveSelectedFreePlan"
+                  defaultMessage="You have selected the Free Plan"
+                />
+              </strong>
             </h5>
             <p className="text-center mb-4 text-xlight">
-              FieldSight subscription fees are charged at the start of
-              delivering service and renew automatically.
+              <FormattedMessage
+                id="app.thirdMessage"
+                defaultMessage="FieldSight subscription fees are charged at the
+                start of delivering service and renew automatically."
+              />
             </p>
             <div className="row">
               <div className="col-md-4">
                 <h6 className="mt-4">
-                  <strong>Plan Detail :</strong>
+                  <strong>
+                    <FormattedMessage
+                      id="app.planDetail"
+                      defaultMessage="Plan Detail"
+                    />{" "}
+                    :
+                  </strong>
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
                     <i className="la la-chevron-circle-right"></i>
-                    <strong>{cardResponse.submissions}</strong> Submissions
+                    <strong>{cardResponse.submissions}</strong>{" "}
+                    <FormattedMessage
+                      id="app.submissions"
+                      defaultMessage="Submissions"
+                    />
                   </li>
                   <li>
-                    <strong>Unlimited</strong> Users, Projects, Sites
+                    <strong>
+                      <FormattedMessage
+                        id="app.unlimited"
+                        defaultMessage="Unlimited"
+                      />
+                    </strong>{" "}
+                    <FormattedMessage
+                      id="app.userProjectSites"
+                      defaultMessage="Users, Projects, Sites"
+                    />
                   </li>
                   <li>
                     <i className="la la-chevron-circle-right"></i>
-                    <strong>Unlimited</strong> Forms, Stages & Schedules
+                    <strong>
+                      <FormattedMessage
+                        id="app.unlimited"
+                        defaultMessage="Unlimited"
+                      />
+                    </strong>{" "}
+                    <FormattedMessage
+                      id="app.formStageSchedules"
+                      defaultMessage="Forms, Stages & Schedules"
+                    />
                   </li>
                   <li>
                     <i className="la la-chevron-circle-right"></i>
-                    <strong>Unlimited</strong> Reports, Dashboards & Maps
+                    <strong>
+                      <FormattedMessage
+                        id="app.unlimited"
+                        defaultMessage="Unlimited"
+                      />
+                    </strong>{" "}
+                    <FormattedMessage
+                      id="app.reportDashboardsMaps"
+                      defaultMessage="Reports, Dashboards & Maps"
+                    />
                   </li>
                   <li>
                     <i className="la la-chevron-circle-right"></i>
-                    <strong>Access</strong> to our Android App
+                    <strong>
+                      {" "}
+                      <FormattedMessage
+                        id="app.access"
+                        defaultMessage="Access"
+                      />
+                    </strong>{" "}
+                    <FormattedMessage
+                      id="app.androidApp"
+                      defaultMessage="to our Android App"
+                    />
                   </li>
                 </ul>
               </div>
               <div className="col-md-4">
                 <h6 className="mt-4">
-                  <strong>Plan Period :</strong>
+                  <strong>
+                    <FormattedMessage
+                      id="app.planPeriod"
+                      defaultMessage="Plan Period"
+                    />{" "}
+                    :
+                  </strong>
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
                     <i className="la la-calendar-check-o"></i>
-                    <strong>Starting Date</strong>
+                    <strong>
+                      <FormattedMessage
+                        id="app.startingDate"
+                        defaultMessage="Starting Date"
+                      />
+                    </strong>
                     <p>{cardResponse.starting_date}</p>
                   </li>
                   <li>
                     <i className="la la-calendar-minus-o"></i>
-                    <strong>Ending Date</strong>
+                    <strong>
+                      <FormattedMessage
+                        id="app.endingDate"
+                        defaultMessage="Ending Date"
+                      />
+                    </strong>
                     <p>{cardResponse.ending_date}</p>
                   </li>
                 </ul>
               </div>
               <div className="col-md-4">
                 <h6 className="mt-4">
-                  <strong>Payment Detail :</strong>
+                  <strong>
+                    <FormattedMessage
+                      id="app.paymentDetail"
+                      defaultMessage="Payment Detail"
+                    />
+                    :
+                  </strong>
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
                     <i className="la la-money"></i>
-                    <strong>Amount Paid</strong>
+                    <strong>
+                      {" "}
+                      <FormattedMessage
+                        id="app.amountPaid"
+                        defaultMessage="Amount Paid"
+                      />
+                    </strong>
                     <p>${cardResponse.amount}</p>
                   </li>
                   <li>
                     <i className="la la-cc-mastercard"></i>
-                    <strong>Payment Method</strong>
-                    <p>Card: xxx xxx xxx {cardResponse.card}</p>
+                    <strong>
+                      <FormattedMessage
+                        id="app.paymentMethod"
+                        defaultMessage="Payment Method"
+                      />
+                    </strong>
+                    <p>
+                      <FormattedMessage id="app.card" defaultMessage="Card" />:
+                      xxx xxx xxx {cardResponse.card}
+                    </p>
                   </li>
                 </ul>
               </div>
@@ -90,7 +188,8 @@ class PricingStepThree extends Component {
                   handleSubmit("finish");
                 }}
               >
-                Finish <i className="la la-check-circle"></i>
+                <FormattedMessage id="app.finish" defaultMessage="Finish" />
+                <i className="la la-check-circle"></i>
               </a>
             </div>
           </div>

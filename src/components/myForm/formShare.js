@@ -5,6 +5,7 @@ import PreviewModal from "./PreviewModal";
 import ReplaceModal from "./ReplaceModal";
 import ShareModal from "./ShareModal";
 import GlobalModel from "./GlobalModal";
+import { FormattedMessage } from "react-intl";
 
 class FormShare extends Component {
   state = {
@@ -32,7 +33,12 @@ class FormShare extends Component {
         </td>
         <td>
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Preview</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                {" "}
+                <FormattedMessage id="app.preview" defaultMessage="Preview" />
+              </Tooltip>
+            }
           >
             <a
               onClick={e =>
@@ -53,7 +59,11 @@ class FormShare extends Component {
           </OverlayTrigger>
 
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Media</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                <FormattedMessage id="app.media" defaultMessage="Media" />
+              </Tooltip>
+            }
           >
             <a
               onClick={e =>
@@ -74,7 +84,11 @@ class FormShare extends Component {
           </OverlayTrigger>
 
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                <FormattedMessage id="app.edit" defaultMessage="Edit" />
+              </Tooltip>
+            }
           >
             <a
               onClick={e => this.props.OpenTabHandler(e, item.edit_url)}
@@ -86,7 +100,11 @@ class FormShare extends Component {
           </OverlayTrigger>
 
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Replace</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                <FormattedMessage id="app.replace" defaultMessage="Replace" />
+              </Tooltip>
+            }
           >
             <a
               onClick={e =>
@@ -106,7 +124,11 @@ class FormShare extends Component {
             </a>
           </OverlayTrigger>
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Download</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                <FormattedMessage id="app.download" defaultMessage="Download" />
+              </Tooltip>
+            }
           >
             <a
               onClick={e => this.props.OpenTabHandler(e, item.download_url)}
@@ -122,10 +144,14 @@ class FormShare extends Component {
 
           <span className="share-icon">
             <OverlayTrigger
-              overlay={<Tooltip id="tooltip-disabled">Share</Tooltip>}
+              overlay={
+                <Tooltip id="tooltip-disabled">
+                  <FormattedMessage id="app.share" defaultMessage="Share" />
+                </Tooltip>
+              }
             >
               <a
-                onClick={e => this.props.shareToggle(e,item.id_string)}
+                onClick={e => this.props.shareToggle(e, item.id_string)}
                 className="td-share-btn td-btn"
               >
                 {" "}
@@ -135,7 +161,12 @@ class FormShare extends Component {
 
             {item.share && (
               <ul className="share-drop">
-                <h5>Share to</h5>
+                <h5>
+                  <FormattedMessage
+                    id="app.shareTo"
+                    defaultMessage="Share to"
+                  />
+                </h5>
                 <li>
                   <a
                     onClick={e =>
@@ -150,7 +181,7 @@ class FormShare extends Component {
                     }
                     data-tab="user-share"
                   >
-                    User
+                    <FormattedMessage id="app.user" defaultMessage="User" />
                   </a>
                 </li>
                 <li>
@@ -167,7 +198,10 @@ class FormShare extends Component {
                     }
                     data-tab="project-share"
                   >
-                    Project
+                    <FormattedMessage
+                      id="app.projects"
+                      defaultMessage="Project"
+                    />
                   </a>
                 </li>
                 {/* <li>
@@ -209,7 +243,11 @@ class FormShare extends Component {
             )}
           </span>
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Delete</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                <FormattedMessage id="app.delete" defaultMessage="Delete" />
+              </Tooltip>
+            }
           >
             <a
               onClick={e => this.props.deleteHandler(e, item.id_string)}

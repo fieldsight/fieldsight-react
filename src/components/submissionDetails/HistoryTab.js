@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import format from "date-fns/format";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { FormattedMessage } from "react-intl";
 
 const HistoryTab = ({ submissionHistory, getSubmissionDetail }) => {
   return (
@@ -21,17 +22,31 @@ const HistoryTab = ({ submissionHistory, getSubmissionDetail }) => {
                       </a>{" "}
                       {history.get_new_status_display === "New Submission" ? (
                         <span>
-                          submitted a{" "}
+                          <FormattedMessage
+                            id="app.submitted"
+                            defaultMessage="submitted a"
+                          />{" "}
                           <strong
                             onClick={() => getSubmissionDetail(history.url)}
                           >
-                            New version
+                            <FormattedMessage
+                              id="app.newVersion"
+                              defaultMessage="New version"
+                            />
                           </strong>{" "}
-                          of this form
+                          <FormattedMessage
+                            id="app.ofThisForm"
+                            defaultMessage="of this form"
+                          />
                         </span>
                       ) : (
                         <Fragment>
-                          <span>marked this submission as </span>
+                          <span>
+                            <FormattedMessage
+                              id="app.markedThisSubmissionAs"
+                              defaultMessage="marked this submission as"
+                            />
+                          </span>
                           <strong
                             className={history.get_new_status_display.toLowerCase()}
                           >
@@ -54,7 +69,12 @@ const HistoryTab = ({ submissionHistory, getSubmissionDetail }) => {
                 </li>
               ))
             ) : (
-              <p> No History Available </p>
+              <p>
+                <FormattedMessage
+                  id="app.noHistoryAvailable"
+                  defaultMessage="No History Available"
+                />
+              </p>
             )}
           </ul>
         </div>

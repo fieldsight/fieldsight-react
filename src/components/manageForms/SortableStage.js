@@ -10,6 +10,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import SubStageTable from "./subStageTable";
 import { DotLoader } from "../myForm/Loader";
+import { FormattedMessage } from "react-intl";
 
 const DragHandle = sortableHandle(({ name, order }) => (
   <Card.Header>
@@ -189,7 +190,15 @@ class SortableStage extends Component {
                               {!reorderSubstage ? (
                                 <OverlayTrigger
                                   placement="top"
-                                  overlay={<Tooltip>Reorder</Tooltip>}
+                                  overlay={
+                                    <Tooltip>
+                                      {/*Reorder*/}
+                                      <FormattedMessage
+                                        id="app.reorder"
+                                        defaultMessage="Reorder"
+                                      />
+                                    </Tooltip>
+                                  }
                                 >
                                   <span className="reorder">
                                     <i className="la la-ellipsis-v" />
@@ -199,7 +208,17 @@ class SortableStage extends Component {
                               ) : (
                                 <OverlayTrigger
                                   placement="top"
-                                  overlay={<Tooltip>Cancel</Tooltip>}
+                                  overlay={
+                                    <Tooltip>
+                                      {
+                                        /*Cancel*/
+                                        <FormattedMessage
+                                          id="app.cancel"
+                                          defaultMessage="Cancel"
+                                        />
+                                      }
+                                    </Tooltip>
+                                  }
                                 >
                                   <span>
                                     <i className="la la-close" />
@@ -221,7 +240,16 @@ class SortableStage extends Component {
                               {/* Save Order */}
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Save</Tooltip>}
+                                overlay={
+                                  <Tooltip>
+                                    {" "}
+                                    {/*Save*/}
+                                    <FormattedMessage
+                                      id="app.save"
+                                      defaultMessage="Save"
+                                    />
+                                  </Tooltip>
+                                }
                               >
                                 <span>
                                   <i className="la la-save" />
@@ -238,7 +266,14 @@ class SortableStage extends Component {
                               <OverlayTrigger
                                 placement="top"
                                 overlay={
-                                  <Tooltip>Deploy All Substages</Tooltip>
+                                  <Tooltip>
+                                    {/*Deploy All Substages*/}
+
+                                    <FormattedMessage
+                                      id="app.deployAllSubstages"
+                                      defaultMessage="Deploy All Substages"
+                                    />
+                                  </Tooltip>
                                 }
                               >
                                 <span className="active deploy">
@@ -341,7 +376,14 @@ class SortableStage extends Component {
                               <OverlayTrigger
                                 placement="top"
                                 overlay={
-                                  <Tooltip>Deploy All Substages</Tooltip>
+                                  <Tooltip>
+                                    {" "}
+                                    {/*Deploy All Substages*/}
+                                    <FormattedMessage
+                                      id="app.deployAllSubstages"
+                                      defaultMessage="Deploy All Substages"
+                                    />
+                                  </Tooltip>
                                 }
                               >
                                 <span className="active deploy">
@@ -414,7 +456,11 @@ class SortableStage extends Component {
                             data-tab="addSubStage-popup"
                             onClick={handleSubStageForm}
                           >
-                            Add Substage
+                            <FormattedMessage
+                              id="app.subStageForm"
+                              defaultMessage="Add Substage"
+                            />
+
                             <span>
                               <i className="la la-plus"></i>
                             </span>
@@ -427,7 +473,11 @@ class SortableStage extends Component {
                             data-tab="addSubStage-popup"
                             onClick={handleSubStageForm}
                           >
-                            Add Substage
+                            <FormattedMessage
+                              id="app.subStageForm"
+                              defaultMessage="Add Substage"
+                            />
+
                             <span>
                               <i className="la la-plus"></i>
                             </span>

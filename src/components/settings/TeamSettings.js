@@ -7,11 +7,12 @@ import TeamLeftSidebar from "../leftSidebar/TeamLeftSieBar";
 import EditTeam from "../editTeam/EditTeam";
 import TeamMapLayer from "../mapLayer/TeamMapLayer";
 import AccountInfoLayout from "../accountInfo/AccountInfoLayout";
+import { FormattedMessage } from "react-intl";
 
 export default class TeamSettings extends Component {
   state = {
     teamData: {},
-    teamName:""
+    teamName: ""
   };
 
   componentWillMount() {
@@ -26,34 +27,38 @@ export default class TeamSettings extends Component {
       // console.log('error', err);
     };
   }
-  teamName=(data)=>{
-  this.setState({
-    teamName:data
-  })
-  
-
-}
+  teamName = data => {
+    this.setState({
+      teamName: data
+    });
+  };
   render() {
     const {
       match: {
         params: { id: teamId },
         path
       }
-    } = this.props;    
-    const { teamData ,teamName} = this.state;
+    } = this.props;
+    const { teamData, teamName } = this.state;
 
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item "  >
-              <a href={`/fieldsight/application/#/team-dashboard/${teamId}/`} style={{color:"#00628E"}}>
+            <li className="breadcrumb-item ">
+              <a
+                href={`/fieldsight/application/#/team-dashboard/${teamId}/`}
+                style={{ color: "#00628E" }}
+              >
                 {teamName}
               </a>
             </li>
 
             <li className="breadcrumb-item" aria-current="page">
-              Team Settings
+              <FormattedMessage
+                id="app.teamSettings"
+                defaultMessage="Team Settings"
+              />
             </li>
           </ol>
         </nav>
@@ -62,10 +67,18 @@ export default class TeamSettings extends Component {
             <div className="left-sidebar new-sidebar sticky-top">
               <div className="card">
                 <div className="card-header main-card-header">
-                  <h5>Settings</h5>
+                  <h5>
+                    <FormattedMessage
+                      id="app.settings"
+                      defaultMessage="Settings"
+                    />
+                  </h5>
                 </div>
                 <div className="card-body">
-                  <TeamLeftSidebar teamOwner={teamData.team_owner} height={this.props.height} />
+                  <TeamLeftSidebar
+                    teamOwner={teamData.team_owner}
+                    height={this.props.height}
+                  />
                 </div>
               </div>
             </div>
@@ -74,9 +87,13 @@ export default class TeamSettings extends Component {
             <div className="right-content">
               <div className="tab-content">
                 <Switch>
-                  <Route exact path={`${path}`}  render={props =><EditTeam {...props} teamData={this.teamName}/> 
-  
-                                                            } />
+                  <Route
+                    exact
+                    path={`${path}`}
+                    render={props => (
+                      <EditTeam {...props} teamData={this.teamName} />
+                    )}
+                  />
                   <Route path={`${path}/map-layer`} component={TeamMapLayer} />
 
                   <Route

@@ -11,6 +11,7 @@ import MapPage from "./MapPage";
 import { successToast, errorToast } from "../../utils/toastHandler";
 import withPagination from "../../hoc/WithPagination";
 import Modal from "../common/Modal";
+import { FormattedMessage } from "react-intl";
 
 class MyrolesMain extends Component {
   state = {
@@ -34,8 +35,8 @@ class MyrolesMain extends Component {
     searchQuery: ""
   };
 
- // componentDidMount() {
-  componentWillMount(){
+  // componentDidMount() {
+  componentWillMount() {
     const { profileId } = this.props.match.params;
     let url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
@@ -72,9 +73,8 @@ class MyrolesMain extends Component {
         }
       })
       .catch(err => {});
-     
   }
-  
+
   invitationOpen = (e, data) => {
     if (this.state.invite == "hide") {
       this.setState({
@@ -261,10 +261,8 @@ class MyrolesMain extends Component {
   };
   render() {
     const { profileId } = this.props.match.params;
-    const {myGuide} =this.state;
-   
-   
-    
+    const { myGuide } = this.state;
+
     return (
       <>
         <div className="card mrb-30">
@@ -306,7 +304,10 @@ class MyrolesMain extends Component {
                           }
                           onClick={e => this.rightTabOpen(e, "region")}
                         >
-                          Regions
+                          <FormattedMessage
+                            id="app.regions"
+                            defaultMessage="Regions"
+                          />
                         </a>
                       </li>
                       <li className="nav-item">
@@ -318,7 +319,10 @@ class MyrolesMain extends Component {
                           }
                           onClick={e => this.rightTabOpen(e, "site")}
                         >
-                          Sites
+                          <FormattedMessage
+                            id="app.sites"
+                            defaultMessage="Sites"
+                          />
                         </a>
                       </li>
                       <li className="nav-item">
@@ -330,7 +334,10 @@ class MyrolesMain extends Component {
                           }
                           onClick={e => this.rightTabOpen(e, "submission")}
                         >
-                          Submissions
+                          <FormattedMessage
+                            id="app.submissions"
+                            defaultMessage="Submissions"
+                          />
                         </a>
                       </li>
                       <li className="nav-item">
@@ -342,7 +349,7 @@ class MyrolesMain extends Component {
                           }
                           onClick={e => this.rightTabOpen(e, "map")}
                         >
-                          map
+                          <FormattedMessage id="app.map" defaultMessage="map" />
                         </a>
                       </li>
                     </ul>
@@ -364,17 +371,16 @@ class MyrolesMain extends Component {
                             display: "flex"
                           }}
                         >
-                         <input
+                          <input
                             type="search"
                             className="form-control"
                             onChange={this.onChangeHandler}
                             placeholder="Search"
                           />
-                          <div style={{marginTop:" 0.6rem"}}>
-                          <i className="la la-search"  />
+                          <div style={{ marginTop: " 0.6rem" }}>
+                            <i className="la la-search" />
                           </div>
                           {/* <label htmlFor="input">Search</label> */}
-                         
                         </div>
                       </form>
                       // </div>
@@ -444,13 +450,22 @@ class MyrolesMain extends Component {
           <Modal title="Welcome to FieldSight" toggleModal={this.cancelHandler}>
             <div className="guide">
               <p>
-                Hi,&nbsp;
+                <FormattedMessage id="app.hi" defaultMessage="Hi," />
+                &nbsp;
                 <span style={{ textTransform: "capitalize" }}>
                   {this.state.profile.fullname}
                 </span>{" "}
-                seems like you have no role yet.&nbsp;You can get started by
-                creating a team in FieldSight or contact your FieldSight manager
-                to invite you to join projects.
+                <FormattedMessage
+                  id="app.noRole"
+                  defaultMessage="seems like you have no role yet."
+                />
+                &nbsp;
+                <FormattedMessage
+                  id="app.noRole2"
+                  defaultMessage="You can get started by
+                            creating a team in FieldSight or contact your FieldSight manager
+                            to invite you to join projects."
+                />
               </p>
             </div>
             <div className="warning-footer text-center">
@@ -459,13 +474,16 @@ class MyrolesMain extends Component {
                 className="fieldsight-btn"
                 style={{ marginRight: "10px", display: "inline-block" }}
               >
-                Create Team
+                <FormattedMessage
+                  id="app.createTeam"
+                  defaultMessage="Create Team"
+                />
               </a>
               <a
                 className="fieldsight-btn rejected-btn"
                 onClick={this.cancelHandler}
               >
-                Cancel
+                <FormattedMessage id="app.cancel" defaultMessage="Cancel" />
               </a>
             </div>
           </Modal>

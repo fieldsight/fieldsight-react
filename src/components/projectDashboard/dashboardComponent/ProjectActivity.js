@@ -1,8 +1,9 @@
 import React from "react";
 import CountCard from "../../common/CountCard";
+import { FormattedMessage } from "react-intl";
 
 const getIcon = submission => {
-  if (submission === "approved") { 
+  if (submission === "approved") {
     return "la-copy";
   } else if (submission === "flagged") {
     return "la-users";
@@ -18,7 +19,10 @@ const ShowAcitivity = props => (
       </div>
       <div className="count-content">
         <h4>{props.value}</h4>
-        <h6>{props.name}</h6>
+        {/*<h6>{props.name}</h6>*/}
+        <h6>
+          <FormattedMessage id={props.id} defaultMessage={props.name} />
+        </h6>
       </div>
     </div>
     {/* <CountCard
@@ -37,7 +41,13 @@ class ProjectActivity extends React.Component {
       <div className="dashboard-counter mrt-30 bg-counter">
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            <h5>Project activity</h5>
+            {/* <h5>Project activity</h5>*/}
+            <h5>
+              <FormattedMessage
+                id="app.project-activity"
+                defaultMessage="Progress table"
+              />
+            </h5>
           </div>
           <div className="card-body">
             <div className="row">
@@ -45,16 +55,19 @@ class ProjectActivity extends React.Component {
                 type="approved"
                 name="Submissions In Last 7 Days"
                 value={projectActivity.submissions_in_last_7_days}
+                id="app.submission-in-last-7-days"
               />
               <ShowAcitivity
                 type="flagged"
                 name="Active Supervisors In Last 7 Days"
                 value={projectActivity.active_supervisors_in_last_7_days}
+                id="app.active-supervisor-in-last-7-days"
               />
               <ShowAcitivity
                 type="marker"
                 name="Site Visits In Last 7 Days"
                 value={projectActivity.site_visits_in_last_7_days}
+                id="app.site-visit-in-last-7-days"
               />
             </div>
           </div>

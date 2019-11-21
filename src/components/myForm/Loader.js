@@ -1,6 +1,7 @@
 import React from "react";
 import { Fade } from "react-reveal";
 import ReactLoader from "react-loader-spinner";
+import { FormattedMessage } from "react-intl";
 
 export const DotLoader = () => (
   <div
@@ -9,7 +10,7 @@ export const DotLoader = () => (
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      height:"500px"
+      height: "500px"
     }}
   >
     <ReactLoader type="ThreeDots" color="#00628E" height="50" width="50" />
@@ -40,7 +41,10 @@ export default () => (
         />
 
         <h6 style={{ color: "#00628E", marginTop: "20px" }}>
-          Loading... Please wait!
+          <FormattedMessage
+            id="app.loadingPleaseWait!"
+            defaultMessage="Loading... Please wait!"
+          />
         </h6>
       </div>
     </div>

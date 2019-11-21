@@ -12,6 +12,7 @@ import ProgressChart from "./dashboardComponent/ProgressChart";
 import SiteDocument from "./dashboardComponent/SiteDocument";
 import UsersList from "./dashboardComponent/UsersList";
 import Logs from "../common/Logs";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 import {
   getSiteDashboard,
@@ -251,14 +252,21 @@ class SiteDashboard extends Component {
                 <div className="col-lg-6">
                   <div className="card map">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
+                      <h5>
+                        {terms_and_labels && terms_and_labels.site} {/*Map*/}
+                        <FormattedMessage id="app.map" defaultMessage="Map" />
+                      </h5>
                       <div className="dash-btn">
                         <a
                           href={`/fieldsight/site/response-coords/${siteId}/`}
                           className="fieldsight-btn left-icon"
                           target="_blank"
                         >
-                          <i className="la la-map" /> full map
+                          <i className="la la-map" /> {/*full map*/}
+                          <FormattedMessage
+                            id="app.full-map"
+                            defaultMessage="full map"
+                          />
                         </a>
                       </div>
                     </div>
@@ -284,8 +292,11 @@ class SiteDashboard extends Component {
                     <div className="card site_dashboard_info">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>
-                          {terms_and_labels && terms_and_labels.site}{" "}
-                          information
+                          {terms_and_labels && terms_and_labels.site} &nbsp;
+                          <FormattedMessage
+                            id="app.information"
+                            defaultMessage="Information"
+                          />
                         </h5>
                         {/* <div className="dash-btn">
                           <a href={`#/`} className="fieldsight-btn left-icon">
@@ -334,7 +345,13 @@ class SiteDashboard extends Component {
                   <div className="col-md-6">
                     <div className="card">
                       <div className="card-header main-card-header sub-card-header">
-                        <h5>Form submissions</h5>
+                        {/* <h5>Form submissions</h5>*/}
+                        <h5>
+                          <FormattedMessage
+                            id="app.form-submission"
+                            defaultMessage="Form submissions"
+                          />
+                        </h5>
                       </div>
                       <div className="card-body">
                         <SubmissionChart
@@ -347,7 +364,12 @@ class SiteDashboard extends Component {
                     <div className="card">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>
-                          {terms_and_labels && terms_and_labels.site} progress
+                          {terms_and_labels && terms_and_labels.site}
+                          &nbsp;&nbsp;
+                          <FormattedMessage
+                            id="app.progress"
+                            defaultMessage="Progress"
+                          />
                         </h5>
                       </div>
                       <div className="card-body">
@@ -371,7 +393,15 @@ class SiteDashboard extends Component {
                   <div className="col-xl-4 col-md-6">
                     <div className="card mangager-list">
                       <div className="card-header main-card-header sub-card-header">
-                        <h5>Users</h5>
+                        {/* <h5>Users</h5>*/}
+
+                        <h5>
+                          <FormattedMessage
+                            id="app.users"
+                            defaultMessage="Users"
+                          />
+                        </h5>
+
                         {/* <div className="dash-btn">
                           <form className="floating-form">
                             <div className="form-group mr-0">
@@ -424,17 +454,14 @@ const mapStateToProps = ({ siteDashboard }) => ({
   siteDashboard
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    getSiteDashboard,
-    getSiteMetas,
-    getSiteSubmissions,
-    getSiteDocuments,
-    getSiteLogs,
-    getSiteForms,
-    getRecentPictures,
-    getSubsites,
-    putCropImage
-  }
-)(SiteDashboard);
+export default connect(mapStateToProps, {
+  getSiteDashboard,
+  getSiteMetas,
+  getSiteSubmissions,
+  getSiteDocuments,
+  getSiteLogs,
+  getSiteForms,
+  getRecentPictures,
+  getSubsites,
+  putCropImage
+})(SiteDashboard);

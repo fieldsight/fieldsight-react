@@ -8,9 +8,12 @@ import Loader from "../common/Loader";
 import { successToast, errorToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
+import { FormattedMessage } from "react-intl";
+import Warning from "../common/DeleteModal";
 
 const tableHeader = {
-  siteTypes: ["ID", "Type", "Action"]
+  //siteTypes: ["ID", "Type", "Action"]
+  siteTypes: ["app.id", "app.type", "app.action"]
 };
 
 const url = "fv3/api/project-site-types/";
@@ -229,10 +232,22 @@ class SiteType extends Component {
       confirmHandler,
       context: { terms }
     } = this;
+    const informationDeclare = !isEmpty(terms)
+      ? `${terms.site} Type`
+      : "Site Type";
     return (
       <Fragment>
         <RightContentCard
-          title={!isEmpty(terms) ? `${terms.site} Type` : "Site Type"}
+          title={
+            !isEmpty(terms) ? (
+              `${terms.site} Type`
+            ) : (
+              <FormattedMessage
+                id="app.siteType"
+                defaultMessage="app.siteType"
+              />
+            )
+          }
           addButton
           toggleModal={toggleModal}
           hideButton={true}
@@ -256,54 +271,42 @@ class SiteType extends Component {
                 tag="input"
                 type="text"
                 required={true}
-                label="ID"
+                label="app.id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
+                translation={true}
               />
               <InputElement
                 tag="textarea"
                 type="text"
                 required={true}
-                label="Type"
+                label="app.type"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
+                translation={true}
               />{" "}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  Save
+                  <FormattedMessage id="app.save" defaultMessage="Save" />
                 </button>
               </div>
             </form>
           </Modal>
         )}
         {showDeleteConfirmation && (
-          <Modal title="Warning" toggleModal={cancelHandler}>
-            <div className="warning">
-              <i className="la la-exclamation-triangle" />
-
-              <p>
-                Are you sure you want to delete the{" "}
-                {!isEmpty(terms) ? `${terms.site} Type` : "Site Type"} ?
-              </p>
-            </div>
-            <div className="warning-footer text-center">
-              <a
-                className="fieldsight-btn rejected-btn"
-                onClick={cancelHandler}
-              >
-                cancel
-              </a>
-              <a className="fieldsight-btn" onClick={confirmHandler}>
-                confirm
-              </a>
-            </div>
-          </Modal>
+          <Warning
+            onCancel={cancelHandler}
+            onConfirm={confirmHandler}
+            onToggle={cancelHandler}
+            message={`Are you sure you want to delete the ${informationDeclare} ?`}
+            title="Warning"
+          />
         )}
       </Fragment>
     );

@@ -3,6 +3,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import Table from "react-bootstrap/Table";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { TableContentLoader } from "../common/Loader";
+import { FormattedMessage } from "react-intl";
 
 class RegionTable extends Component {
   render() {
@@ -21,12 +22,33 @@ class RegionTable extends Component {
               <Table ponsive="xl" className="table  table-bordered  dataTable ">
                 <thead>
                   <tr>
-                    <th>identifier</th>
-                    <th>name</th>
-                    <th>total_sites</th>
-                    <th>Role</th>
+                    <th>
+                      <FormattedMessage
+                        id="app.identifier"
+                        defaultMessage="identifier"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage id="app.name" defaultMessage="Name" />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.totalSites"
+                        defaultMessage="Total Sites"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage id="app.role" defaultMessage="Role" />
+                    </th>
 
-                    {this.props.profileId && <th>Action</th>}
+                    {this.props.profileId && (
+                      <th>
+                        <FormattedMessage
+                          id="app.action"
+                          defaultMessage="Action"
+                        />
+                      </th>
+                    )}
                   </tr>
                 </thead>
 
@@ -64,7 +86,12 @@ class RegionTable extends Component {
                 </tbody>
               </Table>
             ) : (
-              <p>You do not have any region.</p>
+              <p>
+                <FormattedMessage
+                  id="app.noRegion."
+                  defaultMessage="You do not have any region."
+                />
+              </p>
             )}
           </PerfectScrollbar>
         )}

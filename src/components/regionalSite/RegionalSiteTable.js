@@ -5,6 +5,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import { TableContentLoader } from "../common/Loader";
 import withPagination from "../../hoc/WithPagination";
 import isEmpty from "../../utils/isEmpty";
+import { FormattedMessage } from "react-intl";
 
 let base_url = window.base_url
   ? window.base_url
@@ -31,9 +32,7 @@ class RegionalSiteTable extends Component {
     const searchValue = e.target.value;
     this.props.searchHandler(
       searchValue,
-      `fv3/api/regional-sites/?page=1&region=${
-        this.props.regionId
-      }&q=${searchValue}`,
+      `fv3/api/regional-sites/?page=1&region=${this.props.regionId}&q=${searchValue}`,
       {
         type: "regionSite",
         projectId: this.props.regionId
@@ -42,7 +41,6 @@ class RegionalSiteTable extends Component {
   };
 
   render() {
-    
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
@@ -91,15 +89,48 @@ class RegionalSiteTable extends Component {
                 <thead>
                   <tr>
                     <th>
-                    {!isEmpty(this.props.terms) ? `${this.props.terms.site} name` : "Site name"}
-                     
+                      {!isEmpty(this.props.terms) ? (
+                        `${this.props.terms.site} name`
+                      ) : (
+                        <FormattedMessage
+                          id="app.site-name"
+                          defaultMessage="Site name"
+                        />
+                      )}
                     </th>
-                    <th>identifier</th>
-                    <th>Address</th>
-                    <th>type</th>
-                    <th>Progress</th>
-                    <th>Submissions</th>
-                    <th>Latest status</th>
+                    <th>
+                      <FormattedMessage
+                        id="app.identifier"
+                        defaultMessage="Identifier"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.address"
+                        defaultMessage="Address"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage id="app.type" defaultMessage="Type" />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.progress"
+                        defaultMessage="Progress"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.submissions"
+                        defaultMessage="Submissions"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.latest-status"
+                        defaultMessage="Latest status"
+                      />
+                    </th>
                   </tr>
                 </thead>
 

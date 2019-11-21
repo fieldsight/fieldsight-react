@@ -6,6 +6,7 @@ import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
 import findQuestion from "../../utils/findQuestion";
 import { errorToast } from "../../utils/toastHandler";
+import { FormattedMessage } from "react-intl";
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -251,10 +252,15 @@ class FeaturedPictures extends Component {
     return (
       <div className="card mrt-15 no-boxshadow">
         <div className="card-header main-card-header">
-          <h5>featured pictures</h5>
+          <h5>
+            <FormattedMessage
+              id="app.featuredPictures"
+              defaultMessage="featured pictures"
+            />
+          </h5>
           <div className="add-btn">
             <a onClick={toggleModal}>
-              Add new{" "}
+              <FormattedMessage id="app.addNew" defaultMessage="Add new" />{" "}
               <span>
                 <i className="la la-plus" />
               </span>
@@ -274,10 +280,9 @@ class FeaturedPictures extends Component {
             ))}
           </div>
         </div>
-
         {showModal && (
           <Modal
-            title="Add Pictures"
+            title="app.addPictures"
             toggleModal={closeModal}
             submitHandler={onSubmitHandler}
           >
@@ -286,20 +291,22 @@ class FeaturedPictures extends Component {
                 tag="input"
                 type="text"
                 required={true}
-                label="Input Label"
+                label="app.inputLabel"
                 formType="floatingForm"
                 htmlFor="input"
                 name="label"
                 value={label}
                 changeHandler={onInputChangeHandler}
+                translation={true}
               />
 
               <SelectElement
                 className="form-control"
-                label="Type"
+                label="app.type"
                 options={siteFeaturedTypes}
                 value={type ? type : null}
                 changeHandler={onSelectChangeHandler}
+                translation={true}
               />
 
               {type === "Form" && (
@@ -321,7 +328,7 @@ class FeaturedPictures extends Component {
               )}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  Save
+                  <FormattedMessage id="app.save" defaultMessage="Save" />
                 </button>
               </div>
             </form>

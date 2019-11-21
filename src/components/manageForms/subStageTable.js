@@ -8,6 +8,7 @@ import {
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
 import DeleteModal from "../common/DeleteModal";
+import { FormattedMessage } from "react-intl";
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -132,7 +133,12 @@ const GetActionForProject = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={<Tooltip>Deploy</Tooltip>}
+                overlay={
+                  <Tooltip>
+                    {/*Deploy*/}
+                    <FormattedMessage id="app.deploy" defaultMessage="Deploy" />
+                  </Tooltip>
+                }
               >
                 <i className="la la-rocket"> </i>
               </OverlayTrigger>
@@ -143,7 +149,15 @@ const GetActionForProject = props => {
           onClick={() => editAction(item)}
           className={`pending td-edit-btn td-btn ${!!toDrag} ? disabled : ''`}
         >
-          <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip>
+                {/*Edit*/}
+                <FormattedMessage id="app.edit" defaultMessage="Edit" />
+              </Tooltip>
+            }
+          >
             <i className="la la-edit"> </i>
           </OverlayTrigger>
         </a>
@@ -156,7 +170,12 @@ const GetActionForProject = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={<Tooltip>Delete</Tooltip>}
+                overlay={
+                  <Tooltip>
+                    {/*Delete*/}
+                    <FormattedMessage id="app.delete" defaultMessage="Delete" />
+                  </Tooltip>
+                }
               >
                 <i className="la la-trash"> </i>
               </OverlayTrigger>
@@ -199,7 +218,12 @@ const GetActionForProject = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={<Tooltip>Deploy</Tooltip>}
+                overlay={
+                  <Tooltip>
+                    {/*Deploy*/}
+                    <FormattedMessage id="app.deploy" defaultMessage="Deploy" />
+                  </Tooltip>
+                }
               >
                 <i className="la la-rocket"> </i>
               </OverlayTrigger>
@@ -211,7 +235,15 @@ const GetActionForProject = props => {
             onClick={() => editAction(item)}
             className={`pending td-edit-btn td-btn ${!!toDrag} ? disabled : ''`}
           >
-            <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip>
+                  {/*Edit*/}
+                  <FormattedMessage id="app.edit" defaultMessage="Edit" />
+                </Tooltip>
+              }
+            >
               <i className="la la-edit"> </i>
             </OverlayTrigger>
           </a>
@@ -251,14 +283,42 @@ const SortableContainer = sortableContainer(({ children }) => {
     <Table responsive="xl" className="table  table-bordered  dataTable">
       <thead>
         <tr>
-          <th>Substage Name</th>
-          <th>form Name</th>
-          <th>Responses</th>
-          <th>Form Guide</th>
-          <th>Weight</th>
-          <th>assigned date</th>
-          <th>Default status</th>
-          <th width="15%">Action</th>
+          <th>
+            <FormattedMessage
+              id="app.subStageName"
+              defaultMessage="Substage Name"
+            />
+          </th>
+          <th>
+            <FormattedMessage id="app.form-title" defaultMessage="form Name" />
+          </th>
+          <th>
+            {" "}
+            <FormattedMessage id="app.response" defaultMessage="Responses" />
+          </th>
+          <th>
+            <FormattedMessage id="app.formGuide" defaultMessage="Form Guide" />
+          </th>
+          <th>
+            <FormattedMessage id="app.weight" defaultMessage="Weight" />
+          </th>
+          <th>
+            {" "}
+            <FormattedMessage
+              id="app.assigned-date"
+              defaultMessage="Assigned Date"
+            />
+          </th>
+          <th>
+            {" "}
+            <FormattedMessage
+              id="app.defaultStatus"
+              defaultMessage="Default status"
+            />
+          </th>
+          <th width="15%">
+            <FormattedMessage id="app.action" defaultMessage="Action" />
+          </th>
         </tr>
       </thead>
       {children}

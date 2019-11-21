@@ -3,6 +3,7 @@ import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import format from "date-fns/format";
 import { DotLoader } from "../../myForm/Loader";
+import { FormattedMessage } from "react-intl";
 
 export default class SurveyFormResponseTable extends Component {
   render() {
@@ -24,11 +25,38 @@ export default class SurveyFormResponseTable extends Component {
                     >
                       <thead>
                         <tr>
-                          <th>sub stage name</th>
-                          <th>form name</th>
-                          <th>last response on</th>
-                          <th>Submissions</th>
-                          <th>Action</th>
+                          <th>
+                            <FormattedMessage
+                              id="app.sub-stage-name"
+                              defaultMessage="sub stage name"
+                            />
+                          </th>
+                          <th>
+                            <FormattedMessage
+                              id="app.form-name"
+                              defaultMessage="Form Name"
+                            />
+                          </th>
+                          <th>
+                            {" "}
+                            <FormattedMessage
+                              id="app.last-response-on"
+                              defaultMessage="Last Response On"
+                            />
+                          </th>
+                          <th>
+                            {" "}
+                            <FormattedMessage
+                              id="app.submissions"
+                              defaultMessage="Submissions"
+                            />
+                          </th>
+                          <th>
+                            <FormattedMessage
+                              id="app.action"
+                              defaultMessage="Action"
+                            />
+                          </th>
                         </tr>
                       </thead>
                       <tbody>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
+import { FormattedMessage } from "react-intl";
 
 const checkStatus = statusData => {
   if (statusData.status_display === "Pending") {
@@ -109,19 +110,29 @@ class StatusTab extends Component {
             <form className="edit-form" onSubmit={submitHandler}>
               <InputElement
                 tag="textarea"
-                label="Comment"
+                label="app.comment"
                 htmlFor="comment"
                 name="comment"
                 placeholder="Please put your comment here."
                 value={comment}
                 changeHandler={onChangeHandler}
+                translation={true}
               />
               <div className="form-group">
-                <label>attach file</label>
+                <label>
+                  <FormattedMessage
+                    id="app.attach-file"
+                    defaultMessage="Attach File"
+                  />
+                </label>
                 <div className="upload-form">
                   <div className="fieldsight-btn">
                     <label htmlFor="upload-btn">
-                      upload <i className="la la-cloud-upload" />
+                      <FormattedMessage
+                        id="app.upload"
+                        defaultMessage="Upload"
+                      />
+                      <i className="la la-cloud-upload" />
                     </label>
                     <input
                       type="file"
@@ -135,35 +146,38 @@ class StatusTab extends Component {
               <div className="form-group flexrow">
                 <div className="custom-checkbox display-inline">
                   <RadioElement
-                    label="Approve"
+                    label="app.approve"
                     name="status"
                     value="3"
                     className="approved"
                     checked={status === "3"}
                     changeHandler={onChangeHandler}
+                    translation={true}
                   />
                   <RadioElement
-                    label="Flag"
+                    label="app.flag"
                     name="status"
                     value="2"
                     className="flagged"
                     checked={status === "2"}
                     changeHandler={onChangeHandler}
+                    translation={true}
                   />
 
                   <RadioElement
-                    label="Reject"
+                    label="app.reject"
                     name="status"
                     value="1"
                     className="rejected"
                     checked={status === "1"}
                     changeHandler={onChangeHandler}
+                    translation={true}
                   />
                 </div>
               </div>
               <div className="form-group pull-right">
                 <button type="submit" className="fieldsight-btn">
-                  Save
+                  <FormattedMessage id="app.save" defaultMessage="Save" />
                 </button>
               </div>
             </form>

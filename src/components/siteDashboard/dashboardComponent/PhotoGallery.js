@@ -4,6 +4,7 @@ import { GridContentLoader } from "../../common/Loader";
 import { Dropdown } from "react-bootstrap";
 import Modal from "../../common/Modal";
 import axios from "axios";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const GalleryModal = ({
   selectedImage,
@@ -60,9 +61,8 @@ const GalleryModal = ({
 class PhotoGallery extends Component {
   state = {
     selectedImage: {},
-    data:"",
-    response:false
-
+    data: "",
+    response: false
   };
 
   showModal = (img, i) => {
@@ -120,27 +120,23 @@ class PhotoGallery extends Component {
     });
   };
 
-  imageQuality = (imageid,siteId) =>{
+  imageQuality = (imageid, siteId) => {
     axios
-    .get(`/fv3/api/zip-site-images/${siteId}/${imageid}/`)
-     .then( res => { 
-      if (res.status===200){
-         this.setState({
-           data:res.data.message,
-           response:true
-
-         })
-
-       }
-       
-    })
-    .catch(err => {
-      // dispatch({
-      //   type: SITE_DASHBOARD_ERR
-      // });
-    });
-    
-  }
+      .get(`/fv3/api/zip-site-images/${siteId}/${imageid}/`)
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({
+            data: res.data.message,
+            response: true
+          });
+        }
+      })
+      .catch(err => {
+        // dispatch({
+        //   type: SITE_DASHBOARD_ERR
+        // });
+      });
+  };
 
   render() {
     const {
@@ -151,46 +147,69 @@ class PhotoGallery extends Component {
       showModal,
       closeModal
     } = this;
-    
-    
+
     return (
       <div className="col-lg-6">
         <div className="card recent-photo">
           <div className="card-header main-card-header sub-card-header">
-            <h5>Recent Pictures</h5>
+            {/* <h5>Recent Pictures</h5>*/}
+            <h5>
+              <FormattedMessage
+                id="app.recent-pictures"
+                defaultMessage="Recent Pictures"
+              />
+            </h5>
             {recentPictures.length > 0 ? (
               <div className="dash-btn">
-              <a
-                href={`/fieldsight/site/all-pictures/${siteId}/`}
-                className="fieldsight-btn"
-                target="_blank"
-              >
-                view all
-              </a>
-              <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Data"
-                className="fieldsight-btn"
-              >
-                <i className="la la-download"/>
-                <span> Download</span>
-              </Dropdown.Toggle>
+                <a
+                  href={`/fieldsight/site/all-pictures/${siteId}/`}
+                  className="fieldsight-btn"
+                  target="_blank"
+                >
+                  <FormattedMessage
+                    id="app.view-all"
+                    defaultMessage="view all"
+                  />
+                </a>
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant=""
+                    id="dropdown-Data"
+                    className="fieldsight-btn"
+                  >
+                    <i className="la la-download" />
+                    <span>
+                      <FormattedMessage
+                        id="app.download"
+                        defaultMessage="Download"
+                      />
+                    </span>
+                  </Dropdown.Toggle>
 
-              <Dropdown.Menu className="dropdown-menu-right">
-              <Dropdown.Item  target="_blank" onClick={()=>this.imageQuality(0,siteId)}>
-                         Low
+                  <Dropdown.Menu className="dropdown-menu-right">
+                    <Dropdown.Item
+                      target="_blank"
+                      onClick={() => this.imageQuality(0, siteId)}
+                    >
+                      <FormattedMessage id="app.low" defaultMessage="Low" />
                     </Dropdown.Item>
-                    <Dropdown.Item  target="_blank"  onClick={()=>this.imageQuality(1,siteId)}>
-                          Medium
+                    <Dropdown.Item
+                      target="_blank"
+                      onClick={() => this.imageQuality(1, siteId)}
+                    >
+                      <FormattedMessage
+                        id="app.medium"
+                        defaultMessage="Medium"
+                      />
                     </Dropdown.Item>
-                    <Dropdown.Item  target="_blank"  onClick={()=>this.imageQuality(2,siteId)}>
-                       High
+                    <Dropdown.Item
+                      target="_blank"
+                      onClick={() => this.imageQuality(2, siteId)}
+                    >
+                      <FormattedMessage id="app.high" defaultMessage="High" />
                     </Dropdown.Item>
-               
-              
-              </Dropdown.Menu>
-            </Dropdown>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             ) : null}
           </div>
@@ -229,7 +248,12 @@ class PhotoGallery extends Component {
                       ))}
                     </div>
                   ) : (
-                    <p> No Data Available </p>
+                    <p>
+                      <FormattedMessage
+                        id="app.noDataAvailable"
+                        defaultMessage="No Data Available"
+                      />
+                    </p>
                   )}
                 </div>
                 {Object.keys(selectedImage).length > 0 && (
@@ -245,14 +269,16 @@ class PhotoGallery extends Component {
             )}
           </div>
         </div>
-        {this.state.response &&
-               (<Modal title="Message" toggleModal={()=>this.setState({response:false})}>
-                       <div className="response">
-                           <p>{this.state.data}</p>
-                      </div>
-                  </Modal>
-                  )}
-
+        {this.state.response && (
+          <Modal
+            title="Message"
+            toggleModal={() => this.setState({ response: false })}
+          >
+            <div className="response">
+              <p>{this.state.data}</p>
+            </div>
+          </Modal>
+        )}
       </div>
     );
   }

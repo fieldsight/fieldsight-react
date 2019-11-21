@@ -12,6 +12,7 @@ import RejectedTable from "./RejectSubmissionTable.js";
 import FlaggedTable from "./FlagedTable.js";
 import { connect } from "react-redux";
 import { compose } from "redux";
+import { FormattedMessage } from "react-intl";
 
 class SiteViewData extends Component {
   state = {
@@ -149,7 +150,13 @@ class SiteViewData extends Component {
               <div className="left-sidebar new-sidebar sticky-top">
                 <div className="card">
                   <div className="card-header main-card-header">
-                    <h5>View Data</h5>
+                    {/*<h5>View Data</h5>*/}
+                    <h5>
+                      <FormattedMessage
+                        id="app.view-data"
+                        defaultMessage="View Data"
+                      />
+                    </h5>
                   </div>
                   <div className="card-body">
                     <ManageFormSetting

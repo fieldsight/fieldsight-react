@@ -4,6 +4,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { DotLoader } from "./Loader";
 import { successToast, errorToast } from "./toastHandler";
+import { FormattedMessage } from "react-intl";
 
 const url = "fv3/api/form/";
 
@@ -41,7 +42,7 @@ class ShareModal extends Component {
   }
 
   checkboxHandler = (e, checkboxId) => {
-    const newUserList = this.state.userList.map(user => ({...user}));
+    const newUserList = this.state.userList.map(user => ({ ...user }));
     const selectedUser = newUserList.find(user => user.id === +checkboxId);
 
     selectedUser.checkbox = !selectedUser.checkbox;
@@ -115,7 +116,7 @@ class ShareModal extends Component {
             </ul>
             <div className="form-group mrt-30 pull-right">
               <button type="submit" className="fieldsight-btn">
-                Share
+                <FormattedMessage id="app.share" defaultMessage="Share" />
               </button>
             </div>
           </form>

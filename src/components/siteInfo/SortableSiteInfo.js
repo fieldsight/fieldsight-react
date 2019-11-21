@@ -15,12 +15,12 @@ import TableRow from "../common/TableRow";
 import { DotLoader } from "../myForm/Loader";
 
 const tableHeader = [
-  "Attribute",
-  "Type",
-  "Form",
-  "Question",
-  "Project",
-  "Action"
+  "app.attribute",
+  "app.type",
+  "app.forms",
+  "app.question",
+  "app.project",
+  "app.action"
 ];
 
 const DragHandle = sortableHandle(

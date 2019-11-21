@@ -14,6 +14,7 @@ import findQuestion from "../../utils/findQuestion";
 import isEmpty from "../../utils/isEmpty";
 import { errorToast } from "../../utils/toastHandler";
 import SortableSiteInfo from "./SortableSiteInfo";
+import { FormattedMessage } from "react-intl";
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -530,9 +531,14 @@ class SiteInformationTable extends Component {
       editQuestionHandler,
       toggleModal
     } = this;
-    const title = !isEmpty(terms)
-      ? `${terms.site} Information`
-      : "Site Information";
+    const title = !isEmpty(terms) ? (
+      `${terms.site} Information`
+    ) : (
+      <FormattedMessage
+        id="app.site-information"
+        defaultMessage="Site Information"
+      />
+    );
 
     return (
       <>
@@ -549,7 +555,14 @@ class SiteInformationTable extends Component {
                   {!reOrder ? (
                     <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip>Reorder</Tooltip>}
+                      overlay={
+                        <Tooltip>
+                          <FormattedMessage
+                            id="app.reorder"
+                            defaultMessage="Reorder"
+                          />
+                        </Tooltip>
+                      }
                     >
                       <span className="reorder">
                         <i className="la la-ellipsis-v" />
@@ -559,7 +572,14 @@ class SiteInformationTable extends Component {
                   ) : (
                     <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip>Cancel</Tooltip>}
+                      overlay={
+                        <Tooltip>
+                          <FormattedMessage
+                            id="app.cancel"
+                            defaultMessage="Cancel"
+                          />
+                        </Tooltip>
+                      }
                     >
                       <span>
                         <i className="la la-close" />
@@ -572,7 +592,11 @@ class SiteInformationTable extends Component {
                 <a data-tab="addSubStage-popup" onClick={this.handleSave}>
                   <OverlayTrigger
                     placement="top"
-                    overlay={<Tooltip>Save</Tooltip>}
+                    overlay={
+                      <Tooltip>
+                        <FormattedMessage id="app.save" defaultMessage="Save" />
+                      </Tooltip>
+                    }
                   >
                     <span>
                       <i className="la la-save" />
@@ -601,13 +625,13 @@ class SiteInformationTable extends Component {
           </div>
         </div>
         {showModal && (
-          <Modal title="Add Information" toggleModal={this.closeModal}>
+          <Modal title="app.addInformation" toggleModal={this.closeModal}>
             <form className="floating-form" onSubmit={this.onSubmitHandler}>
               <InputElement
                 tag="input"
                 type="text"
                 required={true}
-                label="Input Label"
+                label="app.inputText"
                 formType="floatingForm"
                 htmlFor="label"
                 value={label}
@@ -616,7 +640,7 @@ class SiteInformationTable extends Component {
               />
               <SelectElement
                 className="form-control"
-                label="Type"
+                label="app.type"
                 options={questionTypes}
                 value={type ? type : null}
                 changeHandler={this.onSelectChangeHandler}
@@ -660,7 +684,10 @@ class SiteInformationTable extends Component {
                     className="fieldsight-btn"
                     onClick={this.generateOptField}
                   >
-                    Option+
+                    <FormattedMessage
+                      id="app.option"
+                      defaultMessage="Option+"
+                    />
                   </button>
                 </div>
               )}
@@ -720,8 +747,6 @@ class SiteInformationTable extends Component {
                 />
               )}
 
-              {console.log("selectedQuestion", selectedQuestion)}
-              {console.log("filteredQuestions", filteredQuestions)}
               {(type === "Form" || type === "FormQuestionAnswerStatus") &&
                 filteredQuestions.length > 0 && (
                   <SelectElement
@@ -746,7 +771,7 @@ class SiteInformationTable extends Component {
               </div> */}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  Save
+                  <FormattedMessage id="app.save" defaultMessage="Save" />
                 </button>
               </div>
             </form>

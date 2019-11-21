@@ -3,6 +3,7 @@ import { Button, Dropdown } from "react-bootstrap";
 
 import { AvatarContentLoader } from "../../common/Loader";
 import CountCard from "../../common/CountCard";
+import { FormattedMessage } from "react-intl";
 
 class DashboardHeader extends Component {
   render() {
@@ -23,14 +24,20 @@ class DashboardHeader extends Component {
     } = this.props;
 
     const ManageDropdown = [
-      { title: "users", link: `/fieldsight/manage/people/organization/${id}/` },
+      {
+        title: "users",
+        link: `/fieldsight/manage/people/organization/${id}/`,
+        id: "app.users"
+      },
       {
         title: "projects",
-        link: `/fieldsight/application/#/team-projects/${id}`
+        link: `/fieldsight/application/#/team-projects/${id}`,
+        id: "app.projects"
       },
       {
         title: `settings`,
-        link: `/fieldsight/application/#/team-settings/${id}`
+        link: `/fieldsight/application/#/team-settings/${id}`,
+        id: "app.setting"
       }
     ];
 
@@ -73,12 +80,25 @@ class DashboardHeader extends Component {
                 className="fieldsight-btn"
               >
                 <i className="la la-cog" />
-                <span>Manage</span>
+                {/*<span>Manage</span>*/}
+                <span>
+                  <FormattedMessage
+                    id="app.manage"
+                    defaultMessage="Manage"
+                    description="Manage"
+                  />
+                </span>
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
                   <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
+                    {/*item.title*/}
+
+                    <FormattedMessage
+                      id={item.id}
+                      defaultMessage={item.title}
+                      description={item.title}
+                    />
                   </Dropdown.Item>
                 ))}
               </Dropdown.Menu>

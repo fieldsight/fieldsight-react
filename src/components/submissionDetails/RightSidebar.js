@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import HistoryTab from "./HistoryTab";
 import StatusTab from "./StatusTab";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { FormattedMessage } from "react-intl";
 
 const base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
+
 class RightSidebar extends Component {
   state = {
     showStatus: true
@@ -37,7 +39,7 @@ class RightSidebar extends Component {
                     className={`nav-link ${showStatus ? "active" : ""}`}
                     onClick={() => this.setState({ showStatus: true })}
                   >
-                    Status
+                    <FormattedMessage id="app.status" defaultMessage="Status" />
                   </a>
                 </li>
                 <li className="nav-item">
@@ -45,7 +47,10 @@ class RightSidebar extends Component {
                     className={`nav-link ${!showStatus ? "active" : ""}`}
                     onClick={() => this.setState({ showStatus: false })}
                   >
-                    History
+                    <FormattedMessage
+                      id="app.history"
+                      defaultMessage="History"
+                    />
                   </a>
                 </li>
               </ul>
@@ -54,7 +59,14 @@ class RightSidebar extends Component {
                   <a href={`${base_url}${editUrl}`} target="_blank">
                     <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip>Edit Submission</Tooltip>}
+                      overlay={
+                        <Tooltip>
+                          <FormattedMessage
+                            id="app.edit-submission"
+                            defaultMessage="Edit Submission"
+                          />
+                        </Tooltip>
+                      }
                     >
                       <i className="la la-edit" />
                     </OverlayTrigger>
@@ -65,9 +77,22 @@ class RightSidebar extends Component {
                   <OverlayTrigger
                     placement="top"
                     overlay={
-                      <Tooltip>{`${
+                      <Tooltip>
+                        {/*`${
                         hideNullValues ? "Show" : "Hide"
-                      } Null Values`}</Tooltip>
+                      } Null Values`*/}
+                        {hideNullValues ? (
+                          <FormattedMessage
+                            id="app.showNullValues"
+                            defaultMessage="Show Null Values"
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="app.hideNullValues"
+                            defaultMessage="Hide Null Values"
+                          />
+                        )}
+                      </Tooltip>
                     }
                   >
                     <i
@@ -87,7 +112,14 @@ class RightSidebar extends Component {
                   >
                     <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip>Download as PDF</Tooltip>}
+                      overlay={
+                        <Tooltip>
+                          <FormattedMessage
+                            id="app.download-as-PDF"
+                            defaultMessage="Download as PDF"
+                          />
+                        </Tooltip>
+                      }
                     >
                       <i className="la la-download" />
                     </OverlayTrigger>

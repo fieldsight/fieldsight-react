@@ -4,6 +4,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { DotLoader } from "../../myForm/Loader";
 import isEmpty from "../../../utils/isEmpty";
+import { FormattedMessage } from "react-intl";
 
 class SiteListTable extends React.Component {
   state = {
@@ -28,13 +29,47 @@ class SiteListTable extends React.Component {
                       <th>
                         {!isEmpty(terms) ? `${terms.site}` : "Sites"} Name
                       </th>
-                      <th>id</th>
-                      {/* <th>Address</th> */}
+                      {/*<th>
+                        {!isEmpty(terms) ? (
+                          `${terms.site}` ? (
+                            <FormattedMessage
+                              id="app.school-name"
+                              defaultMessage="School Name"
+                            />
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          "Sites"
+                        )}{" "}
+                      </th>*/}
+                      <th>
+                        <FormattedMessage id="app.id" defaultMessage="id" />
+                      </th>
+                      {/* <th>Address</th> 
+                      <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>*/}
                       <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>
-                      <th>Type</th>
-                      <th>Progress</th>
-                      <th>Submissions</th>
-                      <th>Latest status</th>
+                      <th>
+                        <FormattedMessage id="app.type" defaultMessage="Type" />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.progress"
+                          defaultMessage=" Progress"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.submissions"
+                          defaultMessage="Submissions"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.latest-status"
+                          defaultMessage="Latest status"
+                        />
+                      </th>
                     </tr>
                   </thead>
 
@@ -42,7 +77,12 @@ class SiteListTable extends React.Component {
                     {!loader && data.length === 0 && (
                       <tr>
                         <td colSpan={7}>
-                          <p>No Form Data Available</p>
+                          <p>
+                            <FormattedMessage
+                              id="app.noFormDataAvailable"
+                              defaultMessage="No Form Data Available"
+                            />
+                          </p>
                         </td>
                       </tr>
                     )}

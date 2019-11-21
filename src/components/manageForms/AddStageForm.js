@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Select from "react-select";
+import { FormattedMessage } from "react-intl";
 
 import InputElement from "../common/InputElement";
 
@@ -134,15 +135,18 @@ class AddStageForm extends Component {
             tag="input"
             type="text"
             required={true}
-            label="Name"
+            label="app.name"
             name="name"
             value={name}
             changeHandler={handleChange}
+            translation={true}
           />
           {/* </div> */}
           {regionDropdown && regionDropdown.length > 0 && (
             <div>
-              <label>Regions</label>
+              <label>
+                <FormattedMessage id="app.regions" defaultMessage="Regions" />
+              </label>
               {hasLoaded && (
                 <Select
                   defaultValue={selectedRegion}
@@ -155,7 +159,9 @@ class AddStageForm extends Component {
           )}
           {typeDropdown && typeDropdown.length > 0 && (
             <div>
-              <label>Types</label>
+              <label>
+                <FormattedMessage id="app.types" defaultMessage="Types" />
+              </label>
               {hasLoaded && (
                 <Select
                   defaultValue={selectedType}
@@ -172,10 +178,11 @@ class AddStageForm extends Component {
             tag="input"
             type="text"
             // required={true}
-            label="Description"
+            label="app.description"
             name="desc"
             value={desc}
             changeHandler={handleChange}
+            translation={true}
           />
         </div>
         {/* <div className="modal-footer"> */}
@@ -185,7 +192,7 @@ class AddStageForm extends Component {
             className="fieldsight-btn"
             onClick={handleSubmitForm}
           >
-            Save
+            <FormattedMessage id="app.save" defaultMessage="Save" />
           </button>
         </div>
         {/* </div> */}

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import { FormattedMessage } from "react-intl";
 
 class GlobalModal extends Component {
   state = {
@@ -57,12 +58,12 @@ class GlobalModal extends Component {
                 title="copy"
                 disabled={this.state.disable}
               >
-                copy
+                <FormattedMessage id="app.copy" defaultMessage="Copy" />
               </button>
             </div>
           </div>
           <button type="submit" className="fieldsight-btn mrt-30 pull-right">
-            Share
+            <FormattedMessage id="app.share" defaultMessage="Share" />
           </button>
         </form>
       </div>

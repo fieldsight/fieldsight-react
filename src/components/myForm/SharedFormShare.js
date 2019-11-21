@@ -5,6 +5,7 @@ import PreviewModal from "./PreviewModal";
 import ReplaceModal from "./ReplaceModal";
 import ShareModal from "./ShareModal";
 import GlobalModel from "./GlobalModal";
+import { FormattedMessage } from "react-intl";
 
 class SharedFormShare extends Component {
   state = {
@@ -33,7 +34,11 @@ class SharedFormShare extends Component {
         </td>
         <td>
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Preview</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                <FormattedMessage id="app.preview" defaultMessage="Preview" />
+              </Tooltip>
+            }
           >
             <a
               onClick={e =>
@@ -53,7 +58,11 @@ class SharedFormShare extends Component {
             </a>
           </OverlayTrigger>
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                <FormattedMessage id="app.edit" defaultMessage="Edit" />
+              </Tooltip>
+            }
           >
             <a
               onClick={e => this.props.OpenTabHandler(e, item.edit_url)}
@@ -87,7 +96,11 @@ class SharedFormShare extends Component {
           </a>
           </OverlayTrigger> */}
           <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Download</Tooltip>}
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                <FormattedMessage id="app.download" defaultMessage="download" />
+              </Tooltip>
+            }
           >
             <a
               onClick={e => this.props.OpenTabHandler(e, item.download_url)}

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import { StripeProvider, Elements } from "react-stripe-elements";
+import { FormattedMessage } from "react-intl";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
 import ProjectList from "./dashboardComponent/ProjectList";
@@ -330,14 +331,24 @@ class TeamDashboard extends Component {
                 <div className="col-lg-8">
                   <div className="card map">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>Project maps</h5>
+                      {/* <h5>Project maps</h5>*/}
+                      <h5>
+                        <FormattedMessage
+                          id="app.project-maps"
+                          defaultMessage="Project Maps"
+                        />
+                      </h5>
                       <div className="dash-btn">
                         <a
                           href={`/fieldsight/org-map/${teamId}/`}
                           className="fieldsight-btn left-icon"
                           target="_blank"
                         >
-                          <i className="la la-map" /> full map
+                          <i className="la la-map" /> {/*full map*/}
+                          <FormattedMessage
+                            id="app.full-map"
+                            defaultMessage="Full map"
+                          />
                         </a>
                       </div>
                     </div>
@@ -352,7 +363,13 @@ class TeamDashboard extends Component {
                 <div className="col-lg-4">
                   <div className="card project-list">
                     <div className="card-header main-card-header sub-card-header">
-                      <h5>Projects</h5>
+                      {/* <h5>Projects</h5>*/}
+                      <h5>
+                        <FormattedMessage
+                          id="app.projects"
+                          defaultMessage="Projects"
+                        />
+                      </h5>
                       <div className="dash-btn">
                         {/* <form className="floating-form">
                           <div className="form-group mr-0">
@@ -385,8 +402,14 @@ class TeamDashboard extends Component {
                   <div className="col-lg-4">
                     <div className="card admin">
                       <div className="card-header main-card-header sub-card-header">
-                        <h5>Admin</h5>
-                        {/* <div className="dash-btn">
+                        <h5>
+                          <FormattedMessage
+                            id="app.admin"
+                            defaultMessage="Admin"
+                          />
+                        </h5>
+                        {/*<h5>Admin</h5>
+                         <div className="dash-btn">
                           <form className="floating-form">
                             <div className="form-group mr-0">
                               <input
@@ -423,10 +446,7 @@ const mapStateToProps = ({ teamDashboard }) => ({
   teamDashboard
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    getTeamDashboard,
-    postPackageSubscribe
-  }
-)(TeamDashboard);
+export default connect(mapStateToProps, {
+  getTeamDashboard,
+  postPackageSubscribe
+})(TeamDashboard);

@@ -3,6 +3,7 @@ import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import format from "date-fns/format";
 import { DotLoader } from "../../myForm/Loader";
+import { FormattedMessage } from "react-intl";
 
 export default class SurveyFormResponseTable extends Component {
   state = {
@@ -25,13 +26,40 @@ export default class SurveyFormResponseTable extends Component {
           <Table responsive="xl" className="table  table-bordered  dataTable ">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Title</th>
-                <th>Last Response On</th>
-                <th>Created Date</th>
-                <th>New Submission</th>
-                <th>Submission</th>
-                <th style={{ width: "13%" }}>Action</th>
+                <th>
+                  <FormattedMessage id="app.name" defaultMessage="Name" />
+                </th>
+                <th>
+                  <FormattedMessage id="app.title" defaultMessage="Title" />
+                </th>
+                <th>
+                  <FormattedMessage
+                    id="app.last-response-on"
+                    defaultMessage="Last Response On"
+                  />
+                </th>
+                <th>
+                  {" "}
+                  <FormattedMessage
+                    id="app.created-date"
+                    defaultMessage="Created Date"
+                  />
+                </th>
+                <th>
+                  <FormattedMessage
+                    id="app.new-submission"
+                    defaultMessage="New Submission"
+                  />
+                </th>
+                <th>
+                  <FormattedMessage
+                    id="app.submissions"
+                    defaultMessage="Submissions"
+                  />
+                </th>
+                <th style={{ width: "13%" }}>
+                  <FormattedMessage id="app.action" defaultMessage="Action" />
+                </th>
               </tr>
             </thead>
             <tbody>

@@ -7,6 +7,8 @@ import InputElement from "../common/InputElement";
 import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
 import isEmpty from "../../utils/isEmpty";
+import { FormattedMessage } from "react-intl";
+import DeleteModel from "../common/DeleteModal";
 
 const url = "fv3/api/project-regions/";
 
@@ -76,11 +78,16 @@ class SubRegion extends Component {
             `${terms.region} ID`,
             `${terms.region} Name`,
             ,
-            "Created Date",
-            "Action"
+            "app.created-date",
+            "app.action"
           ]
-        : ["Region ID", "Region Name", "Created Date", "Action"]
+        : ["app.regionId", "app.regionName", "app.created-date", "app.action"]
     };
+    const message = !isEmpty(terms) ? (
+      `${terms.region}`
+    ) : (
+      <FormattedMessage id="app.regions" defaultMessage="Regions" />
+    );
     return (
       <Fragment>
         <RightContentCard
@@ -107,27 +114,29 @@ class SubRegion extends Component {
                 tag="input"
                 type="text"
                 required={true}
-                label="ID"
+                label="app.id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
+                translation={true}
               />
               <InputElement
                 tag="textarea"
                 type="text"
                 required={true}
-                label="Name"
+                label="app.name"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
+                translation={true}
               />{" "}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  Save
+                  <FormattedMessage id="app.save" defaultMessage="Save" />
                 </button>
               </div>
             </form>
@@ -136,27 +145,13 @@ class SubRegion extends Component {
         {isLoading && <Loader />}
 
         {showDeleteConfirmation && (
-          <Modal title="Warning" toggleModal={cancelHandler}>
-            <div className="warning">
-              <i className="la la-exclamation-triangle" />
-
-              <p>
-                Are you sure you want to delete{" "}
-                {!isEmpty(terms) ? `${terms.region}` : "Regions"} ?
-              </p>
-            </div>
-            <div className="warning-footer text-center">
-              <a
-                className="fieldsight-btn rejected-btn"
-                onClick={cancelHandler}
-              >
-                cancel
-              </a>
-              <a className="fieldsight-btn" onClick={confirmHandler}>
-                confirm
-              </a>
-            </div>
-          </Modal>
+          <DeleteModel
+            onCancel={cancelHandler}
+            onConfirm={confirmHandler}
+            onToggle={cancelHandler}
+            message={`Are you sure you want to delete ${message}?`}
+            title="Warning"
+          />
         )}
       </Fragment>
     );

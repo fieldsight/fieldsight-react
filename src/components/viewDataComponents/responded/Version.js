@@ -3,6 +3,7 @@ import Table from "react-bootstrap/Table";
 import axios from "axios";
 import DotLoader from "../../myForm/Loader";
 import { Link } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
 
 class VersionTable extends Component {
   state = {
@@ -58,7 +59,13 @@ class VersionTable extends Component {
         </nav>
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            <h5>Version Submissions</h5>
+            {/*<h5>Version Submissions</h5>*/}
+            <h5>
+              <FormattedMessage
+                id="app.version-submissions"
+                defaultMessage="Version Submissions"
+              />
+            </h5>
           </div>
           <div className="card-body">
             {loader == true ? (
@@ -68,12 +75,39 @@ class VersionTable extends Component {
               >
                 <thead>
                   <tr>
-                    <th>Title</th>
-                    <th>Version</th>
-                    <th>Overidden Date</th>
-                    <th>Last Response On</th>
-                    <th>No of Submissions</th>
-                    <th>Download Excel</th>
+                    <th>
+                      <FormattedMessage id="app.title" defaultMessage="Title" />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.version"
+                        defaultMessage="Version"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.overidden-date"
+                        defaultMessage="Overidden Date"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.last-response-on"
+                        defaultMessage="Last Response On"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.no-of-submissions"
+                        defaultMessage="No of Submissions"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.download-excel"
+                        defaultMessage="Download Excel"
+                      />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

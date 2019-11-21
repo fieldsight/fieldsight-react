@@ -1,6 +1,7 @@
 import React from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { AvatarContentLoader } from "../../common/Loader";
+import { FormattedMessage } from "react-intl";
 
 const ManagersListItem = ({ manager }) => {
   return (
@@ -35,7 +36,12 @@ class ProjectManager extends React.Component {
                   <ManagersListItem manager={manager} key={`manager_${i}`} />
                 ))
               ) : (
-                <p> No Data Available </p>
+                <p>
+                  <FormattedMessage
+                    id="app.noDataAvailable"
+                    defaultMessage="No Data Available"
+                  />
+                </p>
               )}
             </ul>
           </PerfectScrollbar>

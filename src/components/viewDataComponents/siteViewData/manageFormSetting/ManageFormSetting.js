@@ -1,17 +1,53 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
 
 const sideNavRoutes = [
-  { to: "/general", path: "/general", title: "General Forms" },
-  { to: "/scheduled", path: "/scheduled", title: "Scheduled Forms" },
-  { to: "/stage", path: "/stage", title: "Stage Form" }
+  {
+    to: "/general",
+    path: "/general",
+    title: "General Forms",
+    id: "app.generate-forms"
+  },
+  {
+    to: "/scheduled",
+    path: "/scheduled",
+    title: "Scheduled Forms",
+    id: "app.scheduled-form"
+  },
+  {
+    to: "/stage",
+    path: "/stage",
+    title: "Stage Form",
+    id: "app.staged-form"
+  }
 ];
 
 const viewByStatus = [
-  { to: "/rejected", path: "/rejected", title: "Rejected Submission" },
-  { to: "/flagged", path: "/flagged", title: "Flagged Submission" },
-  { to: "/pending", path: "/pending", title: "Pending Submission" },
-  { to: "/approved", path: "/approved", title: "Approved Submission" }
+  {
+    to: "/rejected",
+    path: "/rejected",
+    title: "Rejected Submission",
+    id: "app.rejected-submissions"
+  },
+  {
+    to: "/flagged",
+    path: "/flagged",
+    title: "Flagged Submission",
+    id: "app.flagged-submissions"
+  },
+  {
+    to: "/pending",
+    path: "/pending",
+    title: "Pending Submission",
+    id: "app.pending-submissions"
+  },
+  {
+    to: "/approved",
+    path: "/approved",
+    title: "Approved Submission",
+    id: "app.approved-submissions"
+  }
 ];
 
 class ManageFormSetting extends Component {
@@ -35,7 +71,11 @@ class ManageFormSetting extends Component {
                       : "nav-link"
                   }
                 >
-                  {route.title}
+                  {/*route.title*/}
+                  <FormattedMessage
+                    id={route.id}
+                    defaultMessage={route.title}
+                  />
                 </Link>
               </li>
             ))}
@@ -54,7 +94,11 @@ class ManageFormSetting extends Component {
                       : "nav-link"
                   }
                 >
-                  {route.title}
+                  {/*route.title*/}
+                  <FormattedMessage
+                    id={route.id}
+                    defaultMessage={route.title}
+                  />
                 </Link>
               </li>
             ))}

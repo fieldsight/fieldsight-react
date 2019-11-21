@@ -1,4 +1,5 @@
 import React from "react";
+import { FormattedMessage } from "react-intl";
 
 const RightContentCard = ({
   title,
@@ -9,7 +10,9 @@ const RightContentCard = ({
 }) => (
   <div className="card">
     <div className="card-header main-card-header">
-      <h5>{title}</h5>
+      <h5>
+        <FormattedMessage id={title} defaultMessage={title} />
+      </h5>
       {addButton && (
         <div className="add-btn">
           <a onClick={toggleModal}>

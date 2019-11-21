@@ -3,6 +3,7 @@ import { Switch, Route, Link, withRouter } from "react-router-dom";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import MyFormContent from "./MyFormContent";
 import ProjectFormContent from "./ProjectFormContent";
+import { FormattedMessage } from "react-intl";
 
 // import MyformTable from '../components/MyForm/MyformTable';
 // import UserSelectForm from '../components/MyForm/UserSelectForm';
@@ -22,7 +23,9 @@ class SideBar extends Component {
               style={{ minHeight: this.props.height }}
             >
               <div className="card-header main-card-header sub-card-header">
-                <h5>Forms</h5>
+                <h5>
+                  <FormattedMessage id="app.forms" defaultMessage="Forms" />
+                </h5>
               </div>
               <div className="card-body">
                 <ul
@@ -39,7 +42,10 @@ class SideBar extends Component {
                           : "nav-link"
                       }
                     >
-                      My Forms
+                      <FormattedMessage
+                        id="app.my-forms"
+                        defaultMessage="My Forms"
+                      />
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -51,7 +57,10 @@ class SideBar extends Component {
                           : "nav-link"
                       }
                     >
-                      Project Forms
+                      <FormattedMessage
+                        id="app.project-forms"
+                        defaultMessage="Project Forms"
+                      />
                     </Link>
                   </li>
                 </ul>

@@ -6,6 +6,7 @@ import PreviewModal from "./PreviewModal";
 import ReplaceModal from "./ReplaceModal";
 import ShareModal from "./ShareModal";
 import GlobalModel from "./GlobalModal";
+import { FormattedMessage } from "react-intl";
 
 class MyFormMain extends Component {
   state = {
@@ -49,7 +50,9 @@ class MyFormMain extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a>Forms</a>
+              <a>
+                <FormattedMessage id="app.forms" defaultMessage="Forms" />
+              </a>
             </li>
           </ol>
         </nav>

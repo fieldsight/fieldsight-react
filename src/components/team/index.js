@@ -5,6 +5,7 @@ import { Table, Button } from "react-bootstrap";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { getTeam, getTranslate } from "../../actions/teamAction";
 import { FormattedMessage } from "react-intl";
+import SelectElement from "../common/SelectElement";
 import { useHistory } from "react-router-dom";
 
 class Teams extends Component {
@@ -52,7 +53,6 @@ class Teams extends Component {
 
   onLanguageChangeHandler = e => {
     const { value } = e.target;
-    console.log("target", e.target.value, e.target.name);
     this.props.getTranslate(value);
     // this.setState(
     //   {
@@ -63,10 +63,14 @@ class Teams extends Component {
   };
 
   showMap = () => {
-    console.log("clicked");
-
     this.props.history.push("/map");
   };
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.selected !== this.props.selected) {
+      localStorage.setItem("selected", this.props.selected);
+    }
+  }
+
   render() {
     const { results } = this.state;
 
@@ -79,20 +83,20 @@ class Teams extends Component {
       <>
         <div className="card">
           <div>
-            {/*  <SelectElement
+            <SelectElement
               options={selectLanguage}
               label="Select Language"
               changeHandler={this.onLanguageChangeHandler}
               value={selected}
-          />*/}
+            />
           </div>
           <div className="card-header main-card-header sub-card-header">
-            <h5>Team List</h5>
-            {/*<FormattedMessage
-              id="app.teams-heading"
+            {/* <h5>Team List</h5>*/}
+            <FormattedMessage
+              id="app.team-list"
               defaultMessage="Team List"
               description="Team List"
-            />*/}
+            />
             <div className="dash-btn">
               <form className="floating-form">
                 <div className="form-group mr-0">
@@ -118,7 +122,8 @@ class Teams extends Component {
                 <i className="la la-plus"></i>
               </a>
               <Button className="fieldsight-btn" onClick={() => this.showMap()}>
-                <i className="la la-map"></i>&nbsp; Map
+                <i className="la la-map"></i>&nbsp; {/*Map*/}
+                <FormattedMessage id="app.map" defaultMessage="Map" />
               </Button>
             </div>
           </div>
@@ -132,13 +137,48 @@ class Teams extends Component {
                 >
                   <thead>
                     <tr>
-                      <th>Teams</th>
-                      <th>Address</th>
-                      <th>Projects</th>
-                      <th>Sites</th>
-                      <th> Users</th>
-                      <th>Team Owner</th>
-                      <th>Action</th>
+                      <th>
+                        <FormattedMessage
+                          id="app.teams"
+                          defaultMessage="Teams"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.address"
+                          defaultMessage="Address"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.projects"
+                          defaultMessage="Projects"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.sites"
+                          defaultMessage="Sites"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.users"
+                          defaultMessage="Users"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.team-owner"
+                          defaultMessage="Team Owner"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.action"
+                          defaultMessage="Action"
+                        />
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -209,11 +249,8 @@ const mapStateToProps = ({ teams }) => {
   };
 };
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getTeam,
-      getTranslate
-    }
-  )
+  connect(mapStateToProps, {
+    getTeam,
+    getTranslate
+  })
 )(Teams);

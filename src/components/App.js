@@ -51,16 +51,19 @@ import "../css/custom.css";
 import TeamMap from "./team/TeamMap";
 import Mapparent from "./team/Mapparent";
 
-import messages_en from "../translations/en.json";
-import messages_ne from "../translations/ne.json";
+import en from "../translations/en.json";
+import ne from "../translations/ne.json";
 import SelectElement from "../components/common/SelectElement";
 
 const messages = {
-  ne: messages_ne,
-  en: messages_en
+  ne: ne,
+  en: en
 };
 const language = navigator.language.split(/[-_]/)[0]; // language without region code
-const selectLanguage = [{ id: "en", name: "Eng" }, { id: "ne", name: "Nep" }];
+const selectLanguage = [
+  { id: "en", name: "Eng" },
+  { id: "ne", name: "Nep" }
+];
 
 class App extends Component {
   constructor(props) {
@@ -68,7 +71,10 @@ class App extends Component {
     this.state = {
       height: 0,
       region: false,
-      selectedLanguage: language
+      // selectedLanguage: language,
+      selected: localStorage.getItem("selected")
+        ? localStorage.getItem("selected")
+        : ""
     };
   }
 
@@ -85,15 +91,35 @@ class App extends Component {
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.selected !== this.state.selected) {
+      localStorage.setItem("selected", this.state.selected);
+    }
+  }
+  onLanguageChangeHandler = e => {
+    const { value } = e.target;
+
+    this.setState({
+      selected: value
+    });
+  };
   render() {
     const { selected } = this.props;
+    //const { selected } = this.state;
 
     return (
-      <IntlProvider locale={language} messages={messages[selected]}>
+      <IntlProvider locale={selected} messages={messages[selected]}>
         <div id="fieldsight-new" className="fieldsight-new">
           <div id="main-container">
             <div className="container-fluid">
               <main id="main-content">
+                {/* <SelectElement
+                  options={selectLanguage}
+                  label="Select Language"
+                  changeHandler={this.onLanguageChangeHandler}
+                  value={selected}
+               />*/}
+
                 <Router>
                   <Switch>
                     <Route

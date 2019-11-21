@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
 import isEmpty from "../../utils/isEmpty";
+import { FormattedMessage } from "react-intl";
 
 class TeamLeftSidebar extends Component {
   renderNavRoutes = () => {
@@ -17,13 +18,20 @@ class TeamLeftSidebar extends Component {
       {
         to: `${url}`,
         path: `${url}`,
-        title: "Team Information"
+        title: "Team Information",
+        id: "app.teamInformation"
       },
-      { to: `${url}/map-layer`, path: `${url}/map-layer`, title: "Map Layers" },
+      {
+        to: `${url}/map-layer`,
+        path: `${url}/map-layer`,
+        title: "Map Layers",
+        id: "app.mapLayers"
+      },
       {
         to: `${url}/subscription/team-settings`,
         path: `${url}/subscription/team-settings`,
-        title: "Account Information"
+        title: "Account Information",
+        id: "app.accountInformation"
       }
     ];
 
@@ -37,7 +45,8 @@ class TeamLeftSidebar extends Component {
                 pathname === route.path ? "nav-link active" : "nav-link"
               }
             >
-              {route.title}
+              <FormattedMessage id={route.id} defaultMessage={route.id} />
+              {/*route.title*/}
             </Link>
           </li>
         )}
@@ -49,7 +58,8 @@ class TeamLeftSidebar extends Component {
                 pathname === route.path ? "nav-link active" : "nav-link"
               }
             >
-              {route.title}
+              <FormattedMessage id={route.id} defaultMessage={route.id} />
+              {/*route.title*/}
             </Link>
           </li>
         )}
@@ -58,10 +68,13 @@ class TeamLeftSidebar extends Component {
   };
 
   render() {
-    const {height} =this.props;
-    
+    const { height } = this.props;
+
     return (
-      <ul className="nav nav-tabs flex-column border-tabs" style={{ minHeight:(height > 0 ? height:"") }}>
+      <ul
+        className="nav nav-tabs flex-column border-tabs"
+        style={{ minHeight: height > 0 ? height : "" }}
+      >
         {this.renderNavRoutes()}
       </ul>
     );

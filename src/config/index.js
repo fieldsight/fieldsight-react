@@ -5,7 +5,8 @@ let tokenVal = window.token ? window.token : process.env.TOKEN;
 
 let baseURL = window.base_url
   ? window.base_url
-  : "https://fieldsight.naxa.com.np/";
+  : //: " http://ec2-18-220-9-254.us-east-2.compute.amazonaws.com";
+    "https://fieldsight.naxa.com.np/";
 //"https://app.fieldsight.org/";
 
 const setDefault = () => {

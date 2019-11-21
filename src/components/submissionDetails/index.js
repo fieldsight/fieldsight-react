@@ -79,7 +79,6 @@ class SubmissionDetail extends Component {
                       />
                     </div>
                   )}
-
                   <Submission
                     formName={form_name}
                     dateCreated={date_created}
@@ -121,7 +120,8 @@ const mapStateToProps = ({ submissionDetail }) => ({
   submissionDetail
 });
 
-export default connect(
-  mapStateToProps,
-  { getSubmissionDetail, postSubmissionDetail, toggleSubmission }
-)(SubmissionDetail);
+export default connect(mapStateToProps, {
+  getSubmissionDetail,
+  postSubmissionDetail,
+  toggleSubmission
+})(SubmissionDetail);

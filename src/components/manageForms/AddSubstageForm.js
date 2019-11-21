@@ -5,6 +5,7 @@ import InputElement from "../common/InputElement";
 import RadioElement from "../common/RadioElement";
 import CheckBox from "../common/CheckBox";
 import SelectElement from "../common/SelectElement";
+import { FormattedMessage } from "react-intl";
 
 class AddSubstageForm extends Component {
   _isMounted = false;
@@ -228,10 +229,11 @@ class AddSubstageForm extends Component {
               tag="input"
               type="text"
               required={true}
-              label="Name"
+              label="app.name"
               name="substageTitle"
               value={substageTitle}
               changeHandler={this.handleInputChange}
+              translation={true}
             />
             <InputElement
               classname="border-0"
@@ -239,10 +241,11 @@ class AddSubstageForm extends Component {
               tag="input"
               type="text"
               //   required={true}
-              label="Description"
+              label="app.description"
               name="substageDesc"
               value={substageDesc}
               changeHandler={this.handleInputChange}
+              translation={true}
             />
             <div className="selected-form">
               <div className="selected-text">
@@ -267,51 +270,63 @@ class AddSubstageForm extends Component {
             tag="input"
             type="number"
             // required={true}
-            label="Weight"
+            label="app.weight"
             name="weight"
             value={weight}
             changeHandler={this.handleInputChange}
+            translation={true}
           />
 
           <div className="form-group flexrow checkbox-group">
-            <label>Default submission status</label>
+            <label>
+              <FormattedMessage
+                id="app.defaultSubmissionMession"
+                defaultMessage="Default submission status"
+              />
+            </label>
             <div className="custom-checkbox display-inline">
               <RadioElement
-                label="Approved"
+                label="app.approved"
                 className="approved"
                 name="status"
                 value={3}
                 changeHandler={this.handleRadioChange}
                 checked={status == 3}
+                translation={true}
               />
               <RadioElement
-                label="Pending"
+                label="app.pending"
                 className="pending"
                 name="status"
                 value={0}
                 changeHandler={this.handleRadioChange}
                 checked={status == 0}
+                translation={true}
               />
               <RadioElement
-                label="Flagged"
+                label="app.flagged"
                 className="flagged"
                 name="status"
                 value={2}
                 changeHandler={this.handleRadioChange}
                 checked={status == 2}
+                translation={true}
               />
               <RadioElement
-                label="Rejected"
+                label="app.rejected"
                 className="rejected"
                 name="status"
                 value={1}
                 changeHandler={this.handleRadioChange}
                 checked={status == 1}
+                translation={true}
               />
             </div>
           </div>
           <div>
-            <label>Regions</label>
+            <label>
+              <FormattedMessage id="app.regions" defaultMessage="Regions" />
+            </label>
             {hasLoaded && (
               <Select
                 defaultValue={regionSelected}
@@ -322,7 +337,9 @@ class AddSubstageForm extends Component {
             )}
           </div>
           <div>
-            <label>Types</label>
+            <label>
+              <FormattedMessage id="app.types" defaultMessage="Types" />
+            </label>
             {hasLoaded && (
               <Select
                 defaultValue={typeSelected}
@@ -392,7 +409,7 @@ class AddSubstageForm extends Component {
 
           <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
-              Save
+              <FormattedMessage id="app.save" defaultMessage="Save" />
             </button>
           </div>
         </form>

@@ -4,6 +4,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import SharedFormShare from "./SharedFormShare";
 import { DotLoader } from "./Loader";
+import { FormattedMessage } from "react-intl";
 
 const url = "fv3/api/sharedforms/";
 
@@ -63,11 +64,36 @@ class SharedTable extends Component {
               >
                 <thead>
                   <tr>
-                    <th>Form Name</th>
-                    <th>Form Owner</th>
-                    <th>Create Date</th>
-                    <th>Updated date</th>
-                    <th>Action</th>
+                    <th>
+                      <FormattedMessage
+                        id="app.form-name"
+                        defaultMessage="Form Name"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.formOwner"
+                        defaultMessage="Form Owner"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.create-date"
+                        defaultMessage="Create Date"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.updatedDate"
+                        defaultMessage="Updated date"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.action"
+                        defaultMessage="Action"
+                      />
+                    </th>
                   </tr>
                 </thead>
 
@@ -85,7 +111,12 @@ class SharedTable extends Component {
               </table>
               {this.state.list.length === 0 && !this.state.dLoader && (
                 <div className="card-header main-card-header sub-card-header bg-header">
-                  <h5>No Form Data Available</h5>
+                  <h5>
+                    <FormattedMessage
+                      id="app.noFormDataAvailable"
+                      defaultMessage="No Form Data Available"
+                    />
+                  </h5>
                 </div>
               )}
 

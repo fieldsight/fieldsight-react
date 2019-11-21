@@ -10,6 +10,7 @@ import Modal from "../../common/Modal";
 import Td from "../../common/TableData";
 import { DotLoader } from "../../common/Loader";
 import { Link } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
 
 // const projectId = window.project_id ? window.project_id : 137;
 
@@ -70,11 +71,13 @@ class DashboardHeader extends Component {
     const ManageDropdown = [
       {
         title: "Generate Report",
-        link: `/fieldsight/site-dashboard/${siteId}/`
+        link: `/fieldsight/site-dashboard/${siteId}/`,
+        id: "app.generate-report"
       },
       {
         title: "View Data",
-        link: `/fieldsight/application/#/site-responses/${siteId}/general/`
+        link: `/fieldsight/application/#/site-responses/${siteId}/general/`,
+        id: "app.view-data"
       }
     ];
 
@@ -87,10 +90,15 @@ class DashboardHeader extends Component {
         title: `${termsAndLabels && termsAndLabels.site} documents`,
         link: `/fieldsight/application/#/site-documents/${siteId}/`
       },
-      { title: "users", link: `/fieldsight/manage/people/site/${siteId}/` },
+      {
+        title: "users",
+        link: `/fieldsight/manage/people/site/${siteId}/`,
+        id: "app.users"
+      },
       {
         title: "forms",
-        link: `/fieldsight/application/#/site/manage-forms/0/${siteId}/generalform`
+        link: `/fieldsight/application/#/site/manage-forms/0/${siteId}/generalform`,
+        id: "app.forms"
       }
     ];
 
@@ -136,7 +144,13 @@ class DashboardHeader extends Component {
                   {identifier && (
                     <div className="col-sm-8">
                       <label>
-                        <strong>Identifier:</strong>
+                        <strong>
+                          <FormattedMessage
+                            id="app.identifier"
+                            defaultMessage="Identifier"
+                          />
+                          :
+                        </strong>
                       </label>
                       &nbsp;
                       <span>{identifier}</span>
@@ -145,7 +159,13 @@ class DashboardHeader extends Component {
                   {region && (
                     <div className="col-sm-8">
                       <label>
-                        <strong>Region:</strong>
+                        <strong>
+                          <FormattedMessage
+                            id="app.region"
+                            defaultMessage="Region"
+                          />
+                          :
+                        </strong>
                       </label>
                       &nbsp;
                       <span>{region}</span>
@@ -156,7 +176,14 @@ class DashboardHeader extends Component {
                   {address && (
                     <div className="col-sm-8">
                       <label>
-                        <strong>Address:</strong>
+                        <strong>
+                          <FormattedMessage
+                            id="app.address"
+                            defaultMessage="Address"
+                            description="Address"
+                          />
+                          :
+                        </strong>
                       </label>
                       &nbsp;
                       <span>{address}</span>
@@ -165,7 +192,14 @@ class DashboardHeader extends Component {
                   {type && (
                     <div className="col-sm-8">
                       <label>
-                        <strong>Type:</strong>
+                        <strong>
+                          <FormattedMessage
+                            id="app.type"
+                            defaultMessage="Type"
+                            description="Type"
+                          />
+                          :
+                        </strong>
                       </label>
                       &nbsp;
                       <span>{type}</span>
@@ -186,13 +220,26 @@ class DashboardHeader extends Component {
                 className="fieldsight-btn"
               >
                 <i className="fa fa-paste" />
-                <span>Data</span>
+                {/* <span>Data</span>*/}
+
+                <span>
+                  <FormattedMessage
+                    id="app.data"
+                    defaultMessage="Data"
+                    description="Data"
+                  />
+                </span>
               </Dropdown.Toggle>
 
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
                   <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
+                    {/*item.title*/}
+                    <FormattedMessage
+                      id={item.id}
+                      defaultMessage={item.title}
+                      description={item.title}
+                    />
                   </Dropdown.Item>
                 ))}
               </Dropdown.Menu>
@@ -206,12 +253,27 @@ class DashboardHeader extends Component {
                   className="fieldsight-btn"
                 >
                   <i className="fa fa-cog" />
-                  <span>Manage</span>
+                  {/*<span>Manage</span>*/}
+                  <span>
+                    <FormattedMessage
+                      id="app.manage"
+                      defaultMessage="Manage"
+                      description="Manage"
+                    />
+                  </span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
                   {HeaderDropdown.map((item, i) => (
                     <Dropdown.Item href={item.link} key={i} target="_blank">
-                      {item.title}
+                      {!!item.id ? (
+                        <FormattedMessage
+                          id={item.id}
+                          defaultMessage={item.title}
+                          description={item.title}
+                        />
+                      ) : (
+                        item.title
+                      )}
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
@@ -254,7 +316,11 @@ class DashboardHeader extends Component {
               <div className="add-data">
                 <a onClick={() => openModal("Header")}>
                   {" "}
-                  add data <i className="la la-plus" />
+                  <FormattedMessage
+                    id="app.addData"
+                    defaultMessage="Add Data"
+                  />{" "}
+                  <i className="la la-plus" />
                 </a>
               </div>
             )}
@@ -283,7 +349,14 @@ class DashboardHeader extends Component {
                 <button onClick={rotate} className="fieldsight-btn">
                   <OverlayTrigger
                     placement="top"
-                    overlay={<Tooltip>Rotate Left</Tooltip>}
+                    overlay={
+                      <Tooltip>
+                        <FormattedMessage
+                          id="app.rotateLeft"
+                          defaultMessage="Rotate Left"
+                        />
+                      </Tooltip>
+                    }
                   >
                     <i className="la la-rotate-left" />
                   </OverlayTrigger>
@@ -291,7 +364,14 @@ class DashboardHeader extends Component {
                 <button onClick={rotateLeft} className="fieldsight-btn">
                   <OverlayTrigger
                     placement="top"
-                    overlay={<Tooltip>Rotate Right</Tooltip>}
+                    overlay={
+                      <Tooltip>
+                        <FormattedMessage
+                          id="app.rotateRight"
+                          defaultMessage="Rotate Right"
+                        />
+                      </Tooltip>
+                    }
                   >
                     <i className="la la-rotate-right" />
                   </OverlayTrigger>
@@ -334,7 +414,10 @@ class DashboardHeader extends Component {
                     style={{ marginTop: "15px" }}
                     onClick={this.saveImage}
                   >
-                    Save Image
+                    <FormattedMessage
+                      id="app.saveImage"
+                      defaultMessage="Save Image"
+                    />
                   </button>
                 </div>
               </div>
@@ -357,12 +440,37 @@ class DashboardHeader extends Component {
                   >
                     <thead>
                       <tr>
-                        <th>Identifier</th>
-                        <th>Name</th>
+                        <th>
+                          <FormattedMessage
+                            id="app.identifier"
+                            defaultMessage="Identifier"
+                          />
+                        </th>
+                        <th>
+                          <FormattedMessage
+                            id="app.name"
+                            defaultMessage="Name"
+                          />
+                        </th>
 
-                        <th>Progress</th>
-                        <th>Submissions</th>
-                        <th>Type</th>
+                        <th>
+                          <FormattedMessage
+                            id="app.progress"
+                            defaultMessage="Progress"
+                          />
+                        </th>
+                        <th>
+                          <FormattedMessage
+                            id="app.submissions"
+                            defaultMessage="Submissions"
+                          />
+                        </th>
+                        <th>
+                          <FormattedMessage
+                            id="app.type"
+                            defaultMessage="Type"
+                          />
+                        </th>
                       </tr>
                     </thead>
                     <tbody>

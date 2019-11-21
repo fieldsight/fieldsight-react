@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import withPagination from "../../hoc/WithPagination";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
@@ -176,6 +176,7 @@ class ProjectDashboard extends React.Component {
         params: { id: projectId }
       }
     } = this.props;
+
     const { activeTab, showCropper, showGallery } = this.state;
 
     return (
@@ -221,13 +222,28 @@ class ProjectDashboard extends React.Component {
               <div className="card map">
                 <div className="card-header main-card-header sub-card-header">
                   <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
+
+                  {/* <h5>
+                    <FormattedMessage
+                      id={
+                        terms_and_labels.site == "School"
+                          ? "app.school-map"
+                          : "app.map"
+                      }
+                      defaultMessage="School Map"
+                    />
+                    </h5>*/}
                   <div className="dash-btn">
                     <a
                       href={`/fieldsight/proj-map/${id}/`}
                       className="fieldsight-btn left-icon"
                       target="_blank"
                     >
-                      <i className="la la-map" /> Full map
+                      <i className="la la-map" /> {/*Full map*/}
+                      <FormattedMessage
+                        id="app.full-map"
+                        defaultMessage="Full Map"
+                      />
                     </a>
                   </div>
                 </div>
@@ -251,7 +267,11 @@ class ProjectDashboard extends React.Component {
                         }
                         onClick={() => this.toggleTab("site")}
                       >
-                        Sites
+                        {/* Sites*/}
+                        <FormattedMessage
+                          id="app.sites"
+                          defaultMessage="Sites"
+                        />
                       </a>
                     </li>{" "}
                     {!!has_region && (
@@ -264,7 +284,11 @@ class ProjectDashboard extends React.Component {
                           }
                           onClick={() => this.toggleTab("region")}
                         >
-                          Regions
+                          {/*Regions*/}
+                          <FormattedMessage
+                            id="app.regions"
+                            defaultMessage="Regions"
+                          />
                         </a>
                       </li>
                     )}
@@ -282,7 +306,10 @@ class ProjectDashboard extends React.Component {
                           <input
                             type="search"
                             className="form-control"
-                            placeholder="Search"
+                            placeholder={this.props.intl.formatMessage({
+                              id: "app.teams-search",
+                              defaultMessage: "Search"
+                            })}
                             onChange={this.onChangeHandler}
                           />
                           {/* <label htmlFor="input">Search</label> */}
@@ -394,7 +421,13 @@ class ProjectDashboard extends React.Component {
           <div className="progress-table mrb-30">
             <div className="card">
               <div className="card-header main-card-header sub-card-header">
-                <h5>Progress table</h5>
+                {/*<h5>Progress table</h5>*/}
+                <h5>
+                  <FormattedMessage
+                    id="app.progress-table"
+                    defaultMessage="Progress table"
+                  />
+                </h5>
               </div>
 
               <ProgressTable
@@ -409,7 +442,13 @@ class ProjectDashboard extends React.Component {
               <div className="col-md-6">
                 <div className="card">
                   <div className="card-header main-card-header sub-card-header">
-                    <h5>Form submissions</h5>
+                    {/* <h5>Form submissions</h5>*/}
+                    <h5>
+                      <FormattedMessage
+                        id="app.form-submission"
+                        defaultMessage="Form Submissions"
+                      />
+                    </h5>
                   </div>
                   <div className="card-body">
                     <SubmissionChart
@@ -421,7 +460,13 @@ class ProjectDashboard extends React.Component {
               <div className="col-md-6">
                 <div className="card">
                   <div className="card-header main-card-header sub-card-header">
-                    <h5>Site progress</h5>
+                    {/*<h5>Site progress</h5>*/}
+                    <h5>
+                      <FormattedMessage
+                        id="app.site-progress"
+                        defaultMessage="Site Progress"
+                      />
+                    </h5>
                   </div>
                   <div className="card-body">
                     <ProgressChart progressData={site_progress_chart_data} />
@@ -440,7 +485,13 @@ class ProjectDashboard extends React.Component {
               <div className="col-xl-4 col-md-6">
                 <div className="card mangager-list">
                   <div className="card-header main-card-header sub-card-header">
-                    <h5>Project managers</h5>
+                    {/* <h5>Project managers</h5>*/}
+                    <h5>
+                      <FormattedMessage
+                        id="app.project-managers"
+                        defaultMessage="Progress Managers"
+                      />
+                    </h5>
                     {/* <div className="dash-btn">
                         <form className="floating-form">
                           <div className="form-group mr-0">
@@ -490,14 +541,11 @@ const mapStateToProps = ({ projectDashboard }) => ({
 });
 ProjectDashboard.contextType = LanguageContext;
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getProjectDashboard,
-      getRegionData,
-      getProgressTableData,
-      getSurveyForm
-    }
-  ),
+  connect(mapStateToProps, {
+    getProjectDashboard,
+    getRegionData,
+    getProgressTableData,
+    getSurveyForm
+  }),
   withPagination
-)(ProjectDashboard);
+)(injectIntl(ProjectDashboard));

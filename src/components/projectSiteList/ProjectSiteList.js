@@ -5,6 +5,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import AddSite from "./AddSite";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
+import { FormattedMessage } from "react-intl";
 
 //const project_id = 137;
 const base_url = "https://fieldsight.naxa.com.np";
@@ -67,7 +68,14 @@ class ProjectSiteList extends Component {
             </li> */}
 
             <li className="breadcrumb-item " aria-current="page">
-              {!isEmpty(terms) ? `${terms.site} List` : "Site List"}
+              {!isEmpty(terms) ? (
+                `${terms.site} List`
+              ) : (
+                <FormattedMessage
+                  id="app.siteList"
+                  defaultMessage="Site List"
+                />
+              )}
             </li>
           </ol>
         </nav>
@@ -85,7 +93,12 @@ class ProjectSiteList extends Component {
                 <div className="popup-body lg-body">
                   <div className="card">
                     <div className="card-header main-card-header">
-                      <h5>Bulk Upload</h5>
+                      <h5>
+                        <FormattedMessage
+                          id="app.bulkUpload"
+                          defaultMessage="Bulk Upload"
+                        />
+                      </h5>
                       <span className="popup-close" onClick={this.closePopup}>
                         <i className="la la-close" />
                       </span>
@@ -97,12 +110,27 @@ class ProjectSiteList extends Component {
                       >
                         <PerfectScrollbar>
                           <div className="form-group">
-                            <label>Upload file</label>
+                            <label>
+                              <FormattedMessage
+                                id="app.uploadFile"
+                                defaultMessage="Upload file"
+                              />
+                            </label>
                             <div className="upload-form">
                               <div className="upload-wrap">
                                 <div className="content">
-                                  <h3>Drag & Drop an image</h3>
-                                  <span>or</span>
+                                  <h3>
+                                    <FormattedMessage
+                                      id="app.drag&DropAnImage"
+                                      defaultMessage="Drag & Drop an image"
+                                    />
+                                  </h3>
+                                  <span>
+                                    <FormattedMessage
+                                      id="app.or"
+                                      defaultMessage="or"
+                                    />
+                                  </span>
                                 </div>
                                 <input
                                   type="file"
@@ -111,7 +139,11 @@ class ProjectSiteList extends Component {
                                 />
                                 <div className="fieldsight-btn">
                                   <label htmlFor="upload-btn">
-                                    upload <i className="la la-cloud-upload" />
+                                    <FormattedMessage
+                                      id="app.upload"
+                                      defaultMessage="Upload"
+                                    />
+                                    <i className="la la-cloud-upload" />
                                   </label>
                                   <input type="file" id="upload-btn" multiple />
                                 </div>

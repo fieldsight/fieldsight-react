@@ -10,6 +10,8 @@ import axios from "axios";
 import { RegionContext } from "../../context";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FormattedMessage } from "react-intl";
+import DeleteModel from "../common/DeleteModal";
 
 class ManageRegion extends Component {
   static contextType = RegionContext;
@@ -114,16 +116,26 @@ class ManageRegion extends Component {
             `${terms.region} ID`,
             `${terms.region} Name`,
             ,
-            "Created Date",
-            "Action"
+            "app.created-date",
+            "app.action"
           ]
-        : ["Region ID", "Region Name", "Created Date", "Action"]
+        : ["app.regionId", "app.regionName", "app.created-date", "app.action"]
     };
-
+    const message = !isEmpty(terms) ? (
+      `${terms.region}`
+    ) : (
+      <FormattedMessage id="app.regions" defaultMessage="Regions" />
+    );
     return (
       <Fragment>
         <RightContentCard
-          title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+          title={
+            !isEmpty(terms) ? (
+              `${terms.region}`
+            ) : (
+              <FormattedMessage id="app.regions" defaultMessage="Regions" />
+            )
+          }
           addButton
           toggleModal={toggleModal}
         >
@@ -145,10 +157,11 @@ class ManageRegion extends Component {
                   backgroundColor: "#28a745",
                   color: "white",
                   textAlign: "left",
-                  width: "83px"
+                  width: "97px"
                 }}
               >
-                Turn OFF
+                <FormattedMessage id="app.turnOff" defaultMessage="Turn OFF" />
+
                 <div
                   className="handle"
                   style={{ left: "auto", right: "0.1875rem" }}
@@ -160,10 +173,11 @@ class ManageRegion extends Component {
                 className="btn-toggle"
                 onClick={this.region}
                 style={{
-                  width: "83px"
+                  width: "97px"
                 }}
               >
-                Turn ON
+                <FormattedMessage id="app.turnOn" defaultMessage="Turn ON" />
+
                 <div className="handle"></div>
               </button>
             )}
@@ -180,7 +194,13 @@ class ManageRegion extends Component {
 
         {showModal && (
           <Modal
-            title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+            title={
+              !isEmpty(terms) ? (
+                `${terms.region}`
+              ) : (
+                <FormattedMessage id="app.regions" defaultMessage="Regions" />
+              )
+            }
             toggleModal={toggleModal}
           >
             <form className="floating-form" onSubmit={onSubmitHandler}>
@@ -188,27 +208,29 @@ class ManageRegion extends Component {
                 tag="input"
                 type="text"
                 required={true}
-                label="ID"
+                label="app.id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
+                translation={true}
               />
               <InputElement
                 tag="textarea"
                 type="text"
                 required={true}
-                label="Name"
+                label="app.name"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
+                translation={true}
               />{" "}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  Save
+                  <FormattedMessage id="app.save" defaultMessage="Save" />
                 </button>
               </div>
             </form>
@@ -217,27 +239,13 @@ class ManageRegion extends Component {
         {isLoading && <Loader />}
 
         {showDeleteConfirmation && (
-          <Modal title="Warning" toggleModal={cancelHandler}>
-            <div className="warning">
-              <i className="la la-exclamation-triangle" />
-
-              <p>
-                Are you sure you want to delete{" "}
-                {!isEmpty(terms) ? `${terms.region}` : "Regions"} ?
-              </p>
-            </div>
-            <div className="warning-footer text-center">
-              <a
-                className="fieldsight-btn rejected-btn"
-                onClick={cancelHandler}
-              >
-                cancel
-              </a>
-              <a className="fieldsight-btn" onClick={confirmHandler}>
-                confirm
-              </a>
-            </div>
-          </Modal>
+          <DeleteModel
+            onCancel={cancelHandler}
+            onConfirm={confirmHandler}
+            onToggle={cancelHandler}
+            message={`Are you sure you want to delete ${message}?`}
+            title="Warning"
+          />
         )}
       </Fragment>
     );

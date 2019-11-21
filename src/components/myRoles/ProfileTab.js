@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { AvatarContentLoader } from "../common/Loader";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { FormattedMessage } from "react-intl";
 
 let base_url = window.base_url
   ? window.base_url
@@ -88,7 +89,10 @@ class ProfileTab extends Component {
                       target="_self"
                       className="fieldsight-btn"
                     >
-                      Edit Profile
+                      <FormattedMessage
+                        id="app.edit-profile"
+                        defaultMessage="Edit Profile"
+                      />
                     </a>
                   )}
                 </div>

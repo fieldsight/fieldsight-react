@@ -7,6 +7,7 @@ import RightContentCard from "../common/RightContentCard";
 import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
+import { FormattedMessage } from "react-intl";
 
 const animatedComponents = makeAnimated();
 
@@ -131,7 +132,7 @@ export default class MapLayer extends Component {
                   className="fieldsight-btn pull-right"
                   style={{ marginTop: "15px" }}
                 >
-                  Save
+                  <FormattedMessage id="app.save" defaultMessage="Save" />
                 </button>
               </div>
             </form>
