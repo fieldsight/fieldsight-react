@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import PropTypes from 'prop-types';
 import { getSiteUser } from '../../actions/userDocumentActions';
 
 class UserDocument extends Component {
@@ -51,9 +52,9 @@ class UserDocument extends Component {
         users: search,
       });
     } else {
-      this.setState({
-        users: this.state.masteruser,
-      });
+      this.setState(state => ({
+        users: state.masteruser,
+      }));
     }
   };
 
@@ -62,14 +63,14 @@ class UserDocument extends Component {
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          {
+          {Object.keys(breadcrumbs).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href={breadcrumbs.site_url}>{breadcrumbs.site}</a>
               </li>
               <li className="breadcrumb-item">{breadcrumbs.name}</li>
             </ol>
-          }
+          )}
         </nav>
         <main id="main-content">
           <div className="card">
@@ -78,15 +79,17 @@ class UserDocument extends Component {
               <div className="dash-btn">
                 <form className="floating-form">
                   <div className="form-group mr-0">
-                    <input
-                      type="search"
-                      className="form-control"
-                      name="search"
-                      onChange={e => this.handleChange(e)}
-                      required
-                    />
-                    <label htmlFor="input">Search</label>
-                    <i className="la la-search"></i>
+                    <label htmlFor="input">
+                      Search
+                      <input
+                        type="search"
+                        className="form-control"
+                        name="search"
+                        onChange={e => this.handleChange(e)}
+                        required
+                      />
+                    </label>
+                    <i className="la la-search" />
                   </div>
                 </form>
               </div>
@@ -106,32 +109,32 @@ class UserDocument extends Component {
                 </thead>
 
                 <tbody>
-                  {users.map((users, key) => {
+                  {users.map(user => {
                     return (
-                      <tr key={key}>
+                      <tr key={user.id}>
                         <td>
                           <a
-                            href={`/users/profile/${users.id}`}
+                            href={`/users/profile/${user.id}`}
                             className="pending table-profile"
                           >
                             <figure>
                               <img
-                                src={users.profile_picture}
+                                src={user.profile_picture}
                                 alt="site-logo"
                               />
                             </figure>
-                            <h5>{users.full_name}</h5>
+                            <h5>{user.full_name}</h5>
                           </a>
                         </td>
-                        <td>{users.username}</td>
-                        <td>{users.email}</td>
-                        {users.role !== '' &&
-                        users.role.length > 0 ? (
-                          users.role[0] ? (
-                            <td>{users.role[0]}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        {user.role !== '' && user.role.length > 0 ? (
+                          user.role[0] ? (
+                            <td>{user.role[0]}</td>
                           ) : (
                             <td>
-                              {users.role[0]}/{users.role[1]}
+                              {' '}
+                              {`${user.role[0] / user.role[1]}`}
                             </td>
                           )
                         ) : (
@@ -154,6 +157,10 @@ const mapStateToProps = ({ userDocument }) => {
   return {
     userDocument,
   };
+};
+UserDocument.propTypes = {
+  match: PropTypes.objectOf.isRequired,
+  getSiteUser: PropTypes.func.isRequired,
 };
 export default compose(
   connect(mapStateToProps, {

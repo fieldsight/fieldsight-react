@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+/* eslint-disable react/prop-types */
 
 const FreePlan = ({ period, plan }) => (
   <div className="col-md-4">
@@ -6,29 +7,35 @@ const FreePlan = ({ period, plan }) => (
       <div className="mp-head pbg-1">
         <h4>Free</h4>
         <h3>
-          <strong>${plan.total_charge}</strong>
-          <sub> {period == 'monthly' ? '/Mo' : '/Yr'}</sub>
+          <strong>{`$${plan.total_charge}`}</strong>
+          <sub>{period === 'monthly' ? '/Mo' : '/Yr'}</sub>
         </h3>
         <div className="tri-wrap">
-          <div className="tri-left"></div>
-          <div className="tri-right"></div>
+          <div className="tri-left" />
+          <div className="tri-right" />
         </div>
       </div>
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong> Submissions
+            <strong>{plan.submissions}</strong>
+            Submissions
           </li>
           <li>
-            <strong>15</strong> Users, <strong>2</strong> Projects,{' '}
+            <strong>15</strong>
+            Users,
+            <strong>2</strong>
+            Projects,
             <strong>10</strong>
             Sites
           </li>
           <li>
-            <strong>Unlimited</strong> Forms, Stages & Schedules
+            <strong>Unlimited</strong>
+            Forms, Stages & Schedules
           </li>
           <li>
-            <strong>Unlimited</strong> Reports, Dashboards & Maps
+            <strong>Unlimited</strong>
+            Reports, Dashboards & Maps
           </li>
         </ul>
       </div>
@@ -47,35 +54,42 @@ const StarterPlan = ({ period, plan, handleSelect }) => (
       <div className="mp-head pbg-2">
         <h4>Starter</h4>
         <h3>
-          <strong>${plan.total_charge}</strong>
-          <sub>{period == 'monthly' ? '/Mo' : '/Yr'}</sub>
+          <strong>{`$${plan.total_charge}`}</strong>
+          <sub>{period === 'monthly' ? '/Mo' : '/Yr'}</sub>
         </h3>
         <div className="tri-wrap">
-          <div className="tri-left"></div>
-          <div className="tri-right"></div>
+          <div className="tri-left" />
+          <div className="tri-right" />
         </div>
       </div>
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong> Submissions
+            <strong>{plan.submissions}</strong>
+            Submissions
           </li>
           <li>
-            <strong>Unlimited</strong> Users, Projects, Sites
+            <strong>Unlimited</strong>
+            Users, Projects, Sites
           </li>
           <li>
-            <strong>Unlimited</strong> Forms, Stages & Schedules
+            <strong>Unlimited</strong>
+            Forms, Stages & Schedules
           </li>
           <li>
-            <strong>Unlimited</strong> Reports, Dashboards & Maps
+            <strong>Unlimited</strong>
+            Reports, Dashboards & Maps
           </li>
         </ul>
       </div>
       <div className="mp-footer">
         <a
+          href="#"
           title=""
           className="btn pbg-2 btn-block btn-lg"
-          onClick={() => handleSelect('starter_plan', plan)}
+          onClick={() => {
+            handleSelect('starter_plan', plan);
+          }}
         >
           Select
         </a>
@@ -90,35 +104,42 @@ const BasicPlan = ({ period, plan, handleSelect }) => (
       <div className="mp-head pbg-3">
         <h4>Basic</h4>
         <h3>
-          <strong>${plan.total_charge}</strong>
-          <sub>{period == 'monthly' ? '/Mo' : '/Yr'}</sub>
+          <strong>{`$${plan.total_charge}`}</strong>
+          <sub>{period === 'monthly' ? '/Mo' : '/Yr'}</sub>
         </h3>
         <div className="tri-wrap">
-          <div className="tri-left"></div>
-          <div className="tri-right"></div>
+          <div className="tri-left" />
+          <div className="tri-right" />
         </div>
       </div>
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong> Submissions
+            <strong>{plan.submissions}</strong>
+            Submissions
           </li>
           <li>
-            <strong>Unlimited</strong> Users, Projects, Sites
+            <strong>Unlimited</strong>
+            Users, Projects, Sites
           </li>
           <li>
-            <strong>Unlimited</strong> Forms, Stages & Schedules
+            <strong>Unlimited</strong>
+            Forms, Stages & Schedules
           </li>
           <li>
-            <strong>Unlimited</strong> Reports, Dashboards & Maps
+            <strong>Unlimited</strong>
+            Reports, Dashboards & Maps
           </li>
         </ul>
       </div>
       <div className="mp-footer">
         <a
+          href="#"
           title=""
           className="btn pbg-3 btn-block btn-lg"
-          onClick={() => handleSelect('basic_plan', plan)}
+          onClick={() => {
+            handleSelect('basic_plan', plan);
+          }}
         >
           Select
         </a>
@@ -133,35 +154,42 @@ const ExtendedPlan = ({ period, plan, handleSelect }) => (
       <div className="mp-head pbg-4">
         <h4>Extended</h4>
         <h3>
-          <strong>${plan.total_charge}</strong>
-          <sub> {period == 'monthly' ? '/Mo' : '/Yr'}</sub>
+          <strong>{`$${plan.total_charge}`}</strong>
+          <sub>{period === 'monthly' ? '/Mo' : '/Yr'}</sub>
         </h3>
         <div className="tri-wrap">
-          <div className="tri-left"></div>
-          <div className="tri-right"></div>
+          <div className="tri-left" />
+          <div className="tri-right" />
         </div>
       </div>
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong> Submissions
+            <strong>{plan.submissions}</strong>
+            Submissions
           </li>
           <li>
-            <strong>Unlimited</strong> Users, Projects, Sites
+            <strong>Unlimited</strong>
+            Users, Projects, Sites
           </li>
           <li>
-            <strong>Unlimited</strong> Forms, Stages & Schedules
+            <strong>Unlimited</strong>
+            Forms, Stages & Schedules
           </li>
           <li>
-            <strong>Unlimited</strong> Reports, Dashboards & Maps
+            <strong>Unlimited</strong>
+            Reports, Dashboards & Maps
           </li>
         </ul>
       </div>
       <div className="mp-footer">
         <a
+          href="#"
           title=""
           className="btn pbg-4 btn-block btn-lg"
-          onClick={() => handleSelect('extended_plan', plan)}
+          onClick={() => {
+            handleSelect('extended_plan', plan);
+          }}
         >
           Select
         </a>
@@ -176,35 +204,42 @@ const ProPlan = ({ period, plan, handleSelect }) => (
       <div className="mp-head pbg-5">
         <h4>Pro</h4>
         <h3>
-          <strong>${plan.total_charge}</strong>
-          <sub> {period == 'monthly' ? '/Mo' : '/Yr'}</sub>
+          <strong>{`$${plan.total_charge}`}</strong>
+          <sub>{period === 'monthly' ? '/Mo' : '/Yr'}</sub>
         </h3>
         <div className="tri-wrap">
-          <div className="tri-left"></div>
-          <div className="tri-right"></div>
+          <div className="tri-left" />
+          <div className="tri-right" />
         </div>
       </div>
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong> Submissions
+            <strong>{plan.submissions}</strong>
+            Submissions
           </li>
           <li>
-            <strong>Unlimited</strong> Users, Projects, Sites
+            <strong>Unlimited</strong>
+            Users, Projects, Sites
           </li>
           <li>
-            <strong>Unlimited</strong> Forms, Stages & Schedules
+            <strong>Unlimited</strong>
+            Forms, Stages & Schedules
           </li>
           <li>
-            <strong>Unlimited</strong> Reports, Dashboards & Maps
+            <strong>Unlimited</strong>
+            Reports, Dashboards & Maps
           </li>
         </ul>
       </div>
       <div className="mp-footer">
         <a
+          href="#"
           title=""
           className="btn pbg-5 btn-block btn-lg"
-          onClick={() => handleSelect('pro_plan', plan)}
+          onClick={() => {
+            handleSelect('pro_plan', plan);
+          }}
         >
           Select
         </a>
@@ -219,35 +254,42 @@ const ScalePlan = ({ period, plan, handleSelect }) => (
       <div className="mp-head pbg-6">
         <h4>Scale</h4>
         <h3>
-          <strong>${plan.total_charge}</strong>
-          <sub> {period == 'monthly' ? '/Mo' : '/Yr'}</sub>
+          <strong>{`$${plan.total_charge}`}</strong>
+          <sub>{period === 'monthly' ? '/Mo' : '/Yr'}</sub>
         </h3>
         <div className="tri-wrap">
-          <div className="tri-left"></div>
-          <div className="tri-right"></div>
+          <div className="tri-left" />
+          <div className="tri-right" />
         </div>
       </div>
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong> Submissions
+            <strong>{plan.submissions}</strong>
+            Submissions
           </li>
           <li>
-            <strong>Unlimited</strong> Users, Projects, Sites
+            <strong>Unlimited</strong>
+            Users, Projects, Sites
           </li>
           <li>
-            <strong>Unlimited</strong> Forms, Stages & Schedules
+            <strong>Unlimited</strong>
+            Forms, Stages & Schedules
           </li>
           <li>
-            <strong>Unlimited</strong> Reports, Dashboards & Maps
+            <strong>Unlimited</strong>
+            Reports, Dashboards & Maps
           </li>
         </ul>
       </div>
       <div className="mp-footer">
         <a
+          href="#"
           title=""
           className="btn btn-block pbg-6 btn-lg"
-          onClick={() => handleSelect('scale_plan', plan)}
+          onClick={() => {
+            handleSelect('scale_plan', plan);
+          }}
         >
           Select
         </a>
@@ -328,7 +370,7 @@ const YearlyPricing = props => {
   );
 };
 
-class PricingStepOne extends Component {
+class PricingStepOne extends PureComponent {
   render() {
     const {
       props: {
@@ -346,7 +388,7 @@ class PricingStepOne extends Component {
       <div className="fieldsight-new">
         <div className="bg-primary p-4">
           <div className="bg-light p-4 m-4">
-            <div className="pb-2"></div>
+            <div className="pb-2" />
             <h6 className="text-center mt-4">
               <strong>
                 Thank you for signing up with FieldSight!
@@ -357,7 +399,8 @@ class PricingStepOne extends Component {
             </h5>
             <p className="text-center mb-4 text-xlight">
               Fees for access to the system cover the costs of hosting
-              data and providing support. <br />
+              data and providing support.
+              <br />
               FieldSight subscription fees are charged at the start of
               delivering service and renew automatically.
             </p>
@@ -367,9 +410,10 @@ class PricingStepOne extends Component {
                 data-toggle="buttons"
               >
                 <button
+                  type="button"
                   value="monthly"
                   className={`${
-                    periodType == 'monthly' ? 'active' : ''
+                    periodType === 'monthly' ? 'active' : ''
                   } btn btn-pk btn-outline-primary`}
                   onClick={e => {
                     handleIntervalPeriod(e);
@@ -378,9 +422,10 @@ class PricingStepOne extends Component {
                   Monthly
                 </button>
                 <button
+                  type="button"
                   value="yearly"
                   className={`${
-                    periodType == 'yearly' ? 'active' : ''
+                    periodType === 'yearly' ? 'active' : ''
                   } btn btn-pk btn-outline-primary`}
                   onClick={e => {
                     handleIntervalPeriod(e);
@@ -390,7 +435,7 @@ class PricingStepOne extends Component {
                 </button>
               </div>
             </div>
-            {periodType == 'monthly' ? (
+            {periodType === 'monthly' ? (
               <MonthlyPricing
                 data={packageDetails}
                 handleSelect={handleFirstStepSelect}
@@ -404,11 +449,13 @@ class PricingStepOne extends Component {
             {isPackageSelected && (
               <div className="text-center mt-4">
                 <button
+                  type="button"
                   title=""
                   className="btn btn-primary"
                   onClick={() => handleNext('second')}
                 >
-                  Next <i className="la la-long-arrow-right"></i>
+                  Next
+                  <i className="la la-long-arrow-right" />
                 </button>
               </div>
             )}
@@ -418,4 +465,14 @@ class PricingStepOne extends Component {
     );
   }
 }
+// PricingStepOne.propTypes = {
+//   data: PropTypes.string.isRequired,
+//   handleSelect: PropTypes.func.isRequired,
+//   handleNext: PropTypes.func.isRequired,
+//   handleFirstStepSelect: PropTypes.func.isRequired,
+//   periodType: PropTypes.string.isRequired,
+//   isPackageSelected: PropTypes.bool.isRequired,
+//   handleIntervalPeriod: PropTypes.func.isRequired,
+//   packageDetails: PropTypes.objectOf.isRequired,
+// };
 export default PricingStepOne;

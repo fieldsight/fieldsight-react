@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
@@ -10,16 +11,23 @@ import SelectElement from '../common/SelectElement';
 import RightContentCard from '../common/RightContentCard';
 import Loader from '../common/Loader';
 import 'leaflet/dist/leaflet.css';
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
+const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
+const iconUrl = require('leaflet/dist/images/marker-icon.png');
+const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
 });
 
-class index extends Component {
+class TeamAdd extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
 
@@ -63,33 +71,35 @@ class index extends Component {
         this.setState({
           teamTypes: res.data.team_types,
           country: res.data.countries,
-          id,
+          // id,
         });
       })
       .catch(err => {
         console.log(err, 'err');
       });
-    if (this._isMounted) {
-      if (sector) {
-      }
-    }
+    // if (this._isMounted) {
+    //   if (sector) {
+    //   }
+    // }
   }
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
-    if (position) {
-      return this.setState({
-        position: {
-          ...this.state.position,
+    this.setState(state => {
+      if (position) {
+        return {
+          position: {
+            ...state.position,
+            [name]: value,
+          },
+        };
+      }
+      return {
+        project: {
+          ...state.project,
           [name]: value,
         },
-      });
-    }
-    this.setState({
-      project: {
-        ...this.state.project,
-        [name]: value,
-      },
+      };
     });
   };
 
@@ -145,13 +155,13 @@ class index extends Component {
   };
 
   mapClickHandler = e => {
-    this.setState({
+    this.setState(state => ({
       position: {
-        ...this.state.position,
+        ...state.position,
         latitude: e.latlng.lat,
         longitude: e.latlng.lng,
       },
-    });
+    }));
   };
 
   onSelectChangeHandler = (e, data) => {
@@ -211,12 +221,13 @@ class index extends Component {
           address,
           website,
           publicDescription,
-          logo,
+          // logo,
         },
+        loaded,
         position: { latitude, longitude },
         cropResult,
-        zoom,
-        src,
+        // zoom,
+        // src,
         showCropper,
         isLoading,
         teamTypes,
@@ -245,7 +256,7 @@ class index extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required={true}
+                  required
                   label=" Team Name"
                   name="teamName"
                   value={teamName}
@@ -258,12 +269,12 @@ class index extends Component {
                   label="Type of Team"
                   options={
                     teamTypes.length > 0
-                      ? teamTypes.map(teamTypes => teamTypes)
+                      ? teamTypes.map(each => each)
                       : teamTypes
                   }
-                  changeHandler={e =>
-                    onSelectChangeHandler(e, 'teamTypes')
-                  }
+                  changeHandler={e => {
+                    onSelectChangeHandler(e, 'teamTypes');
+                  }}
                   value={selectedteam}
                 />
               </div>
@@ -272,7 +283,7 @@ class index extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required={true}
+                  required
                   label="Contact Number: "
                   name="contactnumber"
                   value={contactnumber}
@@ -284,7 +295,7 @@ class index extends Component {
                   formType="editForm"
                   tag="input"
                   type="email"
-                  required={true}
+                  required
                   label="Email"
                   name="email"
                   value={email}
@@ -309,7 +320,7 @@ class index extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required={true}
+                  required
                   label="Address"
                   name="address"
                   value={address}
@@ -322,12 +333,12 @@ class index extends Component {
                   label="Country"
                   options={
                     country.length > 0
-                      ? country.map(country => country)
+                      ? country.map(each => each)
                       : country
                   }
-                  changeHandler={e =>
-                    onSelectChangeHandler(e, 'country')
-                  }
+                  changeHandler={e => {
+                    onSelectChangeHandler(e, 'country');
+                  }}
                   value={selectedCountry}
                 />
               </div>
@@ -337,7 +348,7 @@ class index extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required={true}
+                    required
                     label="Description"
                     name="publicDescription"
                     value={publicDescription}
@@ -349,8 +360,9 @@ class index extends Component {
             <div className="row">
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
-                  <label>
-                    Map <sup>*</sup>
+                  <label htmlFor="map">
+                    Map
+                    <sup>*</sup>
                   </label>
 
                   <div className="map-form">
@@ -377,13 +389,13 @@ class index extends Component {
                           formType="editForm"
                           tag="input"
                           type="number"
-                          required={true}
+                          required
                           label="Latitude"
                           name="latitude"
                           value={latitude}
-                          changeHandler={e =>
-                            onChangeHandler(e, 'latitude')
-                          }
+                          changeHandler={e => {
+                            onChangeHandler(e, 'latitude');
+                          }}
                         />
                       </div>
 
@@ -392,13 +404,13 @@ class index extends Component {
                           formType="editForm"
                           tag="input"
                           type="number"
-                          required={true}
+                          required
                           label="Longitude"
                           name="longitude"
                           value={longitude}
-                          changeHandler={e =>
-                            onChangeHandler(e, 'longitude')
-                          }
+                          changeHandler={e => {
+                            onChangeHandler(e, 'longitude');
+                          }}
                         />
                       </div>
                     </div>
@@ -408,7 +420,7 @@ class index extends Component {
 
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
-                  <label>
+                  <label htmlFor="cropresult">
                     {' '}
                     {cropResult ? 'Preview' : 'Attach File'}
                   </label>
@@ -423,7 +435,7 @@ class index extends Component {
                             <div className="upload-form">
                               <img
                                 src={this.state.cropResult}
-                                alt="Cropped Image"
+                                alt="Cropped"
                               />
                             </div>
 
@@ -434,7 +446,10 @@ class index extends Component {
                               />
                               <div className="upload-icon" />
 
-                              <button className="fieldsight-btn">
+                              <button
+                                type="button"
+                                className="fieldsight-btn"
+                              >
                                 Upload
                                 <i className="la la-cloud-upload" />
                               </button>
@@ -460,7 +475,10 @@ class index extends Component {
                                     />
                                     <div className="upload-icon" />
                                     <h3>Drag & Drop an image</h3>
-                                    <button className="fieldsight-btn">
+                                    <button
+                                      type="button"
+                                      className="fieldsight-btn"
+                                    >
                                       Upload
                                       <i className="la la-cloud-upload" />
                                     </button>
@@ -503,6 +521,7 @@ class index extends Component {
                         }}
                       />
                       <button
+                        type="button"
                         className="fieldsight-btn"
                         style={{ marginTop: '15px' }}
                         onClick={this.cropImage}
@@ -535,5 +554,8 @@ class index extends Component {
     );
   }
 }
-
-export default index;
+TeamAdd.propTypes = {
+  match: PropTypes.objectOf.isRequired,
+  history: PropTypes.objectOf.isRequired,
+};
+export default TeamAdd;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Table } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 export default class TeamUser extends Component {
   constructor(props) {
@@ -36,23 +37,24 @@ export default class TeamUser extends Component {
     const {
       target: { value },
     } = e;
+    const { users } = this.state;
     if (value) {
-      const search = await this.state.users.filter(users => {
+      const search = await users.filter(user => {
         return (
-          users.full_name
+          user.full_name
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          users.email.toLowerCase().includes(value.toLowerCase()) ||
-          users.username.toLowerCase().includes(value.toLowerCase())
+          user.email.toLowerCase().includes(value.toLowerCase()) ||
+          user.username.toLowerCase().includes(value.toLowerCase())
         );
       });
       this.setState({
         users: search,
       });
     } else {
-      this.setState({
-        users: this.state.masteruser,
-      });
+      this.setState(state => ({
+        users: state.masteruser,
+      }));
     }
   };
 
@@ -62,14 +64,14 @@ export default class TeamUser extends Component {
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          {
+          {Object.keys(breadcrumb).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href={breadcrumb.team_url}>{breadcrumb.team}</a>
               </li>
               <li className="breadcrumb-item">{breadcrumb.name}</li>
             </ol>
-          }
+          )}
         </nav>
         <main id="main-content">
           <div className="card">
@@ -81,14 +83,16 @@ export default class TeamUser extends Component {
                   onSubmit={this.handleSubmit}
                 >
                   <div className="form-group mr-0">
-                    <input
-                      type="search"
-                      className="form-control"
-                      onChange={e => this.handleChange(e)}
-                      required
-                    />
-                    <label htmlFor="input">Search</label>
-                    <i className="la la-search"></i>
+                    <label htmlFor="input">
+                      Search
+                      <input
+                        type="search"
+                        className="form-control"
+                        onChange={e => this.handleChange(e)}
+                        required
+                      />
+                    </label>
+                    <i className="la la-search" />
                   </div>
                 </form>
               </div>
@@ -107,31 +111,31 @@ export default class TeamUser extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((users, key) => {
+                  {users.map((user, key) => {
                     return (
-                      <tr key={key}>
+                      <tr key={user.id}>
                         <td>
                           <a
-                            href={`/users/profile/${users.id}`}
+                            href={`/users/profile/${user.id}`}
                             className="pending table-profile"
                           >
                             <figure>
                               <img
-                                src={users.profile_picture}
+                                src={user.profile_picture}
                                 alt="site-logo"
                               />
                             </figure>
-                            <h5>{users.full_name}</h5>
+                            <h5>{user.full_name}</h5>
                           </a>
                         </td>
-                        <td>{users.username}</td>
-                        <td>{users.email}</td>
-                        {users.role.length > 0 ? (
-                          users.role[0] ? (
-                            <td>{users.role[0]}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        {user.role.length > 0 ? (
+                          user.role[0] ? (
+                            <td>{user.role[0]}</td>
                           ) : (
                             <td>
-                              {users.role[0]}/{users.role[1]}
+                              {`${users.role[0]}/${users.role[1]}`}
                             </td>
                           )
                         ) : (
@@ -149,3 +153,6 @@ export default class TeamUser extends Component {
     );
   }
 }
+TeamUser.propTypes = {
+  match: PropTypes.objectOf.isRequired,
+};

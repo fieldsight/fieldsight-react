@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+/* eslint-disable react/prop-types  */
+/* eslint-disable  jsx-a11y/label-has-associated-control  */
 
 class FeaturedPicturesCard extends Component {
   renderName = id => {
     const selectedForm = this.props.forms.find(
       form => form.id === +id,
     );
-    if (selectedForm) {
-      return selectedForm.name;
-    }
+    return selectedForm && selectedForm.name;
+    // if (selectedForm) {
+    //   return selectedForm.name;
+    // }
   };
 
   render() {
@@ -23,9 +26,12 @@ class FeaturedPicturesCard extends Component {
             <h5>{picture.question_name}</h5>
             <div className="add-btn">
               <a
-                onClick={() =>
-                  editPicHandler(picture.id || picture.question_name)
-                }
+                role="button"
+                onKeyDown={this.handleKeyDown}
+                tabIndex="0"
+                onClick={() => {
+                  editPicHandler(picture.id || picture.question_name);
+                }}
                 className="td-edit-btn"
               >
                 <OverlayTrigger
@@ -36,11 +42,14 @@ class FeaturedPicturesCard extends Component {
                 </OverlayTrigger>
               </a>
               <a
-                onClick={() =>
+                role="button"
+                onKeyDown={this.handleKeyDown}
+                tabIndex="0"
+                onClick={() => {
                   removePicHandler(
                     picture.id || picture.question_name,
-                  )
-                }
+                  );
+                }}
                 className="td-delete-btn"
               >
                 <OverlayTrigger
@@ -56,18 +65,18 @@ class FeaturedPicturesCard extends Component {
             <div className="before-content">
               <ul>
                 <li>
-                  <label>Type:</label>{' '}
+                  <label>Type:</label>
                   <span>{picture.question_type}</span>
                 </li>
                 {picture.form_id && (
                   <li>
-                    <label>Form :</label>{' '}
+                    <label>Form :</label>
                     <span>{renderName(picture.form_id)}</span>
                   </li>
                 )}
                 {picture.question && (
                   <li>
-                    <label>Question :</label>{' '}
+                    <label>Question :</label>
                     <span>{picture.question.name}</span>
                   </li>
                 )}

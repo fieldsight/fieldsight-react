@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import uuid from 'uuid/v4';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
@@ -12,6 +12,8 @@ import findQuestion from '../../utils/findQuestion';
 import isEmpty from '../../utils/isEmpty';
 import { errorToast } from '../../utils/toastHandler';
 import SortableSiteInfo from './SortableSiteInfo';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -21,7 +23,7 @@ const INITIAL_STATE = {
   type: 'Text',
   placeholder: '',
   helpText: '',
-  showOptions: false,
+  // showOptions: false,
   editMode: false,
   options: {},
   optInputField: [],
@@ -69,25 +71,26 @@ class SiteInformationTable extends Component {
   }
 
   closeModal = () => {
-    this.setState({
+    this.setState(state => ({
       ...INITIAL_STATE,
-      tableQuestions: [...this.state.tableQuestions],
-    });
+      tableQuestions: [...state.tableQuestions],
+    }));
   };
 
   generateOptField = () => {
+    const { optInputField } = this.state;
     const maxVal = Math.max(
-      ...this.state.optInputField.map(field => field.val),
+      ...optInputField.map(field => field.val),
       0,
     );
 
-    const optInputField = [
-      ...this.state.optInputField,
+    const optionalInputField = [
+      ...optInputField,
       { tag: InputElement, val: maxVal + 1 },
     ];
 
     this.setState({
-      optInputField,
+      optInputField: optionalInputField,
     });
   };
 
@@ -97,18 +100,19 @@ class SiteInformationTable extends Component {
     if (value === 'MCQ') {
       return this.setState({
         type: 'MCQ',
-        showOptions: true,
+        // showOptions: true,
       });
     }
-    this.setState({
+    return this.setState({
       type: value,
-      showOptions: false,
+      // showOptions: false,
     });
   };
 
   handleCheckboxChange = (e, type) => {
+    const { filteredMetaAttributes } = this.state;
     if (typeof type === 'object') {
-      const newMetaAttributes = this.state.filteredMetaAttributes.map(
+      const newMetaAttributes = filteredMetaAttributes.map(
         attribute => ({ ...attribute }),
       );
       const selectedAttribute = newMetaAttributes.find(
@@ -120,7 +124,7 @@ class SiteInformationTable extends Component {
       });
     }
 
-    this.setState({ [`${type}Checked`]: e.target.checked });
+    return this.setState({ [`${type}Checked`]: e.target.checked });
   };
 
   handleMultiChange = option => {
@@ -134,23 +138,24 @@ class SiteInformationTable extends Component {
   onInputChangeHandler = (e, option) => {
     const { name, value } = e.target;
     if (option) {
-      return this.setState({
+      return this.setState(state => ({
         options: {
-          ...this.state.options,
+          ...state.options,
           [name]: value,
         },
-      });
+      }));
     }
-    this.setState({
+    return this.setState({
       [name]: value,
     });
   };
 
   removeInputHandler = val => {
-    const filteredOptInputField = this.state.optInputField.filter(
+    const { optInputField, options } = this.state;
+    const filteredOptInputField = optInputField.filter(
       (field, i) => field.val !== val,
     );
-    const filteredOptions = { ...this.state.options };
+    const filteredOptions = { ...options };
     delete filteredOptions[`option${val}`];
     this.setState({
       optInputField: filteredOptInputField,
@@ -160,10 +165,10 @@ class SiteInformationTable extends Component {
 
   formChangeHandler = e => {
     const { value } = e.target;
-    const { type } = this.state;
+    const { type, selectedProject } = this.state;
 
     if (type === 'Link') {
-      if (this.state.selectedProject === value) {
+      if (selectedProject === value) {
         return;
       }
       const filteredMetaAttributes = this.props.projects.find(
@@ -202,7 +207,8 @@ class SiteInformationTable extends Component {
 
   questionChangeHandler = e => {
     const { value } = e.target;
-    const selectedQuestion = this.state.filteredQuestions.find(
+    const { filteredQuestions } = this.state;
+    const selectedQuestion = filteredQuestions.find(
       question => question.name === value,
     );
 
@@ -350,14 +356,14 @@ class SiteInformationTable extends Component {
     };
 
     if (editMode) {
-      let selectedQuestionIndex = tableQuestions.findIndex(question =>
-        question.id
-          ? question.id == selectedId
-          : question.question_text == selectedId,
+      const selectedQuestionIndex = tableQuestions.findIndex(quest =>
+        quest.id
+          ? quest.id === selectedId
+          : quest.question_text === selectedId,
       );
 
-      let newTableQuestions = tableQuestions.map(question => ({
-        ...question,
+      const newTableQuestions = tableQuestions.map(quest => ({
+        ...quest,
       }));
 
       newTableQuestions[selectedQuestionIndex] = question;
@@ -387,8 +393,9 @@ class SiteInformationTable extends Component {
   };
 
   editQuestionHandler = value => {
+    const { filteredQuestions } = this.state;
     let filteredMetaAttributes = [];
-    let filteredQuestions = this.state.filteredQuestions;
+    let filteredQuestion = filteredQuestions;
     const selectedTableQuestion = this.state.tableQuestions.find(
       question =>
         question.id === value || question.question_text === value,
@@ -422,7 +429,7 @@ class SiteInformationTable extends Component {
       }
     }
 
-    console.log('selected Table question', selectedTableQuestion);
+    // console.log('selected Table question', selectedTableQuestion);
 
     const question = {
       label: selectedTableQuestion.question_text,
@@ -478,9 +485,9 @@ class SiteInformationTable extends Component {
         form => form.id === +selectedTableQuestion.form_id,
       );
 
-      console.log('selected form', selectedForm);
+      // console.log('selected form', selectedForm);
       if (selectedForm && Object.keys(selectedForm).length > 0) {
-        filteredQuestions = findQuestion(selectedForm.json.children);
+        filteredQuestion = findQuestion(selectedForm.json.children);
       }
     }
 
@@ -488,32 +495,33 @@ class SiteInformationTable extends Component {
       showModal: true,
       selectedId: value,
       editMode: true,
-      filteredQuestions,
+      filteredQuestions: filteredQuestion,
       ...question,
     });
   };
 
   removeQuestionHandler = value => {
-    const filteredTableQuestions = this.state.tableQuestions.filter(
-      question =>
-        question.id
-          ? question.id !== value
-          : question.question_text !== value,
+    const { tableQuestions } = this.state;
+    const filteredTableQuestions = tableQuestions.filter(question =>
+      question.id
+        ? question.id !== value
+        : question.question_text !== value,
     );
 
     this.setState(
       {
         tableQuestions: filteredTableQuestions,
       },
-      () => this.props.siteInfoHandler(this.state.tableQuestions),
+      () => this.props.siteInfoHandler(tableQuestions),
     );
   };
+
   handleReorderToogle = () => {
     this.setState(
-      {
-        reOrder: !this.state.reOrder,
-        isReorderCancel: !this.state.isReorderCancel,
-      },
+      state => ({
+        reOrder: !state.reOrder,
+        isReorderCancel: !state.isReorderCancel,
+      }),
       () => {
         if (this.state.isReorderCancel) {
           this.setState({ tableQuestions: this.props.jsonQuestions });
@@ -521,28 +529,29 @@ class SiteInformationTable extends Component {
       },
     );
   };
+
   handleSave = () => {
     this.props.handleSaveReorder(this.state.tableQuestions);
     this.handleReorderToogle();
   };
+
   handleReOrder = list => {
     this.setState({ tableQuestions: list });
   };
+
   render() {
     const {
-      props: { forms, terms, projects, jsonQuestions },
+      props: { forms, terms, projects },
       state: {
         label,
         type,
         placeholder,
         helpText,
-        editMode,
         selectedForm,
         selectedQuestion,
         selectedProject,
         optInputField,
         filteredQuestions,
-        filteredMetaAttributes,
         tableQuestions,
         showModal,
         reOrder,
@@ -564,6 +573,9 @@ class SiteInformationTable extends Component {
             <div className="add-btn outline-btn">
               {tableQuestions && tableQuestions.length > 1 && (
                 <a
+                  role="button"
+                  onKeyDown={this.handleKeyDown}
+                  tabIndex="-1"
                   className="pending"
                   data-tab="addSubStage-popup"
                   onClick={this.handleReorderToogle}
@@ -592,6 +604,9 @@ class SiteInformationTable extends Component {
               )}
               {reOrder && (
                 <a
+                  role="button"
+                  onKeyDown={this.handleKeyDown}
+                  tabIndex="0"
                   data-tab="addSubStage-popup"
                   onClick={this.handleSave}
                 >
@@ -605,7 +620,12 @@ class SiteInformationTable extends Component {
                   </OverlayTrigger>
                 </a>
               )}
-              <a onClick={toggleModal}>
+              <a
+                role="button"
+                onKeyDown={this.handleKeyDown}
+                tabIndex="0"
+                onClick={toggleModal}
+              >
                 <span>
                   <i className="la la-plus" />
                 </span>
@@ -637,7 +657,7 @@ class SiteInformationTable extends Component {
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="Input Label"
                 formType="floatingForm"
                 htmlFor="label"
@@ -649,7 +669,7 @@ class SiteInformationTable extends Component {
                 className="form-control"
                 label="Type"
                 options={questionTypes}
-                value={type ? type : null}
+                value={type}
                 changeHandler={this.onSelectChangeHandler}
               />
               {(type === 'Text' ||
@@ -658,7 +678,7 @@ class SiteInformationTable extends Component {
                 <InputElement
                   tag="input"
                   type="text"
-                  required={true}
+                  required
                   label="Placeholder"
                   formType="floatingForm"
                   htmlFor="placeholder"
@@ -671,7 +691,7 @@ class SiteInformationTable extends Component {
               {type === 'MCQ' &&
                 optInputField &&
                 optInputField.length > 0 &&
-                optInputField.map((el, i) => (
+                optInputField.map(el => (
                   <el.tag
                     key={el.val}
                     tag="input"
@@ -679,23 +699,24 @@ class SiteInformationTable extends Component {
                     label={`option${el.val}`}
                     formType="floatingForm"
                     htmlFor={`option${el.val}`}
-                    required={true}
+                    required
                     removeBtn
-                    removeHandler={() =>
-                      this.removeInputHandler(el.val)
-                    }
+                    removeHandler={() => {
+                      this.removeInputHandler(el.val);
+                    }}
                     name={`option${el.val}`}
                     value={
                       this.state.options[`option${el.val}`] || ''
                     }
-                    changeHandler={e =>
-                      this.onInputChangeHandler(e, 'option')
-                    }
+                    changeHandler={e => {
+                      this.onInputChangeHandler(e, 'option');
+                    }}
                   />
                 ))}
               {type === 'MCQ' && (
                 <div className="form-group">
                   <button
+                    type="button"
                     className="fieldsight-btn"
                     onClick={this.generateOptField}
                   >
@@ -710,7 +731,7 @@ class SiteInformationTable extends Component {
                 type === 'MCQ') && (
                 <InputElement
                   tag="textarea"
-                  required={true}
+                  required
                   label="Help Text"
                   formType="floatingForm"
                   htmlFor="helpText"
@@ -725,7 +746,7 @@ class SiteInformationTable extends Component {
                   className="form-control"
                   options={projects}
                   changeHandler={this.formChangeHandler}
-                  value={selectedProject ? selectedProject : null}
+                  value={selectedProject}
                 />
               )}
               {type === 'Link' && (
@@ -743,12 +764,12 @@ class SiteInformationTable extends Component {
                             <CheckBox
                               checked={attribute.checked}
                               label={attribute.question_name}
-                              changeHandler={e =>
+                              changeHandler={e => {
                                 this.handleCheckboxChange(
                                   e,
                                   attribute,
-                                )
-                              }
+                                );
+                              }}
                             />
                           </div>
                         );
@@ -764,13 +785,13 @@ class SiteInformationTable extends Component {
                 <SelectElement
                   className="form-control"
                   options={forms}
-                  value={selectedForm ? selectedForm : null}
+                  value={selectedForm}
                   changeHandler={this.formChangeHandler}
                 />
               )}
-
+              {/* 
               {console.log('selectedQuestion', selectedQuestion)}
-              {console.log('filteredQuestions', filteredQuestions)}
+              {console.log('filteredQuestions', filteredQuestions)} */}
               {(type === 'Form' ||
                 type === 'FormQuestionAnswerStatus') &&
                 filteredQuestions.length > 0 && (

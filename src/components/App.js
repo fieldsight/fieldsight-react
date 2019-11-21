@@ -75,15 +75,16 @@ class App extends Component {
     window.removeEventListener('resize', this.updateWindowDimensions);
   }
 
-  updateWindowDimensions = () => {
-    return (this.state.height = window.innerHeight - 181);
-  };
-
   componentWillMount() {
     setDefault();
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
   }
+
+  updateWindowDimensions = () => {
+    return (this.state.height = window.innerHeight - 181);
+  };
+
   render() {
     const { selected } = this.props;
 
@@ -278,7 +279,6 @@ class App extends Component {
   }
 }
 
-//export default App;
 const mapStateToProps = ({ teams }) => {
   const { selected } = teams;
 

@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { AvatarContentLoader } from '../../common/Loader';
+/* eslint-disable react/prop-types */
 
 const AdminListItem = ({ admin }) => {
   return (
@@ -20,7 +21,7 @@ const AdminListItem = ({ admin }) => {
   );
 };
 
-class Admin extends Component {
+class Admin extends PureComponent {
   render() {
     const { admin, showContentLoader } = this.props;
 
@@ -41,10 +42,10 @@ class Admin extends Component {
               <PerfectScrollbar>
                 <ul>
                   {admin.length > 0 ? (
-                    admin.map((admin, i) => (
+                    admin.map(each => (
                       <AdminListItem
-                        admin={admin}
-                        key={`admin_${i}`}
+                        admin={each}
+                        key={`admin_${each.id}`}
                       />
                     ))
                   ) : (

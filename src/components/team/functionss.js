@@ -1,31 +1,32 @@
+/* eslint-disable */
 function isOdd(num) {
   return num % 2;
 }
 
-calculaterange = (start, end, step) => {
+const calculaterange = (start, end, step) => {
   //
   // //
-  var range = [];
-  var typeofStart = typeof start;
-  var typeofEnd = typeof end;
+  const range = [];
+  const typeofStart = typeof start;
+  const typeofEnd = typeof end;
 
   if (step === 0) {
     throw TypeError('Step cannot be zero.');
   }
 
-  if (typeofStart == 'undefined' || typeofEnd == 'undefined') {
+  if (typeofStart === 'undefined' || typeofEnd === 'undefined') {
     throw TypeError('Must pass start and end arguments.');
-  } else if (typeofStart != typeofEnd) {
+  } else if (typeofStart !== typeofEnd) {
     throw TypeError('Start and end arguments must be of same type.');
   }
 
-  typeof step == 'undefined' && (step = 1);
+  if (typeof step === 'undefined') return (step = 1);
 
   if (end < start) {
     step = -step;
   }
 
-  if (typeofStart == 'number') {
+  if (typeofStart === 'number') {
     while (step > 0 ? end >= start : end <= start) {
       if (end <= 10) {
         range.push(start.toFixed(2));
@@ -42,8 +43,8 @@ calculaterange = (start, end, step) => {
         range.push(Math.round(end));
       }
     }
-  } else if (typeofStart == 'string') {
-    if (start.length != 1 || end.length != 1) {
+  } else if (typeofStart === 'string') {
+    if (start.length !== 1 || end.length !== 1) {
       throw TypeError(
         'Only strings with one character are supported.',
       );

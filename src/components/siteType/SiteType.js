@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../common/Table';
 import Modal from '../common/Modal';
@@ -8,6 +8,7 @@ import Loader from '../common/Loader';
 import { successToast, errorToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
+/* eslint-disable consistent-return  */
 
 const tableHeader = {
   siteTypes: ['ID', 'Type', 'Action'],
@@ -24,21 +25,16 @@ const INITIAL_STATE = {
   isLoading: false,
   showDeleteConfirmation: false,
 };
-class SiteType extends Component {
-  static contextType = RegionContext;
 
+class SiteType extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
 
     this.state = INITIAL_STATE;
+    this.contextType = RegionContext;
   }
-
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
-  };
 
   componentDidMount() {
     this._isMounted = true;
@@ -54,6 +50,16 @@ class SiteType extends Component {
       })
       .catch(err => console.log('err', err));
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  toggleModal = () => {
+    return this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
 
   requestHandler = () => {
     const {
@@ -114,10 +120,10 @@ class SiteType extends Component {
       .post(`${url}?project=${projectId}`, newSiteType)
       .then(res => {
         this.setState(
-          {
+          state => ({
             ...INITIAL_STATE,
-            siteType: [...this.state.siteType, { ...res.data }],
-          },
+            siteType: [...state.siteType, { ...res.data }],
+          }),
           () =>
             successToast(
               !isEmpty(terms) ? `${terms.site} Type` : 'Site Type',
@@ -147,9 +153,8 @@ class SiteType extends Component {
   };
 
   editHandler = id => {
-    const selectedSiteId = this.state.siteType.find(
-      site => site.id === id,
-    );
+    const { siteType } = this.state;
+    const selectedSiteId = siteType.find(site => site.id === id);
     this.setState({
       showModal: true,
       selectedId: id,
@@ -232,7 +237,6 @@ class SiteType extends Component {
         selectedIdentifier,
         selectedName,
         showDeleteConfirmation,
-        showDotLoader,
       },
       toggleModal,
       editHandler,
@@ -244,12 +248,12 @@ class SiteType extends Component {
       context: { terms },
     } = this;
     return (
-      <Fragment>
+      <>
         <RightContentCard
           title={!isEmpty(terms) ? `${terms.site} Type` : 'Site Type'}
           addButton
           toggleModal={toggleModal}
-          hideButton={true}
+          hideButton
         >
           <Table
             page="siteType"
@@ -276,7 +280,7 @@ class SiteType extends Component {
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="ID"
                 formType="floatingForm"
                 htmlFor="input"
@@ -287,14 +291,14 @@ class SiteType extends Component {
               <InputElement
                 tag="textarea"
                 type="text"
-                required={true}
+                required
                 label="Type"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-              />{' '}
+              />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
                   Save
@@ -309,30 +313,35 @@ class SiteType extends Component {
               <i className="la la-exclamation-triangle" />
 
               <p>
-                Are you sure you want to delete the{' '}
-                {!isEmpty(terms) ? `${terms.site} Type` : 'Site Type'}{' '}
+                Are you sure you want to delete the
+                {!isEmpty(terms) ? `${terms.site} Type` : 'Site Type'}
                 ?
               </p>
             </div>
             <div className="warning-footer text-center">
               <a
+                role="button"
+                onKeyDown={this.handleKeyDown}
+                tabIndex="0"
                 className="fieldsight-btn rejected-btn"
                 onClick={cancelHandler}
               >
                 cancel
               </a>
-              <a className="fieldsight-btn" onClick={confirmHandler}>
+              <a
+                className="fieldsight-btn"
+                role="button"
+                onKeyDown={this.handleKeyDown}
+                tabIndex="0"
+                onClick={confirmHandler}
+              >
                 confirm
               </a>
             </div>
           </Modal>
         )}
-      </Fragment>
+      </>
     );
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 

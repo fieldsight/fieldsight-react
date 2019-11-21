@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+/* eslint-disable react/prop-types  */
 
 const SubmissionSiteDetail = ({
   site: { id, name, region, identifier, logo },

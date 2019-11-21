@@ -1,10 +1,11 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import SelectElement from '../common/SelectElement';
 import InputElement from '../common/InputElement';
 import { DotLoader } from '../common/Loader';
-import Modal from '../common/Modal.js';
+import Modal from '../common/Modal';
 import isEmpty from '../../utils/isEmpty';
 import findQuestionWithGroup from '../../utils/findQuestionWithGroup';
+/* eslint-disable react/prop-types  */
 
 const typeOptions = {
   siteProgressCard: [
@@ -87,18 +88,18 @@ class SiteProgressCard extends Component {
       showForm = true;
     }
 
-    if (source == '2') {
+    if (source === '2') {
       showQuestion = true;
     }
 
-    if (source == '3' || source == '4') {
+    if (source === '3' || source === '4') {
       showTargetNum = true;
     }
 
     this.setState({
       source,
       selectedForm,
-      selectedQuestion: selectedQuestion ? selectedQuestion : {},
+      selectedQuestion,
       filteredQuestions,
       showTargetNum,
       showQuestion,
@@ -112,22 +113,22 @@ class SiteProgressCard extends Component {
     } = this;
 
     this.props.siteProgressHandler({
-      pull_integer_form: source == '2' ? selectedForm.id : null,
-      no_submissions_form: source == '4' ? selectedForm.id : null,
+      pull_integer_form: source === '2' ? selectedForm.id : null,
+      no_submissions_form: source === '4' ? selectedForm.id : null,
       no_submissions_total_count: targetNum ? +targetNum : null,
       pull_integer_form_question: selectedQuestion.name,
       // ? selectedQuestion.name
       // : // : selectedQuestion.name
       //   // ? selectedQuestion.name
       //   null,
-      source: source,
+      source,
       deployed: true,
     });
   };
 
   onChangeHandler = e => {
     const { value } = e.target;
-    if (value == '2') {
+    if (value === '2') {
       this.setState(
         {
           ...INITIAL_STATE,
@@ -137,7 +138,7 @@ class SiteProgressCard extends Component {
         },
         this.dataChangeHandler,
       );
-    } else if (value == '3') {
+    } else if (value === '3') {
       this.setState(
         {
           ...INITIAL_STATE,
@@ -146,7 +147,7 @@ class SiteProgressCard extends Component {
         },
         this.dataChangeHandler,
       );
-    } else if (value == '4') {
+    } else if (value === '4') {
       this.setState(
         {
           ...INITIAL_STATE,
@@ -167,7 +168,7 @@ class SiteProgressCard extends Component {
   formChangeHandler = e => {
     const { value } = e.target;
     const selectedForm = this.props.forms.find(
-      form => form.id == value,
+      form => form.id === value,
     );
 
     if (selectedForm) {
@@ -229,10 +230,9 @@ class SiteProgressCard extends Component {
       onChangeHandler,
       formChangeHandler,
       questionChangeHandler,
-      deployModalHandler,
     } = this;
     return (
-      <Fragment>
+      <>
         <div className="card">
           <div className="card-header sub-card-header">
             <h5>{title}</h5>
@@ -280,7 +280,7 @@ class SiteProgressCard extends Component {
                 <InputElement
                   tag="input"
                   type="number"
-                  required={true}
+                  required
                   label="Target"
                   formType="editForm"
                   htmlFor="target"
@@ -296,9 +296,9 @@ class SiteProgressCard extends Component {
         {showDeleteConfirmation && (
           <Modal
             title="Deployment"
-            toggleModal={() =>
-              this.setState({ showDeleteConfirmation: false })
-            }
+            toggleModal={() => {
+              this.setState({ showDeleteConfirmation: false });
+            }}
           >
             <div className="warning">
               <i className="la la-exclamation-triangle" />
@@ -310,20 +310,29 @@ class SiteProgressCard extends Component {
             </div>
             <div className="warning-footer text-center">
               <a
+                role="button"
+                onKeyDown={this.handleKeyDown}
+                tabIndex="0"
                 className="fieldsight-btn rejected-btn"
-                onClick={() =>
-                  this.setState({ showDeleteConfirmation: false })
-                }
+                onClick={() => {
+                  this.setState({ showDeleteConfirmation: false });
+                }}
               >
                 cancel
               </a>
-              <a className="fieldsight-btn" onClick={() => {}}>
+              <a
+                className="fieldsight-btn"
+                role="button"
+                onKeyDown={this.handleKeyDown}
+                tabIndex="0"
+                onClick={() => {}}
+              >
                 confirm
               </a>
             </div>
           </Modal>
         )}
-      </Fragment>
+      </>
     );
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import SiteInformationCard from './SiteInformationCard';
 import SiteProgressCard from './SiteProgressCard';
 import isEmpty from '../../utils/isEmpty';
+/* eslint-disable react/prop-types  */
 
 const IdentityForm = ({
   forms,

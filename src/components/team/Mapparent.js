@@ -11,6 +11,7 @@ class Mapparent extends Component {
       projectpk: '',
     };
   }
+
   popupCLick = (mapstr, e) => {
     this.setState({ projectpk: e });
     this.setState({ map: mapstr });
@@ -19,7 +20,7 @@ class Mapparent extends Component {
   render() {
     return (
       <div>
-        {this.state.map == 'projectmap' ? (
+        {this.state.map === 'projectmap' ? (
           <TeamMap popupCLick={this.popupCLick} />
         ) : (
           <DetailsMap

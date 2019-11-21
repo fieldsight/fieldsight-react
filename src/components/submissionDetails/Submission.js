@@ -11,21 +11,26 @@ import {
 } from 'react-leaflet';
 import L, { latLngBounds } from 'leaflet';
 import Legend from './Legend';
+import MarkerIcon from '../../static/images/marker.png';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
+/* eslint-disable consistent-return  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 function measure(lat1, lon1, lat2, lon2) {
   // generally used geo measurement function
-  var R = 6378.137; // Radius of earth in KM
-  var dLat = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180;
-  var dLon = (lon2 * Math.PI) / 180 - (lon1 * Math.PI) / 180;
-  var a =
+  const R = 6378.137; // Radius of earth in KM
+  const dLat = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180;
+  const dLon = (lon2 * Math.PI) / 180 - (lon1 * Math.PI) / 180;
+  const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos((lat1 * Math.PI) / 180) *
       Math.cos((lat2 * Math.PI) / 180) *
       Math.sin(dLon / 2) *
       Math.sin(dLon / 2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c;
-  //return d; // kilometers
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c;
+  // return d; // kilometers
   return (d * 1000).toFixed(2); // meters
 }
 
@@ -38,7 +43,14 @@ class Submission extends Component {
       showGallery: false,
       selectedImg: '',
     };
+    // this.onEachFeaturePoint = this.onEachFeaturePoint.bind(this);
+    // this.pointToLayer = this.pointToLayer.bind(this);
   }
+
+  onEachFeaturePoint = (feature, layer) => {
+    layer.bindPopup(`<b>Project Name: </b>
+    ${feature.properties.project_name}`);
+  };
 
   openModal = img => {
     this.setState({
@@ -53,27 +65,6 @@ class Submission extends Component {
       selectedImg: '',
     });
   };
-
-  onEachFeaturePoint(feature, layer) {
-    layer.bindPopup(`<b>Project Name: </b>
-    ${feature.properties.project_name}`);
-  }
-
-  pointToLayer(feature, latlng) {
-    const icon = new L.Icon({
-      iconUrl: require('../../static/images/marker.png'),
-      iconRetinaUrl: require('../../static/images/marker.png'),
-      iconSize: [28, 28],
-      iconAnchor: [13, 27],
-      popupAnchor: [2, -24],
-      shadowUrl: null,
-      shadowSize: null,
-      shadowAnchor: null,
-      //iconSize: new L.Point(60, 75)
-      //className: "leaflet-div-icon"
-    });
-    return L.marker(latlng, { icon: icon });
-  }
 
   getGeoJson = data => {
     return {
@@ -121,7 +112,7 @@ class Submission extends Component {
   getLargeBound = latlng => {
     if (Object.entries(latlng).length > 0) {
       const { siteLat, siteLng, ansLat, ansLng } = latlng;
-      let bounds = latLngBounds();
+      const bounds = latLngBounds();
 
       bounds.extend([siteLat, siteLng]);
       bounds.extend([ansLat && ansLat, ansLng && ansLng]);
@@ -133,7 +124,7 @@ class Submission extends Component {
   getLabelAndName = (label, name) => (
     <span>
       {label}
-      {name && <i>({name})</i>}
+      {name && <i>{`(${name})`}</i>}
     </span>
   );
 
@@ -158,8 +149,7 @@ class Submission extends Component {
                         submission.label,
                         submission.name,
                       )
-                  : // )submission.label
-                    submission.name}
+                  : submission.name}
               </Accordion.Toggle>
             </h5>
           </Card.Header>
@@ -203,21 +193,29 @@ class Submission extends Component {
               </div>
               <figure>
                 {submission.answer && (
-                  <img
-                    src={submission.answer}
-                    style={{
-                      backgroundImage: `url(${submission.answer})`,
-                      cursor: 'pointer',
+                  <a
+                    href="#"
+                    onClick={() => {
+                      this.openModal(submission.answer);
                     }}
-                    onClick={() => this.openModal(submission.answer)}
-                  />
+                  >
+                    <img
+                      alt="submisstion-answer"
+                      src={submission.answer}
+                      style={{
+                        backgroundImage: `url(${submission.answer})`,
+                        cursor: 'pointer',
+                      }}
+                    />
+                  </a>
                 )}
               </figure>
             </li>
           </ul>
         </div>
       );
-    } else if (submission.type === 'geopoint') {
+    }
+    if (submission.type === 'geopoint') {
       let splitedGeoLocation = [];
       let latitude = '';
       let longitude = '';
@@ -228,10 +226,11 @@ class Submission extends Component {
 
       if (!!submission.answer === true) {
         splitedGeoLocation = submission.answer.split(' ');
-        latitude = splitedGeoLocation[0];
-        longitude = splitedGeoLocation[1];
-        altitude = splitedGeoLocation[2];
-        accuracy = splitedGeoLocation[3];
+        const [lat, lng, alt, acc] = splitedGeoLocation;
+        latitude = lat;
+        longitude = lng;
+        altitude = alt;
+        accuracy = acc;
 
         latlngObj = {
           siteLat: site && site.latitude,
@@ -284,12 +283,12 @@ class Submission extends Component {
                           maxZoom={19}
                           bounds={bounds}
                           ref={this.mapRef}
-                          attributionControl={true}
-                          zoomControl={true}
-                          doubleClickZoom={true}
-                          scrollWheelZoom={true}
-                          dragging={true}
-                          animate={true}
+                          attributionControl
+                          zoomControl
+                          doubleClickZoom
+                          scrollWheelZoom
+                          dragging
+                          animate
                           easeLinearity={0.35}
                         >
                           <TileLayer
@@ -298,12 +297,8 @@ class Submission extends Component {
                           />
                           <GeoJSON
                             data={geoData}
-                            onEachFeature={this.onEachFeaturePoint.bind(
-                              this,
-                            )}
-                            pointToLayer={this.pointToLayer.bind(
-                              this,
-                            )}
+                            onEachFeature={this.onEachFeaturePoint}
+                            pointToLayer={this.pointToLayer}
                             ref={this.groupRef}
                           />
                           <Legend />
@@ -331,17 +326,17 @@ class Submission extends Component {
                         </p>
                         <p>
                           <span>Altitude:</span>
-                          <label>{altitude} meters</label>
+                          <label>{`${altitude} meters`}</label>
                         </p>
                         <p>
                           <span>Accuracy:</span>
                           <label>
-                            {(+accuracy).toFixed(2)} meters
+                            {`${(+accuracy).toFixed(2)} meters`}
                           </label>
                         </p>
                         <p>
                           <span>Distance From Site:</span>
-                          <label>{distance} meters</label>
+                          <label>{`${distance} meters`}</label>
                         </p>
                       </div>
                     </div>
@@ -352,7 +347,11 @@ class Submission extends Component {
           </ul>
         </div>
       );
-    } else {
+    }
+    if (
+      submission.type !== 'photo' &&
+      submission.type !== 'geopoint'
+    ) {
       return (
         <div className="submission-list normal-list" key={uuid()}>
           <ul>
@@ -377,12 +376,12 @@ class Submission extends Component {
                     'MMMM Do YYYY,  h:mm:ss a',
                   ])}
                 </time>
-              ) : submission.type == 'select one' ? (
+              ) : submission.type === 'select one' ? (
                 this.splitSubmissionObj(
-                  submission.selected['one-one']['label'],
-                  submission.selected['one-one']['name'],
+                  submission.selected['one-one'].label,
+                  submission.selected['one-one'].name,
                 )
-              ) : submission.type == 'select all that apply' ? (
+              ) : submission.type === 'select all that apply' ? (
                 Object.entries(submission.selected).map(many => (
                   <p key={uuid()}>
                     {this.splitSubmissionObj(
@@ -401,16 +400,31 @@ class Submission extends Component {
     }
   };
 
+  pointToLayer = (feature, latlng) => {
+    const icon = new L.Icon({
+      iconUrl: MarkerIcon,
+      iconRetinaUrl: MarkerIcon,
+      iconSize: [28, 28],
+      iconAnchor: [13, 27],
+      popupAnchor: [2, -24],
+      shadowUrl: null,
+      shadowSize: null,
+      shadowAnchor: null,
+    });
+    return L.marker(latlng, { icon });
+  };
+
   renderSubmission = submissionData => {
-    return submissionData.map((submission, i) => {
+    return submissionData.map(submission => {
       if (
         submission.type === 'group' ||
         submission.type === 'repeat'
       ) {
         return this.handleRepeatedSubmission(submission);
-      } else {
-        return this.handleUnrepeatedSubmission(submission);
       }
+      // else {
+      return this.handleUnrepeatedSubmission(submission);
+      // }
     });
   };
 
@@ -445,10 +459,11 @@ class Submission extends Component {
                     {submittedBy && (
                       <div className="submitted-header">
                         <div className="submit-by">
-                          <label>by :</label> {submittedBy}
+                          <label>by :</label>
+                          {submittedBy}
                         </div>
                         <time>
-                          <label>on:</label>{' '}
+                          <label>on:</label>
                           {format(dateCreated, 'MM-DD-YYYY')}
                         </time>
                       </div>
@@ -461,9 +476,14 @@ class Submission extends Component {
                     this.renderSubmission(submissionData)}
                   {showGallery && (
                     <div
+                      role="button"
+                      onKeyDown={this.handleKeyDown}
+                      tabIndex="0"
                       className="gallery-zoom fieldsight-popup open"
                       style={{ zIndex: 99999 }}
-                      onClick={this.closeModal}
+                      onClick={() => {
+                        this.closeModal();
+                      }}
                     >
                       <div className="gallery-body">
                         <img
@@ -476,8 +496,13 @@ class Submission extends Component {
                         />
                       </div>
                       <span
+                        role="button"
+                        tabIndex="-1"
+                        onKeyDown={this.handleKeyDown}
                         className="popup-close"
-                        onClick={this.closeModal}
+                        onClick={() => {
+                          this.closeModal();
+                        }}
                       >
                         <i className="la la-close" />
                       </span>

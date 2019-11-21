@@ -23,22 +23,20 @@
       { "aspects": ["invalidHref"] }
     ],
     "no-nested-ternary": "warn",
-    "no-underscore-dangle": [
-      "error",
-      { "allow": ["__REDUX_DEVTOOLS_EXTENSION__"] }
-    ],
+    "no-underscore-dangle": "warn",
     "react/destructuring-assignment": "warn",
     "array-callback-return": "warn",
-    "jsx-a11y/label-has-for": [
+    "jsx-a11y/label-has-associated-control": [
       2,
       {
-        "components": ["label"],
-        "required": {
-          "some": ["nesting", "id"]
-        },
-        "allowChildren": false
+        "labelComponents": ["CustomLabel"],
+        "labelAttributes": ["inputLabel"],
+        "controlComponents": ["CustomInput"],
+        "assert": "both",
+        "depth": 3
       }
-    ]
+    ],
+    "react/jsx-wrap-multilines": "warn"
   },
   "env": {
     "browser": true

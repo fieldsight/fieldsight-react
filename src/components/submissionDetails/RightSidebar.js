@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import HistoryTab from './HistoryTab';
 import StatusTab from './StatusTab';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
 
 const base_url = window.base_url
   ? window.base_url
@@ -40,24 +42,28 @@ class RightSidebar extends Component {
               <ul className="nav nav-tabs " id="myTab" role="tablist">
                 <li className="nav-item">
                   <a
-                    className={`nav-link ${
-                      showStatus ? 'active' : ''
-                    }`}
-                    onClick={() =>
-                      this.setState({ showStatus: true })
-                    }
+                    role="button"
+                    onKeyDown={this.handleKeyDown}
+                    tabIndex="0"
+                    className={`nav-link 
+                    ${showStatus ? 'active' : ''}`}
+                    onClick={() => {
+                      this.setState({ showStatus: true });
+                    }}
                   >
                     Status
                   </a>
                 </li>
                 <li className="nav-item">
                   <a
-                    className={`nav-link ${
-                      !showStatus ? 'active' : ''
-                    }`}
-                    onClick={() =>
-                      this.setState({ showStatus: false })
-                    }
+                    role="button"
+                    onKeyDown={this.handleKeyDown}
+                    tabIndex="0"
+                    className={`nav-link 
+                    ${!showStatus ? 'active' : ''}`}
+                    onClick={() => {
+                      this.setState({ showStatus: false });
+                    }}
                   >
                     History
                   </a>
@@ -65,7 +71,11 @@ class RightSidebar extends Component {
               </ul>
               <div className="head-icon">
                 {hasReviewPermission && editUrl && (
-                  <a href={`${base_url}${editUrl}`} target="_blank">
+                  <a
+                    href={`${base_url}${editUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip>Edit Submission</Tooltip>}
@@ -75,13 +85,20 @@ class RightSidebar extends Component {
                   </a>
                 )}
 
-                <a onClick={toggleSubmission}>
+                <a
+                  role="button"
+                  onKeyDown={this.handleKeyDown}
+                  tabIndex="0"
+                  onClick={toggleSubmission}
+                >
                   <OverlayTrigger
                     placement="top"
                     overlay={
-                      <Tooltip>{`${
-                        hideNullValues ? 'Show' : 'Hide'
-                      } Null Values`}</Tooltip>
+                      <Tooltip>
+                        {`
+                        ${hideNullValues ? 'Show' : 'Hide'}
+                           Null Values`}
+                      </Tooltip>
                     }
                   >
                     <i
@@ -100,6 +117,7 @@ class RightSidebar extends Component {
                         : downloadUrl.main
                     }`}
                     target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <OverlayTrigger
                       placement="top"

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import InputElement from '../common/InputElement';
 import RightContentCard from '../common/RightContentCard';
@@ -8,6 +8,9 @@ import Loader from '../common/Loader';
 import { successToast, errorToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
+/* eslint-disable camelcase */
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable  consistent-return */
 
 const tableHeader = {
   termsAndLabels: ['Terms And Labels', 'Changed To'],
@@ -16,9 +19,9 @@ const tableHeader = {
 const url = 'fv3/api/project-terms-labels/';
 
 export default class TermAndLabel extends Component {
-  static contextType = RegionContext;
   constructor(props) {
     super(props);
+    this.contextType = RegionContext;
 
     this.state = {
       termsAndLabels: {
@@ -35,6 +38,35 @@ export default class TermAndLabel extends Component {
       showList: true,
       isLoading: false,
     };
+  }
+
+  componentDidMount() {
+    const { projectId, terms } = this.context;
+
+    if (!isEmpty(terms)) {
+      this.setState({
+        termsAndLabels: { ...terms, project: projectId },
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    const {
+      state: {
+        termsAndLabels: { project, ...restLabels },
+      },
+      context: { projectId, terms },
+    } = this;
+
+    const isStateTermsEmpty =
+      Object.values(restLabels).filter(Boolean).length === 0;
+
+    if (isStateTermsEmpty && !isEmpty(terms)) {
+      this.setState({
+        termsAndLabels: { ...terms, project: projectId },
+        // dotLoader: false
+      });
+    }
   }
 
   requestHandler = async () => {
@@ -106,42 +138,13 @@ export default class TermAndLabel extends Component {
   onChangeHandler = e => {
     const { name, value } = e.target;
 
-    this.setState({
+    this.setState(state => ({
       termsAndLabels: {
-        ...this.state.termsAndLabels,
+        ...state.termsAndLabels,
         [name]: value,
       },
-    });
+    }));
   };
-
-  componentDidMount() {
-    const { projectId, terms } = this.context;
-
-    if (!isEmpty(terms)) {
-      this.setState({
-        termsAndLabels: { ...terms, project: projectId },
-      });
-    }
-  }
-
-  componentDidUpdate() {
-    const {
-      state: {
-        termsAndLabels: { project, ...restLabels },
-      },
-      context: { projectId, terms },
-    } = this;
-
-    const isStateTermsEmpty =
-      Object.values(restLabels).filter(Boolean).length === 0;
-
-    if (isStateTermsEmpty && !isEmpty(terms)) {
-      this.setState({
-        termsAndLabels: { ...terms, project: projectId },
-        // dotLoader: false
-      });
-    }
-  }
 
   editHandler = () => {
     this.setState({
@@ -180,11 +183,11 @@ export default class TermAndLabel extends Component {
     const { id, project, ...restLabels } = this.state.termsAndLabels;
 
     return (
-      <Fragment>
+      <>
         <RightContentCard title="Terms And Labels">
           {/* {dotLoader && <DotLoader />} */}
           {!showList && (
-            <Fragment>
+            <>
               <form className="edit-form" onSubmit={onSubmitHandler}>
                 <div className="row">
                   <div className="col-xl-4 col-md-6">
@@ -280,6 +283,7 @@ export default class TermAndLabel extends Component {
                 <div className="col-sm-12">
                   <div className="display-inline pull-right">
                     <button
+                      type="button"
                       className="fieldsight-btn"
                       style={{
                         marginRight: '0.5rem',
@@ -299,26 +303,27 @@ export default class TermAndLabel extends Component {
                   </div>
                 </div>
               </form>
-            </Fragment>
+            </>
           )}
           {showList && (
-            <Fragment>
+            <>
               <Table
                 page="termsAndLabels"
                 tableHeader={tableHeader.termsAndLabels}
                 tableRow={Object.entries(restLabels)}
               />
               <button
+                type="button"
                 className="fieldsight-btn"
                 onClick={editHandler}
               >
                 Edit
               </button>
-            </Fragment>
+            </>
           )}
         </RightContentCard>
         {isLoading && <Loader />}
-      </Fragment>
+      </>
     );
   }
 }

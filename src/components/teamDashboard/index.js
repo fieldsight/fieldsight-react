@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import { StripeProvider, Elements } from 'react-stripe-elements';
+import PropTypes from 'prop-types';
 
 import DashboardHeader from './dashboardComponent/DashboardHeader';
 import ProjectList from './dashboardComponent/ProjectList';
@@ -17,6 +18,10 @@ import {
 import PricingStepOne from './dashboardComponent/PricingStepOne';
 import PricingStepTwo from './dashboardComponent/PricingStepTwo';
 import PricingStepThree from './dashboardComponent/PricingStepThree';
+/* eslint-disable camelcase */
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable  consistent-return */
+/* eslint-disable  no-lone-blocks */
 
 const now = new Date();
 const INITIAL_STATE = {
@@ -37,44 +42,13 @@ const INITIAL_STATE = {
   tokenId: '',
   cardError: 'required',
 };
+
 class TeamDashboard extends Component {
   constructor(props) {
     super(props);
 
     this.state = INITIAL_STATE;
   }
-
-  closeModal = () => {
-    this.setState({
-      stepOne: true,
-      stepTwo: false,
-      stepThree: false,
-      showModal: false,
-    });
-  };
-
-  openModal = type => {
-    const { id: teamId } = this.props.match.params;
-
-    if (type === 'Header' || type === 'Submission') {
-      return this.setState({
-        [`show${type}Modal`]: true,
-      });
-    }
-
-    if (type === 'Subsites') {
-      return this.setState(
-        {
-          showSubsites: true,
-        },
-        // () => this.props.getSubsites(teamId)
-      );
-    }
-
-    this.setState({
-      [`show${type}`]: true,
-    });
-  };
 
   componentDidMount() {
     const { id: teamId } = this.props.match.params;
@@ -105,15 +79,44 @@ class TeamDashboard extends Component {
     }
   }
 
+  closeModal = () => {
+    this.setState({
+      stepOne: true,
+      stepTwo: false,
+      stepThree: false,
+      showModal: false,
+    });
+  };
+
+  openModal = type => {
+    // const { id: teamId } = this.props.match.params;
+
+    if (type === 'Header' || type === 'Submission') {
+      return this.setState({
+        [`show${type}Modal`]: true,
+      });
+    }
+
+    // if (type === 'Subsites') {
+    //   return this.setState({
+    //     showSubsites: true,
+    //   });
+    // }
+
+    this.setState({
+      [`show${type}`]: true,
+    });
+  };
+
   handleIntervalPeriod = e => {
-    const value = e.target.value;
+    const { value } = e.target;
     const { packageStartDate } = this.state;
     this.setState(
       {
         interval: value,
       },
       () => {
-        if (value == 'monthly') {
+        if (value === 'monthly') {
           const endDate = packageStartDate.setMonth(
             packageStartDate.getMonth() + 2,
           );
@@ -121,7 +124,7 @@ class TeamDashboard extends Component {
             packageStartDate: new Date(),
             packageEndDate: new Date(endDate),
           });
-        } else if (value == 'yearly') {
+        } else if (value === 'yearly') {
           const endDate = packageStartDate.setFullYear(
             packageStartDate.getFullYear() + 1,
           );
@@ -135,37 +138,43 @@ class TeamDashboard extends Component {
   };
 
   handleNext = step => {
-    const { cardError } = this.state;
+    const { cardError, stepThree } = this.state;
 
     this.setState(
       state => {
-        if (step == 'second') {
-          return {
-            stepOne: false,
-            stepTwo: true,
-          };
-        } else if (step == 'third') {
-          if (Object.keys(cardError).length == 0) {
+        switch (step) {
+          case 'second': {
             return {
-              stepThree: true,
-              stepTwo: false,
+              stepOne: false,
+              stepTwo: true,
             };
           }
-        } else {
-          return {
-            stepOne: true,
-            stepTwo: false,
-            stepThree: false,
-          };
+          case 'third':
+            {
+              if (Object.keys(cardError).length === 0) {
+                return {
+                  stepThree: true,
+                  stepTwo: false,
+                };
+              }
+            }
+            break;
+          default: {
+            return {
+              stepOne: true,
+              stepTwo: false,
+              stepThree: false,
+            };
+          }
         }
       },
       () => {
-        if (this.state.stepThree) {
+        if (stepThree) {
           const { tokenId, plan, interval } = this.state;
           const { id: teamId } = this.props.match.params;
           const payload = {
             stripeToken: tokenId,
-            interval: interval,
+            interval,
             plan_name: plan,
           };
           this.props.postPackageSubscribe(teamId, payload);
@@ -188,13 +197,13 @@ class TeamDashboard extends Component {
   passStripeToken = (id, error) => {
     this.setState(
       state => {
-        if (!!error) return { cardError: error };
-        else if (!!id) {
+        if (error) return { cardError: error };
+        if (id) {
           return { tokenId: id, cardError: '' };
         }
       },
       () => {
-        if (!!id) {
+        if (id) {
           this.handleNext('third');
         }
       },
@@ -239,16 +248,13 @@ class TeamDashboard extends Component {
         stripeToken,
         plan,
         selectedPlan,
-        cardError,
       },
       closeModal,
       openModal,
-      toggleTab,
       handleFirstStepSelect,
     } = this;
     // console.log("props", this.props);
-    const packageSelected =
-      Object.keys(this.state.plan).length > 0 ? true : false;
+    const packageSelected = Object.keys(plan).length > 0;
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -263,12 +269,12 @@ class TeamDashboard extends Component {
             </ol>
           )}
         </nav>
-        {!!package_details && package_details.length > 0 && (
+        {package_details && package_details.length > 0 && (
           <Modal
             className="modal-container custom-map-modal"
             show={showModal}
             onHide={this.closeModal}
-            animation={true}
+            animation
           >
             <Modal.Header closeButton>
               <Modal.Title>Choose a plan</Modal.Title>
@@ -337,8 +343,10 @@ class TeamDashboard extends Component {
                           href={`/fieldsight/org-map/${teamId}/`}
                           className="fieldsight-btn left-icon"
                           target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          <i className="la la-map" /> full map
+                          <i className="la la-map" />
+                          full map
                         </a>
                       </div>
                     </div>
@@ -423,7 +431,12 @@ class TeamDashboard extends Component {
 const mapStateToProps = ({ teamDashboard }) => ({
   teamDashboard,
 });
-
+TeamDashboard.propTypes = {
+  match: PropTypes.objectOf.isRequired,
+  postPackageSubscribe: PropTypes.func.isRequired,
+  getTeamDashboard: PropTypes.func.isRequired,
+  teamDashboard: PropTypes.objectOf.isRequired,
+};
 export default connect(mapStateToProps, {
   getTeamDashboard,
   postPackageSubscribe,

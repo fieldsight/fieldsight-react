@@ -1,16 +1,33 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import CountCard from '../../common/CountCard';
+/* eslint-disable react/prop-types */
 
 const getIcon = submission => {
-  if (submission === 'rejected') {
-    return 'la-close';
-  } else if (submission === 'approved') {
-    return 'la-thumbs-up';
-  } else if (submission === 'flagged') {
-    return 'la-flag';
-  } else if (submission === 'pending') {
-    return 'la-copy';
+  switch (submission) {
+    case 'rejected': {
+      return 'la-close';
+    }
+    case 'approved': {
+      return 'la-thumbs-up';
+    }
+    case 'flagged': {
+      return 'la-flag';
+    }
+    case 'pending': {
+      return 'la-copy';
+    }
+    default: {
+      return null;
+    }
   }
+  // if (submission === 'rejected') {
+  // }
+  // if (submission === 'approved') {
+  // }
+  // if (submission === 'flagged') {
+  // }
+  // if (submission === 'pending') {
+  // }
 };
 
 const ShowCount = props => (
@@ -24,7 +41,7 @@ const ShowCount = props => (
   </div>
 );
 
-class DashboardCounter extends Component {
+class DashboardCounter extends PureComponent {
   render() {
     const { submissions } = this.props;
     return (

@@ -1,27 +1,37 @@
 import React, { Component } from 'react';
 import InputElement from '../common/InputElement';
 import RadioElement from '../common/RadioElement';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable consistent-return  */
 
 const checkStatus = statusData => {
   if (statusData.status_display === 'Pending') {
     return 0;
-  } else if (statusData.status_display === 'Rejected') {
+  }
+  if (statusData.status_display === 'Rejected') {
     return 1;
-  } else if (statusData.status_display === 'Flagged') {
+  }
+  if (statusData.status_display === 'Flagged') {
     return 2;
-  } else if (statusData.status_display === 'Approved') {
+  }
+  if (statusData.status_display === 'Approved') {
     return 3;
   }
 };
 
 class StatusTab extends Component {
-  state = {
-    file: '',
-    comment: '',
-    status: this.props.statusData.status_display
-      ? checkStatus(this.props.statusData).toString()
-      : '3',
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      file: '',
+      comment: '',
+      status: props.statusData.status_display
+        ? checkStatus(props.statusData).toString()
+        : '3',
+    };
+  }
 
   componentWillReceiveProps(nextProps) {
     if (
@@ -58,7 +68,7 @@ class StatusTab extends Component {
       props: { fieldSightInstance, statusData, postSubmissionDetail },
     } = this;
 
-    let oldStatus = checkStatus(statusData);
+    const oldStatus = checkStatus(statusData);
     const formData = new FormData();
     formData.append('image_1', file);
     formData.append('finstance', fieldSightInstance);
@@ -122,7 +132,8 @@ class StatusTab extends Component {
                 <div className="upload-form">
                   <div className="fieldsight-btn">
                     <label htmlFor="upload-btn">
-                      upload <i className="la la-cloud-upload" />
+                      upload
+                      <i className="la la-cloud-upload" />
                     </label>
                     <input
                       type="file"

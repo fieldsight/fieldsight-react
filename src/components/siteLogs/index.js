@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import Logs from '../common/Logs';
 import { connect } from 'react-redux';
+import Logs from '../common/Logs';
 import { getSiteLogs } from '../../actions/siteDashboardActions';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
 
 const user_id = window.user_id ? window.user_id : 1;
 
@@ -10,9 +12,9 @@ class SiteLogs extends Component {
     super(props);
     this.state = {
       siteId: '',
-      siteLogs: {},
-      siteLogsLoader: true,
-      type: 'Project',
+      // siteLogs: {},
+      // siteLogsLoader: true,
+      // type: 'Project',
     };
   }
 
@@ -53,7 +55,7 @@ class SiteLogs extends Component {
             user_id={user_id}
             siteLogs={siteLogs}
             showContentLoader={siteLogsLoader}
-            fullPage={true}
+            fullPage
           />
         </div>
       </>

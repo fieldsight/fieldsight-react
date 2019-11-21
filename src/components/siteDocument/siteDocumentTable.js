@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
+/* eslint-disable camelcase */
 
-export default class SiteDocumentTable extends Component {
+export default class SiteDocumentTable extends PureComponent {
   render() {
     const { site_document } = this.props;
     return (
@@ -37,14 +40,16 @@ export default class SiteDocumentTable extends Component {
 
                 <td>
                   <a
+                    role="button"
+                    onKeyDown={this.handleKeyDown}
+                    tabIndex="0"
                     className="td-delete-btn"
                     onClick={() => {
                       this.props.handleDelete(site_file.id);
-                      this.props.openDelete;
+                      this.props.openDelete();
                     }}
                   >
-                    {' '}
-                    <i className="la la-trash-o"> </i>{' '}
+                    <i className="la la-trash-o" />
                   </a>
                 </td>
               </tr>

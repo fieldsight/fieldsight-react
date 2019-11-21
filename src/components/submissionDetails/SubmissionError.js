@@ -1,4 +1,5 @@
 import React from 'react';
+/* eslint-disable react/prop-types  */
 
 const SubmissionError = ({ submissionErr }) => (
   <div
@@ -13,7 +14,7 @@ const SubmissionError = ({ submissionErr }) => (
     <h1>{submissionErr.status}</h1>
     <p>{submissionErr.msg}</p>
 
-    <a onClick={() => window.history.back()}>
+    <a href="#" onClick={() => window.history.back()}>
       <b>Back</b>
     </a>
   </div>

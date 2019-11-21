@@ -14,6 +14,9 @@ import {
   toggleSubmission,
 } from '../../actions/submissionDetailActions';
 
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
+
 const submissionId = window.submission_id
   ? window.submission_id
   : 66259;
@@ -39,15 +42,11 @@ class SubmissionDetail extends Component {
           form_name,
           has_review_permission,
           loading,
-          initialLoader,
           submission_err,
           hideNullValues,
           breadcrumb,
           is_survey,
         },
-        postSubmissionDetail,
-        getSubmissionDetail,
-        toggleSubmission,
       },
     } = this;
     return (
@@ -102,12 +101,14 @@ class SubmissionDetail extends Component {
                   statusData={status_data}
                   submissionHistory={submission_history}
                   fieldSightInstance={fieldsight_instance}
-                  postSubmissionDetail={postSubmissionDetail}
-                  getSubmissionDetail={getSubmissionDetail}
+                  postSubmissionDetail={
+                    this.props.postSubmissionDetail
+                  }
+                  getSubmissionDetail={this.props.getSubmissionDetail}
                   editUrl={edit_url}
                   downloadUrl={download_url}
                   hasReviewPermission={has_review_permission}
-                  toggleSubmission={toggleSubmission}
+                  toggleSubmission={this.props.toggleSubmission}
                   hideNullValues={hideNullValues}
                 />
               </div>

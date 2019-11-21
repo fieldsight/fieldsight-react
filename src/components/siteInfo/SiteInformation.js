@@ -10,6 +10,9 @@ import Loader from '../common/Loader';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
+/* eslint no-param-reassign: ["error", { "props": false }] */
+/* eslint-disable consistent-return  */
+/* eslint-disable  no-return-await  */
 
 const urls = [
   'fieldsight/api/organization/',
@@ -20,10 +23,11 @@ const urls = [
 const progressUrl = 'fv3/api/project/progress/add/';
 
 class SiteInformation extends Component {
-  static contextType = RegionContext;
   _isMounted = false;
+
   constructor(props) {
     super(props);
+    this.contextType = RegionContext;
 
     this.state = {
       forms: [],
@@ -36,28 +40,6 @@ class SiteInformation extends Component {
       showConfirmation: false,
     };
   }
-
-  groupQuestion = formQuestionsChildren => {
-    const groupQuestionName = question => {
-      if (question.type === 'group' || question.type === 'repeat') {
-        question.children = question.children.map(childQuestion => {
-          childQuestion.name = `${question.name}/${childQuestion.name}`;
-          if (
-            childQuestion.type === 'group' ||
-            childQuestion.type === 'repeat'
-          ) {
-            groupQuestionName(childQuestion);
-          }
-          return childQuestion;
-        });
-      }
-
-      return question;
-    };
-    return formQuestionsChildren.map(question => {
-      return groupQuestionName(question);
-    });
-  };
 
   componentDidMount() {
     this._isMounted = true;
@@ -106,8 +88,8 @@ class SiteInformation extends Component {
             modifiedJsonQuestions = results[2].data.json_questions.map(
               question => {
                 if (question.question_type === 'MCQ') {
-                  let optInputField = [],
-                    options = {};
+                  const optInputField = [];
+                  const options = {};
                   if (Array.isArray(question.mcq_options)) {
                     question.mcq_options.map((opt, i) => {
                       options[`option${i + 1}`] = opt.option_text;
@@ -120,7 +102,8 @@ class SiteInformation extends Component {
                   question.mcq_options = options;
                   question.optInputField = optInputField;
                   return question;
-                } else if (question.question_type === 'Link') {
+                }
+                if (question.question_type === 'Link') {
                   if (question.metas) {
                     const metaAttribute =
                       question.metas[question.project_id];
@@ -137,13 +120,6 @@ class SiteInformation extends Component {
             settings => {
               if (settings.source === 2) {
                 if (settings.pull_integer_form_question) {
-                  // let splitedStr = settings.pull_integer_form_question.split(
-                  //   "/"
-                  // );
-                  // if (splitedStr.length > 1) {
-                  //   settings.pull_integer_form_question =
-                  //     splitedStr[splitedStr.length - 1];
-                  // }
                   return {
                     ...settings,
                     source: settings.source.toString(),
@@ -194,6 +170,32 @@ class SiteInformation extends Component {
       });
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  groupQuestion = formQuestionsChildren => {
+    const groupQuestionName = question => {
+      if (question.type === 'group' || question.type === 'repeat') {
+        question.children = question.children.map(childQuestion => {
+          childQuestion.name = `${question.name}/${childQuestion.name}`;
+          if (
+            childQuestion.type === 'group' ||
+            childQuestion.type === 'repeat'
+          ) {
+            groupQuestionName(childQuestion);
+          }
+          return childQuestion;
+        });
+      }
+
+      return question;
+    };
+    return formQuestionsChildren.map(question => {
+      return groupQuestionName(question);
+    });
+  };
+
   requestHandler = async () => {
     try {
       const {
@@ -226,7 +228,8 @@ class SiteInformation extends Component {
           const { optInputField, ...rest } = question;
           rest.mcq_options = options;
           return rest;
-        } else if (question.question_type === 'Link') {
+        }
+        if (question.question_type === 'Link') {
           if (question.metas) {
             const metaAttribute = question.metas;
             const metaObj = {
@@ -401,12 +404,12 @@ class SiteInformation extends Component {
   };
 
   siteIdentityHandler = siteIdentity => {
-    this.setState({
+    this.setState(state => ({
       siteBasicInfo: {
-        ...this.state.siteBasicInfo,
+        ...state.siteBasicInfo,
         ...siteIdentity,
       },
-    });
+    }));
   };
 
   siteProgressHandler = progress => {
@@ -443,7 +446,7 @@ class SiteInformation extends Component {
       confirmHandler,
     } = this;
     return (
-      <Fragment>
+      <>
         <RightContentCard
           title={
             !isEmpty(terms)
@@ -477,6 +480,7 @@ class SiteInformation extends Component {
 
           <div className="col-sm-12">
             <button
+              type="button"
               className="fieldsight-btn pull-right"
               onClick={onSubmitHandler}
             >
@@ -514,24 +518,29 @@ class SiteInformation extends Component {
             </div>
             <div className="warning-footer text-center">
               <a
+                role="button"
+                onKeyDown={this.handleKeyDown}
+                tabIndex="0"
                 className="fieldsight-btn rejected-btn"
                 onClick={cancelHandler}
                 style={{ marginRight: '10px' }}
               >
                 cancel
               </a>
-              <a className="fieldsight-btn" onClick={confirmHandler}>
+              <a
+                role="button"
+                onKeyDown={this.handleKeyDown}
+                tabIndex="0"
+                className="fieldsight-btn"
+                onClick={confirmHandler}
+              >
                 confirm
               </a>
             </div>
           </Modal>
         )}
-      </Fragment>
+      </>
     );
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 

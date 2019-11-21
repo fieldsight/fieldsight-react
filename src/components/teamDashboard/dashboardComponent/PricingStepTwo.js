@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
+import PropTypes from 'prop-types';
 
 class PricingStepTwo extends Component {
   constructor(props) {
@@ -7,21 +8,6 @@ class PricingStepTwo extends Component {
     this.handleCardForm = this.handleCardForm.bind(this);
     this.state = { errors: '' };
   }
-
-  async handleCardForm(e) {
-    const { token, error } = await this.props.stripe.createToken({
-      name: 'stripeToken',
-    });
-    if (!!token) this.props.passStripeToken(token.id, '');
-    if (!!error)
-      this.setState({ errors: error }, () => {
-        this.props.passStripeToken('', this.state.errors.code);
-      });
-  }
-
-  handleChange = () => {
-    this.setState({ errors: '' });
-  };
 
   formatDate = date => {
     const monthNames = [
@@ -53,16 +39,31 @@ class PricingStepTwo extends Component {
     const monthIndex = date.getMonth();
     const year = date.getFullYear();
 
-    return (
-      days[dayIndex] +
-      ', ' +
-      monthNames[monthIndex] +
-      ' ' +
-      dateIdx +
-      ',  ' +
-      year
-    );
+    return `${days[dayIndex]}, ${monthNames[monthIndex]}, ${dateIdx}, ${year}`;
+    //   days[dayIndex] +
+    //   ', ' +
+    //   monthNames[monthIndex] +
+    //   ' ' +
+    //   dateIdx +
+    //   ',  ' +
+    //   year
+    // );
   };
+
+  handleChange = () => {
+    this.setState({ errors: '' });
+  };
+
+  async handleCardForm(e) {
+    const { token, error } = await this.props.stripe.createToken({
+      name: 'stripeToken',
+    });
+    if (token) this.props.passStripeToken(token.id, '');
+    if (error)
+      this.setState({ errors: error }, () => {
+        this.props.passStripeToken('', this.state.errors.code);
+      });
+  }
 
   render() {
     const {
@@ -82,7 +83,7 @@ class PricingStepTwo extends Component {
       <div className="fieldsight-new">
         <div className="bg-primary p-4">
           <div className="bg-light p-4 m-4">
-            <div className="pb-2"></div>
+            <div className="pb-2" />
             <input type="hidden" name="interval" value={interval} />
             <input
               type="hidden"
@@ -96,14 +97,15 @@ class PricingStepTwo extends Component {
             </h6>
             <h5 className="text-center mt-2 mb-3">
               <strong>
-                You have selected the {selectedPackage.plan}.
+                {` You have selected the ${selectedPackage.plan}.`}
               </strong>
             </h5>
             <p className="text-center mb-4 text-xlight">
               To complete the signup process, please provide your
-              payment details. <br /> FieldSight subscription fees are
-              charged at the start of delivering service and renew
-              automatically.
+              payment details.
+              <br />
+              FieldSight subscription fees are charged at the start of
+              delivering service and renew automatically.
             </p>
             <div className="row">
               <div className="col-md-3">
@@ -112,26 +114,26 @@ class PricingStepTwo extends Component {
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
-                    <strong>
-                      {selectedPackage.submissions}
-                    </strong>{' '}
+                    <i className="la la-chevron-circle-right" />
+                    <strong>{selectedPackage.submissions}</strong>
                     Submissions
                   </li>
                   <li>
-                    <strong>Unlimited</strong> Users, Projects, Sites
+                    <strong>Unlimited</strong>
+                    Users, Projects, Sites
                   </li>
                   <li>
-                    <strong>Unlimited</strong> Forms, Stages &
-                    Schedules
+                    <strong>Unlimited</strong>
+                    Forms, Stages & Schedules
                   </li>
                   <li>
-                    <strong>Unlimited</strong> Reports, Dashboards &
-                    Maps
+                    <strong>Unlimited</strong>
+                    Reports, Dashboards & Maps
                   </li>
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
-                    <strong>Access</strong> to our Android App
+                    <i className="la la-chevron-circle-right" />
+                    <strong>Access</strong>
+                    to our Android App
                   </li>
                 </ul>
               </div>
@@ -142,14 +144,14 @@ class PricingStepTwo extends Component {
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
-                    <i className="la la-calendar-check-o"></i>
+                    <i className="la la-calendar-check-o" />
                     <strong>Starting Date</strong>
                     <p>
                       {this.formatDate(new Date(packageStartDate))}
                     </p>
                   </li>
                   <li>
-                    <i className="la la-calendar-minus-o"></i>
+                    <i className="la la-calendar-minus-o" />
                     <strong>Ending Date</strong>
                     <p>{this.formatDate(new Date(packageEndDate))}</p>
                   </li>
@@ -168,26 +170,30 @@ class PricingStepTwo extends Component {
                   </div>
                 </div>
                 <p className="text-center">
-                  <small></small>
+                  <small />
                 </p>
               </div>
             </div>
             <div className="text-center">
               <a
+                href="#"
                 title=""
                 className="btn btn-primary"
                 onClick={() => {
                   handlePrevious('first');
                 }}
               >
-                <i className="la la-long-arrow-left"></i> Previous
+                <i className="la la-long-arrow-left" />
+                Previous
               </a>
               <a
+                href="#"
                 title=""
                 className="btn btn-primary"
                 onClick={this.handleCardForm}
               >
-                Next <i className="la la-long-arrow-right"></i>
+                Next
+                <i className="la la-long-arrow-right" />
               </a>
             </div>
           </div>
@@ -196,4 +202,14 @@ class PricingStepTwo extends Component {
     );
   }
 }
+PricingStepTwo.propTypes = {
+  stripe: PropTypes.objectOf.isRequired,
+  passStripeToken: PropTypes.objectOf.isRequired,
+  selectedPackage: PropTypes.objectOf.isRequired,
+  handlePrevious: PropTypes.func.isRequired,
+  packageStartDate: PropTypes.objectOf.isRequired,
+  packageEndDate: PropTypes.objectOf.isRequired,
+  interval: PropTypes.string.isRequired,
+  selectedPlan: PropTypes.string.isRequired,
+};
 export default injectStripe(PricingStepTwo);

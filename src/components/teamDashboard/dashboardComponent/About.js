@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import PropTypes from 'prop-types';
 
-class About extends Component {
+class About extends PureComponent {
   render() {
     const { contacts, desc } = this.props;
 
@@ -28,16 +29,16 @@ class About extends Component {
                     <div className="card-body">
                       <ul>
                         <li>
-                          <i className="la la-phone" />{' '}
+                          <i className="la la-phone" />
                           {contacts.phone}
                         </li>
                         <li>
-                          <i className="la la-envelope" />{' '}
+                          <i className="la la-envelope" />
                           {contacts.email}
                         </li>
                         {contacts.website && (
                           <li>
-                            <i className="la la-external-link" />{' '}
+                            <i className="la la-external-link" />
                             {contacts.website}
                           </li>
                         )}
@@ -53,5 +54,8 @@ class About extends Component {
     );
   }
 }
-
+About.propTypes = {
+  contacts: PropTypes.objectOf.isRequired,
+  desc: PropTypes.string.isRequired,
+};
 export default About;

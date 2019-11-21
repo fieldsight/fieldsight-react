@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
-class PricingStepThree extends Component {
+class PricingStepThree extends PureComponent {
   render() {
     const {
       props: { cardResponse, handleSubmit },
@@ -9,7 +10,7 @@ class PricingStepThree extends Component {
       <div className="fieldsight-new">
         <div className="bg-primary p-4">
           <div className="bg-light p-4 m-4">
-            <div className="pb-2"></div>
+            <div className="pb-2" />
             <h6 className="text-center mt-4">
               <strong>
                 Thank you for signing up with FieldSight!
@@ -29,26 +30,28 @@ class PricingStepThree extends Component {
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
-                    <strong>{cardResponse.submissions}</strong>{' '}
+                    <i className="la la-chevron-circle-right" />
+                    <strong>{cardResponse.submissions}</strong>
                     Submissions
                   </li>
                   <li>
-                    <strong>Unlimited</strong> Users, Projects, Sites
+                    <strong>Unlimited</strong>
+                    Users, Projects, Sites
                   </li>
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
-                    <strong>Unlimited</strong> Forms, Stages &
-                    Schedules
+                    <i className="la la-chevron-circle-right" />
+                    <strong>Unlimited</strong>
+                    Forms, Stages & Schedules
                   </li>
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
-                    <strong>Unlimited</strong> Reports, Dashboards &
-                    Maps
+                    <i className="la la-chevron-circle-right" />
+                    <strong>Unlimited</strong>
+                    Reports, Dashboards & Maps
                   </li>
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
-                    <strong>Access</strong> to our Android App
+                    <i className="la la-chevron-circle-right" />
+                    <strong>Access</strong>
+                    to our Android App
                   </li>
                 </ul>
               </div>
@@ -58,12 +61,12 @@ class PricingStepThree extends Component {
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
-                    <i className="la la-calendar-check-o"></i>
+                    <i className="la la-calendar-check-o" />
                     <strong>Starting Date</strong>
                     <p>{cardResponse.starting_date}</p>
                   </li>
                   <li>
-                    <i className="la la-calendar-minus-o"></i>
+                    <i className="la la-calendar-minus-o" />
                     <strong>Ending Date</strong>
                     <p>{cardResponse.ending_date}</p>
                   </li>
@@ -75,27 +78,29 @@ class PricingStepThree extends Component {
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
-                    <i className="la la-money"></i>
+                    <i className="la la-money" />
                     <strong>Amount Paid</strong>
-                    <p>${cardResponse.amount}</p>
+                    <p>{`$${cardResponse.amount}`}</p>
                   </li>
                   <li>
-                    <i className="la la-cc-mastercard"></i>
+                    <i className="la la-cc-mastercard" />
                     <strong>Payment Method</strong>
-                    <p>Card: xxx xxx xxx {cardResponse.card}</p>
+                    <p>{`Card: xxx xxx xxx ${cardResponse.card}`}</p>
                   </li>
                 </ul>
               </div>
             </div>
             <div className="text-center">
               <a
+                href="#"
                 title=""
                 className="btn btn-primary"
                 onClick={() => {
                   handleSubmit('finish');
                 }}
               >
-                Finish <i className="la la-check-circle"></i>
+                Finish
+                <i className="la la-check-circle" />
               </a>
             </div>
           </div>
@@ -104,5 +109,8 @@ class PricingStepThree extends Component {
     );
   }
 }
-
+PricingStepThree.propTypes = {
+  cardResponse: PropTypes.objectOf.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};
 export default PricingStepThree;

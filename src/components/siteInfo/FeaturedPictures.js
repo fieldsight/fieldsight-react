@@ -6,6 +6,7 @@ import InputElement from '../common/InputElement';
 import SelectElement from '../common/SelectElement';
 import findQuestion from '../../utils/findQuestion';
 import { errorToast } from '../../utils/toastHandler';
+/* eslint-disable react/prop-types  */
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -41,10 +42,10 @@ class FeaturedPictures extends Component {
   }
 
   closeModal = () => {
-    this.setState({
+    this.setState(state => ({
       ...INITIAL_STATE,
-      featuredPics: [...this.state.featuredPics],
-    });
+      featuredPics: [...state.featuredPics],
+    }));
   };
 
   toggleModal = () => {
@@ -69,16 +70,8 @@ class FeaturedPictures extends Component {
 
   validationHandler = () => {
     const {
-      state: {
-        label,
-        type,
-        editMode,
-        selectedForm,
-        selectedQuestion,
-        selectedId,
-        featuredPics,
-      },
-      props: { sitePicHandler },
+      state: { type, selectedForm, selectedQuestion },
+      // props: { sitePicHandler },
     } = this;
 
     if (type === 'Form') {
@@ -108,7 +101,7 @@ class FeaturedPictures extends Component {
         selectedId,
         featuredPics,
       },
-      props: { sitePicHandler },
+      // props: { sitePicHandler },
     } = this;
 
     const isValid = this.validationHandler();
@@ -128,7 +121,7 @@ class FeaturedPictures extends Component {
     };
 
     if (editMode) {
-      let filteredFeaturedPics = featuredPics.filter(pic =>
+      const filteredFeaturedPics = featuredPics.filter(pic =>
         pic.id
           ? pic.id !== selectedId
           : pic.question_name !== selectedId,
@@ -142,7 +135,7 @@ class FeaturedPictures extends Component {
             { ...picture, id: selectedId },
           ],
         },
-        () => this.props.sitePicHandler(this.state.featuredPics),
+        () => this.props.sitePicHandler(featuredPics),
       );
     } else {
       this.setState(
@@ -150,7 +143,7 @@ class FeaturedPictures extends Component {
           ...INITIAL_STATE,
           featuredPics: [...featuredPics, picture],
         },
-        () => this.props.sitePicHandler(this.state.featuredPics),
+        () => this.props.sitePicHandler(featuredPics),
       );
     }
   };
@@ -174,7 +167,8 @@ class FeaturedPictures extends Component {
 
   questionChangeHandler = e => {
     const { value } = e.target;
-    const selectedQuestion = this.state.filteredQuestions.find(
+    const { filteredQuestions } = this.state;
+    const selectedQuestion = filteredQuestions.find(
       question => question.name === value,
     );
 
@@ -184,7 +178,8 @@ class FeaturedPictures extends Component {
   };
 
   removePicHandler = value => {
-    const filteredFeaturedPics = this.state.featuredPics.filter(pic =>
+    const { featuredPics } = this.state;
+    const filteredFeaturedPics = featuredPics.filter(pic =>
       pic.id ? pic.id !== value : pic.question_name !== value,
     );
 
@@ -192,12 +187,13 @@ class FeaturedPictures extends Component {
       {
         featuredPics: filteredFeaturedPics,
       },
-      () => this.props.sitePicHandler(this.state.featuredPics),
+      () => this.props.sitePicHandler(featuredPics),
     );
   };
 
   editPicHandler = value => {
-    const selectedFeaturedPic = this.state.featuredPics.find(
+    const { featuredPics, filteredQuestions } = this.state;
+    const selectedFeaturedPic = featuredPics.find(
       pic => pic.id === value || pic.question_name === value,
     );
 
@@ -212,20 +208,20 @@ class FeaturedPictures extends Component {
       }),
     };
 
-    const filteredQuestions = selectedFeaturedPic.form_id
+    const filteredQuestion = selectedFeaturedPic.form_id
       ? findQuestion(
           this.props.forms.find(
             form => form.id === +selectedFeaturedPic.form_id,
           ).json.children,
           'photo',
         )
-      : this.state.filteredQuestions;
+      : filteredQuestions;
 
     this.setState({
       showModal: true,
       selectedId: value,
       editMode: true,
-      filteredQuestions,
+      filteredQuestions: filteredQuestion,
       ...picture,
     });
   };
@@ -239,7 +235,6 @@ class FeaturedPictures extends Component {
         type,
         selectedForm,
         selectedQuestion,
-        editMode,
         filteredQuestions,
         featuredPics,
       },
@@ -259,8 +254,13 @@ class FeaturedPictures extends Component {
         <div className="card-header main-card-header">
           <h5>featured pictures</h5>
           <div className="add-btn">
-            <a onClick={toggleModal}>
-              Add new{' '}
+            <a
+              role="button"
+              onKeyDown={this.handleKeyDown}
+              tabIndex="0"
+              onClick={toggleModal}
+            >
+              Add new
               <span>
                 <i className="la la-plus" />
               </span>
@@ -294,7 +294,7 @@ class FeaturedPictures extends Component {
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="Input Label"
                 formType="floatingForm"
                 htmlFor="input"
@@ -307,7 +307,7 @@ class FeaturedPictures extends Component {
                 className="form-control"
                 label="Type"
                 options={siteFeaturedTypes}
-                value={type ? type : null}
+                value={type}
                 changeHandler={onSelectChangeHandler}
               />
 
@@ -315,7 +315,7 @@ class FeaturedPictures extends Component {
                 <SelectElement
                   className="form-control"
                   options={forms}
-                  value={selectedForm ? selectedForm : null}
+                  value={selectedForm}
                   changeHandler={formChangeHandler}
                 />
               )}

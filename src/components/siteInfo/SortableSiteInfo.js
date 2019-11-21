@@ -12,6 +12,9 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import TableHeader from '../common/TableHeader';
 import TableRow from '../common/TableRow';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
+/* eslint-disable consistent-return  */
 
 const tableHeader = [
   'Attribute',
@@ -26,8 +29,8 @@ const DragHandle = sortableHandle(({ each, index }) => (
   <tr key={`question_${index}`}>
     <td>
       <span className="drag-icon">
-        <i className="la la-ellipsis-v"></i>
-        <i className="la la-ellipsis-v"></i>
+        <i className="la la-ellipsis-v" />
+        <i className="la la-ellipsis-v" />
       </span>
       {each.question_text}
     </td>
@@ -86,9 +89,28 @@ const SortableItem = sortableElement(
 );
 
 class SortableSiteInfo extends Component {
-  state = {
-    data: this.props.rowData,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: this.props.rowData,
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.rowData !== this.props.rowData) {
+      this.setState({
+        data: nextProps.rowData,
+      });
+    }
+    if (nextProps.isReorderCancel !== this.props.isReorderCancel) {
+      this.setState(state => {
+        if (nextProps.isReorderCancel) {
+          return { data: this.props.rowData };
+        }
+      });
+    }
+  }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState(
@@ -102,21 +124,6 @@ class SortableSiteInfo extends Component {
       },
     );
   };
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.rowData != this.props.rowData) {
-      this.setState({
-        data: nextProps.rowData,
-      });
-    }
-    if (nextProps.isReorderCancel != this.props.isReorderCancel) {
-      this.setState(state => {
-        if (nextProps.isReorderCancel) {
-          return { data: this.props.rowData };
-        }
-      });
-    }
-  }
 
   render() {
     const {

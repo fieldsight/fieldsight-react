@@ -1,8 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import SelectElement from '../common/SelectElement';
 import { DotLoader } from '../common/Loader';
 import findQuestion from '../../utils/findQuestion';
 import isEmpty from '../../utils/isEmpty';
+/* eslint-disable react/prop-types  */
 
 const typeOptions = {
   sitePictureTypes: [
@@ -81,7 +82,8 @@ class SiteInformationCard extends Component {
             question: selectedQuestion,
           },
         });
-      } else {
+      }
+      if (infoType !== 'photo') {
         return this.props.siteIdentityHandler({
           site_location: {
             question_type: type,
@@ -93,22 +95,23 @@ class SiteInformationCard extends Component {
     }
 
     if (infoType === 'photo') {
-      this.props.siteIdentityHandler({
+      return this.props.siteIdentityHandler({
         site_picture: {
           question_type: type,
           form_id: 0,
           question: {},
         },
       });
-    } else {
-      this.props.siteIdentityHandler({
-        site_location: {
-          question_type: type,
-          form_id: 0,
-          question: {},
-        },
-      });
     }
+    // if (infoType !== 'photo') {
+    return this.props.siteIdentityHandler({
+      site_location: {
+        question_type: type,
+        form_id: 0,
+        question: {},
+      },
+    });
+    // }
   };
 
   onChangeHandler = e => {
@@ -120,7 +123,7 @@ class SiteInformationCard extends Component {
         this.dataChangeHandler,
       );
     }
-    this.setState(
+    return this.setState(
       {
         type: value,
         showForm: false,
@@ -133,7 +136,7 @@ class SiteInformationCard extends Component {
     const { value } = e.target;
 
     const selectedForm = this.props.forms.find(
-      form => form.id == value,
+      form => form.id === value,
     );
 
     if (selectedForm) {
@@ -168,13 +171,12 @@ class SiteInformationCard extends Component {
     const {
       state: {
         showForm,
-        showProgressInput,
         filteredQuestions,
         selectedForm,
         selectedQuestion,
         type,
       },
-      props: { title, infoType, forms, siteInfo },
+      props: { title, infoType, forms },
       onChangeHandler,
       formChangeHandler,
       questionChangeHandler,
@@ -203,11 +205,13 @@ class SiteInformationCard extends Component {
             {showForm && forms.length <= 0 && <DotLoader />}
 
             {showForm && forms.length > 0 && (
-              <Fragment>
+              <>
                 <SelectElement
                   className="form-control"
                   options={forms}
-                  changeHandler={e => formChangeHandler(e, infoType)}
+                  changeHandler={e => {
+                    formChangeHandler(e, infoType);
+                  }}
                   value={!isEmpty(selectedForm) && selectedForm.id}
                 />
 
@@ -222,7 +226,7 @@ class SiteInformationCard extends Component {
                     }
                   />
                 )}
-              </Fragment>
+              </>
             )}
           </form>
         </div>
