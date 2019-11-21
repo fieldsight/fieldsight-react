@@ -3,6 +3,10 @@ import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
 import { GridContentLoader } from '../../common/Loader';
 import Modal from '../../common/Modal';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions  */
+/* eslint-disable jsx-a11y/click-events-have-key-events  */
+/* eslint-disable react/no-array-index-key  */
 
 const GalleryModal = ({
   selectedImage,
@@ -12,6 +16,8 @@ const GalleryModal = ({
   closeModal,
 }) => (
   <div
+    tabIndex="0"
+    role="button"
     className="gallery-zoom fieldsight-popup open"
     style={{ zIndex: 99999 }}
     onClick={closeModal}
@@ -29,16 +35,26 @@ const GalleryModal = ({
       <div className="gallery-footer">
         <p>
           <span>
-            {selectedImage.index + 1} of {imagesNumber}{' '}
+            {selectedImage.index + 1}
+            of
+            {imagesNumber}
           </span>
         </p>
       </div>
     </div>
-    <span className="popup-close" onClick={closeModal}>
+    <span
+      className="popup-close"
+      role="button"
+      tabIndex="0"
+      onClick={closeModal}
+    >
       <i className="la la-close" />
     </span>
     <div className="gallery-nav">
       <i
+        aria-label="prev"
+        tabIndex="0"
+        role="button"
         className="la la-long-arrow-left"
         onClick={e => {
           e.stopPropagation();
@@ -46,6 +62,9 @@ const GalleryModal = ({
         }}
       />
       <i
+        tabIndex="0"
+        aria-label="next"
+        role="button"
         className="la la-long-arrow-right"
         onClick={e => {
           e.stopPropagation();
@@ -57,11 +76,15 @@ const GalleryModal = ({
 );
 
 class PhotoGallery extends Component {
-  state = {
-    selectedImage: {},
-    data: '',
-    response: false,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedImage: {},
+      data: '',
+      response: false,
+    };
+  }
 
   showModal = (img, i) => {
     const imgWithIndex = { ...img, index: i };
@@ -86,7 +109,7 @@ class PhotoGallery extends Component {
       };
 
       return this.setState({
-        selectedImage: selectedImage,
+        selectedImage,
       });
     }
 
@@ -94,8 +117,8 @@ class PhotoGallery extends Component {
       ...this.props.recentPictures[i - 1],
       index: i - 1,
     };
-    this.setState({
-      selectedImage: selectedImage,
+    return this.setState({
+      selectedImage,
     });
   };
 
@@ -106,7 +129,7 @@ class PhotoGallery extends Component {
         index: 0,
       };
       return this.setState({
-        selectedImage: selectedImage,
+        selectedImage,
       });
     }
 
@@ -115,8 +138,8 @@ class PhotoGallery extends Component {
       index: i + 1,
     };
 
-    this.setState({
-      selectedImage: selectedImage,
+    return this.setState({
+      selectedImage,
     });
   };
 
@@ -159,6 +182,7 @@ class PhotoGallery extends Component {
                   href={`/fieldsight/site/all-pictures/${siteId}/`}
                   className="fieldsight-btn"
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   view all
                 </a>
@@ -175,7 +199,10 @@ class PhotoGallery extends Component {
                   <Dropdown.Menu className="dropdown-menu-right">
                     <Dropdown.Item
                       target="_blank"
-                      onClick={() => this.imageQuality(0, siteId)}
+                      // rel="noopener noreferrer"
+                      onClick={() => {
+                        this.imageQuality(0, siteId);
+                      }}
                     >
                       Low
                     </Dropdown.Item>

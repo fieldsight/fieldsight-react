@@ -5,6 +5,9 @@ import Select from 'react-select';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import InputElement from '../common/InputElement';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable no-restricted-globals  */
 
 const options = [
   { value: 'chocolate', label: 'Chocolate' },
@@ -32,6 +35,11 @@ class AddSite extends Component {
                 <div className="card-header main-card-header">
                   <h5>Add site</h5>
                   <span
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={() => {
+                      this.props.closePopup();
+                    }}
                     className="popup-close"
                     onClick={this.props.closePopup}
                   >
@@ -117,7 +125,7 @@ class AddSite extends Component {
                                 />
                                 <div className="fieldsight-btn">
                                   <label htmlFor="upload-btn">
-                                    upload{' '}
+                                    upload
                                     <i className="la la-cloud-upload" />
                                   </label>
                                   <input
@@ -134,7 +142,8 @@ class AddSite extends Component {
                         <div className="col-xl-4 col-md-6">
                           <div className="form-group">
                             <label>
-                              Map <sup>*</sup>
+                              Map
+                              <sup>*</sup>
                             </label>
 
                             <div className="map-form">
@@ -166,13 +175,16 @@ class AddSite extends Component {
                                     formType="editForm"
                                     tag="input"
                                     type="number"
-                                    required={true}
+                                    required
                                     label="Latitude"
                                     name="latitude"
                                     value={27.2234}
-                                    changeHandler={e =>
-                                      onChangeHandler(e, 'latitude')
-                                    }
+                                    changeHandler={e => {
+                                      this.props.onChangeHandler(
+                                        e,
+                                        'latitude',
+                                      );
+                                    }}
                                   />
                                 </div>
 
@@ -181,13 +193,16 @@ class AddSite extends Component {
                                     formType="editForm"
                                     tag="input"
                                     type="number"
-                                    required={true}
+                                    required
                                     label="Longitude"
                                     name="longitude"
                                     value={87.23232}
-                                    changeHandler={e =>
-                                      onChangeHandler(e, 'longitude')
-                                    }
+                                    changeHandler={e => {
+                                      this.props.onChangeHandler(
+                                        e,
+                                        'longitude',
+                                      );
+                                    }}
                                   />
                                 </div>
                               </div>

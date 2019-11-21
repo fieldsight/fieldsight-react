@@ -7,6 +7,9 @@ import {
 } from 'react-leaflet';
 import L, { latLngBounds } from 'leaflet';
 import { BlockContentLoader } from '../../common/Loader';
+import MarkerIcon from '../../../static/images/marker.png';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-did-update-set-state  */
 
 const { BaseLayer } = LayersControl;
 
@@ -27,25 +30,11 @@ class SiteMap extends Component {
     }
   }
 
-  onEachFeaturePoint(feature, layer) {
+  onEachFeaturePoint = (feature, layer) => {
     layer.bindPopup(`<span>Name: ${feature.properties.name}</span>
     <br />
     {address && <span>Address: ${feature.properties.address}</span>}`);
-  }
-
-  pointToLayer(feature, latlng) {
-    const icon = new L.Icon({
-      iconUrl: require('../../../static/images/marker.png'),
-      iconRetinaUrl: require('../../../static/images/marker.png'),
-      iconSize: [28, 28],
-      iconAnchor: [13, 27],
-      popupAnchor: [2, -24],
-      shadowUrl: null,
-      shadowSize: null,
-      shadowAnchor: null,
-    });
-    return L.marker(latlng, { icon: icon });
-  }
+  };
 
   getGeoJson = data => {
     return {
@@ -67,6 +56,20 @@ class SiteMap extends Component {
     };
   };
 
+  pointToLayer = (feature, latlng) => {
+    const icon = new L.Icon({
+      iconUrl: MarkerIcon,
+      iconRetinaUrl: MarkerIcon,
+      iconSize: [28, 28],
+      iconAnchor: [13, 27],
+      popupAnchor: [2, -24],
+      shadowUrl: null,
+      shadowSize: null,
+      shadowAnchor: null,
+    });
+    return L.marker(latlng, { icon });
+  };
+
   render() {
     const {
       location: { coordinates },
@@ -76,7 +79,7 @@ class SiteMap extends Component {
       this.state.data && this.state.data,
     );
 
-    let bounds =
+    const bounds =
       !!geoFormat.features[0].geometry.coordinates &&
       latLngBounds(
         [
@@ -100,12 +103,12 @@ class SiteMap extends Component {
             <Map
               center={[coordinates[1], coordinates[0]]}
               maxZoom={20}
-              attributionControl={true}
-              zoomControl={true}
-              doubleClickZoom={true}
-              scrollWheelZoom={true}
-              dragging={true}
-              animate={true}
+              attributionControl
+              zoomControl
+              doubleClickZoom
+              scrollWheelZoom
+              dragging
+              animate
               easeLinearity={0.35}
               bounds={bounds}
               ref={this.mapRef}
@@ -159,8 +162,8 @@ class SiteMap extends Component {
 
               <GeoJSON
                 data={geoFormat}
-                onEachFeature={this.onEachFeaturePoint.bind(this)}
-                pointToLayer={this.pointToLayer.bind(this)}
+                onEachFeature={this.onEachFeaturePoint}
+                pointToLayer={this.pointToLayer}
                 ref={this.groupRef}
               />
             </Map>

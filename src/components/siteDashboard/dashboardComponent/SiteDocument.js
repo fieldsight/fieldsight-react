@@ -1,6 +1,8 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { GridContentLoader } from '../../common/Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
 
 const SiteDocument = ({
   siteDocuments,
@@ -12,12 +14,15 @@ const SiteDocument = ({
     <div className="card ">
       <div className="about">
         <div className="card-header main-card-header sub-card-header">
-          <h5>{termsAndLabels && termsAndLabels.site} Documents</h5>
+          <h5>
+            {`${termsAndLabels && termsAndLabels.site} Documents`}
+          </h5>
           {siteDocuments.length > 0 ? (
             <a
               href={`/fieldsight/application/#/site-documents/${siteId}/`}
               className="fieldsight-btn"
               target="_blank"
+              rel="noopener noreferrer"
             >
               view all
             </a>
@@ -52,8 +57,11 @@ const SiteDocument = ({
                             </figure>
                             <div className="doc-content">
                               <h6>
-                                <a href={doc.file} target="_blank">
-                                  {' '}
+                                <a
+                                  href={doc.file}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
                                   {doc.name}
                                 </a>
                               </h6>

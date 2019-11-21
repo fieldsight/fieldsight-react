@@ -6,6 +6,7 @@ import TeamLeftSidebar from '../leftSidebar/TeamLeftSieBar';
 import EditTeam from '../editTeam/EditTeam';
 import TeamMapLayer from '../mapLayer/TeamMapLayer';
 import AccountInfoLayout from '../accountInfo/AccountInfoLayout';
+/* eslint-disable react/prop-types  */
 
 export default class TeamSettings extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ export default class TeamSettings extends Component {
       teamName: data,
     });
   };
+
   render() {
     const {
       match: {

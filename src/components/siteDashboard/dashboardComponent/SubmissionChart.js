@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Line } from 'react-chartjs-2';
+/* eslint-disable react/prop-types  */
 
 const options = {
   responsive: true,
@@ -40,7 +41,7 @@ const options = {
   },
 };
 
-class SubmissionChart extends Component {
+class SubmissionChart extends PureComponent {
   render() {
     const { submissionData } = this.props;
 
@@ -53,13 +54,21 @@ class SubmissionChart extends Component {
 
     if (submissionDataKeys.length > 0) {
       if (
-        submissionData.approved_submissions.hasOwnProperty('labels')
+        Object.prototype.hasOwnProperty.call(
+          submissionData.approved_submissions,
+          'labels',
+        )
+        // submissionData.approved_submissions.hasOwnProperty('labels')
       ) {
         chartData.labels = submissionData.approved_submissions.labels;
       }
 
       if (
-        submissionData.approved_submissions.hasOwnProperty('data')
+        Object.prototype.hasOwnProperty.call(
+          submissionData.approved_submissions,
+          'data',
+        )
+        // submissionData.approved_submissions.hasOwnProperty('data')
       ) {
         chartData.datasets = [
           ...chartData.datasets,
@@ -74,7 +83,13 @@ class SubmissionChart extends Component {
         ];
       }
 
-      if (submissionData.flagged_submissions.hasOwnProperty('data')) {
+      if (
+        Object.prototype.hasOwnProperty.call(
+          submissionData.flagged_submissions,
+          'data',
+        )
+      ) {
+        // submissionData.flagged_submissions.hasOwnProperty('data')) {
         chartData.datasets = [
           ...chartData.datasets,
           {
@@ -88,7 +103,13 @@ class SubmissionChart extends Component {
         ];
       }
 
-      if (submissionData.pending_submissions.hasOwnProperty('data')) {
+      if (
+        Object.prototype.hasOwnProperty.call(
+          submissionData.pending_submissions,
+          'data',
+        )
+      ) {
+        // submissionData.pending_submissions.hasOwnProperty('data')) {
         chartData.datasets = [
           ...chartData.datasets,
           {
@@ -103,7 +124,12 @@ class SubmissionChart extends Component {
       }
 
       if (
-        submissionData.rejected_submissions.hasOwnProperty('data')
+        Object.prototype.hasOwnProperty.call(
+          submissionData.rejected_submissions,
+          'data',
+        )
+
+        // submissionData.rejected_submissions.hasOwnProperty('data')
       ) {
         chartData.datasets = [
           ...chartData.datasets,
@@ -118,7 +144,13 @@ class SubmissionChart extends Component {
         ];
       }
 
-      if (submissionData.total_submissions.hasOwnProperty('data')) {
+      if (
+        Object.prototype.hasOwnProperty.call(
+          submissionData.total_submissions,
+          'data',
+        )
+      ) {
+        // submissionData.total_submissions.hasOwnProperty('data')) {
         chartData.datasets = [
           ...chartData.datasets,
           {

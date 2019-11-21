@@ -7,6 +7,7 @@ import InputElement from '../common/InputElement';
 import RightContentCard from '../common/RightContentCard';
 import Loader from '../common/Loader';
 import isEmpty from '../../utils/isEmpty';
+/* eslint-disable react/prop-types  */
 
 const url = 'fv3/api/project-regions/';
 
@@ -127,7 +128,7 @@ class SubRegion extends Component {
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-              />{' '}
+              />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
                   Save
@@ -144,18 +145,27 @@ class SubRegion extends Component {
               <i className="la la-exclamation-triangle" />
 
               <p>
-                Are you sure you want to delete{' '}
+                Are you sure you want to delete
                 {!isEmpty(terms) ? `${terms.region}` : 'Regions'} ?
               </p>
             </div>
             <div className="warning-footer text-center">
               <a
+                tabIndex="0"
+                role="button"
+                onKeyDown={cancelHandler}
                 className="fieldsight-btn rejected-btn"
                 onClick={cancelHandler}
               >
                 cancel
               </a>
-              <a className="fieldsight-btn" onClick={confirmHandler}>
+              <a
+                tabIndex="0"
+                role="button"
+                onKeyDown={confirmHandler}
+                className="fieldsight-btn"
+                onClick={confirmHandler}
+              >
                 confirm
               </a>
             </div>

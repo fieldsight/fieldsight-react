@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import LeftSidebar from '../leftSidebar/LeftSidebar';
 import EditProject from '../editProject/EditProject';
@@ -10,8 +10,9 @@ import SubRegion from '../manageRegion/SubRegion';
 import TermsAndLabels from '../termsAndLabels/TermAndLabel';
 import MapLayer from '../mapLayer/MapLayer';
 import { RegionProvider } from '../../context';
+/* eslint-disable react/prop-types  */
 
-export default class Settings extends Component {
+export default class Settings extends PureComponent {
   render() {
     const {
       match: { path },

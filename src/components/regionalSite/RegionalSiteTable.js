@@ -5,6 +5,9 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import { TableContentLoader } from '../common/Loader';
 import withPagination from '../../hoc/WithPagination';
 import isEmpty from '../../utils/isEmpty';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/no-array-index-key  */
 
 // let base_url = window.base_url
 //   ? window.base_url
@@ -19,7 +22,7 @@ class RegionalSiteTable extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.regionId != this.props.regionId) {
+    if (prevProps.regionId !== this.props.regionId) {
       this.props.paginationHandler(1, null, {
         type: 'regionSite',
         projectId: this.props.regionId,
@@ -77,17 +80,15 @@ class RegionalSiteTable extends Component {
               </div>
             </form>
             <button
+              type="button"
               className="fieldsight-btn"
-              onClick={e =>
+              onClick={e => {
                 OpenTabHandler(
                   e,
-                  '/fieldsight/application/#/regional-site-add/' +
-                    projectId +
-                    '/' +
-                    regionId +
-                    '/',
-                )
-              }
+                  `/fieldsight/application/#/regional-site-add/
+                    ${projectId}/${regionId}/`,
+                );
+              }}
             >
               <i className="la la-plus" />
             </button>
@@ -122,10 +123,8 @@ class RegionalSiteTable extends Component {
                       <tr key={i}>
                         <td>
                           <a
-                            href={
-                              '/fieldsight/application/#/site-dashboard/' +
-                              item.id
-                            }
+                            href={`/fieldsight/application/#/site-dashboard/
+                              ${item.id}`}
                             className="pending table-profile"
                           >
                             <figure>
@@ -150,10 +149,10 @@ class RegionalSiteTable extends Component {
                               aria-valuenow="40"
                               aria-valuemin="0"
                               aria-valuemax="200"
-                              style={{ width: item.progress + '%' }}
+                              style={{ width: `${item.progress} %` }}
                             >
                               <span className="progress-count">
-                                {item.progress + '%'}
+                                {`${item.progress} %`}
                               </span>
                             </div>
                           </div>
@@ -162,12 +161,12 @@ class RegionalSiteTable extends Component {
                         <td>
                           <a
                             className={
-                              item.status != null
+                              item.status !== null
                                 ? item.status.toLowerCase()
                                 : null
                             }
                           >
-                            {item.status != null
+                            {item.status !== null
                               ? item.status
                               : 'No Submission Yet'}
                           </a>
@@ -182,12 +181,15 @@ class RegionalSiteTable extends Component {
           <div className="table-footer">
             <div className="showing-rows">
               <p>
-                Showing <span>{fromData}</span> to{' '}
+                Showing
+                <span>{fromData}</span>
+                to
                 <span>
-                  {' '}
-                  {toData > totalCount ? totalCount : toData}{' '}
-                </span>{' '}
-                of <span>{totalCount}</span> entries.
+                  {toData > totalCount ? totalCount : toData}
+                </span>
+                of
+                <span>{totalCount}</span>
+                entries.
               </p>
             </div>
 
@@ -196,9 +198,18 @@ class RegionalSiteTable extends Component {
                 <ul>
                   <li className="page-item">
                     <a
-                      onClick={e =>
-                        paginationHandler(pageNum - 1, null, regionId)
-                      }
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
+                        paginationHandler(pageNum - 1, null, {
+                          projectId: regionId,
+                        });
+                      }}
+                      onClick={() => {
+                        paginationHandler(pageNum - 1, null, {
+                          projectId: regionId,
+                        });
+                      }}
                     >
                       <i className="la la-long-arrow-left" />
                     </a>
@@ -211,9 +222,18 @@ class RegionalSiteTable extends Component {
 
                   <li className="page-item ">
                     <a
-                      onClick={e =>
-                        paginationHandler(pageNum + 1, null, regionId)
-                      }
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
+                        paginationHandler(pageNum + 1, null, {
+                          projectId: regionId,
+                        });
+                      }}
+                      onClick={() => {
+                        paginationHandler(pageNum + 1, null, {
+                          projectId: regionId,
+                        });
+                      }}
                     >
                       <i className="la la-long-arrow-right" />
                     </a>

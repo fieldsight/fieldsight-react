@@ -177,6 +177,7 @@ class AddSubstageForm extends Component {
       }
     });
   };
+
   handleSelectRegionChange = region => {
     this.setState(state => {
       return {
@@ -184,6 +185,7 @@ class AddSubstageForm extends Component {
       };
     });
   };
+
   handleSelectTypeChange = type => {
     this.setState(state => {
       return {
@@ -191,6 +193,7 @@ class AddSubstageForm extends Component {
       };
     });
   };
+
   handleInputChange = e => {
     this.setState({
       [e.target.name]: e.target.value,

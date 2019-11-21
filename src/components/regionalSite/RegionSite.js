@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import RegionSiteList from './RegionSiteList';
-export default class RegionSite extends Component {
+/* eslint-disable react/prop-types  */
+
+export default class RegionSite extends PureComponent {
   render() {
     return <RegionSiteList regionId={this.props.match.params.id} />;
   }

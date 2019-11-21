@@ -5,6 +5,7 @@ import format from 'date-fns/format';
 import uuid from 'uuid/v4';
 import SubmissionModal from './SubmissionModal';
 import { TableContentLoader } from '../../common/Loader';
+/* eslint-disable react/prop-types  */
 
 const DatatablePage = ({
   enableSubsites,
@@ -27,7 +28,14 @@ const DatatablePage = ({
           {hasWritePermission && (
             <div className="add-btn">
               <a
-                onClick={() => openModal('Submission')}
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  openModal('Submission');
+                }}
+                onClick={() => {
+                  openModal('Submission');
+                }}
                 data-tab="scheduled-popup"
               >
                 <span>
@@ -66,6 +74,7 @@ const DatatablePage = ({
                         <a
                           href={`/fieldsight/application/?submission=${submission.instance_id}#/submission-details`}
                           target="_blank"
+                          rel="noopener noreferrer"
                         >
                           {submission.form}
                         </a>
@@ -76,7 +85,7 @@ const DatatablePage = ({
                         <span
                           className={submission.status.toLowerCase()}
                         >
-                          {submission.status}{' '}
+                          {submission.status}
                         </span>
                       </td>
                       <td style={{ width: '25%' }}>

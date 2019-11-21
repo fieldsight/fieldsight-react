@@ -2,11 +2,14 @@ import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import uuid from 'uuid/v4';
 import { BlockContentLoader } from '../../common/Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 const DashboardInfoItem = ({ meta, siteKey }) => (
   <li>
     <p>
-      <label>{siteKey} :</label> {meta}
+      <label>{`${siteKey} :`}</label>
+      {meta}
     </p>
   </li>
 );
@@ -38,15 +41,16 @@ const Array = ({ siteMetas, showContentLoader }) => {
                       </>
                     ))
                   );
-                } else {
-                  return (
-                    <DashboardInfoItem
-                      meta={meta[1]}
-                      siteKey={meta[0]}
-                      key={uuid()}
-                    />
-                  );
                 }
+                // else {
+                return (
+                  <DashboardInfoItem
+                    meta={meta[1]}
+                    siteKey={meta[0]}
+                    key={uuid()}
+                  />
+                );
+                // }
               })}
             </ul>
           </div>
@@ -62,7 +66,7 @@ const DashboardInfo = ({ siteMetas, showContentLoader }) => (
       siteMetas={siteMetas}
       showContentLoader={showContentLoader}
     />
-    {/*showContentLoader ? (
+    {/* showContentLoader ? (
       <BlockContentLoader number={16} height="15px" />
     ) : (
       <PerfectScrollbar>
@@ -75,7 +79,7 @@ const DashboardInfo = ({ siteMetas, showContentLoader }) => (
           </ul>
         </div>
       </PerfectScrollbar>
-            )*/}
+            ) */}
   </>
 );
 export default DashboardInfo;

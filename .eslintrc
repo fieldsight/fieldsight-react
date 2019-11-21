@@ -36,7 +36,8 @@
         "depth": 3
       }
     ],
-    "react/jsx-wrap-multilines": "warn"
+    "react/jsx-wrap-multilines": "warn",
+    "no-restricted-globals": "warn"
   },
   "env": {
     "browser": true

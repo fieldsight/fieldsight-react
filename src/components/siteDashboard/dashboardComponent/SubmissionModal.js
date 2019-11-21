@@ -2,6 +2,9 @@ import React, { Fragment } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Modal from '../../common/Modal';
 import { DotLoader } from '../../common/Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable  react/no-array-index-key  */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 
 const SubmissionTab = ({ formData }) => {
   const formType = Object.keys(formData)[0];
@@ -13,7 +16,7 @@ const SubmissionTab = ({ formData }) => {
           formData[formType].map((data, i) => (
             <Fragment key={i}>
               <p>
-                <b> {data.name}</b>{' '}
+                <b>{data.name}</b>
               </p>
               <table className="table table-bordered">
                 <tbody>
@@ -25,10 +28,11 @@ const SubmissionTab = ({ formData }) => {
                       <td style={{ width: '20%' }}>
                         <a
                           href={subStages.new_submission_url}
-                          target={`_blank`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
                           <i className="la la-plus approved" />
-                        </a>{' '}
+                        </a>
                       </td>
                     </tr>
                   ))}
@@ -45,10 +49,11 @@ const SubmissionTab = ({ formData }) => {
                   <td style={{ width: '20%' }}>
                     <a
                       href={data.new_submission_url}
-                      target={`_blank`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <i className="la la-plus approved" />
-                    </a>{' '}
+                    </a>
                   </td>
                 </tr>
               ))}
@@ -76,24 +81,34 @@ const SubmissionModal = ({
         <ul className="nav nav-tabs ">
           <li className="nav-item">
             <a
+              role="button"
+              // onKeyDown={this.handleKeyDown}
+              tabIndex="0"
               className={
                 activeTab === 'general'
                   ? 'nav-link active'
                   : 'nav-link'
               }
-              onClick={() => toggleTab('general')}
+              onClick={() => {
+                toggleTab('general');
+              }}
             >
               General Form
             </a>
           </li>
           <li className="nav-item">
             <a
+              role="button"
+              // onKeyDown={this.handleKeyDown}
+              tabIndex="0"
               className={
                 activeTab === 'scheduled'
                   ? 'nav-link active'
                   : 'nav-link'
               }
-              onClick={() => toggleTab('scheduled')}
+              onClick={() => {
+                toggleTab('scheduled');
+              }}
             >
               scheduled form
             </a>
@@ -101,12 +116,17 @@ const SubmissionModal = ({
           {!enableSubsites && (
             <li className="nav-item">
               <a
+                role="button"
+                // onKeyDown={this.handleKeyDown}
+                tabIndex="0"
                 className={
                   activeTab === 'stage'
                     ? 'nav-link active'
                     : 'nav-link'
                 }
-                onClick={() => toggleTab('stage')}
+                onClick={() => {
+                  toggleTab('stage');
+                }}
               >
                 Staged Form
               </a>

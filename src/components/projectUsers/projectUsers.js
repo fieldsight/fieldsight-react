@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { getProjectUser } from '../../actions/projectUserActions';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 class ProjectUser extends Component {
   constructor(props) {
@@ -18,7 +21,7 @@ class ProjectUser extends Component {
       match: {
         params: { id },
       },
-      getProjectUser,
+      // getProjectUser,
     } = this.props;
     getProjectUser(id);
   }
@@ -35,14 +38,15 @@ class ProjectUser extends Component {
     const {
       target: { value },
     } = e;
+    const { users, masteruser } = this.state;
     if (value) {
-      const search = await this.state.users.filter(users => {
+      const search = await users.filter(user => {
         return (
-          users.full_name
+          user.full_name
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          users.email.toLowerCase().includes(value.toLowerCase()) ||
-          users.username.toLowerCase().includes(value.toLowerCase())
+          user.email.toLowerCase().includes(value.toLowerCase()) ||
+          user.username.toLowerCase().includes(value.toLowerCase())
         );
       });
       this.setState({
@@ -50,7 +54,7 @@ class ProjectUser extends Component {
       });
     } else {
       this.setState({
-        users: this.state.masteruser,
+        users: masteruser,
       });
     }
   };
@@ -61,16 +65,16 @@ class ProjectUser extends Component {
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          {
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href={breadcrumbs.project_url}>
-                  {breadcrumbs.project}
-                </a>
-              </li>
-              <li className="breadcrumb-item">{breadcrumbs.name}</li>
-            </ol>
-          }
+          {/* { */}
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <a href={breadcrumbs.project_url}>
+                {breadcrumbs.project}
+              </a>
+            </li>
+            <li className="breadcrumb-item">{breadcrumbs.name}</li>
+          </ol>
+          {/* } */}
         </nav>
         <main id="main-content">
           <div className="card">
@@ -86,7 +90,7 @@ class ProjectUser extends Component {
                       required
                     />
                     <label htmlFor="input">Search</label>
-                    <i className="la la-search"></i>
+                    <i className="la la-search" />
                   </div>
                 </form>
               </div>
@@ -105,31 +109,31 @@ class ProjectUser extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((users, key) => {
+                  {users.map(user => {
                     return (
-                      <tr key={key}>
+                      <tr key={user.id}>
                         <td>
                           <a
-                            href={`/users/profile/${users.id}`}
+                            href={`/users/profile/${user.id}`}
                             className="pending table-profile"
                           >
                             <figure>
                               <img
-                                src={users.profile_picture}
+                                src={user.profile_picture}
                                 alt="site-logo"
                               />
                             </figure>
-                            <h5>{users.full_name}</h5>
+                            <h5>{user.full_name}</h5>
                           </a>
                         </td>
-                        <td>{users.username}</td>
-                        <td>{users.email}</td>
-                        {users.role.length > 0 ? (
-                          users.role[0] ? (
-                            <td>{users.role[0]}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        {user.role.length > 0 ? (
+                          user.role[0] ? (
+                            <td>{user.role[0]}</td>
                           ) : (
                             <td>
-                              {users.role[0]}/{users.role[1]}
+                              {`${user.role[0]}/${user.role[1]}`}
                             </td>
                           )
                         ) : (

@@ -2,6 +2,7 @@ import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import uuid from 'uuid/v4';
 import { AvatarContentLoader } from '../../common/Loader';
+/* eslint-disable react/prop-types  */
 
 const UsersListItem = ({ user }) => {
   return (

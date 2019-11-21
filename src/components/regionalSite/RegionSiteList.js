@@ -1,11 +1,15 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Zoom from 'react-reveal/Zoom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import axios from 'axios';
 import AddSite from './AddSite';
 import RegionalSiteTable from './RegionalSiteTable';
-import axios from 'axios';
 import isEmpty from '../../utils/isEmpty';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable consistent-return  */
+/* eslint-disable react/no-array-index-key  */
 
 const popUpState = {
   addModal: false,
@@ -29,8 +33,8 @@ class RegionSiteList extends Component {
   componentDidMount() {
     this._isMounted = true;
 
-    let regionId = this.props.regionId;
-    let subRegion = 'fv3/api/sub-regions/?region=' + regionId;
+    const { regionId } = this.props;
+    const subRegion = `fv3/api/sub-regions/?region=${regionId}`;
 
     axios
       .get(`${subRegion}`)
@@ -47,7 +51,7 @@ class RegionSiteList extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
           // dLoader: false
         });
@@ -55,9 +59,9 @@ class RegionSiteList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.regionId != this.props.regionId) {
-      let regionId = this.props.regionId;
-      let subRegion = 'fv3/api/sub-regions/?region=' + regionId;
+    if (prevProps.regionId === this.props.regionId) {
+      const { regionId } = this.props;
+      const subRegion = `fv3/api/sub-regions/?region=${regionId}`;
 
       axios
         .get(`${subRegion}`)
@@ -75,7 +79,7 @@ class RegionSiteList extends Component {
             }
           }
         })
-        .catch(err => {
+        .catch(() => {
           this.setState({
             // dLoader: false
           });
@@ -84,10 +88,10 @@ class RegionSiteList extends Component {
   }
 
   showPopup = (e, type) => {
-    this.setState(prevState => ({
+    this.setState({
       ...popUpState,
       [`${type}Modal`]: true,
-    }));
+    });
   };
 
   closePopup = () => {
@@ -103,7 +107,15 @@ class RegionSiteList extends Component {
 
   render() {
     const {
-      state: { breadcrumbs, terms, projectId, uploadModal, addModal },
+      state: {
+        breadcrumbs,
+        terms,
+        projectId,
+        uploadModal,
+        addModal,
+        subRegionList,
+        dLoader,
+      },
       props: { regionId },
     } = this;
 
@@ -140,7 +152,7 @@ class RegionSiteList extends Component {
               <div className="row">
                 {subRegionList.map((subRegion, i) => (
                   <div className="col-xl-3 col-lg-6" key={i}>
-                    <Link to={'/regional-site/' + subRegion.id}>
+                    <Link to={`/regional-site/${subRegion.id}`}>
                       <div className="sub-regions-item ">
                         <h5>{subRegion.name}</h5>
                         <h6>{subRegion.identifier}</h6>
@@ -163,6 +175,7 @@ class RegionSiteList extends Component {
             regionId={regionId}
             projectId={projectId}
             terms={terms}
+            loader={dLoader}
           />
 
           {uploadModal && (
@@ -173,8 +186,13 @@ class RegionSiteList extends Component {
                     <div className="card-header main-card-header">
                       <h5>Bulk Upload</h5>
                       <span
+                        tabIndex="0"
+                        role="button"
                         className="popup-close"
                         onClick={this.closePopup}
+                        onKeyDown={() => {
+                          this.closePopup();
+                        }}
                       >
                         <i className="la la-close" />
                       </span>
@@ -203,7 +221,7 @@ class RegionSiteList extends Component {
                                 />
                                 <div className="fieldsight-btn">
                                   <label htmlFor="upload-btn">
-                                    upload{' '}
+                                    upload
                                     <i className="la la-cloud-upload" />
                                   </label>
                                   <input

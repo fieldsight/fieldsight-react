@@ -328,6 +328,7 @@ class GlobalModalForm extends Component {
       }
     });
   };
+
   getDay = day => {
     if (day == 'mon') return 1;
     else if (day == 'tue') return 2;

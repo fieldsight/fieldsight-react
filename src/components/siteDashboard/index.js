@@ -24,6 +24,9 @@ import {
   getSubsites,
   putCropImage,
 } from '../../actions/siteDashboardActions';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase  */
+/* eslint-disable react/no-did-update-set-state  */
 
 const user_id = window.user_id ? window.user_id : 1;
 
@@ -37,7 +40,69 @@ const INITIAL_STATE = {
   siteId: '',
 };
 class SiteDashboard extends Component {
-  state = INITIAL_STATE;
+  constructor(props) {
+    super(props);
+
+    this.state = INITIAL_STATE;
+  }
+
+  componentDidMount() {
+    const {
+      params: {
+        match: { id: siteId },
+      },
+      // getSiteDashboard,
+      // getSiteMetas,
+      // getSiteSubmissions,
+      // getSiteDocuments,
+      // getSiteLogs,
+      // getSiteForms,
+      // getRecentPictures,
+    } = this.props;
+
+    getSiteDashboard(siteId);
+    getSiteMetas(siteId);
+    getSiteSubmissions(siteId);
+    getSiteDocuments(siteId);
+    getSiteLogs(siteId);
+    getSiteForms(siteId, 'general');
+    getRecentPictures(siteId);
+    this.setState({
+      siteId,
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      const {
+        params: {
+          match: { id: siteId },
+        },
+        // getSiteDashboard,
+        // getSiteMetas,
+        // getSiteSubmissions,
+        // getSiteDocuments,
+        // getSiteLogs,
+        // getSiteForms,
+        // getRecentPictures,
+      } = this.props;
+
+      this.setState(
+        {
+          ...INITIAL_STATE,
+        },
+        () => {
+          getSiteDashboard(siteId);
+          getSiteMetas(siteId);
+          getSiteSubmissions(siteId);
+          getSiteDocuments(siteId);
+          getSiteLogs(siteId);
+          getSiteForms(siteId, 'general');
+          getRecentPictures(siteId);
+        },
+      );
+    }
+  }
 
   closeModal = type => {
     const { id: siteId } = this.props.match.params;
@@ -52,7 +117,7 @@ class SiteDashboard extends Component {
       );
     }
 
-    this.setState({
+    return this.setState({
       [`show${type}`]: false,
     });
   };
@@ -75,78 +140,20 @@ class SiteDashboard extends Component {
       );
     }
 
-    this.setState({
+    return this.setState({
       [`show${type}`]: true,
     });
   };
 
   toggleTab = formType => {
     const { id: siteId } = this.props.match.params;
-    this.setState(
+    return this.setState(
       {
         activeTab: formType,
       },
       this.props.getSiteForms(siteId, formType),
     );
   };
-
-  componentDidMount() {
-    const {
-      params: {
-        match: { id: siteId },
-      },
-      getSiteDashboard,
-      getSiteMetas,
-      getSiteSubmissions,
-      getSiteDocuments,
-      getSiteLogs,
-      getSiteForms,
-      getRecentPictures,
-    } = this.props;
-
-    getSiteDashboard(siteId);
-    getSiteMetas(siteId);
-    getSiteSubmissions(siteId);
-    getSiteDocuments(siteId);
-    getSiteLogs(siteId);
-    getSiteForms(siteId, 'general');
-    getRecentPictures(siteId);
-    this.setState({
-      siteId,
-    });
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.match.params.id !== this.props.match.params.id) {
-      const {
-        params: {
-          match: { id: siteId },
-        },
-        getSiteDashboard,
-        getSiteMetas,
-        getSiteSubmissions,
-        getSiteDocuments,
-        getSiteLogs,
-        getSiteForms,
-        getRecentPictures,
-      } = this.props;
-
-      this.setState(
-        {
-          ...INITIAL_STATE,
-        },
-        () => {
-          getSiteDashboard(siteId);
-          getSiteMetas(siteId);
-          getSiteSubmissions(siteId);
-          getSiteDocuments(siteId);
-          getSiteLogs(siteId);
-          getSiteForms(siteId, 'general');
-          getRecentPictures(siteId);
-        },
-      );
-    }
-  }
 
   render() {
     const {
@@ -187,8 +194,8 @@ class SiteDashboard extends Component {
           current_progress,
           type,
         },
-        getSiteForms,
-        putCropImage,
+        // getSiteForms,
+        // putCropImage,
         match: {
           params: { id: siteId },
         },
@@ -279,7 +286,7 @@ class SiteDashboard extends Component {
                   <div className="card map">
                     <div className="card-header main-card-header sub-card-header">
                       <h5>
-                        {terms_and_labels && terms_and_labels.site}{' '}
+                        {terms_and_labels && terms_and_labels.site}
                         Map
                       </h5>
                       <div className="dash-btn">
@@ -287,8 +294,10 @@ class SiteDashboard extends Component {
                           href={`/fieldsight/site/response-coords/${siteId}/`}
                           className="fieldsight-btn left-icon"
                           target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          <i className="la la-map" /> full map
+                          <i className="la la-map" />
+                          full map
                         </a>
                       </div>
                     </div>
@@ -314,7 +323,7 @@ class SiteDashboard extends Component {
                     <div className="card site_dashboard_info">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>
-                          {terms_and_labels && terms_and_labels.site}{' '}
+                          {terms_and_labels && terms_and_labels.site}
                           information
                         </h5>
                       </div>
@@ -374,7 +383,7 @@ class SiteDashboard extends Component {
                     <div className="card">
                       <div className="card-header main-card-header sub-card-header">
                         <h5>
-                          {terms_and_labels && terms_and_labels.site}{' '}
+                          {terms_and_labels && terms_and_labels.site}
                           progress
                         </h5>
                       </div>

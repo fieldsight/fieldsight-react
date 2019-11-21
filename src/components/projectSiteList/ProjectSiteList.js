@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import ProjectSiteTable from './ProjectSiteTable';
 import Zoom from 'react-reveal/Zoom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import ProjectSiteTable from './ProjectSiteTable';
 import AddSite from './AddSite';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
-//const project_id = 137;
-const base_url = 'https://fieldsight.naxa.com.np';
-//const project_name = "test";
+// const project_id = 137;
+// const base_url = 'https://fieldsight.naxa.com.np';
+// const project_name = "test";
 
 const popUpState = {
   addModal: false,
@@ -16,9 +18,9 @@ const popUpState = {
 };
 
 class ProjectSiteList extends Component {
-  static contextType = RegionContext;
   constructor(props) {
     super(props);
+    this.contextType = RegionContext;
     this.state = {
       addModal: false,
       uploadModal: false,
@@ -93,6 +95,9 @@ class ProjectSiteList extends Component {
                     <div className="card-header main-card-header">
                       <h5>Bulk Upload</h5>
                       <span
+                        role="button"
+                        onKeyDown={this.closePopup}
+                        tabIndex="0"
                         className="popup-close"
                         onClick={this.closePopup}
                       >
@@ -123,7 +128,7 @@ class ProjectSiteList extends Component {
                                 />
                                 <div className="fieldsight-btn">
                                   <label htmlFor="upload-btn">
-                                    upload{' '}
+                                    upload
                                     <i className="la la-cloud-upload" />
                                   </label>
                                   <input

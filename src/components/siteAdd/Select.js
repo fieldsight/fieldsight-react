@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import SelectElement from '../common/SelectElement';
 import axios from 'axios';
+import SelectElement from '../common/SelectElement';
+/* eslint-disable react/prop-types  */
 
 export default class Select extends Component {
   constructor(props) {

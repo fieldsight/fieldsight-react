@@ -7,15 +7,22 @@ import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 
 import withPagination from '../../hoc/WithPagination';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
+/* eslint-disable react/no-array-index-key */
 
-let base_url = window.base_url
+const base_url = window.base_url
   ? window.base_url
   : 'https://fieldsight.naxa.com.np';
 
 const project_id = window.project_id ? window.project_id : 137;
 
 class ProjectSiteTable extends Component {
-  static contextType = RegionContext;
+  constructor(props) {
+    super(props);
+
+    this.contextType = RegionContext;
+  }
 
   componentDidMount() {
     this.props.paginationHandler(1, null, {
@@ -81,16 +88,14 @@ class ProjectSiteTable extends Component {
               </div>
             </form>
             <button
+              type="button"
               className="fieldsight-btn"
-              onClick={e =>
+              onClick={e => {
                 OpenTabHandler(
                   e,
-                  base_url +
-                    '/fieldsight/application/#/create-site/' +
-                    project_id +
-                    '/',
-                )
-              }
+                  `${base_url}/fieldsight/application/#/create-site/${project_id} /`,
+                );
+              }}
             >
               <i className="la la-plus" />
             </button>
@@ -98,6 +103,7 @@ class ProjectSiteTable extends Component {
               className="fieldsight-btn"
               href={`/fieldsight/multi-site-assign-region/${project_id}/`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               Assign Sites to Regions
             </a>
@@ -105,19 +111,21 @@ class ProjectSiteTable extends Component {
               className="fieldsight-btn"
               href={`/fieldsight/bulksitesample/${project_id}/1/`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               {!isEmpty(terms)
                 ? `Export ${terms.site} `
                 : 'Export Sites'}
             </a>
             <button
+              type="button"
               className="fieldsight-btn"
-              onClick={e =>
+              onClick={e => {
                 OpenTabHandler(
                   e,
-                  base_url + '/fieldsight/upload/' + project_id + '/',
-                )
-              }
+                  `base_url/fieldsight/upload/${project_id}/`,
+                );
+              }}
             >
               Bulk upload/update
             </button>
@@ -161,10 +169,7 @@ class ProjectSiteTable extends Component {
                       <tr key={i}>
                         <td>
                           <a
-                            href={
-                              '/fieldsight/application/#/site-dashboard/' +
-                              item.id
-                            }
+                            href={`/fieldsight/application/#/site-dashboard/${item.id}`}
                             className="pending table-profile"
                           >
                             <figure>
@@ -190,10 +195,10 @@ class ProjectSiteTable extends Component {
                               aria-valuenow="40"
                               aria-valuemin="0"
                               aria-valuemax="200"
-                              style={{ width: item.progress + '%' }}
+                              style={{ width: `${item.progress} %` }}
                             >
                               <span className="progress-count">
-                                {item.progress + '%'}
+                                {`${item.progress} %`}
                               </span>
                             </div>
                           </div>
@@ -223,12 +228,15 @@ class ProjectSiteTable extends Component {
             <div className="table-footer">
               <div className="showing-rows">
                 <p>
-                  Showing <span>{fromData}</span> to{' '}
+                  Showing
+                  <span>{fromData}</span>
+                  to
                   <span>
-                    {' '}
-                    {toData > totalCount ? totalCount : toData}{' '}
-                  </span>{' '}
-                  of <span>{totalCount}</span> entries.
+                    {toData > totalCount ? totalCount : toData}
+                  </span>
+                  of
+                  <span>{totalCount}</span>
+                  entries.
                 </p>
               </div>
               {toData < totalCount ? (
@@ -236,13 +244,18 @@ class ProjectSiteTable extends Component {
                   <ul>
                     <li className="page-item">
                       <a
-                        onClick={e =>
-                          paginationHandler(
-                            pageNum - 1,
-                            null,
-                            project_id,
-                          )
-                        }
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          paginationHandler(pageNum - 1, null, {
+                            projectId: project_id,
+                          });
+                        }}
+                        onClick={() => {
+                          paginationHandler(pageNum - 1, null, {
+                            projectId: project_id,
+                          });
+                        }}
                       >
                         <i className="la la-long-arrow-left" />
                       </a>
@@ -255,13 +268,18 @@ class ProjectSiteTable extends Component {
 
                     <li className="page-item ">
                       <a
-                        onClick={e =>
-                          paginationHandler(
-                            pageNum + 1,
-                            null,
-                            project_id,
-                          )
-                        }
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          paginationHandler(pageNum + 1, null, {
+                            projectId: project_id,
+                          });
+                        }}
+                        onClick={() => {
+                          paginationHandler(pageNum + 1, null, {
+                            projectId: project_id,
+                          });
+                        }}
                       >
                         <i className="la la-long-arrow-right" />
                       </a>

@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import Cropper from 'react-cropper';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Table from 'react-bootstrap/Table';
 import CountCard from '../../common/CountCard';
-import { AvatarContentLoader } from '../../common/Loader';
+import { AvatarContentLoader, DotLoader } from '../../common/Loader';
 import SubmissionModal from './SubmissionModal';
 import Modal from '../../common/Modal';
 import Td from '../../common/TableData';
-import { DotLoader } from '../../common/Loader';
-import { Link } from 'react-router-dom';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/no-array-index-key  */
 
 // const projectId = window.project_id ? window.project_id : 137;
 
@@ -119,6 +121,11 @@ class DashboardHeader extends Component {
                 <span />
                 <figcaption>
                   <a
+                    onKeyDown={() => {
+                      openModal('Gallery');
+                    }}
+                    tabIndex="0"
+                    role="button"
                     className="photo-preview"
                     onClick={() => openModal('Gallery')}
                   >
@@ -126,8 +133,13 @@ class DashboardHeader extends Component {
                   </a>
                   {hasWritePermission && (
                     <a
+                      tabIndex="0"
+                      role="button"
                       className="photo-edit"
                       onClick={() => openModal('Cropper')}
+                      onKeyDown={() => {
+                        openModal('Cropper');
+                      }}
                     >
                       <i className="la la-camera" />
                     </a>
@@ -246,30 +258,47 @@ class DashboardHeader extends Component {
             <a
               href={`/fieldsight/application/#/site-users/${siteId}/`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <CountCard
                 countName="User"
                 countNumber={totalUsers}
                 icon="la-user"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
             {enableSubsites && (
-              <a onClick={() => openModal('Subsites')}>
+              <a
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  closeModal('Subsites');
+                }}
+                onClick={() => openModal('Subsites')}
+              >
                 <CountCard
                   countName="Subsite"
                   countNumber={totalSubsites}
                   icon="la-map-marker"
-                  noSubmissionText={true}
+                  noSubmissionText
                 />
               </a>
             )}
 
             {hasWritePermission && (
               <div className="add-data">
-                <a onClick={() => openModal('Header')}>
-                  {' '}
-                  add data <i className="la la-plus" />
+                <a
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => {
+                    closeModal('Header');
+                  }}
+                  onClick={() => {
+                    openModal('Header');
+                  }}
+                >
+                  add data
+                  <i className="la la-plus" />
                 </a>
               </div>
             )}
@@ -277,7 +306,7 @@ class DashboardHeader extends Component {
               countName="Progress"
               icon="la-signal"
               countNumber={currentProgress}
-              noSubmissionText={true}
+              noSubmissionText
             />
           </div>
 
@@ -298,7 +327,11 @@ class DashboardHeader extends Component {
               toggleModal={() => closeModal('Cropper')}
             >
               <div className="cropper-btn">
-                <button onClick={rotate} className="fieldsight-btn">
+                <button
+                  type="button"
+                  onClick={rotate}
+                  className="fieldsight-btn"
+                >
                   <OverlayTrigger
                     placement="top"
                     overlay={<Tooltip>Rotate Left</Tooltip>}
@@ -307,6 +340,7 @@ class DashboardHeader extends Component {
                   </OverlayTrigger>
                 </button>
                 <button
+                  type="button"
                   onClick={rotateLeft}
                   className="fieldsight-btn"
                 >
@@ -351,6 +385,7 @@ class DashboardHeader extends Component {
                 </div>
                 <div className="col-md-12 text-right">
                   <button
+                    type="button"
                     className="fieldsight-btn"
                     style={{ marginTop: '15px' }}
                     onClick={this.saveImage}
@@ -364,7 +399,9 @@ class DashboardHeader extends Component {
           {showSubsites && (
             <Modal
               title="Subsites"
-              toggleModal={() => closeModal('Subsites')}
+              toggleModal={() => {
+                closeModal('Subsites');
+              }}
               showButton={enableSubsites && hasWritePermission}
               url={`/fieldsight/application/#/sub-site-add/${projectId}/${siteId}`}
             >
@@ -405,11 +442,11 @@ class DashboardHeader extends Component {
                                 aria-valuemin="0"
                                 aria-valuemax="200"
                                 style={{
-                                  width: subSite.progress + '%',
+                                  width: `${subSite.progress} %`,
                                 }}
                               >
                                 <span className="progress-count">
-                                  {subSite.progress + '%'}
+                                  {`${subSite.progress} %`}
                                 </span>
                               </div>
                             </div>
@@ -430,9 +467,16 @@ class DashboardHeader extends Component {
           )}
           {showGallery && (
             <div
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                closeModal('Gallery');
+              }}
               className="gallery-zoom fieldsight-popup open"
               style={{ zIndex: 99999 }}
-              onClick={() => closeModal('Gallery')}
+              onClick={() => {
+                closeModal('Gallery');
+              }}
             >
               <div className="gallery-body">
                 <img
@@ -442,8 +486,15 @@ class DashboardHeader extends Component {
                 />
               </div>
               <span
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  closeModal('Gallery');
+                }}
                 className="popup-close"
-                onClick={() => closeModal('Gallery')}
+                onClick={() => {
+                  closeModal('Gallery');
+                }}
               >
                 <i className="la la-close" />
               </span>
