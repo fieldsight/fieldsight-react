@@ -70,6 +70,24 @@
   .pd-0 {
     padding: 0;
   }
+  .flex{
+    @include flex;
+  }
+  .flex-start{
+    @include flexStart;
+  }
+  .flex-end{
+    @include flexEnd;
+  }
+  .flex-center{
+    @include flexCenter;
+  }
+  .flexvr{
+    @include flexvr;
+  }
+  .flex-between{
+    @include flexBetween;
+  }
 
   .container {
     width: 100%;
