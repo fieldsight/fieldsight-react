@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import { BlockContentLoader } from '../common/Loader';
+import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { BlockContentLoader } from '../common/Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
 
-class Submissions extends Component {
+class Submissions extends PureComponent {
   render() {
     const { submissionLoader, submission } = this.props;
     return (
@@ -23,18 +25,19 @@ class Submissions extends Component {
                 </figure> */}
                     <div className="content">
                       <p>
-                        <a href={sub.profile}>{sub.submitted_by}</a>{' '}
-                        submitted a response for{' '}
+                        <a href={sub.profile}>{sub.submitted_by}</a>
+                        submitted a response for
                         <a href={sub.form_url}>
                           <b>{sub.form_name}</b>
-                        </a>{' '}
-                        in{' '}
+                        </a>
+                        in
                         <a href={sub.extra_object_url}>
                           <b>{sub.extra_object}</b>
                         </a>
                       </p>
                       <time>
-                        <i className="la la-clock" /> {sub.date}
+                        <i className="la la-clock" />
+                        {sub.date}
                       </time>
                     </div>
                   </li>

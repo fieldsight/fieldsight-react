@@ -1,17 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CountCard from '../../common/CountCard';
+/* eslint-disable react/prop-types  */
 
 const getIcon = submission => {
+  let icon = '';
   if (submission === 'rejected') {
-    return 'la-close';
-  } else if (submission === 'approved') {
-    return 'la-thumbs-up';
-  } else if (submission === 'flagged') {
-    return 'la-flag';
-  } else if (submission === 'pending') {
-    return 'la-hourglass-2';
+    icon = 'la-close';
   }
+  if (submission === 'approved') {
+    icon = 'la-thumbs-up';
+  }
+  if (submission === 'flagged') {
+    icon = 'la-flag';
+  }
+  if (submission === 'pending') {
+    icon = 'la-hourglass-2';
+  }
+  return icon;
 };
 
 const ShowCount = props => (
@@ -27,7 +33,7 @@ const ShowCount = props => (
   </div>
 );
 
-class DashboardCounter extends React.Component {
+class DashboardCounter extends React.PureComponent {
   render() {
     const { projectActivity, id } = this.props;
 

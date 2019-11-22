@@ -3,6 +3,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import Table from 'react-bootstrap/Table';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { TableContentLoader } from '../common/Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
 
 // let base_url = window.base_url
 //   ? window.base_url
@@ -11,7 +13,7 @@ import { TableContentLoader } from '../common/Loader';
 class SiteTable extends Component {
   componentDidUpdate(prevProps) {
     const { props } = this;
-    if (prevProps.initialTeamId != props.initialTeamId) {
+    if (prevProps.initialTeamId !== props.initialTeamId) {
       props.requestSite(props.initialTeamId);
       props.requestRegions(props.initialTeamId);
       props.requestSubmission(props.initialTeamId);
@@ -69,22 +71,11 @@ class SiteTable extends Component {
                       </thead>
 
                       <tbody>
-                        {/*this.props.site.length === 0 && (
-                    <tr>
-                      <td>
-                        <p>No Form Data Available</p>
-                      </td>
-                    </tr>
-                  )*/}
-
                         {site.map((item, i) => (
                           <tr key={i}>
                             <td>
                               <a
-                                href={
-                                  '/fieldsight/application/#/site-dashboard/' +
-                                  item.id
-                                }
+                                href={`/fieldsight/application/#/site-dashboard/${item.id}`}
                                 className="pending table-profile"
                               >
                                 <h5>{item.name}</h5>
@@ -93,7 +84,7 @@ class SiteTable extends Component {
                             <td>{item.identifier}</td>
 
                             <td>
-                              {item.role != null
+                              {item.role !== null
                                 ? item.role
                                 : 'Manager'}
                             </td>
@@ -112,11 +103,11 @@ class SiteTable extends Component {
                                   aria-valuemin="0"
                                   aria-valuemax="200"
                                   style={{
-                                    width: item.progress + '%',
+                                    width: `${item.progress}%`,
                                   }}
                                 >
                                   <span className="progress-count">
-                                    {item.progress + '%'}
+                                    {`${item.progress} %`}
                                   </span>
                                 </div>
                               </div>
@@ -125,12 +116,12 @@ class SiteTable extends Component {
                             <td>
                               <a
                                 className={
-                                  item.status != null
+                                  item.status !== null
                                     ? item.status.toLowerCase()
                                     : null
                                 }
                               >
-                                {item.status != null
+                                {item.status !== null
                                   ? item.status
                                   : 'No Submission Yet'}
                               </a>
@@ -163,12 +154,15 @@ class SiteTable extends Component {
           <div className="table-footer">
             <div className="showing-rows">
               <p>
-                Showing <span>{fromData}</span> to{' '}
+                Showing
+                <span>{fromData}</span>
+                to
                 <span>
-                  {' '}
-                  {toData > totalCount ? totalCount : toData}{' '}
-                </span>{' '}
-                of <span>{totalCount}</span> entries.
+                  {toData > totalCount ? totalCount : toData}
+                </span>
+                of
+                <span>{totalCount}</span>
+                entries.
               </p>
             </div>
             {fromData < totalCount ? (
@@ -176,18 +170,26 @@ class SiteTable extends Component {
                 <ul>
                   <li
                     className={` page-item ${
-                      pageNum == 1 ? 'disable-btn' : ''
+                      pageNum === 1 ? 'disable-btn' : ''
                     }`}
                   >
                     <a
-                      onClick={e =>
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
                         paginationHandler(pageNum - 1, null, {
                           type: 'mySiteList',
                           projectId: siteId,
-                        })
-                      }
+                        });
+                      }}
+                      onClick={() => {
+                        paginationHandler(pageNum - 1, null, {
+                          type: 'mySiteList',
+                          projectId: siteId,
+                        });
+                      }}
                     >
-                      <i className={`la la-long-arrow-left `} />
+                      <i className="la la-long-arrow-left " />
                     </a>
                   </li>
 
@@ -198,20 +200,28 @@ class SiteTable extends Component {
 
                   <li
                     className={`page-item  ${
-                      pageNum == Math.ceil(totalCount / 200)
+                      pageNum === Math.ceil(totalCount / 200)
                         ? ' disable-btn'
                         : ''
                     }`}
                   >
                     <a
-                      onClick={e =>
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
                         paginationHandler(pageNum + 1, null, {
                           type: 'mySiteList',
                           projectId: siteId,
-                        })
-                      }
+                        });
+                      }}
+                      onClick={() => {
+                        paginationHandler(pageNum + 1, null, {
+                          type: 'mySiteList',
+                          projectId: siteId,
+                        });
+                      }}
                     >
-                      <i className={`la la-long-arrow-right`} />
+                      <i className="la la-long-arrow-right" />
                     </a>
                   </li>
                 </ul>

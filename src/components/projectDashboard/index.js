@@ -21,6 +21,8 @@ import {
   getProgressTableData,
   getSurveyForm,
 } from '../../actions/projectDashboardActions';
+/* eslint-disable camelcase */
+/* eslint-disable react/prop-types  */
 
 const INITIAL_STATE = {
   activeTab: 'site',
@@ -39,61 +41,23 @@ class ProjectDashboard extends React.Component {
     this.state = INITIAL_STATE;
   }
 
-  closeModal = type => {
-    if (type) {
-      return this.setState({
-        [`show${type}`]: false,
-      });
-    }
-  };
-
-  openModal = type => {
-    if (type) {
-      return this.setState({
-        [`show${type}`]: true,
-      });
-    }
-  };
-
-  toggleTab = formType => {
-    const {
-      state: { projectId, activeTab },
-      props: { getRegionData, paginationHandler },
-    } = this;
-    this.setState(
-      {
-        activeTab: formType,
-      },
-      () => {
-        if (activeTab == 'region') {
-          getRegionData(projectId);
-        } else if (activeTab == 'site') {
-          paginationHandler(1, null, {
-            type: 'projectSiteList',
-            projectId: projectId,
-          });
-        }
-      },
-    );
-  };
-
   componentWillMount() {
     const {
       params: {
         match: { id: projectId },
       },
-      getProgressTableData,
-      getProjectDashboard,
-      getSurveyForm,
+      // getProgressTableData,
+      // getProjectDashboard,
+      // getSurveyForm,
       paginationHandler,
     } = this.props;
     getProjectDashboard(projectId);
     getProgressTableData(projectId);
     getSurveyForm(projectId);
-    this.setState({ projectId: projectId });
+    this.setState({ projectId });
     paginationHandler(1, null, {
       type: 'projectSiteList',
-      projectId: projectId,
+      projectId,
     });
   }
 
@@ -110,11 +74,55 @@ class ProjectDashboard extends React.Component {
           props.getProjectDashboard(projectId);
           props.getProgressTableData(projectId);
 
-          this.setState({ projectId: projectId });
+          this.setState({ projectId });
         },
       );
     }
   }
+
+  closeModal = type => {
+    // if (type) {
+    return (
+      type &&
+      this.setState({
+        [`show${type}`]: false,
+      })
+    );
+    // }
+  };
+
+  openModal = type => {
+    // if (type) {
+    return (
+      type &&
+      this.setState({
+        [`show${type}`]: true,
+      })
+    );
+    // }
+  };
+
+  toggleTab = formType => {
+    const {
+      state: { projectId, activeTab },
+      props: { paginationHandler },
+    } = this;
+    this.setState(
+      {
+        activeTab: formType,
+      },
+      () => {
+        if (activeTab === 'region') {
+          getRegionData(projectId);
+        } else if (activeTab === 'site') {
+          paginationHandler(1, null, {
+            type: 'projectSiteList',
+            projectId,
+          });
+        }
+      },
+    );
+  };
 
   onChangeHandler = e => {
     const searchValue = e.target.value;
@@ -214,15 +222,18 @@ class ProjectDashboard extends React.Component {
               <div className="card map">
                 <div className="card-header main-card-header sub-card-header">
                   <h5>
-                    {terms_and_labels && terms_and_labels.site} Map
+                    {terms_and_labels && terms_and_labels.site}
+                    Map
                   </h5>
                   <div className="dash-btn">
                     <a
                       href={`/fieldsight/proj-map/${id}/`}
                       className="fieldsight-btn left-icon"
                       target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <i className="la la-map" /> Full map
+                      <i className="la la-map" />
+                      Full map
                     </a>
                   </div>
                 </div>
@@ -241,25 +252,39 @@ class ProjectDashboard extends React.Component {
                   <ul className="nav nav-tabs ">
                     <li className="nav-item">
                       <a
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          this.toggleTab('site');
+                        }}
                         className={
                           activeTab === 'site'
                             ? 'nav-link active'
                             : 'nav-link'
                         }
-                        onClick={() => this.toggleTab('site')}
+                        onClick={() => {
+                          this.toggleTab('site');
+                        }}
                       >
                         Sites
                       </a>
-                    </li>{' '}
+                    </li>
                     {!!has_region && (
                       <li className="nav-item">
                         <a
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={() => {
+                            this.toggleTab('region');
+                          }}
                           className={
                             activeTab === 'region'
                               ? 'nav-link active'
                               : 'nav-link'
                           }
-                          onClick={() => this.toggleTab('region')}
+                          onClick={() => {
+                            this.toggleTab('region');
+                          }}
                         >
                           Regions
                         </a>
@@ -291,6 +316,7 @@ class ProjectDashboard extends React.Component {
                           href={`/fieldsight/application/#/create-site/${projectId}/`}
                           target="_blank"
                           className="fieldsight-btn"
+                          rel="noopener noreferrer"
                         >
                           <i className="la la-plus" />
                         </a>
@@ -313,14 +339,17 @@ class ProjectDashboard extends React.Component {
                         <div className="table-footer">
                           <div className="showing-rows">
                             <p>
-                              Showing <span>{fromData}</span> to{' '}
+                              Showing
+                              <span>{fromData}</span>
+                              to
                               <span>
-                                {' '}
                                 {toData > totalCount
                                   ? totalCount
-                                  : toData}{' '}
-                              </span>{' '}
-                              of <span>{totalCount}</span> entries.
+                                  : toData}
+                              </span>
+                              of
+                              <span>{totalCount}</span>
+                              entries.
                             </p>
                           </div>
                           {toData < totalCount ? (
@@ -328,16 +357,28 @@ class ProjectDashboard extends React.Component {
                               <ul>
                                 <li className="page-item">
                                   <a
-                                    onClick={e =>
+                                    tabIndex="0"
+                                    role="button"
+                                    onKeyDown={() => {
                                       paginationHandler(
                                         pageNum - 1,
                                         null,
                                         {
                                           type: 'projectSiteList',
-                                          projectId: projectId,
+                                          projectId,
                                         },
-                                      )
-                                    }
+                                      );
+                                    }}
+                                    onClick={() => {
+                                      paginationHandler(
+                                        pageNum - 1,
+                                        null,
+                                        {
+                                          type: 'projectSiteList',
+                                          projectId,
+                                        },
+                                      );
+                                    }}
                                   >
                                     <i className="la la-long-arrow-left" />
                                   </a>
@@ -345,21 +386,33 @@ class ProjectDashboard extends React.Component {
 
                                 {renderPageNumbers({
                                   type: 'projectSiteList',
-                                  projectId: projectId,
+                                  projectId,
                                 })}
 
                                 <li className="page-item ">
                                   <a
-                                    onClick={e =>
+                                    tabIndex="0"
+                                    role="button"
+                                    onKeyDown={() => {
                                       paginationHandler(
                                         pageNum + 1,
                                         null,
                                         {
                                           type: 'projectSiteList',
-                                          projectId: projectId,
+                                          projectId,
                                         },
-                                      )
-                                    }
+                                      );
+                                    }}
+                                    onClick={() => {
+                                      paginationHandler(
+                                        pageNum + 1,
+                                        null,
+                                        {
+                                          type: 'projectSiteList',
+                                          projectId,
+                                        },
+                                      );
+                                    }}
                                   >
                                     <i className="la la-long-arrow-right" />
                                   </a>
@@ -490,7 +543,6 @@ class ProjectDashboard extends React.Component {
 const mapStateToProps = ({ projectDashboard }) => ({
   projectDashboard,
 });
-ProjectDashboard.contextType = LanguageContext;
 export default compose(
   connect(mapStateToProps, {
     getProjectDashboard,

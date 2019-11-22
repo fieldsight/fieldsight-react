@@ -1,7 +1,8 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+/* eslint-disable react/prop-types  */
 
-class About extends React.Component {
+class About extends React.PureComponent {
   render() {
     const { contacts, desc } = this.props;
     return (
@@ -27,18 +28,19 @@ class About extends React.Component {
                   <ul>
                     {contacts.phone && (
                       <li>
-                        <i className="la la-phone" /> {contacts.phone}
+                        <i className="la la-phone" />
+                        {contacts.phone}
                       </li>
                     )}
                     {contacts.email && (
                       <li>
-                        <i className="la la-envelope" />{' '}
+                        <i className="la la-envelope" />
                         {contacts.email}
                       </li>
                     )}
                     {contacts.website && (
                       <li>
-                        <i className="la la-external-link" />{' '}
+                        <i className="la la-external-link" />
                         {contacts.website}
                       </li>
                     )}

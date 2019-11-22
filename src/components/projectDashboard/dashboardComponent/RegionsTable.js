@@ -8,6 +8,7 @@ import isEmpty from '../../../utils/isEmpty';
 import withPagination from '../../../hoc/WithPagination';
 import TableHeader from '../../common/TableHeader';
 import TableRow from '../../common/TableRow';
+/* eslint-disable react/prop-types  */
 
 class RegionsTable extends React.Component {
   constructor(props) {
@@ -33,7 +34,6 @@ class RegionsTable extends React.Component {
         ? [
             `${terms.region} ID`,
             `${terms.region} Name`,
-            ,
             'Created Date',
             'Total Sites',
           ]

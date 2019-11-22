@@ -11,6 +11,9 @@ import MapPage from './MapPage';
 import { successToast } from '../../utils/toastHandler';
 import withPagination from '../../hoc/WithPagination';
 import Modal from '../common/Modal';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-unused-state  */
+/* eslint-disable camelcase */
 
 class MyrolesMain extends Component {
   constructor(props) {
@@ -40,7 +43,7 @@ class MyrolesMain extends Component {
   componentWillMount() {
     const { props } = this;
     const { profileId } = props.match.params;
-    let url = profileId
+    const url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
       : `fv3/api/myroles/`;
     this._isMounted = true;
@@ -79,7 +82,7 @@ class MyrolesMain extends Component {
 
   invitationOpen = (e, data) => {
     const { invite } = this.state;
-    if (invite == 'hide') {
+    if (invite === 'hide') {
       this.setState({
         invite: null,
       });
@@ -98,7 +101,7 @@ class MyrolesMain extends Component {
   };
 
   rejectHandler = id => {
-    const reject_url = 'fv3/api/decline-invite/' + id + '/';
+    const reject_url = `fv3/api/decline-invite/${id}/`;
 
     axios
       .post(`${reject_url}`)
@@ -107,7 +110,7 @@ class MyrolesMain extends Component {
         if (res.status === 200) {
           const newInvitation = [...this.state.invitation];
           const deletedForm = newInvitation.filter(
-            user => user.id != id,
+            user => user.id !== id,
           );
 
           this.setState({
@@ -120,8 +123,7 @@ class MyrolesMain extends Component {
   };
 
   acceptHandler = (id, user) => {
-    const accept_url =
-      'fv3/api/accept-invite/' + id + '/' + user + '/';
+    const accept_url = `fv3/api/accept-invite/${id}/${user}/`;
 
     axios
       .post(`${accept_url}`)
@@ -130,7 +132,7 @@ class MyrolesMain extends Component {
         if (res.status === 200) {
           const newInvitation = [...this.state.invitation];
           const deletedForm = newInvitation.filter(
-            user => user.id != id,
+            each => each.id !== id,
           );
 
           this.setState({
@@ -144,10 +146,8 @@ class MyrolesMain extends Component {
   };
 
   acceptAll = () => {
-    const accept_all_url =
-      'fv3/api/accept-all-invites/' +
-      this.state.profile.username +
-      '/';
+    const accept_all_url = `fv3/api/accept-all-invites/
+      ${this.state.profile.username}/`;
 
     axios
       .post(`${accept_all_url}`)
@@ -165,7 +165,7 @@ class MyrolesMain extends Component {
   };
 
   requestRegions = id => {
-    const url = 'fv3/api/my-regions/?project=' + id;
+    const url = `fv3/api/my-regions/?project=${id}`;
     this.setState({
       teamId: id,
       RegionLoader: true,
@@ -179,9 +179,9 @@ class MyrolesMain extends Component {
               regions: res.data.regions,
               RegionLoader: false,
             },
-            () => {
-              this.state, 'dfghjh';
-            },
+            // () => {
+            //   this.state, 'dfghjh';
+            // },
           );
         }
       })
@@ -329,11 +329,18 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            rightTab == 'site'
+                            rightTab === 'site'
                               ? 'nav-link active'
                               : 'nav-link'
                           }
-                          onClick={e => this.rightTabOpen(e, 'site')}
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={e => {
+                            this.rightTabOpen(e, 'site');
+                          }}
+                          onClick={e => {
+                            this.rightTabOpen(e, 'site');
+                          }}
                         >
                           Sites
                         </a>
@@ -341,13 +348,18 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            rightTab == 'region'
+                            rightTab === 'region'
                               ? 'nav-link active'
                               : 'nav-link'
                           }
-                          onClick={e =>
-                            this.rightTabOpen(e, 'region')
-                          }
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={e => {
+                            this.rightTabOpen(e, 'region');
+                          }}
+                          onClick={e => {
+                            this.rightTabOpen(e, 'region');
+                          }}
                         >
                           Regions
                         </a>
@@ -355,13 +367,18 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            rightTab == 'submission'
+                            rightTab === 'submission'
                               ? 'nav-link active'
                               : 'nav-link'
                           }
-                          onClick={e =>
-                            this.rightTabOpen(e, 'submission')
-                          }
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={e => {
+                            this.rightTabOpen(e, 'submission');
+                          }}
+                          onClick={e => {
+                            this.rightTabOpen(e, 'submission');
+                          }}
                         >
                           Submissions
                         </a>
@@ -369,18 +386,25 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            rightTab == 'map'
+                            rightTab === 'map'
                               ? 'nav-link active'
                               : 'nav-link'
                           }
-                          onClick={e => this.rightTabOpen(e, 'map')}
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={e => {
+                            this.rightTabOpen(e, 'map');
+                          }}
+                          onClick={e => {
+                            this.rightTabOpen(e, 'map');
+                          }}
                         >
                           map
                         </a>
                       </li>
                     </ul>
 
-                    {rightTab == 'site' && (
+                    {rightTab === 'site' && (
                       // <div className="dash-btn">
                       <form
                         className="floating-form"
@@ -416,14 +440,14 @@ class MyrolesMain extends Component {
                     className="tab-content mrt-30"
                     id="myTabContent"
                   >
-                    {rightTab == 'submission' && (
+                    {rightTab === 'submission' && (
                       <Submissions
                         submission={submission}
                         submissionLoader={submissionLoader}
                       />
                     )}
 
-                    {rightTab == 'region' && (
+                    {rightTab === 'region' && (
                       <RegionTable
                         // initialTeamId={initialTeamId}
                         // requestRegions={this.requestRegions}
@@ -435,7 +459,7 @@ class MyrolesMain extends Component {
                         profileId={profileId}
                       />
                     )}
-                    {rightTab == 'site' && (
+                    {rightTab === 'site' && (
                       <SiteTable
                         initialTeamId={initialTeamId}
                         requestRegions={this.requestRegions}
@@ -455,7 +479,7 @@ class MyrolesMain extends Component {
                       />
                     )}
 
-                    {rightTab == 'map' && (
+                    {rightTab === 'map' && (
                       <MapPage mapData={mapData} />
                     )}
                   </div>
@@ -465,9 +489,9 @@ class MyrolesMain extends Component {
           </div>
         </div>
 
-        {invitation.length != 0 && (
+        {invitation.length !== 0 && (
           <div
-            className={'invite-popup invite ' + invite}
+            className={`invite-popup invite ${invite}`}
             style={{ zIndex: '1011' }}
           >
             <InviteTab
@@ -489,7 +513,7 @@ class MyrolesMain extends Component {
                 Hi,&nbsp;
                 <span style={{ textTransform: 'capitalize' }}>
                   {profile.fullname}
-                </span>{' '}
+                </span>
                 seems like you have no role yet.&nbsp;You can get
                 started by creating a team in FieldSight or contact
                 your FieldSight manager to invite you to join
@@ -498,7 +522,7 @@ class MyrolesMain extends Component {
             </div>
             <div className="warning-footer text-center">
               <a
-                href={'/fieldsight/application/#/create-team/'}
+                href="/fieldsight/application/#/create-team/"
                 className="fieldsight-btn"
                 style={{
                   marginRight: '10px',
@@ -508,6 +532,9 @@ class MyrolesMain extends Component {
                 Create Team
               </a>
               <a
+                tabIndex="0"
+                role="button"
+                onKeyDown={this.cancelHandler}
                 className="fieldsight-btn rejected-btn"
                 onClick={this.cancelHandler}
               >

@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
-import { AvatarContentLoader } from '../common/Loader';
+import React, { Component, PureComponent } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { AvatarContentLoader } from '../common/Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
 
-let base_url = window.base_url
-  ? window.base_url
-  : 'https://fieldsight.naxa.com.np/';
+// let base_url = window.base_url
+//   ? window.base_url
+//   : 'https://fieldsight.naxa.com.np/';
 
-class ProfileTab extends Component {
+class ProfileTab extends PureComponent {
   render() {
     const { dLoader, profile, profileId } = this.props;
     return (
@@ -25,7 +27,7 @@ class ProfileTab extends Component {
                 <div className="user-info">
                   <h4>{profile.fullname}</h4>
                   <span>{profile.username}</span>
-                  <a href={'mailto:' + profile.email}>
+                  <a href={`mailto:${profile.email}`}>
                     <p>{profile.email}</p>
                   </a>
                   <div className="profile-social-icon">
@@ -81,9 +83,7 @@ class ProfileTab extends Component {
                   </div>
                   {!profileId && (
                     <a
-                      href={
-                        '/users/profile-update/' + profile.id + '/'
-                      }
+                      href={`/users/profile-update/${profile.id}/`}
                       target="_self"
                       className="fieldsight-btn"
                     >
@@ -97,7 +97,7 @@ class ProfileTab extends Component {
                   <ul>
                     {profile.username ? (
                       <li>
-                        <i className="la la-user" />{' '}
+                        <i className="la la-user" />
                         {profile.username}
                       </li>
                     ) : null}
@@ -111,7 +111,8 @@ class ProfileTab extends Component {
 
                     {profile.phone ? (
                       <li>
-                        <i className="la la-phone" /> {profile.phone}
+                        <i className="la la-phone" />
+                        {profile.phone}
                       </li>
                     ) : null}
                   </ul>

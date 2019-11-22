@@ -4,6 +4,8 @@ import { compose } from 'redux';
 import { Table } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { getProjectList } from '../../actions/projectListAction';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 class ProjectList extends Component {
   constructor(props) {
@@ -21,11 +23,10 @@ class ProjectList extends Component {
       match: {
         params: { id },
       },
-      getProjectList,
     } = this.props;
     getProjectList(id);
     this.setState({
-      id: id,
+      id,
     });
   }
 
@@ -86,14 +87,14 @@ class ProjectList extends Component {
                       required
                     />
                     <label htmlFor="input">Search</label>
-                    <i className="la la-search"></i>
+                    <i className="la la-search" />
                   </div>
                 </form>
                 <a
                   href={`/fieldsight/application/#/project-add/${id}`}
                   className="fieldsight-btn"
                 >
-                  <i className="la la-plus"></i>
+                  <i className="la la-plus" />
                 </a>
               </div>
             </div>
@@ -116,9 +117,9 @@ class ProjectList extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {projects.map((project, key) => {
+                      {projects.map(project => {
                         return (
-                          <tr key={key}>
+                          <tr key={project.id}>
                             <td>
                               <a
                                 href={`/fieldsight/application/#/project-dashboard/${project.id}`}
@@ -143,15 +144,13 @@ class ProjectList extends Component {
                                 href={`/fieldsight/application/#/project-dashboard/${project.id}`}
                                 className="td-view-btn td-btn"
                               >
-                                {' '}
-                                <i className="la la-eye"></i>{' '}
+                                <i className="la la-eye" />
                               </a>
                               <a
                                 href={`/fieldsight/application/?project=${project.id}#/project-settings`}
                                 className="td-edit-btn td-btn"
                               >
-                                {' '}
-                                <i className="la la-edit"></i>
+                                <i className="la la-edit" />
                               </a>
                             </td>
                           </tr>

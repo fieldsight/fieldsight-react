@@ -1,13 +1,16 @@
 import React from 'react';
+/* eslint-disable react/prop-types  */
 
 const getIcon = submission => {
+  let icon = '';
   if (submission === 'approved') {
-    return 'la-copy';
+    icon = 'la-copy';
   } else if (submission === 'flagged') {
-    return 'la-users';
+    icon = 'la-users';
   } else if (submission === 'marker') {
-    return 'la-map-marker';
+    icon = 'la-map-marker';
   }
+  return icon;
 };
 
 const ShowAcitivity = props => (
@@ -24,7 +27,7 @@ const ShowAcitivity = props => (
   </div>
 );
 
-class ProjectActivity extends React.Component {
+class ProjectActivity extends React.PureComponent {
   render() {
     const { projectActivity } = this.props;
     return (

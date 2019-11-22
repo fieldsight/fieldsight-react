@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { BlockContentLoader } from '../../common/Loader';
+/* eslint-disable react/prop-types  */
 
 const ShowRow = ({ name }) => (
   <tr>
@@ -46,23 +47,23 @@ const ShowContentRow = ({
             aria-valuemin="0"
             aria-valuemax="200"
             style={{
-              width: progress + '%',
+              width: `${progress} %`,
             }}
           >
-            <span className="progress-counts">{progress}%</span>
+            <span className="progress-counts">{`${progress}%`}</span>
           </div>
         </div>
       </td>
       <td>
         {formUrl ? (
           <a className="pending table-profile" href={formUrl}>
-            <i className="la la-eye"></i>
+            <i className="la la-eye" />
 
-            {totalSubmissions == 0
+            {totalSubmissions === 0
               ? 'No Submission'
               : totalSubmissions > 1
-              ? totalSubmissions + ' Submissions'
-              : totalSubmissions + ' Submission '}
+              ? `${totalSubmissions} Submissions`
+              : `${totalSubmissions} Submission`}
           </a>
         ) : (
           {}
@@ -116,7 +117,7 @@ const CheckCase = ({ sub, sn }) => (
   </>
 );
 
-class ProgressTable extends React.Component {
+class ProgressTable extends React.PureComponent {
   render() {
     const { data, loader } = this.props;
     const sn = 1;

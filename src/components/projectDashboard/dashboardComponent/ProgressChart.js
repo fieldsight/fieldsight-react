@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Bar } from 'react-chartjs-2';
+/* eslint-disable react/prop-types  */
+
 const options = {
   responsive: true,
   title: {
@@ -39,7 +41,7 @@ const options = {
   },
 };
 
-class ProgressChart extends Component {
+class ProgressChart extends PureComponent {
   render() {
     const { progressData } = this.props;
     const barData = {
@@ -47,11 +49,17 @@ class ProgressChart extends Component {
       datasets: [],
     };
 
-    if (progressData.hasOwnProperty('labels')) {
+    if (
+      Object.prototype.hasOwnProperty.call(progressData, 'labels')
+    ) {
+      // progressData.hasOwnProperty('labels')) {
       barData.labels = progressData.labels;
     }
 
-    if (progressData.hasOwnProperty('data')) {
+    if (
+      Object.prototype.hasOwnProperty.call(progressData, 'data')
+      // progressData.hasOwnProperty('data')
+    ) {
       barData.datasets = [
         {
           label: 'Site Progress',
