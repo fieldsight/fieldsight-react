@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import Edit from '../common/editProject';
 import axios from 'axios';
+import Edit from '../common/editProject';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
 
 export default class ProjectAdd extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +20,7 @@ export default class ProjectAdd extends Component {
         public_desc: '',
         cluster_sites: false,
       },
-      loaded: 0,
+      // loaded: 0,
       sector: [],
       subSectors: [],
       selectedSector: '',
@@ -31,7 +34,7 @@ export default class ProjectAdd extends Component {
       showCropper: false,
       cropResult: '',
       isLoading: false,
-      redirect: false,
+      // redirect: false,
       breadcrumbs: {},
     };
   }
@@ -55,7 +58,7 @@ export default class ProjectAdd extends Component {
                 location.data.location.split(' ');
               const longitude = position && position[1].split('(')[1];
               const latitude = position && position[2].split(')')[0];
-              const breadcrumbs = location.data.breadcrumbs;
+              const { breadcrumbs } = location.data;
               this.setState({
                 sector: res.data,
                 id,
@@ -78,25 +81,33 @@ export default class ProjectAdd extends Component {
 
   onSubmitHandler = e => {
     e.preventDefault();
+    const {
+      id,
+      project,
+      selectedSector,
+      selectedSubSector,
+      position,
+      cropResult,
+    } = this.state;
     const data = {
-      organization: this.state.id,
-      name: this.state.project.name,
-      phone: this.state.project.phone,
-      email: this.state.project.email,
-      address: this.state.project.address,
-      website: this.state.project.website,
-      donor: this.state.project.donor,
-      public_desc: this.state.project.public_desc,
-      cluster_sites: this.state.project.cluster_sites,
-      selectedSector: this.state.selectedSector,
-      selectedSubSector: this.state.selectedSubSector,
-      latitude: this.state.position.latitude,
-      longitude: this.state.position.longitude,
-      cropResult: this.state.cropResult,
+      organization: id,
+      name: project.name,
+      phone: project.phone,
+      email: project.email,
+      address: project.address,
+      website: project.website,
+      donor: project.donor,
+      public_desc: project.public_desc,
+      cluster_sites: project.cluster_sites,
+      selectedSector,
+      selectedSubSector,
+      latitude: position.latitude,
+      longitude: position.longitude,
+      cropResult,
     };
 
     axios
-      .post(`fv3/api/add-project/${this.state.id}/`, data)
+      .post(`fv3/api/add-project/${id}/`, data)
       .then(res => {
         if (res.status === 201) {
           this.setState({
@@ -110,7 +121,7 @@ export default class ProjectAdd extends Component {
               public_desc: '',
               cluster_sites: false,
             },
-            loaded: 0,
+            // loaded: 0,
             sector: [],
             subSectors: [],
             selectedSector: '',
@@ -120,7 +131,7 @@ export default class ProjectAdd extends Component {
               longitude: '-0.09',
             },
             cropResult: '',
-            redirect: true,
+            // redirect: true,
           });
           this.props.history.push(
             `/project-dashboard/${res.data.id}`,
@@ -134,48 +145,47 @@ export default class ProjectAdd extends Component {
 
   onSelectChangeHandler = (e, subSect) => {
     const { value } = e.target;
+    const { subSectors, sector } = this.state;
     if (subSect) {
-      const selectedSubSectorId = this.state.subSectors.find(
-        subSect => subSect.id === +value,
+      const selectedSubSectorId = subSectors.find(
+        each => each.id === +value,
       ).id;
       return this.setState({
         selectedSubSector: selectedSubSectorId,
       });
     }
-    const selectedSector = this.state.sector.find(
-      sect => sect.id === +value,
-    );
-    this.setState({
+    const selectedSector = sector.find(sect => sect.id === +value);
+    return this.setState({
       subSectors: selectedSector.subSectors,
       selectedSector: selectedSector.id,
     });
   };
 
   handleCheckboxChange = e =>
-    this.setState({
+    this.setState(state => ({
       project: {
-        ...this.state.project,
+        ...state.project,
         cluster_sites: e.target.checked,
       },
-    });
+    }));
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
     if (position) {
-      return this.setState({
+      return this.setState(state => ({
         position: {
-          ...this.state.position,
+          ...state.position,
           [name]: value,
         },
-      });
+      }));
     }
 
-    this.setState({
+    return this.setState(state => ({
       project: {
-        ...this.state.project,
+        ...state.project,
         [name]: value,
       },
-    });
+    }));
   };
 
   readFile = file => {
@@ -204,13 +214,13 @@ export default class ProjectAdd extends Component {
   };
 
   mapClickHandler = e => {
-    this.setState({
+    this.setState(state => ({
       position: {
-        ...this.state.position,
+        ...state.position,
         latitude: e.latlng.lat,
         longitude: e.latlng.lng,
       },
-    });
+    }));
   };
 
   render() {
@@ -224,8 +234,8 @@ export default class ProjectAdd extends Component {
         public_desc,
         cluster_sites,
         donor,
-        logo,
-        organization,
+        id,
+        sector,
       },
       position: { latitude, longitude },
       breadcrumbs,
@@ -246,11 +256,11 @@ export default class ProjectAdd extends Component {
           )}
         </nav>
         <Edit
-          context={this.state.id}
+          context={id}
           _isMounted={false}
           onSubmitHandler={this.onSubmitHandler}
           onChangeHandler={this.onChangeHandler}
-          sector={this.state.sector}
+          sector={sector}
           onSelectChangeHandler={this.onSelectChangeHandler}
           name={name}
           phone={phone}
@@ -262,7 +272,7 @@ export default class ProjectAdd extends Component {
           cluster_sites={cluster_sites}
           selectedSector={this.state.selectedSector}
           selectedSubSector={this.state.selectedSubSector}
-          selectedSubSector={this.selectedSubSector}
+          // selectedSubSector={this.state.selectedSubSector}
           handleCheckbox={this.handleCheckboxChange}
           latitude={latitude}
           longitude={longitude}
@@ -276,7 +286,7 @@ export default class ProjectAdd extends Component {
           isLoading={this.state.isLoading}
           subSectors={this.state.subSectors}
           readFile={this.readFile}
-          title={'New Project'}
+          title="New Project"
         />
       </>
     );

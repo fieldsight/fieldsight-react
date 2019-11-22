@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Table from 'react-bootstrap/Table';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { TableContentLoader } from '../common/Loader';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
 
-class RegionTable extends Component {
+class RegionTable extends PureComponent {
   render() {
     const { regions, RegionLoader, profileId } = this.props;
     return (
@@ -63,14 +65,6 @@ class RegionTable extends Component {
                 </thead>
 
                 <tbody>
-                  {/*this.props.regions.length === 0 && (
-                  <tr>
-                    <td>
-                      <p>No Form Data Available</p>
-                    </td>
-                  </tr>
-                )*/}
-
                   {regions.map((region, i) => (
                     <tr key={i}>
                       <td>{region.identifier}</td>

@@ -9,6 +9,7 @@ import withPagination from '../../../hoc/WithPagination';
 import TableHeader from '../../common/TableHeader';
 import TableRow from '../../common/TableRow';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
 class RegionsTable extends React.Component {
   constructor(props) {

@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import axios from 'axios';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PreviewModal from './PreviewModal';
 import { DotLoader } from './Loader';
+import { successToast } from './toastHandler';
 import { FormattedMessage } from 'react-intl';
-import { successToast, errorToast } from './toastHandler';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
+/* eslint-disable react/no-array-index-key  */
+/* eslint-disable react/no-unused-state */
 
 const url = 'fv3/api/myprojectforms/';
 
 class ProjecTable extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
 
@@ -21,15 +26,6 @@ class ProjecTable extends Component {
       dLoader: true,
     };
   }
-
-  cloneHandler = (e, clone_url, id, form_id) => {
-    axios
-      .post(clone_url, { id_string: id, project: form_id })
-      .then(res => {
-        successToast('Form', 'cloned');
-      })
-      .catch(err => console.log('err', err));
-  };
 
   componentDidMount() {
     this._isMounted = true;
@@ -52,6 +48,19 @@ class ProjecTable extends Component {
         });
       });
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  cloneHandler = (e, clone_url, id, form_id) => {
+    axios
+      .post(clone_url, { id_string: id, project: form_id })
+      .then(res => {
+        successToast('Form', 'cloned');
+      })
+      .catch(err => console.log('err', err));
+  };
 
   render() {
     const {
@@ -122,9 +131,9 @@ class ProjecTable extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {item.forms.map((items, i) => (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
+                    {item.forms.map((items, key) => (
+                      <tr key={key}>
+                        <td>{key + 1}</td>
                         <td style={{ width: '30%' }}>
                           {items.title}
                         </td>
@@ -148,7 +157,7 @@ class ProjecTable extends Component {
                             }
                           >
                             <a
-                              onClick={e =>
+                              onClick={e => {
                                 commonPopupHandler(
                                   e,
                                   PreviewModal,
@@ -156,12 +165,23 @@ class ProjecTable extends Component {
                                   'Preview Form',
                                   'preview',
                                   null,
-                                )
-                              }
+                                );
+                              }}
                               className="td-view-btn td-btn"
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={e => {
+                                commonPopupHandler(
+                                  e,
+                                  PreviewModal,
+                                  items.preview_url,
+                                  'Preview Form',
+                                  'preview',
+                                  null,
+                                );
+                              }}
                             >
-                              {' '}
-                              <i className="la la-eye"> </i>{' '}
+                              <i className="la la-eye" />
                             </a>
                           </OverlayTrigger>
                           <OverlayTrigger
@@ -175,13 +195,17 @@ class ProjecTable extends Component {
                             }
                           >
                             <a
-                              onClick={e =>
-                                OpenTabHandler(e, items.edit_url)
-                              }
+                              onClick={e => {
+                                OpenTabHandler(e, items.edit_url);
+                              }}
                               className="td-edit-btn td-btn"
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={e => {
+                                OpenTabHandler(e, items.edit_url);
+                              }}
                             >
-                              {' '}
-                              <i className="la la-edit" />{' '}
+                              <i className="la la-edit" />
                             </a>
                           </OverlayTrigger>
                           {/* <OverlayTrigger
@@ -207,8 +231,7 @@ class ProjecTable extends Component {
                             }
                           >
                             <a className="td-edit-btn td-btn">
-                              {' '}
-                              <i className="la la-download"> </i>{' '}
+                              <i className="la la-download" />
                             </a>
                           </OverlayTrigger>
                           <OverlayTrigger
@@ -222,18 +245,27 @@ class ProjecTable extends Component {
                             }
                           >
                             <a
-                              onClick={e =>
+                              onClick={e => {
                                 this.cloneHandler(
                                   e,
                                   items.clone_form_url,
                                   items.id_string,
                                   item.id,
-                                )
-                              }
+                                );
+                              }}
                               className="td-edit-btn td-btn"
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={e => {
+                                this.cloneHandler(
+                                  e,
+                                  items.clone_form_url,
+                                  items.id_string,
+                                  item.id,
+                                );
+                              }}
                             >
-                              {' '}
-                              <i className="la la-clone"> </i>{' '}
+                              <i className="la la-clone" />
                             </a>
                           </OverlayTrigger>
                           {/* <OverlayTrigger
@@ -258,9 +290,6 @@ class ProjecTable extends Component {
         {dLoader && <DotLoader />}
       </>
     );
-  }
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from '../../common/Modal';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable */
 
 const SubmissionModal = ({ surveyData, toggleModal }) => (
   <Modal title="Add Data" toggleModal={toggleModal}>
@@ -29,9 +30,10 @@ const SubmissionModal = ({ surveyData, toggleModal }) => (
                   <a
                     href={subStages.new_submission_url}
                     target={`_blank`}
+                    rel="noopener noreferrer"
                   >
                     <i className="la la-plus approved" />
-                  </a>{' '}
+                  </a>
                 </td>
               </tr>
             ))}

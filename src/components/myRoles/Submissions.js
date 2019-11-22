@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
-import { BlockContentLoader } from '../common/Loader';
+import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FormattedMessage } from 'react-intl';
+import { BlockContentLoader } from '../common/Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
 
-class Submissions extends Component {
+class Submissions extends PureComponent {
   render() {
     return (
       <div className="">
@@ -47,7 +49,8 @@ class Submissions extends Component {
                         </a>
                       </p>
                       <time>
-                        <i className="la la-clock" /> {sub.date}
+                        <i className="la la-clock" />
+                        {sub.date}
                       </time>
                     </div>
                   </li>

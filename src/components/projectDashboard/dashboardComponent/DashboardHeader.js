@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import CountCard from '../../common/CountCard';
 import { AvatarContentLoader } from '../../common/Loader';
 import SubmissionModal from './SubmissionModel';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
 
 class DashboardHeader extends React.Component {
   constructor(props) {
@@ -37,15 +39,12 @@ class DashboardHeader extends React.Component {
       name,
       address,
       logo,
-      public_desc,
       totalUsers,
       totalSites,
       id,
       showContentLoader,
-      activeTab,
       closeModal,
       openModal,
-      showCropper,
       termsAndLabels,
       showGallery,
       isProjectManager,
@@ -110,8 +109,15 @@ class DashboardHeader extends React.Component {
                 <span />
                 <figcaption>
                   <a
+                    onKeyDown={() => {
+                      openModal('Gallery');
+                    }}
+                    tabIndex="0"
+                    role="button"
                     className="photo-preview"
-                    onClick={() => openModal('Gallery')}
+                    onClick={() => {
+                      openModal('Gallery');
+                    }}
                   >
                     <i className="la la-eye" />
                   </a>
@@ -208,35 +214,41 @@ class DashboardHeader extends React.Component {
                 countName=""
                 countNumber={totalSubmissions}
                 icon="la-copy"
-                //noSubmissionText={true}
+                // noSubmissionText={true}
               />
             </Link>
             <a
               href={`/fieldsight/application/#/project-users/${id}/`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <CountCard
                 countName="User"
                 countNumber={totalUsers}
                 icon="la-user"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
             <a
               href={`/fieldsight/application/?project=${id}#/project-sitelist`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <CountCard
                 countName="site"
                 countNumber={totalSites}
                 icon="la-map-marker"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
             {isProjectManager && (
               <div className="add-data">
-                <a onClick={() => this.setState({ openmodel: true })}>
-                  {' '}
+                <a
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => this.setState({ openmodel: true })}
+                  onClick={() => this.setState({ openmodel: true })}
+                >
                   <FormattedMessage
                     id="app.addData"
                     defaultMessage="Add Data"
@@ -254,9 +266,16 @@ class DashboardHeader extends React.Component {
           )}
           {showGallery && (
             <div
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                closeModal('Gallery');
+              }}
               className="gallery-zoom fieldsight-popup open"
               style={{ zIndex: 99999 }}
-              onClick={() => closeModal('Gallery')}
+              onClick={() => {
+                closeModal('Gallery');
+              }}
             >
               <div className="gallery-body">
                 <img
@@ -266,8 +285,15 @@ class DashboardHeader extends React.Component {
                 />
               </div>
               <span
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  closeModal('Header');
+                }}
                 className="popup-close"
-                onClick={() => closeModal('Gallery')}
+                onClick={() => {
+                  closeModal('Gallery');
+                }}
               >
                 <i className="la la-close" />
               </span>

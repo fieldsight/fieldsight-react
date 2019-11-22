@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ProjecTable from './ProjectTable';
+/* eslint-disable react/prop-types  */
 
-class ProjectFormContent extends Component {
+class ProjectFormContent extends PureComponent {
   render() {
     const { OpenTabHandler, commonPopupHandler } = this.props;
     return (

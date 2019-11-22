@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import MyformTable from './MyformTable';
 import SharedTable from './SharedTable';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
 
 const base_url = 'https://fieldsight.naxa.com.np';
 
-class MyFormContent extends Component {
+class MyFormContent extends PureComponent {
   render() {
     const { OpenTabHandler, commonPopupHandler } = this.props;
     return (
@@ -26,14 +28,15 @@ class MyFormContent extends Component {
                     </h5>
                     <div className="add-btn">
                       <a
-                        href={base_url + '/forms/create/'}
+                        href={`${base_url}/forms/create/`}
                         target="_blank"
                         data-tab="site-popup"
+                        rel="noopener noreferrer"
                       >
                         <FormattedMessage
                           id="app.create-new"
                           defaultMessage="Create New"
-                        />{' '}
+                        />
                         <span>
                           <i className="la la-plus" />
                         </span>

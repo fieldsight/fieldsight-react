@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   Map,
   TileLayer,
@@ -7,10 +7,13 @@ import {
   Popup,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
+/* eslint-disable react/jsx-indent */
 
 const position = [27.7, 85.4];
 
-class MapPage extends Component {
+class MapPage extends PureComponent {
   render() {
     return (
       <div>
@@ -45,6 +48,7 @@ class MapPage extends Component {
                     <a
                       href={item.properties.detail_url}
                       target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <div className="content">
                         <h5>{item.properties.form}</h5>

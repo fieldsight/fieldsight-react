@@ -3,14 +3,20 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import SideBar from './SideBar';
 import CommonPopup from './CommonPopup';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-unused-state  */
 
 class MyFormMain extends Component {
-  state = {
-    popupModal: false,
-    selectedModals: null,
-    heading: null,
-    modalDatas: null,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      popupModal: false,
+      selectedModals: null,
+      heading: null,
+      modalDatas: null,
+    };
+  }
 
   OpenTabHandler = (e, url) => {
     window.open(url, '_blank');

@@ -2,6 +2,7 @@ import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { AvatarContentLoader } from '../../common/Loader';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
 const ManagersListItem = ({ manager }) => (
   <li>
@@ -19,7 +20,7 @@ const ManagersListItem = ({ manager }) => (
   </li>
 );
 
-class ProjectManager extends React.Component {
+class ProjectManager extends React.PureComponent {
   render() {
     const { projectManagers, showContentLoader } = this.props;
     return (
@@ -30,10 +31,10 @@ class ProjectManager extends React.Component {
           <PerfectScrollbar>
             <ul>
               {projectManagers.length > 0 ? (
-                projectManagers.map((manager, i) => (
+                projectManagers.map(manager => (
                   <ManagersListItem
                     manager={manager}
-                    key={`manager_${i}`}
+                    key={`manager_${manager.id}`}
                   />
                 ))
               ) : (

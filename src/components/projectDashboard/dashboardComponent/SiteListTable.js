@@ -5,14 +5,15 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import { DotLoader } from '../../myForm/Loader';
 import isEmpty from '../../../utils/isEmpty';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
-class SiteListTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      project_id: JSON.parse(props.id),
-    };
-  }
+class SiteListTable extends React.PureComponent {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     project_id: JSON.parse(props.id),
+  //   };
+  // }
 
   render() {
     const { data, loader, terms } = this.props;
@@ -36,7 +37,7 @@ class SiteListTable extends React.Component {
                   <thead>
                     <tr>
                       <th>
-                        {!isEmpty(terms) ? `${terms.site}` : 'Sites'}{' '}
+                        {!isEmpty(terms) ? `${terms.site}` : 'Sites'}
                         Name
                       </th>
                       {/*<th>
@@ -107,14 +108,11 @@ class SiteListTable extends React.Component {
                       </tr>
                     )}
                     {!loader &&
-                      data.map((item, i) => (
-                        <tr key={i}>
+                      data.map(item => (
+                        <tr key={item.id}>
                           <td>
                             <a
-                              href={
-                                '/fieldsight/application/#/site-dashboard/' +
-                                item.id
-                              }
+                              href={`/fieldsight/application/#/site-dashboard/${item.id}`}
                               className="pending table-profile"
                             >
                               {/* <figure>
@@ -140,10 +138,12 @@ class SiteListTable extends React.Component {
                                 aria-valuenow="40"
                                 aria-valuemin="0"
                                 aria-valuemax="200"
-                                style={{ width: item.progress + '%' }}
+                                style={{
+                                  width: `${item.progress} %`,
+                                }}
                               >
                                 <span className="progress-counts">
-                                  {item.progress + '%'}
+                                  {`${item.progress} %`}
                                 </span>
                               </div>
                             </div>

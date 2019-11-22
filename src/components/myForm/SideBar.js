@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import MyFormContent from './MyFormContent';
 import ProjectFormContent from './ProjectFormContent';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
 // import MyformTable from '../components/MyForm/MyformTable';
 // import UserSelectForm from '../components/MyForm/UserSelectForm';
 
-class SideBar extends Component {
+class SideBar extends PureComponent {
   render() {
     const {
       match: { path, url },
@@ -19,7 +20,7 @@ class SideBar extends Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <div className="col-xl-3 col-lg-4">
           <div className="left-sidebar new-sidebar sticky-top">
             <div
@@ -44,7 +45,7 @@ class SideBar extends Component {
                     <Link
                       to={`${url}/myform`}
                       className={
-                        pathname == `${url}/myform`
+                        pathname === `${url}/myform`
                           ? 'nav-link active'
                           : 'nav-link'
                       }
@@ -59,7 +60,7 @@ class SideBar extends Component {
                     <Link
                       to={`${url}/projectform`}
                       className={
-                        pathname == `${url}/projectform`
+                        pathname === `${url}/projectform`
                           ? 'nav-link active'
                           : 'nav-link'
                       }
@@ -103,7 +104,7 @@ class SideBar extends Component {
             )}
           />
         </Switch>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import Logs from '../common/Logs';
 import { connect } from 'react-redux';
+import Logs from '../common/Logs';
 import { getProjectLogs } from '../../actions/projectLogsActions';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
 
 const user_id = window.user_id ? window.user_id : 1;
 
@@ -11,8 +13,8 @@ class ProjectLogs extends Component {
     super(props);
     this.state = {
       siteId: '',
-      siteLogs: {},
-      siteLogsLoader: true,
+      // siteLogs: {},
+      // siteLogsLoader: true,
     };
   }
 
@@ -21,7 +23,6 @@ class ProjectLogs extends Component {
       match: {
         params: { id },
       },
-      getProjectLogs,
     } = this.props;
     getProjectLogs(id);
     this.setState({
@@ -59,8 +60,8 @@ class ProjectLogs extends Component {
             user_id={user_id}
             siteLogs={siteLogs}
             showContentLoader={siteLogsLoader}
-            fullPage={true}
-            projectlogs={true}
+            fullPage
+            projectlogs
           />
         </div>
       </>

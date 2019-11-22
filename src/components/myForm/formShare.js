@@ -1,18 +1,19 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PreviewModal from './PreviewModal';
 import ReplaceModal from './ReplaceModal';
 import ShareModal from './ShareModal';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
-class FormShare extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      shareOption: false,
-    };
-  }
+class FormShare extends PureComponent {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     shareOption: false,
+  //   };
+  // }
 
   render() {
     const {
@@ -47,7 +48,7 @@ class FormShare extends Component {
             }
           >
             <a
-              onClick={e =>
+              onClick={e => {
                 commonPopupHandler(
                   e,
                   PreviewModal,
@@ -55,12 +56,23 @@ class FormShare extends Component {
                   'Preview Form',
                   'preview',
                   null,
-                )
-              }
+                );
+              }}
               className="td-view-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                commonPopupHandler(
+                  e,
+                  PreviewModal,
+                  item.preview_url,
+                  'Preview Form',
+                  'preview',
+                  null,
+                );
+              }}
             >
-              {' '}
-              <i className="la la-eye"> </i>{' '}
+              <i className="la la-eye" />
             </a>
           </OverlayTrigger>
 
@@ -75,7 +87,7 @@ class FormShare extends Component {
             }
           >
             <a
-              onClick={e =>
+              onClick={e => {
                 commonPopupHandler(
                   e,
                   PreviewModal,
@@ -83,12 +95,23 @@ class FormShare extends Component {
                   'Preview Form',
                   'preview',
                   null,
-                )
-              }
+                );
+              }}
               className="td-view-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                commonPopupHandler(
+                  e,
+                  PreviewModal,
+                  item.media_url,
+                  'Preview Form',
+                  'preview',
+                  null,
+                );
+              }}
             >
-              {' '}
-              <i className="la la-file-image-o"> </i>{' '}
+              <i className="la la-file-image-o" />
             </a>
           </OverlayTrigger>
 
@@ -103,11 +126,17 @@ class FormShare extends Component {
             }
           >
             <a
-              onClick={e => OpenTabHandler(e, item.edit_url)}
+              onClick={e => {
+                OpenTabHandler(e, item.edit_url);
+              }}
               className="td-edit-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                OpenTabHandler(e, item.edit_url);
+              }}
             >
-              {' '}
-              <i className="la la-edit" />{' '}
+              <i className="la la-edit" />
             </a>
           </OverlayTrigger>
 
@@ -122,7 +151,7 @@ class FormShare extends Component {
             }
           >
             <a
-              onClick={e =>
+              onClick={e => {
                 commonPopupHandler(
                   e,
                   ReplaceModal,
@@ -130,12 +159,23 @@ class FormShare extends Component {
                   'Replace Form',
                   'replace',
                   item.id_string,
-                )
-              }
+                );
+              }}
               className="td-edit-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                commonPopupHandler(
+                  e,
+                  ReplaceModal,
+                  item.edit_url,
+                  'Replace Form',
+                  'replace',
+                  item.id_string,
+                );
+              }}
             >
-              {' '}
-              <i className="la la-refresh"> </i>{' '}
+              <i className="la la-refresh" />
             </a>
           </OverlayTrigger>
           <OverlayTrigger
@@ -149,14 +189,18 @@ class FormShare extends Component {
             }
           >
             <a
-              onClick={e => OpenTabHandler(e, item.download_url)}
+              onClick={e => {
+                OpenTabHandler(e, item.download_url);
+              }}
               className="td-edit-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => OpenTabHandler(e, item.download_url)}
               data-toggle="tooltip"
               data-placement="top"
               title="Edit"
             >
-              {' '}
-              <i className="la la-download" />{' '}
+              <i className="la la-download" />
             </a>
           </OverlayTrigger>
 
@@ -172,11 +216,15 @@ class FormShare extends Component {
               }
             >
               <a
-                onClick={e => shareToggle(e, item.id_string)}
+                onClick={e => {
+                  shareToggle(e, item.id_string);
+                }}
                 className="td-share-btn td-btn"
+                tabIndex="0"
+                role="button"
+                onKeyDown={e => shareToggle(e, item.id_string)}
               >
-                {' '}
-                <i className="la la-share-alt"> </i>
+                <i className="la la-share-alt" />
               </a>
             </OverlayTrigger>
 
@@ -190,7 +238,7 @@ class FormShare extends Component {
                 </h5>
                 <li>
                   <a
-                    onClick={e =>
+                    onClick={e => {
                       commonPopupHandler(
                         e,
                         ShareModal,
@@ -198,9 +246,21 @@ class FormShare extends Component {
                         'Select User',
                         'users',
                         item.share_users_url,
-                      )
-                    }
+                      );
+                    }}
                     data-tab="user-share"
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={e => {
+                      commonPopupHandler(
+                        e,
+                        ShareModal,
+                        item.id_string,
+                        'Select User',
+                        'users',
+                        item.share_users_url,
+                      );
+                    }}
                   >
                     <FormattedMessage
                       id="app.user"
@@ -210,7 +270,7 @@ class FormShare extends Component {
                 </li>
                 <li>
                   <a
-                    onClick={e =>
+                    onClick={e => {
                       commonPopupHandler(
                         e,
                         ShareModal,
@@ -218,9 +278,21 @@ class FormShare extends Component {
                         'Select Projects',
                         'projects',
                         item.share_project_url,
-                      )
-                    }
+                      );
+                    }}
                     data-tab="project-share"
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={e => {
+                      commonPopupHandler(
+                        e,
+                        ShareModal,
+                        item.id_string,
+                        'Select Projects',
+                        'projects',
+                        item.share_project_url,
+                      );
+                    }}
                   >
                     <FormattedMessage
                       id="app.projects"
@@ -277,11 +349,17 @@ class FormShare extends Component {
             }
           >
             <a
-              onClick={e => deleteHandler(e, item.id_string)}
+              onClick={e => {
+                deleteHandler(e, item.id_string);
+              }}
               className="td-delete-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                deleteHandler(e, item.id_string);
+              }}
             >
-              {' '}
-              <i className="la la-trash" />{' '}
+              <i className="la la-trash" />
             </a>
           </OverlayTrigger>
         </td>

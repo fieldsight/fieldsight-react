@@ -5,11 +5,12 @@ import Card from 'react-bootstrap/Card';
 import { OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { BlockContentLoader } from '../common/Loader';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
-const url = 'fv3/api/myroles';
-let base_url = window.base_url
-  ? window.base_url
-  : 'https://fieldsight.naxa.com.np/';
+// const url = 'fv3/api/myroles';
+// let base_url = window.base_url
+//   ? window.base_url
+//   : 'https://fieldsight.naxa.com.np/';
 
 class YourTeamSideBar extends Component {
   OpenTabHandler = url => {
@@ -43,6 +44,7 @@ class YourTeamSideBar extends Component {
                   <a
                     href="/fieldsight/application/#/create-team/"
                     target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <FormattedMessage
                       id="app.addTeam"
@@ -75,7 +77,7 @@ class YourTeamSideBar extends Component {
                     id="accordion"
                   >
                     {teams.map((team, i) => (
-                      <Card className="no-boxshadow" key={i}>
+                      <Card className="no-boxshadow" key={team.id}>
                         <Card.Header>
                           <figure>
                             <img src={team.logo} alt="pf" />
@@ -89,9 +91,18 @@ class YourTeamSideBar extends Component {
                               {team.name}
                               {team.has_organization_access && (
                                 <span
-                                  onClick={e =>
-                                    this.OpenTabHandler(team.team_url)
-                                  }
+                                  tabIndex="0"
+                                  role="button"
+                                  onKeyDown={() => {
+                                    this.OpenTabHandler(
+                                      team.team_url,
+                                    );
+                                  }}
+                                  onClick={() => {
+                                    this.OpenTabHandler(
+                                      team.team_url,
+                                    );
+                                  }}
                                   className="goto"
                                 >
                                   <OverlayTrigger
@@ -114,17 +125,25 @@ class YourTeamSideBar extends Component {
                         <Accordion.Collapse eventKey={i.toString()}>
                           <Card.Body>
                             <ul style={{ position: 'relative' }}>
-                              {team.projects.map((project, i) => (
+                              {team.projects.map(project => (
                                 <li
                                   className={
-                                    project.id == teamId
+                                    project.id === teamId
                                       ? 'active'
                                       : null
                                   }
-                                  key={i}
+                                  key={project.id}
                                 >
                                   <a
-                                    onClick={event => {
+                                    tabIndex="0"
+                                    role="button"
+                                    onKeyDown={() => {
+                                      requestRegions(project.id);
+                                      requestSite(project.id);
+                                      requestSubmission(project.id);
+                                      requestMap(project.id);
+                                    }}
+                                    onClick={() => {
                                       requestRegions(project.id);
                                       requestSite(project.id);
                                       requestSubmission(project.id);
