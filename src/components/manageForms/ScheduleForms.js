@@ -1,50 +1,51 @@
-import React, { Component } from "react";
-import axios from "axios";
-import DatePicker from "react-datepicker";
-
-import { DotLoader } from "../myForm/Loader";
-import Modal from "../common/Modal";
-import RightContentCard from "../common/RightContentCard";
-import GlobalModalForm from "./GlobalModalForm";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import ScheduleFormTable from "./ScheduleFormTable";
-import EditFormGuide from "./EditFormGuide";
-import AddForm from "./AddForm";
-import ManageModal from "./ManageModal";
-import Loader from "../common/Loader";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { DotLoader } from '../myForm/Loader';
+import Modal from '../common/Modal';
+import RightContentCard from '../common/RightContentCard';
+import GlobalModalForm from './GlobalModalForm';
+import { errorToast, successToast } from '../../utils/toastHandler';
+import ScheduleFormTable from './ScheduleFormTable';
+import EditFormGuide from './EditFormGuide';
+import AddForm from './AddForm';
+import ManageModal from './ManageModal';
+import Loader from '../common/Loader';
 
 const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  return year + "-" + monthIndex + "-" + dateIdx;
+  return year + '-' + monthIndex + '-' + dateIdx;
 };
 
 class ScheduleForms extends Component {
   _isMounted = false;
-  state = {
-    id: this.props.match.params ? this.props.match.params.id : "",
-    data: [],
-    deployStatus: false,
-    editGuide: false,
-    guideData: {},
-    editFormId: "",
-    showFormModal: false,
-    activeTab: "myForms",
-    formData: {},
-    xf: "",
-    loader: false,
-    loaded: 0,
-    formId: "",
-    formTitle: "",
-    isProjectForm: "",
-    myFormList: this.props.myForms,
-    projectFormList: this.props.projectForms,
-    sharedFormList: this.props.sharedForms,
-    isEditForm: false,
-    fsxf: "",
-    loadReq: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: props.match.params ? props.match.params.id : '',
+      data: [],
+      deployStatus: false,
+      editGuide: false,
+      guideData: {},
+      editFormId: '',
+      showFormModal: false,
+      activeTab: 'myForms',
+      formData: {},
+      xf: '',
+      loader: false,
+      loaded: 0,
+      formId: '',
+      formTitle: '',
+      isProjectForm: '',
+      myFormList: props.myForms,
+      projectFormList: props.projectForms,
+      sharedFormList: props.sharedForms,
+      isEditForm: false,
+      fsxf: '',
+      loadReq: false,
+    };
+  }
 
   requestScheduleForm(id, checkUrl) {
     const apiUrl = checkUrl
@@ -69,77 +70,92 @@ class ScheduleForms extends Component {
     const {
       match: {
         url,
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
-    const splitArr = url.split("/");
-    const isProjectForm = splitArr.includes("project");
-    const isSiteForm = splitArr.includes("site");
+    const splitArr = url.split('/');
+    const isProjectForm = splitArr.includes('project');
+    const isSiteForm = splitArr.includes('site');
     if (isProjectForm) {
       this.setState(
         {
           loader: true,
-          isProjectForm
+          isProjectForm,
         },
-        this.requestScheduleForm(id, true)
+        this.requestScheduleForm(id, true),
       );
     } else if (isSiteForm) {
       this.setState(
         {
           loader: true,
-          isProjectForm: false
+          isProjectForm: false,
         },
-        this.requestScheduleForm(id, false)
+        this.requestScheduleForm(id, false),
       );
     }
   }
 
   onChangeHandler = async e => {
-    const { activeTab } = this.state;
+    const {
+      state: { activeTab },
+      props: { myForms, projectForms, sharedForms },
+    } = this;
     const searchValue = e.target.value;
 
     if (searchValue) {
-      if (activeTab == "myForms") {
-        const filteredData = await this.props.myForms.filter(form => {
+      if (activeTab == 'myForms') {
+        const filteredData = await myForms.filter(form => {
           return (
-            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            form.title
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            form.owner
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
           );
         });
 
         this.setState({
-          myFormList: filteredData
+          myFormList: filteredData,
         });
-      } else if (activeTab == "projectForms") {
-        const awaitedData = await this.props.projectForms.map(project => {
+      } else if (activeTab == 'projectForms') {
+        const awaitedData = await projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
-              form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-              form.owner.toLowerCase().includes(searchValue.toLowerCase())
+              form.title
+                .toLowerCase()
+                .includes(searchValue.toLowerCase()) ||
+              form.owner
+                .toLowerCase()
+                .includes(searchValue.toLowerCase())
             );
           });
           return { ...project, forms: filteredData };
         });
         this.setState({
-          projectFormList: awaitedData
+          projectFormList: awaitedData,
         });
-      } else if (activeTab == "sharedForms") {
-        const filteredData = await this.props.sharedForms.filter(form => {
+      } else if (activeTab == 'sharedForms') {
+        const filteredData = await sharedForms.filter(form => {
           return (
-            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            form.title
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            form.owner
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
           );
         });
 
         this.setState({
-          sharedFormList: filteredData
+          sharedFormList: filteredData,
         });
       }
     } else {
       this.setState({
-        myFormList: this.props.myForms,
-        sharedFormList: this.props.sharedForms,
-        projectFormList: this.props.projectForms
+        myFormList: myForms,
+        sharedFormList: sharedForms,
+        projectFormList: projectForms,
       });
     }
   };
@@ -167,8 +183,8 @@ class ScheduleForms extends Component {
               return { data: newData, loadReq: false };
             },
             () => {
-              successToast("Deploy Status", "updated");
-            }
+              successToast('Deploy Status', 'updated');
+            },
           );
         })
         .catch(err => {
@@ -179,6 +195,7 @@ class ScheduleForms extends Component {
         });
     });
   };
+
   deleteItem = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
     this.setState({ loadReq: true }, () => {
@@ -191,11 +208,11 @@ class ScheduleForms extends Component {
           this.setState(
             {
               data: this.state.data.filter(each => each.id != formId),
-              loadReq: false
+              loadReq: false,
             },
             () => {
-              successToast("Form", "deleted");
-            }
+              successToast('Form', 'deleted');
+            },
           );
         })
         .catch(err => {
@@ -212,26 +229,28 @@ class ScheduleForms extends Component {
       editGuide: !this.state.editGuide,
       guideData: data ? data : {},
       editFormId: formId,
-      fsxf: fsxf
+      fsxf: fsxf,
     });
   };
+
   handleUpdateGuide = data => {
     const { fsxf, editFormId } = this.state;
     this.setState({ loadReq: true }, () => {
       const formData = new FormData();
 
-      if (data.title) formData.append("title", data.title);
-      if (data.text) formData.append("text", data.text);
-      if (data.pdf) formData.append("pdf", data.pdf);
-      if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
-      if (fsxf) formData.append("fsxf", fsxf);
+      if (data.title) formData.append('title', data.title);
+      if (data.text) formData.append('text', data.text);
+      if (data.pdf) formData.append('pdf', data.pdf);
+      if (data.is_pdf) formData.append('is_pdf', data.is_pdf);
+      if (fsxf) formData.append('fsxf', fsxf);
       if (data.images && data.images.length > 0) {
         data.images.map((each, i) => {
-          if (!each.image) formData.append(`new_images_${i + 1}`, each);
+          if (!each.image)
+            formData.append(`new_images_${i + 1}`, each);
         });
       }
       if (data.id) {
-        formData.append("id", data.id);
+        formData.append('id', data.id);
       }
 
       axios
@@ -252,12 +271,12 @@ class ScheduleForms extends Component {
                 return {
                   editGuide: false,
                   data: item,
-                  loadReq: false
+                  loadReq: false,
                 };
               },
               () => {
-                successToast("form", "updated");
-              }
+                successToast('form', 'updated');
+              },
             );
         })
         .catch(err => {
@@ -272,15 +291,17 @@ class ScheduleForms extends Component {
   handleMyFormChange = (e, title) => {
     this.setState({
       formId: e.target.value,
-      formTitle: title
+      formTitle: title,
     });
   };
+
   handleSaveForm = () => {
     this.setState({
       xf: this.state.formId,
-      showFormModal: !this.state.showFormModal
+      showFormModal: !this.state.showFormModal,
     });
   };
+
   toggleFormModal = () => {
     this.setState({ showFormModal: !this.state.showFormModal });
   };
@@ -290,23 +311,31 @@ class ScheduleForms extends Component {
       activeTab: tab,
       myFormList: this.props.myForms,
       sharedFormList: this.props.sharedForms,
-      projectFormList: this.props.projectForms
-    });
-  };
-  handleClosePopup = () => {
-    this.setState({
-      formTitle: "",
-      formId: "",
-      showFormModal: false,
-      activeTab: "myForms",
-      myFormList: this.props.myForms,
       projectFormList: this.props.projectForms,
-      sharedFormList: this.props.sharedForms,
-      xf: "",
-      isEditForm: false
     });
-    this.props.closePopup();
   };
+
+  handleClosePopup = () => {
+    const {
+      myForms,
+      projectForms,
+      sharedForms,
+      closePopup,
+    } = this.props;
+    this.setState({
+      formTitle: '',
+      formId: '',
+      showFormModal: false,
+      activeTab: 'myForms',
+      myFormList: myForms,
+      projectFormList: projectForms,
+      sharedFormList: sharedForms,
+      xf: '',
+      isEditForm: false,
+    });
+    closePopup();
+  };
+
   handleScheduleForm = data => {
     const { id, xf, isEditForm, isProjectForm } = this.state;
     this.setState({ loadReq: true }, () => {
@@ -321,7 +350,9 @@ class ScheduleForms extends Component {
           frequency: data.frequency,
           selected_days: data.selectedDays,
           date_range_start: formatDate(data.startDate),
-          ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
+          ...(!!data.endDate && {
+            date_range_end: formatDate(data.endDate),
+          }),
           setting: {
             notify_incomplete_schedule: data.notifyIncomplete,
             can_edit: data.isEdit,
@@ -334,8 +365,8 @@ class ScheduleForms extends Component {
             types:
               !!data.typeSelected && data.typeSelected.length > 0
                 ? data.typeSelected.map(each => each.id)
-                : []
-          }
+                : [],
+          },
         };
 
         axios
@@ -344,12 +375,12 @@ class ScheduleForms extends Component {
             this.setState(
               {
                 data: [...this.state.data, res.data],
-                loadReq: false
+                loadReq: false,
               },
               () => {
                 this.handleClosePopup();
-                successToast("form ", "added");
-              }
+                successToast('form ', 'added');
+              },
             );
           })
           .catch(err => {
@@ -369,7 +400,9 @@ class ScheduleForms extends Component {
           frequency: data.frequency,
           selected_days: data.selectedDays,
           date_range_start: formatDate(data.startDate),
-          ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
+          ...(!!data.endDate && {
+            date_range_end: formatDate(data.endDate),
+          }),
           setting: {
             id: data.settingId,
             types:
@@ -384,8 +417,8 @@ class ScheduleForms extends Component {
             can_edit: data.isEdit,
             donor_visibility: data.isDonor,
             can_delete: data.isDelete,
-            form: xf
-          }
+            form: xf,
+          },
         };
 
         axios
@@ -403,13 +436,13 @@ class ScheduleForms extends Component {
                 });
                 return {
                   data: newArr,
-                  loadReq: false
+                  loadReq: false,
                 };
               },
               () => {
                 this.handleClosePopup();
-                successToast("form", "updated");
-              }
+                successToast('form', 'updated');
+              },
             );
           })
           .catch(err => {
@@ -421,16 +454,17 @@ class ScheduleForms extends Component {
       }
     });
   };
+
   handleEditScheduleForm = data => {
     this.setState(
       {
         formData: data,
         isEditForm: true,
-        formTitle: data.xf.title
+        formTitle: data.xf.title,
       },
       () => {
         this.props.commonPopupHandler();
-      }
+      },
     );
   };
 
@@ -449,10 +483,16 @@ class ScheduleForms extends Component {
         projectFormList,
         sharedFormList,
         isEditForm,
-        isProjectForm
+        isProjectForm,
       },
-      props: { typeOptions, regionOptions },
-      handleClosePopup
+      props: {
+        typeOptions,
+        regionOptions,
+        formLoader,
+        commonPopupHandler,
+        popupModal,
+      },
+      handleClosePopup,
     } = this;
 
     return (
@@ -460,7 +500,7 @@ class ScheduleForms extends Component {
         <RightContentCard
           title="app.scheduled-form"
           addButton={true}
-          toggleModal={this.props.commonPopupHandler}
+          toggleModal={commonPopupHandler}
           showText={true}
         >
           {loader && <DotLoader />}
@@ -487,7 +527,7 @@ class ScheduleForms extends Component {
               formTable="site"
             />
           )}
-          {this.props.popupModal && (
+          {popupModal && (
             <Modal
               title="Add Scheduled Form"
               toggleModal={handleClosePopup}
@@ -509,7 +549,10 @@ class ScheduleForms extends Component {
             </Modal>
           )}
           {editGuide && (
-            <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
+            <Modal
+              title="Form Guide"
+              toggleModal={this.handleEditGuide}
+            >
               <EditFormGuide
                 data={guideData}
                 handleCancel={this.handleEditGuide}
@@ -537,7 +580,7 @@ class ScheduleForms extends Component {
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
                 // handleSaveForm={this.handleSaveForm}
-                loader={this.props.formLoader}
+                loader={formLoader}
               />
             </ManageModal>
           )}

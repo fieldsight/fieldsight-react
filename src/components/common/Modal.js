@@ -1,6 +1,6 @@
-import React from "react";
-import Zoom from "react-reveal/Zoom";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import Zoom from 'react-reveal/Zoom';
+import { FormattedMessage } from 'react-intl';
 
 const Modal = ({
   title,
@@ -9,14 +9,14 @@ const Modal = ({
   showButton,
   url,
   showText,
-  classname
+  classname,
 }) => (
   <Zoom duration={500}>
     <div className="fieldsight-popup open" style={{ zIndex: 99999 }}>
       <div
-        className={`popup-body ${title === "Preview" ? "cropbody" : ""} ${
-          title === "Warning" ? "sm-body" : ""
-        } ${classname}`}
+        className={`popup-body ${
+          title === 'Preview' ? 'cropbody' : ''
+        } ${title === 'Warning' ? 'sm-body' : ''} ${classname}`}
       >
         <div className="card">
           <div className="card-header main-card-header  sub-card-header">
@@ -26,7 +26,10 @@ const Modal = ({
               <FormattedMessage id={title} defaultMessage={title} />
             </h5>
             {showButton && (
-              <div className="add-btn" style={{ marginRight: "15px" }}>
+              <div
+                className="add-btn"
+                style={{ marginRight: '15px' }}
+              >
                 <a href={url} target="_blank">
                   {showText && showText}
                   <span>

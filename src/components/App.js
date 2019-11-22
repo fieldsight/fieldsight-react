@@ -1,68 +1,81 @@
-import React, { Component } from "react";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import { Provider } from "react-redux";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { ToastContainer } from "react-toastify";
-import { IntlProvider } from "react-intl";
+import React, { Component } from 'react';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import { IntlProvider } from 'react-intl';
 
-import setDefault from "../config";
-import Settings from "./settings/Settings";
-import MyForm from "./myForm/MyformMain";
-import SiteDashboard from "./siteDashboard";
-import SiteList from "./projectSiteList/SiteList";
-import SubmissionDetails from "./submissionDetails";
-import MyrolesMain from "./myRoles/MyrolesMain";
-import RegionSite from "./regionalSite/RegionSite";
-import SiteDocument from "./siteDocument/siteDocument";
-import SiteUsers from "./userDocument";
-import TeamUser from "./teamUsers/teamUsers";
-import ProjectUser from "./projectUsers/projectUsers";
-import ProjectList from "./projectList/projectList";
-import ProjectDashboard from "./projectDashboard";
-import ProjectLog from "./projectLogs/projectLogs";
-import Teams from "./team";
-import SiteLog from "./siteLogs";
-import ProjectAdd from "./projectAdd";
-import TeamAdd from "./teamAdd";
-import SiteAdd from "./siteAdd";
-import EditSite from "./SiteEdit";
-import ViewData from "./viewDataComponents/projectViewData/index";
-import SiteData from "./viewDataComponents/siteViewData";
-import SiteSubmissionData from "./viewDataComponents/siteViewData/FormSubmission";
-import VersionSubmissionData from "./viewDataComponents/projectViewData/VersionTable";
-import VersionSiteSubmission from "./viewDataComponents/siteViewData/VersionTable";
+import setDefault from '../config';
+import Settings from './settings/Settings';
+import MyForm from './myForm/MyformMain';
+import SiteDashboard from './siteDashboard';
+import SiteList from './projectSiteList/SiteList';
+import SubmissionDetails from './submissionDetails';
+import MyrolesMain from './myRoles/MyrolesMain';
+import RegionSite from './regionalSite/RegionSite';
+import SiteDocument from './siteDocument/siteDocument';
+import SiteUsers from './userDocument';
+import TeamUser from './teamUsers/teamUsers';
+import ProjectUser from './projectUsers/projectUsers';
+import ProjectList from './projectList/projectList';
+import ProjectDashboard from './projectDashboard';
+import ProjectLog from './projectLogs/projectLogs';
+import Teams from './team';
+import SiteLog from './siteLogs';
+import ProjectAdd from './projectAdd';
+import TeamAdd from './teamAdd';
+import SiteAdd from './siteAdd';
+import EditSite from './SiteEdit';
+import ViewData from './viewDataComponents/projectViewData/index';
+import SiteData from './viewDataComponents/siteViewData';
+import SiteSubmissionData from './viewDataComponents/siteViewData/FormSubmission';
+import VersionSubmissionData from './viewDataComponents/projectViewData/VersionTable';
+import VersionSiteSubmission from './viewDataComponents/siteViewData/VersionTable';
 
-import TeamDashboard from "./teamDashboard";
-import TeamSetting from "./settings/TeamSettings";
-import SubmissionData from "./viewDataComponents/projectViewData/SubmissionTable";
+import TeamDashboard from './teamDashboard';
+import TeamSetting from './settings/TeamSettings';
+import SubmissionData from './viewDataComponents/projectViewData/SubmissionTable';
+import ManageForms from './manageForms';
+import Mapparent from './team/Mapparent';
 
-import ManageForms from "./manageForms";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'cropperjs/dist/cropper.css';
+import '../css/line-awesome.min.css';
+import '../scss/style.scss';
+import '../css/custom.css';
 
-import store from "../store";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "react-toastify/dist/ReactToastify.css";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import "react-datepicker/dist/react-datepicker.css";
-import "cropperjs/dist/cropper.css";
-import "../css/line-awesome.min.css";
-import "../scss/style.scss";
-import "../css/custom.css";
-import TeamMap from "./team/TeamMap";
-import Mapparent from "./team/Mapparent";
+import store from '../store';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'cropperjs/dist/cropper.css';
+import '../css/line-awesome.min.css';
+import '../scss/style.scss';
+import '../css/custom.css';
+import TeamMap from './team/TeamMap';
+import Mapparent from './team/Mapparent';
 
-import en from "../translations/en.json";
-import ne from "../translations/ne.json";
-import SelectElement from "../components/common/SelectElement";
+import en from '../translations/en.json';
+import ne from '../translations/ne.json';
+import SelectElement from '../components/common/SelectElement';
 
 const messages = {
   ne: ne,
-  en: en
+  en: en,
 };
 const language = navigator.language.split(/[-_]/)[0]; // language without region code
 const selectLanguage = [
-  { id: "en", name: "Eng" },
-  { id: "ne", name: "Nep" }
+  { id: 'en', name: 'Eng' },
+  { id: 'ne', name: 'Nep' },
 ];
 
 class App extends Component {
@@ -72,35 +85,31 @@ class App extends Component {
       height: 0,
       region: false,
       // selectedLanguage: language,
-      selected: localStorage.getItem("selected")
-        ? localStorage.getItem("selected")
-        : ""
+      selected: localStorage.getItem('selected')
+        ? localStorage.getItem('selected')
+        : '',
     };
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.updateWindowDimensions);
+    window.removeEventListener('resize', this.updateWindowDimensions);
   }
-
-  updateWindowDimensions = () => {
-    return (this.state.height = window.innerHeight - 181);
-  };
 
   componentWillMount() {
     setDefault();
     this.updateWindowDimensions();
-    window.addEventListener("resize", this.updateWindowDimensions);
+    window.addEventListener('resize', this.updateWindowDimensions);
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selected !== this.state.selected) {
-      localStorage.setItem("selected", this.state.selected);
+      localStorage.setItem('selected', this.state.selected);
     }
   }
   onLanguageChangeHandler = e => {
     const { value } = e.target;
 
     this.setState({
-      selected: value
+      selected: value,
     });
   };
   render() {
@@ -129,7 +138,10 @@ class App extends Component {
                     <Route
                       path="/team-settings/:id"
                       render={props => (
-                        <TeamSetting {...props} height={this.state.height} />
+                        <TeamSetting
+                          {...props}
+                          height={this.state.height}
+                        />
                       )}
                     />
                     <Route
@@ -143,7 +155,9 @@ class App extends Component {
 
                     <Route
                       path="/submission-details"
-                      render={props => <SubmissionDetails {...props} />}
+                      render={props => (
+                        <SubmissionDetails {...props} />
+                      )}
                     />
 
                     <Route
@@ -172,7 +186,9 @@ class App extends Component {
 
                     <Route
                       path="/project-dashboard/:id"
-                      render={props => <ProjectDashboard {...props} />}
+                      render={props => (
+                        <ProjectDashboard {...props} />
+                      )}
                     />
                     <Route
                       path="/team-dashboard/:id"
@@ -233,7 +249,9 @@ class App extends Component {
                     />
                     <Route
                       path="/create-site/:id"
-                      render={props => <SiteAdd {...props} page="CreateSite" />}
+                      render={props => (
+                        <SiteAdd {...props} page="CreateSite" />
+                      )}
                     />
                     <Route
                       path="/regional-site-add/:id/:regionalId"
@@ -243,11 +261,15 @@ class App extends Component {
                     />
                     <Route
                       path="/sub-site-add/:id/:siteId"
-                      render={props => <SiteAdd {...props} page="subSite" />}
+                      render={props => (
+                        <SiteAdd {...props} page="subSite" />
+                      )}
                     />
                     <Route
                       path="/site-edit/:id"
-                      render={props => <EditSite {...props} page="subSite" />}
+                      render={props => (
+                        <EditSite {...props} page="subSite" />
+                      )}
                     />
 
                     <Route
@@ -264,15 +286,21 @@ class App extends Component {
                     />
                     <Route
                       path="/site-submission-data/:id/:fid"
-                      render={props => <SiteSubmissionData {...props} />}
+                      render={props => (
+                        <SiteSubmissionData {...props} />
+                      )}
                     />
                     <Route
                       path="/site-version-submission/:id/:fid"
-                      render={props => <VersionSiteSubmission {...props} />}
+                      render={props => (
+                        <VersionSiteSubmission {...props} />
+                      )}
                     />
                     <Route
                       path="/project-version-submission/:id/:fid"
-                      render={props => <VersionSubmissionData {...props} />}
+                      render={props => (
+                        <VersionSubmissionData {...props} />
+                      )}
                     />
                   </Switch>
                   <ToastContainer />
@@ -286,12 +314,11 @@ class App extends Component {
   }
 }
 
-//export default App;
 const mapStateToProps = ({ teams }) => {
   const { selected } = teams;
 
   return {
-    selected
+    selected,
   };
 };
 export default compose(connect(mapStateToProps))(App);

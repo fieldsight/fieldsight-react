@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { BlockContentLoader } from "../common/Loader";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { BlockContentLoader } from '../common/Loader';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { FormattedMessage } from 'react-intl';
 
 class Submissions extends Component {
   render() {
@@ -12,7 +12,7 @@ class Submissions extends Component {
         )}
         {!this.props.submissionLoader && (
           <div className="thumb-list mr-0">
-            <ul style={{ position: "relative", height: "650px" }}>
+            <ul style={{ position: 'relative', height: '650px' }}>
               {this.props.submission.length === 0 && (
                 <p>
                   <FormattedMessage
@@ -34,11 +34,14 @@ class Submissions extends Component {
                         <FormattedMessage
                           id="app.submittedResponse"
                           defaultMessage="submitted a response for"
-                        />{" "}
+                        />
                         <a href={sub.form_url}>
                           <b>{sub.form_name}</b>
-                        </a>{" "}
-                        <FormattedMessage id="app.in" defaultMessage="in" />{" "}
+                        </a>
+                        <FormattedMessage
+                          id="app.in"
+                          defaultMessage="in"
+                        />
                         <a href={sub.extra_object_url}>
                           <b>{sub.extra_object}</b>
                         </a>

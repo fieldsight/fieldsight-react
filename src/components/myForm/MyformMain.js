@@ -1,28 +1,24 @@
-import React, { Component, Fragment } from "react";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import SideBar from "./SideBar";
-import CommonPopup from "./CommonPopup";
-import PreviewModal from "./PreviewModal";
-import ReplaceModal from "./ReplaceModal";
-import ShareModal from "./ShareModal";
-import GlobalModel from "./GlobalModal";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import SideBar from './SideBar';
+import CommonPopup from './CommonPopup';
+import { FormattedMessage } from 'react-intl';
 
 class MyFormMain extends Component {
   state = {
     popupModal: false,
     selectedModals: null,
     heading: null,
-    modalDatas: null
+    modalDatas: null,
   };
 
   OpenTabHandler = (e, url) => {
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   };
 
   closePopup = () => {
     this.setState({
-      popupModal: false
+      popupModal: false,
     });
   };
 
@@ -32,7 +28,7 @@ class MyFormMain extends Component {
     modalData,
     modalHeading,
     modalType,
-    shareUrl
+    shareUrl,
   ) => {
     this.setState({
       popupModal: true,
@@ -40,18 +36,26 @@ class MyFormMain extends Component {
       selectedModals: selectedModal,
       modalDatas: modalData,
       modalTypes: modalType,
-      shareUrls: shareUrl
+      shareUrls: shareUrl,
     });
   };
 
   render() {
+    const {
+      props: { height },
+      state: { heading, modalDatas, modalTypes, shareUrls },
+    } = this;
+
     return (
-      <Fragment>
+      <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a>
-                <FormattedMessage id="app.forms" defaultMessage="Forms" />
+                <FormattedMessage
+                  id="app.forms"
+                  defaultMessage="Forms"
+                />
               </a>
             </li>
           </ol>
@@ -60,25 +64,22 @@ class MyFormMain extends Component {
           <SideBar
             OpenTabHandler={this.OpenTabHandler}
             commonPopupHandler={this.commonPopupHandler}
-            height={this.props.height}
+            height={height}
           />
         </div>
 
         {this.state.popupModal && (
-          <CommonPopup
-            closePopup={this.closePopup}
-            heading={this.state.heading}
-          >
+          <CommonPopup closePopup={this.closePopup} heading={heading}>
             <this.state.selectedModals
-              previewUrl={this.state.modalDatas}
-              modalTypes={this.state.modalTypes}
-              modalDatas={this.state.modalDatas}
-              shareUrls={this.state.shareUrls}
+              previewUrl={modalDatas}
+              modalTypes={modalTypes}
+              modalDatas={modalDatas}
+              shareUrls={shareUrls}
               closePopup={this.closePopup}
             />
           </CommonPopup>
         )}
-      </Fragment>
+      </>
     );
   }
 }

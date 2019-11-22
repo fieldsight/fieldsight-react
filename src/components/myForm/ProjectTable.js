@@ -1,30 +1,34 @@
-import React, { Component } from "react";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-import axios from "axios";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import PreviewModal from "./PreviewModal";
-import { DotLoader } from "./Loader";
-import { successToast, errorToast } from "./toastHandler";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import axios from 'axios';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PreviewModal from './PreviewModal';
+import { DotLoader } from './Loader';
+import { FormattedMessage } from 'react-intl';
+import { successToast, errorToast } from './toastHandler';
 
-const url = "fv3/api/myprojectforms/";
+const url = 'fv3/api/myprojectforms/';
 
 class ProjecTable extends Component {
   _isMounted = false;
-  state = {
-    project_list: [],
-    list: [],
-    dLoader: true
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      project_list: [],
+      list: [],
+      dLoader: true,
+    };
+  }
 
   cloneHandler = (e, clone_url, id, form_id) => {
     axios
       .post(clone_url, { id_string: id, project: form_id })
       .then(res => {
-        successToast("Form", "cloned");
+        successToast('Form', 'cloned');
       })
-      .catch(err => console.log("err", err));
+      .catch(err => console.log('err', err));
   };
 
   componentDidMount() {
@@ -37,22 +41,26 @@ class ProjecTable extends Component {
           if (res.status === 200) {
             this.setState({
               project_list: res.data,
-              dLoader: false
+              dLoader: false,
             });
           }
         }
       })
       .catch(err => {
         this.setState({
-          dLoader: false
+          dLoader: false,
         });
       });
   }
 
   render() {
+    const {
+      state: { project_list, dLoader },
+      props: { commonPopupHandler, OpenTabHandler },
+    } = this;
     return (
-      <React.Fragment>
-        {this.state.project_list.length === 0 && !this.state.dLoader && (
+      <>
+        {project_list.length === 0 && !dLoader && (
           <div className="card-header main-card-header sub-card-header bg-header">
             <h5>
               <FormattedMessage
@@ -62,14 +70,14 @@ class ProjecTable extends Component {
             </h5>
           </div>
         )}
-        {this.state.project_list.map((item, i) => (
+        {project_list.map((item, i) => (
           <div key={i}>
             <div className="card-header main-card-header sub-card-header bg-header">
               <h5>{item.name}</h5>
             </div>
             <div
               className="card-body"
-              style={{ position: "relative", height: "300px" }}
+              style={{ position: 'relative', height: '300px' }}
             >
               <PerfectScrollbar>
                 <table
@@ -79,17 +87,20 @@ class ProjecTable extends Component {
                   <thead>
                     <tr>
                       <th>
-                        <FormattedMessage id="app.sn" defaultMessage="S.N" />{" "}
+                        <FormattedMessage
+                          id="app.sn"
+                          defaultMessage="S.N"
+                        />{' '}
                       </th>
                       <th>
-                        {" "}
+                        {' '}
                         <FormattedMessage
                           id="app.form-name"
                           defaultMessage="Form Name"
                         />
                       </th>
                       <th>
-                        {" "}
+                        {' '}
                         <FormattedMessage
                           id="app.create-date"
                           defaultMessage="Create Date"
@@ -102,7 +113,7 @@ class ProjecTable extends Component {
                         />
                       </th>
                       <th>
-                        {" "}
+                        {' '}
                         <FormattedMessage
                           id="app.action"
                           defaultMessage="Action"
@@ -114,7 +125,9 @@ class ProjecTable extends Component {
                     {item.forms.map((items, i) => (
                       <tr key={i}>
                         <td>{i + 1}</td>
-                        <td style={{ width: "30%" }}>{items.title}</td>
+                        <td style={{ width: '30%' }}>
+                          {items.title}
+                        </td>
                         <td>
                           <i className="fa fa-clock-o" />
                           <span>{items.date_created}</span>
@@ -136,19 +149,19 @@ class ProjecTable extends Component {
                           >
                             <a
                               onClick={e =>
-                                this.props.commonPopupHandler(
+                                commonPopupHandler(
                                   e,
                                   PreviewModal,
                                   items.preview_url,
-                                  "Preview Form",
-                                  "preview",
-                                  null
+                                  'Preview Form',
+                                  'preview',
+                                  null,
                                 )
                               }
                               className="td-view-btn td-btn"
                             >
-                              {" "}
-                              <i className="la la-eye"> </i>{" "}
+                              {' '}
+                              <i className="la la-eye"> </i>{' '}
                             </a>
                           </OverlayTrigger>
                           <OverlayTrigger
@@ -163,12 +176,12 @@ class ProjecTable extends Component {
                           >
                             <a
                               onClick={e =>
-                                this.props.OpenTabHandler(e, items.edit_url)
+                                OpenTabHandler(e, items.edit_url)
                               }
                               className="td-edit-btn td-btn"
                             >
-                              {" "}
-                              <i className="la la-edit" />{" "}
+                              {' '}
+                              <i className="la la-edit" />{' '}
                             </a>
                           </OverlayTrigger>
                           {/* <OverlayTrigger
@@ -194,8 +207,8 @@ class ProjecTable extends Component {
                             }
                           >
                             <a className="td-edit-btn td-btn">
-                              {" "}
-                              <i className="la la-download"> </i>{" "}
+                              {' '}
+                              <i className="la la-download"> </i>{' '}
                             </a>
                           </OverlayTrigger>
                           <OverlayTrigger
@@ -214,13 +227,13 @@ class ProjecTable extends Component {
                                   e,
                                   items.clone_form_url,
                                   items.id_string,
-                                  item.id
+                                  item.id,
                                 )
                               }
                               className="td-edit-btn td-btn"
                             >
-                              {" "}
-                              <i className="la la-clone"> </i>{" "}
+                              {' '}
+                              <i className="la la-clone"> </i>{' '}
                             </a>
                           </OverlayTrigger>
                           {/* <OverlayTrigger
@@ -242,8 +255,8 @@ class ProjecTable extends Component {
             </div>
           </div>
         ))}
-        {this.state.dLoader && <DotLoader />}
-      </React.Fragment>
+        {dLoader && <DotLoader />}
+      </>
     );
   }
   componentWillUnmount() {

@@ -1,28 +1,30 @@
-import React, { Component, Fragment } from "react";
-import Table from "../common/Table";
-import Modal from "../common/Modal";
-import InputElement from "../common/InputElement";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import WithContext from "../../hoc/WithContext";
-import isEmpty from "../../utils/isEmpty";
-import axios from "axios";
-import { RegionContext } from "../../context";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { FormattedMessage } from "react-intl";
-import DeleteModel from "../common/DeleteModal";
+import React, { Component, Fragment } from 'react';
+import Table from '../common/Table';
+import Modal from '../common/Modal';
+import InputElement from '../common/InputElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import WithContext from '../../hoc/WithContext';
+import isEmpty from '../../utils/isEmpty';
+import axios from 'axios';
+import { RegionContext } from '../../context';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FormattedMessage } from 'react-intl';
+import DeleteModel from '../common/DeleteModal';
 
 class ManageRegion extends Component {
   static contextType = RegionContext;
-
-  state = {
-    hide: "",
-    response: "",
-    model: false,
-    cluster_sites: "",
-    data: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      hide: '',
+      response: '',
+      model: false,
+      cluster_sites: '',
+      data: false,
+    };
+  }
   componentDidMount() {
     const { projectId } = this.context;
 
@@ -31,50 +33,60 @@ class ManageRegion extends Component {
       .then(res => {
         this.setState({
           cluster_sites: !res.data.cluster_sites,
-          hide: res.data.cluster_sites
+          hide: res.data.cluster_sites,
         });
       })
       .catch(err => {
         console.log(err);
       });
   }
+
   region = () => {
-    const { projectId } = this.context;
+    const {
+      context: { projectId },
+      state: { model, hide, cluster_sites },
+    } = this;
 
     let data = {};
-    data.cluster_sites = this.state.cluster_sites;
+    data.cluster_sites = cluster_sites;
     data.Project = projectId;
 
-    !this.state.model
+    !model
       ? axios
-          .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+          .post(
+            `/fv3/api/enable-project-cluster-sites/${projectId}/`,
+            data,
+          )
           .then(res => {
             this.setState(
               {
-                hide: !this.state.hide,
+                hide: !hide,
                 response: res.data.detail,
                 model: true,
                 cluster_sites: res.data.cluster_sites,
-                data: true
+                data: true,
               },
-              () => this.toast()
+              () => this.toast(),
             );
           })
           .catch(err => {
             console.log(err);
           })
       : axios
-          .post(`/fv3/api/enable-project-cluster-sites/${projectId}/`, data)
+          .post(
+            `/fv3/api/enable-project-cluster-sites/${projectId}/`,
+            data,
+          )
           .then(res => {
             this.setState(
               {
-                hide: !this.state.hide,
+                hide: !hide,
                 response: res.data.detail,
                 model: false,
                 cluster_sites: res.data.cluster_sites,
-                data: true
+                data: true,
               },
-              () => this.toast()
+              () => this.toast(),
             );
           })
           .catch(err => {
@@ -87,6 +99,7 @@ class ManageRegion extends Component {
       toast.success(this.state.response);
     }
   }
+
   render() {
     const {
       props: {
@@ -105,9 +118,9 @@ class ManageRegion extends Component {
           confirmHandler,
           cancelHandler,
           onSubmitHandler,
-          selectRegionHandler
-        }
-      }
+          selectRegionHandler,
+        },
+      },
     } = this;
 
     const tableHeader = {
@@ -116,10 +129,15 @@ class ManageRegion extends Component {
             `${terms.region} ID`,
             `${terms.region} Name`,
             ,
-            "app.created-date",
-            "app.action"
+            'app.created-date',
+            'app.action',
           ]
-        : ["app.regionId", "app.regionName", "app.created-date", "app.action"]
+        : [
+            'app.regionId',
+            'app.regionName',
+            'app.created-date',
+            'app.action',
+          ],
     };
     const message = !isEmpty(terms) ? (
       `${terms.region}`
@@ -127,13 +145,16 @@ class ManageRegion extends Component {
       <FormattedMessage id="app.regions" defaultMessage="Regions" />
     );
     return (
-      <Fragment>
+      <>
         <RightContentCard
           title={
             !isEmpty(terms) ? (
               `${terms.region}`
             ) : (
-              <FormattedMessage id="app.regions" defaultMessage="Regions" />
+              <FormattedMessage
+                id="app.regions"
+                defaultMessage="Regions"
+              />
             )
           }
           addButton
@@ -142,10 +163,10 @@ class ManageRegion extends Component {
           <div
             className="add-btn"
             style={{
-              justifyContent: "flex-end",
-              position: "relative",
-              bottom: "52px",
-              marginRight: "44px"
+              justifyContent: 'flex-end',
+              position: 'relative',
+              bottom: '52px',
+              marginRight: '44px',
             }}
           >
             {this.state.hide ? (
@@ -154,17 +175,20 @@ class ManageRegion extends Component {
                 className="btn-toggle"
                 onClick={this.region}
                 style={{
-                  backgroundColor: "#28a745",
-                  color: "white",
-                  textAlign: "left",
-                  width: "97px"
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  textAlign: 'left',
+                  width: '83px',
                 }}
               >
-                <FormattedMessage id="app.turnOff" defaultMessage="Turn OFF" />
+                <FormattedMessage
+                  id="app.turnOff"
+                  defaultMessage="Turn OFF"
+                />
 
                 <div
                   className="handle"
-                  style={{ left: "auto", right: "0.1875rem" }}
+                  style={{ left: 'auto', right: '0.1875rem' }}
                 ></div>
               </button>
             ) : (
@@ -173,10 +197,13 @@ class ManageRegion extends Component {
                 className="btn-toggle"
                 onClick={this.region}
                 style={{
-                  width: "97px"
+                  width: '97px',
                 }}
               >
-                <FormattedMessage id="app.turnOn" defaultMessage="Turn ON" />
+                <FormattedMessage
+                  id="app.turnOn"
+                  defaultMessage="Turn ON"
+                />
 
                 <div className="handle"></div>
               </button>
@@ -198,12 +225,18 @@ class ManageRegion extends Component {
               !isEmpty(terms) ? (
                 `${terms.region}`
               ) : (
-                <FormattedMessage id="app.regions" defaultMessage="Regions" />
+                <FormattedMessage
+                  id="app.regions"
+                  defaultMessage="Regions"
+                />
               )
             }
             toggleModal={toggleModal}
           >
-            <form className="floating-form" onSubmit={onSubmitHandler}>
+            <form
+              className="floating-form"
+              onSubmit={onSubmitHandler}
+            >
               <InputElement
                 tag="input"
                 type="text"
@@ -227,10 +260,13 @@ class ManageRegion extends Component {
                 value={selectedName}
                 changeHandler={onChangeHandler}
                 translation={true}
-              />{" "}
+              />{' '}
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  <FormattedMessage id="app.save" defaultMessage="Save" />
+                  <FormattedMessage
+                    id="app.save"
+                    defaultMessage="Save"
+                  />
                 </button>
               </div>
             </form>
@@ -247,7 +283,7 @@ class ManageRegion extends Component {
             title="Warning"
           />
         )}
-      </Fragment>
+      </>
     );
   }
 }

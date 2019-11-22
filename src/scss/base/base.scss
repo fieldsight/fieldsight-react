@@ -196,6 +196,8 @@
           flex-wrap: nowrap;
 
           figure {
+            flex:0 0 60px;
+            -ms-flex:0 0 60px;
             max-width: 60px;
             width: 60px !important;
             height: 60px;
@@ -204,10 +206,10 @@
             margin: 0 1rem 0 0;
             position: relative;
 
-            img {
-              @extend figure;
-              height: 60px;
-            }
+            // img {
+            //   @extend figure;
+            //   height: 60px;
+            // }
 
             figcaption {
               @include overlay;

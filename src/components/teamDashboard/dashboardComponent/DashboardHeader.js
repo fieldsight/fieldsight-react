@@ -1,11 +1,13 @@
-import React, { Component } from "react";
-import { Button, Dropdown } from "react-bootstrap";
+import React, { PureComponent } from 'react';
+import { Dropdown } from 'react-bootstrap';
 
-import { AvatarContentLoader } from "../../common/Loader";
-import CountCard from "../../common/CountCard";
-import { FormattedMessage } from "react-intl";
+import { AvatarContentLoader } from '../../common/Loader';
+import CountCard from '../../common/CountCard';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
 
-class DashboardHeader extends Component {
+class DashboardHeader extends PureComponent {
   render() {
     const {
       name,
@@ -20,25 +22,31 @@ class DashboardHeader extends Component {
       showContentLoader,
       activeTab,
       closeModal,
-      openModal
+      openModal,
     } = this.props;
 
     const ManageDropdown = [
       {
-        title: "users",
+        title: 'users',
         link: `/fieldsight/manage/people/organization/${id}/`,
-        id: "app.users"
+        id: 'app.users',
       },
       {
-        title: "projects",
+        title: 'projects',
         link: `/fieldsight/application/#/team-projects/${id}`,
-        id: "app.projects"
+        id: 'app.projects',
       },
       {
+        key: 1,
+        title: 'projects',
+        link: `/fieldsight/application/#/team-projects/${id}`,
+      },
+      {
+        key: 2,
         title: `settings`,
         link: `/fieldsight/application/#/team-settings/${id}`,
-        id: "app.setting"
-      }
+        id: 'app.setting',
+      },
     ];
 
     return (
@@ -51,14 +59,15 @@ class DashboardHeader extends Component {
               <figure
                 style={{
                   backgroundImage: `url(${logo})`,
-                  width: "80px"
+                  width: '80px',
                 }}
               >
                 <span />
                 <figcaption>
                   <a
+                    href="#"
                     className="photo-preview"
-                    onClick={() => openModal("Gallery")}
+                    onClick={() => openModal('Gallery')}
                   >
                     <i className="la la-eye" />
                   </a>
@@ -91,7 +100,11 @@ class DashboardHeader extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                  <Dropdown.Item
+                    href={item.link}
+                    key={i}
+                    target="_blank"
+                  >
                     {/*item.title*/}
 
                     <FormattedMessage
@@ -118,23 +131,25 @@ class DashboardHeader extends Component {
             <a
               href={`/fieldsight/application/#/team-users/${id}`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <CountCard
                 countName="user"
                 countNumber={totalUser}
                 icon="la-user"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
             <a
               href={`/fieldsight/application/#/team-projects/${id}`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <CountCard
                 countName="project"
                 countNumber={totalProjects}
                 icon="la la-tasks"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
             <a>
@@ -142,7 +157,7 @@ class DashboardHeader extends Component {
                 countName="site"
                 countNumber={totalSites}
                 icon="la-map-marker"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
           </div>
@@ -151,5 +166,4 @@ class DashboardHeader extends Component {
     );
   }
 }
-
 export default DashboardHeader;

@@ -1,25 +1,45 @@
-import React, { Component } from "react";
-import SiteDeleteTable from "../../responded/DeleteTable";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import SiteDeleteTable from '../../responded/DeleteTable';
 
 class DeleteTable extends Component {
-  state = {
-    deleted_forms: []
-  };
-  static getDerivedStateFromProps(props, state) {
-    return {
-      deleted_forms: props.deleted_forms
+  constructor(props) {
+    super(props);
+    this.state = {
+      deletedForms: [],
     };
   }
+
+  static getDerivedStateFromProps(props) {
+    return {
+      deletedForms: props.deletedForms,
+    };
+  }
+
   render() {
+    const {
+      state: { deletedForms },
+      props: { id },
+    } = this;
     return (
-      <React.Fragment>
+      <>
         <SiteDeleteTable
-          deleted_forms={this.state.deleted_forms}
-          id={this.props.id}
+          deleted_forms={deletedForms}
+          id={id}
           table="site"
         />
-      </React.Fragment>
+      </>
     );
   }
 }
+
+DeleteTable.propTypes = {
+  deletedForms: PropTypes.arrayOf,
+  id: PropTypes.string,
+};
+
+DeleteTable.defaultProps = {
+  deletedForms: [],
+  id: {},
+};
 export default DeleteTable;

@@ -1,72 +1,76 @@
-import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 const sideNavRoutes = [
   {
-    to: "/general",
-    path: "/general",
-    title: "General Forms",
-    id: "app.generate-forms"
+    to: '/general',
+    path: '/general',
+    title: 'General Forms',
+    id: 'app.generate-forms',
   },
   {
-    to: "/scheduled",
-    path: "/scheduled",
-    title: "Scheduled Forms",
-    id: "app.scheduled-form"
+    to: '/scheduled',
+    path: '/scheduled',
+    title: 'Scheduled Forms',
+    id: 'app.scheduled-form',
   },
   {
-    to: "/stage",
-    path: "/stage",
-    title: "Staged Forms",
-    id: "app.staged-form"
-  }
+    to: '/stage',
+    path: '/stage',
+    title: 'Staged Forms',
+    id: 'app.staged-form',
+  },
 ];
 const site_specific_forms = [
   {
-    to: "/general-survey",
-    path: "/general-survey",
-    title: "General Forms",
-    id: "app.generate-forms"
-  }
+    to: '/general-survey',
+    path: '/general-survey',
+    title: 'General Forms',
+    id: 'app.generate-forms',
+  },
 ];
 
 const viewByStatus = [
   {
-    to: "/rejected",
-    path: "/rejected",
-    title: "Rejected Submissions",
-    id: "app.rejected-submissions"
+    to: '/rejected',
+    path: '/rejected',
+    title: 'Rejected Submissions',
+    id: 'app.rejected-submissions',
   },
   {
-    to: "/flagged",
-    path: "/flagged",
-    title: "Flagged Submissions",
-    id: "app.flagged-submissions"
+    to: '/flagged',
+    path: '/flagged',
+    title: 'Flagged Submissions',
+    id: 'app.flagged-submissions',
   },
   {
-    to: "/pending",
-    path: "/pending",
-    title: "Pending Submissions",
-    id: "app.pending-submissions"
+    to: '/pending',
+    path: '/pending',
+    title: 'Pending Submissions',
+    id: 'app.pending-submissions',
   },
   {
-    to: "/approved",
-    path: "/approved",
-    title: "Approved Submissions",
-    id: "app.approved-submissions"
-  }
+    to: '/approved',
+    path: '/approved',
+    title: 'Approved Submissions',
+    id: 'app.approved-submissions',
+  },
 ];
 
-class ManageFormSetting extends Component {
+class ManageFormSetting extends PureComponent {
   render() {
     const {
-      location: { pathname }
+      location: { pathname },
+      match: {
+        params: { id },
+      },
+      show_submission,
     } = this.props;
 
     return (
       <>
-        {!this.props.show_submission && (
+        {!show_submission && (
           <>
             <div className="manage_group">
               {/* <h5>Site Specific Forms</h5>*/}
@@ -77,15 +81,15 @@ class ManageFormSetting extends Component {
                 />
               </h5>
               <ul className="nav nav-tabs flex-column border-tabs">
-                {sideNavRoutes.map((route, i) => (
-                  <li className="nav-item" key={i}>
+                {sideNavRoutes.map(route => (
+                  <li className="nav-item" key={route.key}>
                     <Link
-                      to={`/project-responses/${this.props.match.params.id}${route.to}`}
+                      to={`/project-responses/${id}${route.to}`}
                       className={
-                        this.props.location.pathname ==
-                        `/project-responses/${this.props.match.params.id}${route.path}`
-                          ? "nav-link active"
-                          : "nav-link"
+                        pathname ===
+                        `/project-responses/${id}${route.path}`
+                          ? 'nav-link active'
+                          : 'nav-link'
                       }
                     >
                       {/*route.title*/}
@@ -107,15 +111,15 @@ class ManageFormSetting extends Component {
                 />
               </h5>
               <ul className="nav nav-tabs flex-column border-tabs">
-                {site_specific_forms.map((route, i) => (
-                  <li className="nav-item" key={i}>
+                {site_specific_forms.map(route => (
+                  <li className="nav-item" key={route.key}>
                     <Link
-                      to={`/project-responses/${this.props.match.params.id}${route.to}`}
+                      to={`/project-responses/${id}${route.to}`}
                       className={
-                        this.props.location.pathname ==
-                        `/project-responses/${this.props.match.params.id}${route.path}`
-                          ? "nav-link active"
-                          : "nav-link"
+                        pathname ===
+                        `/project-responses/${id}${route.path}`
+                          ? 'nav-link active'
+                          : 'nav-link'
                       }
                     >
                       {/*route.title*/}
@@ -130,17 +134,17 @@ class ManageFormSetting extends Component {
             </div>
           </>
         )}
-        {!!this.props.show_submission && (
+        {!!show_submission && (
           <ul className="nav nav-tabs flex-column border-tabs">
-            {viewByStatus.map((route, i) => (
-              <li className="nav-item" key={i}>
+            {viewByStatus.map(route => (
+              <li className="nav-item" key={route.key}>
                 <Link
-                  to={`/project-responses/${this.props.match.params.id}${route.to}`}
+                  to={`/project-responses/${id}${route.to}`}
                   className={
-                    this.props.location.pathname ==
-                    `/project-responses/${this.props.match.params.id}${route.path}`
-                      ? "nav-link active"
-                      : "nav-link"
+                    pathname ===
+                    `/project-responses/${id}${route.path}`
+                      ? 'nav-link active'
+                      : 'nav-link'
                   }
                 >
                   {/*route.title*/}
@@ -158,5 +162,10 @@ class ManageFormSetting extends Component {
     );
   }
 }
+ManageFormSetting.propTypes = {
+  location: PropTypes.objectOf.isRequired,
+  match: PropTypes.objectOf.isRequired,
+  show_submission: PropTypes.bool.isRequired,
+};
 
 export default withRouter(ManageFormSetting);

@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {
   sortableContainer,
   sortableElement,
-  sortableHandle
-} from "react-sortable-hoc";
-import arrayMove from "array-move";
-import DeleteModal from "../common/DeleteModal";
-import { FormattedMessage } from "react-intl";
+  sortableHandle,
+} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
+import DeleteModal from '../common/DeleteModal';
+import { FormattedMessage } from 'react-intl';
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -16,17 +16,19 @@ const getStatus = value => {
   else if (value == 2) return <span>Flagged</span>;
   else if (value == 3) return <span>Approved</span>;
 };
+
 const getClass = status => {
-  if (status == 0) return "pending";
-  if (status == 1) return "rejected";
-  if (status == 2) return "flagged";
-  if (status == 3) return "approved";
+  if (status == 0) return 'pending';
+  if (status == 1) return 'rejected';
+  if (status == 2) return 'flagged';
+  if (status == 3) return 'approved';
 };
+
 const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  return year + "-" + monthIndex + "-" + dateIdx;
+  return year + '-' + monthIndex + '-' + dateIdx;
 };
 
 const DragHandle = sortableHandle(({ sub, index, formTable }) => (
@@ -38,7 +40,7 @@ const DragHandle = sortableHandle(({ sub, index, formTable }) => (
       </span>
       {!!sub && sub.name}
     </td>
-    <td>{sub && sub.xf && sub.xf.title ? sub.xf.title : "-"}</td>
+    <td>{sub && sub.xf && sub.xf.title ? sub.xf.title : '-'}</td>
     <td>{sub && sub.responses_count}</td>
     <td>
       <EducationMaterialForProject
@@ -51,12 +53,14 @@ const DragHandle = sortableHandle(({ sub, index, formTable }) => (
     <td>{sub && sub.weight}</td>
     <td>
       <time>
-        <i className="la la-clock-o"></i>{" "}
+        <i className="la la-clock-o"></i>{' '}
         {formatDate(new Date(sub && sub.date_created))}
       </time>
     </td>
     <td>
-      <span className={getClass(sub && sub.default_submission_status)}>
+      <span
+        className={getClass(sub && sub.default_submission_status)}
+      >
         {getStatus(sub && sub.default_submission_status)}
       </span>
     </td>
@@ -75,28 +79,29 @@ const DragHandle = sortableHandle(({ sub, index, formTable }) => (
 
 const EducationMaterialForProject = props => {
   const { formTable, item, editForm, toDrag } = props;
-  if (formTable == "project") {
+  if (formTable == 'project') {
     return (
       <span className={`${!!toDrag} ? disabled : ''`}>
         <a onClick={() => editForm(item.em, item.id)}>
           <i className="la la-book" />
-          {item && item.em ? item.em.title : ""}
+          {item && item.em ? item.em.title : ''}
         </a>
       </span>
     );
-  } else if (formTable == "site") {
+  } else if (formTable == 'site') {
     return (
       <span className={`${!!toDrag} ? disabled : ''`}>
         {!!item.site && (
           <a onClick={() => editForm(item.em, item.id)}>
             <i className="la la-book" />
-            {item && item.em ? item.em.title : ""}
+            {item && item.em ? item.em.title : ''}
           </a>
         )}
       </span>
     );
   }
 };
+
 const GetActionForProject = props => {
   const {
     formTable,
@@ -107,9 +112,9 @@ const GetActionForProject = props => {
     handleCancel,
     handleConfirm,
     editAction,
-    toDrag
+    toDrag,
   } = props;
-  if (formTable == "project") {
+  if (formTable == 'project') {
     return (
       <div>
         {item && !!item.is_deployed && (
@@ -136,7 +141,10 @@ const GetActionForProject = props => {
                 overlay={
                   <Tooltip>
                     {/*Deploy*/}
-                    <FormattedMessage id="app.deploy" defaultMessage="Deploy" />
+                    <FormattedMessage
+                      id="app.deploy"
+                      defaultMessage="Deploy"
+                    />
                   </Tooltip>
                 }
               >
@@ -154,7 +162,10 @@ const GetActionForProject = props => {
             overlay={
               <Tooltip>
                 {/*Edit*/}
-                <FormattedMessage id="app.edit" defaultMessage="Edit" />
+                <FormattedMessage
+                  id="app.edit"
+                  defaultMessage="Edit"
+                />
               </Tooltip>
             }
           >
@@ -173,7 +184,10 @@ const GetActionForProject = props => {
                 overlay={
                   <Tooltip>
                     {/*Delete*/}
-                    <FormattedMessage id="app.delete" defaultMessage="Delete" />
+                    <FormattedMessage
+                      id="app.delete"
+                      defaultMessage="Delete"
+                    />
                   </Tooltip>
                 }
               >
@@ -188,13 +202,13 @@ const GetActionForProject = props => {
             onCancel={handleCancel}
             onToggle={handleToggle}
             message={
-              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+              'Deleting this form will also delete submissions to this form. Do you want to proceed?'
             }
           />
         )}
       </div>
     );
-  } else if (formTable == "site") {
+  } else if (formTable == 'site') {
     return (
       <div>
         {item && !!item.site && !!item.is_deployed && (
@@ -221,7 +235,10 @@ const GetActionForProject = props => {
                 overlay={
                   <Tooltip>
                     {/*Deploy*/}
-                    <FormattedMessage id="app.deploy" defaultMessage="Deploy" />
+                    <FormattedMessage
+                      id="app.deploy"
+                      defaultMessage="Deploy"
+                    />
                   </Tooltip>
                 }
               >
@@ -240,7 +257,10 @@ const GetActionForProject = props => {
               overlay={
                 <Tooltip>
                   {/*Edit*/}
-                  <FormattedMessage id="app.edit" defaultMessage="Edit" />
+                  <FormattedMessage
+                    id="app.edit"
+                    defaultMessage="Edit"
+                  />
                 </Tooltip>
               }
             >
@@ -269,7 +289,7 @@ const GetActionForProject = props => {
             onCancel={handleCancel}
             onToggle={handleToggle}
             message={
-              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+              'Deleting this form will also delete submissions to this form. Do you want to proceed?'
             }
           />
         )}
@@ -280,7 +300,10 @@ const GetActionForProject = props => {
 
 const SortableContainer = sortableContainer(({ children }) => {
   return (
-    <Table responsive="xl" className="table  table-bordered  dataTable">
+    <Table
+      responsive="xl"
+      className="table  table-bordered  dataTable"
+    >
       <thead>
         <tr>
           <th>
@@ -290,34 +313,49 @@ const SortableContainer = sortableContainer(({ children }) => {
             />
           </th>
           <th>
-            <FormattedMessage id="app.form-title" defaultMessage="form Name" />
+            <FormattedMessage
+              id="app.form-title"
+              defaultMessage="form Name"
+            />
           </th>
           <th>
-            {" "}
-            <FormattedMessage id="app.response" defaultMessage="Responses" />
+            {' '}
+            <FormattedMessage
+              id="app.response"
+              defaultMessage="Responses"
+            />
           </th>
           <th>
-            <FormattedMessage id="app.formGuide" defaultMessage="Form Guide" />
+            <FormattedMessage
+              id="app.formGuide"
+              defaultMessage="Form Guide"
+            />
           </th>
           <th>
-            <FormattedMessage id="app.weight" defaultMessage="Weight" />
+            <FormattedMessage
+              id="app.weight"
+              defaultMessage="Weight"
+            />
           </th>
           <th>
-            {" "}
+            {' '}
             <FormattedMessage
               id="app.assigned-date"
               defaultMessage="Assigned Date"
             />
           </th>
           <th>
-            {" "}
+            {' '}
             <FormattedMessage
               id="app.defaultStatus"
               defaultMessage="Default status"
             />
           </th>
           <th width="15%">
-            <FormattedMessage id="app.action" defaultMessage="Action" />
+            <FormattedMessage
+              id="app.action"
+              defaultMessage="Action"
+            />
           </th>
         </tr>
       </thead>
@@ -331,61 +369,69 @@ const SortableItem = sortableElement(({ sub, index, formTable }) => (
 ));
 
 class SubStageTable extends Component {
-  state = {
-    data: this.props.data,
-    confirmDelete: false,
-    formId: "",
-    isDeploy: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: props.data,
+      confirmDelete: false,
+      formId: '',
+      isDeploy: false,
+    };
+  }
 
   handleToggle = (formId, isDeploy) => {
     this.setState({
       confirmDelete: !this.state.confirmDelete,
       formId,
-      isDeploy
+      isDeploy,
     });
   };
 
   handleConfirm = () => {
     this.setState(
       {
-        confirmDelete: false
+        confirmDelete: false,
       },
       () => {
         this.props.deleteItem(this.state.formId, this.state.isDeploy);
-      }
+      },
     );
   };
+
   handleCancel = () => {
     this.setState({ confirmDelete: false });
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data != this.props.data) {
+    const { props } = this;
+    if (nextProps.data != props.data) {
       this.setState({
-        data: nextProps.data
+        data: nextProps.data,
       });
     }
+
     if (
-      nextProps.isSubstageReorderCancel != this.props.isSubstageReorderCancel
+      nextProps.isSubstageReorderCancel !=
+      props.isSubstageReorderCancel
     ) {
       this.setState(state => {
         if (nextProps.isSubstageReorderCancel) {
-          return { data: this.props.data };
+          return { data: props.data };
         }
       });
     }
   }
+
   onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState(
       ({ data }) => {
         return {
-          data: arrayMove(data, oldIndex, newIndex)
+          data: arrayMove(data, oldIndex, newIndex),
         };
       },
       () => {
         this.props.handleNewSubstageOrder(this.state.data);
-      }
+      },
     );
   };
 
@@ -398,9 +444,9 @@ class SubStageTable extends Component {
         editSubStageForm,
         reorderSubstage,
         isSubstageReorderCancel,
-        formTable
+        formTable,
       },
-      state: { data }
+      state: { data },
     } = this;
 
     return (
@@ -430,7 +476,9 @@ class SubStageTable extends Component {
                   data.map((sub, index) => (
                     <tr key={`sub_stage_${index}`}>
                       <td>{sub.name}</td>
-                      <td>{sub.xf && sub.xf.title ? sub.xf.title : "-"}</td>
+                      <td>
+                        {sub.xf && sub.xf.title ? sub.xf.title : '-'}
+                      </td>
                       <td>{sub.responses_count}</td>
                       <td>
                         <EducationMaterialForProject
@@ -442,13 +490,15 @@ class SubStageTable extends Component {
                       <td>{sub.weight}</td>
                       <td>
                         <time>
-                          <i className="la la-clock-o"></i>{" "}
+                          <i className="la la-clock-o"></i>{' '}
                           {formatDate(new Date(sub.date_created))}
                         </time>
                       </td>
                       <td>
                         <span
-                          className={getClass(sub.default_submission_status)}
+                          className={getClass(
+                            sub.default_submission_status,
+                          )}
                         >
                           {getStatus(sub.default_submission_status)}
                         </span>

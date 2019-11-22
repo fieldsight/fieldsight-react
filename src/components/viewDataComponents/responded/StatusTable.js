@@ -1,26 +1,37 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import { FormattedMessage } from 'react-intl';
 
 class StatusTable extends Component {
-  state = {
-    submission: []
-  };
+  constructor(props) {
+    super(props);
 
-  static getDerivedStateFromProps(props, state) {
+    this.state = {
+      submission: [],
+    };
+  }
+
+  static getDerivedStateFromProps(props) {
     return {
-      submission: props.submission
+      submission: props.submission,
     };
   }
 
   render() {
+    const { submission } = this.state;
     return (
-      <React.Fragment>
-        <Table responsive="xl" className="table  table-bordered  dataTable ">
+      <>
+        <Table
+          responsive="xl"
+          className="table  table-bordered  dataTable "
+        >
           <thead>
             <tr>
               <th>
-                <FormattedMessage id="app.name" defaultMessage="Name" />
+                <FormattedMessage
+                  id="app.name"
+                  defaultMessage="Name"
+                />
               </th>
               <th>
                 <FormattedMessage
@@ -29,18 +40,21 @@ class StatusTable extends Component {
                 />
               </th>
               <th>
-                {" "}
-                <FormattedMessage id="app.time" defaultMessage="Time" />
+                {' '}
+                <FormattedMessage
+                  id="app.time"
+                  defaultMessage="Time"
+                />
               </th>
             </tr>
           </thead>
           <tbody>
-            {!!this.state.submission &&
-              this.state.submission.length > 0 &&
-              this.state.submission.map((sub, key) => {
+            {!!submission &&
+              submission.length > 0 &&
+              submission.map(sub => {
                 return (
-                  <tr key={key}>
-                    <td style={{ width: "380px" }}>
+                  <tr key={sub.id}>
+                    <td style={{ width: '380px' }}>
                       <a href={sub.submission_url}>{sub.name}</a>
                     </td>
                     <td>
@@ -52,8 +66,11 @@ class StatusTable extends Component {
               })}
           </tbody>
         </Table>
-      </React.Fragment>
+      </>
     );
   }
 }
+StatusTable.propTypes = {
+  submission: PropTypes.arrayOf.isRequired,
+};
 export default StatusTable;

@@ -1,7 +1,8 @@
-import React, { Component } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { AvatarContentLoader } from "../../common/Loader";
-import { FormattedMessage } from "react-intl";
+import React, { PureComponent } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { AvatarContentLoader } from '../../common/Loader';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types */
 
 const AdminListItem = ({ admin }) => {
   return (
@@ -20,7 +21,8 @@ const AdminListItem = ({ admin }) => {
     </li>
   );
 };
-class Admin extends Component {
+
+class Admin extends PureComponent {
   render() {
     const { admin, showContentLoader } = this.props;
 
@@ -28,17 +30,24 @@ class Admin extends Component {
       <div className="card-body">
         <div
           className="thumb-list mr-0 "
-          style={{ position: "relative", height: "296px" }}
+          style={{ position: 'relative', height: '296px' }}
         >
           <>
             {showContentLoader ? (
-              <AvatarContentLoader number={6} width="100%" size="40" />
+              <AvatarContentLoader
+                number={6}
+                width="100%"
+                size="40"
+              />
             ) : (
               <PerfectScrollbar>
                 <ul>
                   {admin.length > 0 ? (
-                    admin.map((admin, i) => (
-                      <AdminListItem admin={admin} key={`admin_${i}`} />
+                    admin.map(each => (
+                      <AdminListItem
+                        admin={each}
+                        key={`admin_${each.id}`}
+                      />
                     ))
                   ) : (
                     <p>

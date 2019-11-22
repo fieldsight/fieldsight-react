@@ -1,47 +1,49 @@
-import React, { Component, Fragment } from "react";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import Cropper from "react-cropper";
-import { DotLoader } from "../common/Loader";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import InputElement from "../common/InputElement";
+import React, { Component, Fragment } from 'react';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import { DotLoader } from '../common/Loader';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import { errorToast, successToast } from '../../utils/toastHandler';
+import InputElement from '../common/InputElement';
 
 const animatedComponents = makeAnimated();
 
-const url = "fv3/api/team-geolayer/";
+const url = 'fv3/api/team-geolayer/';
 
 export default class TeamMapLayer extends Component {
   _isMounted = false;
-  state = {
-    geoLayer: {
-      code_prop: "",
-      title: "",
-      title_prop: "",
-      level: "",
-      organization: this.props.match.params ? this.props.match.params.id : "",
-      tolerance: "",
-      geo_shape_file: {}
-    },
-    initialData: [],
-    dropdownData: [],
-    isLoading: false,
-    dotLoader: true,
-    teamId: this.props.match.params ? this.props.match.params.id : "",
-    addMap: true,
-    selectedMapId: "",
-    src: "",
-    showCropper: false,
-    cropResult: "",
-    hasProp: false,
-    propDropdown: [],
-    fileName: "",
-    loaded: "",
-    showMsg: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      geoLayer: {
+        code_prop: '',
+        title: '',
+        title_prop: '',
+        level: '',
+        organization: props.match.params ? props.match.params.id : '',
+        tolerance: '',
+        geo_shape_file: {},
+      },
+      initialData: [],
+      dropdownData: [],
+      isLoading: false,
+      dotLoader: true,
+      teamId: props.match.params ? props.match.params.id : '',
+      addMap: true,
+      selectedMapId: '',
+      src: '',
+      showCropper: false,
+      cropResult: '',
+      hasProp: false,
+      propDropdown: [],
+      fileName: '',
+      loaded: '',
+      showMsg: '',
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -54,56 +56,60 @@ export default class TeamMapLayer extends Component {
       .get(`${url}?team=${teamId}`)
       .then(dropdownData => {
         if (this._isMounted) {
-          const modifiedDropdownData = dropdownData.data.map(item => ({
-            ...item,
-            value: item.id,
-            label: item.title
-          }));
+          const modifiedDropdownData = dropdownData.data.map(
+            item => ({
+              ...item,
+              value: item.id,
+              label: item.title,
+            }),
+          );
           this.setState({
-            // initialData: modifiedInitialData,
             dropdownData: modifiedDropdownData,
-            dotLoader: false
+            dotLoader: false,
           });
         }
       })
       .catch(err => {
         this._isMounted &&
           this.setState({
-            dotLoader: false
+            dotLoader: false,
           });
       });
   };
+
   handleSelectCodeProp = option => {
     this.setState(state => {
       return {
         geoLayer: {
           ...this.state.geoLayer,
-          code_prop: option.value
-        }
+          code_prop: option.value,
+        },
       };
     });
   };
+
   handleSelectTitleProp = option => {
     this.setState(state => {
       return {
         geoLayer: {
           ...this.state.geoLayer,
-          title_prop: option.value
-        }
+          title_prop: option.value,
+        },
       };
     });
   };
+
   handleSelectMap = option => {
-    const fileName = option.geo_shape_file.split("/");
+    const fileName = option.geo_shape_file.split('/');
     const propArr = [];
     this.setState(
       state => {
         if (option.properties.length > 0) {
           option.properties.map(each => {
-            if (each !== "id") {
-              if (each !== "Centroid_X") {
-                if (each !== "Centroid_Y") {
-                  const name = each.replace("_", " ").toUpperCase();
+            if (each !== 'id') {
+              if (each !== 'Centroid_X') {
+                if (each !== 'Centroid_Y') {
+                  const name = each.replace('_', ' ').toUpperCase();
                   propArr.push({ value: each, label: name });
                 }
               }
@@ -119,21 +125,23 @@ export default class TeamMapLayer extends Component {
             title_prop: option.title_prop,
             level: option.level,
             organization: option.organization,
-            tolerance: option.tolerance
+            tolerance: option.tolerance,
             // geo_shape_file: option.geo_shape_file
           },
           cropResult: option.geo_shape_file,
           addMap: !this.state.addMap,
           propDropdown: propArr,
           hasProp: option.properties.length > 0 ? true : false,
-          fileName: fileName.length > 0 ? fileName[fileName.length - 1] : ""
+          fileName:
+            fileName.length > 0 ? fileName[fileName.length - 1] : '',
         };
       },
       () => {
         // this.readJsonFile(option.geo_shape_file);
-      }
+      },
     );
   };
+
   requestHandler = () => {
     const {
       teamId,
@@ -144,21 +152,21 @@ export default class TeamMapLayer extends Component {
         level,
         organization,
         tolerance,
-        geo_shape_file
+        geo_shape_file,
       },
       cropResult,
-      selectedMapId
+      selectedMapId,
     } = this.state;
 
     const formData = new FormData();
-    formData.append("organization", organization);
-    formData.append("level", level);
-    formData.append("title", title);
-    formData.append("title_prop", title_prop);
-    formData.append("code_prop", code_prop);
-    formData.append("tolerance", tolerance);
+    formData.append('organization', organization);
+    formData.append('level', level);
+    formData.append('title', title);
+    formData.append('title_prop', title_prop);
+    formData.append('code_prop', code_prop);
+    formData.append('tolerance', tolerance);
     if (Object.keys(geo_shape_file).length > 0)
-      formData.append("geo_shape_file", cropResult);
+      formData.append('geo_shape_file', cropResult);
 
     if (!!selectedMapId) {
       axios
@@ -166,29 +174,29 @@ export default class TeamMapLayer extends Component {
           onUploadProgress: progressEvent => {
             this.setState({
               loaded: Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              )
+                (progressEvent.loaded * 100) / progressEvent.total,
+              ),
             });
-          }
+          },
         })
         .then(res => {
           this.setState(
             {
               isLoading: false,
-              addMap: !this.state.addMap
+              addMap: !this.state.addMap,
             },
             () => {
-              successToast("Map Layer", "updated");
+              successToast('Map Layer', 'updated');
               this.requestLayerData();
-            }
+            },
           );
         })
         .catch(err => {
           this.setState(
             {
-              isLoading: false
+              isLoading: false,
             },
-            errorToast()
+            errorToast(),
           );
         });
     } else {
@@ -197,29 +205,29 @@ export default class TeamMapLayer extends Component {
           onUploadProgress: progressEvent => {
             this.setState({
               loaded: Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              )
+                (progressEvent.loaded * 100) / progressEvent.total,
+              ),
             });
-          }
+          },
         })
         .then(res => {
           this.setState(
             {
               isLoading: false,
-              addMap: !this.state.addMap
+              addMap: !this.state.addMap,
             },
             () => {
-              successToast("Map Layer", "added");
+              successToast('Map Layer', 'added');
               this.requestLayerData();
-            }
+            },
           );
         })
         .catch(err => {
           this.setState(
             {
-              isLoading: false
+              isLoading: false,
             },
-            errorToast()
+            errorToast(),
           );
         });
     }
@@ -229,29 +237,29 @@ export default class TeamMapLayer extends Component {
     e.preventDefault();
     this.setState(
       {
-        isLoading: true
+        isLoading: true,
       },
-      this.requestHandler
+      this.requestHandler,
     );
   };
 
   toggleNewForm = () => {
+    const { state, props } = this;
     this.setState({
-      addMap: !this.state.addMap,
+      addMap: !state.addMap,
       geoLayer: {
-        code_prop: "",
-        title: "",
-        title_prop: "",
-        level: "",
-        organization: this.props.match.params ? this.props.match.params.id : "",
-        tolerance: ""
-        // geo_shape_file: {}
+        code_prop: '',
+        title: '',
+        title_prop: '',
+        level: '',
+        organization: props.match.params ? props.match.params.id : '',
+        tolerance: '',
       },
-      selectedMapId: "",
-      src: "",
+      selectedMapId: '',
+      src: '',
       showCropper: false,
-      cropResult: "",
-      hasProp: false
+      cropResult: '',
+      hasProp: false,
     });
   };
 
@@ -261,8 +269,8 @@ export default class TeamMapLayer extends Component {
     this.setState({
       geoLayer: {
         ...this.state.geoLayer,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   };
 
@@ -275,21 +283,19 @@ export default class TeamMapLayer extends Component {
       const objKeys = Object.keys(properties);
       const newArr = [];
       objKeys.map(each => {
-        if (each !== "id") {
-          if (each !== "Centroid_X") {
-            if (each !== "Centroid_Y") {
-              const name = each.replace("_", " ").toUpperCase();
+        if (each !== 'id') {
+          if (each !== 'Centroid_X') {
+            if (each !== 'Centroid_Y') {
+              const name = each.replace('_', ' ').toUpperCase();
               newArr.push({ value: each, label: name });
             }
           }
         }
       });
-      // debugger;
       this.setState({
         cropResult: file,
-        // fileName: file[0].name,
         hasProp: true,
-        propDropdown: newArr
+        propDropdown: newArr,
       });
     };
     reader.readAsText(file);
@@ -297,9 +303,9 @@ export default class TeamMapLayer extends Component {
 
   readFile = file => {
     const fileType = [
-      "application/json",
+      'application/json',
       // "application/javascript",
-      "application/geo+json"
+      'application/geo+json',
     ];
     const types = file[0].type;
     if (fileType.includes(types)) {
@@ -311,10 +317,10 @@ export default class TeamMapLayer extends Component {
         const objKeys = Object.keys(properties);
         const newArr = [];
         objKeys.map(each => {
-          if (each !== "id") {
-            if (each !== "Centroid_X") {
-              if (each !== "Centroid_Y") {
-                const name = each.replace("_", " ").toUpperCase();
+          if (each !== 'id') {
+            if (each !== 'Centroid_X') {
+              if (each !== 'Centroid_Y') {
+                const name = each.replace('_', ' ').toUpperCase();
                 newArr.push({ value: each, label: name });
               }
             }
@@ -325,33 +331,33 @@ export default class TeamMapLayer extends Component {
           fileName: file[0].name,
           hasProp: true,
           propDropdown: newArr,
-          showMsg: "",
+          showMsg: '',
           geoLayer: {
             ...this.state.geoLayer,
-            geo_shape_file: file[0]
-          }
+            geo_shape_file: file[0],
+          },
         });
       };
       reader.readAsText(file[0]);
     } else {
-      this.setState({ showMsg: "Select a JSON file" });
+      this.setState({ showMsg: 'Select a JSON file' });
     }
   };
 
   cropImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
 
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
 
@@ -370,7 +376,7 @@ export default class TeamMapLayer extends Component {
         propDropdown,
         fileName,
         loaded,
-        showMsg
+        showMsg,
       },
       onSubmitHandler,
       toggleNewForm,
@@ -379,7 +385,7 @@ export default class TeamMapLayer extends Component {
       handleSelectCodeProp,
       handleSelectTitleProp,
       readFile,
-      closeModal
+      closeModal,
     } = this;
 
     return (
@@ -443,12 +449,16 @@ export default class TeamMapLayer extends Component {
                   <div className="col-xl-8 col-md-6">
                     <div className="form-group">
                       <label>
-                        {" "}
-                        {cropResult ? "Geo shape file" : "Attach File"}
+                        {' '}
+                        {cropResult
+                          ? 'Geo shape file'
+                          : 'Attach File'}
                       </label>
                       {cropResult ? (
                         <Dropzone
-                          onDrop={acceptedFile => readFile(acceptedFile)}
+                          onDrop={acceptedFile =>
+                            readFile(acceptedFile)
+                          }
                         >
                           {({ getRootProps, getInputProps }) => {
                             return (
@@ -476,7 +486,9 @@ export default class TeamMapLayer extends Component {
                         </Dropzone>
                       ) : (
                         <Dropzone
-                          onDrop={acceptedFile => readFile(acceptedFile)}
+                          onDrop={acceptedFile =>
+                            readFile(acceptedFile)
+                          }
                         >
                           {({ getRootProps, getInputProps }) => {
                             return (

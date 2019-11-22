@@ -1,27 +1,30 @@
-import React, { Component } from "react";
-import { OverlayTrigger, Tooltip, Dropdown } from "react-bootstrap";
-import Cropper from "react-cropper";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import Table from "react-bootstrap/Table";
-import CountCard from "../../common/CountCard";
-import { AvatarContentLoader } from "../../common/Loader";
-import SubmissionModal from "./SubmissionModal";
-import Modal from "../../common/Modal";
-import Td from "../../common/TableData";
-import { DotLoader } from "../../common/Loader";
-import { Link } from "react-router-dom";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import Cropper from 'react-cropper';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import Table from 'react-bootstrap/Table';
+import CountCard from '../../common/CountCard';
+import { AvatarContentLoader, DotLoader } from '../../common/Loader';
+import SubmissionModal from './SubmissionModal';
+import Modal from '../../common/Modal';
+import Td from '../../common/TableData';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/no-array-index-key  */
 
 // const projectId = window.project_id ? window.project_id : 137;
 
 class DashboardHeader extends Component {
   saveImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    const { siteId, closeModal, putCropImage } = this.props;
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     const croppedImage = this.cropper.getCroppedCanvas().toDataURL();
-    this.props.putCropImage(this.props.siteId, croppedImage);
-    this.props.closeModal("Cropper");
+    putCropImage(siteId, croppedImage);
+    closeModal('Cropper');
   };
 
   rotate = () => {
@@ -62,44 +65,48 @@ class DashboardHeader extends Component {
         hasWritePermission,
         projectId,
         currentProgress,
-        type
+        type,
       },
       rotate,
-      rotateLeft
+      rotateLeft,
     } = this;
 
     const ManageDropdown = [
       {
-        title: "Generate Report",
+        title: 'Generate Report',
         link: `/fieldsight/site-dashboard/${siteId}/`,
-        id: "app.generate-report"
+        id: 'app.generate-report',
       },
       {
-        title: "View Data",
+        title: 'View Data',
         link: `/fieldsight/application/#/site-responses/${siteId}/general/`,
-        id: "app.view-data"
-      }
+        id: 'app.view-data',
+      },
     ];
 
     const HeaderDropdown = [
       {
         title: `Edit ${termsAndLabels && termsAndLabels.site}`,
-        link: `/fieldsight/application/#/site-edit/${siteId}/`
+        link: `/fieldsight/application/#/site-edit/${siteId}/`,
       },
       {
         title: `${termsAndLabels && termsAndLabels.site} documents`,
-        link: `/fieldsight/application/#/site-documents/${siteId}/`
+        link: `/fieldsight/application/#/site-documents/${siteId}/`,
       },
       {
-        title: "users",
+        title: 'users',
         link: `/fieldsight/manage/people/site/${siteId}/`,
-        id: "app.users"
       },
       {
-        title: "forms",
+        title: 'users',
+        link: `/fieldsight/manage/people/site/${siteId}/`,
+        id: 'app.users',
+      },
+      {
+        title: 'forms',
         link: `/fieldsight/application/#/site/manage-forms/0/${siteId}/generalform`,
-        id: "app.forms"
-      }
+        id: 'app.forms',
+      },
     ];
 
     return (
@@ -113,7 +120,7 @@ class DashboardHeader extends Component {
                 style={{
                   backgroundImage: `url(${logo})`,
                   // height: "80px",
-                  width: "80px"
+                  width: '80px',
                   // borderRadius: "100%",
                   // backgroundRepeat: "no-repeat",
                   // backgroundSize: "cover"
@@ -123,15 +130,25 @@ class DashboardHeader extends Component {
                 <span />
                 <figcaption>
                   <a
+                    onKeyDown={() => {
+                      openModal('Gallery');
+                    }}
+                    tabIndex="0"
+                    role="button"
                     className="photo-preview"
-                    onClick={() => openModal("Gallery")}
+                    onClick={() => openModal('Gallery')}
                   >
                     <i className="la la-eye" />
                   </a>
                   {hasWritePermission && (
                     <a
+                      tabIndex="0"
+                      role="button"
                       className="photo-edit"
-                      onClick={() => openModal("Cropper")}
+                      onClick={() => openModal('Cropper')}
+                      onKeyDown={() => {
+                        openModal('Cropper');
+                      }}
                     >
                       <i className="la la-camera" />
                     </a>
@@ -233,7 +250,11 @@ class DashboardHeader extends Component {
 
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                  <Dropdown.Item
+                    href={item.link}
+                    key={i}
+                    target="_blank"
+                  >
                     {/*item.title*/}
                     <FormattedMessage
                       id={item.id}
@@ -264,7 +285,11 @@ class DashboardHeader extends Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
                   {HeaderDropdown.map((item, i) => (
-                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                    <Dropdown.Item
+                      href={item.link}
+                      key={i}
+                      target="_blank"
+                    >
                       {!!item.id ? (
                         <FormattedMessage
                           id={item.id}
@@ -283,7 +308,10 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <Link to={`/site-responses/${siteId}/general`} target="_blank">
+            <Link
+              to={`/site-responses/${siteId}/general`}
+              target="_blank"
+            >
               <CountCard
                 countName=""
                 countNumber={totalSubmission}
@@ -293,33 +321,41 @@ class DashboardHeader extends Component {
             <a
               href={`/fieldsight/application/#/site-users/${siteId}/`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <CountCard
                 countName="User"
                 countNumber={totalUsers}
                 icon="la-user"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
             {enableSubsites && (
-              <a onClick={() => openModal("Subsites")}>
+              <a
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  closeModal('Subsites');
+                }}
+                onClick={() => openModal('Subsites')}
+              >
                 <CountCard
                   countName="Subsite"
                   countNumber={totalSubsites}
                   icon="la-map-marker"
-                  noSubmissionText={true}
+                  noSubmissionText
                 />
               </a>
             )}
 
             {hasWritePermission && (
               <div className="add-data">
-                <a onClick={() => openModal("Header")}>
-                  {" "}
+                <a onClick={() => openModal('Header')}>
+                  {' '}
                   <FormattedMessage
                     id="app.addData"
                     defaultMessage="Add Data"
-                  />{" "}
+                  />{' '}
                   <i className="la la-plus" />
                 </a>
               </div>
@@ -328,7 +364,7 @@ class DashboardHeader extends Component {
               countName="Progress"
               icon="la-signal"
               countNumber={currentProgress}
-              noSubmissionText={true}
+              noSubmissionText
             />
           </div>
 
@@ -337,16 +373,23 @@ class DashboardHeader extends Component {
               showDotLoader={showDotLoader}
               siteForms={siteForms}
               activeTab={activeTab}
-              closeModal={() => closeModal("Header")}
+              closeModal={() => closeModal('Header')}
               toggleTab={toggleTab}
               enableSubsites={enableSubsites}
             />
           )}
 
           {showCropper && (
-            <Modal title="Preview" toggleModal={() => closeModal("Cropper")}>
+            <Modal
+              title="Preview"
+              toggleModal={() => closeModal('Cropper')}
+            >
               <div className="cropper-btn">
-                <button onClick={rotate} className="fieldsight-btn">
+                <button
+                  type="button"
+                  onClick={rotate}
+                  className="fieldsight-btn"
+                >
                   <OverlayTrigger
                     placement="top"
                     overlay={
@@ -361,7 +404,11 @@ class DashboardHeader extends Component {
                     <i className="la la-rotate-left" />
                   </OverlayTrigger>
                 </button>
-                <button onClick={rotateLeft} className="fieldsight-btn">
+                <button
+                  type="button"
+                  onClick={rotateLeft}
+                  className="fieldsight-btn"
+                >
                   <OverlayTrigger
                     placement="top"
                     overlay={
@@ -400,9 +447,9 @@ class DashboardHeader extends Component {
                       <div
                         className="img-preview"
                         style={{
-                          width: "100%",
+                          width: '100%',
                           height: 400,
-                          overflow: "hidden"
+                          overflow: 'hidden',
                         }}
                       />
                     </figure>
@@ -410,8 +457,9 @@ class DashboardHeader extends Component {
                 </div>
                 <div className="col-md-12 text-right">
                   <button
+                    type="button"
                     className="fieldsight-btn"
-                    style={{ marginTop: "15px" }}
+                    style={{ marginTop: '15px' }}
                     onClick={this.saveImage}
                   >
                     <FormattedMessage
@@ -426,7 +474,9 @@ class DashboardHeader extends Component {
           {showSubsites && (
             <Modal
               title="Subsites"
-              toggleModal={() => closeModal("Subsites")}
+              toggleModal={() => {
+                closeModal('Subsites');
+              }}
               showButton={enableSubsites && hasWritePermission}
               url={`/fieldsight/application/#/sub-site-add/${projectId}/${siteId}`}
             >
@@ -491,10 +541,12 @@ class DashboardHeader extends Component {
                                 aria-valuenow="40"
                                 aria-valuemin="0"
                                 aria-valuemax="200"
-                                style={{ width: subSite.progress + "%" }}
+                                style={{
+                                  width: `${subSite.progress} %`,
+                                }}
                               >
                                 <span className="progress-count">
-                                  {subSite.progress + "%"}
+                                  {`${subSite.progress} %`}
                                 </span>
                               </div>
                             </div>
@@ -515,20 +567,34 @@ class DashboardHeader extends Component {
           )}
           {showGallery && (
             <div
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                closeModal('Gallery');
+              }}
               className="gallery-zoom fieldsight-popup open"
               style={{ zIndex: 99999 }}
-              onClick={() => closeModal("Gallery")}
+              onClick={() => {
+                closeModal('Gallery');
+              }}
             >
               <div className="gallery-body">
                 <img
                   src={logo}
                   alt="logo"
-                  style={{ minHeight: "400px", maxHeight: "400px" }}
+                  style={{ minHeight: '400px', maxHeight: '400px' }}
                 />
               </div>
               <span
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  closeModal('Gallery');
+                }}
                 className="popup-close"
-                onClick={() => closeModal("Gallery")}
+                onClick={() => {
+                  closeModal('Gallery');
+                }}
               >
                 <i className="la la-close" />
               </span>

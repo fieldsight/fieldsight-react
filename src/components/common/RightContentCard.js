@@ -1,12 +1,12 @@
-import React from "react";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const RightContentCard = ({
   title,
   addButton,
   hideButton,
   toggleModal,
-  children
+  children,
 }) => (
   <div className="card">
     <div className="card-header main-card-header">

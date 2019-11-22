@@ -1,5 +1,5 @@
-import React from "react";
-import { RegionConsumer } from "../context";
+import React from 'react';
+import { RegionConsumer } from '../context';
 
 const WithContext = Component => {
   return props => (

@@ -1,17 +1,20 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import { DotLoader } from "../myForm/Loader";
-import { RegionContext } from "../../context";
-import isEmpty from "../../utils/isEmpty";
-import { FormattedMessage, injectIntl } from "react-intl";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { DotLoader } from '../myForm/Loader';
+import { RegionContext } from '../../context';
+import isEmpty from '../../utils/isEmpty';
 
-import withPagination from "../../hoc/WithPagination";
+import withPagination from '../../hoc/WithPagination';
+/* eslint-disable react/prop-types  */
+/* eslint-disable camelcase */
+/* eslint-disable react/no-array-index-key */
 
-let base_url = window.base_url
+const base_url = window.base_url
   ? window.base_url
-  : "https://fieldsight.naxa.com.np";
+  : 'https://fieldsight.naxa.com.np';
 
 const project_id = window.project_id ? window.project_id : 137;
 
@@ -21,7 +24,7 @@ const exportSites = site => {
       id="app.export"
       defaultMessage="Export {name}"
       values={{
-        name: site
+        name: site,
       }}
     />
   );
@@ -32,19 +35,23 @@ const siteName = site => {
       id="app.name"
       defaultMessage="{name} Export"
       values={{
-        name: site
+        name: site,
       }}
     />
   );
 };
 
 class ProjectSiteTable extends Component {
-  static contextType = RegionContext;
+  constructor(props) {
+    super(props);
+
+    this.contextType = RegionContext;
+  }
 
   componentDidMount() {
     this.props.paginationHandler(1, null, {
-      type: "projectSiteList",
-      projectId: project_id
+      type: 'projectSiteList',
+      projectId: project_id,
     });
   }
 
@@ -53,21 +60,33 @@ class ProjectSiteTable extends Component {
       prevProps.breadcrumbhandler(prevProps.breadcrumbs);
     }
   }
+
   onChangeHandler = e => {
     const searchValue = e.target.value;
     this.props.searchHandler(
       searchValue,
       `/fv3/api/project-site-list/?page=1&project=${project_id}&q=${searchValue}`,
       {
-        type: "projectSiteList",
-        projectId: project_id
-      }
+        type: 'projectSiteList',
+        projectId: project_id,
+      },
     );
   };
 
   render() {
     const {
-      context: { terms }
+      context: { terms },
+      props: {
+        OpenTabHandler,
+        dLoader,
+        siteList,
+        fromData,
+        toData,
+        totalCount,
+        pageNum,
+        paginationHandler,
+        renderPageNumbers,
+      },
     } = this;
     const { formatMessage } = this.props.intl;
 
@@ -78,7 +97,10 @@ class ProjectSiteTable extends Component {
             {!isEmpty(terms) ? (
               `${terms.site}`
             ) : (
-              <FormattedMessage id="app.sites" defaultMessage="Sites" />
+              <FormattedMessage
+                id="app.sites"
+                defaultMessage="Sites"
+              />
             )}
           </h5>
           <div className="dash-btn">
@@ -93,23 +115,23 @@ class ProjectSiteTable extends Component {
                   type="search"
                   className="form-control"
                   onChange={this.onChangeHandler}
-                  placeholder={formatMessage({ id: "app.teams-search" })}
+                  placeholder={formatMessage({
+                    id: 'app.teams-search',
+                  })}
                 />
 
                 <i className="la la-search" />
               </div>
             </form>
             <button
+              type="button"
               className="fieldsight-btn"
-              onClick={e =>
-                this.props.OpenTabHandler(
+              onClick={e => {
+                OpenTabHandler(
                   e,
-                  base_url +
-                    "/fieldsight/application/#/create-site/" +
-                    project_id +
-                    "/"
-                )
-              }
+                  `${base_url}/fieldsight/application/#/create-site/${project_id} /`,
+                );
+              }}
             >
               <i className="la la-plus" />
             </button>
@@ -117,6 +139,7 @@ class ProjectSiteTable extends Component {
               className="fieldsight-btn"
               href={`/fieldsight/multi-site-assign-region/${project_id}/`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <FormattedMessage
                 id="app.assignSitestoRegions"
@@ -127,6 +150,7 @@ class ProjectSiteTable extends Component {
               className="fieldsight-btn"
               href={`/fieldsight/bulksitesample/${project_id}/1/`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               {!isEmpty(terms) ? (
                 exportSites(terms.site)
@@ -138,13 +162,14 @@ class ProjectSiteTable extends Component {
               )}
             </a>
             <button
+              type="button"
               className="fieldsight-btn"
-              onClick={e =>
-                this.props.OpenTabHandler(
+              onClick={e => {
+                OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/upload/" + project_id + "/"
-                )
-              }
+                  `base_url/fieldsight/upload/${project_id}/`,
+                );
+              }}
             >
               <FormattedMessage
                 id="app.bulkUpload/update"
@@ -154,7 +179,7 @@ class ProjectSiteTable extends Component {
           </div>
         </div>
         <div className="card-body">
-          <div style={{ position: "relative", height: "800px" }}>
+          <div style={{ position: 'relative', height: '800px' }}>
             <PerfectScrollbar>
               <Table
                 responsive="xl"
@@ -173,10 +198,13 @@ class ProjectSiteTable extends Component {
                       )}
                     </th>
                     <th>
-                      <FormattedMessage id="app.id" defaultMessage="Id" />
+                      <FormattedMessage
+                        id="app.id"
+                        defaultMessage="Id"
+                      />
                     </th>
                     <th>
-                      {" "}
+                      {' '}
                       <FormattedMessage
                         id="app.address"
                         defaultMessage="Address"
@@ -189,7 +217,10 @@ class ProjectSiteTable extends Component {
                       />
                     </th>
                     <th>
-                      <FormattedMessage id="app.type" defaultMessage="Type" />
+                      <FormattedMessage
+                        id="app.type"
+                        defaultMessage="Type"
+                      />
                     </th>
                     <th>
                       <FormattedMessage
@@ -213,7 +244,7 @@ class ProjectSiteTable extends Component {
                 </thead>
 
                 <tbody>
-                  {!this.props.dLoader && this.props.siteList.length === 0 && (
+                  {!dLoader && siteList.length === 0 && (
                     <tr>
                       <td>
                         <p>No Form Data Available</p>
@@ -221,15 +252,12 @@ class ProjectSiteTable extends Component {
                     </tr>
                   )}
 
-                  {!this.props.dLoader &&
-                    this.props.siteList.map((item, i) => (
+                  {!dLoader &&
+                    siteList.map((item, i) => (
                       <tr key={i}>
                         <td>
                           <a
-                            href={
-                              "/fieldsight/application/#/site-dashboard/" +
-                              item.id
-                            }
+                            href={`/fieldsight/application/#/site-dashboard/${item.id}`}
                             className="pending table-profile"
                           >
                             <figure>
@@ -255,10 +283,10 @@ class ProjectSiteTable extends Component {
                               aria-valuenow="40"
                               aria-valuemin="0"
                               aria-valuemax="200"
-                              style={{ width: item.progress + "%" }}
+                              style={{ width: `${item.progress} %` }}
                             >
                               <span className="progress-count">
-                                {item.progress + "%"}
+                                {`${item.progress} %`}
                               </span>
                             </div>
                           </div>
@@ -269,66 +297,77 @@ class ProjectSiteTable extends Component {
                             className={
                               item.status != null
                                 ? item.status.toLowerCase()
-                                : ""
+                                : ''
                             }
                           >
                             {item.status != null
                               ? item.status
-                              : "No Submission Yet"}
+                              : 'No Submission Yet'}
                           </a>
                         </td>
                       </tr>
                     ))}
                 </tbody>
               </Table>
-              {this.props.dLoader && <DotLoader />}
+              {dLoader && <DotLoader />}
             </PerfectScrollbar>
           </div>
-          {this.props.siteList.length > 0 && (
+          {siteList.length > 0 && (
             <div className="table-footer">
               <div className="showing-rows">
                 <p>
-                  Showing <span>{this.props.fromData}</span> to{" "}
+                  Showing
+                  <span>{fromData}</span>
+                  to
                   <span>
-                    {" "}
-                    {this.props.toData > this.props.totalCount
-                      ? this.props.totalCount
-                      : this.props.toData}{" "}
-                  </span>{" "}
-                  of <span>{this.props.totalCount}</span> entries.
+                    {toData > totalCount ? totalCount : toData}
+                  </span>
+                  of
+                  <span>{totalCount}</span>
+                  entries.
                 </p>
               </div>
-              {this.props.toData < this.props.totalCount ? (
+              {toData < totalCount ? (
                 <div className="table-pagination">
                   <ul>
                     <li className="page-item">
                       <a
-                        onClick={e =>
-                          this.props.paginationHandler(
-                            this.props.pageNum - 1,
-                            null,
-                            project_id
-                          )
-                        }
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          paginationHandler(pageNum - 1, null, {
+                            projectId: project_id,
+                          });
+                        }}
+                        onClick={() => {
+                          paginationHandler(pageNum - 1, null, {
+                            projectId: project_id,
+                          });
+                        }}
                       >
                         <i className="la la-long-arrow-left" />
                       </a>
                     </li>
 
-                    {this.props.renderPageNumbers({
-                      type: "projectSiteList",
-                      projectId: project_id
+                    {renderPageNumbers({
+                      type: 'projectSiteList',
+                      projectId: project_id,
                     })}
 
                     <li className="page-item ">
                       <a
-                        onClick={e =>
-                          this.props.paginationHandler(
-                            this.props.pageNum + 1,
-                            null,
-                            project_id
-                          )
-                        }
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          paginationHandler(pageNum + 1, null, {
+                            projectId: project_id,
+                          });
+                        }}
+                        onClick={() => {
+                          paginationHandler(pageNum + 1, null, {
+                            projectId: project_id,
+                          });
+                        }}
                       >
                         <i className="la la-long-arrow-right" />
                       </a>

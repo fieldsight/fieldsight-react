@@ -1,43 +1,47 @@
-import React, { Component } from "react";
-import Edit from "../common/editProject";
-import axios from "axios";
+import React, { Component } from 'react';
+import Edit from '../common/editProject';
+import axios from 'axios';
 
 export default class ProjectAdd extends Component {
   _isMounted = false;
-  state = {
-    project: {
-      name: "",
-      phone: "",
-      email: "",
-      address: "",
-      website: "",
-      donor: "",
-      public_desc: "",
-      cluster_sites: false
-    },
-    loaded: 0,
-    sector: [],
-    subSectors: [],
-    selectedSector: "",
-    selectedSubSector: "",
-    position: {
-      latitude: "28.3949",
-      longitude: "-0.09"
-    },
-    zoom: 13,
-    src: "",
-    showCropper: false,
-    cropResult: "",
-    isLoading: false,
-    redirect: false,
-    breadcrumbs: {}
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      project: {
+        name: '',
+        phone: '',
+        email: '',
+        address: '',
+        website: '',
+        donor: '',
+        public_desc: '',
+        cluster_sites: false,
+      },
+      loaded: 0,
+      sector: [],
+      subSectors: [],
+      selectedSector: '',
+      selectedSubSector: '',
+      position: {
+        latitude: '28.3949',
+        longitude: '-0.09',
+      },
+      zoom: 13,
+      src: '',
+      showCropper: false,
+      cropResult: '',
+      isLoading: false,
+      redirect: false,
+      breadcrumbs: {},
+    };
+  }
+
   componentDidMount() {
     this._isMounted = true;
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
     axios
       .get(`/fv3/api/sectors-subsectors/`)
@@ -47,18 +51,19 @@ export default class ProjectAdd extends Component {
           .then(location => {
             if (this._isMounted) {
               const position =
-                location.data.location && location.data.location.split(" ");
-              const longitude = position && position[1].split("(")[1];
-              const latitude = position && position[2].split(")")[0];
+                location.data.location &&
+                location.data.location.split(' ');
+              const longitude = position && position[1].split('(')[1];
+              const latitude = position && position[2].split(')')[0];
               const breadcrumbs = location.data.breadcrumbs;
               this.setState({
                 sector: res.data,
                 id,
                 position: {
                   longitude,
-                  latitude
+                  latitude,
                 },
-                breadcrumbs
+                breadcrumbs,
               });
             }
           })
@@ -67,7 +72,7 @@ export default class ProjectAdd extends Component {
           });
       })
       .catch(err => {
-        console.log(err, "err");
+        console.log(err, 'err');
       });
   }
 
@@ -87,7 +92,7 @@ export default class ProjectAdd extends Component {
       selectedSubSector: this.state.selectedSubSector,
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude,
-      cropResult: this.state.cropResult
+      cropResult: this.state.cropResult,
     };
 
     axios
@@ -96,28 +101,30 @@ export default class ProjectAdd extends Component {
         if (res.status === 201) {
           this.setState({
             project: {
-              name: "",
-              phone: "",
-              email: "",
-              address: "",
-              website: "",
-              donor: "",
-              public_desc: "",
-              cluster_sites: false
+              name: '',
+              phone: '',
+              email: '',
+              address: '',
+              website: '',
+              donor: '',
+              public_desc: '',
+              cluster_sites: false,
             },
             loaded: 0,
             sector: [],
             subSectors: [],
-            selectedSector: "",
-            selectedSubSector: "",
+            selectedSector: '',
+            selectedSubSector: '',
             position: {
-              latitude: "28.3949",
-              longitude: "-0.09"
+              latitude: '28.3949',
+              longitude: '-0.09',
             },
-            cropResult: "",
-            redirect: true
+            cropResult: '',
+            redirect: true,
           });
-          this.props.history.push(`/project-dashboard/${res.data.id}`);
+          this.props.history.push(
+            `/project-dashboard/${res.data.id}`,
+          );
         }
       })
       .catch(err => {
@@ -129,16 +136,18 @@ export default class ProjectAdd extends Component {
     const { value } = e.target;
     if (subSect) {
       const selectedSubSectorId = this.state.subSectors.find(
-        subSect => subSect.id === +value
+        subSect => subSect.id === +value,
       ).id;
       return this.setState({
-        selectedSubSector: selectedSubSectorId
+        selectedSubSector: selectedSubSectorId,
       });
     }
-    const selectedSector = this.state.sector.find(sect => sect.id === +value);
+    const selectedSector = this.state.sector.find(
+      sect => sect.id === +value,
+    );
     this.setState({
       subSectors: selectedSector.subSectors,
-      selectedSector: selectedSector.id
+      selectedSector: selectedSector.id,
     });
   };
 
@@ -146,8 +155,8 @@ export default class ProjectAdd extends Component {
     this.setState({
       project: {
         ...this.state.project,
-        cluster_sites: e.target.checked
-      }
+        cluster_sites: e.target.checked,
+      },
     });
 
   onChangeHandler = (e, position) => {
@@ -156,16 +165,16 @@ export default class ProjectAdd extends Component {
       return this.setState({
         position: {
           ...this.state.position,
-          [name]: value
-        }
+          [name]: value,
+        },
       });
     }
 
     this.setState({
       project: {
         ...this.state.project,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   };
 
@@ -174,7 +183,7 @@ export default class ProjectAdd extends Component {
     reader.onload = () => {
       this.setState({
         src: reader.result,
-        showCropper: true
+        showCropper: true,
       });
     };
     reader.readAsDataURL(file[0]);
@@ -184,13 +193,13 @@ export default class ProjectAdd extends Component {
     this.setState({
       cropResult: image,
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
 
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
 
@@ -199,10 +208,11 @@ export default class ProjectAdd extends Component {
       position: {
         ...this.state.position,
         latitude: e.latlng.lat,
-        longitude: e.latlng.lng
-      }
+        longitude: e.latlng.lng,
+      },
     });
   };
+
   render() {
     const {
       project: {
@@ -215,10 +225,10 @@ export default class ProjectAdd extends Component {
         cluster_sites,
         donor,
         logo,
-        organization
+        organization,
       },
       position: { latitude, longitude },
-      breadcrumbs
+      breadcrumbs,
     } = this.state;
 
     return (
@@ -229,7 +239,9 @@ export default class ProjectAdd extends Component {
               <li className="breadcrumb-item">
                 <a href={breadcrumbs.name_url}>{breadcrumbs.name}</a>
               </li>
-              <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+              <li className="breadcrumb-item">
+                {breadcrumbs.current_page}
+              </li>
             </ol>
           )}
         </nav>
@@ -264,7 +276,7 @@ export default class ProjectAdd extends Component {
           isLoading={this.state.isLoading}
           subSectors={this.state.subSectors}
           readFile={this.readFile}
-          title={"New Project"}
+          title={'New Project'}
         />
       </>
     );

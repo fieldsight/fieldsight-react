@@ -1,15 +1,16 @@
-import React, { Component } from "react";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import MyformTable from "./MyformTable";
-import SharedTable from "./SharedTable";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import MyformTable from './MyformTable';
+import SharedTable from './SharedTable';
+import { FormattedMessage } from 'react-intl';
 
-const base_url = "https://fieldsight.naxa.com.np";
+const base_url = 'https://fieldsight.naxa.com.np';
 
 class MyFormContent extends Component {
   render() {
+    const { OpenTabHandler, commonPopupHandler } = this.props;
     return (
-      <React.Fragment>
+      <>
         <div className="col-xl-9 col-lg-8">
           <div className="right-content">
             <div className="tab-content">
@@ -25,14 +26,14 @@ class MyFormContent extends Component {
                     </h5>
                     <div className="add-btn">
                       <a
-                        href={base_url + "/forms/create/"}
+                        href={base_url + '/forms/create/'}
                         target="_blank"
                         data-tab="site-popup"
                       >
                         <FormattedMessage
                           id="app.create-new"
                           defaultMessage="Create New"
-                        />{" "}
+                        />{' '}
                         <span>
                           <i className="la la-plus" />
                         </span>
@@ -41,8 +42,8 @@ class MyFormContent extends Component {
                   </div>
                   <div className="card-body">
                     <MyformTable
-                      OpenTabHandler={this.props.OpenTabHandler}
-                      commonPopupHandler={this.props.commonPopupHandler}
+                      OpenTabHandler={OpenTabHandler}
+                      commonPopupHandler={commonPopupHandler}
                     />
                   </div>
                 </div>
@@ -50,7 +51,7 @@ class MyFormContent extends Component {
                 <div className="card no-boxshadow mrt-30">
                   <div className="card-header main-card-header sub-card-header">
                     <h5>
-                      {" "}
+                      {' '}
                       <FormattedMessage
                         id="app.formsSharedWithMe"
                         defaultMessage="Forms Shared With Me"
@@ -59,8 +60,8 @@ class MyFormContent extends Component {
                   </div>
                   <div className="card-body">
                     <SharedTable
-                      OpenTabHandler={this.props.OpenTabHandler}
-                      commonPopupHandler={this.props.commonPopupHandler}
+                      OpenTabHandler={OpenTabHandler}
+                      commonPopupHandler={commonPopupHandler}
                     />
                   </div>
                 </div>
@@ -68,7 +69,7 @@ class MyFormContent extends Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

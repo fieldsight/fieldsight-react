@@ -1,36 +1,41 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
-import format from "date-fns/format";
-import { DotLoader } from "../../myForm/Loader";
-import { FormattedMessage } from "react-intl";
-
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
+import format from 'date-fns/format';
+import PropTypes from 'prop-types';
+import { DotLoader } from '../../myForm/Loader';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable camelcase */
 export default class SurveyFormResponseTable extends Component {
-  state = {
-    survey_forms: [],
-    loader: ""
-  };
-
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props) {
     return {
       survey_forms: props.survey_forms,
-      loader: props.loader
+      loader: props.loader,
     };
   }
 
   render() {
-    const { loader, survey_forms } = this.props;
+    const { loader, survey_forms, id } = this.props;
     return (
-      <React.Fragment>
-        {loader == true ? (
-          <Table responsive="xl" className="table  table-bordered  dataTable ">
+      <>
+        {loader === true ? (
+          <Table
+            responsive="xl"
+            className="table  table-bordered  dataTable "
+          >
             <thead>
               <tr>
                 <th>
-                  <FormattedMessage id="app.name" defaultMessage="Name" />
+                  <FormattedMessage
+                    id="app.name"
+                    defaultMessage="Name"
+                  />
                 </th>
                 <th>
-                  <FormattedMessage id="app.title" defaultMessage="Title" />
+                  <FormattedMessage
+                    id="app.title"
+                    defaultMessage="Title"
+                  />
                 </th>
                 <th>
                   <FormattedMessage
@@ -39,7 +44,7 @@ export default class SurveyFormResponseTable extends Component {
                   />
                 </th>
                 <th>
-                  {" "}
+                  {' '}
                   <FormattedMessage
                     id="app.created-date"
                     defaultMessage="Created Date"
@@ -57,34 +62,41 @@ export default class SurveyFormResponseTable extends Component {
                     defaultMessage="Submissions"
                   />
                 </th>
-                <th style={{ width: "13%" }}>
-                  <FormattedMessage id="app.action" defaultMessage="Action" />
+                <th style={{ width: '13%' }}>
+                  <FormattedMessage
+                    id="app.action"
+                    defaultMessage="Action"
+                  />
                 </th>
               </tr>
             </thead>
             <tbody>
               {survey_forms.length > 0 &&
-                survey_forms.map((survey, key) => {
+                survey_forms.map(survey => {
                   return (
-                    <tr key={key}>
+                    <tr key={survey.id}>
                       <td>{survey.name}</td>
                       <td>{survey.title}</td>
                       <td>
-                        {survey.last_response && survey.last_response.length > 0
+                        {survey.last_response &&
+                        survey.last_response.length > 0
                           ? format(survey.last_response, [
-                              "MMMM Do YYYY, h:mm:ss a"
+                              'MMMM Do YYYY, h:mm:ss a',
                             ])
-                          : ""}
+                          : ''}
                       </td>
                       <td>{survey.created_date}</td>
                       <td>
                         <a target="_blank" href="/forms/new/0/297449">
-                          <i className="la la-plus" aria-hidden="true"></i>
+                          <i
+                            className="la la-plus"
+                            aria-hidden="true"
+                          />
                         </a>
                       </td>
                       <td>
                         <Link
-                          to={`/submission-data/${this.props.id}/${survey.id}`}
+                          to={`/submission-data/${id}/${survey.id}`}
                         >
                           {survey.response_count}
                         </Link>
@@ -93,30 +105,34 @@ export default class SurveyFormResponseTable extends Component {
                         {
                           <Link
                             className="view-tag tag"
-                            to={`/submission-data/${this.props.id}/${survey.id}`}
+                            to={`/submission-data/${id}/${survey.id}`}
                           >
-                            <i className="la la-eye"></i>
+                            <i className="la la-eye" />
                           </Link>
                         }
                         {survey.download_url === null ? (
-                          <a className="edit-tag tag disable pointer">
-                            <i className="la la-download"></i>
+                          <a
+                            href="#"
+                            className="edit-tag tag disable-pointer"
+                          >
+                            <i className="la la-download" />
                           </a>
                         ) : (
                           <a
                             href={survey.download_url}
                             className="edit-tag tag"
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
-                            <i className="la la-download"></i>
+                            <i className="la la-download" />
                           </a>
                         )}
                         {
                           <Link
                             className="pending-tag tag"
-                            to={`/project-version-submission/${this.props.id}/${survey.id}`}
+                            to={`/project-version-submission/${id}/${survey.id}`}
                           >
-                            <i className="la la-clone "></i>
+                            <i className="la la-clone " />
                           </Link>
                         }
                       </td>
@@ -128,7 +144,13 @@ export default class SurveyFormResponseTable extends Component {
         ) : (
           <DotLoader />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
+
+SurveyFormResponseTable.propTypes = {
+  survey_forms: PropTypes.arrayOf.isRequired,
+  loader: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
+};

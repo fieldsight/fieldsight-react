@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Table as BootstrapTable } from "react-bootstrap";
-import TableHeader from "./TableHeader";
-import TableRow from "./TableRow";
-import { DotLoader } from "./Loader";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import React, { Component } from 'react';
+import { Table as BootstrapTable } from 'react-bootstrap';
+import TableHeader from './TableHeader';
+import TableRow from './TableRow';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+
 export default class Table extends Component {
   render() {
     const {
@@ -12,14 +12,14 @@ export default class Table extends Component {
       forms,
       page,
       removeHandler,
-      editHandler
+      editHandler,
     } = this.props;
     return (
       <div
         className="table-responsive"
         style={{
-          position: "relative",
-          ...(tableRow.length > 10 && { height: "290px" })
+          position: 'relative',
+          ...(tableRow.length > 10 && { height: '290px' }),
         }}
       >
         <PerfectScrollbar>

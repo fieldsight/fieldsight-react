@@ -1,27 +1,29 @@
-import React, { Component } from "react";
-import axios from "axios";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import FormShare from "./formShare";
-import { DotLoader } from "./Loader";
-import Modal from "../common/Modal";
-import DeleteModal from "../common/DeleteModal";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import axios from 'axios';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import FormShare from './formShare';
+import { DotLoader } from './Loader';
+import DeleteModal from '../common/DeleteModal';
+import { FormattedMessage } from 'react-intl';
 
-const url = "fv3/api/myforms/";
-const deleteUrl = "/fv3/api/form/delete/";
+const url = 'fv3/api/myforms/';
+const deleteUrl = '/fv3/api/form/delete/';
 
 class MyformTable extends Component {
   _isMounted = false;
-  state = {
-    project_list: [],
-    list: [],
-    shareOption: false,
-    dLoader: true,
-    tblDiv: false,
-    showDeleteConfirmation: false,
-    delete_id: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      project_list: [],
+      list: [],
+      shareOption: false,
+      dLoader: true,
+      tblDiv: false,
+      showDeleteConfirmation: false,
+      delete_id: null,
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -33,19 +35,19 @@ class MyformTable extends Component {
           if (res.status === 200) {
             const modifiedList = res.data.map(user => ({
               ...user,
-              share: false
+              share: false,
             }));
 
             this.setState({
               list: modifiedList,
-              dLoader: false
+              dLoader: false,
             });
           }
         }
       })
       .catch(err => {
         this.setState({
-          dLoader: false
+          dLoader: false,
         });
       });
   }
@@ -53,13 +55,13 @@ class MyformTable extends Component {
   deleteHandler = (e, ids) => {
     this.setState({
       delete_id: ids,
-      showDeleteConfirmation: true
+      showDeleteConfirmation: true,
     });
   };
 
   cancelHandler = () => {
     this.setState({
-      showDeleteConfirmation: false
+      showDeleteConfirmation: false,
     });
   };
 
@@ -67,10 +69,10 @@ class MyformTable extends Component {
     const formList = this.state.list.map(user =>
       user.id_string === id
         ? { ...user, share: !user.share }
-        : { ...user, share: false }
+        : { ...user, share: false },
     );
     this.setState({
-      list: formList
+      list: formList,
     });
   };
 
@@ -81,10 +83,12 @@ class MyformTable extends Component {
 
       .then(res => {
         const newUserList = [...this.state.list];
-        const deletedForm = newUserList.filter(user => user.id_string != id);
+        const deletedForm = newUserList.filter(
+          user => user.id_string != id,
+        );
         this.setState({
           list: deletedForm,
-          showDeleteConfirmation: false
+          showDeleteConfirmation: false,
         });
       })
       .catch(err => {
@@ -95,13 +99,14 @@ class MyformTable extends Component {
   };
 
   render() {
+    const { OpenTabHandler, commonPopupHandler } = this.props;
     return (
-      <React.Fragment>
+      <>
         <div className="myform-table">
           {/*  <div className="add-btn"><a href="#/" onClick={this.props.myFormPopup}>Add new <span><i className="la la-plus"></i></span></a></div> */}
           <div
             className="table-wrapper"
-            style={{ position: "relative", height: "500px" }}
+            style={{ position: 'relative', height: '500px' }}
           >
             <PerfectScrollbar>
               <table
@@ -123,14 +128,14 @@ class MyformTable extends Component {
                       />
                     </th>
                     <th>
-                      {" "}
+                      {' '}
                       <FormattedMessage
                         id="app.updatedDate"
                         defaultMessage="Updated date"
                       />
                     </th>
                     <th>
-                      {" "}
+                      {' '}
                       <FormattedMessage
                         id="app.action"
                         defaultMessage="Action"
@@ -143,8 +148,8 @@ class MyformTable extends Component {
                     <FormShare
                       key={i + 1}
                       item={item}
-                      OpenTabHandler={this.props.OpenTabHandler}
-                      commonPopupHandler={this.props.commonPopupHandler}
+                      OpenTabHandler={OpenTabHandler}
+                      commonPopupHandler={commonPopupHandler}
                       deleteHandler={this.deleteHandler}
                       shareToggle={this.shareToggle}
                     />
@@ -162,11 +167,11 @@ class MyformTable extends Component {
             onCancel={this.cancelHandler}
             onToggle={this.cancelHandler}
             message={
-              "Any submissions submitted in the form will be deleted and will be lost from project and sites associated. Are you sure you want to delete the form?"
+              'Any submissions submitted in the form will be deleted and will be lost from project and sites associated. Are you sure you want to delete the form?'
             }
           />
         )}
-      </React.Fragment>
+      </>
     );
   }
   componentWillUnmount() {

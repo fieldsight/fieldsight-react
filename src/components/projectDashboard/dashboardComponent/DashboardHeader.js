@@ -1,27 +1,29 @@
-import React from "react";
-import Cropper from "react-cropper";
-import { Link } from "react-router-dom";
-import pf from "../../../static/images/pf.jpg";
-import { Button, Dropdown } from "react-bootstrap";
-import CountCard from "../../common/CountCard";
-import { AvatarContentLoader } from "../../common/Loader";
-import { DotLoader } from "../../common/Loader";
-import Modal from "../../common/Modal";
-import SubmissionModal from "./SubmissionModel";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Dropdown } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import CountCard from '../../common/CountCard';
+import { AvatarContentLoader } from '../../common/Loader';
+import SubmissionModal from './SubmissionModel';
 
 class DashboardHeader extends React.Component {
-  state = {
-    openmodel: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      openmodel: false,
+    };
+  }
+
   saveImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    const { siteId, putCropImage, closeModal } = this.props;
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     const croppedImage = this.cropper.getCroppedCanvas().toDataURL();
-    this.props.putCropImage(this.props.siteId, croppedImage);
-    this.props.closeModal("Cropper");
+    putCropImage(siteId, croppedImage);
+    closeModal('Cropper');
   };
+
   rotate = () => {
     this.cropper.rotate(90);
   };
@@ -29,6 +31,7 @@ class DashboardHeader extends React.Component {
   rotateLeft = () => {
     this.cropper.rotate(-90);
   };
+
   render() {
     const {
       name,
@@ -47,48 +50,48 @@ class DashboardHeader extends React.Component {
       showGallery,
       isProjectManager,
       totalSubmissions,
-      surveyData
+      surveyData,
     } = this.props;
 
     const { openmodel } = this.state;
     const ManageDropdown = [
       {
-        title: "users",
+        title: 'users',
         link: `/fieldsight/manage/people/project/${id}/`,
-        id: "app.users"
+        id: 'app.users',
       },
       // { title: "forms", link: `/forms/setup-forms/1/${id}` },
       {
-        title: "forms",
+        title: 'forms',
         link: `/fieldsight/application/#/project/manage-forms/1/${id}/generalform`,
-        id: "app.forms"
+        id: 'app.forms',
       },
 
       {
         title: `${termsAndLabels && termsAndLabels.site}`,
         link: `/fieldsight/application/?project=${id}#/project-sitelist`,
         id:
-          `${termsAndLabels && termsAndLabels.site}` == "School"
-            ? "app.school"
-            : `${termsAndLabels && termsAndLabels.site}`
+          `${termsAndLabels && termsAndLabels.site}` == 'School'
+            ? 'app.school'
+            : `${termsAndLabels && termsAndLabels.site}`,
       },
       {
         title: `settings`,
         link: `/fieldsight/application/?project=${id}#/project-settings`,
-        id: "app.setting"
-      }
+        id: 'app.setting',
+      },
     ];
     const DataDropdown = [
       {
-        title: "Generate Report",
+        title: 'Generate Report',
         link: `/fieldsight/project-dashboard/${id}/`,
-        id: "app.generate-report"
+        id: 'app.generate-report',
       },
       {
-        title: "View Data",
+        title: 'View Data',
         link: `/fieldsight/application/#/project-responses/${id}/general/`,
-        id: "app.view-data"
-      }
+        id: 'app.view-data',
+      },
     ];
 
     return (
@@ -101,14 +104,14 @@ class DashboardHeader extends React.Component {
               <figure
                 style={{
                   backgroundImage: `url(${logo})`,
-                  width: "80px"
+                  width: '80px',
                 }}
               >
                 <span />
                 <figcaption>
                   <a
                     className="photo-preview"
-                    onClick={() => openModal("Gallery")}
+                    onClick={() => openModal('Gallery')}
                   >
                     <i className="la la-eye" />
                   </a>
@@ -141,7 +144,11 @@ class DashboardHeader extends React.Component {
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
                 {DataDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
+                  <Dropdown.Item
+                    href={item.link}
+                    key={i}
+                    target="_blank"
+                  >
                     {/*item.title*/}
                     <FormattedMessage
                       id={item.id}
@@ -172,7 +179,11 @@ class DashboardHeader extends React.Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
                   {ManageDropdown.map((item, i) => (
-                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                    <Dropdown.Item
+                      href={item.link}
+                      key={i}
+                      target="_blank"
+                    >
                       {/*item.title*/}
 
                       <FormattedMessage
@@ -189,7 +200,10 @@ class DashboardHeader extends React.Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <Link to={`/project-responses/${id}/general`} target="_blank">
+            <Link
+              to={`/project-responses/${id}/general`}
+              target="_blank"
+            >
               <CountCard
                 countName=""
                 countNumber={totalSubmissions}
@@ -222,7 +236,7 @@ class DashboardHeader extends React.Component {
             {isProjectManager && (
               <div className="add-data">
                 <a onClick={() => this.setState({ openmodel: true })}>
-                  {" "}
+                  {' '}
                   <FormattedMessage
                     id="app.addData"
                     defaultMessage="Add Data"
@@ -242,18 +256,18 @@ class DashboardHeader extends React.Component {
             <div
               className="gallery-zoom fieldsight-popup open"
               style={{ zIndex: 99999 }}
-              onClick={() => closeModal("Gallery")}
+              onClick={() => closeModal('Gallery')}
             >
               <div className="gallery-body">
                 <img
                   src={logo}
                   alt="logo"
-                  style={{ minHeight: "400px", maxHeight: "400px" }}
+                  style={{ minHeight: '400px', maxHeight: '400px' }}
                 />
               </div>
               <span
                 className="popup-close"
-                onClick={() => closeModal("Gallery")}
+                onClick={() => closeModal('Gallery')}
               >
                 <i className="la la-close" />
               </span>

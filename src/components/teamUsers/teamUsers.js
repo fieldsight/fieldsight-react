@@ -1,7 +1,8 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { Table } from "react-bootstrap";
-import { FormattedMessage, injectIntl } from "react-intl";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { Table } from 'react-bootstrap';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
 
 class TeamUser extends Component {
   constructor(props) {
@@ -9,15 +10,15 @@ class TeamUser extends Component {
     this.state = {
       users: [],
       breadcrumb: [],
-      masteruser: []
+      masteruser: [],
     };
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
     axios
       .get(`fv3/api/users/?team=${id}`)
@@ -25,7 +26,7 @@ class TeamUser extends Component {
         this.setState({
           users: res.data.users,
           breadcrumb: res.data.breadcrumbs,
-          masteruser: res.data.users
+          masteruser: res.data.users,
         });
       })
       .catch(err => {
@@ -35,22 +36,24 @@ class TeamUser extends Component {
 
   handleChange = async e => {
     const {
-      target: { value }
+      target: { value },
     } = e;
     if (value) {
       const search = await this.state.users.filter(users => {
         return (
-          users.full_name.toLowerCase().includes(value.toLowerCase()) ||
+          users.full_name
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           users.email.toLowerCase().includes(value.toLowerCase()) ||
           users.username.toLowerCase().includes(value.toLowerCase())
         );
       });
       this.setState({
-        users: search
+        users: search,
       });
     } else {
       this.setState({
-        users: this.state.masteruser
+        users: this.state.masteruser,
       });
     }
   };
@@ -81,7 +84,10 @@ class TeamUser extends Component {
               />
 
               <div className="dash-btn">
-                <form className="floating-form" onSubmit={this.handleSubmit}>
+                <form
+                  className="floating-form"
+                  onSubmit={this.handleSubmit}
+                >
                   <div className="form-group mr-0">
                     <input
                       type="search"
@@ -90,7 +96,7 @@ class TeamUser extends Component {
                       required
                     />
                     <label htmlFor="input">
-                      {" "}
+                      {' '}
                       <FormattedMessage
                         id="app.teams-search"
                         defaultMessage="Search"
@@ -109,7 +115,10 @@ class TeamUser extends Component {
                 <thead>
                   <tr>
                     <th>
-                      <FormattedMessage id="app.name" defaultMessage="Name" />
+                      <FormattedMessage
+                        id="app.name"
+                        defaultMessage="Name"
+                      />
                     </th>
                     <th>
                       <FormattedMessage
@@ -118,10 +127,16 @@ class TeamUser extends Component {
                       />
                     </th>
                     <th>
-                      <FormattedMessage id="app.email" defaultMessage="Email" />
+                      <FormattedMessage
+                        id="app.email"
+                        defaultMessage="Email"
+                      />
                     </th>
                     <th>
-                      <FormattedMessage id="app.role" defaultMessage="Role" />
+                      <FormattedMessage
+                        id="app.role"
+                        defaultMessage="Role"
+                      />
                     </th>
                   </tr>
                 </thead>
@@ -170,3 +185,6 @@ class TeamUser extends Component {
 }
 
 export default injectIntl(TeamUser);
+TeamUser.propTypes = {
+  match: PropTypes.objectOf.isRequired,
+};

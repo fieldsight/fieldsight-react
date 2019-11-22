@@ -1,18 +1,19 @@
-import React from "react";
-import CountCard from "../../common/CountCard";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import CountCard from '../../common/CountCard';
 
 const getIcon = submission => {
-  if (submission === "rejected") {
-    return "la-close";
-  } else if (submission === "approved") {
-    return "la-thumbs-up";
-  } else if (submission === "flagged") {
-    return "la-flag";
-  } else if (submission === "pending") {
-    return "la-hourglass-2";
+  if (submission === 'rejected') {
+    return 'la-close';
+  } else if (submission === 'approved') {
+    return 'la-thumbs-up';
+  } else if (submission === 'flagged') {
+    return 'la-flag';
+  } else if (submission === 'pending') {
+    return 'la-hourglass-2';
   }
 };
+
 const ShowCount = props => (
   <div className="col-xl-3 col-md-6">
     <Link to={props.link}>
@@ -26,6 +27,7 @@ const ShowCount = props => (
     </Link>
   </div>
 );
+
 class DashboardCounter extends React.Component {
   render() {
     const { projectActivity, id } = this.props;

@@ -1,9 +1,12 @@
-import { GET_TEAMS, GET_TRANSLATION } from "../actions/types";
+import { GET_TEAMS, GET_TRANSLATION } from '../actions/types';
+/* eslint-disable camelcase */
 
 const initialState = {
   teams: [],
-  count: "",
-  selected: localStorage.getItem("selected") && localStorage.getItem("selected")
+  count: '',
+  selected:
+    localStorage.getItem('selected') &&
+    localStorage.getItem('selected'),
 };
 
 export default function(state = initialState, action) {
@@ -14,13 +17,13 @@ export default function(state = initialState, action) {
       return {
         teams: [...action.payload.results],
         count: action.payload.count,
-        selected: "en"
+        selected: 'en',
       };
     case GET_TRANSLATION:
       return {
         selected: action.payload,
         teams: state.teams,
-        count: state.count
+        count: state.count,
       };
 
     default:

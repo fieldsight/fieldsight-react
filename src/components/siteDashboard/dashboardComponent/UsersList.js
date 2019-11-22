@@ -1,8 +1,9 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import uuid from "uuid/v4";
-import { AvatarContentLoader } from "../../common/Loader";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { FormattedMessage } from 'react-intl';
+import uuid from 'uuid/v4';
+import { AvatarContentLoader } from '../../common/Loader';
+/* eslint-disable react/prop-types  */
 
 const UsersListItem = ({ user }) => {
   return (
@@ -28,7 +29,9 @@ const UsersList = ({ users, showContentLoader }) => (
       <PerfectScrollbar>
         <ul>
           {users.length > 0 ? (
-            users.map((user, i) => <UsersListItem user={user} key={uuid()} />)
+            users.map((user, i) => (
+              <UsersListItem user={user} key={uuid()} />
+            ))
           ) : (
             <p>
               <FormattedMessage

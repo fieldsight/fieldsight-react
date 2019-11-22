@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 class InviteTab extends Component {
   render() {
@@ -7,7 +7,7 @@ class InviteTab extends Component {
       <>
         <span
           className="popup-close"
-          onClick={e => this.props.invitationOpen(e, "role")}
+          onClick={e => this.props.invitationOpen(e, 'role')}
         >
           <i className="la la-close" />
         </span>
@@ -53,7 +53,7 @@ class InviteTab extends Component {
                         id="app.acceptAll"
                         defaultMessage=" has
                             invited you to join FieldSight as"
-                      />{" "}
+                      />{' '}
                       <span>{item.group}</span> .
                     </p>
                     <div className="invite-btn">
@@ -61,7 +61,10 @@ class InviteTab extends Component {
                         href="javascript:void(0);"
                         className="accept-btn"
                         onClick={e =>
-                          this.props.acceptHandler(item.id, item.current_user)
+                          this.props.acceptHandler(
+                            item.id,
+                            item.current_user,
+                          )
                         }
                       >
                         <i className="la la-check" />
@@ -73,7 +76,9 @@ class InviteTab extends Component {
                       <a
                         href="javascript:void(0);"
                         className="reject-btn"
-                        onClick={e => this.props.rejectHandler(item.id)}
+                        onClick={e =>
+                          this.props.rejectHandler(item.id)
+                        }
                       >
                         <i className="la la-close" />
 

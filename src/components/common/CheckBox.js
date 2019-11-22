@@ -1,5 +1,5 @@
-import React from "react";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const CheckBox = ({
   name,
@@ -11,7 +11,6 @@ const CheckBox = ({
   ...rest
 }) => (
   <div className={`checkbox ${className}`}>
-    {console.log(label, "3333")}
     <label>
       <input
         type="checkbox"
@@ -20,7 +19,7 @@ const CheckBox = ({
         checked={checked}
         onChange={changeHandler}
       />
-      <i className="helper" />{" "}
+      <i className="helper" />
       {translation == true ? (
         <FormattedMessage id={label} defaultMessage={label} />
       ) : (

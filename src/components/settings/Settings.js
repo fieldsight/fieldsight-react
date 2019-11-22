@@ -1,21 +1,23 @@
-import React, { Component, Fragment } from "react";
-import { Route, Switch } from "react-router-dom";
-import LeftSidebar from "../leftSidebar/LeftSidebar";
-import EditProject from "../editProject/EditProject";
-import SiteType from "../siteType/SiteType";
-import SiteInformation from "../siteInfo/SiteInformation";
-import SiteManage from "../SiteManage";
-import ManageRegion from "../manageRegion/ManageRegion";
-import SubRegion from "../manageRegion/SubRegion";
-import TermsAndLabels from "../termsAndLabels/TermAndLabel";
-import MapLayer from "../mapLayer/MapLayer";
-import { RegionProvider } from "../../context";
-import { FormattedMessage } from "react-intl";
+import React, { PureComponent } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import LeftSidebar from '../leftSidebar/LeftSidebar';
+import EditProject from '../editProject/EditProject';
+import SiteType from '../siteType/SiteType';
+import SiteInformation from '../siteInfo/SiteInformation';
+import SiteManage from '../SiteManage';
+import ManageRegion from '../manageRegion/ManageRegion';
+import SubRegion from '../manageRegion/SubRegion';
+import TermsAndLabels from '../termsAndLabels/TermAndLabel';
+import MapLayer from '../mapLayer/MapLayer';
+import { RegionProvider } from '../../context';
 
-export default class Settings extends Component {
+/* eslint-disable react/prop-types  */
+
+export default class Settings extends PureComponent {
   render() {
     const {
-      match: { path }
+      match: { path },
     } = this.props;
 
     return (
@@ -28,11 +30,16 @@ export default class Settings extends Component {
                   window.project_id ? window.project_id : 1
                 }/`}
               >
-                {window.project_name ? window.project_name : "Project Name"}
+                {window.project_name
+                  ? window.project_name
+                  : 'Project Name'}
               </a>
             </li>
 
-            <li className="breadcrumb-item active" aria-current="page">
+            <li
+              className="breadcrumb-item active"
+              aria-current="page"
+            >
               <FormattedMessage
                 id="app.projectSettings"
                 defaultMessage="Project Settings"
@@ -62,8 +69,15 @@ export default class Settings extends Component {
             <div className="right-content">
               <div className="tab-content">
                 <Switch>
-                  <Route exact path={`${path}`} component={EditProject} />
-                  <Route path={`${path}/site-type`} component={SiteType} />
+                  <Route
+                    exact
+                    path={`${path}`}
+                    component={EditProject}
+                  />
+                  <Route
+                    path={`${path}/site-type`}
+                    component={SiteType}
+                  />
                   <Route
                     path={`${path}/site-information`}
                     component={SiteInformation}
@@ -77,8 +91,14 @@ export default class Settings extends Component {
                     component={ManageRegion}
                   />
 
-                  <Route path={`${path}/manage-site`} component={SiteManage} />
-                  <Route path={`${path}/map-layer`} component={MapLayer} />
+                  <Route
+                    path={`${path}/manage-site`}
+                    component={SiteManage}
+                  />
+                  <Route
+                    path={`${path}/map-layer`}
+                    component={MapLayer}
+                  />
                   <Route
                     path={`${path}/term-and-label`}
                     component={TermsAndLabels}

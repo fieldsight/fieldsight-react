@@ -1,9 +1,8 @@
-import React, { Component } from "react";
-import axios from "axios";
-import Logs from "../common/Logs";
-import { connect } from "react-redux";
-import { getProjectLogs } from "../../actions/projectLogsActions";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import Logs from '../common/Logs';
+import { connect } from 'react-redux';
+import { getProjectLogs } from '../../actions/projectLogsActions';
+import { FormattedMessage } from 'react-intl';
 
 const user_id = window.user_id ? window.user_id : 1;
 
@@ -11,21 +10,22 @@ class ProjectLogs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      siteId: "",
+      siteId: '',
       siteLogs: {},
-      siteLogsLoader: true
+      siteLogsLoader: true,
     };
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
+      getProjectLogs,
     } = this.props;
-    this.props.getProjectLogs(id);
+    getProjectLogs(id);
     this.setState({
-      siteId: id
+      siteId: id,
     });
   }
 
@@ -40,7 +40,10 @@ class ProjectLogs extends Component {
               <a
                 href={`/fieldsight/application/#/project-dashboard/${this.state.siteId}`}
               >
-                <FormattedMessage id="app.project" defaultMessage="Project" />
+                <FormattedMessage
+                  id="app.project"
+                  defaultMessage="Project"
+                />
               </a>
             </li>
             <li className="breadcrumb-item">
@@ -67,10 +70,10 @@ class ProjectLogs extends Component {
 
 const mapStateToProps = ({ projectLogs }) => {
   return {
-    projectLogs
+    projectLogs,
   };
 };
 
 export default connect(mapStateToProps, {
-  getProjectLogs
+  getProjectLogs,
 })(ProjectLogs);

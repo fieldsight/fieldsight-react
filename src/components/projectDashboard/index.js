@@ -1,134 +1,122 @@
-import React from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { FormattedMessage, injectIntl } from "react-intl";
-import withPagination from "../../hoc/WithPagination";
+import React from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import withPagination from '../../hoc/WithPagination';
 
-import DashboardHeader from "./dashboardComponent/DashboardHeader";
-import SiteMap from "../common/SiteMap";
-import RegionsTable from "./dashboardComponent/RegionsTable";
-import DashboardCounter from "./dashboardComponent/DashboardCounter";
-import ProjectActivity from "./dashboardComponent/ProjectActivity";
-import ProgressTable from "./dashboardComponent/ProgressTable";
-import SubmissionChart from "../siteDashboard/dashboardComponent/SubmissionChart";
-import ProgressChart from "./dashboardComponent/ProgressChart";
-import About from "./dashboardComponent/About";
-import ProjectManager from "./dashboardComponent/ProjectManager";
-import Logs from "../common/Logs";
-import SiteListTable from "./dashboardComponent/SiteListTable";
+import DashboardHeader from './dashboardComponent/DashboardHeader';
+import SiteMap from '../common/SiteMap';
+import RegionsTable from './dashboardComponent/RegionsTable';
+import DashboardCounter from './dashboardComponent/DashboardCounter';
+import ProjectActivity from './dashboardComponent/ProjectActivity';
+import ProgressTable from './dashboardComponent/ProgressTable';
+import SubmissionChart from '../siteDashboard/dashboardComponent/SubmissionChart';
+import ProgressChart from './dashboardComponent/ProgressChart';
+import About from './dashboardComponent/About';
+import ProjectManager from './dashboardComponent/ProjectManager';
+import Logs from '../common/Logs';
+import SiteListTable from './dashboardComponent/SiteListTable';
 import {
   getProjectDashboard,
   getRegionData,
   getProgressTableData,
-  getSurveyForm
-} from "../../actions/projectDashboardActions";
-import { LanguageContext } from "../../languageContext";
+  getSurveyForm,
+} from '../../actions/projectDashboardActions';
 
 const INITIAL_STATE = {
-  activeTab: "site",
+  activeTab: 'site',
   showHeaderModal: false,
   showSubmissionModal: false,
   showCropper: false,
   showSubsites: false,
   showGallery: false,
-  projectId: ""
+  projectId: '',
 };
 const user_id = window.user_id ? window.user_id : 1;
 
 class ProjectDashboard extends React.Component {
-  state = INITIAL_STATE;
+  constructor(props) {
+    super(props);
+    this.state = INITIAL_STATE;
+  }
 
   closeModal = type => {
-    // const { id: projectId } = this.props.match.params;
-
     if (type) {
       return this.setState({
-        [`show${type}`]: false
+        [`show${type}`]: false,
       });
     }
   };
 
   openModal = type => {
-    // const { id: projectId } = this.props.match.params;
-
     if (type) {
       return this.setState({
-        [`show${type}`]: true
+        [`show${type}`]: true,
       });
     }
   };
 
   toggleTab = formType => {
-    const { projectId } = this.state;
+    const {
+      state: { projectId, activeTab },
+      props: { getRegionData, paginationHandler },
+    } = this;
     this.setState(
       {
-        activeTab: formType
+        activeTab: formType,
       },
       () => {
-        if (this.state.activeTab == "region") {
-          this.props.getRegionData(projectId);
-        } else if (this.state.activeTab == "site") {
-          this.props.paginationHandler(1, null, {
-            type: "projectSiteList",
-            projectId: projectId
+        if (activeTab == 'region') {
+          getRegionData(projectId);
+        } else if (activeTab == 'site') {
+          paginationHandler(1, null, {
+            type: 'projectSiteList',
+            projectId: projectId,
           });
         }
-      }
+      },
     );
   };
 
   componentWillMount() {
-    const { id: projectId } = this.props.match.params;
-    this.props.getProjectDashboard(projectId);
-    this.props.getProgressTableData(projectId);
-    this.props.getSurveyForm(projectId);
+    const {
+      params: {
+        match: { id: projectId },
+      },
+      getProgressTableData,
+      getProjectDashboard,
+      getSurveyForm,
+      paginationHandler,
+    } = this.props;
+    getProjectDashboard(projectId);
+    getProgressTableData(projectId);
+    getSurveyForm(projectId);
     this.setState({ projectId: projectId });
-    this.props.paginationHandler(1, null, {
-      type: "projectSiteList",
-      projectId: projectId
+    paginationHandler(1, null, {
+      type: 'projectSiteList',
+      projectId: projectId,
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.projectDashboard != this.props.projectDashboard) {
-    //   const { projectId, activeTab } = this.state;
-    //   if (!!nextProps.projectDashboard.has_region && activeTab === "") {
-    //     this.setState(
-    //       {
-    //         activeTab: "region"
-    //       },
-    //       this.props.getRegionData(projectId)
-    //     );
-    //   } else if (!nextProps.projectDashboard.has_region && activeTab === "") {
-    //     this.setState(
-    //       {
-    //         activeTab: "site"
-    //       },
-    //       () => {
-    //         this.props.paginationHandler(1, null, {
-    //           type: "projectSiteList",
-    //           projectId: projectId
-    //         });
-    //       }
-    //     );
-    //   }
-    // }
-    if (nextProps.match.params.id !== this.props.match.params.id) {
-      const { id: projectId } = this.props.match.params;
+    const { props } = this;
+    if (nextProps.match.params.id !== props.match.params.id) {
+      const { id: projectId } = props.match.params;
 
       this.setState(
         {
-          ...INITIAL_STATE
+          ...INITIAL_STATE,
         },
         () => {
-          this.props.getProjectDashboard(projectId);
-          this.props.getProgressTableData(projectId);
+          props.getProjectDashboard(projectId);
+          props.getProgressTableData(projectId);
 
           this.setState({ projectId: projectId });
-        }
+        },
       );
     }
   }
+
   onChangeHandler = e => {
     const searchValue = e.target.value;
     const { projectId } = this.state;
@@ -136,9 +124,9 @@ class ProjectDashboard extends React.Component {
       searchValue,
       `/fv3/api/project-site-list/?page=1&project=${projectId}&q=${searchValue}`,
       {
-        type: "projectSiteList",
-        projectId
-      }
+        type: 'projectSiteList',
+        projectId,
+      },
     );
   };
 
@@ -168,13 +156,19 @@ class ProjectDashboard extends React.Component {
         progressTableData,
         progressLoader,
         is_project_manager,
-        surveyData
+        surveyData,
       },
       siteList,
       dLoader,
       match: {
-        params: { id: projectId }
-      }
+        params: { id: projectId },
+      },
+      fromData,
+      toData,
+      totalCount,
+      pageNum,
+      paginationHandler,
+      renderPageNumbers,
     } = this.props;
 
     const { activeTab, showCropper, showGallery } = this.state;
@@ -221,7 +215,9 @@ class ProjectDashboard extends React.Component {
             <div className="col-lg-6">
               <div className="card map">
                 <div className="card-header main-card-header sub-card-header">
-                  <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
+                  <h5>
+                    {terms_and_labels && terms_and_labels.site} Map
+                  </h5>
 
                   {/* <h5>
                     <FormattedMessage
@@ -263,9 +259,11 @@ class ProjectDashboard extends React.Component {
                     <li className="nav-item">
                       <a
                         className={
-                          activeTab === "site" ? "nav-link active" : "nav-link"
+                          activeTab === 'site'
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
-                        onClick={() => this.toggleTab("site")}
+                        onClick={() => this.toggleTab('site')}
                       >
                         {/* Sites*/}
                         <FormattedMessage
@@ -273,16 +271,16 @@ class ProjectDashboard extends React.Component {
                           defaultMessage="Sites"
                         />
                       </a>
-                    </li>{" "}
+                    </li>{' '}
                     {!!has_region && (
                       <li className="nav-item">
                         <a
                           className={
-                            activeTab === "region"
-                              ? "nav-link active"
-                              : "nav-link"
+                            activeTab === 'region'
+                              ? 'nav-link active'
+                              : 'nav-link'
                           }
-                          onClick={() => this.toggleTab("region")}
+                          onClick={() => this.toggleTab('region')}
                         >
                           {/*Regions*/}
                           <FormattedMessage
@@ -294,7 +292,7 @@ class ProjectDashboard extends React.Component {
                     )}
                   </ul>
                   {/* </div> */}
-                  {activeTab === "site" && (
+                  {activeTab === 'site' && (
                     <div className="dash-btn">
                       <form
                         className="floating-form"
@@ -306,10 +304,12 @@ class ProjectDashboard extends React.Component {
                           <input
                             type="search"
                             className="form-control"
-                            placeholder={this.props.intl.formatMessage({
-                              id: "app.teams-search",
-                              defaultMessage: "Search"
-                            })}
+                            placeholder={this.props.intl.formatMessage(
+                              {
+                                id: 'app.teams-search',
+                                defaultMessage: 'Search',
+                              },
+                            )}
                             onChange={this.onChangeHandler}
                           />
                           {/* <label htmlFor="input">Search</label> */}
@@ -329,7 +329,7 @@ class ProjectDashboard extends React.Component {
                   )}
                 </div>
 
-                {activeTab === "site" && (
+                {activeTab === 'site' && (
                   <>
                     <SiteListTable
                       id={projectId}
@@ -338,34 +338,34 @@ class ProjectDashboard extends React.Component {
                       terms={terms_and_labels}
                     />
 
-                    {this.props.siteList.length > 0 && (
+                    {siteList.length > 0 && (
                       <div className="card-body">
                         <div className="table-footer">
                           <div className="showing-rows">
                             <p>
-                              Showing <span>{this.props.fromData}</span> to{" "}
+                              Showing <span>{fromData}</span> to{' '}
                               <span>
-                                {" "}
-                                {this.props.toData > this.props.totalCount
-                                  ? this.props.totalCount
-                                  : this.props.toData}{" "}
-                              </span>{" "}
-                              of <span>{this.props.totalCount}</span> entries.
+                                {' '}
+                                {toData > totalCount
+                                  ? totalCount
+                                  : toData}{' '}
+                              </span>{' '}
+                              of <span>{totalCount}</span> entries.
                             </p>
                           </div>
-                          {this.props.toData < this.props.totalCount ? (
+                          {toData < totalCount ? (
                             <div className="table-pagination">
                               <ul>
                                 <li className="page-item">
                                   <a
                                     onClick={e =>
-                                      this.props.paginationHandler(
-                                        this.props.pageNum - 1,
+                                      paginationHandler(
+                                        pageNum - 1,
                                         null,
                                         {
-                                          type: "projectSiteList",
-                                          projectId: projectId
-                                        }
+                                          type: 'projectSiteList',
+                                          projectId: projectId,
+                                        },
                                       )
                                     }
                                   >
@@ -373,21 +373,21 @@ class ProjectDashboard extends React.Component {
                                   </a>
                                 </li>
 
-                                {this.props.renderPageNumbers({
-                                  type: "projectSiteList",
-                                  projectId: projectId
+                                {renderPageNumbers({
+                                  type: 'projectSiteList',
+                                  projectId: projectId,
                                 })}
 
                                 <li className="page-item ">
                                   <a
                                     onClick={e =>
-                                      this.props.paginationHandler(
-                                        this.props.pageNum + 1,
+                                      paginationHandler(
+                                        pageNum + 1,
                                         null,
                                         {
-                                          type: "projectSiteList",
-                                          projectId: projectId
-                                        }
+                                          type: 'projectSiteList',
+                                          projectId: projectId,
+                                        },
                                       )
                                     }
                                   >
@@ -402,7 +402,7 @@ class ProjectDashboard extends React.Component {
                     )}
                   </>
                 )}
-                {activeTab === "region" && (
+                {activeTab === 'region' && (
                   <RegionsTable
                     id={projectId}
                     loader={projectRegionDataLoader}
@@ -433,7 +433,7 @@ class ProjectDashboard extends React.Component {
               <ProgressTable
                 data={progressTableData}
                 loader={progressLoader}
-                id={this.props.match.params.id}
+                id={projectId}
               />
             </div>
           </div>
@@ -469,7 +469,9 @@ class ProjectDashboard extends React.Component {
                     </h5>
                   </div>
                   <div className="card-body">
-                    <ProgressChart progressData={site_progress_chart_data} />
+                    <ProgressChart
+                      progressData={site_progress_chart_data}
+                    />
                   </div>
                 </div>
               </div>
@@ -512,7 +514,10 @@ class ProjectDashboard extends React.Component {
                   <div className="card-body">
                     <div
                       className="thumb-list mr-0 "
-                      style={{ position: "relative", height: "327px" }}
+                      style={{
+                        position: 'relative',
+                        height: '327px',
+                      }}
                     >
                       <ProjectManager
                         projectManagers={project_managers}
@@ -537,7 +542,7 @@ class ProjectDashboard extends React.Component {
   }
 }
 const mapStateToProps = ({ projectDashboard }) => ({
-  projectDashboard
+  projectDashboard,
 });
 ProjectDashboard.contextType = LanguageContext;
 export default compose(
@@ -545,7 +550,7 @@ export default compose(
     getProjectDashboard,
     getRegionData,
     getProgressTableData,
-    getSurveyForm
+    getSurveyForm,
   }),
-  withPagination
+  withPagination,
 )(injectIntl(ProjectDashboard));
