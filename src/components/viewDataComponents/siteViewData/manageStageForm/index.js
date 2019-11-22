@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import ResponseTable from '../../responded/StagedFormResponseTable';
-import axios from 'axios';
-import DeleteTable from '../deleteTable';
-import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { Link } from 'react-router-dom';
+import ResponseTable from '../../responded/StagedFormResponseTable';
+import DeleteTable from '../deleteTable';
+import PropTypes from 'prop-types';
+
 import { getsiteViewData } from '../../../../actions/siteViewDataAction';
-import { FormattedMessage } from 'react-intl';
 
 class ResponseStageForm extends Component {
   constructor(props) {
@@ -34,9 +35,9 @@ class ResponseStageForm extends Component {
       props: {
         showViewData,
         data,
-        stage_forms,
+        stageForms,
         deleted_forms,
-        stage_forms_loading,
+        stageFormsLoading,
         id,
       },
     } = this;
@@ -76,10 +77,10 @@ class ResponseStageForm extends Component {
         <div className="card-body">
           {!data && (
             <ResponseTable
-              stage_forms={stage_forms}
+              stageForms={stageForms}
               table="site"
               id={id}
-              loader={stage_forms_loading}
+              loader={stageFormsLoading}
             />
           )}
         </div>
@@ -146,9 +147,9 @@ class ResponseStageForm extends Component {
                 <div className="card-body">
                   {!this.state.hide && (
                     <DeleteTable
-                      deleted_forms={deleted_forms}
+                      deletedForms={deletedForms}
                       id={id}
-                      loader={stage_forms_loading}
+                      loader={stageFormsLoading}
                     />
                   )}
                 </div>
@@ -165,22 +166,22 @@ ResponseStageForm.propTypes = {
   getsiteViewData: PropTypes.func.isRequired,
   showViewData: PropTypes.bool.isRequired,
   data: PropTypes.objectOf.isRequired,
-  stage_forms: PropTypes.arrayOf.isRequired,
-  deleted_forms: PropTypes.arrayOf.isRequired,
-  stage_forms_loading: PropTypes.bool.isRequired,
+  stageForms: PropTypes.arrayOf.isRequired,
+  deletedForms: PropTypes.arrayOf.isRequired,
+  stageFormsLoading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ siteViewData }) => {
   const {
-    stage_forms_loading,
-    deleted_forms,
-    stage_forms,
+    stageFormsLoading,
+    deletedForms,
+    stageForms,
   } = siteViewData;
 
   return {
-    stage_forms_loading,
-    deleted_forms,
-    stage_forms,
+    stageFormsLoading,
+    deletedForms,
+    stageForms,
   };
 };
 

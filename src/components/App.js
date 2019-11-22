@@ -41,7 +41,6 @@ import TeamDashboard from './teamDashboard';
 import TeamSetting from './settings/TeamSettings';
 import SubmissionData from './viewDataComponents/projectViewData/SubmissionTable';
 import ManageForms from './manageForms';
-import Mapparent from './team/Mapparent';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';

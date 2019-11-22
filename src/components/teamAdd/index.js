@@ -14,7 +14,6 @@ import { RegionContext } from '../../context';
 import 'leaflet/dist/leaflet.css';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import PropTypes from 'prop-types';
 
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/label-has-associated-control */

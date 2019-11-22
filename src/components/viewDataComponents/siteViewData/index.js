@@ -4,20 +4,9 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-import axios from 'axios';
-import ManageFormSetting from './manageFormSetting/ManageFormSetting';
-import ManageGeneralForm from './manageGeneralForm';
-import ManageScheduledForm from './manageScheduledForm';
-import ManageStageForm from './manageStageForm';
-import DeleteTable from './deleteTable';
-import ApprovedTable from './ApprovedTable.js';
-import PendingTable from './PendingSubmissionTable.js';
-import RejectedTable from './RejectSubmissionTable.js';
-import FlaggedTable from './FlagedTable.js';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
-
 import ManageFormSetting from './manageFormSetting/ManageFormSetting';
 import ManageGeneralForm from './manageGeneralForm';
 import ManageScheduledForm from './manageScheduledForm';
@@ -26,6 +15,7 @@ import ApprovedTable from './ApprovedTable.js';
 import PendingTable from './PendingSubmissionTable.js';
 import RejectedTable from './RejectSubmissionTable.js';
 import FlaggedTable from './FlagedTable.js';
+
 /* eslint-disable camelcase */
 
 class SiteViewData extends Component {

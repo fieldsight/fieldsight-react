@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage } from 'react-intl';
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 class About extends PureComponent {

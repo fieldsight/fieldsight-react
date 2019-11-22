@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { BlockContentLoader } from '../../common/Loader';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 /* eslint-disable react/prop-types  */
 
 const ShowRow = ({ name }) => (
