@@ -1,5 +1,5 @@
-import axios from "axios";
-import { GET_LOGS } from "./types";
+import axios from 'axios';
+import { GET_LOGS } from './types';
 
 export const getProjectLogs = id => dispatch => {
   axios
@@ -7,7 +7,7 @@ export const getProjectLogs = id => dispatch => {
     .then(res => {
       dispatch({
         type: GET_LOGS,
-        payload: res.data.results
+        payload: res.data.results,
       });
     })
     .catch(err => {

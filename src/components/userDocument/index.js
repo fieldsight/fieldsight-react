@@ -1,8 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { getSiteUser } from "../../actions/userDocumentActions";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { getSiteUser } from '../../actions/userDocumentActions';
 
 class UserDocument extends Component {
   constructor(props) {
@@ -11,15 +12,15 @@ class UserDocument extends Component {
     this.state = {
       users: [],
       masteruser: [],
-      breadcrumbs: []
+      breadcrumbs: [],
     };
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
     this.props.getSiteUser(id);
   }
@@ -28,31 +29,33 @@ class UserDocument extends Component {
     this.setState({
       users: nextprops.userDocument.users,
       masteruser: nextprops.userDocument.users,
-      breadcrumbs: nextprops.userDocument.breadcrumbs
+      breadcrumbs: nextprops.userDocument.breadcrumbs,
     });
   }
 
   handleChange = async e => {
     const {
-      target: { value }
+      target: { value },
     } = e;
     const { users } = this.state;
     if (value) {
       const search = await users.filter(user => {
         return (
-          user.full_name.toLowerCase().includes(value.toLowerCase()) ||
+          user.full_name
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           user.email.toLowerCase().includes(value.toLowerCase()) ||
           user.username.toLowerCase().includes(value.toLowerCase())
         );
       });
 
       this.setState({
-        users: search
+        users: search,
       });
     } else {
-      this.setState({
-        users: this.state.masteruser
-      });
+      this.setState(state => ({
+        users: state.masteruser,
+      }));
     }
   };
 
@@ -61,20 +64,23 @@ class UserDocument extends Component {
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          {
+          {Object.keys(breadcrumbs).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href={breadcrumbs.site_url}>{breadcrumbs.site}</a>
               </li>
               <li className="breadcrumb-item">{breadcrumbs.name}</li>
             </ol>
-          }
+          )}
         </nav>
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
               {/*<h5>Users</h5>*/}
-              <FormattedMessage id="app.users" defaultMessage="Users" />
+              <FormattedMessage
+                id="app.users"
+                defaultMessage="Users"
+              />
 
               <div className="dash-btn">
                 <form className="floating-form">
@@ -105,7 +111,10 @@ class UserDocument extends Component {
                 <thead>
                   <tr>
                     <th>
-                      <FormattedMessage id="app.name" defaultMessage="Name" />
+                      <FormattedMessage
+                        id="app.name"
+                        defaultMessage="Name"
+                      />
                     </th>
                     <th>
                       <FormattedMessage
@@ -114,10 +123,16 @@ class UserDocument extends Component {
                       />
                     </th>
                     <th>
-                      <FormattedMessage id="app.email" defaultMessage="Email" />
+                      <FormattedMessage
+                        id="app.email"
+                        defaultMessage="Email"
+                      />
                     </th>
                     <th>
-                      <FormattedMessage id="app.role" defaultMessage="Role" />
+                      <FormattedMessage
+                        id="app.role"
+                        defaultMessage="Role"
+                      />
                     </th>
                   </tr>
                 </thead>
@@ -132,21 +147,22 @@ class UserDocument extends Component {
                           >
                             <figure>
                               <img
-                                src={users.profile_picture}
+                                src={user.profile_picture}
                                 alt="site-logo"
                               />
                             </figure>
-                            <h5>{users.full_name}</h5>
+                            <h5>{user.full_name}</h5>
                           </a>
                         </td>
-                        <td>{users.username}</td>
-                        <td>{users.email}</td>
-                        {users.role !== "" && users.role.length > 0 ? (
-                          users.role[0] ? (
-                            <td>{users.role[0]}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        {user.role !== '' && user.role.length > 0 ? (
+                          user.role[0] ? (
+                            <td>{user.role[0]}</td>
                           ) : (
                             <td>
-                              {users.role[0]}/{users.role[1]}
+                              {' '}
+                              {`${user.role[0] / user.role[1]}`}
                             </td>
                           )
                         ) : (
@@ -167,14 +183,15 @@ class UserDocument extends Component {
 
 const mapStateToProps = ({ userDocument }) => {
   return {
-    userDocument
+    userDocument,
   };
 };
+UserDocument.propTypes = {
+  match: PropTypes.objectOf.isRequired,
+  getSiteUser: PropTypes.func.isRequired,
+};
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getSiteUser
-    }
-  )
+  connect(mapStateToProps, {
+    getSiteUser,
+  }),
 )(UserDocument);

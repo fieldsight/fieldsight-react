@@ -1,36 +1,46 @@
-import React, { Component } from "react";
-import StatusTable from "../../responded/StatusTable";
-import WithPagination from "../../../../hoc/WithPagination";
-import axios from "axios";
-import { DotLoader } from "../../../myForm/Loader";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import StatusTable from '../../responded/StatusTable';
+import WithPagination from '../../../../hoc/WithPagination';
+import { DotLoader } from '../../../myForm/Loader';
 
 class PendingTable extends Component {
-  state = {
-    pending_submissions: []
-  };
   componentDidMount() {
-    if (!!this.props.id) {
+    if (this.props.id) {
       this.props.paginationHandler(1, null, {
-        type: "viewByStatus",
+        type: 'viewByStatus',
         projectId: this.props.id,
-        status: "pending"
+        status: 'pending',
       });
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
   }
+
   render() {
     const {
-      props: { data, showViewData, dLoader }
+      props: {
+        data,
+        showViewData,
+        dLoader,
+        siteList,
+        id,
+        fromData,
+        toData,
+        totalCount,
+        pageNum,
+        paginationHandler,
+        renderPageNumbers,
+      },
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>
             {/*Pending Submissions*/}
@@ -55,65 +65,64 @@ class PendingTable extends Component {
             </button>
           </div>
         </div>
-        {dLoader == false ? (
+        {dLoader === false ? (
           <>
             <div className="card-body">
               <StatusTable
-                submission={this.props.siteList}
+                submission={siteList}
                 count={this.state.count}
                 next={this.state.next}
                 previous={this.state.previous}
-                projectId={this.props.id}
+                projectId={id}
               />
             </div>
 
-            {this.props.siteList && this.props.siteList.length > 0 ? (
+            {siteList && siteList.length > 0 ? (
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing <span>{this.props.fromData}</span> to{" "}
+                      Showing
+                      <span>{fromData}</span>
+                      to
                       <span>
-                        {" "}
-                        {this.props.toData > this.props.totalCount
-                          ? this.props.totalCount
-                          : this.props.toData}{" "}
-                      </span>{" "}
-                      of <span>{this.props.totalCount}</span> entries.
+                        {toData > totalCount ? totalCount : toData}
+                      </span>
+                      of
+                      <span>{totalCount}</span>
+                      entries.
                     </p>
                   </div>
-                  {this.props.toData < this.props.totalCount ? (
+                  {toData < totalCount ? (
                     <div className="table-pagination">
                       <ul>
                         <li className="page-item">
                           <a
-                            onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum - 1,
-                                null,
-                                project_id
-                              )
-                            }
+                            href="#"
+                            onClick={() => {
+                              paginationHandler(pageNum - 1, null, {
+                                projectId: id,
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-left" />
                           </a>
                         </li>
 
-                        {this.props.renderPageNumbers({
-                          type: "viewByStatus",
-                          projectId: this.props.id,
-                          status: "pending"
+                        {renderPageNumbers({
+                          type: 'viewByStatus',
+                          projectId: id,
+                          status: 'pending',
                         })}
 
                         <li className="page-item ">
                           <a
-                            onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum + 1,
-                                null,
-                                project_id
-                              )
-                            }
+                            href="#"
+                            onClick={() => {
+                              paginationHandler(pageNum + 1, null, {
+                                projectId: id,
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-right" />
                           </a>
@@ -136,8 +145,23 @@ class PendingTable extends Component {
         ) : (
           <DotLoader />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
+PendingTable.propTypes = {
+  id: PropTypes.string.isRequired,
+  breadcrumbs: PropTypes.objectOf.isRequired,
+  showViewData: PropTypes.func.isRequired,
+  siteList: PropTypes.arrayOf.isRequired,
+  fromData: PropTypes.number.isRequired,
+  toData: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  pageNum: PropTypes.number.isRequired,
+  renderPageNumbers: PropTypes.func.isRequired,
+  dLoader: PropTypes.bool.isRequired,
+  paginationHandler: PropTypes.func.isRequired,
+  data: PropTypes.objectOf.isRequired,
+  handleBreadCrumb: PropTypes.func.isRequired,
+};
 export default WithPagination(PendingTable);

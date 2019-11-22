@@ -1,22 +1,33 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
-import format from "date-fns/format";
-import { FormattedMessage } from "react-intl";
+import React, { PureComponent } from 'react';
+import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import format from 'date-fns/format';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable camelcase */
 
-class DeleteTable extends Component {
+class DeleteTable extends PureComponent {
   render() {
-    const { deleted_forms, table } = this.props;
+    const { deleted_forms, table, id } = this.props;
     return (
-      <React.Fragment>
-        <Table responsive="xl" className="table  table-bordered  dataTable ">
+      <>
+        <Table
+          responsive="xl"
+          className="table  table-bordered  dataTable "
+        >
           <thead>
             <tr>
               <th>
-                <FormattedMessage id="app.name" defaultMessage="Name" />
+                <FormattedMessage
+                  id="app.name"
+                  defaultMessage="Name"
+                />
               </th>
               <th>
-                <FormattedMessage id="app.title" defaultMessage="Title" />
+                <FormattedMessage
+                  id="app.title"
+                  defaultMessage="Title"
+                />
               </th>
               <th>
                 <FormattedMessage
@@ -25,52 +36,54 @@ class DeleteTable extends Component {
                 />
               </th>
               <th>
-                {" "}
+                {' '}
                 <FormattedMessage
                   id="app.created-date"
                   defaultMessage="Created Date"
                 />
               </th>
               <th>
-                {" "}
+                {' '}
                 <FormattedMessage
                   id="app.submissions"
                   defaultMessage="Submissions"
                 />
               </th>
               <th>
-                <FormattedMessage id="app.action" defaultMessage="Action" />
+                <FormattedMessage
+                  id="app.action"
+                  defaultMessage="Action"
+                />
               </th>
             </tr>
           </thead>
           <tbody>
-            {deleted_forms.map((deleted, key) => {
+            {deleted_forms.map(deleted => {
               return (
-                <tr key={key}>
+                <tr key={deleted.id}>
                   <td>{deleted.name}</td>
                   <td>{deleted.title}</td>
                   <td>
-                    {" "}
                     {deleted.last_response.length > 0
                       ? format(deleted.last_response, [
-                          "MMMM Do YYYY, h:mm:ss a"
+                          'MMMM Do YYYY, h:mm:ss a',
                         ])
-                      : ""}
+                      : ''}
                   </td>
                   <td>{deleted.created_date}</td>
                   <td>
-                    {table == "site" ? (
+                    {table === 'site' ? (
                       deleted.fsxf_id ? (
                         <Link
                           className="view-tag tag"
-                          to={`/site-submission-data/${this.props.id}/${deleted.fsxf_id}`}
+                          to={`/site-submission-data/${id}/${deleted.fsxf_id}`}
                         >
                           {deleted.response_count}
                         </Link>
                       ) : (
                         <Link
                           className="view-tag tag"
-                          to={`/site-submission-data/${this.props.id}/${deleted.id}`}
+                          to={`/site-submission-data/${id}/${deleted.id}`}
                         >
                           {deleted.response_count}
                         </Link>
@@ -78,93 +91,94 @@ class DeleteTable extends Component {
                     ) : deleted.fsxf_id ? (
                       <Link
                         className="view-tag tag"
-                        to={`/submission-data/${this.props.id}/${deleted.fsxf_id}`}
+                        to={`/submission-data/${id}/${deleted.fsxf_id}`}
                       >
                         {deleted.response_count}
                       </Link>
                     ) : (
                       <Link
                         className="view-tag tag"
-                        to={`/submission-data/${this.props.id}/${deleted.id}`}
+                        to={`/submission-data/${id}/${deleted.id}`}
                       >
                         {deleted.response_count}
                       </Link>
                     )}
                   </td>
                   <td>
-                    {table == "site" ? (
+                    {table === 'site' ? (
                       deleted.fsxf_id ? (
                         <Link
                           className="view-tag tag"
-                          to={`/site-submission-data/${this.props.id}/${deleted.fsxf_id}`}
+                          to={`/site-submission-data/${id}/${deleted.fsxf_id}`}
                         >
-                          <i className="la la-eye view-tag tag"></i>
+                          <i className="la la-eye view-tag tag" />
                         </Link>
                       ) : (
                         <Link
                           className="view-tag tag"
-                          to={`/site-submission-data/${this.props.id}/${deleted.id}`}
+                          to={`/site-submission-data/${id}/${deleted.id}`}
                         >
-                          <i className="la la-eye view-tag tag"></i>
+                          <i className="la la-eye view-tag tag" />
                         </Link>
                       )
                     ) : deleted.fsxf_id ? (
                       <Link
                         className="view-tag tag"
-                        to={`/submission-data/${this.props.id}/${deleted.fsxf_id}`}
+                        to={`/submission-data/${id}/${deleted.fsxf_id}`}
                       >
-                        <i className="la la-eye view-tag tag"></i>
+                        <i className="la la-eye view-tag tag" />
                       </Link>
                     ) : (
                       <Link
                         className="view-tag tag"
-                        to={`/submission-data/${this.props.id}/${deleted.id}`}
+                        to={`/submission-data/${id}/${deleted.id}`}
                       >
-                        <i className="la la-eye view-tag tag"></i>
+                        <i className="la la-eye view-tag tag" />
                       </Link>
                     )}
                     {deleted.download_url === null ? (
-                      <a className="edit-tag tag disable pointer">
-                        <i className="la la-download"></i>
+                      <a className="edit-tag tag disable-pointer">
+                        <i className="la la-download" />
                       </a>
                     ) : (
                       <a
                         href={deleted.download_url}
                         className="edit-tag tag"
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        <i className="la la-download"></i>{" "}
+                        <i className="la la-download" />
                       </a>
                     )}
-                    {table == "site" ? (
+                    {table === 'site' ? (
                       deleted.fsxf_id ? (
                         <Link
                           className="pending-tag tag"
-                          to={`/site-version-submission/${this.props.id}/${deleted.fsxf_id}`}
+                          to={`/site-version-submission/${id}/${deleted.fsxf_id}`}
                         >
-                          <i className="la la-clone edit-tag tag"></i>
+                          <i className="la la-clone edit-tag tag" />
                         </Link>
                       ) : (
                         <Link
                           className="pending-tag tag"
-                          to={`/site-version-submission/${this.props.id}/${deleted.id}`}
+                          to={`/site-version-submission/${id}/${deleted.id}`}
                         >
-                          <i className="la la-clone edit-tag tag"></i>
+                          <i className="la la-clone edit-tag tag" />
                         </Link>
                       )
                     ) : deleted.fsxf_id ? (
                       <Link
                         className="pending-tag tag"
-                        to={`/project-version-submission/${this.props.id}/${deleted.fsxf_id}`}
+                        to={`/project-version-submission/${id}/${deleted.fsxf_id}`}
                       >
-                        <i className="la la-clone edit-tag tag"></i>
+                        <i className="la la-clone edit-tag tag" />
                       </Link>
                     ) : (
                       <Link
                         className="pending-tag tag"
-                        to={`/project-version-submission/${this.props.id}/${deleted.id}`}
+                        to={`/project-version-submission/${id}/${deleted.id}`}
                       >
-                        <i className="la la-clone edit-tag tag"></i>
+                        <i className="la la-clone edit-tag tag" />
                       </Link>
                     )}
                   </td>
@@ -173,8 +187,13 @@ class DeleteTable extends Component {
             })}
           </tbody>
         </Table>
-      </React.Fragment>
+      </>
     );
   }
 }
+DeleteTable.propTypes = {
+  deleted_forms: PropTypes.arrayOf.isRequired,
+  table: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+};
 export default DeleteTable;

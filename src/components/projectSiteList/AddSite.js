@@ -1,29 +1,33 @@
-import React, { Component, Fragment } from "react";
-import Zoom from "react-reveal/Zoom";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import Select from "react-select";
-import L from "leaflet";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import InputElement from "../common/InputElement";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import Zoom from 'react-reveal/Zoom';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import Select from 'react-select';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import InputElement from '../common/InputElement';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" }
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' },
 ];
 
 const SelectOption = () => <Select options={options} />;
 
 class AddSite extends Component {
-  state = {
-    zoom: 1
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      zoom: 1,
+    };
+  }
 
   render() {
     return (
-      <Fragment>
+      <>
         <Zoom duration={500}>
           <div className="fieldsight-popup open">
             <div className="popup-body lg-body">
@@ -35,14 +39,17 @@ class AddSite extends Component {
                       defaultMessage="Add Site"
                     />
                   </h5>
-                  <span className="popup-close" onClick={this.props.closePopup}>
+                  <span
+                    className="popup-close"
+                    onClick={this.props.closePopup}
+                  >
                     <i className="la la-close" />
                   </span>
                 </div>
                 <div className="card-body">
                   <form
                     className="floating-form"
-                    style={{ position: "relative", height: "300px" }}
+                    style={{ position: 'relative', height: '300px' }}
                   >
                     <PerfectScrollbar>
                       <div className="row">
@@ -145,7 +152,7 @@ class AddSite extends Component {
                                     />
                                   </h3>
                                   <span>
-                                    {" "}
+                                    {' '}
                                     <FormattedMessage
                                       id="app.or"
                                       defaultMessage="or"
@@ -162,10 +169,14 @@ class AddSite extends Component {
                                     <FormattedMessage
                                       id="app.upload"
                                       defaultMessage="upload"
-                                    />{" "}
+                                    />{' '}
                                     <i className="la la-cloud-upload" />
                                   </label>
-                                  <input type="file" id="upload-btn" multiple />
+                                  <input
+                                    type="file"
+                                    id="upload-btn"
+                                    multiple
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -178,13 +189,16 @@ class AddSite extends Component {
                               <FormattedMessage
                                 id="app.map"
                                 defaultMessage="Map"
-                              />{" "}
+                              />{' '}
                               <sup>*</sup>
                             </label>
 
                             <div className="map-form">
                               <Map
-                                style={{ height: "205px", marginTop: "1rem" }}
+                                style={{
+                                  height: '205px',
+                                  marginTop: '1rem',
+                                }}
                                 center={[27.2234, 87.23232]}
                                 zoom={this.state.zoom}
                                 onClick={this.mapClickHandler}
@@ -193,15 +207,16 @@ class AddSite extends Component {
                                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                 />
-                                <Marker position={[27.2234, 87.23232]}>
+                                <Marker
+                                  position={[27.2234, 87.23232]}
+                                >
                                   <Popup>
                                     <b>
-                                      {" "}
                                       <FormattedMessage
                                         id="app.name"
                                         defaultMessage="Name"
                                       />
-                                      :{" "}
+                                      :
                                     </b>
                                     {name}
                                   </Popup>
@@ -219,7 +234,7 @@ class AddSite extends Component {
                                     value={27.2234}
                                     translation={true}
                                     changeHandler={e =>
-                                      onChangeHandler(e, "latitude")
+                                      onChangeHandler(e, 'latitude')
                                     }
                                   />
                                 </div>
@@ -235,7 +250,7 @@ class AddSite extends Component {
                                     value={87.23232}
                                     translation={true}
                                     changeHandler={e =>
-                                      onChangeHandler(e, "longitude")
+                                      onChangeHandler(e, 'longitude')
                                     }
                                   />
                                 </div>
@@ -247,7 +262,10 @@ class AddSite extends Component {
                       </div>
                       <div className="form-group">
                         <div className="form-group pull-right no-margin">
-                          <button type="submit" className="fieldsight-btn">
+                          <button
+                            type="submit"
+                            className="fieldsight-btn"
+                          >
                             <FormattedMessage
                               id="app.save"
                               defaultMessage="Save"
@@ -262,7 +280,7 @@ class AddSite extends Component {
             </div>
           </div>
         </Zoom>
-      </Fragment>
+      </>
     );
   }
 }

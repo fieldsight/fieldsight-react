@@ -1,26 +1,33 @@
-import React, { Component } from "react";
-import ResponseTable from "../../responded/StagedFormResponseTable";
-import axios from "axios";
-import DeleteTable from "../deleteTable";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { getsiteViewData } from "../../../../actions/siteViewDataAction";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { getsiteViewData } from '../../../../actions/siteViewDataAction';
+import DeleteTable from '../deleteTable';
+import ResponseTable from '../../responded/StagedFormResponseTable';
+/* eslint-disable camelcase */
 
 class ResponseStageForm extends Component {
-  state = {
-    hide: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      hide: true,
+    };
+  }
+
   componentDidMount() {
-    if (this.props.id != "") {
-      this.props.getsiteViewData(this.props.id, "stage");
+    const { id } = this.props;
+    if (id !== '') {
+      this.props.getsiteViewData(id, 'stage');
     }
   }
+
   toggleHide = () => {
-    this.setState({
-      hide: !this.state.hide
-    });
+    this.setState(prevState => ({
+      hide: !prevState.hide,
+    }));
   };
 
   render() {
@@ -30,12 +37,13 @@ class ResponseStageForm extends Component {
         data,
         stage_forms,
         deleted_forms,
-        stage_forms_loading
-      }
+        stage_forms_loading,
+        id,
+      },
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>
             {!data ? (
@@ -50,8 +58,12 @@ class ResponseStageForm extends Component {
               />
             )}
           </h5>
-          <Link to={`/site-responses/${this.props.id}/rejected`}>
-            <button onClick={showViewData} className="fieldsight-btn">
+          <Link to={`/site-responses/${id}/rejected`}>
+            <button
+              type="button"
+              onClick={showViewData}
+              className="fieldsight-btn"
+            >
               {data ? (
                 <FormattedMessage
                   id="app.view-by-form"
@@ -59,8 +71,8 @@ class ResponseStageForm extends Component {
                 />
               ) : (
                 <FormattedMessage
-                  id="app.view-by-status"
-                  defaultMessage="View By Status"
+                  id="app.view-by-form"
+                  defaultMessage="View By Form"
                 />
               )}
             </button>
@@ -71,7 +83,7 @@ class ResponseStageForm extends Component {
             <ResponseTable
               stage_forms={stage_forms}
               table="site"
-              id={this.props.id}
+              id={id}
               loader={stage_forms_loading}
             />
           )}
@@ -93,9 +105,12 @@ class ResponseStageForm extends Component {
                         type="button"
                         className="btn-toggle"
                         onClick={this.toggleHide}
-                        style={{ width: "96px" }}
+                        style={{ width: '96px' }}
                       >
-                        <FormattedMessage id="app.show" defaultMessage="Show" />
+                        <FormattedMessage
+                          id="app.show"
+                          defaultMessage="Show"
+                        />
                         <div className="handle"></div>
                       </button>
                     ) : (
@@ -104,49 +119,78 @@ class ResponseStageForm extends Component {
                         className="btn-toggle"
                         onClick={this.toggleHide}
                         style={{
-                          backgroundColor: "#28a745",
-                          color: "white",
-                          textAlign: "left",
-                          width: "96px"
+                          backgroundColor: '#28a745',
+                          color: 'white',
+                          textAlign: 'left',
+                          width: '96px',
                         }}
                       >
-                        <FormattedMessage id="app.hide" defaultMessage="Hide" />
+                        <FormattedMessage
+                          id="app.hide"
+                          defaultMessage="Hide"
+                        />
                         <div
                           className="handle"
-                          style={{ left: "auto", right: "0.1875rem" }}
+                          style={{ left: 'auto', right: '0.1875rem' }}
                         ></div>
                       </button>
                     )}
                   </div>
                 </div>
-                <div className="card-body">
+                {/* <div className="card-body">
                   {!this.state.hide && (
                     <DeleteTable
                       deleted_forms={deleted_forms}
                       id={this.props.id}
                       loader={stage_forms_loading}
                     />
+                  </button>
+                )}
+              </div> 
+            </div>*/}
+                <div className="card-body">
+                  {!this.state.hide && (
+                    <DeleteTable
+                      deleted_forms={deleted_forms}
+                      id={id}
+                      loader={stage_forms_loading}
+                    />
                   )}
                 </div>
               </div>
             )
-          : ""}
-      </React.Fragment>
+          : ''}
+      </>
     );
   }
 }
-//export default ResponseStageForm;
+
+ResponseStageForm.propTypes = {
+  id: PropTypes.string.isRequired,
+  getsiteViewData: PropTypes.func.isRequired,
+  showViewData: PropTypes.bool.isRequired,
+  data: PropTypes.objectOf.isRequired,
+  stage_forms: PropTypes.arrayOf.isRequired,
+  deleted_forms: PropTypes.arrayOf.isRequired,
+  stage_forms_loading: PropTypes.bool.isRequired,
+};
+
 const mapStateToProps = ({ siteViewData }) => {
-  const { stage_forms_loading, deleted_forms, stage_forms } = siteViewData;
+  const {
+    stage_forms_loading,
+    deleted_forms,
+    stage_forms,
+  } = siteViewData;
 
   return {
     stage_forms_loading,
     deleted_forms,
-    stage_forms
+    stage_forms,
   };
 };
+
 export default compose(
   connect(mapStateToProps, {
-    getsiteViewData
-  })
+    getsiteViewData,
+  }),
 )(ResponseStageForm);

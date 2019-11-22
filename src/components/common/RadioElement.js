@@ -1,5 +1,5 @@
-import React from "react";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const RadioElement = ({
   name,
@@ -8,11 +8,11 @@ const RadioElement = ({
   changeHandler,
   label,
   value,
-  translation
+  translation,
 }) => (
   <div className={`radiobox ${className}`}>
     <label>
-      {" "}
+      {' '}
       <input
         type="radio"
         name={name}

@@ -1,25 +1,31 @@
-import React, { Component } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import Table from "react-bootstrap/Table";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { TableContentLoader } from "../common/Loader";
-import { FormattedMessage } from "react-intl";
+import React, { PureComponent } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import Table from 'react-bootstrap/Table';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import { TableContentLoader } from '../common/Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
 
-class RegionTable extends Component {
+class RegionTable extends PureComponent {
   render() {
+    const { regions, RegionLoader, profileId } = this.props;
     return (
       <div
         className="table-wrapper"
         role="tabpanel"
         aria-labelledby="region_tab"
-        style={{ position: "relative", height: "650px" }}
+        style={{ position: 'relative', height: '650px' }}
       >
-        {this.props.RegionLoader && <TableContentLoader row={10} column={5} />}
+        {RegionLoader && <TableContentLoader row={10} column={5} />}
 
-        {!this.props.RegionLoader && (
+        {!RegionLoader && (
           <PerfectScrollbar>
-            {this.props.regions.length > 0 ? (
-              <Table ponsive="xl" className="table  table-bordered  dataTable ">
+            {regions.length > 0 ? (
+              <Table
+                ponsive="xl"
+                className="table  table-bordered  dataTable "
+              >
                 <thead>
                   <tr>
                     <th>
@@ -29,7 +35,10 @@ class RegionTable extends Component {
                       />
                     </th>
                     <th>
-                      <FormattedMessage id="app.name" defaultMessage="Name" />
+                      <FormattedMessage
+                        id="app.name"
+                        defaultMessage="Name"
+                      />
                     </th>
                     <th>
                       <FormattedMessage
@@ -38,7 +47,10 @@ class RegionTable extends Component {
                       />
                     </th>
                     <th>
-                      <FormattedMessage id="app.role" defaultMessage="Role" />
+                      <FormattedMessage
+                        id="app.role"
+                        defaultMessage="Role"
+                      />
                     </th>
 
                     {this.props.profileId && (
@@ -53,15 +65,7 @@ class RegionTable extends Component {
                 </thead>
 
                 <tbody>
-                  {/*this.props.regions.length === 0 && (
-                  <tr>
-                    <td>
-                      <p>No Form Data Available</p>
-                    </td>
-                  </tr>
-                )*/}
-
-                  {this.props.regions.map((region, i) => (
+                  {regions.map((region, i) => (
                     <tr key={i}>
                       <td>{region.identifier}</td>
                       <td>
@@ -69,7 +73,7 @@ class RegionTable extends Component {
                       </td>
                       <td>{region.total_sites}</td>
                       <td>{region.role}</td>
-                      {this.props.profileId && (
+                      {profileId && (
                         <td>
                           <a className="td-delete-btn td-btn">
                             <OverlayTrigger
@@ -99,16 +103,16 @@ class RegionTable extends Component {
     );
   }
 
-  componentDidUpdate(prevProps) {
-    const url = "fv3/api/my-regions/?project=" + this.props.initialTeamId;
-    if (prevProps.initialTeamId != this.props.initialTeamId) {
-      // console.log("regiodtable update")
-      this.props.requestRegions(this.props.initialTeamId);
-      this.props.requestSite(this.props.initialTeamId);
-      this.props.requestSubmission(this.props.initialTeamId);
-      this.props.requestMap(this.props.initialTeamId);
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   const url = "fv3/api/my-regions/?project=" + this.props.initialTeamId;
+  //   if (prevProps.initialTeamId != this.props.initialTeamId) {
+  //     // console.log("regiodtable update")
+  //     this.props.requestRegions(this.props.initialTeamId);
+  //     this.props.requestSite(this.props.initialTeamId);
+  //     this.props.requestSubmission(this.props.initialTeamId);
+  //     this.props.requestMap(this.props.initialTeamId);
+  //   }
+  // }
 }
 
 export default RegionTable;

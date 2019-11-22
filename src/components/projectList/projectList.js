@@ -1,55 +1,62 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { Table } from "react-bootstrap";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import axios from "axios";
-import { getProjectList } from "../../actions/projectListAction";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { Table } from 'react-bootstrap';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { FormattedMessage } from 'react-intl';
+import { getProjectList } from '../../actions/projectListAction';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 class ProjectList extends Component {
-  state = {
-    projects: [],
-    masterprojects: [],
-    breadcrumbs: [],
-    id: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      projects: [],
+      masterprojects: [],
+      breadcrumbs: [],
+      id: '',
+    };
+  }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
-    this.props.getProjectList(id);
+    getProjectList(id);
     this.setState({
-      id: id
+      id,
     });
   }
+
   componentWillReceiveProps(nextprops) {
     this.setState({
       projects: nextprops.projectList.projects,
       masterprojects: nextprops.projectList.projects,
-      breadcrumbs: nextprops.projectList.breadcrumbs
+      breadcrumbs: nextprops.projectList.breadcrumbs,
     });
   }
 
   handleChange = async e => {
     const {
-      target: { value }
+      target: { value },
     } = e;
     const { projects, masterprojects } = this.state;
     if (value) {
       const search = await projects.filter(project => {
-        return project.name.toLowerCase().includes(value.toLowerCase());
+        return project.name
+          .toLowerCase()
+          .includes(value.toLowerCase());
       });
 
       this.setState({
-        projects: search
+        projects: search,
       });
     } else {
       this.setState({
-        projects: masterprojects
+        projects: masterprojects,
       });
     }
   };
@@ -106,7 +113,7 @@ class ProjectList extends Component {
               </div>
             </div>
             <div className="card-body">
-              <div style={{ position: "relative", height: "800px" }}>
+              <div style={{ position: 'relative', height: '800px' }}>
                 <PerfectScrollbar>
                   <Table
                     id="manage_table"
@@ -151,7 +158,7 @@ class ProjectList extends Component {
                           />
                         </th>
                         <th>
-                          {" "}
+                          {' '}
                           <FormattedMessage
                             id="app.action"
                             defaultMessage="Action"
@@ -169,7 +176,10 @@ class ProjectList extends Component {
                                 className="pending table-profile"
                               >
                                 <figure>
-                                  <img src={project.logo} alt="site-logo" />
+                                  <img
+                                    src={project.logo}
+                                    alt="site-logo"
+                                  />
                                 </figure>
                                 <h5>{project.name}</h5>
                               </a>
@@ -184,15 +194,13 @@ class ProjectList extends Component {
                                 href={`/fieldsight/application/#/project-dashboard/${project.id}`}
                                 className="td-view-btn td-btn"
                               >
-                                {" "}
-                                <i className="la la-eye"></i>{" "}
+                                <i className="la la-eye" />
                               </a>
                               <a
                                 href={`/fieldsight/application/?project=${project.id}#/project-settings`}
                                 className="td-edit-btn td-btn"
                               >
-                                {" "}
-                                <i className="la la-edit"></i>
+                                <i className="la la-edit" />
                               </a>
                             </td>
                           </tr>
@@ -212,11 +220,11 @@ class ProjectList extends Component {
 
 const mapStateToProps = ({ projectList }) => {
   return {
-    projectList
+    projectList,
   };
 };
 export default compose(
   connect(mapStateToProps, {
-    getProjectList
-  })
+    getProjectList,
+  }),
 )(ProjectList);

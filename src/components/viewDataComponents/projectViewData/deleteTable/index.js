@@ -1,35 +1,45 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
-import format from "date-fns/format";
-import ProjectDeleteTable from "../../responded/DeleteTable";
-import { DotLoader } from "../../../myForm/Loader";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ProjectDeleteTable from '../../responded/DeleteTable';
+import { DotLoader } from '../../../myForm/Loader';
+/* eslint-disable camelcase */
 
 class DeleteTable extends Component {
-  state = {
-    deleted_forms: [],
-    loader: ""
-  };
-  static getDerivedStateFromProps(props, state) {
-    return {
-      deleted_forms: props.deleted_forms,
-      loader: props.loader
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      deleted_forms: [],
+      loader: '',
     };
   }
+
+  static getDerivedStateFromProps(props) {
+    return {
+      deleted_forms: props.deleted_forms,
+      loader: props.loader,
+    };
+  }
+
   render() {
-    const { loader } = this.state;
+    const { loader, deleted_forms } = this.state;
     return (
-      <React.Fragment>
-        {loader == true ? (
+      <>
+        {loader === true ? (
           <ProjectDeleteTable
-            deleted_forms={this.state.deleted_forms}
+            deleted_forms={deleted_forms}
             id={this.props.id}
           />
         ) : (
           <DotLoader />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
+DeleteTable.propTypes = {
+  deleted_forms: PropTypes.arrayOf.isRequired,
+  id: PropTypes.string.isRequired,
+  loader: PropTypes.bool.isRequired,
+};
 export default DeleteTable;

@@ -1,6 +1,7 @@
-import React from "react";
-import Modal from "../../common/Modal";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import Modal from '../../common/Modal';
+/* eslint-disable */
 
 const SubmissionModal = ({ surveyData, toggleModal }) => (
   <Modal title="Add Data" toggleModal={toggleModal}>
@@ -17,16 +18,22 @@ const SubmissionModal = ({ surveyData, toggleModal }) => (
           </li>
         </ul>
       </div>
-      <div style={{ position: "relative", height: "434px" }}>
+      <div style={{ position: 'relative', height: '434px' }}>
         <table className="table table-bordered">
           <tbody>
             {surveyData.map((subStages, ind) => (
               <tr key={ind}>
-                <td style={{ width: "80%" }}>{subStages.form_name}</td>
-                <td style={{ width: "20%" }}>
-                  <a href={subStages.new_submission_url} target={`_blank`}>
+                <td style={{ width: '80%' }}>
+                  {subStages.form_name}
+                </td>
+                <td style={{ width: '20%' }}>
+                  <a
+                    href={subStages.new_submission_url}
+                    target={`_blank`}
+                    rel="noopener noreferrer"
+                  >
                     <i className="la la-plus approved" />
-                  </a>{" "}
+                  </a>
                 </td>
               </tr>
             ))}

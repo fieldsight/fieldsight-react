@@ -1,27 +1,33 @@
-import React, { Component } from "react";
-import ResponseTable from "../../responded/ResponseTable";
-import axios from "axios";
-import DeleteTable from "../deleteTable";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { getsiteViewData } from "../../../../actions/siteViewDataAction";
-import { DotLoader } from "../../../myForm/Loader";
-import { FormattedMessage } from "react-intl";
-
+import React, { Component } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import ResponseTable from '../../responded/ResponseTable';
+import DeleteTable from '../deleteTable';
+import { getsiteViewData } from '../../../../actions/siteViewDataAction';
+import { DotLoader } from '../../../myForm/Loader';
+/* eslint-disable camelcase */
 class ManageScheduledForm extends Component {
-  state = {
-    hide: true
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hide: true,
+    };
+  }
+
   componentDidMount() {
-    if (this.props.id != "") {
-      this.props.getsiteViewData(this.props.id, "scheduled");
+    if (this.props.id !== '') {
+      this.props.getsiteViewData(this.props.id, 'scheduled');
     }
   }
+
   toggleHide = () => {
-    this.setState({
-      hide: !this.state.hide
-    });
+    this.setState(state => ({
+      hide: !state.hide,
+    }));
   };
 
   render() {
@@ -31,12 +37,13 @@ class ManageScheduledForm extends Component {
         data,
         scheduled_forms,
         deleted_forms,
-        scheduled_loading
-      }
+        scheduled_loading,
+        id,
+      },
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>
             {!data ? (
@@ -73,7 +80,7 @@ class ManageScheduledForm extends Component {
               <ResponseTable
                 generals_forms={scheduled_forms}
                 table="site"
-                id={this.props.id}
+                id={id}
                 survey="true"
               />
             ) : (
@@ -96,9 +103,12 @@ class ManageScheduledForm extends Component {
                         type="button"
                         className="btn-toggle"
                         onClick={this.toggleHide}
-                        style={{ width: "96px" }}
+                        style={{ width: '96px' }}
                       >
-                        <FormattedMessage id="app.show" defaultMessage="Show" />
+                        <FormattedMessage
+                          id="app.show"
+                          defaultMessage="Show"
+                        />
                         <div className="handle"></div>
                       </button>
                     ) : (
@@ -107,49 +117,76 @@ class ManageScheduledForm extends Component {
                         className="btn-toggle"
                         onClick={this.toggleHide}
                         style={{
-                          backgroundColor: "#28a745",
-                          color: "white",
-                          textAlign: "left",
-                          width: "96px"
+                          backgroundColor: '#28a745',
+                          color: 'white',
+                          textAlign: 'left',
+                          width: '96px',
                         }}
                       >
-                        <FormattedMessage id="app.hide" defaultMessage="Hide" />
+                        <FormattedMessage
+                          id="app.hide"
+                          defaultMessage="Hide"
+                        />
                         <div
                           className="handle"
-                          style={{ left: "auto", right: "0.1875rem" }}
+                          style={{ left: 'auto', right: '0.1875rem' }}
                         ></div>
                       </button>
                     )}
                   </div>
                 </div>
-                <div className="card-body">
+                {/* <div className="card-body">
                   {!this.state.hide && (
                     <DeleteTable
                       deleted_forms={deleted_forms}
                       id={this.props.id}
                       loader={scheduled_loading}
                     />
+                  </button>
+                )}
+              </div>
+            </div> */}
+                <div className="card-body">
+                  {!this.state.hide && (
+                    <DeleteTable
+                      deleted_forms={deleted_forms}
+                      id={id}
+                      loader={scheduled_loading}
+                    />
                   )}
                 </div>
               </div>
             )
-          : ""}
-      </React.Fragment>
+          : ''}
+      </>
     );
   }
 }
-//export default ManageScheduledForm;
+
+ManageScheduledForm.propTypes = {
+  id: PropTypes.string.isRequired,
+  showViewData: PropTypes.bool.isRequired,
+  data: PropTypes.objectOf.isRequired,
+  scheduled_forms: PropTypes.arrayOf.isRequired,
+  deleted_forms: PropTypes.arrayOf.isRequired,
+  getsiteViewData: PropTypes.func.isRequired,
+  scheduled_loading: PropTypes.bool.isRequired,
+};
 const mapStateToProps = ({ siteViewData }) => {
-  const { scheduled_forms, deleted_forms, scheduled_loading } = siteViewData;
+  const {
+    scheduled_forms,
+    deleted_forms,
+    scheduled_loading,
+  } = siteViewData;
 
   return {
     scheduled_forms,
     deleted_forms,
-    scheduled_loading
+    scheduled_loading,
   };
 };
 export default compose(
   connect(mapStateToProps, {
-    getsiteViewData
-  })
+    getsiteViewData,
+  }),
 )(ManageScheduledForm);

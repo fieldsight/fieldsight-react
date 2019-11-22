@@ -1,10 +1,11 @@
-import React, { Component } from "react";
-import axios from "axios";
-import Modal from "../common/Modal";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { getProjectUser } from "../../actions/projectUserActions";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { FormattedMessage } from 'react-intl';
+import { getProjectUser } from '../../actions/projectUserActions';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 class ProjectUser extends Component {
   constructor(props) {
@@ -12,45 +13,49 @@ class ProjectUser extends Component {
     this.state = {
       users: [],
       breadcrumbs: [],
-      masteruser: []
+      masteruser: [],
     };
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
+      // getProjectUser,
     } = this.props;
-    this.props.getProjectUser(id);
+    getProjectUser(id);
   }
 
   componentWillReceiveProps(nextprops) {
     this.setState({
       users: nextprops.projectUser.users,
       masteruser: nextprops.projectUser.users,
-      breadcrumbs: nextprops.projectUser.breadcrumbs
+      breadcrumbs: nextprops.projectUser.breadcrumbs,
     });
   }
 
   handleChange = async e => {
     const {
-      target: { value }
+      target: { value },
     } = e;
+    const { users, masteruser } = this.state;
     if (value) {
-      const search = await this.state.users.filter(users => {
+      const search = await users.filter(user => {
         return (
-          users.full_name.toLowerCase().includes(value.toLowerCase()) ||
-          users.email.toLowerCase().includes(value.toLowerCase()) ||
-          users.username.toLowerCase().includes(value.toLowerCase())
+          user.full_name
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          user.email.toLowerCase().includes(value.toLowerCase()) ||
+          user.username.toLowerCase().includes(value.toLowerCase())
         );
       });
       this.setState({
-        users: search
+        users: search,
       });
     } else {
       this.setState({
-        users: this.state.masteruser
+        users: masteruser,
       });
     }
   };
@@ -61,14 +66,16 @@ class ProjectUser extends Component {
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          {
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href={breadcrumbs.project_url}>{breadcrumbs.project}</a>
-              </li>
-              <li className="breadcrumb-item">{breadcrumbs.name}</li>
-            </ol>
-          }
+          {/* { */}
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <a href={breadcrumbs.project_url}>
+                {breadcrumbs.project}
+              </a>
+            </li>
+            <li className="breadcrumb-item">{breadcrumbs.name}</li>
+          </ol>
+          {/* } */}
         </nav>
         <main id="main-content">
           <div className="card">
@@ -109,7 +116,10 @@ class ProjectUser extends Component {
                 <thead>
                   <tr>
                     <th>
-                      <FormattedMessage id="app.name" defaultMessage="Name" />
+                      <FormattedMessage
+                        id="app.name"
+                        defaultMessage="Name"
+                      />
                     </th>
                     <th>
                       <FormattedMessage
@@ -118,10 +128,16 @@ class ProjectUser extends Component {
                       />
                     </th>
                     <th>
-                      <FormattedMessage id="app.email" defaultMessage="Email" />
+                      <FormattedMessage
+                        id="app.email"
+                        defaultMessage="Email"
+                      />
                     </th>
                     <th>
-                      <FormattedMessage id="app.role" defaultMessage="Role" />
+                      <FormattedMessage
+                        id="app.role"
+                        defaultMessage="Role"
+                      />
                     </th>
                   </tr>
                 </thead>
@@ -136,21 +152,21 @@ class ProjectUser extends Component {
                           >
                             <figure>
                               <img
-                                src={users.profile_picture}
+                                src={user.profile_picture}
                                 alt="site-logo"
                               />
                             </figure>
-                            <h5>{users.full_name}</h5>
+                            <h5>{user.full_name}</h5>
                           </a>
                         </td>
-                        <td>{users.username}</td>
-                        <td>{users.email}</td>
-                        {users.role.length > 0 ? (
-                          users.role[0] ? (
-                            <td>{users.role[0]}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        {user.role.length > 0 ? (
+                          user.role[0] ? (
+                            <td>{user.role[0]}</td>
                           ) : (
                             <td>
-                              {users.role[0]}/{users.role[1]}
+                              {`${user.role[0]}/${user.role[1]}`}
                             </td>
                           )
                         ) : (
@@ -171,11 +187,11 @@ class ProjectUser extends Component {
 
 const mapStateToProps = ({ projectUser }) => {
   return {
-    projectUser
+    projectUser,
   };
 };
 export default compose(
   connect(mapStateToProps, {
-    getProjectUser
-  })
+    getProjectUser,
+  }),
 )(ProjectUser);

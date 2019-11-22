@@ -1,35 +1,40 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { Table, Button } from "react-bootstrap";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { getTeam, getTranslate } from "../../actions/teamAction";
-import { FormattedMessage } from "react-intl";
-import SelectElement from "../common/SelectElement";
-import { useHistory } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { FormattedMessage } from 'react-intl';
+import { Table, Button } from 'react-bootstrap';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { getTeam, getTranslate } from '../../actions/teamAction';
+/* eslint-disable jsx-a11y/label-has-associated-control */
 
 class Teams extends Component {
-  state = {
-    results: [],
-    masterresult: [],
-    count: "",
-    selectedLanguage: "en"
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      results: [],
+      masterresult: [],
+      // count: '',
+      // selectedLanguage: 'en',
+    };
+  }
 
   componentDidMount() {
     this.props.getTeam();
   }
+
   componentWillReceiveProps(nextprops) {
     this.setState({
       results: nextprops.teams.teams,
       masterresult: nextprops.teams.teams,
-      count: nextprops.teams.count
+      // count: nextprops.teams.count,
     });
   }
 
   handleChange = async e => {
     const {
-      target: { value }
+      target: { value },
     } = e;
     const { results, masterresult } = this.state;
     if (value) {
@@ -37,16 +42,18 @@ class Teams extends Component {
         return (
           result.name.toLowerCase().includes(value.toLowerCase()) ||
           (result.address !== null
-            ? result.address.toLowerCase().includes(value.toLowerCase())
-            : "")
+            ? result.address
+                .toLowerCase()
+                .includes(value.toLowerCase())
+            : '')
         );
       });
       this.setState({
-        results: search
+        results: search,
       });
     } else {
       this.setState({
-        results: masterresult
+        results: masterresult,
       });
     }
   };
@@ -54,31 +61,15 @@ class Teams extends Component {
   onLanguageChangeHandler = e => {
     const { value } = e.target;
     this.props.getTranslate(value);
-    // this.setState(
-    //   {
-    //     selectedLanguage: value
-    //   },
-    //   ()=>this.props
-    // );
   };
 
   showMap = () => {
-    this.props.history.push("/map");
+    this.props.history.push('/map');
   };
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.selected !== this.props.selected) {
-      localStorage.setItem("selected", this.props.selected);
-    }
-  }
 
   render() {
     const { results } = this.state;
 
-    const selectLanguage = [
-      { id: "en", name: "Eng" },
-      { id: "ne", name: "Nep" }
-    ];
-    const { selected } = this.props;
     return (
       <>
         <div className="card">
@@ -112,24 +103,28 @@ class Teams extends Component {
                       defaultMessage="Search"
                     />
                   </label>
-                  <i className="la la-search"></i>
+                  <i className="la la-search" />
                 </div>
               </form>
               <a
-                href={`/fieldsight/application/#/create-team/`}
+                href="/fieldsight/application/#/create-team/"
                 className="fieldsight-btn"
               >
-                <i className="la la-plus"></i>
+                <i className="la la-plus" />
               </a>
-              <Button className="fieldsight-btn" onClick={() => this.showMap()}>
-                <i className="la la-map"></i>&nbsp; {/*Map*/}
+              <Button
+                className="fieldsight-btn"
+                onClick={() => this.showMap()}
+              >
+                <i className="la la-map" />
+                &nbsp;{' '}
                 <FormattedMessage id="app.map" defaultMessage="Map" />
               </Button>
             </div>
           </div>
 
           <div className="card-body">
-            <div style={{ position: "relative", height: "800px" }}>
+            <div style={{ position: 'relative', height: '800px' }}>
               <PerfectScrollbar>
                 <Table
                   id="manage_table"
@@ -184,16 +179,19 @@ class Teams extends Component {
                   <tbody>
                     {results &&
                       results.length > 0 &&
-                      results.map((project, key) => {
+                      results.map(project => {
                         return (
-                          <tr key={key}>
+                          <tr key={project.id}>
                             <td>
                               <a
                                 href={`/fieldsight/application/#/team-dashboard/${project.id}`}
                                 className="pending table-profile"
                               >
                                 <figure>
-                                  <img src={project.logo} alt="site-logo" />
+                                  <img
+                                    src={project.logo}
+                                    alt="site-logo"
+                                  />
                                 </figure>
                                 <h5>{project.name}</h5>
                               </a>
@@ -216,13 +214,13 @@ class Teams extends Component {
                                 href={`/fieldsight/application/#/team-dashboard/${project.id}`}
                                 className="td-view-btn td-btn"
                               >
-                                <i className="la la-eye"></i>
+                                <i className="la la-eye" />
                               </a>
                               <a
                                 href={`/fieldsight/application/#/team-settings/${project.id}`}
                                 className="td-edit-btn td-btn"
                               >
-                                <i className="la la-edit"></i>
+                                <i className="la la-edit" />
                               </a>
                             </td>
                           </tr>
@@ -241,16 +239,20 @@ class Teams extends Component {
 
 const mapStateToProps = ({ teams }) => {
   const { selected } = teams;
-  // console.log(teams, selected, "========");
-
   return {
     teams,
-    selected
+    selected,
   };
+};
+Teams.propTypes = {
+  // teams: PropTypes.arrayOf.isRequired,
+  getTeam: PropTypes.func.isRequired,
+  getTranslate: PropTypes.func.isRequired,
+  history: PropTypes.objectOf.isRequired,
 };
 export default compose(
   connect(mapStateToProps, {
     getTeam,
-    getTranslate
-  })
+    getTranslate,
+  }),
 )(Teams);

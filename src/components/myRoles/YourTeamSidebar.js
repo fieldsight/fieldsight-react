@@ -1,22 +1,33 @@
-import React, { Component } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import Accordion from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card";
-import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
-import { BlockContentLoader } from "../common/Loader";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import Accordion from 'react-bootstrap/Accordion';
+import Card from 'react-bootstrap/Card';
+import { FormattedMessage } from 'react-intl';
+import { OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
+import { BlockContentLoader } from '../common/Loader';
+/* eslint-disable react/prop-types  */
 
-const url = "fv3/api/myroles";
-let base_url = window.base_url
-  ? window.base_url
-  : "https://fieldsight.naxa.com.np/";
+// const url = 'fv3/api/myroles';
+// let base_url = window.base_url
+//   ? window.base_url
+//   : 'https://fieldsight.naxa.com.np/';
 
 class YourTeamSideBar extends Component {
   OpenTabHandler = url => {
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   };
 
   render() {
+    const {
+      addPermission,
+      dLoader,
+      teams,
+      teamId,
+      requestRegions,
+      requestSite,
+      requestSubmission,
+      requestMap,
+    } = this.props;
     return (
       <div className="col-xl-4 col-lg-5">
         <div className="left-sidebar new-sidebar sticky-top">
@@ -33,6 +44,7 @@ class YourTeamSideBar extends Component {
                   <a
                     href="/fieldsight/application/#/create-team/"
                     target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <FormattedMessage
                       id="app.addTeam"
@@ -47,15 +59,15 @@ class YourTeamSideBar extends Component {
               )}
             </div>
 
-            {this.props.dLoader && (
+            {dLoader && (
               <BlockContentLoader number={5} height="140px" />
             )}
 
-            {!this.props.dLoader && (
+            {!dLoader && (
               <div
                 style={{
-                  position: "relative",
-                  height: "600px"
+                  position: 'relative',
+                  height: '600px',
                 }}
               >
                 <PerfectScrollbar>
@@ -64,8 +76,8 @@ class YourTeamSideBar extends Component {
                     className="sidebar-accordion"
                     id="accordion"
                   >
-                    {this.props.teams.map((team, i) => (
-                      <Card className="no-boxshadow" key={i}>
+                    {teams.map((team, i) => (
+                      <Card className="no-boxshadow" key={team.id}>
                         <Card.Header>
                           <figure>
                             <img src={team.logo} alt="pf" />
@@ -79,14 +91,27 @@ class YourTeamSideBar extends Component {
                               {team.name}
                               {team.has_organization_access && (
                                 <span
-                                  onClick={e =>
-                                    this.OpenTabHandler(team.team_url)
-                                  }
+                                  tabIndex="0"
+                                  role="button"
+                                  onKeyDown={() => {
+                                    this.OpenTabHandler(
+                                      team.team_url,
+                                    );
+                                  }}
+                                  onClick={() => {
+                                    this.OpenTabHandler(
+                                      team.team_url,
+                                    );
+                                  }}
                                   className="goto"
                                 >
                                   <OverlayTrigger
                                     placement="top"
-                                    overlay={<Tooltip>Go to dashboard</Tooltip>}
+                                    overlay={
+                                      <Tooltip>
+                                        Go to dashboard
+                                      </Tooltip>
+                                    }
                                   >
                                     <i className="la la-external-link" />
                                   </OverlayTrigger>
@@ -99,22 +124,30 @@ class YourTeamSideBar extends Component {
 
                         <Accordion.Collapse eventKey={i.toString()}>
                           <Card.Body>
-                            <ul style={{ position: "relative" }}>
-                              {team.projects.map((project, i) => (
+                            <ul style={{ position: 'relative' }}>
+                              {team.projects.map(project => (
                                 <li
                                   className={
-                                    project.id == this.props.teamId
-                                      ? "active"
+                                    project.id === teamId
+                                      ? 'active'
                                       : null
                                   }
-                                  key={i}
+                                  key={project.id}
                                 >
                                   <a
-                                    onClick={event => {
-                                      this.props.requestRegions(project.id);
-                                      this.props.requestSite(project.id);
-                                      this.props.requestSubmission(project.id);
-                                      this.props.requestMap(project.id);
+                                    tabIndex="0"
+                                    role="button"
+                                    onKeyDown={() => {
+                                      requestRegions(project.id);
+                                      requestSite(project.id);
+                                      requestSubmission(project.id);
+                                      requestMap(project.id);
+                                    }}
+                                    onClick={() => {
+                                      requestRegions(project.id);
+                                      requestSite(project.id);
+                                      requestSubmission(project.id);
+                                      requestMap(project.id);
                                     }}
                                   >
                                     {project.name}
@@ -127,7 +160,9 @@ class YourTeamSideBar extends Component {
                                       <OverlayTrigger
                                         placement="top"
                                         overlay={
-                                          <Tooltip>Go to dashboard</Tooltip>
+                                          <Tooltip>
+                                            Go to dashboard
+                                          </Tooltip>
                                         }
                                       >
                                         <i className="la la-external-link" />

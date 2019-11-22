@@ -1,52 +1,38 @@
-import React, { Component } from "react";
-// import { Elements } from "react-stripe-elements";
-// import CheckoutForm from "../../common/CheckoutForm";
-import { CardElement, injectStripe } from "react-stripe-elements";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { CardElement, injectStripe } from 'react-stripe-elements';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 class PricingStepTwo extends Component {
   constructor(props) {
     super(props);
     this.handleCardForm = this.handleCardForm.bind(this);
-    this.state = { errors: "" };
+    this.state = { errors: '' };
   }
 
-  async handleCardForm(e) {
-    const { token, error } = await this.props.stripe.createToken({
-      name: "stripeToken"
-    });
-    if (!!token) this.props.passStripeToken(token.id, "");
-    if (!!error)
-      this.setState({ errors: error }, () => {
-        this.props.passStripeToken("", this.state.errors.code);
-      });
-  }
-  handleChange = () => {
-    this.setState({ errors: "" });
-  };
   formatDate = date => {
     const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
     const days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
     ];
 
     const dayIndex = date.getDay();
@@ -54,16 +40,32 @@ class PricingStepTwo extends Component {
     const monthIndex = date.getMonth();
     const year = date.getFullYear();
 
-    return (
-      days[dayIndex] +
-      ", " +
-      monthNames[monthIndex] +
-      " " +
-      dateIdx +
-      ",  " +
-      year
-    );
+    return `${days[dayIndex]}, ${monthNames[monthIndex]}, ${dateIdx}, ${year}`;
+    //   days[dayIndex] +
+    //   ', ' +
+    //   monthNames[monthIndex] +
+    //   ' ' +
+    //   dateIdx +
+    //   ',  ' +
+    //   year
+    // );
   };
+
+  handleChange = () => {
+    this.setState({ errors: '' });
+  };
+
+  async handleCardForm(e) {
+    const { token, error } = await this.props.stripe.createToken({
+      name: 'stripeToken',
+    });
+    if (token) this.props.passStripeToken(token.id, '');
+    if (error)
+      this.setState({ errors: error }, () => {
+        this.props.passStripeToken('', this.state.errors.code);
+      });
+  }
+
   render() {
     const {
       props: {
@@ -73,18 +75,22 @@ class PricingStepTwo extends Component {
         packageStartDate,
         packageEndDate,
         selectedPlan,
-        interval
+        interval,
       },
-      state: { errors }
+      state: { errors },
     } = this;
 
     return (
       <div className="fieldsight-new">
         <div className="bg-primary p-4">
           <div className="bg-light p-4 m-4">
-            <div className="pb-2"></div>
+            <div className="pb-2" />
             <input type="hidden" name="interval" value={interval} />
-            <input type="hidden" name="plan_name" value={selectedPlan} />
+            <input
+              type="hidden"
+              name="plan_name"
+              value={selectedPlan}
+            />
             <h6 className="text-center mt-4">
               <strong>
                 <FormattedMessage
@@ -206,7 +212,9 @@ class PricingStepTwo extends Component {
                         defaultMessage="Starting Date"
                       />
                     </strong>
-                    <p>{this.formatDate(new Date(packageStartDate))}</p>
+                    <p>
+                      {this.formatDate(new Date(packageStartDate))}
+                    </p>
                   </li>
                   <li>
                     <i className="la la-calendar-minus-o"></i>
@@ -231,32 +239,42 @@ class PricingStepTwo extends Component {
                     </p>
                     <CardElement onChange={this.handleChange} />
                     {Object.keys(errors).length > 0 && (
-                      <span className="card-error">{errors.message}</span>
+                      <span className="card-error">
+                        {errors.message}
+                      </span>
                     )}
                   </div>
                 </div>
                 <p className="text-center">
-                  <small></small>
+                  <small />
                 </p>
               </div>
             </div>
             <div className="text-center">
               <a
+                href="#"
                 title=""
                 className="btn btn-primary"
                 onClick={() => {
-                  handlePrevious("first");
+                  handlePrevious('first');
                 }}
               >
                 <i className="la la-long-arrow-left"></i>
-                <FormattedMessage id="app.previous" defaultMessage="Previous" />
+                <FormattedMessage
+                  id="app.previous"
+                  defaultMessage="Previous"
+                />
               </a>
               <a
+                href="#"
                 title=""
                 className="btn btn-primary"
                 onClick={this.handleCardForm}
               >
-                <FormattedMessage id="app.next" defaultMessage="Next" />
+                <FormattedMessage
+                  id="app.next"
+                  defaultMessage="Next"
+                />
                 <i className="la la-long-arrow-right"></i>
               </a>
             </div>
@@ -266,4 +284,14 @@ class PricingStepTwo extends Component {
     );
   }
 }
+PricingStepTwo.propTypes = {
+  stripe: PropTypes.objectOf.isRequired,
+  passStripeToken: PropTypes.objectOf.isRequired,
+  selectedPackage: PropTypes.objectOf.isRequired,
+  handlePrevious: PropTypes.func.isRequired,
+  packageStartDate: PropTypes.objectOf.isRequired,
+  packageEndDate: PropTypes.objectOf.isRequired,
+  interval: PropTypes.string.isRequired,
+  selectedPlan: PropTypes.string.isRequired,
+};
 export default injectStripe(PricingStepTwo);

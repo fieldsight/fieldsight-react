@@ -1,27 +1,26 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { AvatarContentLoader } from "../../common/Loader";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { FormattedMessage } from 'react-intl';
+import { AvatarContentLoader } from '../../common/Loader';
+/* eslint-disable react/prop-types  */
 
-const ManagersListItem = ({ manager }) => {
-  return (
-    <li>
-      <figure>
-        <img src={manager.profile_picture} alt="user avatar" />
-      </figure>
-      <div className="content">
-        <h6>
-          <a href={`/users/profile/${manager.id}/`} target=" _blank">
-            {manager.full_name}
-          </a>
-        </h6>
-        <span>{manager.email}</span>
-      </div>
-    </li>
-  );
-};
+const ManagersListItem = ({ manager }) => (
+  <li>
+    <figure>
+      <img src={manager.profile_picture} alt="user avatar" />
+    </figure>
+    <div className="content">
+      <h6>
+        <a href={`/users/profile/${manager.id}/`} target=" _blank">
+          {manager.full_name}
+        </a>
+      </h6>
+      <span>{manager.email}</span>
+    </div>
+  </li>
+);
 
-class ProjectManager extends React.Component {
+class ProjectManager extends React.PureComponent {
   render() {
     const { projectManagers, showContentLoader } = this.props;
     return (
@@ -32,8 +31,11 @@ class ProjectManager extends React.Component {
           <PerfectScrollbar>
             <ul>
               {projectManagers.length > 0 ? (
-                projectManagers.map((manager, i) => (
-                  <ManagersListItem manager={manager} key={`manager_${i}`} />
+                projectManagers.map(manager => (
+                  <ManagersListItem
+                    manager={manager}
+                    key={`manager_${manager.id}`}
+                  />
                 ))
               ) : (
                 <p>

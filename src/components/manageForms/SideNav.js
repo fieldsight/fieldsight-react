@@ -1,42 +1,55 @@
-import React, { Component } from "react";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-// import "react-perfect-scrollbar/dist/css/styles.css";
-import axios from "axios";
-import GeneralForms from "./GeneralForms";
-import ScheduleForms from "./ScheduleForms";
-import StagedForms from "./StagedFoms";
-import ProjectWideForms from "./ProjectWideForms";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { Switch, Route, Link, withRouter } from 'react-router-dom';
+import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
+import GeneralForms from './GeneralForms';
+import ScheduleForms from './ScheduleForms';
+import StagedForms from './StagedFoms';
+import ProjectWideForms from './ProjectWideForms';
+import {
+  getRegionsAndTypes,
+  getMyFormList,
+  getProjectFormList,
+  getSharedFormList,
+} from '../../actions/manageFormActions';
 
 const urls = [
-  "fv3/api/project-regions-types/",
-  "fv3/api/myforms/",
-  "fv3/api/myprojectforms/",
-  "fv3/api/sharedforms/"
+  'fv3/api/project-regions-types/',
+  'fv3/api/myforms/',
+  'fv3/api/myprojectforms/',
+  'fv3/api/sharedforms/',
 ];
 
 class SideNav extends Component {
   _isMounted = false;
-  state = {
-    regionOptions: [],
-    typeOptions: [],
-    myForms: [],
-    projectForms: [],
-    sharedForms: [],
-    loader: false,
-    isProjectForm: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      regionOptions: [],
+      typeOptions: [],
+      myForms: [],
+      projectForms: [],
+      sharedForms: [],
+      loader: false,
+      isProjectForm: false,
+      formProps: {},
+    };
+  }
 
   requestForms(id) {
     axios
       .all(
         urls.map((url, i) => {
           if (this.state.isProjectForm) {
-            return i === 0 ? axios.get(`${url}${id}/`) : axios.get(url);
+            return i === 0
+              ? axios.get(`${url}${id}/`)
+              : axios.get(url);
           } else {
-            return i > 0 ? axios.get(url) : "";
+            return i > 0 ? axios.get(url) : '';
           }
-        })
+        }),
       )
       .then(
         axios.spread((list, myForms, projectForms, sharedForms) => {
@@ -48,51 +61,60 @@ class SideNav extends Component {
                 return {
                   regionOptions: [
                     ...regions,
-                    { id: 0, identifier: "unassigned", name: "unassigned" }
+                    {
+                      id: 0,
+                      identifier: 'unassigned',
+                      name: 'unassigned',
+                    },
                   ],
                   typeOptions: [
                     ...types,
-                    { id: 0, identifier: "undefined", name: "undefined" }
+                    {
+                      id: 0,
+                      identifier: 'undefined',
+                      name: 'undefined',
+                    },
                   ],
                   myForms: myForms.data,
                   projectForms: projectForms.data,
                   sharedForms: sharedForms.data,
-                  loader: false
+                  loader: false,
                 };
               } else {
                 return {
                   myForms: myForms.data,
                   projectForms: projectForms.data,
                   sharedForms: sharedForms.data,
-                  loader: false
+                  loader: false,
                 };
               }
             });
           }
-        })
+        }),
       )
       .catch(err => {});
   }
+
   componentDidMount() {
     this._isMounted = true;
     const {
       props: {
         match: {
           url,
-          params: { id }
-        }
-      }
+          params: { id },
+        },
+      },
     } = this;
 
-    const splitArr = url.split("/");
-    const isProjectForm = splitArr.includes("project");
-    const isSiteForm = splitArr.includes("site");
+    const splitArr = url.split('/');
+    const isProjectForm = splitArr.includes('project');
+    const isSiteForm = splitArr.includes('site');
     this.setState(
       state => {
         if (isProjectForm) {
           return {
             loader: true,
-            isProjectForm
+            isProjectForm,
           };
         } else if (isSiteForm) {
           return { loader: true, isProjectForm: false };
@@ -100,13 +122,27 @@ class SideNav extends Component {
       },
       () => {
         this.requestForms(id);
-      }
+      },
     );
+  }
+
+  componentDidUpdate(prevProps) {
+    const { manageForms } = this.props;
+    if (prevProps.manageForms !== manageForms) {
+      this.setState({
+        formProps: manageForms,
+      });
+    }
   }
   render() {
     const {
       props: {
-        match: { path, url }
+        match: { path, url },
+        location: { pathname },
+        height,
+        commonPopupHandler,
+        closePopup,
+        popupModal,
       },
       state: {
         regionOptions,
@@ -115,17 +151,22 @@ class SideNav extends Component {
         projectForms,
         sharedForms,
         loader,
-        isProjectForm
-      }
+        isProjectForm,
+        formProps,
+      },
     } = this;
+    // console.log(
+    //   "props in sidenav",
+    //   this.state.formProps && this.state.formProps.projectForms
+    // );
 
     return (
-      <React.Fragment>
+      <>
         <div className="col-xl-3 col-lg-4">
           <div className="left-sidebar new-sidebar sticky-top">
             <div
               className="card no-boxshadow"
-              style={{ minHeight: this.props.height }}
+              style={{ minHeight: height }}
             >
               <div className="card-header main-card-header">
                 {/*<h5>Manage Forms</h5>*/}
@@ -152,9 +193,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/generalform`}
                         className={
-                          this.props.location.pathname == `${url}/generalform`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname == `${url}/generalform`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         {/*General forms*/}
@@ -168,9 +209,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/scheduleform`}
                         className={
-                          this.props.location.pathname == `${url}/scheduleform`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname == `${url}/scheduleform`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         {/*Scheduled forms*/}
@@ -184,9 +225,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/stageform`}
                         className={
-                          this.props.location.pathname == `${url}/stageform`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname == `${url}/stageform`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         {/* Staged forms*/}
@@ -216,10 +257,9 @@ class SideNav extends Component {
                         <Link
                           to={`${url}/wide/generalform`}
                           className={
-                            this.props.location.pathname ==
-                            `${url}/wide/generalform`
-                              ? "nav-link active"
-                              : "nav-link"
+                            pathname == `${url}/wide/generalform`
+                              ? 'nav-link active'
+                              : 'nav-link'
                           }
                         >
                           {/*General forms*/}
@@ -245,16 +285,17 @@ class SideNav extends Component {
               <GeneralForms
                 {...props}
                 title="GeneralForms"
-                OpenTabHandler={this.props.OpenTabHandler}
-                commonPopupHandler={this.props.commonPopupHandler}
-                closePopup={this.props.closePopup}
-                popupModal={this.props.popupModal}
-                typeOptions={typeOptions}
-                regionOptions={regionOptions}
-                myForms={myForms}
-                projectForms={projectForms}
-                sharedForms={sharedForms}
-                formLoader={loader}
+                // OpenTabHandler={this.props.OpenTabHandler}
+                commonPopupHandler={commonPopupHandler}
+                closePopup={closePopup}
+                popupModal={popupModal}
+                // formResponse={formProps}
+                typeOptions={formProps && formProps.types}
+                regionOptions={formProps && formProps.regions}
+                myForms={formProps && formProps.myForms}
+                projectForms={formProps && formProps.projectForms}
+                sharedForms={formProps && formProps.sharedForms}
+                formLoader={formProps && formProps.formLoader}
               />
             )}
           />
@@ -266,10 +307,10 @@ class SideNav extends Component {
               <ScheduleForms
                 {...props}
                 title="ScheduleForms"
-                OpenTabHandler={this.props.OpenTabHandler}
-                commonPopupHandler={this.props.commonPopupHandler}
-                closePopup={this.props.closePopup}
-                popupModal={this.props.popupModal}
+                // OpenTabHandler={this.props.OpenTabHandler}
+                commonPopupHandler={commonPopupHandler}
+                closePopup={closePopup}
+                popupModal={popupModal}
                 typeOptions={typeOptions}
                 regionOptions={regionOptions}
                 myForms={myForms}
@@ -287,10 +328,10 @@ class SideNav extends Component {
               <StagedForms
                 {...props}
                 title="StagedForms"
-                OpenTabHandler={this.props.OpenTabHandler}
-                commonPopupHandler={this.props.commonPopupHandler}
-                closePopup={this.props.closePopup}
-                popupModal={this.props.popupModal}
+                // OpenTabHandler={this.props.OpenTabHandler}
+                commonPopupHandler={commonPopupHandler}
+                closePopup={closePopup}
+                popupModal={popupModal}
                 typeOptions={typeOptions}
                 regionOptions={regionOptions}
                 myForms={myForms}
@@ -308,10 +349,10 @@ class SideNav extends Component {
               <ProjectWideForms
                 {...props}
                 title="ProjectWideForms"
-                OpenTabHandler={this.props.OpenTabHandler}
-                commonPopupHandler={this.props.commonPopupHandler}
-                closePopup={this.props.closePopup}
-                popupModal={this.props.popupModal}
+                // OpenTabHandler={this.props.OpenTabHandler}
+                commonPopupHandler={commonPopupHandler}
+                closePopup={closePopup}
+                popupModal={popupModal}
                 myForms={myForms}
                 projectForms={projectForms}
                 sharedForms={sharedForms}
@@ -320,12 +361,25 @@ class SideNav extends Component {
             )}
           />
         </Switch>
-      </React.Fragment>
+      </>
     );
   }
+
   componentWillUnmount() {
     this._isMounted = false;
   }
 }
 
-export default withRouter(SideNav);
+const mapStateToProps = ({ manageForms }) => ({
+  manageForms,
+});
+
+export default compose(
+  connect(mapStateToProps, {
+    getRegionsAndTypes,
+    getMyFormList,
+    getProjectFormList,
+    getSharedFormList,
+  }),
+  withRouter,
+)(SideNav);

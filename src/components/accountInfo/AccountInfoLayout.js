@@ -1,13 +1,12 @@
-import React, { Component } from "react";
-import { Elements, StripeProvider } from "react-stripe-elements";
-
-import RightContentCard from "../common/RightContentCard";
-import AccountInfo from "./AccountInfo";
+import React, { Component } from 'react';
+import { Elements, StripeProvider } from 'react-stripe-elements';
+import RightContentCard from '../common/RightContentCard';
+import AccountInfo from './AccountInfo';
 
 class AccountInfoLayout extends Component {
   render() {
     const {
-      props: { data, teamId }
+      props: { data, teamId },
     } = this;
 
     return (
@@ -34,9 +33,9 @@ class AccountInfoLayout extends Component {
                     data.subscribed_package.total_charge}
                   /
                   {data.subscribed_package &&
-                  data.subscribed_package.period == "Month"
-                    ? "Mo"
-                    : "Yr"}
+                  data.subscribed_package.period == 'Month'
+                    ? 'Mo'
+                    : 'Yr'}
                 </strong>
               </h6>
               <ul className="list-icon mt-4 mb-4">
@@ -45,7 +44,7 @@ class AccountInfoLayout extends Component {
                   <strong>
                     {data.subscribed_package &&
                       data.subscribed_package.total_submissions}
-                  </strong>{" "}
+                  </strong>{' '}
                   Submissions
                 </li>
                 <li>
@@ -58,7 +57,8 @@ class AccountInfoLayout extends Component {
                 </li>
                 <li>
                   <i className="la la-chevron-circle-right"></i>
-                  <strong>Unlimited</strong> Reports, Dashboards & Maps
+                  <strong>Unlimited</strong> Reports, Dashboards &
+                  Maps
                 </li>
               </ul>
             </div>

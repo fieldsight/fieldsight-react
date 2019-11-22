@@ -1,40 +1,69 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
-import { successToast, errorToast } from "./utils/toastHandler";
-import isEmpty from "./utils/isEmpty";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { successToast, errorToast } from './utils/toastHandler';
+import isEmpty from './utils/isEmpty';
 
 export const RegionContext = React.createContext();
 
-const url = "fv3/api/project-regions/";
-const urls = ["fv3/api/project-regions/", "fv3/api/project-terms-labels/"];
+/* eslint-disable consistent-return */
+
+const url = 'fv3/api/project-regions/';
+const urls = [
+  'fv3/api/project-regions/',
+  'fv3/api/project-terms-labels/',
+];
 
 const INITIAL_STATE = {
   terms: {},
   region: [],
   subRegion: [],
-  subRegionId: "",
+  subRegionId: '',
   showModal: false,
-  selectedIdentifier: "",
-  selectedName: "",
-  selectedId: "",
+  selectedIdentifier: '',
+  selectedName: '',
+  selectedId: '',
   isLoading: false,
   showDeleteConfirmation: false,
-  projectId: window.project_id ? window.project_id : process.env.PROJECT_ID,
+  projectId: window.project_id
+    ? window.project_id
+    : process.env.PROJECT_ID,
 
   organizationId: window.organization_id
     ? window.organization_id
-    : process.env.ORG_ID
+    : process.env.ORG_ID,
 };
 
 class RegionProvider extends Component {
-  state = INITIAL_STATE;
+  constructor(props) {
+    super(props);
+
+    this.state = INITIAL_STATE;
+  }
+
+  componentDidMount() {
+    const { projectId } = this.state;
+
+    axios
+      .all(
+        urls.map(each => axios.get(`${each}?project=${projectId}`)),
+      )
+      .then(
+        axios.spread((region, terms) => {
+          this.setState({
+            region: region.data,
+            terms: terms.data.length > 0 ? terms.data[0] : {},
+          });
+        }),
+      )
+      .catch(err => {});
+  }
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
-      selectedIdentifier: "",
-      selectedName: "",
-      selectedId: ""
+      selectedIdentifier: '',
+      selectedName: '',
+      selectedId: '',
     }));
   };
 
@@ -45,13 +74,13 @@ class RegionProvider extends Component {
       selectedName,
       region,
       projectId,
-      terms
+      terms,
     } = this.state;
 
     if (selectedId) {
       const newRegion = [...region];
       const selectedRegion = newRegion.find(
-        region => region.id === +selectedId
+        each => each.id === +selectedId,
       );
       selectedRegion.identifier = selectedIdentifier;
       selectedRegion.name = selectedName;
@@ -60,30 +89,31 @@ class RegionProvider extends Component {
         .put(`${url}${selectedId}/`, {
           identifier: selectedRegion.identifier,
           name: selectedRegion.name,
-          project: selectedRegion.project
+          project: selectedRegion.project,
         })
         .then(res => {
           this.setState(
-            {
+            prevState => ({
               ...INITIAL_STATE,
               region: newRegion,
-              subRegion: [...this.state.subRegion],
-              terms: { ...this.state.terms }
-            },
-            () =>
+              subRegion: [...prevState.subRegion],
+              terms: { ...prevState.terms },
+            }),
+            () => {
               successToast(
-                !isEmpty(terms) ? `${terms.region}` : "Region",
-                "updated"
-              )
+                !isEmpty(terms) ? `${terms.region}` : 'Region',
+                'updated',
+              );
+            },
           );
         })
         .catch(err => {
           this.setState(
             {
               isLoading: false,
-              selectedId: ""
+              selectedId: '',
             },
-            errorToast
+            errorToast,
           );
         });
     }
@@ -91,32 +121,33 @@ class RegionProvider extends Component {
     const newRegion = {
       identifier: selectedIdentifier,
       name: selectedName,
-      project: projectId
+      project: projectId,
     };
 
     axios
       .post(`${url}?project=${projectId}`, newRegion)
       .then(res => {
         this.setState(
-          {
+          prevState => ({
             ...INITIAL_STATE,
-            region: [...this.state.region, { ...res.data }],
-            subRegion: [...this.state.subRegion],
-            terms: { ...this.state.terms }
-          },
-          () =>
+            region: [...prevState.region, { ...res.data }],
+            subRegion: [...prevState.subRegion],
+            terms: { ...prevState.terms },
+          }),
+          () => {
             successToast(
-              !isEmpty(terms) ? `${terms.region}` : "Region",
-              "added"
-            )
+              !isEmpty(terms) ? `${terms.region}` : 'Region',
+              'added',
+            );
+          },
         );
       })
       .catch(err => {
         this.setState(
           {
-            isLoading: false
+            isLoading: false,
           },
-          errorToast
+          errorToast,
         );
       });
   };
@@ -129,13 +160,13 @@ class RegionProvider extends Component {
       subRegion,
       subRegionId,
       projectId,
-      terms
+      terms,
     } = this.state;
 
     if (selectedId) {
       const newSubRegion = [...subRegion];
       const selectedSubRegion = newSubRegion.find(
-        subRegion => subRegion.id === +selectedId
+        each => each.id === +selectedId,
       );
       selectedSubRegion.identifier = selectedIdentifier;
       selectedSubRegion.name = selectedName;
@@ -145,31 +176,34 @@ class RegionProvider extends Component {
           identifier: selectedSubRegion.identifier,
           name: selectedSubRegion.name,
           project: selectedSubRegion.project,
-          parent: subRegionId
+          parent: subRegionId,
         })
         .then(res => {
           this.setState(
-            {
+            prevState => ({
               ...INITIAL_STATE,
-              region: [...this.state.region],
-              terms: { ...this.state.terms },
+              region: [...prevState.region],
+              terms: { ...prevState.terms },
               subRegion: newSubRegion,
-              subRegionId
-            },
-            () =>
+              subRegionId,
+            }),
+            () => {
               successToast(
-                !isEmpty(terms) ? `Sub ${terms.region}` : "Sub Region",
-                "updated"
-              )
+                !isEmpty(terms)
+                  ? `Sub ${terms.region}`
+                  : 'Sub Region',
+                'updated',
+              );
+            },
           );
         })
         .catch(err => {
           this.setState(
             {
               isLoading: false,
-              selectedId: ""
+              selectedId: '',
             },
-            errorToast
+            errorToast,
           );
         });
     }
@@ -178,33 +212,34 @@ class RegionProvider extends Component {
       identifier: selectedIdentifier,
       name: selectedName,
       project: projectId,
-      parent: subRegionId
+      parent: subRegionId,
     };
 
     axios
       .post(`${url}?project=${projectId}`, newSubRegion)
       .then(res => {
         this.setState(
-          {
+          prevState => ({
             ...INITIAL_STATE,
-            region: [...this.state.region],
-            terms: { ...this.state.terms },
-            subRegion: [...this.state.subRegion, { ...res.data }],
-            subRegionId
-          },
-          () =>
+            region: [...prevState.region],
+            terms: { ...prevState.terms },
+            subRegion: [...prevState.subRegion, { ...res.data }],
+            subRegionId,
+          }),
+          () => {
             successToast(
-              !isEmpty(terms) ? `Sub ${terms.region}` : "Sub Region",
-              "added"
-            )
+              !isEmpty(terms) ? `Sub ${terms.region}` : 'Sub Region',
+              'added',
+            );
+          },
         );
       })
       .catch(err => {
         this.setState(
           {
-            isLoading: false
+            isLoading: false,
           },
-          errorToast
+          errorToast,
         );
       });
   };
@@ -224,39 +259,43 @@ class RegionProvider extends Component {
     this.setState(
       {
         isLoading: true,
-        showModal: false
+        showModal: false,
       },
-      this.requestHandler
+      this.requestHandler,
     );
   };
 
   editHandler = id => {
-    const { subRegionId } = this.state;
-    if (subRegionId) {
-      const selectedSubRegion = this.state.subRegion.find(
-        subReg => subReg.id === +id
-      );
+    this.setState(prevState => {
+      if (prevState.subRegionId) {
+        const selectedSubRegion = prevState.subRegion.find(
+          subReg => subReg.id === +id,
+        );
 
-      return this.setState({
+        return this.setState({
+          showModal: true,
+          selectedId: id,
+          selectedIdentifier: selectedSubRegion.identifier,
+          selectedName: selectedSubRegion.name,
+        });
+      }
+
+      const selectedRegion = prevState.region.find(
+        reg => reg.id === +id,
+      );
+      this.setState({
         showModal: true,
         selectedId: id,
-        selectedIdentifier: selectedSubRegion.identifier,
-        selectedName: selectedSubRegion.name
+        selectedIdentifier: selectedRegion.identifier,
+        selectedName: selectedRegion.name,
       });
-    }
-    const selectedRegion = this.state.region.find(reg => reg.id === +id);
-    this.setState({
-      showModal: true,
-      selectedId: id,
-      selectedIdentifier: selectedRegion.identifier,
-      selectedName: selectedRegion.name
     });
   };
 
   removeHandler = id => {
     this.setState({
       showDeleteConfirmation: true,
-      selectedId: id
+      selectedId: id,
     });
   };
 
@@ -264,121 +303,112 @@ class RegionProvider extends Component {
     this.setState(
       {
         showDeleteConfirmation: false,
-        isLoading: true
+        isLoading: true,
       },
-      this.confirmedRemoveHandler
+      this.confirmedRemoveHandler,
     );
   };
 
   cancelHandler = () => {
     this.setState({
       showDeleteConfirmation: false,
-      selectedId: ""
+      selectedId: '',
     });
   };
 
   confirmedRemoveHandler = () => {
     const { subRegionId, terms } = this.state;
-    if (subRegionId) {
-      const { selectedId, subRegion } = this.state;
-      const filteredSubRegion = subRegion.filter(
-        region => region.id !== +selectedId
+    this.setState(prevState => {
+      if (prevState.subRegionId) {
+        const { selectedId, subRegion } = prevState;
+        const filteredSubRegion = subRegion.filter(
+          region => region.id !== +selectedId,
+        );
+
+        return axios
+          .delete(`${url}${selectedId}/`)
+          .then(res => {
+            this.setState(
+              {
+                ...INITIAL_STATE,
+                region: [...prevState.region],
+                terms: { ...prevState.terms },
+                subRegion: filteredSubRegion,
+                subRegionId,
+              },
+              () =>
+                successToast(
+                  !isEmpty(terms)
+                    ? `Sub ${terms.region}`
+                    : 'Sub Region',
+                  'deleted',
+                ),
+            );
+          })
+          .catch(err => {
+            this.setState(
+              {
+                isLoading: false,
+              },
+              errorToast,
+            );
+          });
+      }
+
+      const { selectedId, region } = prevState;
+      const filteredRegion = region.filter(
+        each => each.id !== +selectedId,
       );
 
-      return axios
+      axios
         .delete(`${url}${selectedId}/`)
         .then(res => {
           this.setState(
             {
               ...INITIAL_STATE,
-              region: [...this.state.region],
-              terms: { ...this.state.terms },
-              subRegion: filteredSubRegion,
-              subRegionId
+              terms: { ...prevState.terms },
+              subRegion: [...prevState.subRegion],
+              region: filteredRegion,
             },
-            () =>
+            () => {
               successToast(
-                !isEmpty(terms) ? `Sub ${terms.region}` : "Sub Region",
-                "deleted"
-              )
+                !isEmpty(terms) ? `${terms.region}` : 'Region',
+                'deleted',
+              );
+            },
           );
         })
         .catch(err => {
           this.setState(
             {
-              isLoading: false
+              isLoading: false,
             },
-            errorToast
+            errorToast,
           );
         });
-    }
-
-    const { selectedId, region } = this.state;
-    const filteredRegion = region.filter(region => region.id !== +selectedId);
-
-    axios
-      .delete(`${url}${selectedId}/`)
-      .then(res => {
-        this.setState(
-          {
-            ...INITIAL_STATE,
-            terms: { ...this.state.terms },
-            subRegion: [...this.state.subRegion],
-            region: filteredRegion
-          },
-          () =>
-            successToast(
-              !isEmpty(terms) ? `${terms.region}` : "Region",
-              "deleted"
-            )
-        );
-      })
-      .catch(err => {
-        this.setState(
-          {
-            isLoading: false
-          },
-          errorToast
-        );
-      });
+    });
   };
 
   onChangeHandler = e => {
     const { name, value } = e.target;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   };
 
   setSubRegion = (subRegion, subRegionId) => {
     this.setState({
       subRegion,
-      subRegionId
+      subRegionId,
     });
   };
 
   updateTerms = terms => {
     this.setState({
-      terms
+      terms,
     });
   };
-
-  componentDidMount() {
-    const { projectId } = this.state;
-
-    axios
-      .all(urls.map(url => axios.get(`${url}?project=${projectId}`)))
-      .then(
-        axios.spread((region, terms) => {
-          this.setState({
-            region: region.data,
-            terms: terms.data.length > 0 ? terms.data[0] : {}
-          });
-        })
-      )
-      .catch(err => console.log("err", err));
-  }
 
   render() {
     const {
@@ -391,11 +421,12 @@ class RegionProvider extends Component {
       onSubmitHandler,
       setSubRegion,
       updateTerms,
-      state
+      state,
+      props,
     } = this;
 
     return (
-      <Fragment>
+      <>
         <RegionContext.Provider
           value={{
             ...state,
@@ -407,12 +438,12 @@ class RegionProvider extends Component {
             confirmHandler,
             onSubmitHandler,
             setSubRegion,
-            updateTerms
+            updateTerms,
           }}
         >
-          {this.props.children}
+          {props.children}
         </RegionContext.Provider>
-      </Fragment>
+      </>
     );
   }
 }

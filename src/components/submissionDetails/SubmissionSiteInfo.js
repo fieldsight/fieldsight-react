@@ -1,7 +1,11 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { DotLoader } from "../common/Loader";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
+/* eslint-disable  jsx-a11y/label-has-for  */
+/* eslint-disable no-else-return  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 const SubmissionSiteInfo = ({ siteInformation }) => (
   <div className="col-lg-6">
@@ -18,18 +22,21 @@ const SubmissionSiteInfo = ({ siteInformation }) => (
 
       <div
         className="card-body site-info submission-site-info"
-        style={{ position: "relative", height: "290px" }}
+        style={{ position: 'relative', height: '290px' }}
       >
-        {siteInformation && Object.keys(siteInformation).length > 0 ? (
+        {siteInformation &&
+        Object.keys(siteInformation).length > 0 ? (
           <PerfectScrollbar>
             <ul>
               {Object.entries(siteInformation).map((info, i) => {
                 if (info[1].children) {
-                  const childEntries = Object.entries(info[1].children);
-                  return childEntries.map((child, i) => {
+                  const childEntries = Object.entries(
+                    info[1].children,
+                  );
+                  return childEntries.map((child, j) => {
                     return (
-                      <li key={`${child[0]}${i}`}>
-                        <label>{child[0]} :</label>
+                      <li key={`${child[0]}${j}`}>
+                        <label>{`${child[0]} :`}</label>
                         {child[1]}
                       </li>
                     );
@@ -37,7 +44,7 @@ const SubmissionSiteInfo = ({ siteInformation }) => (
                 } else {
                   return (
                     <li key={`${info[0]}${i}`}>
-                      <label>{info[0]} :</label>
+                      <label>{`${info[0]} :`}</label>
                       {info[1]}
                     </li>
                   );

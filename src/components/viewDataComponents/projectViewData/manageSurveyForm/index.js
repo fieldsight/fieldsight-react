@@ -1,27 +1,35 @@
-import React, { Component } from "react";
-import ResponseTable from "../../responded/SurveyFormResponseTable";
-import DeleteTable from "../deleteTable";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { getProjectViewData } from "../../../../actions/viewDataActions";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from "react-intl";
+import ResponseTable from '../../responded/SurveyFormResponseTable';
+import DeleteTable from '../deleteTable';
+import { getProjectViewData } from '../../../../actions/viewDataActions';
+/* eslint-disable camelcase */
 
 class ManageSurveyForm extends Component {
-  state = {
-    hide: true
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hide: true,
+    };
+  }
+
   componentDidMount() {
-    if (this.props.id != "") {
-      this.props.getProjectViewData(this.props.id, "survey");
+    if (this.props.id !== '') {
+      this.props.getProjectViewData(this.props.id, 'survey');
     }
   }
 
   toggleHide = () => {
-    this.setState({
-      hide: !this.state.hide
-    });
+    this.setState(state => ({
+      hide: !state.hide,
+    }));
   };
+
   render() {
     const {
       props: {
@@ -29,11 +37,13 @@ class ManageSurveyForm extends Component {
         data,
         survey_forms,
         deleted_forms,
-        survey_forms_loader
-      }
+        survey_forms_loader,
+        url,
+        id,
+      },
     } = this;
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>
             {!data ? (
@@ -68,11 +78,10 @@ class ManageSurveyForm extends Component {
           {!data && (
             <ResponseTable
               survey_forms={survey_forms}
-              id={this.props.id}
+              id={id}
               loader={survey_forms_loader}
             />
           )}
-          {/*data && <Rejected id={this.props.id} />*/}
         </div>
         {deleted_forms.length > 0
           ? !data && (
@@ -124,27 +133,50 @@ class ManageSurveyForm extends Component {
                       deleted_forms={deleted_forms}
                       loader={survey_forms_loader}
                     />
-                  )}
-                </div>
+                  </button>
+                )}
               </div>
-            )
-          : ""}
-      </React.Fragment>
+            </div>
+            <div className="card-body">
+              {!this.state.hide && (
+                <DeleteTable
+                  id={id}
+                  deleted_forms={deleted_forms}
+                  loader={survey_forms_loader}
+                />
+              )}
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 }
-//export default ManageSurveyForm;
 const mapStateToProps = ({ projectViewData }) => {
-  const { survey_forms, deleted_forms, survey_forms_loader } = projectViewData;
+  const {
+    survey_forms,
+    deleted_forms,
+    survey_forms_loader,
+  } = projectViewData;
 
   return {
     survey_forms,
     deleted_forms,
-    survey_forms_loader
+    survey_forms_loader,
   };
+};
+ManageSurveyForm.propTypes = {
+  deleted_forms: PropTypes.arrayOf.isRequired,
+  showViewData: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  getProjectViewData: PropTypes.func.isRequired,
+  data: PropTypes.string.isRequired,
+  survey_forms: PropTypes.arrayOf.isRequired,
+  url: PropTypes.string.isRequired,
+  survey_forms_loader: PropTypes.bool.isRequired,
 };
 export default compose(
   connect(mapStateToProps, {
-    getProjectViewData
-  })
+    getProjectViewData,
+  }),
 )(ManageSurveyForm);

@@ -9,26 +9,21 @@ import {
   GET_SUBSITES,
   SHOW_DOT_LOADER,
   SHOW_DASHBOARD_LOADERS,
-  UPDATE_SITE_LOGO
-  // SITE_DASHBOARD_ERR,
-  // SITE_METAS_ERR,
-  // SITE_SUBMISSIONS_ERR,
-  // SITE_DOCUMENTS_ERR,
-  // SITE_PICTURES_ERR,
-  // SITE_LOGS_ERR
-} from "../actions/types";
+  UPDATE_SITE_LOGO,
+} from '../actions/types';
+/* eslint-disable camelcase */
 
 const initialState = {
-  id: "",
-  identifier: "",
-  name: "",
-  address: "",
+  id: '',
+  identifier: '',
+  name: '',
+  address: '',
   location: {},
-  logo: "",
-  public_desc: "",
-  project_id: "",
+  logo: '',
+  public_desc: '',
+  project_id: '',
   region: null,
-  total_users: "",
+  total_users: '',
   users: [],
   submissions: {},
   total_subsites: null,
@@ -51,7 +46,7 @@ const initialState = {
   sitePicturesLoader: true,
   subSitesLoader: true,
   current_progress: 0,
-  type: null
+  type: null,
   // siteDashboardErr: false,
   // siteMetasErr: false,
   // siteSubmissionsErr: false,
@@ -66,13 +61,13 @@ const getRecentPictures = (state, action) => {
   if (picturesKeyArr.length > 0) {
     modifiedPayload = [
       action.payload.site_featured_images.photo,
-      ...action.payload.recent_pictures
+      ...action.payload.recent_pictures,
     ].filter(Boolean);
   }
   return {
     ...state,
     recentPictures: modifiedPayload,
-    sitePicturesLoader: false
+    sitePicturesLoader: false,
   };
 };
 
@@ -84,43 +79,43 @@ export default function(state = initialState, action) {
         ...action.payload,
 
         site_progress_chart_data: {
-          ...action.payload.site_progress_chart_data
+          ...action.payload.site_progress_chart_data,
         },
-        siteDashboardLoader: false
+        siteDashboardLoader: false,
       };
     // site meta/ information
     case GET_SITE_METAS:
       return {
         ...state,
         siteMetas: action.payload,
-        siteMetasLoader: false
+        siteMetasLoader: false,
       };
 
     case GET_SITE_SUBMISSIONS:
       return {
         ...state,
         siteSubmissions: [...action.payload.results],
-        siteSubmissionsLoader: false
+        siteSubmissionsLoader: false,
       };
     case GET_SITE_DOCUMENTS:
       return {
         ...state,
         siteDocuments: [...action.payload.documents],
-        siteDocumentsLoader: false
+        siteDocumentsLoader: false,
       };
 
     case GET_SITE_LOGS:
       return {
         ...state,
         siteLogs: [...action.payload],
-        siteLogsLoader: false
+        siteLogsLoader: false,
       };
 
     case GET_SITE_FORMS:
       return {
         ...state,
         siteForms: { ...action.payload },
-        showDotLoader: false
+        showDotLoader: false,
       };
     case GET_RECENT_PICTURES:
       return getRecentPictures(state, action);
@@ -129,13 +124,13 @@ export default function(state = initialState, action) {
       return {
         ...state,
         subSites: action.payload.results.data,
-        subSitesLoader: false
+        subSitesLoader: false,
       };
     }
     case SHOW_DOT_LOADER:
       return {
         ...state,
-        showDotLoader: true
+        showDotLoader: true,
       };
 
     case SHOW_DASHBOARD_LOADERS:
@@ -146,13 +141,13 @@ export default function(state = initialState, action) {
         siteSubmissionsLoader: true,
         siteDocumentsLoader: true,
         siteLogsLoader: true,
-        sitePicturesLoader: true
+        sitePicturesLoader: true,
       };
 
     case UPDATE_SITE_LOGO:
       return {
         ...state,
-        logo: action.payload
+        logo: action.payload,
       };
 
     // case SITE_DASHBOARD_ERR:

@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import DeleteModal from "../common/DeleteModal";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import DeleteModal from '../common/DeleteModal';
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -10,43 +10,46 @@ const getStatus = value => {
   else if (value == 2) return <span>Flagged</span>;
   else if (value == 3) return <span>Approved</span>;
 };
+
 const getClass = status => {
-  if (status == 0) return "pending";
-  if (status == 1) return "rejected";
-  if (status == 2) return "flagged";
-  if (status == 3) return "approved";
+  if (status == 0) return 'pending';
+  if (status == 1) return 'rejected';
+  if (status == 2) return 'flagged';
+  if (status == 3) return 'approved';
 };
+
 const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  return year + "-" + monthIndex + "-" + dateIdx;
+  return year + '-' + monthIndex + '-' + dateIdx;
 };
 
 const EducationMaterialForProject = props => {
   const { formTable, item, editForm } = props;
-  if (formTable == "project") {
+  if (formTable == 'project') {
     return (
       <span>
         <a onClick={() => editForm(item.em, item.id, item.fsxf)}>
           <i className="la la-book" />
-          {item.em ? item.em.title : ""}
+          {item.em ? item.em.title : ''}
         </a>
       </span>
     );
-  } else if (formTable == "site") {
+  } else if (formTable == 'site') {
     return (
       <span>
         {!!item.site && (
           <a onClick={() => editForm(item.em, item.id, item.fsxf)}>
             <i className="la la-book" />
-            {item.em ? item.em.title : ""}
+            {item.em ? item.em.title : ''}
           </a>
         )}
       </span>
     );
   }
 };
+
 const GetActionForProject = props => {
   const {
     formTable,
@@ -56,9 +59,9 @@ const GetActionForProject = props => {
     handleToggle,
     handleCancel,
     handleConfirm,
-    editAction
+    editAction,
   } = props;
-  if (formTable == "project") {
+  if (formTable == 'project') {
     return (
       <div>
         {!!item.is_deployed && (
@@ -91,7 +94,10 @@ const GetActionForProject = props => {
                 placement="top"
                 overlay={
                   <Tooltip>
-                    <FormattedMessage id="app.deploy" defaultMessage="Deploy" />
+                    <FormattedMessage
+                      id="app.deploy"
+                      defaultMessage="Deploy"
+                    />
                   </Tooltip>
                 }
               >
@@ -108,7 +114,10 @@ const GetActionForProject = props => {
             placement="top"
             overlay={
               <Tooltip>
-                <FormattedMessage id="app.edit" defaultMessage="Edit" />
+                <FormattedMessage
+                  id="app.edit"
+                  defaultMessage="Edit"
+                />
               </Tooltip>
             }
           >
@@ -126,7 +135,10 @@ const GetActionForProject = props => {
                 placement="top"
                 overlay={
                   <Tooltip>
-                    <FormattedMessage id="app.delete" defaultMessage="Delete" />
+                    <FormattedMessage
+                      id="app.delete"
+                      defaultMessage="Delete"
+                    />
                   </Tooltip>
                 }
               >
@@ -141,13 +153,13 @@ const GetActionForProject = props => {
             onCancel={handleCancel}
             onToggle={handleToggle}
             message={
-              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+              'Deleting this form will also delete submissions to this form. Do you want to proceed?'
             }
           />
         )}
       </div>
     );
-  } else if (formTable == "site") {
+  } else if (formTable == 'site') {
     return (
       <div>
         {!!item.site && !!item.is_deployed && (
@@ -180,7 +192,10 @@ const GetActionForProject = props => {
                 placement="top"
                 overlay={
                   <Tooltip>
-                    <FormattedMessage id="app.deploy" defaultMessage="Deploy" />
+                    <FormattedMessage
+                      id="app.deploy"
+                      defaultMessage="Deploy"
+                    />
                   </Tooltip>
                 }
               >
@@ -198,7 +213,10 @@ const GetActionForProject = props => {
               placement="top"
               overlay={
                 <Tooltip>
-                  <FormattedMessage id="app.edit" defaultMessage="Edit" />
+                  <FormattedMessage
+                    id="app.edit"
+                    defaultMessage="Edit"
+                  />
                 </Tooltip>
               }
             >
@@ -216,7 +234,10 @@ const GetActionForProject = props => {
                 placement="top"
                 overlay={
                   <Tooltip>
-                    <FormattedMessage id="app.delete" defaultMessage="Delete" />
+                    <FormattedMessage
+                      id="app.delete"
+                      defaultMessage="Delete"
+                    />
                   </Tooltip>
                 }
               >
@@ -231,7 +252,7 @@ const GetActionForProject = props => {
             onCancel={handleCancel}
             onToggle={handleToggle}
             message={
-              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+              'Deleting this form will also delete submissions to this form. Do you want to proceed?'
             }
           />
         )}
@@ -241,30 +262,34 @@ const GetActionForProject = props => {
 };
 
 class ScheduleFormTable extends Component {
-  state = {
-    confirmDelete: false,
-    formId: "",
-    isDeploy: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      confirmDelete: false,
+      formId: '',
+      isDeploy: false,
+    };
+  }
 
   handleToggle = (formId, isDeploy) => {
     this.setState({
       confirmDelete: !this.state.confirmDelete,
       formId,
-      isDeploy
+      isDeploy,
     });
   };
 
   handleConfirm = () => {
     this.setState(
       {
-        confirmDelete: false
+        confirmDelete: false,
       },
       () => {
         this.props.deleteItem(this.state.formId, this.state.isDeploy);
-      }
+      },
     );
   };
+
   handleCancel = () => {
     this.setState({ confirmDelete: false });
   };
@@ -277,8 +302,8 @@ class ScheduleFormTable extends Component {
         changeDeployStatus,
         handleEditForm,
         handleEditGuide,
-        formTable
-      }
+        formTable,
+      },
     } = this;
 
     return (
@@ -289,7 +314,10 @@ class ScheduleFormTable extends Component {
             defaultMessage="No Form added yet."
           />
         ) : (
-          <Table responsive="xl" className="table  table-bordered  dataTable">
+          <Table
+            responsive="xl"
+            className="table  table-bordered  dataTable"
+          >
             <thead>
               <tr>
                 <th>
@@ -299,7 +327,7 @@ class ScheduleFormTable extends Component {
                   />
                 </th>
                 <th>
-                  {" "}
+                  {' '}
                   <FormattedMessage
                     id="app.response"
                     defaultMessage="Responses"
@@ -324,7 +352,10 @@ class ScheduleFormTable extends Component {
                   />
                 </th>
                 <th width="15%">
-                  <FormattedMessage id="app.action" defaultMessage="Action" />
+                  <FormattedMessage
+                    id="app.action"
+                    defaultMessage="Action"
+                  />
                 </th>
               </tr>
             </thead>
@@ -339,7 +370,7 @@ class ScheduleFormTable extends Component {
               {!loader &&
                 data.map((item, i) => (
                   <tr key={i}>
-                    <td>{item.xf ? item.xf.title : ""}</td>
+                    <td>{item.xf ? item.xf.title : ''}</td>
                     <td>{item.responses_count}</td>
                     <td>
                       <EducationMaterialForProject
@@ -350,13 +381,15 @@ class ScheduleFormTable extends Component {
                     </td>
                     <td>
                       <time>
-                        <i className="la la-clock-o"></i>{" "}
+                        <i className="la la-clock-o"></i>{' '}
                         {formatDate(new Date(item.date_created))}
                       </time>
                     </td>
                     <td>
                       <span
-                        className={getClass(item.default_submission_status)}
+                        className={getClass(
+                          item.default_submission_status,
+                        )}
                       >
                         {getStatus(item.default_submission_status)}
                       </span>

@@ -1,5 +1,5 @@
-import React from "react";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const InputElement = ({
   tag: Tag,
@@ -18,10 +18,10 @@ const InputElement = ({
   ...rest
 }) => (
   <div className={`form-group ${classname}`}>
-    {formType === "editForm" &&
+    {formType === 'editForm' &&
       (translation == true ? (
         <label htmlFor={htmlFor}>
-          <FormattedMessage id={label} defaultMessage={label} />{" "}
+          <FormattedMessage id={label} defaultMessage={label} />{' '}
           {required && <sup>*</sup>}
         </label>
       ) : (
@@ -34,16 +34,16 @@ const InputElement = ({
       type={type}
       className="form-control"
       required={required}
-      value={value ? value : ""}
+      value={value ? value : ''}
       onChange={changeHandler}
       name={name}
       {...rest}
     />
 
-    {formType === "floatingForm" &&
+    {formType === 'floatingForm' &&
       (translation == true ? (
         <label htmlFor={htmlFor}>
-          <FormattedMessage id={label} defaultMessage={label} />{" "}
+          <FormattedMessage id={label} defaultMessage={label} />{' '}
         </label>
       ) : (
         <label htmlFor={htmlFor}>{label}</label>

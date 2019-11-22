@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from "react";
-import RadioElement from "../common/RadioElement";
-import { DotLoader } from "../myForm/Loader";
+import React, { Component, Fragment } from 'react';
+import RadioElement from '../common/RadioElement';
+import { DotLoader } from '../myForm/Loader';
 
 class AddForm extends Component {
   render() {
@@ -12,10 +12,9 @@ class AddForm extends Component {
         formList,
         handleRadioChange,
         projectList,
-        handleSaveForm,
         sharedList,
-        loader
-      }
+        loader,
+      },
     } = this;
 
     return (
@@ -24,9 +23,11 @@ class AddForm extends Component {
           <li className="nav-item">
             <a
               className={
-                activeTab === "myForms" ? "nav-link active" : "nav-link"
+                activeTab === 'myForms'
+                  ? 'nav-link active'
+                  : 'nav-link'
               }
-              onClick={() => toggleTab("myForms")}
+              onClick={() => toggleTab('myForms')}
             >
               My Forms
             </a>
@@ -34,9 +35,11 @@ class AddForm extends Component {
           <li className="nav-item">
             <a
               className={
-                activeTab === "sharedForms" ? "nav-link active" : "nav-link"
+                activeTab === 'sharedForms'
+                  ? 'nav-link active'
+                  : 'nav-link'
               }
-              onClick={() => toggleTab("sharedForms")}
+              onClick={() => toggleTab('sharedForms')}
             >
               Shared Forms
             </a>
@@ -44,9 +47,11 @@ class AddForm extends Component {
           <li className="nav-item">
             <a
               className={
-                activeTab === "projectForms" ? "nav-link active" : "nav-link"
+                activeTab === 'projectForms'
+                  ? 'nav-link active'
+                  : 'nav-link'
               }
-              onClick={() => toggleTab("projectForms")}
+              onClick={() => toggleTab('projectForms')}
             >
               Project Forms
             </a>
@@ -64,7 +69,7 @@ class AddForm extends Component {
         </ul>
         {loader && <DotLoader />}
 
-        {!loader && activeTab === "myForms" && (
+        {!loader && activeTab === 'myForms' && (
           <div className="thumb-list mr-0 ">
             {/* <form
               className="floating-form"
@@ -98,7 +103,9 @@ class AddForm extends Component {
                         }}
                       />
                       <div className="select-form-info">
-                        <span className="form-owner">{each.owner}</span>
+                        <span className="form-owner">
+                          {each.owner}
+                        </span>
                         <time>
                           <i className="la la-clock-o"></i>
                           {each.date_created}
@@ -122,7 +129,7 @@ class AddForm extends Component {
           </div>
         )}
 
-        {!loader && activeTab === "projectForms" && (
+        {!loader && activeTab === 'projectForms' && (
           <div className="thumb-list mr-0 ">
             {/* <form
               className="floating-form"
@@ -151,7 +158,10 @@ class AddForm extends Component {
                           <h5>{each.name}</h5>
                         </div>
                         {each.forms.map((item, i) => (
-                          <div className="form-group" key={`form_${i}`}>
+                          <div
+                            className="form-group"
+                            key={`form_${i}`}
+                          >
                             <RadioElement
                               label={item.title}
                               className="radiobox"
@@ -162,7 +172,9 @@ class AddForm extends Component {
                               }}
                             />
                             <div className="select-form-info">
-                              <span className="form-owner">{item.owner}</span>
+                              <span className="form-owner">
+                                {item.owner}
+                              </span>
                               <time>
                                 <i className="la la-clock-o"></i>
                                 {each.date_created}
@@ -189,7 +201,7 @@ class AddForm extends Component {
           </div>
         )}
 
-        {!loader && activeTab === "sharedForms" && (
+        {!loader && activeTab === 'sharedForms' && (
           <div className="thumb-list mr-0 ">
             {/* <form
               className="floating-form"
@@ -224,7 +236,9 @@ class AddForm extends Component {
                         }}
                       />
                       <div className="select-form-info">
-                        <span className="form-owner">{each.owner}</span>
+                        <span className="form-owner">
+                          {each.owner}
+                        </span>
                         <time>
                           <i className="la la-clock-o"></i>
                           {each.date_created}

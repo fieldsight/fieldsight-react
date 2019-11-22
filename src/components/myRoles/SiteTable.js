@@ -1,29 +1,53 @@
-import React, { Component, Fragment } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import Table from "react-bootstrap/Table";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { TableContentLoader } from "../common/Loader";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import Table from 'react-bootstrap/Table';
+import { FormattedMessage } from 'react-intl';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { TableContentLoader } from '../common/Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
 
-let base_url = window.base_url
-  ? window.base_url
-  : "https://fieldsight.naxa.com.np";
+// let base_url = window.base_url
+//   ? window.base_url
+//   : 'https://fieldsight.naxa.com.np';
 
 class SiteTable extends Component {
+  componentDidUpdate(prevProps) {
+    const { props } = this;
+    if (prevProps.initialTeamId !== props.initialTeamId) {
+      props.requestSite(props.initialTeamId);
+      props.requestRegions(props.initialTeamId);
+      props.requestSubmission(props.initialTeamId);
+      props.requestMap(props.initialTeamId);
+    }
+  }
+
   render() {
+    const {
+      siteLoader,
+      site,
+      profileId,
+      fromData,
+      toData,
+      totalCount,
+      pageNum,
+      paginationHandler,
+      siteId,
+      renderPageNumbers,
+    } = this.props;
     return (
-      <Fragment>
+      <>
         <div
           className="table-wrapper"
           role="tabpanel"
           aria-labelledby="region_tab"
-          style={{ position: "relative", height: "650px" }}
+          style={{ position: 'relative', height: '650px' }}
         >
-          {this.props.siteLoader && <TableContentLoader row={18} column={5} />}
+          {siteLoader && <TableContentLoader row={18} column={5} />}
 
           {!this.props.siteLoader && (
             <div>
-              <ul style={{ position: "relative", height: "650px" }}>
+              <ul style={{ position: 'relative', height: '650px' }}>
                 {this.props.site.length === 0 && (
                   <p>
                     <FormattedMessage
@@ -47,7 +71,10 @@ class SiteTable extends Component {
                             />
                           </th>
                           <th>
-                            <FormattedMessage id="app.id" defaultMessage="id" />
+                            <FormattedMessage
+                              id="app.id"
+                              defaultMessage="id"
+                            />
                           </th>
                           <th>
                             <FormattedMessage
@@ -110,7 +137,7 @@ class SiteTable extends Component {
                             <td>
                               <a
                                 href={
-                                  "/fieldsight/application/#/site-dashboard/" +
+                                  '/fieldsight/application/#/site-dashboard/' +
                                   item.id
                                 }
                                 className="pending table-profile"
@@ -120,7 +147,11 @@ class SiteTable extends Component {
                             </td>
                             <td>{item.identifier}</td>
 
-                            <td>{item.role != null ? item.role : "Manager"}</td>
+                            <td>
+                              {item.role !== null
+                                ? item.role
+                                : 'Manager'}
+                            </td>
                             <td>
                               <a href="#" className="pending">
                                 {item.region}
@@ -135,10 +166,12 @@ class SiteTable extends Component {
                                   aria-valuenow="40"
                                   aria-valuemin="0"
                                   aria-valuemax="200"
-                                  style={{ width: item.progress + "%" }}
+                                  style={{
+                                    width: `${item.progress}%`,
+                                  }}
                                 >
                                   <span className="progress-count">
-                                    {item.progress + "%"}
+                                    {`${item.progress} %`}
                                   </span>
                                 </div>
                               </div>
@@ -147,22 +180,24 @@ class SiteTable extends Component {
                             <td>
                               <a
                                 className={
-                                  item.status != null
+                                  item.status !== null
                                     ? item.status.toLowerCase()
                                     : null
                                 }
                               >
-                                {item.status != null
+                                {item.status !== null
                                   ? item.status
-                                  : "No Submission Yet"}
+                                  : 'No Submission Yet'}
                               </a>
                             </td>
-                            {this.props.profileId && (
+                            {profileId && (
                               <td>
                                 <a className="td-delete-btn td-btn">
                                   <OverlayTrigger
                                     placement="top"
-                                    overlay={<Tooltip>Delete</Tooltip>}
+                                    overlay={
+                                      <Tooltip>Delete</Tooltip>
+                                    }
                                   >
                                     <i className="la la-trash-o" />
                                   </OverlayTrigger>
@@ -179,51 +214,76 @@ class SiteTable extends Component {
             </div>
           )}
         </div>
-        {this.props.site.length > 0 && (
+        {site.length > 0 && (
           <div className="table-footer">
             <div className="showing-rows">
               <p>
-                Showing <span>{this.props.fromData}</span> to{" "}
+                Showing
+                <span>{fromData}</span>
+                to
                 <span>
-                  {" "}
-                  {this.props.toData > this.props.totalCount
-                    ? this.props.totalCount
-                    : this.props.toData}{" "}
-                </span>{" "}
-                of <span>{this.props.totalCount}</span> entries.
+                  {toData > totalCount ? totalCount : toData}
+                </span>
+                of
+                <span>{totalCount}</span>
+                entries.
               </p>
             </div>
-            {this.props.toData < this.props.totalCount ? (
+            {fromData < totalCount ? (
               <div className="table-pagination">
                 <ul>
-                  <li className="page-item">
+                  <li
+                    className={` page-item ${
+                      pageNum === 1 ? 'disable-btn' : ''
+                    }`}
+                  >
                     <a
-                      onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum - 1,
-                          null,
-                          this.props.siteId
-                        )
-                      }
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
+                        paginationHandler(pageNum - 1, null, {
+                          type: 'mySiteList',
+                          projectId: siteId,
+                        });
+                      }}
+                      onClick={() => {
+                        paginationHandler(pageNum - 1, null, {
+                          type: 'mySiteList',
+                          projectId: siteId,
+                        });
+                      }}
                     >
-                      <i className="la la-long-arrow-left" />
+                      <i className="la la-long-arrow-left " />
                     </a>
                   </li>
 
-                  {this.props.renderPageNumbers({
-                    type: "mySiteList",
-                    projectId: this.props.siteId
+                  {renderPageNumbers({
+                    type: 'mySiteList',
+                    projectId: siteId,
                   })}
 
-                  <li className="page-item ">
+                  <li
+                    className={`page-item  ${
+                      pageNum === Math.ceil(totalCount / 200)
+                        ? ' disable-btn'
+                        : ''
+                    }`}
+                  >
                     <a
-                      onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum + 1,
-                          null,
-                          this.props.siteId
-                        )
-                      }
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
+                        paginationHandler(pageNum + 1, null, {
+                          type: 'mySiteList',
+                          projectId: siteId,
+                        });
+                      }}
+                      onClick={() => {
+                        paginationHandler(pageNum + 1, null, {
+                          type: 'mySiteList',
+                          projectId: siteId,
+                        });
+                      }}
                     >
                       <i className="la la-long-arrow-right" />
                     </a>
@@ -233,7 +293,7 @@ class SiteTable extends Component {
             ) : null}
           </div>
         )}
-      </Fragment>
+      </>
     );
   }
 }

@@ -1,8 +1,9 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { FormattedMessage, injectIntl } from "react-intl";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { FormattedMessage, injectIntl } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
-class About extends React.Component {
+class About extends React.PureComponent {
   render() {
     const { contacts, desc } = this.props;
     return (
@@ -16,7 +17,7 @@ class About extends React.Component {
         </div>
         <div
           className="thumb-list mr-0 "
-          style={{ position: "relative", height: "357px" }}
+          style={{ position: 'relative', height: '357px' }}
         >
           <PerfectScrollbar>
             <div className="card-body about-body">
@@ -36,17 +37,20 @@ class About extends React.Component {
                   <ul>
                     {contacts.phone && (
                       <li>
-                        <i className="la la-phone" /> {contacts.phone}
+                        <i className="la la-phone" />
+                        {contacts.phone}
                       </li>
                     )}
                     {contacts.email && (
                       <li>
-                        <i className="la la-envelope" /> {contacts.email}
+                        <i className="la la-envelope" />
+                        {contacts.email}
                       </li>
                     )}
                     {contacts.website && (
                       <li>
-                        <i className="la la-external-link" /> {contacts.website}
+                        <i className="la la-external-link" />
+                        {contacts.website}
                       </li>
                     )}
                   </ul>

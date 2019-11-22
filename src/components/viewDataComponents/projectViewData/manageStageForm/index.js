@@ -1,25 +1,33 @@
-import React, { Component } from "react";
-import ResponseTable from "../../responded/StagedFormResponseTable";
-import DeleteTable from "../deleteTable";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { getProjectViewData } from "../../../../actions/viewDataActions";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import ResponseTable from '../../responded/StagedFormResponseTable';
+import DeleteTable from '../deleteTable';
+import { getProjectViewData } from '../../../../actions/viewDataActions';
+/* eslint-disable camelcase */
 
 class ResponseStageForm extends Component {
-  state = {
-    hide: true
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hide: true,
+    };
+  }
+
   componentDidMount() {
-    if (this.props.id != "") {
-      this.props.getProjectViewData(this.props.id, "stage");
+    if (this.props.id !== '') {
+      this.props.getProjectViewData(this.props.id, 'stage');
     }
   }
+
   toggleHide = () => {
-    this.setState({
-      hide: !this.state.hide
-    });
+    this.setState(state => ({
+      hide: !state.hide,
+    }));
   };
 
   render() {
@@ -29,12 +37,14 @@ class ResponseStageForm extends Component {
         data,
         stage_forms,
         deleted_forms,
-        stage_forms_loader
-      }
+        stage_forms_loader,
+        url,
+        id,
+      },
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
           <h5>
             {!data ? (
@@ -69,7 +79,7 @@ class ResponseStageForm extends Component {
           {!data && (
             <ResponseTable
               stage_forms={stage_forms}
-              id={this.props.id}
+              id={id}
               loader={stage_forms_loader}
             />
           )}
@@ -90,9 +100,12 @@ class ResponseStageForm extends Component {
                         type="button"
                         className="btn-toggle"
                         onClick={this.toggleHide}
-                        style={{ width: "96px" }}
+                        style={{ width: '96px' }}
                       >
-                        <FormattedMessage id="app.show" defaultMessage="Show" />
+                        <FormattedMessage
+                          id="app.show"
+                          defaultMessage="Show"
+                        />
                         <div className="handle"></div>
                       </button>
                     ) : (
@@ -101,25 +114,39 @@ class ResponseStageForm extends Component {
                         className="btn-toggle"
                         onClick={this.toggleHide}
                         style={{
-                          backgroundColor: "#28a745",
-                          color: "white",
-                          textAlign: "left",
-                          width: "96px"
+                          backgroundColor: '#28a745',
+                          color: 'white',
+                          textAlign: 'left',
+                          width: '96px',
                         }}
                       >
-                        <FormattedMessage id="app.hide" defaultMessage="Hide" />
+                        <FormattedMessage
+                          id="app.hide"
+                          defaultMessage="Hide"
+                        />
                         <div
                           className="handle"
-                          style={{ left: "auto", right: "0.1875rem" }}
+                          style={{ left: 'auto', right: '0.1875rem' }}
                         ></div>
                       </button>
                     )}
                   </div>
                 </div>
-                <div className="card-body">
+                {/* <div className="card-body">
                   {!this.state.hide && (
                     <DeleteTable
                       id={this.props.id}
+                      deleted_forms={deleted_forms}
+                      loader={stage_forms_loader}
+                    />
+                  </button>
+                )}
+              </div>
+            </div> */}
+                <div className="card-body">
+                  {!this.state.hide && (
+                    <DeleteTable
+                      id={id}
                       deleted_forms={deleted_forms}
                       loader={stage_forms_loader}
                     />
@@ -127,23 +154,36 @@ class ResponseStageForm extends Component {
                 </div>
               </div>
             )
-          : ""}
-      </React.Fragment>
+          : ''}
+      </>
     );
   }
 }
-//export default ResponseStageForm;
 const mapStateToProps = ({ projectViewData }) => {
-  const { stage_forms, deleted_forms, stage_forms_loader } = projectViewData;
+  const {
+    stage_forms,
+    deleted_forms,
+    stage_forms_loader,
+  } = projectViewData;
 
   return {
     stage_forms,
     deleted_forms,
-    stage_forms_loader
+    stage_forms_loader,
   };
+};
+ResponseStageForm.propTypes = {
+  deleted_forms: PropTypes.arrayOf.isRequired,
+  showViewData: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  getProjectViewData: PropTypes.func.isRequired,
+  data: PropTypes.string.isRequired,
+  stage_forms: PropTypes.arrayOf.isRequired,
+  url: PropTypes.string.isRequired,
+  stage_forms_loader: PropTypes.bool.isRequired,
 };
 export default compose(
   connect(mapStateToProps, {
-    getProjectViewData
-  })
+    getProjectViewData,
+  }),
 )(ResponseStageForm);

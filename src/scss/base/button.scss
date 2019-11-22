@@ -66,6 +66,11 @@
     &.flagged-btn {
       background-color: $color-yellow;
     }
+    &.disable-btn{
+      background-color:$color-bg;
+      opacity: .75;
+      cursor:not-allowed;
+    }
 
   }
 
@@ -292,4 +297,7 @@
       transition: right 0.25s;
     }
   }
+}
+.disable{
+  color:$color-bg;
 }

@@ -1,5 +1,5 @@
-import React from "react";
-import { FormattedMessage } from "react-intl";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const CountCard = ({
   countName,
@@ -7,24 +7,26 @@ const CountCard = ({
   icon,
   className,
   noSubmissionText,
-  id
+  id,
 }) => {
   return (
     <div className="count-card">
-      <div className={`count-icon ${className ? className : ""}`}>
+      <div className={`count-icon ${className ? className : ''}`}>
         <i className={`la ${icon}`}> </i>
       </div>
       <div className="count-content">
-        {countName != "Progress" && <h4>{countNumber !== 0 && countNumber}</h4>}
-        {countName == "Progress" && (
-          <h4>{countNumber !== 0 && countNumber + "%"}</h4>
+        {countName != 'Progress' && (
+          <h4>{countNumber !== 0 && countNumber}</h4>
+        )}
+        {countName == 'Progress' && (
+          <h4>{countNumber !== 0 && countNumber + '%'}</h4>
         )}
         <h6>
           {noSubmissionText ? (
             countNumber === 0 ? (
               //`No ${countName}`
               <>
-                {countName === "User" || countName === "user" ? (
+                {countName === 'User' || countName === 'user' ? (
                   <>
                     <FormattedMessage
                       id="app.no-user"
@@ -32,9 +34,9 @@ const CountCard = ({
                     />
                   </>
                 ) : (
-                  ""
+                  ''
                 )}
-                {countName === "project" ? (
+                {countName === 'project' ? (
                   <>
                     <FormattedMessage
                       id="app.no-projects"
@@ -42,47 +44,53 @@ const CountCard = ({
                     />
                   </>
                 ) : (
-                  ""
+                  ''
                 )}
 
-                {countName === "site" ? (
+                {countName === 'site' ? (
                   <FormattedMessage
                     id="app.no-site"
                     defaultMessage=" No Site"
                   />
                 ) : (
-                  ""
+                  ''
                 )}
-                {countName === "Progress" ? (
+                {countName === 'Progress' ? (
                   <FormattedMessage
                     id="app.no-progress"
                     defaultMessage=" No Progress"
                   />
                 ) : (
-                  ""
+                  ''
                 )}
               </>
             ) : (
               <>
-                {countName === "User" || countName === "user" ? (
-                  <FormattedMessage id="app.user" defaultMessage="User" />
+                {countName === 'User' || countName === 'user' ? (
+                  <FormattedMessage
+                    id="app.user"
+                    defaultMessage="User"
+                  />
                 ) : (
-                  ""
+                  ''
                 )}
-                {countName === "site" ? (
-                  <FormattedMessage id="app.site" defaultMessage="Site" />
+                {countName === 'site' ? (
+                  <FormattedMessage
+                    id="app.site"
+                    defaultMessage="Site"
+                  />
                 ) : (
-                  ""
+                  ''
                 )}
-                {countName === "Progress" ? (
+                {countName === 'Progress' ? (
                   <FormattedMessage
                     id="app.progress"
                     defaultMessage="Progress"
                   />
                 ) : (
-                  ""
+                  ''
                 )}
-                {countName === "project" ? (
+                {countName === 'project' ? (
                   <>
                     <FormattedMessage
                       id="app.projects"
@@ -90,7 +98,7 @@ const CountCard = ({
                     />
                   </>
                 ) : (
-                  ""
+                  ''
                 )}
               </>
             )
@@ -99,72 +107,72 @@ const CountCard = ({
             <>
               {!!id ? (
                 <>
-                  {countName === "pending" ? (
+                  {countName === 'pending' ? (
                     <FormattedMessage
                       id="app.no-pending-submission"
                       defaultMessage="No pending Submission"
                     />
                   ) : (
-                    ""
+                    ''
                   )}
-                  {countName === "rejected" ? (
+                  {countName === 'rejected' ? (
                     <FormattedMessage
                       id="app.no-rejected-submission"
                       defaultMessage="No Rejected Submission"
                     />
                   ) : (
-                    ""
+                    ''
                   )}
-                  {countName === "approved" ? (
+                  {countName === 'approved' ? (
                     <FormattedMessage
                       id="app.no-approved-submission"
                       defaultMessage="No Approved Submission"
                     />
                   ) : (
-                    ""
+                    ''
                   )}
-                  {countName === "flagged" ? (
+                  {countName === 'flagged' ? (
                     <FormattedMessage
                       id="app.no-flagged-submission"
                       defaultMessage="No flagged Submission"
                     />
                   ) : (
-                    ""
+                    ''
                   )}
                 </>
               ) : (
                 <>
-                  {countName === "pending" ? (
+                  {countName === 'pending' ? (
                     <FormattedMessage
                       id="app.pending"
                       defaultMessage="Pending"
                     />
                   ) : (
-                    ""
+                    ''
                   )}
-                  {countName === "approved" ? (
+                  {countName === 'approved' ? (
                     <FormattedMessage
                       id="app.approved"
                       defaultMessage="Approved"
                     />
                   ) : (
-                    ""
+                    ''
                   )}
-                  {countName === "flagged" ? (
+                  {countName === 'flagged' ? (
                     <FormattedMessage
                       id="app.flagged"
                       defaultMessage="Flagged"
                     />
                   ) : (
-                    ""
+                    ''
                   )}
-                  {countName === "rejected" ? (
+                  {countName === 'rejected' ? (
                     <FormattedMessage
                       id="app.rejected"
                       defaultMessage="Rejected"
                     />
                   ) : (
-                    ""
+                    ''
                   )}
                   &nbsp;&nbsp;
                   <FormattedMessage
@@ -177,25 +185,37 @@ const CountCard = ({
           ) : (
             <>
               {/*`${countName} submission`*/}
-              {countName === "pending" ? (
-                <FormattedMessage id="app.pending" defaultMessage="Pending" />
+              {countName === 'pending' ? (
+                <FormattedMessage
+                  id="app.pending"
+                  defaultMessage="Pending"
+                />
               ) : (
-                ""
+                ''
               )}
-              {countName === "approved" ? (
-                <FormattedMessage id="app.approved" defaultMessage="Approved" />
+              {countName === 'approved' ? (
+                <FormattedMessage
+                  id="app.approved"
+                  defaultMessage="Approved"
+                />
               ) : (
-                ""
+                ''
               )}
-              {countName === "flagged" ? (
-                <FormattedMessage id="app.flagged" defaultMessage="Flagged" />
+              {countName === 'flagged' ? (
+                <FormattedMessage
+                  id="app.flagged"
+                  defaultMessage="Flagged"
+                />
               ) : (
-                ""
+                ''
               )}
-              {countName === "rejected" ? (
-                <FormattedMessage id="app.rejected" defaultMessage="Rejected" />
+              {countName === 'rejected' ? (
+                <FormattedMessage
+                  id="app.rejected"
+                  defaultMessage="Rejected"
+                />
               ) : (
-                ""
+                ''
               )}
               &nbsp;&nbsp;
               <FormattedMessage
@@ -205,7 +225,7 @@ const CountCard = ({
             </>
           )}
           {countNumber !== 0 && countNumber > 1 && (
-            <span style={{ textTransform: "lowercase" }}>
+            <span style={{ textTransform: 'lowercase' }}>
               <FormattedMessage id="app.s" defaultMessage="s" />
             </span>
           )}

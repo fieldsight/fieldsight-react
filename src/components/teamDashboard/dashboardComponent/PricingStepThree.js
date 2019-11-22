@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { FormattedMessage } from "react-intl";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
-class PricingStepThree extends Component {
+class PricingStepThree extends PureComponent {
   render() {
     const {
-      props: { cardResponse, handleSubmit }
+      props: { cardResponse, handleSubmit },
     } = this;
     return (
       <div className="fieldsight-new">
         <div className="bg-primary p-4">
           <div className="bg-light p-4 m-4">
-            <div className="pb-2"></div>
+            <div className="pb-2" />
             <h6 className="text-center mt-4">
               <strong>
-                {" "}
                 <FormattedMessage
                   id="app.thankuMessage"
                   defaultMessage="Thank you for signing up with FieldSight!"
@@ -42,14 +42,14 @@ class PricingStepThree extends Component {
                     <FormattedMessage
                       id="app.planDetail"
                       defaultMessage="Plan Detail"
-                    />{" "}
+                    />{' '}
                     :
                   </strong>
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
                     <i className="la la-chevron-circle-right"></i>
-                    <strong>{cardResponse.submissions}</strong>{" "}
+                    <strong>{cardResponse.submissions}</strong>{' '}
                     <FormattedMessage
                       id="app.submissions"
                       defaultMessage="Submissions"
@@ -61,7 +61,7 @@ class PricingStepThree extends Component {
                         id="app.unlimited"
                         defaultMessage="Unlimited"
                       />
-                    </strong>{" "}
+                    </strong>{' '}
                     <FormattedMessage
                       id="app.userProjectSites"
                       defaultMessage="Users, Projects, Sites"
@@ -74,7 +74,7 @@ class PricingStepThree extends Component {
                         id="app.unlimited"
                         defaultMessage="Unlimited"
                       />
-                    </strong>{" "}
+                    </strong>{' '}
                     <FormattedMessage
                       id="app.formStageSchedules"
                       defaultMessage="Forms, Stages & Schedules"
@@ -87,7 +87,7 @@ class PricingStepThree extends Component {
                         id="app.unlimited"
                         defaultMessage="Unlimited"
                       />
-                    </strong>{" "}
+                    </strong>{' '}
                     <FormattedMessage
                       id="app.reportDashboardsMaps"
                       defaultMessage="Reports, Dashboards & Maps"
@@ -96,12 +96,12 @@ class PricingStepThree extends Component {
                   <li>
                     <i className="la la-chevron-circle-right"></i>
                     <strong>
-                      {" "}
+                      {' '}
                       <FormattedMessage
                         id="app.access"
                         defaultMessage="Access"
                       />
-                    </strong>{" "}
+                    </strong>{' '}
                     <FormattedMessage
                       id="app.androidApp"
                       defaultMessage="to our Android App"
@@ -115,7 +115,7 @@ class PricingStepThree extends Component {
                     <FormattedMessage
                       id="app.planPeriod"
                       defaultMessage="Plan Period"
-                    />{" "}
+                    />{' '}
                     :
                   </strong>
                 </h6>
@@ -156,7 +156,7 @@ class PricingStepThree extends Component {
                   <li>
                     <i className="la la-money"></i>
                     <strong>
-                      {" "}
+                      {' '}
                       <FormattedMessage
                         id="app.amountPaid"
                         defaultMessage="Amount Paid"
@@ -173,8 +173,11 @@ class PricingStepThree extends Component {
                       />
                     </strong>
                     <p>
-                      <FormattedMessage id="app.card" defaultMessage="Card" />:
-                      xxx xxx xxx {cardResponse.card}
+                      <FormattedMessage
+                        id="app.card"
+                        defaultMessage="Card"
+                      />
+                      : xxx xxx xxx {cardResponse.card}
                     </p>
                   </li>
                 </ul>
@@ -182,13 +185,17 @@ class PricingStepThree extends Component {
             </div>
             <div className="text-center">
               <a
+                href="#"
                 title=""
                 className="btn btn-primary"
                 onClick={() => {
-                  handleSubmit("finish");
+                  handleSubmit('finish');
                 }}
               >
-                <FormattedMessage id="app.finish" defaultMessage="Finish" />
+                <FormattedMessage
+                  id="app.finish"
+                  defaultMessage="Finish"
+                />
                 <i className="la la-check-circle"></i>
               </a>
             </div>
@@ -198,5 +205,8 @@ class PricingStepThree extends Component {
     );
   }
 }
-
+PricingStepThree.propTypes = {
+  cardResponse: PropTypes.objectOf.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};
 export default PricingStepThree;

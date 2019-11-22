@@ -1,90 +1,89 @@
-import React, { Component, Fragment } from "react";
-import L from "leaflet";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import Cropper from "react-cropper";
-import Modal from "../common/Modal";
-import InputElement from "../common/InputElement";
-import SelectElement from "../common/SelectElement";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import CheckBox from "../common/CheckBox";
-import Select from "./Select";
+import React, { Component, Fragment } from 'react';
+import L from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import Cropper from 'react-cropper';
+import Modal from '../common/Modal';
+import InputElement from '../common/InputElement';
+import SelectElement from '../common/SelectElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import CheckBox from '../common/CheckBox';
+import Select from './Select';
 
-import { errorToast, successToast } from "../../utils/toastHandler";
-import { RegionContext } from "../../context";
-import "leaflet/dist/leaflet.css";
-import { FormattedMessage } from "react-intl";
+import 'leaflet/dist/leaflet.css';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-  iconUrl: require("leaflet/dist/images/marker-icon.png"),
-  shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
 export default class SiteAdd extends Component {
   _isMounted = false;
   state = {
     project: {
-      name: "",
-      site_id: "",
+      name: '',
+      site_id: '',
       phone: undefined,
-      address: "",
-      publicDescription: "",
-      logo: "",
+      address: '',
+      publicDescription: '',
+      logo: '',
       weight: 0,
-      cluster_sites: false
+      cluster_sites: false,
     },
     loaded: 0,
     jsondata: [],
     position: {
-      latitude: "51.505",
-      longitude: "-0.09"
+      latitude: '51.505',
+      longitude: '-0.09',
     },
     zoom: 13,
-    src: "",
+    src: '',
     showCropper: false,
-    cropResult: "",
+    cropResult: '',
     isLoading: false,
-    selectedSiteTypes: "",
-    id: "",
+    selectedSiteTypes: '',
+    id: '',
     selectform: [],
     selectdata: false,
-    region: [{ name: "----", id: "" }],
+    region: [{ name: '----', id: '' }],
     data: {},
-    regionselected: "",
+    regionselected: '',
 
-    selectedGender: "",
-    dataSelected: "",
-    id: "",
-    siteId: "",
-    regionalId: "",
-    site_types: [{ name: "----", id: "" }],
-    Selectedtypes: "",
+    selectedGender: '',
+    dataSelected: '',
+    id: '',
+    siteId: '',
+    regionalId: '',
+    site_types: [{ name: '----', id: '' }],
+    Selectedtypes: '',
     show: false,
-    jsdata: "",
-    breadcrumbs: {}
+    jsdata: '',
+    breadcrumbs: {},
   };
 
   componentDidMount() {
     this._isMounted = true;
     const {
       match: {
-        params: { id, siteId, regionalId }
-      }
+        params: { id, siteId, regionalId },
+      },
     } = this.props;
     const urls = [
       `/fv3/api/site-form/?project=${id}`,
-      `fv3/api/site-forms-breadcrumbs/?project=${id}&type=create`
+      `fv3/api/site-forms-breadcrumbs/?project=${id}&type=create`,
     ];
 
     axios
       .all(
         urls.map((url, i) => {
           return axios.get(url);
-        })
+        }),
       )
       .then(
         axios.spread((siteForm, breadcrumbRes) => {
@@ -93,81 +92,49 @@ export default class SiteAdd extends Component {
 
           if (this._isMounted) {
             const position =
-              siteForm.data.location !== "None"
-                ? siteForm.data.location && siteForm.data.location.split(" ")
-                : "";
-            const longitude = position && position[1].split("(")[1];
-            const latitude = position && position[2].split(")")[0];
+              siteForm.data.location !== 'None'
+                ? siteForm.data.location &&
+                  siteForm.data.location.split(' ')
+                : '';
+            const longitude = position && position[1].split('(')[1];
+            const latitude = position && position[2].split(')')[0];
             const breadcrumbs = breadcrumbRes.data;
 
             this.setState(
               state => {
                 siteForm.data.regions !== undefined &&
-                  siteForm.data.regions.map(each => regionArr.push(each));
-                siteForm.data.site_types.map(each => typeArr.push(each));
+                  siteForm.data.regions.map(each =>
+                    regionArr.push(each),
+                  );
+                siteForm.data.site_types.map(each =>
+                  typeArr.push(each),
+                );
                 return {
                   jsdata: siteForm.data.hello,
                   jsondata: siteForm.data.json_questions,
                   id,
                   region:
-                    siteForm.data.regions !== undefined || "" ? regionArr : [],
+                    siteForm.data.regions !== undefined || ''
+                      ? regionArr
+                      : [],
                   siteId,
                   regionalId,
                   site_types: typeArr,
                   position: {
                     longitude,
-                    latitude
+                    latitude,
                   },
-                  breadcrumbs
+                  breadcrumbs,
                 };
               },
-              () => {}
+              () => {},
             );
           }
-        })
+        }),
       )
       .catch(err => {
-        console.log(err, "err");
+        console.log(err, 'err');
       });
-
-    // axios.get(`/fv3/api/site-form/?project=${id}`)
-    // .then(res=>{
-
-    //   let regionArr =this.state.region
-    //   let typeArr =this.state.site_types
-
-    //   if (this._isMounted) {
-
-    //    const position = res.data.location!== "None" ? res.data.location&& res.data.location.split(" "):""
-    //    const longitude = position && position[1].split("(")[1];
-    //     const latitude = position && position[2].split(")")[0];
-
-    //     this.setState(
-    //       state=>{
-    //         res.data.regions!== undefined && res.data.regions.map(each=> regionArr.push(each))
-    //         res.data.site_types.map(each=>typeArr.push(each))
-    //         return{
-    //           jsdata:res.data.hello,
-    //           jsondata:res.data.json_questions,
-    //           id,
-    //           region:res.data.regions !== undefined || "" ? regionArr:[],
-    //           siteId,
-    //           regionalId,
-    //           site_types:typeArr,
-    //            position:{
-    //             longitude,
-    //             latitude
-    //           },
-
-    //         }
-    //        }
-    //        )
-    //   }
-
-    //     }).catch(err=>{
-    //     console.log(err ,"err");
-
-    // })
   }
 
   onChangeHandler = (e, position) => {
@@ -176,19 +143,19 @@ export default class SiteAdd extends Component {
       return this.setState({
         position: {
           ...this.state.position,
-          [name]: value
-        }
+          [name]: value,
+        },
       });
     }
     this.setState(
       {
         project: {
           ...this.state.project,
-          [name]: value
-        }
+          [name]: value,
+        },
       },
       () => this.state.weight,
-      this.state
+      this.state,
     );
   };
 
@@ -210,8 +177,8 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        (select = this.state.dataSelected)
-      )
+        (select = this.state.dataSelected),
+      ),
     };
 
     const Subsite = {
@@ -231,8 +198,8 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        (select = this.state.dataSelected)
-      )
+        (select = this.state.dataSelected),
+      ),
     };
     const region = {
       project: this.state.id,
@@ -249,46 +216,46 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        (select = this.state.dataSelected)
+        (select = this.state.dataSelected),
       ),
-      subsite: this.state.siteId
+      subsite: this.state.siteId,
     };
 
-    if (this.props.page === "CreateSite") {
+    if (this.props.page === 'CreateSite') {
       axios({
-        method: "POST",
+        method: 'POST',
         url: `/fv3/api/site-form/?project=${this.state.id}`,
         data,
-        headers: { "content-type": "application/json" }
+        headers: { 'content-type': 'application/json' },
       })
         .then(req => {
           if (req.status === 201) {
             this.setState({
               project: {
-                name: "",
-                site_id: "",
-                phone: "",
-                address: "",
-                publicDescription: "",
-                logo: "",
-                cluster_sites: false
+                name: '',
+                site_id: '',
+                phone: '',
+                address: '',
+                publicDescription: '',
+                logo: '',
+                cluster_sites: false,
               },
               position: {
-                latitude: "51.505",
-                longitude: "-0.09"
+                latitude: '51.505',
+                longitude: '-0.09',
               },
-              src: "",
+              src: '',
               showCropper: false,
-              cropResult: "",
+              cropResult: '',
               isLoading: false,
-              selectedSiteTypes: "",
-              id: "",
+              selectedSiteTypes: '',
+              id: '',
               selectdata: false,
-              regionselected: "",
-              selectedGender: "Male",
-              dataSelected: "",
-              id: "",
-              data: []
+              regionselected: '',
+              selectedGender: 'Male',
+              dataSelected: '',
+              id: '',
+              data: [],
             });
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
@@ -296,41 +263,41 @@ export default class SiteAdd extends Component {
         .catch(err => {
           console.log(err);
         });
-    } else if (this.props.page === "subSite") {
+    } else if (this.props.page === 'subSite') {
       axios({
-        method: "POST",
+        method: 'POST',
         url: `/fv3/api/site-form/?project=${this.state.id}&site=${this.state.siteId}`,
         data: Subsite,
-        headers: { "content-type": "application/json" }
+        headers: { 'content-type': 'application/json' },
       })
         .then(req => {
           if (req.status === 201) {
             this.setState({
               project: {
-                name: "",
-                site_id: "",
-                phone: "",
-                address: "",
-                publicDescription: "",
-                logo: "",
-                cluster_sites: false
+                name: '',
+                site_id: '',
+                phone: '',
+                address: '',
+                publicDescription: '',
+                logo: '',
+                cluster_sites: false,
               },
               position: {
-                latitude: "51.505",
-                longitude: "-0.09"
+                latitude: '51.505',
+                longitude: '-0.09',
               },
-              src: "",
+              src: '',
               showCropper: false,
-              cropResult: "",
+              cropResult: '',
               isLoading: false,
-              selectedSiteTypes: "",
-              id: "",
+              selectedSiteTypes: '',
+              id: '',
               selectdata: false,
-              regionselected: "",
-              selectedGender: "Male",
-              dataSelected: "",
-              id: "",
-              data: []
+              regionselected: '',
+              selectedGender: 'Male',
+              dataSelected: '',
+              id: '',
+              data: [],
             });
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
@@ -338,41 +305,41 @@ export default class SiteAdd extends Component {
         .catch(err => {
           console.log(err);
         });
-    } else if (this.props.page === "regionalSite") {
+    } else if (this.props.page === 'regionalSite') {
       axios({
-        method: "POST",
+        method: 'POST',
         url: `/fv3/api/site-form/?project=${this.state.id}&region=${this.state.regionalId}`,
         data: region,
-        headers: { "content-type": "application/json" }
+        headers: { 'content-type': 'application/json' },
       })
         .then(req => {
           if (req.status === 201) {
             this.setState({
               project: {
-                name: "",
-                site_id: "",
-                phone: "",
-                address: "",
-                publicDescription: "",
-                logo: "",
-                cluster_sites: false
+                name: '',
+                site_id: '',
+                phone: '',
+                address: '',
+                publicDescription: '',
+                logo: '',
+                cluster_sites: false,
               },
               position: {
-                latitude: "51.505",
-                longitude: "-0.09"
+                latitude: '51.505',
+                longitude: '-0.09',
               },
-              src: "",
+              src: '',
               showCropper: false,
-              cropResult: "",
+              cropResult: '',
               isLoading: false,
-              selectedSiteTypes: "",
-              id: "",
+              selectedSiteTypes: '',
+              id: '',
               selectdata: false,
-              regionselected: "",
-              selectedGender: "Male",
-              dataSelected: "",
-              id: "",
-              data: []
+              regionselected: '',
+              selectedGender: 'Male',
+              dataSelected: '',
+              id: '',
+              data: [],
             });
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
@@ -387,31 +354,32 @@ export default class SiteAdd extends Component {
       position: {
         ...this.state.position,
         latitude: e.latlng.lat,
-        longitude: e.latlng.lng
-      }
+        longitude: e.latlng.lng,
+      },
     });
   };
   onSelectChangeHandler = (e, data) => {
     const { value } = e.target;
-    if (data === "regions") {
+    if (data === 'regions') {
       this.setState(
         {
-          regionselected: value
+          regionselected: value,
         },
-        () => console.log(this.state.regionselected, "regionselected")
+        () =>
+          console.log(this.state.regionselected, 'regionselected'),
       );
-    } else if (data === "site_types") {
+    } else if (data === 'site_types') {
       this.setState(
         {
-          Selectedtypes: value
+          Selectedtypes: value,
         },
-        () => console.log(this.state.Selectedtypes, "Selectedtypes")
+        () => console.log(this.state.Selectedtypes, 'Selectedtypes'),
       );
     }
   };
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
   readFile = file => {
@@ -420,52 +388,52 @@ export default class SiteAdd extends Component {
       this.setState({
         src: reader.result,
         showCropper: true,
-        show: true
+        show: true,
       });
     };
     reader.readAsDataURL(file[0]);
   };
   cropImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
   handleCheckboxChange = e => {
     this.setState({
       project: {
         ...this.state.project,
-        cluster_sites: e.target.checked
-      }
+        cluster_sites: e.target.checked,
+      },
     });
   };
   ondynamiChangeHandler = e => {
     const {
-      target: { name, value }
+      target: { name, value },
     } = e;
     this.setState({
       data: {
         ...this.state.data,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   };
   onchange = e => {
     this.setState({
-      selectedGender: e.target.value
+      selectedGender: e.target.value,
     });
   };
   selectedValue = data => {
     this.setState({
-      dataSelected: data
+      dataSelected: data,
     });
   };
   selectform = data => {
-    if (data.question_type === "Text") {
+    if (data.question_type === 'Text') {
       return (
         <div className="col-xl-4 col-md-6">
           <InputElement
@@ -476,14 +444,14 @@ export default class SiteAdd extends Component {
             g
             label={data.question_text}
             name={data.question_name}
-            value={this.state.data[data.question_name] || ""}
+            value={this.state.data[data.question_name] || ''}
             placeholder={data.question_placeholder}
             changeHandler={this.ondynamiChangeHandler}
           />
           <span>{data.question_help}</span>
         </div>
       );
-    } else if (data.question_type === "Date") {
+    } else if (data.question_type === 'Date') {
       return (
         <div className="col-xl-4 col-md-6">
           <InputElement
@@ -493,14 +461,14 @@ export default class SiteAdd extends Component {
             id={data.id}
             label={data.question_text}
             name={data.question_name}
-            value={this.state.data[data.question_name] || ""}
+            value={this.state.data[data.question_name] || ''}
             placeholder={data.question_placeholder}
             changeHandler={this.ondynamiChangeHandler}
           />
           <span>{data.question_help}</span>
         </div>
       );
-    } else if (data.question_type === "MCQ") {
+    } else if (data.question_type === 'MCQ') {
       return (
         <div className="form-group col-xl-4 col-md-6">
           <label>{data.question_text}</label>
@@ -508,7 +476,7 @@ export default class SiteAdd extends Component {
             className="form-control"
             onChange={this.ondynamiChangeHandler}
             name={data.question_name}
-            style={{ border: "0", borderBottom: "1px solid #eaeaea" }}
+            style={{ border: '0', borderBottom: '1px solid #eaeaea' }}
           >
             {data.mcq_options.map((option, key) => {
               return (
@@ -523,7 +491,7 @@ export default class SiteAdd extends Component {
           <span>{data.question_help}</span>
         </div>
       );
-    } else if (data.question_type === "Number") {
+    } else if (data.question_type === 'Number') {
       return (
         <div className="col-xl-4 col-md-6">
           <InputElement
@@ -533,19 +501,19 @@ export default class SiteAdd extends Component {
             id={data.id}
             label={data.question_text}
             name={data.question_name}
-            value={this.state.data[data.question_name] || ""}
+            value={this.state.data[data.question_name] || ''}
             placeholder={data.question_placeholder}
             changeHandler={this.ondynamiChangeHandler}
           />
           <span>{data.question_help}</span>
         </div>
       );
-    } else if (data.question_type === "Link") {
+    } else if (data.question_type === 'Link') {
       return (
         <Select
           data={data.project_id}
           onchange={this.ondynamiChangeHandler}
-          value={this.state.data[data.id] || ""}
+          value={this.state.data[data.id] || ''}
           type={data.question_text}
           selectedValue={this.selectedValue}
           name={data.question_name}
@@ -577,7 +545,7 @@ export default class SiteAdd extends Component {
           publicDescription,
           logo,
           weight,
-          cluster_sites
+          cluster_sites,
         },
         region,
         position: { latitude, longitude },
@@ -590,8 +558,8 @@ export default class SiteAdd extends Component {
         jsondata,
         site_types,
         regionselected,
-        Selectedtypes
-      }
+        Selectedtypes,
+      },
     } = this;
 
     return (
@@ -602,7 +570,9 @@ export default class SiteAdd extends Component {
               <li className="breadcrumb-item">
                 <a href={breadcrumbs.name_url}>{breadcrumbs.name}</a>
               </li>
-              <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+              <li className="breadcrumb-item">
+                {breadcrumbs.current_page}
+              </li>
             </ol>
           )}
         </nav>
@@ -636,8 +606,8 @@ export default class SiteAdd extends Component {
                 />
               </div>
               {region.length > 0 ? (
-                this.props.page === "CreateSite" ||
-                this.props.page === "subSite" ? (
+                this.props.page === 'CreateSite' ||
+                this.props.page === 'subSite' ? (
                   <div className="col-xl-4 col-md-6">
                     <SelectElement
                       className="form-control"
@@ -648,15 +618,17 @@ export default class SiteAdd extends Component {
                           ? region.map(region => region)
                           : region
                       }
-                      changeHandler={e => onSelectChangeHandler(e, "regions")}
+                      changeHandler={e =>
+                        onSelectChangeHandler(e, 'regions')
+                      }
                       value={regionselected && regionselected}
                     />
                   </div>
                 ) : (
-                  ""
+                  ''
                 )
               ) : (
-                ""
+                ''
               )}
 
               <div className="col-xl-4 col-md-6">
@@ -669,7 +641,9 @@ export default class SiteAdd extends Component {
                       ? site_types.map(region => region)
                       : site_types
                   }
-                  changeHandler={e => onSelectChangeHandler(e, "site_types")}
+                  changeHandler={e =>
+                    onSelectChangeHandler(e, 'site_types')
+                  }
                   value={Selectedtypes}
                 />
               </div>
@@ -702,7 +676,7 @@ export default class SiteAdd extends Component {
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
                   <CheckBox
-                    checked={this.state.project.cluster_sites || ""}
+                    checked={this.state.project.cluster_sites || ''}
                     label="app.enableSubsites"
                     value={cluster_sites}
                     changeHandler={handleCheckboxChange}
@@ -710,7 +684,7 @@ export default class SiteAdd extends Component {
                   />
                 </div>
               </div>
-              {this.props.page === "subSite" ? (
+              {this.props.page === 'subSite' ? (
                 <div className="col-xl-4 col-md-6">
                   <InputElement
                     formType="editForm"
@@ -727,7 +701,7 @@ export default class SiteAdd extends Component {
                   />
                 </div>
               ) : (
-                ""
+                ''
               )}
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
@@ -747,13 +721,16 @@ export default class SiteAdd extends Component {
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
                   <label>
-                    <FormattedMessage id="app.map" defaultMessage="Map" />{" "}
+                    <FormattedMessage
+                      id="app.map"
+                      defaultMessage="Map"
+                    />{' '}
                     <sup>*</sup>
                   </label>
 
                   <div className="map-form">
                     <Map
-                      style={{ height: "205px", marginTop: "1rem" }}
+                      style={{ height: '205px', marginTop: '1rem' }}
                       center={[latitude, longitude]}
                       zoom={this.state.zoom}
                       onClick={mapClickHandler}
@@ -765,12 +742,12 @@ export default class SiteAdd extends Component {
                       <Marker position={[latitude, longitude]}>
                         <Popup>
                           <b>
-                            {" "}
+                            {' '}
                             <FormattedMessage
                               id="app.name"
                               defaultMessage="Name"
                             />
-                            :{" "}
+                            :{' '}
                           </b>
                           {name}
                         </Popup>
@@ -786,7 +763,9 @@ export default class SiteAdd extends Component {
                           label="app.latitude"
                           name="latitude"
                           value={latitude}
-                          changeHandler={e => onChangeHandler(e, "latitude")}
+                          changeHandler={e =>
+                            onChangeHandler(e, 'latitude')
+                          }
                           translation={true}
                         />
                       </div>
@@ -800,7 +779,9 @@ export default class SiteAdd extends Component {
                           label="app.longitude"
                           name="longitude"
                           value={longitude}
-                          changeHandler={e => onChangeHandler(e, "longitude")}
+                          changeHandler={e =>
+                            onChangeHandler(e, 'longitude')
+                          }
                           translation={true}
                         />
                       </div>
@@ -812,7 +793,7 @@ export default class SiteAdd extends Component {
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
                   <label>
-                    {" "}
+                    {' '}
                     {cropResult ? (
                       <FormattedMessage
                         id="app.preview"
@@ -827,7 +808,9 @@ export default class SiteAdd extends Component {
                   </label>
 
                   {cropResult ? (
-                    <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                    <Dropzone
+                      onDrop={acceptedFile => readFile(acceptedFile)}
+                    >
                       {({ getRootProps, getInputProps }) => {
                         return (
                           <section>
@@ -839,7 +822,10 @@ export default class SiteAdd extends Component {
                             </div>
 
                             <div {...getRootProps()}>
-                              <input {...getInputProps()} multiple={false} />
+                              <input
+                                {...getInputProps()}
+                                multiple={false}
+                              />
                               <div className="upload-icon" />
 
                               <button className="fieldsight-btn">
@@ -855,7 +841,9 @@ export default class SiteAdd extends Component {
                       }}
                     </Dropzone>
                   ) : (
-                    <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                    <Dropzone
+                      onDrop={acceptedFile => readFile(acceptedFile)}
+                    >
                       {({ getRootProps, getInputProps }) => {
                         return (
                           <section>
@@ -893,11 +881,21 @@ export default class SiteAdd extends Component {
                 </div>
               </div>
               {jsondata.map((data, key) => {
-                return <Fragment key={key}>{this.selectform(data)}</Fragment>;
+                return (
+                  <Fragment key={key}>
+                    {this.selectform(data)}
+                  </Fragment>
+                );
               })}
               <div className="col-sm-12">
-                <button type="submit" className="fieldsight-btn pull-right">
-                  <FormattedMessage id="app.save" defaultMessage="Save" />
+                <button
+                  type="submit"
+                  className="fieldsight-btn pull-right"
+                >
+                  <FormattedMessage
+                    id="app.save"
+                    defaultMessage="Save"
+                  />
                 </button>
               </div>
             </div>
@@ -920,7 +918,7 @@ export default class SiteAdd extends Component {
                       />
                       <button
                         className="fieldsight-btn"
-                        style={{ marginTop: "15px" }}
+                        style={{ marginTop: '15px' }}
                         onClick={this.cropImage}
                       >
                         <FormattedMessage
@@ -937,9 +935,9 @@ export default class SiteAdd extends Component {
                       <div
                         className="img-preview"
                         style={{
-                          width: "100%",
+                          width: '100%',
                           height: 400,
-                          overflow: "hidden"
+                          overflow: 'hidden',
                         }}
                       />
                     </figure>

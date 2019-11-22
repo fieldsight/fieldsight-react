@@ -1,42 +1,44 @@
-import React, { Component } from "react";
-import axios from "axios";
-
-import { DotLoader } from "../myForm/Loader";
-import Modal from "../common/Modal";
-import RightContentCard from "../common/RightContentCard";
-import GlobalModalForm from "./GlobalModalForm";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import EditFormGuide from "./EditFormGuide";
-import AddForm from "./AddForm";
-import GeneralFormTable from "./GeneralFormTable";
-import ManageModal from "./ManageModal";
-import Loader from "../common/Loader";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
+import { DotLoader } from '../myForm/Loader';
+import Modal from '../common/Modal';
+import RightContentCard from '../common/RightContentCard';
+import GlobalModalForm from './GlobalModalForm';
+import { errorToast, successToast } from '../../utils/toastHandler';
+import EditFormGuide from './EditFormGuide';
+import AddForm from './AddForm';
+import GeneralFormTable from './GeneralFormTable';
+import ManageModal from './ManageModal';
+import Loader from '../common/Loader';
 
 class GeneralForms extends Component {
   _isMounted = false;
-  state = {
-    id: this.props.match.params ? this.props.match.params.id : "",
-    data: [],
-    deployStatus: false,
-    editGuide: false,
-    guideData: {},
-    editFormId: "",
-    showFormModal: false,
-    activeTab: "myForms",
-    formData: {},
-    xf: "",
-    loader: false,
-    loadReq: false,
-    loaded: 0,
-    formId: "",
-    formTitle: "",
-    isProjectForm: "",
-    myFormList: this.props.myForms,
-    projectFormList: this.props.projectForms,
-    sharedFormList: this.props.sharedForms,
-    isEditForm: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: props.match.params ? props.match.params.id : '',
+      data: [],
+      deployStatus: false,
+      editGuide: false,
+      guideData: {},
+      editFormId: '',
+      showFormModal: false,
+      activeTab: 'myForms',
+      formData: {},
+      xf: '',
+      loader: false,
+      loadReq: false,
+      loaded: 0,
+      formId: '',
+      formTitle: '',
+      isProjectForm: '',
+      myFormList: props.myForms,
+      projectFormList: props.projectForms,
+      sharedFormList: props.sharedForms,
+      isEditForm: false,
+    };
+  }
 
   requestGeneralForm(id, checkUrl) {
     const apiUrl = checkUrl
@@ -61,43 +63,44 @@ class GeneralForms extends Component {
     const {
       match: {
         url,
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
-    const splitArr = url.split("/");
-    const isProjectForm = splitArr.includes("project");
-    const isSiteForm = splitArr.includes("site");
+    const splitArr = url.split('/');
+    const isProjectForm = splitArr.includes('project');
+    const isSiteForm = splitArr.includes('site');
     if (isProjectForm) {
       this.setState(
         {
           loader: true,
-          isProjectForm
+          isProjectForm,
         },
-        this.requestGeneralForm(id, true)
+        this.requestGeneralForm(id, true),
       );
     } else if (isSiteForm) {
       this.setState(
         {
           loader: true,
-          isProjectForm: false
+          isProjectForm: false,
         },
-        this.requestGeneralForm(id, false)
+        this.requestGeneralForm(id, false),
       );
     }
   }
 
   componentDidUpdate(nextProps) {
-    if (nextProps.myForms != this.props.myForms) {
+    const { props } = this;
+    if (nextProps.myForms != props.myForms) {
       this.setState({
-        myFormList: this.props.myForms
+        myFormList: props.myForms,
       });
-    } else if (nextProps.projectForms != this.props.projectForms) {
+    } else if (nextProps.projectForms != props.projectForms) {
       this.setState({
-        projectFormList: this.props.projectForms
+        projectFormList: props.projectForms,
       });
-    } else if (nextProps.sharedForms != this.props.sharedForms) {
+    } else if (nextProps.sharedForms != props.sharedForms) {
       this.setState({
-        sharedFormList: this.props.sharedForms
+        sharedFormList: props.sharedForms,
       });
     }
   }
@@ -106,7 +109,7 @@ class GeneralForms extends Component {
     const { id, isProjectForm } = this.state;
     this.setState(
       {
-        loadReq: true
+        loadReq: true,
       },
       () => {
         const deployUrl = !!isProjectForm
@@ -129,8 +132,8 @@ class GeneralForms extends Component {
                 return { data: newData, loadReq: false };
               },
               () => {
-                successToast("Deploy Status", "updated");
-              }
+                successToast('Deploy Status', 'updated');
+              },
             );
           })
           .catch(err => {
@@ -139,14 +142,15 @@ class GeneralForms extends Component {
               errorToast(errors.data.error);
             });
           });
-      }
+      },
     );
   };
+
   deleteItem = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
     this.setState(
       {
-        loadReq: true
+        loadReq: true,
       },
       () => {
         const deleteUrl = !!isProjectForm
@@ -157,12 +161,14 @@ class GeneralForms extends Component {
           .then(res => {
             this.setState(
               {
-                data: this.state.data.filter(each => each.id != formId),
-                loadReq: false
+                data: this.state.data.filter(
+                  each => each.id != formId,
+                ),
+                loadReq: false,
               },
               () => {
-                successToast("Form", "deleted");
-              }
+                successToast('Form', 'deleted');
+              },
             );
           })
           .catch(err => {
@@ -171,36 +177,39 @@ class GeneralForms extends Component {
               errorToast(errors.data.error);
             });
           });
-      }
+      },
     );
   };
+
   handleEditGuide = (data, formId) => {
     this.setState({
       editGuide: !this.state.editGuide,
       guideData: data ? data : {},
-      editFormId: formId
+      editFormId: formId,
     });
   };
+
   handleUpdateGuide = data => {
     const { id, editFormId } = this.state;
     this.setState(
       {
-        loadReq: true
+        loadReq: true,
       },
       () => {
         const formData = new FormData();
-        if (data.title) formData.append("title", data.title);
-        if (data.text) formData.append("text", data.text);
-        if (data.pdf) formData.append("pdf", data.pdf);
-        if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
-        if (editFormId) formData.append("fsxf", editFormId);
+        if (data.title) formData.append('title', data.title);
+        if (data.text) formData.append('text', data.text);
+        if (data.pdf) formData.append('pdf', data.pdf);
+        if (data.is_pdf) formData.append('is_pdf', data.is_pdf);
+        if (editFormId) formData.append('fsxf', editFormId);
         if (data.images && data.images.length > 0) {
           data.images.map((each, i) => {
-            if (!each.image) formData.append(`new_images_${i + 1}`, each);
+            if (!each.image)
+              formData.append(`new_images_${i + 1}`, each);
           });
         }
         if (data.id) {
-          formData.append("id", data.id);
+          formData.append('id', data.id);
         }
         axios
           .post(`forms/api/save_educational_material/`, formData)
@@ -220,12 +229,12 @@ class GeneralForms extends Component {
                   return {
                     editGuide: false,
                     data: item,
-                    loadReq: false
+                    loadReq: false,
                   };
                 },
                 () => {
-                  successToast("form", "updated");
-                }
+                  successToast('form', 'updated');
+                },
               );
             }
           })
@@ -235,33 +244,38 @@ class GeneralForms extends Component {
               errorToast(errors.data.error);
             });
           });
-      }
+      },
     );
   };
+
   handleClosePopup = () => {
+    const { props } = this;
     this.setState(
       {
-        formTitle: "",
-        formId: "",
+        formTitle: '',
+        formId: '',
         showFormModal: false,
-        activeTab: "myForms",
-        myFormList: this.props.myForms,
-        projectFormList: this.props.projectForms,
-        sharedFormList: this.props.sharedForms,
-        xf: "",
-        isEditForm: false
+        activeTab: 'myForms',
+        myFormList: props.myForms,
+        projectFormList: props.projectForms,
+        sharedFormList: props.sharedForms,
+        xf: '',
+        isEditForm: false,
       },
       () => {
-        this.props.closePopup();
-      }
+        props.closePopup();
+      },
     );
   };
 
   handleCreateGeneralForm = data => {
-    const { id, xf, isEditForm, isProjectForm } = this.state;
+    const {
+      state: { id, xf, isEditForm, isProjectForm },
+      props,
+    } = this;
     this.setState(
       {
-        loadReq: true
+        loadReq: true,
       },
       () => {
         if (!isEditForm) {
@@ -277,13 +291,14 @@ class GeneralForms extends Component {
                   ? data.typeSelected.map(each => each.id)
                   : [],
               regions:
-                !!data.regionSelected && data.regionSelected.length > 0
+                !!data.regionSelected &&
+                data.regionSelected.length > 0
                   ? data.regionSelected.map(each => each.id)
                   : [],
               donor_visibility: data.isDonor,
               can_edit: data.isEdit,
-              can_delete: data.isDelete
-            }
+              can_delete: data.isDelete,
+            },
           };
           axios
             .post(postUrl, payload)
@@ -291,12 +306,12 @@ class GeneralForms extends Component {
               this.setState(
                 {
                   data: [...this.state.data, res.data],
-                  loadReq: false
+                  loadReq: false,
                 },
                 () => {
-                  this.props.closePopup();
-                  successToast("form ", "added");
-                }
+                  props.closePopup();
+                  successToast('form ', 'added');
+                },
               );
             })
             .catch(err => {
@@ -322,15 +337,16 @@ class GeneralForms extends Component {
               can_edit: data.isEdit,
               donor_visibility: data.isDonor,
               regions:
-                !!data.regionSelected && data.regionSelected.length > 0
+                !!data.regionSelected &&
+                data.regionSelected.length > 0
                   ? data.regionSelected.map(each => each.id)
                   : [],
               can_delete: data.isDelete,
               types:
                 !!data.typeSelected && data.typeSelected.length > 0
                   ? data.typeSelected.map(each => each.id)
-                  : []
-            }
+                  : [],
+            },
           };
 
           axios
@@ -348,13 +364,13 @@ class GeneralForms extends Component {
                   });
                   return {
                     data: newArr,
-                    loadReq: false
+                    loadReq: false,
                   };
                 },
                 () => {
                   this.handleClosePopup();
-                  successToast("form", "updated");
-                }
+                  successToast('form', 'updated');
+                },
               );
             })
             .catch(err => {
@@ -364,20 +380,21 @@ class GeneralForms extends Component {
               });
             });
         }
-      }
+      },
     );
   };
 
   handleEditGeneralForm = data => {
+    const { props } = this;
     this.setState(
       {
         formData: data,
         isEditForm: true,
-        formTitle: data.xf.title
+        formTitle: data.xf.title,
       },
       () => {
-        this.props.commonPopupHandler();
-      }
+        props.commonPopupHandler();
+      },
     );
   };
 
@@ -386,73 +403,88 @@ class GeneralForms extends Component {
   };
 
   toggleTab = tab => {
+    const { props } = this;
     this.setState({
       activeTab: tab,
-      myFormList: this.props.myForms,
-      sharedFormList: this.props.sharedForms,
-      projectFormList: this.props.projectForms
+      myFormList: props.myForms,
+      sharedFormList: props.sharedForms,
+      projectFormList: props.projectForms,
     });
   };
 
   onChangeHandler = async e => {
     const { activeTab } = this.state;
+    const { props } = this;
+
     const searchValue = e.target.value;
 
     if (searchValue) {
-      if (activeTab == "myForms") {
-        const filteredData = await this.props.myForms.filter(form => {
+      if (activeTab == 'myForms') {
+        const filteredData = await props.myForms.filter(form => {
           return (
-            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            form.title
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            form.owner
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
           );
         });
 
         this.setState({
-          myFormList: filteredData
+          myFormList: filteredData,
         });
-      } else if (activeTab == "projectForms") {
-        const awaitedData = await this.props.projectForms.map(project => {
+      } else if (activeTab == 'projectForms') {
+        const awaitedData = await props.projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
-              form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-              form.owner.toLowerCase().includes(searchValue.toLowerCase())
+              form.title
+                .toLowerCase()
+                .includes(searchValue.toLowerCase()) ||
+              form.owner
+                .toLowerCase()
+                .includes(searchValue.toLowerCase())
             );
           });
           return { ...project, forms: filteredData };
         });
         this.setState({
-          projectFormList: awaitedData
+          projectFormList: awaitedData,
         });
-      } else if (activeTab == "sharedForms") {
-        const filteredData = await this.props.sharedForms.filter(form => {
+      } else if (activeTab == 'sharedForms') {
+        const filteredData = await props.sharedForms.filter(form => {
           return (
-            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            form.title
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            form.owner
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
           );
         });
 
         this.setState({
-          sharedFormList: filteredData
+          sharedFormList: filteredData,
         });
       }
     } else {
       this.setState({
-        myFormList: this.props.myForms,
-        sharedFormList: this.props.sharedForms,
-        projectFormList: this.props.projectForms
+        myFormList: props.myForms,
+        sharedFormList: props.sharedForms,
+        projectFormList: props.projectForms,
       });
     }
   };
   handleMyFormChange = (e, title) => {
     this.setState({
       formId: e.target.value,
-      formTitle: title
+      formTitle: title,
     });
   };
   handleSaveForm = () => {
     this.setState({
       xf: this.state.formId,
-      showFormModal: !this.state.showFormModal
+      showFormModal: !this.state.showFormModal,
     });
   };
 
@@ -471,10 +503,15 @@ class GeneralForms extends Component {
         projectFormList,
         sharedFormList,
         isEditForm,
-        isProjectForm
+        isProjectForm,
       },
-      props: { typeOptions, regionOptions },
-      handleClosePopup
+      props: {
+        typeOptions,
+        regionOptions,
+        commonPopupHandler,
+        popupModal,
+      },
+      handleClosePopup,
     } = this;
 
     return (
@@ -482,7 +519,7 @@ class GeneralForms extends Component {
         <RightContentCard
           title="app.generate-forms"
           addButton={true}
-          toggleModal={this.props.commonPopupHandler}
+          toggleModal={commonPopupHandler}
           showText={true}
         >
           {loader && <DotLoader />}
@@ -508,7 +545,7 @@ class GeneralForms extends Component {
               formTable="site"
             />
           )}
-          {this.props.popupModal && (
+          {props.popupModal && (
             <Modal
               title="Add General Form"
               toggleModal={handleClosePopup}
@@ -530,7 +567,10 @@ class GeneralForms extends Component {
             </Modal>
           )}
           {editGuide && (
-            <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
+            <Modal
+              title="Form Guide"
+              toggleModal={this.handleEditGuide}
+            >
               <EditFormGuide
                 data={guideData}
                 handleCancel={this.handleEditGuide}
@@ -558,7 +598,7 @@ class GeneralForms extends Component {
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
                 // handleSaveForm={this.handleSaveForm}
-                loader={this.props.formLoader}
+                loader={formLoader}
               />
             </ManageModal>
           )}

@@ -1,25 +1,27 @@
-import React, { Component } from "react";
-import { Dropdown } from "react-bootstrap";
-import CustomMap from "./CustomMap";
-import axios from "axios";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { FormattedMessage } from "react-intl";
+import React, { Component } from 'react';
+import { Dropdown } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import axios from 'axios';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import CustomMap from './CustomMap';
 
 let baseURL = window.base_url
   ? window.base_url
-  : "https://fieldsight.naxa.com.np/fieldsight/application";
+  : 'https://fieldsight.naxa.com.np/fieldsight/application';
 
-const selectPeriod = ["Last 7 days", "Last month", "Last Year"];
+const selectPeriod = ['Last 7 days', 'Last month', 'Last Year'];
 
-const url = "fv3/api/latestsubmissions/";
+const url = 'fv3/api/latestsubmissions/';
 
 class Activity extends Component {
   _isMounted = false;
-
-  state = {
-    activity: [],
-    map: []
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activity: [],
+      map: [],
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -30,7 +32,7 @@ class Activity extends Component {
         if (this._isMounted) {
           if (res.status === 200) {
             this.setState({
-              activity: res.data
+              activity: res.data,
             });
           }
         }
@@ -84,7 +86,7 @@ class Activity extends Component {
               <div className="card-body">
                 <div
                   className="thumb-list mr-0"
-                  style={{ position: "relative", height: "655px" }}
+                  style={{ position: 'relative', height: '655px' }}
                 >
                   <PerfectScrollbar>
                     <ul>
@@ -114,11 +116,14 @@ class Activity extends Component {
             <div className="card">
               <div className="card-header main-card-header sub-card-header">
                 <h5>
-                  <FormattedMessage id="app.map" defaultMessage="Map" />
+                  <FormattedMessage
+                    id="app.map"
+                    defaultMessage="Map"
+                  />
                 </h5>
               </div>
               <div className="card-body">
-                <div id="map" style={{ height: "415px" }}>
+                <div id="map" style={{ height: '415px' }}>
                   <CustomMap activity={this.state.activity} />
                 </div>
               </div>

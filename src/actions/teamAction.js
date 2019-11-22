@@ -1,5 +1,5 @@
-import axios from "axios";
-import { GET_TEAMS, GET_TRANSLATION } from "./types";
+import axios from 'axios';
+import { GET_TEAMS, GET_TRANSLATION } from './types';
 
 export const getTeam = id => dispatch => {
   axios
@@ -7,7 +7,7 @@ export const getTeam = id => dispatch => {
     .then(res => {
       dispatch({
         type: GET_TEAMS,
-        payload: res.data
+        payload: res.data,
       });
     })
     .catch(err => {
@@ -20,6 +20,6 @@ export const getTeam = id => dispatch => {
 export const getTranslate = value => dispatch => {
   dispatch({
     type: GET_TRANSLATION,
-    payload: value
+    payload: value,
   });
 };

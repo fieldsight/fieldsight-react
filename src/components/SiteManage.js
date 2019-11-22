@@ -1,25 +1,29 @@
-import React, { Component, Fragment } from "react";
-import Table from "./common/Table";
-import Modal from "./common/Modal";
-import InputElement from "./common/InputElement";
-import RightContentCard from "./common/RightContentCard";
-import { FormattedMessage } from "react-intl";
+import React, { Component, Fragment } from 'react';
+import { FormattedMessage } from 'react-intl';
+import Table from './common/Table';
+import Modal from './common/Modal';
+import InputElement from './common/InputElement';
+import RightContentCard from './common/RightContentCard';
 
 class SiteManage extends Component {
-  state = {
-    showModal: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showModal: false,
+    };
+  }
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({
-      showModal: !showModal
+      showModal: !showModal,
     }));
   };
 
   render() {
     const {
       state: { showModal },
-      toggleModal
+      toggleModal,
     } = this;
     return (
       <Fragment>
@@ -32,7 +36,10 @@ class SiteManage extends Component {
         </RightContentCard>
         {showModal && (
           <Modal title="Add site" toggleModal={toggleModal}>
-            <form className="floating-form" onSubmit={onSubmitHandler}>
+            <form
+              className="floating-form"
+              onSubmit={onSubmitHandler}
+            >
               <InputElement
                 tag="input"
                 type="text"
@@ -80,7 +87,10 @@ class SiteManage extends Component {
               />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  <FormattedMessage id="app.save" defaultMessage="Save" />
+                  <FormattedMessage
+                    id="app.save"
+                    defaultMessage="Save"
+                  />
                 </button>
               </div>
             </form>

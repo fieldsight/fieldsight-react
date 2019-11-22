@@ -1,74 +1,86 @@
-import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
-import { FormattedMessage } from "react-intl";
+import React, { PureComponent } from 'react';
+import { withRouter, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable camelcase */
 
 const sideNavRoutes = [
   {
-    to: "/general",
-    path: "/general",
-    title: "General Forms",
-    id: "app.generate-forms"
+    key: 0,
+    to: '/general',
+    path: '/general',
+    title: 'General Forms',
+    id: 'app.generate-forms',
   },
   {
-    to: "/scheduled",
-    path: "/scheduled",
-    title: "Scheduled Forms",
-    id: "app.scheduled-form"
+    key: 1,
+    to: '/scheduled',
+    path: '/scheduled',
+    title: 'Scheduled Forms',
+    id: 'app.scheduled-form',
   },
   {
-    to: "/stage",
-    path: "/stage",
-    title: "Stage Form",
-    id: "app.staged-form"
-  }
+    key: 2,
+    to: '/stage',
+    path: '/stage',
+    title: 'Stage Form',
+    id: 'app.staged-form',
+  },
 ];
 
 const viewByStatus = [
   {
-    to: "/rejected",
-    path: "/rejected",
-    title: "Rejected Submission",
-    id: "app.rejected-submissions"
+    key: 0,
+    to: '/rejected',
+    path: '/rejected',
+    title: 'Rejected Submission',
+    id: 'app.rejected-submissions',
   },
   {
-    to: "/flagged",
-    path: "/flagged",
-    title: "Flagged Submission",
-    id: "app.flagged-submissions"
+    key: 1,
+    to: '/flagged',
+    path: '/flagged',
+    title: 'Flagged Submission',
+    id: 'app.flagged-submissions',
   },
   {
-    to: "/pending",
-    path: "/pending",
-    title: "Pending Submission",
-    id: "app.pending-submissions"
+    key: 2,
+    to: '/pending',
+    path: '/pending',
+    title: 'Pending Submission',
+    id: 'app.pending-submissions',
   },
   {
-    to: "/approved",
-    path: "/approved",
-    title: "Approved Submission",
-    id: "app.approved-submissions"
-  }
+    key: 3,
+    to: '/approved',
+    path: '/approved',
+    title: 'Approved Submission',
+    id: 'app.approved-submissions',
+  },
 ];
 
-class ManageFormSetting extends Component {
+class ManageFormSetting extends PureComponent {
   render() {
     const {
-      location: { pathname }
+      location: { pathname },
+      match: {
+        params: { id },
+      },
+      show_submission,
     } = this.props;
 
     return (
       <>
-        {!this.props.show_submission && (
+        {!show_submission && (
           <ul className="nav nav-tabs flex-column border-tabs">
-            {sideNavRoutes.map((route, i) => (
-              <li className="nav-item" key={i}>
+            {sideNavRoutes.map(route => (
+              <li className="nav-item" key={route.key}>
                 <Link
-                  to={`/site-responses/${this.props.match.params.id}${route.to}`}
+                  to={`/site-responses/${id}${route.to}`}
                   className={
-                    this.props.location.pathname ==
-                    `/site-responses/${this.props.match.params.id}${route.path}`
-                      ? "nav-link active"
-                      : "nav-link"
+                    pathname === `/site-responses/${id}${route.path}`
+                      ? 'nav-link active'
+                      : 'nav-link'
                   }
                 >
                   {/*route.title*/}
@@ -81,17 +93,16 @@ class ManageFormSetting extends Component {
             ))}
           </ul>
         )}
-        {this.props.show_submission && (
+        {show_submission && (
           <ul className="nav nav-tabs flex-column border-tabs">
-            {viewByStatus.map((route, i) => (
-              <li className="nav-item" key={i}>
+            {viewByStatus.map(route => (
+              <li className="nav-item" key={route.key}>
                 <Link
-                  to={`/site-responses/${this.props.match.params.id}${route.to}`}
+                  to={`/site-responses/${id}${route.to}`}
                   className={
-                    this.props.location.pathname ==
-                    `/site-responses/${this.props.match.params.id}${route.path}`
-                      ? "nav-link active"
-                      : "nav-link"
+                    pathname === `/site-responses/${id}${route.path}`
+                      ? 'nav-link active'
+                      : 'nav-link'
                   }
                 >
                   {/*route.title*/}
@@ -108,5 +119,11 @@ class ManageFormSetting extends Component {
     );
   }
 }
+
+ManageFormSetting.propTypes = {
+  location: PropTypes.objectOf.isRequired,
+  match: PropTypes.objectOf.isRequired,
+  show_submission: PropTypes.bool.isRequired,
+};
 
 export default withRouter(ManageFormSetting);

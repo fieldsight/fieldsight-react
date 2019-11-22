@@ -1,30 +1,38 @@
-import React, { Component } from "react";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import MyFormContent from "./MyFormContent";
-import ProjectFormContent from "./ProjectFormContent";
-import { FormattedMessage } from "react-intl";
+import React, { PureComponent } from 'react';
+import { Switch, Route, Link, withRouter } from 'react-router-dom';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { FormattedMessage } from 'react-intl';
+import MyFormContent from './MyFormContent';
+import ProjectFormContent from './ProjectFormContent';
+/* eslint-disable react/prop-types  */
 
 // import MyformTable from '../components/MyForm/MyformTable';
 // import UserSelectForm from '../components/MyForm/UserSelectForm';
 
-class SideBar extends Component {
+class SideBar extends PureComponent {
   render() {
     const {
-      match: { path, url }
+      match: { path, url },
+      height,
+      location: { pathname },
+      OpenTabHandler,
+      commonPopupHandler,
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <div className="col-xl-3 col-lg-4">
           <div className="left-sidebar new-sidebar sticky-top">
             <div
               className="card no-boxshadow"
-              style={{ minHeight: this.props.height }}
+              style={{ minHeight: height }}
             >
               <div className="card-header main-card-header sub-card-header">
                 <h5>
-                  <FormattedMessage id="app.forms" defaultMessage="Forms" />
+                  <FormattedMessage
+                    id="app.forms"
+                    defaultMessage="Forms"
+                  />
                 </h5>
               </div>
               <div className="card-body">
@@ -37,9 +45,9 @@ class SideBar extends Component {
                     <Link
                       to={`${url}/myform`}
                       className={
-                        this.props.location.pathname == `${url}/myform`
-                          ? "nav-link active"
-                          : "nav-link"
+                        pathname === `${url}/myform`
+                          ? 'nav-link active'
+                          : 'nav-link'
                       }
                     >
                       <FormattedMessage
@@ -52,9 +60,9 @@ class SideBar extends Component {
                     <Link
                       to={`${url}/projectform`}
                       className={
-                        this.props.location.pathname == `${url}/projectform`
-                          ? "nav-link active"
-                          : "nav-link"
+                        pathname === `${url}/projectform`
+                          ? 'nav-link active'
+                          : 'nav-link'
                       }
                     >
                       <FormattedMessage
@@ -77,8 +85,8 @@ class SideBar extends Component {
               <MyFormContent
                 {...props}
                 title="MyFormContent"
-                OpenTabHandler={this.props.OpenTabHandler}
-                commonPopupHandler={this.props.commonPopupHandler}
+                OpenTabHandler={OpenTabHandler}
+                commonPopupHandler={commonPopupHandler}
               />
             )}
           />
@@ -90,13 +98,13 @@ class SideBar extends Component {
               <ProjectFormContent
                 {...props}
                 title="ProjectFormContent"
-                OpenTabHandler={this.props.OpenTabHandler}
-                commonPopupHandler={this.props.commonPopupHandler}
+                OpenTabHandler={OpenTabHandler}
+                commonPopupHandler={commonPopupHandler}
               />
             )}
           />
         </Switch>
-      </React.Fragment>
+      </>
     );
   }
 }

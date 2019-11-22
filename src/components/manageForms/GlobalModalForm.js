@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import Select from "react-select";
-import DatePicker from "react-datepicker";
-import RadioElement from "../common/RadioElement";
-import CheckBox from "../common/CheckBox";
-import SelectElement from "../common/SelectElement";
+import React, { Component } from 'react';
+import Select from 'react-select';
+import DatePicker from 'react-datepicker';
+import RadioElement from '../common/RadioElement';
+import CheckBox from '../common/CheckBox';
+import SelectElement from '../common/SelectElement';
 
 const getArrValue = (arr, value) => {
   if (arr.includes(value)) return true;
@@ -12,129 +12,138 @@ const getArrValue = (arr, value) => {
 
 class GlobalModalForm extends Component {
   _isMounted = false;
-  state = {
-    id: this.props.formData ? this.props.formData.id : "",
-    em: this.props.formData ? this.props.formData.em : null,
-    status:
-      this.props.formData && this.props.formData.default_submission_status
-        ? this.props.formData.default_submission_status
-        : 0,
-    isDonor:
-      this.props.formData && this.props.formData.setting
-        ? this.props.formData.setting.donor_visibility
-        : true,
-    isEdit:
-      this.props.formData && this.props.formData.setting
-        ? this.props.formData.setting.can_edit
-        : true,
-    isDelete:
-      this.props.formData && this.props.formData.setting
-        ? this.props.formData.setting.can_delete
-        : true,
-    regionSelected: [],
-    typeSelected: [],
-    startDate:
-      this.props.formData && this.props.formData.date_range_start
-        ? new Date(this.props.formData.date_range_start)
-        : new Date(),
-    endDate:
-      this.props.formData && this.props.formData.date_range_end
-        ? new Date(this.props.formData.date_range_end)
-        : null,
-    hasLoaded: false,
-    order:
-      this.props.formData && this.props.formData.order
-        ? this.props.formData.order
-        : 0,
-    settingId:
-      this.props.formData && this.props.formData.setting
-        ? this.props.formData.setting.id
-        : "",
-    isDeploy:
-      this.props.formData && this.props.formData.is_deployed
-        ? this.props.formData.is_deployed
-        : false,
-    scheduleType:
-      this.props.formData && this.props.formData.schedule_level_id
-        ? this.props.formData.schedule_level_id
-        : 0,
-    dailyArrDays: {
-      mon:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 1)
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      id: props.formData ? props.formData.id : '',
+      em: props.formData ? props.formData.em : null,
+      status:
+        props.formData && props.formData.default_submission_status
+          ? props.formData.default_submission_status
+          : 0,
+      isDonor:
+        props.formData && props.formData.setting
+          ? props.formData.setting.donor_visibility
+          : true,
+      isEdit:
+        props.formData && props.formData.setting
+          ? props.formData.setting.can_edit
+          : true,
+      isDelete:
+        props.formData && props.formData.setting
+          ? props.formData.setting.can_delete
+          : true,
+      regionSelected: [],
+      typeSelected: [],
+      startDate:
+        props.formData && props.formData.date_range_start
+          ? new Date(props.formData.date_range_start)
+          : new Date(),
+      endDate:
+        props.formData && props.formData.date_range_end
+          ? new Date(props.formData.date_range_end)
+          : null,
+      hasLoaded: false,
+      order:
+        props.formData && props.formData.order
+          ? props.formData.order
+          : 0,
+      settingId:
+        props.formData && props.formData.setting
+          ? props.formData.setting.id
+          : '',
+      isDeploy:
+        props.formData && props.formData.is_deployed
+          ? props.formData.is_deployed
           : false,
-      tue:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 2)
-          : false,
-      wed:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 3)
-          : false,
-      thu:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 4)
-          : false,
-      fri:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 5)
-          : false,
-      sat:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 6)
-          : false,
-      sun:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 7)
-          : false
-    },
-    selectedDays:
-      this.props.formData && this.props.formData.selected_days
-        ? this.props.formData.selected_days
-        : [],
-    weeklyArrDays: {
-      mon:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 1)
-          : false,
-      tue:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 2)
-          : false,
-      wed:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 3)
-          : false,
-      thu:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 4)
-          : false,
-      fri:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 5)
-          : false,
-      sat:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 6)
-          : false,
-      sun:
-        this.props.formData && this.props.formData.selected_days
-          ? getArrValue(this.props.formData.selected_days, 7)
-          : false
-    },
-    frequency:
-      this.props.formData && this.props.formData.frequency
-        ? this.props.formData.frequency
-        : 1,
-    notifyIncomplete:
-      this.props.formData && this.props.formData.setting
-        ? this.props.formData.setting.notify_incomplete_schedule
-        : true
-  };
+      scheduleType:
+        props.formData && props.formData.schedule_level_id
+          ? props.formData.schedule_level_id
+          : 0,
+      dailyArrDays: {
+        mon:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 1)
+            : false,
+        tue:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 2)
+            : false,
+        wed:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 3)
+            : false,
+        thu:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 4)
+            : false,
+        fri:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 5)
+            : false,
+        sat:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 6)
+            : false,
+        sun:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 7)
+            : false,
+      },
+      selectedDays:
+        props.formData && props.formData.selected_days
+          ? props.formData.selected_days
+          : [],
+      weeklyArrDays: {
+        mon:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 1)
+            : false,
+        tue:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 2)
+            : false,
+        wed:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 3)
+            : false,
+        thu:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 4)
+            : false,
+        fri:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 5)
+            : false,
+        sat:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 6)
+            : false,
+        sun:
+          props.formData && props.formData.selected_days
+            ? getArrValue(props.formData.selected_days, 7)
+            : false,
+      },
+      frequency:
+        props.formData && props.formData.frequency
+          ? props.formData.frequency
+          : 1,
+      notifyIncomplete:
+        props.formData && props.formData.setting
+          ? props.formData.setting.notify_incomplete_schedule
+          : true,
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
-    const { typeOptions, regionOptions, formData, isProjectWide } = this.props;
+    const {
+      typeOptions,
+      regionOptions,
+      formData,
+      isProjectWide,
+    } = this.props;
     if (!isProjectWide) {
       const regionSelected =
         formData && formData.setting && formData.setting.regions;
@@ -147,14 +156,14 @@ class GlobalModalForm extends Component {
           regionOptions.map(each => ({
             ...each,
             value: each.identifier,
-            label: each.name
+            label: each.name,
           }));
         const newTypeArr =
           typeOptions &&
           typeOptions.map(each => ({
             ...each,
             value: each.identifier,
-            label: each.name
+            label: each.name,
           }));
 
         let selectedRegion = [];
@@ -167,7 +176,7 @@ class GlobalModalForm extends Component {
                 selectedRegion.push({
                   ...region,
                   value: region.identifier,
-                  label: region.name
+                  label: region.name,
                 });
               }
             });
@@ -179,7 +188,7 @@ class GlobalModalForm extends Component {
                 selectedType.push({
                   ...type,
                   value: type.identifier,
-                  label: type.name
+                  label: type.name,
                 });
               }
             });
@@ -194,7 +203,7 @@ class GlobalModalForm extends Component {
           regionDropdown: newRegionArr,
           typeDropdown: newTypeArr,
           regionSelected: selectedRegion,
-          typeSelected: selectedType
+          typeSelected: selectedType,
         });
       }
     }
@@ -205,6 +214,7 @@ class GlobalModalForm extends Component {
   }
 
   handleClearState = () => {
+    const { handleToggleForm } = this;
     this.setState(
       {
         status: 0,
@@ -216,11 +226,11 @@ class GlobalModalForm extends Component {
         startDate: new Date(),
         endDate: null,
         hasLoaded: false,
-        errors: {}
+        errors: {},
       },
       () => {
-        this.props.handleToggleForm();
-      }
+        handleToggleForm();
+      },
     );
   };
 
@@ -228,51 +238,54 @@ class GlobalModalForm extends Component {
     const { name, value } = e.target;
 
     this.setState(state => {
-      if (name == "status") {
+      if (name == 'status') {
         return {
-          status: value
+          status: value,
         };
-      } else if (name == "donor") {
+      } else if (name == 'donor') {
         return {
-          isDonor: JSON.parse(value)
+          isDonor: JSON.parse(value),
         };
-      } else if (name == "edit") {
+      } else if (name == 'edit') {
         return {
-          isEdit: JSON.parse(value)
+          isEdit: JSON.parse(value),
         };
-      } else if (name == "delete") {
+      } else if (name == 'delete') {
         return {
-          isDelete: JSON.parse(value)
+          isDelete: JSON.parse(value),
         };
-      } else if (name == "scheduleType") {
+      } else if (name == 'scheduleType') {
         return {
           scheduleType: JSON.parse(value),
-          selectedDays: []
+          selectedDays: [],
         };
-      } else if (name == "notifyIncomplete") {
+      } else if (name == 'notifyIncomplete') {
         return {
-          notifyIncomplete: JSON.parse(value)
+          notifyIncomplete: JSON.parse(value),
         };
       }
     });
   };
+
   handleSelectRegionChange = region => {
     this.setState(state => {
       return {
-        regionSelected: region
+        regionSelected: region,
       };
     });
   };
+
   handleSelectTypeChange = type => {
     this.setState(state => {
       return {
-        typeSelected: type
+        typeSelected: type,
       };
     });
   };
+
   handleInputChange = e => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -281,47 +294,49 @@ class GlobalModalForm extends Component {
     let errors = {};
     this.setState(state => {
       if (!!endDate && e > endDate) {
-        errors.endDate = "Invalid Date";
+        errors.endDate = 'Invalid Date';
         return {
           endDate: e,
-          errors
+          errors,
         };
       } else {
         errors = {};
         return {
           startDate: e,
-          errors
+          errors,
         };
       }
     });
   };
+
   handleEndDateChange = e => {
     const { startDate } = this.state;
     let errors = {};
     this.setState(state => {
       if (e < startDate) {
-        errors.endDate = "Invalid Date";
+        errors.endDate = 'Invalid Date';
         return {
           startDate: e,
-          errors
+          errors,
         };
       } else {
         errors = {};
         return {
           endDate: e,
-          errors
+          errors,
         };
       }
     });
   };
+
   getDay = day => {
-    if (day == "mon") return 1;
-    else if (day == "tue") return 2;
-    else if (day == "wed") return 3;
-    else if (day == "thu") return 4;
-    else if (day == "fri") return 5;
-    else if (day == "sat") return 6;
-    else if (day == "sun") return 7;
+    if (day == 'mon') return 1;
+    else if (day == 'tue') return 2;
+    else if (day == 'wed') return 3;
+    else if (day == 'thu') return 4;
+    else if (day == 'fri') return 5;
+    else if (day == 'sat') return 6;
+    else if (day == 'sun') return 7;
   };
 
   handleCheckbox = e => {
@@ -333,28 +348,33 @@ class GlobalModalForm extends Component {
         dailyArrDays: {
           ...this.state.dailyArrDays,
 
-          [e.target.name]: !this.state.dailyArrDays[name]
-        }
+          [e.target.name]: !this.state.dailyArrDays[name],
+        },
       },
       () => {
         this.setState(state => {
           if (!!checked) {
-            return { selectedDays: [...this.state.selectedDays, selectedDay] };
+            return {
+              selectedDays: [...this.state.selectedDays, selectedDay],
+            };
           } else {
             const days = this.state.selectedDays;
-            return { selectedDays: days.filter(day => day != selectedDay) };
+            return {
+              selectedDays: days.filter(day => day != selectedDay),
+            };
           }
         });
-      }
+      },
     );
   };
+
   handleOnWeekCheckbox = e => {
     const name = e.target.name;
     const checked = e.target.checked;
     const day = this.getDay(name);
     this.setState(
       state => {
-        if (name == "sun") {
+        if (name == 'sun') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -364,10 +384,10 @@ class GlobalModalForm extends Component {
               wed: false,
               thu: false,
               fri: false,
-              sat: false
-            }
+              sat: false,
+            },
           };
-        } else if (name == "mon") {
+        } else if (name == 'mon') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -377,10 +397,10 @@ class GlobalModalForm extends Component {
               wed: false,
               thu: false,
               fri: false,
-              sat: false
-            }
+              sat: false,
+            },
           };
-        } else if (name == "tue") {
+        } else if (name == 'tue') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -390,10 +410,10 @@ class GlobalModalForm extends Component {
               wed: false,
               thu: false,
               fri: false,
-              sat: false
-            }
+              sat: false,
+            },
           };
-        } else if (name == "wed") {
+        } else if (name == 'wed') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -403,10 +423,10 @@ class GlobalModalForm extends Component {
               mon: false,
               thu: false,
               fri: false,
-              sat: false
-            }
+              sat: false,
+            },
           };
-        } else if (name == "thu") {
+        } else if (name == 'thu') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -416,10 +436,10 @@ class GlobalModalForm extends Component {
               wed: false,
               mon: false,
               fri: false,
-              sat: false
-            }
+              sat: false,
+            },
           };
-        } else if (name == "fri") {
+        } else if (name == 'fri') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -429,10 +449,10 @@ class GlobalModalForm extends Component {
               wed: false,
               thu: false,
               mon: false,
-              sat: false
-            }
+              sat: false,
+            },
           };
-        } else if (name == "sat") {
+        } else if (name == 'sat') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -442,8 +462,8 @@ class GlobalModalForm extends Component {
               wed: false,
               thu: false,
               fri: false,
-              mon: false
-            }
+              mon: false,
+            },
           };
         }
       },
@@ -455,22 +475,26 @@ class GlobalModalForm extends Component {
             return { selectedDays: [] };
           }
         });
-      }
+      },
     );
   };
+
   handleFrequencyChange = e => {
     const { value } = e.target;
     this.setState({ frequency: JSON.parse(value) });
   };
+
   handleDaySelect = e => {
     const { value } = e.target;
     this.setState({
-      selectedDays: [JSON.parse(value)]
+      selectedDays: [JSON.parse(value)],
     });
   };
+
   handleSubmit = e => {
     e.preventDefault();
-    this.props.handleCreateForm(this.state);
+    const { handleCreateForm } = this.props;
+    handleCreateForm(this.state);
   };
 
   render() {
@@ -480,7 +504,7 @@ class GlobalModalForm extends Component {
         isProjectWide,
         toggleFormModal,
         formTitle,
-        isEditForm
+        isEditForm,
       },
       state: {
         regionDropdown,
@@ -500,8 +524,8 @@ class GlobalModalForm extends Component {
         weeklyArrDays,
         selectedDays,
         frequency,
-        notifyIncomplete
-      }
+        notifyIncomplete,
+      },
     } = this;
 
     let weekOptions = [];
@@ -515,7 +539,7 @@ class GlobalModalForm extends Component {
     }
     for (var i = 1; i <= 31; i++) {
       if (i <= 30) dayOptions.push({ key: i, name: i });
-      else dayOptions.push({ key: 0, name: "Last" });
+      else dayOptions.push({ key: 0, name: 'Last' });
     }
     return (
       <>
@@ -528,7 +552,7 @@ class GlobalModalForm extends Component {
               {!isEditForm && (
                 <div className="add-btn flex-start">
                   <a data-tab="choose-form" onClick={toggleFormModal}>
-                    {!!formTitle ? "Change form" : " Choose form"}
+                    {!!formTitle ? 'Change form' : ' Choose form'}
                     <span>
                       <i className="la la-file-text-o"></i>
                     </span>
@@ -538,7 +562,7 @@ class GlobalModalForm extends Component {
             </div>
           </div>
 
-          {formType == "schedule" && (
+          {formType == 'schedule' && (
             <>
               {/* // for schedule form */}
               <div className="form-group checkbox-group">
@@ -785,19 +809,21 @@ class GlobalModalForm extends Component {
               />
             </div>
           </div>
-          {!isProjectWide && regionDropdown && regionDropdown.length > 0 && (
-            <div>
-              <label>Regions</label>
-              {hasLoaded && (
-                <Select
-                  defaultValue={regionSelected}
-                  isMulti={true}
-                  options={regionDropdown}
-                  onChange={this.handleSelectRegionChange}
-                />
-              )}
-            </div>
-          )}
+          {!isProjectWide &&
+            regionDropdown &&
+            regionDropdown.length > 0 && (
+              <div>
+                <label>Regions</label>
+                {hasLoaded && (
+                  <Select
+                    defaultValue={regionSelected}
+                    isMulti={true}
+                    options={regionDropdown}
+                    onChange={this.handleSelectRegionChange}
+                  />
+                )}
+              </div>
+            )}
           {!isProjectWide && typeDropdown && typeDropdown.length > 0 && (
             <div>
               <label>Types</label>

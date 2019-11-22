@@ -1,16 +1,17 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
-import WithContext from "../../hoc/WithContext";
-import Modal from "../common/Modal";
-import Table from "../common/Table";
-import InputElement from "../common/InputElement";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import isEmpty from "../../utils/isEmpty";
-import { FormattedMessage } from "react-intl";
-import DeleteModel from "../common/DeleteModal";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
+import DeleteModel from '../common/DeleteModal';
+import WithContext from '../../hoc/WithContext';
+import Modal from '../common/Modal';
+import Table from '../common/Table';
+import InputElement from '../common/InputElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import isEmpty from '../../utils/isEmpty';
+/* eslint-disable react/prop-types  */
 
-const url = "fv3/api/project-regions/";
+const url = 'fv3/api/project-regions/';
 
 class SubRegion extends Component {
   _isMounted = false;
@@ -19,9 +20,9 @@ class SubRegion extends Component {
     this._isMounted = true;
     const {
       match: {
-        params: { subRegionId }
+        params: { subRegionId },
       },
-      value: { setSubRegion, projectId }
+      value: { setSubRegion, projectId },
     } = this.props;
     if (subRegionId) {
       axios
@@ -29,16 +30,16 @@ class SubRegion extends Component {
         .then(res => {
           this._isMounted && setSubRegion(res.data, subRegionId);
         })
-        .catch(err => console.log("Err", err));
+        .catch(err => console.log('Err', err));
     }
   }
 
   componentDidUpdate(prevProps) {
     const {
       match: {
-        params: { subRegionId }
+        params: { subRegionId },
       },
-      value: { setSubRegion, projectId }
+      value: { setSubRegion, projectId },
     } = this.props;
     if (prevProps.match.params.subRegionId !== subRegionId) {
       axios
@@ -46,7 +47,7 @@ class SubRegion extends Component {
         .then(res => {
           this._isMounted && setSubRegion(res.data, subRegionId);
         })
-        .catch(err => console.log("Err", err));
+        .catch(err => console.log('Err', err));
     }
   }
 
@@ -67,9 +68,9 @@ class SubRegion extends Component {
           removeHandler,
           confirmHandler,
           cancelHandler,
-          onSubmitHandler
-        }
-      }
+          onSubmitHandler,
+        },
+      },
     } = this;
 
     const tableHeader = {
@@ -78,10 +79,15 @@ class SubRegion extends Component {
             `${terms.region} ID`,
             `${terms.region} Name`,
             ,
-            "app.created-date",
-            "app.action"
+            'app.created-date',
+            'app.action',
           ]
-        : ["app.regionId", "app.regionName", "app.created-date", "app.action"]
+        : [
+            'app.regionId',
+            'app.regionName',
+            'app.created-date',
+            'app.action',
+          ],
     };
     const message = !isEmpty(terms) ? (
       `${terms.region}`
@@ -89,9 +95,9 @@ class SubRegion extends Component {
       <FormattedMessage id="app.regions" defaultMessage="Regions" />
     );
     return (
-      <Fragment>
+      <>
         <RightContentCard
-          title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+          title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
           addButton
           toggleModal={toggleModal}
         >
@@ -106,10 +112,13 @@ class SubRegion extends Component {
 
         {showModal && (
           <Modal
-            title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+            title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
             toggleModal={toggleModal}
           >
-            <form className="floating-form" onSubmit={onSubmitHandler}>
+            <form
+              className="floating-form"
+              onSubmit={onSubmitHandler}
+            >
               <InputElement
                 tag="input"
                 type="text"
@@ -133,10 +142,13 @@ class SubRegion extends Component {
                 value={selectedName}
                 changeHandler={onChangeHandler}
                 translation={true}
-              />{" "}
+              />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  <FormattedMessage id="app.save" defaultMessage="Save" />
+                  <FormattedMessage
+                    id="app.save"
+                    defaultMessage="Save"
+                  />
                 </button>
               </div>
             </form>
@@ -153,13 +165,13 @@ class SubRegion extends Component {
             title="Warning"
           />
         )}
-      </Fragment>
+      </>
     );
   }
 
   componentWillUnmount() {
     this._isMounted = false;
-    this.props.setSubRegion && this.props.setSubRegion([], "");
+    this.props.setSubRegion && this.props.setSubRegion([], '');
   }
 }
 

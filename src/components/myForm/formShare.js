@@ -1,28 +1,32 @@
-import React, { Component } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import PreviewModal from "./PreviewModal";
-import ReplaceModal from "./ReplaceModal";
-import ShareModal from "./ShareModal";
-import GlobalModel from "./GlobalModal";
-import { FormattedMessage } from "react-intl";
+import React, { PureComponent } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { FormattedMessage } from 'react-intl';
+import PreviewModal from './PreviewModal';
+import ReplaceModal from './ReplaceModal';
+import ShareModal from './ShareModal';
+/* eslint-disable react/prop-types  */
 
-class FormShare extends Component {
-  state = {
-    shareOption: false
-  };
-
-  // shareToggle = e => {
-  //   this.setState({
-  //     shareOption: !this.state.shareOption
-  //   });
-  // };
+class FormShare extends PureComponent {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     shareOption: false,
+  //   };
+  // }
 
   render() {
-    const item = this.props.item;
+    const {
+      item,
+      commonPopupHandler,
+      OpenTabHandler,
+      shareToggle,
+      deleteHandler,
+    } = this.props;
+    // const item = this.props.item;
     return (
       <tr key={item.id_string}>
-        <td style={{ width: "50%" }}>{item.title}</td>
+        <td style={{ width: '50%' }}>{item.title}</td>
         <td>
           <i className="fa fa-clock-o" />
           <span>{item.date_created}</span>
@@ -35,110 +39,168 @@ class FormShare extends Component {
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">
-                {" "}
-                <FormattedMessage id="app.preview" defaultMessage="Preview" />
+                {' '}
+                <FormattedMessage
+                  id="app.preview"
+                  defaultMessage="Preview"
+                />
               </Tooltip>
             }
           >
             <a
-              onClick={e =>
-                this.props.commonPopupHandler(
+              onClick={e => {
+                commonPopupHandler(
                   e,
                   PreviewModal,
                   item.preview_url,
-                  "Preview Form",
-                  "preview",
-                  null
-                )
-              }
+                  'Preview Form',
+                  'preview',
+                  null,
+                );
+              }}
               className="td-view-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                commonPopupHandler(
+                  e,
+                  PreviewModal,
+                  item.preview_url,
+                  'Preview Form',
+                  'preview',
+                  null,
+                );
+              }}
             >
-              {" "}
-              <i className="la la-eye"> </i>{" "}
+              <i className="la la-eye" />
             </a>
           </OverlayTrigger>
 
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">
-                <FormattedMessage id="app.media" defaultMessage="Media" />
+                <FormattedMessage
+                  id="app.media"
+                  defaultMessage="Media"
+                />
               </Tooltip>
             }
           >
             <a
-              onClick={e =>
-                this.props.commonPopupHandler(
+              onClick={e => {
+                commonPopupHandler(
                   e,
                   PreviewModal,
                   item.media_url,
-                  "Preview Form",
-                  "preview",
-                  null
-                )
-              }
+                  'Preview Form',
+                  'preview',
+                  null,
+                );
+              }}
               className="td-view-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                commonPopupHandler(
+                  e,
+                  PreviewModal,
+                  item.media_url,
+                  'Preview Form',
+                  'preview',
+                  null,
+                );
+              }}
             >
-              {" "}
-              <i className="la la-file-image-o"> </i>{" "}
+              <i className="la la-file-image-o" />
             </a>
           </OverlayTrigger>
 
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">
-                <FormattedMessage id="app.edit" defaultMessage="Edit" />
+                <FormattedMessage
+                  id="app.edit"
+                  defaultMessage="Edit"
+                />
               </Tooltip>
             }
           >
             <a
-              onClick={e => this.props.OpenTabHandler(e, item.edit_url)}
+              onClick={e => {
+                OpenTabHandler(e, item.edit_url);
+              }}
               className="td-edit-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                OpenTabHandler(e, item.edit_url);
+              }}
             >
-              {" "}
-              <i className="la la-edit" />{" "}
+              <i className="la la-edit" />
             </a>
           </OverlayTrigger>
 
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">
-                <FormattedMessage id="app.replace" defaultMessage="Replace" />
+                <FormattedMessage
+                  id="app.replace"
+                  defaultMessage="Replace"
+                />
               </Tooltip>
             }
           >
             <a
-              onClick={e =>
-                this.props.commonPopupHandler(
+              onClick={e => {
+                commonPopupHandler(
                   e,
                   ReplaceModal,
                   item.edit_url,
-                  "Replace Form",
-                  "replace",
-                  item.id_string
-                )
-              }
+                  'Replace Form',
+                  'replace',
+                  item.id_string,
+                );
+              }}
               className="td-edit-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                commonPopupHandler(
+                  e,
+                  ReplaceModal,
+                  item.edit_url,
+                  'Replace Form',
+                  'replace',
+                  item.id_string,
+                );
+              }}
             >
-              {" "}
-              <i className="la la-refresh"> </i>{" "}
+              <i className="la la-refresh" />
             </a>
           </OverlayTrigger>
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">
-                <FormattedMessage id="app.download" defaultMessage="Download" />
+                <FormattedMessage
+                  id="app.download"
+                  defaultMessage="Download"
+                />
               </Tooltip>
             }
           >
             <a
-              onClick={e => this.props.OpenTabHandler(e, item.download_url)}
+              onClick={e => {
+                OpenTabHandler(e, item.download_url);
+              }}
               className="td-edit-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => OpenTabHandler(e, item.download_url)}
               data-toggle="tooltip"
               data-placement="top"
               title="Edit"
             >
-              {" "}
-              <i className="la la-download" />{" "}
+              <i className="la la-download" />
             </a>
           </OverlayTrigger>
 
@@ -146,16 +208,23 @@ class FormShare extends Component {
             <OverlayTrigger
               overlay={
                 <Tooltip id="tooltip-disabled">
-                  <FormattedMessage id="app.share" defaultMessage="Share" />
+                  <FormattedMessage
+                    id="app.share"
+                    defaultMessage="Share"
+                  />
                 </Tooltip>
               }
             >
               <a
-                onClick={e => this.props.shareToggle(e, item.id_string)}
+                onClick={e => {
+                  shareToggle(e, item.id_string);
+                }}
                 className="td-share-btn td-btn"
+                tabIndex="0"
+                role="button"
+                onKeyDown={e => shareToggle(e, item.id_string)}
               >
-                {" "}
-                <i className="la la-share-alt"> </i>
+                <i className="la la-share-alt" />
               </a>
             </OverlayTrigger>
 
@@ -169,34 +238,61 @@ class FormShare extends Component {
                 </h5>
                 <li>
                   <a
-                    onClick={e =>
-                      this.props.commonPopupHandler(
+                    onClick={e => {
+                      commonPopupHandler(
                         e,
                         ShareModal,
                         item.id_string,
-                        "Select User",
-                        "users",
-                        item.share_users_url
-                      )
-                    }
+                        'Select User',
+                        'users',
+                        item.share_users_url,
+                      );
+                    }}
                     data-tab="user-share"
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={e => {
+                      commonPopupHandler(
+                        e,
+                        ShareModal,
+                        item.id_string,
+                        'Select User',
+                        'users',
+                        item.share_users_url,
+                      );
+                    }}
                   >
-                    <FormattedMessage id="app.user" defaultMessage="User" />
+                    <FormattedMessage
+                      id="app.user"
+                      defaultMessage="User"
+                    />
                   </a>
                 </li>
                 <li>
                   <a
-                    onClick={e =>
-                      this.props.commonPopupHandler(
+                    onClick={e => {
+                      commonPopupHandler(
                         e,
                         ShareModal,
                         item.id_string,
-                        "Select Projects",
-                        "projects",
-                        item.share_project_url
-                      )
-                    }
+                        'Select Projects',
+                        'projects',
+                        item.share_project_url,
+                      );
+                    }}
                     data-tab="project-share"
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={e => {
+                      commonPopupHandler(
+                        e,
+                        ShareModal,
+                        item.id_string,
+                        'Select Projects',
+                        'projects',
+                        item.share_project_url,
+                      );
+                    }}
                   >
                     <FormattedMessage
                       id="app.projects"
@@ -245,16 +341,25 @@ class FormShare extends Component {
           <OverlayTrigger
             overlay={
               <Tooltip id="tooltip-disabled">
-                <FormattedMessage id="app.delete" defaultMessage="Delete" />
+                <FormattedMessage
+                  id="app.delete"
+                  defaultMessage="Delete"
+                />
               </Tooltip>
             }
           >
             <a
-              onClick={e => this.props.deleteHandler(e, item.id_string)}
+              onClick={e => {
+                deleteHandler(e, item.id_string);
+              }}
               className="td-delete-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={e => {
+                deleteHandler(e, item.id_string);
+              }}
             >
-              {" "}
-              <i className="la la-trash" />{" "}
+              <i className="la la-trash" />
             </a>
           </OverlayTrigger>
         </td>
