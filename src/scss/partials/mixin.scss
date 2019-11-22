@@ -183,7 +183,29 @@
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;  
-}
+    flex-wrap: wrap;
+  }
+  @mixin flexBetween {
+      @include flex;
+      justify-content: space-between;
+  }
+  @mixin flexCenter{
+      @include flex;
+      justify-content: center;
+      align-items: center;
+  }
+  @mixin flexStart {
+    @include flex;
+    justify-content: flex-start;
+  }
+  @mixin flexEnd {
+    @include flex;
+    justify-content: flex-end;
+  }
+  @mixin flexvr{
+    @include flexCenter;
+    flex-direction: column;
+  }
 @mixin flexjust {
     display: -webkit-box;
     display: -moz-box;
