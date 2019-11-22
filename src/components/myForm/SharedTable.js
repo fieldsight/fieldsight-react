@@ -4,11 +4,16 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import SharedFormShare from './SharedFormShare';
 import { DotLoader } from './Loader';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-unused-state  */
+/* eslint-disable camelcase */
+/* eslint-disable react/no-array-index-key  */
 
 const url = 'fv3/api/sharedforms/';
 
 class SharedTable extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
 
@@ -41,6 +46,10 @@ class SharedTable extends Component {
           dLoader: false,
         });
       });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   cloneHandler = (e, clone_url, id, form_id) => {
@@ -104,9 +113,6 @@ class SharedTable extends Component {
         </div>
       </>
     );
-  }
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 

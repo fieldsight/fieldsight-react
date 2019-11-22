@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Iframe from 'react-iframe';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+/* eslint-disable react/prop-types  */
 
-class PreviewModal extends Component {
-  state = {};
-
+class PreviewModal extends PureComponent {
   render() {
     return (
       <div className="thumb-list userlist">

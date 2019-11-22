@@ -5,12 +5,16 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import FormShare from './formShare';
 import { DotLoader } from './Loader';
 import DeleteModal from '../common/DeleteModal';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-unused-state  */
+/* eslint-disable react/no-array-index-key  */
 
 const url = 'fv3/api/myforms/';
 const deleteUrl = '/fv3/api/form/delete/';
 
 class MyformTable extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -51,6 +55,10 @@ class MyformTable extends Component {
       });
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   deleteHandler = (e, ids) => {
     this.setState({
       delete_id: ids,
@@ -65,7 +73,8 @@ class MyformTable extends Component {
   };
 
   shareToggle = (e, id) => {
-    const formList = this.state.list.map(user =>
+    const { list } = this.state;
+    const formList = list.map(user =>
       user.id_string === id
         ? { ...user, share: !user.share }
         : { ...user, share: false },
@@ -83,7 +92,7 @@ class MyformTable extends Component {
       .then(res => {
         const newUserList = [...this.state.list];
         const deletedForm = newUserList.filter(
-          user => user.id_string != id,
+          user => user.id_string !== id,
         );
         this.setState({
           list: deletedForm,
@@ -143,16 +152,11 @@ class MyformTable extends Component {
             onConfirm={this.confirmHandler}
             onCancel={this.cancelHandler}
             onToggle={this.cancelHandler}
-            message={
-              'Any submissions submitted in the form will be deleted and will be lost from project and sites associated. Are you sure you want to delete the form?'
-            }
+            message="Any submissions submitted in the form will be deleted and will be lost from project and sites associated. Are you sure you want to delete the form?"
           />
         )}
       </>
     );
-  }
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 

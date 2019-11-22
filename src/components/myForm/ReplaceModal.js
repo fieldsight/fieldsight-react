@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+/* eslint-disable react/prop-types  */
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 
-let tokenVal = window.token
+const tokenVal = window.token
   ? window.token
   : '91a844e62e86b6e336b8fb440340cbeaabf601fe';
 
-let kpiUrl = window.kpi_base_url
+const kpiUrl = window.kpi_base_url
   ? window.kpi_base_url
   : 'https://kpi.naxa.com.np/';
 
@@ -15,7 +17,7 @@ class ReplaceModal extends Component {
     const { shareUrls, modalDatas } = this.props;
     const id = shareUrls;
     const editUrl = modalDatas;
-    const destinationUrl = kpiUrl + 'assets/' + id + '/';
+    const destinationUrl = `${kpiUrl}assets/${id}/`;
     const formData = new FormData();
 
     formData.append('assetUid', id);
@@ -24,10 +26,10 @@ class ReplaceModal extends Component {
     formData.append('destination', destinationUrl);
 
     axios
-      .post(kpiUrl + 'imports/', formData, {
+      .post(`${kpiUrl}imports/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: 'Token ' + tokenVal,
+          Authorization: `Token${tokenVal}`,
         },
       })
       .then(res => {
@@ -40,7 +42,7 @@ class ReplaceModal extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <form>
           <div className="form-group">
             <label>attach file</label>
@@ -58,7 +60,8 @@ class ReplaceModal extends Component {
                 />
                 <div className="fieldsight-btn">
                   <label htmlFor="upload-btn">
-                    upload <i className="la la-cloud-upload" />
+                    upload
+                    <i className="la la-cloud-upload" />
                   </label>
                   {/* <input type="file" id="upload-btn"  /> */}
                 </div>
@@ -66,7 +69,7 @@ class ReplaceModal extends Component {
             </div>
           </div>
         </form>
-      </React.Fragment>
+      </>
     );
   }
 }
