@@ -209,7 +209,9 @@ class Submission extends Component {
           </ul>
         </div>
       );
-    } else if (submission.type === "geopoint") {
+    } else if (submission.type === "geopoint" && site) {
+      console.log("geoloc", submission.answer);
+
       let splitedGeoLocation = [];
       let latitude = "";
       let longitude = "";
@@ -243,6 +245,7 @@ class Submission extends Component {
         latitude && latitude,
         longitude && longitude
       );
+      console.log("dist", distance);
 
       if (distance < 500) {
         bounds = this.getSmallBound(latlngObj);
