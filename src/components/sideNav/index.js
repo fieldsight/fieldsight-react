@@ -46,52 +46,46 @@ export class SideNav extends Component {
   }
 
   handleMenuSelect = menu => {
-    const { activeMenu, showSubmenu } = this.state;
     this.setState({ activeMenu: menu }, () => {
-      if (activeMenu !== "forms") this.props.handleToggle;
+      if (this.state.activeMenu !== "forms") this.props.handleToggle;
       else {
-        this.setState({ showSubmenu: !showSubmenu });
+        this.setState(prevState => ({ showSubmenu: !prevState.showSubmenu }));
       }
     });
   };
 
   render() {
     const { activeMenu, showSubmenu } = this.state;
-    const { handleToggle } = this.props;
+
     return (
       <div id="sidebar" data-toggle="affix" className="main-sidebar sticky">
-        <div
-          className="leftside-navigation"
-          // style={{ overflow: "hidden", outline: "none" }}
-        >
+        <div className="leftside-navigation">
           <ul className="sidebar-menu" id="nav-accordion">
             {mainMenu.map(menu => (
-              // if (menu.value !== "forms") {
-              //   return (
-              <>
+              <React.Fragment key={menu.key}>
                 <li>
                   <a
                     className={`${activeMenu === menu.value ? "active" : ""}`}
-                    href={menu.value !== "forms" && menu.path}
+                    href={menu.value !== "forms" ? menu.path : undefined}
                     onClick={() => {
-                      this.handleMenuSelect();
+                      this.handleMenuSelect(menu.value);
                     }}
                   >
                     <i className={menu.icon} />
                     <span>{menu.name}</span>
                   </a>
                 </li>
-                {showSubmenu && (
+                {!!showSubmenu && (
                   <ul className="sub" style={{ display: "none" }}>
                     {formSubMenu.map(sub => (
-                      <li>
+                      <li key={sub.key}>
                         <a
                           className={`${
                             activeMenu === sub.value ? "active" : ""
                           }`}
-                          href={sub.value !== "forms" && sub.path}
+                          href={sub.path}
                           onClick={() => {
-                            this.handleMenuSelect();
+                            this.handleMenuSelect(sub.value);
                           }}
                         >
                           <i className={sub.icon} />
@@ -101,7 +95,7 @@ export class SideNav extends Component {
                     ))}
                   </ul>
                 )}
-              </>
+              </React.Fragment>
             ))}
             {/* <li>
               <a className="" href="/">
