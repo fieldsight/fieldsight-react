@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import WithPagination from '../../../../hoc/WithPagination';
@@ -179,19 +180,33 @@ class SubmissionData extends Component {
             <div className="dash-btn">
               <form className="floating-form">
                 <div className="form-group mr-0">
+<<<<<<< HEAD
                   <input
                     type="search"
                     className="form-control"
                     onChange={e => this.handleChange(e)}
                     required
                   />
+=======
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                   <label htmlFor="input">
                     <FormattedMessage
                       id="app.teams-search"
                       defaultMessage="Search"
                     />
+<<<<<<< HEAD
                   </label>
                   <i className="la la-search"></i>
+=======
+                    <input
+                      type="search"
+                      className="form-control"
+                      onChange={e => this.handleChange(e)}
+                      required
+                    />
+                  </label>
+                  <i className="la la-search" />
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                 </div>
               </form>
             </div>
@@ -228,18 +243,30 @@ class SubmissionData extends Component {
                       />
                     </th>
                     <th>
+<<<<<<< HEAD
+=======
+                      {' '}
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                       <FormattedMessage
                         id="app.submission-by"
                         defaultMessage="Submission By"
                       />
                     </th>
                     <th>
+<<<<<<< HEAD
+=======
+                      {' '}
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                       <FormattedMessage
                         id="app.submission-date"
                         defaultMessage="Submission Date"
                       />
                     </th>
                     <th>
+<<<<<<< HEAD
+=======
+                      {' '}
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                       <FormattedMessage
                         id="app.action"
                         defaultMessage="Action"

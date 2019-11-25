@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import Modal from 'react-bootstrap/Modal';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import { FormattedMessage } from 'react-intl';
@@ -352,7 +353,11 @@ class TeamDashboard extends Component {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
+<<<<<<< HEAD
                           <i className="la la-map" /> {/*full map*/}
+=======
+                          <i className="la la-map" />
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                           <FormattedMessage
                             id="app.full-map"
                             defaultMessage="Full map"

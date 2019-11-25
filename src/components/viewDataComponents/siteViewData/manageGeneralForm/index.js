@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import ResponseTable from '../../responded/ResponseTable';
@@ -62,8 +63,14 @@ class ManageGeneralForm extends Component {
             />
           </h5>
           <div className="dash-btn">
+<<<<<<< HEAD
             <Link to={`/site-responses/${this.props.id}/rejected`}>
               <button
+=======
+            <Link to={`/site-responses/${id}/rejected`}>
+              <button
+                type="button"
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                 onClick={showViewData}
                 className="fieldsight-btn"
               >
@@ -94,6 +101,7 @@ class ManageGeneralForm extends Component {
               <DotLoader />
             ))}
         </div>
+<<<<<<< HEAD
         {deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
@@ -148,6 +156,49 @@ class ManageGeneralForm extends Component {
                       deleted_forms={deleted_forms}
                       id={this.props.id}
                       loader={generals_loading}
+=======
+        {deleted_forms.length > 0 && !data && (
+          <div className="card no-boxshadow">
+            <div className="card-header main-card-header sub-card-header">
+              <h5>
+                {' '}
+                <FormattedMessage
+                  id="app.deleted-forms"
+                  defaultMessage="Deleted Forms"
+                />
+              </h5>
+              <div className="dash-btn">
+                {hide ? (
+                  <button
+                    type="button"
+                    className="btn-toggle"
+                    onClick={this.toggleHide}
+                  >
+                    <FormattedMessage
+                      id="app.show"
+                      defaultMessage="Show"
+                    />
+                    <div className="handle" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn-toggle"
+                    onClick={this.toggleHide}
+                    style={{
+                      backgroundColor: '#28a745',
+                      color: 'white',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <FormattedMessage
+                      id="app.hide"
+                      defaultMessage="Hide"
+                    />
+                    <div
+                      className="handle"
+                      style={{ left: 'auto', right: '0.1875rem' }}
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                     />
                   </button>
                 )}

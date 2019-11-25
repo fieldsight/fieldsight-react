@@ -5,6 +5,7 @@ import InputElement from '../common/InputElement';
 import RightContentCard from '../common/RightContentCard';
 import Table from '../common/Table';
 import Loader from '../common/Loader';
+import { FormattedMessage } from 'react-intl';
 
 import { successToast, errorToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
@@ -201,7 +202,7 @@ export default class TermAndLabel extends Component {
                       value={donor}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation={true}
+                      translation
                     />
                   </div>
 
@@ -215,7 +216,7 @@ export default class TermAndLabel extends Component {
                       value={site}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation={true}
+                      translation
                     />
                   </div>
                   <div className="col-xl-4 col-md-6">
@@ -228,7 +229,7 @@ export default class TermAndLabel extends Component {
                       value={site_supervisor}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation={true}
+                      translation
                     />
                   </div>
                   <div className="col-xl-4 col-md-6">
@@ -241,7 +242,7 @@ export default class TermAndLabel extends Component {
                       value={site_reviewer}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation={true}
+                      translation
                     />
                   </div>
                   <div className="col-xl-4 col-md-6">
@@ -254,7 +255,7 @@ export default class TermAndLabel extends Component {
                       value={region}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation={true}
+                      translation
                     />
                   </div>
                   <div className="col-xl-4 col-md-6">
@@ -268,7 +269,7 @@ export default class TermAndLabel extends Component {
                         value={region_supervisor}
                         required={false}
                         changeHandler={onChangeHandler}
-                        translation={true}
+                        translation
                       />
                     </div>
                   </div>
@@ -283,7 +284,7 @@ export default class TermAndLabel extends Component {
                         value={region_reviewer}
                         required={false}
                         changeHandler={onChangeHandler}
-                        translation={true}
+                        translation
                       />
                     </div>
                   </div>

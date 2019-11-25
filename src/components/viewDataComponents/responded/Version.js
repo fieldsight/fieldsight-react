@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
+import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
 import DotLoader from '../../myForm/Loader';

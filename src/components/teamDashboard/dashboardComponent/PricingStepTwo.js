@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import { FormattedMessage } from 'react-intl';
+=======
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
 
 class PricingStepTwo extends Component {
   constructor(props) {
@@ -134,7 +138,11 @@ class PricingStepTwo extends Component {
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
+<<<<<<< HEAD
                     <i className="la la-chevron-circle-right"></i>
+=======
+                    <i className="la la-chevron-circle-right" />
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                     <strong>{selectedPackage.submissions}</strong>
                     <FormattedMessage
                       id="app.submissions"
@@ -178,7 +186,7 @@ class PricingStepTwo extends Component {
                     />
                   </li>
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
+                    <i className="la la-chevron-circle-right" />
                     <strong>
                       <FormattedMessage
                         id="app.access"
@@ -205,7 +213,11 @@ class PricingStepTwo extends Component {
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
+<<<<<<< HEAD
                     <i className="la la-calendar-check-o"></i>
+=======
+                    <i className="la la-calendar-check-o" />
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                     <strong>
                       <FormattedMessage
                         id="app.startingDate"
@@ -217,7 +229,7 @@ class PricingStepTwo extends Component {
                     </p>
                   </li>
                   <li>
-                    <i className="la la-calendar-minus-o"></i>
+                    <i className="la la-calendar-minus-o" />
                     <strong>
                       <FormattedMessage
                         id="app.endingDate"
@@ -259,7 +271,11 @@ class PricingStepTwo extends Component {
                   handlePrevious('first');
                 }}
               >
+<<<<<<< HEAD
                 <i className="la la-long-arrow-left"></i>
+=======
+                <i className="la la-long-arrow-left" />
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                 <FormattedMessage
                   id="app.previous"
                   defaultMessage="Previous"
@@ -275,7 +291,11 @@ class PricingStepTwo extends Component {
                   id="app.next"
                   defaultMessage="Next"
                 />
+<<<<<<< HEAD
                 <i className="la la-long-arrow-right"></i>
+=======
+                <i className="la la-long-arrow-right" />
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
               </a>
             </div>
           </div>

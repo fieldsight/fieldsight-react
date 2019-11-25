@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -9,6 +10,10 @@ import DeleteTable from '../deleteTable';
 import { getsiteViewData } from '../../../../actions/siteViewDataAction';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
 class ManageScheduledForm extends Component {
   constructor(props) {
     super(props);
@@ -58,8 +63,12 @@ class ManageScheduledForm extends Component {
               />
             )}
           </h5>
-          <Link to={`/site-responses/${this.props.id}/rejected`}>
-            <button onClick={showViewData} className="fieldsight-btn">
+          <Link to={`/site-responses/${id}/rejected`}>
+            <button
+              type="button"
+              onClick={showViewData}
+              className="fieldsight-btn"
+            >
               {data ? (
                 <FormattedMessage
                   id="app.view-by-form"
@@ -87,6 +96,7 @@ class ManageScheduledForm extends Component {
               <DotLoader />
             ))}
         </div>
+<<<<<<< HEAD
         {deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
@@ -141,6 +151,48 @@ class ManageScheduledForm extends Component {
                       deleted_forms={deleted_forms}
                       id={this.props.id}
                       loader={scheduled_loading}
+=======
+        {deleted_forms.length > 0 && !data && (
+          <div className="card no-boxshadow">
+            <div className="card-header main-card-header sub-card-header">
+              <h5>
+                <FormattedMessage
+                  id="app.deleted-forms"
+                  defaultMessage="Deleted Forms"
+                />
+              </h5>
+              <div className="dash-btn">
+                {this.state.hide ? (
+                  <button
+                    type="button"
+                    className="btn-toggle"
+                    onClick={this.toggleHide}
+                  >
+                    <FormattedMessage
+                      id="app.show"
+                      defaultMessage="Show"
+                    />
+                    <div className="handle" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn-toggle"
+                    onClick={this.toggleHide}
+                    style={{
+                      backgroundColor: '#28a745',
+                      color: 'white',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <FormattedMessage
+                      id="app.hide"
+                      defaultMessage="Hide"
+                    />
+                    <div
+                      className="handle"
+                      style={{ left: 'auto', right: '0.1875rem' }}
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                     />
                   </button>
                 )}

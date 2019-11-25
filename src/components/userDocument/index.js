@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -76,29 +77,43 @@ class UserDocument extends Component {
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
+<<<<<<< HEAD
               {/*<h5>Users</h5>*/}
               <FormattedMessage
                 id="app.users"
                 defaultMessage="Users"
               />
 
+=======
+              <h5>
+                <FormattedMessage
+                  id="app.users"
+                  defaultMessage="Users"
+                />
+              </h5>
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
               <div className="dash-btn">
                 <form className="floating-form">
                   <div className="form-group mr-0">
-                    <input
-                      type="search"
-                      className="form-control"
-                      name="search"
-                      onChange={e => this.handleChange(e)}
-                      required
-                    />
                     <label htmlFor="input">
                       <FormattedMessage
                         id="app.teams-search"
                         defaultMessage="Search"
                       />
+<<<<<<< HEAD
                     </label>
                     <i className="la la-search"></i>
+=======
+                      <input
+                        type="search"
+                        className="form-control"
+                        name="search"
+                        onChange={e => this.handleChange(e)}
+                        required
+                      />
+                    </label>
+                    <i className="la la-search" />
+>>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                   </div>
                 </form>
               </div>
