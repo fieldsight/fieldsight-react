@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import MyTask from "./myTask";
 import OtherTask from "./otherTask";
+import NotificationHandler from "./NotificationHandler";
+
+const user_id = window.user_id ? window.user_id : 1;
 
 export class ListTask extends Component {
   constructor(props) {
@@ -16,7 +19,10 @@ export class ListTask extends Component {
   };
 
   render() {
-    const { activeTab } = this.state;
+    const {
+      state: { activeTab },
+      props: { myTasks, otherTasks }
+    } = this;
     return (
       <>
         <ul className="nav nav-tabs " id="myTab" role="tablist">
@@ -54,8 +60,17 @@ export class ListTask extends Component {
           </li>
         </ul>
         <div className="tab-content mrt-15">
-          {activeTab === "myTask" && <MyTask />}
-          {activeTab === "otherTask" && <OtherTask />}
+          {activeTab === "myTask" && (
+            <NotificationHandler
+              logs={myTasks}
+              showContentLoader={false}
+              //  siteId={id}
+              type="project"
+              user_id={user_id}
+            />
+          )}
+          {/* // <MyTask data={myTasks} />} */}
+          {activeTab === "otherTask" && <OtherTask data={otherTasks} />}
         </div>
       </>
     );

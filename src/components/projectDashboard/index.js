@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import withPagination from "../../hoc/WithPagination";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
@@ -490,14 +490,11 @@ const mapStateToProps = ({ projectDashboard }) => ({
 });
 ProjectDashboard.contextType = LanguageContext;
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getProjectDashboard,
-      getRegionData,
-      getProgressTableData,
-      getSurveyForm
-    }
-  ),
+  connect(mapStateToProps, {
+    getProjectDashboard,
+    getRegionData,
+    getProgressTableData,
+    getSurveyForm
+  }),
   withPagination
 )(ProjectDashboard);

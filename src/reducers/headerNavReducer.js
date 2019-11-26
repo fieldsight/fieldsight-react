@@ -27,5 +27,7 @@ export default function(state = initialState, action) {
         ...state,
         notifications: action.payload.results
       };
+    default:
+      return state;
   }
 }

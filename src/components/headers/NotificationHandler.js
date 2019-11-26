@@ -1,18 +1,31 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import format from "date-fns/format";
-import { BlockContentLoader } from "./Loader";
 import { Link } from "react-router-dom";
 import uuid from "uuid/v4";
+import { BlockContentLoader } from "../common/Loader";
 
-class Logs extends Component {
-  state = {
-    width: false
-  };
+class NotificationHandler extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      width: false
+    };
+  }
+
+  componentDidUpdate() {
+    if (this.timeLineDiv) {
+      const anchorList = this.timeLineDiv.getElementsByTagName("a");
+      for (let i = 0; i < anchorList.length; i++) {
+        anchorList[i].setAttribute("target", "_blank");
+      }
+    }
+  }
+
   getLog = (data, user_id) => {
     let content = "";
     const formdetail = data.get_event_name.split("form");
-
     switch (data.type) {
       case 0:
         content =
@@ -1034,7 +1047,7 @@ class Logs extends Component {
 
   groupByDate = logs => {
     const groups = logs.reduce((groups, log) => {
-      const date = log.date.split("T")[0];
+      const date = log.date_added.split("T")[0];
       if (!groups[date]) {
         groups[date] = [];
       }
@@ -1057,95 +1070,73 @@ class Logs extends Component {
     return colorArr[Math.floor(Math.random() * colorArr.length)];
   };
 
-  componentDidUpdate() {
-    if (this.timeLineDiv) {
-      const anchorList = this.timeLineDiv.getElementsByTagName("a");
-      for (let i = 0; i < anchorList.length; i++) {
-        anchorList[i].setAttribute("target", "_blank");
-      }
-    }
-  }
-
   render() {
     const {
-      props: { siteLogs, showContentLoader, siteId, type, user_id, fullPage },
+      props: { logs, showContentLoader, siteId, type, user_id, fullPage },
       groupByDate,
       getColor,
       getLog,
       sitewidth
     } = this;
-
     return (
-      <div className={fullPage ? "col-md-12" : "col-xl-4 col-md-12"}>
-        <div className="card logs">
-          <div className="card-header main-card-header sub-card-header">
-            <h5>Logs</h5>
-
-            {siteLogs.length > 0 ? (
-              fullPage ? null : (
-                <Link
-                  to={`/${type}_logs/${siteId}/`}
-                  className="fieldsight-btn"
-                >
-                  View all
-                </Link>
-              )
-            ) : null}
-          </div>
-          <div className="card-body">
-            <div
-              className="logs-list"
-              style={fullPage ? {} : { position: "relative", height: "314px" }}
-            >
-              {showContentLoader ? (
-                <BlockContentLoader number={2} height="150px" />
-              ) : (
-                <PerfectScrollbar>
-                  {siteLogs.length > 0 ? (
-                    <div
-                      className="timeline"
-                      ref={el => (this.timeLineDiv = el)}
-                    >
-                      {groupByDate(siteLogs).map(siteLog => {
-                        return (
-                          <div className="timeline-list" key={uuid()}>
-                            <time>{siteLog.date}</time>
-                            <ul>
-                              {siteLog.logs.map(log => (
-                                <li className="blue" key={uuid()}>
-                                  <div className="event-list ">
-                                    <figure>
-                                      <img src={log.source_img} alt="logo" />
-                                    </figure>
-                                    <div className="log-content">
-                                      <span className="time">
-                                        {format(log.date, ["h:mm a"])}
-                                      </span>
-
-                                      <div
-                                        dangerouslySetInnerHTML={{
-                                          __html: getLog(log, user_id)
-                                        }}
-                                      />
-                                    </div>
+      <div
+        className="tab-pane active"
+        id="role"
+        role="tabpanel"
+        aria-labelledby="role_tab"
+      >
+        {showContentLoader ? (
+          <BlockContentLoader number={2} height="150px" />
+        ) : (
+          <PerfectScrollbar>
+            {logs.length > 0 ? (
+              <div className="timeline" ref={el => (this.timeLineDiv = el)}>
+                {groupByDate(logs).map(each => {
+                  return (
+                    <div className="timeline-list" key={uuid()}>
+                      {/* <time>{siteLog.date}</time> */}
+                      <ul>
+                        {each.logs.map(log => {
+                          return (
+                            <li key={uuid()}>
+                              <a>
+                                <figure>
+                                  <img src={log.source_img} alt="logo" />
+                                </figure>
+                                <div className="notify-info">
+                                  {/* <p> */}
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: getLog(log, user_id)
+                                    }}
+                                  />
+                                  {/* </p> */}
+                                  <span className="time">
+                                    {format(log.date_added, ["h:mm a"])}
+                                  </span>
+                                  <div className="download-file">
+                                    <b>download file</b>
                                   </div>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        );
-                      })}
+                                </div>
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
                     </div>
-                  ) : (
-                    <p> No Data Available </p>
-                  )}
-                </PerfectScrollbar>
-              )}
-            </div>
-          </div>
-        </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p> No Data Available </p>
+            )}
+          </PerfectScrollbar>
+        )}
       </div>
+      //   </div>
+      // </div>
+      //   </div>
     );
   }
 }
-export default Logs;
+export default NotificationHandler;

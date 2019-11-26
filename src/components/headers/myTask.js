@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import Profile from "../../static/images/profile.png";
+import NotificationHandler from "./NotificationHandler";
+
+const user_id = window.user_id ? window.user_id : 1;
 
 class MyTask extends Component {
   render() {
+    const { data } = this.props;
     return (
       <div
         className="tab-pane active"
