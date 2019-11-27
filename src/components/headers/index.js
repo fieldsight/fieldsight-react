@@ -107,7 +107,7 @@ export class Header extends Component {
                     className="fieldsight-btn"
                   >
                     <i className="la la-file-alt" />
-                    <sup className="notify">{taskCount}</sup>
+                    {taskCount > 0 && <sup className="notify">{taskCount}</sup>}
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-right dropdown-animation">
                     <ListTask myTasks={myTasks} otherTasks={otherTasks}
@@ -121,7 +121,7 @@ export class Header extends Component {
                     className="fieldsight-btn"
                   >
                     <i className="la la-bell" />
-                    <sup className="notify">{notificationCount}</sup>
+                    {notificationCount > 0 && <sup className="notify">{notificationCount}</sup>}
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-right">
                     <NotificationHandler notifications={notifications}
