@@ -78,3 +78,4 @@ export const GET_SITE_VIEW = "GET_SITE_VIEW";
 export const GET_MY_TASK = "GET_MY_TASK";
 export const GET_OTHER_TASK = "GET_OTHER_TASK";
 export const GET_NOTIFICATIONS = "GET_NOTIFICATIONS";
+export const NAV_LOADER = "NAV_LOADER"
