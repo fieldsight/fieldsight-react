@@ -55,6 +55,21 @@ export class Header extends Component {
     }));
   };
 
+  handleDownloadFile = file => {
+    const decodeurl = decodeURI(file)
+    const spliturl = decodeurl.split("/")
+    const len = spliturl.length
+    const fileName = spliturl[len - 1]
+    const blob = file
+    const url = window.URL.createObjectURL(new Blob([blob]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+  }
+
   render() {
     const { toggleClass, handleToggle } = this.props;
     const { myTasks, otherTasks, notifications } = this.state;
@@ -87,7 +102,7 @@ export class Header extends Component {
                     <i className="la la-file-alt" />
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-right dropdown-animation">
-                    <ListTask myTasks={myTasks} otherTasks={otherTasks} />
+                    <ListTask myTasks={myTasks} otherTasks={otherTasks} handleDownloadFile={this.handleDownloadFile} />
                   </Dropdown.Menu>
                 </Dropdown>
                 <Dropdown>
@@ -102,7 +117,7 @@ export class Header extends Component {
                   <Dropdown.Menu className="dropdown-menu-right">
 
                     <NotificationHandler notifications={notifications}
-                      showContentLoader={false} userId={userId} />
+                      showContentLoader={false} userId={userId} handleDownloadFile={this.handleDownloadFile} />
                     <div className="dropdown-footer">
                       <a className="text-center" >
                         <span>View All</span>

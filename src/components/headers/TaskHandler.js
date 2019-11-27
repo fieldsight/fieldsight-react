@@ -132,7 +132,7 @@ class TaskHandler extends Component {
 
   render() {
     const {
-      props: { tasks, showContentLoader, },
+      props: { tasks, showContentLoader, handleDownloadFile },
       getTaskContent,
     } = this;
     return (
@@ -170,7 +170,8 @@ class TaskHandler extends Component {
                                 <span className="time">
                                   {`Added on ${format(task.date_added, ["MMMM, DD, YYYY, h:mm a"])}`}
                                 </span>
-                                {task.file && <div className="download-file">
+                                {task.file && <div className="download-file"
+                                  onClick={() => { handleDownloadFile(task.file) }}>
                                   <b>download file</b>
                                 </div>}
                               </div>

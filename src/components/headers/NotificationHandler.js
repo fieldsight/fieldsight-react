@@ -1072,7 +1072,7 @@ class NotificationHandler extends Component {
 
   render() {
     const {
-      props: { notifications, showContentLoader, userId },
+      props: { notifications, showContentLoader, userId, handleDownloadFile },
       getLog,
     } = this;
     return (
@@ -1109,7 +1109,8 @@ class NotificationHandler extends Component {
                                 <span className="time">
                                   {`Added on ${format(notification.date, ["MMMM, DD, YYYY, h:mm a"])}`}
                                 </span>
-                                {notification.file && <div className="download-file">
+                                {notification.file && <div className="download-file"
+                                  onClick={() => { handleDownloadFile(notification.file) }}>
                                   <b>download file</b>
                                 </div>}
                               </div>

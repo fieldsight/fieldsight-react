@@ -63,11 +63,12 @@ export class ListTask extends Component {
             <TaskHandler
               tasks={myTasks}
               showContentLoader={false}
-
+              handleDownloadFile={this.props.handleDownloadFile}
             />
           )}
           {activeTab === "otherTask" &&
-            <TaskHandler tasks={otherTasks} showContentLoader={false} />
+            <TaskHandler tasks={otherTasks} showContentLoader={false}
+              handleDownloadFile={this.props.handleDownloadFile} />
           }
           <div className="dropdown-footer">
             <a className="text-center" >
