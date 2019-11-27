@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import MyTask from "./myTask";
-import OtherTask from "./otherTask";
-import NotificationHandler from "./NotificationHandler";
+import TaskHandler from "./TaskHandler";
 
 const user_id = window.user_id ? window.user_id : 1;
 
@@ -38,14 +36,14 @@ export class ListTask extends Component {
                 this.handleTabChange("myTask");
               }}
             >
-              Your Task
+              Your Tasks
             </a>
           </li>
           <li className="nav-item">
             <a
               className={`nav-link ${
                 activeTab === "otherTask" ? "active" : ""
-              }`}
+                }`}
               id="activities_tab"
               data-toggle="tab"
               role="tab"
@@ -55,23 +53,29 @@ export class ListTask extends Component {
                 this.handleTabChange("otherTask");
               }}
             >
-              Other Task
+              Other Tasks
             </a>
           </li>
         </ul>
         <div className="tab-content mrt-15">
+
           {activeTab === "myTask" && (
-            <NotificationHandler
-              logs={myTasks}
+            <TaskHandler
+              tasks={myTasks}
               showContentLoader={false}
-              //  siteId={id}
-              type="project"
-              user_id={user_id}
+
             />
           )}
-          {/* // <MyTask data={myTasks} />} */}
-          {activeTab === "otherTask" && <OtherTask data={otherTasks} />}
+          {activeTab === "otherTask" &&
+            <TaskHandler tasks={otherTasks} showContentLoader={false} />
+          }
+          <div className="dropdown-footer">
+            <a className="text-center" >
+              <span>View All</span>
+              <span>Mark all as seen</span> </a>
+          </div>
         </div>
+        {/* </div> */}
       </>
     );
   }

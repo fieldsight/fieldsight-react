@@ -23,7 +23,7 @@ class NotificationHandler extends Component {
     }
   }
 
-  getLog = (data, user_id) => {
+  getLog = (data, userId) => {
     let content = "";
     const formdetail = data.get_event_name.split("form");
     switch (data.type) {
@@ -282,7 +282,7 @@ class NotificationHandler extends Component {
         }
         return content;
       case 12:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             '<span style="color:green;"><b>Sucessfully</b></span> ' +
             data.extra_message +
@@ -445,7 +445,7 @@ class NotificationHandler extends Component {
           "</a></b> form.";
         return content;
       case 21:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             "<b>TASK INFO : </b>" +
             data.extra_message +
@@ -470,7 +470,7 @@ class NotificationHandler extends Component {
         }
         return content;
       case 22:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             "<b>TASK INFO : </b>" +
             data.extra_message +
@@ -750,7 +750,7 @@ class NotificationHandler extends Component {
           "</a></b>.";
         return content;
       case 35:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             '<span style="color:green;"><b>Sucessfully</b></span> ' +
             data.extra_message +
@@ -775,7 +775,7 @@ class NotificationHandler extends Component {
         }
         return content;
       case 36:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             '<span style="color:green;"><b>Sucessfully</b></span> deleted ' +
             data.extra_message +
@@ -1047,7 +1047,7 @@ class NotificationHandler extends Component {
 
   groupByDate = logs => {
     const groups = logs.reduce((groups, log) => {
-      const date = log.date_added.split("T")[0];
+      const date = log.date.split("T")[0];
       if (!groups[date]) {
         groups[date] = [];
       }
@@ -1072,11 +1072,8 @@ class NotificationHandler extends Component {
 
   render() {
     const {
-      props: { logs, showContentLoader, siteId, type, user_id, fullPage },
-      groupByDate,
-      getColor,
+      props: { notifications, showContentLoader, userId },
       getLog,
-      sitewidth
     } = this;
     return (
       <div
@@ -1085,55 +1082,56 @@ class NotificationHandler extends Component {
         role="tabpanel"
         aria-labelledby="role_tab"
       >
-        {showContentLoader ? (
-          <BlockContentLoader number={2} height="150px" />
-        ) : (
-          <PerfectScrollbar>
-            {logs.length > 0 ? (
-              <div className="timeline" ref={el => (this.timeLineDiv = el)}>
-                {groupByDate(logs).map(each => {
-                  return (
-                    <div className="timeline-list" key={uuid()}>
-                      {/* <time>{siteLog.date}</time> */}
-                      <ul>
-                        {each.logs.map(log => {
-                          return (
-                            <li key={uuid()}>
-                              <a>
-                                <figure>
-                                  <img src={log.source_img} alt="logo" />
-                                </figure>
-                                <div className="notify-info">
-                                  {/* <p> */}
-                                  <div
-                                    dangerouslySetInnerHTML={{
-                                      __html: getLog(log, user_id)
-                                    }}
-                                  />
-                                  {/* </p> */}
-                                  <span className="time">
-                                    {format(log.date_added, ["h:mm a"])}
-                                  </span>
-                                  <div className="download-file">
-                                    <b>download file</b>
-                                  </div>
-                                </div>
-                              </a>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p> No Data Available </p>
+        <div
+          className="thumb-list mr-0 "
+          style={{ position: "relative", height: "314px" }}
+        >
+          {showContentLoader ? (
+            <BlockContentLoader number={2} height="150px" />
+          ) : (
+              <PerfectScrollbar>
+                {notifications.length > 0 ? (
+                  <div className="timeline">
+                    <ul>
+                      <li className="dropdown-header">You have 5 notifications</li>
+                      {notifications.map(notification => {
+                        return (
+                          <li key={uuid()}>
+                            <a>
+                              <figure>
+                                <img src={notification.source_img} alt="user" />
+                              </figure>
+                              <div className="notify-info">
+                                <p dangerouslySetInnerHTML={{
+                                  __html: getLog(notification, userId)
+                                }}
+                                />
+                                <span className="time">
+                                  {`Added on ${format(notification.date, ["MMMM, DD, YYYY, h:mm a"])}`}
+                                </span>
+                                {notification.file && <div className="download-file">
+                                  <b>download file</b>
+                                </div>}
+                              </div>
+                            </a>
+                          </li>
+                        );
+                      })}
+                      {/* <li className="dropdown-footer">
+                        <a className="text-center">
+                          <span>View All</span>
+                          <span>Mark all as seen</span> </a>
+                      </li> */}
+                    </ul>
+                  </div>
+
+                ) : (
+                    <p> No Data Available </p>
+                  )}
+              </PerfectScrollbar>
             )}
-          </PerfectScrollbar>
-        )}
+        </div>
       </div>
-      //   </div>
       // </div>
       //   </div>
     );

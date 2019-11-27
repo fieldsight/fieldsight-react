@@ -38,6 +38,7 @@ import TeamSetting from "./settings/TeamSettings";
 import SubmissionData from "./viewDataComponents/projectViewData/SubmissionTable";
 
 import ManageForms from "./manageForms";
+import ChangePassword from './changePassword';
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -264,6 +265,7 @@ class App extends Component {
                     path="/project-version-submission/:id/:fid"
                     render={props => <VersionSubmissionData {...props} />}
                   />
+                  <Route path="/change-password" render={props => <ChangePassword {...props} />} />
                 </Switch>
                 <ToastContainer />
               </Router>

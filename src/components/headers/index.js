@@ -9,8 +9,10 @@ import {
 import Logo from "../../static/images/logo.png";
 import Profile from "../../static/images/profile.png";
 import ListTask from "./listTask";
-import Notifications from "./notifications";
+import NotificationHandler from "./NotificationHandler";
 import MyProfile from "./profile";
+
+const userId = window.user_id ? window.user_id : 1;
 
 export class Header extends Component {
   constructor(props) {
@@ -98,7 +100,14 @@ export class Header extends Component {
                     <sup className="notify">10</sup>
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-right">
-                    <Notifications />
+
+                    <NotificationHandler notifications={notifications}
+                      showContentLoader={false} userId={userId} />
+                    <div className="dropdown-footer">
+                      <a className="text-center" >
+                        <span>View All</span>
+                        <span>Mark all as seen</span> </a>
+                    </div>
                   </Dropdown.Menu>
                 </Dropdown>
                 <Dropdown>
@@ -121,7 +130,7 @@ export class Header extends Component {
                     </>
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-right">
-                    <MyProfile />
+                    <MyProfile userId={userId} />
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
