@@ -13,6 +13,8 @@ import NotificationHandler from "./NotificationHandler";
 import MyProfile from "./profile";
 
 const userId = window.user_id ? window.user_id : 1;
+const taskCount = window.task_count ? window.task_count : 0;
+const notificationCount = window.notification_count ? window.notification_count : 0;
 
 export class Header extends Component {
   constructor(props) {
@@ -22,7 +24,8 @@ export class Header extends Component {
       showTaskList: false,
       myTasks: [],
       otherTasks: [],
-      notifications: []
+      notifications: [],
+      showContentLoader: false
     };
   }
 
@@ -47,6 +50,12 @@ export class Header extends Component {
     ) {
       this.setState({ notifications: nextProps.headerNavData.notifications });
     }
+    if (
+      nextProps.headerNavData.navLoader !== this.props.headerNavData.navLoader
+    ) {
+      this.setState({ showContentLoader: nextProps.headerNavData.navLoader });
+    }
+
   }
 
   handleTaskList = () => {
@@ -60,8 +69,7 @@ export class Header extends Component {
     const spliturl = decodeurl.split("/")
     const len = spliturl.length
     const fileName = spliturl[len - 1]
-    const blob = file
-    const url = window.URL.createObjectURL(new Blob([blob]));
+    const url = window.URL.createObjectURL(new Blob([file]));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', fileName);
@@ -72,8 +80,7 @@ export class Header extends Component {
 
   render() {
     const { toggleClass, handleToggle } = this.props;
-    const { myTasks, otherTasks, notifications } = this.state;
-    // console.log("header", this.state);
+    const { myTasks, otherTasks, notifications, showContentLoader } = this.state;
 
     return (
       <header className="site-header">
@@ -100,9 +107,11 @@ export class Header extends Component {
                     className="fieldsight-btn"
                   >
                     <i className="la la-file-alt" />
+                    <sup className="notify">{taskCount}</sup>
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-right dropdown-animation">
-                    <ListTask myTasks={myTasks} otherTasks={otherTasks} handleDownloadFile={this.handleDownloadFile} />
+                    <ListTask myTasks={myTasks} otherTasks={otherTasks}
+                      showContentLoader={showContentLoader} handleDownloadFile={this.handleDownloadFile} />
                   </Dropdown.Menu>
                 </Dropdown>
                 <Dropdown>
@@ -112,12 +121,12 @@ export class Header extends Component {
                     className="fieldsight-btn"
                   >
                     <i className="la la-bell" />
-                    <sup className="notify">10</sup>
+                    <sup className="notify">{notificationCount}</sup>
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-right">
-
                     <NotificationHandler notifications={notifications}
-                      showContentLoader={false} userId={userId} handleDownloadFile={this.handleDownloadFile} />
+                      showContentLoader={showContentLoader} userId={userId}
+                      handleDownloadFile={this.handleDownloadFile} />
                     <div className="dropdown-footer">
                       <a className="text-center" >
                         <span>View All</span>

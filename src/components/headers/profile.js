@@ -13,8 +13,7 @@ export class MyProfile extends Component {
         </li>
 
         <li className="dropdown-footer">
-          <a href="signin.html">
-            {" "}
+          <a>
             <i className="la la-power-off" /> Log Out
           </a>
         </li>

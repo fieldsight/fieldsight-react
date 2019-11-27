@@ -19,7 +19,7 @@ export class ListTask extends Component {
   render() {
     const {
       state: { activeTab },
-      props: { myTasks, otherTasks }
+      props: { myTasks, otherTasks, showContentLoader }
     } = this;
     return (
       <>
@@ -62,12 +62,12 @@ export class ListTask extends Component {
           {activeTab === "myTask" && (
             <TaskHandler
               tasks={myTasks}
-              showContentLoader={false}
+              showContentLoader={showContentLoader}
               handleDownloadFile={this.props.handleDownloadFile}
             />
           )}
           {activeTab === "otherTask" &&
-            <TaskHandler tasks={otherTasks} showContentLoader={false}
+            <TaskHandler tasks={otherTasks} showContentLoader={showContentLoader}
               handleDownloadFile={this.props.handleDownloadFile} />
           }
           <div className="dropdown-footer">
