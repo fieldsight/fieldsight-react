@@ -25,7 +25,6 @@ const DatatablePage = ({
     <div className="col-xl-6 col-md-12">
       <div className="card region-table">
         <div className="card-header main-card-header sub-card-header">
-          {/* <h5>Submissions</h5>*/}
           <h5>
             <FormattedMessage
               id="app.submissions"

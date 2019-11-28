@@ -4,6 +4,16 @@ import Select from 'react-select';
 
 import InputElement from '../common/InputElement';
 
+/* eslint-disable  consistent-return */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable camelcase */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable  no-sequences */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-unused-expressions */
+
 class AddStageForm extends Component {
   constructor(props) {
     super(props);
@@ -147,12 +157,12 @@ class AddStageForm extends Component {
             formType="editForm"
             tag="input"
             type="text"
-            required={true}
+            required
             label="app.name"
             name="name"
             value={name}
             changeHandler={handleChange}
-            translation={true}
+            translation
           />
           {/* </div> */}
           {regionDropdown && regionDropdown.length > 0 && (
@@ -166,7 +176,7 @@ class AddStageForm extends Component {
               {hasLoaded && (
                 <Select
                   defaultValue={selectedRegion}
-                  isMulti={true}
+                  isMulti
                   options={regionDropdown}
                   onChange={handleSelectRegionChange}
                 />
@@ -196,12 +206,12 @@ class AddStageForm extends Component {
             formType="editForm"
             tag="input"
             type="text"
-            // required={true}
+            // required
             label="app.description"
             name="desc"
             value={desc}
             changeHandler={handleChange}
-            translation={true}
+            translation
           />
         </div>
         {/* <div className="modal-footer"> */}

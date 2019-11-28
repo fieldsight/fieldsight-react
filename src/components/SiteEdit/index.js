@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import SiteEditForm from '../common/siteEdit';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
+import SiteEditForm from '../common/siteEdit';
+
+/* eslint-disable */
 
 export default class SiteEdit extends Component {
   _isMounted = false;

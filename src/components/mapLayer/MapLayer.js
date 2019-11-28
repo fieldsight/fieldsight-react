@@ -3,9 +3,8 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
-import { DotLoader } from '../common/Loader';
+import Loader, { DotLoader } from '../common/Loader';
 import RightContentCard from '../common/RightContentCard';
-import Loader from '../common/Loader';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 
@@ -14,12 +13,12 @@ const animatedComponents = makeAnimated();
 const urls = ['fv3/api/geolayer/', 'fv3/api/organization-geolayer/'];
 
 export default class MapLayer extends Component {
-  static contextType = RegionContext;
   _isMounted = false;
+
   constructor(props) {
     super(props);
+    this.contextType = RegionContext;
     this.state = {
-      geoLayer: [],
       initialData: [],
       dropdownData: [],
       multiValue: [],
@@ -60,11 +59,16 @@ export default class MapLayer extends Component {
         }),
       )
       .catch(err => {
-        this._isMounted &&
+        if (this._isMounted) {
           this.setState({
             dotLoader: false,
           });
+        }
       });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handleMultiChange = option => {
@@ -151,9 +155,5 @@ export default class MapLayer extends Component {
         {isLoading && <Loader />}
       </>
     );
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }

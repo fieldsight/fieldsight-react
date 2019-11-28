@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
 import { DotLoader } from '../../../myForm/Loader';
@@ -32,22 +32,17 @@ class ApprovedTable extends Component {
       <>
         <div className="card-header main-card-header sub-card-header">
           <h5>
-            {/*Approved Submissions*/}
             <FormattedMessage
               id="app.approved-submissions"
               defaultMessage="Approved Submissions"
             />
           </h5>
           <div className="dash-btn">
-<<<<<<< HEAD
-            <button onClick={showViewData} className="fieldsight-btn">
-=======
             <button
               type="button"
               onClick={showViewData}
               className="fieldsight-btn"
             >
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
               {data ? (
                 <FormattedMessage
                   id="app.view-by-form"

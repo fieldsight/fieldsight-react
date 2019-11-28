@@ -99,17 +99,15 @@ class ProjecTable extends Component {
                         <FormattedMessage
                           id="app.sn"
                           defaultMessage="S.N"
-                        />{' '}
+                        />
                       </th>
                       <th>
-                        {' '}
                         <FormattedMessage
                           id="app.form-name"
                           defaultMessage="Form Name"
                         />
                       </th>
                       <th>
-                        {' '}
                         <FormattedMessage
                           id="app.create-date"
                           defaultMessage="Create Date"
@@ -122,7 +120,6 @@ class ProjecTable extends Component {
                         />
                       </th>
                       <th>
-                        {' '}
                         <FormattedMessage
                           id="app.action"
                           defaultMessage="Action"

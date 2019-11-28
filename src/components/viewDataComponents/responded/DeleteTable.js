@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import format from 'date-fns/format';
-import { FormattedMessage } from 'react-intl';
+
 /* eslint-disable camelcase */
 
 class DeleteTable extends PureComponent {

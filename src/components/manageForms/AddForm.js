@@ -1,8 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import RadioElement from '../common/RadioElement';
 import { DotLoader } from '../myForm/Loader';
 
-class AddForm extends Component {
+/* eslint-disable  consistent-return */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-array-index-key */
+
+class AddForm extends PureComponent {
   render() {
     const {
       props: {
@@ -28,6 +32,9 @@ class AddForm extends Component {
                   : 'nav-link'
               }
               onClick={() => toggleTab('myForms')}
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => toggleTab('myForms')}
             >
               My Forms
             </a>
@@ -40,6 +47,9 @@ class AddForm extends Component {
                   : 'nav-link'
               }
               onClick={() => toggleTab('sharedForms')}
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => toggleTab('sharedForms')}
             >
               Shared Forms
             </a>
@@ -52,6 +62,9 @@ class AddForm extends Component {
                   : 'nav-link'
               }
               onClick={() => toggleTab('projectForms')}
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => toggleTab('projectForms')}
             >
               Project Forms
             </a>
@@ -86,7 +99,7 @@ class AddForm extends Component {
               />
               <i className="la la-search" />
             </div>
-            {formList.length == 0 ? (
+            {formList.length === 0 ? (
               <div>No Form Available</div>
             ) : (
               <div>
@@ -107,7 +120,7 @@ class AddForm extends Component {
                           {each.owner}
                         </span>
                         <time>
-                          <i className="la la-clock-o"></i>
+                          <i className="la la-clock-o" />
                           {each.date_created}
                         </time>
                       </div>
@@ -146,7 +159,7 @@ class AddForm extends Component {
               />
               <i className="la la-search" />
             </div>
-            {projectList.length == 0 ? (
+            {projectList.length === 0 ? (
               <div>No Form Available</div>
             ) : (
               <div>
@@ -157,10 +170,10 @@ class AddForm extends Component {
                         <div>
                           <h5>{each.name}</h5>
                         </div>
-                        {each.forms.map((item, i) => (
+                        {each.forms.map(item => (
                           <div
                             className="form-group"
-                            key={`form_${i}`}
+                            // key={`form_${i}`}
                           >
                             <RadioElement
                               label={item.title}
@@ -176,7 +189,7 @@ class AddForm extends Component {
                                 {item.owner}
                               </span>
                               <time>
-                                <i className="la la-clock-o"></i>
+                                <i className="la la-clock-o" />
                                 {each.date_created}
                               </time>
                             </div>
@@ -213,13 +226,12 @@ class AddForm extends Component {
               <input
                 type="search"
                 className="form-control"
-                placeholder=""
                 placeholder="Search"
                 onChange={onChangeHandler}
               />
               <i className="la la-search" />
             </div>
-            {sharedList.length == 0 ? (
+            {sharedList.length === 0 ? (
               <div>No Form Available</div>
             ) : (
               <div>
@@ -240,7 +252,7 @@ class AddForm extends Component {
                           {each.owner}
                         </span>
                         <time>
-                          <i className="la la-clock-o"></i>
+                          <i className="la la-clock-o" />
                           {each.date_created}
                         </time>
                       </div>

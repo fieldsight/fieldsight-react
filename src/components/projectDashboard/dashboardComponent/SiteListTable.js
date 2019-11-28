@@ -40,7 +40,7 @@ class SiteListTable extends React.PureComponent {
                         {!isEmpty(terms) ? `${terms.site}` : 'Sites'}
                         Name
                       </th>
-                      {/*<th>
+                      {/* <th>
                         {!isEmpty(terms) ? (
                           `${terms.site}` ? (
                             <FormattedMessage
@@ -53,7 +53,7 @@ class SiteListTable extends React.PureComponent {
                         ) : (
                           "Sites"
                         )}{" "}
-                      </th>*/}
+                      </th> */}
                       <th>
                         <FormattedMessage
                           id="app.id"
@@ -61,7 +61,7 @@ class SiteListTable extends React.PureComponent {
                         />
                       </th>
                       {/* <th>Address</th> 
-                      <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>*/}
+                      <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th> */}
                       <th>
                         {!isEmpty(terms)
                           ? `${terms.region}`

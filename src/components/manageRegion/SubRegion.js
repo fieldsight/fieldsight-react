@@ -28,7 +28,9 @@ class SubRegion extends Component {
       axios
         .get(`${url}?project=${projectId}&region=${subRegionId}`)
         .then(res => {
-          this._isMounted && setSubRegion(res.data, subRegionId);
+          if (this._isMounted) {
+            setSubRegion(res.data, subRegionId);
+          }
         })
         .catch(err => console.log('Err', err));
     }
@@ -45,9 +47,18 @@ class SubRegion extends Component {
       axios
         .get(`${url}?project=${projectId}&region=${subRegionId}`)
         .then(res => {
-          this._isMounted && setSubRegion(res.data, subRegionId);
+          if (this._isMounted) {
+            setSubRegion(res.data, subRegionId);
+          }
         })
         .catch(err => console.log('Err', err));
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    if (this.props.setSubRegion) {
+      this.props.setSubRegion([], '');
     }
   }
 
@@ -78,7 +89,6 @@ class SubRegion extends Component {
         ? [
             `${terms.region} ID`,
             `${terms.region} Name`,
-            ,
             'app.created-date',
             'app.action',
           ]
@@ -122,26 +132,26 @@ class SubRegion extends Component {
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
               <InputElement
                 tag="textarea"
                 type="text"
-                required={true}
+                required
                 label="app.name"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
@@ -167,11 +177,6 @@ class SubRegion extends Component {
         )}
       </>
     );
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-    this.props.setSubRegion && this.props.setSubRegion([], '');
   }
 }
 

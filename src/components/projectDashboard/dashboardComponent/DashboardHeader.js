@@ -70,7 +70,7 @@ class DashboardHeader extends React.Component {
         title: `${termsAndLabels && termsAndLabels.site}`,
         link: `/fieldsight/application/?project=${id}#/project-sitelist`,
         id:
-          `${termsAndLabels && termsAndLabels.site}` == 'School'
+          `${termsAndLabels && termsAndLabels.site}` === 'School'
             ? 'app.school'
             : `${termsAndLabels && termsAndLabels.site}`,
       },
@@ -139,7 +139,7 @@ class DashboardHeader extends React.Component {
                 className="fieldsight-btn"
               >
                 <i className="la la-paste" />
-                {/*<span>Data</span>*/}
+
                 <span>
                   <FormattedMessage
                     id="app.data"
@@ -155,7 +155,6 @@ class DashboardHeader extends React.Component {
                     key={i}
                     target="_blank"
                   >
-                    {/*item.title*/}
                     <FormattedMessage
                       id={item.id}
                       defaultMessage={item.title}
@@ -174,7 +173,7 @@ class DashboardHeader extends React.Component {
                   className="fieldsight-btn"
                 >
                   <i className="la la-cog" />
-                  {/*<span>Manage</span>*/}
+
                   <span>
                     <FormattedMessage
                       id="app.manage"
@@ -190,8 +189,6 @@ class DashboardHeader extends React.Component {
                       key={i}
                       target="_blank"
                     >
-                      {/*item.title*/}
-
                       <FormattedMessage
                         id={item.id}
                         defaultMessage={item.title}
@@ -243,8 +240,12 @@ class DashboardHeader extends React.Component {
             </a>
             {isProjectManager && (
               <div className="add-data">
-                <a onClick={() => this.setState({ openmodel: true })}>
-                  {' '}
+                <a
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => this.setState({ openmodel: true })}
+                  onClick={() => this.setState({ openmodel: true })}
+                >
                   <FormattedMessage
                     id="app.addData"
                     defaultMessage="Add Data"

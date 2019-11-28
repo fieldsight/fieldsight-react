@@ -3,9 +3,9 @@ import Zoom from 'react-reveal/Zoom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Select from 'react-select';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { FormattedMessage } from 'react-intl';
 import 'leaflet/dist/leaflet.css';
 import InputElement from '../common/InputElement';
-import { FormattedMessage } from 'react-intl';
 /* eslint-disable react/prop-types  */
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 
@@ -26,6 +26,7 @@ class AddSite extends Component {
   }
 
   render() {
+    const { onChangeHandler } = this.props;
     return (
       <>
         <Zoom duration={500}>
@@ -42,6 +43,9 @@ class AddSite extends Component {
                   <span
                     className="popup-close"
                     onClick={this.props.closePopup}
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={this.props.closePopup}
                   >
                     <i className="la la-close" />
                   </span>
@@ -152,7 +156,6 @@ class AddSite extends Component {
                                     />
                                   </h3>
                                   <span>
-                                    {' '}
                                     <FormattedMessage
                                       id="app.or"
                                       defaultMessage="or"
@@ -169,7 +172,7 @@ class AddSite extends Component {
                                     <FormattedMessage
                                       id="app.upload"
                                       defaultMessage="upload"
-                                    />{' '}
+                                    />
                                     <i className="la la-cloud-upload" />
                                   </label>
                                   <input
@@ -189,7 +192,7 @@ class AddSite extends Component {
                               <FormattedMessage
                                 id="app.map"
                                 defaultMessage="Map"
-                              />{' '}
+                              />
                               <sup>*</sup>
                             </label>
 
@@ -228,14 +231,14 @@ class AddSite extends Component {
                                     formType="editForm"
                                     tag="input"
                                     type="number"
-                                    required={true}
+                                    required
                                     label="app.latitude"
                                     name="latitude"
                                     value={27.2234}
-                                    translation={true}
-                                    changeHandler={e =>
-                                      onChangeHandler(e, 'latitude')
-                                    }
+                                    translation
+                                    changeHandler={e => {
+                                      onChangeHandler(e, 'latitude');
+                                    }}
                                   />
                                 </div>
 
@@ -244,14 +247,14 @@ class AddSite extends Component {
                                     formType="editForm"
                                     tag="input"
                                     type="number"
-                                    required={true}
+                                    required
                                     label="app.longitude"
                                     name="longitude"
                                     value={87.23232}
-                                    translation={true}
-                                    changeHandler={e =>
-                                      onChangeHandler(e, 'longitude')
-                                    }
+                                    translation
+                                    changeHandler={e => {
+                                      onChangeHandler(e, 'longitude');
+                                    }}
                                   />
                                 </div>
                               </div>

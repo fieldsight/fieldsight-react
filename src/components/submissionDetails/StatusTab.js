@@ -127,7 +127,7 @@ class StatusTab extends Component {
                 placeholder="Please put your comment here."
                 value={comment}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
               <div className="form-group">
                 <label>
@@ -163,7 +163,7 @@ class StatusTab extends Component {
                     className="approved"
                     checked={status === '3'}
                     changeHandler={onChangeHandler}
-                    translation={true}
+                    translation
                   />
                   <RadioElement
                     label="app.flag"
@@ -172,7 +172,7 @@ class StatusTab extends Component {
                     className="flagged"
                     checked={status === '2'}
                     changeHandler={onChangeHandler}
-                    translation={true}
+                    translation
                   />
 
                   <RadioElement
@@ -182,7 +182,7 @@ class StatusTab extends Component {
                     className="rejected"
                     checked={status === '1'}
                     changeHandler={onChangeHandler}
-                    translation={true}
+                    translation
                   />
                 </div>
               </div>

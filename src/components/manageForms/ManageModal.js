@@ -1,6 +1,8 @@
 import React from 'react';
 import Zoom from 'react-reveal/Zoom';
 
+/* eslint-disable  react/prop-types */
+
 const ManageModal = props => {
   const {
     title,
@@ -31,15 +33,26 @@ const ManageModal = props => {
                   className="add-btn"
                   style={{ marginRight: '15px' }}
                 >
-                  <a href={url} target="_blank">
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {showText && showText}
+
                     <span>
                       <i className="la la-plus" />
                     </span>
                   </a>
                 </div>
               )}
-              <span className="popup-close" onClick={toggleModal}>
+              <span
+                className="popup-close"
+                onClick={toggleModal}
+                tabIndex="0"
+                role="button"
+                onKeyDown={toggleModal}
+              >
                 <i className="la la-close" />
               </span>
             </div>

@@ -124,22 +124,20 @@ class SiteTable extends Component {
                       </thead>
 
                       <tbody>
-                        {/*this.props.site.length === 0 && (
+                        {/* this.props.site.length === 0 && (
                     <tr>
                       <td>
                         <p>No Form Data Available</p>
                       </td>
                     </tr>
-                  )*/}
+                  ) */}
 
                         {this.props.site.map((item, i) => (
                           <tr key={i}>
                             <td>
                               <a
-                                href={
-                                  '/fieldsight/application/#/site-dashboard/' +
-                                  item.id
-                                }
+                                href={` /fieldsight/application/#/site-dashboard/
+                                  ${item.id}`}
                                 className="pending table-profile"
                               >
                                 <h5>{item.name}</h5>

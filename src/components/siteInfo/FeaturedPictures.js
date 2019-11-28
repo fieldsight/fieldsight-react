@@ -302,14 +302,14 @@ class FeaturedPictures extends Component {
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.inputLabel"
                 formType="floatingForm"
                 htmlFor="input"
                 name="label"
                 value={label}
                 changeHandler={onInputChangeHandler}
-                translation={true}
+                translation
               />
 
               <SelectElement
@@ -318,7 +318,7 @@ class FeaturedPictures extends Component {
                 options={siteFeaturedTypes}
                 value={type}
                 changeHandler={onSelectChangeHandler}
-                translation={true}
+                translation
               />
 
               {type === 'Form' && (

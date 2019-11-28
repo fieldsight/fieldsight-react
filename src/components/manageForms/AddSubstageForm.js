@@ -5,11 +5,18 @@ import { FormattedMessage } from 'react-intl';
 import InputElement from '../common/InputElement';
 import RadioElement from '../common/RadioElement';
 
+/* eslint-disable  consistent-return */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable camelcase */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/no-array-index-key */
+
 class AddSubstageForm extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
-
     this.state = {
       id: props.formData ? props.formData.id : '',
       em: props.formData ? props.formData.em : null,
@@ -67,8 +74,8 @@ class AddSubstageForm extends Component {
       formData && formData.setting && formData.setting.types;
 
     if (this._isMounted) {
-      let newRegionArr = [];
-      let newTypeArr = [];
+      const newRegionArr = [];
+      const newTypeArr = [];
       regionOptions.map(each => {
         if (stagedRegions.indexOf(each.id) > -1) {
           newRegionArr.push({
@@ -159,19 +166,22 @@ class AddSubstageForm extends Component {
     const { name, value } = e.target;
 
     this.setState(state => {
-      if (name == 'status') {
+      if (name === 'status') {
         return {
           status: value,
         };
-      } else if (name == 'donor') {
+      }
+      if (name === 'donor') {
         return {
           isDonor: JSON.parse(value),
         };
-      } else if (name == 'edit') {
+      }
+      if (name === 'edit') {
         return {
           isEdit: JSON.parse(value),
         };
-      } else if (name == 'delete') {
+      }
+      if (name === 'delete') {
         return {
           isDelete: JSON.parse(value),
         };
@@ -236,12 +246,12 @@ class AddSubstageForm extends Component {
               formType="editForm"
               tag="input"
               type="text"
-              required={true}
+              required
               label="app.name"
               name="substageTitle"
               value={substageTitle}
               changeHandler={this.handleInputChange}
-              translation={true}
+              translation
             />
             <InputElement
               classname="border-0"
@@ -253,7 +263,7 @@ class AddSubstageForm extends Component {
               name="substageDesc"
               value={substageDesc}
               changeHandler={this.handleInputChange}
-              translation={true}
+              translation
             />
             <div className="selected-form">
               <div className="selected-text">
@@ -261,7 +271,13 @@ class AddSubstageForm extends Component {
               </div>
 
               <div className="add-btn flex-start">
-                <a data-tab="choose-form" onClick={toggleFormModal}>
+                <a
+                  data-tab="choose-form"
+                  onClick={toggleFormModal}
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={toggleFormModal}
+                >
                   {!!isEditForm || formTitle
                     ? 'Change form'
                     : ' Choose form'}
@@ -269,7 +285,7 @@ class AddSubstageForm extends Component {
                     <sup style={{ color: '#ed5261' }}>*</sup>
                   )}
                   <span>
-                    <i className="la la-file-text-o"></i>
+                    <i className="la la-file-text-o" />
                   </span>
                 </a>
               </div>
@@ -286,7 +302,7 @@ class AddSubstageForm extends Component {
             name="weight"
             value={weight}
             changeHandler={this.handleInputChange}
-            translation={true}
+            translation
           />
 
           <div className="form-group flexrow checkbox-group">
@@ -303,8 +319,8 @@ class AddSubstageForm extends Component {
                 name="status"
                 value={3}
                 changeHandler={this.handleRadioChange}
-                checked={status == 3}
-                translation={true}
+                checked={status === 3}
+                translation
               />
               <RadioElement
                 label="app.pending"
@@ -312,8 +328,8 @@ class AddSubstageForm extends Component {
                 name="status"
                 value={0}
                 changeHandler={this.handleRadioChange}
-                checked={status == 0}
-                translation={true}
+                checked={status === 0}
+                translation
               />
               <RadioElement
                 label="app.flagged"
@@ -321,8 +337,8 @@ class AddSubstageForm extends Component {
                 name="status"
                 value={2}
                 changeHandler={this.handleRadioChange}
-                checked={status == 2}
-                translation={true}
+                checked={status === 2}
+                translation
               />
               <RadioElement
                 label="app.rejected"
@@ -330,8 +346,8 @@ class AddSubstageForm extends Component {
                 name="status"
                 value={1}
                 changeHandler={this.handleRadioChange}
-                checked={status == 1}
-                translation={true}
+                checked={status === 1}
+                translation
               />
             </div>
           </div>
@@ -345,7 +361,7 @@ class AddSubstageForm extends Component {
             {hasLoaded && (
               <Select
                 defaultValue={regionSelected}
-                isMulti={true}
+                isMulti
                 options={regionDropdown}
                 onChange={this.handleSelectRegionChange}
               />

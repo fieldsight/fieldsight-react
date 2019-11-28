@@ -5,20 +5,30 @@ import 'leaflet/dist/leaflet.css';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
 import { FormattedMessage } from 'react-intl';
-import Modal from '../common/Modal';
-import InputElement from '../common/InputElement';
-import SelectElement from '../common/SelectElement';
-import RightContentCard from '../common/RightContentCard';
-import Loader from '../common/Loader';
-import CheckBox from '../common/CheckBox';
+import Modal from './Modal';
+import InputElement from './InputElement';
+import SelectElement from './SelectElement';
+import RightContentCard from './RightContentCard';
+import Loader from './Loader';
+import CheckBox from './CheckBox';
 import Select from '../siteAdd/Select';
-import DeleteModel from '../common/DeleteModal';
+import DeleteModel from './DeleteModal';
+
+/* eslint-disable   react/prop-types */
+/* eslint-disable   camelcase */
+/* eslint-disable   react/no-array-index-key */
+/* eslint-disable   jsx-a11y/label-has-associated-control */
+/* eslint-disable   no-shadow */
+
+const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
+const iconUrl = require('leaflet/dist/images/marker-icon.png');
+const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
 });
 
 export default class SiteAdd extends Component {
@@ -108,6 +118,9 @@ export default class SiteAdd extends Component {
               className="fieldsight-btn rejected-btn"
               style={{ boxShadow: 'none' }}
               onClick={handleDelete}
+              tabIndex="0"
+              role="button"
+              onKeyDown={handleDelete}
             >
               <FormattedMessage
                 id="app.delete"
@@ -125,12 +138,12 @@ export default class SiteAdd extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.id"
                 name="site_id"
                 value={site_id}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -138,12 +151,12 @@ export default class SiteAdd extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.name"
                 name="name"
                 value={name}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
 
@@ -153,15 +166,15 @@ export default class SiteAdd extends Component {
                   className="form-control"
                   label="app.regions"
                   options={
-                    !!region && region.length > 0
-                      ? region.map(region => region)
+                    region && region.length > 0
+                      ? region.map(region1 => region1)
                       : []
                   }
-                  changeHandler={e =>
-                    onSelectChangeHandler(e, 'regions')
-                  }
+                  changeHandler={e => {
+                    onSelectChangeHandler(e, 'regions');
+                  }}
                   value={regionselected}
-                  translation={true}
+                  translation
                 />
               </div>
             ) : (
@@ -176,11 +189,11 @@ export default class SiteAdd extends Component {
                     ? site_types.map(region => region)
                     : site_types
                 }
-                changeHandler={e =>
-                  onSelectChangeHandler(e, 'site_types')
-                }
+                changeHandler={e => {
+                  onSelectChangeHandler(e, 'site_types');
+                }}
                 value={Selectedtypes}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -193,7 +206,7 @@ export default class SiteAdd extends Component {
                 name="phone"
                 value={phone}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -206,7 +219,7 @@ export default class SiteAdd extends Component {
                 name="address"
                 value={address}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -216,7 +229,7 @@ export default class SiteAdd extends Component {
                   label="app.enableSubsites"
                   changeHandler={handleCheckboxChange}
                   value={cluster_sites}
-                  translation={true}
+                  translation
                 />
               </div>
             </div>
@@ -231,7 +244,7 @@ export default class SiteAdd extends Component {
                   name="weight"
                   value={weight}
                   changeHandler={onChangeHandler}
-                  translation={true}
+                  translation
                 />
               </div>
             ) : (
@@ -248,7 +261,7 @@ export default class SiteAdd extends Component {
                   name="public_desc"
                   value={public_desc}
                   changeHandler={onChangeHandler}
-                  translation={true}
+                  translation
                 />
               </div>
             </div>
@@ -258,7 +271,7 @@ export default class SiteAdd extends Component {
                   <FormattedMessage
                     id="app.map"
                     defaultMessage="Map"
-                  />{' '}
+                  />
                   <sup>*</sup>
                 </label>
 
@@ -276,12 +289,11 @@ export default class SiteAdd extends Component {
                     <Marker position={[latitude, longitude]}>
                       <Popup>
                         <b>
-                          {' '}
                           <FormattedMessage
                             id="app.name"
                             defaultMessage="Name"
                           />
-                          :{' '}
+                          :
                         </b>
                         {name}
                       </Popup>
@@ -293,14 +305,14 @@ export default class SiteAdd extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
-                        required={true}
+                        required
                         label="app.latitude"
                         name="latitude"
                         value={latitude}
-                        translation={true}
-                        changeHandler={e =>
-                          onChangeHandler(e, 'latitude')
-                        }
+                        translation
+                        changeHandler={e => {
+                          onChangeHandler(e, 'latitude');
+                        }}
                       />
                     </div>
 
@@ -309,14 +321,14 @@ export default class SiteAdd extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
-                        required={true}
+                        required
                         label="app.longitude"
                         name="longitude"
                         value={longitude}
-                        translation={true}
-                        changeHandler={e =>
-                          onChangeHandler(e, 'longitude')
-                        }
+                        translation
+                        changeHandler={e => {
+                          onChangeHandler(e, 'longitude');
+                        }}
                       />
                     </div>
                   </div>
@@ -348,10 +360,7 @@ export default class SiteAdd extends Component {
                       return (
                         <section>
                           <div className="upload-form">
-                            <img
-                              src={cropResult}
-                              alt="Cropped Image"
-                            />
+                            <img src={cropResult} alt="" />
                           </div>
 
                           <div {...getRootProps()}>
@@ -361,7 +370,10 @@ export default class SiteAdd extends Component {
                             />
                             <div className="upload-icon" />
 
-                            <button className="fieldsight-btn">
+                            <button
+                              className="fieldsight-btn"
+                              type="button"
+                            >
                               <FormattedMessage
                                 id="app.upload"
                                 defaultMessage="Upload"
@@ -390,13 +402,15 @@ export default class SiteAdd extends Component {
                                   />
                                   <div className="upload-icon" />
                                   <h3>
-                                    {' '}
                                     <FormattedMessage
                                       id="app.drag&DropAnImage"
                                       defaultMessage="Drag & Drop an image"
                                     />
                                   </h3>
-                                  <button className="fieldsight-btn">
+                                  <button
+                                    className="fieldsight-btn"
+                                    type="button"
+                                  >
                                     <FormattedMessage
                                       id="app.upload"
                                       defaultMessage="Upload"
@@ -478,9 +492,9 @@ export default class SiteAdd extends Component {
                             borderBottom: '1px solid #eaeaea',
                           }}
                         >
-                          {data.mcq_options.map((option, key) => {
+                          {data.mcq_options.map((option, k) => {
                             return (
-                              <Fragment key={key}>
+                              <Fragment key={k}>
                                 <option value={option.option_text}>
                                   {option.option_text}
                                 </option>
@@ -515,11 +529,11 @@ export default class SiteAdd extends Component {
                     {data.question_type === 'Link' ? (
                       <Select
                         data={data.project_id}
-                        //onchange={ondynamiChangeHandler}
+                        // onchange={ondynamiChangeHandler}
                         value={project_info[data.question_name]}
                         type={data.question_text}
                         name={data.question_name}
-                        selectedValue={selectedValue}
+                        // selectedValue={selectedValue}
                       />
                     ) : (
                       ''
@@ -529,8 +543,8 @@ export default class SiteAdd extends Component {
               })}
             <div className="col-sm-12">
               <button
-                type="submit"
                 className="fieldsight-btn pull-right"
+                type="button"
               >
                 <FormattedMessage
                   id="app.save"
@@ -560,6 +574,7 @@ export default class SiteAdd extends Component {
                       className="fieldsight-btn"
                       style={{ marginTop: '15px' }}
                       onClick={this.cropImage}
+                      type="button"
                     >
                       <FormattedMessage
                         id="app.saveImage"
@@ -593,12 +608,12 @@ export default class SiteAdd extends Component {
           completely removed.Do you still want to continue?"
             onCancel={deleteClose}
             onConfirm={deleteFile}
-            title={'Are you sure you want to delete ' + name + ' ?'}
+            title={`'Are you sure you want to delete ' ${name} '?'`}
             onToggle={deleteClose}
           />
         )}
 
-        {isLoading && <Loader loaded={loaded} />}
+        {/* {isLoading && <Loader loaded={loaded} />} */}
       </RightContentCard>
     );
   }

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
 class PricingStepThree extends PureComponent {
   render() {
@@ -42,14 +43,14 @@ class PricingStepThree extends PureComponent {
                     <FormattedMessage
                       id="app.planDetail"
                       defaultMessage="Plan Detail"
-                    />{' '}
+                    />
                     :
                   </strong>
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
-                    <strong>{cardResponse.submissions}</strong>{' '}
+                    <i className="la la-chevron-circle-right" />
+                    <strong>{cardResponse.submissions}</strong>
                     <FormattedMessage
                       id="app.submissions"
                       defaultMessage="Submissions"
@@ -61,47 +62,46 @@ class PricingStepThree extends PureComponent {
                         id="app.unlimited"
                         defaultMessage="Unlimited"
                       />
-                    </strong>{' '}
+                    </strong>
                     <FormattedMessage
                       id="app.userProjectSites"
                       defaultMessage="Users, Projects, Sites"
                     />
                   </li>
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
+                    <i className="la la-chevron-circle-right" />
                     <strong>
                       <FormattedMessage
                         id="app.unlimited"
                         defaultMessage="Unlimited"
                       />
-                    </strong>{' '}
+                    </strong>
                     <FormattedMessage
                       id="app.formStageSchedules"
                       defaultMessage="Forms, Stages & Schedules"
                     />
                   </li>
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
+                    <i className="la la-chevron-circle-right" />
                     <strong>
                       <FormattedMessage
                         id="app.unlimited"
                         defaultMessage="Unlimited"
                       />
-                    </strong>{' '}
+                    </strong>
                     <FormattedMessage
                       id="app.reportDashboardsMaps"
                       defaultMessage="Reports, Dashboards & Maps"
                     />
                   </li>
                   <li>
-                    <i className="la la-chevron-circle-right"></i>
+                    <i className="la la-chevron-circle-right" />
                     <strong>
-                      {' '}
                       <FormattedMessage
                         id="app.access"
                         defaultMessage="Access"
                       />
-                    </strong>{' '}
+                    </strong>
                     <FormattedMessage
                       id="app.androidApp"
                       defaultMessage="to our Android App"
@@ -115,13 +115,13 @@ class PricingStepThree extends PureComponent {
                     <FormattedMessage
                       id="app.planPeriod"
                       defaultMessage="Plan Period"
-                    />{' '}
+                    />
                     :
                   </strong>
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
-                    <i className="la la-calendar-check-o"></i>
+                    <i className="la la-calendar-check-o" />
                     <strong>
                       <FormattedMessage
                         id="app.startingDate"
@@ -131,7 +131,7 @@ class PricingStepThree extends PureComponent {
                     <p>{cardResponse.starting_date}</p>
                   </li>
                   <li>
-                    <i className="la la-calendar-minus-o"></i>
+                    <i className="la la-calendar-minus-o" />
                     <strong>
                       <FormattedMessage
                         id="app.endingDate"
@@ -154,18 +154,17 @@ class PricingStepThree extends PureComponent {
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
-                    <i className="la la-money"></i>
+                    <i className="la la-money" />
                     <strong>
-                      {' '}
                       <FormattedMessage
                         id="app.amountPaid"
                         defaultMessage="Amount Paid"
                       />
                     </strong>
-                    <p>${cardResponse.amount}</p>
+                    <p>{`$${cardResponse.amount}`}</p>
                   </li>
                   <li>
-                    <i className="la la-cc-mastercard"></i>
+                    <i className="la la-cc-mastercard" />
                     <strong>
                       <FormattedMessage
                         id="app.paymentMethod"
@@ -177,7 +176,7 @@ class PricingStepThree extends PureComponent {
                         id="app.card"
                         defaultMessage="Card"
                       />
-                      : xxx xxx xxx {cardResponse.card}
+                      {`: xxx xxx xxx ${cardResponse.card}`}
                     </p>
                   </li>
                 </ul>
@@ -196,7 +195,7 @@ class PricingStepThree extends PureComponent {
                   id="app.finish"
                   defaultMessage="Finish"
                 />
-                <i className="la la-check-circle"></i>
+                <i className="la la-check-circle" />
               </a>
             </div>
           </div>

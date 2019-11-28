@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
-import { getProjectUser } from '../../actions/projectUserActions';
+import getProjectUser from '../../actions/projectUserActions';
 /* eslint-disable react/prop-types  */
 /* eslint-disable react/no-array-index-key  */
 /* eslint-disable jsx-a11y/label-has-associated-control  */
@@ -80,8 +80,6 @@ class ProjectUser extends Component {
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-              {/*<h5>Project Users</h5>*/}
-
               <h5>
                 <FormattedMessage
                   id="app.project-user"
@@ -103,7 +101,7 @@ class ProjectUser extends Component {
                         defaultMessage="Search"
                       />
                     </label>
-                    <i className="la la-search"></i>
+                    <i className="la la-search" />
                   </div>
                 </form>
               </div>
@@ -142,12 +140,12 @@ class ProjectUser extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((users, key) => {
+                  {users.map((user, key) => {
                     return (
                       <tr key={key}>
                         <td>
                           <a
-                            href={`/users/profile/${users.id}`}
+                            href={`/users/profile/${user.id}`}
                             className="pending table-profile"
                           >
                             <figure>

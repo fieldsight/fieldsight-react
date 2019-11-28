@@ -4,6 +4,9 @@ import format from 'date-fns/format';
 import { withRouter } from 'react-router-dom';
 import Td from './TableData';
 
+/* eslint-disable   react/prop-types */
+/* eslint-disable   camelcase */
+
 class TableRow extends Component {
   renderName = (dataType, id) => {
     const selectedData = this.props[dataType].find(
@@ -37,6 +40,11 @@ class TableRow extends Component {
             <a
               onClick={() => editHandler(row.id || row.question_text)}
               className="td-edit-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                editHandler(row.id || row.question_text);
+              }}
             >
               <OverlayTrigger
                 placement="top"
@@ -46,9 +54,14 @@ class TableRow extends Component {
               </OverlayTrigger>
             </a>
             <a
-              onClick={() =>
-                removeHandler(row.id || row.question_text)
-              }
+              onClick={() => {
+                removeHandler(row.id || row.question_text);
+              }}
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                removeHandler(row.id || row.question_text);
+              }}
               className="td-delete-btn td-btn"
             >
               <OverlayTrigger
@@ -70,6 +83,9 @@ class TableRow extends Component {
             <a
               onClick={() => editHandler(row.id)}
               className="td-edit-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => editHandler(row.id)}
             >
               <OverlayTrigger
                 placement="top"
@@ -81,6 +97,9 @@ class TableRow extends Component {
             <a
               onClick={() => removeHandler(row.id)}
               className="td-delete-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => removeHandler(row.id)}
             >
               <OverlayTrigger
                 placement="top"
@@ -114,6 +133,9 @@ class TableRow extends Component {
             <a
               onClick={() => editHandler(row.id)}
               className="td-edit-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => editHandler(row.id)}
             >
               <OverlayTrigger
                 placement="top"
@@ -125,6 +147,9 @@ class TableRow extends Component {
             <a
               onClick={() => removeHandler(row.id)}
               className="td-delete-btn td-btn"
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => removeHandler(row.id)}
             >
               <OverlayTrigger
                 placement="top"
@@ -143,7 +168,7 @@ class TableRow extends Component {
             {row[0].replace('_', ' ')}
           </td>
           <td style={row[1] ? {} : { textTransform: 'capitalize' }}>
-            {row[1] || row[0].replace('_', ' ')}{' '}
+            {row[1] || row[0].replace('_', ' ')}
           </td>
         </tr>
       ),

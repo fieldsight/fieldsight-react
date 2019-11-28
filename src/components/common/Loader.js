@@ -2,6 +2,8 @@ import React from 'react';
 import { Fade } from 'react-reveal';
 import ReactLoader from 'react-loader-spinner';
 
+/* eslint-disable */
+
 export const TableContentLoader = ({ row, column }) => (
   <div className="contentLoading">
     <div className="loading-list table-list">

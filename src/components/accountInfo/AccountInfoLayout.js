@@ -3,6 +3,8 @@ import { Elements, StripeProvider } from 'react-stripe-elements';
 import RightContentCard from '../common/RightContentCard';
 import AccountInfo from './AccountInfo';
 
+/* eslint-disable */
+
 class AccountInfoLayout extends Component {
   render() {
     const {

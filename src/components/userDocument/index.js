@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+
 import { getSiteUser } from '../../actions/userDocumentActions';
 
 class UserDocument extends Component {
@@ -77,21 +77,12 @@ class UserDocument extends Component {
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-<<<<<<< HEAD
-              {/*<h5>Users</h5>*/}
-              <FormattedMessage
-                id="app.users"
-                defaultMessage="Users"
-              />
-
-=======
               <h5>
                 <FormattedMessage
                   id="app.users"
                   defaultMessage="Users"
                 />
               </h5>
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
               <div className="dash-btn">
                 <form className="floating-form">
                   <div className="form-group mr-0">
@@ -100,10 +91,6 @@ class UserDocument extends Component {
                         id="app.teams-search"
                         defaultMessage="Search"
                       />
-<<<<<<< HEAD
-                    </label>
-                    <i className="la la-search"></i>
-=======
                       <input
                         type="search"
                         className="form-control"
@@ -113,7 +100,6 @@ class UserDocument extends Component {
                       />
                     </label>
                     <i className="la la-search" />
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                   </div>
                 </form>
               </div>
@@ -152,12 +138,12 @@ class UserDocument extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((users, key) => {
+                  {users.map(user => {
                     return (
-                      <tr key={key}>
+                      <tr key={user.id}>
                         <td>
                           <a
-                            href={`/users/profile/${users.id}`}
+                            href={`/users/profile/${user.id}`}
                             className="pending table-profile"
                           >
                             <figure>

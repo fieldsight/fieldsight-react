@@ -684,12 +684,13 @@ class SiteInformationTable extends Component {
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.inputText"
                 formType="floatingForm"
                 htmlFor="label"
                 value={label}
                 name="label"
+                translation
                 changeHandler={this.onInputChangeHandler}
               />
               <SelectElement
@@ -697,6 +698,7 @@ class SiteInformationTable extends Component {
                 label="app.type"
                 options={questionTypes}
                 value={type}
+                translation
                 changeHandler={this.onSelectChangeHandler}
               />
               {(type === 'Text' ||

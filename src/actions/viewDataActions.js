@@ -14,3 +14,4 @@ export const getProjectViewData = (id, type) => dispatch => {
       console.log(err);
     });
 };
+export default getProjectViewData;

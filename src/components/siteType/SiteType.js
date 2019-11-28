@@ -9,6 +9,7 @@ import Loader from '../common/Loader';
 import { successToast, errorToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
+import Warning from '../common/DeleteModal';
 /* eslint-disable consistent-return  */
 
 const tableHeader = {
@@ -293,26 +294,26 @@ class SiteType extends Component {
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
               <InputElement
                 tag="textarea"
                 type="text"
-                required={true}
+                required
                 label="app.type"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">

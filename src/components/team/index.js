@@ -5,7 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { Table, Button } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import SelectElement from '../common/SelectElement';
+
 import { getTeam, getTranslate } from '../../actions/teamAction';
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
@@ -69,7 +70,12 @@ class Teams extends Component {
 
   render() {
     const { results } = this.state;
+    const { selected } = this.props;
 
+    const selectLanguage = [
+      { id: 'en', name: 'Eng' },
+      { id: 'ne', name: 'Nep' },
+    ];
     return (
       <>
         <div className="card">
@@ -82,7 +88,6 @@ class Teams extends Component {
             />
           </div>
           <div className="card-header main-card-header sub-card-header">
-            {/* <h5>Team List</h5>*/}
             <FormattedMessage
               id="app.team-list"
               defaultMessage="Team List"
@@ -117,7 +122,7 @@ class Teams extends Component {
                 onClick={() => this.showMap()}
               >
                 <i className="la la-map" />
-                &nbsp;{' '}
+                &nbsp;
                 <FormattedMessage id="app.map" defaultMessage="Map" />
               </Button>
             </div>
@@ -249,6 +254,7 @@ Teams.propTypes = {
   getTeam: PropTypes.func.isRequired,
   getTranslate: PropTypes.func.isRequired,
   history: PropTypes.objectOf.isRequired,
+  selected: PropTypes.string.isRequired,
 };
 export default compose(
   connect(mapStateToProps, {

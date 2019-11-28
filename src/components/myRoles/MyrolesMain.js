@@ -527,7 +527,7 @@ class MyrolesMain extends Component {
                 &nbsp;
                 <span style={{ textTransform: 'capitalize' }}>
                   {this.state.profile.fullname}
-                </span>{' '}
+                </span>
                 <FormattedMessage
                   id="app.noRole"
                   defaultMessage="seems like you have no role yet."

@@ -12,15 +12,12 @@ class DashboardHeader extends PureComponent {
       name,
       address,
       logo,
-      public_desc,
       totalSites,
       totalUser,
       totalProjects,
       totalSubmissions,
       id,
       showContentLoader,
-      activeTab,
-      closeModal,
       openModal,
     } = this.props;
 
@@ -90,7 +87,7 @@ class DashboardHeader extends PureComponent {
                 className="fieldsight-btn"
               >
                 <i className="la la-cog" />
-                {/*<span>Manage</span>*/}
+
                 <span>
                   <FormattedMessage
                     id="app.manage"
@@ -100,14 +97,12 @@ class DashboardHeader extends PureComponent {
                 </span>
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
-                {ManageDropdown.map((item, i) => (
+                {ManageDropdown.map(item => (
                   <Dropdown.Item
                     href={item.link}
-                    key={i}
+                    key={item.key}
                     target="_blank"
                   >
-                    {/*item.title*/}
-
                     <FormattedMessage
                       id={item.id}
                       defaultMessage={item.title}

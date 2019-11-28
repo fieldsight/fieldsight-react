@@ -5,6 +5,8 @@ import Modal from './common/Modal';
 import InputElement from './common/InputElement';
 import RightContentCard from './common/RightContentCard';
 
+/* eslint-disable */
+
 class SiteManage extends Component {
   constructor(props) {
     super(props);

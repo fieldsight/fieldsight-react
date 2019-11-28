@@ -5,7 +5,6 @@ import InputElement from '../common/InputElement';
 import RightContentCard from '../common/RightContentCard';
 import Table from '../common/Table';
 import Loader from '../common/Loader';
-import { FormattedMessage } from 'react-intl';
 
 import { successToast, errorToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
@@ -328,6 +327,7 @@ export default class TermAndLabel extends Component {
                 tableRow={Object.entries(restLabels)}
               />
               <button
+                type="button"
                 className="fieldsight-btn"
                 onClick={editHandler}
               >

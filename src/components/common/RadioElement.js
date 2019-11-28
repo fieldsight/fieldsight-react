@@ -1,6 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+/* eslint-disable   react/prop-types */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
 const RadioElement = ({
   name,
   checked,
@@ -12,7 +15,6 @@ const RadioElement = ({
 }) => (
   <div className={`radiobox ${className}`}>
     <label>
-      {' '}
       <input
         type="radio"
         name={name}
@@ -21,7 +23,7 @@ const RadioElement = ({
         value={value}
       />
       <i className="helper" />
-      {translation == true ? (
+      {translation === true ? (
         <FormattedMessage id={label} defaultMessage={label} />
       ) : (
         label

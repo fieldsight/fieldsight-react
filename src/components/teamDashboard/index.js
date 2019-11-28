@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Modal from 'react-bootstrap/Modal';
 import { StripeProvider, Elements } from 'react-stripe-elements';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 import DashboardHeader from './dashboardComponent/DashboardHeader';
@@ -339,7 +338,6 @@ class TeamDashboard extends Component {
                 <div className="col-lg-8">
                   <div className="card map">
                     <div className="card-header main-card-header sub-card-header">
-                      {/* <h5>Project maps</h5>*/}
                       <h5>
                         <FormattedMessage
                           id="app.project-maps"
@@ -353,11 +351,7 @@ class TeamDashboard extends Component {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-<<<<<<< HEAD
-                          <i className="la la-map" /> {/*full map*/}
-=======
                           <i className="la la-map" />
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                           <FormattedMessage
                             id="app.full-map"
                             defaultMessage="Full map"
@@ -376,7 +370,6 @@ class TeamDashboard extends Component {
                 <div className="col-lg-4">
                   <div className="card project-list">
                     <div className="card-header main-card-header sub-card-header">
-                      {/* <h5>Projects</h5>*/}
                       <h5>
                         <FormattedMessage
                           id="app.projects"
@@ -421,7 +414,7 @@ class TeamDashboard extends Component {
                             defaultMessage="Admin"
                           />
                         </h5>
-                        {/*<h5>Admin</h5>
+                        {/* <h5>Admin</h5>
                          <div className="dash-btn">
                           <form className="floating-form">
                             <div className="form-group mr-0">

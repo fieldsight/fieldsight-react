@@ -1,6 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+/* eslint-disable   react/prop-types */
+
 const RightContentCard = ({
   title,
   addButton,
@@ -15,7 +17,12 @@ const RightContentCard = ({
       </h5>
       {addButton && (
         <div className="add-btn">
-          <a onClick={toggleModal}>
+          <a
+            onClick={toggleModal}
+            tabIndex="0"
+            role="button"
+            onKeyDown={toggleModal}
+          >
             <span>
               <i className="la la-plus" />
             </span>

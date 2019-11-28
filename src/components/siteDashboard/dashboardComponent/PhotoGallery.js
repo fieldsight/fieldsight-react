@@ -176,7 +176,7 @@ class PhotoGallery extends Component {
       <div className="col-lg-6">
         <div className="card recent-photo">
           <div className="card-header main-card-header sub-card-header">
-            {/* <h5>Recent Pictures</h5>*/}
+            {/* <h5>Recent Pictures</h5> */}
             <h5>
               <FormattedMessage
                 id="app.recent-pictures"
@@ -189,6 +189,7 @@ class PhotoGallery extends Component {
                   href={`/fieldsight/site/all-pictures/${siteId}/`}
                   className="fieldsight-btn"
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <FormattedMessage
                     id="app.view-all"

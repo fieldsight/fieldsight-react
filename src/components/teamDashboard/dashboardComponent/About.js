@@ -12,7 +12,6 @@ class About extends PureComponent {
         <div className="card ">
           <div className="about">
             <div className="card-header main-card-header sub-card-header">
-              {/*<h5>About</h5>*/}
               <h5>
                 <FormattedMessage
                   id="app.about"

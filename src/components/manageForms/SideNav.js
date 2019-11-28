@@ -15,6 +15,13 @@ import {
   getSharedFormList,
 } from '../../actions/manageFormActions';
 
+/* eslint-disable  react/prop-types */
+/* eslint-disable  no-unneeded-ternary */
+/* eslint-disable  consistent-return */
+/* eslint-disable  react/no-access-state-in-setstate */
+/* eslint-disable  react/no-did-update-set-state */
+/* eslint-disable   prefer-destructuring */
+
 const urls = [
   'fv3/api/project-regions-types/',
   'fv3/api/myforms/',
@@ -24,6 +31,7 @@ const urls = [
 
 class SideNav extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -38,6 +46,51 @@ class SideNav extends Component {
     };
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+    const {
+      props: {
+        match: {
+          url,
+          params: { id },
+        },
+      },
+    } = this;
+
+    const splitArr = url.split('/');
+    const isProjectForm = splitArr.includes('project');
+    const isSiteForm = splitArr.includes('site');
+    this.setState(
+      state => {
+        if (isProjectForm) {
+          return {
+            loader: true,
+            isProjectForm,
+          };
+        }
+        if (isSiteForm) {
+          return { loader: true, isProjectForm: false };
+        }
+      },
+      () => {
+        this.requestForms(id);
+      },
+    );
+  }
+
+  componentDidUpdate(prevProps) {
+    const { manageForms } = this.props;
+    if (prevProps.manageForms !== manageForms) {
+      this.setState({
+        formProps: manageForms,
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   requestForms(id) {
     axios
       .all(
@@ -46,16 +99,17 @@ class SideNav extends Component {
             return i === 0
               ? axios.get(`${url}${id}/`)
               : axios.get(url);
-          } else {
-            return i > 0 ? axios.get(url) : '';
           }
+          // else {
+          //   return i > 0 ? axios.get(url) : '';
+          // }
         }),
       )
       .then(
         axios.spread((list, myForms, projectForms, sharedForms) => {
           if (this._isMounted) {
             this.setState(state => {
-              if (!!this.state.isProjectForm) {
+              if (this.state.isProjectForm) {
                 const regions = list.data.regions;
                 const types = list.data.site_types;
                 return {
@@ -80,14 +134,15 @@ class SideNav extends Component {
                   sharedForms: sharedForms.data,
                   loader: false,
                 };
-              } else {
-                return {
-                  myForms: myForms.data,
-                  projectForms: projectForms.data,
-                  sharedForms: sharedForms.data,
-                  loader: false,
-                };
               }
+              // else {
+              //   return {
+              //     myForms: myForms.data,
+              //     projectForms: projectForms.data,
+              //     sharedForms: sharedForms.data,
+              //     loader: false,
+              //   };
+              // }
             });
           }
         }),
@@ -95,45 +150,6 @@ class SideNav extends Component {
       .catch(err => {});
   }
 
-  componentDidMount() {
-    this._isMounted = true;
-    const {
-      props: {
-        match: {
-          url,
-          params: { id },
-        },
-      },
-    } = this;
-
-    const splitArr = url.split('/');
-    const isProjectForm = splitArr.includes('project');
-    const isSiteForm = splitArr.includes('site');
-    this.setState(
-      state => {
-        if (isProjectForm) {
-          return {
-            loader: true,
-            isProjectForm,
-          };
-        } else if (isSiteForm) {
-          return { loader: true, isProjectForm: false };
-        }
-      },
-      () => {
-        this.requestForms(id);
-      },
-    );
-  }
-
-  componentDidUpdate(prevProps) {
-    const { manageForms } = this.props;
-    if (prevProps.manageForms !== manageForms) {
-      this.setState({
-        formProps: manageForms,
-      });
-    }
-  }
   render() {
     const {
       props: {
@@ -169,7 +185,6 @@ class SideNav extends Component {
               style={{ minHeight: height }}
             >
               <div className="card-header main-card-header">
-                {/*<h5>Manage Forms</h5>*/}
                 <FormattedMessage
                   id="app.manage-forms"
                   defaultMessage="Manage Forms"
@@ -177,15 +192,12 @@ class SideNav extends Component {
               </div>
               <div className="card-body">
                 <div className="manage_group">
-                  {!!isProjectForm && (
+                  {isProjectForm && (
                     <h5>
-                      {
-                        /*Site-Specific Forms*/
-                        <FormattedMessage
-                          id="app.site-specific-forms"
-                          defaultMessage="Site Specific Forms"
-                        />
-                      }
+                      <FormattedMessage
+                        id="app.site-specific-forms"
+                        defaultMessage="Site Specific Forms"
+                      />
                     </h5>
                   )}
                   <ul className="nav nav-tabs flex-column border-tabs">
@@ -193,12 +205,11 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/generalform`}
                         className={
-                          pathname == `${url}/generalform`
+                          pathname === `${url}/generalform`
                             ? 'nav-link active'
                             : 'nav-link'
                         }
                       >
-                        {/*General forms*/}
                         <FormattedMessage
                           id="app.general-forms"
                           defaultMessage="General forms"
@@ -209,12 +220,11 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/scheduleform`}
                         className={
-                          pathname == `${url}/scheduleform`
+                          pathname === `${url}/scheduleform`
                             ? 'nav-link active'
                             : 'nav-link'
                         }
                       >
-                        {/*Scheduled forms*/}
                         <FormattedMessage
                           id="app.scheduled-form"
                           defaultMessage="Scheduled forms"
@@ -225,12 +235,11 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/stageform`}
                         className={
-                          pathname == `${url}/stageform`
+                          pathname === `${url}/stageform`
                             ? 'nav-link active'
                             : 'nav-link'
                         }
                       >
-                        {/* Staged forms*/}
                         <FormattedMessage
                           id="app.staged-form"
                           defaultMessage="Staged Forms"
@@ -241,7 +250,6 @@ class SideNav extends Component {
                 </div>
                 {isProjectForm && (
                   <div className="manage_group mrt-15">
-                    {/*<h5>Project-Wide Forms</h5>*/}
                     <h5>
                       <FormattedMessage
                         id="app.project-wide-forms"
@@ -257,12 +265,11 @@ class SideNav extends Component {
                         <Link
                           to={`${url}/wide/generalform`}
                           className={
-                            pathname == `${url}/wide/generalform`
+                            pathname === `${url}/wide/generalform`
                               ? 'nav-link active'
                               : 'nav-link'
                           }
                         >
-                          {/*General forms*/}
                           <FormattedMessage
                             id="app.general-forms"
                             defaultMessage="General forms"
@@ -363,10 +370,6 @@ class SideNav extends Component {
         </Switch>
       </>
     );
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 

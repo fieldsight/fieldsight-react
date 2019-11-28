@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+
 import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
 import { DotLoader } from '../../../myForm/Loader';
@@ -170,7 +170,6 @@ class SubmissionData extends Component {
         </nav>
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            {/* <h5>Project Submissions</h5>*/}
             <h5>
               <FormattedMessage
                 id="app.project-submission"
@@ -180,24 +179,11 @@ class SubmissionData extends Component {
             <div className="dash-btn">
               <form className="floating-form">
                 <div className="form-group mr-0">
-<<<<<<< HEAD
-                  <input
-                    type="search"
-                    className="form-control"
-                    onChange={e => this.handleChange(e)}
-                    required
-                  />
-=======
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                   <label htmlFor="input">
                     <FormattedMessage
                       id="app.teams-search"
                       defaultMessage="Search"
                     />
-<<<<<<< HEAD
-                  </label>
-                  <i className="la la-search"></i>
-=======
                     <input
                       type="search"
                       className="form-control"
@@ -206,7 +192,6 @@ class SubmissionData extends Component {
                     />
                   </label>
                   <i className="la la-search" />
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                 </div>
               </form>
             </div>
@@ -219,7 +204,7 @@ class SubmissionData extends Component {
               >
                 <thead>
                   <tr>
-                    {/* <th>S.N.</th>*/}
+                    {/* <th>S.N.</th> */}
                     {!isSurvey && (
                       <th>
                         <FormattedMessage
@@ -243,30 +228,18 @@ class SubmissionData extends Component {
                       />
                     </th>
                     <th>
-<<<<<<< HEAD
-=======
-                      {' '}
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                       <FormattedMessage
                         id="app.submission-by"
                         defaultMessage="Submission By"
                       />
                     </th>
                     <th>
-<<<<<<< HEAD
-=======
-                      {' '}
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                       <FormattedMessage
                         id="app.submission-date"
                         defaultMessage="Submission Date"
                       />
                     </th>
                     <th>
-<<<<<<< HEAD
-=======
-                      {' '}
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                       <FormattedMessage
                         id="app.action"
                         defaultMessage="Action"

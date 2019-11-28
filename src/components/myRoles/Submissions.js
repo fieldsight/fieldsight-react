@@ -43,7 +43,7 @@ class Submissions extends PureComponent {
                         <FormattedMessage
                           id="app.in"
                           defaultMessage="in"
-                        />{' '}
+                        />
                         <a href={sub.extra_object_url}>
                           <b>{sub.extra_object}</b>
                         </a>

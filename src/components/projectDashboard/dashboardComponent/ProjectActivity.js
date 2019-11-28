@@ -22,7 +22,7 @@ const ShowAcitivity = props => (
       </div>
       <div className="count-content">
         <h4>{props.value}</h4>
-        {/*<h6>{props.name}</h6>*/}
+
         <h6>
           <FormattedMessage
             id={props.id}
@@ -41,7 +41,6 @@ class ProjectActivity extends React.PureComponent {
       <div className="dashboard-counter mrt-30 bg-counter">
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            {/* <h5>Project activity</h5>*/}
             <h5>
               <FormattedMessage
                 id="app.project-activity"

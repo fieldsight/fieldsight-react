@@ -16,3 +16,5 @@ export const getSiteUser = id => dispatch => {
       // });
     });
 };
+
+export default getSiteUser;

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
 const FreePlan = ({ period, plan }) => (
   <div className="col-md-4">
@@ -20,7 +21,7 @@ const FreePlan = ({ period, plan }) => (
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong>{' '}
+            <strong>{plan.submissions}</strong>
             <FormattedMessage
               id="app.submissions"
               defaultMessage="Submissions"
@@ -34,17 +35,16 @@ const FreePlan = ({ period, plan }) => (
               id="app.projects"
               defaultMessage="Projects"
             />
-            , <strong>10</strong>
+            <strong>,10</strong>
             <FormattedMessage id="app.sites" defaultMessage="Sites" />
           </li>
           <li>
             <strong>
-              {' '}
               <FormattedMessage
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.formStageSchedules"
               defaultMessage="Forms, Stages & Schedules"
@@ -52,12 +52,11 @@ const FreePlan = ({ period, plan }) => (
           </li>
           <li>
             <strong>
-              {' '}
               <FormattedMessage
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.reportDashboardsMaps"
               defaultMessage="Reports, Dashboards & Maps"
@@ -99,7 +98,7 @@ const StarterPlan = ({ period, plan, handleSelect }) => (
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong>{' '}
+            <strong>{plan.submissions}</strong>
             <FormattedMessage
               id="app.submissions"
               defaultMessage="Submissions"
@@ -111,7 +110,7 @@ const StarterPlan = ({ period, plan, handleSelect }) => (
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.userProjectSites"
               defaultMessage="Users, Projects, Sites"
@@ -123,7 +122,7 @@ const StarterPlan = ({ period, plan, handleSelect }) => (
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.formStageSchedules"
               defaultMessage="Forms, Stages & Schedules"
@@ -135,7 +134,7 @@ const StarterPlan = ({ period, plan, handleSelect }) => (
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.reportDashboardsMaps"
               defaultMessage="Reports, Dashboards & Maps"
@@ -178,7 +177,7 @@ const BasicPlan = ({ period, plan, handleSelect }) => (
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong>{' '}
+            <strong>{plan.submissions}</strong>
             <FormattedMessage
               id="app.submissions"
               defaultMessage="Submissions"
@@ -186,12 +185,11 @@ const BasicPlan = ({ period, plan, handleSelect }) => (
           </li>
           <li>
             <strong>
-              {' '}
               <FormattedMessage
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.userProjectSites"
               defaultMessage="Users, Projects, Sites"
@@ -199,12 +197,11 @@ const BasicPlan = ({ period, plan, handleSelect }) => (
           </li>
           <li>
             <strong>
-              {' '}
               <FormattedMessage
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.formStageSchedules"
               defaultMessage="Forms, Stages & Schedules"
@@ -212,12 +209,11 @@ const BasicPlan = ({ period, plan, handleSelect }) => (
           </li>
           <li>
             <strong>
-              {' '}
               <FormattedMessage
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.reportDashboardsMaps"
               defaultMessage="Reports, Dashboards & Maps"
@@ -263,7 +259,7 @@ const ExtendedPlan = ({ period, plan, handleSelect }) => (
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong>{' '}
+            <strong>{plan.submissions}</strong>
             <FormattedMessage
               id="app.submissions"
               defaultMessage="Submissions"
@@ -271,12 +267,11 @@ const ExtendedPlan = ({ period, plan, handleSelect }) => (
           </li>
           <li>
             <strong>
-              {' '}
               <FormattedMessage
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.userProjectSites"
               defaultMessage="Users, Projects, Sites"
@@ -284,12 +279,11 @@ const ExtendedPlan = ({ period, plan, handleSelect }) => (
           </li>
           <li>
             <strong>
-              {' '}
               <FormattedMessage
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.formStageSchedules"
               defaultMessage="Forms, Stages & Schedules"
@@ -297,12 +291,11 @@ const ExtendedPlan = ({ period, plan, handleSelect }) => (
           </li>
           <li>
             <strong>
-              {' '}
               <FormattedMessage
                 id="app.unlimited"
                 defaultMessage="Unlimited"
               />
-            </strong>{' '}
+            </strong>
             <FormattedMessage
               id="app.reportDashboardsMaps"
               defaultMessage="Reports, Dashboards & Maps"
@@ -345,7 +338,7 @@ const ProPlan = ({ period, plan, handleSelect }) => (
       <div className="mp-body">
         <ul>
           <li>
-            <strong>{plan.submissions}</strong>{' '}
+            <strong>{plan.submissions}</strong>
             <FormattedMessage
               id="app.submissions"
               defaultMessage="Submissions"
@@ -664,7 +657,7 @@ class PricingStepOne extends PureComponent {
                     id="app.next"
                     defaultMessage="Next"
                   />
-                  <i className="la la-long-arrow-right"></i>
+                  <i className="la la-long-arrow-right" />
                 </button>
               </div>
             )}

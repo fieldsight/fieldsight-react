@@ -4,7 +4,7 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-import { Provider } from 'react-redux';
+
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
@@ -52,12 +52,15 @@ import '../css/line-awesome.min.css';
 import '../scss/style.scss';
 import '../css/custom.css';
 
-import messages_en from '../translations/en.json';
-import messages_ne from '../translations/ne.json';
+import English from '../translations/en.json';
+import Nepali from '../translations/ne.json';
+
+/* eslint-disable react/prop-types */
+/* eslint-disable camelcase */
 
 const messages = {
-  ne: messages_ne,
-  en: messages_en,
+  ne: Nepali,
+  en: English,
 };
 const language = navigator.language.split(/[-_]/)[0]; // language without region code
 
@@ -66,7 +69,7 @@ class App extends Component {
     super(props);
     this.state = {
       height: 0,
-      region: false,
+      // region: false,
       // selectedLanguage: language,
       selected: localStorage.getItem('selected')
         ? localStorage.getItem('selected')
@@ -74,20 +77,22 @@ class App extends Component {
     };
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-  }
-
   componentWillMount() {
     setDefault();
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
+    // this.updateWindowDimensions();
+    // window.addEventListener('resize', this.updateWindowDimensions);
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selected !== this.state.selected) {
       localStorage.setItem('selected', this.state.selected);
     }
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
   onLanguageChangeHandler = e => {
     const { value } = e.target;
 
@@ -95,9 +100,10 @@ class App extends Component {
       selected: value,
     });
   };
+
   render() {
     const { selected } = this.props;
-    //const { selected } = this.state;
+    // const { selected } = this.state;
 
     return (
       <IntlProvider locale={selected} messages={messages[selected]}>
@@ -110,7 +116,7 @@ class App extends Component {
                   label="Select Language"
                   changeHandler={this.onLanguageChangeHandler}
                   value={selected}
-               />*/}
+               /> */}
 
                 <Router>
                   <Switch>

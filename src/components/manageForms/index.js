@@ -1,15 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import SideNav from './SideNav';
+/* eslint-disable react/prop-types */
 
 class ManageForms extends Component {
   constructor(props) {
     super(props);
     this.state = {
       popupModal: false,
-      selectedModals: null,
-      heading: null,
-      modalDatas: null,
       breadcrumb: {},
     };
   }

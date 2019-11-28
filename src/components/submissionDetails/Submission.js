@@ -313,7 +313,7 @@ class Submission extends Component {
                                   id="app.question"
                                   defaultMessage="Question"
                                 />
-                                :{' '}
+                                :
                               </b>
                               {question}
                             </Popup>

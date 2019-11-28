@@ -3,6 +3,10 @@ import { withRouter, Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import isEmpty from '../../utils/isEmpty';
 
+/* eslint-disable  consistent-return */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-array-index-key */
+
 class TeamLeftSidebar extends Component {
   renderNavRoutes = () => {
     const {
@@ -37,7 +41,7 @@ class TeamLeftSidebar extends Component {
 
     return sideNavRoutes.map((route, i) => (
       <Fragment key={i}>
-        {route.title != 'Account Information' && (
+        {route.title !== 'Account Information' && (
           <li className="nav-item" key={i}>
             <Link
               to={route.to}
@@ -51,11 +55,10 @@ class TeamLeftSidebar extends Component {
                 id={route.id}
                 defaultMessage={route.id}
               />
-              {/*route.title*/}
             </Link>
           </li>
         )}
-        {route.title == 'Account Information' && !!teamOwner && (
+        {route.title === 'Account Information' && !!teamOwner && (
           <li className="nav-item" key={i}>
             <Link
               to={route.to}
@@ -69,7 +72,6 @@ class TeamLeftSidebar extends Component {
                 id={route.id}
                 defaultMessage={route.id}
               />
-              {/*route.title*/}
             </Link>
           </li>
         )}

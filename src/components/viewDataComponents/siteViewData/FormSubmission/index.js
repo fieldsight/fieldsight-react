@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
+
 import PropTypes from 'prop-types';
 import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
@@ -151,7 +151,6 @@ class SubmissionData extends Component {
         </nav>
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            {/*<h5>Site Submissions</h5>*/}
             <h5>
               <FormattedMessage
                 id="app.site-submissions"
@@ -185,7 +184,7 @@ class SubmissionData extends Component {
               >
                 <thead>
                   <tr>
-                    {/*<th>S.N.</th>*/}
+                    {/* <th>S.N.</th> */}
                     <th>
                       <FormattedMessage
                         id="app.submission-id"

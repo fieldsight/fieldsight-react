@@ -14,3 +14,5 @@ export const getsiteViewData = (id, type) => dispatch => {
       console.log(err);
     });
 };
+
+export default getsiteViewData;

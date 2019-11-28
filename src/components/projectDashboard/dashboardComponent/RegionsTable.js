@@ -2,9 +2,9 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import { FormattedMessage } from 'react-intl';
 import { DotLoader } from '../../myForm/Loader';
 import isEmpty from '../../../utils/isEmpty';
-import { FormattedMessage } from 'react-intl';
 import withPagination from '../../../hoc/WithPagination';
 import TableHeader from '../../common/TableHeader';
 import TableRow from '../../common/TableRow';
@@ -34,7 +34,6 @@ class RegionsTable extends React.Component {
         ? [
             `${terms.region} ID`,
             `${terms.region} Name`,
-            ,
             'app.created-date',
             'app.totalSites',
           ]

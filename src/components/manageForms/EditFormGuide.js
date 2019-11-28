@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import InputElement from '../common/InputElement';
 
+/* eslint-disable  consistent-return */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable camelcase */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/no-array-index-key */
+
 const getFilename = name => {
   const fileName = name.split('/');
   return fileName[fileName.length - 1];
@@ -32,7 +39,7 @@ class EditFormGuide extends Component {
       srcs: props.data.em_images
         ? getImages(this.props.data.em_images)
         : [],
-      file: {},
+      // file: {},
     };
   }
 
@@ -92,7 +99,7 @@ class EditFormGuide extends Component {
       props: { handleUpdateGuide },
     } = this;
     let body = {};
-    if (!!id) {
+    if (id) {
       body = { ...data, id };
     } else {
       body = { ...data };
@@ -154,16 +161,16 @@ class EditFormGuide extends Component {
                       return (
                         <section key={`image_${index}`}>
                           <div className="upload-form">
-                            <img src={each} alt="Preview Image" />
+                            <img src={each} alt="" />
                           </div>
                           <div {...getRootProps()}>
-                            <input
-                              {...getInputProps()}
-                              multiple={true}
-                            />
+                            <input {...getInputProps()} multiple />
                             <div className="upload-icon" />
 
-                            <button className="fieldsight-btn">
+                            <button
+                              className="fieldsight-btn"
+                              type="button"
+                            >
                               Upload
                               <i className="la la-cloud-upload" />
                             </button>
@@ -187,11 +194,14 @@ class EditFormGuide extends Component {
                               <div {...getRootProps()}>
                                 <input
                                   {...getInputProps()}
-                                  multiple={true}
+                                  multiple
                                 />
                                 <div className="upload-icon" />
                                 <h3>Drag & Drop an image</h3>
-                                <button className="fieldsight-btn">
+                                <button
+                                  className="fieldsight-btn"
+                                  type="button"
+                                >
                                   Upload
                                   <i className="la la-cloud-upload" />
                                 </button>
@@ -208,7 +218,7 @@ class EditFormGuide extends Component {
           </div>
           <div className="col-md-12">
             <div className="form-group">
-              <label>{' Attach File'}</label>
+              <label>Attach File</label>
               {is_pdf ? (
                 <Dropzone
                   accept=".pdf"
@@ -218,7 +228,7 @@ class EditFormGuide extends Component {
                     return (
                       <section>
                         <div className="upload-form">
-                          <i className="la la-file-o"></i>
+                          <i className="la la-file-o" />
                           <span>{fileName}</span>
                         </div>
                         <div {...getRootProps()}>
@@ -229,7 +239,10 @@ class EditFormGuide extends Component {
                           />
                           <div className="upload-icon" />
 
-                          <button className="fieldsight-btn">
+                          <button
+                            className="fieldsight-btn"
+                            type="button"
+                          >
                             Upload
                             <i className="la la-cloud-upload" />
                           </button>
@@ -256,7 +269,10 @@ class EditFormGuide extends Component {
                                 />
                                 <div className="upload-icon" />
                                 <h3>Drag & Drop a file</h3>
-                                <button className="fieldsight-btn">
+                                <button
+                                  className="fieldsight-btn"
+                                  type="button"
+                                >
                                   Upload
                                   <i className="la la-cloud-upload" />
                                 </button>

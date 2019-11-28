@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { Table } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FormattedMessage } from 'react-intl';
-import { getProjectList } from '../../actions/projectListAction';
+import getProjectList from '../../actions/projectListAction';
 /* eslint-disable react/prop-types  */
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 
@@ -77,7 +77,6 @@ class ProjectList extends Component {
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-              {/*<h5>Project List</h5>*/}
               <h5>
                 <FormattedMessage
                   id="app.project-list"
@@ -95,20 +94,19 @@ class ProjectList extends Component {
                       required
                     />
                     <label htmlFor="input">
-                      {/*Search*/}
                       <FormattedMessage
                         id="app.teams-search"
                         defaultMessage="Search"
                       />
                     </label>
-                    <i className="la la-search"></i>
+                    <i className="la la-search" />
                   </div>
                 </form>
                 <a
                   href={`/fieldsight/application/#/project-add/${id}`}
                   className="fieldsight-btn"
                 >
-                  <i className="la la-plus"></i>
+                  <i className="la la-plus" />
                 </a>
               </div>
             </div>
@@ -167,9 +165,9 @@ class ProjectList extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {projects.map((project, key) => {
+                      {projects.map(project => {
                         return (
-                          <tr key={key}>
+                          <tr key={project.id}>
                             <td>
                               <a
                                 href={`/fieldsight/application/#/project-dashboard/${project.id}`}

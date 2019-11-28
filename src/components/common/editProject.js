@@ -6,24 +6,38 @@ import Cropper from 'react-cropper';
 import 'leaflet/dist/leaflet.css';
 import { FormattedMessage } from 'react-intl';
 
-import Modal from '../common/Modal';
-import InputElement from '../common/InputElement';
-import SelectElement from '../common/SelectElement';
-import RightContentCard from '../common/RightContentCard';
-import CheckBox from '../common/CheckBox';
-import Loader from '../common/Loader';
+import Modal from './Modal';
+import InputElement from './InputElement';
+import SelectElement from './SelectElement';
+import RightContentCard from './RightContentCard';
+import CheckBox from './CheckBox';
+import Loader from './Loader';
+
+const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
+const iconUrl = require('leaflet/dist/images/marker-icon.png');
+const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
+
+/* eslint-disable   react/prop-types */
+/* eslint-disable   camelcase */
+/* eslint-disable   react/no-array-index-key */
+/* eslint-disable   jsx-a11y/label-has-associated-control */
+/* eslint-disable   no-shadow */
+/* eslint-disable  no-return-assign */
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
 });
-
 class EditProject extends Component {
-  state = {
-    data: '',
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: '',
+    };
+  }
 
   imageCroper = () => {
     const { cropImage } = this.props;
@@ -80,12 +94,12 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.name"
                 name="name"
                 value={name}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -99,22 +113,22 @@ class EditProject extends Component {
                 }
                 changeHandler={onSelectChangeHandler}
                 value={selectedSector && selectedSector}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <SelectElement
                 className="form-control"
                 label="app.subSector"
-                translation={true}
+                translation
                 options={
                   subSectors.length > 0
                     ? subSectors.map(subSect => subSect)
                     : subSectors
                 }
-                changeHandler={e =>
-                  onSelectChangeHandler(e, 'subSect')
-                }
+                changeHandler={e => {
+                  onSelectChangeHandler(e, 'subSect');
+                }}
                 value={selectedSubSector && selectedSubSector}
               />
             </div>
@@ -128,7 +142,7 @@ class EditProject extends Component {
                 name="phone"
                 value={phone}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -141,7 +155,7 @@ class EditProject extends Component {
                 name="email"
                 value={email}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -154,7 +168,7 @@ class EditProject extends Component {
                 name="address"
                 value={address}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -167,7 +181,7 @@ class EditProject extends Component {
                   name="website"
                   value={website}
                   changeHandler={onChangeHandler}
-                  translation={true}
+                  translation
                 />
               </div>
             </div>
@@ -181,7 +195,7 @@ class EditProject extends Component {
                   name="donor"
                   value={donor}
                   changeHandler={onChangeHandler}
-                  translation={true}
+                  translation
                 />
               </div>
             </div>
@@ -191,7 +205,7 @@ class EditProject extends Component {
                   checked={cluster_sites || ''}
                   label="app.enable/disable"
                   changeHandler={handleCheckbox}
-                  translation={true}
+                  translation
                 />
               </div>
             </div>
@@ -200,12 +214,12 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.description"
                 name="public_desc"
                 value={public_desc}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -214,7 +228,7 @@ class EditProject extends Component {
                   <FormattedMessage
                     id="app.map"
                     defaultMessage="Map"
-                  />{' '}
+                  />
                   <sup>*</sup>
                 </label>
 
@@ -236,7 +250,7 @@ class EditProject extends Component {
                             id="app.name"
                             defaultMessage="Name"
                           />
-                          :{' '}
+                          :
                         </b>
                         {name}
                       </Popup>
@@ -248,14 +262,14 @@ class EditProject extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
-                        required={true}
+                        required
                         label="app.latitude"
                         name="latitude"
                         value={latitude}
-                        changeHandler={e =>
-                          onChangeHandler(e, 'latitude')
-                        }
-                        translation={true}
+                        changeHandler={e => {
+                          onChangeHandler(e, 'latitude');
+                        }}
+                        translation
                       />
                     </div>
 
@@ -264,14 +278,14 @@ class EditProject extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
-                        required={true}
+                        required
                         label="app.longitude"
                         name="longitude"
                         value={longitude}
-                        changeHandler={e =>
-                          onChangeHandler(e, 'longitude')
-                        }
-                        translation={true}
+                        changeHandler={e => {
+                          onChangeHandler(e, 'longitude');
+                        }}
+                        translation
                       />
                     </div>
                   </div>
@@ -282,7 +296,6 @@ class EditProject extends Component {
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label>
-                  {' '}
                   {cropResult ? (
                     <FormattedMessage
                       id="app.preview"
@@ -303,10 +316,7 @@ class EditProject extends Component {
                       return (
                         <section>
                           <div className="upload-form">
-                            <img
-                              src={cropResult}
-                              alt="Cropped Image"
-                            />
+                            <img src={cropResult} alt="" />
                           </div>
                           <div {...getRootProps()}>
                             <input
@@ -315,7 +325,10 @@ class EditProject extends Component {
                             />
                             <div className="upload-icon" />
 
-                            <button className="fieldsight-btn">
+                            <button
+                              className="fieldsight-btn"
+                              type="button"
+                            >
                               <FormattedMessage
                                 id="app.upload"
                                 defaultMessage="Upload"
@@ -349,7 +362,10 @@ class EditProject extends Component {
                                       defaultMessage="Drag & Drop an image"
                                     />
                                   </h3>
-                                  <button className="fieldsight-btn">
+                                  <button
+                                    className="fieldsight-btn"
+                                    type="button"
+                                  >
                                     <FormattedMessage
                                       id="app.upload"
                                       defaultMessage="Upload"
@@ -370,7 +386,7 @@ class EditProject extends Component {
 
             <div className="col-sm-12">
               <button
-                type="submit"
+                type="button"
                 className="fieldsight-btn pull-right"
               >
                 <FormattedMessage
@@ -399,6 +415,7 @@ class EditProject extends Component {
                       className="fieldsight-btn"
                       style={{ marginTop: '15px' }}
                       onClick={this.imageCroper}
+                      type="button"
                     >
                       <FormattedMessage
                         id="app.saveImage"
@@ -425,7 +442,7 @@ class EditProject extends Component {
             </div>
           </Modal>
         )}
-        {isLoading && <Loader loaded={loaded} />}
+        {/* {isLoading && <Loader loaded={loaded} />} */}
       </RightContentCard>
     );
   }

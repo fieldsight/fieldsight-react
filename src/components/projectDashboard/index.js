@@ -24,6 +24,7 @@ import {
 } from '../../actions/projectDashboardActions';
 /* eslint-disable camelcase */
 /* eslint-disable react/prop-types  */
+/* eslint-disable react/jsx-one-expression-per-line  */
 
 const INITIAL_STATE = {
   activeTab: 'site',
@@ -43,9 +44,13 @@ class ProjectDashboard extends React.Component {
   }
 
   componentWillMount() {
+    console.log(this.props, 'this.props');
     const {
-      params: {
-        match: { id: projectId },
+      match: {
+        params: {
+          id: projectId,
+          // projectId: id,
+        },
       },
       // getProgressTableData,
       // getProjectDashboard,
@@ -236,7 +241,7 @@ class ProjectDashboard extends React.Component {
                       }
                       defaultMessage="School Map"
                     />
-                    </h5>*/}
+                    </h5> */}
                   <div className="dash-btn">
                     <a
                       href={`/fieldsight/proj-map/${id}/`}
@@ -244,7 +249,7 @@ class ProjectDashboard extends React.Component {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <i className="la la-map" /> {/*Full map*/}
+                      <i className="la la-map" />
                       <FormattedMessage
                         id="app.full-map"
                         defaultMessage="Full Map"
@@ -281,7 +286,6 @@ class ProjectDashboard extends React.Component {
                           this.toggleTab('site');
                         }}
                       >
-                        {/* Sites*/}
                         <FormattedMessage
                           id="app.sites"
                           defaultMessage="Sites"
@@ -305,7 +309,6 @@ class ProjectDashboard extends React.Component {
                             this.toggleTab('region');
                           }}
                         >
-                          {/*Regions*/}
                           <FormattedMessage
                             id="app.regions"
                             defaultMessage="Regions"
@@ -472,7 +475,6 @@ class ProjectDashboard extends React.Component {
           <div className="progress-table mrb-30">
             <div className="card">
               <div className="card-header main-card-header sub-card-header">
-                {/*<h5>Progress table</h5>*/}
                 <h5>
                   <FormattedMessage
                     id="app.progress-table"
@@ -493,7 +495,6 @@ class ProjectDashboard extends React.Component {
               <div className="col-md-6">
                 <div className="card">
                   <div className="card-header main-card-header sub-card-header">
-                    {/* <h5>Form submissions</h5>*/}
                     <h5>
                       <FormattedMessage
                         id="app.form-submission"
@@ -511,7 +512,6 @@ class ProjectDashboard extends React.Component {
               <div className="col-md-6">
                 <div className="card">
                   <div className="card-header main-card-header sub-card-header">
-                    {/*<h5>Site progress</h5>*/}
                     <h5>
                       <FormattedMessage
                         id="app.site-progress"
@@ -538,7 +538,6 @@ class ProjectDashboard extends React.Component {
               <div className="col-xl-4 col-md-6">
                 <div className="card mangager-list">
                   <div className="card-header main-card-header sub-card-header">
-                    {/* <h5>Project managers</h5>*/}
                     <h5>
                       <FormattedMessage
                         id="app.project-managers"

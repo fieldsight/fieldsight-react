@@ -4,20 +4,27 @@ import { FormattedMessage } from 'react-intl';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable consistent-return */
+
 class LeftSidebar extends Component {
-  static contextType = RegionContext;
+  constructor(props) {
+    super(props);
+    this.contextType = RegionContext;
+  }
 
   translating = title => {
     if (
-      title == 'app.projectInformation' ||
+      title === 'app.projectInformation' ||
       'app.siteTypes' ||
       'app.regions' ||
       'app.mapLayers' ||
       'app.termsAndLabels'
     ) {
       return <FormattedMessage id={title} defaultMessage={title} />;
-    } else {
-      return { title };
+      // } else {
+      //   return { title };
     }
   };
 

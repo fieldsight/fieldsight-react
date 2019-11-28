@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import Modal from '../common/Modal';
 import SiteDocumentTable from './siteDocumentTable';
-import { FormattedMessage } from 'react-intl';
 /* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 

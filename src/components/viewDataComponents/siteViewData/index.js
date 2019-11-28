@@ -4,10 +4,6 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
-<<<<<<< HEAD
-import { FormattedMessage } from 'react-intl';
-=======
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
 
 import ManageFormSetting from './manageFormSetting/ManageFormSetting';
 import ManageGeneralForm from './manageGeneralForm';
@@ -166,7 +162,6 @@ class SiteViewData extends Component {
               <div className="left-sidebar new-sidebar sticky-top">
                 <div className="card">
                   <div className="card-header main-card-header">
-                    {/*<h5>View Data</h5>*/}
                     <h5>
                       <FormattedMessage
                         id="app.view-data"

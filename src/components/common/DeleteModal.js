@@ -1,6 +1,8 @@
 import React from 'react';
-import Modal from './Modal';
 import { FormattedMessage } from 'react-intl';
+import Modal from './Modal';
+
+/* eslint-disable */
 
 const DeleteModal = props => {
   const {

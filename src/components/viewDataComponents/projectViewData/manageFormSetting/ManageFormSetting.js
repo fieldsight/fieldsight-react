@@ -83,7 +83,6 @@ class ManageFormSetting extends PureComponent {
         {!show_submission && (
           <>
             <div className="manage_group">
-              {/* <h5>Site Specific Forms</h5>*/}
               <h5>
                 <FormattedMessage
                   id="app.site-specific-forms"
@@ -102,7 +101,6 @@ class ManageFormSetting extends PureComponent {
                           : 'nav-link'
                       }
                     >
-                      {/*route.title*/}
                       <FormattedMessage
                         id={route.id}
                         defaultMessage={route.title}
@@ -113,7 +111,6 @@ class ManageFormSetting extends PureComponent {
               </ul>
             </div>
             <div className="manage_group mrt-15">
-              {/*<h5>Project-Wide Forms</h5>*/}
               <h5>
                 <FormattedMessage
                   id="app.project-wide-forms"
@@ -132,7 +129,6 @@ class ManageFormSetting extends PureComponent {
                           : 'nav-link'
                       }
                     >
-                      {/*route.title*/}
                       <FormattedMessage
                         id={route.id}
                         defaultMessage={route.title}
@@ -157,7 +153,6 @@ class ManageFormSetting extends PureComponent {
                       : 'nav-link'
                   }
                 >
-                  {/*route.title*/}
                   <FormattedMessage
                     id={route.id}
                     defaultMessage={route.title}

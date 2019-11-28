@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 import DeleteModel from '../common/DeleteModal';
 import Table from '../common/Table';
 import Modal from '../common/Modal';
@@ -8,15 +10,16 @@ import RightContentCard from '../common/RightContentCard';
 import Loader from '../common/Loader';
 import WithContext from '../../hoc/WithContext';
 import isEmpty from '../../utils/isEmpty';
-import axios from 'axios';
 import { RegionContext } from '../../context';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+/* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
+
 class ManageRegion extends Component {
-  static contextType = RegionContext;
   constructor(props) {
     super(props);
+    this.contextType = RegionContext;
     this.state = {
       hide: '',
       response: '',
@@ -25,6 +28,7 @@ class ManageRegion extends Component {
       data: false,
     };
   }
+
   componentDidMount() {
     const { projectId } = this.context;
 
@@ -47,51 +51,53 @@ class ManageRegion extends Component {
       state: { model, hide, cluster_sites },
     } = this;
 
-    let data = {};
+    const data = {};
     data.cluster_sites = cluster_sites;
     data.Project = projectId;
 
-    !model
-      ? axios
-          .post(
-            `/fv3/api/enable-project-cluster-sites/${projectId}/`,
-            data,
-          )
-          .then(res => {
-            this.setState(
-              {
-                hide: !hide,
-                response: res.data.detail,
-                model: true,
-                cluster_sites: res.data.cluster_sites,
-                data: true,
-              },
-              () => this.toast(),
-            );
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      : axios
-          .post(
-            `/fv3/api/enable-project-cluster-sites/${projectId}/`,
-            data,
-          )
-          .then(res => {
-            this.setState(
-              {
-                hide: !hide,
-                response: res.data.detail,
-                model: false,
-                cluster_sites: res.data.cluster_sites,
-                data: true,
-              },
-              () => this.toast(),
-            );
-          })
-          .catch(err => {
-            console.log(err);
-          });
+    if (!model) {
+      axios
+        .post(
+          `/fv3/api/enable-project-cluster-sites/${projectId}/`,
+          data,
+        )
+        .then(res => {
+          this.setState(
+            {
+              hide: !hide,
+              response: res.data.detail,
+              model: true,
+              cluster_sites: res.data.cluster_sites,
+              data: true,
+            },
+            () => this.toast(),
+          );
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .post(
+          `/fv3/api/enable-project-cluster-sites/${projectId}/`,
+          data,
+        )
+        .then(res => {
+          this.setState(
+            {
+              hide: !hide,
+              response: res.data.detail,
+              model: false,
+              cluster_sites: res.data.cluster_sites,
+              data: true,
+            },
+            () => this.toast(),
+          );
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   toast() {
@@ -128,7 +134,6 @@ class ManageRegion extends Component {
         ? [
             `${terms.region} ID`,
             `${terms.region} Name`,
-            ,
             'app.created-date',
             'app.action',
           ]
@@ -186,10 +191,10 @@ class ManageRegion extends Component {
                   defaultMessage="Turn OFF"
                 />
 
-                <div
+                {/* <div
                   className="handle"
                   style={{ left: 'auto', right: '0.1875rem' }}
-                ></div>
+                ></div> */}
               </button>
             ) : (
               <button
@@ -205,7 +210,7 @@ class ManageRegion extends Component {
                   defaultMessage="Turn ON"
                 />
 
-                <div className="handle"></div>
+                {/* <div className="handle"></div> */}
               </button>
             )}
           </div>
@@ -240,26 +245,26 @@ class ManageRegion extends Component {
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
               <InputElement
                 tag="textarea"
                 type="text"
-                required={true}
+                required
                 label="app.name"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">

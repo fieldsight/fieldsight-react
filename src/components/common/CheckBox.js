@@ -1,6 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+/* eslint-disable */
+
 const CheckBox = ({
   name,
   checked,

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+
 import { DotLoader } from '../../myForm/Loader';
 /* eslint-disable camelcase */
 export default class SurveyFormResponseTable extends Component {

@@ -3,14 +3,16 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import uuid from 'uuid/v4';
+import { FormattedMessage } from 'react-intl';
 import { BlockContentLoader } from './Loader';
-import { FormattedMessage, injectIntl } from 'react-intl';
+
+/* eslint-disable */
 
 class Logs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: false,
+      // width: false,
     };
   }
 
@@ -274,7 +276,7 @@ class Logs extends Component {
         }
         return content;
       case 12:
-        if (data.source_uid == user_id) {
+        if (data.source_uid === user_id) {
           content =
             '<span style="color:green;"><b>Sucessfully</b></span> ' +
             data.extra_message +
@@ -437,7 +439,7 @@ class Logs extends Component {
           '</a></b> form.';
         return content;
       case 21:
-        if (data.source_uid == user_id) {
+        if (data.source_uid === user_id) {
           content =
             '<b>TASK INFO : </b>' +
             data.extra_message +
@@ -462,7 +464,7 @@ class Logs extends Component {
         }
         return content;
       case 22:
-        if (data.source_uid == user_id) {
+        if (data.source_uid === user_id) {
           content =
             '<b>TASK INFO : </b>' +
             data.extra_message +
@@ -670,7 +672,7 @@ class Logs extends Component {
         return content;
       case 31:
         const level = 'site';
-        if (data.extra_message == 'project') {
+        if (data.extra_message === 'project') {
           level = 'project';
         }
         content =
@@ -742,7 +744,7 @@ class Logs extends Component {
           '</a></b>.';
         return content;
       case 35:
-        if (data.source_uid == user_id) {
+        if (data.source_uid === user_id) {
           content =
             '<span style="color:green;"><b>Sucessfully</b></span> ' +
             data.extra_message +
@@ -767,7 +769,7 @@ class Logs extends Component {
         }
         return content;
       case 36:
-        if (data.source_uid == user_id) {
+        if (data.source_uid === user_id) {
           content =
             '<span style="color:green;"><b>Sucessfully</b></span> deleted ' +
             data.extra_message +

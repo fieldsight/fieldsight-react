@@ -11,21 +11,28 @@ import AddForm from './AddForm';
 import ManageModal from './ManageModal';
 import Loader from '../common/Loader';
 
+/* eslint-disable  react/prop-types */
+/* eslint-disable  react/no-access-state-in-setstate */
+/* eslint-disable  consistent-return */
+/* eslint-disable  no-unneeded-ternary */
+
 const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  return year + '-' + monthIndex + '-' + dateIdx;
+  const dash = '-';
+  return `${year}  ${dash}  ${monthIndex}  ${dash}  ${dateIdx}`;
 };
 
 class ScheduleForms extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
       id: props.match.params ? props.match.params.id : '',
       data: [],
-      deployStatus: false,
+      // deployStatus: false,
       editGuide: false,
       guideData: {},
       editFormId: '',
@@ -34,7 +41,7 @@ class ScheduleForms extends Component {
       formData: {},
       xf: '',
       loader: false,
-      loaded: 0,
+      // loaded: 0,
       formId: '',
       formTitle: '',
       isProjectForm: '',
@@ -45,24 +52,6 @@ class ScheduleForms extends Component {
       fsxf: '',
       loadReq: false,
     };
-  }
-
-  requestScheduleForm(id, checkUrl) {
-    const apiUrl = checkUrl
-      ? `fv3/api/manage-forms/schedule/?project_id=${id}`
-      : `fv3/api/manage-forms/schedule/?site_id=${id}`;
-
-    axios
-      .get(apiUrl)
-      .then(res => {
-        if (this._isMounted && res.data) {
-          this.setState({ data: res.data, loader: false });
-        }
-      })
-      .catch(err => {
-        const errors = err.response;
-        errorToast(errors.data.error);
-      });
   }
 
   componentDidMount() {
@@ -103,7 +92,7 @@ class ScheduleForms extends Component {
     const searchValue = e.target.value;
 
     if (searchValue) {
-      if (activeTab == 'myForms') {
+      if (activeTab === 'myForms') {
         const filteredData = await myForms.filter(form => {
           return (
             form.title
@@ -118,7 +107,7 @@ class ScheduleForms extends Component {
         this.setState({
           myFormList: filteredData,
         });
-      } else if (activeTab == 'projectForms') {
+      } else if (activeTab === 'projectForms') {
         const awaitedData = await projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
@@ -135,7 +124,7 @@ class ScheduleForms extends Component {
         this.setState({
           projectFormList: awaitedData,
         });
-      } else if (activeTab == 'sharedForms') {
+      } else if (activeTab === 'sharedForms') {
         const filteredData = await sharedForms.filter(form => {
           return (
             form.title
@@ -163,7 +152,7 @@ class ScheduleForms extends Component {
   changeDeployStatus = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
     this.setState({ loadReq: true }, () => {
-      const deployUrl = !!isProjectForm
+      const deployUrl = isProjectForm
         ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=schedule&id=${formId}`
         : `fv3/api/manage-forms/deploy/?site_id=${id}&type=schedule&id=${formId}`;
       axios
@@ -174,9 +163,9 @@ class ScheduleForms extends Component {
               const newData = this.state.data;
               newData.map(each => {
                 const arrItem = { ...each };
-
-                if (each.id == formId) {
-                  each.is_deployed = !isDeploy;
+                let IsDeployed = each.is_deployed;
+                if (each.id === formId) {
+                  IsDeployed = !isDeploy;
                 }
                 return arrItem;
               });
@@ -199,7 +188,7 @@ class ScheduleForms extends Component {
   deleteItem = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
     this.setState({ loadReq: true }, () => {
-      const deleteUrl = !!isProjectForm
+      const deleteUrl = isProjectForm
         ? `fv3/api/manage-forms/delete/?project_id=${id}&type=schedule&id=${formId}`
         : `fv3/api/manage-forms/delete/?site_id=${id}&type=schedule&id=${formId}`;
       axios
@@ -207,7 +196,9 @@ class ScheduleForms extends Component {
         .then(res => {
           this.setState(
             {
-              data: this.state.data.filter(each => each.id != formId),
+              data: this.state.data.filter(
+                each => each.id !== formId,
+              ),
               loadReq: false,
             },
             () => {
@@ -229,7 +220,7 @@ class ScheduleForms extends Component {
       editGuide: !this.state.editGuide,
       guideData: data ? data : {},
       editFormId: formId,
-      fsxf: fsxf,
+      fsxf,
     });
   };
 
@@ -261,9 +252,12 @@ class ScheduleForms extends Component {
               state => {
                 const item = this.state.data;
                 item.map(each => {
-                  const newItem = { ...each };
-                  if (each.id == editFormId) {
-                    each.em = res.data;
+                  const newEach = { ...each };
+                  const newItem = newEach;
+                  let eachEm = each.em;
+
+                  if (each.id === editFormId) {
+                    eachEm = res.data;
                   }
                   return newItem;
                 });
@@ -340,17 +334,17 @@ class ScheduleForms extends Component {
     const { id, xf, isEditForm, isProjectForm } = this.state;
     this.setState({ loadReq: true }, () => {
       if (!isEditForm) {
-        const postUrl = !!isProjectForm
+        const postUrl = isProjectForm
           ? `fv3/api/manage-forms/schedule/?project_id=${id}`
           : `fv3/api/manage-forms/schedule/?site_id=${id}`;
         const payload = {
-          xf: xf,
+          xf,
           default_submission_status: data.status,
           schedule_level_id: data.scheduleType,
           frequency: data.frequency,
           selected_days: data.selectedDays,
           date_range_start: formatDate(data.startDate),
-          ...(!!data.endDate && {
+          ...(data.endDate && {
             date_range_end: formatDate(data.endDate),
           }),
           setting: {
@@ -358,12 +352,12 @@ class ScheduleForms extends Component {
             can_edit: data.isEdit,
             donor_visibility: data.isDonor,
             regions:
-              !!data.regionSelected && data.regionSelected.length > 0
+              data.regionSelected && data.regionSelected.length > 0
                 ? data.regionSelected.map(each => each.id)
                 : [],
             can_delete: data.isDelete,
             types:
-              !!data.typeSelected && data.typeSelected.length > 0
+              data.typeSelected && data.typeSelected.length > 0
                 ? data.typeSelected.map(each => each.id)
                 : [],
           },
@@ -390,7 +384,7 @@ class ScheduleForms extends Component {
             });
           });
       } else {
-        const updateUrl = !!isProjectForm
+        const updateUrl = isProjectForm
           ? `fv3/api/manage-forms/schedule/${data.id}/?project_id=${id}`
           : `fv3/api/manage-forms/schedule/${data.id}/?site_id=${id}`;
         const payload = {
@@ -400,13 +394,13 @@ class ScheduleForms extends Component {
           frequency: data.frequency,
           selected_days: data.selectedDays,
           date_range_start: formatDate(data.startDate),
-          ...(!!data.endDate && {
+          ...(data.endDate && {
             date_range_end: formatDate(data.endDate),
           }),
           setting: {
             id: data.settingId,
             types:
-              !!data.typeSelected && data.typeSelected.length > 0
+              data.typeSelected && data.typeSelected.length > 0
                 ? data.typeSelected.map(each => each.id)
                 : [],
             regions:
@@ -428,11 +422,13 @@ class ScheduleForms extends Component {
               state => {
                 const arr = this.state.data;
                 const newArr = arr.map(item => {
-                  if (item.id == res.data.id) {
-                    return res.data;
-                  } else {
-                    return item;
+                  if (item.id === res.data.id) {
+                    const result = res.data;
+                    return result;
                   }
+                  //  else {
+                  //   return item;
+                  // }
                 });
                 return {
                   data: newArr,
@@ -468,6 +464,24 @@ class ScheduleForms extends Component {
     );
   };
 
+  requestScheduleForm(id, checkUrl) {
+    const apiUrl = checkUrl
+      ? `fv3/api/manage-forms/schedule/?project_id=${id}`
+      : `fv3/api/manage-forms/schedule/?site_id=${id}`;
+
+    axios
+      .get(apiUrl)
+      .then(res => {
+        if (this._isMounted && res.data) {
+          this.setState({ data: res.data, loader: false });
+        }
+      })
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
+  }
+
   render() {
     const {
       state: {
@@ -499,13 +513,13 @@ class ScheduleForms extends Component {
       <div className="col-xl-9 col-lg-8">
         <RightContentCard
           title="app.scheduled-form"
-          addButton={true}
+          addButton
           toggleModal={commonPopupHandler}
-          showText={true}
+          showText
         >
           {loader && <DotLoader />}
 
-          {!loader && !!isProjectForm && (
+          {!loader && isProjectForm && (
             <ScheduleFormTable
               data={data}
               loader={loader}
@@ -542,7 +556,7 @@ class ScheduleForms extends Component {
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleScheduleForm}
-                formData={!!isEditForm && formData}
+                formData={isEditForm && formData}
                 isEditForm={isEditForm}
                 isProjectWide={false}
               />
@@ -565,7 +579,7 @@ class ScheduleForms extends Component {
             <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
-              showButton={true}
+              showButton
               showText="Create Form"
               url="/forms/create/"
               classname="manage-body md-body"

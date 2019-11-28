@@ -3,11 +3,16 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
-import { DotLoader } from '../common/Loader';
+import Loader, { DotLoader } from '../common/Loader';
 import RightContentCard from '../common/RightContentCard';
-import Loader from '../common/Loader';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import InputElement from '../common/InputElement';
+
+/* eslint-disable react/prop-types */
+/* eslint-disable camelcase */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-unneeded-ternary */
 
 const animatedComponents = makeAnimated();
 
@@ -15,6 +20,7 @@ const url = 'fv3/api/team-geolayer/';
 
 export default class TeamMapLayer extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -34,8 +40,6 @@ export default class TeamMapLayer extends Component {
       teamId: props.match.params ? props.match.params.id : '',
       addMap: true,
       selectedMapId: '',
-      src: '',
-      showCropper: false,
       cropResult: '',
       hasProp: false,
       propDropdown: [],
@@ -48,6 +52,10 @@ export default class TeamMapLayer extends Component {
   componentDidMount() {
     this._isMounted = true;
     this.requestLayerData();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   requestLayerData = () => {
@@ -70,18 +78,21 @@ export default class TeamMapLayer extends Component {
         }
       })
       .catch(err => {
-        this._isMounted &&
+        if (this._isMounted) {
           this.setState({
             dotLoader: false,
           });
+        }
+
+        console.log(err);
       });
   };
 
   handleSelectCodeProp = option => {
-    this.setState(state => {
+    this.setState(prevState => {
       return {
         geoLayer: {
-          ...this.state.geoLayer,
+          ...prevState.geoLayer,
           code_prop: option.value,
         },
       };
@@ -89,10 +100,10 @@ export default class TeamMapLayer extends Component {
   };
 
   handleSelectTitleProp = option => {
-    this.setState(state => {
+    this.setState(prevState => {
       return {
         geoLayer: {
-          ...this.state.geoLayer,
+          ...prevState.geoLayer,
           title_prop: option.value,
         },
       };
@@ -103,7 +114,7 @@ export default class TeamMapLayer extends Component {
     const fileName = option.geo_shape_file.split('/');
     const propArr = [];
     this.setState(
-      state => {
+      prevState => {
         if (option.properties.length > 0) {
           option.properties.map(each => {
             if (each !== 'id') {
@@ -119,7 +130,7 @@ export default class TeamMapLayer extends Component {
         return {
           selectedMapId: option.id,
           geoLayer: {
-            ...this.state.geoLayer,
+            ...prevState.geoLayer,
             code_prop: option.code_prop,
             title: option.title,
             title_prop: option.title_prop,
@@ -129,11 +140,11 @@ export default class TeamMapLayer extends Component {
             // geo_shape_file: option.geo_shape_file
           },
           cropResult: option.geo_shape_file,
-          addMap: !this.state.addMap,
+          addMap: !prevState.addMap,
           propDropdown: propArr,
           hasProp: option.properties.length > 0 ? true : false,
           fileName:
-            fileName.length > 0 ? fileName[fileName.length - 1] : '',
+            fileName.length > 0 && fileName[fileName.length - 1],
         };
       },
       () => {
@@ -144,7 +155,6 @@ export default class TeamMapLayer extends Component {
 
   requestHandler = () => {
     const {
-      teamId,
       geoLayer: {
         code_prop,
         title,
@@ -168,7 +178,7 @@ export default class TeamMapLayer extends Component {
     if (Object.keys(geo_shape_file).length > 0)
       formData.append('geo_shape_file', cropResult);
 
-    if (!!selectedMapId) {
+    if (selectedMapId) {
       axios
         .put(`${url}${selectedMapId}/`, formData, {
           onUploadProgress: progressEvent => {
@@ -181,10 +191,10 @@ export default class TeamMapLayer extends Component {
         })
         .then(res => {
           this.setState(
-            {
+            prevState => ({
               isLoading: false,
-              addMap: !this.state.addMap,
-            },
+              addMap: !prevState.addMap,
+            }),
             () => {
               successToast('Map Layer', 'updated');
               this.requestLayerData();
@@ -212,10 +222,10 @@ export default class TeamMapLayer extends Component {
         })
         .then(res => {
           this.setState(
-            {
+            prevState => ({
               isLoading: false,
-              addMap: !this.state.addMap,
-            },
+              addMap: !prevState.addMap,
+            }),
             () => {
               successToast('Map Layer', 'added');
               this.requestLayerData();
@@ -245,8 +255,8 @@ export default class TeamMapLayer extends Component {
 
   toggleNewForm = () => {
     const { state, props } = this;
-    this.setState({
-      addMap: !state.addMap,
+    this.setState(prevState => ({
+      addMap: !prevState.addMap,
       geoLayer: {
         code_prop: '',
         title: '',
@@ -256,22 +266,20 @@ export default class TeamMapLayer extends Component {
         tolerance: '',
       },
       selectedMapId: '',
-      src: '',
-      showCropper: false,
       cropResult: '',
       hasProp: false,
-    });
+    }));
   };
 
   onChangeHandler = e => {
     const { name, value } = e.target;
 
-    this.setState({
+    this.setState(prevState => ({
       geoLayer: {
-        ...this.state.geoLayer,
+        ...prevState.geoLayer,
         [name]: value,
       },
-    });
+    }));
   };
 
   readJsonFile = file => {
@@ -326,17 +334,17 @@ export default class TeamMapLayer extends Component {
             }
           }
         });
-        this.setState({
+        this.setState(prevState => ({
           cropResult: file[0],
           fileName: file[0].name,
           hasProp: true,
           propDropdown: newArr,
           showMsg: '',
           geoLayer: {
-            ...this.state.geoLayer,
+            ...prevState.geoLayer,
             geo_shape_file: file[0],
           },
-        });
+        }));
       };
       reader.readAsText(file[0]);
     } else {
@@ -350,16 +358,14 @@ export default class TeamMapLayer extends Component {
     }
     this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
-      showCropper: false,
-      src: '',
     });
   };
 
-  closeModal = () => {
-    this.setState({
-      showCropper: false,
-    });
-  };
+  // closeModal = () => {
+  //   this.setState({
+  //     showCropper: false,
+  //   });
+  // };
 
   render() {
     const {
@@ -385,11 +391,11 @@ export default class TeamMapLayer extends Component {
       handleSelectCodeProp,
       handleSelectTitleProp,
       readFile,
-      closeModal,
+      // closeModal,
     } = this;
 
     return (
-      <Fragment>
+      <>
         <RightContentCard
           title="Map Layer"
           addButton={addMap}
@@ -398,7 +404,7 @@ export default class TeamMapLayer extends Component {
           {dotLoader && <DotLoader />}
           {!dotLoader && !!addMap && (
             <Select
-              closeMenuOnSelect={true}
+              closeMenuOnSelect
               components={animatedComponents}
               onChange={handleSelectMap}
               defaultValue={initialData}
@@ -414,7 +420,7 @@ export default class TeamMapLayer extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      required={true}
+                      required
                       label="Title"
                       name="title"
                       value={title}
@@ -449,22 +455,21 @@ export default class TeamMapLayer extends Component {
                   <div className="col-xl-8 col-md-6">
                     <div className="form-group">
                       <label>
-                        {' '}
                         {cropResult
                           ? 'Geo shape file'
                           : 'Attach File'}
                       </label>
                       {cropResult ? (
                         <Dropzone
-                          onDrop={acceptedFile =>
-                            readFile(acceptedFile)
-                          }
+                          onDrop={acceptedFile => {
+                            readFile(acceptedFile);
+                          }}
                         >
                           {({ getRootProps, getInputProps }) => {
                             return (
                               <section>
                                 <div className="upload-form">
-                                  <i className="la la-file-o"></i>
+                                  <i className="la la-file-o" />
                                   <span>{fileName}</span>
                                 </div>
                                 <div {...getRootProps()}>
@@ -475,7 +480,10 @@ export default class TeamMapLayer extends Component {
                                   />
                                   <div className="upload-icon" />
 
-                                  <button className="fieldsight-btn">
+                                  <button
+                                    className="fieldsight-btn"
+                                    type="button"
+                                  >
                                     Upload
                                     <i className="la la-cloud-upload" />
                                   </button>
@@ -486,9 +494,9 @@ export default class TeamMapLayer extends Component {
                         </Dropzone>
                       ) : (
                         <Dropzone
-                          onDrop={acceptedFile =>
-                            readFile(acceptedFile)
-                          }
+                          onDrop={acceptedFile => {
+                            readFile(acceptedFile);
+                          }}
                         >
                           {({ getRootProps, getInputProps }) => {
                             return (
@@ -503,7 +511,10 @@ export default class TeamMapLayer extends Component {
                                         />
                                         <div className="upload-icon" />
                                         <h3>Drag & Drop a file</h3>
-                                        <button className="fieldsight-btn">
+                                        <button
+                                          className="fieldsight-btn"
+                                          type="button"
+                                        >
                                           Upload
                                           <i className="la la-cloud-upload" />
                                         </button>
@@ -523,7 +534,7 @@ export default class TeamMapLayer extends Component {
                   {hasProp && (
                     <div className="col-xl-6 col-md-6">
                       <Select
-                        closeMenuOnSelect={true}
+                        closeMenuOnSelect
                         components={animatedComponents}
                         onChange={handleSelectTitleProp}
                         defaultInputValue={title_prop}
@@ -535,7 +546,7 @@ export default class TeamMapLayer extends Component {
                   {hasProp && (
                     <div className="col-xl-6 col-md-6">
                       <Select
-                        closeMenuOnSelect={true}
+                        closeMenuOnSelect
                         components={animatedComponents}
                         onChange={handleSelectCodeProp}
                         defaultInputValue={code_prop}
@@ -576,11 +587,7 @@ export default class TeamMapLayer extends Component {
             // />
           )}
         </RightContentCard>
-      </Fragment>
+      </>
     );
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }

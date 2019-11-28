@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Logs from '../common/Logs';
-import { getProjectLogs } from '../../actions/projectLogsActions';
+import getProjectLogs from '../../actions/projectLogsActions';
 /* eslint-disable react/prop-types  */
 /* eslint-disable camelcase */
 

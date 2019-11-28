@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+
 /* eslint-disable camelcase */
 
 const sideNavRoutes = [
@@ -84,7 +84,6 @@ class ManageFormSetting extends PureComponent {
                       : 'nav-link'
                   }
                 >
-                  {/*route.title*/}
                   <FormattedMessage
                     id={route.id}
                     defaultMessage={route.title}
@@ -106,7 +105,6 @@ class ManageFormSetting extends PureComponent {
                       : 'nav-link'
                   }
                 >
-                  {/*route.title*/}
                   <FormattedMessage
                     id={route.id}
                     defaultMessage={route.title}

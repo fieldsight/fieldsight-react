@@ -27,6 +27,7 @@ class AddSite extends Component {
   }
 
   render() {
+    const { onChangeHandler } = this.props;
     return (
       <>
         <Zoom duration={500}>
@@ -41,6 +42,9 @@ class AddSite extends Component {
                     />
                   </h5>
                   <span
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={this.props.closePopup}
                     className="popup-close"
                     onClick={this.props.closePopup}
                   >
@@ -228,14 +232,14 @@ class AddSite extends Component {
                                     formType="editForm"
                                     tag="input"
                                     type="number"
-                                    required={true}
+                                    required
                                     label="app.latitude"
                                     name="latitude"
                                     value={27.2234}
-                                    translation={true}
-                                    changeHandler={e =>
-                                      onChangeHandler(e, 'latitude')
-                                    }
+                                    translation
+                                    changeHandler={e => {
+                                      onChangeHandler(e, 'latitude');
+                                    }}
                                   />
                                 </div>
 
@@ -244,14 +248,14 @@ class AddSite extends Component {
                                     formType="editForm"
                                     tag="input"
                                     type="number"
-                                    required={true}
+                                    required
                                     label="app.longitude"
                                     name="longitude"
                                     value={87.23232}
-                                    translation={true}
-                                    changeHandler={e =>
-                                      onChangeHandler(e, 'longitude')
-                                    }
+                                    translation
+                                    changeHandler={e => {
+                                      onChangeHandler(e, 'longitude');
+                                    }}
                                   />
                                 </div>
                               </div>

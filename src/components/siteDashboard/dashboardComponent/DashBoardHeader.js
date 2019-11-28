@@ -237,7 +237,6 @@ class DashboardHeader extends Component {
                 className="fieldsight-btn"
               >
                 <i className="fa fa-paste" />
-                {/* <span>Data</span>*/}
 
                 <span>
                   <FormattedMessage
@@ -255,7 +254,6 @@ class DashboardHeader extends Component {
                     key={i}
                     target="_blank"
                   >
-                    {/*item.title*/}
                     <FormattedMessage
                       id={item.id}
                       defaultMessage={item.title}
@@ -274,7 +272,7 @@ class DashboardHeader extends Component {
                   className="fieldsight-btn"
                 >
                   <i className="fa fa-cog" />
-                  {/*<span>Manage</span>*/}
+
                   <span>
                     <FormattedMessage
                       id="app.manage"
@@ -290,7 +288,7 @@ class DashboardHeader extends Component {
                       key={i}
                       target="_blank"
                     >
-                      {!!item.id ? (
+                      {item.id ? (
                         <FormattedMessage
                           id={item.id}
                           defaultMessage={item.title}
@@ -350,7 +348,13 @@ class DashboardHeader extends Component {
 
             {hasWritePermission && (
               <div className="add-data">
-                <a onClick={() => openModal('Header')}>
+                <a
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => openModal('Header')}
+                  className="popup-close"
+                  onClick={() => openModal('Header')}
+                >
                   <FormattedMessage
                     id="app.addData"
                     defaultMessage="Add Data"

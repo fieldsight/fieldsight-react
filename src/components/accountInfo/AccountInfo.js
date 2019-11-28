@@ -4,6 +4,8 @@ import Axios from 'axios';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import Loader from '../common/Loader';
 
+/* eslint-disable */
+
 class AccountInfo extends Component {
   constructor(props) {
     super(props);

@@ -19,7 +19,7 @@ class MyFormContent extends PureComponent {
               <div className="tab-pane fade show active">
                 <div className="card no-boxshadow">
                   <div className="card-header main-card-header sub-card-header">
-                    {/* <h5>My Forms</h5>*/}
+                    {/* <h5>My Forms</h5> */}
                     <h5>
                       <FormattedMessage
                         id="app.my-forms"

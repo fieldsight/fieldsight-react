@@ -9,6 +9,8 @@ import L, { latLngBounds } from 'leaflet';
 
 import { BlockContentLoader } from './Loader';
 
+/* eslint-disable  */
+
 const { BaseLayer } = LayersControl;
 
 class SiteMap extends Component {

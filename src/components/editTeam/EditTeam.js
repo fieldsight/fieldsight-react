@@ -12,13 +12,25 @@ import RightContentCard from '../common/RightContentCard';
 import Loader from '../common/Loader';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import 'leaflet/dist/leaflet.css';
-import { markerIcon } from '../common/Marker';
+import markerIcon from '../common/Marker';
+
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable consistent-return */
+/* eslint-disable camelcase */
+/* eslint-disable no-shadow */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
+const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
+const iconUrl = require('leaflet/dist/images/marker-icon.png');
+const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
 });
 
 const urls = [
@@ -28,9 +40,9 @@ const urls = [
 
 class EditTeam extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
-
     this.state = {
       teamId: props.match.params ? props.match.params.id : '',
       team: {
@@ -74,7 +86,7 @@ class EditTeam extends Component {
       )
       .then(
         axios.spread((team, types) => {
-          teamData(team.data.name);
+          // teamData(team.data.name);
 
           if (this._isMounted) {
             if (team && types) {
@@ -103,7 +115,7 @@ class EditTeam extends Component {
               this.setState({
                 team: team.data,
                 teamTypes: teamType,
-                countryList: countryList,
+                countryList,
                 cropResult: newCropResult,
                 position: newPosition,
               });
@@ -112,6 +124,10 @@ class EditTeam extends Component {
         }),
       )
       .catch(err => console.log('err', err));
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   requestHandler = () => {
@@ -133,7 +149,7 @@ class EditTeam extends Component {
         cropResult,
         updateLogo,
       },
-      props: {},
+      // props: {},
     } = this;
 
     const team = {
@@ -309,12 +325,12 @@ class EditTeam extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.teamName"
                 name="name"
                 value={name}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-6 col-md-6">
@@ -325,7 +341,7 @@ class EditTeam extends Component {
                 options={teamTypes.map(team => team)}
                 changeHandler={e => onTypeSelectChangeHandler(e)}
                 value={type && type}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-6 col-md-6">
@@ -333,12 +349,12 @@ class EditTeam extends Component {
                 formType="editForm"
                 tag="input"
                 type="number"
-                // required={true}
+                // required
                 label="app.contactNumber"
                 name="phone"
                 value={phone}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-6 col-md-6">
@@ -346,12 +362,12 @@ class EditTeam extends Component {
                 formType="editForm"
                 tag="input"
                 type="email"
-                // required={true}
+                // required
                 label="app.email"
                 name="email"
                 value={email}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-6 col-md-6">
@@ -359,12 +375,12 @@ class EditTeam extends Component {
                 formType="editForm"
                 tag="input"
                 type="url"
-                // required={true}
+                // required
                 label="app.website"
                 name="website"
                 value={website}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-6 col-md-6">
@@ -375,8 +391,8 @@ class EditTeam extends Component {
                 options={countryList.map(each => each)}
                 changeHandler={e => onCountrySelectChangeHandler(e)}
                 value={country && country}
-                required={true}
-                translation={true}
+                required
+                translation
               />
             </div>
             <div className="col-xl-6 col-md-6">
@@ -384,12 +400,12 @@ class EditTeam extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                // required={true}
+                // required
                 label="app.address"
                 name="address"
                 value={address}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
             <div className="col-xl-6 col-md-6">
@@ -397,12 +413,12 @@ class EditTeam extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.description"
                 name="public_desc"
                 value={public_desc}
                 changeHandler={onChangeHandler}
-                translation={true}
+                translation
               />
             </div>
 
@@ -412,7 +428,7 @@ class EditTeam extends Component {
                   <FormattedMessage
                     id="app.map"
                     defaultMessage="Map"
-                  />{' '}
+                  />
                   <sup>*</sup>
                 </label>
 
@@ -437,7 +453,7 @@ class EditTeam extends Component {
                             id="app.name"
                             defaultMessage="Name"
                           />
-                          :{' '}
+                          :
                         </b>
                         {name}
                       </Popup>
@@ -449,14 +465,14 @@ class EditTeam extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
-                        required={true}
+                        required
                         label="app.latitude"
                         name="latitude"
                         value={latitude}
-                        translation={true}
-                        changeHandler={e =>
-                          onChangeHandler(e, 'latitude')
-                        }
+                        translation
+                        changeHandler={e => {
+                          onChangeHandler(e, 'latitude');
+                        }}
                       />
                     </div>
 
@@ -465,14 +481,14 @@ class EditTeam extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
-                        required={true}
+                        required
                         label="app.longitude"
                         name="longitude"
                         value={longitude}
-                        translation={true}
-                        changeHandler={e =>
-                          onChangeHandler(e, 'longitude')
-                        }
+                        translation
+                        changeHandler={e => {
+                          onChangeHandler(e, 'longitude');
+                        }}
                       />
                     </div>
                   </div>
@@ -483,7 +499,6 @@ class EditTeam extends Component {
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label>
-                  {' '}
                   {cropResult ? (
                     <FormattedMessage
                       id="app.preview"
@@ -504,10 +519,7 @@ class EditTeam extends Component {
                       return (
                         <section>
                           <div className="upload-form">
-                            <img
-                              src={this.state.cropResult}
-                              alt="Cropped Image"
-                            />
+                            <img src={this.state.cropResult} alt="" />
                           </div>
                           <div {...getRootProps()}>
                             <input
@@ -516,7 +528,10 @@ class EditTeam extends Component {
                             />
                             <div className="upload-icon" />
 
-                            <button className="fieldsight-btn">
+                            <button
+                              className="fieldsight-btn"
+                              type="button"
+                            >
                               <FormattedMessage
                                 id="app.upload"
                                 defaultMessage="Upload"
@@ -550,7 +565,10 @@ class EditTeam extends Component {
                                       defaultMessage="Drag & Drop an image"
                                     />
                                   </h3>
-                                  <button className="fieldsight-btn">
+                                  <button
+                                    className="fieldsight-btn"
+                                    type="button"
+                                  >
                                     <FormattedMessage
                                       id="app.upload"
                                       defaultMessage="Upload"
@@ -602,6 +620,7 @@ class EditTeam extends Component {
                       className="fieldsight-btn"
                       style={{ marginTop: '15px' }}
                       onClick={this.cropImage}
+                      type="button"
                     >
                       <FormattedMessage
                         id="app.saveImage"
@@ -631,9 +650,6 @@ class EditTeam extends Component {
         {isLoading && <Loader loaded={loaded} />}
       </RightContentCard>
     );
-  }
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 export default EditTeam;

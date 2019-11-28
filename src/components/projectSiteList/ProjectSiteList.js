@@ -108,6 +108,9 @@ class ProjectSiteList extends Component {
                         />
                       </h5>
                       <span
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={this.closePopup}
                         className="popup-close"
                         onClick={this.closePopup}
                       >

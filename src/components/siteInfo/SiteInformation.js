@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
 import IdentityForm from './IdentityForm';
@@ -6,11 +6,11 @@ import SiteInformationTable from './SiteInformationTable';
 import FeaturedPictures from './FeaturedPictures';
 import RightContentCard from '../common/RightContentCard';
 import InputElement from '../common/InputElement';
-import Modal from '../common/Modal';
 import Loader from '../common/Loader';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
+import DeleteModel from '../common/DeleteModal';
 /* eslint no-param-reassign: ["error", { "props": false }] */
 /* eslint-disable consistent-return  */
 /* eslint-disable  no-return-await  */
@@ -495,7 +495,7 @@ class SiteInformation extends Component {
             onCancel={confirmHandler}
             onConfirm={cancelHandler}
             onToggle={cancelHandler}
-            message={`Are you sure you want to save the changes?`}
+            message="Are you sure you want to save the changes?"
             title="Warning"
           >
             <p>

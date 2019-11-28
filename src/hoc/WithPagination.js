@@ -37,7 +37,7 @@ const withPagination = WrappedComponent => {
     }
 
     componentWillUnmount() {
-      this.isMounted = false;
+      this.mounted = false;
     }
 
     getUrl = (page_num, payload) => {
@@ -67,12 +67,12 @@ const withPagination = WrappedComponent => {
     };
 
     requestHandler = paginateUrl => {
-      this.isMounted = true;
+      this.mounted = true;
       axios
         .get(`${paginateUrl}`)
 
         .then(res => {
-          if (this.isMounted) {
+          if (this.mounted) {
             if (res.status === 200) {
               // if (res.data.results.query === null) {
               //   this.setState({

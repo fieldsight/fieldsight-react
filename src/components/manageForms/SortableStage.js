@@ -17,11 +17,15 @@ import { FormattedMessage } from 'react-intl';
 import SubStageTable from './subStageTable';
 import { DotLoader } from '../myForm/Loader';
 
+/* eslint-disable  react/prop-types */
+/* eslint-disable  no-unneeded-ternary */
+/* eslint-disable  consistent-return */
+
 const DragHandle = sortableHandle(({ name }) => (
   <Card.Header>
     <span className="drag-icon">
-      <i className="la la-ellipsis-v"></i>
-      <i className="la la-ellipsis-v"></i>
+      <i className="la la-ellipsis-v" />
+      <i className="la la-ellipsis-v" />
     </span>
     <h5>
       <Accordion.Toggle
@@ -63,13 +67,13 @@ class SortableStage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { props } = this;
-    if (nextProps.stage != props.stage) {
+    if (nextProps.stage !== props.stage) {
       this.setState({
         data: nextProps.stage,
       });
     }
     if (
-      nextProps.isStageReorderCancel != props.isStageReorderCancel
+      nextProps.isStageReorderCancel !== props.isStageReorderCancel
     ) {
       this.setState(state => {
         if (nextProps.isStageReorderCancel) {
@@ -121,19 +125,23 @@ class SortableStage extends Component {
       subStageData.length > 0 &&
       subStageData.map(sub => {
         if (sub.is_deployed) {
-          return false;
-        } else {
-          return true;
+          const result = false;
+          return result;
         }
+        // else {
+        //   return true;
+        // }
       });
     const arrDelete =
       subStageData.length > 0 &&
       subStageData.map(sub => {
         if (sub.is_deployed) {
-          return true;
-        } else {
-          return false;
+          const result = true;
+          return result;
         }
+        // else {
+        //   return false;
+        // }
       });
 
     toDeploy =
@@ -142,6 +150,7 @@ class SortableStage extends Component {
           ? true
           : false
         : '';
+
     toDelete =
       arrDelete.length > 0
         ? arrDelete.indexOf(true) > -1
@@ -151,17 +160,18 @@ class SortableStage extends Component {
 
     return (
       <>
-        {data.length == 0 ? (
+        {data.length === 0 ? (
           <div>No Stage added yet.</div>
         ) : (
           <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
             {data.length > 0 &&
               data.map((each, index) => (
                 <Card
-                  key={`key_${index}`}
+                  // key={`key_${index}`}
+                  key={`item-${each.id}`}
                   className=" no-boxshadow mrb-15"
                 >
-                  {!!reorder ? (
+                  {reorder ? (
                     <SortableItem
                       key={`item-${each.id}`}
                       index={index}
@@ -171,13 +181,16 @@ class SortableStage extends Component {
                   ) : (
                     <Card.Header>
                       <h5>
-                        {!!isProjectForm && (
+                        {isProjectForm && (
                           <span
                             className="edit-stage"
                             data-tab="addSubStage-popup"
                             onClick={() => handleClickEdit(each)}
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => handleClickEdit(each)}
                           >
-                            <i className="la la-edit"></i>
+                            <i className="la la-edit" />
                           </span>
                         )}
                         {!isProjectForm && !!each.site && (
@@ -185,8 +198,11 @@ class SortableStage extends Component {
                             className="edit-stage"
                             data-tab="addSubStage-popup"
                             onClick={() => handleClickEdit(each)}
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => handleClickEdit(each)}
                           >
-                            <i className="la la-edit"></i>
+                            <i className="la la-edit" />
                           </span>
                         )}
                         <Accordion.Toggle
@@ -212,6 +228,9 @@ class SortableStage extends Component {
                               className="pending"
                               data-tab="addSubStage-popup"
                               onClick={handleSubstageReorder}
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={handleSubstageReorder}
                             >
                               {!reorderSubstage ? '' : ''}
                               {!reorderSubstage ? (
@@ -219,7 +238,6 @@ class SortableStage extends Component {
                                   placement="top"
                                   overlay={
                                     <Tooltip>
-                                      {/*Reorder*/}
                                       <FormattedMessage
                                         id="app.reorder"
                                         defaultMessage="Reorder"
@@ -237,13 +255,10 @@ class SortableStage extends Component {
                                   placement="top"
                                   overlay={
                                     <Tooltip>
-                                      {
-                                        /*Cancel*/
-                                        <FormattedMessage
-                                          id="app.cancel"
-                                          defaultMessage="Cancel"
-                                        />
-                                      }
+                                      <FormattedMessage
+                                        id="app.cancel"
+                                        defaultMessage="Cancel"
+                                      />
                                     </Tooltip>
                                   }
                                 >
@@ -263,14 +278,15 @@ class SortableStage extends Component {
                                   ? 'disabled'
                                   : ''
                               }`}
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={handleSaveSubstageReorder}
                             >
                               {/* Save Order */}
                               <OverlayTrigger
                                 placement="top"
                                 overlay={
                                   <Tooltip>
-                                    {' '}
-                                    {/*Save*/}
                                     <FormattedMessage
                                       id="app.save"
                                       defaultMessage="Save"
@@ -290,8 +306,12 @@ class SortableStage extends Component {
                               <a
                                 data-tab="addSubStage-popup"
                                 onClick={() => handleDeployAll(true)}
+                                onKeyDown={() => {
+                                  handleDeployAll(true);
+                                }}
+                                tabIndex="0"
+                                role="button"
                               >
-                                {/* Deploy Substages */}
                                 <OverlayTrigger
                                   placement="top"
                                   overlay={
@@ -331,6 +351,11 @@ class SortableStage extends Component {
                               <a
                                 data-tab="addSubStage-popup"
                                 onClick={() => handleDeployAll(false)}
+                                onKeyDown={() => {
+                                  handleDeployAll(false);
+                                }}
+                                tabIndex="0"
+                                role="button"
                               >
                                 {/* Undeploy Substages */}
                                 <OverlayTrigger
@@ -356,6 +381,9 @@ class SortableStage extends Component {
                               className="pending"
                               data-tab="addSubStage-popup"
                               onClick={handleSubstageReorder}
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={handleSubstageReorder}
                             >
                               {!reorderSubstage ? '' : ''}
                               {!reorderSubstage ? (
@@ -384,6 +412,9 @@ class SortableStage extends Component {
                             <a
                               data-tab="addSubStage-popup"
                               onClick={handleSaveSubstageReorder}
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={handleSaveSubstageReorder}
                             >
                               {/* Save Order */}
                               <OverlayTrigger
@@ -402,6 +433,11 @@ class SortableStage extends Component {
                               <a
                                 data-tab="addSubStage-popup"
                                 onClick={() => handleDeployAll(true)}
+                                onKeyDown={() => {
+                                  handleDeployAll(true);
+                                }}
+                                tabIndex="0"
+                                role="button"
                               >
                                 {/* Deploy Substages */}
                                 <OverlayTrigger
@@ -426,7 +462,14 @@ class SortableStage extends Component {
                             !toDeploy && (
                               <a
                                 data-tab="addSubStage-popup"
-                                onClick={() => handleDeployAll(false)}
+                                onClick={() => {
+                                  handleDeployAll(false);
+                                }}
+                                onKeyDown={() => {
+                                  handleDeployAll(false);
+                                }}
+                                tabIndex="0"
+                                role="button"
                               >
                                 {/* Undeploy Substages */}
                                 <OverlayTrigger
@@ -485,11 +528,14 @@ class SortableStage extends Component {
                             formTable="site"
                           />
                         )}
-                      {!!isProjectForm && (
+                      {isProjectForm && (
                         <div className="add-btn stage-add">
                           <a
                             data-tab="addSubStage-popup"
                             onClick={handleSubStageForm}
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={handleSubStageForm}
                           >
                             <FormattedMessage
                               id="app.subStageForm"
@@ -497,7 +543,7 @@ class SortableStage extends Component {
                             />
 
                             <span>
-                              <i className="la la-plus"></i>
+                              <i className="la la-plus" />
                             </span>
                           </a>
                         </div>
@@ -507,6 +553,9 @@ class SortableStage extends Component {
                           <a
                             data-tab="addSubStage-popup"
                             onClick={handleSubStageForm}
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={handleSubStageForm}
                           >
                             <FormattedMessage
                               id="app.subStageForm"
@@ -514,7 +563,7 @@ class SortableStage extends Component {
                             />
 
                             <span>
-                              <i className="la la-plus"></i>
+                              <i className="la la-plus" />
                             </span>
                           </a>
                         </div>

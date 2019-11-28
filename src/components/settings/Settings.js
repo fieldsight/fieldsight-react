@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 import LeftSidebar from '../leftSidebar/LeftSidebar';
 import EditProject from '../editProject/EditProject';
 import SiteType from '../siteType/SiteType';
@@ -10,7 +11,6 @@ import SubRegion from '../manageRegion/SubRegion';
 import TermsAndLabels from '../termsAndLabels/TermAndLabel';
 import MapLayer from '../mapLayer/MapLayer';
 import { RegionProvider } from '../../context';
-import { FormattedMessage } from 'react-intl';
 /* eslint-disable react/prop-types  */
 
 export default class Settings extends PureComponent {

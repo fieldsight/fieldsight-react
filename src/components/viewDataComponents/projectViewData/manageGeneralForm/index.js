@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+
 import ResponseTable from '../../responded/ResponseTable';
 import DeleteTable from '../deleteTable';
 import { DotLoader } from '../../../myForm/Loader';
@@ -48,7 +48,6 @@ class ManageGeneralForm extends Component {
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
-          {/*<h5>General Forms</h5>*/}
           <h5>
             <FormattedMessage
               id="app.generate-form"
@@ -56,14 +55,9 @@ class ManageGeneralForm extends Component {
             />
           </h5>
           <div className="dash-btn">
-<<<<<<< HEAD
-            <Link to={this.props.url}>
-              <button
-=======
             <Link to={url}>
               <button
                 type="button"
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                 onClick={showViewData}
                 className="fieldsight-btn"
               >
@@ -93,68 +87,10 @@ class ManageGeneralForm extends Component {
               <DotLoader />
             ))}
         </div>
-<<<<<<< HEAD
-        {deleted_forms.length > 0
-          ? !data && (
-              <div className="card no-boxshadow">
-                <div className="card-header main-card-header sub-card-header">
-                  {/*<h5>Deleted Forms</h5>*/}
-                  <h5>
-                    <FormattedMessage
-                      id="app.deleted-forms"
-                      defaultMessage="Deleted Forms"
-                    />
-                  </h5>
-                  <div className="dash-btn">
-                    {this.state.hide ? (
-                      <button
-                        type="button"
-                        className="btn-toggle"
-                        onClick={this.toggleHide}
-                        style={{ width: '96px' }}
-                      >
-                        <FormattedMessage
-                          id="app.show"
-                          defaultMessage="Show"
-                        />
-                        <div className="handle"></div>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className="btn-toggle"
-                        onClick={this.toggleHide}
-                        style={{
-                          backgroundColor: '#28a745',
-                          color: 'white',
-                          textAlign: 'left',
-                          width: '96px',
-                        }}
-                      >
-                        <FormattedMessage
-                          id="app.hide"
-                          defaultMessage="Hide"
-                        />
-                        <div
-                          className="handle"
-                          style={{ left: 'auto', right: '0.1875rem' }}
-                        ></div>
-                      </button>
-                    )}
-                  </div>
-                </div>
-                {/* <div className="card-body">
-                  {!this.state.hide && (
-                    <DeleteTable
-                      deleted_forms={deleted_forms}
-                      id={this.props.id}
-                      loader={generals_loader}
-=======
         {deleted_forms.length > 0 && !data && (
           <div className="card no-boxshadow">
             <div className="card-header main-card-header sub-card-header">
               <h5>
-                {' '}
                 <FormattedMessage
                   id="app.deleted-forms"
                   defaultMessage="Deleted Forms"
@@ -191,24 +127,23 @@ class ManageGeneralForm extends Component {
                     <div
                       className="handle"
                       style={{ left: 'auto', right: '0.1875rem' }}
->>>>>>> 4bebdaf08f26475f941cf5e32898bbf8bdbb2bdc
                     />
                   </button>
                 )}
               </div>
-            </div> */}
-                <div className="card-body">
-                  {!this.state.hide && (
-                    <DeleteTable
-                      deleted_forms={deleted_forms}
-                      id={id}
-                      loader={generals_loader}
-                    />
-                  )}
-                </div>
-              </div>
-            )
-          : ''}
+            </div>
+
+            <div className="card-body">
+              {!this.state.hide && (
+                <DeleteTable
+                  deleted_forms={deleted_forms}
+                  id={id}
+                  loader={generals_loader}
+                />
+              )}
+            </div>
+          </div>
+        )}
       </>
     );
   }

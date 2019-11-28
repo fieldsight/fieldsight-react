@@ -5,13 +5,20 @@ import RadioElement from '../common/RadioElement';
 import CheckBox from '../common/CheckBox';
 import SelectElement from '../common/SelectElement';
 
+/* eslint-disable react/prop-types */
+/* eslint-disable  consistent-return */
+/* eslint-disable  react/no-access-state-in-setstate */
+/* eslint-disable  jsx-a11y/label-has-associated-control */
+/* eslint-disable  no-plusplus */
+
 const getArrValue = (arr, value) => {
   if (arr.includes(value)) return true;
-  else return false;
+  // else return false;
 };
 
 class GlobalModalForm extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
 
@@ -238,28 +245,33 @@ class GlobalModalForm extends Component {
     const { name, value } = e.target;
 
     this.setState(state => {
-      if (name == 'status') {
+      if (name === 'status') {
         return {
           status: value,
         };
-      } else if (name == 'donor') {
+      }
+      if (name === 'donor') {
         return {
           isDonor: JSON.parse(value),
         };
-      } else if (name == 'edit') {
+      }
+      if (name === 'edit') {
         return {
           isEdit: JSON.parse(value),
         };
-      } else if (name == 'delete') {
+      }
+      if (name === 'delete') {
         return {
           isDelete: JSON.parse(value),
         };
-      } else if (name == 'scheduleType') {
+      }
+      if (name === 'scheduleType') {
         return {
           scheduleType: JSON.parse(value),
           selectedDays: [],
         };
-      } else if (name == 'notifyIncomplete') {
+      }
+      if (name === 'notifyIncomplete') {
         return {
           notifyIncomplete: JSON.parse(value),
         };
@@ -291,27 +303,28 @@ class GlobalModalForm extends Component {
 
   handleStartDateChange = e => {
     const { endDate } = this.state;
-    let errors = {};
+    const errors = {};
     this.setState(state => {
-      if (!!endDate && e > endDate) {
+      if (endDate && e > endDate) {
         errors.endDate = 'Invalid Date';
         return {
           endDate: e,
           errors,
         };
-      } else {
-        errors = {};
-        return {
-          startDate: e,
-          errors,
-        };
       }
+      // else {
+      //   errors = {};
+      //   return {
+      //     startDate: e,
+      //     errors,
+      //   };
+      // }
     });
   };
 
   handleEndDateChange = e => {
     const { startDate } = this.state;
-    let errors = {};
+    const errors = {};
     this.setState(state => {
       if (e < startDate) {
         errors.endDate = 'Invalid Date';
@@ -319,48 +332,57 @@ class GlobalModalForm extends Component {
           startDate: e,
           errors,
         };
-      } else {
-        errors = {};
-        return {
-          endDate: e,
-          errors,
-        };
       }
+      // else {
+      //   errors = {};
+      //   return {
+      //     endDate: e,
+      //     errors,
+      //   };
+      // }
     });
   };
 
   getDay = day => {
-    if (day == 'mon') return 1;
-    else if (day == 'tue') return 2;
-    else if (day == 'wed') return 3;
-    else if (day == 'thu') return 4;
-    else if (day == 'fri') return 5;
-    else if (day == 'sat') return 6;
-    else if (day == 'sun') return 7;
+    if (day === 'mon') return 1;
+    if (day === 'tue') return 2;
+    if (day === 'wed') return 3;
+    if (day === 'thu') return 4;
+    if (day === 'fri') return 5;
+    if (day === 'sat') return 6;
+    if (day === 'sun') return 7;
   };
 
   handleCheckbox = e => {
-    const name = e.target.name;
-    const checked = e.target.checked;
+    const {
+      state: { dailyArrDays },
+    } = this;
+
+    const {
+      target: { name, checked },
+    } = e;
+    // const name = name;
+    // const checked = checked;
     const selectedDay = this.getDay(name);
     this.setState(
-      {
+      preState => ({
         dailyArrDays: {
-          ...this.state.dailyArrDays,
+          ...preState.dailyArrDays,
 
-          [e.target.name]: !this.state.dailyArrDays[name],
+          [e.target.name]: !dailyArrDays[name],
         },
-      },
+      }),
       () => {
         this.setState(state => {
-          if (!!checked) {
+          if (checked) {
             return {
               selectedDays: [...this.state.selectedDays, selectedDay],
             };
-          } else {
+          }
+          if (!checked) {
             const days = this.state.selectedDays;
             return {
-              selectedDays: days.filter(day => day != selectedDay),
+              selectedDays: days.filter(day => day !== selectedDay),
             };
           }
         });
@@ -369,12 +391,15 @@ class GlobalModalForm extends Component {
   };
 
   handleOnWeekCheckbox = e => {
-    const name = e.target.name;
-    const checked = e.target.checked;
+    const {
+      target: { name, checked },
+    } = e;
+    // const name = e.target.name;
+    // const checked = e.target.checked;
     const day = this.getDay(name);
     this.setState(
       state => {
-        if (name == 'sun') {
+        if (name === 'sun') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -387,7 +412,8 @@ class GlobalModalForm extends Component {
               sat: false,
             },
           };
-        } else if (name == 'mon') {
+        }
+        if (name === 'mon') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -400,7 +426,8 @@ class GlobalModalForm extends Component {
               sat: false,
             },
           };
-        } else if (name == 'tue') {
+        }
+        if (name === 'tue') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -413,7 +440,8 @@ class GlobalModalForm extends Component {
               sat: false,
             },
           };
-        } else if (name == 'wed') {
+        }
+        if (name === 'wed') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -426,7 +454,8 @@ class GlobalModalForm extends Component {
               sat: false,
             },
           };
-        } else if (name == 'thu') {
+        }
+        if (name === 'thu') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -439,7 +468,8 @@ class GlobalModalForm extends Component {
               sat: false,
             },
           };
-        } else if (name == 'fri') {
+        }
+        if (name === 'fri') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -452,7 +482,8 @@ class GlobalModalForm extends Component {
               sat: false,
             },
           };
-        } else if (name == 'sat') {
+        }
+        if (name === 'sat') {
           return {
             weeklyArrDays: {
               ...this.state.weeklyArrDays,
@@ -469,9 +500,10 @@ class GlobalModalForm extends Component {
       },
       () => {
         this.setState(state => {
-          if (!!checked) {
+          if (checked) {
             return { selectedDays: [day] };
-          } else {
+          }
+          if (!checked) {
             return { selectedDays: [] };
           }
         });
@@ -528,16 +560,16 @@ class GlobalModalForm extends Component {
       },
     } = this;
 
-    let weekOptions = [];
-    let monthOPtions = [];
-    let dayOptions = [];
-    for (var i = 1; i < 52; i++) {
+    const weekOptions = [];
+    const monthOPtions = [];
+    const dayOptions = [];
+    for (let i = 1; i < 52; i++) {
       weekOptions.push({ key: i, name: i });
     }
-    for (var i = 1; i <= 12; i++) {
+    for (let i = 1; i <= 12; i++) {
       monthOPtions.push({ key: i, name: i });
     }
-    for (var i = 1; i <= 31; i++) {
+    for (let i = 1; i <= 31; i++) {
       if (i <= 30) dayOptions.push({ key: i, name: i });
       else dayOptions.push({ key: 0, name: 'Last' });
     }
@@ -551,10 +583,16 @@ class GlobalModalForm extends Component {
               </div>
               {!isEditForm && (
                 <div className="add-btn flex-start">
-                  <a data-tab="choose-form" onClick={toggleFormModal}>
-                    {!!formTitle ? 'Change form' : ' Choose form'}
+                  <a
+                    data-tab="choose-form"
+                    onClick={toggleFormModal}
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={toggleFormModal}
+                  >
+                    {formTitle ? 'Change form' : ' Choose form'}
                     <span>
-                      <i className="la la-file-text-o"></i>
+                      <i className="la la-file-text-o" />
                     </span>
                   </a>
                 </div>
@@ -562,7 +600,7 @@ class GlobalModalForm extends Component {
             </div>
           </div>
 
-          {formType == 'schedule' && (
+          {formType === 'schedule' && (
             <>
               {/* // for schedule form */}
               <div className="form-group checkbox-group">
@@ -573,25 +611,25 @@ class GlobalModalForm extends Component {
                     name="scheduleType"
                     value={0}
                     changeHandler={this.handleRadioChange}
-                    checked={scheduleType == 0}
+                    checked={scheduleType === 0}
                   />
                   <RadioElement
                     label="Weekly"
                     name="scheduleType"
                     value={1}
                     changeHandler={this.handleRadioChange}
-                    checked={scheduleType == 1}
+                    checked={scheduleType === 1}
                   />
                   <RadioElement
                     label="Monthly"
                     name="scheduleType"
                     value={2}
                     changeHandler={this.handleRadioChange}
-                    checked={scheduleType == 2}
+                    checked={scheduleType === 2}
                   />
                 </div>
               </div>
-              {scheduleType == 0 && (
+              {scheduleType === 0 && (
                 <div className="form-group">
                   <div className="custom-checkbox display-inline">
                     <CheckBox
@@ -639,7 +677,7 @@ class GlobalModalForm extends Component {
                   </div>
                 </div>
               )}
-              {scheduleType == 1 && (
+              {scheduleType === 1 && (
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
                   <SelectElement
@@ -697,7 +735,7 @@ class GlobalModalForm extends Component {
                   </div>
                 </div>
               )}
-              {scheduleType == 2 && (
+              {scheduleType === 2 && (
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
                   <SelectElement
@@ -721,15 +759,15 @@ class GlobalModalForm extends Component {
                     label="Yes"
                     name="notifyIncomplete"
                     changeHandler={this.handleRadioChange}
-                    value={true}
-                    checked={notifyIncomplete == true}
+                    value
+                    checked={notifyIncomplete === true}
                   />
                   <RadioElement
                     label="No"
                     name="notifyIncomplete"
                     changeHandler={this.handleRadioChange}
                     value={false}
-                    checked={notifyIncomplete == false}
+                    checked={notifyIncomplete === false}
                   />
                 </div>
               </div>
@@ -781,7 +819,7 @@ class GlobalModalForm extends Component {
                 name="status"
                 value={3}
                 changeHandler={this.handleRadioChange}
-                checked={status == 3}
+                checked={status === 3}
               />
               <RadioElement
                 label="Pending"
@@ -789,7 +827,7 @@ class GlobalModalForm extends Component {
                 name="status"
                 value={0}
                 changeHandler={this.handleRadioChange}
-                checked={status == 0}
+                checked={status === 0}
               />
               <RadioElement
                 label="Flagged"
@@ -797,7 +835,7 @@ class GlobalModalForm extends Component {
                 name="status"
                 value={2}
                 changeHandler={this.handleRadioChange}
-                checked={status == 2}
+                checked={status === 2}
               />
               <RadioElement
                 label="Rejected"
@@ -805,7 +843,7 @@ class GlobalModalForm extends Component {
                 name="status"
                 value={1}
                 changeHandler={this.handleRadioChange}
-                checked={status == 1}
+                checked={status === 1}
               />
             </div>
           </div>
@@ -817,7 +855,7 @@ class GlobalModalForm extends Component {
                 {hasLoaded && (
                   <Select
                     defaultValue={regionSelected}
-                    isMulti={true}
+                    isMulti
                     options={regionDropdown}
                     onChange={this.handleSelectRegionChange}
                   />

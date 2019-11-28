@@ -4,43 +4,60 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import DeleteModal from '../common/DeleteModal';
 
+/* eslint-disable  react/prop-types */
+/* eslint-disable  react/no-access-state-in-setstate */
+/* eslint-disable  consistent-return */
+/* eslint-disable  no-unneeded-ternary */
+
 const getStatus = value => {
-  if (value == 0) return <span>pending</span>;
-  else if (value == 1) return <span>Rejected</span>;
-  else if (value == 2) return <span>Flagged</span>;
-  else if (value == 3) return <span>Approved</span>;
+  if (value === 0) return <span>pending</span>;
+  if (value === 1) return <span>Rejected</span>;
+  if (value === 2) return <span>Flagged</span>;
+  if (value === 3) return <span>Approved</span>;
 };
 
 const getClass = status => {
-  if (status == 0) return 'pending';
-  if (status == 1) return 'rejected';
-  if (status == 2) return 'flagged';
-  if (status == 3) return 'approved';
+  if (status === 0) return 'pending';
+  if (status === 1) return 'rejected';
+  if (status === 2) return 'flagged';
+  if (status === 3) return 'approved';
 };
 
 const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  return year + '-' + monthIndex + '-' + dateIdx;
+  const dash = '-';
+  return `${year} ${dash}   ${monthIndex}  ${dash}  ${dateIdx}`;
 };
 
 const EducationMaterialForProject = props => {
   const { formTable, item, editForm } = props;
-  if (formTable == 'project') {
+  if (formTable === 'project') {
     return (
       <span>
-        <a onClick={() => editForm(item.em, item.id, item.fsxf)}>
+        <a
+          onClick={() => editForm(item.em, item.id, item.fsxf)}
+          tabIndex="0"
+          role="button"
+          onKeyDown={() => editForm(item.em, item.id, item.fsxf)}
+        >
           <i className="la la-book" />
           {item.em ? item.em.title : ''}
         </a>
       </span>
     );
-  } else if (formTable == 'site') {
+  }
+  if (formTable === 'site') {
     return (
       <span>
-        {!!item.site && (
-          <a onClick={() => editForm(item.em, item.id, item.fsxf)}>
+        {item.site && (
+          <a
+            onClick={() => editForm(item.em, item.id, item.fsxf)}
+            tabIndex="0"
+            role="button"
+            onKeyDown={() => editForm(item.em, item.id, item.fsxf)}
+          >
             <i className="la la-book" />
             {item.em ? item.em.title : ''}
           </a>
@@ -61,13 +78,16 @@ const GetActionForProject = props => {
     handleConfirm,
     editAction,
   } = props;
-  if (formTable == 'project') {
+  if (formTable === +'project') {
     return (
       <div>
-        {!!item.is_deployed && (
+        {item.is_deployed && (
           <a
             className="rejected td-edit-btn td-btn"
             onClick={() => deployAction(item.id, item.is_deployed)}
+            tabIndex="0"
+            role="button"
+            onKeyDown={() => deployAction(item.id, item.is_deployed)}
           >
             <OverlayTrigger
               placement="top"
@@ -89,6 +109,11 @@ const GetActionForProject = props => {
             <a
               className="td-edit-btn td-btn approved"
               onClick={() => deployAction(item.id, item.is_deployed)}
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                deployAction(item.id, item.is_deployed);
+              }}
             >
               <OverlayTrigger
                 placement="top"
@@ -109,6 +134,9 @@ const GetActionForProject = props => {
         <a
           onClick={() => editAction(item)}
           className="pending td-edit-btn td-btn"
+          tabIndex="0"
+          role="button"
+          onKeyDown={() => editAction(item)}
         >
           <OverlayTrigger
             placement="top"
@@ -130,6 +158,11 @@ const GetActionForProject = props => {
             <a
               className="rejected td-edit-btn td-btn"
               onClick={() => handleToggle(item.id, item.is_deployed)}
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                handleToggle(item.id, item.is_deployed);
+              }}
             >
               <OverlayTrigger
                 placement="top"
@@ -152,20 +185,22 @@ const GetActionForProject = props => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
             onToggle={handleToggle}
-            message={
-              'Deleting this form will also delete submissions to this form. Do you want to proceed?'
-            }
+            message="Deleting this form will also delete submissions to this form. Do you want to proceed?"
           />
         )}
       </div>
     );
-  } else if (formTable == 'site') {
+  }
+  if (formTable === 'site') {
     return (
       <div>
-        {!!item.site && !!item.is_deployed && (
+        {item.site && item.is_deployed && (
           <a
             className="rejected td-edit-btn td-btn"
             onClick={() => deployAction(item.id, item.is_deployed)}
+            tabIndex="0"
+            role="button"
+            onKeyDown={() => deployAction(item.id, item.is_deployed)}
           >
             <OverlayTrigger
               placement="top"
@@ -182,11 +217,16 @@ const GetActionForProject = props => {
             </OverlayTrigger>
           </a>
         )}
-        {!!item.site && !item.is_deployed && (
+        {item.site && !item.is_deployed && (
           <span>
             <a
               className="td-edit-btn td-btn approved"
               onClick={() => deployAction(item.id, item.is_deployed)}
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                deployAction(item.id, item.is_deployed);
+              }}
             >
               <OverlayTrigger
                 placement="top"
@@ -204,10 +244,13 @@ const GetActionForProject = props => {
             </a>
           </span>
         )}
-        {!!item.site && (
+        {item.site && (
           <a
             onClick={() => editAction(item)}
             className="pending td-edit-btn td-btn"
+            tabIndex="0"
+            role="button"
+            onKeyDown={() => editAction(item)}
           >
             <OverlayTrigger
               placement="top"
@@ -224,11 +267,16 @@ const GetActionForProject = props => {
             </OverlayTrigger>
           </a>
         )}
-        {!!item.site && !item.is_deployed && (
+        {item.site && !item.is_deployed && (
           <span>
             <a
               className="rejected td-edit-btn td-btn"
               onClick={() => handleToggle(item.id, item.is_deployed)}
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                handleToggle(item.id, item.is_deployed);
+              }}
             >
               <OverlayTrigger
                 placement="top"
@@ -251,9 +299,7 @@ const GetActionForProject = props => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
             onToggle={handleToggle}
-            message={
-              'Deleting this form will also delete submissions to this form. Do you want to proceed?'
-            }
+            message="Deleting this form will also delete submissions to this form. Do you want to proceed?"
           />
         )}
       </div>
@@ -369,7 +415,7 @@ class ScheduleFormTable extends Component {
               )} */}
               {!loader &&
                 data.map((item, i) => (
-                  <tr key={i}>
+                  <tr key={item.id}>
                     <td>{item.xf ? item.xf.title : ''}</td>
                     <td>{item.responses_count}</td>
                     <td>
@@ -381,7 +427,7 @@ class ScheduleFormTable extends Component {
                     </td>
                     <td>
                       <time>
-                        <i className="la la-clock-o"></i>{' '}
+                        <i className="la la-clock-o" />
                         {formatDate(new Date(item.date_created))}
                       </time>
                     </td>

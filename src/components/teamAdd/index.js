@@ -61,11 +61,11 @@ class TeamAdd extends Component {
   }
 
   componentDidMount() {
-    const {
-      match: {
-        params: { id },
-      },
-    } = this.props;
+    // const {
+    //   match: {
+    //     params: { id },
+    //   },
+    // } = this.props;
     axios
       .get(`/fv3/api/team-types-countries`)
       .then(res => {
@@ -260,19 +260,19 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required={true}
+                  required
                   label="app.teamName"
                   name="teamName"
                   value={teamName}
                   changeHandler={onChangeHandler}
-                  translation={true}
+                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
                   label="app.typeOfTeam"
-                  translation={true}
+                  translation
                   options={
                     teamTypes.length > 0
                       ? teamTypes.map(each => each)
@@ -289,12 +289,12 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required={true}
+                  required
                   label="app.contactNumber"
                   name="contactnumber"
                   value={contactnumber}
                   changeHandler={onChangeHandler}
-                  translation={true}
+                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -302,12 +302,12 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="email"
-                  required={true}
+                  required
                   label="app.email"
                   name="email"
                   value={email}
                   changeHandler={onChangeHandler}
-                  translation={true}
+                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -320,7 +320,7 @@ class TeamAdd extends Component {
                     name="website"
                     value={website}
                     changeHandler={onChangeHandler}
-                    translation={true}
+                    translation
                   />
                 </div>
               </div>
@@ -329,19 +329,19 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required={true}
+                  required
                   label="app.address"
                   name="address"
                   value={address}
                   changeHandler={onChangeHandler}
-                  translation={true}
+                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
                   label="app.country"
-                  translation={true}
+                  translation
                   options={
                     country.length > 0
                       ? country.map(each => each)
@@ -359,12 +359,12 @@ class TeamAdd extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required={true}
+                    required
                     label="app.description"
                     name="publicDescription"
                     value={publicDescription}
                     changeHandler={onChangeHandler}
-                    translation={true}
+                    translation
                   />
                 </div>
               </div>
@@ -398,7 +398,7 @@ class TeamAdd extends Component {
                               id="app.name"
                               defaultMessage="Name"
                             />
-                            :{' '}
+                            :
                           </b>
                           {teamName}
                         </Popup>
@@ -417,7 +417,7 @@ class TeamAdd extends Component {
                           changeHandler={e => {
                             onChangeHandler(e, 'latitude');
                           }}
-                          translation={true}
+                          translation
                         />
                       </div>
 
@@ -426,14 +426,14 @@ class TeamAdd extends Component {
                           formType="editForm"
                           tag="input"
                           type="number"
-                          required={true}
+                          required
                           label="app.longitude"
                           name="longitude"
                           value={longitude}
-                          changeHandler={e =>
-                            onChangeHandler(e, 'longitude')
-                          }
-                          translation={true}
+                          changeHandler={e => {
+                            onChangeHandler(e, 'longitude');
+                          }}
+                          translation
                         />
                       </div>
                     </div>

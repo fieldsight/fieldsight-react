@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GET_LOGS } from './types';
 
-export const getProjectLogs = id => dispatch => {
+const getProjectLogs = id => dispatch => {
   axios
     .get(`/events/api/project_logs/${id}/`)
     .then(res => {
@@ -16,3 +16,5 @@ export const getProjectLogs = id => dispatch => {
       // });
     });
 };
+
+export default getProjectLogs;

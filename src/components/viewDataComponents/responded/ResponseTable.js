@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
-import { FormattedMessage } from 'react-intl';
+
 /* eslint-disable camelcase */
 
 class ResponseTable extends PureComponent {
@@ -30,7 +30,7 @@ class ResponseTable extends PureComponent {
                     id="app.name"
                     defaultMessage="Name"
                   />
-                )}{' '}
+                )}
               </th>
 
               <th>

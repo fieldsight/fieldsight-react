@@ -2,6 +2,8 @@ import React from 'react';
 import Zoom from 'react-reveal/Zoom';
 import { FormattedMessage } from 'react-intl';
 
+/* eslint-disable   react/prop-types */
+
 const Modal = ({
   title,
   toggleModal,
@@ -21,7 +23,7 @@ const Modal = ({
         <div className="card">
           <div className="card-header main-card-header  sub-card-header">
             <h5>
-              {/*title*/}
+              {/* title */}
 
               <FormattedMessage id={title} defaultMessage={title} />
             </h5>
@@ -30,7 +32,11 @@ const Modal = ({
                 className="add-btn"
                 style={{ marginRight: '15px' }}
               >
-                <a href={url} target="_blank">
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {showText && showText}
                   <span>
                     <i className="la la-plus" />
@@ -38,7 +44,13 @@ const Modal = ({
                 </a>
               </div>
             )}
-            <span className="popup-close" onClick={toggleModal}>
+            <span
+              className="popup-close"
+              onClick={toggleModal}
+              tabIndex="0"
+              role="button"
+              onKeyDown={toggleModal}
+            >
               <i className="la la-close" />
             </span>
           </div>

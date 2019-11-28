@@ -1,8 +1,11 @@
 import L from 'leaflet';
 
-export const markerIcon = new L.Icon({
-  iconUrl: require('../../static/images/marker.png'),
-  iconRetinaUrl: require('../../static/images/marker.png'),
+const iconUrl = require('../../static/images/marker.png');
+const iconRetinaUrl = require('../../static/images/marker.png');
+
+const markerIcon = new L.Icon({
+  iconUrl,
+  iconRetinaUrl,
   iconSize: [28, 28],
   iconAnchor: [13, 27],
   popupAnchor: [0, -24],
@@ -10,3 +13,5 @@ export const markerIcon = new L.Icon({
   shadowSize: null,
   shadowAnchor: null,
 });
+
+export default markerIcon;

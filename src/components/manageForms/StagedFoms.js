@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { DotLoader } from '../myForm/Loader';
 import Modal from '../common/Modal';
@@ -10,18 +11,23 @@ import { errorToast, successToast } from '../../utils/toastHandler';
 import EditFormGuide from './EditFormGuide';
 import SortableStage from './SortableStage';
 import AddStageForm from './AddStageForm';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import ManageModal from './ManageModal';
 import Loader from '../common/Loader';
 
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable  consistent-return */
+/* eslint-disable  react/no-access-state-in-setstate */
+/* eslint-disable  no-unneeded-ternary */
+
 class StagedForms extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
       id: props.match.params ? props.match.params.id : '',
       data: [],
-      deployStatus: false,
       editGuide: false,
       guideData: {},
       editFormId: '',
@@ -30,7 +36,6 @@ class StagedForms extends Component {
       formData: {},
       xf: '',
       loader: false,
-      loaded: 0,
       formId: '',
       formTitle: '',
       isProjectForm: '',
@@ -94,15 +99,15 @@ class StagedForms extends Component {
 
   componentDidUpdate(nextProps) {
     const { props } = this;
-    if (nextProps.myForms != props.myForms) {
+    if (nextProps.myForms !== props.myForms) {
       this.setState({
         myFormList: props.myForms,
       });
-    } else if (nextProps.projectForms != props.projectForms) {
+    } else if (nextProps.projectForms !== props.projectForms) {
       this.setState({
         projectFormList: props.projectForms,
       });
-    } else if (nextProps.sharedForms != props.sharedForms) {
+    } else if (nextProps.sharedForms !== props.sharedForms) {
       this.setState({
         sharedFormList: props.sharedForms,
       });
@@ -147,30 +152,32 @@ class StagedForms extends Component {
           ? selectedType.map(each => each.id)
           : [];
       const newOrder =
-        typeof order == 'number' ? order : state.data.length + 1;
-      if (props.popupModal && order == newOrder) {
-        const updateStageApi = !!state.isProjectForm
+        typeof order === 'number' ? order : state.data.length + 1;
+      if (props.popupModal && order === newOrder) {
+        const updateStageApi = state.isProjectForm
           ? `fv3/api/manage-forms/stages/${id}/?project_id=${state.id}`
           : `fv3/api/manage-forms/stages/${id}/?site_id=${state.id}`;
         const body = {
-          name: name,
+          name,
           tags: mapType,
           regions: mapRegion,
           order: newOrder,
           description: desc,
-          id: id,
+          id,
         };
         axios
           .put(updateStageApi, body)
           .then(res => {
             this.setState(
-              state => {
-                const data = this.state.data;
-                const newArr = data.map(each => {
-                  if (each.id == res.data.id) {
-                    return (each = res.data);
-                  } else {
-                    return each;
+              preState => {
+                const info = preState.data;
+                const newArr = info.map(each => {
+                  let newData = each;
+                  if (newData.id === res.data.id) {
+                    newData = res.data;
+                    return newData;
+                    // } else {
+                    //   return newData;
                   }
                 });
                 return {
@@ -193,11 +200,11 @@ class StagedForms extends Component {
             });
           });
       } else {
-        const postStageApi = !!this.state.isProjectForm
+        const postStageApi = this.state.isProjectForm
           ? `fv3/api/manage-forms/stages/?project_id=${this.state.id}`
           : `fv3/api/manage-forms/stages/?site_id=${this.state.id}`;
         const body = {
-          name: name,
+          name,
           tags: mapType,
           regions: mapRegion,
           order: newOrder,
@@ -207,12 +214,12 @@ class StagedForms extends Component {
           .post(postStageApi, body)
           .then(res => {
             this.setState(
-              {
-                data: [...this.state.data, res.data],
-                stageRegions: res.data.regions,
+              preState => ({
+                data: [...preState.data, res.data],
+                // stageRegions: res.data.regions,
                 stagedTypes: res.data.tags,
                 loadReq: false,
-              },
+              }),
               () => {
                 this.handleClearStageForm();
                 successToast('form', 'added');
@@ -292,9 +299,9 @@ class StagedForms extends Component {
   };
 
   handleSubStageForm = () => {
-    this.setState({
-      showSubstageForm: !this.state.showSubstageForm,
-    });
+    this.setState(preState => ({
+      showSubstageForm: !preState.showSubstageForm,
+    }));
   };
 
   handleClosePopup = () => {
@@ -316,22 +323,22 @@ class StagedForms extends Component {
   handleCreateForm = data => {
     const { stageId, substageId, xf } = this.state;
     this.setState({ loadReq: true }, () => {
-      if (!!substageId) {
+      if (substageId) {
         const body = {
           id: substageId,
           weight: JSON.parse(data.weight),
           name: data.substageTitle,
           description: data.substageDesc,
           order: data.order,
-          xf: !!xf == true ? JSON.parse(xf) : '',
+          xf: xf === true ? JSON.parse(xf) : '',
           default_submission_status: data.status,
           setting: {
             types:
-              !!data.typeSelected && data.typeSelected.length > 0
+              data.typeSelected && data.typeSelected.length > 0
                 ? data.typeSelected.map(each => each.id)
                 : [],
             regions:
-              !!data.regionSelected && data.regionSelected.length > 0
+              data.regionSelected && data.regionSelected.length > 0
                 ? data.regionSelected.map(each => each.id)
                 : [],
             donor_visibility: data.isDonor,
@@ -348,14 +355,17 @@ class StagedForms extends Component {
           )
           .then(res => {
             this.setState(
-              state => {
-                const data = this.state.subStageData;
-                const newArr = data.map(each => {
-                  if (each.id == res.data.id) {
-                    return (each = res.data);
-                  } else {
-                    return each;
+              preState => {
+                const data1 = preState.subStageData;
+                const newArr = data1.map(each => {
+                  let newData = each;
+                  if (newData.id === res.data.id) {
+                    newData = res.data;
+                    return newData;
                   }
+                  // else {
+                  //   return each;
+                  // }
                 });
                 return {
                   subStageData: newArr,
@@ -381,15 +391,15 @@ class StagedForms extends Component {
           name: data.substageTitle,
           description: data.substageDesc,
           order: this.state.subStageData.length + 1,
-          xf: !!xf == true ? JSON.parse(xf) : '',
+          xf: xf === true ? JSON.parse(xf) : '',
           default_submission_status: data.status,
           setting: {
             types:
-              !!data.typeSelected && data.typeSelected.length > 0
+              data.typeSelected && data.typeSelected.length > 0
                 ? data.typeSelected.map(each => each.id)
                 : [],
             regions:
-              !!data.regionSelected && data.regionSelected.length > 0
+              data.regionSelected && data.regionSelected.length > 0
                 ? data.regionSelected.map(each => each.id)
                 : [],
             donor_visibility: data.isDonor,
@@ -405,10 +415,10 @@ class StagedForms extends Component {
           )
           .then(res => {
             this.setState(
-              {
-                subStageData: [...this.state.subStageData, res.data],
+              prevState => ({
+                subStageData: [...prevState.subStageData, res.data],
                 loadReq: false,
-              },
+              }),
               () => {
                 this.handleClosePopup();
                 successToast('form', 'created');
@@ -426,11 +436,11 @@ class StagedForms extends Component {
   };
 
   handleRequestSubStage = stage => {
-    if (stage.id != this.state.stageId) {
+    if (stage.id !== this.state.stageId) {
       this.setState(
         {
           loadSubStage: true,
-          order: stage.order,
+          // order: stage.order,
           stageId: stage.id,
           isSubstageReorder: false,
           isSubstageReorderCancel: true,
@@ -458,10 +468,10 @@ class StagedForms extends Component {
   };
 
   handleSubstageReorder = () => {
-    this.setState({
-      isSubstageReorder: !this.state.isSubstageReorder,
-      isSubstageReorderCancel: !this.state.isSubstageReorderCancel,
-    });
+    this.setState(preState => ({
+      isSubstageReorder: !preState.isSubstageReorder,
+      isSubstageReorderCancel: !preState.isSubstageReorderCancel,
+    }));
   };
 
   handleNewSubstageOrder = list => {
@@ -498,7 +508,7 @@ class StagedForms extends Component {
   changeDeployStatus = (formId, isDeploy) => {
     const { id, isProjectForm, subStageData } = this.state;
     this.setState({ loadReq: true }, () => {
-      const deployUrl = !!isProjectForm
+      const deployUrl = isProjectForm
         ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=substage&id=${formId}`
         : `fv3/api/manage-forms/deploy/?site_id=${id}&type=substage&id=${formId}`;
       axios
@@ -509,9 +519,9 @@ class StagedForms extends Component {
               const newData = subStageData;
               newData.map(each => {
                 const arrItem = { ...each };
-
-                if (each.id == formId) {
-                  each.is_deployed = !isDeploy;
+                let newEach = each.is_deployed;
+                if (each.id === formId) {
+                  newEach = !isDeploy;
                 }
                 return arrItem;
               });
@@ -534,7 +544,7 @@ class StagedForms extends Component {
   deleteItem = (formId, isDeploy) => {
     const { id, isProjectForm, subStageData } = this.state;
     this.setState({ loadReq: true }, () => {
-      const deployUrl = !!isProjectForm
+      const deployUrl = isProjectForm
         ? `fv3/api/manage-forms/delete/?project_id=${id}&type=substage&id=${formId}`
         : `fv3/api/manage-forms/delete/?site_id=${id}&type=substage&id=${formId}`;
 
@@ -544,7 +554,7 @@ class StagedForms extends Component {
           this.setState(
             {
               subStageData: subStageData.filter(
-                each => each.id != formId,
+                each => each.id !== formId,
               ),
               loadReq: false,
             },
@@ -598,8 +608,9 @@ class StagedForms extends Component {
                 const item = this.state.subStageData;
                 item.map(each => {
                   const newItem = { ...each };
-                  if (each.id == editFormId) {
-                    each.em = res.data;
+                  let newEach = each.em;
+                  if (each.id === editFormId) {
+                    newEach = res.data;
                   }
                   return newItem;
                 });
@@ -645,10 +656,10 @@ class StagedForms extends Component {
   };
 
   handleSaveForm = () => {
-    this.setState({
+    this.setState(preState => ({
       xf: this.state.formId,
-      showFormModal: !this.state.showFormModal,
-    });
+      showFormModal: !preState.showFormModal,
+    }));
   };
 
   onChangeHandler = async e => {
@@ -659,7 +670,7 @@ class StagedForms extends Component {
     const searchValue = e.target.value;
 
     if (searchValue) {
-      if (activeTab == 'myForms') {
+      if (activeTab === 'myForms') {
         const filteredData = await myForms.filter(form => {
           return (
             form.title
@@ -674,7 +685,7 @@ class StagedForms extends Component {
         this.setState({
           myFormList: filteredData,
         });
-      } else if (activeTab == 'projectForms') {
+      } else if (activeTab === 'projectForms') {
         const awaitedData = await projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
@@ -691,7 +702,7 @@ class StagedForms extends Component {
         this.setState({
           projectFormList: awaitedData,
         });
-      } else if (activeTab == 'sharedForms') {
+      } else if (activeTab === 'sharedForms') {
         const filteredData = await sharedForms.filter(form => {
           return (
             form.title
@@ -719,7 +730,7 @@ class StagedForms extends Component {
   editSubStageForm = formData => {
     this.setState(
       {
-        formData: formData,
+        formData,
         xf: formData.xf && formData.xf.id,
         formId: formData.xf && formData.xf.id,
         formTitle: formData.xf && formData.xf.title,
@@ -735,7 +746,7 @@ class StagedForms extends Component {
   handleDeployAllSubstages = toDeploy => {
     const { id, stageId, subStageData, isProjectForm } = this.state;
     this.setState({ loadReq: true }, () => {
-      const deployAllSubstageUrl = !!isProjectForm
+      const deployAllSubstageUrl = isProjectForm
         ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=stage&id=${stageId}`
         : `fv3/api/manage-forms/deploy/?site_id=${id}&type=stage&id=${stageId}`;
       axios
@@ -747,9 +758,12 @@ class StagedForms extends Component {
             this.setState(
               state => {
                 const data = subStageData;
+
                 data.map(sub => {
-                  const arrItem = { ...sub };
-                  sub.is_deployed = toDeploy;
+                  const newSub = { ...sub };
+                  const arrItem = newSub;
+                  let newIsDeployed = sub.is_deployed;
+                  newIsDeployed = toDeploy;
                   return arrItem;
                 });
                 return {
@@ -774,7 +788,7 @@ class StagedForms extends Component {
   handleDeleteAllSubstages = toDeploy => {
     const { id, stageId, isProjectForm } = this.state;
     this.setState({ loadReq: true }, () => {
-      const deleteAllSubstageUrl = !!isProjectForm
+      const deleteAllSubstageUrl = isProjectForm
         ? `fv3/api/manage-forms/delete/?project_id=${id}&type=stage&id=${stageId}`
         : `fv3/api/manage-forms/delete/?site_id=${id}&type=stage&id=${stageId}`;
       axios
@@ -782,7 +796,7 @@ class StagedForms extends Component {
           is_deployed: toDeploy,
         })
         .then(res => {
-          if (!!res.data)
+          if (res.data)
             this.setState(
               {
                 subStageData: [],
@@ -805,7 +819,7 @@ class StagedForms extends Component {
   handleDeployAllStages = toDeploy => {
     const { id, isProjectForm } = this.state;
     this.setState({ loadReq: true }, () => {
-      const deployAllUrl = !!isProjectForm
+      const deployAllUrl = isProjectForm
         ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=all&id=${id}`
         : `fv3/api/manage-forms/deploy/?site_id=${id}&type=all&id=${id}`;
       axios
@@ -818,7 +832,7 @@ class StagedForms extends Component {
               loadReq: false,
             },
             () => {
-              if (!!isProjectForm) this.requestStagedData(id, true);
+              if (isProjectForm) this.requestStagedData(id, true);
               else this.requestStagedData(id, false);
               successToast('form', 'updated');
             },
@@ -835,7 +849,7 @@ class StagedForms extends Component {
 
   handleDeleteAllStages = toDeploy => {
     const { id, isProjectForm } = this.state;
-    const deleteAllUrl = !!isProjectForm
+    const deleteAllUrl = isProjectForm
       ? `fv3/api/manage-forms/delete/?project_id=${id}&type=all&id=${id}`
       : `fv3/api/manage-forms/delete/?site_id=${id}&type=all&id=${id}`;
 
@@ -844,7 +858,7 @@ class StagedForms extends Component {
         is_deployed: toDeploy,
       })
       .then(res => {
-        if (!!res.data)
+        if (res.data)
           this.setState(
             {
               data: [],
@@ -906,39 +920,51 @@ class StagedForms extends Component {
     });
 
     const arrToReorder = data.map(each => {
-      if (!!each.site) {
+      if (each.site) {
         return true;
-      } else {
-        return false;
       }
+      // } else {
+      //   return false;
+      // }
     });
-    canReorder =
-      arrToReorder.length > 0
-        ? arrToReorder.indexOf(false) > -1
-          ? false
-          : true
-        : '';
+    // canReorder =
+    //   arrToReorder.length > 0
+    //     ? arrToReorder.indexOf(false) > -1
+    //       ? false
+    //       : true
+    //     : '';
+    // let canReorder = false;
+    if (arrToReorder.length > 0) {
+      if (arrToReorder.indexOf(false) > -1) {
+        canReorder = false;
+      } else {
+        canReorder = true;
+      }
+    }
 
     return (
       <div className="col-xl-9 col-lg-8">
         <div className="card">
           <div className="card-header main-card-header">
-            {/* <h5>Staged Forms</h5>*/}
             <h5>
               <FormattedMessage
                 id="app.staged-form"
                 defaultMessage="Staged Forms"
               />
             </h5>
-            {!!isProjectForm && (
+            {isProjectForm && (
               <div className="add-btn">
-                <a onClick={this.handleStageReorder}>
+                <a
+                  onClick={this.handleStageReorder}
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={this.handleStageReorder}
+                >
                   {!isStageReorder ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={
                         <Tooltip>
-                          {/*Reorder*/}
                           <FormattedMessage
                             id="app.reorder"
                             defaultMessage="Reorder"
@@ -956,7 +982,6 @@ class StagedForms extends Component {
                       placement="top"
                       overlay={
                         <Tooltip>
-                          {/*Cancel Reorder*/}
                           <FormattedMessage
                             id="app.cancelReorder"
                             defaultMessage="Cancel Reorder"
@@ -974,13 +999,14 @@ class StagedForms extends Component {
                   <a
                     onClick={this.handleSaveStageReorder}
                     className={`${reOrderDisable ? 'disabled' : ''}`}
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={this.handleSaveStageReorder}
                   >
                     <OverlayTrigger
                       placement="top"
                       overlay={
                         <Tooltip>
-                          {' '}
-                          {/*Save*/}
                           <FormattedMessage
                             id="app.save"
                             defaultMessage="Save"
@@ -1002,12 +1028,14 @@ class StagedForms extends Component {
                       : 'deploy-inactive'
                   }`}
                   onClick={() => this.handleDeployAllStages(true)}
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => this.handleDeployAllStages(true)}
                 >
                   <OverlayTrigger
                     placement="top"
                     overlay={
                       <Tooltip>
-                        {/*Deploy All Stages*/}
                         <FormattedMessage
                           id="app.deployAllStages"
                           defaultMessage="Deploy All Stages"
@@ -1025,13 +1053,17 @@ class StagedForms extends Component {
             )}
             {!isProjectForm && canReorder && (
               <div className="add-btn">
-                <a onClick={this.handleStageReorder}>
+                <a
+                  onClick={this.handleStageReorder}
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={this.handleStageReorder}
+                >
                   {!isStageReorder ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={
                         <Tooltip>
-                          {/*Reorder Stages*/}
                           <FormattedMessage
                             id="app.reorderStages"
                             defaultMessage="Reorder Stages"
@@ -1049,7 +1081,6 @@ class StagedForms extends Component {
                       placement="top"
                       overlay={
                         <Tooltip>
-                          {/* Cancel Reorder*/}
                           <FormattedMessage
                             id="app.cancelReorder"
                             defaultMessage="Cancel Reorder"
@@ -1067,6 +1098,9 @@ class StagedForms extends Component {
                   <a
                     onClick={this.handleSaveStageReorder}
                     className={`${reOrderDisable ? 'disabled' : ''}`}
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={this.handleSaveStageReorder}
                   >
                     <OverlayTrigger
                       placement="top"
@@ -1086,13 +1120,14 @@ class StagedForms extends Component {
                       : 'deploy-inactive'
                   }`}
                   onClick={() => this.handleDeployAllStages(true)}
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => this.handleDeployAllStages(true)}
                 >
                   <OverlayTrigger
                     placement="top"
                     overlay={
                       <Tooltip>
-                        {' '}
-                        {/*Deploy All Stages*/}
                         <FormattedMessage
                           id="app.deployAllStages"
                           defaultMessage="Deploy All Stages"
@@ -1139,8 +1174,12 @@ class StagedForms extends Component {
               />
               <div className="card-body pdt-0">
                 <div className="add-btn  stage-add">
-                  <a onClick={this.props.commonPopupHandler}>
-                    {/*Add Stage*/}
+                  <a
+                    onClick={this.props.commonPopupHandler}
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={this.props.commonPopupHandler}
+                  >
                     <FormattedMessage
                       id="app.addStage"
                       defaultMessage="Add Stage"
@@ -1182,7 +1221,7 @@ class StagedForms extends Component {
                 handleToggleForm={this.handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateForm}
-                formData={!!isEditForm && formData}
+                formData={isEditForm && formData}
                 isEditForm={isEditForm}
                 stagedRegions={stagedRegions}
                 stagedTypes={stagedTypes}
@@ -1193,7 +1232,7 @@ class StagedForms extends Component {
             <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
-              showButton={true}
+              showButton
               showText="Create Form"
               url="/forms/create/"
               classname="manage-body md-body"

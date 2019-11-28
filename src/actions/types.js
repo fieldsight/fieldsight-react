@@ -29,7 +29,7 @@ export const UPDATE_SITE_LOGO = 'UPDATE_SITE_LOGO';
 // export const SITE_PICTURES_ERR = "SITE_PICTURES_ERR";
 // export const SITE_LOGS_ERR = "SITE_LOGS_ERR";
 
-//Project Dashbaord Actions
+// Project Dashbaord Actions
 export const GET_PROJECT_DASHBOARD = 'GET_PROJECT_DASHBOARD';
 export const GET_PROJECT_METAS = 'GET_PROJECT_METAS';
 export const GET_PROJECT_SUBMISSIONS = 'GET_PROJECT_SUBMISSIONS';
@@ -44,7 +44,7 @@ export const SHOW_PROJECT_DASHBOARD_LOADERS =
   'SHOW_PROJECT_DASHBOARD_LOADERS';
 export const UPDATE_PROJECT_LOGO = 'UPDATE_PROJECT_LOGO';
 
-//Team Dashboard Actions
+// Team Dashboard Actions
 export const GET_TEAM_DASHBOARD = 'GET_TEAM_DASHBOARD';
 export const SHOW_TEAM_DASHBOARD_LOADERS =
   'SHOW_TEAM_DASHBOARD_LOADERS';
@@ -53,23 +53,23 @@ export const POST_PACKAGE_SUBSCRIBE = 'POST_PACKAGE_SUBSCRIBE';
 // User Document Actions
 export const GET_USER_DOCUMENT = 'GET_USER_DOCUMENT';
 
-//Site Team Users
+// Site Team Users
 export const GET_TEAM_USERS = 'GET_TEAM_USERS';
 
-//Project List
+// Project List
 export const GET_PROJECT_LIST = 'GET_PROJECT_LIST';
 
 // Project User List
 export const GET_PROJECT_USER = 'GET_PROJECT_USER';
 
-//Project Log
+// Project Log
 export const GET_LOGS = 'GET_LOGS';
 
-//Teams
+// Teams
 export const GET_TEAMS = 'GET_TEAMS';
 export const GET_TRANSLATION = 'GET_TRANSLATION';
 
-//ProjectViewData
+// ProjectViewData
 export const GET_PROJECT_VIEW = 'GET_PROJECT_VIEW';
 
 // ManageForms
@@ -78,8 +78,8 @@ export const GET_MY_FORM_LIST = 'GET_MY_FORM_LIST';
 export const GET_PROJECT_FORM_LIST = 'GET_PROJECT_FORM_LIST';
 export const GET_SHARED_FORM_LIST = 'GET_SHARED_FORM_LIST';
 export const GET_REGIONS_AND_TYPES = 'GET_REGIONS_AND_TYPES';
-//SiteviewData
+// SiteviewData
 export const GET_SITE_VIEW = 'GET_SITE_VIEW';
 
-//Translation
-//export const GET_TRANSLATION = "GET_TRANSLATION";
+// Translation
+// export const GET_TRANSLATION = "GET_TRANSLATION";
