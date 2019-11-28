@@ -1,5 +1,5 @@
-import axios from "axios";
-import { GET_PROJECT_VIEW } from "./types";
+import axios from 'axios';
+import { GET_PROJECT_VIEW } from './types';
 
 export const getProjectViewData = (id, type) => dispatch => {
   axios
@@ -7,10 +7,11 @@ export const getProjectViewData = (id, type) => dispatch => {
     .then(res => {
       dispatch({
         type: GET_PROJECT_VIEW,
-        payload: res.data
+        payload: res.data,
       });
     })
     .catch(err => {
       console.log(err);
     });
 };
+export default getProjectViewData;

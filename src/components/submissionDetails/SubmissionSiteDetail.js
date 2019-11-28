@@ -1,14 +1,22 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
 const SubmissionSiteDetail = ({
-  site: { id, name, region, identifier, logo }
+  site: { id, name, region, identifier, logo },
 }) => {
   return (
     <div className="col-lg-6">
       <div className="card">
         <div className="card-header main-card-header">
-          <h5>site details</h5>
+          <h5>
+            <FormattedMessage
+              id="app.site-details"
+              defaultMessage="site details"
+              description="site details"
+            />
+          </h5>
         </div>
         <div className="card-body site-details">
           <figure style={{ backgroundImage: `url(${logo})` }}>

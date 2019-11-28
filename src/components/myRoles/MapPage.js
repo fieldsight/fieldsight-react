@@ -1,28 +1,26 @@
-import React, { Component } from "react";
+import React, { PureComponent } from 'react';
 import {
   Map,
   TileLayer,
   LayersControl,
   Marker,
   Popup,
-  FeatureGroup,
-  Circle
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+} from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+/* eslint-disable react/prop-types  */
+/* eslint-disable react/no-array-index-key  */
+/* eslint-disable react/jsx-indent */
 
 const position = [27.7, 85.4];
 
-class MapPage extends Component {
+class MapPage extends PureComponent {
   render() {
-    console.log(this.props.mapData);
     return (
-      <div
-       
-      >
+      <div>
         <Map
           center={position}
           zoom={7}
-          style={{ width: "100%", height: "600px" }}
+          style={{ width: '100%', height: '600px' }}
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -43,10 +41,15 @@ class MapPage extends Component {
             </LayersControl.BaseLayer>
             {/* <LayersControl.Overlay name="Marker with popup"> */}
             {this.props.mapData.map((item, i) => {
-              return item.geometry.coordinates.filter(Boolean).length > 0 ? (
+              return item.geometry.coordinates.filter(Boolean)
+                .length > 0 ? (
                 <Marker position={item.geometry.coordinates} key={i}>
                   <Popup>
-                    <a href={item.properties.detail_url} target="_blank">
+                    <a
+                      href={item.properties.detail_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <div className="content">
                         <h5>{item.properties.form}</h5>
                       </div>

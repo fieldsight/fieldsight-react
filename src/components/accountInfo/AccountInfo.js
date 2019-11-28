@@ -1,42 +1,46 @@
-import React, { Component } from "react";
-import { CardElement, injectStripe } from "react-stripe-elements";
-import Axios from "axios";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import Loader from "../common/Loader";
+import React, { Component } from 'react';
+import { CardElement, injectStripe } from 'react-stripe-elements';
+import Axios from 'axios';
+import { errorToast, successToast } from '../../utils/toastHandler';
+import Loader from '../common/Loader';
+
+/* eslint-disable */
 
 class AccountInfo extends Component {
   constructor(props) {
     super(props);
     this.submitCardInfo = this.submitCardInfo.bind(this);
-
+    const { data } = this.props;
     this.state = {
       isEdit: false,
-      errors: "",
+      errors: '',
       loaded: 0,
       isLoading: false,
-      card: this.props.data.account_information
-        ? this.props.data.account_information.card
-        : ""
+      card: data.account_information
+        ? data.account_information.card
+        : '',
     };
   }
+
   handleEdit = e => {
     this.setState({ isEdit: !this.state.isEdit });
   };
+
   handleChange = () => {
-    this.setState({ errors: "" });
+    this.setState({ errors: '' });
   };
 
   async submitCardInfo(e) {
-    const { token, error } = await this.props.stripe.createToken({
-      name: "stripeToken"
+    const { stripe, teamId } = this.props;
+    const { token, error } = await stripe.createToken({
+      name: 'stripeToken',
     });
     this.setState(
       {
-        isLoading: true
+        isLoading: true,
       },
       () => {
         if (!!token) {
-          const { teamId } = this.props;
           Axios.post(
             `fv3/api/team-owner-account/${teamId}/`,
             { stripeToken: token.id },
@@ -44,11 +48,12 @@ class AccountInfo extends Component {
               onUploadProgress: progressEvent => {
                 this.setState({
                   loaded: Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                  )
+                    (progressEvent.loaded * 100) /
+                      progressEvent.total,
+                  ),
                 });
-              }
-            }
+              },
+            },
           )
             .then(res => {
               this.setState(
@@ -56,30 +61,29 @@ class AccountInfo extends Component {
                   isLoading: false,
                   loaded: 0,
                   card: res.data.data,
-                  isEdit: !this.state.isEdit
+                  isEdit: !this.state.isEdit,
                 },
-                () => successToast("Card Info", "updated")
+                () => successToast('Card Info', 'updated'),
               );
             })
             .catch(err => {
               this.setState(
                 {
-                  isLoading: false
+                  isLoading: false,
                 },
-                errorToast
+                errorToast,
               );
             });
-          // })
         }
-
         if (!!error) this.setState({ errors: error }, () => {});
-      }
+      },
     );
   }
+
   render() {
     const {
       state: { isEdit, errors, isLoading, loaded, card },
-      props: { data }
+      props: { data },
     } = this;
 
     return (
@@ -92,12 +96,14 @@ class AccountInfo extends Component {
           <h5>Starter Monthly Plan</h5>
           <h6>
             <strong>
-              ${data.subscribed_package && data.subscribed_package.total_charge}
+              $
+              {data.subscribed_package &&
+                data.subscribed_package.total_charge}
               /
               {data.subscribed_package &&
-              data.subscribed_package.period == "Month"
-                ? "Mo"
-                : "Yr"}
+              data.subscribed_package.period == 'Month'
+                ? 'Mo'
+                : 'Yr'}
             </strong>
           </h6>
           <ul className="list-icon mt-4 mb-4">
@@ -106,7 +112,7 @@ class AccountInfo extends Component {
               <strong>
                 {data.subscribed_package &&
                   data.subscribed_package.total_submissions}
-              </strong>{" "}
+              </strong>{' '}
               Submissions
             </li>
             <li>
@@ -133,7 +139,8 @@ class AccountInfo extends Component {
               <div>Email Address</div>
               <p>
                 <strong>
-                  {data.account_information && data.account_information.email}
+                  {data.account_information &&
+                    data.account_information.email}
                 </strong>
               </p>
             </li>
@@ -150,7 +157,7 @@ class AccountInfo extends Component {
               title=""
               className="btn btn-primary"
               onClick={() => {
-                this.handleEdit("edit");
+                this.handleEdit('edit');
               }}
             >
               Edit Credit Info <i className="la la-edit"></i>

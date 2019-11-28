@@ -1,0 +1,45 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "max-len": [1, 70, 2, { "ignoreComments": true }],
+    "prettier/prettier": ["error"],
+    "react/jsx-filename-extension": [
+      1,
+      { "extensions": [".js", ".jsx"] }
+    ],
+    "react/prop-types": [2, { "ignore": ["children"] }],
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": true }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "no-unused-vars": "warn",
+    "no-console": 1,
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": [
+      "warn",
+      { "aspects": ["invalidHref"] }
+    ],
+    "no-nested-ternary": "warn",
+    "no-underscore-dangle": "warn",
+    "react/destructuring-assignment": "warn",
+    "array-callback-return": "warn",
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "labelComponents": ["CustomLabel"],
+        "labelAttributes": ["inputLabel"],
+        "controlComponents": ["CustomInput"],
+        "assert": "both",
+        "depth": 3
+      }
+    ],
+    "react/jsx-wrap-multilines": "warn",
+    "no-restricted-globals": "warn"
+  },
+  "env": {
+    "browser": true
+  }
+}

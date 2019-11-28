@@ -1,21 +1,32 @@
-import React from "react";
-import Table from "react-bootstrap/Table";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import { DotLoader } from "../../myForm/Loader";
-import isEmpty from "../../../utils/isEmpty";
+import React from 'react';
+import Table from 'react-bootstrap/Table';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { FormattedMessage } from 'react-intl';
+import { DotLoader } from '../../myForm/Loader';
+import isEmpty from '../../../utils/isEmpty';
+/* eslint-disable react/prop-types  */
 
-class SiteListTable extends React.Component {
-  state = {
-    project_id: JSON.parse(this.props.id)
-  };
+class SiteListTable extends React.PureComponent {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     project_id: JSON.parse(props.id),
+  //   };
+  // }
+
   render() {
     const { data, loader, terms } = this.props;
-    const tableHeight = data.length > 0 ? "324px" : "396px";
+    const tableHeight = data.length > 0 ? '324px' : '396px';
     return (
       <>
         <div className="card-body">
-          <div style={{ position: "relative", height: `${tableHeight} ` }}>
+          <div
+            style={{
+              position: 'relative',
+              height: `${tableHeight} `,
+            }}
+          >
             <PerfectScrollbar>
               {loader && <DotLoader />}
               {!loader && (
@@ -26,15 +37,60 @@ class SiteListTable extends React.Component {
                   <thead>
                     <tr>
                       <th>
-                        {!isEmpty(terms) ? `${terms.site}` : "Sites"} Name
+                        {!isEmpty(terms) ? `${terms.site}` : 'Sites'}
+                        Name
                       </th>
-                      <th>id</th>
-                      {/* <th>Address</th> */}
-                      <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th>
-                      <th>Type</th>
-                      <th>Progress</th>
-                      <th>Submissions</th>
-                      <th>Latest status</th>
+                      {/* <th>
+                        {!isEmpty(terms) ? (
+                          `${terms.site}` ? (
+                            <FormattedMessage
+                              id="app.school-name"
+                              defaultMessage="School Name"
+                            />
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          "Sites"
+                        )}{" "}
+                      </th> */}
+                      <th>
+                        <FormattedMessage
+                          id="app.id"
+                          defaultMessage="id"
+                        />
+                      </th>
+                      {/* <th>Address</th> 
+                      <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th> */}
+                      <th>
+                        {!isEmpty(terms)
+                          ? `${terms.region}`
+                          : 'Region'}
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.type"
+                          defaultMessage="Type"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.progress"
+                          defaultMessage=" Progress"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.submissions"
+                          defaultMessage="Submissions"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.latest-status"
+                          defaultMessage="Latest status"
+                        />
+                      </th>
                     </tr>
                   </thead>
 
@@ -42,19 +98,21 @@ class SiteListTable extends React.Component {
                     {!loader && data.length === 0 && (
                       <tr>
                         <td colSpan={7}>
-                          <p>No Form Data Available</p>
+                          <p>
+                            <FormattedMessage
+                              id="app.noFormDataAvailable"
+                              defaultMessage="No Form Data Available"
+                            />
+                          </p>
                         </td>
                       </tr>
                     )}
                     {!loader &&
-                      data.map((item, i) => (
-                        <tr key={i}>
+                      data.map(item => (
+                        <tr key={item.id}>
                           <td>
                             <a
-                              href={
-                                "/fieldsight/application/#/site-dashboard/" +
-                                item.id
-                              }
+                              href={`/fieldsight/application/#/site-dashboard/${item.id}`}
                               className="pending table-profile"
                             >
                               {/* <figure>
@@ -80,26 +138,30 @@ class SiteListTable extends React.Component {
                                 aria-valuenow="40"
                                 aria-valuemin="0"
                                 aria-valuemax="200"
-                                style={{ width: item.progress + "%" }}
+                                style={{
+                                  width: `${item.progress} %`,
+                                }}
                               >
                                 <span className="progress-counts">
-                                  {item.progress + "%"}
+                                  {`${item.progress} %`}
                                 </span>
                               </div>
                             </div>
                           </td>
-                          <td style={{ right: "-28px" }}>{item.submissions}</td>
+                          <td style={{ right: '-28px' }}>
+                            {item.submissions}
+                          </td>
                           <td>
                             <a
                               className={
                                 item.status != null
                                   ? item.status.toLowerCase()
-                                  : ""
+                                  : ''
                               }
                             >
                               {item.status != null
                                 ? item.status
-                                : "No Submission Yet"}
+                                : 'No Submission Yet'}
                             </a>
                           </td>
                         </tr>

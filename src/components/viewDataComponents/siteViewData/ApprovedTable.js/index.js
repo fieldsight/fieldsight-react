@@ -1,22 +1,23 @@
-import React, { Component } from "react";
-import StatusTable from "../../responded/StatusTable";
-import { DotLoader } from "../../../myForm/Loader";
-import WithPagination from "../../../../hoc/WithPagination";
+import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+
+import StatusTable from '../../responded/StatusTable';
+import { DotLoader } from '../../../myForm/Loader';
+import WithPagination from '../../../../hoc/WithPagination';
 
 class ApprovedTable extends Component {
-  state = {
-    approved_submissions: []
-  };
   componentDidMount() {
-    if (this.props.id != "") {
+    if (this.props.id !== '') {
       this.props.paginationHandler(1, null, {
-        type: "siteStatus",
+        type: 'siteStatus',
         projectId: this.props.id,
-        status: "approved"
+        status: 'approved',
       });
     }
   }
-  componentDidUpdate(prevProps, prevState) {
+
+  componentDidUpdate(prevProps) {
     if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
@@ -24,71 +25,100 @@ class ApprovedTable extends Component {
 
   render() {
     const {
-      props: { data, showViewData, dLoader }
+      props: {
+        id,
+        data,
+        showViewData,
+        dLoader,
+        siteList,
+        fromData,
+        toData,
+        totalCount,
+        pageNum,
+        paginationHandler,
+        renderPageNumbers,
+      },
     } = this;
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Approved Submissions</h5>
+          <h5>
+            <FormattedMessage
+              id="app.approved-submissions"
+              defaultMessage="Approved Submissions"
+            />
+          </h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
+            <button
+              type="button"
+              onClick={showViewData}
+              className="fieldsight-btn"
+            >
+              {data ? (
+                <FormattedMessage
+                  id="app.view-by-form"
+                  defaultMessage="View By Form"
+                />
+              ) : (
+                <FormattedMessage
+                  id="app.view-by-status"
+                  defaultMessage="View By Status"
+                />
+              )}
             </button>
           </div>
         </div>
-        {dLoader == false ? (
+        {dLoader === false ? (
           <>
-            {" "}
             <div className="card-body">
-              <StatusTable submission={this.props.siteList} />
+              <StatusTable submission={siteList} />
             </div>
-            {this.props.siteList && this.props.siteList.length > 0 ? (
+            {siteList && siteList.length > 0 ? (
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing <span>{this.props.fromData}</span> to{" "}
+                      Showing
+                      <span>{fromData}</span>
+                      to
                       <span>
-                        {" "}
-                        {this.props.toData > this.props.totalCount
-                          ? this.props.totalCount
-                          : this.props.toData}{" "}
-                      </span>{" "}
-                      of <span>{this.props.totalCount}</span> entries.
+                        {toData > totalCount ? totalCount : toData}
+                      </span>
+                      of
+                      <span>{totalCount}</span>
+                      entries.
                     </p>
                   </div>
-                  {this.props.toData < this.props.totalCount ? (
+                  {toData < totalCount ? (
                     <div className="table-pagination">
                       <ul>
                         <li className="page-item">
                           <a
-                            onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum - 1,
-                                null,
-                                project_id
-                              )
-                            }
+                            href="#"
+                            onClick={() => {
+                              paginationHandler(pageNum - 1, null, {
+                                projectId: id,
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-left" />
                           </a>
                         </li>
 
-                        {this.props.renderPageNumbers({
-                          type: "viewByStatus",
-                          projectId: this.props.id,
-                          status: "flagged"
+                        {renderPageNumbers({
+                          type: 'viewByStatus',
+                          projectId: id,
+                          status: 'flagged',
                         })}
 
                         <li className="page-item ">
                           <a
-                            onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum + 1,
-                                null,
-                                project_id
-                              )
-                            }
+                            href="#"
+                            onClick={() => {
+                              paginationHandler(pageNum + 1, null, {
+                                projectId: id,
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-right" />
                           </a>
@@ -106,13 +136,28 @@ class ApprovedTable extends Component {
                   </div>
                 </div>
               </div>
-            )}{" "}
+            )}
           </>
         ) : (
           <DotLoader />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
+ApprovedTable.propTypes = {
+  id: PropTypes.string.isRequired,
+  paginationHandler: PropTypes.func.isRequired,
+  breadcrumbs: PropTypes.objectOf.isRequired,
+  data: PropTypes.objectOf.isRequired,
+  showViewData: PropTypes.bool.isRequired,
+  dLoader: PropTypes.bool.isRequired,
+  siteList: PropTypes.arrayOf.isRequired,
+  fromData: PropTypes.number.isRequired,
+  toData: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  pageNum: PropTypes.number.isRequired,
+  handleBreadCrumb: PropTypes.func.isRequired,
+  renderPageNumbers: PropTypes.func.isRequired,
+};
 export default WithPagination(ApprovedTable);

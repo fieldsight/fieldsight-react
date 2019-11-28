@@ -1,23 +1,27 @@
-import { GET_TEAM_DASHBOARD, POST_PACKAGE_SUBSCRIBE } from "../actions/types";
+import {
+  GET_TEAM_DASHBOARD,
+  POST_PACKAGE_SUBSCRIBE,
+} from '../actions/types';
+/* eslint-disable camelcase */
 
 const initialState = {
-  id: "",
-  name: "",
-  address: "",
-  public_desc: "",
-  logo: "",
-  contact: "",
-  total_sites: "",
-  submissions: "",
-  projects: "",
-  admin: "",
-  breadcrumbs: "",
+  id: '',
+  name: '',
+  address: '',
+  public_desc: '',
+  logo: '',
+  contact: '',
+  total_sites: '',
+  submissions: '',
+  projects: '',
+  admin: '',
+  breadcrumbs: '',
   teamDashboardLoader: true,
-  total_projects: "",
-  total_users: "",
+  total_projects: '',
+  total_users: '',
   map: {},
   package_details: [],
-  postCardResponse: {}
+  postCardResponse: {},
 };
 
 export default function(state = initialState, action) {
@@ -26,12 +30,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         ...action.payload,
-        teamDashboardLoader: false
+        teamDashboardLoader: false,
       };
     case POST_PACKAGE_SUBSCRIBE:
       return {
         ...state,
-        postCardResponse: action.response
+        postCardResponse: action.response,
       };
     default:
       return state;

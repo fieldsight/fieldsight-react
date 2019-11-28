@@ -1,5 +1,8 @@
-import React from "react";
-import Zoom from "react-reveal/Zoom";
+import React from 'react';
+import Zoom from 'react-reveal/Zoom';
+import { FormattedMessage } from 'react-intl';
+
+/* eslint-disable   react/prop-types */
 
 const Modal = ({
   title,
@@ -8,21 +11,32 @@ const Modal = ({
   showButton,
   url,
   showText,
-  classname
+  classname,
 }) => (
   <Zoom duration={500}>
     <div className="fieldsight-popup open" style={{ zIndex: 99999 }}>
       <div
-        className={`popup-body ${title === "Preview" ? "cropbody" : ""} ${
-          title === "Warning" ? "sm-body" : ""
-        } ${classname}`}
+        className={`popup-body ${
+          title === 'Preview' ? 'cropbody' : ''
+        } ${title === 'Warning' ? 'sm-body' : ''} ${classname}`}
       >
         <div className="card">
           <div className="card-header main-card-header  sub-card-header">
-            <h5>{title}</h5>
+            <h5>
+              {/* title */}
+
+              <FormattedMessage id={title} defaultMessage={title} />
+            </h5>
             {showButton && (
-              <div className="add-btn" style={{ marginRight: "15px" }}>
-                <a href={url} target="_blank">
+              <div
+                className="add-btn"
+                style={{ marginRight: '15px' }}
+              >
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {showText && showText}
                   <span>
                     <i className="la la-plus" />
@@ -30,12 +44,17 @@ const Modal = ({
                 </a>
               </div>
             )}
-            <span className="popup-close" onClick={toggleModal}>
+            <span
+              className="popup-close"
+              onClick={toggleModal}
+              tabIndex="0"
+              role="button"
+              onKeyDown={toggleModal}
+            >
               <i className="la la-close" />
             </span>
           </div>
           <div className="card-body">{children}</div>
-          
         </div>
       </div>
     </div>

@@ -1,57 +1,86 @@
-import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
-import { RegionContext } from "../../context";
-import isEmpty from "../../utils/isEmpty";
+import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import { RegionContext } from '../../context';
+import isEmpty from '../../utils/isEmpty';
+
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable consistent-return */
 
 class LeftSidebar extends Component {
-  static contextType = RegionContext;
+  constructor(props) {
+    super(props);
+    this.contextType = RegionContext;
+  }
+
+  translating = title => {
+    if (
+      title === 'app.projectInformation' ||
+      'app.siteTypes' ||
+      'app.regions' ||
+      'app.mapLayers' ||
+      'app.termsAndLabels'
+    ) {
+      return <FormattedMessage id={title} defaultMessage={title} />;
+      // } else {
+      //   return { title };
+    }
+  };
 
   renderNavRoutes = () => {
     const { terms } = this.context;
-
     const {
       location: { pathname },
-      match: { url }
+      match: { url },
     } = this.props;
 
     const sideNavRoutes = [
       {
         to: `${url}`,
         path: `${url}`,
-        title: "Project Information"
+        title: 'app.projectInformation',
       },
       {
         to: `${url}/site-type`,
         path: `${url}/site-type`,
-        title: !isEmpty(terms) ? `${terms.site} Types` : "Site Types"
+        title: !isEmpty(terms)
+          ? `${terms.site} Types`
+          : 'app.siteTypes',
       },
       {
         to: `${url}/site-information`,
         path: `${url}/site-information`,
         title: !isEmpty(terms)
           ? `${terms.site} Information`
-          : "Site Information"
+          : 'app.siteInformation',
       },
       {
         to: `${url}/manage-region`,
         path: `${url}/manage-region`,
-        title: !isEmpty(terms) ? `${terms.region}` : "Regions"
+        title: !isEmpty(terms) ? `${terms.region}` : 'app.regions',
       },
-      { to: `${url}/map-layer`, path: `${url}/map-layer`, title: "Map Layers" },
+      {
+        to: `${url}/map-layer`,
+        path: `${url}/map-layer`,
+        title: 'app.mapLayers',
+      },
       {
         to: `${url}/term-and-label`,
         path: `${url}/term-and-label`,
-        title: "Terms And Labels"
-      }
+        title: 'app.termsAndLabels',
+      },
     ];
 
     return sideNavRoutes.map((route, i) => (
       <li className="nav-item" key={i}>
         <Link
           to={route.to}
-          className={pathname === route.path ? "nav-link active" : "nav-link"}
+          className={
+            pathname === route.path ? 'nav-link active' : 'nav-link'
+          }
         >
-          {route.title}
+          {this.translating(route.title)}
         </Link>
       </li>
     ));

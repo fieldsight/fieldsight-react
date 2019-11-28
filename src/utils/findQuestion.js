@@ -1,6 +1,11 @@
 const findQuestion = (children, type) => {
   const filteredQuestions = [
-    { bind: null, type: null, name: "--Select Question--", label: null }
+    {
+      bind: null,
+      type: null,
+      name: '--Select Question--',
+      label: null,
+    },
   ];
 
   const filterQuestionByType = questions => {
@@ -10,16 +15,16 @@ const findQuestion = (children, type) => {
           filteredQuestions.push(question);
         }
 
-        if (question.type === "group" || question.type === "repeat") {
+        if (question.type === 'group' || question.type === 'repeat') {
           filterQuestionByType(question.children);
         }
       });
     } else {
       questions.forEach(question => {
-        if (question.type === "group" || question.type === "repeat") {
+        if (question.type === 'group' || question.type === 'repeat') {
           return filterQuestionByType(question.children);
         }
-        filteredQuestions.push(question);
+        return filteredQuestions.push(question);
       });
     }
   };

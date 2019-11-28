@@ -1,5 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+/* eslint-disable */
+
 const Td = ({ children, to }) => {
   return (
     <td>

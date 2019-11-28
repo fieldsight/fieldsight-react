@@ -1,4 +1,7 @@
-import React from "react";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+/* eslint-disable */
 
 const CheckBox = ({
   name,
@@ -6,9 +9,11 @@ const CheckBox = ({
   className,
   changeHandler,
   label,
+  translation,
   ...rest
 }) => (
   <div className={`checkbox ${className}`}>
+    {console.log(label, '3333')}
     <label>
       <input
         type="checkbox"
@@ -17,7 +22,12 @@ const CheckBox = ({
         checked={checked}
         onChange={changeHandler}
       />
-      <i className="helper" /> {label}
+      <i className="helper" />{' '}
+      {translation == true ? (
+        <FormattedMessage id={label} defaultMessage={label} />
+      ) : (
+        label
+      )}
     </label>
   </div>
 );

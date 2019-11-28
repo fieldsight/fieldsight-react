@@ -1,18 +1,22 @@
-import React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { FormattedMessage, injectIntl } from 'react-intl';
+/* eslint-disable react/prop-types  */
 
-class About extends React.Component {
+class About extends React.PureComponent {
   render() {
     const { contacts, desc } = this.props;
     return (
       // <div className="card ">
       <div className="about">
         <div className="card-header main-card-header sub-card-header">
-          <h5>About</h5>
+          <h5>
+            <FormattedMessage id="app.about" defaultMessage="About" />
+          </h5>
         </div>
         <div
           className="thumb-list mr-0 "
-          style={{ position: "relative", height: "357px" }}
+          style={{ position: 'relative', height: '357px' }}
         >
           <PerfectScrollbar>
             <div className="card-body about-body">
@@ -21,23 +25,31 @@ class About extends React.Component {
               </div>
               <div className="contact">
                 <div className="card-header main-card-header sub-card-header">
-                  <h5>Contacts</h5>
+                  <h5>
+                    <FormattedMessage
+                      id="app.contacts"
+                      defaultMessage="Contacts"
+                    />
+                  </h5>
                 </div>
                 <div className="card-body">
                   <ul>
                     {contacts.phone && (
                       <li>
-                        <i className="la la-phone" /> {contacts.phone}
+                        <i className="la la-phone" />
+                        {contacts.phone}
                       </li>
                     )}
                     {contacts.email && (
                       <li>
-                        <i className="la la-envelope" /> {contacts.email}
+                        <i className="la la-envelope" />
+                        {contacts.email}
                       </li>
                     )}
                     {contacts.website && (
                       <li>
-                        <i className="la la-external-link" /> {contacts.website}
+                        <i className="la la-external-link" />
+                        {contacts.website}
                       </li>
                     )}
                   </ul>
