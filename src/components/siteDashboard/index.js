@@ -49,25 +49,18 @@ class SiteDashboard extends Component {
 
   componentDidMount() {
     const {
-      params: {
-        match: { id: siteId },
+      match: {
+        params: { id: siteId },
       },
-      // getSiteDashboard,
-      // getSiteMetas,
-      // getSiteSubmissions,
-      // getSiteDocuments,
-      // getSiteLogs,
-      // getSiteForms,
-      // getRecentPictures,
     } = this.props;
 
-    getSiteDashboard(siteId);
-    getSiteMetas(siteId);
-    getSiteSubmissions(siteId);
-    getSiteDocuments(siteId);
-    getSiteLogs(siteId);
-    getSiteForms(siteId, 'general');
-    getRecentPictures(siteId);
+    this.props.getSiteDashboard(siteId);
+    this.props.getSiteMetas(siteId);
+    this.props.getSiteSubmissions(siteId);
+    this.props.getSiteDocuments(siteId);
+    this.props.getSiteLogs(siteId);
+    this.props.getSiteForms(siteId, 'general');
+    this.props.getRecentPictures(siteId);
     this.setState({
       siteId,
     });

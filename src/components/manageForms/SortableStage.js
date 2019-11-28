@@ -18,8 +18,6 @@ import SubStageTable from './subStageTable';
 import { DotLoader } from '../myForm/Loader';
 
 /* eslint-disable  react/prop-types */
-/* eslint-disable  no-unneeded-ternary */
-/* eslint-disable  consistent-return */
 
 const DragHandle = sortableHandle(({ name }) => (
   <Card.Header>
@@ -75,10 +73,11 @@ class SortableStage extends Component {
     if (
       nextProps.isStageReorderCancel !== props.isStageReorderCancel
     ) {
-      this.setState(state => {
+      this.setState(() => {
         if (nextProps.isStageReorderCancel) {
           return { data: props.stage };
         }
+        return null;
       });
     }
   }
@@ -129,7 +128,7 @@ class SortableStage extends Component {
           return result;
         }
         // else {
-        //   return true;
+        return null;
         // }
       });
     const arrDelete =
@@ -140,7 +139,7 @@ class SortableStage extends Component {
           return result;
         }
         // else {
-        //   return false;
+        return null;
         // }
       });
 
