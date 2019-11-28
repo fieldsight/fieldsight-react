@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 /* eslint-disable   react/prop-types */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 
 const RadioElement = ({
   name,

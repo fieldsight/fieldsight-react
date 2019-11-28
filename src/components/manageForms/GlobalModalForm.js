@@ -6,13 +6,10 @@ import CheckBox from '../common/CheckBox';
 import SelectElement from '../common/SelectElement';
 
 /* eslint-disable react/prop-types */
-/* eslint-disable  consistent-return */
-/* eslint-disable  react/no-access-state-in-setstate */
-/* eslint-disable  jsx-a11y/label-has-associated-control */
-/* eslint-disable  no-plusplus */
 
 const getArrValue = (arr, value) => {
   if (arr.includes(value)) return true;
+  return false;
   // else return false;
 };
 
@@ -244,54 +241,84 @@ class GlobalModalForm extends Component {
   handleRadioChange = e => {
     const { name, value } = e.target;
 
-    this.setState(state => {
-      if (name === 'status') {
-        return {
-          status: value,
-        };
+    this.setState(() => {
+      switch (name) {
+        case 'status':
+          return {
+            status: value,
+          };
+        case 'donor':
+          return {
+            isDonor: JSON.parse(value),
+          };
+        case 'edit':
+          return {
+            isEdit: JSON.parse(value),
+          };
+        case 'delete':
+          return {
+            isDelete: JSON.parse(value),
+          };
+        case 'scheduleType':
+          return {
+            scheduleType: JSON.parse(value),
+            selectedDays: [],
+          };
+        case 'notifyIncomplete':
+          return {
+            notifyIncomplete: JSON.parse(value),
+          };
+        default:
+          return null;
       }
-      if (name === 'donor') {
-        return {
-          isDonor: JSON.parse(value),
-        };
-      }
-      if (name === 'edit') {
-        return {
-          isEdit: JSON.parse(value),
-        };
-      }
-      if (name === 'delete') {
-        return {
-          isDelete: JSON.parse(value),
-        };
-      }
-      if (name === 'scheduleType') {
-        return {
-          scheduleType: JSON.parse(value),
-          selectedDays: [],
-        };
-      }
-      if (name === 'notifyIncomplete') {
-        return {
-          notifyIncomplete: JSON.parse(value),
-        };
-      }
+
+      //   if (name === 'status') {
+      //     return {
+      //       status: value,
+      //     };
+      //   }
+      //   if (name === 'donor') {
+      //     return {
+      //       isDonor: JSON.parse(value),
+      //     };
+      //   }
+      //   if (name === 'edit') {
+      //     return {
+      //       isEdit: JSON.parse(value),
+      //     };
+      //   }
+      //   if (name === 'delete') {
+      //     return {
+      //       isDelete: JSON.parse(value),
+      //     };
+      //   }
+      //   if (name === 'scheduleType') {
+      //     return {
+      //       scheduleType: JSON.parse(value),
+      //       selectedDays: [],
+      //     };
+      //   }
+      //   if (name === 'notifyIncomplete') {
+      //     return {
+      //       notifyIncomplete: JSON.parse(value),
+      //     };
+      //   }
     });
   };
 
   handleSelectRegionChange = region => {
-    this.setState(state => {
-      return {
-        regionSelected: region,
-      };
+    this.setState({
+      // return {
+      regionSelected: region,
+      // };
     });
   };
 
   handleSelectTypeChange = type => {
-    this.setState(state => {
-      return {
-        typeSelected: type,
-      };
+    this.setState({
+      // return {
+      typeSelected: type,
+      // };
     });
   };
 
@@ -304,7 +331,7 @@ class GlobalModalForm extends Component {
   handleStartDateChange = e => {
     const { endDate } = this.state;
     const errors = {};
-    this.setState(state => {
+    this.setState(() => {
       if (endDate && e > endDate) {
         errors.endDate = 'Invalid Date';
         return {
@@ -314,10 +341,10 @@ class GlobalModalForm extends Component {
       }
       // else {
       //   errors = {};
-      //   return {
-      //     startDate: e,
-      //     errors,
-      //   };
+      return {
+        // startDate: e,
+        errors,
+      };
       // }
     });
   };
@@ -325,7 +352,7 @@ class GlobalModalForm extends Component {
   handleEndDateChange = e => {
     const { startDate } = this.state;
     const errors = {};
-    this.setState(state => {
+    this.setState(() => {
       if (e < startDate) {
         errors.endDate = 'Invalid Date';
         return {
@@ -335,10 +362,10 @@ class GlobalModalForm extends Component {
       }
       // else {
       //   errors = {};
-      //   return {
-      //     endDate: e,
-      //     errors,
-      //   };
+      return {
+        // endDate: e,
+        errors,
+      };
       // }
     });
   };
@@ -351,6 +378,7 @@ class GlobalModalForm extends Component {
     if (day === 'fri') return 5;
     if (day === 'sat') return 6;
     if (day === 'sun') return 7;
+    return null;
   };
 
   handleCheckbox = e => {
@@ -361,8 +389,6 @@ class GlobalModalForm extends Component {
     const {
       target: { name, checked },
     } = e;
-    // const name = name;
-    // const checked = checked;
     const selectedDay = this.getDay(name);
     this.setState(
       preState => ({
@@ -376,15 +402,16 @@ class GlobalModalForm extends Component {
         this.setState(state => {
           if (checked) {
             return {
-              selectedDays: [...this.state.selectedDays, selectedDay],
+              selectedDays: [...state.selectedDays, selectedDay],
             };
           }
           if (!checked) {
-            const days = this.state.selectedDays;
+            const days = state.selectedDays;
             return {
               selectedDays: days.filter(day => day !== selectedDay),
             };
           }
+          return null;
         });
       },
     );
@@ -394,16 +421,14 @@ class GlobalModalForm extends Component {
     const {
       target: { name, checked },
     } = e;
-    // const name = e.target.name;
-    // const checked = e.target.checked;
     const day = this.getDay(name);
     this.setState(
       state => {
         if (name === 'sun') {
           return {
             weeklyArrDays: {
-              ...this.state.weeklyArrDays,
-              [name]: !this.state.weeklyArrDays[name],
+              ...state.weeklyArrDays,
+              [name]: !state.weeklyArrDays[name],
               mon: false,
               tue: false,
               wed: false,
@@ -416,8 +441,8 @@ class GlobalModalForm extends Component {
         if (name === 'mon') {
           return {
             weeklyArrDays: {
-              ...this.state.weeklyArrDays,
-              [name]: !this.state.weeklyArrDays[name],
+              ...state.weeklyArrDays,
+              [name]: !state.weeklyArrDays[name],
               sun: false,
               tue: false,
               wed: false,
@@ -430,8 +455,8 @@ class GlobalModalForm extends Component {
         if (name === 'tue') {
           return {
             weeklyArrDays: {
-              ...this.state.weeklyArrDays,
-              [name]: !this.state.weeklyArrDays[name],
+              ...state.weeklyArrDays,
+              [name]: !state.weeklyArrDays[name],
               sun: false,
               mon: false,
               wed: false,
@@ -444,8 +469,8 @@ class GlobalModalForm extends Component {
         if (name === 'wed') {
           return {
             weeklyArrDays: {
-              ...this.state.weeklyArrDays,
-              [name]: !this.state.weeklyArrDays[name],
+              ...state.weeklyArrDays,
+              [name]: !state.weeklyArrDays[name],
               sun: false,
               tue: false,
               mon: false,
@@ -458,8 +483,8 @@ class GlobalModalForm extends Component {
         if (name === 'thu') {
           return {
             weeklyArrDays: {
-              ...this.state.weeklyArrDays,
-              [name]: !this.state.weeklyArrDays[name],
+              ...state.weeklyArrDays,
+              [name]: !state.weeklyArrDays[name],
               sun: false,
               tue: false,
               wed: false,
@@ -472,8 +497,8 @@ class GlobalModalForm extends Component {
         if (name === 'fri') {
           return {
             weeklyArrDays: {
-              ...this.state.weeklyArrDays,
-              [name]: !this.state.weeklyArrDays[name],
+              ...state.weeklyArrDays,
+              [name]: !state.weeklyArrDays[name],
               sun: false,
               tue: false,
               wed: false,
@@ -486,8 +511,8 @@ class GlobalModalForm extends Component {
         if (name === 'sat') {
           return {
             weeklyArrDays: {
-              ...this.state.weeklyArrDays,
-              [name]: !this.state.weeklyArrDays[name],
+              ...state.weeklyArrDays,
+              [name]: !state.weeklyArrDays[name],
               sun: false,
               tue: false,
               wed: false,
@@ -497,15 +522,17 @@ class GlobalModalForm extends Component {
             },
           };
         }
+        return null;
       },
       () => {
-        this.setState(state => {
+        this.setState(() => {
           if (checked) {
             return { selectedDays: [day] };
           }
           if (!checked) {
             return { selectedDays: [] };
           }
+          return null;
         });
       },
     );
@@ -544,9 +571,9 @@ class GlobalModalForm extends Component {
         typeDropdown,
         typeSelected,
         status,
-        isDonor,
-        isEdit,
-        isDelete,
+        // isDonor,
+        // isEdit,
+        // isDelete,
         hasLoaded,
         startDate,
         endDate,
@@ -563,13 +590,13 @@ class GlobalModalForm extends Component {
     const weekOptions = [];
     const monthOPtions = [];
     const dayOptions = [];
-    for (let i = 1; i < 52; i++) {
+    for (let i = 1; i < 52; i += 1) {
       weekOptions.push({ key: i, name: i });
     }
-    for (let i = 1; i <= 12; i++) {
+    for (let i = 1; i <= 12; i += 1) {
       monthOPtions.push({ key: i, name: i });
     }
-    for (let i = 1; i <= 31; i++) {
+    for (let i = 1; i <= 31; i += 1) {
       if (i <= 30) dayOptions.push({ key: i, name: i });
       else dayOptions.push({ key: 0, name: 'Last' });
     }

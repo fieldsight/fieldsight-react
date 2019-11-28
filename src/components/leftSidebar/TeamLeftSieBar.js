@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import isEmpty from '../../utils/isEmpty';
 
 /* eslint-disable  consistent-return */
 /* eslint-disable react/prop-types */
@@ -13,7 +12,7 @@ class TeamLeftSidebar extends Component {
       location: { pathname },
       match: {
         url,
-        params: { id: teamId },
+        // params: { id: teamId },
       },
       teamOwner,
     } = this.props;

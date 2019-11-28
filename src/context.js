@@ -55,7 +55,7 @@ class RegionProvider extends Component {
           });
         }),
       )
-      .catch(err => {});
+      .catch(() => {});
   }
 
   toggleModal = () => {
@@ -91,7 +91,7 @@ class RegionProvider extends Component {
           name: selectedRegion.name,
           project: selectedRegion.project,
         })
-        .then(res => {
+        .then(() => {
           this.setState(
             prevState => ({
               ...INITIAL_STATE,
@@ -107,7 +107,7 @@ class RegionProvider extends Component {
             },
           );
         })
-        .catch(err => {
+        .catch(() => {
           this.setState(
             {
               isLoading: false,
@@ -142,7 +142,7 @@ class RegionProvider extends Component {
           },
         );
       })
-      .catch(err => {
+      .catch(() => {
         this.setState(
           {
             isLoading: false,
@@ -178,7 +178,7 @@ class RegionProvider extends Component {
           project: selectedSubRegion.project,
           parent: subRegionId,
         })
-        .then(res => {
+        .then(() => {
           this.setState(
             prevState => ({
               ...INITIAL_STATE,
@@ -197,7 +197,7 @@ class RegionProvider extends Component {
             },
           );
         })
-        .catch(err => {
+        .catch(() => {
           this.setState(
             {
               isLoading: false,
@@ -234,7 +234,7 @@ class RegionProvider extends Component {
           },
         );
       })
-      .catch(err => {
+      .catch(() => {
         this.setState(
           {
             isLoading: false,
@@ -253,7 +253,7 @@ class RegionProvider extends Component {
     this.regionPostHandler();
   };
 
-  onSubmitHandler = (e, edit) => {
+  onSubmitHandler = e => {
     e.preventDefault();
 
     this.setState(
@@ -327,7 +327,7 @@ class RegionProvider extends Component {
 
         return axios
           .delete(`${url}${selectedId}/`)
-          .then(res => {
+          .then(() => {
             this.setState(
               {
                 ...INITIAL_STATE,
@@ -345,7 +345,7 @@ class RegionProvider extends Component {
                 ),
             );
           })
-          .catch(err => {
+          .catch(() => {
             this.setState(
               {
                 isLoading: false,
@@ -362,7 +362,7 @@ class RegionProvider extends Component {
 
       axios
         .delete(`${url}${selectedId}/`)
-        .then(res => {
+        .then(() => {
           this.setState(
             {
               ...INITIAL_STATE,
@@ -378,7 +378,7 @@ class RegionProvider extends Component {
             },
           );
         })
-        .catch(err => {
+        .catch(() => {
           this.setState(
             {
               isLoading: false,

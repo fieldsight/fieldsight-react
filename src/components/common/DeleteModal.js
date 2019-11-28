@@ -1,8 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Modal from './Modal';
-
-/* eslint-disable */
+/* eslint-disable  react/prop-types */
 
 const DeleteModal = props => {
   const {
@@ -15,7 +14,7 @@ const DeleteModal = props => {
   } = props;
   return (
     <Modal
-      title={title !== '' ? title : Warning}
+      title={title !== '' ? title : 'Warning'}
       toggleModal={onToggle}
     >
       <div className="warning">
@@ -27,6 +26,9 @@ const DeleteModal = props => {
       <div className="warning-footer text-center">
         <span className="col-4">
           <a
+            tabIndex="0"
+            role="button"
+            onKeyDown={onCancel}
             className="fieldsight-btn rejected-btn"
             onClick={onCancel}
           >
@@ -38,7 +40,13 @@ const DeleteModal = props => {
         </span>
 
         <span className="col-4">
-          <a className="fieldsight-btn" onClick={onConfirm}>
+          <a
+            className="fieldsight-btn"
+            tabIndex="0"
+            role="button"
+            onKeyDown={onConfirm}
+            onClick={onConfirm}
+          >
             <FormattedMessage
               id="app.confirm"
               defaultMessage="Confirm"

@@ -5,15 +5,13 @@ import { FormattedMessage } from 'react-intl';
 import DeleteModal from '../common/DeleteModal';
 
 /* eslint-disable  react/prop-types */
-/* eslint-disable  react/no-access-state-in-setstate */
-/* eslint-disable  consistent-return */
-/* eslint-disable  no-unneeded-ternary */
 
 const getStatus = value => {
   if (value === 0) return <span>pending</span>;
   if (value === 1) return <span>Rejected</span>;
   if (value === 2) return <span>Flagged</span>;
   if (value === 3) return <span>Approved</span>;
+  return null;
 };
 
 const getClass = status => {
@@ -21,6 +19,7 @@ const getClass = status => {
   if (status === 1) return 'rejected';
   if (status === 2) return 'flagged';
   if (status === 3) return 'approved';
+  return null;
 };
 
 const formatDate = date => {
@@ -65,6 +64,7 @@ const EducationMaterialForProject = props => {
       </span>
     );
   }
+  return null;
 };
 
 const GetActionForProject = props => {
@@ -78,7 +78,7 @@ const GetActionForProject = props => {
     handleConfirm,
     editAction,
   } = props;
-  if (formTable === +'project') {
+  if (formTable === 'project') {
     return (
       <div>
         {item.is_deployed && (
@@ -305,6 +305,7 @@ const GetActionForProject = props => {
       </div>
     );
   }
+  return null;
 };
 
 class ScheduleFormTable extends Component {
@@ -318,11 +319,11 @@ class ScheduleFormTable extends Component {
   }
 
   handleToggle = (formId, isDeploy) => {
-    this.setState({
-      confirmDelete: !this.state.confirmDelete,
+    this.setState(state => ({
+      confirmDelete: !state.confirmDelete,
       formId,
       isDeploy,
-    });
+    }));
   };
 
   handleConfirm = () => {

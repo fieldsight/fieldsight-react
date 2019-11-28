@@ -18,14 +18,15 @@ class Mapparent extends Component {
   };
 
   render() {
+    const { map, projectpk } = this.state;
     return (
       <div>
-        {this.state.map === 'projectmap' ? (
+        {map === 'projectmap' ? (
           <TeamMap popupCLick={this.popupCLick} />
         ) : (
           <DetailsMap
             popupCLick={this.popupCLick}
-            projectpk={this.state.projectpk}
+            projectpk={projectpk}
           />
         )}
       </div>

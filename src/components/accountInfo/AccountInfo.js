@@ -4,7 +4,7 @@ import Axios from 'axios';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import Loader from '../common/Loader';
 
-/* eslint-disable */
+/* eslint-disable  react/prop-types */
 
 class AccountInfo extends Component {
   constructor(props) {
@@ -22,15 +22,15 @@ class AccountInfo extends Component {
     };
   }
 
-  handleEdit = e => {
-    this.setState({ isEdit: !this.state.isEdit });
+  handleEdit = () => {
+    this.setState(state => ({ isEdit: !state.isEdit }));
   };
 
   handleChange = () => {
     this.setState({ errors: '' });
   };
 
-  async submitCardInfo(e) {
+  async submitCardInfo() {
     const { stripe, teamId } = this.props;
     const { token, error } = await stripe.createToken({
       name: 'stripeToken',
@@ -40,7 +40,7 @@ class AccountInfo extends Component {
         isLoading: true,
       },
       () => {
-        if (!!token) {
+        if (token) {
           Axios.post(
             `fv3/api/team-owner-account/${teamId}/`,
             { stripeToken: token.id },
@@ -57,16 +57,16 @@ class AccountInfo extends Component {
           )
             .then(res => {
               this.setState(
-                {
+                prev => ({
                   isLoading: false,
                   loaded: 0,
                   card: res.data.data,
-                  isEdit: !this.state.isEdit,
-                },
+                  isEdit: !prev.isEdit,
+                }),
                 () => successToast('Card Info', 'updated'),
               );
             })
-            .catch(err => {
+            .catch(() => {
               this.setState(
                 {
                   isLoading: false,
@@ -75,7 +75,7 @@ class AccountInfo extends Component {
               );
             });
         }
-        if (!!error) this.setState({ errors: error }, () => {});
+        if (error) this.setState({ errors: error }, () => {});
       },
     );
   }
@@ -101,31 +101,34 @@ class AccountInfo extends Component {
                 data.subscribed_package.total_charge}
               /
               {data.subscribed_package &&
-              data.subscribed_package.period == 'Month'
+              data.subscribed_package.period === 'Month'
                 ? 'Mo'
                 : 'Yr'}
             </strong>
           </h6>
           <ul className="list-icon mt-4 mb-4">
             <li>
-              <i className="la la-chevron-circle-right"></i>
+              <i className="la la-chevron-circle-right" />
               <strong>
                 {data.subscribed_package &&
                   data.subscribed_package.total_submissions}
-              </strong>{' '}
+              </strong>
               Submissions
             </li>
             <li>
-              <i className="la la-chevron-circle-right"></i>
-              <strong>Unlimited</strong> Users, Projects, Sites
+              <i className="la la-chevron-circle-right" />
+              <strong>Unlimited</strong>
+              Users, Projects, Sites
             </li>
             <li>
-              <i className="la la-chevron-circle-right"></i>
-              <strong>Unlimited</strong> Forms, Stages & Schedules
+              <i className="la la-chevron-circle-right" />
+              <strong>Unlimited</strong>
+              Forms, Stages & Schedules
             </li>
             <li>
-              <i className="la la-chevron-circle-right"></i>
-              <strong>Unlimited</strong> Reports, Dashboards & Maps
+              <i className="la la-chevron-circle-right" />
+              <strong>Unlimited</strong>
+              Reports, Dashboards & Maps
             </li>
           </ul>
         </div>
@@ -135,7 +138,7 @@ class AccountInfo extends Component {
           </h6>
           <ul className="list-icon mt-4 mb-4">
             <li>
-              <i className="la la-envelope"></i>
+              <i className="la la-envelope" />
               <div>Email Address</div>
               <p>
                 <strong>
@@ -145,26 +148,32 @@ class AccountInfo extends Component {
               </p>
             </li>
             <li>
-              <i className="la la-credit-card"></i>
+              <i className="la la-credit-card" />
               <div>Card Info</div>
               <p>
-                <strong>Card: **** **** **** {card}</strong>
+                <strong>{`Card: **** **** **** ${card}`}</strong>
               </p>
             </li>
           </ul>
           <div className="col-sm-12">
             <a
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => {
+                this.handleEdit('edit');
+              }}
               title=""
               className="btn btn-primary"
               onClick={() => {
                 this.handleEdit('edit');
               }}
             >
-              Edit Credit Info <i className="la la-edit"></i>
+              Edit Credit Info
+              <i className="la la-edit" />
             </a>
           </div>
         </div>
-        {!!isEdit && (
+        {isEdit && (
           <div className="col-md-8">
             <h6 className="mt-4">
               <strong>Edit Card Info:</strong>
@@ -184,7 +193,8 @@ class AccountInfo extends Component {
                 className="fieldsight-btn pull-left"
                 onClick={this.submitCardInfo}
               >
-                Save Info <i className="la la-save"></i>
+                Save Info
+                <i className="la la-save" />
               </button>
             </div>
           </div>

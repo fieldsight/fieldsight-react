@@ -11,7 +11,6 @@ import InputElement from './InputElement';
 import SelectElement from './SelectElement';
 import RightContentCard from './RightContentCard';
 import CheckBox from './CheckBox';
-import Loader from './Loader';
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
 const iconUrl = require('leaflet/dist/images/marker-icon.png');
@@ -20,7 +19,6 @@ const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
 /* eslint-disable   react/prop-types */
 /* eslint-disable   camelcase */
 /* eslint-disable   react/no-array-index-key */
-/* eslint-disable   jsx-a11y/label-has-associated-control */
 /* eslint-disable   no-shadow */
 /* eslint-disable  no-return-assign */
 
@@ -30,6 +28,7 @@ L.Icon.Default.mergeOptions({
   iconUrl,
   shadowUrl,
 });
+
 class EditProject extends Component {
   constructor(props) {
     super(props);

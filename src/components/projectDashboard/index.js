@@ -44,7 +44,6 @@ class ProjectDashboard extends React.Component {
   }
 
   componentWillMount() {
-    console.log(this.props, 'this.props');
     const {
       match: {
         params: {
@@ -52,16 +51,12 @@ class ProjectDashboard extends React.Component {
           // projectId: id,
         },
       },
-      // getProgressTableData,
-      // getProjectDashboard,
-      // getSurveyForm,
-      paginationHandler,
     } = this.props;
-    getProjectDashboard(projectId);
-    getProgressTableData(projectId);
-    getSurveyForm(projectId);
+    this.props.getProjectDashboard(projectId);
+    this.props.getProgressTableData(projectId);
+    this.props.getSurveyForm(projectId);
     this.setState({ projectId });
-    paginationHandler(1, null, {
+    this.props.paginationHandler(1, null, {
       type: 'projectSiteList',
       projectId,
     });

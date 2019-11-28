@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-
-/* eslint-disable */
+/* eslint-disable  react/prop-types */
 
 const CountCard = ({
   countName,
@@ -17,16 +16,15 @@ const CountCard = ({
         <i className={`la ${icon}`}> </i>
       </div>
       <div className="count-content">
-        {countName != 'Progress' && (
+        {countName !== 'Progress' && (
           <h4>{countNumber !== 0 && countNumber}</h4>
         )}
-        {countName == 'Progress' && (
-          <h4>{countNumber !== 0 && countNumber + '%'}</h4>
+        {countName === 'Progress' && (
+          <h4>{countNumber !== 0 && `${countNumber}%`}</h4>
         )}
         <h6>
           {noSubmissionText ? (
             countNumber === 0 ? (
-              //`No ${countName}`
               <>
                 {countName === 'User' || countName === 'user' ? (
                   <>
@@ -105,9 +103,8 @@ const CountCard = ({
               </>
             )
           ) : countNumber === 0 ? (
-            //`No ${countName} submission`
             <>
-              {!!id ? (
+              {id ? (
                 <>
                   {countName === 'pending' ? (
                     <FormattedMessage
@@ -186,7 +183,6 @@ const CountCard = ({
             </>
           ) : (
             <>
-              {/*`${countName} submission`*/}
               {countName === 'pending' ? (
                 <FormattedMessage
                   id="app.pending"

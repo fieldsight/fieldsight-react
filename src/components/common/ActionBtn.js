@@ -1,15 +1,14 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-/* eslint-disable */
+
 const ActionBtn = () => (
-  <Fragment>
-    {' '}
+  <>
     <a href="#" className="td-edit-btn">
       <OverlayTrigger
         placement="top"
         overlay={<Tooltip>Edit</Tooltip>}
       >
-        <i className="la la-edit"></i>
+        <i className="la la-edit" />
       </OverlayTrigger>
     </a>
     <a href="#" className="td-delete-btn">
@@ -17,10 +16,10 @@ const ActionBtn = () => (
         placement="top"
         overlay={<Tooltip>Delete</Tooltip>}
       >
-        <i className="la la-trash-o"></i>
+        <i className="la la-trash-o" />
       </OverlayTrigger>
     </a>
-  </Fragment>
+  </>
 );
 
 export default ActionBtn;

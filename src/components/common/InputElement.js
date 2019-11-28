@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-
-/* eslint-disable */
+/* eslint-disable  react/prop-types */
 
 const InputElement = ({
   tag: Tag,
@@ -21,14 +20,15 @@ const InputElement = ({
 }) => (
   <div className={`form-group ${classname}`}>
     {formType === 'editForm' &&
-      (translation == true ? (
+      (translation === true ? (
         <label htmlFor={htmlFor}>
-          <FormattedMessage id={label} defaultMessage={label} />{' '}
+          <FormattedMessage id={label} defaultMessage={label} />
           {required && <sup>*</sup>}
         </label>
       ) : (
         <label htmlFor={htmlFor}>
-          {label} {required && <sup>*</sup>}
+          {label}
+          {required && <sup>*</sup>}
         </label>
       ))}
 
@@ -43,16 +43,22 @@ const InputElement = ({
     />
 
     {formType === 'floatingForm' &&
-      (translation == true ? (
+      (translation === true ? (
         <label htmlFor={htmlFor}>
-          <FormattedMessage id={label} defaultMessage={label} />{' '}
+          <FormattedMessage id={label} defaultMessage={label} />
         </label>
       ) : (
         <label htmlFor={htmlFor}>{label}</label>
       ))}
 
     {removeBtn && (
-      <span className="cross-icon" onClick={removeHandler}>
+      <span
+        className="cross-icon"
+        tabIndex="0"
+        role="button"
+        onKeyDown={removeHandler}
+        onClick={removeHandler}
+      >
         <i className="la la-close" />
       </span>
     )}
