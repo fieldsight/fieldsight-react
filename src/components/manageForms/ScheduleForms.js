@@ -12,9 +12,6 @@ import ManageModal from './ManageModal';
 import Loader from '../common/Loader';
 
 /* eslint-disable  react/prop-types */
-/* eslint-disable  react/no-access-state-in-setstate */
-/* eslint-disable  consistent-return */
-/* eslint-disable  no-unneeded-ternary */
 
 const formatDate = date => {
   const dateIdx = date.getDate();
@@ -160,12 +157,12 @@ class ScheduleForms extends Component {
         .then(res => {
           this.setState(
             state => {
-              const newData = this.state.data;
+              const newData = state.data;
               newData.map(each => {
                 const arrItem = { ...each };
-                let IsDeployed = each.is_deployed;
+                // let IsDeployed = each.is_deployed;
                 if (each.id === formId) {
-                  IsDeployed = !isDeploy;
+                  arrItem.is_deployed = !isDeploy;
                 }
                 return arrItem;
               });
@@ -193,14 +190,12 @@ class ScheduleForms extends Component {
         : `fv3/api/manage-forms/delete/?site_id=${id}&type=schedule&id=${formId}`;
       axios
         .post(deleteUrl, { is_deployed: isDeploy })
-        .then(res => {
+        .then(() => {
           this.setState(
-            {
-              data: this.state.data.filter(
-                each => each.id !== formId,
-              ),
+            state => ({
+              data: state.data.filter(each => each.id !== formId),
               loadReq: false,
-            },
+            }),
             () => {
               successToast('Form', 'deleted');
             },
@@ -216,12 +211,12 @@ class ScheduleForms extends Component {
   };
 
   handleEditGuide = (data, formId, fsxf) => {
-    this.setState({
-      editGuide: !this.state.editGuide,
+    this.setState(state => ({
+      editGuide: !state.editGuide,
       guideData: data ? data : {},
       editFormId: formId,
       fsxf,
-    });
+    }));
   };
 
   handleUpdateGuide = data => {
@@ -250,14 +245,14 @@ class ScheduleForms extends Component {
           if (res.data)
             this.setState(
               state => {
-                const item = this.state.data;
+                const item = state.data;
                 item.map(each => {
                   const newEach = { ...each };
                   const newItem = newEach;
-                  let eachEm = each.em;
+                  // let eachEm = each.em;
 
                   if (each.id === editFormId) {
-                    eachEm = res.data;
+                    newItem.em = res.data;
                   }
                   return newItem;
                 });
@@ -290,22 +285,25 @@ class ScheduleForms extends Component {
   };
 
   handleSaveForm = () => {
-    this.setState({
-      xf: this.state.formId,
-      showFormModal: !this.state.showFormModal,
-    });
+    this.setState(state => ({
+      xf: state.formId,
+      showFormModal: !state.showFormModal,
+    }));
   };
 
   toggleFormModal = () => {
-    this.setState({ showFormModal: !this.state.showFormModal });
+    this.setState(({ showFormModal }) => ({
+      showFormModal: !showFormModal,
+    }));
   };
 
   toggleTab = tab => {
+    const { myForms, sharedForms, projectForms } = this.props;
     this.setState({
       activeTab: tab,
-      myFormList: this.props.myForms,
-      sharedFormList: this.props.sharedForms,
-      projectFormList: this.props.projectForms,
+      myFormList: myForms,
+      sharedFormList: sharedForms,
+      projectFormList: projectForms,
     });
   };
 
@@ -367,10 +365,10 @@ class ScheduleForms extends Component {
           .post(postUrl, payload)
           .then(res => {
             this.setState(
-              {
-                data: [...this.state.data, res.data],
+              state => ({
+                data: [...state.data, res.data],
                 loadReq: false,
-              },
+              }),
               () => {
                 this.handleClosePopup();
                 successToast('form ', 'added');
@@ -420,14 +418,14 @@ class ScheduleForms extends Component {
           .then(res => {
             this.setState(
               state => {
-                const arr = this.state.data;
+                const arr = state.data;
                 const newArr = arr.map(item => {
                   if (item.id === res.data.id) {
                     const result = res.data;
                     return result;
                   }
                   //  else {
-                  //   return item;
+                  return item;
                   // }
                 });
                 return {

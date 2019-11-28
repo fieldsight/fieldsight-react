@@ -16,11 +16,7 @@ import {
 } from '../../actions/manageFormActions';
 
 /* eslint-disable  react/prop-types */
-/* eslint-disable  no-unneeded-ternary */
-/* eslint-disable  consistent-return */
-/* eslint-disable  react/no-access-state-in-setstate */
 /* eslint-disable  react/no-did-update-set-state */
-/* eslint-disable   prefer-destructuring */
 
 const urls = [
   'fv3/api/project-regions-types/',
@@ -61,7 +57,7 @@ class SideNav extends Component {
     const isProjectForm = splitArr.includes('project');
     const isSiteForm = splitArr.includes('site');
     this.setState(
-      state => {
+      () => {
         if (isProjectForm) {
           return {
             loader: true,
@@ -71,6 +67,7 @@ class SideNav extends Component {
         if (isSiteForm) {
           return { loader: true, isProjectForm: false };
         }
+        return null;
       },
       () => {
         this.requestForms(id);
@@ -101,7 +98,7 @@ class SideNav extends Component {
               : axios.get(url);
           }
           // else {
-          //   return i > 0 ? axios.get(url) : '';
+          return i > 0 && axios.get(url);
           // }
         }),
       )
@@ -109,8 +106,8 @@ class SideNav extends Component {
         axios.spread((list, myForms, projectForms, sharedForms) => {
           if (this._isMounted) {
             this.setState(state => {
-              if (this.state.isProjectForm) {
-                const regions = list.data.regions;
+              if (state.isProjectForm) {
+                const { regions } = list.data;
                 const types = list.data.site_types;
                 return {
                   regionOptions: [
@@ -135,19 +132,19 @@ class SideNav extends Component {
                   loader: false,
                 };
               }
-              // else {
-              //   return {
-              //     myForms: myForms.data,
-              //     projectForms: projectForms.data,
-              //     sharedForms: sharedForms.data,
-              //     loader: false,
-              //   };
+              // } else {
+              return {
+                myForms: myForms.data,
+                projectForms: projectForms.data,
+                sharedForms: sharedForms.data,
+                loader: false,
+              };
               // }
             });
           }
         }),
       )
-      .catch(err => {});
+      .catch(() => {});
   }
 
   render() {
@@ -171,10 +168,6 @@ class SideNav extends Component {
         formProps,
       },
     } = this;
-    // console.log(
-    //   "props in sidenav",
-    //   this.state.formProps && this.state.formProps.projectForms
-    // );
 
     return (
       <>

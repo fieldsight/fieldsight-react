@@ -1,8 +1,8 @@
 import React from 'react';
 import { Fade } from 'react-reveal';
 import ReactLoader from 'react-loader-spinner';
-
-/* eslint-disable */
+/* eslint-disable   react/prop-types */
+/* eslint-disable   react/no-array-index-key */
 
 export const TableContentLoader = ({ row, column }) => (
   <div className="contentLoading">
@@ -40,10 +40,7 @@ export const GridContentLoader = ({ number, height }) => (
             .fill('')
             .map((e, i) => (
               <div className="col-lg-4 col-xs-4" key={i}>
-                <div
-                  className="loading-content"
-                  style={{ height: height }}
-                >
+                <div className="loading-content" style={{ height }}>
                   {' '}
                 </div>
               </div>
@@ -63,7 +60,7 @@ export const BlockContentLoader = ({ number, height }) => (
           .map((e, i) => (
             <div
               className="loading-content"
-              style={{ height: height }}
+              style={{ height }}
               key={i}
             />
           ))}
@@ -77,15 +74,9 @@ export const AvatarContentLoader = ({ number, width, size }) => (
     {Array(number)
       .fill('')
       .map((item, i) => (
-        <div
-          className="contentLoading"
-          style={{ width: width }}
-          key={i}
-        >
+        <div className="contentLoading" style={{ width }} key={i}>
           <div className="loading-list">
-            <div className={`loading-image circle circle-${size}`}>
-              ​
-            </div>
+            <div className={`loading-image circle circle-${size}`} />
             <div className="text">
               <div className="loading-content" />
               <div className="loading-content" />
@@ -121,7 +112,7 @@ export const DotLoader = ({ height }) => (
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      ...(height && { height: height }),
+      ...(height && { height }),
     }}
   >
     <ReactLoader
@@ -157,7 +148,12 @@ export default props => (
           width="50"
         />
 
-        <h6 style={{ color: '#00628E', marginTop: '20px' }}>
+        <h6
+          style={{
+            color: '#00628E',
+            marginTop: '20px',
+          }}
+        >
           Loading... Please wait!
           {/* Loading... Please wait! {props.loaded && `${props.loaded} %`} */}
         </h6>

@@ -26,18 +26,11 @@
     "no-underscore-dangle": "warn",
     "react/destructuring-assignment": "warn",
     "array-callback-return": "warn",
-    "jsx-a11y/label-has-associated-control": [
-      2,
-      {
-        "labelComponents": ["CustomLabel"],
-        "labelAttributes": ["inputLabel"],
-        "controlComponents": ["CustomInput"],
-        "assert": "both",
-        "depth": 3
-      }
-    ],
+    "jsx-a11y/label-has-associated-control": "off",
     "react/jsx-wrap-multilines": "warn",
-    "no-restricted-globals": "warn"
+    "no-restricted-globals": "warn",
+    "no-unneeded-ternary": "off",
+    "no-debugger": "off"
   },
   "env": {
     "browser": true

@@ -51,10 +51,6 @@ class ProjectDashboard extends React.Component {
           // projectId: id,
         },
       },
-      // getProgressTableData,
-      // getProjectDashboard,
-      // getSurveyForm,
-      paginationHandler,
     } = this.props;
     this.props.getProjectDashboard(projectId);
     this.props.getProgressTableData(projectId);

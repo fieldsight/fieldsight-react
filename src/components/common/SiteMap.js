@@ -6,56 +6,56 @@ import {
   GeoJSON,
 } from 'react-leaflet';
 import L, { latLngBounds } from 'leaflet';
-
 import { BlockContentLoader } from './Loader';
 
-/* eslint-disable  */
+const iconUrl = require('../../static/images/marker.png');
+const iconRetinaUrl = require('../../static/images/marker.png');
 
 const { BaseLayer } = LayersControl;
+/* eslint-disable   react/prop-types */
+/* eslint-disable   react/no-did-update-set-state */
 
 class SiteMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
       mapData: props.map ? props.map : {},
-      bound: latLngBounds(
-        [29.38217507514529, 87.5390625],
-        [27.293689224852407, 81.474609375],
-      ),
+      // bound: latLngBounds(
+      //   [29.38217507514529, 87.5390625],
+      //   [27.293689224852407, 81.474609375],
+      // ),
     };
     this.mapRef = createRef();
     this.groupRef = createRef();
   }
 
   componentDidUpdate(prevProps) {
-    const { map } = this.props;
-    if (prevProps.map !== map) {
+    if (prevProps.map !== this.props.map) {
       this.setState({
-        mapData: map,
+        mapData: this.props.map,
       });
     }
   }
-  onEachFeaturePoint(feature, layer) {
+
+  onEachFeaturePoint = (feature, layer) => {
     layer.bindPopup(`<a href=${feature.url} target="_blank">
     ${feature.properties.name}
   </a>`);
-  }
+  };
 
-  pointToLayer(feature, latlng) {
+  pointToLayer = (feature, latlng) => {
     const icon = new L.Icon({
-      iconUrl: require('../../static/images/marker.png'),
-      iconRetinaUrl: require('../../static/images/marker.png'),
+      iconUrl,
+      iconRetinaUrl,
       iconSize: [28, 28],
       iconAnchor: [13, 27],
       popupAnchor: [2, -24],
       shadowUrl: null,
       shadowSize: null,
       shadowAnchor: null,
-      //iconSize: new L.Point(60, 75)
-      //className: "leaflet-div-icon"
     });
-    return L.marker(latlng, { icon: icon });
-  }
+    return L.marker(latlng, { icon });
+  };
 
   getSmallBound = latlng => {
     if (Object.entries(latlng).length > 0) {
@@ -66,27 +66,21 @@ class SiteMap extends Component {
       );
       return bounds;
     }
+    return null;
   };
-  getLargeBound = latlng => {
-    let bounds = latLngBounds();
-    latlng.forEach(data => {
-      bounds.extend([
-        data.geometry.coordinates[1],
-        data.geometry.coordinates[0],
-      ]);
-    });
-    return bounds;
-  };
+
   returnGeoArr = (loc1, loc2) => {
     if (
-      loc1.geometry.coordinates[0] == loc2.geometry.coordinates[0] &&
-      loc1.geometry.coordinates[1] == loc2.geometry.coordinates[1]
+      loc1.geometry.coordinates[0] === loc2.geometry.coordinates[0] &&
+      loc1.geometry.coordinates[1] === loc2.geometry.coordinates[1]
     ) {
       return null;
-    } else {
-      return loc2;
     }
+    // else {
+    return loc2;
+    // }
   };
+
   render() {
     const {
       props: { showContentLoader },
@@ -96,17 +90,17 @@ class SiteMap extends Component {
     let bounds = latLngBounds();
 
     if (mapData && mapData.features && mapData.features.length > 0) {
-      if (mapData.features.length == 1) {
+      if (mapData.features.length === 1) {
         const latlng = {
           lat: mapData.features[0].geometry.coordinates[1],
           lng: mapData.features[0].geometry.coordinates[0],
         };
         bounds = this.getSmallBound(latlng);
       } else if (mapData.features.length > 1) {
-        let newArr = [];
+        const newArr = [];
 
         mapData.features.forEach((data, index) => {
-          newArr.length == 0 && newArr.push(data);
+          if (newArr.length === 0) newArr.push(data);
           if (
             !!mapData.features[index] &&
             !!mapData.features[index + 1]
@@ -116,13 +110,13 @@ class SiteMap extends Component {
               mapData.features[index + 1],
             );
 
-            if (!!objGeo) {
+            if (objGeo) {
               newArr.push(objGeo);
             }
           }
         });
 
-        if (newArr.length == 1) {
+        if (newArr.length === 1) {
           const latlng = {
             lat: newArr[0].geometry.coordinates[1],
             lng: newArr[0].geometry.coordinates[0],
@@ -151,17 +145,16 @@ class SiteMap extends Component {
             ]}
             zoom={15}
             maxZoom={20}
-            attributionControl={true}
-            zoomControl={true}
-            doubleClickZoom={true}
-            scrollWheelZoom={true}
-            dragging={true}
-            animate={true}
+            attributionControl
+            zoomControl
+            doubleClickZoom
+            scrollWheelZoom
+            dragging
+            animate
             easeLinearity={0.35}
             bounds={bounds}
             ref={this.mapRef}
             style={{ width: '100%', height: '396px' }}
-            ref={this.mapRef}
           >
             {/* <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -210,10 +203,27 @@ class SiteMap extends Component {
             </LayersControl>
             <GeoJSON
               data={mapData}
-              onEachFeature={this.onEachFeaturePoint.bind(this)}
-              pointToLayer={this.pointToLayer.bind(this)}
+              onEachFeature={this.onEachFeaturePoint}
+              pointToLayer={this.pointToLayer}
               ref={this.groupRef}
             />
+
+            {/* <MyMarkersList markers={map.features} /> */}
+            {/* {map.features.map((each, idx) => {
+              const name = each.properties.name;
+              const location = each.geometry.coordinates;
+              const url = each.url;
+              return (
+                <Marker position={[location[1], location[0]]} key={`map${idx}`}>
+                  <Popup>
+                    <span>
+                      <a href={url}>Name: {name}</a>
+                    </span>
+                    <br />
+                  </Popup>
+                </Marker>
+              );
+            })} */}
           </Map>
         ) : (
           <Map zoom={13} style={{ width: '100%', height: '396px' }}>

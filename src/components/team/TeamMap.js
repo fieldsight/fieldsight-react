@@ -53,33 +53,25 @@ class TeamMap extends React.Component {
   }
 
   componentDidMount() {
-    (function() {
-      const originalInitTile = L.GridLayer.prototype._initTile;
-      L.GridLayer.include({
-        _initTile(tile) {
-          originalInitTile.call(this, tile);
-
-          const tileSize = this.getTileSize();
-
-          tile.style.width = `${tileSize.x + 1}px`;
-          tile.style.height = `${tileSize.y + 1} px`;
-        },
-      });
-    })();
-
-    // console.log("DIdmountasdasdkas");
+    this.addGridLayer();
     const map = this.mapRef.current.leafletElement;
+    const {
+      layerGroup,
+      prjidtosend,
+      projectcount,
+      vectorGrid,
+    } = this.state;
     map.createPane('world_shp');
     map.getPane('world_shp').style.zIndex = 250;
-    map.addLayer(this.state.layerGroup);
-    this.state.layerGroup.on('click', e => {
+    map.addLayer(layerGroup);
+    layerGroup.on('click', () => {
       const a = document.getElementsByClassName('popButton');
 
       // document.getElementsByClassName('popButton').addEventListener('click', () => {
 
       for (let i = 0; i < a.length; i += 1) {
         a[i].addEventListener('click', () =>
-          this.popUpClick(this.state.prjidtosend),
+          this.popUpClick(prjidtosend),
         );
       }
     });
@@ -110,32 +102,16 @@ class TeamMap extends React.Component {
         ProjectsData: response.data.data,
         loader: false,
       });
-      // const map = this.mapRef.current.leafletElement;
-      // response.data.data.map((e) => {
-
-      // var popup = "<div class='popup'><h6><strong>Name: </strong>" + name + "</h6>" +
-      //     "<h6><strong>Address: </strong>" + e.address + "</h6>" +
-      //     "<h6><strong>Sites: </strong> " + e.sites_count + "</h6>" +
-      //     "<button class='popButton'>View Details</button>" + "</div>"
-      // var mrk = L.marker(e.latlng, { icon: new L.icon({ iconUrl: '../../static/images/marker.png', iconSize: [28, 28] }) }).bindPopup(popup)
-      // mrk.on('click', () => {
-
-      //     this.setState({ prjidtosend: e.pk })
-      // })
-
-      // mrk.addTo(this.state.layerGroup)
-      // map.fitBounds(layerGroup.getBounds())
-
-      // })
     });
 
     axios.get('fv3/api/map/projects-countries/').then(response => {
       const Countarray = [];
+      // const {projectcount} = this.state
       this.setState({ projectcount: response.data });
 
-      for (let i = 0; i < this.state.projectcount.length; i += 1) {
-        const projectcount = this.state.projectcount[i].projects;
-        Countarray.push(parseInt(projectcount, 10));
+      for (let i = 0; i < projectcount.length; i += 1) {
+        const newProjectcount = projectcount[i].projects;
+        Countarray.push(parseInt(newProjectcount, 10));
       }
       this.maxCount = Math.max(...Countarray);
       this.minCount = Math.min(...Countarray);
@@ -163,10 +139,10 @@ class TeamMap extends React.Component {
 
         m.eachLayer(e => map.removeLayer(e));
         // console.log(map);
-        this.setVectorGridStyle(this.state.vectorGrid);
+        this.setVectorGridStyle(vectorGrid);
         this.setState({ clicked: true });
 
-        m.addLayer(this.state.vectorGrid);
+        m.addLayer(vectorGrid);
         m.fitBounds(this.bounds);
       });
       return div;
@@ -174,6 +150,20 @@ class TeamMap extends React.Component {
 
     refreshmap.addTo(map);
   }
+
+  addGridLayer = () => {
+    const originalInitTile = L.GridLayer.prototype._initTile;
+    L.GridLayer.include({
+      _initTile(tile) {
+        originalInitTile.call(this, tile);
+
+        const tileSize = this.getTileSize();
+
+        tile.style.width = `${tileSize.x + 1}px`;
+        tile.style.height = `${tileSize.y + 1} px`;
+      },
+    });
+  };
 
   handleChange = e => {
     this.state.selectedOption = [];

@@ -43,24 +43,36 @@ const withPagination = WrappedComponent => {
     getUrl = (page_num, payload) => {
       switch (payload.type) {
         case 'projectSiteList':
-          return `fv3/api/project-site-list/?page=${page_num}&project=${payload.projectId}`;
+          return `fv3/api/project-site-list/?page=
+          ${page_num}&project=${payload.projectId}`;
         case 'mySiteList':
-          return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}`;
+          return `fv3/api/my-sites/?page=
+          ${page_num}&project=${payload.projectId}`;
 
         case 'regionSite':
-          return `fv3/api/regional-sites/?page=${page_num}&region=${payload.projectId}`;
+          return `fv3/api/regional-sites/?page=
+          ${page_num}&region=${payload.projectId}`;
 
         case 'projectRegionList':
-          return `fv3/api/project-regions/?page=${page_num}&project=${payload.projectId}`;
+          return `fv3/api/project-regions/?page=
+          ${page_num}&project=${payload.projectId}`;
 
         case 'viewByStatus':
-          return `fv3/api/view-by-status/?page=${page_num}&project=${payload.projectId}&submission_status=${payload.status}`;
+          return `fv3/api/view-by-status/?page=
+          ${page_num}&project=${payload.projectId}
+          &submission_status=${payload.status}`;
         case 'siteStatus':
-          return `fv3/api/view-by-status/?page=${page_num}&site=${payload.projectId}&submission_status=${payload.status}`;
+          return `fv3/api/view-by-status/?page=
+          ${page_num}&site=${payload.projectId}
+          &submission_status=${payload.status}`;
         case 'formSubmission':
-          return `/fv3/api/forms-submissions/?page=${page_num}&project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+          return `/fv3/api/forms-submissions/?page=
+          ${page_num}&project=${payload.projectId}
+          &fsxf_id=${payload.fsxf_id}`;
         case 'siteSubmission':
-          return `/fv3/api/forms-submissions/?page=${page_num}&site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+          return `/fv3/api/forms-submissions/?page=
+          ${page_num}&site=${payload.projectId}
+          &fsxf_id=${payload.fsxf_id}`;
         default:
           return null;
       }
@@ -95,7 +107,8 @@ const withPagination = WrappedComponent => {
               // }
 
               if (res.data.results.query) {
-                if (res.data.results.query === this.state.textVal) {
+                const { textVal } = this.state;
+                if (res.data.results.query === textVal) {
                   this.setState({
                     siteList: res.data.results.data,
                     dLoader: false,
@@ -119,7 +132,7 @@ const withPagination = WrappedComponent => {
             }
           }
         })
-        .catch(err => {});
+        .catch(() => {});
     };
 
     paginationHandler = (page_num, searchUrl, payload) => {
@@ -144,21 +157,20 @@ const withPagination = WrappedComponent => {
     };
 
     renderPageNumbers = payload => {
-      if (this.state.totalPage) {
+      const { totalPage, pageNum } = this.state;
+      if (totalPage) {
         const pageNumbers = [];
-        for (let i = 1; i <= this.state.totalPage; i += 1) {
+        for (let i = 1; i <= totalPage; i += 1) {
           pageNumbers.push(i);
         }
 
         return pageNumbers.map(number => {
-          const classes =
-            this.state.pageNum === number ? 'current' : '';
+          const classes = pageNum === number ? 'current' : '';
 
           if (
             number === 1 ||
-            number === this.state.totalPage ||
-            (number >= this.state.pageNum - 2 &&
-              number <= this.state.pageNum + 2)
+            number === totalPage ||
+            (number >= pageNum - 2 && number <= pageNum + 2)
           ) {
             return (
               <li key={number} className={classes}>

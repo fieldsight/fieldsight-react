@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import InputElement from '../common/InputElement';
 
-/* eslint-disable  consistent-return */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable camelcase */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-array-index-key */
 
 const getFilename = name => {
@@ -45,25 +42,25 @@ class EditFormGuide extends Component {
 
   readFile = file => {
     const newFile = file[0];
-    this.setState({
+    this.setState(state => ({
       data: {
-        ...this.state.data,
+        ...state.data,
         pdf: newFile,
         is_pdf: true,
       },
       fileName: newFile.name,
       // isPdf: true
-    });
+    }));
   };
 
   readImageFile = file => {
     this.setState(
-      {
+      state => ({
         data: {
-          ...this.state.data,
+          ...state.data,
           images: file,
         },
-      },
+      }),
       () => {
         this.previewImg(file);
       },
@@ -74,9 +71,9 @@ class EditFormGuide extends Component {
     files.map(img => {
       const reader = new FileReader();
       reader.onload = () => {
-        this.setState({
-          srcs: [...this.state.srcs, reader.result],
-        });
+        this.setState(state => ({
+          srcs: [...state.srcs, reader.result],
+        }));
       };
       reader.readAsDataURL(img);
     });
@@ -84,12 +81,12 @@ class EditFormGuide extends Component {
 
   handleChange = e => {
     const { name, value } = e.target;
-    this.setState({
+    this.setState(state => ({
       data: {
-        ...this.state.data,
+        ...state.data,
         [name]: value,
       },
-    });
+    }));
   };
 
   handleSubmit = e => {

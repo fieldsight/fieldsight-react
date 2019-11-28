@@ -17,11 +17,7 @@ import markerIcon from '../common/Marker';
 
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-access-state-in-setstate */
-/* eslint-disable react/static-property-placement */
-/* eslint-disable react/sort-comp */
-/* eslint-disable no-shadow */
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
 const iconUrl = require('leaflet/dist/images/marker-icon.png');
@@ -221,7 +217,7 @@ class EditProject extends Component {
     const { value } = e.target;
     if (subSect) {
       const selectedSubSectorId = this.state.subSectors.find(
-        subSect => subSect.id === +value,
+        each => each.id === +value,
       ).id;
       return this.setState({
         selectedSubSector: selectedSubSectorId,

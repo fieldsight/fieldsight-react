@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 
 /* eslint-disable   react/prop-types */
 /* eslint-disable   react/no-array-index-key */
-/* eslint-disable   jsx-a11y/label-has-associated-control */
 /* eslint-disable   no-unneeded-ternary */
 
 const SelectElement = ({

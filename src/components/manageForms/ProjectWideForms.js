@@ -12,10 +12,7 @@ import GeneralFormTable from './GeneralFormTable';
 import ManageModal from './ManageModal';
 
 /* eslint-disable  react/prop-types */
-/* eslint-disable  react/no-access-state-in-setstate */
 /* eslint-disable  react/no-did-update-set-state */
-/* eslint-disable  no-unneeded-ternary */
-/* eslint-disable  consistent-return */
 
 class ProjectWideForms extends Component {
   _isMounted = false;
@@ -103,7 +100,7 @@ class ProjectWideForms extends Component {
       .then(res => {
         this.setState(
           state => {
-            const newData = this.state.data;
+            const newData = state.data;
             newData.map(each => {
               const newEach = { ...each };
               const arrItem = newEach;
@@ -120,7 +117,7 @@ class ProjectWideForms extends Component {
           },
         );
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   deleteItem = (formId, isDeploy) => {
@@ -130,25 +127,25 @@ class ProjectWideForms extends Component {
         `fv3/api/manage-forms/delete/?project_id=${id}&type=general&id=${formId}`,
         { is_deployed: isDeploy },
       )
-      .then(res => {
+      .then(() => {
         this.setState(
-          {
-            data: this.state.data.filter(each => each.id !== formId),
-          },
+          state => ({
+            data: state.data.filter(each => each.id !== formId),
+          }),
           () => {
             successToast('Form', 'deleted');
           },
         );
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   handleEditGuide = (data, formId) => {
-    this.setState({
-      editGuide: !this.state.editGuide,
+    this.setState(state => ({
+      editGuide: !state.editGuide,
       guideData: data ? data : {},
       editFormId: formId,
-    });
+    }));
   };
 
   handleUpdateGuide = data => {
@@ -171,7 +168,7 @@ class ProjectWideForms extends Component {
     }
     axios
       .post(`forms/api/save_educational_material/`, formData)
-      .then(res => {
+      .then(() => {
         this.setState(
           {
             editGuide: false,
@@ -203,7 +200,9 @@ class ProjectWideForms extends Component {
   };
 
   toggleFormModal = () => {
-    this.setState({ showFormModal: !this.state.showFormModal });
+    this.setState(({ showFormModal }) => ({
+      showFormModal: !showFormModal,
+    }));
   };
 
   toggleTab = tab => {
@@ -217,11 +216,12 @@ class ProjectWideForms extends Component {
 
   onChangeHandler = async e => {
     const { activeTab } = this.state;
+    const { myForms, sharedForms, projectForms } = this.props;
     const searchValue = e.target.value;
 
     if (searchValue) {
       if (activeTab === 'myForms') {
-        const filteredData = await this.props.myForms.filter(form => {
+        const filteredData = await myForms.filter(form => {
           return (
             form.title
               .toLowerCase()
@@ -236,27 +236,8 @@ class ProjectWideForms extends Component {
           myFormList: filteredData,
         });
       } else if (activeTab === 'projectForms') {
-        const awaitedData = await this.props.projectForms.map(
-          project => {
-            const filteredData = project.forms.filter(form => {
-              return (
-                form.title
-                  .toLowerCase()
-                  .includes(searchValue.toLowerCase()) ||
-                form.owner
-                  .toLowerCase()
-                  .includes(searchValue.toLowerCase())
-              );
-            });
-            return { ...project, forms: filteredData };
-          },
-        );
-        this.setState({
-          projectFormList: awaitedData,
-        });
-      } else if (activeTab === 'sharedForms') {
-        const filteredData = await this.props.sharedForms.filter(
-          form => {
+        const awaitedData = await projectForms.map(project => {
+          const filteredData = project.forms.filter(form => {
             return (
               form.title
                 .toLowerCase()
@@ -265,8 +246,23 @@ class ProjectWideForms extends Component {
                 .toLowerCase()
                 .includes(searchValue.toLowerCase())
             );
-          },
-        );
+          });
+          return { ...project, forms: filteredData };
+        });
+        this.setState({
+          projectFormList: awaitedData,
+        });
+      } else if (activeTab === 'sharedForms') {
+        const filteredData = await sharedForms.filter(form => {
+          return (
+            form.title
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            form.owner
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
+          );
+        });
 
         this.setState({
           sharedFormList: filteredData,
@@ -274,9 +270,9 @@ class ProjectWideForms extends Component {
       }
     } else {
       this.setState({
-        myFormList: this.props.myForms,
-        sharedFormList: this.props.sharedForms,
-        projectFormList: this.props.projectForms,
+        myFormList: myForms,
+        sharedFormList: sharedForms,
+        projectFormList: projectForms,
       });
     }
   };
@@ -306,7 +302,7 @@ class ProjectWideForms extends Component {
         .then(res => {
           this.setState(
             state => {
-              const data1 = this.state.data;
+              const data1 = state.data;
               const newArr = data1.map(each => {
                 let newEach = each;
                 if (each.id === res.data.id) {
@@ -314,7 +310,7 @@ class ProjectWideForms extends Component {
                   return newEach;
                 }
                 // else {
-                //   return each;
+                return each;
                 // }
               });
               return {
@@ -348,9 +344,9 @@ class ProjectWideForms extends Component {
         )
         .then(res => {
           this.setState(
-            {
-              data: [...this.state.data, res.data],
-            },
+            state => ({
+              data: [...state.data, res.data],
+            }),
             () => {
               this.props.closePopup();
               successToast('form ', 'added');
@@ -371,10 +367,10 @@ class ProjectWideForms extends Component {
   };
 
   handleSaveForm = () => {
-    this.setState({
-      xf: this.state.formId,
-      showFormModal: !this.state.showFormModal,
-    });
+    this.setState(state => ({
+      xf: state.formId,
+      showFormModal: !state.showFormModal,
+    }));
   };
 
   editForm = data => {
@@ -398,7 +394,7 @@ class ProjectWideForms extends Component {
           this.setState({ data: res.data, loader: false });
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   }
 
   render() {
@@ -412,7 +408,7 @@ class ProjectWideForms extends Component {
         activeTab,
         formData,
         formTitle,
-        optionRegion,
+        // optionRegion,
         myFormList,
         projectFormList,
         sharedFormList,

@@ -17,7 +17,6 @@ import DeleteModel from './DeleteModal';
 /* eslint-disable   react/prop-types */
 /* eslint-disable   camelcase */
 /* eslint-disable   react/no-array-index-key */
-/* eslint-disable   jsx-a11y/label-has-associated-control */
 /* eslint-disable   no-shadow */
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');

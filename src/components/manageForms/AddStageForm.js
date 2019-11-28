@@ -4,15 +4,8 @@ import Select from 'react-select';
 
 import InputElement from '../common/InputElement';
 
-/* eslint-disable  consistent-return */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/no-access-state-in-setstate */
-/* eslint-disable camelcase */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-array-index-key */
-/* eslint-disable  no-sequences */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable no-unused-expressions */
 
 class AddStageForm extends Component {
   constructor(props) {
@@ -76,47 +69,48 @@ class AddStageForm extends Component {
         //   selectedType = newTypeArr;
       }
     } else {
-      (selectedRegion = newRegionArr), (selectedType = newTypeArr);
+      selectedRegion = newRegionArr;
+      selectedType = newTypeArr;
     }
-    this.setState({
+    this.setState(state => ({
       hasLoaded: true,
       regionDropdown: newRegionArr,
       typeDropdown: newTypeArr,
       form: {
-        ...this.state.form,
+        ...state.form,
         selectedRegion,
         selectedType,
       },
-    });
+    }));
   }
 
   handleChange = e => {
     const { name, value } = e.target;
-    this.setState({
+    this.setState(state => ({
       form: {
-        ...this.state.form,
+        ...state.form,
 
         [name]: value,
       },
-    });
+    }));
   };
 
   handleSelectRegionChange = region => {
-    this.setState({
+    this.setState(state => ({
       form: {
-        ...this.state.form,
+        ...state.form,
         selectedRegion: region,
       },
-    });
+    }));
   };
 
   handleSelectTypeChange = type => {
-    this.setState({
+    this.setState(state => ({
       form: {
-        ...this.state.form,
+        ...state.form,
         selectedType: type,
       },
-    });
+    }));
   };
 
   handleSubmitForm = e => {

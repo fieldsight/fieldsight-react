@@ -5,11 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import InputElement from '../common/InputElement';
 import RadioElement from '../common/RadioElement';
 
-/* eslint-disable  consistent-return */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/no-access-state-in-setstate */
-/* eslint-disable camelcase */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-array-index-key */
 
 class AddSubstageForm extends Component {
@@ -164,28 +160,45 @@ class AddSubstageForm extends Component {
 
   handleRadioChange = e => {
     const { name, value } = e.target;
+    return this.setState(() => {
+      switch (name) {
+        case 'status':
+          return {
+            status: value,
+          };
+        case 'donor':
+          return {
+            isDonor: JSON.parse(value),
+          };
+        case 'edit':
+          return {
+            isEdit: JSON.parse(value),
+          };
+        case 'delete':
+          return {
+            isDelete: JSON.parse(value),
+          };
+        default:
+          return null;
+      }
+      // if (name === 'status') {
 
-    this.setState(state => {
-      if (name === 'status') {
-        return {
-          status: value,
-        };
-      }
-      if (name === 'donor') {
-        return {
-          isDonor: JSON.parse(value),
-        };
-      }
-      if (name === 'edit') {
-        return {
-          isEdit: JSON.parse(value),
-        };
-      }
-      if (name === 'delete') {
-        return {
-          isDelete: JSON.parse(value),
-        };
-      }
+      // }
+      // if (name === 'donor') {
+      //   return {
+      //     isDonor: JSON.parse(value),
+      //   };
+      // }
+      // if (name === 'edit') {
+      //   return {
+      //     isEdit: JSON.parse(value),
+      //   };
+      // }
+      // if (name === 'delete') {
+      //   return {
+      //     isDelete: JSON.parse(value),
+      //   };
+      // }
     });
   };
 

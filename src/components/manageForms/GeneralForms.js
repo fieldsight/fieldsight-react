@@ -15,9 +15,6 @@ import Loader from '../common/Loader';
 /* eslint-disable react/prop-types */
 /* eslint-disable  consistent-return */
 /* eslint-disable  react/no-did-update-set-state */
-/* eslint-disable react/no-access-state-in-setstate */
-/* eslint-disable  no-unneeded-ternary */
-/* eslint-disable  no-param-reassign */
 
 class GeneralForms extends Component {
   _isMounted = false;
@@ -111,16 +108,16 @@ class GeneralForms extends Component {
           : `fv3/api/manage-forms/deploy/?site_id=${id}&type=general&id=${formId}`;
         axios
           .post(deployUrl, { is_deployed: !isDeploy })
-          .then(res => {
+          .then(() => {
             this.setState(
               state => {
-                const newData = this.state.data;
+                const newData = state.data;
                 newData.map(each => {
                   const arrItem = { ...each };
                   // const isDeployed = each.is_deployed;
 
                   if (each.id === formId) {
-                    each.is_deployed = !isDeploy;
+                    arrItem.is_deployed = !isDeploy;
                   }
                   return arrItem;
                 });
@@ -153,14 +150,12 @@ class GeneralForms extends Component {
           : `fv3/api/manage-forms/delete/?site_id=${id}&type=general&id=${formId}`;
         axios
           .post(deleteUrl, { is_deployed: isDeploy })
-          .then(res => {
+          .then(() => {
             this.setState(
-              {
-                data: this.state.data.filter(
-                  each => each.id !== formId,
-                ),
+              state => ({
+                data: state.data.filter(each => each.id !== formId),
                 loadReq: false,
-              },
+              }),
               () => {
                 successToast('Form', 'deleted');
               },
@@ -177,15 +172,15 @@ class GeneralForms extends Component {
   };
 
   handleEditGuide = (data, formId) => {
-    this.setState({
-      editGuide: !this.state.editGuide,
+    this.setState(state => ({
+      editGuide: !state.editGuide,
       guideData: data ? data : {},
       editFormId: formId,
-    });
+    }));
   };
 
   handleUpdateGuide = data => {
-    const { id, editFormId } = this.state;
+    const { editFormId } = this.state;
     this.setState(
       {
         loadReq: true,
@@ -212,12 +207,12 @@ class GeneralForms extends Component {
             if (res.data) {
               this.setState(
                 state => {
-                  const item = this.state.data;
+                  const item = state.data;
                   item.map(each => {
                     const newItem = { ...each };
                     // const newEach = each.em;
                     if (each.id === editFormId) {
-                      each.em = res.data;
+                      newItem.em = res.data;
                     }
                     return newItem;
                   });
@@ -299,10 +294,10 @@ class GeneralForms extends Component {
             .post(postUrl, payload)
             .then(res => {
               this.setState(
-                {
-                  data: [...this.state.data, res.data],
+                state => ({
+                  data: [...state.data, res.data],
                   loadReq: false,
-                },
+                }),
                 () => {
                   props.closePopup();
                   successToast('form ', 'added');
@@ -348,7 +343,7 @@ class GeneralForms extends Component {
             .then(res => {
               this.setState(
                 state => {
-                  const arr = this.state.data;
+                  const arr = state.data;
                   const newArr = arr.map(item => {
                     if (item.id === res.data.id) {
                       return res.data;
@@ -394,7 +389,9 @@ class GeneralForms extends Component {
   };
 
   toggleFormModal = () => {
-    this.setState({ showFormModal: !this.state.showFormModal });
+    this.setState(({ showFormModal }) => ({
+      showFormModal: !showFormModal,
+    }));
   };
 
   toggleTab = tab => {
@@ -479,10 +476,10 @@ class GeneralForms extends Component {
   };
 
   handleSaveForm = () => {
-    this.setState({
-      xf: this.state.formId,
-      showFormModal: !this.state.showFormModal,
-    });
+    this.setState(state => ({
+      xf: state.formId,
+      showFormModal: !state.showFormModal,
+    }));
   };
 
   requestGeneralForm(id, checkUrl) {
