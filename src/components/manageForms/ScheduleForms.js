@@ -516,7 +516,6 @@ class ScheduleForms extends Component {
           showText
         >
           {loader && <DotLoader />}
-
           {!loader && isProjectForm && (
             <ScheduleFormTable
               data={data}

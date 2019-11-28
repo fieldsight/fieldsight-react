@@ -17,9 +17,10 @@ import 'react-toastify/dist/ReactToastify.css';
 /* eslint-disable react/prop-types */
 
 class ManageRegion extends Component {
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
     this.state = {
       hide: '',
       response: '',
