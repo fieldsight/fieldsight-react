@@ -7,12 +7,11 @@ import isEmpty from '../../utils/isEmpty';
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable consistent-return */
+/* eslint-disable react/static-property-placement */
+/* eslint-disable  react/sort-comp */
 
 class LeftSidebar extends Component {
-  constructor(props) {
-    super(props);
-    this.contextType = RegionContext;
-  }
+  static contextType = RegionContext;
 
   translating = title => {
     if (

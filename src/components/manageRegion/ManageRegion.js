@@ -15,11 +15,15 @@ import 'react-toastify/dist/ReactToastify.css';
 
 /* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
+/* eslint-disable react/static-property-placement */
+/* eslint-disable react/sort-comp */
 
 class ManageRegion extends Component {
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
+
     this.state = {
       hide: '',
       response: '',
@@ -191,10 +195,10 @@ class ManageRegion extends Component {
                   defaultMessage="Turn OFF"
                 />
 
-                {/* <div
+                <div
                   className="handle"
                   style={{ left: 'auto', right: '0.1875rem' }}
-                ></div> */}
+                />
               </button>
             ) : (
               <button
@@ -210,7 +214,10 @@ class ManageRegion extends Component {
                   defaultMessage="Turn ON"
                 />
 
-                {/* <div className="handle"></div> */}
+                <div
+                  className="handle"
+                  // style={{ left: 'auto', right: '0.1875rem' }}
+                />
               </button>
             )}
           </div>

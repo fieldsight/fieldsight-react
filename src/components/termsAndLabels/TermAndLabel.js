@@ -12,6 +12,8 @@ import isEmpty from '../../utils/isEmpty';
 /* eslint-disable camelcase */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable  consistent-return */
+/* eslint-disable react/static-property-placement */
+/* eslint-disable  react/sort-comp */
 
 const tableHeader = {
   termsAndLabels: ['Terms And Labels', 'Changed To'],
@@ -20,9 +22,10 @@ const tableHeader = {
 const url = 'fv3/api/project-terms-labels/';
 
 export default class TermAndLabel extends Component {
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
 
     this.state = {
       termsAndLabels: {

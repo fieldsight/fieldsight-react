@@ -32,6 +32,7 @@ export const getSiteDashboard = id => dispatch => {
       // dispatch({
       //   type: SITE_DASHBOARD_ERR
       // });
+      console.log(err);
     });
 };
 
@@ -52,6 +53,7 @@ export const getSiteMetas = id => dispatch => {
       // dispatch({
       //   type: SITE_METAS_ERR
       // });
+      console.log(err);
     });
 };
 
@@ -71,6 +73,7 @@ export const getSiteSubmissions = id => dispatch => {
       // dispatch({
       //   type: SITE_SUBMISSIONS_ERR
       // });
+      console.log(err);
     });
 };
 
@@ -103,7 +106,9 @@ export const getSiteLogs = id => dispatch => {
         payload: res.data.results,
       });
     })
-    .catch(err => {});
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 export const getSiteForms = (id, formType) => dispatch => {
@@ -139,6 +144,7 @@ export const getRecentPictures = id => dispatch => {
       // dispatch({
       //   type: SITE_PICTURES_ERR
       // });
+      console.log(err);
     });
 };
 

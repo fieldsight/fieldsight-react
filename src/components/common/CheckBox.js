@@ -13,7 +13,6 @@ const CheckBox = ({
   ...rest
 }) => (
   <div className={`checkbox ${className}`}>
-    {console.log(label, '3333')}
     <label>
       <input
         type="checkbox"

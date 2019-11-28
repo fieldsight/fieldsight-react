@@ -57,6 +57,7 @@ import Nepali from '../translations/ne.json';
 
 /* eslint-disable react/prop-types */
 /* eslint-disable camelcase */
+/* eslint-disable lines-between-class-members */
 
 const messages = {
   ne: Nepali,
@@ -65,45 +66,13 @@ const messages = {
 const language = navigator.language.split(/[-_]/)[0]; // language without region code
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      height: 0,
-      // region: false,
-      // selectedLanguage: language,
-      selected: localStorage.getItem('selected')
-        ? localStorage.getItem('selected')
-        : '',
-    };
-  }
-
   componentWillMount() {
     setDefault();
     // this.updateWindowDimensions();
-    // window.addEventListener('resize', this.updateWindowDimensions);
+    // window.addEventListener("resize", this.updateWindowDimensions);
   }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.selected !== this.state.selected) {
-      localStorage.setItem('selected', this.state.selected);
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-  }
-
-  onLanguageChangeHandler = e => {
-    const { value } = e.target;
-
-    this.setState({
-      selected: value,
-    });
-  };
-
   render() {
     const { selected } = this.props;
-    // const { selected } = this.state;
 
     return (
       <IntlProvider locale={selected} messages={messages[selected]}>
@@ -111,13 +80,6 @@ class App extends Component {
           <div id="main-container">
             <div className="container-fluid">
               <main id="main-content">
-                {/* <SelectElement
-                  options={selectLanguage}
-                  label="Select Language"
-                  changeHandler={this.onLanguageChangeHandler}
-                  value={selected}
-               /> */}
-
                 <Router>
                   <Switch>
                     <Route
@@ -129,7 +91,7 @@ class App extends Component {
                       render={props => (
                         <TeamSetting
                           {...props}
-                          height={this.state.height}
+                          // height={this.state.height}
                         />
                       )}
                     />

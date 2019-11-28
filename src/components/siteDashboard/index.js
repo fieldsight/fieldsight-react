@@ -49,8 +49,8 @@ class SiteDashboard extends Component {
 
   componentDidMount() {
     const {
-      params: {
-        match: { id: siteId },
+      match: {
+        params: { id: siteId },
       },
       // getSiteDashboard,
       // getSiteMetas,

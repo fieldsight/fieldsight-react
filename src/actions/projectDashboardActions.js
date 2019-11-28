@@ -23,6 +23,7 @@ export const getProjectDashboard = id => dispatch => {
       // dispatch({
       //   type: SITE_DASHBOARD_ERR
       // });
+      console.log(err);
     });
 };
 
@@ -38,7 +39,9 @@ export const getRegionData = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {});
+    .catch(err => {
+      console.log(err);
+    });
 };
 export const getProgressTableData = id => dispatch => {
   dispatch({
@@ -52,7 +55,9 @@ export const getProgressTableData = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {});
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 export const getSurveyForm = id => dispatch => {
@@ -64,5 +69,7 @@ export const getSurveyForm = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {});
+    .catch(err => {
+      console.log(err);
+    });
 };

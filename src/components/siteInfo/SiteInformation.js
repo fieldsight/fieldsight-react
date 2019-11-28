@@ -14,6 +14,8 @@ import DeleteModel from '../common/DeleteModal';
 /* eslint no-param-reassign: ["error", { "props": false }] */
 /* eslint-disable consistent-return  */
 /* eslint-disable  no-return-await  */
+/* eslint-disable react/static-property-placement */
+/* eslint-disable  react/sort-comp */
 
 const urls = [
   'fieldsight/api/organization/',
@@ -26,9 +28,10 @@ const progressUrl = 'fv3/api/project/progress/add/';
 class SiteInformation extends Component {
   _isMounted = false;
 
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
 
     this.state = {
       forms: [],

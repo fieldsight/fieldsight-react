@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
 
 import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
 
 class SubmissionData extends Component {
   constructor(props) {
@@ -279,9 +279,13 @@ class SubmissionData extends Component {
                             </a>
 
                             <a
-                              href="#"
                               className="delete-tag tag"
                               onClick={() => {
+                                this.handleDelete(list.submission_id);
+                              }}
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={() => {
                                 this.handleDelete(list.submission_id);
                               }}
                             >
@@ -412,18 +416,5 @@ class SubmissionData extends Component {
     );
   }
 }
-SubmissionData.propTypes = {
-  match: PropTypes.objectOf.isRequired,
-  breadcrumbs: PropTypes.objectOf.isRequired,
-  form_id_string: PropTypes.string.isRequired,
-  is_survey: PropTypes.bool.isRequired,
-  siteList: PropTypes.arrayOf.isRequired,
-  fromData: PropTypes.number.isRequired,
-  toData: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  pageNum: PropTypes.number.isRequired,
-  renderPageNumbers: PropTypes.func.isRequired,
-  dLoader: PropTypes.bool.isRequired,
-  paginationHandler: PropTypes.func.isRequired,
-};
+
 export default WithPagination(SubmissionData);

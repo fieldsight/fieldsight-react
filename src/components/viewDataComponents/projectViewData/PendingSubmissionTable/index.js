@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
 
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
 import { DotLoader } from '../../../myForm/Loader';
+
+/* eslint-disable react/prop-types */
 
 class PendingTable extends Component {
   componentDidMount() {
@@ -40,6 +41,8 @@ class PendingTable extends Component {
       },
     } = this;
 
+    console.log(this.props, 'this.protp');
+
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
@@ -74,9 +77,9 @@ class PendingTable extends Component {
             <div className="card-body">
               <StatusTable
                 submission={siteList}
-                count={this.state.count}
-                next={this.state.next}
-                previous={this.state.previous}
+                count={this.props.count}
+                next={this.props.next}
+                previous={this.props.previous}
                 projectId={id}
               />
             </div>
@@ -153,19 +156,5 @@ class PendingTable extends Component {
     );
   }
 }
-PendingTable.propTypes = {
-  id: PropTypes.string.isRequired,
-  breadcrumbs: PropTypes.objectOf.isRequired,
-  showViewData: PropTypes.func.isRequired,
-  siteList: PropTypes.arrayOf.isRequired,
-  fromData: PropTypes.number.isRequired,
-  toData: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  pageNum: PropTypes.number.isRequired,
-  renderPageNumbers: PropTypes.func.isRequired,
-  dLoader: PropTypes.bool.isRequired,
-  paginationHandler: PropTypes.func.isRequired,
-  data: PropTypes.objectOf.isRequired,
-  handleBreadCrumb: PropTypes.func.isRequired,
-};
+
 export default WithPagination(PendingTable);

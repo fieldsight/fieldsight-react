@@ -19,7 +19,8 @@ import markerIcon from '../common/Marker';
 /* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-access-state-in-setstate */
-
+/* eslint-disable react/static-property-placement */
+/* eslint-disable react/sort-comp */
 /* eslint-disable no-shadow */
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
@@ -41,9 +42,11 @@ const urls = [
 class EditProject extends Component {
   _isMounted = false;
 
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
+
     this.state = {
       project: {
         name: '',

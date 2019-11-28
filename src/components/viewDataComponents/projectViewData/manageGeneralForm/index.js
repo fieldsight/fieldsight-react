@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
-import PropTypes from 'prop-types';
 
 import ResponseTable from '../../responded/ResponseTable';
 import DeleteTable from '../deleteTable';
 import { DotLoader } from '../../../myForm/Loader';
 import { getProjectViewData } from '../../../../actions/viewDataActions';
 /* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
 
 class ManageGeneralForm extends Component {
   constructor(props) {
@@ -162,16 +162,7 @@ const mapStateToProps = ({ projectViewData }) => {
     generals_loader,
   };
 };
-ManageGeneralForm.propTypes = {
-  deleted_forms: PropTypes.arrayOf.isRequired,
-  showViewData: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
-  getProjectViewData: PropTypes.func.isRequired,
-  data: PropTypes.string.isRequired,
-  generals_forms: PropTypes.arrayOf.isRequired,
-  url: PropTypes.string.isRequired,
-  generals_loader: PropTypes.bool.isRequired,
-};
+
 export default compose(
   connect(mapStateToProps, {
     getProjectViewData,

@@ -33,6 +33,12 @@ class Teams extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.selected !== this.props.selected) {
+      localStorage.setItem('selected', this.props.selected);
+    }
+  }
+
   handleChange = async e => {
     const {
       target: { value },

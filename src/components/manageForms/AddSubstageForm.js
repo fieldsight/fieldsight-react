@@ -278,9 +278,17 @@ class AddSubstageForm extends Component {
                   role="button"
                   onKeyDown={toggleFormModal}
                 >
-                  {!!isEditForm || formTitle
-                    ? 'Change form'
-                    : ' Choose form'}
+                  {!!isEditForm || formTitle ? (
+                    <FormattedMessage
+                      id="app.changeForm"
+                      defaultMessage="Change Form"
+                    />
+                  ) : (
+                    <FormattedMessage
+                      id="app.chooseForm"
+                      defaultMessage="Choose Form"
+                    />
+                  )}
                   {!formTitle && (
                     <sup style={{ color: '#ed5261' }}>*</sup>
                   )}

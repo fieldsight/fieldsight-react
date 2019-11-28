@@ -7,7 +7,9 @@ import AddSite from './AddSite';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 /* eslint-disable react/prop-types  */
+/* eslint-disable react/sort-comp  */
 /* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/static-property-placement  */
 
 // const project_id = 137;
 // const base_url = 'https://fieldsight.naxa.com.np';
@@ -19,9 +21,10 @@ const popUpState = {
 };
 
 class ProjectSiteList extends Component {
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
     this.state = {
       addModal: false,
       uploadModal: false,

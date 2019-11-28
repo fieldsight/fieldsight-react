@@ -8,6 +8,7 @@ import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 
 import withPagination from '../../hoc/WithPagination';
+/* eslint-disable */
 /* eslint-disable react/prop-types  */
 /* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key */
@@ -42,10 +43,10 @@ const siteName = site => {
 };
 
 class ProjectSiteTable extends Component {
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-
-    this.contextType = RegionContext;
   }
 
   componentDidMount() {

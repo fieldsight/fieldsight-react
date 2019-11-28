@@ -12,12 +12,16 @@ const animatedComponents = makeAnimated();
 
 const urls = ['fv3/api/geolayer/', 'fv3/api/organization-geolayer/'];
 
+/* eslint-disable react/static-property-placement */
+/* eslint-disable react/sort-comp */
+
 export default class MapLayer extends Component {
   _isMounted = false;
 
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
     this.state = {
       initialData: [],
       dropdownData: [],

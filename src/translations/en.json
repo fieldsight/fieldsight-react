@@ -395,5 +395,9 @@
   "app.total": "Total",
   "app.siteList": "Site List",
   "app.surveyForm": "Survey Form",
-  "app.contacts": "Contacts"
+  "app.contacts": "Contacts",
+  "app.sharedForms": "Shared Forms",
+  "app.noFormAvailable": "No Form Available",
+  "app.changeForm": "Change Form",
+  "app.chooseForm": "Choose Form"
 }

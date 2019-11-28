@@ -395,5 +395,9 @@
   "app.total": "कुल",
   "app.siteList": "साइट सूची",
   "app.surveyForm": "सर्वेक्षण फाराम",
-  "app.contacts": "सम्पर्कहरू"
+  "app.contacts": "सम्पर्कहरू",
+  "app.sharedForms": "साझा फारामहरू",
+  "app.noFormAvailable": "कुनै फारम उपलब्ध छैन",
+  "app.changeForm": "फारम परिवर्तन गर्नुहोस्",
+  "app.chooseForm": "फारम छनौट गर्नुहोस्"
 }

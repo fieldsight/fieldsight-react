@@ -10,6 +10,7 @@ import DeleteTable from '../deleteTable';
 import { getProjectViewData } from '../../../../actions/viewDataActions';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
 
 class ManageScheduledForm extends Component {
   constructor(props) {
@@ -167,16 +168,7 @@ const mapStateToProps = ({ projectViewData }) => {
     scheduled_loader,
   };
 };
-ManageScheduledForm.propTypes = {
-  deleted_forms: PropTypes.arrayOf.isRequired,
-  showViewData: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
-  getProjectViewData: PropTypes.func.isRequired,
-  data: PropTypes.string.isRequired,
-  scheduled_forms: PropTypes.arrayOf.isRequired,
-  url: PropTypes.string.isRequired,
-  scheduled_loader: PropTypes.bool.isRequired,
-};
+
 export default compose(
   connect(mapStateToProps, {
     getProjectViewData,
