@@ -50,7 +50,7 @@ class SiteType extends Component {
           });
         }
       })
-      .catch(err => console.log('err', err));
+      .catch(() => {});
   }
 
   componentWillUnmount() {
@@ -88,7 +88,7 @@ class SiteType extends Component {
           name: selectedSite.name,
           project: selectedSite.project,
         })
-        .then(res => {
+        .then(() => {
           this.setState(
             {
               ...INITIAL_STATE,
@@ -101,7 +101,7 @@ class SiteType extends Component {
               ),
           );
         })
-        .catch(err => {
+        .catch(() => {
           this.setState(
             {
               isLoading: false,
@@ -133,7 +133,7 @@ class SiteType extends Component {
             ),
         );
       })
-      .catch(err => {
+      .catch(() => {
         this.setState(
           {
             isLoading: false,
@@ -143,7 +143,7 @@ class SiteType extends Component {
       });
   };
 
-  onSubmitHandler = (e, edit) => {
+  onSubmitHandler = e => {
     e.preventDefault();
     this.setState(
       {
@@ -189,7 +189,7 @@ class SiteType extends Component {
         );
         axios
           .delete(`${url}${selectedId}/`)
-          .then(res => {
+          .then(() => {
             this.setState(
               {
                 ...INITIAL_STATE,
@@ -204,7 +204,7 @@ class SiteType extends Component {
                 ),
             );
           })
-          .catch(err => {
+          .catch(() => {
             this.setState(
               {
                 isLoading: false,

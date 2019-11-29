@@ -13,7 +13,7 @@ import RightContentCard from '../common/RightContentCard';
 import Loader from '../common/Loader';
 import 'leaflet/dist/leaflet.css';
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/destructuring-assignment */
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
 const iconUrl = require('leaflet/dist/images/marker-icon.png');
@@ -75,9 +75,7 @@ class TeamAdd extends Component {
           // id,
         });
       })
-      .catch(err => {
-        console.log(err, 'err');
-      });
+      .catch(() => {});
     // if (this._isMounted) {
     //   if (sector) {
     //   }
@@ -150,9 +148,7 @@ class TeamAdd extends Component {
           this.props.history.push(`/team-dashboard/${res.data.id}`);
         }
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch(() => {});
   };
 
   mapClickHandler = e => {

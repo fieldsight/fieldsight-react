@@ -63,7 +63,9 @@ class DashboardHeader extends PureComponent {
                 <span />
                 <figcaption>
                   <a
-                    href="#"
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={() => openModal('Gallery')}
                     className="photo-preview"
                     onClick={() => openModal('Gallery')}
                   >

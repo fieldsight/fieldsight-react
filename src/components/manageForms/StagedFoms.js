@@ -177,8 +177,8 @@ class StagedForms extends Component {
                     newData = res.data;
                     return newData;
                     // } else {
-                    //   return newData;
                   }
+                  return newData;
                 });
                 return {
                   data: newArr,
@@ -364,7 +364,7 @@ class StagedForms extends Component {
                     return newData;
                   }
                   // else {
-                  //   return each;
+                  return newData;
                   // }
                 });
                 return {
@@ -591,8 +591,10 @@ class StagedForms extends Component {
       // if (editFormId) formData.append("fsxf", editFormId);
       if (data.images && data.images.length > 0) {
         data.images.map((each, i) => {
-          if (!each.image)
-            formData.append(`new_images_${i + 1}`, each);
+          if (!each.image) {
+            return formData.append(`new_images_${i + 1}`, each);
+          }
+          return formData;
         });
       }
       if (data.id) {
@@ -917,6 +919,7 @@ class StagedForms extends Component {
 
     data.map(each => {
       deployCount += each.undeployed_count;
+      return deployCount;
     });
 
     const arrToReorder = data.map(each => {
@@ -924,7 +927,7 @@ class StagedForms extends Component {
         return true;
       }
       // } else {
-      //   return false;
+      return false;
       // }
     });
     // canReorder =

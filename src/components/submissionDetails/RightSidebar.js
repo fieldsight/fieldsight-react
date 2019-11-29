@@ -109,9 +109,6 @@ class RightSidebar extends Component {
                     placement="top"
                     overlay={
                       <Tooltip>
-                        {/* `${
-                        hideNullValues ? "Show" : "Hide"
-                      } Null Values` */}
                         {hideNullValues ? (
                           <FormattedMessage
                             id="app.showNullValues"

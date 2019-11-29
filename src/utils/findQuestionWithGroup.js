@@ -10,7 +10,7 @@ const findQuestionWithGroup = (children, type) => {
 
   const filterQuestionByType = (questions, name) => {
     // if (type) {
-    questions.forEach((question) => {
+    questions.forEach(question => {
       if (question.type === type) {
         filteredQuestions.push({
           ...question,
@@ -21,7 +21,7 @@ const findQuestionWithGroup = (children, type) => {
       if (question.type === 'group' || question.type === 'repeat') {
         filterQuestionByType(
           question.children,
-          name ? `${name}/${question.name}` : question.name
+          name ? `${name}/${question.name}` : question.name,
         );
       }
     });

@@ -5,13 +5,15 @@ import PropTypes from 'prop-types';
 import StatusTable from '../../responded/StatusTable';
 import { DotLoader } from '../../../myForm/Loader';
 import WithPagination from '../../../../hoc/WithPagination';
+/* eslint-disable react/destructuring-assignment */
 
 class ApprovedTable extends Component {
   componentDidMount() {
-    if (this.props.id !== '') {
+    const { id } = this.props;
+    if (id !== '') {
       this.props.paginationHandler(1, null, {
         type: 'siteStatus',
-        projectId: this.props.id,
+        projectId: id,
         status: 'approved',
       });
     }
@@ -94,10 +96,20 @@ class ApprovedTable extends Component {
                       <ul>
                         <li className="page-item">
                           <a
-                            href="#"
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum - 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'flagged',
+                              });
+                            }}
                             onClick={() => {
                               paginationHandler(pageNum - 1, null, {
+                                type: 'viewByStatus',
                                 projectId: id,
+                                status: 'flagged',
                               });
                             }}
                           >
@@ -113,10 +125,20 @@ class ApprovedTable extends Component {
 
                         <li className="page-item ">
                           <a
-                            href="#"
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum + 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'flagged',
+                              });
+                            }}
                             onClick={() => {
                               paginationHandler(pageNum + 1, null, {
+                                type: 'viewByStatus',
                                 projectId: id,
+                                status: 'flagged',
                               });
                             }}
                           >

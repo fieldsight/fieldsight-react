@@ -9,6 +9,7 @@ import { getsiteViewData } from '../../../../actions/siteViewDataAction';
 import DeleteTable from '../deleteTable';
 import ResponseTable from '../../responded/StagedFormResponseTable';
 /* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
 
 class ResponseStageForm extends Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class ResponseStageForm extends Component {
         stage_forms_loading,
         id,
       },
+      state: { hide },
     } = this;
 
     return (
@@ -100,7 +102,7 @@ class ResponseStageForm extends Component {
                 />
               </h5>
               <div className="dash-btn">
-                {this.state.hide ? (
+                {hide ? (
                   <button
                     type="button"
                     className="btn-toggle"
@@ -137,7 +139,7 @@ class ResponseStageForm extends Component {
             </div>
 
             <div className="card-body">
-              {!this.state.hide && (
+              {!hide && (
                 <DeleteTable
                   deleted_forms={deleted_forms}
                   id={id}

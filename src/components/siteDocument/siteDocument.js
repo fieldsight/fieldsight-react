@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Modal from '../common/Modal';
 import SiteDocumentTable from './siteDocumentTable';
 /* eslint-disable camelcase */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/destructuring-assignment */
 
 export default class SiteDocument extends Component {
   constructor(props) {
@@ -81,8 +81,8 @@ export default class SiteDocument extends Component {
           });
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
       });
   };
 
@@ -148,8 +148,8 @@ export default class SiteDocument extends Component {
           this.handleUpdate(res);
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
       });
   };
 

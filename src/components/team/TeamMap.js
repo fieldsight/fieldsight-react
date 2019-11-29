@@ -17,7 +17,7 @@ import * as Funtionss from './functionss';
 require('leaflet.vectorgrid/dist/Leaflet.VectorGrid.bundled');
 const giphy = require('../../static/images/giphy.gif');
 const ring = require('../../static/images/ring.gif');
-/* eslint-disable react/prop-types  */
+/* eslint-disable */
 /* eslint-disable consistent-return  */
 /* eslint no-param-reassign: ["error", { "props": false }] */
 /* eslint-disable  no-new-func */
@@ -79,7 +79,7 @@ class TeamMap extends React.Component {
     axios.get('fv3/api/map/countries/').then(response => {
       const neww = [];
       response.data.data.map(e => {
-        neww.push({ value: e.pk, label: e.name });
+        return neww.push({ value: e.pk, label: e.name });
       });
 
       this.setState({ Countries: neww });
@@ -89,7 +89,7 @@ class TeamMap extends React.Component {
       // console.log(response.data)
       const neww = [];
       response.data.map(e => {
-        neww.push({ value: e.pk, label: e.name });
+        return neww.push({ value: e.pk, label: e.name });
       });
 
       this.setState({ Oraganization: neww });
@@ -171,7 +171,7 @@ class TeamMap extends React.Component {
 
     if (e !== null) {
       e.map(el => {
-        this.state.selectedOption.push(el.value);
+        return this.state.selectedOption.push(el.value);
       });
       // console.log(this.state.selectedOption);
     }
@@ -183,7 +183,7 @@ class TeamMap extends React.Component {
 
     if (e !== null) {
       e.map(el => {
-        this.state.selectedOptionOrg.push(el.value);
+        return this.state.selectedOptionOrg.push(el.value);
       });
     }
   };
@@ -448,7 +448,7 @@ class TeamMap extends React.Component {
         }
       });
 
-      mrk.addTo(this.state.layerGroup);
+      return mrk.addTo(this.state.layerGroup);
     });
   };
 
@@ -484,6 +484,7 @@ class TeamMap extends React.Component {
       ) {
         return true;
       }
+      return null;
     });
     const map = this.mapRef.current.leafletElement;
     this.state.layerGroup.eachLayer(l =>
@@ -508,7 +509,7 @@ class TeamMap extends React.Component {
           .addEventListener('click', () => this.popUpClick(e.pk)),
       );
 
-      mrk.addTo(this.state.layerGroup);
+      return mrk.addTo(this.state.layerGroup);
       // map.fitBounds(this.state.layerGroup.getBounds())
     });
     map.flyToBounds(this.state.layerGroup.getBounds(), {

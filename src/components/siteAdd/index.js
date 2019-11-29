@@ -18,9 +18,8 @@ import 'leaflet/dist/leaflet.css';
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
 const iconUrl = require('leaflet/dist/images/marker-icon.png');
 const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
 /* eslint-disable consistent-return  */
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -88,7 +87,7 @@ export default class SiteAdd extends Component {
 
     axios
       .all(
-        urls.map((url, i) => {
+        urls.map(url => {
           return axios.get(url);
         }),
       )
@@ -141,8 +140,8 @@ export default class SiteAdd extends Component {
           }
         }),
       )
-      .catch(err => {
-        console.log(err, 'err');
+      .catch(() => {
+        // console.log(err, 'err');
       });
   }
 
@@ -268,8 +267,8 @@ export default class SiteAdd extends Component {
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     } else if (this.props.page === 'subSite') {
       axios({
@@ -309,8 +308,8 @@ export default class SiteAdd extends Component {
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     } else if (this.props.page === 'regionalSite') {
       axios({
@@ -350,8 +349,8 @@ export default class SiteAdd extends Component {
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     }
   };

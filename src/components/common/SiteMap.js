@@ -12,7 +12,7 @@ const iconUrl = require('../../static/images/marker.png');
 const iconRetinaUrl = require('../../static/images/marker.png');
 
 const { BaseLayer } = LayersControl;
-/* eslint-disable   react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 /* eslint-disable   react/no-did-update-set-state */
 
 class SiteMap extends Component {
@@ -124,7 +124,7 @@ class SiteMap extends Component {
           bounds = this.getSmallBound(latlng);
         } else {
           newArr.map(data => {
-            bounds.extend([
+            return bounds.extend([
               data.geometry.coordinates[1],
               data.geometry.coordinates[0],
             ]);

@@ -9,6 +9,7 @@ import ResponseTable from '../../responded/SurveyFormResponseTable';
 import DeleteTable from '../deleteTable';
 import { getProjectViewData } from '../../../../actions/viewDataActions';
 /* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
 
 class ManageSurveyForm extends Component {
   constructor(props) {

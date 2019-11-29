@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
 import { Table } from 'react-bootstrap';
 import PropTypes from 'prop-types';

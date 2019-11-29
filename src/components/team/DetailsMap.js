@@ -17,6 +17,7 @@ require('leaflet.markercluster');
 const giphy = require('../../static/images/giphy.gif');
 const ring = require('../../static/images/ring.gif');
 
+/* eslint-disable */
 /* eslint-disable react/prop-types  */
 /* eslint-disable consistent-return  */
 

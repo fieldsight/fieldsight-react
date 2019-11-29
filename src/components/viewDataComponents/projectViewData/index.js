@@ -16,6 +16,7 @@ import PendingTable from './PendingSubmissionTable';
 import RejectedTable from './RejectSubmissionTable';
 import FlaggedTable from './FlagedTable';
 /* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
 
 class ViewData extends Component {
   constructor(props) {

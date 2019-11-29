@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import format from 'date-fns/format';
 import uuid from 'uuid/v4';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import SubmissionModal from './SubmissionModal';
 import { TableContentLoader } from '../../common/Loader';
 /* eslint-disable react/prop-types  */
@@ -100,7 +100,7 @@ const DatatablePage = ({
                 </thead>
 
                 <tbody>
-                  {siteSubmissions.map((submission, i) => (
+                  {siteSubmissions.map(submission => (
                     <tr key={uuid()}>
                       <td>
                         <a

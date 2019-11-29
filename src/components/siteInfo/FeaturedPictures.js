@@ -7,7 +7,7 @@ import InputElement from '../common/InputElement';
 import SelectElement from '../common/SelectElement';
 import findQuestion from '../../utils/findQuestion';
 import { errorToast } from '../../utils/toastHandler';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 

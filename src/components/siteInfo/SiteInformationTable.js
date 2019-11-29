@@ -13,7 +13,7 @@ import findQuestion from '../../utils/findQuestion';
 import isEmpty from '../../utils/isEmpty';
 import { errorToast } from '../../utils/toastHandler';
 import SortableSiteInfo from './SortableSiteInfo';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
 
 const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -129,7 +129,7 @@ class SiteInformationTable extends Component {
   };
 
   handleMultiChange = option => {
-    this.setState(state => {
+    this.setState(() => {
       return {
         multiValue: option,
       };
@@ -154,7 +154,7 @@ class SiteInformationTable extends Component {
   removeInputHandler = val => {
     const { optInputField, options } = this.state;
     const filteredOptInputField = optInputField.filter(
-      (field, i) => field.val !== val,
+      field => field.val !== val,
     );
     const filteredOptions = { ...options };
     delete filteredOptions[`option${val}`];
@@ -177,12 +177,12 @@ class SiteInformationTable extends Component {
       );
 
       if (filteredMetaAttributes) {
-        const modifiedMetaAttributes = filteredMetaAttributes.site_meta_attributes.map(
-          meta => ({
+        const modifiedMetaAttributes =
+          filteredMetaAttributes.site_meta_attributes &&
+          filteredMetaAttributes.site_meta_attributes.map(meta => ({
             ...meta,
             checked: false,
-          }),
-        );
+          }));
 
         this.setState({
           selectedProject: value,
@@ -413,15 +413,17 @@ class SiteInformationTable extends Component {
             ({ question_name }) => question_name,
           ),
         );
-        const nonSelectedMetaAttribute = siteMetaAttributes.site_meta_attributes
-          .filter(
-            ({ question_name }) =>
-              !selectedMetaAttributes.has(question_name),
-          )
-          .map(attr => ({
-            ...attr,
-            checked: false,
-          }));
+        const nonSelectedMetaAttribute =
+          siteMetaAttributes.site_meta_attributes &&
+          siteMetaAttributes.site_meta_attributes
+            .filter(
+              ({ question_name }) =>
+                !selectedMetaAttributes.has(question_name),
+            )
+            .map(attr => ({
+              ...attr,
+              checked: false,
+            }));
 
         filteredMetaAttributes = [
           ...selectedTableQuestion.metas,
@@ -821,9 +823,6 @@ class SiteInformationTable extends Component {
                   changeHandler={this.formChangeHandler}
                 />
               )}
-              {/* 
-              {console.log('selectedQuestion', selectedQuestion)}
-              {console.log('filteredQuestions', filteredQuestions)} */}
               {(type === 'Form' ||
                 type === 'FormQuestionAnswerStatus') &&
                 filteredQuestions.length > 0 && (

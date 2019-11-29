@@ -5,13 +5,15 @@ import PropTypes from 'prop-types';
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
 import { DotLoader } from '../../../myForm/Loader';
+/* eslint-disable react/destructuring-assignment */
 
 class ApprovedTable extends Component {
   componentDidMount() {
-    if (this.props.id !== '') {
-      this.props.paginationHandler(1, null, {
+    const { id, paginationHandler } = this.props;
+    if (id !== '') {
+      paginationHandler(1, null, {
         type: 'viewByStatus',
-        projectId: this.props.id,
+        projectId: id,
         status: 'approved',
       });
     }
@@ -25,7 +27,19 @@ class ApprovedTable extends Component {
 
   render() {
     const {
-      props: { data, showViewData, dLoader, id },
+      props: {
+        data,
+        showViewData,
+        dLoader,
+        id,
+        siteList,
+        fromData,
+        toData,
+        totalCount,
+        pageNum,
+        paginationHandler,
+        renderPageNumbers,
+      },
     } = this;
 
     return (
@@ -60,45 +74,51 @@ class ApprovedTable extends Component {
         {dLoader === false ? (
           <>
             <div className="card-body">
-              <StatusTable submission={this.props.siteList} />
+              <StatusTable submission={siteList} />
             </div>
-            {this.props.siteList && this.props.siteList.length > 0 ? (
+            {siteList && siteList.length > 0 ? (
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
                       Showing
-                      <span>{this.props.fromData}</span>
+                      <span>{fromData}</span>
                       to
                       <span>
-                        {this.props.toData > this.props.totalCount
-                          ? this.props.totalCount
-                          : this.props.toData}
+                        {toData > totalCount ? totalCount : toData}
                       </span>
                       of
-                      <span>{this.props.totalCount}</span>
+                      <span>{totalCount}</span>
                       entries.
                     </p>
                   </div>
-                  {this.props.toData < this.props.totalCount ? (
+                  {toData < totalCount ? (
                     <div className="table-pagination">
                       <ul>
                         <li className="page-item">
                           <a
-                            href="#"
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum - 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'flagged',
+                              });
+                            }}
                             onClick={() => {
-                              this.props.paginationHandler(
-                                this.props.pageNum - 1,
-                                null,
-                                { projectId: id },
-                              );
+                              paginationHandler(pageNum - 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'flagged',
+                              });
                             }}
                           >
                             <i className="la la-long-arrow-left" />
                           </a>
                         </li>
 
-                        {this.props.renderPageNumbers({
+                        {renderPageNumbers({
                           type: 'viewByStatus',
                           projectId: id,
                           status: 'flagged',
@@ -106,13 +126,21 @@ class ApprovedTable extends Component {
 
                         <li className="page-item ">
                           <a
-                            href="#"
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum + 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'flagged',
+                              });
+                            }}
                             onClick={() => {
-                              this.props.paginationHandler(
-                                this.props.pageNum + 1,
-                                null,
-                                { projectId: id },
-                              );
+                              paginationHandler(pageNum + 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'flagged',
+                              });
                             }}
                           >
                             <i className="la la-long-arrow-right" />

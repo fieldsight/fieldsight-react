@@ -97,10 +97,20 @@ class RejectedTable extends Component {
                       <ul>
                         <li className="page-item">
                           <a
-                            href="#"
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum - 1, null, {
+                                type: 'siteStatus',
+                                projectId: id,
+                                status: 'rejected',
+                              });
+                            }}
                             onClick={() => {
                               paginationHandler(pageNum - 1, null, {
+                                type: 'siteStatus',
                                 projectId: id,
+                                status: 'rejected',
                               });
                             }}
                           >
@@ -116,10 +126,20 @@ class RejectedTable extends Component {
 
                         <li className="page-item ">
                           <a
-                            href="#"
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum + 1, null, {
+                                type: 'siteStatus',
+                                projectId: id,
+                                status: 'rejected',
+                              });
+                            }}
                             onClick={() => {
                               paginationHandler(pageNum + 1, null, {
+                                type: 'siteStatus',
                                 projectId: id,
+                                status: 'rejected',
                               });
                             }}
                           >

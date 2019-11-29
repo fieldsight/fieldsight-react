@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 import InputElement from '../common/InputElement';
 
-/* eslint-disable react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key */
 
 class AddStageForm extends Component {
@@ -44,12 +44,13 @@ class AddStageForm extends Component {
       if (stageData.regions.length > 0) {
         regionOptions.map(region => {
           if (stageData.regions.indexOf(region.id) > -1) {
-            selectedRegion.push({
+            return selectedRegion.push({
               ...region,
               value: region.identifier,
               label: region.name,
             });
           }
+          return selectedRegion;
         });
         // } else {
         //   selectedRegion = newRegionArr;
@@ -58,12 +59,13 @@ class AddStageForm extends Component {
       if (stageData.tags.length > 0) {
         typeOptions.map(type => {
           if (stageData.tags.indexOf(type.id) > -1) {
-            selectedType.push({
+            return selectedType.push({
               ...type,
               value: type.identifier,
               label: type.name,
             });
           }
+          return selectedType;
         });
         // } else {
         //   selectedType = newTypeArr;

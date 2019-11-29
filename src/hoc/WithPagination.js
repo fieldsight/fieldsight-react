@@ -164,7 +164,7 @@ const withPagination = WrappedComponent => {
           pageNumbers.push(i);
         }
 
-        return pageNumbers.map(number => {
+        pageNumbers.map(number => {
           const classes = pageNum === number ? 'current' : '';
 
           if (
@@ -175,7 +175,11 @@ const withPagination = WrappedComponent => {
             return (
               <li key={number} className={classes}>
                 <a
-                  href="#"
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => {
+                    this.paginationHandler(number, null, payload);
+                  }}
                   onClick={() => {
                     this.paginationHandler(number, null, payload);
                   }}
@@ -185,6 +189,7 @@ const withPagination = WrappedComponent => {
               </li>
             );
           }
+          return null;
         });
       }
     };

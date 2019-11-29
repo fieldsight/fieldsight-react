@@ -3,7 +3,7 @@ import RadioElement from '../common/RadioElement';
 import { DotLoader } from '../myForm/Loader';
 
 /* eslint-disable  consistent-return */
-/* eslint-disable react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key */
 
 class AddForm extends PureComponent {

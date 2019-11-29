@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import InputElement from '../common/InputElement';
 
-/* eslint-disable react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 /* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key */
 
@@ -13,7 +13,7 @@ const getFilename = name => {
 const getImages = images => {
   const arr = [];
   images.map(item => {
-    arr.push(item.image);
+    return arr.push(item.image);
   });
   return arr;
 };
@@ -75,7 +75,7 @@ class EditFormGuide extends Component {
           srcs: [...state.srcs, reader.result],
         }));
       };
-      reader.readAsDataURL(img);
+      return reader.readAsDataURL(img);
     });
   };
 

@@ -10,8 +10,6 @@ import { AvatarContentLoader, DotLoader } from '../../common/Loader';
 import SubmissionModal from './SubmissionModal';
 import Modal from '../../common/Modal';
 import Td from '../../common/TableData';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
 /* eslint-disable react/no-array-index-key  */
 
 // const projectId = window.project_id ? window.project_id : 137;

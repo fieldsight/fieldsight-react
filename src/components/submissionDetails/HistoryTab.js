@@ -25,7 +25,11 @@ class HistoryTab extends React.Component {
                     </figure>
                     <div className="content">
                       <p>
-                        <a href="#" className="name">
+                        <a
+                          tabIndex="0"
+                          role="button"
+                          className="name"
+                        >
                           {history.user_full_name}
                         </a>
                         {history.get_new_status_display ===
@@ -62,7 +66,10 @@ class HistoryTab extends React.Component {
                               />
                             </span>
                             <strong
-                              className={history.get_new_status_display.toLowerCase()}
+                              className={
+                                history.get_new_status_display &&
+                                history.get_new_status_display.toLowerCase()
+                              }
                             >
                               {history.get_new_status_display}
                             </strong>

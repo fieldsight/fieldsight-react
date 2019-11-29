@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
@@ -77,14 +77,12 @@ export default class TeamMapLayer extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         if (this._isMounted) {
           this.setState({
             dotLoader: false,
           });
         }
-
-        console.log(err);
       });
   };
 
@@ -121,10 +119,11 @@ export default class TeamMapLayer extends Component {
               if (each !== 'Centroid_X') {
                 if (each !== 'Centroid_Y') {
                   const name = each.replace('_', ' ').toUpperCase();
-                  propArr.push({ value: each, label: name });
+                  return propArr.push({ value: each, label: name });
                 }
               }
             }
+            return propArr;
           });
         }
         return {
@@ -201,7 +200,7 @@ export default class TeamMapLayer extends Component {
             },
           );
         })
-        .catch(err => {
+        .catch(() => {
           this.setState(
             {
               isLoading: false,
@@ -232,7 +231,7 @@ export default class TeamMapLayer extends Component {
             },
           );
         })
-        .catch(err => {
+        .catch(() => {
           this.setState(
             {
               isLoading: false,
@@ -295,10 +294,11 @@ export default class TeamMapLayer extends Component {
           if (each !== 'Centroid_X') {
             if (each !== 'Centroid_Y') {
               const name = each.replace('_', ' ').toUpperCase();
-              newArr.push({ value: each, label: name });
+              return newArr.push({ value: each, label: name });
             }
           }
         }
+        return newArr;
       });
       this.setState({
         cropResult: file,
@@ -329,10 +329,11 @@ export default class TeamMapLayer extends Component {
             if (each !== 'Centroid_X') {
               if (each !== 'Centroid_Y') {
                 const name = each.replace('_', ' ').toUpperCase();
-                newArr.push({ value: each, label: name });
+                return newArr.push({ value: each, label: name });
               }
             }
           }
+          return newArr;
         });
         this.setState(prevState => ({
           cropResult: file[0],
@@ -361,12 +362,6 @@ export default class TeamMapLayer extends Component {
     });
   };
 
-  // closeModal = () => {
-  //   this.setState({
-  //     showCropper: false,
-  //   });
-  // };
-
   render() {
     const {
       state: {
@@ -375,7 +370,6 @@ export default class TeamMapLayer extends Component {
         isLoading,
         dotLoader,
         addMap,
-        teamId,
         cropResult,
         geoLayer: { code_prop, title, title_prop, level, tolerance },
         hasProp,

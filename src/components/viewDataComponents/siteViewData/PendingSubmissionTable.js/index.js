@@ -5,21 +5,24 @@ import PropTypes from 'prop-types';
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
 import { DotLoader } from '../../../myForm/Loader';
+/* eslint-disable react/destructuring-assignment */
 
 class PendingTable extends Component {
   componentDidMount() {
-    if (this.props.id !== '') {
+    const { id } = this.props;
+    if (id !== '') {
       this.props.paginationHandler(1, null, {
         type: 'siteStatus',
-        projectId: this.props.id,
+        projectId: id,
         status: 'pending',
       });
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
-      this.props.handleBreadCrumb(this.props.breadcrumbs);
+    const { breadcrumbs } = this.props;
+    if (prevProps.breadcrumbs !== breadcrumbs) {
+      this.props.handleBreadCrumb(breadcrumbs);
     }
   }
 
@@ -94,10 +97,20 @@ class PendingTable extends Component {
                       <ul>
                         <li className="page-item">
                           <a
-                            href="#"
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum - 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'flagged',
+                              });
+                            }}
                             onClick={() => {
                               paginationHandler(pageNum - 1, null, {
+                                type: 'viewByStatus',
                                 projectId: id,
+                                status: 'flagged',
                               });
                             }}
                           >
@@ -113,10 +126,20 @@ class PendingTable extends Component {
 
                         <li className="page-item ">
                           <a
-                            href="#"
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum + 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'flagged',
+                              });
+                            }}
                             onClick={() => {
                               paginationHandler(pageNum + 1, null, {
+                                type: 'viewByStatus',
                                 projectId: id,
+                                status: 'flagged',
                               });
                             }}
                           >

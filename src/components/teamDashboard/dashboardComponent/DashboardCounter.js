@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import CountCard from '../../common/CountCard';
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 const getIcon = submission => {
   switch (submission) {

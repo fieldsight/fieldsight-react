@@ -11,7 +11,7 @@ import AddForm from './AddForm';
 import GeneralFormTable from './GeneralFormTable';
 import ManageModal from './ManageModal';
 
-/* eslint-disable  react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 /* eslint-disable  react/no-did-update-set-state */
 
 class ProjectWideForms extends Component {

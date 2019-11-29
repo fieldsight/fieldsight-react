@@ -112,10 +112,7 @@ export default class SurveyFormResponseTable extends Component {
                           </Link>
                         }
                         {survey.download_url === null ? (
-                          <a
-                            href="#"
-                            className="edit-tag tag disable-pointer"
-                          >
+                          <a className="edit-tag tag disable-pointer">
                             <i className="la la-download" />
                           </a>
                         ) : (

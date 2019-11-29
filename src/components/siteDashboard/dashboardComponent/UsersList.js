@@ -29,7 +29,7 @@ const UsersList = ({ users, showContentLoader }) => (
       <PerfectScrollbar>
         <ul>
           {users.length > 0 ? (
-            users.map((user, i) => (
+            users.map(user => (
               <UsersListItem user={user} key={uuid()} />
             ))
           ) : (

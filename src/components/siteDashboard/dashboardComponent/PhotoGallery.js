@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { GridContentLoader } from '../../common/Loader';
 import Modal from '../../common/Modal';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions  */
 /* eslint-disable jsx-a11y/click-events-have-key-events  */
 /* eslint-disable react/no-array-index-key  */
@@ -155,7 +155,7 @@ class PhotoGallery extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         // dispatch({
         //   type: SITE_DASHBOARD_ERR
         // });

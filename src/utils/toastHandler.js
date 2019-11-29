@@ -10,7 +10,7 @@ export const successToast = (title, action) => {
   });
 };
 
-export const errorToast = (error) => {
+export const errorToast = error => {
   toast.error(error ? error : 'Oops, something went wrong', {
     position: 'top-right',
     autoClose: 5000,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import SideNav from './SideNav';
-/* eslint-disable react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 
 class ManageForms extends Component {
   constructor(props) {

@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-/* eslint-disable react/prop-types  */
 
 class PricingStepThree extends PureComponent {
   render() {
@@ -184,7 +183,11 @@ class PricingStepThree extends PureComponent {
             </div>
             <div className="text-center">
               <a
-                href="#"
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  handleSubmit('finish');
+                }}
                 title=""
                 className="btn btn-primary"
                 onClick={() => {
