@@ -20,8 +20,6 @@ export const getSubmissionDetail = id => dispatch => {
     axios
       .get(`${id}`)
       .then(res => {
-        console.log(res, 'STOP_SUBMISSION_LOADER');
-
         dispatch({
           type: STOP_SUBMISSION_LOADER,
         });
@@ -30,7 +28,7 @@ export const getSubmissionDetail = id => dispatch => {
           payload: res.data,
         });
       })
-      .catch(err => {
+      .catch(() => {
         dispatch({
           type: STOP_SUBMISSION_LOADER,
         });
@@ -81,7 +79,7 @@ export const postSubmissionDetail = data => dispatch => {
       });
       successToast('Status', 'added');
     })
-    .catch(err => {
+    .catch(() => {
       dispatch({
         type: STOP_SUBMISSION_LOADER,
       });

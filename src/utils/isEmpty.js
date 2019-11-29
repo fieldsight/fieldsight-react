@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 
-const isEmpty = data => {
+const isEmpty = (data) => {
   if (typeof data === 'object') {
     return Object.keys(data).length === 0;
   }

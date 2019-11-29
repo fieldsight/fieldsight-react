@@ -20,7 +20,7 @@ export const getRegionsAndTypes = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // dispatch({
       //   type: SITE_DASHBOARD_ERR
       // });
@@ -39,7 +39,7 @@ export const getMyFormList = () => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {});
+    .catch(() => {});
 };
 
 export const getProjectFormList = () => dispatch => {
@@ -54,7 +54,7 @@ export const getProjectFormList = () => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {});
+    .catch(() => {});
 };
 
 export const getSharedFormList = () => dispatch => {
@@ -69,5 +69,5 @@ export const getSharedFormList = () => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {});
+    .catch(() => {});
 };

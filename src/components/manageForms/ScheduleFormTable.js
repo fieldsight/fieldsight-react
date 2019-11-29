@@ -100,7 +100,7 @@ const GetActionForProject = props => {
                 </Tooltip>
               }
             >
-              <i className="la la-rocket"> </i>
+              <i className="la la-rocket" />
             </OverlayTrigger>
           </a>
         )}
@@ -108,7 +108,9 @@ const GetActionForProject = props => {
           <span>
             <a
               className="td-edit-btn td-btn approved"
-              onClick={() => deployAction(item.id, item.is_deployed)}
+              onClick={() => {
+                deployAction(item.id, item.is_deployed);
+              }}
               tabIndex="0"
               role="button"
               onKeyDown={() => {
@@ -126,17 +128,21 @@ const GetActionForProject = props => {
                   </Tooltip>
                 }
               >
-                <i className="la la-rocket"> </i>
+                <i className="la la-rocket" />
               </OverlayTrigger>
             </a>
           </span>
         )}
         <a
-          onClick={() => editAction(item)}
+          onClick={() => {
+            editAction(item);
+          }}
           className="pending td-edit-btn td-btn"
           tabIndex="0"
           role="button"
-          onKeyDown={() => editAction(item)}
+          onKeyDown={() => {
+            editAction(item);
+          }}
         >
           <OverlayTrigger
             placement="top"
@@ -149,7 +155,7 @@ const GetActionForProject = props => {
               </Tooltip>
             }
           >
-            <i className="la la-edit"> </i>
+            <i className="la la-edit" />
           </OverlayTrigger>
         </a>
 
@@ -157,7 +163,9 @@ const GetActionForProject = props => {
           <span>
             <a
               className="rejected td-edit-btn td-btn"
-              onClick={() => handleToggle(item.id, item.is_deployed)}
+              onClick={() => {
+                handleToggle(item.id, item.is_deployed);
+              }}
               tabIndex="0"
               role="button"
               onKeyDown={() => {
@@ -175,7 +183,7 @@ const GetActionForProject = props => {
                   </Tooltip>
                 }
               >
-                <i className="la la-trash"> </i>
+                <i className="la la-trash" />
               </OverlayTrigger>
             </a>
           </span>
@@ -197,10 +205,14 @@ const GetActionForProject = props => {
         {item.site && item.is_deployed && (
           <a
             className="rejected td-edit-btn td-btn"
-            onClick={() => deployAction(item.id, item.is_deployed)}
+            onClick={() => {
+              deployAction(item.id, item.is_deployed);
+            }}
             tabIndex="0"
             role="button"
-            onKeyDown={() => deployAction(item.id, item.is_deployed)}
+            onKeyDown={() => {
+              deployAction(item.id, item.is_deployed);
+            }}
           >
             <OverlayTrigger
               placement="top"
@@ -213,7 +225,7 @@ const GetActionForProject = props => {
                 </Tooltip>
               }
             >
-              <i className="la la-rocket"> </i>
+              <i className="la la-rocket" />
             </OverlayTrigger>
           </a>
         )}
@@ -221,7 +233,9 @@ const GetActionForProject = props => {
           <span>
             <a
               className="td-edit-btn td-btn approved"
-              onClick={() => deployAction(item.id, item.is_deployed)}
+              onClick={() => {
+                deployAction(item.id, item.is_deployed);
+              }}
               tabIndex="0"
               role="button"
               onKeyDown={() => {
@@ -239,18 +253,22 @@ const GetActionForProject = props => {
                   </Tooltip>
                 }
               >
-                <i className="la la-rocket"> </i>
+                <i className="la la-rocket" />
               </OverlayTrigger>
             </a>
           </span>
         )}
         {item.site && (
           <a
-            onClick={() => editAction(item)}
+            onClick={() => {
+              editAction(item);
+            }}
             className="pending td-edit-btn td-btn"
             tabIndex="0"
             role="button"
-            onKeyDown={() => editAction(item)}
+            onKeyDown={() => {
+              editAction(item);
+            }}
           >
             <OverlayTrigger
               placement="top"
@@ -263,7 +281,7 @@ const GetActionForProject = props => {
                 </Tooltip>
               }
             >
-              <i className="la la-edit"> </i>
+              <i className="la la-edit" />
             </OverlayTrigger>
           </a>
         )}
@@ -271,7 +289,9 @@ const GetActionForProject = props => {
           <span>
             <a
               className="rejected td-edit-btn td-btn"
-              onClick={() => handleToggle(item.id, item.is_deployed)}
+              onClick={() => {
+                handleToggle(item.id, item.is_deployed);
+              }}
               tabIndex="0"
               role="button"
               onKeyDown={() => {
@@ -289,7 +309,7 @@ const GetActionForProject = props => {
                   </Tooltip>
                 }
               >
-                <i className="la la-trash"> </i>
+                <i className="la la-trash" />
               </OverlayTrigger>
             </a>
           </span>
@@ -327,12 +347,13 @@ class ScheduleFormTable extends Component {
   };
 
   handleConfirm = () => {
+    const { formId, isDeploy } = this.state;
     this.setState(
       {
         confirmDelete: false,
       },
       () => {
-        this.props.deleteItem(this.state.formId, this.state.isDeploy);
+        this.props.deleteItem(formId, isDeploy);
       },
     );
   };

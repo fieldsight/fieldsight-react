@@ -25,6 +25,12 @@ class Teams extends Component {
     this.props.getTeam();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.selected !== this.props.selected) {
+      localStorage.setItem('selected', this.props.selected);
+    }
+  }
+
   componentWillReceiveProps(nextprops) {
     this.setState({
       results: nextprops.teams.teams,
@@ -260,7 +266,7 @@ Teams.propTypes = {
   // teams: PropTypes.arrayOf.isRequired,
   getTeam: PropTypes.func.isRequired,
   getTranslate: PropTypes.func.isRequired,
-  history: PropTypes.objectOf.isRequired,
+  history: PropTypes.func.isRequired,
   selected: PropTypes.string.isRequired,
 };
 export default compose(

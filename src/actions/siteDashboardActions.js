@@ -28,7 +28,7 @@ export const getSiteDashboard = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // dispatch({
       //   type: SITE_DASHBOARD_ERR
       // });
@@ -48,7 +48,7 @@ export const getSiteMetas = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // dispatch({
       //   type: SITE_METAS_ERR
       // });
@@ -67,7 +67,7 @@ export const getSiteSubmissions = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // dispatch({
       //   type: SITE_SUBMISSIONS_ERR
       // });
@@ -86,8 +86,8 @@ export const getSiteDocuments = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
-      console.log('err', err);
+    .catch(() => {
+      // console.log('err', err);
     });
 };
 
@@ -103,7 +103,7 @@ export const getSiteLogs = id => dispatch => {
         payload: res.data.results,
       });
     })
-    .catch(err => {});
+    .catch(() => {});
 };
 
 export const getSiteForms = (id, formType) => dispatch => {
@@ -118,8 +118,8 @@ export const getSiteForms = (id, formType) => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
-      console.log('Err', err);
+    .catch(() => {
+      // console.log('Err', err);
     });
 };
 
@@ -135,7 +135,7 @@ export const getRecentPictures = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // dispatch({
       //   type: SITE_PICTURES_ERR
       // });
@@ -151,7 +151,10 @@ export const getSubsites = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => console.log('ERr', err));
+    .catch(
+      () => {},
+      // console.log('ERr', err)
+    );
 };
 
 export const putCropImage = (id, cropImage) => dispatch => {
@@ -161,7 +164,7 @@ export const putCropImage = (id, cropImage) => dispatch => {
     .put(`fv3/api/site-crop-image/${id}/`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
-    .then(res => {
+    .then(() => {
       dispatch({
         type: UPDATE_SITE_LOGO,
         payload: cropImage,
@@ -169,7 +172,7 @@ export const putCropImage = (id, cropImage) => dispatch => {
 
       successToast('Logo', 'updated');
     })
-    .catch(err => {
-      console.log('err', err);
+    .catch(() => {
+      // console.log('err', err);
     });
 };
