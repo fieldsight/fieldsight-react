@@ -25,8 +25,7 @@ const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  const dash = '-';
-  return `${year} ${dash} ${monthIndex}  ${dash} ${dateIdx}`;
+  return `${year}-${monthIndex}-${dateIdx}`;
 };
 
 const EducationMaterialForProject = props => {

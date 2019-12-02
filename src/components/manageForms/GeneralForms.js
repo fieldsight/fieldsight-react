@@ -97,7 +97,6 @@ class GeneralForms extends Component {
 
   changeDeployStatus = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
-    console.log('heloo', formId, isDeploy, isProjectForm, id);
 
     this.setState(
       {
@@ -112,27 +111,21 @@ class GeneralForms extends Component {
           .then(() => {
             this.setState(
               state => {
-                const newData = state.data;
-                console.log(newData, 'newData');
-                newData.map(each => {
+                const newData = [];
+                state.data.map(each => {
                   const arrItem = { ...each };
-                  console.log(arrItem, 'arrItem');
 
-                  // const isDeployed = each.is_deployed;
-                  console.log(each.id, formId, each.id === formId);
-                  if (each.id === formId) {
-                    console.log((arrItem.is_deployed = !isDeploy));
+                  if (arrItem.id === formId) {
                     arrItem.is_deployed = !isDeploy;
+                    return newData.push(arrItem);
                   }
 
-                  // console.log(arrItem, '2nd');
-                  return arrItem;
+                  return newData.push(arrItem);
                 });
 
                 return { data: newData, loadReq: false };
               },
               () => {
-                console.log(this.state.data, '------------');
                 successToast('Deploy Status', 'updated');
               },
             );
@@ -218,14 +211,15 @@ class GeneralForms extends Component {
             if (res.data) {
               this.setState(
                 state => {
-                  const item = state.data;
-                  item.map(each => {
+                  const item = [];
+                  state.data.map(each => {
                     const newItem = { ...each };
                     // const newEach = each.em;
-                    if (each.id === editFormId) {
+                    if (newItem.id === editFormId) {
                       newItem.em = res.data;
+                      return item.push(newItem);
                     }
-                    return newItem;
+                    return item.push(newItem);
                   });
 
                   return {

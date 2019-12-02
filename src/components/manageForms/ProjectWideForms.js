@@ -97,25 +97,26 @@ class ProjectWideForms extends Component {
         `fv3/api/manage-forms/deploy/?project_id=${id}&type=general&id=${formId}`,
         { is_deployed: !isDeploy },
       )
-      .then(() => {
-        this.setState(
-          state => {
-            const newData = state.data;
-            newData.map(each => {
-              const newEach = { ...each };
-              const arrItem = newEach;
-              // let isDeployed = each.is_deployed;
-              if (each.id === formId) {
-                arrItem.is_deployed = !isDeploy;
-              }
-              return arrItem;
-            });
-            return { data: newData };
-          },
-          () => {
-            successToast('Deploy Status', 'updated');
-          },
-        );
+      .then(res => {
+        if (res.data) {
+          this.setState(
+            state => {
+              const newData = [];
+              state.data.map(each => {
+                const newEach = { ...each };
+                if (newEach.id === formId) {
+                  newEach.is_deployed = !isDeploy;
+                  return newData.push(newEach);
+                }
+                return newData.push(newEach);
+              });
+              return { data: newData };
+            },
+            () => {
+              successToast('Deploy Status', 'updated');
+            },
+          );
+        }
       })
       .catch(() => {});
   };
@@ -149,7 +150,7 @@ class ProjectWideForms extends Component {
   };
 
   handleUpdateGuide = data => {
-    const { id, editFormId } = this.state;
+    const { editFormId } = this.state;
     const formData = new FormData();
     if (data.title) formData.append('title', data.title);
     if (data.text) formData.append('text', data.text);
@@ -168,16 +169,31 @@ class ProjectWideForms extends Component {
     }
     axios
       .post(`forms/api/save_educational_material/`, formData)
-      .then(() => {
-        this.setState(
-          {
-            editGuide: false,
-          },
-          () => {
-            this.requestGeneralForm(id);
-            successToast('updated', 'successfully');
-          },
-        );
+      .then(res => {
+        if (res.data) {
+          this.setState(
+            state => {
+              const item = [];
+              state.data.map(each => {
+                const newItem = { ...each };
+                if (newItem.id === editFormId) {
+                  newItem.em = res.data;
+                  return item.push(newItem);
+                }
+                return item.push(newItem);
+              });
+
+              return {
+                data: item,
+                editGuide: false,
+              };
+            },
+            () => {
+              // this.requestGeneralForm(id);
+              successToast('updated', 'successfully');
+            },
+          );
+        }
       })
       .catch(err => {
         errorToast(err);

@@ -365,16 +365,15 @@ class ProjectDashboard extends React.Component {
                         <div className="table-footer">
                           <div className="showing-rows">
                             <p>
-                              Showing
-                              <span>{fromData}</span>
-                              to
+                              Showing &nbsp;
+                              <span>{fromData}</span> &nbsp; to &nbsp;
                               <span>
                                 {toData > totalCount
                                   ? totalCount
                                   : toData}
                               </span>
-                              of
-                              <span>{totalCount}</span>
+                              &nbsp; of &nbsp;
+                              <span>{totalCount}</span> &nbsp;
                               entries.
                             </p>
                           </div>

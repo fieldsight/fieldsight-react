@@ -514,14 +514,15 @@ class StagedForms extends Component {
         .then(() => {
           this.setState(
             () => {
-              const newData = subStageData;
-              newData.map(each => {
+              const newData = [];
+              subStageData.map(each => {
                 const arrItem = { ...each };
                 // let newEach = each.is_deployed;
                 if (each.id === formId) {
                   arrItem.is_deployed = !isDeploy;
+                  return newData.push(arrItem);
                 }
-                return arrItem;
+                return newData.push(arrItem);
               });
               return { subStageData: newData, loadReq: false };
             },
@@ -605,14 +606,15 @@ class StagedForms extends Component {
           if (res.data)
             this.setState(
               state => {
-                const item = state.subStageData;
-                item.map(each => {
+                const item = [];
+                state.subStageData.map(each => {
                   const newItem = { ...each };
                   // const newEach = each.em;
-                  if (each.id === editFormId) {
+                  if (newItem.id === editFormId) {
                     newItem.em = res.data;
+                    return item.push(newItem);
                   }
-                  return newItem;
+                  return item.push(newItem);
                 });
 
                 return {
@@ -748,7 +750,7 @@ class StagedForms extends Component {
   };
 
   handleDeployAllSubstages = toDeploy => {
-    const { id, stageId, subStageData, isProjectForm } = this.state;
+    const { id, stageId, isProjectForm } = this.state;
     this.setState({ loadReq: true }, () => {
       const deployAllSubstageUrl = isProjectForm
         ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=stage&id=${stageId}`
@@ -760,16 +762,15 @@ class StagedForms extends Component {
         .then(res => {
           if (res.data && !!res.data.message)
             this.setState(
-              () => {
-                const data = subStageData;
+              state => {
+                const data = [];
 
-                data.map(sub => {
+                state.subStageData.map(sub => {
                   const newSub = { ...sub };
-                  const arrItem = newSub;
-                  // let newIsDeployed = sub.is_deployed;
-                  arrItem.is_deployed = toDeploy;
-                  return arrItem;
+                  newSub.is_deployed = toDeploy;
+                  return data.push(newSub);
                 });
+
                 return {
                   subStageData: data,
                   loadReq: false,

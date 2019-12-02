@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
@@ -8,15 +6,8 @@ import GeneralForms from './GeneralForms';
 import ScheduleForms from './ScheduleForms';
 import StagedForms from './StagedFoms';
 import ProjectWideForms from './ProjectWideForms';
-import {
-  getRegionsAndTypes,
-  getMyFormList,
-  getProjectFormList,
-  getSharedFormList,
-} from '../../actions/manageFormActions';
 
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable  react/no-did-update-set-state */
 
 const urls = [
   'fv3/api/project-regions-types/',
@@ -38,7 +29,6 @@ class SideNav extends Component {
       sharedForms: [],
       loader: false,
       isProjectForm: false,
-      formProps: {},
     };
   }
 
@@ -73,15 +63,6 @@ class SideNav extends Component {
         this.requestForms(id);
       },
     );
-  }
-
-  componentDidUpdate(prevProps) {
-    const { manageForms } = this.props;
-    if (prevProps.manageForms !== manageForms) {
-      this.setState({
-        formProps: manageForms,
-      });
-    }
   }
 
   componentWillUnmount() {
@@ -165,7 +146,6 @@ class SideNav extends Component {
         sharedForms,
         loader,
         isProjectForm,
-        formProps,
       },
     } = this;
 
@@ -290,12 +270,12 @@ class SideNav extends Component {
                 closePopup={closePopup}
                 popupModal={popupModal}
                 // formResponse={formProps}
-                typeOptions={formProps && formProps.types}
-                regionOptions={formProps && formProps.regions}
-                myForms={formProps && formProps.myForms}
-                projectForms={formProps && formProps.projectForms}
-                sharedForms={formProps && formProps.sharedForms}
-                formLoader={formProps && formProps.formLoader}
+                typeOptions={typeOptions}
+                regionOptions={regionOptions}
+                myForms={myForms}
+                projectForms={projectForms}
+                sharedForms={sharedForms}
+                formLoader={loader}
               />
             )}
           />
@@ -366,16 +346,4 @@ class SideNav extends Component {
   }
 }
 
-const mapStateToProps = ({ manageForms }) => ({
-  manageForms,
-});
-
-export default compose(
-  connect(mapStateToProps, {
-    getRegionsAndTypes,
-    getMyFormList,
-    getProjectFormList,
-    getSharedFormList,
-  }),
-  withRouter,
-)(SideNav);
+export default withRouter(SideNav);

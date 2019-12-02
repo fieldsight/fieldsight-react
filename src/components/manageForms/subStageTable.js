@@ -32,7 +32,7 @@ const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  return `${year}  '-'  ${monthIndex}  '-'  ${dateIdx}`;
+  return `${year}-${monthIndex}-${dateIdx}`;
 };
 
 const DragHandle = sortableHandle(({ sub, index, formTable }) => (

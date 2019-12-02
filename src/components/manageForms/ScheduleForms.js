@@ -16,8 +16,7 @@ const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  const dash = '-';
-  return `${year}  ${dash}  ${monthIndex}  ${dash}  ${dateIdx}`;
+  return `${year}-${monthIndex}-${dateIdx}`;
 };
 
 class ScheduleForms extends Component {
@@ -156,14 +155,14 @@ class ScheduleForms extends Component {
         .then(() => {
           this.setState(
             state => {
-              const newData = state.data;
-              newData.map(each => {
+              const newData = [];
+              state.data.map(each => {
                 const arrItem = { ...each };
-                // let IsDeployed = each.is_deployed;
-                if (each.id === formId) {
+                if (arrItem.id === formId) {
                   arrItem.is_deployed = !isDeploy;
+                  return newData.push(arrItem);
                 }
-                return arrItem;
+                return newData.push(arrItem);
               });
               return { data: newData, loadReq: false };
             },
@@ -246,16 +245,14 @@ class ScheduleForms extends Component {
           if (res.data)
             this.setState(
               state => {
-                const item = state.data;
-                item.map(each => {
+                const item = [];
+                state.data.map(each => {
                   const newEach = { ...each };
-                  const newItem = newEach;
-                  // let eachEm = each.em;
-
-                  if (each.id === editFormId) {
-                    newItem.em = res.data;
+                  if (newEach.id === editFormId) {
+                    newEach.em = res.data;
+                    return item.push(newEach);
                   }
-                  return newItem;
+                  return item.push(newEach);
                 });
 
                 return {

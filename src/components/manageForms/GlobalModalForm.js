@@ -245,36 +245,6 @@ class GlobalModalForm extends Component {
     const { name, value } = e.target;
 
     this.setState(() => {
-      // switch (name) {
-      //   case 'status':
-      //     return {
-      //       status: value,
-      //     };
-      //   case 'donor':
-      //     return {
-      //       isDonor: JSON.parse(value),
-      //     };
-      //   case 'edit':
-      //     return {
-      //       isEdit: JSON.parse(value),
-      //     };
-      //   case 'delete':
-      //     return {
-      //       isDelete: JSON.parse(value),
-      //     };
-      //   case 'scheduleType':
-      //     return {
-      //       scheduleType: JSON.parse(value),
-      //       selectedDays: [],
-      //     };
-      //   case 'notifyIncomplete':
-      //     return {
-      //       notifyIncomplete: JSON.parse(value),
-      //     };
-      //   default:
-      //     return null;
-      // }
-
       if (name === 'status') {
         return {
           status: JSON.parse(value),
@@ -346,7 +316,7 @@ class GlobalModalForm extends Component {
       // else {
       //   errors = {};
       return {
-        // startDate: e,
+        startDate: e,
         errors,
       };
       // }
@@ -367,7 +337,7 @@ class GlobalModalForm extends Component {
       // else {
       //   errors = {};
       return {
-        // endDate: e,
+        endDate: e,
         errors,
       };
       // }
