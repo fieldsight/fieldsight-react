@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import { DotLoader } from '../myForm/Loader';
 import Modal from '../common/Modal';
 import RightContentCard from '../common/RightContentCard';
@@ -98,6 +97,8 @@ class GeneralForms extends Component {
 
   changeDeployStatus = (formId, isDeploy) => {
     const { id, isProjectForm } = this.state;
+    console.log('heloo', formId, isDeploy, isProjectForm, id);
+
     this.setState(
       {
         loadReq: true,
@@ -112,18 +113,26 @@ class GeneralForms extends Component {
             this.setState(
               state => {
                 const newData = state.data;
+                console.log(newData, 'newData');
                 newData.map(each => {
                   const arrItem = { ...each };
-                  // const isDeployed = each.is_deployed;
+                  console.log(arrItem, 'arrItem');
 
+                  // const isDeployed = each.is_deployed;
+                  console.log(each.id, formId, each.id === formId);
                   if (each.id === formId) {
+                    console.log((arrItem.is_deployed = !isDeploy));
                     arrItem.is_deployed = !isDeploy;
                   }
-                  return arrItem;
+
+                  // console.log(arrItem, '2nd');
+                  // return arrItem;
                 });
+
                 return { data: newData, loadReq: false };
               },
               () => {
+                console.log(this.state.data, '------------');
                 successToast('Deploy Status', 'updated');
               },
             );

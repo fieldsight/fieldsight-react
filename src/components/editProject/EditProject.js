@@ -18,6 +18,8 @@ import markerIcon from '../common/Marker';
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
 /* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable  react/static-property-placement */
+/* eslint-disable  react/sort-comp */
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
 const iconUrl = require('leaflet/dist/images/marker-icon.png');

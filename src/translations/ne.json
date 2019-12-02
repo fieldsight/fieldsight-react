@@ -399,5 +399,18 @@
   "app.sharedForms": "साझा फारामहरू",
   "app.noFormAvailable": "कुनै फारम उपलब्ध छैन",
   "app.changeForm": "फारम परिवर्तन गर्नुहोस्",
-  "app.chooseForm": "फारम छनौट गर्नुहोस्"
+  "app.chooseForm": "फारम छनौट गर्नुहोस्",
+  "app.attachedImages": "संलग्न छविहरू",
+  "app.monthsOnDay": "दिनमा महिना",
+  "app.notifyIfIncomplete": "अधुरो भने सूचित गर्नुहोस्",
+  "app.startDate": "सुरू मिति",
+  "app.endDate": "अन्त्य मिति",
+  "app.defaultSubmissionStatus": "पूर्वनिर्धारित प्रस्तुति स्थिति",
+  "app.saveChanges": "परिवर्तनहरू सुरक्षित गर्नुहोस",
+  "app.sorryNoData": "माफ गर्नुहोस्, कुनै डाटा छैन",
+  "app.showing": "देखाउँदै",
+  "app.to": "लाई",
+  "app.of": "को",
+  "app.entries": "प्रविष्टिहरू",
+  "app.typeofSchedule": "तालिकाको प्रकार"
 }

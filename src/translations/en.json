@@ -399,5 +399,18 @@
   "app.sharedForms": "Shared Forms",
   "app.noFormAvailable": "No Form Available",
   "app.changeForm": "Change Form",
-  "app.chooseForm": "Choose Form"
+  "app.chooseForm": "Choose Form",
+  "app.attachedImages": "Attached Images",
+  "app.monthsOnDay": "Months on day",
+  "app.notifyIfIncomplete": "Notify if incomplete",
+  "app.startDate": "Start Date",
+  "app.endDate": "End Date",
+  "app.defaultSubmissionStatus": "Default submission status",
+  "app.saveChanges": "Save Changes",
+  "app.sorryNoData": "Sorry No Data",
+  "app.showing": "Showing",
+  "app.to": "to",
+  "app.of": "of",
+  "app.entries": "entries",
+  "app.typeofSchedule": "Type of schedule"
 }

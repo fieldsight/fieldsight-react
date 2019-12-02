@@ -89,15 +89,28 @@ class PendingTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing
+                      <FormattedMessage
+                        id="app.showing"
+                        defaultMessage="Showing"
+                      />
                       <span>{fromData}</span>
-                      to
+                      <FormattedMessage
+                        id="app.to"
+                        defaultMessage="to"
+                      />
                       <span>
                         {toData > totalCount ? totalCount : toData}
                       </span>
-                      of
+                      <FormattedMessage
+                        id="app.of"
+                        defaultMessage="of"
+                      />
                       <span>{totalCount}</span>
-                      entries.
+                      <FormattedMessage
+                        id="app.entries"
+                        defaultMessage="entries"
+                      />
+                      .
                     </p>
                   </div>
                   {toData < totalCount ? (
@@ -143,7 +156,12 @@ class PendingTable extends Component {
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
-                    <p>Sorry No Data</p>
+                    <p>
+                      <FormattedMessage
+                        id="app.sorryNoData"
+                        defaultMessage="Sorry No Data"
+                      />
+                    </p>
                   </div>
                 </div>
               </div>

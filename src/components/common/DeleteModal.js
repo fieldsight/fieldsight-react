@@ -13,10 +13,7 @@ const DeleteModal = props => {
     children,
   } = props;
   return (
-    <Modal
-      title={title !== '' ? title : 'Warning'}
-      toggleModal={onToggle}
-    >
+    <Modal title={title ? title : 'Warning'} toggleModal={onToggle}>
       <div className="warning">
         <i className="la la-exclamation-triangle" />
 

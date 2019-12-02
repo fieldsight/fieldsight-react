@@ -40,6 +40,8 @@ export const getSubmissionDetail = id => dispatch => {
       .get(`fv3/api/submission/${id}/`)
 
       .then(res => {
+        // console.log(res, 'submission');
+
         dispatch({
           type: STOP_SUBMISSION_LOADER,
         });
@@ -49,6 +51,8 @@ export const getSubmissionDetail = id => dispatch => {
         });
       })
       .catch(err => {
+        console.log(err.response.data.detail);
+        debugger;
         dispatch({
           type: SHOW_SUBMISSION_ERR_MSG,
           err: {

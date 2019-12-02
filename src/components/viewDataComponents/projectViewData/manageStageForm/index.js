@@ -105,6 +105,7 @@ class ResponseStageForm extends Component {
                     type="button"
                     className="btn-toggle"
                     onClick={this.toggleHide}
+                    style={{ width: '97px' }}
                   >
                     <FormattedMessage
                       id="app.show"
@@ -121,6 +122,7 @@ class ResponseStageForm extends Component {
                       backgroundColor: '#28a745',
                       color: 'white',
                       textAlign: 'left',
+                      width: '97px',
                     }}
                   >
                     <FormattedMessage

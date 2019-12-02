@@ -190,6 +190,7 @@ class AddForm extends PureComponent {
                         <div>
                           <h5>{each.name}</h5>
                         </div>
+                        {console.log(each.forms, 'each.forms')}
                         {each.forms.map(item => (
                           <div
                             className="form-group"

@@ -9,7 +9,10 @@ import ResponseTable from '../../responded/ResponseTable';
 import DeleteTable from '../deleteTable';
 import { getsiteViewData } from '../../../../actions/siteViewDataAction';
 import { DotLoader } from '../../../myForm/Loader';
+
 /* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
+
 class ManageScheduledForm extends Component {
   constructor(props) {
     super(props);

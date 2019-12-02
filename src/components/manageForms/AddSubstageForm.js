@@ -161,44 +161,27 @@ class AddSubstageForm extends Component {
   handleRadioChange = e => {
     const { name, value } = e.target;
     return this.setState(() => {
-      switch (name) {
-        case 'status':
-          return {
-            status: value,
-          };
-        case 'donor':
-          return {
-            isDonor: JSON.parse(value),
-          };
-        case 'edit':
-          return {
-            isEdit: JSON.parse(value),
-          };
-        case 'delete':
-          return {
-            isDelete: JSON.parse(value),
-          };
-        default:
-          return null;
+      if (name === 'status') {
+        return {
+          status: JSON.parse(value),
+        };
       }
-      // if (name === 'status') {
-
-      // }
-      // if (name === 'donor') {
-      //   return {
-      //     isDonor: JSON.parse(value),
-      //   };
-      // }
-      // if (name === 'edit') {
-      //   return {
-      //     isEdit: JSON.parse(value),
-      //   };
-      // }
-      // if (name === 'delete') {
-      //   return {
-      //     isDelete: JSON.parse(value),
-      //   };
-      // }
+      if (name === 'donor') {
+        return {
+          isDonor: JSON.parse(value),
+        };
+      }
+      if (name === 'edit') {
+        return {
+          isEdit: JSON.parse(value),
+        };
+      }
+      if (name === 'delete') {
+        return {
+          isDelete: JSON.parse(value),
+        };
+      }
+      return null;
     });
   };
 

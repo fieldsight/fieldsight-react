@@ -68,17 +68,30 @@ class ApprovedTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing
+                      <FormattedMessage
+                        id="app.showing"
+                        defaultMessage="Showing"
+                      />
                       <span>{this.props.fromData}</span>
-                      to
+                      <FormattedMessage
+                        id="app.to"
+                        defaultMessage="to"
+                      />
                       <span>
                         {this.props.toData > this.props.totalCount
                           ? this.props.totalCount
                           : this.props.toData}
                       </span>
-                      of
+                      <FormattedMessage
+                        id="app.of"
+                        defaultMessage="of"
+                      />
                       <span>{this.props.totalCount}</span>
-                      entries.
+                      <FormattedMessage
+                        id="app.entries"
+                        defaultMessage="entries"
+                      />
+                      .
                     </p>
                   </div>
                   {this.props.toData < this.props.totalCount ? (
@@ -128,7 +141,12 @@ class ApprovedTable extends Component {
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
-                    <p>Sorry No Data</p>
+                    <p>
+                      <FormattedMessage
+                        id="app.sorryNoData"
+                        defaultMessage="Sorry No Data"
+                      />
+                    </p>
                   </div>
                 </div>
               </div>

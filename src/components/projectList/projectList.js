@@ -25,7 +25,7 @@ class ProjectList extends Component {
         params: { id },
       },
     } = this.props;
-    getProjectList(id);
+    this.props.getProjectList(id);
     this.setState({
       id,
     });

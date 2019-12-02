@@ -10,6 +10,7 @@ import DeleteTable from '../deleteTable';
 import { getsiteViewData } from '../../../../actions/siteViewDataAction';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
 
 class ManageGeneralForm extends Component {
   constructor(props) {
@@ -110,6 +111,7 @@ class ManageGeneralForm extends Component {
                     type="button"
                     className="btn-toggle"
                     onClick={this.toggleHide}
+                    style={{ width: '97px' }}
                   >
                     <FormattedMessage
                       id="app.show"
@@ -126,6 +128,7 @@ class ManageGeneralForm extends Component {
                       backgroundColor: '#28a745',
                       color: 'white',
                       textAlign: 'left',
+                      width: '97px',
                     }}
                   >
                     <FormattedMessage
@@ -156,16 +159,6 @@ class ManageGeneralForm extends Component {
     );
   }
 }
-
-ManageGeneralForm.propTypes = {
-  id: PropTypes.string.isRequired,
-  showViewData: PropTypes.bool.isRequired,
-  data: PropTypes.objectOf.isRequired,
-  generals_forms: PropTypes.arrayOf.isRequired,
-  deleted_forms: PropTypes.arrayOf.isRequired,
-  getsiteViewData: PropTypes.func.isRequired,
-  generals_loading: PropTypes.bool.isRequired,
-};
 
 const mapStateToProps = ({ siteViewData }) => {
   const {

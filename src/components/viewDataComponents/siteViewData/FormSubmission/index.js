@@ -8,6 +8,8 @@ import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
 import { DotLoader } from '../../../myForm/Loader';
 
+/* eslint-disable react/prop-types */
+
 class SubmissionData extends Component {
   constructor(props) {
     super(props);
@@ -259,17 +261,30 @@ class SubmissionData extends Component {
                   <div className="table-footer">
                     <div className="showing-rows">
                       <p>
-                        Showing
+                        <FormattedMessage
+                          id="app.showing"
+                          defaultMessage="Showing"
+                        />
                         <span>{this.props.fromData}</span>
-                        to
+                        <FormattedMessage
+                          id="app.to"
+                          defaultMessage="to"
+                        />
                         <span>
                           {this.props.toData > this.props.totalCount
                             ? this.props.totalCount
                             : this.props.toData}
                         </span>
-                        of
+                        <FormattedMessage
+                          id="app.of"
+                          defaultMessage="of"
+                        />
                         <span>{this.props.totalCount}</span>
-                        entries.
+                        <FormattedMessage
+                          id="app.entries"
+                          defaultMessage="entries"
+                        />
+                        .
                       </p>
                     </div>
                     {this.props.toData < this.props.totalCount ? (
@@ -330,7 +345,12 @@ class SubmissionData extends Component {
                 <div className="card-body">
                   <div className="table-footer">
                     <div className="showing-rows">
-                      <p>Sorry No Data</p>
+                      <p>
+                        <FormattedMessage
+                          id="app.sorryNoData"
+                          defaultMessage="Sorry No Data"
+                        />
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -379,18 +399,5 @@ class SubmissionData extends Component {
     );
   }
 }
-SubmissionData.propTypes = {
-  id: PropTypes.string.isRequired,
-  paginationHandler: PropTypes.func.isRequired,
-  breadcrumbs: PropTypes.objectOf.isRequired,
-  form_id_string: PropTypes.string.isRequired,
-  dLoader: PropTypes.bool.isRequired,
-  siteList: PropTypes.arrayOf.isRequired,
-  fromData: PropTypes.number.isRequired,
-  toData: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  pageNum: PropTypes.number.isRequired,
-  renderPageNumbers: PropTypes.func.isRequired,
-  match: PropTypes.objectOf.isRequired,
-};
+
 export default WithPagination(SubmissionData);
