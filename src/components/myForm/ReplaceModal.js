@@ -38,7 +38,7 @@ class ReplaceModal extends Component {
           window.open(editUrl, '_self');
         }
       })
-      .catch(err => console.log('err', err));
+      .catch(() => {});
   };
 
   render() {

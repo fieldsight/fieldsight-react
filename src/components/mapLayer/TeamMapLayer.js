@@ -188,7 +188,7 @@ export default class TeamMapLayer extends Component {
             });
           },
         })
-        .then(res => {
+        .then(() => {
           this.setState(
             prevState => ({
               isLoading: false,
@@ -219,7 +219,7 @@ export default class TeamMapLayer extends Component {
             });
           },
         })
-        .then(res => {
+        .then(() => {
           this.setState(
             prevState => ({
               isLoading: false,
@@ -253,7 +253,7 @@ export default class TeamMapLayer extends Component {
   };
 
   toggleNewForm = () => {
-    const { state, props } = this;
+    const { props } = this;
     this.setState(prevState => ({
       addMap: !prevState.addMap,
       geoLayer: {

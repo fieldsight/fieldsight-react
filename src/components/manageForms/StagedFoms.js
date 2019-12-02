@@ -14,11 +14,10 @@ import AddStageForm from './AddStageForm';
 import ManageModal from './ManageModal';
 import Loader from '../common/Loader';
 
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable  consistent-return */
 /* eslint-disable  react/no-access-state-in-setstate */
-/* eslint-disable  no-unneeded-ternary */
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -513,15 +512,15 @@ class StagedForms extends Component {
         : `fv3/api/manage-forms/deploy/?site_id=${id}&type=substage&id=${formId}`;
       axios
         .post(deployUrl, { is_deployed: !isDeploy })
-        .then(res => {
+        .then(() => {
           this.setState(
-            state => {
+            () => {
               const newData = subStageData;
               newData.map(each => {
                 const arrItem = { ...each };
-                let newEach = each.is_deployed;
+                // let newEach = each.is_deployed;
                 if (each.id === formId) {
-                  newEach = !isDeploy;
+                  arrItem.is_deployed = !isDeploy;
                 }
                 return arrItem;
               });
@@ -550,7 +549,7 @@ class StagedForms extends Component {
 
       axios
         .post(deployUrl, { is_deployed: isDeploy })
-        .then(res => {
+        .then(() => {
           this.setState(
             {
               subStageData: subStageData.filter(
@@ -606,13 +605,13 @@ class StagedForms extends Component {
         .then(res => {
           if (res.data)
             this.setState(
-              state => {
+              () => {
                 const item = this.state.subStageData;
                 item.map(each => {
                   const newItem = { ...each };
-                  let newEach = each.em;
+                  // const newEach = each.em;
                   if (each.id === editFormId) {
-                    newEach = res.data;
+                    newItem.em = res.data;
                   }
                   return newItem;
                 });
@@ -758,14 +757,14 @@ class StagedForms extends Component {
         .then(res => {
           if (res.data && !!res.data.message)
             this.setState(
-              state => {
+              () => {
                 const data = subStageData;
 
                 data.map(sub => {
                   const newSub = { ...sub };
                   const arrItem = newSub;
-                  let newIsDeployed = sub.is_deployed;
-                  newIsDeployed = toDeploy;
+                  // let newIsDeployed = sub.is_deployed;
+                  arrItem.is_deployed = toDeploy;
                   return arrItem;
                 });
                 return {
@@ -828,7 +827,7 @@ class StagedForms extends Component {
         .post(deployAllUrl, {
           is_deployed: toDeploy,
         })
-        .then(res => {
+        .then(() => {
           this.setState(
             {
               loadReq: false,
@@ -878,13 +877,7 @@ class StagedForms extends Component {
 
   render() {
     const {
-      props: {
-        regionOptions,
-        typeOptions,
-        commonPopupHandler,
-        popupModal,
-        formLoader,
-      },
+      props: { regionOptions, typeOptions, popupModal, formLoader },
       state: {
         data,
         loader,

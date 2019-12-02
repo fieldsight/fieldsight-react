@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import SideBar from './SideBar';
 import CommonPopup from './CommonPopup';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-unused-state  */
 
 class MyFormMain extends Component {

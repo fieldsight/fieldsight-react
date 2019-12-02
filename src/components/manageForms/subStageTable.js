@@ -9,7 +9,7 @@ import {
 } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import DeleteModal from '../common/DeleteModal';
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable consistent-return */
 /* eslint-disable react/no-array-index-key */
 
@@ -426,7 +426,7 @@ class SubStageTable extends Component {
       nextProps.isSubstageReorderCancel !==
       props.isSubstageReorderCancel
     ) {
-      this.setState(state => {
+      this.setState(() => {
         if (nextProps.isSubstageReorderCancel) {
           return { data: props.data };
         }
@@ -474,11 +474,9 @@ class SubStageTable extends Component {
     const {
       props: {
         changeDeployStatus,
-        deleteItem,
         handleEditGuide,
         editSubStageForm,
         reorderSubstage,
-        isSubstageReorderCancel,
         formTable,
       },
       state: { data },

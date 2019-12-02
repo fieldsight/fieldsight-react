@@ -106,7 +106,7 @@ export default class SiteAdd extends Component {
             const latitude = position && position[2].split(')')[0];
             const breadcrumbs = breadcrumbRes.data;
             this.setState(
-              state => {
+              () => {
                 if (siteForm.data.regions !== undefined) {
                   siteForm.data.regions.map(each =>
                     regionArr.push(each),
@@ -368,20 +368,13 @@ export default class SiteAdd extends Component {
   onSelectChangeHandler = (e, data) => {
     const { value } = e.target;
     if (data === 'regions') {
-      this.setState(
-        {
-          regionselected: value,
-        },
-        () =>
-          console.log(this.state.regionselected, 'regionselected'),
-      );
+      this.setState({
+        regionselected: value,
+      });
     } else if (data === 'site_types') {
-      this.setState(
-        {
-          Selectedtypes: value,
-        },
-        () => console.log(this.state.Selectedtypes, 'Selectedtypes'),
-      );
+      this.setState({
+        Selectedtypes: value,
+      });
     }
   };
 
@@ -494,7 +487,7 @@ export default class SiteAdd extends Component {
             name={data.question_name}
             style={{ border: '0', borderBottom: '1px solid #eaeaea' }}
           >
-            {data.mcq_options.map((option, key) => {
+            {data.mcq_options.map(option => {
               return (
                 <Fragment key={option.id}>
                   <option value={option.option_text}>

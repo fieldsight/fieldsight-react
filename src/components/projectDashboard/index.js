@@ -23,7 +23,7 @@ import {
   getSurveyForm,
 } from '../../actions/projectDashboardActions';
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-one-expression-per-line  */
 
 const INITIAL_STATE = {

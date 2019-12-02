@@ -3,8 +3,7 @@ import Table from 'react-bootstrap/Table';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import DeleteModal from '../common/DeleteModal';
-
-/* eslint-disable  react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 const getStatus = value => {
   if (value === 0) return <span>pending</span>;

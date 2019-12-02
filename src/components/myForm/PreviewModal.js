@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import Iframe from 'react-iframe';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 class PreviewModal extends PureComponent {
   render() {

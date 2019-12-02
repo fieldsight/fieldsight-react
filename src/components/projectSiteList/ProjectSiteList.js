@@ -6,8 +6,7 @@ import ProjectSiteTable from './ProjectSiteTable';
 import AddSite from './AddSite';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/destructuring-assignment */
 
 // const project_id = 137;
 // const base_url = 'https://fieldsight.naxa.com.np';
@@ -30,7 +29,7 @@ class ProjectSiteList extends Component {
   }
 
   showPopup = (e, type) => {
-    this.setState(prevState => ({
+    this.setState(() => ({
       ...popUpState,
       [`${type}Modal`]: true,
     }));

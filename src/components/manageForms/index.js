@@ -30,7 +30,7 @@ class ManageForms extends Component {
             breadcrumb: res.data,
           });
         })
-        .catch(err => {});
+        .catch(() => {});
     } else if (isSiteForm) {
       axios
         .get(`fv3/api/manage-forms/breadcrums/?site_id=${id}`)
@@ -39,7 +39,7 @@ class ManageForms extends Component {
             breadcrumb: res.data,
           });
         })
-        .catch(err => {});
+        .catch(() => {});
     }
   }
 

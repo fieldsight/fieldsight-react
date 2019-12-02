@@ -5,8 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { DotLoader } from './Loader';
 import { successToast } from './toastHandler';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/destructuring-assignment */
 
 const url = 'fv3/api/form/';
 
@@ -43,7 +42,7 @@ class ShareModal extends Component {
           });
         }
       })
-      .catch(err => console.log('err', err));
+      .catch(() => {});
   }
 
   checkboxHandler = (e, checkboxId) => {
@@ -81,7 +80,7 @@ class ShareModal extends Component {
         }
       })
 
-      .catch(err => console.log('err', err));
+      .catch(() => {});
   };
 
   render() {

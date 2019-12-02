@@ -10,8 +10,7 @@ import EditFormGuide from './EditFormGuide';
 import AddForm from './AddForm';
 import ManageModal from './ManageModal';
 import Loader from '../common/Loader';
-
-/* eslint-disable  react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 const formatDate = date => {
   const dateIdx = date.getDate();

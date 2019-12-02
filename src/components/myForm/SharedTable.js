@@ -5,7 +5,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import SharedFormShare from './SharedFormShare';
 import { DotLoader } from './Loader';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-unused-state  */
 /* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key  */
@@ -42,7 +42,7 @@ class SharedTable extends Component {
           }
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
           dLoader: false,
         });
@@ -56,10 +56,10 @@ class SharedTable extends Component {
   cloneHandler = (e, clone_url, id, form_id) => {
     axios
       .post(`${clone_url}`, { id_string: id, project: form_id })
-      .then(res => {
+      .then(() => {
         // successToast("Form", "cloned");
       })
-      .catch(err => console.log('err', err));
+      .catch(() => {});
   };
 
   render() {

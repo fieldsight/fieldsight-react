@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import SelectElement from '../common/SelectElement';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 export default class Select extends Component {
   constructor(props) {
@@ -25,8 +25,8 @@ export default class Select extends Component {
           });
         }
       })
-      .catch(err => {
-        console.log(err, 'err');
+      .catch(() => {
+        // console.log(err, 'err');
       });
   }
 

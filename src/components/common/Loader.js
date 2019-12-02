@@ -1,7 +1,6 @@
 import React from 'react';
 import { Fade } from 'react-reveal';
 import ReactLoader from 'react-loader-spinner';
-/* eslint-disable   react/prop-types */
 /* eslint-disable   react/no-array-index-key */
 
 export const TableContentLoader = ({ row, column }) => (
@@ -124,7 +123,7 @@ export const DotLoader = ({ height }) => (
   </div>
 );
 
-export default props => (
+export default () => (
   <Fade>
     <div className="fieldsight-popup open">
       <div
@@ -155,7 +154,8 @@ export default props => (
           }}
         >
           Loading... Please wait!
-          {/* Loading... Please wait! {props.loaded && `${props.loaded} %`} */}
+          {/* Loading... Please wait!
+           {props.loaded && `${props.loaded} %`} */}
         </h6>
       </div>
     </div>

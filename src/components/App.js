@@ -54,14 +54,15 @@ import '../css/custom.css';
 import English from '../translations/en.json';
 import Nepali from '../translations/ne.json';
 
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
 
 const messages = {
   ne: Nepali,
   en: English,
 };
-const language = navigator.language.split(/[-_]/)[0]; // language without region code
+// const language = navigator.language.split(/[-_]/)[0];
+// language without region code
 
 class App extends Component {
   componentWillMount() {

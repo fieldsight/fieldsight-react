@@ -8,6 +8,8 @@ import RightContentCard from '../common/RightContentCard';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 
+/* eslint-disable react/destructuring-assignment */
+
 const animatedComponents = makeAnimated();
 
 const urls = ['fv3/api/geolayer/', 'fv3/api/organization-geolayer/'];
@@ -58,7 +60,7 @@ export default class MapLayer extends Component {
           }
         }),
       )
-      .catch(err => {
+      .catch(() => {
         if (this._isMounted) {
           this.setState({
             dotLoader: false,
@@ -72,7 +74,7 @@ export default class MapLayer extends Component {
   }
 
   handleMultiChange = option => {
-    this.setState(state => {
+    this.setState(() => {
       return {
         multiValue: option,
       };
@@ -87,7 +89,7 @@ export default class MapLayer extends Component {
         project: projectId,
         geo_layers: idArray,
       })
-      .then(res => {
+      .then(() => {
         this.setState(
           {
             isLoading: false,
@@ -95,7 +97,7 @@ export default class MapLayer extends Component {
           () => successToast('Map Layer', 'added'),
         );
       })
-      .catch(err => {
+      .catch(() => {
         this.setState(
           {
             isLoading: false,

@@ -15,7 +15,7 @@ import {
   getSharedFormList,
 } from '../../actions/manageFormActions';
 
-/* eslint-disable  react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable  react/no-did-update-set-state */
 
 const urls = [

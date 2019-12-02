@@ -7,7 +7,6 @@ import TeamLeftSidebar from '../leftSidebar/TeamLeftSieBar';
 import EditTeam from '../editTeam/EditTeam';
 import TeamMapLayer from '../mapLayer/TeamMapLayer';
 import AccountInfoLayout from '../accountInfo/AccountInfoLayout';
-/* eslint-disable react/prop-types  */
 
 export default class TeamSettings extends Component {
   constructor(props) {
@@ -26,7 +25,7 @@ export default class TeamSettings extends Component {
     } = this.props;
     Axios.get(`fv3/api/team-owner-account/${teamId}/`).then(res => {
       this.setState({ teamData: res.data });
-    }).catch = err => {};
+    }).catch = () => {};
   }
 
   teamName = data => {

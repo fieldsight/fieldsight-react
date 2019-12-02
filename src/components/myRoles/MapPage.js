@@ -7,9 +7,8 @@ import {
   Popup,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key  */
-/* eslint-disable react/jsx-indent */
 
 const position = [27.7, 85.4];
 
@@ -41,22 +40,27 @@ class MapPage extends PureComponent {
             </LayersControl.BaseLayer>
             {/* <LayersControl.Overlay name="Marker with popup"> */}
             {this.props.mapData.map((item, i) => {
-              return item.geometry.coordinates.filter(Boolean)
-                .length > 0 ? (
-                <Marker position={item.geometry.coordinates} key={i}>
-                  <Popup>
-                    <a
-                      href={item.properties.detail_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <div className="content">
-                        <h5>{item.properties.form}</h5>
-                      </div>
-                    </a>
-                  </Popup>
-                </Marker>
-              ) : null;
+              return (
+                item.geometry.coordinates.filter(Boolean).length >
+                  0 && (
+                  <Marker
+                    position={item.geometry.coordinates}
+                    key={i}
+                  >
+                    <Popup>
+                      <a
+                        href={item.properties.detail_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <div className="content">
+                          <h5>{item.properties.form}</h5>
+                        </div>
+                      </a>
+                    </Popup>
+                  </Marker>
+                )
+              );
             })}
           </LayersControl>
         </Map>

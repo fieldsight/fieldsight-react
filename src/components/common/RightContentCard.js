@@ -1,12 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-/* eslint-disable   react/prop-types */
-
 const RightContentCard = ({
   title,
   addButton,
-  hideButton,
+  // hideButton,
   toggleModal,
   children,
 }) => (

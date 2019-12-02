@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { BlockContentLoader } from '../common/Loader';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 // const url = 'fv3/api/myroles';
 // let base_url = window.base_url

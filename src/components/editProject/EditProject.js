@@ -15,9 +15,9 @@ import { errorToast, successToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import markerIcon from '../common/Marker';
 
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
-/* eslint-disable react/no-access-state-in-setstate */
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
 const iconUrl = require('leaflet/dist/images/marker-icon.png');
@@ -126,7 +126,7 @@ class EditProject extends Component {
           }
         }),
       )
-      .catch(err => console.log('err', err));
+      .catch(() => {});
   }
 
   componentWillUnmount() {
@@ -143,9 +143,9 @@ class EditProject extends Component {
           address,
           website,
           public_desc,
-          cluster_sites,
+          // cluster_sites,
           donor,
-          logo,
+          // logo,
           organization,
         },
         position: { latitude, longitude },
@@ -182,7 +182,7 @@ class EditProject extends Component {
           });
         },
       })
-      .then(res => {
+      .then(() => {
         this.setState(
           {
             isLoading: false,
@@ -191,7 +191,7 @@ class EditProject extends Component {
           () => successToast('Project', 'updated'),
         );
       })
-      .catch(err => {
+      .catch(() => {
         this.setState(
           {
             isLoading: false,
@@ -213,17 +213,16 @@ class EditProject extends Component {
 
   onSelectChangeHandler = (e, subSect) => {
     const { value } = e.target;
+    const { subSectors, sector } = this.state;
     if (subSect) {
-      const selectedSubSectorId = this.state.subSectors.find(
+      const selectedSubSectorId = subSectors.find(
         each => each.id === +value,
       ).id;
       return this.setState({
         selectedSubSector: selectedSubSectorId,
       });
     }
-    const selectedSector = this.state.sector.find(
-      sect => sect.id === +value,
-    );
+    const selectedSector = sector.find(sect => sect.id === +value);
     this.setState({
       subSectors: selectedSector.subSectors,
       selectedSector: selectedSector.id,
@@ -231,31 +230,31 @@ class EditProject extends Component {
   };
 
   handleCheckboxChange = e =>
-    this.setState({
+    this.setState(state => ({
       project: {
-        ...this.state.project,
+        ...state.project,
         cluster_sites: e.target.checked,
       },
-    });
+    }));
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
     // debugger;
     if (position) {
-      this.setState({
+      this.setState(state => ({
         position: {
-          ...this.state.position,
+          ...state.position,
           [name]: value,
         },
-      });
+      }));
     }
 
-    this.setState({
+    this.setState(state => ({
       project: {
-        ...this.state.project,
+        ...state.project,
         [name]: value,
       },
-    });
+    }));
   };
 
   readFile = file => {
@@ -284,13 +283,13 @@ class EditProject extends Component {
   };
 
   mapClickHandler = e => {
-    this.setState({
+    this.setState(state => ({
       position: {
-        ...this.state.position,
+        ...state.position,
         latitude: e.latlng.lat,
         longitude: e.latlng.lng,
       },
-    });
+    }));
   };
 
   render() {
@@ -305,7 +304,7 @@ class EditProject extends Component {
           website,
           donor,
           public_desc,
-          cluster_sites,
+          // cluster_sites,
         },
         sector,
         subSectors,

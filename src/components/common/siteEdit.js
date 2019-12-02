@@ -9,12 +9,11 @@ import Modal from './Modal';
 import InputElement from './InputElement';
 import SelectElement from './SelectElement';
 import RightContentCard from './RightContentCard';
-import Loader from './Loader';
+// import Loader from './Loader';
 import CheckBox from './CheckBox';
 import Select from '../siteAdd/Select';
 import DeleteModel from './DeleteModal';
 
-/* eslint-disable   react/prop-types */
 /* eslint-disable   camelcase */
 /* eslint-disable   react/no-array-index-key */
 /* eslint-disable   no-shadow */
@@ -76,7 +75,7 @@ export default class SiteAdd extends Component {
           phone,
           address,
           public_desc,
-          logo,
+          // logo,
           weight,
           cluster_sites,
         },
@@ -86,13 +85,13 @@ export default class SiteAdd extends Component {
         zoom,
         src,
         showCropper,
-        isLoading,
+        // isLoading,
         jsondata,
         site_types,
-        data,
+        // data,
         regionselected,
-        selectdata,
-        selectedGender,
+        // selectdata,
+        // selectedGender,
         Selectedtypes,
         deleteConfirm,
         delete_perm,

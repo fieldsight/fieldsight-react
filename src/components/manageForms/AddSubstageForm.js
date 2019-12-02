@@ -207,7 +207,7 @@ class AddSubstageForm extends Component {
   };
 
   handleSelectRegionChange = region => {
-    this.setState(state => {
+    this.setState(() => {
       return {
         regionSelected: region,
       };
@@ -215,7 +215,7 @@ class AddSubstageForm extends Component {
   };
 
   handleSelectTypeChange = type => {
-    this.setState(state => {
+    this.setState(() => {
       return {
         typeSelected: type,
       };
@@ -244,9 +244,9 @@ class AddSubstageForm extends Component {
         typeDropdown,
         typeSelected,
         status,
-        isDonor,
-        isEdit,
-        isDelete,
+        // isDonor,
+        // isEdit,
+        // isDelete,
         weight,
         substageTitle,
         substageDesc,

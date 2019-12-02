@@ -7,8 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import AddSite from './AddSite';
 import RegionalSiteTable from './RegionalSiteTable';
 import isEmpty from '../../utils/isEmpty';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable consistent-return  */
 /* eslint-disable react/no-array-index-key  */
 

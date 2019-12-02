@@ -6,8 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { TableContentLoader } from '../common/Loader';
 import withPagination from '../../hoc/WithPagination';
 import isEmpty from '../../utils/isEmpty';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key  */
 
 // let base_url = window.base_url
@@ -173,7 +172,11 @@ class RegionalSiteTable extends Component {
 
                         <td>{item.address}</td>
                         <td>
-                          <a href="#" className="pending">
+                          <a
+                            tabIndex="0"
+                            role="button"
+                            className="pending"
+                          >
                             {item.type}
                           </a>
                         </td>

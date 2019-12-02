@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 const getIcon = submission => {
   let icon = '';

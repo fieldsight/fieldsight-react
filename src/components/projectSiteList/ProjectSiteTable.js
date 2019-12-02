@@ -8,7 +8,7 @@ import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 
 import withPagination from '../../hoc/WithPagination';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key */
 
@@ -270,7 +270,11 @@ class ProjectSiteTable extends Component {
 
                         <td>{item.address}</td>
                         <td>
-                          <a href="#" className="pending">
+                          <a
+                            tabIndex="0"
+                            role="button"
+                            className="pending"
+                          >
                             {item.region}
                           </a>
                         </td>

@@ -1,7 +1,6 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage, injectIntl } from 'react-intl';
-/* eslint-disable react/prop-types  */
+import { FormattedMessage } from 'react-intl';
 
 class About extends React.PureComponent {
   render() {

@@ -2,9 +2,8 @@ import React, { Fragment } from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { BlockContentLoader } from '../../common/Loader';
-/* eslint-disable react/prop-types  */
 
 const ShowRow = ({ name }) => (
   <tr>
