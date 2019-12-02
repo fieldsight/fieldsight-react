@@ -4,7 +4,6 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import { FormattedMessage } from 'react-intl';
 import MyFormContent from './MyFormContent';
 import ProjectFormContent from './ProjectFormContent';
-/* eslint-disable react/prop-types  */
 
 // import MyformTable from '../components/MyForm/MyformTable';
 // import UserSelectForm from '../components/MyForm/UserSelectForm';

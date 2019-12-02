@@ -10,7 +10,6 @@ import {
 import arrayMove from 'array-move';
 import DeleteModal from '../common/DeleteModal';
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable consistent-return */
 /* eslint-disable react/no-array-index-key */
 
 const getStatus = value => {
@@ -18,6 +17,7 @@ const getStatus = value => {
   if (value === 1) return <span>Rejected</span>;
   if (value === 2) return <span>Flagged</span>;
   if (value === 3) return <span>Approved</span>;
+  return null;
 };
 
 const getClass = status => {
@@ -25,6 +25,7 @@ const getClass = status => {
   if (status === 1) return 'rejected';
   if (status === 2) return 'flagged';
   if (status === 3) return 'approved';
+  return null;
 };
 
 const formatDate = date => {
@@ -114,6 +115,7 @@ const EducationMaterialForProject = props => {
       </span>
     );
   }
+  return null;
 };
 
 const GetActionForProject = props => {
@@ -334,6 +336,7 @@ const GetActionForProject = props => {
       </div>
     );
   }
+  return null;
 };
 
 const SortableContainer = sortableContainer(({ children }) => {
@@ -430,6 +433,7 @@ class SubStageTable extends Component {
         if (nextProps.isSubstageReorderCancel) {
           return { data: props.data };
         }
+        return null;
       });
     }
   }

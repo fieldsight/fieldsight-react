@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
-/* eslint-disable react/prop-types  */
 /* eslint-disable no-script-url  */
 /* eslint-disable jsx-a11y/anchor-is-valid  */
 /* eslint-disable react/jsx-one-expression-per-line  */

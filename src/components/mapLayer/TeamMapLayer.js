@@ -8,11 +8,7 @@ import RightContentCard from '../common/RightContentCard';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import InputElement from '../common/InputElement';
 
-/* eslint-disable react/prop-types */
 /* eslint-disable camelcase */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable no-unneeded-ternary */
 
 const animatedComponents = makeAnimated();
 
@@ -285,8 +281,8 @@ export default class TeamMapLayer extends Component {
     const reader = new FileReader();
     reader.onload = () => {
       const res = JSON.parse(reader.result);
-      const features = res.features;
-      const properties = features[0].properties;
+      const { features } = res;
+      const { properties } = features[0];
       const objKeys = Object.keys(properties);
       const newArr = [];
       objKeys.map(each => {
@@ -320,8 +316,8 @@ export default class TeamMapLayer extends Component {
       const reader = new FileReader();
       reader.onload = () => {
         const res = JSON.parse(reader.result);
-        const features = res.features;
-        const properties = features[0].properties;
+        const { features } = res;
+        const { properties } = features[0];
         const objKeys = Object.keys(properties);
         const newArr = [];
         objKeys.map(each => {

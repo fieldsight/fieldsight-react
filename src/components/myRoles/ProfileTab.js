@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { AvatarContentLoader } from '../common/Loader';
-/* eslint-disable react/prop-types  */
 /* eslint-disable react/no-array-index-key  */
 
 // let base_url = window.base_url

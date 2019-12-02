@@ -3,7 +3,6 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PreviewModal from './PreviewModal';
-/* eslint-disable react/prop-types  */
 
 class SharedFormShare extends Component {
   constructor(props) {

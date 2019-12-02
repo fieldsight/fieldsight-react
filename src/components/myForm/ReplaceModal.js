@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 const tokenVal = window.token
   ? window.token

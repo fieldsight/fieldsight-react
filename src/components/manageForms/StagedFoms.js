@@ -16,8 +16,6 @@ import Loader from '../common/Loader';
 
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-did-update-set-state */
-/* eslint-disable  consistent-return */
-/* eslint-disable  react/no-access-state-in-setstate */
 
 class StagedForms extends Component {
   _isMounted = false;
@@ -572,11 +570,11 @@ class StagedForms extends Component {
   };
 
   handleEditGuide = (data, formId) => {
-    this.setState({
-      editGuide: !this.state.editGuide,
+    this.setState(state => ({
+      editGuide: !state.editGuide,
       guideData: data ? data : {},
       editFormId: formId,
-    });
+    }));
   };
 
   handleUpdateGuide = data => {
@@ -605,8 +603,8 @@ class StagedForms extends Component {
         .then(res => {
           if (res.data)
             this.setState(
-              () => {
-                const item = this.state.subStageData;
+              state => {
+                const item = state.subStageData;
                 item.map(each => {
                   const newItem = { ...each };
                   // const newEach = each.em;
@@ -637,28 +635,32 @@ class StagedForms extends Component {
   };
 
   toggleFormModal = () => {
-    this.setState({ showFormModal: !this.state.showFormModal });
+    this.setState(({ showFormModal }) => ({
+      showFormModal: !showFormModal,
+    }));
   };
 
   toggleTab = tab => {
+    const { myForms, sharedForms, projectForms } = this.props;
     this.setState({
       activeTab: tab,
-      myFormList: this.props.myForms,
-      sharedFormList: this.props.sharedForms,
-      projectFormList: this.props.projectForms,
+      myFormList: myForms,
+      sharedFormList: sharedForms,
+      projectFormList: projectForms,
     });
   };
 
   handleMyFormChange = (e, title) => {
+    const { value } = e.target;
     this.setState({
-      formId: e.target.value,
+      formId: value,
       formTitle: title,
     });
   };
 
   handleSaveForm = () => {
     this.setState(preState => ({
-      xf: this.state.formId,
+      xf: preState.formId,
       showFormModal: !preState.showFormModal,
     }));
   };
