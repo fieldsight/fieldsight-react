@@ -11,6 +11,7 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import isEmpty from "../../utils/isEmpty";
 import findQuestionWithGroup from "../../utils/findQuestionWithGroup";
+import { DotLoader } from "../myForm/Loader";
 
 const urls = [
   "fieldsight/api/organization/",
@@ -31,7 +32,7 @@ class SiteInformation extends Component {
     jsonQuestions: [],
     projectSettings: {},
     siteFeaturedImages: [],
-    isLoading: false,
+    isLoading: true,
     showConfirmation: false
   };
 
@@ -71,6 +72,20 @@ class SiteInformation extends Component {
         if (this._isMounted) {
           let modifiedJsonQuestions = [];
           let modifiedForm = [];
+          let modifiedProjects = [];
+
+          if (results[0].data) {
+            modifiedProjects = results[0].data.filter(
+              project => project.site_meta_attributes.length > 0
+            );
+
+            modifiedProjects = modifiedProjects.map(project => {
+              project.site_meta_attributes = project.site_meta_attributes.filter(
+                attribute => attribute.question_type !== "Link"
+              );
+              return project;
+            });
+          }
 
           if (results[1].data) {
             modifiedForm = results[1].data.map(formQuestions => {
@@ -122,7 +137,10 @@ class SiteInformation extends Component {
                   //   settings.pull_integer_form_question =
                   //     splitedStr[splitedStr.length - 1];
                   // }
-                  return { ...settings, source: settings.source.toString() };
+                  return {
+                    ...settings,
+                    source: settings.source.toString()
+                  };
                 }
               } else {
                 return {
@@ -136,7 +154,7 @@ class SiteInformation extends Component {
           this.setState({
             projects: [
               { id: 0, name: "--Select Project--", site_meta_attributes: [] },
-              ...results[0].data
+              ...modifiedProjects
             ],
             forms: [
               { id: 0, name: "--Select Form--", json: { children: [] } },
@@ -148,11 +166,15 @@ class SiteInformation extends Component {
             projectSettings:
               modifiedProjectSettings.length > 0
                 ? modifiedProjectSettings[0]
-                : {}
+                : {},
+            isLoading: false
           });
         }
       })
       .catch(error => {
+        this.setState({
+          isLoading: false
+        });
         console.log("error", error);
       });
   }
@@ -237,7 +259,76 @@ class SiteInformation extends Component {
     }
   };
 
+  validationHandler = () => {
+    const {
+      state: { siteBasicInfo, projectSettings },
+      context: { terms }
+    } = this;
+
+    if (
+      siteBasicInfo.site_picture &&
+      siteBasicInfo.site_picture.question_type &&
+      siteBasicInfo.site_picture.question_type === "Form"
+    ) {
+      if (!siteBasicInfo.site_picture.form_id) {
+        errorToast(`Please select a form for ${terms.site} photo.`);
+        return false;
+      }
+
+      if (Object.keys(siteBasicInfo.site_picture.question).length <= 0) {
+        errorToast(`Please select a question for ${terms.site} photo.`);
+        return false;
+      }
+    }
+
+    if (
+      siteBasicInfo.site_location &&
+      siteBasicInfo.site_location.question_type &&
+      siteBasicInfo.site_location.question_type === "Form"
+    ) {
+      if (!siteBasicInfo.site_location.form_id) {
+        errorToast(`Please select a form for ${terms.site} location.`);
+        return false;
+      }
+
+      if (Object.keys(siteBasicInfo.site_location.question).length <= 0) {
+        errorToast(`Please select a question for ${terms.site} location.`);
+        return false;
+      }
+    }
+
+    if (projectSettings.source === "2") {
+      if (!projectSettings.pull_integer_form) {
+        errorToast(`Please select a form for ${terms.site} progress.`);
+        return false;
+      }
+
+      if (!projectSettings.pull_integer_form_question) {
+        errorToast(`Please select a question for ${terms.site} progress.`);
+        return false;
+      }
+    }
+
+    if (projectSettings.source === "4") {
+      if (!projectSettings.no_submissions_form) {
+        errorToast(`Please select a form for ${terms.site} progress.`);
+        return false;
+      }
+    }
+
+    if (projectSettings.source === "3" || projectSettings.source === "4") {
+      if (!projectSettings.no_submissions_total_count) {
+        errorToast(`Please add target for ${terms.site} progress.`);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   onSubmitHandler = () => {
+    const isValid = this.validationHandler();
+    if (!isValid) return;
     this.setState({
       showConfirmation: true
     });
@@ -285,6 +376,11 @@ class SiteInformation extends Component {
     });
   };
 
+  handleSaveReorder = newOrder => {
+    this.setState({
+      jsonQuestions: newOrder
+    });
+  };
   render() {
     const {
       state: {
@@ -336,6 +432,7 @@ class SiteInformation extends Component {
             jsonQuestions={jsonQuestions}
             siteInfoHandler={siteInfoHandler}
             terms={terms}
+            handleSaveReorder={this.handleSaveReorder}
           />
 
           <div className="col-sm-12">
@@ -355,7 +452,6 @@ class SiteInformation extends Component {
               <p>Please Note </p>
               <ul style={{ textAlign: "left" }}>
                 <li>
-                  {" "}
                   Changing site information will change data in all the sites.
                 </li>
                 <li>
@@ -377,6 +473,7 @@ class SiteInformation extends Component {
               <a
                 className="fieldsight-btn rejected-btn"
                 onClick={cancelHandler}
+                style={{ marginRight: "10px" }}
               >
                 cancel
               </a>

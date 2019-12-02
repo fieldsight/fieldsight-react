@@ -58,7 +58,7 @@ export default class TeamSettings extends Component {
           </ol>
         </nav>
         <div className="row">
-          <div className="col-xl-3 col-lg-4">
+          <div className="  col-xl-3 col-lg-4">
             <div className="left-sidebar new-sidebar sticky-top">
               <div className="card">
                 <div className="card-header main-card-header">

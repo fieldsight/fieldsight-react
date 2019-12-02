@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
-const imgUrl = "https://naxafieldsight.s3.amazonaws.com/";
+//const imgUrl = "https://naxafieldsight.s3.amazonaws.com/";
 class ProjectList extends Component {
   render() {
     const { projects } = this.props;
@@ -17,7 +17,7 @@ class ProjectList extends Component {
                 projects.map((each, index) => (
                   <li key={index}>
                     <figure>
-                      <img src={`${imgUrl}${each.logo}`} alt="pf" />
+                      <img src={`${each.logo}`} alt="pf" />
                     </figure>
                     <div className="content">
                       <h6>

@@ -4,7 +4,6 @@ import Modal from "react-bootstrap/Modal";
 import { StripeProvider, Elements } from "react-stripe-elements";
 
 import DashboardHeader from "./dashboardComponent/DashboardHeader";
-import TeamMap from "./dashboardComponent/TeamMap";
 import ProjectList from "./dashboardComponent/ProjectList";
 import DashboardCounter from "./dashboardComponent/DashboardCounter";
 import About from "./dashboardComponent/About";
@@ -187,7 +186,7 @@ class TeamDashboard extends Component {
   handleFirstStepSelect = (selected, data) => {
     this.setState({ plan: selected, selectedPlan: data });
   };
-  handlePriceSubmit = e => { };
+  handlePriceSubmit = e => {};
   passStripeToken = (id, error) => {
     this.setState(
       state => {
@@ -348,7 +347,6 @@ class TeamDashboard extends Component {
                         showContentLoader={teamDashboardLoader}
                       />
                     </div>
-
                   </div>
                 </div>
                 <div className="col-lg-4">
@@ -368,9 +366,9 @@ class TeamDashboard extends Component {
                           </div>
                         </form> */}
                         <a
-                          href={`/fieldsight/project/add/${teamId}/`}
+                          href={`/fieldsight/application/#/project-add/${teamId}/`}
                           className="fieldsight-btn"
-                        // target="_blank"
+                          // target="_blank"
                         >
                           <i className="la la-plus" />
                         </a>

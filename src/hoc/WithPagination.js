@@ -16,7 +16,10 @@ const withPagination = WrappedComponent => {
       dLoader: true,
       per_page: 200,
       totalPage: null,
-      textVal: null
+      textVal: null,
+      form_id_string: "",
+      is_survey: false,
+      breadcrumbs: {}
     };
 
     getUrl = (page_num, payload) => {
@@ -28,8 +31,18 @@ const withPagination = WrappedComponent => {
 
         case "regionSite":
           return `fv3/api/regional-sites/?page=${page_num}&region=${payload.projectId}`;
+
         case "projectRegionList":
           return `fv3/api/project-regions/?page=${page_num}&project=${payload.projectId}`;
+
+        case "viewByStatus":
+          return `fv3/api/view-by-status/?page=${page_num}&project=${payload.projectId}&submission_status=${payload.status}`;
+        case "siteStatus":
+          return `fv3/api/view-by-status/?page=${page_num}&site=${payload.projectId}&submission_status=${payload.status}`;
+        case "formSubmission":
+          return `/fv3/api/forms-submissions/?page=${page_num}&project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+        case "siteSubmission":
+          return `/fv3/api/forms-submissions/?page=${page_num}&site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
       }
     };
 
@@ -77,7 +90,10 @@ const withPagination = WrappedComponent => {
                   dLoader: false,
                   totalCount: res.data.count,
                   textVal: null,
-                  totalPage: Math.ceil(res.data.count / 200)
+                  form_id_string: res.data.results.form_id_string,
+                  breadcrumbs: res.data.results.breadcrumbs,
+                  totalPage: Math.ceil(res.data.count / 200),
+                  is_survey: res.data.results.is_survey
                 });
               }
             }
@@ -96,7 +112,6 @@ const withPagination = WrappedComponent => {
       } else {
         paginateUrl = this.getUrl(page_num, payload);
       }
-
       this.setState(
         {
           toData: toNum,
@@ -126,7 +141,6 @@ const withPagination = WrappedComponent => {
           ) {
             return (
               <li key={number} className={classes}>
-                {" "}
                 <a onClick={e => this.paginationHandler(number, null, payload)}>
                   {number}
                 </a>

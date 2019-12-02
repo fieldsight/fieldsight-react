@@ -15,8 +15,7 @@ module.exports = env => {
     {
       entry: ["@babel/polyfill", APP_DIR],
       output: {
-        // To run locally use publicPath: "/"
-        publicPath: "/static/"
+        publicPath: PLATFORM === "production" ? "/static/" : "/"
       },
       module: {
         rules: [
@@ -88,7 +87,12 @@ module.exports = env => {
         new CopyWebpackPlugin([{ from: "src/static/" }]),
         new DashboardPlugin(),
         new Dotenv()
+<<<<<<< HEAD
       ]
+=======
+      ],
+      devtool: PLATFORM === "production" ? "" : "eval-source-map"
+>>>>>>> 9e79a51e55dbb3fa1b1455e6c937dae353fc92f3
     }
   ]);
 };

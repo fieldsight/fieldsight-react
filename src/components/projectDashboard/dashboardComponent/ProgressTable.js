@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Table from "react-bootstrap/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
@@ -56,12 +56,13 @@ const ShowContentRow = ({
       <td>
         {formUrl ? (
           <a className="pending table-profile" href={formUrl}>
-            <i className="la la-eye">
-             
-            </i>
+            <i className="la la-eye"></i>
+
             {totalSubmissions == 0
-                ? "No Submission"
-                : totalSubmissions + " Submission(s) "}
+              ? "No Submission"
+              : totalSubmissions > 1
+              ? totalSubmissions + " Submissions"
+              : totalSubmissions + " Submission "}
           </a>
         ) : (
           {}
@@ -82,60 +83,12 @@ const ShowContentRow = ({
     </tr>
   );
 };
-// const ShowChild = ({
-//   sn,
-//   id,
-//   name,
-//   progress,
-//   pending,
-//   approved,
-//   flagged,
-//   rejected
-// }) => {
-//   return (
-//     <tr className="sub-row" key={`childrow_${id + 1}`}>
-//       <td>
-//         {sn}.{id + 1}
-//       </td>
-//       <td>{name}</td>
-//       <td />
-//       <td>
-//         <div className="progress">
-//           <div
-//             className="progress-bar"
-//             role="progressbar"
-//             aria-valuenow="80"
-//             aria-valuemin="0"
-//             aria-valuemax="200"
-//             style={{
-//               width: progress + "%"
-//             }}
-//           >
-//             <span className="progress-count">{progress}%</span>
-//           </div>
-//         </div>
-//       </td>
-//       <td>
-//         <a className="pending">{pending}</a>
-//       </td>
-//       <td>
-//         <a className="approved">{approved}</a>
-//       </td>
-//       <td>
-//         <a className="flagged">{flagged}</a>
-//       </td>
-//       <td>
-//         <a className="rejected">{rejected}</a>
-//       </td>
-//     </tr>
-//   );
-// };
 
 const CheckCase = ({ sub, sn }) => {
   // if (sub.name) {
   return (
-    <>
-      <tr className="heading-row" key={`stage_${sn}`}>
+    <Fragment key={`stage_${sn}`}>
+      <tr className="heading-row">
         <td>{sn}</td>
         <td>{sub.name}</td>
         <td />
@@ -162,7 +115,7 @@ const CheckCase = ({ sub, sn }) => {
             />
           );
         })}
-    </>
+    </Fragment>
   );
   // }
 };

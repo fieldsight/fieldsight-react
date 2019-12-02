@@ -3,7 +3,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import MyformTable from "./MyformTable";
 import SharedTable from "./SharedTable";
 
-//const base_url = "https://fieldsight.naxa.com.np";
+// const base_url = "https://fieldsight.naxa.com.np";
 
 class MyFormContent extends Component {
   render() {
