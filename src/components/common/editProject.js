@@ -16,7 +16,7 @@ const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
 const iconUrl = require('leaflet/dist/images/marker-icon.png');
 const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
 
-/* eslint-disable   react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable   camelcase */
 /* eslint-disable   react/no-array-index-key */
 /* eslint-disable   no-shadow */
@@ -78,7 +78,7 @@ class EditProject extends Component {
       showCropper,
       closeModal,
       src,
-      isLoading,
+      // isLoading,
       subSectors,
       readFile,
       title,

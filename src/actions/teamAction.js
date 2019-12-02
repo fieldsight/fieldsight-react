@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GET_TEAMS, GET_TRANSLATION } from './types';
 
-export const getTeam = id => dispatch => {
+export const getTeam = () => dispatch => {
   axios
     .get(`/fv3/api/teams/`)
     .then(res => {
@@ -10,7 +10,7 @@ export const getTeam = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // dispatch({
       //   type: SITE_DASHBOARD_ERR
       // });

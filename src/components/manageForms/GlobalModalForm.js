@@ -6,7 +6,7 @@ import RadioElement from '../common/RadioElement';
 import CheckBox from '../common/CheckBox';
 import SelectElement from '../common/SelectElement';
 
-/* eslint-disable react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 
 const getArrValue = (arr, value) => {
   if (arr.includes(value)) return true;
@@ -178,24 +178,26 @@ class GlobalModalForm extends Component {
           if (regionSelected && regionSelected.length > 0) {
             regionOptions.map(region => {
               if (regionSelected.indexOf(region.id) > -1) {
-                selectedRegion.push({
+                return selectedRegion.push({
                   ...region,
                   value: region.identifier,
                   label: region.name,
                 });
               }
+              return selectedRegion;
             });
           }
 
           if (typeSelected && typeSelected.length > 0) {
             typeOptions.map(type => {
               if (typeSelected.indexOf(type.id) > -1) {
-                selectedType.push({
+                return selectedType.push({
                   ...type,
                   value: type.identifier,
                   label: type.name,
                 });
               }
+              return selectedType;
             });
           }
         } else {

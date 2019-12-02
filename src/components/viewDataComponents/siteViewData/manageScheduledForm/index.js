@@ -11,7 +11,7 @@ import { getsiteViewData } from '../../../../actions/siteViewDataAction';
 import { DotLoader } from '../../../myForm/Loader';
 
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 class ManageScheduledForm extends Component {
   constructor(props) {
@@ -23,8 +23,9 @@ class ManageScheduledForm extends Component {
   }
 
   componentDidMount() {
-    if (this.props.id !== '') {
-      this.props.getsiteViewData(this.props.id, 'scheduled');
+    const { id } = this.props;
+    if (id !== '') {
+      this.props.getsiteViewData(id, 'scheduled');
     }
   }
 
@@ -44,6 +45,7 @@ class ManageScheduledForm extends Component {
         scheduled_loading,
         id,
       },
+      state: { hide },
     } = this;
 
     return (
@@ -105,7 +107,7 @@ class ManageScheduledForm extends Component {
                 />
               </h5>
               <div className="dash-btn">
-                {this.state.hide ? (
+                {hide ? (
                   <button
                     type="button"
                     className="btn-toggle"
@@ -142,7 +144,7 @@ class ManageScheduledForm extends Component {
             </div>
 
             <div className="card-body">
-              {!this.state.hide && (
+              {!hide && (
                 <DeleteTable
                   deleted_forms={deleted_forms}
                   id={id}

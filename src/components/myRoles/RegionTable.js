@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { TableContentLoader } from '../common/Loader';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key  */
 
 class RegionTable extends PureComponent {

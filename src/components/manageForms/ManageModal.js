@@ -1,8 +1,6 @@
 import React from 'react';
 import Zoom from 'react-reveal/Zoom';
 
-/* eslint-disable  react/prop-types */
-
 const ManageModal = props => {
   const {
     title,

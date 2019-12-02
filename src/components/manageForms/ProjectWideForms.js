@@ -11,7 +11,7 @@ import AddForm from './AddForm';
 import GeneralFormTable from './GeneralFormTable';
 import ManageModal from './ManageModal';
 
-/* eslint-disable  react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 /* eslint-disable  react/no-did-update-set-state */
 
 class ProjectWideForms extends Component {
@@ -97,16 +97,16 @@ class ProjectWideForms extends Component {
         `fv3/api/manage-forms/deploy/?project_id=${id}&type=general&id=${formId}`,
         { is_deployed: !isDeploy },
       )
-      .then(res => {
+      .then(() => {
         this.setState(
           state => {
             const newData = state.data;
             newData.map(each => {
               const newEach = { ...each };
               const arrItem = newEach;
-              let isDeployed = each.is_deployed;
+              // let isDeployed = each.is_deployed;
               if (each.id === formId) {
-                isDeployed = !isDeploy;
+                arrItem.is_deployed = !isDeploy;
               }
               return arrItem;
             });

@@ -10,8 +10,7 @@ import EditFormGuide from './EditFormGuide';
 import AddForm from './AddForm';
 import ManageModal from './ManageModal';
 import Loader from '../common/Loader';
-
-/* eslint-disable  react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 const formatDate = date => {
   const dateIdx = date.getDate();
@@ -154,7 +153,7 @@ class ScheduleForms extends Component {
         : `fv3/api/manage-forms/deploy/?site_id=${id}&type=schedule&id=${formId}`;
       axios
         .post(deployUrl, { is_deployed: !isDeploy })
-        .then(res => {
+        .then(() => {
           this.setState(
             state => {
               const newData = state.data;
@@ -231,8 +230,10 @@ class ScheduleForms extends Component {
       if (fsxf) formData.append('fsxf', fsxf);
       if (data.images && data.images.length > 0) {
         data.images.map((each, i) => {
-          if (!each.image)
-            formData.append(`new_images_${i + 1}`, each);
+          if (!each.image) {
+            return formData.append(`new_images_${i + 1}`, each);
+          }
+          return formData;
         });
       }
       if (data.id) {
@@ -516,7 +517,6 @@ class ScheduleForms extends Component {
           showText
         >
           {loader && <DotLoader />}
-
           {!loader && isProjectForm && (
             <ScheduleFormTable
               data={data}

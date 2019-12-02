@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import PropTypes from 'prop-types';
 /* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/destructuring-assignment */
 
 class PricingStepTwo extends Component {
   constructor(props) {
@@ -56,7 +57,7 @@ class PricingStepTwo extends Component {
     this.setState({ errors: '' });
   };
 
-  async handleCardForm(e) {
+  async handleCardForm() {
     const { token, error } = await this.props.stripe.createToken({
       name: 'stripeToken',
     });
@@ -255,7 +256,11 @@ class PricingStepTwo extends Component {
             </div>
             <div className="text-center">
               <a
-                href="#"
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  handlePrevious('first');
+                }}
                 title=""
                 className="btn btn-primary"
                 onClick={() => {
@@ -269,7 +274,9 @@ class PricingStepTwo extends Component {
                 />
               </a>
               <a
-                href="#"
+                tabIndex="0"
+                role="button"
+                onKeyDown={this.handleCardForm}
                 title=""
                 className="btn btn-primary"
                 onClick={this.handleCardForm}

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key  */
 /* eslint-disable camelcase */
 

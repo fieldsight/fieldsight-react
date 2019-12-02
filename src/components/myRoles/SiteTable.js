@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { TableContentLoader } from '../common/Loader';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key  */
 
 // let base_url = window.base_url
@@ -151,7 +151,11 @@ class SiteTable extends Component {
                                 : 'Manager'}
                             </td>
                             <td>
-                              <a href="#" className="pending">
+                              <a
+                                tabIndex="0"
+                                role="button"
+                                className="pending"
+                              >
                                 {item.region}
                               </a>
                             </td>

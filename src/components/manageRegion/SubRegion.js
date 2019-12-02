@@ -9,7 +9,7 @@ import InputElement from '../common/InputElement';
 import RightContentCard from '../common/RightContentCard';
 import Loader from '../common/Loader';
 import isEmpty from '../../utils/isEmpty';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 const url = 'fv3/api/project-regions/';
 
@@ -32,7 +32,7 @@ class SubRegion extends Component {
             setSubRegion(res.data, subRegionId);
           }
         })
-        .catch(err => console.log('Err', err));
+        .catch(() => {});
     }
   }
 
@@ -51,7 +51,7 @@ class SubRegion extends Component {
             setSubRegion(res.data, subRegionId);
           }
         })
-        .catch(err => console.log('Err', err));
+        .catch(() => {});
     }
   }
 

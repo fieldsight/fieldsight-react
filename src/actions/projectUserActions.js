@@ -10,8 +10,8 @@ const getProjectUser = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
-      console.log(err);
+    .catch(() => {
+      // console.log(err);
     });
 };
 

@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Table as BootstrapTable } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
-
-/* eslint-disable  react/prop-types */
 
 const Table = (
   tableHeader,

@@ -7,7 +7,7 @@ import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 class SubmissionData extends Component {
   constructor(props) {
@@ -31,9 +31,10 @@ class SubmissionData extends Component {
       },
       paginationHandler,
     } = this.props;
+    const { id } = this.state;
     paginationHandler(1, null, {
       type: 'formSubmission',
-      projectId: this.state.id,
+      projectId: id,
       fsxf_id: fid,
       status: 'form-submission',
     });
@@ -109,7 +110,7 @@ class SubmissionData extends Component {
       .get(`/fv3/api/delete-submission/${id}/`)
       .then(res => {
         if (res.status === 204) {
-          this.setState(state => {
+          this.setState(() => {
             const result = list.filter(
               data => data.submission_id !== id,
             );
@@ -123,8 +124,8 @@ class SubmissionData extends Component {
           });
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
       });
   };
 
@@ -279,6 +280,11 @@ class SubmissionData extends Component {
                             </a>
 
                             <a
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={() => {
+                                this.handleDelete(list.submission_id);
+                              }}
                               className="delete-tag tag"
                               onClick={() => {
                                 this.handleDelete(list.submission_id);
@@ -332,7 +338,16 @@ class SubmissionData extends Component {
                         <ul>
                           <li className="page-item">
                             <a
-                              href="#"
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={() => {
+                                paginationHandler(pageNum - 1, null, {
+                                  type: 'formSubmission',
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: 'form-submission',
+                                });
+                              }}
                               onClick={() => {
                                 paginationHandler(pageNum - 1, null, {
                                   type: 'formSubmission',
@@ -358,7 +373,16 @@ class SubmissionData extends Component {
 
                           <li className="page-item ">
                             <a
-                              href="#"
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={() => {
+                                paginationHandler(pageNum + 1, null, {
+                                  type: 'formSubmission',
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: 'form-submission',
+                                });
+                              }}
                               onClick={() => {
                                 paginationHandler(pageNum + 1, null, {
                                   type: 'formSubmission',
@@ -412,7 +436,11 @@ class SubmissionData extends Component {
             </div>
             <div className="warning-footer text-center">
               <a
-                href="#"
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  this.setState({ showConfirmation: false });
+                }}
                 className="fieldsight-btn rejected-btn"
                 onClick={() => {
                   this.setState({ showConfirmation: false });
@@ -421,7 +449,11 @@ class SubmissionData extends Component {
                 cancel
               </a>
               <a
-                href="#"
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  this.delete(id);
+                }}
                 className="fieldsight-btn"
                 onClick={() => this.delete(id)}
               >

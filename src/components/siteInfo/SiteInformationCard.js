@@ -3,7 +3,7 @@ import SelectElement from '../common/SelectElement';
 import { DotLoader } from '../common/Loader';
 import findQuestion from '../../utils/findQuestion';
 import isEmpty from '../../utils/isEmpty';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 const typeOptions = {
   sitePictureTypes: [

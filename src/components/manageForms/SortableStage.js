@@ -16,8 +16,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import SubStageTable from './subStageTable';
 import { DotLoader } from '../myForm/Loader';
-
-/* eslint-disable  react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 const DragHandle = sortableHandle(({ name }) => (
   <Card.Header>
@@ -119,7 +118,7 @@ class SortableStage extends Component {
       },
     } = this;
     let toDeploy = '';
-    let toDelete = '';
+    // let toDelete = '';
     const arrDeploy =
       subStageData.length > 0 &&
       subStageData.map(sub => {
@@ -131,17 +130,17 @@ class SortableStage extends Component {
         return null;
         // }
       });
-    const arrDelete =
-      subStageData.length > 0 &&
-      subStageData.map(sub => {
-        if (sub.is_deployed) {
-          const result = true;
-          return result;
-        }
-        // else {
-        return null;
-        // }
-      });
+    // const arrDelete =
+    //   subStageData.length > 0 &&
+    //   subStageData.map(sub => {
+    //     if (sub.is_deployed) {
+    //       const result = true;
+    //       return result;
+    //     }
+    // else {
+    // return null;
+    // }
+    // });
 
     toDeploy =
       arrDeploy.length > 0
@@ -150,12 +149,12 @@ class SortableStage extends Component {
           : false
         : '';
 
-    toDelete =
-      arrDelete.length > 0
-        ? arrDelete.indexOf(true) > -1
-          ? false
-          : true
-        : '';
+    // toDelete =
+    //   arrDelete.length > 0
+    //     ? arrDelete.indexOf(true) > -1
+    //       ? false
+    //       : true
+    //     : '';
 
     return (
       <>

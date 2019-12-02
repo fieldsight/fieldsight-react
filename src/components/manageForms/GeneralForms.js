@@ -11,7 +11,7 @@ import GeneralFormTable from './GeneralFormTable';
 import ManageModal from './ManageModal';
 import Loader from '../common/Loader';
 
-/* eslint-disable react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 /* eslint-disable  consistent-return */
 /* eslint-disable  react/no-did-update-set-state */
 
@@ -203,8 +203,10 @@ class GeneralForms extends Component {
         if (editFormId) formData.append('fsxf', editFormId);
         if (data.images && data.images.length > 0) {
           data.images.map((each, i) => {
-            if (!each.image)
-              formData.append(`new_images_${i + 1}`, each);
+            if (!each.image) {
+              return formData.append(`new_images_${i + 1}`, each);
+            }
+            return formData;
           });
         }
         if (data.id) {
@@ -358,7 +360,7 @@ class GeneralForms extends Component {
                       return res.data;
                     }
                     // else {
-                    //   return item;
+                    return item;
                     // }
                   });
                   return {

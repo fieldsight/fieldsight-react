@@ -14,6 +14,7 @@ import PendingTable from './PendingSubmissionTable.js';
 import RejectedTable from './RejectSubmissionTable.js';
 import FlaggedTable from './FlagedTable.js';
 /* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
 
 class SiteViewData extends Component {
   constructor(props) {
@@ -64,7 +65,7 @@ class SiteViewData extends Component {
       location: { pathname },
     } = this.props;
 
-    if (preState.location.pathname !== this.props.location.pathname) {
+    if (preState.location.pathname !== pathname) {
       this.getPath(pathname, id);
     }
   }

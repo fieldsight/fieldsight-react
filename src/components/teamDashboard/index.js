@@ -21,8 +21,9 @@ import PricingStepTwo from './dashboardComponent/PricingStepTwo';
 import PricingStepThree from './dashboardComponent/PricingStepThree';
 /* eslint-disable camelcase */
 /* eslint-disable react/no-did-update-set-state */
-/* eslint-disable  consistent-return */
 /* eslint-disable  no-lone-blocks */
+/* eslint-disable  consistent-return */
+/* eslint-disable react/destructuring-assignment */
 
 const now = new Date();
 const INITIAL_STATE = {
@@ -52,13 +53,22 @@ class TeamDashboard extends Component {
   }
 
   componentDidMount() {
-    const { id: teamId } = this.props.match.params;
+    const {
+      match: {
+        params: { id: teamId },
+      },
+    } = this.props;
     this.props.getTeamDashboard(teamId);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.id !== this.props.match.params.id) {
-      const { id: teamId } = this.props.match.params;
+      const {
+        match: {
+          params: { id: teamId },
+        },
+      } = this.props;
+
       this.setState(
         {
           ...INITIAL_STATE,
@@ -69,19 +79,20 @@ class TeamDashboard extends Component {
       );
     }
     if (prevProps.teamDashboard !== this.props.teamDashboard) {
+      const { teamDashboard } = this.props;
       this.setState({
-        stripeToken: this.props.teamDashboard.stripe_token
-          ? this.props.teamDashboard.stripe_token
+        stripeToken: teamDashboard.stripe_token
+          ? teamDashboard.stripe_token
           : '',
-        selectedPlan: this.props.teamDashboard.package_details
-          ? this.props.teamDashboard.package_details[0]
+        selectedPlan: teamDashboard.package_details
+          ? teamDashboard.package_details[0]
           : {},
       });
     }
   }
 
   closeModal = () => {
-    this.setState({
+    return this.setState({
       stepOne: true,
       stepTwo: false,
       stepThree: false,
@@ -90,21 +101,13 @@ class TeamDashboard extends Component {
   };
 
   openModal = type => {
-    // const { id: teamId } = this.props.match.params;
-
     if (type === 'Header' || type === 'Submission') {
       return this.setState({
         [`show${type}Modal`]: true,
       });
     }
 
-    // if (type === 'Subsites') {
-    //   return this.setState({
-    //     showSubsites: true,
-    //   });
-    // }
-
-    this.setState({
+    return this.setState({
       [`show${type}`]: true,
     });
   };
@@ -142,7 +145,7 @@ class TeamDashboard extends Component {
     const { cardError, stepThree } = this.state;
 
     this.setState(
-      state => {
+      () => {
         switch (step) {
           case 'second': {
             return {
@@ -172,7 +175,12 @@ class TeamDashboard extends Component {
       () => {
         if (stepThree) {
           const { tokenId, plan, interval } = this.state;
-          const { id: teamId } = this.props.match.params;
+          const {
+            match: {
+              params: { id: teamId },
+            },
+          } = this.props;
+
           const payload = {
             stripeToken: tokenId,
             interval,
@@ -197,11 +205,12 @@ class TeamDashboard extends Component {
 
   passStripeToken = (id, error) => {
     this.setState(
-      state => {
+      () => {
         if (error) return { cardError: error };
         if (id) {
           return { tokenId: id, cardError: '' };
         }
+        return null;
       },
       () => {
         if (id) {

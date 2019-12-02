@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import SiteEditForm from '../common/siteEdit';
 
 /* eslint-disable */

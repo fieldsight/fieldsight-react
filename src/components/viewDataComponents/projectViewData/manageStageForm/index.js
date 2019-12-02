@@ -9,7 +9,7 @@ import DeleteTable from '../deleteTable';
 import { getProjectViewData } from '../../../../actions/viewDataActions';
 
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 class ResponseStageForm extends Component {
   constructor(props) {

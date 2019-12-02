@@ -7,7 +7,6 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import PreviewModal from './PreviewModal';
 import { DotLoader } from './Loader';
 import { successToast } from './toastHandler';
-/* eslint-disable react/prop-types  */
 /* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key  */
 /* eslint-disable react/no-unused-state */
@@ -42,7 +41,7 @@ class ProjecTable extends Component {
           }
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
           dLoader: false,
         });
@@ -56,10 +55,10 @@ class ProjecTable extends Component {
   cloneHandler = (e, clone_url, id, form_id) => {
     axios
       .post(clone_url, { id_string: id, project: form_id })
-      .then(res => {
+      .then(() => {
         successToast('Form', 'cloned');
       })
-      .catch(err => console.log('err', err));
+      .catch(() => {});
   };
 
   render() {

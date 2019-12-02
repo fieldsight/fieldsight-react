@@ -3,8 +3,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import format from 'date-fns/format';
 import { withRouter } from 'react-router-dom';
 import Td from './TableData';
-
-/* eslint-disable   react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable   camelcase */
 
 class TableRow extends Component {
@@ -19,9 +18,9 @@ class TableRow extends Component {
   };
 
   tableRowMethod = () => {
-    const {
-      match: { url },
-    } = this.props;
+    // const {
+    //   match: { url },
+    // } = this.props;
 
     return {
       siteInfo: (row, i, editHandler, removeHandler) => (

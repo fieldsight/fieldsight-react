@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
 import { DotLoader } from '../../../myForm/Loader';
+/* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
 
 /* eslint-disable react/prop-types */
 
@@ -30,11 +32,10 @@ class SubmissionData extends Component {
       match: {
         params: { id, fid },
       },
-      paginationHandler,
       siteList,
     } = this.props;
 
-    paginationHandler(1, null, {
+    this.props.paginationHandler(1, null, {
       type: 'siteSubmission',
       projectId: id,
       fsxf_id: fid,
@@ -72,13 +73,13 @@ class SubmissionData extends Component {
   };
 
   delete = id => {
-    let list = this.state.siteList;
+    let { siteList: list } = this.state;
 
     axios
       .get(`/fv3/api/delete-submission/${id}/`)
       .then(res => {
         if (res.status === 204) {
-          this.setState(state => {
+          this.setState(() => {
             const result = list.filter(
               data => data.submission_id !== id,
             );
@@ -97,15 +98,13 @@ class SubmissionData extends Component {
           });
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
       });
   };
 
   handleChange = async e => {
-    const {
-      target: { value },
-    } = e;
+    const { value } = e.target;
     const { siteList, mastersiteList } = this.state;
 
     if (value) {
@@ -126,12 +125,24 @@ class SubmissionData extends Component {
 
   render() {
     const {
-      breadcrumbs,
-      dLoader,
-      siteList,
-      showConfirmation,
-      id,
-    } = this.state;
+      state: {
+        breadcrumbs,
+        dLoader,
+        siteList,
+        showConfirmation,
+        id,
+        fid,
+      },
+      props: {
+        fromData,
+        toData,
+        totalCount,
+        paginationHandler,
+        pageNum,
+        form_id_string,
+        renderPageNumbers,
+      },
+    } = this;
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -235,13 +246,17 @@ class SubmissionData extends Component {
                             </a>
                             <a
                               className="edit-tag tag"
-                              href={`/forms/edit/${this.props.form_id_string}/${list.submission_id}`}
+                              href={`/forms/edit/${form_id_string}/${list.submission_id}`}
                             >
                               <i className="la la-edit" />
                             </a>
 
                             <a
-                              href="#"
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={() => {
+                                this.handleDelete(list.submission_id);
+                              }}
                               className="delete-tag tag"
                               onClick={() => {
                                 this.handleDelete(list.submission_id);
@@ -255,8 +270,7 @@ class SubmissionData extends Component {
                     })}
                 </tbody>
               </Table>
-              {this.props.siteList &&
-              this.props.siteList.length > 0 ? (
+              {siteList && siteList.length > 0 ? (
                 <div className="card-body">
                   <div className="table-footer">
                     <div className="showing-rows">
@@ -271,9 +285,7 @@ class SubmissionData extends Component {
                           defaultMessage="to"
                         />
                         <span>
-                          {this.props.toData > this.props.totalCount
-                            ? this.props.totalCount
-                            : this.props.toData}
+                          {toData > totalCount ? totalCount : toData}
                         </span>
                         <FormattedMessage
                           id="app.of"
@@ -287,50 +299,60 @@ class SubmissionData extends Component {
                         .
                       </p>
                     </div>
-                    {this.props.toData < this.props.totalCount ? (
+                    {toData < totalCount ? (
                       <div className="table-pagination">
                         <ul>
                           <li className="page-item">
                             <a
-                              href="#"
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={() => {
+                                paginationHandler(pageNum - 1, null, {
+                                  type: 'formSubmission',
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: 'form-submission',
+                                });
+                              }}
                               onClick={() => {
-                                this.props.paginationHandler(
-                                  this.props.pageNum - 1,
-                                  null,
-                                  {
-                                    type: 'formSubmission',
-                                    projectId: this.state.id,
-                                    fsxf_id: this.state.fid,
-                                    status: 'form-submission',
-                                  },
-                                );
+                                paginationHandler(pageNum - 1, null, {
+                                  type: 'formSubmission',
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: 'form-submission',
+                                });
                               }}
                             >
                               <i className="la la-long-arrow-left" />
                             </a>
                           </li>
 
-                          {this.props.renderPageNumbers({
+                          {renderPageNumbers({
                             type: 'formSubmission',
-                            projectId: this.state.id,
-                            fsxf_id: this.state.fid,
+                            projectId: id,
+                            fsxf_id: fid,
                             status: 'form-submission',
                           })}
 
                           <li className="page-item ">
                             <a
-                              href="#"
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={() => {
+                                paginationHandler(pageNum + 1, null, {
+                                  type: 'formSubmission',
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: 'form-submission',
+                                });
+                              }}
                               onClick={() => {
-                                this.props.paginationHandler(
-                                  this.props.pageNum + 1,
-                                  null,
-                                  {
-                                    type: 'formSubmission',
-                                    projectId: this.state.id,
-                                    fsxf_id: this.state.fid,
-                                    status: 'form-submission',
-                                  },
-                                );
+                                paginationHandler(pageNum + 1, null, {
+                                  type: 'formSubmission',
+                                  projectId: id,
+                                  fsxf_id: fid,
+                                  status: 'form-submission',
+                                });
                               }}
                             >
                               <i className="la la-long-arrow-right" />
@@ -377,7 +399,11 @@ class SubmissionData extends Component {
             </div>
             <div className="warning-footer text-center">
               <a
-                href="#"
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  this.setState({ showConfirmation: false });
+                }}
                 className="fieldsight-btn rejected-btn"
                 onClick={() => {
                   this.setState({ showConfirmation: false });
@@ -386,7 +412,11 @@ class SubmissionData extends Component {
                 cancel
               </a>
               <a
-                href="#"
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  this.delete(id);
+                }}
                 className="fieldsight-btn"
                 onClick={() => this.delete(id)}
               >

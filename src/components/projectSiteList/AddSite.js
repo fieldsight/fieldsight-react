@@ -6,8 +6,7 @@ import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import { FormattedMessage } from 'react-intl';
 import 'leaflet/dist/leaflet.css';
 import InputElement from '../common/InputElement';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/destructuring-assignment */
 
 const options = [
   { value: 'chocolate', label: 'Chocolate' },

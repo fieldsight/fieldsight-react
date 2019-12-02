@@ -10,7 +10,7 @@ import DeleteTable from '../deleteTable';
 import { getsiteViewData } from '../../../../actions/siteViewDataAction';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 class ManageGeneralForm extends Component {
   constructor(props) {

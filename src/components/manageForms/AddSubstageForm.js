@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import InputElement from '../common/InputElement';
 import RadioElement from '../common/RadioElement';
 
-/* eslint-disable react/prop-types */
+/* eslint-disable   react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key */
 
 class AddSubstageForm extends Component {
@@ -74,22 +74,24 @@ class AddSubstageForm extends Component {
       const newTypeArr = [];
       regionOptions.map(each => {
         if (stagedRegions.indexOf(each.id) > -1) {
-          newRegionArr.push({
+          return newRegionArr.push({
             ...each,
             value: each.identifier,
             label: each.name,
           });
         }
+        return newRegionArr;
       });
 
       typeOptions.map(each => {
         if (stagedTypes.indexOf(each.id) > -1) {
-          newTypeArr.push({
+          return newTypeArr.push({
             ...each,
             value: each.identifier,
             label: each.name,
           });
         }
+        return newTypeArr;
       });
 
       let selectedRegion = [];
@@ -98,24 +100,26 @@ class AddSubstageForm extends Component {
         if (regionSelected && regionSelected.length > 0) {
           regionOptions.map(region => {
             if (regionSelected.indexOf(region.id) > -1) {
-              selectedRegion.push({
+              return selectedRegion.push({
                 ...region,
                 value: region.identifier,
                 label: region.name,
               });
             }
+            return selectedRegion;
           });
         }
 
         if (typeSelected && typeSelected.length > 0) {
           typeOptions.map(type => {
             if (typeSelected.indexOf(type.id) > -1) {
-              selectedType.push({
+              return selectedType.push({
                 ...type,
                 value: type.identifier,
                 label: type.name,
               });
             }
+            return selectedType;
           });
         }
       } else {
@@ -186,7 +190,7 @@ class AddSubstageForm extends Component {
   };
 
   handleSelectRegionChange = region => {
-    this.setState(state => {
+    this.setState(() => {
       return {
         regionSelected: region,
       };
@@ -194,7 +198,7 @@ class AddSubstageForm extends Component {
   };
 
   handleSelectTypeChange = type => {
-    this.setState(state => {
+    this.setState(() => {
       return {
         typeSelected: type,
       };
@@ -223,9 +227,9 @@ class AddSubstageForm extends Component {
         typeDropdown,
         typeSelected,
         status,
-        isDonor,
-        isEdit,
-        isDelete,
+        // isDonor,
+        // isEdit,
+        // isDelete,
         weight,
         substageTitle,
         substageDesc,

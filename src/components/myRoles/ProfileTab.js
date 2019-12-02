@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { AvatarContentLoader } from '../common/Loader';
@@ -33,7 +33,7 @@ class ProfileTab extends PureComponent {
                   </a>
                   <div className="profile-social-icon">
                     {profile.skype && (
-                      <a href="#" className="skype">
+                      <a tabIndex="0" role="button" className="skype">
                         <OverlayTrigger
                           placement="top"
                           overlay={<Tooltip>{profile.skype}</Tooltip>}
@@ -44,7 +44,11 @@ class ProfileTab extends PureComponent {
                     )}
 
                     {profile.whatsapp && (
-                      <a href="#" className="whatsapp">
+                      <a
+                        tabIndex="0"
+                        role="button"
+                        className="whatsapp"
+                      >
                         <OverlayTrigger
                           placement="top"
                           overlay={
@@ -57,7 +61,11 @@ class ProfileTab extends PureComponent {
                     )}
 
                     {profile.twitter && (
-                      <a href="#" className="twitter">
+                      <a
+                        tabIndex="0"
+                        role="button"
+                        className="twitter"
+                      >
                         <OverlayTrigger
                           placement="top"
                           overlay={
@@ -70,7 +78,11 @@ class ProfileTab extends PureComponent {
                     )}
 
                     {profile.google_talk && (
-                      <a href="#" className="google">
+                      <a
+                        tabIndex="0"
+                        role="button"
+                        className="google"
+                      >
                         <OverlayTrigger
                           placement="top"
                           overlay={

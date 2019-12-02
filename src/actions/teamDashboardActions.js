@@ -17,7 +17,7 @@ export const getTeamDashboard = id => dispatch => {
         payload: res.data,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // dispatch({
       //   type: SITE_DASHBOARD_ERR
       // });
@@ -36,7 +36,7 @@ export const postPackageSubscribe = (id, payload) => dispatch => {
         response: res.data,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // console.log("error", err);
     });
 };

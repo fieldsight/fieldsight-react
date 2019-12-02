@@ -12,9 +12,9 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import TableHeader from '../common/TableHeader';
 import TableRow from '../common/TableRow';
-/* eslint-disable react/prop-types  */
 /* eslint-disable react/no-array-index-key  */
 /* eslint-disable consistent-return  */
+/* eslint-disable react/destructuring-assignment */
 
 const tableHeader = [
   'app.attribute',
@@ -104,7 +104,7 @@ class SortableSiteInfo extends Component {
       });
     }
     if (nextProps.isReorderCancel !== this.props.isReorderCancel) {
-      this.setState(state => {
+      this.setState(() => {
         if (nextProps.isReorderCancel) {
           return { data: this.props.rowData };
         }

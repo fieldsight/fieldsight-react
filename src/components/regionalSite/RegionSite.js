@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import RegionSiteList from './RegionSiteList';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 export default class RegionSite extends PureComponent {
   render() {

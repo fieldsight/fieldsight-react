@@ -14,7 +14,7 @@ import { errorToast, successToast } from '../../utils/toastHandler';
 import 'leaflet/dist/leaflet.css';
 import markerIcon from '../common/Marker';
 
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
@@ -95,11 +95,11 @@ class EditTeam extends Component {
               const teamType = types.data.team_types
                 ? types.data.team_types
                 : [];
-              const selectedType = team.data.type;
+              // const selectedType = team.data.type;
               const countryList = types.data.countries
                 ? types.data.countries
                 : '';
-              const selectedCountry = team.data.country;
+              // const selectedCountry = team.data.country;
 
               const newPosition =
                 position && position.length > 0
@@ -121,7 +121,7 @@ class EditTeam extends Component {
           }
         }),
       )
-      .catch(err => console.log('err', err));
+      .catch(() => {});
   }
 
   componentWillUnmount() {
@@ -141,7 +141,6 @@ class EditTeam extends Component {
           website,
           country,
           public_desc,
-          logo,
         },
         position: { latitude, longitude },
         cropResult,
@@ -175,7 +174,7 @@ class EditTeam extends Component {
           });
         },
       })
-      .then(res => {
+      .then(() => {
         this.setState(
           {
             isLoading: false,
@@ -184,7 +183,7 @@ class EditTeam extends Component {
           () => successToast('Team', 'updated'),
         );
       })
-      .catch(err => {
+      .catch(() => {
         this.setState(
           {
             isLoading: false,
@@ -296,7 +295,6 @@ class EditTeam extends Component {
           website,
           country,
           public_desc,
-          logo,
         },
         position: { latitude, longitude },
         showCropper,

@@ -5,7 +5,7 @@ import { DotLoader } from '../common/Loader';
 import Modal from '../common/Modal';
 import isEmpty from '../../utils/isEmpty';
 import findQuestionWithGroup from '../../utils/findQuestionWithGroup';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 const typeOptions = {
   siteProgressCard: [

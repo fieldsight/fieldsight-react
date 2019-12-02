@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
-/* eslint-disable react/prop-types  */
 
 const FreePlan = ({ period, plan }) => (
   <div className="col-md-4">
@@ -144,7 +143,11 @@ const StarterPlan = ({ period, plan, handleSelect }) => (
       </div>
       <div className="mp-footer">
         <a
-          href="#"
+          tabIndex="0"
+          role="button"
+          onKeyDown={() => {
+            handleSelect('starter_plan', plan);
+          }}
           title=""
           className="btn pbg-2 btn-block btn-lg"
           onClick={() => {
@@ -223,7 +226,11 @@ const BasicPlan = ({ period, plan, handleSelect }) => (
       </div>
       <div className="mp-footer">
         <a
-          href="#"
+          tabIndex="0"
+          role="button"
+          onKeyDown={() => {
+            handleSelect('basic_plan', plan);
+          }}
           title=""
           className="btn pbg-3 btn-block btn-lg"
           onClick={() => {
@@ -305,7 +312,11 @@ const ExtendedPlan = ({ period, plan, handleSelect }) => (
       </div>
       <div className="mp-footer">
         <a
-          href="#"
+          tabIndex="0"
+          role="button"
+          onKeyDown={() => {
+            handleSelect('extended_plan', plan);
+          }}
           title=""
           className="btn pbg-4 btn-block btn-lg"
           onClick={() => {
@@ -384,7 +395,11 @@ const ProPlan = ({ period, plan, handleSelect }) => (
       </div>
       <div className="mp-footer">
         <a
-          href="#"
+          tabIndex="0"
+          role="button"
+          onKeyDown={() => {
+            handleSelect('pro_plan', plan);
+          }}
           title=""
           className="btn pbg-5 btn-block btn-lg"
           onClick={() => {
@@ -463,7 +478,11 @@ const ScalePlan = ({ period, plan, handleSelect }) => (
       </div>
       <div className="mp-footer">
         <a
-          href="#"
+          tabIndex="0"
+          role="button"
+          onKeyDown={() => {
+            handleSelect('scale_plan', plan);
+          }}
           title=""
           className="btn btn-block pbg-6 btn-lg"
           onClick={() => {

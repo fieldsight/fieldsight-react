@@ -18,9 +18,8 @@ import 'leaflet/dist/leaflet.css';
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
 const iconUrl = require('leaflet/dist/images/marker-icon.png');
 const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
 /* eslint-disable consistent-return  */
 /* eslint-disable react/no-access-state-in-setstate  */
 
@@ -89,7 +88,7 @@ export default class SiteAdd extends Component {
 
     axios
       .all(
-        urls.map((url, i) => {
+        urls.map(url => {
           return axios.get(url);
         }),
       )
@@ -108,7 +107,7 @@ export default class SiteAdd extends Component {
             const latitude = position && position[2].split(')')[0];
             const breadcrumbs = breadcrumbRes.data;
             this.setState(
-              state => {
+              () => {
                 if (siteForm.data.regions !== undefined) {
                   siteForm.data.regions.map(each =>
                     regionArr.push(each),
@@ -142,8 +141,8 @@ export default class SiteAdd extends Component {
           }
         }),
       )
-      .catch(err => {
-        console.log(err, 'err');
+      .catch(() => {
+        // console.log(err, 'err');
       });
   }
 
@@ -269,8 +268,8 @@ export default class SiteAdd extends Component {
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     } else if (this.props.page === 'subSite') {
       axios({
@@ -310,8 +309,8 @@ export default class SiteAdd extends Component {
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     } else if (this.props.page === 'regionalSite') {
       axios({
@@ -351,8 +350,8 @@ export default class SiteAdd extends Component {
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     }
   };
@@ -370,20 +369,13 @@ export default class SiteAdd extends Component {
   onSelectChangeHandler = (e, data) => {
     const { value } = e.target;
     if (data === 'regions') {
-      this.setState(
-        {
-          regionselected: value,
-        },
-        () =>
-          console.log(this.state.regionselected, 'regionselected'),
-      );
+      this.setState({
+        regionselected: value,
+      });
     } else if (data === 'site_types') {
-      this.setState(
-        {
-          Selectedtypes: value,
-        },
-        () => console.log(this.state.Selectedtypes, 'Selectedtypes'),
-      );
+      this.setState({
+        Selectedtypes: value,
+      });
     }
   };
 
@@ -497,7 +489,7 @@ export default class SiteAdd extends Component {
             name={data.question_name}
             style={{ border: '0', borderBottom: '1px solid #eaeaea' }}
           >
-            {data.mcq_options.map((option, key) => {
+            {data.mcq_options.map(option => {
               return (
                 <Fragment key={option.id}>
                   <option value={option.option_text}>

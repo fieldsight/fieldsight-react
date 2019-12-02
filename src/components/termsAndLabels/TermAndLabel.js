@@ -12,8 +12,7 @@ import isEmpty from '../../utils/isEmpty';
 /* eslint-disable camelcase */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable  consistent-return */
-/* eslint-disable react/static-property-placement */
-/* eslint-disable  react/sort-comp */
+/* eslint-disable react/destructuring-assignment */
 
 const tableHeader = {
   termsAndLabels: ['Terms And Labels', 'Changed To'],

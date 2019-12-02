@@ -10,7 +10,7 @@ const getProjectLogs = id => dispatch => {
         payload: res.data.results,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // dispatch({
       //   type: SITE_LOGS_ERR
       // });

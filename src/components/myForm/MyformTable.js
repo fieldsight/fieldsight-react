@@ -6,7 +6,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import FormShare from './formShare';
 import { DotLoader } from './Loader';
 import DeleteModal from '../common/DeleteModal';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-unused-state  */
 /* eslint-disable react/no-array-index-key  */
 
@@ -49,7 +49,7 @@ class MyformTable extends Component {
           }
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
           dLoader: false,
         });
@@ -90,7 +90,7 @@ class MyformTable extends Component {
     axios
       .post(`${deleteUrl}`, { id_string: id })
 
-      .then(res => {
+      .then(() => {
         const newUserList = [...this.state.list];
         const deletedForm = newUserList.filter(
           user => user.id_string !== id,
@@ -100,7 +100,7 @@ class MyformTable extends Component {
           showDeleteConfirmation: false,
         });
       })
-      .catch(err => {
+      .catch(() => {
         // this.setState({
         //   dLoader: false
         // });
@@ -112,7 +112,14 @@ class MyformTable extends Component {
     return (
       <>
         <div className="myform-table">
-          {/*  <div className="add-btn"><a href="#/" onClick={this.props.myFormPopup}>Add new <span><i className="la la-plus"></i></span></a></div> */}
+          {/*  <div className="add-btn">
+          <a href="#/" onClick={this.props.myFormPopup}>
+          Add new
+           <span>
+           <i className="la la-plus"/>
+           </span>
+           </a>
+           </div> */}
           <div
             className="table-wrapper"
             style={{ position: 'relative', height: '500px' }}

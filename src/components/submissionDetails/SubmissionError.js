@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-/* eslint-disable react/prop-types  */
 
 const SubmissionError = ({ submissionErr }) => (
   <div
@@ -15,7 +14,14 @@ const SubmissionError = ({ submissionErr }) => (
     <h1>{submissionErr.status}</h1>
     <p>{submissionErr.msg}</p>
 
-    <a href="#" onClick={() => window.history.back()}>
+    <a
+      tabIndex="0"
+      role="button"
+      onKeyDown={() => {
+        window.history.back();
+      }}
+      onClick={() => window.history.back()}
+    >
       <b>
         <FormattedMessage id="app.back" defaultMessage="Back" />
       </b>

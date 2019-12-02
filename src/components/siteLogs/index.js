@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Logs from '../common/Logs';
 import { getSiteLogs } from '../../actions/siteDashboardActions';
-/* eslint-disable react/prop-types  */
+
 /* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
 
 const user_id = window.user_id ? window.user_id : 1;
 

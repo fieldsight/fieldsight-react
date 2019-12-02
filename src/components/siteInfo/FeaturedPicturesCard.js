@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-/* eslint-disable react/prop-types  */
-/* eslint-disable  jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/destructuring-assignment */
 
 class FeaturedPicturesCard extends Component {
   renderName = id => {

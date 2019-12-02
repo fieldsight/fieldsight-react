@@ -8,7 +8,7 @@ import isEmpty from '../../../utils/isEmpty';
 import withPagination from '../../../hoc/WithPagination';
 import TableHeader from '../../common/TableHeader';
 import TableRow from '../../common/TableRow';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 
 class RegionsTable extends React.Component {
   constructor(props) {

@@ -1,9 +1,8 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
-// import { loadState, saveState } from "./localStorage";
 
-// const persistedState = loadState();
+/* eslint-disable  no-underscore-dangle */
 
 const initialState = {};
 const isDev = process.env.PLATFORM === 'local';

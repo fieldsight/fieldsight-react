@@ -14,8 +14,7 @@ import DeleteModel from '../common/DeleteModal';
 /* eslint no-param-reassign: ["error", { "props": false }] */
 /* eslint-disable consistent-return  */
 /* eslint-disable  no-return-await  */
-/* eslint-disable react/static-property-placement */
-/* eslint-disable  react/sort-comp */
+/* eslint-disable react/destructuring-assignment */
 
 const urls = [
   'fieldsight/api/organization/',
@@ -69,7 +68,8 @@ class SiteInformation extends Component {
             );
 
             modifiedProjects = modifiedProjects.map(project => {
-              project.site_meta_attributes = project.site_meta_attributes.filter(
+              // project.site_meta_attributes =
+              project.site_meta_attributes.filter(
                 attribute => attribute.question_type !== 'Link',
               );
               return project;
@@ -97,7 +97,7 @@ class SiteInformation extends Component {
                   if (Array.isArray(question.mcq_options)) {
                     question.mcq_options.map((opt, i) => {
                       options[`option${i + 1}`] = opt.option_text;
-                      optInputField.push({
+                      return optInputField.push({
                         tag: InputElement,
                         val: i + 1,
                       });
@@ -129,12 +129,12 @@ class SiteInformation extends Component {
                     source: settings.source.toString(),
                   };
                 }
-              } else {
-                return {
-                  ...settings,
-                  source: settings.source.toString(),
-                };
               }
+              return {
+                ...settings,
+                source: settings.source.toString(),
+              };
+              // }
             },
           );
 
@@ -166,11 +166,10 @@ class SiteInformation extends Component {
           });
         }
       })
-      .catch(error => {
+      .catch(() => {
         this.setState({
           isLoading: false,
         });
-        console.log('error', error);
       });
   }
 
@@ -225,7 +224,7 @@ class SiteInformation extends Component {
 
           if (!Array.isArray(question.mcq_options)) {
             Object.values(question.mcq_options).map(opt => {
-              options.push({ option_text: opt });
+              return options.push({ option_text: opt });
             });
           }
 

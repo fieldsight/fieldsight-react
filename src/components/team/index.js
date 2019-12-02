@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import SelectElement from '../common/SelectElement';
 
 import { getTeam, getTranslate } from '../../actions/teamAction';
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/destructuring-assignment */
 
 class Teams extends Component {
   constructor(props) {
@@ -23,6 +23,12 @@ class Teams extends Component {
 
   componentDidMount() {
     this.props.getTeam();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.selected !== this.props.selected) {
+      localStorage.setItem('selected', this.props.selected);
+    }
   }
 
   componentWillReceiveProps(nextprops) {

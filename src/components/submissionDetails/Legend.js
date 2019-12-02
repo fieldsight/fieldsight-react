@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
 import { withLeaflet, MapControl } from 'react-leaflet';
 import L from 'leaflet';
 
 class Legend extends MapControl {
-  createLeafletElement(opts) {
+  createLeafletElement() {
     const MapInfo = L.Control.extend({
-      onAdd: map => {
+      onAdd: () => {
         this.panelDiv = L.DomUtil.create('div', 'info');
         this.panelDiv.innerHTML =
           '<table style="background:rgba(255, 255, 255, 0.75); padding: 2px;">' +

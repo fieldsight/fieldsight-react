@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import DashboardHeader from './dashboardComponent/DashBoardHeader';
 import DatatablePage from './dashboardComponent/DatatablePage';
@@ -25,7 +25,7 @@ import {
   getSubsites,
   putCropImage,
 } from '../../actions/siteDashboardActions';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase  */
 /* eslint-disable react/no-did-update-set-state  */
 

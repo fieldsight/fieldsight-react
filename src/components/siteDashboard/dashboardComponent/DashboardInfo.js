@@ -2,8 +2,6 @@ import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import uuid from 'uuid/v4';
 import { BlockContentLoader } from '../../common/Loader';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 const DashboardInfoItem = ({ meta, siteKey }) => (
   <li>
@@ -31,7 +29,7 @@ const Array = ({ siteMetas, showContentLoader }) => {
 
                   return (
                     data &&
-                    data.map((items, i) => (
+                    data.map(items => (
                       <>
                         <DashboardInfoItem
                           meta={items[1]}

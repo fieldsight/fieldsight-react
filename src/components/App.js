@@ -36,7 +36,6 @@ import SiteData from './viewDataComponents/siteViewData';
 import SiteSubmissionData from './viewDataComponents/siteViewData/FormSubmission';
 import VersionSubmissionData from './viewDataComponents/projectViewData/VersionTable';
 import VersionSiteSubmission from './viewDataComponents/siteViewData/VersionTable';
-
 import TeamDashboard from './teamDashboard';
 import TeamSetting from './settings/TeamSettings';
 import SubmissionData from './viewDataComponents/projectViewData/SubmissionTable';
@@ -55,7 +54,7 @@ import '../css/custom.css';
 import English from '../translations/en.json';
 import Nepali from '../translations/ne.json';
 
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
 /* eslint-disable lines-between-class-members */
 
@@ -63,14 +62,20 @@ const messages = {
   ne: Nepali,
   en: English,
 };
-const language = navigator.language.split(/[-_]/)[0]; // language without region code
+// const language = navigator.language.split(/[-_]/)[0];
+// language without region code
 
 class App extends Component {
   componentWillMount() {
     setDefault();
     // this.updateWindowDimensions();
-    // window.addEventListener("resize", this.updateWindowDimensions);
+    // window.addEventListener('resize', this.updateWindowDimensions);
   }
+
+  // componentWillUnmount() {
+  //   window.removeEventListener('resize', this.updateWindowDimensions);
+  // }
+
   render() {
     const { selected } = this.props;
 

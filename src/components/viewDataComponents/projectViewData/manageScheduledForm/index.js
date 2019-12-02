@@ -10,7 +10,7 @@ import DeleteTable from '../deleteTable';
 import { getProjectViewData } from '../../../../actions/viewDataActions';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 class ManageScheduledForm extends Component {
   constructor(props) {

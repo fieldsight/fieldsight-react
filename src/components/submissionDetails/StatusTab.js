@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import InputElement from '../common/InputElement';
 import RadioElement from '../common/RadioElement';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
+
 /* eslint-disable consistent-return  */
+/* eslint-disable react/destructuring-assignment */
 
 const checkStatus = statusData => {
   if (statusData.status_display === 'Pending') {
@@ -106,7 +106,8 @@ class StatusTab extends Component {
       >
         <div className="status-view">
           <a
-            href="#"
+            tabIndex="0"
+            role="button"
             className={
               statusData.status_display &&
               statusData.status_display.toLowerCase()

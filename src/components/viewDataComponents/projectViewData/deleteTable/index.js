@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ProjectDeleteTable from '../../responded/DeleteTable';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 
 class DeleteTable extends Component {
   constructor(props) {

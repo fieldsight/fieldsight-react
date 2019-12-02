@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { getSiteUser } from '../../actions/userDocumentActions';
+/* eslint-disable react/destructuring-assignment */
 
 class UserDocument extends Component {
   constructor(props) {

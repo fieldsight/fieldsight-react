@@ -10,6 +10,7 @@ import {
 
 import copy from '../utils/cloneNestedObject';
 /* eslint-disable camelcase */
+/* eslint-disable  no-unused-vars */
 
 /* eslint-disable no-param-reassign */
 

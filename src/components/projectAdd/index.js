@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Edit from '../common/editProject';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
 
 export default class ProjectAdd extends Component {
@@ -70,12 +70,12 @@ export default class ProjectAdd extends Component {
               });
             }
           })
-          .catch(err => {
-            console.log(err);
+          .catch(() => {
+            // console.log(err);
           });
       })
-      .catch(err => {
-        console.log(err, 'err');
+      .catch(() => {
+        // console.log(err, 'err');
       });
   }
 
@@ -138,8 +138,8 @@ export default class ProjectAdd extends Component {
           );
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
       });
   };
 

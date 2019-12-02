@@ -14,7 +14,7 @@ import {
   toggleSubmission,
 } from '../../actions/submissionDetailActions';
 
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
 
 const submissionId = window.submission_id

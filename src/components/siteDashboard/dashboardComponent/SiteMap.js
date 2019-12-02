@@ -8,7 +8,7 @@ import {
 import L, { latLngBounds } from 'leaflet';
 import { BlockContentLoader } from '../../common/Loader';
 import MarkerIcon from '../../../static/images/marker.png';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-did-update-set-state  */
 
 const { BaseLayer } = LayersControl;

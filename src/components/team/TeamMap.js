@@ -19,10 +19,13 @@ import 'animate.css/animate.min.css';
 import { calculaterange } from './functionss';
 
 require('leaflet.vectorgrid/dist/Leaflet.VectorGrid.bundled');
-
-// const WrappedVectorTileLayer = withLeaflet(VectorTileLayer);
-
-const { BaseLayer, Overlay } = LayersControl;
+const giphy = require('../../static/images/giphy.gif');
+const ring = require('../../static/images/ring.gif');
+/* eslint-disable */
+/* eslint-disable consistent-return  */
+/* eslint no-param-reassign: ["error", { "props": false }] */
+/* eslint-disable  no-new-func */
+const { BaseLayer } = LayersControl;
 
 class TeamMap extends React.Component {
   state = {
@@ -57,6 +60,119 @@ class TeamMap extends React.Component {
     // this.map = this.mapRef.current.leafletElement;
   }
 
+  componentDidMount() {
+    this.addGridLayer();
+    const map = this.mapRef.current.leafletElement;
+    const {
+      layerGroup,
+      prjidtosend,
+      projectcount,
+      vectorGrid,
+    } = this.state;
+    map.createPane('world_shp');
+    map.getPane('world_shp').style.zIndex = 250;
+    map.addLayer(layerGroup);
+    layerGroup.on('click', () => {
+      const a = document.getElementsByClassName('popButton');
+
+      // document.getElementsByClassName('popButton').addEventListener('click', () => {
+
+      for (let i = 0; i < a.length; i += 1) {
+        a[i].addEventListener('click', () =>
+          this.popUpClick(prjidtosend),
+        );
+      }
+    });
+
+    axios.get('fv3/api/map/countries/').then(response => {
+      const neww = [];
+      response.data.data.map(e => {
+        return neww.push({ value: e.pk, label: e.name });
+      });
+
+      this.setState({ Countries: neww });
+    });
+
+    axios.get('fv3/api/map/organizations/').then(response => {
+      // console.log(response.data)
+      const neww = [];
+      response.data.map(e => {
+        return neww.push({ value: e.pk, label: e.name });
+      });
+
+      this.setState({ Oraganization: neww });
+      // console.log("ORAGANIZATION", this.state.Oraganization)
+    });
+
+    axios.get('fv3/api/map/projects/').then(response => {
+      // console.log(response)
+      this.setState({
+        ProjectsData: response.data.data,
+        loader: false,
+      });
+    });
+
+    axios.get('fv3/api/map/projects-countries/').then(response => {
+      const Countarray = [];
+      // const {projectcount} = this.state
+      this.setState({ projectcount: response.data });
+
+      for (let i = 0; i < projectcount.length; i += 1) {
+        const newProjectcount = projectcount[i].projects;
+        Countarray.push(parseInt(newProjectcount, 10));
+      }
+      this.maxCount = Math.max(...Countarray);
+      this.minCount = Math.min(...Countarray);
+
+      this.rangearay = Funtionss.calculaterange(
+        this.minCount,
+        this.maxCount,
+        50,
+      );
+
+      this.onProjectcountload();
+    });
+
+    const refreshmap = L.control({ position: 'topleft' });
+
+    refreshmap.onAdd = m => {
+      const div = L.DomUtil.create('div', 'refreshmap');
+      div.title = 'Refresh Map';
+
+      div.innerHTML +=
+        "<img src='../../static/images/refresh.jpg'></img>";
+      div.addEventListener('click', () => {
+        // var mapp = this.mapRef.current.leafletElement;
+        // console.log(this.state.vectorGrid,"VECTOR");
+
+        m.eachLayer(e => map.removeLayer(e));
+        // console.log(map);
+        this.setVectorGridStyle(vectorGrid);
+        this.setState({ clicked: true });
+
+        m.addLayer(vectorGrid);
+        m.fitBounds(this.bounds);
+      });
+      return div;
+    };
+
+    refreshmap.addTo(map);
+  }
+
+  addGridLayer = () => {
+    const originalInitTile = L.GridLayer.prototype._initTile;
+    L.GridLayer.include({
+      _initTile(tile) {
+        originalInitTile.call(this, tile);
+
+        const tileSize = this.getTileSize();
+
+        tile.style.width = `${tileSize.x + 1}px`;
+        tile.style.height = `${tileSize.y + 1} px`;
+      },
+    });
+  };
+
   handleChange = e => {
     // console.log(e)
     // const newa=this.state.selectedOption.push(e[0].value);
@@ -66,7 +182,7 @@ class TeamMap extends React.Component {
 
     if (e !== null) {
       e.map(el => {
-        this.state.selectedOption.push(el.value);
+        return this.state.selectedOption.push(el.value);
       });
       // console.log(this.state.selectedOption);
     }
@@ -80,7 +196,7 @@ class TeamMap extends React.Component {
 
     if (e !== null) {
       e.map(el => {
-        this.state.selectedOptionOrg.push(el.value);
+        return this.state.selectedOptionOrg.push(el.value);
       });
       // console.log(this.state.selectedOptionOrg);
     }
@@ -392,7 +508,7 @@ class TeamMap extends React.Component {
         }
       });
 
-      mrk.addTo(this.state.layerGroup);
+      return mrk.addTo(this.state.layerGroup);
     });
   };
 
@@ -435,6 +551,7 @@ class TeamMap extends React.Component {
       ) {
         return true;
       }
+      return null;
     });
     const map = this.mapRef.current.leafletElement;
     this.state.layerGroup.eachLayer(l =>
@@ -469,7 +586,7 @@ class TeamMap extends React.Component {
           .addEventListener('click', () => this.popUpClick(e.pk)),
       );
 
-      mrk.addTo(this.state.layerGroup);
+      return mrk.addTo(this.state.layerGroup);
       // map.fitBounds(this.state.layerGroup.getBounds())
     });
     map.flyToBounds(this.state.layerGroup.getBounds(), {

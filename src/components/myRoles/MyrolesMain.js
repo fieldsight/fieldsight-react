@@ -12,7 +12,7 @@ import MapPage from './MapPage';
 import { successToast } from '../../utils/toastHandler';
 import withPagination from '../../hoc/WithPagination';
 import Modal from '../common/Modal';
-/* eslint-disable react/prop-types  */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-unused-state  */
 /* eslint-disable camelcase */
 
@@ -78,10 +78,10 @@ class MyrolesMain extends Component {
           }
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   }
 
-  invitationOpen = (e, data) => {
+  invitationOpen = () => {
     const { invite } = this.state;
     if (invite === 'hide') {
       this.setState({
@@ -120,7 +120,7 @@ class MyrolesMain extends Component {
           successToast('Invite', 'Rejected');
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   acceptHandler = (id, user) => {
@@ -143,7 +143,7 @@ class MyrolesMain extends Component {
           successToast('Invite', 'Accepted');
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   acceptAll = () => {
@@ -162,7 +162,7 @@ class MyrolesMain extends Component {
           successToast('All Invites', 'Accepted');
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   requestRegions = id => {
@@ -186,7 +186,7 @@ class MyrolesMain extends Component {
           );
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   requestSite = id => {
@@ -217,7 +217,7 @@ class MyrolesMain extends Component {
           });
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   requestMap = id => {
@@ -232,7 +232,7 @@ class MyrolesMain extends Component {
           });
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   cancelHandler = () => {

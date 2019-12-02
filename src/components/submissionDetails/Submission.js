@@ -13,10 +13,8 @@ import {
 import L, { latLngBounds } from 'leaflet';
 import Legend from './Legend';
 import MarkerIcon from '../../static/images/marker.png';
-/* eslint-disable react/prop-types  */
 /* eslint-disable camelcase */
 /* eslint-disable consistent-return  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 function measure(lat1, lon1, lat2, lon2) {
   // generally used geo measurement function
@@ -195,7 +193,11 @@ class Submission extends Component {
               <figure>
                 {submission.answer && (
                   <a
-                    href="#"
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={() => {
+                      this.openModal(submission.answer);
+                    }}
                     onClick={() => {
                       this.openModal(submission.answer);
                     }}

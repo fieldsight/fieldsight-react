@@ -14,16 +14,13 @@ import { RegionContext } from '../../context';
 import 'react-toastify/dist/ReactToastify.css';
 
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/static-property-placement */
-/* eslint-disable react/sort-comp */
+/* eslint-disable react/destructuring-assignment */
 
 class ManageRegion extends Component {
   static contextType = RegionContext;
 
   constructor(props) {
     super(props);
-
     this.state = {
       hide: '',
       response: '',
@@ -44,8 +41,8 @@ class ManageRegion extends Component {
           hide: res.data.cluster_sites,
         });
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
       });
   }
 
@@ -77,8 +74,8 @@ class ManageRegion extends Component {
             () => this.toast(),
           );
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     } else {
       axios
@@ -98,8 +95,8 @@ class ManageRegion extends Component {
             () => this.toast(),
           );
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     }
   };
