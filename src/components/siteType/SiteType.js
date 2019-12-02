@@ -11,6 +11,8 @@ import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 import Warning from '../common/DeleteModal';
 /* eslint-disable consistent-return  */
+/* eslint-disable react/static-property-placement */
+/* eslint-disable  react/sort-comp */
 
 const tableHeader = {
   siteTypes: ['app.id', 'app.type', 'app.action'],
@@ -31,11 +33,12 @@ const INITIAL_STATE = {
 class SiteType extends Component {
   _isMounted = false;
 
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
 
     this.state = INITIAL_STATE;
-    this.contextType = RegionContext;
   }
 
   componentDidMount() {

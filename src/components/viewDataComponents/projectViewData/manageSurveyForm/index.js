@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
-import PropTypes from 'prop-types';
 
 import ResponseTable from '../../responded/SurveyFormResponseTable';
 import DeleteTable from '../deleteTable';
@@ -105,6 +104,7 @@ class ManageSurveyForm extends Component {
                     type="button"
                     className="btn-toggle"
                     onClick={this.toggleHide}
+                    style={{ width: '97px' }}
                   >
                     <FormattedMessage
                       id="app.show"
@@ -121,6 +121,7 @@ class ManageSurveyForm extends Component {
                       backgroundColor: '#28a745',
                       color: 'white',
                       textAlign: 'left',
+                      width: '97px',
                     }}
                   >
                     <FormattedMessage
@@ -163,16 +164,7 @@ const mapStateToProps = ({ projectViewData }) => {
     survey_forms_loader,
   };
 };
-ManageSurveyForm.propTypes = {
-  deleted_forms: PropTypes.arrayOf.isRequired,
-  showViewData: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
-  getProjectViewData: PropTypes.func.isRequired,
-  data: PropTypes.string.isRequired,
-  survey_forms: PropTypes.arrayOf.isRequired,
-  url: PropTypes.string.isRequired,
-  survey_forms_loader: PropTypes.bool.isRequired,
-};
+
 export default compose(
   connect(mapStateToProps, {
     getProjectViewData,

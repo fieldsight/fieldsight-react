@@ -24,7 +24,8 @@ class ProjectLogs extends Component {
         params: { id },
       },
     } = this.props;
-    getProjectLogs(id);
+
+    this.props.getProjectLogs(id);
     this.setState({
       siteId: id,
     });

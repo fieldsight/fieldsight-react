@@ -95,10 +95,9 @@ export default class SiteAdd extends Component {
         Selectedtypes,
         deleteConfirm,
         delete_perm,
-        project_info,
       },
+      project_info,
     } = this.props;
-    // console.log(jsondata, "jsondata");
 
     return (
       <RightContentCard title="app.siteForm">
@@ -129,7 +128,12 @@ export default class SiteAdd extends Component {
             ''
           )}
         </div>
-        <form className="edit-form" onSubmit={onSubmitHandler}>
+        <form
+          className="edit-form"
+          onSubmit={e => {
+            e.preventDefault();
+          }}
+        >
           <div className="row">
             <div className="col-xl-4 col-md-6">
               <InputElement
@@ -437,6 +441,11 @@ export default class SiteAdd extends Component {
                         className="col-xl-4 col-md-6"
                         style={{ paddingBottom: '16px' }}
                       >
+                        {console.log(
+                          project_info,
+                          'jsondaar',
+                          project_info[data.question_name],
+                        )}
                         <InputElement
                           formType="editForm"
                           tag="input"
@@ -527,7 +536,7 @@ export default class SiteAdd extends Component {
                     {data.question_type === 'Link' ? (
                       <Select
                         data={data.project_id}
-                        // onchange={ondynamiChangeHandler}
+                        onchange={ondynamiChangeHandler}
                         value={project_info[data.question_name]}
                         type={data.question_text}
                         name={data.question_name}
@@ -543,6 +552,7 @@ export default class SiteAdd extends Component {
               <button
                 className="fieldsight-btn pull-right"
                 type="button"
+                onClick={onSubmitHandler}
               >
                 <FormattedMessage
                   id="app.save"

@@ -199,9 +199,15 @@ class TableRow extends Component {
     } = this;
     return (
       <tbody>
-        {tableRow.map((row, i) =>
-          tableRowMethod()[page](row, i, editHandler, removeHandler),
-        )}
+        {tableRow.length > 0 &&
+          tableRow.map((row, i) =>
+            tableRowMethod()[page](
+              row,
+              i,
+              editHandler,
+              removeHandler,
+            ),
+          )}
       </tbody>
     );
   }

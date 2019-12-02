@@ -14,6 +14,7 @@ const getProjectLogs = id => dispatch => {
       // dispatch({
       //   type: SITE_LOGS_ERR
       // });
+      console.log(err);
     });
 };
 

@@ -35,11 +35,6 @@ class DashboardHeader extends PureComponent {
         id: 'app.projects',
       },
       {
-        key: 1,
-        title: 'projects',
-        link: `/fieldsight/application/#/team-projects/${id}`,
-      },
-      {
         key: 2,
         title: `settings`,
         link: `/fieldsight/application/#/team-settings/${id}`,

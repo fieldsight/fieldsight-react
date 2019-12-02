@@ -109,6 +109,7 @@ class ManageScheduledForm extends Component {
                     type="button"
                     className="btn-toggle"
                     onClick={this.toggleHide}
+                    style={{ width: '97px' }}
                   >
                     <FormattedMessage
                       id="app.show"
@@ -125,6 +126,7 @@ class ManageScheduledForm extends Component {
                       backgroundColor: '#28a745',
                       color: 'white',
                       textAlign: 'left',
+                      width: '97px',
                     }}
                   >
                     <FormattedMessage
@@ -168,16 +170,7 @@ const mapStateToProps = ({ projectViewData }) => {
     scheduled_loader,
   };
 };
-ManageScheduledForm.propTypes = {
-  deleted_forms: PropTypes.arrayOf.isRequired,
-  showViewData: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
-  getProjectViewData: PropTypes.func.isRequired,
-  data: PropTypes.string.isRequired,
-  scheduled_forms: PropTypes.arrayOf.isRequired,
-  url: PropTypes.string.isRequired,
-  scheduled_loader: PropTypes.bool.isRequired,
-};
+
 export default compose(
   connect(mapStateToProps, {
     getProjectViewData,

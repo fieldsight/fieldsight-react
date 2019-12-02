@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
 
 import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
@@ -290,6 +289,11 @@ class SubmissionData extends Component {
                               onClick={() => {
                                 this.handleDelete(list.submission_id);
                               }}
+                              tabIndex="0"
+                              role="button"
+                              onKeyDown={() => {
+                                this.handleDelete(list.submission_id);
+                              }}
                             >
                               <i className="la la-trash-o" />
                             </a>
@@ -304,15 +308,28 @@ class SubmissionData extends Component {
                   <div className="table-footer">
                     <div className="showing-rows">
                       <p>
-                        Showing
+                        <FormattedMessage
+                          id="app.showing"
+                          defaultMessage="Showing"
+                        />
                         <span>{fromData}</span>
-                        to
+                        <FormattedMessage
+                          id="app.to"
+                          defaultMessage="to"
+                        />
                         <span>
                           {toData > totalCount ? totalCount : toData}
                         </span>
-                        of
+                        <FormattedMessage
+                          id="app.of"
+                          defaultMessage="of"
+                        />
                         <span>{totalCount}</span>
-                        entries.
+                        <FormattedMessage
+                          id="app.entries"
+                          defaultMessage="entries"
+                        />
+                        .
                       </p>
                     </div>
 
@@ -387,7 +404,12 @@ class SubmissionData extends Component {
                 <div className="card-body">
                   <div className="table-footer">
                     <div className="showing-rows">
-                      <p>Sorry No Data</p>
+                      <p>
+                        <FormattedMessage
+                          id="app.sorryNoData"
+                          defaultMessage="Sorry No Data"
+                        />
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -444,18 +466,5 @@ class SubmissionData extends Component {
     );
   }
 }
-SubmissionData.propTypes = {
-  match: PropTypes.objectOf.isRequired,
-  breadcrumbs: PropTypes.objectOf.isRequired,
-  form_id_string: PropTypes.string.isRequired,
-  is_survey: PropTypes.bool.isRequired,
-  siteList: PropTypes.arrayOf.isRequired,
-  fromData: PropTypes.number.isRequired,
-  toData: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  pageNum: PropTypes.number.isRequired,
-  renderPageNumbers: PropTypes.func.isRequired,
-  dLoader: PropTypes.bool.isRequired,
-  paginationHandler: PropTypes.func.isRequired,
-};
+
 export default WithPagination(SubmissionData);

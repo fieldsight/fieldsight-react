@@ -416,10 +416,15 @@ class Submission extends Component {
                   ])}
                 </time>
               ) : submission.type === 'select one' ? (
-                this.splitSubmissionObj(
-                  submission.selected['one-one'].label,
-                  submission.selected['one-one'].name,
-                )
+                submission.selected &&
+                Object.entries(submission.selected).map(one => (
+                  <p key={uuid()}>
+                    {this.splitSubmissionObj(
+                      one[1].label,
+                      one[1].name,
+                    )}
+                  </p>
+                ))
               ) : submission.type === 'select all that apply' ? (
                 Object.entries(submission.selected).map(many => (
                   <p key={uuid()}>

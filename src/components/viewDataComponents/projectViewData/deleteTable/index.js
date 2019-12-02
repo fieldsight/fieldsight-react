@@ -38,9 +38,5 @@ class DeleteTable extends Component {
     );
   }
 }
-DeleteTable.propTypes = {
-  deleted_forms: PropTypes.arrayOf.isRequired,
-  id: PropTypes.string.isRequired,
-  loader: PropTypes.bool.isRequired,
-};
+
 export default DeleteTable;

@@ -21,6 +21,7 @@ const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase  */
 /* eslint-disable consistent-return  */
+/* eslint-disable react/no-access-state-in-setstate  */
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -408,10 +409,11 @@ export default class SiteAdd extends Component {
   };
 
   handleCheckboxChange = e => {
+    const { checked } = e.target;
     this.setState(prevState => ({
       project: {
         ...prevState.project,
-        cluster_sites: e.target.checked,
+        cluster_sites: checked,
       },
     }));
   };

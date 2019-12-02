@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
+
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable react/destructuring-assignment */
+
+/* eslint-disable react/prop-types */
 
 class RejectedTable extends Component {
   componentDidMount() {
@@ -85,15 +87,28 @@ class RejectedTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing
+                      <FormattedMessage
+                        id="app.showing"
+                        defaultMessage="Showing"
+                      />
                       <span>{fromData}</span>
-                      to
+                      <FormattedMessage
+                        id="app.to"
+                        defaultMessage="to"
+                      />
                       <span>
                         {toData > totalCount ? totalCount : toData}
                       </span>
-                      of
+                      <FormattedMessage
+                        id="app.of"
+                        defaultMessage="of"
+                      />
                       <span>{totalCount}</span>
-                      entries.
+                      <FormattedMessage
+                        id="app.entries"
+                        defaultMessage="entries"
+                      />
+                      .
                     </p>
                   </div>
                   {toData < totalCount ? (
@@ -159,7 +174,12 @@ class RejectedTable extends Component {
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
-                    <p>Sorry No Data</p>
+                    <p>
+                      <FormattedMessage
+                        id="app.sorryNoData"
+                        defaultMessage="Sorry No Data"
+                      />
+                    </p>
                   </div>
                 </div>
               </div>
@@ -172,20 +192,5 @@ class RejectedTable extends Component {
     );
   }
 }
-RejectedTable.propTypes = {
-  id: PropTypes.string.isRequired,
-  breadcrumbs: PropTypes.objectOf.isRequired,
-  url: PropTypes.string.isRequired,
-  showViewData: PropTypes.func.isRequired,
-  siteList: PropTypes.arrayOf.isRequired,
-  fromData: PropTypes.number.isRequired,
-  toData: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  pageNum: PropTypes.number.isRequired,
-  renderPageNumbers: PropTypes.func.isRequired,
-  dLoader: PropTypes.bool.isRequired,
-  paginationHandler: PropTypes.func.isRequired,
-  data: PropTypes.objectOf.isRequired,
-  handleBreadCrumb: PropTypes.func.isRequired,
-};
+
 export default WithPagination(RejectedTable);

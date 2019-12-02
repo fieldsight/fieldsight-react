@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
+import { FormattedMessage } from 'react-intl';
 import DatePicker from 'react-datepicker';
 import RadioElement from '../common/RadioElement';
 import CheckBox from '../common/CheckBox';
@@ -244,67 +245,68 @@ class GlobalModalForm extends Component {
     const { name, value } = e.target;
 
     this.setState(() => {
-      switch (name) {
-        case 'status':
-          return {
-            status: value,
-          };
-        case 'donor':
-          return {
-            isDonor: JSON.parse(value),
-          };
-        case 'edit':
-          return {
-            isEdit: JSON.parse(value),
-          };
-        case 'delete':
-          return {
-            isDelete: JSON.parse(value),
-          };
-        case 'scheduleType':
-          return {
-            scheduleType: JSON.parse(value),
-            selectedDays: [],
-          };
-        case 'notifyIncomplete':
-          return {
-            notifyIncomplete: JSON.parse(value),
-          };
-        default:
-          return null;
-      }
-
-      //   if (name === 'status') {
+      // switch (name) {
+      //   case 'status':
       //     return {
       //       status: value,
       //     };
-      //   }
-      //   if (name === 'donor') {
+      //   case 'donor':
       //     return {
       //       isDonor: JSON.parse(value),
       //     };
-      //   }
-      //   if (name === 'edit') {
+      //   case 'edit':
       //     return {
       //       isEdit: JSON.parse(value),
       //     };
-      //   }
-      //   if (name === 'delete') {
+      //   case 'delete':
       //     return {
       //       isDelete: JSON.parse(value),
       //     };
-      //   }
-      //   if (name === 'scheduleType') {
+      //   case 'scheduleType':
       //     return {
       //       scheduleType: JSON.parse(value),
       //       selectedDays: [],
       //     };
-      //   }
-      //   if (name === 'notifyIncomplete') {
+      //   case 'notifyIncomplete':
       //     return {
       //       notifyIncomplete: JSON.parse(value),
       //     };
-      //   }
+      //   default:
+      //     return null;
+      // }
+
+      if (name === 'status') {
+        return {
+          status: JSON.parse(value),
+        };
+      }
+      if (name === 'donor') {
+        return {
+          isDonor: JSON.parse(value),
+        };
+      }
+      if (name === 'edit') {
+        return {
+          isEdit: JSON.parse(value),
+        };
+      }
+      if (name === 'delete') {
+        return {
+          isDelete: JSON.parse(value),
+        };
+      }
+      if (name === 'scheduleType') {
+        return {
+          scheduleType: JSON.parse(value),
+          selectedDays: [],
+        };
+      }
+      if (name === 'notifyIncomplete') {
+        return {
+          notifyIncomplete: JSON.parse(value),
+        };
+      }
+      return null;
     });
   };
 
@@ -633,7 +635,12 @@ class GlobalModalForm extends Component {
             <>
               {/* // for schedule form */}
               <div className="form-group checkbox-group">
-                <label>Type of schedule</label>
+                <label>
+                  <FormattedMessage
+                    id="app.typeofSchedule"
+                    defaultMessage="Type of schedule"
+                  />
+                </label>
                 <div className="custom-checkbox display-inline">
                   <RadioElement
                     label="Daily"
@@ -840,39 +847,48 @@ class GlobalModalForm extends Component {
           )}
 
           <div className="form-group flexrow checkbox-group">
-            <label>Default submission status</label>
+            <label>
+              <FormattedMessage
+                id="app.defaultSubmissionStatus"
+                defaultMessage="Default submission status"
+              />
+            </label>
             <div className="custom-checkbox display-inline">
               <RadioElement
-                label="Approved"
+                label="app.approved"
                 className="approved"
                 name="status"
                 value={3}
                 changeHandler={this.handleRadioChange}
                 checked={status === 3}
+                translation
               />
               <RadioElement
-                label="Pending"
+                label="app.pending"
                 className="pending"
                 name="status"
                 value={0}
                 changeHandler={this.handleRadioChange}
                 checked={status === 0}
+                translation
               />
               <RadioElement
-                label="Flagged"
+                label="app.flagged"
                 className="flagged"
                 name="status"
                 value={2}
                 changeHandler={this.handleRadioChange}
                 checked={status === 2}
+                translation
               />
               <RadioElement
-                label="Rejected"
+                label="app.rejected"
                 className="rejected"
                 name="status"
                 value={1}
                 changeHandler={this.handleRadioChange}
                 checked={status === 1}
+                translation
               />
             </div>
           </div>
@@ -880,7 +896,12 @@ class GlobalModalForm extends Component {
             regionDropdown &&
             regionDropdown.length > 0 && (
               <div>
-                <label>Regions</label>
+                <label>
+                  <FormattedMessage
+                    id="app.regions"
+                    defaultMessage="Regions"
+                  />
+                </label>
                 {hasLoaded && (
                   <Select
                     defaultValue={regionSelected}
@@ -893,7 +914,12 @@ class GlobalModalForm extends Component {
             )}
           {!isProjectWide && typeDropdown && typeDropdown.length > 0 && (
             <div>
-              <label>Types</label>
+              <label>
+                <FormattedMessage
+                  id="app.types"
+                  defaultMessage="Types"
+                />
+              </label>
               {hasLoaded && (
                 <Select
                   defaultValue={typeSelected}
@@ -963,7 +989,7 @@ class GlobalModalForm extends Component {
           </div> */}
           <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
-              Save
+              <FormattedMessage id="app.save" defaultMessage="Save" />
             </button>
           </div>
         </form>

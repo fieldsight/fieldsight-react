@@ -130,6 +130,7 @@ const GetActionForProject = props => {
     editAction,
     toDrag,
   } = props;
+
   if (formTable === 'project') {
     return (
       <div>
@@ -325,6 +326,7 @@ const GetActionForProject = props => {
             </a>
           </span>
         )}
+
         {isDelete && (
           <DeleteModal
             onConfirm={handleConfirm}

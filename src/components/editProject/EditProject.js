@@ -38,9 +38,11 @@ const urls = [
 class EditProject extends Component {
   _isMounted = false;
 
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
+
     this.state = {
       project: {
         name: '',

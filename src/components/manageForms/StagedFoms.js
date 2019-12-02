@@ -319,6 +319,7 @@ class StagedForms extends Component {
 
   handleCreateForm = data => {
     const { stageId, substageId, xf } = this.state;
+
     this.setState({ loadReq: true }, () => {
       if (substageId) {
         const body = {
@@ -327,7 +328,7 @@ class StagedForms extends Component {
           name: data.substageTitle,
           description: data.substageDesc,
           order: data.order,
-          xf: xf === true ? JSON.parse(xf) : '',
+          xf: xf ? JSON.parse(xf) : '',
           default_submission_status: data.status,
           setting: {
             types:
@@ -388,7 +389,7 @@ class StagedForms extends Component {
           name: data.substageTitle,
           description: data.substageDesc,
           order: this.state.subStageData.length + 1,
-          xf: xf === true ? JSON.parse(xf) : '',
+          xf: xf ? JSON.parse(xf) : '',
           default_submission_status: data.status,
           setting: {
             types:

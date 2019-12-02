@@ -42,10 +42,10 @@ const siteName = site => {
 };
 
 class ProjectSiteTable extends Component {
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-
-    this.contextType = RegionContext;
   }
 
   componentDidMount() {
@@ -204,7 +204,6 @@ class ProjectSiteTable extends Component {
                       />
                     </th>
                     <th>
-                      {' '}
                       <FormattedMessage
                         id="app.address"
                         defaultMessage="Address"

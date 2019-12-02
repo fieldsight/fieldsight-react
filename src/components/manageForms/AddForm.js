@@ -1,4 +1,5 @@
 import React, { Fragment, PureComponent } from 'react';
+import { FormattedMessage } from 'react-intl';
 import RadioElement from '../common/RadioElement';
 import { DotLoader } from '../myForm/Loader';
 
@@ -36,7 +37,10 @@ class AddForm extends PureComponent {
               role="button"
               onKeyDown={() => toggleTab('myForms')}
             >
-              My Forms
+              <FormattedMessage
+                id="app.my-forms"
+                defaultMessage="My Forms"
+              />
             </a>
           </li>
           <li className="nav-item">
@@ -51,7 +55,10 @@ class AddForm extends PureComponent {
               role="button"
               onKeyDown={() => toggleTab('sharedForms')}
             >
-              Shared Forms
+              <FormattedMessage
+                id="app.sharedForms"
+                defaultMessage="Shared Forms"
+              />
             </a>
           </li>
           <li className="nav-item">
@@ -66,7 +73,10 @@ class AddForm extends PureComponent {
               role="button"
               onKeyDown={() => toggleTab('projectForms')}
             >
-              Project Forms
+              <FormattedMessage
+                id="app.project-forms"
+                defaultMessage="Project Forms"
+              />
             </a>
           </li>
           {/* <li className="nav-item">
@@ -100,7 +110,12 @@ class AddForm extends PureComponent {
               <i className="la la-search" />
             </div>
             {formList.length === 0 ? (
-              <div>No Form Available</div>
+              <div>
+                <FormattedMessage
+                  id="app.noFormAvailable"
+                  defaultMessage="No Form Available"
+                />
+              </div>
             ) : (
               <div>
                 {formList.map((each, i) => {
@@ -160,7 +175,12 @@ class AddForm extends PureComponent {
               <i className="la la-search" />
             </div>
             {projectList.length === 0 ? (
-              <div>No Form Available</div>
+              <div>
+                <FormattedMessage
+                  id="app.noFormAvailable"
+                  defaultMessage="No Form Available"
+                />
+              </div>
             ) : (
               <div>
                 {projectList.map((each, i) => (
@@ -170,6 +190,7 @@ class AddForm extends PureComponent {
                         <div>
                           <h5>{each.name}</h5>
                         </div>
+                        {console.log(each.forms, 'each.forms')}
                         {each.forms.map(item => (
                           <div
                             className="form-group"
@@ -232,7 +253,12 @@ class AddForm extends PureComponent {
               <i className="la la-search" />
             </div>
             {sharedList.length === 0 ? (
-              <div>No Form Available</div>
+              <div>
+                <FormattedMessage
+                  id="app.noFormAvailable"
+                  defaultMessage="No Form Available"
+                />
+              </div>
             ) : (
               <div>
                 {sharedList.map((each, i) => {

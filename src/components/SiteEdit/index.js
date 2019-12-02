@@ -73,8 +73,6 @@ export default class SiteEdit extends Component {
       )
       .then(
         axios.spread((siteForm, breadcrumbRes) => {
-          // console.log("res", siteForm, breadcrumbRes);
-
           if (this._isMounted) {
             if (siteForm && breadcrumbRes) {
               axios
@@ -171,8 +169,7 @@ export default class SiteEdit extends Component {
     });
   };
 
-  onSubmitHandler = e => {
-    e.preventDefault();
+  onSubmitHandler = () => {
     const {
       match: {
         params: { id },
@@ -207,12 +204,8 @@ export default class SiteEdit extends Component {
       site_meta_attributes_ans: JSON.stringify(data),
     };
 
-    axios({
-      method: 'PUT',
-      url: `/fv3/api/site-form/${id}/`,
-      body,
-      headers: { 'content-type': 'application/json' },
-    })
+    axios
+      .put(`/fv3/api/site-form/${id}/`, body)
       .then(res => {
         if (res.status === 200) {
           this.props.history.push(`/site-dashboard/${res.data.id}`);
@@ -285,12 +278,17 @@ export default class SiteEdit extends Component {
     const {
       target: { name, value },
     } = e;
-    this.setState({
-      data: {
-        ...this.state.data,
-        [name]: value,
-      },
-    });
+    console.log(e.target.value, e.target.name, 'onchange');
+
+    this.setState(
+      prestate => ({
+        data: {
+          ...prestate.data,
+          [name]: value,
+        },
+      }),
+      () => console.log(this.state.data, 'data'),
+    );
   };
 
   handleDelete = () => {
@@ -345,6 +343,7 @@ export default class SiteEdit extends Component {
       delete_perm,
       jsondata,
     } = this.state;
+    console.log(data, 'kkkk', this.state.data);
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">

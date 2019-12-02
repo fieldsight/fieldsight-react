@@ -21,9 +21,10 @@ const tableHeader = {
 const url = 'fv3/api/project-terms-labels/';
 
 export default class TermAndLabel extends Component {
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
 
     this.state = {
       termsAndLabels: {

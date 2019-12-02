@@ -192,10 +192,10 @@ class ManageRegion extends Component {
                   defaultMessage="Turn OFF"
                 />
 
-                {/* <div
+                <div
                   className="handle"
                   style={{ left: 'auto', right: '0.1875rem' }}
-                ></div> */}
+                />
               </button>
             ) : (
               <button
@@ -211,7 +211,10 @@ class ManageRegion extends Component {
                   defaultMessage="Turn ON"
                 />
 
-                {/* <div className="handle"></div> */}
+                <div
+                  className="handle"
+                  // style={{ left: 'auto', right: '0.1875rem' }}
+                />
               </button>
             )}
           </div>

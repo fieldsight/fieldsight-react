@@ -56,6 +56,7 @@ import Nepali from '../translations/ne.json';
 
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
+/* eslint-disable lines-between-class-members */
 
 const messages = {
   ne: Nepali,
@@ -77,7 +78,6 @@ class App extends Component {
 
   render() {
     const { selected } = this.props;
-    // const { selected } = this.state;
 
     return (
       <IntlProvider locale={selected} messages={messages[selected]}>
@@ -85,13 +85,6 @@ class App extends Component {
           <div id="main-container">
             <div className="container-fluid">
               <main id="main-content">
-                {/* <SelectElement
-                  options={selectLanguage}
-                  label="Select Language"
-                  changeHandler={this.onLanguageChangeHandler}
-                  value={selected}
-               /> */}
-
                 <Router>
                   <Switch>
                     <Route
@@ -103,7 +96,7 @@ class App extends Component {
                       render={props => (
                         <TeamSetting
                           {...props}
-                          height={this.state.height}
+                          // height={this.state.height}
                         />
                       )}
                     />

@@ -27,9 +27,10 @@ const progressUrl = 'fv3/api/project/progress/add/';
 class SiteInformation extends Component {
   _isMounted = false;
 
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
 
     this.state = {
       forms: [],

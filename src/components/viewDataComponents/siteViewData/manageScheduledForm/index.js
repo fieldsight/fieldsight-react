@@ -9,6 +9,7 @@ import ResponseTable from '../../responded/ResponseTable';
 import DeleteTable from '../deleteTable';
 import { getsiteViewData } from '../../../../actions/siteViewDataAction';
 import { DotLoader } from '../../../myForm/Loader';
+
 /* eslint-disable camelcase */
 /* eslint-disable react/destructuring-assignment */
 

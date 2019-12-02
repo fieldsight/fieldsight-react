@@ -39,6 +39,12 @@ class Teams extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.selected !== this.props.selected) {
+      localStorage.setItem('selected', this.props.selected);
+    }
+  }
+
   handleChange = async e => {
     const {
       target: { value },
@@ -198,8 +204,7 @@ class Teams extends Component {
                           <tr key={project.id}>
                             <td>
                               <a
-                                href={`/fieldsight/application/#/
-                                team-dashboard/${project.id}`}
+                                href={`/fieldsight/application/#/team-dashboard/${project.id}`}
                                 className="pending table-profile"
                               >
                                 <figure>
@@ -218,8 +223,7 @@ class Teams extends Component {
                             <td>{project.users}</td>
                             <td>
                               <a
-                                href={`/users/profile/
-                                ${project.team_owner_id}`}
+                                href={`/fieldsight/application/#/profile/${project.team_owner_id}`}
                                 className="pending table-profile"
                               >
                                 {project.team_owner}
@@ -227,15 +231,13 @@ class Teams extends Component {
                             </td>
                             <td>
                               <a
-                                href={`/fieldsight/application/#/
-                                team-dashboard/${project.id}`}
+                                href={`/fieldsight/application/#/team-dashboard/${project.id}`}
                                 className="td-view-btn td-btn"
                               >
                                 <i className="la la-eye" />
                               </a>
                               <a
-                                href={`/fieldsight/application/#/
-                                team-settings/${project.id}`}
+                                href={`/fieldsight/application/#/team-settings/${project.id}`}
                                 className="td-edit-btn td-btn"
                               >
                                 <i className="la la-edit" />

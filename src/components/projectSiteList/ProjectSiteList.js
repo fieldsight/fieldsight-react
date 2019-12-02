@@ -18,9 +18,10 @@ const popUpState = {
 };
 
 class ProjectSiteList extends Component {
+  static contextType = RegionContext;
+
   constructor(props) {
     super(props);
-    this.contextType = RegionContext;
     this.state = {
       addModal: false,
       uploadModal: false,

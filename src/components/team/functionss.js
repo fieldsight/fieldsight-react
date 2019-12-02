@@ -3,7 +3,7 @@ function isOdd(num) {
   return num % 2;
 }
 
-const calculaterange = (start, end, step) => {
+export const calculaterange = (start, end, step) => {
   //
   // //
   const range = [];

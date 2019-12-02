@@ -7,6 +7,8 @@ import WithPagination from '../../../../hoc/WithPagination';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable react/destructuring-assignment */
 
+/* eslint-disable react/prop-types */
+
 class PendingTable extends Component {
   componentDidMount() {
     const { id } = this.props;
@@ -81,15 +83,28 @@ class PendingTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing
+                      <FormattedMessage
+                        id="app.showing"
+                        defaultMessage="Showing"
+                      />
                       <span>{fromData}</span>
-                      to
+                      <FormattedMessage
+                        id="app.to"
+                        defaultMessage="to"
+                      />
                       <span>
                         {toData > totalCount ? totalCount : toData}
                       </span>
-                      of
+                      <FormattedMessage
+                        id="app.of"
+                        defaultMessage="of"
+                      />
                       <span>{totalCount}</span>
-                      entries.
+                      <FormattedMessage
+                        id="app.entries"
+                        defaultMessage="entries"
+                      />
+                      .
                     </p>
                   </div>
                   {toData < totalCount ? (
@@ -155,7 +170,12 @@ class PendingTable extends Component {
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
-                    <p>Sorry No Data</p>
+                    <p>
+                      <FormattedMessage
+                        id="app.sorryNoData"
+                        defaultMessage="Sorry No Data"
+                      />
+                    </p>
                   </div>
                 </div>
               </div>
@@ -168,20 +188,5 @@ class PendingTable extends Component {
     );
   }
 }
-PendingTable.propTypes = {
-  id: PropTypes.string.isRequired,
-  paginationHandler: PropTypes.func.isRequired,
-  breadcrumbs: PropTypes.objectOf.isRequired,
-  handleBreadCrumb: PropTypes.func.isRequired,
-  data: PropTypes.objectOf.isRequired,
-  showViewData: PropTypes.bool.isRequired,
-  dLoader: PropTypes.bool.isRequired,
-  siteList: PropTypes.arrayOf.isRequired,
-  fromData: PropTypes.number.isRequired,
-  toData: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  pageNum: PropTypes.number.isRequired,
-  renderPageNumbers: PropTypes.func.isRequired,
-};
 
 export default WithPagination(PendingTable);

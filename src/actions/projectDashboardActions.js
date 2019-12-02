@@ -23,6 +23,7 @@ export const getProjectDashboard = id => dispatch => {
       // dispatch({
       //   type: SITE_DASHBOARD_ERR
       // });
+      console.log(err);
     });
 };
 

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
 
 import StatusTable from '../../responded/StatusTable';
 import { DotLoader } from '../../../myForm/Loader';
 import WithPagination from '../../../../hoc/WithPagination';
 /* eslint-disable react/destructuring-assignment */
+
+/* eslint-disable react/prop-types */
 
 class ApprovedTable extends Component {
   componentDidMount() {
@@ -80,15 +81,28 @@ class ApprovedTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing
+                      <FormattedMessage
+                        id="app.showing"
+                        defaultMessage="Showing"
+                      />
                       <span>{fromData}</span>
-                      to
+                      <FormattedMessage
+                        id="app.to"
+                        defaultMessage="to"
+                      />
                       <span>
                         {toData > totalCount ? totalCount : toData}
                       </span>
-                      of
+                      <FormattedMessage
+                        id="app.of"
+                        defaultMessage="of"
+                      />
                       <span>{totalCount}</span>
-                      entries.
+                      <FormattedMessage
+                        id="app.entries"
+                        defaultMessage="entries"
+                      />
+                      .
                     </p>
                   </div>
                   {toData < totalCount ? (
@@ -154,7 +168,12 @@ class ApprovedTable extends Component {
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
-                    <p>Sorry No Data</p>
+                    <p>
+                      <FormattedMessage
+                        id="app.sorryNoData"
+                        defaultMessage="Sorry No Data"
+                      />
+                    </p>
                   </div>
                 </div>
               </div>
@@ -167,19 +186,5 @@ class ApprovedTable extends Component {
     );
   }
 }
-ApprovedTable.propTypes = {
-  id: PropTypes.string.isRequired,
-  paginationHandler: PropTypes.func.isRequired,
-  breadcrumbs: PropTypes.objectOf.isRequired,
-  data: PropTypes.objectOf.isRequired,
-  showViewData: PropTypes.bool.isRequired,
-  dLoader: PropTypes.bool.isRequired,
-  siteList: PropTypes.arrayOf.isRequired,
-  fromData: PropTypes.number.isRequired,
-  toData: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  pageNum: PropTypes.number.isRequired,
-  handleBreadCrumb: PropTypes.func.isRequired,
-  renderPageNumbers: PropTypes.func.isRequired,
-};
+
 export default WithPagination(ApprovedTable);
