@@ -34,7 +34,7 @@ const initialState = {
   total_subsites: null,
   form_submissions_chart_data: {},
   site_progress_chart_data: {},
-  siteMetas: {},
+  siteMetas: [],
   siteSubmissions: [],
   siteDocuments: [],
   siteLogs: [],
@@ -49,9 +49,7 @@ const initialState = {
   siteDocumentsLoader: true,
   siteLogsLoader: true,
   sitePicturesLoader: true,
-  subSitesLoader: true,
-  current_progress: 0,
-  type: null
+  subSitesLoader: true
   // siteDashboardErr: false,
   // siteMetasErr: false,
   // siteSubmissionsErr: false,
@@ -92,7 +90,7 @@ export default function(state = initialState, action) {
     case GET_SITE_METAS:
       return {
         ...state,
-        siteMetas: action.payload,
+        siteMetas: [...action.payload],
         siteMetasLoader: false
       };
 

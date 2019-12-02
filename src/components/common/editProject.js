@@ -21,26 +21,27 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
 
-class EditProject extends Component {
-  state = {
-    data: ""
-  };
 
-  imageCroper = () => {
+
+class  EditProject extends Component {
+  state={
+    data:""
+  }
+  
+  imageCroper=()=>{
     if (typeof this.cropper.getCroppedCanvas() === "undefined") {
       return;
     }
-    this.setState(
-      {
-        data: this.cropper.getCroppedCanvas().toDataURL()
-      },
-      () => {
-        this.props.cropImage(this.state.data);
-      }
-    );
-  };
+    this.setState({
+      data: this.cropper.getCroppedCanvas().toDataURL(),
+       }, () =>{
 
-  render() {
+         this.props.cropImage(this.state.data)
+       });
+
+  }
+  
+  render(){
     const {
       onChangeHandler,
       onSubmitHandler,
@@ -53,7 +54,7 @@ class EditProject extends Component {
       website,
       donor,
       public_desc,
-      cluster_sites,
+      cluster_sites ,
       onSelectChangeHandler,
       selectedSubSector,
       handleCheckbox,
@@ -62,17 +63,21 @@ class EditProject extends Component {
       zoom,
       mapClickHandler,
       cropResult,
-      showCropper,
-      closeModal,
+      showCropper ,
+      closeModal ,
       src,
       cropImage,
       isLoading,
-      subSectors,
-      readFile
-    } = this.props;
-
+      subSectors,readFile} =this.props;
+     console.log(donor);
+     
+      
+      
+  
+  
     return (
-      <RightContentCard title={this.props.title}>
+        <RightContentCard title={this.props.title}>
+
         <form className="edit-form" onSubmit={onSubmitHandler}>
           <div className="row">
             <div className="col-xl-4 col-md-6">
@@ -88,10 +93,10 @@ class EditProject extends Component {
               />
             </div>
             <div className="col-xl-4 col-md-6">
-              <SelectElement
+            <SelectElement
                 className="form-control"
                 label="Sector"
-                options={sector.length > 0 ? sector.map(sect => sect) : sector}
+                options={sector.length>0?sector.map(sect => sect): sector}
                 changeHandler={onSelectChangeHandler}
                 value={selectedSector && selectedSector}
               />
@@ -100,21 +105,17 @@ class EditProject extends Component {
               <SelectElement
                 className="form-control"
                 label="Sub Sector"
-                options={
-                  subSectors.length > 0
-                    ? subSectors.map(subSect => subSect)
-                    : subSectors
-                }
+                options={subSectors.length>0?subSectors.map(subSect => subSect): subSectors}
                 changeHandler={e => onSelectChangeHandler(e, "subSect")}
                 value={selectedSubSector && selectedSubSector}
               />
-            </div>
+              </div>
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={false}
+                required={true}
                 label="Phone"
                 name="phone"
                 value={phone}
@@ -126,7 +127,7 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="email"
-                required={false}
+                required={true}
                 label="Email"
                 name="email"
                 value={email}
@@ -138,7 +139,7 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={false}
+                required={true}
                 label="Address"
                 name="address"
                 value={address}
@@ -176,7 +177,7 @@ class EditProject extends Component {
                 <CheckBox
                   checked={cluster_sites || ""}
                   label="Enable/Disable Clustering into Regions"
-                  changeHandler={handleCheckbox}
+                  onChange={handleCheckbox}
                 />
               </div>
             </div>
@@ -256,7 +257,10 @@ class EditProject extends Component {
                       return (
                         <section>
                           <div className="upload-form">
-                            <img src={cropResult} alt="Cropped Image" />
+                            <img
+                              src={cropResult}
+                              alt="Cropped Image"
+                            />
                           </div>
                           <div {...getRootProps()}>
                             <input {...getInputProps()} multiple={false} />
@@ -321,7 +325,9 @@ class EditProject extends Component {
                       preview=".img-preview"
                       guides={false}
                       src={src}
-                      ref={cropper => (this.cropper = cropper)}
+                      ref={cropper => 
+                        this.cropper = cropper
+                      }
                     />
                     <button
                       className="fieldsight-btn"
@@ -352,8 +358,15 @@ class EditProject extends Component {
         )}
         {isLoading && <Loader loaded={loaded} />}
       </RightContentCard>
-    );
-  }
+ 
+    )}
 }
 
+
+  
+  
+  
+   
+
+    
 export default EditProject;

@@ -9,7 +9,6 @@ import SubmissionModal from "./SubmissionModal";
 import Modal from "../../common/Modal";
 import Td from "../../common/TableData";
 import { DotLoader } from "../../common/Loader";
-import { Link } from "react-router-dom";
 
 // const projectId = window.project_id ? window.project_id : 137;
 
@@ -59,39 +58,27 @@ class DashboardHeader extends Component {
         subSitesLoader,
         termsAndLabels,
         hasWritePermission,
-        projectId,
-        currentProgress,
-        type
+        projectId
       },
       rotate,
       rotateLeft
     } = this;
-
     const ManageDropdown = [
-      {
-        title: "Generate Report",
-        link: `/fieldsight/site-dashboard/${siteId}/`
-      },
-      {
-        title: "View Data",
-        link: `/fieldsight/application/#/site-responses/${siteId}/general/`
-      }
+      { title: "Generate Report", link: `/fieldsight/site-dashboard/${siteId}/` },
+      { title: "View Data", link: `/forms/responses/${siteId}/` }
     ];
 
     const HeaderDropdown = [
       {
         title: `Edit ${termsAndLabels && termsAndLabels.site}`,
-        link: `/fieldsight/application/#/site-edit/${siteId}/`
+        link: `/fieldsight/site/${siteId}/`
       },
       {
         title: `${termsAndLabels && termsAndLabels.site} documents`,
-        link: `/fieldsight/application/#/site-documents/${siteId}/`
+        link: `/fieldsight/site/blue-prints/${siteId}/`
       },
       { title: "users", link: `/fieldsight/manage/people/site/${siteId}/` },
-      {
-        title: "forms",
-        link: `/fieldsight/application/#/site/manage-forms/0/${siteId}/generalform`
-      }
+      { title: "forms", link: `/forms/setup-forms/0/${siteId}` }
     ];
 
     return (
@@ -132,48 +119,9 @@ class DashboardHeader extends Component {
               </figure>
               <div className="dash-pf-content">
                 {name && <h5>{name}</h5>}
-                <div className="flex">
-                  {identifier && (
-                    <div className="col-sm-8">
-                      <label>
-                        <strong>Identifier:</strong>
-                      </label>
-                      &nbsp;
-                      <span>{identifier}</span>
-                    </div>
-                  )}
-                  {region && (
-                    <div className="col-sm-8">
-                      <label>
-                        <strong>Region:</strong>
-                      </label>
-                      &nbsp;
-                      <span>{region}</span>
-                    </div>
-                  )}
-                </div>
-                <div className="flex">
-                  {address && (
-                    <div className="col-sm-8">
-                      <label>
-                        <strong>Address:</strong>
-                      </label>
-                      &nbsp;
-                      <span>{address}</span>
-                    </div>
-                  )}
-                  {type && (
-                    <div className="col-sm-8">
-                      <label>
-                        <strong>Type:</strong>
-                      </label>
-                      &nbsp;
-                      <span>{type}</span>
-                    </div>
-                  )}
-                </div>
-                {/* {address && <span>{address}</span>}
-                {region && <span>{region} </span>} */}
+                {identifier && <span>{identifier}</span>}
+                {address && <span>{address}</span>}
+                {region && <span>{region} </span>}
               </div>
             </div>
           )}
@@ -184,6 +132,7 @@ class DashboardHeader extends Component {
                 variant=""
                 id="dropdown-Data"
                 className="fieldsight-btn"
+                
               >
                 <i className="fa fa-paste" />
                 <span>Data</span>
@@ -192,6 +141,7 @@ class DashboardHeader extends Component {
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map((item, i) => (
                   <Dropdown.Item href={item.link} key={i} target="_blank">
+                   
                     {item.title}
                   </Dropdown.Item>
                 ))}
@@ -221,17 +171,17 @@ class DashboardHeader extends Component {
         </div>
         <div className="card-body">
           <div className="header-count">
-            <Link to={`/site-responses/${siteId}/general`} target="_blank">
+            <a
+              href={`/forms/responses/${siteId}/`}
+              target="_blank"
+            >
               <CountCard
                 countName=""
                 countNumber={totalSubmission}
                 icon="la-clone"
               />
-            </Link>
-            <a
-              href={`/fieldsight/application/#/site-users/${siteId}/`}
-              target="_blank"
-            >
+            </a>
+            <a href={`/fieldsight/application/#/site-users/${siteId}/`} target="_blank">
               <CountCard
                 countName="User"
                 countNumber={totalUsers}
@@ -258,12 +208,6 @@ class DashboardHeader extends Component {
                 </a>
               </div>
             )}
-            <CountCard
-              countName="Progress"
-              icon="la-signal"
-              countNumber={currentProgress}
-              noSubmissionText={true}
-            />
           </div>
 
           {showModal && (
@@ -345,7 +289,7 @@ class DashboardHeader extends Component {
               title="Subsites"
               toggleModal={() => closeModal("Subsites")}
               showButton={enableSubsites && hasWritePermission}
-              url={`/fieldsight/application/#/sub-site-add/${projectId}/${siteId}`}
+              url={`/fieldsight/site/add/subsite/${projectId}/${siteId}`}
             >
               {subSitesLoader ? (
                 <DotLoader />
@@ -392,7 +336,7 @@ class DashboardHeader extends Component {
                             </div>
                           </Td>
                           <Td to={`/site-dashboard/${subSite.id}`}>
-                            {subSite.submissions}
+                            {subSite.submission}
                           </Td>
                           <Td to={`/site-dashboard/${subSite.id}`}>
                             {subSite.type}

@@ -5,7 +5,6 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import FormShare from "./formShare";
 import { DotLoader } from "./Loader";
 import Modal from "../common/Modal";
-import DeleteModal from "../common/DeleteModal";
 
 const url = "fv3/api/myforms/";
 const deleteUrl = "/fv3/api/form/delete/";
@@ -134,14 +133,24 @@ class MyformTable extends Component {
           </div>
         </div>
         {this.state.showDeleteConfirmation && (
-          <DeleteModal
-            onConfirm={this.confirmHandler}
-            onCancel={this.cancelHandler}
-            onToggle={this.cancelHandler}
-            message={
-              "Any submissions submitted in the form will be deleted and will be lost from project and sites associated. Are you sure you want to delete the form?"
-            }
-          />
+          <Modal title="Warning" toggleModal={this.cancelHandler}>
+            <div className="warning">
+              <i className="la la-exclamation-triangle" />
+
+              <p>Any submissions submitted in the form will be deleted and will be lost from project and sites associated. Are you sure you want to delete the form?</p>
+            </div>
+            <div className="warning-footer text-center">
+              <a
+                className="fieldsight-btn rejected-btn"
+                onClick={this.cancelHandler}
+              >
+                cancel
+              </a>
+              <a className="fieldsight-btn" onClick={this.confirmHandler}>
+                confirm
+              </a>
+            </div>
+          </Modal>
         )}
       </React.Fragment>
     );

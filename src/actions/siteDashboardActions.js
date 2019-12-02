@@ -104,6 +104,8 @@ export const getSiteLogs = id => dispatch => {
   axios
     .get(`events/api/site_logs/${id}/`)
     .then(res => {
+      
+      
       dispatch({
         type: GET_SITE_LOGS,
         payload: res.data.results

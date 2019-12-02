@@ -16,26 +16,12 @@ const SubmissionSiteInfo = ({ siteInformation }) => (
         {siteInformation && Object.keys(siteInformation).length > 0 ? (
           <PerfectScrollbar>
             <ul>
-              {Object.entries(siteInformation).map((info, i) => {
-                if (info[1].children) {
-                  const childEntries = Object.entries(info[1].children);
-                  return childEntries.map((child, i) => {
-                    return (
-                      <li key={`${child[0]}${i}`}>
-                        <label>{child[0]} :</label>
-                        {child[1]}
-                      </li>
-                    );
-                  });
-                } else {
-                  return (
-                    <li key={`${info[0]}${i}`}>
-                      <label>{info[0]} :</label>
-                      {info[1]}
-                    </li>
-                  );
-                }
-              })}
+              {Object.entries(siteInformation).map((info, i) => (
+                <li key={`${info[0]}${i}`}>
+                  <label>{info[0]} :</label>
+                  {info[1]}
+                </li>
+              ))}
             </ul>
           </PerfectScrollbar>
         ) : (

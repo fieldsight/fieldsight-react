@@ -13,6 +13,7 @@ const RightContentCard = ({
       {addButton && (
         <div className="add-btn">
           <a onClick={toggleModal}>
+            {" "}
             <span>
               <i className="la la-plus" />
             </span>

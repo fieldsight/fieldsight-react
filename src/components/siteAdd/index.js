@@ -76,13 +76,32 @@ export default class SiteAdd extends Component {
     axios
       .get(`/fv3/api/site-form/?project=${id}`)
       .then(res => {
-        console.log(res, "res");
         let regionArr = this.state.region;
         let typeArr = this.state.site_types;
+        if (res.data.location) {
+          const position = res.data.location && res.data.location.split(" ");
+          const longitude = position && position[1].split("(")[1];
+          const latitude = position && position[2].split(")")[0];
+
+          this.setState({
+            position: {
+              latitude,
+              longitude
+            }
+          });
+        } else {
+          this.setState({
+            position: {
+              latitude: "51.505",
+              longitude: "-0.09"
+            }
+          });
+        }
+
         this.setState(state => {
           res.data.regions !== undefined &&
             res.data.regions.map(each => regionArr.push(each));
-          res.data.regions.site_types !== undefined &&
+          res.data.regions !== undefined &&
             res.data.site_types.map(each => typeArr.push(each));
           return {
             jsondata: res.data.json_questions,
@@ -164,6 +183,7 @@ export default class SiteAdd extends Component {
         (select = this.state.dataSelected)
       )
     };
+
     const region = {
       project: this.state.id,
       name: this.state.project.name,
@@ -183,6 +203,7 @@ export default class SiteAdd extends Component {
       ),
       subsite: this.state.siteId
     };
+
     if (this.props.page === "CreateSite") {
       axios({
         method: "POST",

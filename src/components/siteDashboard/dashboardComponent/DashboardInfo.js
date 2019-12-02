@@ -3,74 +3,33 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import uuid from "uuid/v4";
 import { BlockContentLoader } from "../../common/Loader";
 
-const DashboardInfoItem = ({ meta, siteKey }) => (
+const DashboardInfoItem = ({ meta }) => (
   <li>
     <p>
-      <label>{siteKey} :</label> {meta}
+      <label>{meta.question_text} :</label> {meta.answer}
     </p>
   </li>
 );
-const Array = ({ siteMetas, showContentLoader }) => {
-  return (
-    <>
-      {showContentLoader ? (
-        <BlockContentLoader number={16} height="15px" />
-      ) : (
-        <PerfectScrollbar>
-          <div className="info-wrap">
-            <ul>
-              {Object.entries(siteMetas).map(meta => {
-                if (meta[1].children) {
-                  const data =
-                    meta[1].children && Object.entries(meta[1].children);
-
-                  return (
-                    data &&
-                    data.map((items, i) => (
-                      <>
-                        <DashboardInfoItem
-                          meta={items[1]}
-                          siteKey={items[0]}
-                          key={uuid()}
-                        />
-                      </>
-                    ))
-                  );
-                } else {
-                  return (
-                    <DashboardInfoItem
-                      meta={meta[1]}
-                      siteKey={meta[0]}
-                      key={uuid()}
-                    />
-                  );
-                }
-              })}
-            </ul>
-          </div>
-        </PerfectScrollbar>
-      )}
-    </>
-  );
-};
 
 const DashboardInfo = ({ siteMetas, showContentLoader }) => (
   <>
-    <Array siteMetas={siteMetas} showContentLoader={showContentLoader} />
-    {/*showContentLoader ? (
+    {showContentLoader ? (
       <BlockContentLoader number={16} height="15px" />
     ) : (
       <PerfectScrollbar>
         <div className="info-wrap">
           <ul>
-            {//Object.keys(siteMetas).length > 0 ? (
-            Object.keys(siteMetas).map(meta => (
-              <DashboardInfoItem meta={meta} key={uuid()} />
-            ))}
+            {siteMetas.length > 0 ? (
+              siteMetas.map(meta => (
+                <DashboardInfoItem meta={meta} key={uuid()} />
+              ))
+            ) : (
+              <p> No Data Available</p>
+            )}
           </ul>
         </div>
       </PerfectScrollbar>
-            )*/}
+    )}
   </>
 );
 export default DashboardInfo;

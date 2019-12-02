@@ -36,7 +36,7 @@ const INITIAL_STATE = {
   showCropper: false,
   showSubsites: false,
   showGallery: false,
-  siteId: ""
+  
 };
 class SiteDashboard extends Component {
   state = INITIAL_STATE;
@@ -94,7 +94,8 @@ class SiteDashboard extends Component {
 
   componentDidMount() {
     const { id: siteId } = this.props.match.params;
-
+    
+    
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
     this.props.getSiteSubmissions(siteId);
@@ -102,9 +103,6 @@ class SiteDashboard extends Component {
     this.props.getSiteLogs(siteId);
     this.props.getSiteForms(siteId, "general");
     this.props.getRecentPictures(siteId);
-    this.setState({
-      siteId
-    });
   }
 
   componentDidUpdate(prevProps) {
@@ -126,7 +124,7 @@ class SiteDashboard extends Component {
       );
     }
   }
-  render() {
+  render() { 
     const {
       props: {
         siteDashboard: {
@@ -161,9 +159,7 @@ class SiteDashboard extends Component {
           sitePicturesLoader,
           subSitesLoader,
           has_write_permission,
-          breadcrumbs,
-          current_progress,
-          type
+          breadcrumbs
         },
         getSiteForms,
         putCropImage,
@@ -183,6 +179,7 @@ class SiteDashboard extends Component {
       openModal,
       toggleTab
     } = this;
+
 
     return (
       <>
@@ -244,8 +241,6 @@ class SiteDashboard extends Component {
                 showGallery={showGallery}
                 hasWritePermission={has_write_permission}
                 projectId={project_id}
-                currentProgress={current_progress}
-                type={type}
               />
               <div className="row">
                 <div className="col-lg-6">
@@ -323,10 +318,7 @@ class SiteDashboard extends Component {
               </div>
               <div className="dashboard-counter mrt-30">
                 <div className="row">
-                  <DashboardCounter
-                    submissions={submissions}
-                    siteid={this.state.siteId}
-                  />
+                  <DashboardCounter submissions={submissions} />
                 </div>
               </div>
               <div className="chart mrb-30">

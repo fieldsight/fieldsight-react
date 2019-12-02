@@ -109,7 +109,6 @@ export default class MapLayer extends Component {
       onSubmitHandler,
       handleMultiChange
     } = this;
-
     return (
       <Fragment>
         <RightContentCard title="Map Layer">

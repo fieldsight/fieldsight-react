@@ -12,7 +12,6 @@ class SideBar extends Component {
     const {
       match: { path, url }
     } = this.props;
-
     return (
       <React.Fragment>
         <div className="col-xl-3 col-lg-4">

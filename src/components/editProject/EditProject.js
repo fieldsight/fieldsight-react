@@ -13,7 +13,6 @@ import Loader from "../common/Loader";
 import { errorToast, successToast } from "../../utils/toastHandler";
 import { RegionContext } from "../../context";
 import "leaflet/dist/leaflet.css";
-import { markerIcon } from "../common/Marker";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -87,7 +86,7 @@ class EditProject extends Component {
       website,
       donor,
       public_desc,
-      // cluster_sites,
+      cluster_sites,
       ...(cropResult && { logo: cropResult }),
       latitude,
       longitude,
@@ -95,6 +94,7 @@ class EditProject extends Component {
       sub_sector: selectedSubSector,
       organization
     };
+
     axios
       .put(`${urls[0]}${projectId}/`, project, {
         onUploadProgress: progressEvent => {
@@ -133,6 +133,7 @@ class EditProject extends Component {
       this.requestHandler
     );
   };
+ 
 
   onSelectChangeHandler = (e, subSect) => {
     const { value } = e.target;
@@ -160,10 +161,10 @@ class EditProject extends Component {
     });
 
   onChangeHandler = (e, position) => {
+  
     const { name, value } = e.target;
-    // debugger;
     if (position) {
-      this.setState({
+      return this.setState({
         position: {
           ...this.state.position,
           [name]: value
@@ -182,7 +183,6 @@ class EditProject extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { projectId } = this.context;
-
     axios
       .all(
         urls.map((url, i) => {
@@ -190,7 +190,7 @@ class EditProject extends Component {
         })
       )
       .then(
-        axios.spread((project, sector) => {
+        axios.spread((project, sector) => { 
           if (this._isMounted) {
             if (project && sector) {
               const position =
@@ -242,10 +242,10 @@ class EditProject extends Component {
   };
 
   cropImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+      if (typeof this.cropper.getCroppedCanvas() === "undefined") {
       return;
-    }
-    this.setState({
+      }
+   this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
       src: ""
@@ -269,6 +269,7 @@ class EditProject extends Component {
   };
 
   render() {
+  
     const {
       state: {
         loaded,
@@ -396,15 +397,15 @@ class EditProject extends Component {
                 />
               </div>
             </div>
-            {/*  <div className="col-xl-4 col-md-6">
+            <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <CheckBox
                   checked={cluster_sites || ""}
                   label="Enable/Disable Clustering into Regions"
-                  changeHandler={this.handleCheckboxChange}
+                  onChange={this.handleCheckboxChange}
                 />
               </div>
-    </div>*/}
+            </div>
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"
@@ -434,7 +435,7 @@ class EditProject extends Component {
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[latitude, longitude]} icon={markerIcon}>
+                    <Marker position={[latitude, longitude]}>
                       <Popup>
                         <b>Name: </b>
                         {name}
@@ -447,7 +448,6 @@ class EditProject extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
-                        // step="any"
                         required={true}
                         label="Latitude"
                         name="latitude"
@@ -476,7 +476,7 @@ class EditProject extends Component {
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label> {cropResult ? "Preview" : "Attach File"}</label>
-
+               
                 {cropResult ? (
                   <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
                     {({ getRootProps, getInputProps }) => {
@@ -488,7 +488,7 @@ class EditProject extends Component {
                               alt="Cropped Image"
                             />
                           </div>
-
+                          
                           <div {...getRootProps()}>
                             <input {...getInputProps()} multiple={false} />
                             <div className="upload-icon" />

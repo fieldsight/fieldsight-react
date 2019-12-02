@@ -6,23 +6,20 @@ import {
   UPDATE_SUBMISSION_DETAIL,
   STOP_SUBMISSION_LOADER,
   TOGGLE_NULL_SUBMISSIONS_ANSWER,
-  SHOW_SUBMISSION_ERR_MSG,
   SHOW_DOT_LOADER
 } from "./types";
 import { successToast, errorToast } from "../utils/toastHandler";
 
 export const getSubmissionDetail = id => dispatch => {
-  dispatch({
-    type: START_SUBMISSION_LOADER
-  });
-
   const splitedData = id.toString().split("/");
+
   if (splitedData.length > 1) {
+    dispatch({
+      type: START_SUBMISSION_LOADER
+    });
     axios
       .get(`${id}`)
       .then(res => {
-        console.log(res, "STOP_SUBMISSION_LOADER");
-
         dispatch({
           type: STOP_SUBMISSION_LOADER
         });
@@ -39,21 +36,13 @@ export const getSubmissionDetail = id => dispatch => {
   } else {
     axios
       .get(`fv3/api/submission/${id}/`)
-
       .then(res => {
-        dispatch({
-          type: STOP_SUBMISSION_LOADER
-        });
         dispatch({
           type: GET_SUBMISSION_DETAIL,
           payload: res.data
         });
       })
       .catch(err => {
-        dispatch({
-          type: SHOW_SUBMISSION_ERR_MSG,
-          err: { msg: err.response.data.detail, status: err.response.status }
-        });
         dispatch({
           type: STOP_SUBMISSION_LOADER
         });

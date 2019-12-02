@@ -56,8 +56,6 @@
                 flex-wrap: nowrap;
 
                 figure {
-                    flex: 0 0 40px;
-                    -ms-flex: 0 0 40px;
                     max-width: 40px;
                     margin: 0;
                     overflow: hidden;
@@ -72,19 +70,18 @@
                 }
 
                 h5 {
-                    font-size: 0.845rem;
-                    font-weight: 400;
+                    font-size: 0.875rem;
                 }
             }
 
             a.tag {
                 margin-right: 0.7rem;
                 @include radius4;
-                font-size: 0.845rem;
+                font-size: 0.875rem;
 
                 i {
                     font-size: 1rem;
-                    font-weight: 400;
+                    font-weight: 600;
                     margin-right: 0.2rem;
                 }
 
@@ -235,8 +232,7 @@
 
                     a {
                         &.td-btn {
-                            margin: 0 0.25rem;
-                            display: inline-block;
+                            margin: 0 0.625rem;
                         }
 
                         &.td-edit-btn {
@@ -275,7 +271,7 @@
                                 font-size: 0.875rem;
                                 margin: 0.5rem 0 0 0;
                                 padding: 0 0 0.5rem 0;
-                                font-weight: 500;
+                                font-weight: 600;
                                 border-bottom: 1px solid $color-bg;
                             }
 
@@ -321,9 +317,7 @@
 
                 &.selected {
                     background-color: $color-bg;
-                }
-                &:hover{
-                    background-color: lighten($color-bg,7%);
+                    ;
                 }
 
             }
@@ -442,14 +436,6 @@
                             color: $color-white !important;
                         }
                     }
-                    &.disable-btn{
-                        background-color:$color-bg;
-                        opacity: .75;
-                        cursor:not-allowed;
-                        a{
-                            cursor:not-allowed;
-                        }
-                    }
                 }
             }
         }
@@ -461,7 +447,7 @@
 
             h4 {
                 font-size: 1rem;
-                font-weight: 400;
+                font-weight: 500;
                 text-transform: capitalize;
                 padding-bottom: 0.5rem;
                 border-bottom: 1px solid $color-bg;

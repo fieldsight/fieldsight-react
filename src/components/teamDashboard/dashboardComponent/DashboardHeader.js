@@ -30,7 +30,7 @@ class DashboardHeader extends Component {
       },
       {
         title: `settings`,
-        link: `/fieldsight/application/#/team-settings/${id}`
+        link: `/fieldsight/organization/${id}`
       }
     ];
 

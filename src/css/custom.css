@@ -2,10 +2,6 @@
   background: #00628e;
 }
 
-.Toastify__toast-container {
-  z-index: 999999;
-}
-
 #lightboxBackdrop {
   z-index: 9999;
 }

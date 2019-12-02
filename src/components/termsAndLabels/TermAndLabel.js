@@ -29,7 +29,7 @@ export default class TermAndLabel extends Component {
       region_supervisor: "",
       region_reviewer: "",
       //project: window.project_id ? window.project_id : 137
-      project: window.project_id
+       project: window.project_id
     },
     showList: true,
     isLoading: false
@@ -119,6 +119,7 @@ export default class TermAndLabel extends Component {
     if (!isEmpty(terms)) {
       this.setState({
         termsAndLabels: { ...terms, project: projectId }
+        // dotLoader: false
       });
     }
   }
@@ -177,7 +178,6 @@ export default class TermAndLabel extends Component {
     } = this;
 
     const { id, project, ...restLabels } = this.state.termsAndLabels;
-
     return (
       <Fragment>
         <RightContentCard title="Terms And Labels">
@@ -194,7 +194,7 @@ export default class TermAndLabel extends Component {
                       label="Donor"
                       name="donor"
                       value={donor}
-                      required={false}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -207,7 +207,7 @@ export default class TermAndLabel extends Component {
                       label="Site"
                       name="site"
                       value={site}
-                      required={false}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -219,7 +219,7 @@ export default class TermAndLabel extends Component {
                       label="Site Supervisor"
                       name="site_supervisor"
                       value={site_supervisor}
-                      required={false}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -231,7 +231,7 @@ export default class TermAndLabel extends Component {
                       label="Site Reviewer"
                       name="site_reviewer"
                       value={site_reviewer}
-                      required={false}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -243,7 +243,7 @@ export default class TermAndLabel extends Component {
                       label="Region"
                       name="region"
                       value={region}
-                      required={false}
+                      required={true}
                       changeHandler={onChangeHandler}
                     />
                   </div>
@@ -256,7 +256,7 @@ export default class TermAndLabel extends Component {
                         label="Region Supervisor"
                         name="region_supervisor"
                         value={region_supervisor}
-                        required={false}
+                        required={true}
                         changeHandler={onChangeHandler}
                       />
                     </div>
@@ -270,7 +270,7 @@ export default class TermAndLabel extends Component {
                         label="Region Reviewer"
                         name="region_reviewer"
                         value={region_reviewer}
-                        required={false}
+                        required={true}
                         changeHandler={onChangeHandler}
                       />
                     </div>

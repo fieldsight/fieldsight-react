@@ -15,7 +15,7 @@ import Modal from "../common/Modal";
 class MyrolesMain extends Component {
   state = {
     invite: null,
-    rightTab: "site",
+    rightTab: "region",
     profile: [],
     invitation: [],
     roles: [],
@@ -34,8 +34,8 @@ class MyrolesMain extends Component {
     searchQuery: ""
   };
 
-  // componentDidMount() {
-  componentWillMount() {
+ // componentDidMount() {
+  componentWillMount(){
     const { profileId } = this.props.match.params;
     let url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
@@ -72,8 +72,9 @@ class MyrolesMain extends Component {
         }
       })
       .catch(err => {});
+     
   }
-
+  
   invitationOpen = (e, data) => {
     if (this.state.invite == "hide") {
       this.setState({
@@ -260,8 +261,10 @@ class MyrolesMain extends Component {
   };
   render() {
     const { profileId } = this.props.match.params;
-    const { myGuide } = this.state;
-
+    const {myGuide} =this.state;
+   
+   
+    
     return (
       <>
         <div className="card mrb-30">
@@ -297,18 +300,6 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == "site"
-                              ? "nav-link active"
-                              : "nav-link"
-                          }
-                          onClick={e => this.rightTabOpen(e, "site")}
-                        >
-                          Sites
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          className={
                             this.state.rightTab == "region"
                               ? "nav-link active"
                               : "nav-link"
@@ -316,6 +307,18 @@ class MyrolesMain extends Component {
                           onClick={e => this.rightTabOpen(e, "region")}
                         >
                           Regions
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className={
+                            this.state.rightTab == "site"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          onClick={e => this.rightTabOpen(e, "site")}
+                        >
+                          Sites
                         </a>
                       </li>
                       <li className="nav-item">
@@ -361,16 +364,17 @@ class MyrolesMain extends Component {
                             display: "flex"
                           }}
                         >
-                          <input
+                         <input
                             type="search"
                             className="form-control"
                             onChange={this.onChangeHandler}
                             placeholder="Search"
                           />
-                          <div style={{ marginTop: " 0.6rem" }}>
-                            <i className="la la-search" />
+                          <div style={{marginTop:" 0.6rem"}}>
+                          <i className="la la-search"  />
                           </div>
                           {/* <label htmlFor="input">Search</label> */}
+                         
                         </div>
                       </form>
                       // </div>
@@ -386,23 +390,19 @@ class MyrolesMain extends Component {
 
                     {this.state.rightTab == "region" && (
                       <RegionTable
-                        // initialTeamId={this.state.initialTeamId}
-                        // requestRegions={this.requestRegions}
-                        // requestSite={this.requestSite}
-                        // requestSubmission={this.requestSubmission}
-                        // requestMap={this.requestMap}
-                        regions={this.state.regions}
-                        RegionLoader={this.state.RegionLoader}
-                        profileId={profileId}
-                      />
-                    )}
-                    {this.state.rightTab == "site" && (
-                      <SiteTable
                         initialTeamId={this.state.initialTeamId}
                         requestRegions={this.requestRegions}
                         requestSite={this.requestSite}
                         requestSubmission={this.requestSubmission}
                         requestMap={this.requestMap}
+                        regions={this.state.regions}
+                        RegionLoader={this.state.RegionLoader}
+                        profileId={profileId}
+                      />
+                    )}
+
+                    {this.state.rightTab == "site" && (
+                      <SiteTable
                         site={this.props.siteList}
                         siteLoader={this.state.dLoader}
                         renderPageNumbers={this.props.renderPageNumbers}
@@ -455,7 +455,7 @@ class MyrolesMain extends Component {
             </div>
             <div className="warning-footer text-center">
               <a
-                href={"/fieldsight/application/#/create-team/"}
+                href={"/fieldsight/organization/add/"}
                 className="fieldsight-btn"
                 style={{ marginRight: "10px", display: "inline-block" }}
               >

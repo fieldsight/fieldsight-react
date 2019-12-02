@@ -1,7 +1,8 @@
-#app {
-  padding: 0 8px;
+#app{
+  padding:0 8px;
 }
 .fieldsight-new {
+
   .mr-0,
   .no-margin {
     margin: 0 !important;
@@ -70,24 +71,6 @@
   .pd-0 {
     padding: 0;
   }
-  .flex{
-    @include flex;
-  }
-  .flex-start{
-    @include flexStart;
-  }
-  .flex-end{
-    @include flexEnd;
-  }
-  .flex-center{
-    @include flexCenter;
-  }
-  .flexvr{
-    @include flexvr;
-  }
-  .flex-between{
-    @include flexBetween;
-  }
 
   .container {
     width: 100%;
@@ -109,6 +92,8 @@
     color: $color-white;
     background-color: $color-blue;
   }
+
+
 
   .table {
     width: 100% !important;
@@ -154,9 +139,6 @@
             color: $color-white;
             @include radius4;
             margin-left: 0.635rem;
-            i.la-ellipsis-v:last-child{
-              margin-left:-10px;
-            }
           }
         }
       }
@@ -177,6 +159,7 @@
           margin-right: 0.25rem;
           font-weight: 600;
         }
+
       }
 
       .head-icon {
@@ -196,6 +179,7 @@
         .dash-btn {
           @include translatey;
           right: 1rem;
+          ;
         }
 
         .nav-tabs {
@@ -214,20 +198,18 @@
           flex-wrap: nowrap;
 
           figure {
-            flex:0 0 60px;
-            -ms-flex:0 0 60px;
             max-width: 60px;
-            width: 60px !important;
-            height: 60px;
+            width:60px !important;
+            height:60px;
             @include coverbg;
             @include radius50;
             margin: 0 1rem 0 0;
             position: relative;
 
-            // img {
-            //   @extend figure;
-            //   height: 60px;
-            // }
+            img {
+              @extend figure;
+              height: 60px;
+            }
 
             figcaption {
               @include overlay;
@@ -254,7 +236,7 @@
                 &:hover {
                   background-color: $color-yellow;
                 }
-                &:first-child {
+                &:first-child{
                   margin-right: 0.2rem;
                   background-color: $color-yellow;
                 }
@@ -276,12 +258,12 @@
             }
 
             &:hover {
-              figcaption {
+              figcaption{
                 opacity: 1;
                 visibility: visible;
                 @include animZoom-after;
                 @include backface;
-              }
+            }
               span {
                 opacity: 1;
                 visibility: visible;
@@ -331,6 +313,7 @@
 
     .myform-header {
       position: relative;
+
     }
 
     .bg-header {
@@ -350,36 +333,7 @@
     }
 
     &.no-boxshadow {
-      box-shadow: none;
-    }
-
-    .deploy-active {
-      color: $color-green !important;
-    }
-    .deploy-inactive {
-      pointer-events: none;
-      cursor: default;
-      text-decoration: none;
-      color: rgb(165, 163, 163) !important;
-    }
-  }
-  span.drag-icon {
-    display: inline-block;
-
-    i {
-      margin-left: -10px;
-      color: darken($color-bg, 10%);
-      font-size: 1.2rem;
-
-      &:last-child {
-        margin-left: -.875rem;
-      }
-    }
-
-    &:hover {
-      cursor: -moz-move;
-      cursor: -webkit-move;
-      cursor: move;
+      box-shadow: none
     }
   }
 
@@ -404,6 +358,7 @@
   .twitter {
     color: $twitter;
   }
+
 }
 
 .cursor {
@@ -443,7 +398,4 @@
   .cursor {
     background-color: rgba($color-green, 0.4);
   }
-}
-.border-none{
-  border:none;
 }

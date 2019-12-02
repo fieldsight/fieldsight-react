@@ -36,8 +36,7 @@ class SiteProgressCard extends Component {
     let selectedForm = {};
     let selectedQuestion = {};
     let source = "0";
-    let showForm;
-
+    let showForm = false;
     let showQuestion = false;
     let showTargetNum = false;
     let filteredQuestions = [];
@@ -92,7 +91,7 @@ class SiteProgressCard extends Component {
       filteredQuestions,
       showTargetNum,
       showQuestion,
-      ...(showForm && { showForm })
+      showForm
     });
   }
 
@@ -118,34 +117,25 @@ class SiteProgressCard extends Component {
   onChangeHandler = e => {
     const { value } = e.target;
     if (value == "2") {
-      this.setState(
-        {
-          ...INITIAL_STATE,
-          showForm: true,
-          showQuestion: true,
-          source: value
-        },
-        this.dataChangeHandler
-      );
+      this.setState({
+        ...INITIAL_STATE,
+        showForm: true,
+        showQuestion: true,
+        source: value
+      });
     } else if (value == "3") {
-      this.setState(
-        {
-          ...INITIAL_STATE,
-          showTargetNum: true,
-          source: value
-        },
-        this.dataChangeHandler
-      );
+      this.setState({
+        ...INITIAL_STATE,
+        showTargetNum: true,
+        source: value
+      });
     } else if (value == "4") {
-      this.setState(
-        {
-          ...INITIAL_STATE,
-          showForm: true,
-          showTargetNum: true,
-          source: value
-        },
-        this.dataChangeHandler
-      );
+      this.setState({
+        ...INITIAL_STATE,
+        showForm: true,
+        showTargetNum: true,
+        source: value
+      });
     } else {
       this.setState(
         { ...INITIAL_STATE, source: value },
@@ -247,7 +237,7 @@ class SiteProgressCard extends Component {
                 />
               )}
 
-              {showQuestion && forms.length > 0 && selectedForm.id && (
+              {showQuestion && forms.length > 0 && (
                 <SelectElement
                   className="form-control"
                   options={filteredQuestions}
