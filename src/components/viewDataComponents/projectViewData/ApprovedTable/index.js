@@ -86,7 +86,7 @@ class ApprovedTable extends Component {
                         id="app.showing"
                         defaultMessage="Showing"
                       />
-                      <span>{this.props.fromData}</span>
+                      <span>{fromData}</span>
                       <FormattedMessage
                         id="app.to"
                         defaultMessage="to"
@@ -98,7 +98,7 @@ class ApprovedTable extends Component {
                         id="app.of"
                         defaultMessage="of"
                       />
-                      <span>{this.props.totalCount}</span>
+                      <span>{totalCount}</span>
                       <FormattedMessage
                         id="app.entries"
                         defaultMessage="entries"

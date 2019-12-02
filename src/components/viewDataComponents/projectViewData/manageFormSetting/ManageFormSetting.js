@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
 
 const sideNavRoutes = [
   {

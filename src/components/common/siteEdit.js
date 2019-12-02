@@ -441,11 +441,6 @@ export default class SiteAdd extends Component {
                         className="col-xl-4 col-md-6"
                         style={{ paddingBottom: '16px' }}
                       >
-                        {console.log(
-                          project_info,
-                          'jsondaar',
-                          project_info[data.question_name],
-                        )}
                         <InputElement
                           formType="editForm"
                           tag="input"

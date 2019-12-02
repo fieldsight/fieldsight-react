@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
-
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable react/destructuring-assignment */
-
-/* eslint-disable react/prop-types */
 
 class FlaggedTable extends Component {
   componentDidMount() {

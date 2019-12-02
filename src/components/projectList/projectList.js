@@ -5,8 +5,7 @@ import { Table } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FormattedMessage } from 'react-intl';
 import getProjectList from '../../actions/projectListAction';
-/* eslint-disable react/prop-types  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/destructuring-assignment */
 
 class ProjectList extends Component {
   constructor(props) {

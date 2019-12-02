@@ -126,7 +126,7 @@ class GeneralForms extends Component {
                   }
 
                   // console.log(arrItem, '2nd');
-                  // return arrItem;
+                  return arrItem;
                 });
 
                 return { data: newData, loadReq: false };

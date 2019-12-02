@@ -280,18 +280,13 @@ class SubmissionData extends Component {
                             </a>
 
                             <a
-                              tabIndex="0"
-                              role="button"
-                              onKeyDown={() => {
-                                this.handleDelete(list.submission_id);
-                              }}
                               className="delete-tag tag"
-                              onClick={() => {
-                                this.handleDelete(list.submission_id);
-                              }}
                               tabIndex="0"
                               role="button"
                               onKeyDown={() => {
+                                this.handleDelete(list.submission_id);
+                              }}
+                              onClick={() => {
                                 this.handleDelete(list.submission_id);
                               }}
                             >

@@ -44,8 +44,6 @@ class PendingTable extends Component {
       state: { count, previous, next },
     } = this;
 
-    console.log(this.props, 'this.protp');
-
     return (
       <>
         <div className="card-header main-card-header sub-card-header">

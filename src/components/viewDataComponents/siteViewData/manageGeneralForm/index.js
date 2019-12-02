@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
 
 import ResponseTable from '../../responded/ResponseTable';
 import DeleteTable from '../deleteTable';

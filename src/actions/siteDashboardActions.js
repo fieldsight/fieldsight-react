@@ -32,7 +32,7 @@ export const getSiteDashboard = id => dispatch => {
       // dispatch({
       //   type: SITE_DASHBOARD_ERR
       // });
-      console.log(err);
+      // console.log(err);
     });
 };
 
@@ -53,7 +53,7 @@ export const getSiteMetas = id => dispatch => {
       // dispatch({
       //   type: SITE_METAS_ERR
       // });
-      console.log(err);
+      // console.log(err);
     });
 };
 
@@ -73,7 +73,7 @@ export const getSiteSubmissions = id => dispatch => {
       // dispatch({
       //   type: SITE_SUBMISSIONS_ERR
       // });
-      console.log(err);
+      // console.log(err);
     });
 };
 
@@ -142,7 +142,7 @@ export const getRecentPictures = id => dispatch => {
       // dispatch({
       //   type: SITE_PICTURES_ERR
       // });
-      console.log(err);
+      // console.log(err);
     });
 };
 

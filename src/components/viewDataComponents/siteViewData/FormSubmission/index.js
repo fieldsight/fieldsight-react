@@ -3,14 +3,11 @@ import Table from 'react-bootstrap/Table';
 import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
 
-import PropTypes from 'prop-types';
 import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
 import { DotLoader } from '../../../myForm/Loader';
 /* eslint-disable camelcase */
 /* eslint-disable react/destructuring-assignment */
-
-/* eslint-disable react/prop-types */
 
 class SubmissionData extends Component {
   constructor(props) {
@@ -279,7 +276,7 @@ class SubmissionData extends Component {
                           id="app.showing"
                           defaultMessage="Showing"
                         />
-                        <span>{this.props.fromData}</span>
+                        <span>{fromData}</span>
                         <FormattedMessage
                           id="app.to"
                           defaultMessage="to"

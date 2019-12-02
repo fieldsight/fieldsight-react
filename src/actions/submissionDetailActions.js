@@ -49,8 +49,6 @@ export const getSubmissionDetail = id => dispatch => {
         });
       })
       .catch(err => {
-        console.log(err.response.data.detail);
-        debugger;
         dispatch({
           type: SHOW_SUBMISSION_ERR_MSG,
           err: {

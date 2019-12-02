@@ -13,7 +13,6 @@ const RadioElement = ({
   translation,
 }) => (
   <div className={`radiobox ${className}`}>
-    {console.log(value, 'checked')}
     <label>
       <input
         type="radio"

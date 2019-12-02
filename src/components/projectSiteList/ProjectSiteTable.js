@@ -44,10 +44,6 @@ const siteName = site => {
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.paginationHandler(1, null, {
       type: 'projectSiteList',
