@@ -220,7 +220,7 @@ class AddSite extends Component {
                                       />
                                       :
                                     </b>
-                                    {name}
+                                    {/* {name} */}
                                   </Popup>
                                 </Marker>
                               </Map>

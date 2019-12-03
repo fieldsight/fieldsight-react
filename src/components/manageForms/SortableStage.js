@@ -219,272 +219,290 @@ class SortableStage extends Component {
 
                   <Accordion.Collapse eventKey={`${each.id}`}>
                     <Card.Body>
-                      {!!isProjectForm && (
-                        <div className="add-btn  outline-btn">
-                          {subStageData && subStageData.length > 1 && (
-                            <a
-                              className="pending"
-                              data-tab="addSubStage-popup"
-                              onClick={handleSubstageReorder}
-                              tabIndex="0"
-                              role="button"
-                              onKeyDown={handleSubstageReorder}
-                            >
-                              {!reorderSubstage ? '' : ''}
-                              {!reorderSubstage ? (
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={
-                                    <Tooltip>
-                                      <FormattedMessage
-                                        id="app.reorder"
-                                        defaultMessage="Reorder"
-                                      />
-                                    </Tooltip>
-                                  }
+                      {subStageData && (
+                        <>
+                          {!!isProjectForm && (
+                            <div className="add-btn  outline-btn">
+                              {subStageData.length > 1 && (
+                                <a
+                                  className="pending"
+                                  data-tab="addSubStage-popup"
+                                  onClick={handleSubstageReorder}
+                                  tabIndex="0"
+                                  role="button"
+                                  onKeyDown={handleSubstageReorder}
                                 >
-                                  <span className="reorder">
-                                    <i className="la la-ellipsis-v" />
-                                    <i className="la la-ellipsis-v" />
-                                  </span>
-                                </OverlayTrigger>
-                              ) : (
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={
-                                    <Tooltip>
-                                      <FormattedMessage
-                                        id="app.cancel"
-                                        defaultMessage="Cancel"
-                                      />
-                                    </Tooltip>
-                                  }
-                                >
-                                  <span>
-                                    <i className="la la-close" />
-                                  </span>
-                                </OverlayTrigger>
+                                  {!reorderSubstage ? '' : ''}
+                                  {!reorderSubstage ? (
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>
+                                          <FormattedMessage
+                                            id="app.reorder"
+                                            defaultMessage="Reorder"
+                                          />
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <span className="reorder">
+                                        <i className="la la-ellipsis-v" />
+                                        <i className="la la-ellipsis-v" />
+                                      </span>
+                                    </OverlayTrigger>
+                                  ) : (
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>
+                                          <FormattedMessage
+                                            id="app.cancel"
+                                            defaultMessage="Cancel"
+                                          />
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <span>
+                                        <i className="la la-close" />
+                                      </span>
+                                    </OverlayTrigger>
+                                  )}
+                                </a>
                               )}
-                            </a>
-                          )}
-                          {reorderSubstage && (
-                            <a
-                              data-tab="addSubStage-popup"
-                              onClick={handleSaveSubstageReorder}
-                              className={`${
-                                subStageReorderDisable
-                                  ? 'disabled'
-                                  : ''
-                              }`}
-                              tabIndex="0"
-                              role="button"
-                              onKeyDown={handleSaveSubstageReorder}
-                            >
-                              {/* Save Order */}
-                              <OverlayTrigger
-                                placement="top"
-                                overlay={
-                                  <Tooltip>
-                                    <FormattedMessage
-                                      id="app.save"
-                                      defaultMessage="Save"
-                                    />
-                                  </Tooltip>
-                                }
-                              >
-                                <span>
-                                  <i className="la la-save" />
-                                </span>
-                              </OverlayTrigger>
-                            </a>
-                          )}
-                          {subStageData &&
-                            subStageData.length > 0 &&
-                            toDeploy && (
-                              <a
-                                data-tab="addSubStage-popup"
-                                onClick={() => handleDeployAll(true)}
-                                onKeyDown={() => {
-                                  handleDeployAll(true);
-                                }}
-                                tabIndex="0"
-                                role="button"
-                              >
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={
-                                    <Tooltip>
-                                      <FormattedMessage
-                                        id="app.deployAllSubstages"
-                                        defaultMessage="Deploy All Substages"
-                                      />
-                                    </Tooltip>
+                              {reorderSubstage && (
+                                <a
+                                  data-tab="addSubStage-popup"
+                                  onClick={handleSaveSubstageReorder}
+                                  className={`${
+                                    subStageReorderDisable
+                                      ? 'disabled'
+                                      : ''
+                                  }`}
+                                  tabIndex="0"
+                                  role="button"
+                                  onKeyDown={
+                                    handleSaveSubstageReorder
                                   }
                                 >
-                                  <span className="active deploy">
-                                    <i className="la la-rocket" />
-                                  </span>
-                                </OverlayTrigger>
-                              </a>
-                            )}
-                          {/* {subStageData && subStageData.length > 0 && toDelete && (
-                      <a
-                        data-tab="addSubStage-popup"
-                        onClick={() => handleDeleteAll(true)}
-                      >
-                        {/* Delete Substages */}
-                          {/*                         
-                        <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Delete Substage</Tooltip>}>
-                        <span>
-                          <i className="la la-trash" />
-                        </span>
-                    </OverlayTrigger>
-                      </a>
-                    )}  */}
-                          {subStageData &&
-                            subStageData.length > 0 &&
-                            !toDeploy && (
-                              <a
-                                data-tab="addSubStage-popup"
-                                onClick={() => handleDeployAll(false)}
-                                onKeyDown={() => {
-                                  handleDeployAll(false);
-                                }}
-                                tabIndex="0"
-                                role="button"
-                              >
-                                {/* Undeploy Substages */}
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={
-                                    <Tooltip>
-                                      Undeploy All Substages
-                                    </Tooltip>
-                                  }
-                                >
-                                  <span>
-                                    <i className="undeployed la la-rocket" />
-                                  </span>
-                                </OverlayTrigger>
-                              </a>
-                            )}
-                        </div>
-                      )}
-                      {!isProjectForm && !!each.site && (
-                        <div className="add-btn  outline-btn">
-                          {subStageData && subStageData.length > 1 && (
-                            <a
-                              className="pending"
-                              data-tab="addSubStage-popup"
-                              onClick={handleSubstageReorder}
-                              tabIndex="0"
-                              role="button"
-                              onKeyDown={handleSubstageReorder}
-                            >
-                              {!reorderSubstage ? '' : ''}
-                              {!reorderSubstage ? (
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={<Tooltip>Reorder</Tooltip>}
-                                >
-                                  <span className="reorder">
-                                    <i className="la la-ellipsis-v" />
-                                    <i className="la la-ellipsis-v" />
-                                  </span>
-                                </OverlayTrigger>
-                              ) : (
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={<Tooltip>Cancel</Tooltip>}
-                                >
-                                  <span>
-                                    <i className="la la-close" />
-                                  </span>
-                                </OverlayTrigger>
+                                  {/* Save Order */}
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={
+                                      <Tooltip>
+                                        <FormattedMessage
+                                          id="app.save"
+                                          defaultMessage="Save"
+                                        />
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <span>
+                                      <i className="la la-save" />
+                                    </span>
+                                  </OverlayTrigger>
+                                </a>
                               )}
-                            </a>
+                              {subStageData &&
+                                subStageData.length > 0 &&
+                                toDeploy && (
+                                  <a
+                                    data-tab="addSubStage-popup"
+                                    onClick={() => {
+                                      handleDeployAll(true);
+                                    }}
+                                    onKeyDown={() => {
+                                      handleDeployAll(true);
+                                    }}
+                                    tabIndex="0"
+                                    role="button"
+                                  >
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>
+                                          <FormattedMessage
+                                            id="app.deployAllSubstages"
+                                            defaultMessage="Deploy All Substages"
+                                          />
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <span className="active deploy">
+                                        <i className="la la-rocket" />
+                                      </span>
+                                    </OverlayTrigger>
+                                  </a>
+                                )}
+                              {/* {subStageData && subStageData.length > 0 && toDelete && (
+                        <a
+                          data-tab="addSubStage-popup"
+                          onClick={() => handleDeleteAll(true)}
+                        >
+                          {/* Delete Substages */}
+                              {/*                         
+                          <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip>Delete Substage</Tooltip>}>
+                          <span>
+                            <i className="la la-trash" />
+                          </span>
+                      </OverlayTrigger>
+                        </a>
+                      )}  */}
+                              {subStageData &&
+                                subStageData.length > 0 &&
+                                !toDeploy && (
+                                  <a
+                                    data-tab="addSubStage-popup"
+                                    onClick={() => {
+                                      handleDeployAll(false);
+                                    }}
+                                    onKeyDown={() => {
+                                      handleDeployAll(false);
+                                    }}
+                                    tabIndex="0"
+                                    role="button"
+                                  >
+                                    {/* Undeploy Substages */}
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>
+                                          Undeploy All Substages
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <span>
+                                        <i className="undeployed la la-rocket" />
+                                      </span>
+                                    </OverlayTrigger>
+                                  </a>
+                                )}
+                            </div>
                           )}
-                          {reorderSubstage && (
-                            <a
-                              data-tab="addSubStage-popup"
-                              onClick={handleSaveSubstageReorder}
-                              tabIndex="0"
-                              role="button"
-                              onKeyDown={handleSaveSubstageReorder}
-                            >
-                              {/* Save Order */}
-                              <OverlayTrigger
-                                placement="top"
-                                overlay={<Tooltip>Save</Tooltip>}
-                              >
-                                <span>
-                                  <i className="la la-save" />
-                                </span>
-                              </OverlayTrigger>
-                            </a>
-                          )}
-                          {subStageData &&
-                            subStageData.length > 0 &&
-                            toDeploy && (
-                              <a
-                                data-tab="addSubStage-popup"
-                                onClick={() => handleDeployAll(true)}
-                                onKeyDown={() => {
-                                  handleDeployAll(true);
-                                }}
-                                tabIndex="0"
-                                role="button"
-                              >
-                                {/* Deploy Substages */}
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={
-                                    <Tooltip>
-                                      <FormattedMessage
-                                        id="app.deployAllSubstages"
-                                        defaultMessage="Deploy All Substages"
-                                      />
-                                    </Tooltip>
+                          {!isProjectForm && !!each.site && (
+                            <div className="add-btn  outline-btn">
+                              {subStageData.length > 1 && (
+                                <a
+                                  className="pending"
+                                  data-tab="addSubStage-popup"
+                                  onClick={handleSubstageReorder}
+                                  tabIndex="0"
+                                  role="button"
+                                  onKeyDown={handleSubstageReorder}
+                                >
+                                  {!reorderSubstage ? '' : ''}
+                                  {!reorderSubstage ? (
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>Reorder</Tooltip>
+                                      }
+                                    >
+                                      <span className="reorder">
+                                        <i className="la la-ellipsis-v" />
+                                        <i className="la la-ellipsis-v" />
+                                      </span>
+                                    </OverlayTrigger>
+                                  ) : (
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>Cancel</Tooltip>
+                                      }
+                                    >
+                                      <span>
+                                        <i className="la la-close" />
+                                      </span>
+                                    </OverlayTrigger>
+                                  )}
+                                </a>
+                              )}
+                              {reorderSubstage && (
+                                <a
+                                  data-tab="addSubStage-popup"
+                                  onClick={handleSaveSubstageReorder}
+                                  tabIndex="0"
+                                  role="button"
+                                  onKeyDown={
+                                    handleSaveSubstageReorder
                                   }
                                 >
-                                  <span className="active deploy">
-                                    <i className="la la-rocket" />
-                                  </span>
-                                </OverlayTrigger>
-                              </a>
-                            )}
-                          {subStageData &&
-                            subStageData.length > 0 &&
-                            !toDeploy && (
-                              <a
-                                data-tab="addSubStage-popup"
-                                onClick={() => {
-                                  handleDeployAll(false);
-                                }}
-                                onKeyDown={() => {
-                                  handleDeployAll(false);
-                                }}
-                                tabIndex="0"
-                                role="button"
-                              >
-                                {/* Undeploy Substages */}
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={
-                                    <Tooltip>
-                                      Undeploy All Substages
-                                    </Tooltip>
-                                  }
-                                >
-                                  <span>
-                                    <i className="undeployed la la-rocket" />
-                                  </span>
-                                </OverlayTrigger>
-                              </a>
-                            )}
-                        </div>
+                                  {/* Save Order */}
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>Save</Tooltip>}
+                                  >
+                                    <span>
+                                      <i className="la la-save" />
+                                    </span>
+                                  </OverlayTrigger>
+                                </a>
+                              )}
+                              {subStageData &&
+                                subStageData.length > 0 &&
+                                toDeploy && (
+                                  <a
+                                    data-tab="addSubStage-popup"
+                                    onClick={() => {
+                                      handleDeployAll(true);
+                                    }}
+                                    onKeyDown={() => {
+                                      handleDeployAll(true);
+                                    }}
+                                    tabIndex="0"
+                                    role="button"
+                                  >
+                                    {/* Deploy Substages */}
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>
+                                          <FormattedMessage
+                                            id="app.deployAllSubstages"
+                                            defaultMessage="Deploy All Substages"
+                                          />
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <span className="active deploy">
+                                        <i className="la la-rocket" />
+                                      </span>
+                                    </OverlayTrigger>
+                                  </a>
+                                )}
+                              {subStageData &&
+                                subStageData.length > 0 &&
+                                !toDeploy && (
+                                  <a
+                                    data-tab="addSubStage-popup"
+                                    onClick={() => {
+                                      handleDeployAll(false);
+                                    }}
+                                    onKeyDown={() => {
+                                      handleDeployAll(false);
+                                    }}
+                                    tabIndex="0"
+                                    role="button"
+                                  >
+                                    {/* Undeploy Substages */}
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>
+                                          Undeploy All Substages
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <span>
+                                        <i className="undeployed la la-rocket" />
+                                      </span>
+                                    </OverlayTrigger>
+                                  </a>
+                                )}
+                            </div>
+                          )}
+                        </>
                       )}
 
                       {!!loadSubStage && <DotLoader />}

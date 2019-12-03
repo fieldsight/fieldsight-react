@@ -380,7 +380,7 @@ class GlobalModalForm extends Component {
             };
           }
           if (!checked) {
-            const days = state.selectedDays;
+            // const days = state.selectedDays;
             return {
               selectedDays: state.selectedDays.filter(
                 day => day !== selectedDay,
@@ -864,43 +864,45 @@ class GlobalModalForm extends Component {
               />
             </div>
           </div>
-          {!isProjectWide &&
-            regionDropdown &&
-            regionDropdown.length > 0 && (
-              <div>
-                <label>
-                  <FormattedMessage
-                    id="app.regions"
-                    defaultMessage="Regions"
-                  />
-                </label>
-                {hasLoaded && (
-                  <Select
-                    defaultValue={regionSelected}
-                    isMulti
-                    options={regionDropdown}
-                    onChange={this.handleSelectRegionChange}
-                  />
-                )}
-              </div>
-            )}
-          {!isProjectWide && typeDropdown && typeDropdown.length > 0 && (
-            <div>
-              <label>
-                <FormattedMessage
-                  id="app.types"
-                  defaultMessage="Types"
-                />
-              </label>
-              {hasLoaded && (
-                <Select
-                  defaultValue={typeSelected}
-                  isMulti
-                  options={typeDropdown}
-                  onChange={this.handleSelectTypeChange}
-                />
+          {!isProjectWide && (
+            <>
+              {regionDropdown && regionDropdown.length > 0 && (
+                <div>
+                  <label>
+                    <FormattedMessage
+                      id="app.regions"
+                      defaultMessage="Regions"
+                    />
+                  </label>
+                  {hasLoaded && (
+                    <Select
+                      defaultValue={regionSelected}
+                      isMulti
+                      options={regionDropdown}
+                      onChange={this.handleSelectRegionChange}
+                    />
+                  )}
+                </div>
               )}
-            </div>
+              {typeDropdown && typeDropdown.length > 0 && (
+                <div>
+                  <label>
+                    <FormattedMessage
+                      id="app.types"
+                      defaultMessage="Types"
+                    />
+                  </label>
+                  {hasLoaded && (
+                    <Select
+                      defaultValue={typeSelected}
+                      isMulti
+                      options={typeDropdown}
+                      onChange={this.handleSelectTypeChange}
+                    />
+                  )}
+                </div>
+              )}
+            </>
           )}
           {/* <div className="form-group checkbox-group">
             <label>Donor visibility</label>

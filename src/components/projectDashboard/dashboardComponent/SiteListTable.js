@@ -61,7 +61,8 @@ class SiteListTable extends React.PureComponent {
                         />
                       </th>
                       {/* <th>Address</th> 
-                      <th>{!isEmpty(terms) ? `${terms.region}` : "Region"}</th> */}
+                      <th>{!isEmpty(terms) ?
+                       `${terms.region}` : "Region"}</th> */}
                       <th>
                         {!isEmpty(terms)
                           ? `${terms.region}`

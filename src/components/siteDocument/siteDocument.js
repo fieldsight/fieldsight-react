@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
 import Modal from '../common/Modal';
 import SiteDocumentTable from './siteDocumentTable';
 /* eslint-disable camelcase */
@@ -183,7 +182,10 @@ export default class SiteDocument extends Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-12">
-              <div className="right-content">
+              <div
+                className="right-content"
+                style={{ minHeight: '512px' }}
+              >
                 <div className="card no-boxshadow">
                   <div className="card-header main-card-header">
                     <h5>
@@ -361,6 +363,3 @@ export default class SiteDocument extends Component {
     );
   }
 }
-SiteDocument.propTypes = {
-  match: PropTypes.objectOf.isRequired,
-};

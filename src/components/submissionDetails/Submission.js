@@ -426,6 +426,7 @@ class Submission extends Component {
                   </p>
                 ))
               ) : submission.type === 'select all that apply' ? (
+                submission.selected &&
                 Object.entries(submission.selected).map(many => (
                   <p key={uuid()}>
                     {this.splitSubmissionObj(

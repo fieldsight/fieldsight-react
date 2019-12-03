@@ -168,7 +168,7 @@ export default class SiteAdd extends Component {
 
   onSubmitHandler = e => {
     e.preventDefault();
-    let select;
+    // let select;
     const data = {
       project: this.state.id,
       name: this.state.project.name,
@@ -184,7 +184,7 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        (select = this.state.dataSelected),
+        this.state.dataSelected,
       ),
     };
 
@@ -205,7 +205,7 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        (select = this.state.dataSelected),
+        this.state.dataSelected,
       ),
     };
     const region = {
@@ -223,7 +223,7 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        (select = this.state.dataSelected),
+        this.state.dataSelected,
       ),
       subsite: this.state.siteId,
     };

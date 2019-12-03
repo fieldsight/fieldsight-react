@@ -13,19 +13,19 @@ import isEmpty from '../../utils/isEmpty';
 class LeftSidebar extends Component {
   static contextType = RegionContext;
 
-  translating = title => {
-    if (
-      title === 'app.projectInformation' ||
-      'app.siteTypes' ||
-      'app.regions' ||
-      'app.mapLayers' ||
-      'app.termsAndLabels'
-    ) {
-      return <FormattedMessage id={title} defaultMessage={title} />;
-      // } else {
-      //   return { title };
-    }
-  };
+  // translating = title => {
+  //   if (
+  //     title === 'app.projectInformation' ||
+  //     'app.siteTypes' ||
+  //     'app.regions' ||
+  //     'app.mapLayers' ||
+  //     'app.termsAndLabels'
+  //   ) {
+  //     return <FormattedMessage id={title} defaultMessage={title} />;
+  //     // } else {
+  //     //   return { title };
+  //   }
+  // };
 
   renderNavRoutes = () => {
     const { terms } = this.context;
@@ -79,7 +79,11 @@ class LeftSidebar extends Component {
             pathname === route.path ? 'nav-link active' : 'nav-link'
           }
         >
-          {this.translating(route.title)}
+          <FormattedMessage
+            id={route.title}
+            defaultMessage={route.title}
+          />
+          {/* {this.translating(route.title)} */}
         </Link>
       </li>
     ));

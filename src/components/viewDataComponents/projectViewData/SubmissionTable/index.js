@@ -307,7 +307,8 @@ class SubmissionData extends Component {
                           defaultMessage="Showing"
                         />
                         &nbsp;
-                        <span>{fromData}</span> &nbsp;
+                        <span>{fromData}</span>
+                        &nbsp;
                         <FormattedMessage
                           id="app.to"
                           defaultMessage="to"
@@ -322,7 +323,8 @@ class SubmissionData extends Component {
                           defaultMessage="of"
                         />
                         &nbsp;
-                        <span>{totalCount}</span> &nbsp;
+                        <span>{totalCount}</span>
+                        &nbsp;
                         <FormattedMessage
                           id="app.entries"
                           defaultMessage="entries"

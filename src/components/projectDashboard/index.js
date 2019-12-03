@@ -325,15 +325,18 @@ class ProjectDashboard extends React.Component {
                           <input
                             type="search"
                             className="form-control"
-                            placeholder={this.props.intl.formatMessage(
-                              {
+                            placeholder={
+                              this.props.intl &&
+                              this.props.intl.formatMessage({
                                 id: 'app.teams-search',
                                 defaultMessage: 'Search',
-                              },
-                            )}
+                              })
+                            }
                             onChange={this.onChangeHandler}
                           />
-                          {/* <label htmlFor="input">Search</label> */}
+                          {/* <label htmlFor="input">
+                          Search
+                          </label> */}
                           <i className="la la-search" />
                         </div>
                       </form>
@@ -370,7 +373,8 @@ class ProjectDashboard extends React.Component {
                                 defaultMessage="Showing"
                               />
                               &nbsp;
-                              <span>{fromData}</span> &nbsp;
+                              <span>{fromData}</span>
+                              &nbsp;
                               <FormattedMessage
                                 id="app.to"
                                 defaultMessage="to"
@@ -387,7 +391,8 @@ class ProjectDashboard extends React.Component {
                                 defaultMessage="of"
                               />
                               &nbsp;
-                              <span>{totalCount}</span> &nbsp;
+                              <span>{totalCount}</span>
+                              &nbsp;
                               <FormattedMessage
                                 id="app.entries"
                                 defaultMessage="entries"

@@ -75,7 +75,7 @@ class TableRow extends Component {
       ),
 
       siteType: (row, i, editHandler, removeHandler) => (
-        <tr key={row.id}>
+        <tr key={`site${row.id}_key_${i}`}>
           <td>{row.identifier}</td>
           <td>{row.name}</td>
           <td>
@@ -173,7 +173,7 @@ class TableRow extends Component {
       ),
 
       projectManageRegion: (row, i) => (
-        <tr key={row.id}>
+        <tr key={`project${row.id}_key_${i}`}>
           <td>{row.identifier}</td>
           <td>
             <a

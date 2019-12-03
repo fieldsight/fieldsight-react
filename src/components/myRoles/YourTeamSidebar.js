@@ -19,7 +19,6 @@ class YourTeamSideBar extends Component {
 
   render() {
     const {
-      addPermission,
       dLoader,
       teams,
       teamId,

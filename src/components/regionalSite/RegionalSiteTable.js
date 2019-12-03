@@ -47,7 +47,6 @@ class RegionalSiteTable extends Component {
       OpenTabHandler,
       projectId,
       regionId,
-      terms,
       dLoader,
       siteList,
       fromData,

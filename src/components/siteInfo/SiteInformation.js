@@ -88,40 +88,41 @@ class SiteInformation extends Component {
             });
           }
 
-          if (results[2].data.json_questions.length > 0) {
-            modifiedJsonQuestions = results[2].data.json_questions.map(
-              question => {
-                if (question.question_type === 'MCQ') {
-                  const optInputField = [];
-                  const options = {};
-                  if (Array.isArray(question.mcq_options)) {
-                    question.mcq_options.map((opt, i) => {
-                      options[`option${i + 1}`] = opt.option_text;
-                      return optInputField.push({
-                        tag: InputElement,
-                        val: i + 1,
-                      });
+          // if (results[2].data.json_questions.length > 0) {
+          modifiedJsonQuestions =
+            results[2].data.json_questions.length > 0 &&
+            results[2].data.json_questions.map(question => {
+              if (question.question_type === 'MCQ') {
+                const optInputField = [];
+                const options = {};
+                if (Array.isArray(question.mcq_options)) {
+                  question.mcq_options.map((opt, i) => {
+                    options[`option${i + 1}`] = opt.option_text;
+                    return optInputField.push({
+                      tag: InputElement,
+                      val: i + 1,
                     });
-                  }
-                  question.mcq_options = options;
-                  question.optInputField = optInputField;
-                  return question;
+                  });
                 }
-                if (question.question_type === 'Link') {
-                  if (question.metas) {
-                    const metaAttribute =
-                      question.metas[question.project_id];
-                    question.metas = metaAttribute;
-                  }
-                  return question;
+                question.mcq_options = options;
+                question.optInputField = optInputField;
+                return question;
+              }
+              if (question.question_type === 'Link') {
+                if (question.metas) {
+                  const metaAttribute =
+                    question.metas[question.project_id];
+                  question.metas = metaAttribute;
                 }
                 return question;
-              },
-            );
-          }
+              }
+              return question;
+            });
+          // }
 
-          const modifiedProjectSettings = results[2].data.project_settings.map(
-            settings => {
+          const modifiedProjectSettings =
+            results[2].data.project_settings.length > 0 &&
+            results[2].data.project_settings.map(settings => {
               if (settings.source === 2) {
                 if (settings.pull_integer_form_question) {
                   return {
@@ -135,8 +136,7 @@ class SiteInformation extends Component {
                 source: settings.source.toString(),
               };
               // }
-            },
-          );
+            });
 
           this.setState({
             projects: [
