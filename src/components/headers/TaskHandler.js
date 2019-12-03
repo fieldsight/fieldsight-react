@@ -151,8 +151,8 @@ class TaskHandler extends Component {
           ) : (
               <PerfectScrollbar>
                 {tasks.length > 0 ? (
-                  <div className="timeline" >
-                    <ul>
+                  
+                    <ul className="notification-menu">
                       {tasks.map(task => {
                         const resp = this.populatemytasklist(task)
                         return (
@@ -185,7 +185,7 @@ class TaskHandler extends Component {
                           <span>Mark all as seen</span> </a>
                       </li> */}
                     </ul>
-                  </div>
+                 
                 )
                   : (
                     <p> No Data Available </p>

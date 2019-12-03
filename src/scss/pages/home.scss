@@ -1,4 +1,7 @@
 .fieldsight-new {
+  #main-container{
+    padding:0 1rem;
+  }
   .routing-list {
     @include flex_start;
     align-items: center;
