@@ -1076,12 +1076,7 @@ class NotificationHandler extends Component {
       getLog,
     } = this;
     return (
-      <div
-        className="tab-pane active"
-        id="role"
-        role="tabpanel"
-        aria-labelledby="role_tab"
-      >
+     
         <div
           className="thumb-list mr-0 "
           style={{ position: "relative", height: "314px" }}
@@ -1091,8 +1086,7 @@ class NotificationHandler extends Component {
           ) : (
               <PerfectScrollbar>
                 {notifications.length > 0 ? (
-                  <div className="timeline">
-                    <ul>
+                    <ul className="notification-menu">
                       <li className="dropdown-header">You have 5 notifications</li>
                       {notifications.map(notification => {
                         return (
@@ -1124,7 +1118,7 @@ class NotificationHandler extends Component {
                           <span>Mark all as seen</span> </a>
                       </li> */}
                     </ul>
-                  </div>
+                  
 
                 ) : (
                     <p> No Data Available </p>
@@ -1132,7 +1126,7 @@ class NotificationHandler extends Component {
               </PerfectScrollbar>
             )}
         </div>
-      </div>
+    
       // </div>
       //   </div>
     );
