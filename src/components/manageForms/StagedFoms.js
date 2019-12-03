@@ -565,7 +565,7 @@ class StagedForms extends Component {
         .catch(err => {
           this.setState({ loadReq: false }, () => {
             const errors = err.response;
-            errorToast(errors.data.error);
+            errorToast(errors && errors.data.error);
           });
         });
     });

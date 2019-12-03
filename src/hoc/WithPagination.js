@@ -151,8 +151,7 @@ const withPagination = WrappedComponent => {
         for (let i = 1; i <= totalPage; i += 1) {
           pageNumbers.push(i);
         }
-
-        pageNumbers.map(number => {
+        return pageNumbers.map(number => {
           const classes = pageNum === number ? 'current' : '';
 
           if (

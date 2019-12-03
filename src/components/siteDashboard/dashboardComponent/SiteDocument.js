@@ -2,7 +2,6 @@ import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FormattedMessage } from 'react-intl';
 import { GridContentLoader } from '../../common/Loader';
-/* eslint-disable react/prop-types  */
 /* eslint-disable react/no-array-index-key  */
 /* eslint-disable react/jsx-one-expression-per-line  */
 
@@ -39,7 +38,7 @@ const SiteDocument = ({
         </div>
         <div
           className="card-body about-body"
-          style={{ position: 'relative', height: '358px' }}
+          style={{ position: 'relative', height: '349px' }}
         >
           {showContentLoader ? (
             <GridContentLoader

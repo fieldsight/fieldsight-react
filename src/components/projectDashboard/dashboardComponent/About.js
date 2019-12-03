@@ -15,7 +15,7 @@ class About extends React.PureComponent {
         </div>
         <div
           className="thumb-list mr-0 "
-          style={{ position: 'relative', height: '357px' }}
+          style={{ position: 'relative', height: '346px' }}
         >
           <PerfectScrollbar>
             <div className="card-body about-body">

@@ -94,10 +94,6 @@ class DashboardHeader extends Component {
       {
         title: 'users',
         link: `/fieldsight/manage/people/site/${siteId}/`,
-      },
-      {
-        title: 'users',
-        link: `/fieldsight/manage/people/site/${siteId}/`,
         id: 'app.users',
       },
       {

@@ -451,7 +451,7 @@ class SiteDashboard extends Component {
                           className="thumb-list mr-0 "
                           style={{
                             position: 'relative',
-                            height: '327px',
+                            height: '316px',
                           }}
                         >
                           <UsersList

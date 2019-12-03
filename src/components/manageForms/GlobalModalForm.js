@@ -369,7 +369,7 @@ class GlobalModalForm extends Component {
         dailyArrDays: {
           ...preState.dailyArrDays,
 
-          [e.target.name]: !dailyArrDays[name],
+          [name]: !dailyArrDays[name],
         },
       }),
       () => {
@@ -382,7 +382,9 @@ class GlobalModalForm extends Component {
           if (!checked) {
             const days = state.selectedDays;
             return {
-              selectedDays: days.filter(day => day !== selectedDay),
+              selectedDays: state.selectedDays.filter(
+                day => day !== selectedDay,
+              ),
             };
           }
           return null;

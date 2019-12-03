@@ -190,10 +190,10 @@ class AddForm extends PureComponent {
                         <div>
                           <h5>{each.name}</h5>
                         </div>
-                        {each.forms.map(item => (
+                        {each.forms.map((item, idx) => (
                           <div
                             className="form-group"
-                            // key={`form_${i}`}
+                            key={`form_${idx}`}
                           >
                             <RadioElement
                               label={item.title}
