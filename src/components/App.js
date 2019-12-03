@@ -56,7 +56,6 @@ import Nepali from '../translations/ne.json';
 
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
-/* eslint-disable lines-between-class-members */
 
 const messages = {
   ne: Nepali,

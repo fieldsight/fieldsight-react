@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
-
 import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
 import { DotLoader } from '../../../myForm/Loader';
@@ -307,19 +306,23 @@ class SubmissionData extends Component {
                           id="app.showing"
                           defaultMessage="Showing"
                         />
-                        <span>{fromData}</span>
+                        &nbsp;
+                        <span>{fromData}</span> &nbsp;
                         <FormattedMessage
                           id="app.to"
                           defaultMessage="to"
                         />
+                        &nbsp;
                         <span>
                           {toData > totalCount ? totalCount : toData}
                         </span>
+                        &nbsp;
                         <FormattedMessage
                           id="app.of"
                           defaultMessage="of"
                         />
-                        <span>{totalCount}</span>
+                        &nbsp;
+                        <span>{totalCount}</span> &nbsp;
                         <FormattedMessage
                           id="app.entries"
                           defaultMessage="entries"

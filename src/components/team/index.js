@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { Table, Button } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import PropTypes from 'prop-types';
 import SelectElement from '../common/SelectElement';
 
 import { getTeam, getTranslate } from '../../actions/teamAction';
@@ -258,13 +257,7 @@ const mapStateToProps = ({ teams }) => {
     selected,
   };
 };
-Teams.propTypes = {
-  // teams: PropTypes.arrayOf.isRequired,
-  getTeam: PropTypes.func.isRequired,
-  getTranslate: PropTypes.func.isRequired,
-  history: PropTypes.func.isRequired,
-  selected: PropTypes.string.isRequired,
-};
+
 export default compose(
   connect(mapStateToProps, {
     getTeam,

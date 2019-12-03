@@ -18,8 +18,6 @@ const giphy = require('../../static/images/giphy.gif');
 const ring = require('../../static/images/ring.gif');
 
 /* eslint-disable */
-/* eslint-disable react/prop-types  */
-/* eslint-disable consistent-return  */
 
 const { BaseLayer } = LayersControl;
 
@@ -128,13 +126,22 @@ class DetailsMap extends React.Component {
       const map = this.mapRef.current.leafletElement;
 
       response.data.results.map(e => {
-        const popup = `div class='popup'><strong><h5>${e.name}
-          </h5></strong><h6> Region: ${e.region}</h6>
-          <h6>Site type: ${e.type}</h6>
-          <button><a style='color:white' 
-          href='/fieldsight/application/#/site-dashboard/${e.pk}/>Go to Site</button>
-          </div>`;
-        const mrk = L.CircleMarker(e.latlng, {
+        const popup =
+          "<div class='popup'>" +
+          '<strong><h5>' +
+          e.name +
+          '</h5></strong>' +
+          '<h6> Region: ' +
+          e.region +
+          '</h6>' +
+          '<h6>Site type: : ' +
+          e.type +
+          '</h6>' +
+          "<button><a style='color:white' href='/fieldsight/application/#/site-dashboard/" +
+          e.pk +
+          "'/>Go to Site</button>" +
+          '</div>';
+        const mrk = L.circleMarker(e.latlng, {
           radius: 6,
           fillColor: this.changeColor(e, 'Site Progress'),
           color: '#000',
@@ -151,30 +158,48 @@ class DetailsMap extends React.Component {
           legend.onAdd = () => {
             const div = L.DomUtil.create('div', 'info legend');
 
-            div.innerHTML += '<h6>Legend</h6>';
-            div.innerHTML += '<h7>Site Progress</h7><br>';
-
-            div.innerHTML += `<i class="circle_legend"  style="background:
-              ${this.progressColor[0]}"/> 0%<br>`;
-            div.innerHTML += `<i class="circle_legend" style="background:
-              ${this.progressColor[1]}"
-              /> 0-20%<br>`;
-            div.innerHTML += `<i class="circle_legend" style="background:
-              ${this.progressColor[2]}"
-              /> 21-40%<br>`;
-            div.innerHTML += `<i class="circle_legend" style="background:
-              ${this.progressColor[3]}"
-              /> 41-60%<br>`;
-            div.innerHTML += `<i class="circle_legend" style="background:
-              ${this.progressColor[4]}"
-              /> 61-80%<br>`;
-            div.innerHTML += `<i class="circle_legend" style="background:
-              ${this.progressColor[5]}"
-              /> 81-99%<br>`;
-
-            div.innerHTML += `<i class="circle_legend" style="background:
-              ${this.progressColor[6]}"
-              /> 100%<br>`;
+            div.innerHTML +=
+              '<i class="circle_legend"  style="background:' +
+              this.progressColor[0] +
+              '"></i> ' +
+              '0%' +
+              '<br>';
+            div.innerHTML +=
+              '<i class="circle_legend" style="background:' +
+              this.progressColor[1] +
+              '"></i> ' +
+              '0-20%' +
+              '<br>';
+            div.innerHTML +=
+              '<i class="circle_legend" style="background:' +
+              this.progressColor[2] +
+              '"></i> ' +
+              '21-40%' +
+              '<br>';
+            div.innerHTML +=
+              '<i class="circle_legend" style="background:' +
+              this.progressColor[3] +
+              '"></i> ' +
+              '41-60%' +
+              '<br>';
+            div.innerHTML +=
+              '<i class="circle_legend" style="background:' +
+              this.progressColor[4] +
+              '"></i> ' +
+              '61-80%' +
+              '<br>';
+            div.innerHTML +=
+              '<i class="circle_legend" style="background:' +
+              this.progressColor[5] +
+              '"></i> ' +
+              '81-99%' +
+              '<br>';
+            div.innerHTML +=
+              '<i class="circle_legend" style="background:' +
+              this.progressColor[6] +
+              '"></i> ' +
+              '100%' +
+              '<br>';
 
             return div;
           };

@@ -365,16 +365,34 @@ class ProjectDashboard extends React.Component {
                         <div className="table-footer">
                           <div className="showing-rows">
                             <p>
-                              Showing &nbsp;
-                              <span>{fromData}</span> &nbsp; to &nbsp;
+                              <FormattedMessage
+                                id="app.showing"
+                                defaultMessage="Showing"
+                              />
+                              &nbsp;
+                              <span>{fromData}</span> &nbsp;
+                              <FormattedMessage
+                                id="app.to"
+                                defaultMessage="to"
+                              />
+                              &nbsp;
                               <span>
                                 {toData > totalCount
                                   ? totalCount
                                   : toData}
                               </span>
-                              &nbsp; of &nbsp;
+                              &nbsp;
+                              <FormattedMessage
+                                id="app.of"
+                                defaultMessage="of"
+                              />
+                              &nbsp;
                               <span>{totalCount}</span> &nbsp;
-                              entries.
+                              <FormattedMessage
+                                id="app.entries"
+                                defaultMessage="entries"
+                              />
+                              .
                             </p>
                           </div>
                           {toData < totalCount ? (

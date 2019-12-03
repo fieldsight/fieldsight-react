@@ -19,7 +19,7 @@ import {
 
 const submissionId = window.submission_id
   ? window.submission_id
-  : 66259;
+  : 309996;
 
 class SubmissionDetail extends Component {
   componentDidMount() {
