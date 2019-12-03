@@ -209,7 +209,13 @@ class Submission extends Component {
           </ul>
         </div>
       );
-    } else if (submission.type === "geopoint") {
+    } else if (
+      submission.type === "geopoint" &&
+      site.latitude &&
+      site.longitude
+    ) {
+      console.log("geoloc", submission.answer);
+
       let splitedGeoLocation = [];
       let latitude = "";
       let longitude = "";
@@ -243,6 +249,7 @@ class Submission extends Component {
         latitude && latitude,
         longitude && longitude
       );
+      console.log("dist", distance);
 
       if (distance < 500) {
         bounds = this.getSmallBound(latlngObj);
@@ -350,11 +357,14 @@ class Submission extends Component {
                   {format(submission.answer, ["MMMM Do YYYY,  h:mm:ss a"])}
                 </time>
               ) : submission.type == "select one" ? (
-                this.splitSubmissionObj(
-                  submission.selected["one-one"]["label"],
-                  submission.selected["one-one"]["name"]
-                )
+                submission.selected &&
+                Object.entries(submission.selected).map(one => {
+                  <p key={uuid()}>
+                    {this.splitSubmissionObj(one[1].label, one[1].name)}
+                  </p>;
+                })
               ) : submission.type == "select all that apply" ? (
+                submission.selected &&
                 Object.entries(submission.selected).map(many => (
                   <p key={uuid()}>
                     {this.splitSubmissionObj(many[1].label, many[1].name)}
