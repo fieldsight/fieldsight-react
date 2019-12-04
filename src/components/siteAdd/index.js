@@ -630,7 +630,8 @@ export default class SiteAdd extends Component {
                 <CheckBox
                   checked={this.state.project.cluster_sites || ""}
                   label="Enable subsites"
-                  onChange={handleCheckboxChange}
+                  value={cluster_sites}
+                  changeHandler={handleCheckboxChange}
                 />
               </div>
             </div>

@@ -1,138 +1,134 @@
 .fieldsight-new {
-    .new-dashboard {
-        .card{
-            .card-header{
-                min-height: 50px;
-            }
-        }
-
-
-        .gallery {
-            min-height: 396px;
-            max-height: 396px;
-
-            .photo-item {
-                position: relative;
-                @include coverbg;
-                min-height: 180px;
-                max-height: 180px;
-                cursor: pointer;
-                margin-bottom: 1rem;
-
-                figcaption {
-                    @include overlay;
-                    background-color: rgba($color-primary, 0.5);
-                    @include flexvr;
-                    @include animZoom-before;
-                    @include anim05;
-                    opacity: 0;
-                    visibility: hidden;
-
-                    a {
-                        width: 24px;
-                        height: 24px;
-                        @include flexvr;
-                        background-color: $color-blue;
-                        color: $color-white;
-                        @include radius4;
-                        @include anim03;
-                        @include backface;
-
-                        &:hover {
-                            background-color: $color-yellow;
-
-                        }
-                    }
-                }
-
-                &:hover {
-                    figcaption {
-                        opacity: 1;
-                        visibility: visible;
-                        @include animZoom-after;
-                        @include backface;
-                    }
-                }
-            }
-
-            .col-md-6 {
-
-                &:nth-child(4),
-                &:nth-child(5) &:nth-child(6) {
-                    .photo-item {
-                        margin-bottom: 0;
-                    }
-                }
-            }
-
-        }
+  .new-dashboard {
+    .card {
+      .card-header {
+        min-height: 50px;
+      }
     }
 
-    .gallery-zoom {
-        height: 100vh;
-        background-color: rgba($color-primary, 0.7);
+    .gallery {
+      min-height: 396px;
+      max-height: 396px;
 
-        .popup-close {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            width: 25px;
-            height: 25px;
+      .photo-item {
+        position: relative;
+        @include coverbg;
+        min-height: 180px;
+        max-height: 180px;
+        cursor: pointer;
+        margin-bottom: 1rem;
+
+        figcaption {
+          @include overlay;
+          background-color: rgba($color-primary, 0.5);
+          @include flexvr;
+          @include animZoom-before;
+          @include anim05;
+          opacity: 0;
+          visibility: hidden;
+
+          a {
+            width: 24px;
+            height: 24px;
             @include flexvr;
-            @include boxshadow;
-            color: $color-red;
-            @include radius50;
-            cursor: pointer;
-            background-color: $color-white;
-            @include anim05;
+            background-color: $color-blue;
+            color: $color-white;
+            @include radius4;
+            @include anim03;
+            @include backface;
 
             &:hover {
-                background-color: $color-red;
-                color: $color-white;
+              background-color: $color-yellow;
             }
+          }
         }
 
-        .gallery-body {
-            width: 50%;
-            @include translatey;
-            left: 0;
-            right: 0;
-            margin: auto;
-            z-index: 1001;
-            text-align: center;
-
-            .gallery-footer {
-                padding: 0.5rem;
-                color: $color-white;
-                font-size: 1rem;
-            }
+        &:hover {
+          figcaption {
+            opacity: 1;
+            visibility: visible;
+            @include animZoom-after;
+            @include backface;
+          }
         }
+      }
 
-        @media screen and (min-width:280px) {
-            .gallery-body {
-                width: 80%;
-            }
+      .col-md-6 {
+        &:nth-child(4),
+        &:nth-child(5) &:nth-child(6) {
+          .photo-item {
+            margin-bottom: 0;
+          }
         }
-
-        @media screen and (min-width:$lg-tab) {
-            .gallery-body {
-                width: 70%;
-            }
-        }
-
-        .gallery-nav {
-            @extend .gallery-body;
-            @include flexjust;
-
-            i {
-                color: $color-white;
-                font-size: 2rem;
-
-                &:hover {
-                    color: $color-secondary;
-                    cursor: pointer;
-                }
-            }
-        }
+      }
     }
+  }
+
+  .gallery-zoom {
+    height: 100vh;
+    background-color: rgba($color-primary, 0.7);
+
+    .popup-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 25px;
+      height: 25px;
+      @include flexvr;
+      @include boxshadow;
+      color: $color-red;
+      @include radius50;
+      cursor: pointer;
+      background-color: $color-white;
+      @include anim05;
+
+      &:hover {
+        background-color: $color-red;
+        color: $color-white;
+      }
+    }
+
+    .gallery-body {
+      width: 50%;
+      @include translatey;
+      left: 0;
+      right: 0;
+      margin: auto;
+      z-index: 1001;
+      text-align: center;
+
+      .gallery-footer {
+        padding: 0.5rem;
+        color: $color-white;
+        font-size: 1rem;
+      }
+    }
+
+    @media screen and (min-width: 280px) {
+      .gallery-body {
+        width: 80%;
+      }
+    }
+
+    @media screen and (min-width: $lg-tab) {
+      .gallery-body {
+        width: 70%;
+      }
+    }
+
+    .gallery-nav {
+      @extend .gallery-body;
+      @include flexjust;
+
+      i {
+        color: $color-white;
+        font-size: 2rem;
+
+        &:hover {
+          color: $color-secondary;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }

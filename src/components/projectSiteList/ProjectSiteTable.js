@@ -12,7 +12,7 @@ let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
 
-//const project_id = window.project_id ? window.project_id : 137;
+const project_id = window.project_id ? window.project_id : 137;
 
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
@@ -24,6 +24,11 @@ class ProjectSiteTable extends Component {
     });
   }
 
+  componentWillUpdate(prevProps) {
+    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
+      prevProps.breadcrumbhandler(prevProps.breadcrumbs);
+    }
+  }
   onChangeHandler = e => {
     const searchValue = e.target.value;
     this.props.searchHandler(
@@ -59,7 +64,7 @@ class ProjectSiteTable extends Component {
                   onChange={this.onChangeHandler}
                   placeholder="Search"
                 />
-               
+
                 <i className="la la-search" />
               </div>
             </form>
@@ -68,7 +73,10 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/site/add/" + project_id + "/"
+                  base_url +
+                    "/fieldsight/application/#/create-site/" +
+                    project_id +
+                    "/"
                 )
               }
             >
@@ -76,10 +84,10 @@ class ProjectSiteTable extends Component {
             </button>
             <a
               className="fieldsight-btn"
-              href={`fieldsight/multi-site-assign-region/${project_id}/`}
+              href={`/fieldsight/multi-site-assign-region/${project_id}/`}
               target="_blank"
             >
-               Assign Sites to Regions
+              Assign Sites to Regions
             </a>
             <a
               className="fieldsight-btn"

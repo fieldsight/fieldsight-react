@@ -8,6 +8,8 @@ import projectListReducer from "./projectListReducer";
 import projectUserReducer from "./projectUserReducer";
 import teamReducer from "./teamsReducer";
 import projectLogsReducer from "./projectLogsReducer";
+import viewDataReducer from "./viewDataReducer";
+import siteViewDataReducer from "./siteViewDataReducer";
 
 export default combineReducers({
   submissionDetail: submissionDetailReducer,
@@ -17,6 +19,8 @@ export default combineReducers({
   userDocument: userDocumentReducer,
   projectList: projectListReducer,
   projectUser: projectUserReducer,
-  teams:teamReducer,
-  projectLogs:projectLogsReducer
+  teams: teamReducer,
+  projectLogs: projectLogsReducer,
+  projectViewData: viewDataReducer,
+  siteViewData: siteViewDataReducer
 });

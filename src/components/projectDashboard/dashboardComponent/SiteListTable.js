@@ -11,22 +11,21 @@ class SiteListTable extends React.Component {
   };
   render() {
     const { data, loader, terms } = this.props;
-
+    const tableHeight = data.length > 0 ? "324px" : "396px";
     return (
       <>
         <div className="card-body">
-          <div style={{ position: "relative", height: "324px" }}>
+          <div style={{ position: "relative", height: `${tableHeight} ` }}>
             <PerfectScrollbar>
               {loader && <DotLoader />}
               {!loader && (
                 <Table
                   responsive="xl"
                   className="table  table-bordered  dataTable"
-
-                   >
+                >
                   <thead>
-                    <tr >
-                      <th >
+                    <tr>
+                      <th>
                         {!isEmpty(terms) ? `${terms.site}` : "Sites"} Name
                       </th>
                       <th>id</th>
@@ -42,7 +41,7 @@ class SiteListTable extends React.Component {
                   <tbody>
                     {!loader && data.length === 0 && (
                       <tr>
-                        <td>
+                        <td colSpan={7}>
                           <p>No Form Data Available</p>
                         </td>
                       </tr>
