@@ -11,6 +11,7 @@ import MapPage from "./MapPage";
 import { successToast, errorToast } from "../../utils/toastHandler";
 import withPagination from "../../hoc/WithPagination";
 import Modal from "../common/Modal";
+import DeleteModal from "../common/DeleteModal";
 
 class MyrolesMain extends Component {
   state = {
@@ -32,13 +33,19 @@ class MyrolesMain extends Component {
     siteId: null,
     myGuide: false,
     searchQuery: "",
-    profileId: ""
+    profileId: "",
+    roles: [],
+    checkRole: false,
+    type: "",
+    roleId: "",
+    isDelConfirm: false
   };
 
   // componentDidMount() {
   componentWillMount() {
     const { profileId } = this.props.match.params;
-    let url = profileId
+
+    const url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
       : `fv3/api/myroles/`;
     this._isMounted = true;
@@ -189,13 +196,13 @@ class MyrolesMain extends Component {
           );
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   requestSite = id => {
     const { profileId } = this.state;
 
-    const site_url = !!profileId
+    const site_url = profileId
       ? "fv3/api/my-sites/?project=" + id + "&profile=" + profileId
       : "fv3/api/my-sites/?project=" + id;
 
@@ -214,7 +221,7 @@ class MyrolesMain extends Component {
     //     }
     //   })
     //   .catch(err => {});
-    if (!!profileId) {
+    if (profileId) {
       this.props.paginationHandler(1, null, {
         type: "mySiteList",
         projectId: id,
@@ -271,7 +278,8 @@ class MyrolesMain extends Component {
 
   cancelHandler = () => {
     this.setState({
-      myGuide: false
+      myGuide: false,
+      checkRole: false
     });
   };
 
@@ -289,9 +297,47 @@ class MyrolesMain extends Component {
       });
     });
   };
+
+  requestCheckRoles = (type, id) => {
+    const { profileId } = this.state;
+    this.setState({ checkRole: true, type, roleId: id }, () => {
+      axios
+        .get(`/fv3/api/check-role/${profileId}/${type}/${id}/`)
+        .then(res => {
+          if (res.data) {
+            this.setState({ roles: res.data });
+          }
+        })
+        .catch(() => {});
+    });
+  };
+
+  requestDeleteRole = () => {
+    const { type, roleId } = this.state;
+    axios
+      .post(`fv3/api/remove-role/${type}/${roleId}/`)
+      .then(res => {
+        if (res.data) {
+          this.setState({
+            isDelConfirm: false,
+            checkRole: false
+          }),
+            successToast("role", "deleted");
+        }
+      })
+      .catch(err => {
+        const error = err.response && err.response.data;
+        errorToast(error);
+      });
+  };
+
+  handleToggleDelete = () => {
+    this.setState(({ isDelConfirm }) => ({ isDelConfirm: !isDelConfirm }));
+  };
+
   render() {
     // const { profileId } = this.props.match.params;
-    const { myGuide, profileId } = this.state;
+    const { myGuide, profileId, roles, checkRole, isDelConfirm } = this.state;
 
     return (
       <>
@@ -314,6 +360,7 @@ class MyrolesMain extends Component {
             requestMap={this.requestMap}
             regions={this.state.regions}
             addPermission={this.state.profile.can_create_team}
+            requestCheckRoles={this.requestCheckRoles}
           />
 
           <div className="col-xl-8 col-lg-7">
@@ -425,6 +472,7 @@ class MyrolesMain extends Component {
                         regions={this.state.regions}
                         RegionLoader={this.state.RegionLoader}
                         profileId={profileId}
+                        requestCheckRoles={this.requestCheckRoles}
                       />
                     )}
                     {this.state.rightTab == "site" && (
@@ -444,6 +492,7 @@ class MyrolesMain extends Component {
                         toData={this.props.toData}
                         totalCount={this.props.totalCount}
                         profileId={profileId}
+                        requestCheckRoles={this.requestCheckRoles}
                       />
                     )}
 
@@ -500,6 +549,43 @@ class MyrolesMain extends Component {
               </a>
             </div>
           </Modal>
+        )}
+        {checkRole && (
+          <Modal
+            title="Which of the following roles do you want to Delete?"
+            toggleModal={this.cancelHandler}
+          >
+            {/* <div className="row"> */}
+            <ul>
+              {roles &&
+                roles.length > 0 &&
+                roles.map(role => (
+                  <li key={`role_${role.role_id}`}>
+                    <label>
+                      <strong>{role.group_name}</strong>
+                    </label>
+                    &nbsp;
+                    <a
+                      className="td-delete-btn td-btn"
+                      onClick={() => {
+                        this.handleToggleDelete();
+                      }}
+                    >
+                      Delete
+                    </a>
+                  </li>
+                ))}
+            </ul>
+            {/* </div> */}
+          </Modal>
+        )}
+        {isDelConfirm && (
+          <DeleteModal
+            onCancel={this.handleToggleDelete}
+            onConfirm={this.requestDeleteRole}
+            onToggle={this.handleToggleDelete}
+            message="Are you sure to delete the role?"
+          />
         )}
       </>
     );

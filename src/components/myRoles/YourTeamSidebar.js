@@ -16,6 +16,8 @@ class YourTeamSideBar extends Component {
   };
 
   render() {
+    console.log("log team", this.props.teams);
+
     return (
       <div className="col-xl-4 col-lg-5">
         <div className="left-sidebar new-sidebar sticky-top">
@@ -67,8 +69,16 @@ class YourTeamSideBar extends Component {
                               eventKey={i.toString()}
                             >
                               {team.name}
-                              {!!team.delete_role_url && (
-                                <span className="td-delete-btn td-btn">
+                              {!!team.can_delete_role && (
+                                <span
+                                  className="td-delete-btn td-btn"
+                                  onClick={() => {
+                                    this.props.requestCheckRoles(
+                                      "team",
+                                      team.id
+                                    );
+                                  }}
+                                >
                                   <OverlayTrigger
                                     placement="top"
                                     overlay={<Tooltip>Delete</Tooltip>}
@@ -110,7 +120,7 @@ class YourTeamSideBar extends Component {
                                   key={i}
                                 >
                                   <a
-                                    onClick={event => {
+                                    onClick={() => {
                                       this.props.requestSite(project.id);
                                       this.props.requestRegions(project.id);
                                       this.props.requestSubmission(project.id);
@@ -136,8 +146,16 @@ class YourTeamSideBar extends Component {
                                       </OverlayTrigger>
                                     </span>
                                   )}
-                                  {!!project.delete_role_url && (
-                                    <span className="td-delete-btn td-btn">
+                                  {!!project.can_delete_role && (
+                                    <span
+                                      className="td-delete-btn td-btn"
+                                      onClick={() => {
+                                        this.props.requestCheckRoles(
+                                          "project",
+                                          project.id
+                                        );
+                                      }}
+                                    >
                                       <OverlayTrigger
                                         placement="top"
                                         overlay={<Tooltip>Delete</Tooltip>}

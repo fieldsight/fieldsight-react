@@ -47,16 +47,26 @@ class RegionTable extends Component {
                       </td>
                       <td>{region.total_sites}</td>
                       <td>{region.role}</td>
-                      {this.props.profileId && !!region.delete_role_url && (
+                      {this.props.profileId && (
                         <td>
-                          <a className="td-delete-btn td-btn">
-                            <OverlayTrigger
-                              placement="top"
-                              overlay={<Tooltip>Delete</Tooltip>}
+                          {region.can_delete_role && (
+                            <a
+                              className="td-delete-btn td-btn"
+                              onClick={() => {
+                                this.props.requestCheckRoles(
+                                  "region",
+                                  region.id
+                                );
+                              }}
                             >
-                              <i className="la la-trash-o" />
-                            </OverlayTrigger>
-                          </a>
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Delete</Tooltip>}
+                              >
+                                <i className="la la-trash-o" />
+                              </OverlayTrigger>
+                            </a>
+                          )}
                         </td>
                       )}
                     </tr>
