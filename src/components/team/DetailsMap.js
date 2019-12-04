@@ -106,7 +106,7 @@ class DetailsMap extends React.Component {
                 const map = this.mapRef.current.leafletElement;
 
                 response.data.results.map((e) => {
-                    
+
                     var popup = "<div class='popup'>" + "<strong><h5>" + e.name + "</h5></strong>" +
                         "<h6> Region: " + e.region + "</h6>" +
                         "<h6>Site type: : " + e.type + "</h6>" +
@@ -114,7 +114,7 @@ class DetailsMap extends React.Component {
                         + "</div>"
                     // console.log(e, "e")
                     var mrk = L.circleMarker(e.latlng, {
-                        radius: 6, 
+                        radius: 6,
                         fillColor: this.changeColor(e, "Site Progress"),
                         color: "#000",
                         weight: 1,
@@ -335,19 +335,30 @@ class DetailsMap extends React.Component {
 
     }
     render() {
-        var height=window.innerHeight-63.547;
+        var height = window.innerHeight - 63.547;
+        console.log(this.props.projectname,"name")
 
-        
+
 
 
         return (
             <>
+                <div className='infodiv'>
+
+                    <h6>All Sites of {this.props.projectname}  </h6>
+                    <div className='backdiv' style={{display:'flex',flexDirection:'row'}}>
+                        <img onClick={()=>this.props.detailstoprojects()} id='backbtn' src='../../static/images/back.png'></img><h6>Go back to Projects</h6>
+
+
+                    </div>
+
+                </div>
                 {this.state.loader && <div className='loader'>
                     <img src={require('../../static/images/ring.gif')}></img>
-                    bsjs
+
 
                 </div>}
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#07224c',display:'none' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#07224c', display: 'none' }}>
                     <Button onClick={() => this.props.popupCLick('projectmap', '')} style={{ marginRight: 20 }}>Back</Button>
 
                     {this.state.regions !== null ? <Select
