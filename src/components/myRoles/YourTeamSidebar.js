@@ -16,8 +16,6 @@ class YourTeamSideBar extends Component {
   };
 
   render() {
-    console.log("log team", this.props.teams);
-
     return (
       <div className="col-xl-4 col-lg-5">
         <div className="left-sidebar new-sidebar sticky-top">

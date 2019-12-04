@@ -300,7 +300,7 @@ class MyrolesMain extends Component {
 
   requestCheckRoles = (type, id) => {
     const { profileId } = this.state;
-    this.setState({ checkRole: true, type, roleId: id }, () => {
+    this.setState({ checkRole: true, type }, () => {
       axios
         .get(`/fv3/api/check-role/${profileId}/${type}/${id}/`)
         .then(res => {
@@ -309,6 +309,13 @@ class MyrolesMain extends Component {
           }
         })
         .catch(() => {});
+    });
+  };
+
+  handleToggleDelete = roleId => {
+    this.setState(state => {
+      if (roleId) return { roleId, isDelConfirm: !state.isDelConfirm };
+      return { isDelConfirm: !isDelConfirm };
     });
   };
 
@@ -329,10 +336,6 @@ class MyrolesMain extends Component {
         const error = err.response && err.response.data;
         errorToast(error);
       });
-  };
-
-  handleToggleDelete = () => {
-    this.setState(({ isDelConfirm }) => ({ isDelConfirm: !isDelConfirm }));
   };
 
   render() {
@@ -568,7 +571,7 @@ class MyrolesMain extends Component {
                     <a
                       className="td-delete-btn td-btn"
                       onClick={() => {
-                        this.handleToggleDelete();
+                        this.handleToggleDelete(role.role_id);
                       }}
                     >
                       Delete
