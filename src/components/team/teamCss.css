@@ -140,7 +140,7 @@
 .infodiv{
     max-width: 200px;
     position: fixed;
-    top:20px;
+    top:13px;
     left:70px;
     z-index: 3000;
     background-color: white;
@@ -154,8 +154,8 @@
 }
 #backbtn{
     margin-right: 4px;
-    width: 20px;
-    height: 15px;
+    width: 30px;
+    height: 25px;
     cursor: pointer;
     background-color:white ;
 }

@@ -40,7 +40,8 @@ class TeamMap extends React.Component {
         projectcount: null,
         baselayer: false,
         clicked: true,
-        vectorGrid:''
+        vectorGrid:'',
+        countrystr:"Fieldsight Coverage all over the world"
 
 
 
@@ -298,6 +299,8 @@ class TeamMap extends React.Component {
             // var parsed=JSON.parse(e)
             var s = eval(e.layer.properties.BBOX)
             this.setState({ clicked: false })
+            console.log(e.layer.properties.COUNTRY)
+            this.setState({countrystr:"Projects of "+e.layer.properties.COUNTRY})
 
             // console.log(e.layer.properties)
             var first = [];
@@ -686,6 +689,7 @@ class TeamMap extends React.Component {
                 
                 map.addLayer(this.state.vectorGrid)
                 map.fitBounds(this.bounds)
+                this.setState({countrystr:"Fieldsight Coverage all over the world"})
 
 
 
@@ -738,7 +742,7 @@ class TeamMap extends React.Component {
         return (
             <>
             <div className='infodiv'>
-                <h6>Projects count of all countries around the Globe</h6>
+        <h6>{this.state.countrystr}</h6>
 
             </div>
                 {this.state.loader && <div className='loader'>

@@ -345,9 +345,9 @@ class DetailsMap extends React.Component {
             <>
                 <div className='infodiv'>
 
-                    <h6>All Sites of {this.props.projectname}  </h6>
+                    <h6>All Sites of the project <strong> {this.props.projectname} </strong> </h6>
                     <div className='backdiv' style={{display:'flex',flexDirection:'row'}}>
-                        <img onClick={()=>this.props.detailstoprojects()} id='backbtn' src='../../static/images/back.png'></img><h6>Go back to Projects</h6>
+                        <img onClick={()=>this.props.detailstoprojects()} id='backbtn' src='../../static/images/back.png'></img><h6 style={{color:'rgba(0,0,0,0.4)'}}>Go back to Projects</h6>
 
 
                     </div>
