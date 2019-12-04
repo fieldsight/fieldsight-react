@@ -4,14 +4,14 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 
-const Table = (
+const Table = ({
   tableHeader,
   tableRow,
   forms,
   page,
   removeHandler,
   editHandler,
-) => {
+}) => {
   return (
     <div
       className="table-responsive"

@@ -20,7 +20,7 @@ const InputElement = ({
 }) => (
   <div className={`form-group ${classname}`}>
     {formType === 'editForm' &&
-      (translation === true ? (
+      (translation ? (
         <label htmlFor={htmlFor}>
           <FormattedMessage id={label} defaultMessage={label} />
           {required && <sup>*</sup>}

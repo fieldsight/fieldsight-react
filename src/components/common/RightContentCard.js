@@ -11,7 +11,11 @@ const RightContentCard = ({
   <div className="card">
     <div className="card-header main-card-header">
       <h5>
-        <FormattedMessage id={title} defaultMessage={title} />
+        {typeof title === 'string' ? (
+          <FormattedMessage id={title} defaultMessage={title} />
+        ) : (
+          title
+        )}
       </h5>
       {addButton && (
         <div className="add-btn">

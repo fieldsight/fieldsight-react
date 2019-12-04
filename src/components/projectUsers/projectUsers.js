@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import getProjectUser from '../../actions/projectUserActions';
-/* eslint-disable react/prop-types  */
-/* eslint-disable react/no-array-index-key  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
+/* eslint-disable react/destructuring-assignment */
 
 class ProjectUser extends Component {
   constructor(props) {
@@ -22,9 +20,8 @@ class ProjectUser extends Component {
       match: {
         params: { id },
       },
-      // getProjectUser,
     } = this.props;
-    getProjectUser(id);
+    this.props.getProjectUser(id);
   }
 
   componentWillReceiveProps(nextprops) {
@@ -140,9 +137,9 @@ class ProjectUser extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user, key) => {
+                  {users.map(user => {
                     return (
-                      <tr key={key}>
+                      <tr key={user.id}>
                         <td>
                           <a
                             href={`/users/profile/${user.id}`}

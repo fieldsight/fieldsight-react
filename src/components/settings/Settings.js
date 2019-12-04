@@ -11,7 +11,6 @@ import SubRegion from '../manageRegion/SubRegion';
 import TermsAndLabels from '../termsAndLabels/TermAndLabel';
 import MapLayer from '../mapLayer/MapLayer';
 import { RegionProvider } from '../../context';
-/* eslint-disable react/prop-types  */
 
 export default class Settings extends PureComponent {
   render() {

@@ -10,14 +10,23 @@ const TableHeader = ({ tableHeader }) => {
         {tableHeader.length > 0 &&
           tableHeader.map((header, i) => (
             <th key={i} style={{ width: '20%' }}>
-              {header === ('app.type' || 'app.action' || 'app.id') ? (
+              {typeof header === 'string' ? (
+                <FormattedMessage
+                  id={header}
+                  defaultMessage={header}
+                />
+              ) : (
+                header
+              )}
+
+              {/* {header === ('app.type' || 'app.action' || 'app.id') ? (
                 <FormattedMessage
                   id={header}
                   defaultMessage={header}
                 />
               ) : (
                 { header }
-              )}
+              )} */}
             </th>
           ))}
       </tr>

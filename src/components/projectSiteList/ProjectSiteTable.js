@@ -315,15 +315,28 @@ class ProjectSiteTable extends Component {
             <div className="table-footer">
               <div className="showing-rows">
                 <p>
-                  Showing
+                  <FormattedMessage
+                    id="app.showing"
+                    defaultMessage="Showing"
+                  />
+                  &nbsp;
                   <span>{fromData}</span>
-                  to
+                  &nbsp;
+                  <FormattedMessage id="app.to" defaultMessage="to" />
+                  &nbsp;
                   <span>
                     {toData > totalCount ? totalCount : toData}
                   </span>
-                  of
+                  &nbsp;
+                  <FormattedMessage id="app.of" defaultMessage="of" />
+                  &nbsp;
                   <span>{totalCount}</span>
-                  entries.
+                  &nbsp;
+                  <FormattedMessage
+                    id="app.entries"
+                    defaultMessage="entries"
+                  />
+                  .
                 </p>
               </div>
               {toData < totalCount ? (

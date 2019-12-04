@@ -10,8 +10,6 @@ import { successToast, errorToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 import Warning from '../common/DeleteModal';
-/* eslint-disable consistent-return  */
-/* eslint-disable react/static-property-placement */
 /* eslint-disable  react/sort-comp */
 
 const tableHeader = {
@@ -44,16 +42,26 @@ class SiteType extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { projectId } = this.context;
-    axios
-      .get(`${url}?project=${projectId}`)
-      .then(res => {
-        if (this._isMounted) {
-          this.setState({
-            siteType: res.data,
+    this.setState(
+      {
+        isLoading: true,
+      },
+      () => {
+        axios
+          .get(`${url}?project=${projectId}`)
+          .then(res => {
+            if (this._isMounted) {
+              this.setState({
+                siteType: res.data,
+                isLoading: false,
+              });
+            }
+          })
+          .catch(() => {
+            this.setState({ isLoading: false });
           });
-        }
-      })
-      .catch(() => {});
+      },
+    );
   }
 
   componentWillUnmount() {
@@ -121,7 +129,7 @@ class SiteType extends Component {
       project: projectId,
     };
 
-    axios
+    return axios
       .post(`${url}?project=${projectId}`, newSiteType)
       .then(res => {
         this.setState(
@@ -252,6 +260,7 @@ class SiteType extends Component {
       confirmHandler,
       context: { terms },
     } = this;
+
     const informationDeclare = !isEmpty(terms)
       ? `${terms.site} Type`
       : 'Site Type';
@@ -272,13 +281,15 @@ class SiteType extends Component {
           toggleModal={toggleModal}
           hideButton
         >
-          <Table
-            page="siteType"
-            tableHeader={tableHeader.siteTypes}
-            tableRow={siteType}
-            removeHandler={removeHandler}
-            editHandler={editHandler}
-          />
+          {!isLoading && (
+            <Table
+              page="siteType"
+              tableHeader={tableHeader.siteTypes}
+              tableRow={siteType}
+              removeHandler={removeHandler}
+              editHandler={editHandler}
+            />
+          )}
         </RightContentCard>
         {isLoading && <Loader />}
         {showModal && (
