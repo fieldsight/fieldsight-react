@@ -67,6 +67,16 @@ class YourTeamSideBar extends Component {
                               eventKey={i.toString()}
                             >
                               {team.name}
+                              {!!team.delete_role_url && (
+                                <span className="td-delete-btn td-btn">
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>Delete</Tooltip>}
+                                  >
+                                    <i className="la la-trash-o" />
+                                  </OverlayTrigger>
+                                </span>
+                              )}
                               {team.has_organization_access && (
                                 <span
                                   onClick={e =>
@@ -101,8 +111,8 @@ class YourTeamSideBar extends Component {
                                 >
                                   <a
                                     onClick={event => {
-                                      this.props.requestRegions(project.id);
                                       this.props.requestSite(project.id);
+                                      this.props.requestRegions(project.id);
                                       this.props.requestSubmission(project.id);
                                       this.props.requestMap(project.id);
                                     }}
@@ -110,9 +120,11 @@ class YourTeamSideBar extends Component {
                                     {project.name}
                                   </a>
                                   {project.has_project_access && (
-                                    <a
+                                    <span
+                                      onClick={e =>
+                                        this.OpenTabHandler(project.project_url)
+                                      }
                                       className="project-link"
-                                      href={project.project_url}
                                     >
                                       <OverlayTrigger
                                         placement="top"
@@ -122,7 +134,17 @@ class YourTeamSideBar extends Component {
                                       >
                                         <i className="la la-external-link" />
                                       </OverlayTrigger>
-                                    </a>
+                                    </span>
+                                  )}
+                                  {!!project.delete_role_url && (
+                                    <span className="td-delete-btn td-btn">
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip>Delete</Tooltip>}
+                                      >
+                                        <i className="la la-trash-o" />
+                                      </OverlayTrigger>
+                                    </span>
                                   )}
                                 </li>
                               ))}

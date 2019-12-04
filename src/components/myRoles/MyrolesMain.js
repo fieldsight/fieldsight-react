@@ -31,7 +31,8 @@ class MyrolesMain extends Component {
     teamId: null,
     siteId: null,
     myGuide: false,
-    searchQuery: ""
+    searchQuery: "",
+    profileId: ""
   };
 
   // componentDidMount() {
@@ -41,37 +42,44 @@ class MyrolesMain extends Component {
       ? `fv3/api/myroles/?profile=${profileId}`
       : `fv3/api/myroles/`;
     this._isMounted = true;
-    axios
-      .get(`${url}`)
+    this.setState(
+      {
+        profileId
+      },
+      () => {
+        axios
+          .get(`${url}`)
 
-      .then(res => {
-        if (this._isMounted) {
-          if (res.status === 200) {
-            const modifiedTeam = res.data.teams.map((team, i) => {
-              return i === 0
-                ? { ...team, accord: true }
-                : { ...team, accord: false };
-            });
+          .then(res => {
+            if (this._isMounted) {
+              if (res.status === 200) {
+                const modifiedTeam = res.data.teams.map((team, i) => {
+                  return i === 0
+                    ? { ...team, accord: true }
+                    : { ...team, accord: false };
+                });
 
-            if (res.data.teams.length > 0) {
-              this.setState({
-                initialTeamId: res.data.teams[0].projects[0].id
-              });
+                if (res.data.teams.length > 0) {
+                  this.setState({
+                    initialTeamId: res.data.teams[0].projects[0].id
+                  });
+                }
+
+                this.setState({
+                  profile: res.data.profile,
+                  invitation: res.data.invitations,
+                  roles: res.data.roles,
+                  teams: modifiedTeam,
+                  dLoader: false,
+                  RegionLoader: false,
+                  myGuide: res.data.profile.guide_popup
+                });
+              }
             }
-
-            this.setState({
-              profile: res.data.profile,
-              invitation: res.data.invitations,
-              roles: res.data.roles,
-              teams: modifiedTeam,
-              dLoader: false,
-              RegionLoader: false,
-              myGuide: res.data.profile.guide_popup
-            });
-          }
-        }
-      })
-      .catch(err => {});
+          })
+          .catch(err => {});
+      }
+    );
   }
 
   invitationOpen = (e, data) => {
@@ -157,7 +165,11 @@ class MyrolesMain extends Component {
   };
 
   requestRegions = id => {
-    const url = "fv3/api/my-regions/?project=" + id;
+    const { profileId } = this.state;
+    const url = !!profileId
+      ? "fv3/api/my-regions/?project=" + id + "&profile=" + profileId
+      : "fv3/api/my-regions/?project=" + id;
+
     this.setState({
       teamId: id,
       RegionLoader: true
@@ -172,7 +184,7 @@ class MyrolesMain extends Component {
               RegionLoader: false
             },
             () => {
-              this.state, "dfghjh";
+              // this.state, "dfghjh";
             }
           );
         }
@@ -181,7 +193,12 @@ class MyrolesMain extends Component {
   };
 
   requestSite = id => {
-    const site_url = "fv3/api/my-sites/?project=" + id;
+    const { profileId } = this.state;
+
+    const site_url = !!profileId
+      ? "fv3/api/my-sites/?project=" + id + "&profile=" + profileId
+      : "fv3/api/my-sites/?project=" + id;
+
     this.setState({
       siteLoader: true,
       siteId: id
@@ -197,15 +214,27 @@ class MyrolesMain extends Component {
     //     }
     //   })
     //   .catch(err => {});
-
-    this.props.paginationHandler(1, null, {
-      type: "mySiteList",
-      projectId: id
-    });
+    if (!!profileId) {
+      this.props.paginationHandler(1, null, {
+        type: "mySiteList",
+        projectId: id,
+        profileId
+      });
+    } else {
+      this.props.paginationHandler(1, null, {
+        type: "mySiteList",
+        projectId: id
+      });
+    }
   };
 
   requestSubmission = id => {
-    const submission_url = `fv3/api/submissions-map/?project=${id}&type=submissions`;
+    const { profileId } = this.state;
+
+    const submission_url = !!profileId
+      ? `fv3/api/submissions-map/?project=${id}&type=submissions&profile=${profileId}`
+      : `fv3/api/submissions-map/?project=${id}&type=submissions`;
+
     this.setState({
       submissionLoader: true
     });
@@ -223,8 +252,10 @@ class MyrolesMain extends Component {
   };
 
   requestMap = id => {
-    //const id =309
-    const submission_url = `fv3/api/submissions-map/?project=${id}&type=map`;
+    const { profileId } = this.state;
+    const submission_url = !!profileId
+      ? `fv3/api/submissions-map/?project=${id}&type=map&profile=${profileId}`
+      : `fv3/api/submissions-map/?project=${id}&type=map`;
 
     axios
       .get(`${submission_url}`)
@@ -246,21 +277,21 @@ class MyrolesMain extends Component {
 
   onChangeHandler = e => {
     const searchValue = e.target.value;
-    const { siteId } = this.state;
+    const { siteId, profileId } = this.state;
+    const url = !!profileId
+      ? `fv3/api/my-sites/?project=${siteId}&profile=${profileId}&q=${this.state.searchQuery}`
+      : `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`;
+
     this.setState({ searchQuery: searchValue }, () => {
-      this.props.searchHandler(
-        this.state.searchQuery,
-        `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`,
-        {
-          type: "mySiteList",
-          projectId: siteId
-        }
-      );
+      this.props.searchHandler(this.state.searchQuery, url, {
+        type: "mySiteList",
+        projectId: siteId
+      });
     });
   };
   render() {
-    const { profileId } = this.props.match.params;
-    const { myGuide } = this.state;
+    // const { profileId } = this.props.match.params;
+    const { myGuide, profileId } = this.state;
 
     return (
       <>

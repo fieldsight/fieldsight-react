@@ -47,7 +47,7 @@ class RegionTable extends Component {
                       </td>
                       <td>{region.total_sites}</td>
                       <td>{region.role}</td>
-                      {this.props.profileId && (
+                      {this.props.profileId && !!region.delete_role_url && (
                         <td>
                           <a className="td-delete-btn td-btn">
                             <OverlayTrigger
