@@ -40,7 +40,8 @@ class TeamMap extends React.Component {
         projectcount: null,
         baselayer: false,
         clicked: true,
-        vectorGrid:''
+        vectorGrid:'',
+        countrystr:"Fieldsight Coverage all over the world"
 
 
 
@@ -100,8 +101,9 @@ class TeamMap extends React.Component {
 
     }
 
-    popUpClick = (e) => {
-        this.props.popupCLick('detailsmap', e)
+    popUpClick = (e,name) => {
+        console.log("a",e,name,"m")
+        e!=undefined&&name!=undefined&&this.props.popupCLick('detailsmap', e,name)
 
 
 
@@ -125,7 +127,7 @@ class TeamMap extends React.Component {
         }
     }
     getColor = (d) => {
-        var reversecolors = ['#111359', '#1C2095', '#2226B3', '#2D33EE', '#5055F8', '#9C9EF3'];
+        var reversecolors = ['#005175', '#005A82', '#00628E', '#177098', '#458CAC', '#73A9C1'];
         var colors = reversecolors.reverse();
         // console.log(this.rangearay.length );
         // console.log(d);
@@ -297,6 +299,8 @@ class TeamMap extends React.Component {
             // var parsed=JSON.parse(e)
             var s = eval(e.layer.properties.BBOX)
             this.setState({ clicked: false })
+            console.log(e.layer.properties.COUNTRY)
+            this.setState({countrystr:"Projects of "+e.layer.properties.COUNTRY})
 
             // console.log(e.layer.properties)
             var first = [];
@@ -392,7 +396,7 @@ class TeamMap extends React.Component {
         //         world.on('mouseover', (e) => {
         //             // //
         //             // //
-        console.log(e)
+        // console.log(e)
         //             L.popup().setLatLng(e.latlng).setContent("<h6>Country: " + e.layer.properties.COUNTRY + "</h6>" +
         //                 "<h6>ProjectCount: " + e.layer.properties.id + "</h6>"
         //             )
@@ -442,6 +446,8 @@ class TeamMap extends React.Component {
 
         // console.log("NEW DATA",newData)
         newData.map((e) => {
+            console.log(e.name)
+            // debugger
             var popup = "<div class='popup'>" + "<strong><h5>" + e.name + "</h5></strong>" +
                 "<h6> " + e.address + "</h6>" +
                 "<h6>Sites: " + e.sites_count + "</h6>" +
@@ -449,8 +455,13 @@ class TeamMap extends React.Component {
             var mrk = L.marker(e.latlng, { icon: new L.icon({ iconUrl: '../../static/images/marker.png', iconSize: [28, 28] }) }).bindPopup(popup)
             mrk.on('click', () => {
                 var classes = document.getElementsByClassName('popButton')
+                var name=e.name
+                console.log(name)
+
                 for (var i = 0; i < classes.length; i++) {
-                    classes[i].addEventListener('click', () => this.popUpClick(e.pk))
+                    console.log(classes.length,"length",i)
+                    classes[i].addEventListener('click', () => {this.popUpClick(e.pk,name)})
+                    // debugger
                 }
             })
 
@@ -678,6 +689,7 @@ class TeamMap extends React.Component {
                 
                 map.addLayer(this.state.vectorGrid)
                 map.fitBounds(this.bounds)
+                this.setState({countrystr:"Fieldsight Coverage all over the world"})
 
 
 
@@ -729,6 +741,10 @@ class TeamMap extends React.Component {
 
         return (
             <>
+            <div className='infodiv'>
+        <h6>{this.state.countrystr}</h6>
+
+            </div>
                 {this.state.loader && <div className='loader'>
                     <img src={require('../../static/images/ring.gif')}></img>
 
