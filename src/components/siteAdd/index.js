@@ -84,48 +84,60 @@ export default class SiteAdd extends Component {
         params: { id, siteId, regionalId }
       }
     } = this.props;
+    const urls = [
+      `/fv3/api/site-form/?project=${id}`,
+      `fv3/api/site-forms-breadcrumbs/?project=${id}&type=create`
+    ];
 
     axios
-      .get(`/fv3/api/site-form/?project=${id}`)
-      .then(res => {
-        let regionArr = this.state.region;
-        let typeArr = this.state.site_types;
-        if (res.data.location) {
-          const position = res.data.location && res.data.location.split(" ");
-          const longitude = position && position[1].split("(")[1];
-          const latitude = position && position[2].split(")")[0];
+      .all(
+        urls.map((url, i) => {
+          return axios.get(url);
+        })
+      )
+      .then(
+        axios.spread((siteForm, breadcrumbRes) => {
+          let regionArr = this.state.region;
+          let typeArr = this.state.site_types;
 
-          this.setState({
-            position: {
-              latitude,
-              longitude
-            }
-          });
-        } else {
-          this.setState({
-            position: {
-              latitude: "51.505",
-              longitude: "-0.09"
-            }
-          });
-        }
+          if (this._isMounted) {
+            const position =
+              siteForm.data.location !== "None"
+                ? siteForm.data.location && siteForm.data.location.split(" ")
+                : "";
+            const longitude = position && position[1].split("(")[1];
+            const latitude = position && position[2].split(")")[0];
+            const breadcrumbs = breadcrumbRes.data;
 
-        this.setState(state => {
-          res.data.regions !== undefined &&
-            res.data.regions.map(each => regionArr.push(each));
-          res.data.regions !== undefined &&
-            res.data.site_types.map(each => typeArr.push(each));
-          return {
-            jsondata: res.data.json_questions,
-            id,
-            region: regionArr,
-            siteId,
-            regionalId,
-            site_types: typeArr
-          };
-        });
-      })
-      .catch();
+            this.setState(
+              state => {
+                siteForm.data.regions !== undefined &&
+                  siteForm.data.regions.map(each => regionArr.push(each));
+                siteForm.data.site_types.map(each => typeArr.push(each));
+                return {
+                  jsdata: siteForm.data.hello,
+                  jsondata: siteForm.data.json_questions,
+                  id,
+                  region:
+                    siteForm.data.regions !== undefined || "" ? regionArr : [],
+                  siteId,
+                  regionalId,
+                  site_types: typeArr,
+                  position: {
+                    longitude,
+                    latitude
+                  },
+                  breadcrumbs
+                };
+              },
+              () => {}
+            );
+          }
+        })
+      )
+      .catch(err => {
+        console.log(err, "err");
+      });
   }
 
   componentWillUnmount() {
