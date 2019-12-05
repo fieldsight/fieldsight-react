@@ -102,13 +102,9 @@ export default class SiteEdit extends Component {
               cropResult: response.data.logo
             });
           })
-          .catch(err => {
-            console.log(err, "err");
-          });
+          .catch();
       })
-      .catch(err => {
-        console.log(err, "err");
-      });
+      .catch();
   }
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
@@ -163,9 +159,7 @@ export default class SiteEdit extends Component {
           this.props.history.push(`/site-dashboard/${res.data.id}`);
         }
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch();
   };
   mapClickHandler = e => {
     this.setState({
@@ -254,9 +248,7 @@ export default class SiteEdit extends Component {
           );
         }
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch();
   };
   render() {
     return (

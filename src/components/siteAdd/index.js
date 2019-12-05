@@ -125,9 +125,7 @@ export default class SiteAdd extends Component {
           };
         });
       })
-      .catch(err => {
-        console.log(err, "err");
-      });
+      .catch();
   }
 
   componentWillUnmount() {
@@ -252,9 +250,7 @@ export default class SiteAdd extends Component {
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(() => {
-          // console.log(err);
-        });
+        .catch();
     } else if (this.props.page === "subSite") {
       axios({
         method: "POST",
@@ -293,9 +289,7 @@ export default class SiteAdd extends Component {
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(() => {
-          // console.log(err);
-        });
+        .catch();
     } else if (this.props.page === "regionalSite") {
       axios({
         method: "POST",
@@ -334,9 +328,7 @@ export default class SiteAdd extends Component {
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(() => {
-          // console.log(err);
-        });
+        .catch();
     }
   };
 
