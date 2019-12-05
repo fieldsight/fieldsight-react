@@ -12,7 +12,6 @@ import SelectElement from '../common/SelectElement';
 import RightContentCard from '../common/RightContentCard';
 import Loader from '../common/Loader';
 import 'leaflet/dist/leaflet.css';
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable react/destructuring-assignment */
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');

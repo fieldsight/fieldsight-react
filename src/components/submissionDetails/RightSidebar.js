@@ -3,7 +3,6 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import HistoryTab from './HistoryTab';
 import StatusTab from './StatusTab';
-/* eslint-disable react/prop-types  */
 /* eslint-disable camelcase */
 
 const base_url = window.base_url

@@ -1,11 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Table from './common/Table';
 import Modal from './common/Modal';
 import InputElement from './common/InputElement';
 import RightContentCard from './common/RightContentCard';
-
-/* eslint-disable */
+/* eslint-disable no-undef */
 
 class SiteManage extends Component {
   constructor(props) {
@@ -28,7 +27,7 @@ class SiteManage extends Component {
       toggleModal,
     } = this;
     return (
-      <Fragment>
+      <>
         <RightContentCard
           title="Site Manage"
           addButton
@@ -45,47 +44,47 @@ class SiteManage extends Component {
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.id"
                 formType="floatingForm"
                 htmlFor="input"
-                translation={true}
+                translation
               />
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.sites"
                 formType="floatingForm"
                 htmlFor="input"
-                translation={true}
+                translation
               />
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.address"
                 formType="floatingForm"
                 htmlFor="input"
-                translation={true}
+                translation
               />
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.regions"
                 formType="floatingForm"
                 htmlFor="input"
-                translation={true}
+                translation
               />
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
+                required
                 label="app.status"
                 formType="floatingForm"
                 htmlFor="input"
-                translation={true}
+                translation
               />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
@@ -98,7 +97,7 @@ class SiteManage extends Component {
             </form>
           </Modal>
         )}
-      </Fragment>
+      </>
     );
   }
 }

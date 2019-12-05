@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Modal from '../../common/Modal';
 import { DotLoader } from '../../common/Loader';
-/* eslint-disable react/prop-types  */
 /* eslint-disable  react/no-array-index-key  */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 

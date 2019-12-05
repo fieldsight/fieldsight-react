@@ -21,7 +21,6 @@ import PricingStepThree from './dashboardComponent/PricingStepThree';
 /* eslint-disable camelcase */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable  no-lone-blocks */
-/* eslint-disable  consistent-return */
 /* eslint-disable react/destructuring-assignment */
 
 const now = new Date();
@@ -141,45 +140,36 @@ class TeamDashboard extends Component {
   };
 
   handleNext = step => {
-    const { cardError, stepThree } = this.state;
+    const { cardError } = this.state;
 
     this.setState(
       () => {
-        switch (step) {
-          case 'second': {
+        if (step === 'second') {
+          return {
+            stepOne: false,
+            stepTwo: true,
+          };
+        }
+        if (step === 'third') {
+          if (Object.keys(cardError).length === 0) {
             return {
-              stepOne: false,
-              stepTwo: true,
-            };
-          }
-          case 'third':
-            {
-              if (Object.keys(cardError).length === 0) {
-                return {
-                  stepThree: true,
-                  stepTwo: false,
-                };
-              }
-            }
-            break;
-          default: {
-            return {
-              stepOne: true,
+              stepThree: true,
               stepTwo: false,
-              stepThree: false,
             };
           }
         }
+        // else {
+        return {
+          stepOne: true,
+          stepTwo: false,
+          stepThree: false,
+        };
+        // }
       },
       () => {
-        if (stepThree) {
+        if (this.state.stepThree) {
           const { tokenId, plan, interval } = this.state;
-          const {
-            match: {
-              params: { id: teamId },
-            },
-          } = this.props;
-
+          const { id: teamId } = this.props.match.params;
           const payload = {
             stripeToken: tokenId,
             interval,

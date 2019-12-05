@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-array-index-key  */
 /* eslint-disable camelcase */
 
 export default class SiteDocumentTable extends PureComponent {
@@ -36,9 +35,9 @@ export default class SiteDocumentTable extends PureComponent {
           </tr>
         </thead>
         <tbody>
-          {site_document.map((site_file, key) => {
+          {site_document.map(site_file => {
             return (
-              <tr key={key}>
+              <tr key={site_file.id}>
                 <td>
                   <a href={site_file.file}>
                     <span className="td-doc-icon google">

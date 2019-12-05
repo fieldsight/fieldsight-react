@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Line } from 'react-chartjs-2';
-/* eslint-disable react/prop-types  */
 
 const options = {
   responsive: true,

@@ -5,9 +5,9 @@ import { FormattedMessage } from 'react-intl';
 import { GridContentLoader } from '../../common/Loader';
 import Modal from '../../common/Modal';
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions  */
-/* eslint-disable jsx-a11y/click-events-have-key-events  */
 /* eslint-disable react/no-array-index-key  */
+/* eslint-disable jsx-a11y/click-events-have-key-events  */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions   */
 
 const GalleryModal = ({
   selectedImage,
@@ -22,6 +22,7 @@ const GalleryModal = ({
     className="gallery-zoom fieldsight-popup open"
     style={{ zIndex: 99999 }}
     onClick={closeModal}
+    onKeyDown={closeModal}
   >
     <div className="gallery-body">
       <img
@@ -47,6 +48,7 @@ const GalleryModal = ({
       className="popup-close"
       role="button"
       tabIndex="0"
+      onKeyDown={closeModal}
       onClick={closeModal}
     >
       <i className="la la-close" />
@@ -61,6 +63,10 @@ const GalleryModal = ({
           e.stopPropagation();
           gotoPrevious(selectedImage.index);
         }}
+        onKeyDown={e => {
+          e.stopPropagation();
+          gotoPrevious(selectedImage.index);
+        }}
       />
       <i
         tabIndex="0"
@@ -68,6 +74,10 @@ const GalleryModal = ({
         role="button"
         className="la la-long-arrow-right"
         onClick={e => {
+          e.stopPropagation();
+          gotoNext(selectedImage.index);
+        }}
+        onKeyDown={e => {
           e.stopPropagation();
           gotoNext(selectedImage.index);
         }}

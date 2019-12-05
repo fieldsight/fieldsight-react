@@ -344,8 +344,8 @@ class MyrolesMain extends Component {
                           }}
                         >
                           <FormattedMessage
-                            id="app.regions"
-                            defaultMessage="Regions"
+                            id="app.sites"
+                            defaultMessage="Sites"
                           />
                         </a>
                       </li>
@@ -366,8 +366,8 @@ class MyrolesMain extends Component {
                           }}
                         >
                           <FormattedMessage
-                            id="app.sites"
-                            defaultMessage="Sites"
+                            id="app.regions"
+                            defaultMessage="Regions"
                           />
                         </a>
                       </li>

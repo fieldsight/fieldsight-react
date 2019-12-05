@@ -2,7 +2,6 @@ import React from 'react';
 import format from 'date-fns/format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FormattedMessage } from 'react-intl';
-/* eslint-disable react/prop-types  */
 
 class HistoryTab extends React.Component {
   render() {

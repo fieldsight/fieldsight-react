@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import SiteEditForm from '../common/siteEdit';
-
-/* eslint-disable */
+/* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable  react/no-unused-state */
+/* eslint-disable no-return-assign */
 
 export default class SiteEdit extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -19,35 +22,34 @@ export default class SiteEdit extends Component {
         weight: '',
         cluster_sites: false,
       },
-      loaded: 0,
+      // loaded: 0,
       jsondata: [],
       position: {
         latitude: '51.505',
         longitude: '-0.09',
       },
-      zoom: 13,
+      // zoom: 13,
       src: '',
       showCropper: false,
       cropResult: '',
-      isLoading: false,
-      selectedSiteTypes: '',
+      // isLoading: false,
+      // selectedSiteTypes: '',
       id: '',
-      selectform: [],
-      selectdata: false,
+      // selectform: [],
+      // selectdata: false,
       region: [{ id: null, name: '----' }],
       data: [],
       regionselected: '',
-      dataSelected: '',
-      id: '',
-      siteId: '',
-      regionalId: '',
+      // dataSelected: '',
+      // siteId: '',
+      // regionalId: '',
       site_types: [{ id: null, name: '----' }],
       Selectedtypes: '',
-      project_info: [],
+      // project_info: [],
       project_id: '',
       show: false,
       deleteConfirm: false,
-      select: [],
+      // select: [],
       delete_perm: '',
       breadcrumbs: {},
     };
@@ -67,7 +69,7 @@ export default class SiteEdit extends Component {
 
     axios
       .all(
-        urls.map((url, i) => {
+        urls.map(url => {
           return axios.get(url);
         }),
       )
@@ -80,8 +82,8 @@ export default class SiteEdit extends Component {
                   `/fv3/api/site-form/?project=${siteForm.data.project}`,
                 )
                 .then(res => {
-                  let regionArr = this.state.region;
-                  let typeArr = this.state.site_types;
+                  const regionArr = this.state.region;
+                  const typeArr = this.state.site_types;
                   const position =
                     res.data.location !== 'None'
                       ? res.data.location &&
@@ -91,29 +93,24 @@ export default class SiteEdit extends Component {
                     position && position[1].split('(')[1];
                   const latitude =
                     position && position[2].split(')')[0];
-                  this.setState(state => {
-                    res.data.regions !== undefined &&
-                      res.data.regions.map(each =>
+                  this.setState(() => {
+                    if (res.data.regions !== undefined)
+                      return res.data.regions.map(each =>
                         regionArr.push(each),
                       );
-                    res.data.site_types.map(each =>
-                      typeArr.push(each),
-                    );
+                    if (res.data.site_types !== undefined)
+                      return res.data.site_types.map(each =>
+                        typeArr.push(each),
+                      );
                     return {
                       delete_perm: siteForm.data.delete_perm,
                       project_id: siteForm.data.project,
                       jsondata: res.data.json_questions,
                       id,
-                      region:
-                        res.data.regions !== undefined || ''
-                          ? regionArr
-                          : [],
+                      region: regionArr,
                       siteId,
                       regionalId,
-                      site_types:
-                        res.data.site_types !== undefined || ''
-                          ? typeArr
-                          : [],
+                      site_types: typeArr,
                       // data: siteForm.data,
                       project: {
                         name: siteForm.data.name,
@@ -138,35 +135,35 @@ export default class SiteEdit extends Component {
                     };
                   });
                 })
-                .catch(err => {
-                  console.log(err, 'err');
+                .catch(() => {
+                  // console.log(err, 'err');
                 });
             }
           }
         }),
       )
-      .catch(err => {
-        console.log(err, 'err');
+      .catch(() => {
+        // console.log(err, 'err');
       });
   }
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
     if (position) {
-      return this.setState({
+      return this.setState(state => ({
         position: {
-          ...this.state.position,
+          ...state.position,
           [name]: value,
         },
-      });
+      }));
     }
 
-    this.setState({
+    return this.setState(state => ({
       project: {
-        ...this.state.project,
+        ...state.project,
         [name]: value,
       },
-    });
+    }));
   };
 
   onSubmitHandler = () => {
@@ -187,7 +184,7 @@ export default class SiteEdit extends Component {
       data,
     } = this.state;
 
-    let body = {
+    const body = {
       project: project_id,
       name: project.name,
       identifier: project.site_id,
@@ -211,19 +208,19 @@ export default class SiteEdit extends Component {
           this.props.history.push(`/site-dashboard/${res.data.id}`);
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
       });
   };
 
   mapClickHandler = e => {
-    this.setState({
+    this.setState(state => ({
       position: {
-        ...this.state.position,
+        ...state.position,
         latitude: e.latlng.lat,
         longitude: e.latlng.lng,
       },
-    });
+    }));
   };
 
   onSelectChangeHandler = (e, data) => {
@@ -252,12 +249,12 @@ export default class SiteEdit extends Component {
   };
 
   handleCheckboxChange = e => {
-    this.setState({
+    this.setState(state => ({
       project: {
-        ...this.state.project,
+        ...state.project,
         cluster_sites: e.target.checked,
       },
-    });
+    }));
   };
 
   closeModal = () => {
@@ -278,17 +275,13 @@ export default class SiteEdit extends Component {
     const {
       target: { name, value },
     } = e;
-    console.log(e.target.value, e.target.name, 'onchange');
 
-    this.setState(
-      prestate => ({
-        data: {
-          ...prestate.data,
-          [name]: value,
-        },
-      }),
-      () => console.log(this.state.data, 'data'),
-    );
+    this.setState(prestate => ({
+      data: {
+        ...prestate.data,
+        [name]: value,
+      },
+    }));
   };
 
   handleDelete = () => {
@@ -307,15 +300,15 @@ export default class SiteEdit extends Component {
     axios
       .delete(`/fv3/api/site-form/${this.state.id}/`)
       .then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.setState({
             deleteConfirm: false,
           });
           window.location.href = `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`;
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
       });
   };
 
@@ -325,7 +318,6 @@ export default class SiteEdit extends Component {
     dataArr.forEach(
       objKey => (obj[objKey] = this.state.data[objKey]),
     );
-    //name = value;
     this.setState({
       data: {
         ...obj,
@@ -343,7 +335,6 @@ export default class SiteEdit extends Component {
       delete_perm,
       jsondata,
     } = this.state;
-    console.log(data, 'kkkk', this.state.data);
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">

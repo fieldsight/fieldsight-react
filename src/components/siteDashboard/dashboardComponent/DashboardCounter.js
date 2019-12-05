@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import uuid from 'uuid/v4';
 import CountCard from '../../common/CountCard';
-/* eslint-disable react/prop-types  */
 /* eslint-disable camelcase */
 
 class DashboardCounter extends Component {

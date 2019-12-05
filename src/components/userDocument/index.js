@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import PropTypes from 'prop-types';
-
 import { getSiteUser } from '../../actions/userDocumentActions';
 /* eslint-disable react/destructuring-assignment */
 
@@ -187,10 +185,6 @@ const mapStateToProps = ({ userDocument }) => {
   return {
     userDocument,
   };
-};
-UserDocument.propTypes = {
-  match: PropTypes.objectOf.isRequired,
-  getSiteUser: PropTypes.func.isRequired,
 };
 export default compose(
   connect(mapStateToProps, {

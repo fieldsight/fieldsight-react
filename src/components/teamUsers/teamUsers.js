@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
 import { Table } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 
 export default class TeamUser extends Component {
   constructor(props) {
@@ -182,6 +181,3 @@ export default class TeamUser extends Component {
     );
   }
 }
-TeamUser.propTypes = {
-  match: PropTypes.objectOf.isRequired,
-};

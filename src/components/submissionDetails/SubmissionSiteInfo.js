@@ -1,11 +1,7 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FormattedMessage } from 'react-intl';
-/* eslint-disable react/prop-types  */
 /* eslint-disable react/no-array-index-key  */
-/* eslint-disable  jsx-a11y/label-has-for  */
-/* eslint-disable no-else-return  */
-/* eslint-disable jsx-a11y/label-has-associated-control  */
 
 const SubmissionSiteInfo = ({ siteInformation }) => (
   <div className="col-lg-6">
@@ -41,14 +37,15 @@ const SubmissionSiteInfo = ({ siteInformation }) => (
                       </li>
                     );
                   });
-                } else {
-                  return (
-                    <li key={`${info[0]}${i}`}>
-                      <label>{`${info[0]} :`}</label>
-                      {info[1]}
-                    </li>
-                  );
                 }
+                // else {
+                return (
+                  <li key={`${info[0]}${i}`}>
+                    <label>{`${info[0]} :`}</label>
+                    {info[1]}
+                  </li>
+                );
+                // }
               })}
             </ul>
           </PerfectScrollbar>

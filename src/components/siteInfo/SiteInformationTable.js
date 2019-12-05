@@ -9,7 +9,6 @@ import InputElement from '../common/InputElement';
 import SelectElement from '../common/SelectElement';
 import CheckBox from '../common/CheckBox';
 import findQuestion from '../../utils/findQuestion';
-
 import isEmpty from '../../utils/isEmpty';
 import { errorToast } from '../../utils/toastHandler';
 import SortableSiteInfo from './SortableSiteInfo';
