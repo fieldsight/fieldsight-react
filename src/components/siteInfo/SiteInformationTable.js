@@ -406,7 +406,7 @@ class SiteInformationTable extends Component {
       }
     }
 
-    console.log("selected Table question", selectedTableQuestion);
+    // console.log("selected Table question", selectedTableQuestion);
 
     const question = {
       label: selectedTableQuestion.question_text,
@@ -459,7 +459,7 @@ class SiteInformationTable extends Component {
         form => form.id === +selectedTableQuestion.form_id
       );
 
-      console.log("selected form", selectedForm);
+      // console.log("selected form", selectedForm);
       if (selectedForm && Object.keys(selectedForm).length > 0) {
         filteredQuestions = findQuestion(selectedForm.json.children);
       }
@@ -720,8 +720,8 @@ class SiteInformationTable extends Component {
                 />
               )}
 
-              {console.log("selectedQuestion", selectedQuestion)}
-              {console.log("filteredQuestions", filteredQuestions)}
+              {/* {console.log("selectedQuestion", selectedQuestion)}
+              {console.log("filteredQuestions", filteredQuestions)} */}
               {(type === "Form" || type === "FormQuestionAnswerStatus") &&
                 filteredQuestions.length > 0 && (
                   <SelectElement
