@@ -37,6 +37,7 @@ class MyrolesMain extends Component {
     roles: [],
     checkRole: false,
     type: "",
+    typeId: "",
     roleId: "",
     isDelConfirm: false
   };
@@ -300,7 +301,7 @@ class MyrolesMain extends Component {
 
   requestCheckRoles = (type, id) => {
     const { profileId } = this.state;
-    this.setState({ checkRole: true, type }, () => {
+    this.setState({ checkRole: true, type, typeId: id }, () => {
       axios
         .get(`/fv3/api/check-role/${profileId}/${type}/${id}/`)
         .then(res => {
@@ -320,9 +321,9 @@ class MyrolesMain extends Component {
   };
 
   requestDeleteRole = () => {
-    const { type, roleId } = this.state;
+    const { type, roleId, typeId } = this.state;
     axios
-      .post(`fv3/api/remove-role/${type}/${roleId}/`)
+      .post(`fv3/api/remove-role/${type}/${roleId}/${typeId}/`)
       .then(res => {
         if (res.data) {
           this.setState({
