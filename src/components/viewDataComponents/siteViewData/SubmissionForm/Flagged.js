@@ -1,18 +1,19 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import StatusTable from "../../responded/StatusTable";
 import WithPagination from "../../../../hoc/WithPagination";
 import { DotLoader } from "../../../myForm/Loader";
 
-class RejectedTable extends Component {
+class FlaggedTable extends Component {
   state = {
-    rejected_submissions: []
+    flagged_submissions: []
   };
   componentDidMount() {
     if (this.props.id != "") {
       this.props.paginationHandler(1, null, {
         type: "siteStatus",
         projectId: this.props.id,
-        status: "rejected"
+        status: "flagged"
       });
     }
   }
@@ -21,6 +22,7 @@ class RejectedTable extends Component {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
   }
+
   render() {
     const {
       props: { data, showViewData, dLoader }
@@ -28,16 +30,17 @@ class RejectedTable extends Component {
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Rejected Submissions</h5>
+          <h5>Flagged Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+            <Link to={`/site-responses/${this.props.id}/general`}>
+              <button onClick={showViewData} className="fieldsight-btn">
+                View By Status
+              </button>
+            </Link>
           </div>
         </div>
         {dLoader == false ? (
           <>
-            {" "}
             <div className="card-body">
               <StatusTable submission={this.props.siteList} />
             </div>
@@ -114,4 +117,4 @@ class RejectedTable extends Component {
     );
   }
 }
-export default WithPagination(RejectedTable);
+export default WithPagination(FlaggedTable);

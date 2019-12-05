@@ -28,17 +28,16 @@ class ManageSurveyForm extends Component {
         data,
         survey_forms,
         deleted_forms,
-        survey_forms_loader
+        survey_forms_loader,
+        id
       }
     } = this;
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>{!data ? "General Forms" : "Rejected Submission"}</h5>
-          <Link to={this.props.url}>
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+          <h5>General Forms</h5>
+          <Link to={`/project-submission-responses/${id}/rejected`}>
+            <button className="fieldsight-btn">View By Form</button>
           </Link>
         </div>
         <div className="card-body">

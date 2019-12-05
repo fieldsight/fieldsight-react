@@ -28,18 +28,17 @@ class ResponseStageForm extends Component {
         data,
         stage_forms,
         deleted_forms,
-        stage_forms_loader
+        stage_forms_loader,
+        id
       }
     } = this;
 
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>{!data ? "Stage Forms" : "Rejected Submission"}</h5>
-          <Link to={this.props.url}>
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+          <h5>Stage Forms</h5>
+          <Link to={`/project-submission-responses/${id}/rejected`}>
+            <button className="fieldsight-btn">View By Form</button>
           </Link>
         </div>
         <div className="card-body">

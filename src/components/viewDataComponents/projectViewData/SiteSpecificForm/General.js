@@ -32,23 +32,19 @@ class ManageGeneralForm extends Component {
         generals_forms,
         deleted_forms,
         generals_loader,
-        match: {
-          params: { id }
-        }
+        id
       }
     } = this;
 
-    console.log(this.props.url, "general");
-    const toUrl = `/project-responses/${id}/rejected`;
+    console.log(this.props.match, id, "general");
+    const toUrl = `/project-submission-responses/${id}/rejected`;
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
           <h5>General Forms</h5>
           <div className="dash-btn">
             <Link to={toUrl}>
-              <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Form" : "View by Status"}
-              </button>
+              <button className="fieldsight-btn">View By Form</button>
             </Link>
           </div>
         </div>

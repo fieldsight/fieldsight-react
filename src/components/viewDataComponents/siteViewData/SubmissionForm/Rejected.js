@@ -1,19 +1,19 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import StatusTable from "../../responded/StatusTable";
 import WithPagination from "../../../../hoc/WithPagination";
-import axios from "axios";
 import { DotLoader } from "../../../myForm/Loader";
 
-class PendingTable extends Component {
+class RejectedTable extends Component {
   state = {
-    pending_submissions: []
+    rejected_submissions: []
   };
   componentDidMount() {
     if (this.props.id != "") {
       this.props.paginationHandler(1, null, {
         type: "siteStatus",
         projectId: this.props.id,
-        status: "pending"
+        status: "rejected"
       });
     }
   }
@@ -29,11 +29,13 @@ class PendingTable extends Component {
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Pending Submissions</h5>
+          <h5>Rejected Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+            <Link to={`/site-responses/${this.props.id}/general`}>
+              <button onClick={showViewData} className="fieldsight-btn">
+                View By Status
+              </button>
+            </Link>
           </div>
         </div>
         {dLoader == false ? (
@@ -114,4 +116,4 @@ class PendingTable extends Component {
     );
   }
 }
-export default WithPagination(PendingTable);
+export default WithPagination(RejectedTable);

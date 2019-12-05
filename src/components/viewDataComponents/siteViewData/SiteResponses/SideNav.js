@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 
-import ApprovedTable from "./Approved";
-import PendingTable from "./Pending";
-import RejectedTable from "./Rejected";
-import FlaggedTable from "./Flagged";
+import General from "./General";
+import Scheduled from "./Scheduled";
+import Staged from "./Staged";
 
 class SideNav extends Component {
-  // componentDidMount() {
-  //   const {
-  //     match: {
-  //       url
-  //       // param: { id }
-  //     },
-  //     location: { pathname }
-  //   } = this.props;
+  componentDidMount() {
+    const {
+      match: {
+        url
+        // param: { id }
+      },
+      location: { pathname },
+      handleBreadCrumb
+    } = this.props;
 
-  //   console.log(this.props);
-  // }
+    console.log(this.props);
+  }
   render() {
     const {
       match: {
@@ -47,50 +47,38 @@ class SideNav extends Component {
                   <ul className="nav nav-tabs flex-column border-tabs">
                     <li className="nav-item">
                       <Link
-                        to={`${url}/rejected`}
+                        to={`${url}/general`}
                         className={
-                          pathname == `${url}/rejected`
+                          pathname == `${url}/general`
                             ? "nav-link active"
                             : "nav-link"
                         }
                       >
-                        Rejected Submissions
+                        General forms
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link
-                        to={`${url}/flagged`}
+                        to={`${url}/scheduled`}
                         className={
-                          pathname == `${url}/flagged`
+                          pathname == `${url}/scheduled`
                             ? "nav-link active"
                             : "nav-link"
                         }
                       >
-                        Flagged Submissions
+                        Scheduled forms
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link
-                        to={`${url}/pending`}
+                        to={`${url}/stage`}
                         className={
-                          pathname == `${url}/pending`
+                          pathname == `${url}/stage`
                             ? "nav-link active"
                             : "nav-link"
                         }
                       >
-                        Pending Submissions
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link
-                        to={`${url}/approved`}
-                        className={
-                          pathname == `${url}/approved`
-                            ? "nav-link active"
-                            : "nav-link"
-                        }
-                      >
-                        Approved Submissions
+                        Staged forms
                       </Link>
                     </li>
                   </ul>
@@ -105,50 +93,37 @@ class SideNav extends Component {
               <div className="tab-content">
                 <Switch>
                   <Route
-                    path={`${this.props.match.url}/approved`}
+                    exact
+                    path={`${this.props.match.url}/general`}
                     render={props => (
-                      <ApprovedTable
+                      <General
                         showViewData={showViewData}
                         data={view_btn}
                         id={id}
-                        handleBreadCrumb={handleBreadCrumb}
                         url={url}
+                        handleBreadCrumb={handleBreadCrumb}
                         {...props}
                       />
                     )}
                   />
 
                   <Route
-                    path={`${this.props.match.url}/flagged`}
+                    path={`${this.props.match.url}/scheduled`}
                     render={props => (
-                      <FlaggedTable
+                      <Scheduled
                         showViewData={showViewData}
                         data={view_btn}
                         id={id}
-                        handleBreadCrumb={handleBreadCrumb}
                         url={url}
+                        handleBreadCrumb={handleBreadCrumb}
                         {...props}
                       />
                     )}
                   />
                   <Route
-                    path={`${this.props.match.url}/pending`}
+                    path={`${this.props.match.url}/stage`}
                     render={props => (
-                      <PendingTable
-                        showViewData={showViewData}
-                        data={view_btn}
-                        id={id}
-                        handleBreadCrumb={handleBreadCrumb}
-                        url={url}
-                        {...props}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    path={`${this.props.match.url}/rejected`}
-                    render={props => (
-                      <RejectedTable
+                      <Staged
                         showViewData={showViewData}
                         data={view_btn}
                         id={id}

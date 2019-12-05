@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import StatusTable from "../../responded/StatusTable";
 import WithPagination from "../../../../hoc/WithPagination";
 import { DotLoader } from "../../../myForm/Loader";
@@ -23,7 +24,7 @@ class FlaggedTable extends Component {
   }
   render() {
     const {
-      props: { data, showViewData, dLoader }
+      props: { data, showViewData, dLoader, id }
     } = this;
 
     return (
@@ -31,9 +32,9 @@ class FlaggedTable extends Component {
         <div className="card-header main-card-header sub-card-header">
           <h5>Flagged Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+            <Link to={`/project-responses/${id}/general`}>
+              <button className="fieldsight-btn">View by Status</button>
+            </Link>
           </div>
         </div>
         {dLoader == false ? (

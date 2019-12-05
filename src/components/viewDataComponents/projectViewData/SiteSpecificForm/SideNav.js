@@ -30,8 +30,7 @@ class SideNav extends Component {
       showViewData,
       view_btn
     } = this.props;
-
-    console.log(this.props);
+    console.log(id, "id");
 
     return (
       <>

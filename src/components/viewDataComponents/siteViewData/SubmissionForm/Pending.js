@@ -1,18 +1,20 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import StatusTable from "../../responded/StatusTable";
-import { DotLoader } from "../../../myForm/Loader";
 import WithPagination from "../../../../hoc/WithPagination";
+import axios from "axios";
+import { DotLoader } from "../../../myForm/Loader";
 
-class ApprovedTable extends Component {
+class PendingTable extends Component {
   state = {
-    approved_submissions: []
+    pending_submissions: []
   };
   componentDidMount() {
     if (this.props.id != "") {
       this.props.paginationHandler(1, null, {
         type: "siteStatus",
         projectId: this.props.id,
-        status: "approved"
+        status: "pending"
       });
     }
   }
@@ -21,7 +23,6 @@ class ApprovedTable extends Component {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
   }
-
   render() {
     const {
       props: { data, showViewData, dLoader }
@@ -29,16 +30,17 @@ class ApprovedTable extends Component {
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Approved Submissions</h5>
+          <h5>Pending Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+            <Link to={`/site-responses/${this.props.id}/general`}>
+              <button onClick={showViewData} className="fieldsight-btn">
+                View By Status
+              </button>
+            </Link>
           </div>
         </div>
         {dLoader == false ? (
           <>
-            {" "}
             <div className="card-body">
               <StatusTable submission={this.props.siteList} />
             </div>
@@ -106,7 +108,7 @@ class ApprovedTable extends Component {
                   </div>
                 </div>
               </div>
-            )}{" "}
+            )}
           </>
         ) : (
           <DotLoader />
@@ -115,4 +117,4 @@ class ApprovedTable extends Component {
     );
   }
 }
-export default WithPagination(ApprovedTable);
+export default WithPagination(PendingTable);

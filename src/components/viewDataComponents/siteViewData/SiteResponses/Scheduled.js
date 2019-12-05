@@ -37,10 +37,10 @@ class ManageScheduledForm extends Component {
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>{!data ? "Schedule Forms" : "Rejected Submission"}</h5>
-          <Link to={`/site-responses/${this.props.id}/rejected`}>
+          <h5>Schedule Forms</h5>
+          <Link to={`/site-submission-responses/${this.props.id}/rejected`}>
             <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
+              View By Form
             </button>
           </Link>
         </div>
@@ -119,10 +119,7 @@ const mapStateToProps = ({ siteViewData }) => {
   };
 };
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getsiteViewData
-    }
-  )
+  connect(mapStateToProps, {
+    getsiteViewData
+  })
 )(ManageScheduledForm);

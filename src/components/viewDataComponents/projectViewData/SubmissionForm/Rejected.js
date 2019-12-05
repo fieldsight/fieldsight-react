@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import StatusTable from "../../responded/StatusTable";
 import axios from "axios";
 import WithPagination from "../../../../hoc/WithPagination";
-import { Link } from "react-router-dom";
 import { DotLoader } from "../../../myForm/Loader";
 
 class RejectedTable extends Component {
@@ -26,18 +26,17 @@ class RejectedTable extends Component {
   }
   render() {
     const {
-      props: { data, showViewData, dLoader }
+      props: { data, showViewData, dLoader, id }
     } = this;
-    console.log(this.props.url, "rejected");
 
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
           <h5>Rejected Submissions</h5>
           <div className="dash-btn">
-            <Link to={this.props.url}>
+            <Link to={`/project-responses/${id}/general`}>
               <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Form" : "View by Status"}
+                View by Status
               </button>
             </Link>
           </div>
