@@ -62,7 +62,7 @@ export default class SiteAdd extends Component {
 
       id: "",
 
-      region: [{ name: "----", id: "" }],
+      region: [{ id: "", name: "----" }],
       data: {},
       regionselected: "",
       dataSelected: "",
@@ -84,61 +84,49 @@ export default class SiteAdd extends Component {
         params: { id, siteId, regionalId }
       }
     } = this.props;
-    const urls = [
-      `/fv3/api/site-form/?project=${id}`,
-      `fv3/api/site-forms-breadcrumbs/?project=${id}&type=create`
-    ];
 
     axios
-      .all(
-        urls.map(url => {
-          return axios.get(url);
-        })
-      )
-      .then(
-        axios.spread((siteForm, breadcrumbRes) => {
-          const regionArr = this.state.region;
-          const typeArr = this.state.site_types;
+      .get(`/fv3/api/site-form/?project=${id}`)
+      .then(res => {
+        let regionArr = this.state.region;
+        let typeArr = this.state.site_types;
+        if (res.data.location) {
+          const position = res.data.location && res.data.location.split(" ");
+          const longitude = position && position[1].split("(")[1];
+          const latitude = position && position[2].split(")")[0];
 
-          if (this._isMounted) {
-            const position =
-              siteForm.data.location !== "None"
-                ? siteForm.data.location && siteForm.data.location.split(" ")
-                : "";
-            const longitude = position && position[1].split("(")[1];
-            const latitude = position && position[2].split(")")[0];
-            const breadcrumbs = breadcrumbRes.data;
-            this.setState(
-              () => {
-                if (siteForm.data.regions !== undefined) {
-                  siteForm.data.regions.map(each => regionArr.push(each));
-                }
-                if (siteForm.data.site_types !== undefined) {
-                  siteForm.data.site_types.map(each => typeArr.push(each));
-                }
-                return {
-                  jsdata: siteForm.data.hello,
-                  jsondata: siteForm.data.json_questions,
-                  id,
-                  region: regionArr,
-                  siteId,
-                  regionalId,
-                  site_types: typeArr,
-                  position: {
-                    longitude,
-                    latitude
-                  },
-                  breadcrumbs,
-                  regionFlag: true
-                };
-              },
-              () => {}
-            );
-          }
-        })
-      )
-      .catch(() => {
-        // console.log(err, 'err');
+          this.setState({
+            position: {
+              latitude,
+              longitude
+            }
+          });
+        } else {
+          this.setState({
+            position: {
+              latitude: "51.505",
+              longitude: "-0.09"
+            }
+          });
+        }
+
+        this.setState(state => {
+          res.data.regions !== undefined &&
+            res.data.regions.map(each => regionArr.push(each));
+          res.data.regions !== undefined &&
+            res.data.site_types.map(each => typeArr.push(each));
+          return {
+            jsondata: res.data.json_questions,
+            id,
+            region: regionArr,
+            siteId,
+            regionalId,
+            site_types: typeArr
+          };
+        });
+      })
+      .catch(err => {
+        console.log(err, "err");
       });
   }
 
@@ -603,33 +591,28 @@ export default class SiteAdd extends Component {
                   changeHandler={onChangeHandler}
                 />
               </div>
-              {this.state.regionFlag &&
-                (this.props.page === "CreateSite" ||
-                  this.props.page === "subSite") && (
-                  <div className="col-xl-4 col-md-6">
-                    <SelectElement
-                      className="form-control"
-                      label="Regions"
-                      options={region}
-                      changeHandler={e => {
-                        onSelectChangeHandler(e, "regions");
-                      }}
-                      value={regionselected && regionselected}
-                    />
-                  </div>
-                  // ) : (
-                  //   ""
-                )}
+              {(this.props.page === "CreateSite" ||
+                this.props.page === "subSite") && (
+                <div className="col-xl-4 col-md-6">
+                  <SelectElement
+                    className="form-control"
+                    label="Regions"
+                    options={region}
+                    changeHandler={e => {
+                      onSelectChangeHandler(e, "regions");
+                    }}
+                    value={regionselected && regionselected}
+                  />
+                </div>
+                // ) : (
+                //   ""
+              )}
 
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
                   label="Types"
-                  options={
-                    site_types.length > 0
-                      ? site_types.map(site_type => site_type)
-                      : site_types
-                  }
+                  options={site_types}
                   changeHandler={e => {
                     onSelectChangeHandler(e, "site_types");
                   }}
@@ -706,7 +689,6 @@ export default class SiteAdd extends Component {
                 <div className="form-group">
                   <label>
                     Map <sup>*</sup>
-                    <sup>*</sup>
                   </label>
 
                   <div className="map-form">

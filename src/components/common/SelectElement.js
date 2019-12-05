@@ -9,7 +9,6 @@ const SelectElement = ({
   value,
   classname
 }) => {
-  // debugger;
   return (
     <div className={`form-group ${classname}`}>
       {label && (
@@ -24,8 +23,6 @@ const SelectElement = ({
           value={value ? value : undefined}
           // value="81881"
         >
-          {console.log(options, "option")}
-
           {options.map((option, i) => (
             <option
               value={
@@ -35,7 +32,7 @@ const SelectElement = ({
                   ? option.name
                   : option.key
                   ? option.key
-                  : option
+                  : ""
               }
               key={`${
                 option.name
@@ -44,7 +41,7 @@ const SelectElement = ({
                   ? option.value
                   : option.identifier
                   ? option.identifier
-                  : option
+                  : ""
               }${i}`}
             >
               {option.name
@@ -53,7 +50,7 @@ const SelectElement = ({
                 ? option.value
                 : option.identifier
                 ? option.identifier
-                : option}
+                : ""}
             </option>
           ))}
         </select>
