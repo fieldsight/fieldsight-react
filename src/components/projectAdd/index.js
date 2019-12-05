@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import Edit from "../common/editProject";
+import { errorToast, successToast } from "../../utils/toastHandler";
+
 import axios from "axios";
+import Edit from "../common/editProject";
 
 export default class ProjectAdd extends Component {
   _isMounted = false;
@@ -58,7 +60,7 @@ export default class ProjectAdd extends Component {
                   longitude,
                   latitude
                 },
-                breadcrumbs
+                breadcrumbs: location.data.breadcrumbs
               });
             }
           })
@@ -93,7 +95,9 @@ export default class ProjectAdd extends Component {
     axios
       .post(`fv3/api/add-project/${this.state.id}/`, data)
       .then(res => {
+        console.log(res);
         if (res.status === 201) {
+          successToast("Form", "Created");
           this.setState({
             project: {
               name: "",
@@ -121,9 +125,16 @@ export default class ProjectAdd extends Component {
         }
       })
       .catch(err => {
-        console.log(err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
   };
+
+  toast() {
+    if (this.state.data) {
+      toast.success("SucessFully Added");
+    }
+  }
 
   onSelectChangeHandler = (e, subSect) => {
     const { value } = e.target;
