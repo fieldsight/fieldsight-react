@@ -95,7 +95,6 @@ export default class ProjectAdd extends Component {
     axios
       .post(`fv3/api/add-project/${this.state.id}/`, data)
       .then(res => {
-        console.log(res);
         if (res.status === 201) {
           successToast("Form", "Created");
           this.setState({
