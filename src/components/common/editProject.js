@@ -137,7 +137,7 @@ class EditProject extends Component {
                 tag="input"
                 type="text"
                 required={false}
-                label="app.Phone"
+                label="app.phone"
                 name="phone"
                 value={phone}
                 changeHandler={onChangeHandler}
@@ -385,7 +385,7 @@ class EditProject extends Component {
 
             <div className="col-sm-12">
               <button
-                type="button"
+                type="submit"
                 className="fieldsight-btn pull-right"
               >
                 <FormattedMessage

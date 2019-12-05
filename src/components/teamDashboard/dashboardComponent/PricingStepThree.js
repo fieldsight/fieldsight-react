@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 class PricingStepThree extends PureComponent {
@@ -207,8 +206,4 @@ class PricingStepThree extends PureComponent {
     );
   }
 }
-PricingStepThree.propTypes = {
-  cardResponse: PropTypes.objectOf.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-};
 export default PricingStepThree;

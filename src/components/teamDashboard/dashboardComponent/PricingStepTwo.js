@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import PropTypes from 'prop-types';
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/destructuring-assignment */
 
@@ -294,14 +293,4 @@ class PricingStepTwo extends Component {
     );
   }
 }
-PricingStepTwo.propTypes = {
-  stripe: PropTypes.objectOf.isRequired,
-  passStripeToken: PropTypes.objectOf.isRequired,
-  selectedPackage: PropTypes.objectOf.isRequired,
-  handlePrevious: PropTypes.func.isRequired,
-  packageStartDate: PropTypes.objectOf.isRequired,
-  packageEndDate: PropTypes.objectOf.isRequired,
-  interval: PropTypes.string.isRequired,
-  selectedPlan: PropTypes.string.isRequired,
-};
 export default injectStripe(PricingStepTwo);

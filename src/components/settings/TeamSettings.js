@@ -28,7 +28,7 @@ export default class TeamSettings extends Component {
     }).catch = () => {};
   }
 
-  teamName = data => {
+  reqTeamName = data => {
     this.setState({
       teamName: data,
     });
@@ -94,7 +94,10 @@ export default class TeamSettings extends Component {
                     exact
                     path={`${path}`}
                     render={props => (
-                      <EditTeam {...props} teamData={this.teamName} />
+                      <EditTeam
+                        {...props}
+                        reqTeamName={this.reqTeamName}
+                      />
                     )}
                   />
                   <Route

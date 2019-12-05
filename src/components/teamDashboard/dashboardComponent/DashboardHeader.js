@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import { AvatarContentLoader } from '../../common/Loader';
 import CountCard from '../../common/CountCard';
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
 
 class DashboardHeader extends PureComponent {
   render() {

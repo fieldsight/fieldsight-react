@@ -235,8 +235,8 @@ export default class ProjectAdd extends Component {
         cluster_sites,
         donor,
         id,
-        sector,
       },
+      sector,
       position: { latitude, longitude },
       breadcrumbs,
     } = this.state;

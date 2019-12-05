@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Modal from 'react-bootstrap/Modal';
 import { StripeProvider, Elements } from 'react-stripe-elements';
-import PropTypes from 'prop-types';
 
 import DashboardHeader from './dashboardComponent/DashboardHeader';
 import ProjectList from './dashboardComponent/ProjectList';
@@ -460,12 +459,7 @@ class TeamDashboard extends Component {
 const mapStateToProps = ({ teamDashboard }) => ({
   teamDashboard,
 });
-TeamDashboard.propTypes = {
-  match: PropTypes.objectOf.isRequired,
-  postPackageSubscribe: PropTypes.func.isRequired,
-  getTeamDashboard: PropTypes.func.isRequired,
-  teamDashboard: PropTypes.objectOf.isRequired,
-};
+
 export default connect(mapStateToProps, {
   getTeamDashboard,
   postPackageSubscribe,

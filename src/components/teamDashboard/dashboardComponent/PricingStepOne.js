@@ -686,14 +686,4 @@ class PricingStepOne extends PureComponent {
     );
   }
 }
-// PricingStepOne.propTypes = {
-//   data: PropTypes.string.isRequired,
-//   handleSelect: PropTypes.func.isRequired,
-//   handleNext: PropTypes.func.isRequired,
-//   handleFirstStepSelect: PropTypes.func.isRequired,
-//   periodType: PropTypes.string.isRequired,
-//   isPackageSelected: PropTypes.bool.isRequired,
-//   handleIntervalPeriod: PropTypes.func.isRequired,
-//   packageDetails: PropTypes.objectOf.isRequired,
-// };
 export default PricingStepOne;

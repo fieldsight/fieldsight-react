@@ -12,7 +12,6 @@ import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 import DeleteModel from '../common/DeleteModal';
 /* eslint no-param-reassign: ["error", { "props": false }] */
-/* eslint-disable consistent-return  */
 /* eslint-disable  no-return-await  */
 /* eslint-disable react/destructuring-assignment */
 

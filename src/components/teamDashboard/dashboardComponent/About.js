@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
 
 class About extends PureComponent {
   render() {
@@ -60,8 +59,4 @@ class About extends PureComponent {
     );
   }
 }
-About.propTypes = {
-  contacts: PropTypes.objectOf.isRequired,
-  desc: PropTypes.string.isRequired,
-};
 export default About;

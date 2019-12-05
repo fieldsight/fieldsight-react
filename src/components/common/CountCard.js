@@ -93,7 +93,7 @@ const CountCard = ({
                 {countName === 'project' ? (
                   <>
                     <FormattedMessage
-                      id="app.projects"
+                      id="app.project"
                       defaultMessage="Project"
                     />
                   </>

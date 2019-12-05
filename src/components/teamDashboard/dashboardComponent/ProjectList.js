@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import PropTypes from 'prop-types';
 
 class ProjectList extends PureComponent {
   render() {
@@ -38,7 +37,4 @@ class ProjectList extends PureComponent {
     );
   }
 }
-ProjectList.propTypes = {
-  projects: PropTypes.arrayOf.isRequired,
-};
 export default ProjectList;
