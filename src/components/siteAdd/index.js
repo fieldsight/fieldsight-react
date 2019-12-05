@@ -4,6 +4,7 @@ import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import axios from "axios";
 import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
+import { FormattedMessage } from "react-intl";
 import Modal from "../common/Modal";
 import InputElement from "../common/InputElement";
 import SelectElement from "../common/SelectElement";
@@ -12,58 +13,69 @@ import Loader from "../common/Loader";
 import CheckBox from "../common/CheckBox";
 import Select from "./Select";
 
-import { errorToast, successToast } from "../../utils/toastHandler";
-import { RegionContext } from "../../context";
 import "leaflet/dist/leaflet.css";
+
+const iconRetinaUrl = require("leaflet/dist/images/marker-icon-2x.png");
+const iconUrl = require("leaflet/dist/images/marker-icon.png");
+const shadowUrl = require("leaflet/dist/images/marker-shadow.png");
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable camelcase  */
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-  iconUrl: require("leaflet/dist/images/marker-icon.png"),
-  shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl
 });
+const data = [
+  { name: "----", id: "" },
+  { id: "645", name: "testregion" }
+];
 
 export default class SiteAdd extends Component {
   _isMounted = false;
-  state = {
-    project: {
-      name: "",
-      site_id: "",
-      phone: undefined,
-      address: "",
-      publicDescription: "",
-      logo: "",
-      weight: 0,
-      cluster_sites: false
-    },
-    loaded: 0,
-    jsondata: [],
-    position: {
-      latitude: "51.505",
-      longitude: "-0.09"
-    },
-    zoom: 13,
-    src: "",
-    showCropper: false,
-    cropResult: "",
-    isLoading: false,
-    selectedSiteTypes: "",
-    id: "",
-    selectform: [],
-    selectdata: false,
-    region: [{ name: "----", id: null }],
-    data: {},
-    regionselected: "",
 
-    selectedGender: "",
-    dataSelected: "",
-    id: "",
-    siteId: "",
-    regionalId: "",
-    site_types: [{ name: "----", id: null }],
-    Selectedtypes: "",
-    show: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      project: {
+        name: "",
+        site_id: "",
+        phone: undefined,
+        address: "",
+        publicDescription: "",
+        logo: "",
+        weight: 0,
+        cluster_sites: false
+      },
+      loaded: 0,
+      jsondata: [],
+      position: {
+        latitude: "51.505",
+        longitude: "-0.09"
+      },
+      zoom: 13,
+      src: "",
+      showCropper: false,
+      cropResult: "",
+      isLoading: false,
+
+      id: "",
+
+      region: [{ name: "----", id: "" }],
+      data: {},
+      regionselected: "",
+      dataSelected: "",
+      siteId: "",
+      regionalId: "",
+      site_types: [{ name: "----", id: "" }],
+      Selectedtypes: "",
+      show: false,
+      // jsdata: '',
+      breadcrumbs: {},
+      regionFlag: false
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -72,78 +84,89 @@ export default class SiteAdd extends Component {
         params: { id, siteId, regionalId }
       }
     } = this.props;
+    const urls = [
+      `/fv3/api/site-form/?project=${id}`,
+      `fv3/api/site-forms-breadcrumbs/?project=${id}&type=create`
+    ];
 
     axios
-      .get(`/fv3/api/site-form/?project=${id}`)
-      .then(res => {
-        let regionArr = this.state.region;
-        let typeArr = this.state.site_types;
-        if (res.data.location) {
-          const position = res.data.location && res.data.location.split(" ");
-          const longitude = position && position[1].split("(")[1];
-          const latitude = position && position[2].split(")")[0];
+      .all(
+        urls.map(url => {
+          return axios.get(url);
+        })
+      )
+      .then(
+        axios.spread((siteForm, breadcrumbRes) => {
+          const regionArr = this.state.region;
+          const typeArr = this.state.site_types;
 
-          this.setState({
-            position: {
-              latitude,
-              longitude
-            }
-          });
-        } else {
-          this.setState({
-            position: {
-              latitude: "51.505",
-              longitude: "-0.09"
-            }
-          });
-        }
-
-        this.setState(state => {
-          res.data.regions !== undefined &&
-            res.data.regions.map(each => regionArr.push(each));
-          res.data.regions !== undefined &&
-            res.data.site_types.map(each => typeArr.push(each));
-          return {
-            jsondata: res.data.json_questions,
-            id,
-            region: regionArr,
-            siteId,
-            regionalId,
-            site_types: typeArr
-          };
-        });
-      })
-      .catch(err => {
-        console.log(err, "err");
+          if (this._isMounted) {
+            const position =
+              siteForm.data.location !== "None"
+                ? siteForm.data.location && siteForm.data.location.split(" ")
+                : "";
+            const longitude = position && position[1].split("(")[1];
+            const latitude = position && position[2].split(")")[0];
+            const breadcrumbs = breadcrumbRes.data;
+            this.setState(
+              () => {
+                if (siteForm.data.regions !== undefined) {
+                  siteForm.data.regions.map(each => regionArr.push(each));
+                }
+                if (siteForm.data.site_types !== undefined) {
+                  siteForm.data.site_types.map(each => typeArr.push(each));
+                }
+                return {
+                  jsdata: siteForm.data.hello,
+                  jsondata: siteForm.data.json_questions,
+                  id,
+                  region: regionArr,
+                  siteId,
+                  regionalId,
+                  site_types: typeArr,
+                  position: {
+                    longitude,
+                    latitude
+                  },
+                  breadcrumbs,
+                  regionFlag: true
+                };
+              },
+              () => {}
+            );
+          }
+        })
+      )
+      .catch(() => {
+        // console.log(err, 'err');
       });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
     if (position) {
-      return this.setState({
+      this.setState(prevState => ({
         position: {
-          ...this.state.position,
+          ...prevState.position,
           [name]: value
         }
-      });
+      }));
     }
-
-    this.setState(
-      {
-        project: {
-          ...this.state.project,
-          [name]: value
-        }
-      },
-      () => this.state.weight,
-      this.state
-    );
+    return this.setState(prevState => ({
+      project: {
+        ...prevState.project,
+        [name]: value
+      }
+    }));
   };
 
   onSubmitHandler = e => {
     e.preventDefault();
-    let select;
+    // let select;
     const data = {
       project: this.state.id,
       name: this.state.project.name,
@@ -159,7 +182,7 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        (select = this.state.dataSelected)
+        this.state.dataSelected
       )
     };
 
@@ -180,10 +203,9 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        (select = this.state.dataSelected)
+        this.state.dataSelected
       )
     };
-
     const region = {
       project: this.state.id,
       name: this.state.project.name,
@@ -199,7 +221,7 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        (select = this.state.dataSelected)
+        this.state.dataSelected
       ),
       subsite: this.state.siteId
     };
@@ -231,22 +253,19 @@ export default class SiteAdd extends Component {
               showCropper: false,
               cropResult: "",
               isLoading: false,
-              selectedSiteTypes: "",
+
               id: "",
-              selectdata: false,
+
               regionselected: "",
-              selectedGender: "Male",
+              // selectedGender: 'Male',
               dataSelected: "",
-              id: "",
               data: []
             });
-            this.props.history.push(
-              `/fieldsight/application/#/site-dashboard/${req.data.id}`
-            );
+            this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     } else if (this.props.page === "subSite") {
       axios({
@@ -275,22 +294,19 @@ export default class SiteAdd extends Component {
               showCropper: false,
               cropResult: "",
               isLoading: false,
-              selectedSiteTypes: "",
+
               id: "",
-              selectdata: false,
+
               regionselected: "",
-              selectedGender: "Male",
+              // selectedGender: 'Male',
               dataSelected: "",
-              id: "",
               data: []
             });
-            this.props.history.push(
-              `/fieldsight/application/#/site-dashboard/${req.data.id}`
-            );
+            this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     } else if (this.props.page === "regionalSite") {
       axios({
@@ -319,34 +335,33 @@ export default class SiteAdd extends Component {
               showCropper: false,
               cropResult: "",
               isLoading: false,
-              selectedSiteTypes: "",
+
               id: "",
-              selectdata: false,
+
               regionselected: "",
-              selectedGender: "Male",
+              // selectedGender: 'Male',
               dataSelected: "",
-              id: "",
               data: []
             });
-            this.props.history.push(
-              `/fieldsight/application/#/site-dashboard/${req.data.id}`
-            );
+            this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          // console.log(err);
         });
     }
   };
+
   mapClickHandler = e => {
-    this.setState({
+    this.setState(prevState => ({
       position: {
-        ...this.state.position,
+        ...prevState.position,
         latitude: e.latlng.lat,
         longitude: e.latlng.lng
       }
-    });
+    }));
   };
+
   onSelectChangeHandler = (e, data) => {
     const { value } = e.target;
     if (data === "regions") {
@@ -359,11 +374,13 @@ export default class SiteAdd extends Component {
       });
     }
   };
+
   closeModal = () => {
     this.setState({
       showCropper: false
     });
   };
+
   readFile = file => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -375,6 +392,7 @@ export default class SiteAdd extends Component {
     };
     reader.readAsDataURL(file[0]);
   };
+
   cropImage = () => {
     if (typeof this.cropper.getCroppedCanvas() === "undefined") {
       return;
@@ -385,35 +403,41 @@ export default class SiteAdd extends Component {
       src: ""
     });
   };
+
   handleCheckboxChange = e => {
-    this.setState({
+    const { checked } = e.target;
+    this.setState(prevState => ({
       project: {
-        ...this.state.project,
-        cluster_sites: e.target.checked
+        ...prevState.project,
+        cluster_sites: checked
       }
-    });
+    }));
   };
+
   ondynamiChangeHandler = e => {
     const {
       target: { name, value }
     } = e;
-    this.setState({
+    this.setState(prevState => ({
       data: {
-        ...this.state.data,
+        ...prevState.data,
         [name]: value
       }
-    });
+    }));
   };
-  onchange = e => {
-    this.setState({
-      selectedGender: e.target.value
-    });
-  };
+
+  // onchange = e => {
+  //   this.setState({
+  //     selectedGender: e.target.value,
+  //   });
+  // };
+
   selectedValue = data => {
     this.setState({
       dataSelected: data
     });
   };
+
   selectform = data => {
     if (data.question_type === "Text") {
       return (
@@ -423,7 +447,6 @@ export default class SiteAdd extends Component {
             tag="input"
             type={data.question_type}
             id={data.id}
-            g
             label={data.question_text}
             name={data.question_name}
             value={this.state.data[data.question_name] || ""}
@@ -433,7 +456,8 @@ export default class SiteAdd extends Component {
           <span>{data.question_help}</span>
         </div>
       );
-    } else if (data.question_type === "Date") {
+    }
+    if (data.question_type === "Date") {
       return (
         <div className="col-xl-4 col-md-6">
           <InputElement
@@ -450,7 +474,8 @@ export default class SiteAdd extends Component {
           <span>{data.question_help}</span>
         </div>
       );
-    } else if (data.question_type === "MCQ") {
+    }
+    if (data.question_type === "MCQ") {
       return (
         <div className="form-group col-xl-4 col-md-6">
           <label>{data.question_text}</label>
@@ -460,9 +485,9 @@ export default class SiteAdd extends Component {
             name={data.question_name}
             style={{ border: "0", borderBottom: "1px solid #eaeaea" }}
           >
-            {data.mcq_options.map((option, key) => {
+            {data.mcq_options.map(option => {
               return (
-                <Fragment key={key}>
+                <Fragment key={option.id}>
                   <option value={option.option_text}>
                     {option.option_text}
                   </option>
@@ -473,7 +498,8 @@ export default class SiteAdd extends Component {
           <span>{data.question_help}</span>
         </div>
       );
-    } else if (data.question_type === "Number") {
+    }
+    if (data.question_type === "Number") {
       return (
         <div className="col-xl-4 col-md-6">
           <InputElement
@@ -490,7 +516,8 @@ export default class SiteAdd extends Component {
           <span>{data.question_help}</span>
         </div>
       );
-    } else if (data.question_type === "Link") {
+    }
+    if (data.question_type === "Link") {
       return (
         <Select
           data={data.project_id}
@@ -502,10 +529,8 @@ export default class SiteAdd extends Component {
         />
       );
     }
+    return null;
   };
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
 
   render() {
     const {
@@ -516,325 +541,343 @@ export default class SiteAdd extends Component {
       readFile,
       closeModal,
       handleCheckboxChange,
-      ondynamiChangeHandler,
       state: {
         project: {
           name,
           site_id,
           phone,
           address,
-          website,
           publicDescription,
-          logo,
-          weight,
           cluster_sites
         },
         region,
         position: { latitude, longitude },
         cropResult,
-        zoom,
-        src,
         showCropper,
         isLoading,
-
+        breadcrumbs,
+        loaded,
         jsondata,
         site_types,
         regionselected,
         Selectedtypes
       }
     } = this;
-    return (
-      <RightContentCard title="New Site">
-        <form className="edit-form" onSubmit={onSubmitHandler}>
-          <div className="row">
-            <div className="col-xl-4 col-md-6">
-              <InputElement
-                formType="editForm"
-                tag="input"
-                type="text"
-                required={true}
-                label="ID"
-                name="site_id"
-                value={site_id}
-                changeHandler={onChangeHandler}
-              />
-            </div>
-            <div className="col-xl-4 col-md-6">
-              <InputElement
-                formType="editForm"
-                tag="input"
-                type="text"
-                required={true}
-                label="Name"
-                name="name"
-                value={name}
-                changeHandler={onChangeHandler}
-              />
-            </div>
-            {this.props.page === "CreateSite" ||
-            this.props.page === "subSite" ? (
-              <div className="col-xl-4 col-md-6">
-                <SelectElement
-                  className="form-control"
-                  label="Regions"
-                  options={
-                    region.length > 0 ? region.map(region => region) : region
-                  }
-                  changeHandler={e => onSelectChangeHandler(e, "regions")}
-                  value={regionselected && regionselected}
-                />
-              </div>
-            ) : (
-              ""
-            )}
 
-            <div className="col-xl-4 col-md-6">
-              <SelectElement
-                className="form-control"
-                label="Types"
-                options={
-                  site_types.length > 0
-                    ? site_types.map(region => region)
-                    : site_types
-                }
-                changeHandler={e => onSelectChangeHandler(e, "site_types")}
-                value={Selectedtypes}
-              />
-            </div>
-            <div className="col-xl-4 col-md-6">
-              <InputElement
-                formType="editForm"
-                tag="input"
-                type="text"
-                required={false}
-                label="Phone"
-                name="phone"
-                value={phone}
-                changeHandler={onChangeHandler}
-              />
-            </div>
-            <div className="col-xl-4 col-md-6">
-              <InputElement
-                formType="editForm"
-                tag="input"
-                type="text"
-                required={false}
-                label="Address"
-                name="address"
-                value={address}
-                changeHandler={onChangeHandler}
-              />
-            </div>
-            <div className="col-xl-4 col-md-6">
-              <div className="form-group">
-                <CheckBox
-                  checked={this.state.project.cluster_sites || ""}
-                  label="Enable subsites"
-                  value={cluster_sites}
-                  changeHandler={handleCheckboxChange}
-                />
-              </div>
-            </div>
-            {this.props.page === "subSite" ? (
+    return (
+      <>
+        <nav aria-label="breadcrumb" role="navigation">
+          {breadcrumbs && Object.keys(breadcrumbs).length > 0 && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.name_url}>{breadcrumbs.name}</a>
+              </li>
+              <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+            </ol>
+          )}
+        </nav>
+        <RightContentCard title="New Site">
+          <form className="edit-form" onSubmit={onSubmitHandler}>
+            <div className="row">
               <div className="col-xl-4 col-md-6">
                 <InputElement
                   formType="editForm"
                   tag="input"
-                  type="number"
-                  required={false}
-                  label="Weight"
-                  name="weight"
-                  value={this.state.weight}
-                  changeHandler={e => this.setState({ weight: e.target.value })}
+                  type="text"
+                  required
+                  label="ID"
+                  name="site_id"
+                  value={site_id}
+                  changeHandler={onChangeHandler}
                 />
               </div>
-            ) : (
-              ""
-            )}
-            <div className="col-xl-4 col-md-6">
-              <div className="form-group">
+              <div className="col-xl-4 col-md-6">
+                <InputElement
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  required
+                  label="Name"
+                  name="name"
+                  value={name}
+                  changeHandler={onChangeHandler}
+                />
+              </div>
+              {this.state.regionFlag &&
+                (this.props.page === "CreateSite" ||
+                  this.props.page === "subSite") && (
+                  <div className="col-xl-4 col-md-6">
+                    <SelectElement
+                      className="form-control"
+                      label="Regions"
+                      options={region}
+                      changeHandler={e => {
+                        onSelectChangeHandler(e, "regions");
+                      }}
+                      value={regionselected && regionselected}
+                    />
+                  </div>
+                  // ) : (
+                  //   ""
+                )}
+
+              <div className="col-xl-4 col-md-6">
+                <SelectElement
+                  className="form-control"
+                  label="Types"
+                  options={
+                    site_types.length > 0
+                      ? site_types.map(site_type => site_type)
+                      : site_types
+                  }
+                  changeHandler={e => {
+                    onSelectChangeHandler(e, "site_types");
+                  }}
+                  value={Selectedtypes}
+                />
+              </div>
+              <div className="col-xl-4 col-md-6">
                 <InputElement
                   formType="editForm"
                   tag="input"
                   type="text"
                   required={false}
-                  label="Description"
-                  name="publicDescription"
-                  value={publicDescription}
+                  label="Phone"
+                  name="phone"
+                  value={phone}
                   changeHandler={onChangeHandler}
                 />
               </div>
-            </div>
-            <div className="col-xl-4 col-md-6">
-              <div className="form-group">
-                <label>
-                  Map <sup>*</sup>
-                </label>
+              <div className="col-xl-4 col-md-6">
+                <InputElement
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  required={false}
+                  label="Address"
+                  name="address"
+                  value={address}
+                  changeHandler={onChangeHandler}
+                />
+              </div>
+              <div className="col-xl-4 col-md-6">
+                <div className="form-group">
+                  <CheckBox
+                    checked={this.state.project.cluster_sites || ""}
+                    label="Enable subsites"
+                    value={cluster_sites}
+                    changeHandler={handleCheckboxChange}
+                  />
+                </div>
+              </div>
+              {this.props.page === "subSite" ? (
+                <div className="col-xl-4 col-md-6">
+                  <InputElement
+                    formType="editForm"
+                    tag="input"
+                    type="number"
+                    required={false}
+                    label="Weight"
+                    name="weight"
+                    value={this.state.weight}
+                    changeHandler={e => {
+                      this.setState({ weight: e.target.value });
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+              <div className="col-xl-4 col-md-6">
+                <div className="form-group">
+                  <InputElement
+                    formType="editForm"
+                    tag="input"
+                    type="text"
+                    required={false}
+                    label="Description"
+                    name="publicDescription"
+                    value={publicDescription}
+                    changeHandler={onChangeHandler}
+                  />
+                </div>
+              </div>
+              <div className="col-xl-4 col-md-6">
+                <div className="form-group">
+                  <label>
+                    Map <sup>*</sup>
+                    <sup>*</sup>
+                  </label>
 
-                <div className="map-form">
-                  <Map
-                    style={{ height: "205px", marginTop: "1rem" }}
-                    center={[latitude, longitude]}
-                    zoom={this.state.zoom}
-                    onClick={mapClickHandler}
-                  >
-                    <TileLayer
-                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Marker position={[latitude, longitude]}>
-                      <Popup>
-                        <b>Name: </b>
-                        {name}
-                      </Popup>
-                    </Marker>
-                  </Map>
-                  <div className="latitude-form">
-                    <div className="lat-group">
-                      <InputElement
-                        formType="editForm"
-                        tag="input"
-                        type="number"
-                        required={true}
-                        label="Latitude"
-                        name="latitude"
-                        value={latitude}
-                        changeHandler={e => onChangeHandler(e, "latitude")}
+                  <div className="map-form">
+                    <Map
+                      style={{ height: "205px", marginTop: "1rem" }}
+                      center={[latitude, longitude]}
+                      zoom={this.state.zoom}
+                      onClick={mapClickHandler}
+                    >
+                      <TileLayer
+                        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       />
-                    </div>
+                      <Marker position={[latitude, longitude]}>
+                        <Popup>
+                          <b>Name: </b>
+                          {name}
+                        </Popup>
+                      </Marker>
+                    </Map>
+                    <div className="latitude-form">
+                      <div className="lat-group">
+                        <InputElement
+                          formType="editForm"
+                          tag="input"
+                          type="number"
+                          required
+                          label="Latitude"
+                          name="latitude"
+                          value={latitude}
+                          changeHandler={e => {
+                            onChangeHandler(e, "latitude");
+                          }}
+                        />
+                      </div>
 
-                    <div className="lat-group">
-                      <InputElement
-                        formType="editForm"
-                        tag="input"
-                        type="number"
-                        required={true}
-                        label="Longitude"
-                        name="longitude"
-                        value={longitude}
-                        changeHandler={e => onChangeHandler(e, "longitude")}
-                      />
+                      <div className="lat-group">
+                        <InputElement
+                          formType="editForm"
+                          tag="input"
+                          type="number"
+                          required
+                          label="Longitude"
+                          name="longitude"
+                          value={longitude}
+                          changeHandler={e => {
+                            onChangeHandler(e, "longitude");
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="col-xl-4 col-md-6">
-              <div className="form-group">
-                <label> {cropResult ? "Preview" : "Attach File"}</label>
+              <div className="col-xl-4 col-md-6">
+                <div className="form-group">
+                  <label> {cropResult ? "Preview" : "Attach File"}</label>
 
-                {cropResult ? (
-                  <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
-                    {({ getRootProps, getInputProps }) => {
-                      return (
-                        <section>
-                          <div className="upload-form">
-                            <img
-                              src={this.state.cropResult}
-                              alt="Cropped Image"
-                            />
-                          </div>
+                  {cropResult ? (
+                    <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                      {({ getRootProps, getInputProps }) => {
+                        return (
+                          <section>
+                            <div className="upload-form">
+                              <img
+                                src={this.state.cropResult}
+                                alt="Cropped Image"
+                              />
+                            </div>
 
-                          <div {...getRootProps()}>
-                            <input {...getInputProps()} multiple={false} />
-                            <div className="upload-icon" />
+                            <div {...getRootProps()}>
+                              <input {...getInputProps()} multiple={false} />
+                              <div className="upload-icon" />
 
-                            <button className="fieldsight-btn">
-                              Upload
-                              <i className="la la-cloud-upload" />
-                            </button>
-                          </div>
-                        </section>
-                      );
-                    }}
-                  </Dropzone>
-                ) : (
-                  <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
-                    {({ getRootProps, getInputProps }) => {
-                      return (
-                        <section>
-                          <div className="upload-form">
-                            <div className="upload-wrap">
-                              <div className="content">
-                                <div {...getRootProps()}>
-                                  <input
-                                    {...getInputProps()}
-                                    multiple={false}
-                                  />
-                                  <div className="upload-icon" />
-                                  <h3>Drag & Drop an image</h3>
-                                  <button className="fieldsight-btn">
-                                    Upload
-                                    <i className="la la-cloud-upload" />
-                                  </button>
+                              <button className="fieldsight-btn">
+                                Upload
+                                <i className="la la-cloud-upload" />
+                              </button>
+                            </div>
+                          </section>
+                        );
+                      }}
+                    </Dropzone>
+                  ) : (
+                    <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                      {({ getRootProps, getInputProps }) => {
+                        return (
+                          <section>
+                            <div className="upload-form">
+                              <div className="upload-wrap">
+                                <div className="content">
+                                  <div {...getRootProps()}>
+                                    <input
+                                      {...getInputProps()}
+                                      multiple={false}
+                                    />
+                                    <div className="upload-icon" />
+                                    <h3>Drag & Drop an image</h3>
+                                    <button className="fieldsight-btn">
+                                      Upload
+                                      <i className="la la-cloud-upload" />
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </section>
-                      );
-                    }}
-                  </Dropzone>
-                )}
-              </div>
-            </div>
-            {jsondata.map((data, key) => {
-              return <Fragment key={key}>{this.selectform(data)}</Fragment>;
-            })}
-            <div className="col-sm-12">
-              <button type="submit" className="fieldsight-btn pull-right">
-                Save
-              </button>
-            </div>
-          </div>
-        </form>
-        {showCropper && (
-          <Modal title="Preview" toggleModal={closeModal}>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="card-body" style={{ padding: 0 }}>
-                  <figure>
-                    <Cropper
-                      style={{ height: 400, width: 300 }}
-                      aspectRatio={1 / 1}
-                      preview=".img-preview"
-                      guides={false}
-                      src={this.state.src}
-                      ref={cropper => {
-                        this.cropper = cropper;
+                          </section>
+                        );
                       }}
-                    />
-                    <button
-                      className="fieldsight-btn"
-                      style={{ marginTop: "15px" }}
-                      onClick={this.cropImage}
-                    >
-                      Save Image
-                    </button>
-                  </figure>
+                    </Dropzone>
+                  )}
                 </div>
               </div>
-              <div className="col-md-6">
-                <div className="card-body" style={{ padding: 0 }}>
-                  <figure>
-                    <div
-                      className="img-preview"
-                      style={{
-                        width: "100%",
-                        height: 400,
-                        overflow: "hidden"
-                      }}
-                    />
-                  </figure>
-                </div>
+              {jsondata.map((data, key) => {
+                return <Fragment key={key}>{this.selectform(data)}</Fragment>;
+              })}
+              <div className="col-sm-12">
+                <button type="submit" className="fieldsight-btn pull-right">
+                  Save
+                </button>
               </div>
             </div>
-          </Modal>
-        )}
+          </form>
+          {showCropper && (
+            <Modal title="Preview" toggleModal={closeModal}>
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="card-body" style={{ padding: 0 }}>
+                    <figure>
+                      <Cropper
+                        style={{ height: 400, width: 300 }}
+                        aspectRatio={1 / 1}
+                        preview=".img-preview"
+                        guides={false}
+                        src={this.state.src}
+                        ref={cropper => {
+                          this.cropper = cropper;
+                        }}
+                      />
+                      <button
+                        className="fieldsight-btn"
+                        style={{ marginTop: "15px" }}
+                        onClick={this.cropImage}
+                      >
+                        Save Image
+                      </button>
+                    </figure>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="card-body" style={{ padding: 0 }}>
+                    <figure>
+                      <div
+                        className="img-preview"
+                        style={{
+                          width: "100%",
+                          height: 400,
+                          overflow: "hidden"
+                        }}
+                      />
+                    </figure>
+                  </div>
+                </div>
+              </div>
+            </Modal>
+          )}
 
-        {isLoading && <Loader loaded={loaded} />}
-      </RightContentCard>
+          {isLoading && <Loader loaded={loaded} />}
+        </RightContentCard>
+      </>
     );
   }
 }

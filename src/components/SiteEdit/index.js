@@ -160,9 +160,7 @@ export default class SiteEdit extends Component {
     })
       .then(res => {
         if (res.status === 200) {
-          this.props.history.push(
-            `/fieldsight/application/#/site-dashboard/${res.data.id}`
-          );
+          this.props.history.push(`/site-dashboard/${res.data.id}`);
         }
       })
       .catch(err => {
