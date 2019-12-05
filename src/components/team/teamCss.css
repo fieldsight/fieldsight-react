@@ -139,7 +139,7 @@
 }
 .infodiv{
     max-width: 200px;
-    position: fixed;
+    position: absolute;
     top:13px;
     left:70px;
     z-index: 3000;

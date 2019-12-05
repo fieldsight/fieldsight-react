@@ -375,6 +375,7 @@ class TeamMap extends React.Component {
         };
 
         legend.addTo(map);
+        this.setState({legend:legend})
         // this.setState({ defaultMap: map })
 
 
