@@ -72,14 +72,17 @@ export default class SiteEdit extends Component {
               axios
                 .get(`/fv3/api/site-form/?project=${siteForm.data.project}`)
                 .then(res => {
+                  console.log(res, "res", siteForm);
                   let regionArr = this.state.region;
                   let typeArr = this.state.site_types;
                   const position =
-                    res.data.location !== "None"
-                      ? res.data.location && res.data.location.split(" ")
+                    siteForm.data.location !== "None"
+                      ? siteForm.data.location &&
+                        siteForm.data.location.split(" ")
                       : "";
                   const longitude = position && position[1].split("(")[1];
                   const latitude = position && position[2].split(")")[0];
+                  console.log(longitude, latitude);
                   this.setState(state => {
                     res.data.regions !== undefined &&
                       res.data.regions.map(each => regionArr.push(each));
@@ -170,6 +173,7 @@ export default class SiteEdit extends Component {
       ...(this.state.show && { logo: this.state.cropResult }),
       site_meta_attributes_ans: JSON.stringify(this.state.data)
     };
+    console.log(data, "data");
 
     axios({
       method: "PUT",
