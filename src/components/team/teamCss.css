@@ -134,3 +134,38 @@
       cursor: pointer;
 
   }
+  .leaflet-tile-container img {
+    box-shadow: 0 0 0px #060472;
+}
+.infodiv{
+    max-width: 200px;
+    position: absolute;
+    top:13px;
+    left:70px;
+    z-index: 3000;
+    background-color: white;
+    padding:5px
+}
+.infodiv h6{
+    font-size: 12px;
+    color: #005175;
+    margin: 1px;
+
+}
+#backbtn{
+    margin-right: 4px;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+    background-color:white ;
+}
+.backdiv{
+    align-items: center;
+    justify-content: start;
+    
+}
+#backbtn:hover{
+   border: solid rgba(139, 137, 137,0.4) 0.1px;
+
+
+}
