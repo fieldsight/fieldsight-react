@@ -72,7 +72,6 @@ export default class SiteEdit extends Component {
               axios
                 .get(`/fv3/api/site-form/?project=${siteForm.data.project}`)
                 .then(res => {
-                  console.log(res, "res", siteForm);
                   let regionArr = this.state.region;
                   let typeArr = this.state.site_types;
                   const position =
@@ -82,7 +81,7 @@ export default class SiteEdit extends Component {
                       : "";
                   const longitude = position && position[1].split("(")[1];
                   const latitude = position && position[2].split(")")[0];
-                  console.log(longitude, latitude);
+
                   this.setState(state => {
                     res.data.regions !== undefined &&
                       res.data.regions.map(each => regionArr.push(each));
