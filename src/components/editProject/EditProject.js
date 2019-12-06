@@ -115,12 +115,15 @@ class EditProject extends Component {
         );
       })
       .catch(err => {
-        const errors = err.response;
+        const error = err.response.data;
+
         this.setState(
           {
             isLoading: false
           },
-          errorToast(errors.data.error)
+          Object.entries(error).map(([key, value]) => {
+            errorToast(`${value}`);
+          })
         );
       });
   };
