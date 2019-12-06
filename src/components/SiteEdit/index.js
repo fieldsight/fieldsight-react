@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { errorToast, successToast } from "../../utils/toastHandler";
 import SiteEditForm from "../common/siteEdit";
 import axios from "axios";
 export default class SiteEdit extends Component {
@@ -182,10 +183,16 @@ export default class SiteEdit extends Component {
     })
       .then(res => {
         if (res.status === 200) {
+          successToast("Site", "updated");
           this.props.history.push(`/site-dashboard/${res.data.id}`);
         }
       })
-      .catch();
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          errorToast(`${value}`);
+        });
+      });
   };
   mapClickHandler = e => {
     this.setState({
