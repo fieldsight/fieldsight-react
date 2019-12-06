@@ -53,9 +53,9 @@ import Mapparent from "./team/Mapparent";
 
 import messages_en from "../translations/en.json";
 import messages_ne from "../translations/ne.json";
-import SelectElement from "../components/common/SelectElement";
 
 import ResetPassword from "./ResetPassword";
+import UpdateProfile from "./updateProject";
 
 const messages = {
   ne: messages_ne,
@@ -257,6 +257,11 @@ class App extends Component {
                     <Route
                       path="/reset-password"
                       render={props => <ResetPassword {...props} />}
+                    />
+
+                    <Route
+                      path="/update-profile"
+                      render={props => <UpdateProfile {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
