@@ -48,9 +48,8 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
-import TeamMap from "./team/TeamMap";
 import Mapparent from "./team/Mapparent";
-
+import SyncSchedule from "./syncSchedule";
 import messages_en from "../translations/en.json";
 import messages_ne from "../translations/ne.json";
 import SelectElement from "../components/common/SelectElement";
@@ -60,7 +59,10 @@ const messages = {
   en: messages_en
 };
 const language = navigator.language.split(/[-_]/)[0]; // language without region code
-const selectLanguage = [{ id: "en", name: "Eng" }, { id: "ne", name: "Nep" }];
+const selectLanguage = [
+  { id: "en", name: "Eng" },
+  { id: "ne", name: "Nep" }
+];
 
 class App extends Component {
   constructor(props) {
@@ -247,6 +249,10 @@ class App extends Component {
                     <Route
                       path="/project-version-submission/:id/:fid"
                       render={props => <VersionSubmissionData {...props} />}
+                    />
+                    <Route
+                      path="/sync-schedule/:projectId"
+                      render={props => <SyncSchedule {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
