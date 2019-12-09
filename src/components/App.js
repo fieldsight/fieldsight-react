@@ -260,7 +260,7 @@ class App extends Component {
                     />
 
                     <Route
-                      path="/update-profile"
+                      path="/update-profile/:id"
                       render={props => <UpdateProfile {...props} />}
                     />
                   </Switch>
