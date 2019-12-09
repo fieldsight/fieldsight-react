@@ -27,10 +27,6 @@ L.Icon.Default.mergeOptions({
   iconUrl,
   shadowUrl
 });
-const data = [
-  { name: "----", id: "" },
-  { id: "645", name: "testregion" }
-];
 
 export default class SiteAdd extends Component {
   _isMounted = false;

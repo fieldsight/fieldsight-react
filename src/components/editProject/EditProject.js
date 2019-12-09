@@ -106,7 +106,6 @@ class EditProject extends Component {
         }
       })
       .then(res => {
-        console.log(res, "res");
         this.setState(
           {
             isLoading: false,
@@ -117,15 +116,17 @@ class EditProject extends Component {
       })
       .catch(err => {
         const error = err.response.data;
-        console.log(error, "error");
+
         this.setState(
           {
             isLoading: false
           },
-          Object.entries(error).map(([key, value]) => {
-            console.log(`${value}`, "dfghjk");
-            // errorToast(`${value}`);
-          })
+          () => {
+            error &&
+              Object.entries(error).map(([key, value]) => {
+                return errorToast(`${value}`);
+              });
+          }
         );
       });
   };
