@@ -4,6 +4,15 @@ import { Dropdown, DropdownButton } from "react-bootstrap";
 import SelectElement from "../common/SelectElement";
 
 const forms = ["form1", "form2", "form3"];
+const weekOptions = [
+  { id: 1, name: "Mon" },
+  { id: 2, name: "Tue" },
+  { id: 3, name: "Wed" },
+  { id: 4, name: "Thurs" },
+  { id: 5, name: "Fri" },
+  { id: 6, name: "Sat" },
+  { id: 7, name: "Sun" }
+];
 
 export default class SyncSchedule extends Component {
   constructor(props) {
@@ -36,7 +45,32 @@ export default class SyncSchedule extends Component {
     this.setState({ selectedForm: e });
   };
 
+  handleScheduleTypeChange = e => {
+    console.log("on form", e);
+
+    this.setState({ scheduleType: e });
+  };
+
+  handleSelectedDayChange = e => {
+    const { value } = e.target;
+    this.setState({ selectedDayOnWeek: JSON.parse(value) });
+  };
+
+  handleSelectedMonthDayChange = e => {
+    const { value } = e.target;
+    this.setState({ selectedDayOnMonth: JSON.parse(value) });
+  };
+
   render() {
+    const {
+      state: { selectedDayOnWeek, selectedDayOnMonth, scheduleType }
+    } = this;
+    let dayOptions = [];
+    for (var i = 1; i <= 31; i += 1) {
+      if (i <= 30) dayOptions.push({ id: i, name: i });
+      else dayOptions.push({ id: 0, name: "Last" });
+    }
+
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -113,93 +147,59 @@ export default class SyncSchedule extends Component {
                   <Dropdown.Menu className="dropdown-menu-right">
                     <Dropdown.Item
                       target="_blank"
-                      onSelect={this.handleDropdownChange}
-                      eventKey="siteInfo"
+                      onSelect={this.handleScheduleTypeChange}
+                      eventKey="manual"
                     >
                       Manual
                     </Dropdown.Item>
                     <Dropdown.Item
                       target="_blank"
-                      onSelect={this.handleDropdownChange}
-                      eventKey="progress"
+                      onSelect={this.handleScheduleTypeChange}
+                      eventKey="daily"
                     >
                       Daily
                     </Dropdown.Item>
                     <Dropdown.Item
                       target="_blank"
-                      onSelect={this.handleDropdownChange}
-                      eventKey="siteInfo"
+                      onSelect={this.handleScheduleTypeChange}
+                      eventKey="weekly"
                     >
                       Weekly
                     </Dropdown.Item>
                     <Dropdown.Item
                       target="_blank"
-                      onSelect={this.handleDropdownChange}
-                      eventKey="progress"
+                      onSelect={this.handleScheduleTypeChange}
+                      eventKey="monthly"
                     >
                       Monthly
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-              <div className="form-group">
+              {scheduleType === "weekly" && (
                 <div className="every-week flex">
                   <span className="ml-0">every</span>
                   <SelectElement
                     classname="border-0"
                     options={weekOptions}
-                    value={frequency}
-                    changeHandler={this.handleFrequencyChange}
+                    value={selectedDayOnWeek}
+                    changeHandler={this.handleSelectedDayChange}
                   />
-                  <span>weeks on</span>
-                  <div className="form-group">
-                    <div className="custom-checkbox display-inline">
-                      <RadioElement
-                        label="Sun"
-                        name="sun"
-                        changeHandler={this.handleOnWeekCheckbox}
-                        checked={weeklyArrDays.sun}
-                      />
-                      <RadioElement
-                        label="Mon"
-                        name="mon"
-                        changeHandler={this.handleOnWeekCheckbox}
-                        checked={weeklyArrDays.mon}
-                      />
-                      <RadioElement
-                        label="Tue"
-                        name="tue"
-                        changeHandler={this.handleOnWeekCheckbox}
-                        checked={weeklyArrDays.tue}
-                      />
-                      <RadioElement
-                        label="Wed"
-                        name="wed"
-                        changeHandler={this.handleOnWeekCheckbox}
-                        checked={weeklyArrDays.wed}
-                      />
-                      <RadioElement
-                        label="Thu"
-                        name="thu"
-                        changeHandler={this.handleOnWeekCheckbox}
-                        checked={weeklyArrDays.thu}
-                      />
-                      <RadioElement
-                        label="Fri"
-                        name="fri"
-                        changeHandler={this.handleOnWeekCheckbox}
-                        checked={weeklyArrDays.fri}
-                      />
-                      <RadioElement
-                        label="Sat"
-                        name="sat"
-                        changeHandler={this.handleOnWeekCheckbox}
-                        checked={weeklyArrDays.sat}
-                      />
-                    </div>
-                  </div>
+                  <span>Day</span>
                 </div>
-              </div>
+              )}
+              {scheduleType === "monthly" && (
+                <div className="every-week flex">
+                  <span className="ml-0">every</span>
+                  <SelectElement
+                    classname="border-0"
+                    options={dayOptions}
+                    value={selectedDayOnMonth}
+                    changeHandler={this.handleSelectedMonthDayChange}
+                  />
+                  <span>Date of Month</span>
+                </div>
+              )}
             </form>
           </div>
         </div>
