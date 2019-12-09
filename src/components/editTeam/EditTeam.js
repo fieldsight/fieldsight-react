@@ -170,7 +170,7 @@ class EditTeam extends Component {
 
           () =>
             Object.entries(error).map(([key, value]) => {
-              errorToast(`${value}`);
+              return errorToast(`${value}`);
             })
         );
       });

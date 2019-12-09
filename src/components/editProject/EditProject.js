@@ -121,9 +121,12 @@ class EditProject extends Component {
           {
             isLoading: false
           },
-          Object.entries(error).map(([key, value]) => {
-            errorToast(`${value}`);
-          })
+          () => {
+            error &&
+              Object.entries(error).map(([key, value]) => {
+                return errorToast(`${value}`);
+              });
+          }
         );
       });
   };
@@ -165,7 +168,7 @@ class EditProject extends Component {
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
-    // debugger;
+
     if (position) {
       this.setState({
         position: {

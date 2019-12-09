@@ -190,7 +190,7 @@ export default class SiteEdit extends Component {
       .catch(err => {
         const error = err.response.data;
         Object.entries(error).map(([key, value]) => {
-          errorToast(`${value}`);
+          return errorToast(`${value}`);
         });
       });
   };
