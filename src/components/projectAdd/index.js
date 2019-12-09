@@ -101,7 +101,6 @@ export default class ProjectAdd extends Component {
       .post(`fv3/api/add-project/${id}/`, data)
       .then(res => {
         if (res.status === 201) {
-          console.log(res, "sucess message");
           successToast("Form", "Created");
           this.setState({
             project: {

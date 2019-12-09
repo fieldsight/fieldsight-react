@@ -56,6 +56,7 @@ import messages_ne from "../translations/ne.json";
 
 import ResetPassword from "./ResetPassword";
 import UpdateProfile from "./updateProject";
+import CreateProfile from "./ProfileAdd";
 
 const messages = {
   ne: messages_ne,
@@ -262,6 +263,11 @@ class App extends Component {
                     <Route
                       path="/update-profile/:id"
                       render={props => <UpdateProfile {...props} />}
+                    />
+
+                    <Route
+                      path="/create-profile/:id"
+                      render={props => <CreateProfile {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

@@ -10,7 +10,6 @@ export default class ResetPassword extends Component {
     this.state = {
       resetPsw: "",
       confirmResetPsw: "",
-
       errresetPsw: "",
       errconfirmResetPsw: ""
     };
@@ -18,7 +17,12 @@ export default class ResetPassword extends Component {
   onSubmitHandler = e => {
     e.preventDefault();
 
-    const { resetPsw, confirmResetPsw } = this.state;
+    const {
+      resetPsw,
+      confirmResetPsw,
+      errresetPsw,
+      errconfirmResetPsw
+    } = this.state;
 
     this.handleResetValidation();
 
@@ -28,13 +32,13 @@ export default class ResetPassword extends Component {
       formData.append("confirmResetPsw", confirmResetPsw);
       Axios.post(``, formData)
         .then(res => {
-          if (res.data) {
-            successToast(res.data.message);
-          }
+          // if (res.data) {
+          //   successToast(res.data.message);
+          // }
         })
         .catch(err => {
-          const errors = err.response;
-          errorToast(errors.data.old_password[0]);
+          // const errors = err.response;
+          // errorToast(errors.data.old_password[0]);
         });
     }
   };

@@ -8,7 +8,7 @@ import SelectElement from "../common/SelectElement";
 import RadioElement from "../common/RadioElement";
 import Modal from "../common/Modal";
 
-class UpdateProfile extends Component {
+class CreateProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,47 +46,15 @@ class UpdateProfile extends Component {
         params: { id }
       }
     } = this.props;
-    const urls = [`/fv3/api/get-profile/${id}/`, `/fv3/api/timezones/`];
 
-    axios
-      .all(
-        urls.map((url, i) => {
-          return axios.get(url);
-        })
-      )
-      .then(
-        axios.spread((get_profile, timezone) => {
-          const timezoneArr = this.state.timezone;
+    axios.get(`/fv3/api/timezones/`).then(res => {
+      const timezoneArr = this.state.timezone;
 
-          timezone.data &&
-            timezone.data.map(zoneArr => timezoneArr.push(zoneArr));
-          this.setState({
-            timezone: timezoneArr,
-            first_name: get_profile.data.first_name,
-            last_name: get_profile.data.last_name,
-            address: get_profile.data.address,
-            phone: get_profile.data.phone,
-            skype: get_profile.data.skype,
-            primary_number: get_profile.data.primary_number,
-            secondary_number: get_profile.data.secondary_number,
-            office_number: get_profile.data.office_number,
-            viber: get_profile.data.viber,
-            whatsapp: get_profile.data.whatsapp,
-            wechat: get_profile.data.wechat,
-            line: get_profile.data.line,
-            tango: get_profile.data.tango,
-            hike: get_profile.data.hike,
-            qq: get_profile.data.qq,
-            google_talk: get_profile.data.google_talk,
-            twitter: get_profile.data.twitter,
-            selectTimeZone: get_profile.data.timezone,
-            selectedGender: get_profile.data.gender,
-            cropResult:
-              get_profile.data.profile_picture &&
-              get_profile.data.profile_picture
-          });
-        })
-      );
+      res.data && res.data.map(zoneArr => timezoneArr.push(zoneArr));
+      this.setState({
+        timezone: timezoneArr
+      });
+    });
   }
 
   onChangeHandler = e => {
@@ -104,30 +72,30 @@ class UpdateProfile extends Component {
       }
     } = this.props;
 
-    const updateProfile = {};
-    updateProfile.first_name = this.state.first_name;
-    updateProfile.last_name = this.state.last_name;
-    updateProfile.address = this.state.address;
-    updateProfile.phone = this.state.phone;
-    updateProfile.skype = this.state.skype;
-    updateProfile.primary_number = this.state.primary_number;
-    updateProfile.secondary_number = this.state.secondary_number;
-    updateProfile.office_number = this.state.office_number;
-    updateProfile.viber = this.state.viber;
-    updateProfile.whatsapp = this.state.whatsapp;
-    updateProfile.wechat = this.state.wechat;
-    updateProfile.line = this.state.line;
-    updateProfile.tango = this.state.tango;
-    updateProfile.hike = this.state.hike;
-    updateProfile.qq = this.state.qq;
-    updateProfile.google_talk = this.state.google_talk;
-    updateProfile.twitter = this.state.twitter;
-    updateProfile.selectTimeZone = this.state.selectTimeZone;
-    updateProfile.gender = this.state.selectedGender;
-    updateProfile.profile_picture = this.state.cropResult;
+    const createProfile = {};
+    createProfile.first_name = this.state.first_name;
+    createProfile.last_name = this.state.last_name;
+    createProfile.address = this.state.address;
+    createProfile.phone = this.state.phone;
+    createProfile.skype = this.state.skype;
+    createProfile.primary_number = this.state.primary_number;
+    createProfile.secondary_number = this.state.secondary_number;
+    createProfile.office_number = this.state.office_number;
+    createProfile.viber = this.state.viber;
+    createProfile.whatsapp = this.state.whatsapp;
+    createProfile.wechat = this.state.wechat;
+    createProfile.line = this.state.line;
+    createProfile.tango = this.state.tango;
+    createProfile.hike = this.state.hike;
+    createProfile.qq = this.state.qq;
+    createProfile.google_talk = this.state.google_talk;
+    createProfile.twitter = this.state.twitter;
+    createProfile.selectTimeZone = this.state.selectTimeZone;
+    createProfile.gender = this.state.selectedGender;
+    createProfile.profile_picture = this.state.cropResult;
 
     axios
-      .post(`/fv3/api/update-profile/${id}/`, updateProfile)
+      .post(`/fv3/api/create-profile/${id}/`, createProfile)
       .then(req => {
         if (req.status === 201) {
           this.setState({
@@ -151,7 +119,7 @@ class UpdateProfile extends Component {
             profile_picture: "",
             timezone: [{ id: "", name: "----" }],
             selectTimeZone: "",
-            selectedGender: "0",
+            selectedGender: "Male",
             showCropper: false,
             cropResult: "",
             src: "",
@@ -245,7 +213,7 @@ class UpdateProfile extends Component {
     } = this;
     return (
       <>
-        <RightContentCard title="Update Profile">
+        <RightContentCard title="Create Profile">
           <form className="edit-form" onSubmit={e => onSubmitHandler(e)}>
             <div className="col-sm-12">
               <div className="row">
@@ -582,4 +550,4 @@ class UpdateProfile extends Component {
   }
 }
 
-export default UpdateProfile;
+export default CreateProfile;
