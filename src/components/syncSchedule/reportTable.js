@@ -2,88 +2,110 @@ import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
-import { DotLoader } from "../myForm/Loader";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const getType = type => {
-  if (type === "site_info") {
-    return "Site Info";
-  }
-  if (type === "site_progress") {
-    return "Site Progress";
-  }
-  if (type === "form") {
-    return "Form";
-  }
-  return null;
-};
+// const getType = type => {
+//   if (type === "site_info") {
+//     return "Site Info";
+//   }
+//   if (type === "site_progress") {
+//     return "Site Progress";
+//   }
+//   if (type === "form") {
+//     return "Form";
+//   }
+//   return null;
+// };
 
-const getScheduleType = schedule => {
-  if (schedule === 0) {
-    return "Manual";
-  }
-  if (schedule === 1) {
-    return "Daily";
-  }
-  if (schedule === 2) {
-    return "Weekly";
-  }
-  if (schedule === 3) {
-    return "Monthly";
-  }
-  return null;
-};
-
-const formatDate = date => {
-  const dateIdx = date.getDate();
-  const monthIndex = date.getMonth() + 1;
-  const year = date.getFullYear();
-  return year + "-" + monthIndex + "-" + dateIdx;
-};
+// const getScheduleType = schedule => {
+//   if (schedule === 0) {
+//     return "Manual";
+//   }
+//   if (schedule === 1) {
+//     return "Daily";
+//   }
+//   if (schedule === 2) {
+//     return "Weekly";
+//   }
+//   if (schedule === 3) {
+//     return "Monthly";
+//   }
+//   return null;
+// };
 
 export default class ReportTable extends Component {
   render() {
-    const { loader, data } = this.props;
+    const { loader, data, scheduleType } = this.props;
     return (
       <>
-        {!loader && data.length === 0 ? (
-          <div>No Form added yet.</div>
-        ) : (
-          <div
-            className="thumb-list mr-0 "
-            style={{ position: "relative", height: "327px" }}
-          >
-            <PerfectScrollbar>
-              <Table
-                responsive="xl"
-                className="table  table-bordered  dataTable "
-              >
-                <thead>
+        <div
+          className="thumb-list mr-0 "
+          style={{ position: "relative", height: "327px" }}
+        >
+          <PerfectScrollbar>
+            <div style={{ display: "flex" }}>
+              <h6>{scheduleType}</h6>
+            </div>
+            <Table
+              responsive="xl"
+              className="table  table-bordered  dataTable "
+            >
+              <thead>
+                <tr>
+                  <th>Form Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {!loader && data.length === 0 ? (
                   <tr>
-                    <th>Id</th>
-                    <th>Type</th>
-                    <th>Schedule Type</th>
-                    <th>Last Synced Date</th>
+                    <td colSpan={2}>No Form added yet.</td>
                   </tr>
-                </thead>
-
-                <tbody>
-                  {data.map(each => (
-                    <tr key={`report_${each.id}`}>
-                      <td>{each.id}</td>
-                      <td>{getType(each.report_type)}</td>
-                      <td>{getScheduleType(each.schedule_type)}</td>
-                      <td>
-                        {each.last_synced_date &&
-                          formatDate(each.last_synced_date)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </PerfectScrollbar>
-          </div>
-        )}
-        {loader && <DotLoader />}
+                ) : (
+                  <>
+                    {data.map(each => (
+                      <tr key={`report_${each.report_id}`}>
+                        <td>
+                          {each.report_type === "Form"
+                            ? each.form
+                            : each.report_type}
+                        </td>
+                        <td>
+                          <span>
+                            <a
+                              onClick={() => this.props.editAction(each)}
+                              className="pending td-edit-btn td-btn"
+                            >
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Edit</Tooltip>}
+                              >
+                                <i className="la la-edit" />
+                              </OverlayTrigger>
+                            </a>
+                          </span>
+                          <span>
+                            <a
+                              onClick={() => this.props.editAction(each)}
+                              className="pending td-edit-btn td-btn"
+                            >
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Sync Now</Tooltip>}
+                              >
+                                <i className="la la-refresh ml-2" />
+                              </OverlayTrigger>
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                )}
+              </tbody>
+            </Table>
+          </PerfectScrollbar>
+        </div>
       </>
     );
   }

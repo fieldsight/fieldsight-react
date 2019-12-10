@@ -1,8 +1,32 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Axios from "axios";
 
+import { DotLoader } from "../myForm/Loader";
+import Modal from "../common/Modal";
 import SyncScheduleForm from "./form";
 import ReportTable from "./reportTable";
+import StandardReportTable from "./standardReportTable";
+
+const getScheduleType = schedule => {
+  if (schedule === 0) {
+    return "Manual";
+  }
+  if (schedule === 1) {
+    return "Daily";
+  }
+  if (schedule === 2) {
+    return "Weekly";
+  }
+  if (schedule === 3) {
+    return "Monthly";
+  }
+  return null;
+};
+
+const getReportName = report => {
+  const split = report.split("_");
+  return split.join(" ");
+};
 
 export default class SyncSchedule extends Component {
   constructor(props) {
@@ -11,7 +35,8 @@ export default class SyncSchedule extends Component {
     this.state = {
       reportList: [],
       loader: false,
-      showForm: false
+      showForm: false,
+      data: {}
     };
   }
 
@@ -22,10 +47,13 @@ export default class SyncSchedule extends Component {
       }
     } = this.props;
     this.setState({ loader: true }, () => {
-      Axios.get(`fv3/api/report-sync-settings-list/?project_id=${projectId}`)
+      Axios.get(`/fv3/api/report-sync-settings-list/?project_id=${projectId}`)
         .then(res => {
           if (res.data) {
-            this.setState({ reportList: res.data, loader: false });
+            const resData = Object.entries(res.data);
+            console.log(res.data, "resData", resData);
+
+            this.setState({ reportList: resData, loader: false });
           }
         })
         .catch(err => {
@@ -45,9 +73,17 @@ export default class SyncSchedule extends Component {
       showForm: false
     }));
   };
+
+  handleEdit = data => {
+    this.setState({
+      showForm: true,
+      data
+    });
+  };
+
   render() {
     const {
-      state: { reportList, loader, showForm },
+      state: { reportList, loader, showForm, data },
       props: {
         match: {
           params: { projectId }
@@ -64,31 +100,61 @@ export default class SyncSchedule extends Component {
           </ol>
         </nav>
         <div className="card">
-          {!showForm && (
-            <div className="card-header main-card-header">
-              <h5>Project Schedule List</h5>
-              <div className="add-btn">
-                <a onClick={this.handleToggleFlag}> Add Form</a>
-              </div>
-            </div>
-          )}
-          {showForm && (
-            <div className="card-header main-card-header">
-              <h5>
-                <i className="la la-building" />
-                Project Schedule Settings
-              </h5>
-            </div>
-          )}
+          <div className="card-header main-card-header">
+            <h5>
+              <i className="la la-building" />
+              Project Schedule List
+            </h5>
+          </div>
+
           <div className="card-body">
+            {loader && <DotLoader />}
+            {reportList.length > 0 &&
+              reportList.map(report => {
+                if (report[0] && report[0] === "standard_reports") {
+                  return (
+                    <Fragment key={`report_${report[0]}`}>
+                      <StandardReportTable
+                        loader={loader}
+                        data={report[1]}
+                        editAction={this.handleEdit}
+                        scheduleType={getReportName(report[0])}
+                      />
+                    </Fragment>
+                  );
+                }
+                if (
+                  report[0] &&
+                  report[0] !== "standard_reports" &&
+                  report[0] !== "stage_reports"
+                ) {
+                  return (
+                    <Fragment key={`report_${report[0]}`}>
+                      <ReportTable
+                        loader={loader}
+                        data={report[1]}
+                        editAction={this.handleEdit}
+                        scheduleType={getReportName(report[0])}
+                      />
+                    </Fragment>
+                  );
+                }
+              })}
             {showForm && (
-              <SyncScheduleForm
-                projectId={projectId}
-                handleSuccess={this.updateListOnSuccess}
-                onCancel={this.handleToggleFlag}
-              />
+              <Modal
+                title="Edit Project Schedule Settings"
+                toggleModal={this.handleToggleFlag}
+                classname="md-body"
+              >
+                <SyncScheduleForm
+                  projectId={projectId}
+                  handleSuccess={this.updateListOnSuccess}
+                  data={data}
+                  getScheduleType={getScheduleType}
+                  // onCancel={this.handleToggleFlag}
+                />
+              </Modal>
             )}
-            {!showForm && <ReportTable loader={loader} data={reportList} />}
           </div>
         </div>
       </>

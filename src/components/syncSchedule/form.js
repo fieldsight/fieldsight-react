@@ -21,10 +21,16 @@ export default class Form extends Component {
     super(props);
 
     this.state = {
-      selectedType: "",
-      scheduleType: "",
-      selectedDayOnWeek: 1,
-      selectedDayOnMonth: 1,
+      selectedType: props.data.title ? props.data.title : "",
+      scheduleType: props.data.scheduleType ? props.data.scheduleType : 0,
+      selectedDayOnWeek:
+        props.data.scheduleType &&
+        props.data.scheduleType === 2 &&
+        props.data.day,
+      selectedDayOnMonth:
+        props.data.scheduleType &&
+        props.data.scheduleType === 3 &&
+        props.data.day,
       isFormSelected: false,
       selectedForm: "",
       formList: [],
@@ -34,34 +40,27 @@ export default class Form extends Component {
 
   componentWillMount() {
     const { projectId } = this.state;
-    Axios.get(`/fv3/api/project-forms/${projectId}/`)
-      .then(res => {
-        if (res.data) {
-          this.setState({ formList: res.data });
-        }
-      })
-      .catch(err => {
-        console.log("err", err);
-      });
+    // Axios.get(`/fv3/api/project-forms/${projectId}/`)
+    //   .then(res => {
+    //     if (res.data) {
+    //       this.setState({ formList: res.data });
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log("err", err);
+    //   });
   }
 
-  handleDropdownChange = e => {
-    this.setState({ selectedType: e, selectedForm: "" });
-  };
-
-  handleSelectForm = e => {
-    this.setState({ selectedType: "form", selectedForm: JSON.parse(e) });
-  };
-
   handleScheduleTypeChange = e => {
+    const { value } = e.target;
     this.setState(() => {
-      if (e > 1)
+      if (value > 1)
         return {
-          scheduleType: JSON.parse(e),
+          scheduleType: JSON.parse(value),
           selectedDayOnWeek: null,
           selectedDayOnMonth: null
         };
-      return { scheduleType: JSON.parse(e) };
+      return { scheduleType: JSON.parse(value) };
     });
   };
 
@@ -120,79 +119,41 @@ export default class Form extends Component {
         selectedDayOnWeek,
         selectedDayOnMonth,
         scheduleType,
-        formList
+        selectedType
         // selectedType
-      }
+      },
+      props: { getScheduleType }
     } = this;
     let dayOptions = [];
     for (var i = 1; i <= 31; i += 1) {
       if (i <= 30) dayOptions.push({ id: i, name: i });
       else dayOptions.push({ id: 0, name: "Last" });
     }
+    const scheduleOptions = [
+      { id: 0, name: "manual" },
+      { id: 1, name: "daily" },
+      { id: 2, name: "weekly" },
+      { id: 3, name: "monthly" }
+    ];
 
     return (
       <>
         <form className="floating-form" onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <label>Type:</label>
-            <Dropdown>
-              <Dropdown.Toggle variant="" className="fieldsight-btn">
-                <span>Type</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                <Dropdown.Item
-                  target="_blank"
-                  onSelect={this.handleDropdownChange}
-                  eventKey="site_info"
-                >
-                  Site Info
-                </Dropdown.Item>
-                <Dropdown.Item
-                  target="_blank"
-                  onSelect={this.handleDropdownChange}
-                  eventKey="site_progress"
-                >
-                  Progress
-                </Dropdown.Item>
-                <Dropdown.Item
-                  as={Dropdown}
-                  target="_blank"
-                  id="form"
-                  key="form"
-                  eventKey="form"
-                  // title="form"
-                  // className="fieldsight-btn"
-                >
-                  <div
-                    className="thumb-list mr-0 "
-                    style={{ position: "relative", height: "327px" }}
-                  >
-                    <Dropdown.Toggle variant="" drop="right">
-                      <span>Form</span>
-                    </Dropdown.Toggle>
-                    <PerfectScrollbar>
-                      {formList.length > 0 &&
-                        formList.map(form => (
-                          <Dropdown.Item
-                            key={`form_${form.id}`}
-                            target="_blank"
-                            onSelect={this.handleSelectForm}
-                            eventKey={form.id}
-                          >
-                            {form.title}
-                          </Dropdown.Item>
-                        ))}
-                    </PerfectScrollbar>
-                  </div>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            {/* <label>Type:</label> */}
+            <h6>{selectedType}</h6>
           </div>
           <div className="form-group">
             <label>Schedule Type:</label>
-            <Dropdown>
+            <SelectElement
+              classname="border-0"
+              options={scheduleOptions}
+              value={scheduleType}
+              changeHandler={this.handleScheduleTypeChange}
+            />
+            {/* <Dropdown>
               <Dropdown.Toggle variant="" className="fieldsight-btn">
-                <span>Schedule Type</span>
+                <span>{getScheduleType(scheduleType)}</span>
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
                 <Dropdown.Item
@@ -224,7 +185,7 @@ export default class Form extends Component {
                   Monthly
                 </Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
           {scheduleType === 2 && (
             <div className="every-week flex">
@@ -251,13 +212,13 @@ export default class Form extends Component {
             </div>
           )}
           <div className="form-group pull-right no-margin">
-            <button
+            {/* <button
               type="button"
               className="fieldsight-btn"
               onClick={this.props.onCancel}
             >
               Cancel
-            </button>
+            </button> */}
             &nbsp;
             <button type="submit" className="fieldsight-btn">
               Save
