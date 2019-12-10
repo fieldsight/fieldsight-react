@@ -105,29 +105,26 @@ export default class SiteAdd extends Component {
             const latitude = position && position[2].split(")")[0];
             const breadcrumbs = breadcrumbRes.data;
 
-            this.setState(
-              state => {
-                siteForm.data.regions !== undefined &&
-                  siteForm.data.regions.map(each => regionArr.push(each));
-                siteForm.data.site_types.map(each => typeArr.push(each));
-                return {
-                  jsdata: siteForm.data.hello,
-                  jsondata: siteForm.data.json_questions,
-                  id,
-                  region:
-                    siteForm.data.regions !== undefined || "" ? regionArr : [],
-                  siteId,
-                  regionalId,
-                  site_types: typeArr,
-                  position: {
-                    longitude,
-                    latitude
-                  },
-                  breadcrumbs
-                };
-              },
-              () => {}
-            );
+            this.setState(state => {
+              siteForm.data.regions !== undefined &&
+                siteForm.data.regions.map(each => regionArr.push(each));
+              siteForm.data.site_types.map(each => typeArr.push(each));
+              return {
+                jsdata: siteForm.data.hello,
+                jsondata: siteForm.data.json_questions,
+                id,
+                region:
+                  siteForm.data.regions !== undefined || "" ? regionArr : [],
+                siteId,
+                regionalId,
+                site_types: typeArr,
+                position: {
+                  longitude,
+                  latitude
+                },
+                breadcrumbs
+              };
+            });
           }
         })
       )

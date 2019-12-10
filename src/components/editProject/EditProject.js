@@ -115,12 +115,18 @@ class EditProject extends Component {
         );
       })
       .catch(err => {
-        const errors = err.response;
+        const error = err.response.data;
+
         this.setState(
           {
             isLoading: false
           },
-          errorToast(errors.data.error)
+          () => {
+            error &&
+              Object.entries(error).map(([key, value]) => {
+                return errorToast(`${value}`);
+              });
+          }
         );
       });
   };
@@ -162,7 +168,7 @@ class EditProject extends Component {
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
-    // debugger;
+
     if (position) {
       this.setState({
         position: {

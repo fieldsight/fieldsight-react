@@ -101,7 +101,7 @@ export default class ProjectAdd extends Component {
       .post(`fv3/api/add-project/${id}/`, data)
       .then(res => {
         if (res.status === 201) {
-          successToast("Form", "Created");
+          successToast("Project", "Created");
           this.setState({
             project: {
               name: "",
@@ -129,16 +129,12 @@ export default class ProjectAdd extends Component {
         }
       })
       .catch(err => {
-        const errors = err.response;
-        // errorToast(errors.data.error);
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          errorToast(`${value}`);
+        });
       });
   };
-
-  toast() {
-    if (this.state.data) {
-      toast.success("SucessFully Added");
-    }
-  }
 
   onSelectChangeHandler = (e, subSect) => {
     const { value } = e.target;
