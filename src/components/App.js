@@ -53,14 +53,20 @@ import Mapparent from "./team/Mapparent";
 
 import messages_en from "../translations/en.json";
 import messages_ne from "../translations/ne.json";
-import SelectElement from "../components/common/SelectElement";
+
+import ResetPassword from "./ResetPassword";
+import UpdateProfile from "./updateProject";
+import CreateProfile from "./ProfileAdd";
 
 const messages = {
   ne: messages_ne,
   en: messages_en
 };
 const language = navigator.language.split(/[-_]/)[0]; // language without region code
-const selectLanguage = [{ id: "en", name: "Eng" }, { id: "ne", name: "Nep" }];
+const selectLanguage = [
+  { id: "en", name: "Eng" },
+  { id: "ne", name: "Nep" }
+];
 
 class App extends Component {
   constructor(props) {
@@ -247,6 +253,21 @@ class App extends Component {
                     <Route
                       path="/project-version-submission/:id/:fid"
                       render={props => <VersionSubmissionData {...props} />}
+                    />
+
+                    <Route
+                      path="/reset-password"
+                      render={props => <ResetPassword {...props} />}
+                    />
+
+                    <Route
+                      path="/update-profile/:id"
+                      render={props => <UpdateProfile {...props} />}
+                    />
+
+                    <Route
+                      path="/create-profile/:id"
+                      render={props => <CreateProfile {...props} />}
                     />
                   </Switch>
                   <ToastContainer />

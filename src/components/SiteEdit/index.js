@@ -173,7 +173,6 @@ export default class SiteEdit extends Component {
       ...(this.state.show && { logo: this.state.cropResult }),
       site_meta_attributes_ans: JSON.stringify(this.state.data)
     };
-    console.log(data, "data");
 
     axios({
       method: "PUT",

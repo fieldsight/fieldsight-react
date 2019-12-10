@@ -75,6 +75,11 @@ export default class ProjectAdd extends Component {
 
   onSubmitHandler = e => {
     e.preventDefault();
+    const {
+      match: {
+        params: { id }
+      }
+    } = this.props;
     const data = {
       organization: this.state.id,
       name: this.state.project.name,
@@ -93,7 +98,7 @@ export default class ProjectAdd extends Component {
     };
 
     axios
-      .post(`fv3/api/add-project/${this.state.id}/`, data)
+      .post(`fv3/api/add-project/${id}/`, data)
       .then(res => {
         if (res.status === 201) {
           successToast("Project", "Created");
