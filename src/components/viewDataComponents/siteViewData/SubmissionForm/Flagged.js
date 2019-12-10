@@ -1,54 +1,49 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import StatusTable from "../../responded/StatusTable";
 import WithPagination from "../../../../hoc/WithPagination";
-import axios from "axios";
 import { DotLoader } from "../../../myForm/Loader";
-class PendingTable extends Component {
+
+class FlaggedTable extends Component {
   state = {
-    pending_submissions: []
+    flagged_submissions: []
   };
   componentDidMount() {
-    if (!!this.props.id) {
+    if (this.props.id != "") {
       this.props.paginationHandler(1, null, {
-        type: "viewByStatus",
+        type: "siteStatus",
         projectId: this.props.id,
-        status: "pending"
+        status: "flagged"
       });
     }
   }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
   }
+
   render() {
     const {
       props: { data, showViewData, dLoader }
     } = this;
-
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Pending Submissions</h5>
+          <h5>Flagged Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+            <Link to={`/site-responses/${this.props.id}/general`}>
+              <button onClick={showViewData} className="fieldsight-btn">
+                View By Status
+              </button>
+            </Link>
           </div>
         </div>
         {dLoader == false ? (
           <>
             <div className="card-body">
-              <StatusTable
-                submission={this.props.siteList}
-                count={this.state.count}
-                next={this.state.next}
-                previous={this.state.previous}
-                projectId={this.props.id}
-              />
+              <StatusTable submission={this.props.siteList} />
             </div>
-
             {this.props.siteList && this.props.siteList.length > 0 ? (
               <div className="card-body">
                 <div className="table-footer">
@@ -84,7 +79,7 @@ class PendingTable extends Component {
                         {this.props.renderPageNumbers({
                           type: "viewByStatus",
                           projectId: this.props.id,
-                          status: "pending"
+                          status: "flagged"
                         })}
 
                         <li className="page-item ">
@@ -122,4 +117,4 @@ class PendingTable extends Component {
     );
   }
 }
-export default WithPagination(PendingTable);
+export default WithPagination(FlaggedTable);

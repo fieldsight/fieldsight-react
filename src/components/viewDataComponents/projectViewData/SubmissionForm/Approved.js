@@ -1,18 +1,19 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import StatusTable from "../../responded/StatusTable";
 import WithPagination from "../../../../hoc/WithPagination";
 import { DotLoader } from "../../../myForm/Loader";
 
-class FlaggedTable extends Component {
+class ApprovedTable extends Component {
   state = {
-    flagged_submissions: []
+    approved_submissions: []
   };
   componentDidMount() {
-    if (!!this.props.id) {
+    if (this.props.id != "") {
       this.props.paginationHandler(1, null, {
         type: "viewByStatus",
         projectId: this.props.id,
-        status: "flagged"
+        status: "approved"
       });
     }
   }
@@ -23,17 +24,17 @@ class FlaggedTable extends Component {
   }
   render() {
     const {
-      props: { data, showViewData, dLoader }
+      props: { data, showViewData, dLoader, id }
     } = this;
 
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Flagged Submissions</h5>
+          <h5>Approved Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+            <Link to={`/project-responses/${id}/general`}>
+              <button className="fieldsight-btn">View by Status</button>
+            </Link>
           </div>
         </div>
         {dLoader == false ? (
@@ -41,7 +42,6 @@ class FlaggedTable extends Component {
             <div className="card-body">
               <StatusTable submission={this.props.siteList} />
             </div>
-
             {this.props.siteList && this.props.siteList.length > 0 ? (
               <div className="card-body">
                 <div className="table-footer">
@@ -101,7 +101,9 @@ class FlaggedTable extends Component {
             ) : (
               <div className="card-body">
                 <div className="table-footer">
-                  <div className="showing-rows">Sorry No Data</div>
+                  <div className="showing-rows">
+                    <p>Sorry No Data</p>
+                  </div>
                 </div>
               </div>
             )}
@@ -113,4 +115,5 @@ class FlaggedTable extends Component {
     );
   }
 }
-export default WithPagination(FlaggedTable);
+
+export default WithPagination(ApprovedTable);

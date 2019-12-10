@@ -1,57 +1,56 @@
 import React, { Component } from "react";
-import ResponseTable from "../../responded/StagedFormResponseTable";
+import ResponseTable from "../../responded/SurveyFormResponseTable";
 import DeleteTable from "../deleteTable";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { getProjectViewData } from "../../../../actions/viewDataActions";
 
-class ResponseStageForm extends Component {
+class ManageSurveyForm extends Component {
   state = {
     hide: true
   };
   componentDidMount() {
     if (this.props.id != "") {
-      this.props.getProjectViewData(this.props.id, "stage");
+      this.props.getProjectViewData(this.props.id, "survey");
     }
   }
+
   toggleHide = () => {
     this.setState({
       hide: !this.state.hide
     });
   };
-
   render() {
     const {
       props: {
         showViewData,
         data,
-        stage_forms,
+        survey_forms,
         deleted_forms,
-        stage_forms_loader
+        survey_forms_loader,
+        id
       }
     } = this;
-
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>{!data ? "Stage Forms" : "Rejected Submission"}</h5>
-          <Link to={this.props.url}>
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+          <h5>General Forms</h5>
+          <Link to={`/project-submission-responses/${id}/rejected`}>
+            <button className="fieldsight-btn">View By Form</button>
           </Link>
         </div>
         <div className="card-body">
           {!data && (
             <ResponseTable
-              stage_forms={stage_forms}
+              survey_forms={survey_forms}
               id={this.props.id}
-              loader={stage_forms_loader}
+              loader={survey_forms_loader}
             />
           )}
+          {/*data && <Rejected id={this.props.id} />*/}
         </div>
-        {!!deleted_forms && deleted_forms.length > 0
+        {deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">
@@ -91,7 +90,7 @@ class ResponseStageForm extends Component {
                     <DeleteTable
                       id={this.props.id}
                       deleted_forms={deleted_forms}
-                      loader={stage_forms_loader}
+                      loader={survey_forms_loader}
                     />
                   )}
                 </div>
@@ -102,21 +101,18 @@ class ResponseStageForm extends Component {
     );
   }
 }
-//export default ResponseStageForm;
+//export default ManageSurveyForm;
 const mapStateToProps = ({ projectViewData }) => {
-  const { stage_forms, deleted_forms, stage_forms_loader } = projectViewData;
+  const { survey_forms, deleted_forms, survey_forms_loader } = projectViewData;
 
   return {
-    stage_forms,
+    survey_forms,
     deleted_forms,
-    stage_forms_loader
+    survey_forms_loader
   };
 };
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getProjectViewData
-    }
-  )
-)(ResponseStageForm);
+  connect(mapStateToProps, {
+    getProjectViewData
+  })
+)(ManageSurveyForm);

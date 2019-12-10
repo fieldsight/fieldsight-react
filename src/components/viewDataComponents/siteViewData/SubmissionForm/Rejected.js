@@ -1,18 +1,19 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import StatusTable from "../../responded/StatusTable";
 import WithPagination from "../../../../hoc/WithPagination";
 import { DotLoader } from "../../../myForm/Loader";
 
-class ApprovedTable extends Component {
+class RejectedTable extends Component {
   state = {
-    approved_submissions: []
+    rejected_submissions: []
   };
   componentDidMount() {
     if (this.props.id != "") {
       this.props.paginationHandler(1, null, {
-        type: "viewByStatus",
+        type: "siteStatus",
         projectId: this.props.id,
-        status: "approved"
+        status: "rejected"
       });
     }
   }
@@ -25,15 +26,16 @@ class ApprovedTable extends Component {
     const {
       props: { data, showViewData, dLoader }
     } = this;
-
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Approved Submissions</h5>
+          <h5>Rejected Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+            <Link to={`/site-responses/${this.props.id}/general`}>
+              <button onClick={showViewData} className="fieldsight-btn">
+                View By Status
+              </button>
+            </Link>
           </div>
         </div>
         {dLoader == false ? (
@@ -114,5 +116,4 @@ class ApprovedTable extends Component {
     );
   }
 }
-
-export default WithPagination(ApprovedTable);
+export default WithPagination(RejectedTable);

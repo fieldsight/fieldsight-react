@@ -10,15 +10,17 @@ class SiteSpecificForm extends Component {
 
     return (
       <>
-        {Object.keys(breadcrumbs).length > 0 && (
+        {Object.keys(breadcrumbs).length > 0 ? (
           <nav aria-label="breadcrumb" role="navigation">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href={breadcrumbs.project_url}>{breadcrumbs.project_name}</a>
+                <a href={breadcrumbs.site_url}>{breadcrumbs.site_name}</a>
               </li>
               <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
             </ol>
           </nav>
+        ) : (
+          ""
         )}
         <div className="row">
           <SideNav handleBreadCrumb={this.handleBreadCrumb} />
@@ -27,8 +29,8 @@ class SiteSpecificForm extends Component {
     );
   }
 }
-const mapStateToProps = ({ projectViewData }) => {
-  const { breadcrumbs } = projectViewData;
+const mapStateToProps = ({ siteViewData }) => {
+  const { breadcrumbs } = siteViewData;
 
   return {
     breadcrumbs

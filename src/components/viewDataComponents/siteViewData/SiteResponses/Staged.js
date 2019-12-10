@@ -1,27 +1,19 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import ResponseTable from "../../responded/ResponseTable";
-import Rejected from "../RejectSubmissionTable.js";
-import DeleteTable from "../deleteTable";
+import ResponseTable from "../../responded/StagedFormResponseTable";
 import axios from "axios";
+import DeleteTable from "../deleteTable";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { getsiteViewData } from "../../../../actions/siteViewDataAction";
-import { DotLoader } from "../../../myForm/Loader";
 
-class ManageGeneralForm extends Component {
+class ResponseStageForm extends Component {
   state = {
     hide: true
   };
-  static getDerivedStateFromProps(props, state) {
-    return {
-      id: props.id
-    };
-  }
-
   componentDidMount() {
     if (this.props.id != "") {
-      this.props.getsiteViewData(this.props.id, "general");
+      this.props.getsiteViewData(this.props.id, "stage");
     }
   }
   toggleHide = () => {
@@ -33,39 +25,36 @@ class ManageGeneralForm extends Component {
   render() {
     const {
       props: {
-        data,
         showViewData,
-        generals_forms,
+        data,
+        stage_forms,
         deleted_forms,
-        generals_loading
+        stage_forms_loading
       }
     } = this;
 
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>General Forms</h5>
-          <div className="dash-btn">
-            <Link to={`/site-responses/${this.props.id}/rejected`}>
-              <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Form" : "View by Status"}
-              </button>
-            </Link>
-          </div>
+          <h5>Stage Forms</h5>
+          <Link to={`/site-submission-responses/${this.props.id}/rejected`}>
+            <button onClick={showViewData} className="fieldsight-btn">
+              View By Form
+            </button>
+          </Link>
         </div>
         <div className="card-body">
-          {!data &&
-            (generals_loading ? (
-              <ResponseTable
-                generals_forms={generals_forms}
-                table="site"
-                id={this.props.id}
-              />
-            ) : (
-              <DotLoader />
-            ))}
+          {!data && (
+            <ResponseTable
+              stage_forms={stage_forms}
+              table="site"
+              id={this.props.id}
+              loader={stage_forms_loading}
+            />
+          )}
         </div>
-        {deleted_forms.length > 0
+
+        {deleted_forms && deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">
@@ -105,7 +94,7 @@ class ManageGeneralForm extends Component {
                     <DeleteTable
                       deleted_forms={deleted_forms}
                       id={this.props.id}
-                      loader={generals_loading}
+                      loader={stage_forms_loading}
                     />
                   )}
                 </div>
@@ -116,21 +105,18 @@ class ManageGeneralForm extends Component {
     );
   }
 }
-//export default ManageGeneralForm;
+//export default ResponseStageForm;
 const mapStateToProps = ({ siteViewData }) => {
-  const { generals_forms, deleted_forms, generals_loading } = siteViewData;
+  const { stage_forms_loading, deleted_forms, stage_forms } = siteViewData;
 
   return {
-    generals_forms,
+    stage_forms_loading,
     deleted_forms,
-    generals_loading
+    stage_forms
   };
 };
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getsiteViewData
-    }
-  )
-)(ManageGeneralForm);
+  connect(mapStateToProps, {
+    getsiteViewData
+  })
+)(ResponseStageForm);

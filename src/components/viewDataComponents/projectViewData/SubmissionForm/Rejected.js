@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import StatusTable from "../../responded/StatusTable";
+import axios from "axios";
 import WithPagination from "../../../../hoc/WithPagination";
 import { DotLoader } from "../../../myForm/Loader";
 
@@ -8,14 +10,15 @@ class RejectedTable extends Component {
     rejected_submissions: []
   };
   componentDidMount() {
-    if (this.props.id != "") {
+    if (!!this.props.id) {
       this.props.paginationHandler(1, null, {
-        type: "siteStatus",
+        type: "viewByStatus",
         projectId: this.props.id,
         status: "rejected"
       });
     }
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
@@ -23,24 +26,27 @@ class RejectedTable extends Component {
   }
   render() {
     const {
-      props: { data, showViewData, dLoader }
+      props: { data, showViewData, dLoader, id }
     } = this;
+
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
           <h5>Rejected Submissions</h5>
           <div className="dash-btn">
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+            <Link to={`/project-responses/${id}/general`}>
+              <button onClick={showViewData} className="fieldsight-btn">
+                View by Status
+              </button>
+            </Link>
           </div>
         </div>
         {dLoader == false ? (
           <>
-            {" "}
             <div className="card-body">
               <StatusTable submission={this.props.siteList} />
             </div>
+
             {this.props.siteList && this.props.siteList.length > 0 ? (
               <div className="card-body">
                 <div className="table-footer">

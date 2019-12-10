@@ -1,52 +1,50 @@
 import React, { Component } from "react";
-import StatusTable from "../../responded/StatusTable";
-import axios from "axios";
-import WithPagination from "../../../../hoc/WithPagination";
 import { Link } from "react-router-dom";
+import StatusTable from "../../responded/StatusTable";
 import { DotLoader } from "../../../myForm/Loader";
+import WithPagination from "../../../../hoc/WithPagination";
 
-class RejectedTable extends Component {
+class ApprovedTable extends Component {
   state = {
-    rejected_submissions: []
+    approved_submissions: []
   };
   componentDidMount() {
-    if (!!this.props.id) {
+    if (this.props.id != "") {
       this.props.paginationHandler(1, null, {
-        type: "viewByStatus",
+        type: "siteStatus",
         projectId: this.props.id,
-        status: "rejected"
+        status: "approved"
       });
     }
   }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
   }
+
   render() {
     const {
       props: { data, showViewData, dLoader }
     } = this;
-
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Rejected Submissions</h5>
+          <h5>Approved Submissions</h5>
           <div className="dash-btn">
-            <Link to={this.props.url}>
+            <Link to={`/site-responses/${this.props.id}/general`}>
               <button onClick={showViewData} className="fieldsight-btn">
-                {data ? "View By Form" : "View by Status"}
+                View By Status
               </button>
             </Link>
           </div>
         </div>
         {dLoader == false ? (
           <>
+            {" "}
             <div className="card-body">
               <StatusTable submission={this.props.siteList} />
             </div>
-
             {this.props.siteList && this.props.siteList.length > 0 ? (
               <div className="card-body">
                 <div className="table-footer">
@@ -111,7 +109,7 @@ class RejectedTable extends Component {
                   </div>
                 </div>
               </div>
-            )}
+            )}{" "}
           </>
         ) : (
           <DotLoader />
@@ -120,4 +118,4 @@ class RejectedTable extends Component {
     );
   }
 }
-export default WithPagination(RejectedTable);
+export default WithPagination(ApprovedTable);

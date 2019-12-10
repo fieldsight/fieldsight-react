@@ -27,8 +27,7 @@ import ProjectAdd from "./projectAdd";
 import TeamAdd from "./teamAdd";
 import SiteAdd from "./siteAdd";
 import EditSite from "./SiteEdit";
-import ViewData from "./viewDataComponents/projectViewData/index";
-import SiteData from "./viewDataComponents/siteViewData";
+
 import SiteSubmissionData from "./viewDataComponents/siteViewData/FormSubmission";
 import VersionSubmissionData from "./viewDataComponents/projectViewData/VersionTable";
 import VersionSiteSubmission from "./viewDataComponents/siteViewData/VersionTable";
@@ -36,6 +35,11 @@ import VersionSiteSubmission from "./viewDataComponents/siteViewData/VersionTabl
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
 import SubmissionData from "./viewDataComponents/projectViewData/SubmissionTable";
+
+import SpecificViewData from "./viewDataComponents/projectViewData/SiteSpecificForm";
+import SubmissionForm from "./viewDataComponents/projectViewData/SubmissionForm";
+import SiteViewData from "./viewDataComponents/siteViewData/SiteResponses";
+import SiteSubmissionForm from "./viewDataComponents/siteViewData/SubmissionForm";
 
 import ManageForms from "./manageForms";
 
@@ -230,14 +234,34 @@ class App extends Component {
                       render={props => <EditSite {...props} page="subSite" />}
                     />
 
-                    <Route
+                    {/* <Route
                       path="/project-responses/:id"
                       render={props => <ViewData {...props} />}
-                    />
+                    /> */}
+
                     <Route
+                      path="/project-responses/:id"
+                      render={props => <SpecificViewData {...props} />}
+                    />
+
+                    <Route
+                      path="/project-submission-responses/:id"
+                      render={props => <SubmissionForm {...props} />}
+                    />
+
+                    {/* <Route
                       path="/site-responses/:id"
                       render={props => <SiteData {...props} />}
+                    /> */}
+                    <Route
+                      path="/site-responses/:id"
+                      render={props => <SiteViewData {...props} />}
                     />
+                    <Route
+                      path="/site-submission-responses/:id"
+                      render={props => <SiteSubmissionForm {...props} />}
+                    />
+
                     <Route
                       path="/submission-data/:id/:fid"
                       render={props => <SubmissionData {...props} />}

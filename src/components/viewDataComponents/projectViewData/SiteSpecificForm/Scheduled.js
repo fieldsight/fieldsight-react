@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-import ResponseTable from "../../responded/StagedFormResponseTable";
-import axios from "axios";
+import ResponseTable from "../../responded/ResponseTable";
 import DeleteTable from "../deleteTable";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { getsiteViewData } from "../../../../actions/siteViewDataAction";
+import { getProjectViewData } from "../../../../actions/viewDataActions";
+import { DotLoader } from "../../../myForm/Loader";
 
-class ResponseStageForm extends Component {
+class ManageScheduledForm extends Component {
   state = {
     hide: true
   };
   componentDidMount() {
     if (this.props.id != "") {
-      this.props.getsiteViewData(this.props.id, "stage");
+      this.props.getProjectViewData(this.props.id, "scheduled");
     }
   }
   toggleHide = () => {
@@ -27,34 +27,36 @@ class ResponseStageForm extends Component {
       props: {
         showViewData,
         data,
-        stage_forms,
+        scheduled_loader,
+        scheduled_forms,
         deleted_forms,
-        stage_forms_loading
+        id
       }
     } = this;
 
     return (
       <React.Fragment>
         <div className="card-header main-card-header sub-card-header">
-          <h5>{!data ? "Stage Forms" : "Rejected Submission"}</h5>
-          <Link to={`/site-responses/${this.props.id}/rejected`}>
-            <button onClick={showViewData} className="fieldsight-btn">
-              {data ? "View By Form" : "View by Status"}
-            </button>
+          <h5>Schedule Forms</h5>
+          <Link to={`/project-submission-responses/${id}/rejected`}>
+            <button className="fieldsight-btn">View By Form</button>
           </Link>
         </div>
         <div className="card-body">
-          {!data && (
-            <ResponseTable
-              stage_forms={stage_forms}
-              table="site"
-              id={this.props.id}
-              loader={stage_forms_loading}
-            />
-          )}
-        </div>
+          {!data &&
+            (scheduled_loader ? (
+              <ResponseTable
+                generals_forms={scheduled_forms}
+                survey="true"
+                id={this.props.id}
+              />
+            ) : (
+              <DotLoader />
+            ))}
 
-        {deleted_forms && deleted_forms.length > 0
+          {/* {!!data && <Rejected id={this.props.id} />} */}
+        </div>
+        {deleted_forms.length > 0
           ? !data && (
               <div className="card no-boxshadow">
                 <div className="card-header main-card-header sub-card-header">
@@ -92,9 +94,9 @@ class ResponseStageForm extends Component {
                 <div className="card-body">
                   {!this.state.hide && (
                     <DeleteTable
-                      deleted_forms={deleted_forms}
                       id={this.props.id}
-                      loader={stage_forms_loading}
+                      deleted_forms={deleted_forms}
+                      loader={scheduled_loader}
                     />
                   )}
                 </div>
@@ -105,21 +107,18 @@ class ResponseStageForm extends Component {
     );
   }
 }
-//export default ResponseStageForm;
-const mapStateToProps = ({ siteViewData }) => {
-  const { stage_forms_loading, deleted_forms, stage_forms } = siteViewData;
+//export default ManageScheduledForm;
+const mapStateToProps = ({ projectViewData }) => {
+  const { scheduled_forms, deleted_forms, scheduled_loader } = projectViewData;
 
   return {
-    stage_forms_loading,
+    scheduled_forms,
     deleted_forms,
-    stage_forms
+    scheduled_loader
   };
 };
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getsiteViewData
-    }
-  )
-)(ResponseStageForm);
+  connect(mapStateToProps, {
+    getProjectViewData
+  })
+)(ManageScheduledForm);
