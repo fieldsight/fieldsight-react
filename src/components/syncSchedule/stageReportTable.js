@@ -4,20 +4,22 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default class StageReportTable extends Component {
   render() {
-    const { loader, stages } = this.props;
+    const { loader, stages, formatDate } = this.props;
 
     return (
       <Table responsive="xl" className="table  table-bordered  dataTable ">
         <thead>
           <tr>
             <th>Form Name</th>
+            <th>Schedule Type</th>
+            <th>Last Synced Date</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {!loader && stages.length === 0 ? (
             <tr>
-              <td colSpan={2}>No Form added yet.</td>
+              <td colSpan={4}>No Form added yet.</td>
             </tr>
           ) : (
             <>
@@ -25,11 +27,11 @@ export default class StageReportTable extends Component {
                 stages.map(stage => (
                   <Fragment key={`stage_${stage.id}`}>
                     <tr>
-                      <td colSpan={2}>Stage: {stage.stage}</td>
+                      <td colSpan={4}>Stage: {stage.stage}</td>
                     </tr>
                     {!loader && stage.sub_stages && stage.sub_stages === 0 ? (
                       <tr>
-                        <td colSpan={2}>No Substage added yet.</td>
+                        <td colSpan={4}>No Substage added yet.</td>
                       </tr>
                     ) : (
                       <>
@@ -44,6 +46,11 @@ export default class StageReportTable extends Component {
                                     : sub.report_type}
                                 </label>
                                 <p>{sub.description && sub.description}</p>
+                              </td>
+                              <td>{sub.schedule_type}</td>
+                              <td>
+                                {sub.last_synced_date &&
+                                  formatDate(sub.last_synced_date)}
                               </td>
                               <td>
                                 <span>

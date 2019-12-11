@@ -8,6 +8,13 @@ import ReportTable from "./reportTable";
 import StandardReportTable from "./standardReportTable";
 import StageReportTable from "./stageReportTable";
 
+const formatDate = date => {
+  const dateIdx = date.getDate();
+  const monthIndex = date.getMonth() + 1;
+  const year = date.getFullYear();
+  return year + "-" + monthIndex + "-" + dateIdx;
+};
+
 const getScheduleType = schedule => {
   if (schedule === "Manual") {
     return 0;
@@ -53,6 +60,11 @@ export default class SyncSchedule extends Component {
         params: { projectId }
       }
     } = this.props;
+
+    this.requestList(projectId);
+  }
+
+  requestList = projectId => {
     this.setState({ loader: true }, () => {
       Axios.get(`/fv3/api/report-sync-settings-list/?project_id=${projectId}`)
         .then(res => {
@@ -96,19 +108,21 @@ export default class SyncSchedule extends Component {
           // console.log("err", err);
         });
     });
-  }
+  };
 
   handleToggleFlag = () => {
     this.setState(state => ({ showForm: !state.showForm }));
   };
 
   updateListOnSuccess = data => {
-    // console.log("success", data);
-
-    this.setState(state => ({
-      // reportList: [data, ...state.reportList],
-      showForm: false
-    }));
+    this.setState(
+      {
+        showForm: false
+      },
+      () => {
+        this.requestList(data.project);
+      }
+    );
   };
 
   handleEdit = data => {
@@ -165,6 +179,7 @@ export default class SyncSchedule extends Component {
                     editAction={this.handleEdit}
                     scheduleType={getReportName(standard[0])}
                     getReportName={getReportName}
+                    formatDate={formatDate}
                   />
                 </Fragment>
               ))}
@@ -176,6 +191,7 @@ export default class SyncSchedule extends Component {
                     data={general[1]}
                     editAction={this.handleEdit}
                     scheduleType={getReportName(general[0])}
+                    formatDate={formatDate}
                   />
                 </Fragment>
               ))}
@@ -187,6 +203,7 @@ export default class SyncSchedule extends Component {
                     data={schedule[1]}
                     editAction={this.handleEdit}
                     scheduleType={getReportName(schedule[0])}
+                    formatDate={formatDate}
                   />
                 </Fragment>
               ))}
@@ -198,6 +215,7 @@ export default class SyncSchedule extends Component {
                     data={survey[1]}
                     editAction={this.handleEdit}
                     scheduleType={getReportName(survey[0])}
+                    formatDate={formatDate}
                   />
                 </Fragment>
               ))}
@@ -214,6 +232,7 @@ export default class SyncSchedule extends Component {
                       stages={stage[1]}
                       editAction={this.handleEdit}
                       scheduleType={getReportName(stage[0])}
+                      formatDate={formatDate}
                     />
                   </Fragment>
                 );

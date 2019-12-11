@@ -6,7 +6,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default class ReportTable extends Component {
   render() {
-    const { loader, data, scheduleType } = this.props;
+    const { loader, data, scheduleType, formatDate } = this.props;
     return (
       <>
         {/* <div
@@ -21,13 +21,15 @@ export default class ReportTable extends Component {
           <thead>
             <tr>
               <th>Form Name</th>
+              <th>Schedule Type</th>
+              <th>Last Synced Date</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {!loader && data.length === 0 ? (
               <tr>
-                <td colSpan={2}>No Form added yet.</td>
+                <td colSpan={4}>No Form added yet.</td>
               </tr>
             ) : (
               <>
@@ -40,6 +42,11 @@ export default class ReportTable extends Component {
                           : each.report_type}
                       </label>
                       <p>{each.description && each.description}</p>
+                    </td>
+                    <td>{each.schedule_type}</td>
+                    <td>
+                      {each.last_synced_date &&
+                        formatDate(each.last_synced_date)}
                     </td>
                     <td>
                       <span>
