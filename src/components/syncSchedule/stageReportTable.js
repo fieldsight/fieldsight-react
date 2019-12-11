@@ -4,7 +4,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default class StageReportTable extends Component {
   render() {
-    const { loader, stages, formatDate } = this.props;
+    const { loader, stages, formatDate, canSyncOrEdit } = this.props;
 
     return (
       <Table responsive="xl" className="table  table-bordered  dataTable ">
@@ -53,32 +53,42 @@ export default class StageReportTable extends Component {
                                   formatDate(sub.last_synced_date)}
                               </td>
                               <td>
-                                <span>
-                                  <a
-                                    onClick={() => this.props.editAction(sub)}
-                                    className="pending td-edit-btn td-btn"
-                                  >
-                                    <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>Edit Schedule</Tooltip>}
-                                    >
-                                      <i className="la la-edit" />
-                                    </OverlayTrigger>
-                                  </a>
-                                </span>
-                                <span>
-                                  <a
-                                    onClick={() => this.props.editAction(sub)}
-                                    className="pending td-edit-btn td-btn"
-                                  >
-                                    <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>Sync Now</Tooltip>}
-                                    >
-                                      <i className="la la-refresh ml-2" />
-                                    </OverlayTrigger>
-                                  </a>
-                                </span>
+                                {canSyncOrEdit && (
+                                  <>
+                                    <span>
+                                      <a
+                                        onClick={() =>
+                                          this.props.editAction(sub)
+                                        }
+                                        className="pending td-edit-btn td-btn"
+                                      >
+                                        <OverlayTrigger
+                                          placement="top"
+                                          overlay={
+                                            <Tooltip>Edit Schedule</Tooltip>
+                                          }
+                                        >
+                                          <i className="la la-edit" />
+                                        </OverlayTrigger>
+                                      </a>
+                                    </span>
+                                    <span>
+                                      <a
+                                        onClick={() =>
+                                          this.props.editAction(sub)
+                                        }
+                                        className="pending td-edit-btn td-btn"
+                                      >
+                                        <OverlayTrigger
+                                          placement="top"
+                                          overlay={<Tooltip>Sync Now</Tooltip>}
+                                        >
+                                          <i className="la la-refresh ml-2" />
+                                        </OverlayTrigger>
+                                      </a>
+                                    </span>
+                                  </>
+                                )}
                               </td>
                             </tr>
                           ))}

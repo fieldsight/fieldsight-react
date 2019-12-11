@@ -50,7 +50,8 @@ export default class SyncSchedule extends Component {
       generalReports: [],
       scheduledReports: [],
       surveyReports: [],
-      stagedReports: []
+      stagedReports: [],
+      canSyncOrEdit: false
     };
   }
 
@@ -75,6 +76,7 @@ export default class SyncSchedule extends Component {
             const scheduledReports = [];
             const surveyReports = [];
             const stagedReports = [];
+            let canSyncOrEdit = false;
             resData.map(each => {
               if (each[0] === "standard_reports") {
                 standardReports.push(each);
@@ -91,6 +93,9 @@ export default class SyncSchedule extends Component {
               if (each[0] === "stage_reports") {
                 stagedReports.push(each);
               }
+              if (each[0] === "can_edit_or_sync") {
+                canSyncOrEdit = each[1];
+              }
             });
             this.setState({
               reportList: resData,
@@ -99,6 +104,7 @@ export default class SyncSchedule extends Component {
               scheduledReports,
               surveyReports,
               stagedReports,
+              canSyncOrEdit,
               loader: false
             });
           }
@@ -142,7 +148,8 @@ export default class SyncSchedule extends Component {
         generalReports,
         scheduledReports,
         surveyReports,
-        stagedReports
+        stagedReports,
+        canSyncOrEdit
       },
       props: {
         match: {
@@ -180,6 +187,7 @@ export default class SyncSchedule extends Component {
                     scheduleType={getReportName(standard[0])}
                     getReportName={getReportName}
                     formatDate={formatDate}
+                    canSyncOrEdit={canSyncOrEdit}
                   />
                 </Fragment>
               ))}
@@ -192,6 +200,7 @@ export default class SyncSchedule extends Component {
                     editAction={this.handleEdit}
                     scheduleType={getReportName(general[0])}
                     formatDate={formatDate}
+                    canSyncOrEdit={canSyncOrEdit}
                   />
                 </Fragment>
               ))}
@@ -203,6 +212,7 @@ export default class SyncSchedule extends Component {
                     data={schedule[1]}
                     editAction={this.handleEdit}
                     scheduleType={getReportName(schedule[0])}
+                    canSyncOrEdit={canSyncOrEdit}
                     formatDate={formatDate}
                   />
                 </Fragment>
@@ -215,6 +225,7 @@ export default class SyncSchedule extends Component {
                     data={survey[1]}
                     editAction={this.handleEdit}
                     scheduleType={getReportName(survey[0])}
+                    canSyncOrEdit={canSyncOrEdit}
                     formatDate={formatDate}
                   />
                 </Fragment>
@@ -232,6 +243,7 @@ export default class SyncSchedule extends Component {
                       stages={stage[1]}
                       editAction={this.handleEdit}
                       scheduleType={getReportName(stage[0])}
+                      canSyncOrEdit={canSyncOrEdit}
                       formatDate={formatDate}
                     />
                   </Fragment>

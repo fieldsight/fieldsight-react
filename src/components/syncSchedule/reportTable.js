@@ -1,19 +1,18 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default class ReportTable extends Component {
   render() {
-    const { loader, data, scheduleType, formatDate } = this.props;
+    const {
+      loader,
+      data,
+      scheduleType,
+      formatDate,
+      canSyncOrEdit
+    } = this.props;
     return (
       <>
-        {/* <div
-          className="thumb-list mr-0 "
-          style={{ position: "relative", height: "327px" }}
-        >
-          <PerfectScrollbar> */}
         <div style={{ display: "flex" }}>
           <h6>{scheduleType}</h6>
         </div>
@@ -49,32 +48,36 @@ export default class ReportTable extends Component {
                         formatDate(each.last_synced_date)}
                     </td>
                     <td>
-                      <span>
-                        <a
-                          onClick={() => this.props.editAction(each)}
-                          className="pending td-edit-btn td-btn"
-                        >
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip>Edit Schedule</Tooltip>}
-                          >
-                            <i className="la la-edit" />
-                          </OverlayTrigger>
-                        </a>
-                      </span>
-                      <span>
-                        <a
-                          onClick={() => this.props.editAction(each)}
-                          className="pending td-edit-btn td-btn"
-                        >
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip>Sync Now</Tooltip>}
-                          >
-                            <i className="la la-refresh ml-2" />
-                          </OverlayTrigger>
-                        </a>
-                      </span>
+                      {canSyncOrEdit && (
+                        <>
+                          <span>
+                            <a
+                              onClick={() => this.props.editAction(each)}
+                              className="pending td-edit-btn td-btn"
+                            >
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Edit Schedule</Tooltip>}
+                              >
+                                <i className="la la-edit" />
+                              </OverlayTrigger>
+                            </a>
+                          </span>
+                          <span>
+                            <a
+                              onClick={() => this.props.editAction(each)}
+                              className="pending td-edit-btn td-btn"
+                            >
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Sync Now</Tooltip>}
+                              >
+                                <i className="la la-refresh ml-2" />
+                              </OverlayTrigger>
+                            </a>
+                          </span>
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))}

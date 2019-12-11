@@ -9,7 +9,8 @@ export default class StandardReportTable extends Component {
       data,
       scheduleType,
       getReportName,
-      formatDate
+      formatDate,
+      canSyncOrEdit
     } = this.props;
     return (
       <>
@@ -44,32 +45,36 @@ export default class StandardReportTable extends Component {
                         formatDate(each.last_synced_date)}
                     </td>
                     <td>
-                      <span>
-                        <a
-                          onClick={() => this.props.editAction(each)}
-                          className="pending td-edit-btn td-btn"
-                        >
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip>Edit Schedule</Tooltip>}
-                          >
-                            <i className="la la-edit" />
-                          </OverlayTrigger>
-                        </a>
-                      </span>
-                      <span>
-                        <a
-                          onClick={() => this.props.editAction(each)}
-                          className="pending td-edit-btn td-btn"
-                        >
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip>Sync Now</Tooltip>}
-                          >
-                            <i className="la la-refresh ml-2" />
-                          </OverlayTrigger>
-                        </a>
-                      </span>
+                      {canSyncOrEdit && (
+                        <>
+                          <span>
+                            <a
+                              onClick={() => this.props.editAction(each)}
+                              className="pending td-edit-btn td-btn"
+                            >
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Edit Schedule</Tooltip>}
+                              >
+                                <i className="la la-edit" />
+                              </OverlayTrigger>
+                            </a>
+                          </span>
+                          <span>
+                            <a
+                              onClick={() => this.props.editAction(each)}
+                              className="pending td-edit-btn td-btn"
+                            >
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Sync Now</Tooltip>}
+                              >
+                                <i className="la la-refresh ml-2" />
+                              </OverlayTrigger>
+                            </a>
+                          </span>
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))}
