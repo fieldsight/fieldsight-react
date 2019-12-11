@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import Axios from "axios";
-import { Dropdown, DropdownButton } from "react-bootstrap";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import SelectElement from "../common/SelectElement";
 import { errorToast, successToast } from "../../utils/toastHandler";
 
@@ -21,34 +18,28 @@ export default class Form extends Component {
     super(props);
 
     this.state = {
-      selectedType: props.data.title ? props.data.title : "",
-      scheduleType: props.data.scheduleType ? props.data.scheduleType : 0,
+      selectedReport: props.data.report_type
+        ? props.data.report_type === "form"
+          ? props.data.title
+          : props.data.report_type
+        : "",
+      selectedType: props.data.report_type && props.data.report_type,
+      reportId: props.data.report_id && props.data.report_id,
+      scheduleType: props.data.scheduleType
+        ? props.getScheduleType(props.data.scheduleType)
+        : 0,
       selectedDayOnWeek:
         props.data.scheduleType &&
-        props.data.scheduleType === 2 &&
+        props.data.scheduleType === "Weekly" &&
         props.data.day,
       selectedDayOnMonth:
         props.data.scheduleType &&
-        props.data.scheduleType === 3 &&
+        props.data.scheduleType === "Monthly" &&
         props.data.day,
       isFormSelected: false,
-      selectedForm: "",
       formList: [],
       projectId: props.projectId
     };
-  }
-
-  componentWillMount() {
-    const { projectId } = this.state;
-    // Axios.get(`/fv3/api/project-forms/${projectId}/`)
-    //   .then(res => {
-    //     if (res.data) {
-    //       this.setState({ formList: res.data });
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log("err", err);
-    //   });
   }
 
   handleScheduleTypeChange = e => {
@@ -56,11 +47,11 @@ export default class Form extends Component {
     this.setState(() => {
       if (value > 1)
         return {
-          scheduleType: JSON.parse(value),
+          scheduleType: value,
           selectedDayOnWeek: null,
           selectedDayOnMonth: null
         };
-      return { scheduleType: JSON.parse(value) };
+      return { scheduleType: value };
     });
   };
 
@@ -82,7 +73,7 @@ export default class Form extends Component {
         scheduleType,
         selectedDayOnWeek,
         selectedDayOnMonth,
-        selectedForm,
+        reportId,
         projectId
       }
     } = this;
@@ -95,17 +86,17 @@ export default class Form extends Component {
       description: null,
       project: JSON.parse(projectId),
       day:
-        scheduleType === 2 && selectedDayOnWeek
+        scheduleType === "2" && selectedDayOnWeek
           ? selectedDayOnWeek
-          : scheduleType === 3 && selectedDayOnMonth
+          : scheduleType === "3" && selectedDayOnMonth
           ? selectedDayOnMonth
-          : null,
-      form: selectedForm
+          : null
     };
-    Axios.post("/fv3/api/report-sync-settings/", body)
+
+    Axios.put(`/fv3/api/update-report-sync-settings/${reportId}/`, body)
       .then(res => {
         this.props.handleSuccess(res.data);
-        successToast("form", "created");
+        successToast("form", "updated");
       })
       .catch(err => {
         const errors = err.response;
@@ -119,10 +110,10 @@ export default class Form extends Component {
         selectedDayOnWeek,
         selectedDayOnMonth,
         scheduleType,
-        selectedType
+        selectedReport
         // selectedType
       },
-      props: { getScheduleType }
+      props: { getReportName }
     } = this;
     let dayOptions = [];
     for (var i = 1; i <= 31; i += 1) {
@@ -141,7 +132,7 @@ export default class Form extends Component {
         <form className="floating-form" onSubmit={this.handleSubmit}>
           <div className="form-group">
             {/* <label>Type:</label> */}
-            <h6>{selectedType}</h6>
+            <h6>{getReportName(selectedReport)}</h6>
           </div>
           <div className="form-group">
             <label>Schedule Type:</label>
@@ -151,43 +142,8 @@ export default class Form extends Component {
               value={scheduleType}
               changeHandler={this.handleScheduleTypeChange}
             />
-            {/* <Dropdown>
-              <Dropdown.Toggle variant="" className="fieldsight-btn">
-                <span>{getScheduleType(scheduleType)}</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                <Dropdown.Item
-                  target="_blank"
-                  onSelect={this.handleScheduleTypeChange}
-                  eventKey={0}
-                >
-                  Manual
-                </Dropdown.Item>
-                <Dropdown.Item
-                  target="_blank"
-                  onSelect={this.handleScheduleTypeChange}
-                  eventKey={1}
-                >
-                  Daily
-                </Dropdown.Item>
-                <Dropdown.Item
-                  target="_blank"
-                  onSelect={this.handleScheduleTypeChange}
-                  eventKey={2}
-                >
-                  Weekly
-                </Dropdown.Item>
-                <Dropdown.Item
-                  target="_blank"
-                  onSelect={this.handleScheduleTypeChange}
-                  eventKey={3}
-                >
-                  Monthly
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown> */}
           </div>
-          {scheduleType === 2 && (
+          {scheduleType === "2" && (
             <div className="every-week flex">
               <span className="ml-0">every</span>
               <SelectElement
@@ -199,7 +155,7 @@ export default class Form extends Component {
               <span>Day</span>
             </div>
           )}
-          {scheduleType === 3 && (
+          {scheduleType === "3" && (
             <div className="every-week flex">
               <span className="ml-0">every</span>
               <SelectElement

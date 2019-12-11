@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import Table from "react-bootstrap/Table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default class StandardReportTable extends Component {
   render() {
-    const { loader, data, scheduleType } = this.props;
+    const { loader, data, scheduleType, getReportName } = this.props;
     return (
       <>
         <div style={{ display: "flex" }}>
@@ -25,11 +27,7 @@ export default class StandardReportTable extends Component {
                 {data.map(each => (
                   <tr key={`report_${each.report_id}`}>
                     <td>
-                      <h6>
-                        {each.report_type === "Form"
-                          ? each.form
-                          : each.report_type}
-                      </h6>
+                      <label>{getReportName(each.report_type)}</label>
                       <p>{each.description && each.description}</p>
                     </td>
                     <td>
@@ -40,7 +38,7 @@ export default class StandardReportTable extends Component {
                         >
                           <OverlayTrigger
                             placement="top"
-                            overlay={<Tooltip>Edit</Tooltip>}
+                            overlay={<Tooltip>Edit Schedule</Tooltip>}
                           >
                             <i className="la la-edit" />
                           </OverlayTrigger>
