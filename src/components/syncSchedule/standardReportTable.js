@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import Sheet from "../../static/images/sheets.png";
 
 export default class StandardReportTable extends Component {
   render() {
@@ -22,6 +23,7 @@ export default class StandardReportTable extends Component {
             <tr>
               <th>Report Name</th>
               <th>Schedule Type</th>
+              <th>Google Sheet</th>
               <th>Last Synced Date</th>
               <th>Action</th>
             </tr>
@@ -40,6 +42,20 @@ export default class StandardReportTable extends Component {
                       <p>{each.description && each.description}</p>
                     </td>
                     <td>{each.schedule_type}</td>
+                    <td>
+                      {each.spreadsheet_id ? (
+                        <a href={each.spreadsheet_id}>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip>Google Sheet</Tooltip>}
+                          >
+                            <img src={Sheet} style={{ height: "15px" }} />
+                          </OverlayTrigger>
+                        </a>
+                      ) : (
+                        "Not Synced Yet"
+                      )}
+                    </td>
                     <td>
                       {each.last_synced_date &&
                         formatDate(each.last_synced_date)}
