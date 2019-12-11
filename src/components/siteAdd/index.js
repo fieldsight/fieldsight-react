@@ -1,23 +1,23 @@
-import React, { Component, Fragment } from "react";
-import L from "leaflet";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import Cropper from "react-cropper";
-import { FormattedMessage } from "react-intl";
-import Modal from "../common/Modal";
-import InputElement from "../common/InputElement";
-import SelectElement from "../common/SelectElement";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import CheckBox from "../common/CheckBox";
-import Select from "./Select";
+import React, { Component, Fragment } from 'react';
+import L from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import Cropper from 'react-cropper';
+import { FormattedMessage } from 'react-intl';
+import Modal from '../common/Modal';
+import InputElement from '../common/InputElement';
+import SelectElement from '../common/SelectElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import CheckBox from '../common/CheckBox';
+import Select from './Select';
 
-import "leaflet/dist/leaflet.css";
+import 'leaflet/dist/leaflet.css';
 
-const iconRetinaUrl = require("leaflet/dist/images/marker-icon-2x.png");
-const iconUrl = require("leaflet/dist/images/marker-icon.png");
-const shadowUrl = require("leaflet/dist/images/marker-shadow.png");
+const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
+const iconUrl = require('leaflet/dist/images/marker-icon.png');
+const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase  */
 
@@ -25,7 +25,7 @@ delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl,
   iconUrl,
-  shadowUrl
+  shadowUrl,
 });
 
 export default class SiteAdd extends Component {
@@ -35,41 +35,40 @@ export default class SiteAdd extends Component {
     super(props);
     this.state = {
       project: {
-        name: "",
-        site_id: "",
+        name: '',
+        site_id: '',
         phone: undefined,
-        address: "",
-        publicDescription: "",
-        logo: "",
+        address: '',
+        publicDescription: '',
+        logo: '',
         weight: 0,
-        cluster_sites: false
+        cluster_sites: false,
       },
       loaded: 0,
       jsondata: [],
       position: {
-        latitude: "51.505",
-        longitude: "-0.09"
+        latitude: '51.505',
+        longitude: '-0.09',
       },
       zoom: 13,
-      src: "",
+      src: '',
       showCropper: false,
-      cropResult: "",
+      cropResult: '',
       isLoading: false,
 
-      id: "",
+      id: '',
 
-      region: [{ id: "", name: "----" }],
+      region: [{ name: '----', id: '' }],
       data: {},
-      regionselected: "",
-      dataSelected: "",
-      siteId: "",
-      regionalId: "",
-      site_types: [{ name: "----", id: "" }],
-      Selectedtypes: "",
+      regionselected: '',
+      dataSelected: '',
+      siteId: '',
+      regionalId: '',
+      site_types: [{ name: '----', id: '' }],
+      Selectedtypes: '',
       show: false,
       // jsdata: '',
       breadcrumbs: {},
-      regionFlag: false
     };
   }
 
@@ -77,59 +76,71 @@ export default class SiteAdd extends Component {
     this._isMounted = true;
     const {
       match: {
-        params: { id, siteId, regionalId }
-      }
+        params: { id, siteId, regionalId },
+      },
     } = this.props;
     const urls = [
       `/fv3/api/site-form/?project=${id}`,
-      `fv3/api/site-forms-breadcrumbs/?project=${id}&type=create`
+      `fv3/api/site-forms-breadcrumbs/?project=${id}&type=create`,
     ];
 
     axios
       .all(
-        urls.map((url, i) => {
+        urls.map(url => {
           return axios.get(url);
-        })
+        }),
       )
       .then(
         axios.spread((siteForm, breadcrumbRes) => {
-          let regionArr = this.state.region;
-          let typeArr = this.state.site_types;
+          const regionArr = this.state.region;
+          const typeArr = this.state.site_types;
 
           if (this._isMounted) {
             const position =
-              siteForm.data.location !== "None"
-                ? siteForm.data.location && siteForm.data.location.split(" ")
-                : "";
-            const longitude = position && position[1].split("(")[1];
-            const latitude = position && position[2].split(")")[0];
+              siteForm.data.location !== 'None'
+                ? siteForm.data.location &&
+                  siteForm.data.location.split(' ')
+                : '';
+            const longitude = position && position[1].split('(')[1];
+            const latitude = position && position[2].split(')')[0];
             const breadcrumbs = breadcrumbRes.data;
-
-            this.setState(state => {
-              siteForm.data.regions !== undefined &&
-                siteForm.data.regions.map(each => regionArr.push(each));
-              siteForm.data.site_types.map(each => typeArr.push(each));
-              return {
-                jsdata: siteForm.data.hello,
-                jsondata: siteForm.data.json_questions,
-                id,
-                region:
-                  siteForm.data.regions !== undefined || "" ? regionArr : [],
-                siteId,
-                regionalId,
-                site_types: typeArr,
-                position: {
-                  longitude,
-                  latitude
-                },
-                breadcrumbs
-              };
-            });
+            this.setState(
+              () => {
+                if (siteForm.data.regions !== undefined) {
+                  siteForm.data.regions.map(each =>
+                    regionArr.push(each),
+                  );
+                }
+                if (siteForm.data.site_types !== undefined) {
+                  siteForm.data.site_types.map(each =>
+                    typeArr.push(each),
+                  );
+                }
+                return {
+                  jsdata: siteForm.data.hello,
+                  jsondata: siteForm.data.json_questions,
+                  id,
+                  region:
+                    siteForm.data.regions !== undefined || ''
+                      ? regionArr
+                      : [],
+                  siteId,
+                  regionalId,
+                  site_types: typeArr,
+                  position: {
+                    longitude,
+                    latitude,
+                  },
+                  breadcrumbs,
+                };
+              },
+              () => {},
+            );
           }
-        })
+        }),
       )
-      .catch(err => {
-        console.log(err, "err");
+      .catch(() => {
+        // console.log(err, 'err');
       });
   }
 
@@ -143,15 +154,15 @@ export default class SiteAdd extends Component {
       this.setState(prevState => ({
         position: {
           ...prevState.position,
-          [name]: value
-        }
+          [name]: value,
+        },
       }));
     }
     return this.setState(prevState => ({
       project: {
         ...prevState.project,
-        [name]: value
-      }
+        [name]: value,
+      },
     }));
   };
 
@@ -173,8 +184,8 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        this.state.dataSelected
-      )
+        this.state.dataSelected,
+      ),
     };
 
     const Subsite = {
@@ -194,8 +205,8 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        this.state.dataSelected
-      )
+        this.state.dataSelected,
+      ),
     };
     const region = {
       project: this.state.id,
@@ -212,128 +223,134 @@ export default class SiteAdd extends Component {
       enable_subsites: this.state.project.cluster_sites,
       site_meta_attributes_ans: JSON.stringify(
         this.state.data,
-        this.state.dataSelected
+        this.state.dataSelected,
       ),
-      subsite: this.state.siteId
+      subsite: this.state.siteId,
     };
 
-    if (this.props.page === "CreateSite") {
+    if (this.props.page === 'CreateSite') {
       axios({
-        method: "POST",
+        method: 'POST',
         url: `/fv3/api/site-form/?project=${this.state.id}`,
         data,
-        headers: { "content-type": "application/json" }
+        headers: { 'content-type': 'application/json' },
       })
         .then(req => {
           if (req.status === 201) {
             this.setState({
               project: {
-                name: "",
-                site_id: "",
-                phone: "",
-                address: "",
-                publicDescription: "",
-                logo: "",
-                cluster_sites: false
+                name: '',
+                site_id: '',
+                phone: '',
+                address: '',
+                publicDescription: '',
+                logo: '',
+                cluster_sites: false,
               },
               position: {
-                latitude: "51.505",
-                longitude: "-0.09"
+                latitude: '51.505',
+                longitude: '-0.09',
               },
-              src: "",
+              src: '',
               showCropper: false,
-              cropResult: "",
+              cropResult: '',
               isLoading: false,
 
-              id: "",
+              id: '',
 
-              regionselected: "",
+              regionselected: '',
               // selectedGender: 'Male',
-              dataSelected: "",
-              data: []
+              dataSelected: '',
+              data: [],
             });
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch();
-    } else if (this.props.page === "subSite") {
+        .catch(() => {
+          // console.log(err);
+        });
+    } else if (this.props.page === 'subSite') {
       axios({
-        method: "POST",
+        method: 'POST',
         url: `/fv3/api/site-form/?project=${this.state.id}&site=${this.state.siteId}`,
         data: Subsite,
-        headers: { "content-type": "application/json" }
+        headers: { 'content-type': 'application/json' },
       })
         .then(req => {
           if (req.status === 201) {
             this.setState({
               project: {
-                name: "",
-                site_id: "",
-                phone: "",
-                address: "",
-                publicDescription: "",
-                logo: "",
-                cluster_sites: false
+                name: '',
+                site_id: '',
+                phone: '',
+                address: '',
+                publicDescription: '',
+                logo: '',
+                cluster_sites: false,
               },
               position: {
-                latitude: "51.505",
-                longitude: "-0.09"
+                latitude: '51.505',
+                longitude: '-0.09',
               },
-              src: "",
+              src: '',
               showCropper: false,
-              cropResult: "",
+              cropResult: '',
               isLoading: false,
 
-              id: "",
+              id: '',
 
-              regionselected: "",
+              regionselected: '',
               // selectedGender: 'Male',
-              dataSelected: "",
-              data: []
+              dataSelected: '',
+              data: [],
             });
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch();
-    } else if (this.props.page === "regionalSite") {
+        .catch(() => {
+          // console.log(err);
+        });
+    } else if (this.props.page === 'regionalSite') {
       axios({
-        method: "POST",
+        method: 'POST',
         url: `/fv3/api/site-form/?project=${this.state.id}&region=${this.state.regionalId}`,
         data: region,
-        headers: { "content-type": "application/json" }
+        headers: { 'content-type': 'application/json' },
       })
         .then(req => {
           if (req.status === 201) {
             this.setState({
               project: {
-                name: "",
-                site_id: "",
-                phone: "",
-                address: "",
-                publicDescription: "",
-                logo: "",
-                cluster_sites: false
+                name: '',
+                site_id: '',
+                phone: '',
+                address: '',
+                publicDescription: '',
+                logo: '',
+                cluster_sites: false,
               },
               position: {
-                latitude: "51.505",
-                longitude: "-0.09"
+                latitude: '51.505',
+                longitude: '-0.09',
               },
-              src: "",
+              src: '',
               showCropper: false,
-              cropResult: "",
+              cropResult: '',
               isLoading: false,
 
-              id: "",
+              id: '',
 
-              regionselected: "",
+              regionselected: '',
               // selectedGender: 'Male',
-              dataSelected: "",
-              data: []
+              dataSelected: '',
+              data: [],
             });
             this.props.history.push(`/site-dashboard/${req.data.id}`);
           }
         })
-        .catch();
+        .catch(() => {
+          // console.log(err);
+        });
     }
   };
 
@@ -342,27 +359,27 @@ export default class SiteAdd extends Component {
       position: {
         ...prevState.position,
         latitude: e.latlng.lat,
-        longitude: e.latlng.lng
-      }
+        longitude: e.latlng.lng,
+      },
     }));
   };
 
   onSelectChangeHandler = (e, data) => {
     const { value } = e.target;
-    if (data === "regions") {
+    if (data === 'regions') {
       this.setState({
-        regionselected: value
+        regionselected: value,
       });
-    } else if (data === "site_types") {
+    } else if (data === 'site_types') {
       this.setState({
-        Selectedtypes: value
+        Selectedtypes: value,
       });
     }
   };
 
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
 
@@ -372,20 +389,20 @@ export default class SiteAdd extends Component {
       this.setState({
         src: reader.result,
         showCropper: true,
-        show: true
+        show: true,
       });
     };
     reader.readAsDataURL(file[0]);
   };
 
   cropImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
 
@@ -394,20 +411,20 @@ export default class SiteAdd extends Component {
     this.setState(prevState => ({
       project: {
         ...prevState.project,
-        cluster_sites: checked
-      }
+        cluster_sites: checked,
+      },
     }));
   };
 
   ondynamiChangeHandler = e => {
     const {
-      target: { name, value }
+      target: { name, value },
     } = e;
     this.setState(prevState => ({
       data: {
         ...prevState.data,
-        [name]: value
-      }
+        [name]: value,
+      },
     }));
   };
 
@@ -419,12 +436,12 @@ export default class SiteAdd extends Component {
 
   selectedValue = data => {
     this.setState({
-      dataSelected: data
+      dataSelected: data,
     });
   };
 
   selectform = data => {
-    if (data.question_type === "Text") {
+    if (data.question_type === 'Text') {
       return (
         <div className="col-xl-4 col-md-6">
           <InputElement
@@ -434,7 +451,7 @@ export default class SiteAdd extends Component {
             id={data.id}
             label={data.question_text}
             name={data.question_name}
-            value={this.state.data[data.question_name] || ""}
+            value={this.state.data[data.question_name] || ''}
             placeholder={data.question_placeholder}
             changeHandler={this.ondynamiChangeHandler}
           />
@@ -442,7 +459,7 @@ export default class SiteAdd extends Component {
         </div>
       );
     }
-    if (data.question_type === "Date") {
+    if (data.question_type === 'Date') {
       return (
         <div className="col-xl-4 col-md-6">
           <InputElement
@@ -452,7 +469,7 @@ export default class SiteAdd extends Component {
             id={data.id}
             label={data.question_text}
             name={data.question_name}
-            value={this.state.data[data.question_name] || ""}
+            value={this.state.data[data.question_name] || ''}
             placeholder={data.question_placeholder}
             changeHandler={this.ondynamiChangeHandler}
           />
@@ -460,7 +477,7 @@ export default class SiteAdd extends Component {
         </div>
       );
     }
-    if (data.question_type === "MCQ") {
+    if (data.question_type === 'MCQ') {
       return (
         <div className="form-group col-xl-4 col-md-6">
           <label>{data.question_text}</label>
@@ -468,7 +485,7 @@ export default class SiteAdd extends Component {
             className="form-control"
             onChange={this.ondynamiChangeHandler}
             name={data.question_name}
-            style={{ border: "0", borderBottom: "1px solid #eaeaea" }}
+            style={{ border: '0', borderBottom: '1px solid #eaeaea' }}
           >
             {data.mcq_options.map(option => {
               return (
@@ -484,7 +501,7 @@ export default class SiteAdd extends Component {
         </div>
       );
     }
-    if (data.question_type === "Number") {
+    if (data.question_type === 'Number') {
       return (
         <div className="col-xl-4 col-md-6">
           <InputElement
@@ -494,7 +511,7 @@ export default class SiteAdd extends Component {
             id={data.id}
             label={data.question_text}
             name={data.question_name}
-            value={this.state.data[data.question_name] || ""}
+            value={this.state.data[data.question_name] || ''}
             placeholder={data.question_placeholder}
             changeHandler={this.ondynamiChangeHandler}
           />
@@ -502,12 +519,12 @@ export default class SiteAdd extends Component {
         </div>
       );
     }
-    if (data.question_type === "Link") {
+    if (data.question_type === 'Link') {
       return (
         <Select
           data={data.project_id}
           onchange={this.ondynamiChangeHandler}
-          value={this.state.data[data.id] || ""}
+          value={this.state.data[data.id] || ''}
           type={data.question_text}
           selectedValue={this.selectedValue}
           name={data.question_name}
@@ -533,7 +550,7 @@ export default class SiteAdd extends Component {
           phone,
           address,
           publicDescription,
-          cluster_sites
+          cluster_sites,
         },
         region,
         position: { latitude, longitude },
@@ -545,8 +562,8 @@ export default class SiteAdd extends Component {
         jsondata,
         site_types,
         regionselected,
-        Selectedtypes
-      }
+        Selectedtypes,
+      },
     } = this;
 
     return (
@@ -557,11 +574,13 @@ export default class SiteAdd extends Component {
               <li className="breadcrumb-item">
                 <a href={breadcrumbs.name_url}>{breadcrumbs.name}</a>
               </li>
-              <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+              <li className="breadcrumb-item">
+                {breadcrumbs.current_page}
+              </li>
             </ol>
           )}
         </nav>
-        <RightContentCard title="New Site">
+        <RightContentCard title="app.siteForm">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">
               <div className="col-xl-4 col-md-6">
@@ -570,10 +589,11 @@ export default class SiteAdd extends Component {
                   tag="input"
                   type="text"
                   required
-                  label="ID"
+                  label="app.id"
                   name="site_id"
                   value={site_id}
                   changeHandler={onChangeHandler}
+                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -582,36 +602,51 @@ export default class SiteAdd extends Component {
                   tag="input"
                   type="text"
                   required
-                  label="Name"
+                  label="app.name"
                   name="name"
                   value={name}
                   changeHandler={onChangeHandler}
+                  translation
                 />
               </div>
-              {(this.props.page === "CreateSite" ||
-                this.props.page === "subSite") && (
-                <div className="col-xl-4 col-md-6">
-                  <SelectElement
-                    className="form-control"
-                    label="Regions"
-                    options={region}
-                    changeHandler={e => {
-                      onSelectChangeHandler(e, "regions");
-                    }}
-                    value={regionselected && regionselected}
-                  />
-                </div>
-                // ) : (
-                //   ""
+              {region.length > 0 ? (
+                this.props.page === 'CreateSite' ||
+                this.props.page === 'subSite' ? (
+                  <div className="col-xl-4 col-md-6">
+                    <SelectElement
+                      className="form-control"
+                      label="app.regions"
+                      translation
+                      options={
+                        region.length > 0
+                          ? region.map(regions => regions)
+                          : region
+                      }
+                      changeHandler={e => {
+                        onSelectChangeHandler(e, 'regions');
+                      }}
+                      value={regionselected && regionselected}
+                    />
+                  </div>
+                ) : (
+                  ''
+                )
+              ) : (
+                ''
               )}
 
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
-                  label="Types"
-                  options={site_types}
+                  label="app.siteType"
+                  translation
+                  options={
+                    site_types.length > 0
+                      ? site_types.map(site_type => site_type)
+                      : site_types
+                  }
                   changeHandler={e => {
-                    onSelectChangeHandler(e, "site_types");
+                    onSelectChangeHandler(e, 'site_types');
                   }}
                   value={Selectedtypes}
                 />
@@ -622,10 +657,11 @@ export default class SiteAdd extends Component {
                   tag="input"
                   type="text"
                   required={false}
-                  label="Phone"
+                  label="app.phone"
                   name="phone"
                   value={phone}
                   changeHandler={onChangeHandler}
+                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -634,39 +670,42 @@ export default class SiteAdd extends Component {
                   tag="input"
                   type="text"
                   required={false}
-                  label="Address"
+                  label="app.address"
                   name="address"
                   value={address}
                   changeHandler={onChangeHandler}
+                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
                   <CheckBox
-                    checked={this.state.project.cluster_sites || ""}
-                    label="Enable subsites"
+                    checked={this.state.project.cluster_sites || ''}
+                    label="app.enableSubsites"
                     value={cluster_sites}
                     changeHandler={handleCheckboxChange}
+                    translation
                   />
                 </div>
               </div>
-              {this.props.page === "subSite" ? (
+              {this.props.page === 'subSite' ? (
                 <div className="col-xl-4 col-md-6">
                   <InputElement
                     formType="editForm"
                     tag="input"
                     type="number"
                     required={false}
-                    label="Weight"
+                    label="app.weight"
                     name="weight"
                     value={this.state.weight}
                     changeHandler={e => {
                       this.setState({ weight: e.target.value });
                     }}
+                    translation
                   />
                 </div>
               ) : (
-                ""
+                ''
               )}
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
@@ -675,22 +714,27 @@ export default class SiteAdd extends Component {
                     tag="input"
                     type="text"
                     required={false}
-                    label="Description"
+                    label="app.description"
                     name="publicDescription"
                     value={publicDescription}
                     changeHandler={onChangeHandler}
+                    translation
                   />
                 </div>
               </div>
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
                   <label>
-                    Map <sup>*</sup>
+                    <FormattedMessage
+                      id="app.map"
+                      defaultMessage="Map"
+                    />
+                    <sup>*</sup>
                   </label>
 
                   <div className="map-form">
                     <Map
-                      style={{ height: "205px", marginTop: "1rem" }}
+                      style={{ height: '205px', marginTop: '1rem' }}
                       center={[latitude, longitude]}
                       zoom={this.state.zoom}
                       onClick={mapClickHandler}
@@ -701,7 +745,13 @@ export default class SiteAdd extends Component {
                       />
                       <Marker position={[latitude, longitude]}>
                         <Popup>
-                          <b>Name: </b>
+                          <b>
+                            <FormattedMessage
+                              id="app.name"
+                              defaultMessage="Name"
+                            />
+                            :
+                          </b>
                           {name}
                         </Popup>
                       </Marker>
@@ -713,12 +763,13 @@ export default class SiteAdd extends Component {
                           tag="input"
                           type="number"
                           required
-                          label="Latitude"
+                          label="app.latitude"
                           name="latitude"
                           value={latitude}
                           changeHandler={e => {
-                            onChangeHandler(e, "latitude");
+                            onChangeHandler(e, 'latitude');
                           }}
+                          translation
                         />
                       </div>
 
@@ -728,12 +779,13 @@ export default class SiteAdd extends Component {
                           tag="input"
                           type="number"
                           required
-                          label="Longitude"
+                          label="app.longitude"
                           name="longitude"
                           value={longitude}
                           changeHandler={e => {
-                            onChangeHandler(e, "longitude");
+                            onChangeHandler(e, 'longitude');
                           }}
+                          translation
                         />
                       </div>
                     </div>
@@ -743,26 +795,49 @@ export default class SiteAdd extends Component {
 
               <div className="col-xl-4 col-md-6">
                 <div className="form-group">
-                  <label> {cropResult ? "Preview" : "Attach File"}</label>
+                  <label>
+                    {cropResult ? (
+                      <FormattedMessage
+                        id="app.preview"
+                        defaultMessage="Preview"
+                      />
+                    ) : (
+                      <FormattedMessage
+                        id="app.attatchFile"
+                        defaultMessage="Attach File"
+                      />
+                    )}
+                  </label>
 
                   {cropResult ? (
-                    <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                    <Dropzone
+                      onDrop={acceptedFile => readFile(acceptedFile)}
+                    >
                       {({ getRootProps, getInputProps }) => {
                         return (
                           <section>
                             <div className="upload-form">
                               <img
                                 src={this.state.cropResult}
-                                alt="Cropped Image"
+                                alt=""
                               />
                             </div>
 
                             <div {...getRootProps()}>
-                              <input {...getInputProps()} multiple={false} />
+                              <input
+                                {...getInputProps()}
+                                multiple={false}
+                              />
                               <div className="upload-icon" />
 
-                              <button className="fieldsight-btn">
-                                Upload
+                              <button
+                                className="fieldsight-btn"
+                                type="button"
+                              >
+                                <FormattedMessage
+                                  id="app.upload"
+                                  defaultMessage="Upload"
+                                />
                                 <i className="la la-cloud-upload" />
                               </button>
                             </div>
@@ -771,7 +846,9 @@ export default class SiteAdd extends Component {
                       }}
                     </Dropzone>
                   ) : (
-                    <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                    <Dropzone
+                      onDrop={acceptedFile => readFile(acceptedFile)}
+                    >
                       {({ getRootProps, getInputProps }) => {
                         return (
                           <section>
@@ -784,9 +861,20 @@ export default class SiteAdd extends Component {
                                       multiple={false}
                                     />
                                     <div className="upload-icon" />
-                                    <h3>Drag & Drop an image</h3>
-                                    <button className="fieldsight-btn">
-                                      Upload
+                                    <h3>
+                                      <FormattedMessage
+                                        id="app.drag&DropAnImage"
+                                        defaultMessage="Drag & Drop an image"
+                                      />
+                                    </h3>
+                                    <button
+                                      className="fieldsight-btn"
+                                      type="button"
+                                    >
+                                      <FormattedMessage
+                                        id="app.upload"
+                                        defaultMessage="Upload"
+                                      />
                                       <i className="la la-cloud-upload" />
                                     </button>
                                   </div>
@@ -800,18 +888,28 @@ export default class SiteAdd extends Component {
                   )}
                 </div>
               </div>
-              {jsondata.map((data, key) => {
-                return <Fragment key={key}>{this.selectform(data)}</Fragment>;
+              {jsondata.map(data => {
+                return (
+                  <Fragment key={data.id}>
+                    {this.selectform(data)}
+                  </Fragment>
+                );
               })}
               <div className="col-sm-12">
-                <button type="submit" className="fieldsight-btn pull-right">
-                  Save
+                <button
+                  type="submit"
+                  className="fieldsight-btn pull-right"
+                >
+                  <FormattedMessage
+                    id="app.save"
+                    defaultMessage="Save"
+                  />
                 </button>
               </div>
             </div>
           </form>
           {showCropper && (
-            <Modal title="Preview" toggleModal={closeModal}>
+            <Modal title="app.preview" toggleModal={closeModal}>
               <div className="row">
                 <div className="col-md-6">
                   <div className="card-body" style={{ padding: 0 }}>
@@ -827,11 +925,15 @@ export default class SiteAdd extends Component {
                         }}
                       />
                       <button
+                        type="button"
                         className="fieldsight-btn"
-                        style={{ marginTop: "15px" }}
+                        style={{ marginTop: '15px' }}
                         onClick={this.cropImage}
                       >
-                        Save Image
+                        <FormattedMessage
+                          id="app.saveImage"
+                          defaultMessage="Save Image"
+                        />
                       </button>
                     </figure>
                   </div>
@@ -842,9 +944,9 @@ export default class SiteAdd extends Component {
                       <div
                         className="img-preview"
                         style={{
-                          width: "100%",
+                          width: '100%',
                           height: 400,
-                          overflow: "hidden"
+                          overflow: 'hidden',
                         }}
                       />
                     </figure>

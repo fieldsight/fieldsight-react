@@ -1,75 +1,79 @@
-import React, { Component } from "react";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import Cropper from "react-cropper";
-import InputElement from "../common/InputElement";
-import RightContentCard from "../common/RightContentCard";
-import SelectElement from "../common/SelectElement";
-import RadioElement from "../common/RadioElement";
-import Modal from "../common/Modal";
+import React, { Component } from 'react';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import Cropper from 'react-cropper';
+import InputElement from '../common/InputElement';
+import RightContentCard from '../common/RightContentCard';
+import SelectElement from '../common/SelectElement';
+import RadioElement from '../common/RadioElement';
+import Modal from '../common/Modal';
+
+/* eslint-disable camelcase */
 
 class CreateProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      first_name: "",
-      last_name: "",
-      address: "",
-      phone: "",
-      skype: "",
-      primary_number: "",
-      secondary_number: "",
-      office_number: "",
-      viber: "",
-      whatsapp: "",
-      wechat: "",
-      line: "",
-      tango: "",
-      hike: "",
-      qq: "",
-      google_talk: "",
-      twitter: "",
-      profile_picture: "",
-      timezone: [{ id: "", name: "----" }],
-      selectTimeZone: "",
-      selectedGender: "Male",
+      first_name: '',
+      last_name: '',
+      address: '',
+      phone: '',
+      skype: '',
+      primary_number: '',
+      secondary_number: '',
+      office_number: '',
+      viber: '',
+      whatsapp: '',
+      wechat: '',
+      line: '',
+      tango: '',
+      hike: '',
+      qq: '',
+      google_talk: '',
+      twitter: '',
+      profile_picture: '',
+      timezone: [{ id: '', name: '----' }],
+      selectTimeZone: '',
+      selectedGender: 'Male',
       showCropper: false,
-      cropResult: "",
-      src: "",
-      show: false
+      cropResult: '',
+      src: '',
+      show: false,
     };
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
 
     axios.get(`/fv3/api/timezones/`).then(res => {
-      const timezoneArr = this.state.timezone;
-
-      res.data && res.data.map(zoneArr => timezoneArr.push(zoneArr));
-      this.setState({
-        timezone: timezoneArr
-      });
+      if (res.data) {
+        this.setState(state => {
+          const timezoneArr = state.timezone;
+          res.data.map(zoneArr => timezoneArr.push(zoneArr));
+          return { timezone: timezoneArr };
+        });
+      }
     });
   }
 
   onChangeHandler = e => {
     const { value, name } = e.target;
-    this.setState({
-      ...this.state,
-      [name]: value
-    });
+    this.setState(state => ({
+      ...state,
+      [name]: value,
+    }));
   };
+
   onSubmitHandler = e => {
     e.preventDefault();
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
 
     const createProfile = {};
@@ -99,31 +103,31 @@ class CreateProfile extends Component {
       .then(req => {
         if (req.status === 201) {
           this.setState({
-            first_name: "",
-            last_name: "",
-            address: "",
-            phone: "",
-            skype: "",
-            primary_number: "",
-            secondary_number: "",
-            office_number: "",
-            viber: "",
-            whatsapp: "",
-            wechat: "",
-            line: "",
-            tango: "",
-            hike: "",
-            qq: "",
-            google_talk: "",
-            twitter: "",
-            profile_picture: "",
-            timezone: [{ id: "", name: "----" }],
-            selectTimeZone: "",
-            selectedGender: "Male",
+            first_name: '',
+            last_name: '',
+            address: '',
+            phone: '',
+            skype: '',
+            primary_number: '',
+            secondary_number: '',
+            office_number: '',
+            viber: '',
+            whatsapp: '',
+            wechat: '',
+            line: '',
+            tango: '',
+            hike: '',
+            qq: '',
+            google_talk: '',
+            twitter: '',
+            profile_picture: '',
+            timezone: [{ id: '', name: '----' }],
+            selectTimeZone: '',
+            selectedGender: 'Male',
             showCropper: false,
-            cropResult: "",
-            src: "",
-            show: false
+            cropResult: '',
+            src: '',
+            show: false,
           });
           // this.props.history.push(``);
         }
@@ -135,20 +139,21 @@ class CreateProfile extends Component {
     const { value } = e.target;
 
     this.setState({
-      selectTimeZone: value
+      selectTimeZone: value,
     });
   };
+
   handleGender = e => {
     const { value } = e.target;
 
-    if (value === "Male") {
+    if (value === 'Male') {
       this.setState({
-        selectedGender: value
+        selectedGender: value,
       });
     }
-    if (value === "Female") {
+    if (value === 'Female') {
       this.setState({
-        selectedGender: value
+        selectedGender: value,
       });
     }
   };
@@ -159,28 +164,29 @@ class CreateProfile extends Component {
       this.setState({
         src: reader.result,
         showCropper: true,
-        show: true
+        show: true,
       });
     };
     reader.readAsDataURL(file[0]);
   };
 
   cropImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
 
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
+
   render() {
     const {
       state: {
@@ -205,16 +211,19 @@ class CreateProfile extends Component {
         selectTimeZone,
         selectedGender,
         cropResult,
-        showCropper
+        showCropper,
       },
       onChangeHandler,
       onSubmitHandler,
-      handleGender
+      handleGender,
     } = this;
     return (
       <>
         <RightContentCard title="Create Profile">
-          <form className="edit-form" onSubmit={e => onSubmitHandler(e)}>
+          <form
+            className="edit-form"
+            onSubmit={e => onSubmitHandler(e)}
+          >
             <div className="col-sm-12">
               <div className="row">
                 <div className="col-xl-4 col-md-6">
@@ -244,14 +253,14 @@ class CreateProfile extends Component {
                 <div className="col-xl-4 col-md-6">
                   <RadioElement
                     name="Gender"
-                    checked={selectedGender === "Male"}
+                    checked={selectedGender === 'Male'}
                     changeHandler={handleGender}
                     label="Male"
                     value="Male"
                   />
                   <RadioElement
                     name="Gender"
-                    checked={selectedGender === "Female"}
+                    checked={selectedGender === 'Female'}
                     changeHandler={handleGender}
                     label="Female"
                     value="Female"
@@ -433,11 +442,15 @@ class CreateProfile extends Component {
                 </div>
                 <div className="col-xl-4 col-md-6">
                   <div className="form-group">
-                    <label> {cropResult ? "Preview" : "Attach File"}</label>
+                    <label>
+                      {cropResult ? 'Preview' : 'Attach File'}
+                    </label>
 
                     {cropResult ? (
                       <Dropzone
-                        onDrop={acceptedFile => this.readFile(acceptedFile)}
+                        onDrop={acceptedFile => {
+                          this.readFile(acceptedFile);
+                        }}
                       >
                         {({ getRootProps, getInputProps }) => {
                           return (
@@ -445,15 +458,21 @@ class CreateProfile extends Component {
                               <div className="upload-form">
                                 <img
                                   src={this.state.cropResult}
-                                  alt="Cropped Image"
+                                  alt=""
                                 />
                               </div>
 
                               <div {...getRootProps()}>
-                                <input {...getInputProps()} multiple={false} />
+                                <input
+                                  {...getInputProps()}
+                                  multiple={false}
+                                />
                                 <div className="upload-icon" />
 
-                                <button className="fieldsight-btn">
+                                <button
+                                  className="fieldsight-btn"
+                                  type="button"
+                                >
                                   Upload
                                   <i className="la la-cloud-upload" />
                                 </button>
@@ -464,7 +483,9 @@ class CreateProfile extends Component {
                       </Dropzone>
                     ) : (
                       <Dropzone
-                        onDrop={acceptedFile => this.readFile(acceptedFile)}
+                        onDrop={acceptedFile => {
+                          this.readFile(acceptedFile);
+                        }}
                       >
                         {({ getRootProps, getInputProps }) => {
                           return (
@@ -479,7 +500,10 @@ class CreateProfile extends Component {
                                       />
                                       <div className="upload-icon" />
                                       <h3>Drag & Drop an image</h3>
-                                      <button className="fieldsight-btn">
+                                      <button
+                                        className="fieldsight-btn"
+                                        type="button"
+                                      >
                                         Upload
                                         <i className="la la-cloud-upload" />
                                       </button>
@@ -499,7 +523,10 @@ class CreateProfile extends Component {
                 <Modal title="Preview" toggleModal={this.closeModal}>
                   <div className="row">
                     <div className="col-md-6">
-                      <div className="card-body" style={{ padding: 0 }}>
+                      <div
+                        className="card-body"
+                        style={{ padding: 0 }}
+                      >
                         <figure>
                           <Cropper
                             style={{ height: 400, width: 300 }}
@@ -513,8 +540,9 @@ class CreateProfile extends Component {
                           />
                           <button
                             className="fieldsight-btn"
-                            style={{ marginTop: "15px" }}
+                            style={{ marginTop: '15px' }}
                             onClick={this.cropImage}
+                            type="button"
                           >
                             Save Image
                           </button>
@@ -522,14 +550,17 @@ class CreateProfile extends Component {
                       </div>
                     </div>
                     <div className="col-md-6">
-                      <div className="card-body" style={{ padding: 0 }}>
+                      <div
+                        className="card-body"
+                        style={{ padding: 0 }}
+                      >
                         <figure>
                           <div
                             className="img-preview"
                             style={{
-                              width: "100%",
+                              width: '100%',
                               height: 400,
-                              overflow: "hidden"
+                              overflow: 'hidden',
                             }}
                           />
                         </figure>
@@ -539,7 +570,10 @@ class CreateProfile extends Component {
                 </Modal>
               )}
 
-              <button type="submit" className="fieldsight-btn pull-right">
+              <button
+                type="submit"
+                className="fieldsight-btn pull-right"
+              >
                 save
               </button>
             </div>

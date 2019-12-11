@@ -1,127 +1,155 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import ResponseTable from "../../responded/ResponseTable";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import DeleteTable from "../deleteTable";
-import { DotLoader } from "../../../myForm/Loader";
-import { getProjectViewData } from "../../../../actions/viewDataActions";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
+import { compose } from 'redux';
+
+import ResponseTable from '../../responded/ResponseTable';
+import DeleteTable from '../deleteTable';
+import { DotLoader } from '../../../myForm/Loader';
+import { getProjectViewData } from '../../../../actions/viewDataActions';
+/* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
 
 class ManageGeneralForm extends Component {
-  state = {
-    hide: true
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hide: true,
+    };
+  }
 
   componentDidMount() {
-    if (this.props.id !== "") {
-      this.props.getProjectViewData(this.props.id, "general");
+    if (this.props.id !== '') {
+      this.props.getProjectViewData(this.props.id, 'general');
     }
   }
 
   toggleHide = () => {
-    this.setState({
-      hide: !this.state.hide
-    });
+    this.setState(state => ({
+      hide: !state.hide,
+    }));
   };
 
   render() {
     const {
       props: {
-        data,
-        showViewData,
         generals_forms,
         deleted_forms,
         generals_loader,
-        id
-      }
+
+        id,
+      },
     } = this;
 
-    console.log(this.props.match, id, "general");
-    const toUrl = `/project-submission-responses/${id}/rejected`;
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>General Forms</h5>
+          <h5>
+            <FormattedMessage
+              id="app.generate-form"
+              defaultMessage="General Forms"
+            />
+          </h5>
           <div className="dash-btn">
-            <Link to={toUrl}>
-              <button className="fieldsight-btn">View By Form</button>
+            <Link to={`/project-submission-responses/${id}/rejected`}>
+              <button type="button" className="fieldsight-btn">
+                <FormattedMessage
+                  id="app.view-by-form"
+                  defaultMessage="View By Form"
+                />
+              </button>
             </Link>
           </div>
         </div>
         <div className="card-body">
-          {!data &&
-            (generals_loader ? (
-              <ResponseTable
-                generals_forms={generals_forms}
-                id={this.props.id}
-              />
-            ) : (
-              <DotLoader />
-            ))}
+          {generals_loader ? (
+            <ResponseTable generals_forms={generals_forms} id={id} />
+          ) : (
+            <DotLoader />
+          )}
         </div>
-        {deleted_forms.length > 0
-          ? !data && (
-              <div className="card no-boxshadow">
-                <div className="card-header main-card-header sub-card-header">
-                  <h5>Deleted Forms</h5>
-                  <div className="dash-btn">
-                    {this.state.hide ? (
-                      <button
-                        type="button"
-                        className="btn-toggle"
-                        onClick={this.toggleHide}
-                      >
-                        show
-                        <div className="handle"></div>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className="btn-toggle"
-                        onClick={this.toggleHide}
-                        style={{
-                          backgroundColor: "#28a745",
-                          color: "white",
-                          textAlign: "left"
-                        }}
-                      >
-                        hide
-                        <div
-                          className="handle"
-                          style={{ left: "auto", right: "0.1875rem" }}
-                        ></div>
-                      </button>
-                    )}
-                  </div>
-                </div>
-                <div className="card-body">
-                  {!this.state.hide && (
-                    <DeleteTable
-                      deleted_forms={deleted_forms}
-                      id={this.props.id}
-                      loader={generals_loader}
+        {deleted_forms.length > 0 && (
+          <div className="card no-boxshadow">
+            <div className="card-header main-card-header sub-card-header">
+              <h5>
+                <FormattedMessage
+                  id="app.deleted-forms"
+                  defaultMessage="Deleted Forms"
+                />
+              </h5>
+              <div className="dash-btn">
+                {this.state.hide ? (
+                  <button
+                    type="button"
+                    className="btn-toggle"
+                    onClick={this.toggleHide}
+                    style={{ width: '97px' }}
+                  >
+                    <FormattedMessage
+                      id="app.show"
+                      defaultMessage="Show"
                     />
-                  )}
-                </div>
+                    <div className="handle" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn-toggle"
+                    onClick={this.toggleHide}
+                    style={{
+                      backgroundColor: '#28a745',
+                      color: 'white',
+                      textAlign: 'left',
+                      width: '97px',
+                    }}
+                  >
+                    <FormattedMessage
+                      id="app.hide"
+                      defaultMessage="Hide"
+                    />
+                    <div
+                      className="handle"
+                      style={{ left: 'auto', right: '0.1875rem' }}
+                    />
+                  </button>
+                )}
               </div>
-            )
-          : ""}
-      </React.Fragment>
+            </div>
+
+            <div className="card-body">
+              {!this.state.hide && (
+                <DeleteTable
+                  deleted_forms={deleted_forms}
+                  id={id}
+                  loader={generals_loader}
+                />
+              )}
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 }
 
 const mapStateToProps = ({ projectViewData }) => {
-  const { generals_forms, deleted_forms, generals_loader } = projectViewData;
+  const {
+    generals_forms,
+    deleted_forms,
+    generals_loader,
+  } = projectViewData;
 
   return {
     generals_forms,
     deleted_forms,
-    generals_loader
+    generals_loader,
   };
 };
+
 export default compose(
   connect(mapStateToProps, {
-    getProjectViewData
-  })
+    getProjectViewData,
+  }),
 )(ManageGeneralForm);

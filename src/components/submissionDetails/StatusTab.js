@@ -1,26 +1,38 @@
-import React, { Component } from "react";
-import InputElement from "../common/InputElement";
-import RadioElement from "../common/RadioElement";
+import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
+import InputElement from '../common/InputElement';
+import RadioElement from '../common/RadioElement';
+
+/* eslint-disable consistent-return  */
+/* eslint-disable react/destructuring-assignment */
 
 const checkStatus = statusData => {
-  if (statusData.status_display === "Pending") {
+  if (statusData.status_display === 'Pending') {
     return 0;
-  } else if (statusData.status_display === "Rejected") {
+  }
+  if (statusData.status_display === 'Rejected') {
     return 1;
-  } else if (statusData.status_display === "Flagged") {
+  }
+  if (statusData.status_display === 'Flagged') {
     return 2;
-  } else if (statusData.status_display === "Approved") {
+  }
+  if (statusData.status_display === 'Approved') {
     return 3;
   }
 };
+
 class StatusTab extends Component {
-  state = {
-    file: "",
-    comment: "",
-    status: this.props.statusData.status_display
-      ? checkStatus(this.props.statusData).toString()
-      : "3"
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      file: '',
+      comment: '',
+      status: props.statusData.status_display
+        ? checkStatus(props.statusData).toString()
+        : '3',
+    };
+  }
 
   componentWillReceiveProps(nextProps) {
     if (
@@ -28,11 +40,11 @@ class StatusTab extends Component {
       this.props.statusData.status_display
     ) {
       this.setState({
-        file: "",
-        comment: "",
+        file: '',
+        comment: '',
         status: nextProps.statusData.status_display
           ? checkStatus(nextProps.statusData).toString()
-          : "3"
+          : '3',
       });
     }
   }
@@ -40,13 +52,13 @@ class StatusTab extends Component {
   onChangeHandler = (e, file) => {
     if (file) {
       return this.setState({
-        file: e.target.files[0]
+        file: e.target.files[0],
       });
     }
     const { name, value } = e.target;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -54,16 +66,16 @@ class StatusTab extends Component {
     e.preventDefault();
     const {
       state: { comment, status, file },
-      props: { fieldSightInstance, statusData, postSubmissionDetail }
+      props: { fieldSightInstance, statusData, postSubmissionDetail },
     } = this;
 
-    let oldStatus = checkStatus(statusData);
+    const oldStatus = checkStatus(statusData);
     const formData = new FormData();
-    formData.append("image_1", file);
-    formData.append("finstance", fieldSightInstance);
-    formData.append("new_status", status);
-    formData.append("old_status", oldStatus);
-    formData.append("message", comment);
+    formData.append('image_1', file);
+    formData.append('finstance', fieldSightInstance);
+    formData.append('new_status', status);
+    formData.append('old_status', oldStatus);
+    formData.append('message', comment);
 
     postSubmissionDetail(formData);
   };
@@ -73,17 +85,17 @@ class StatusTab extends Component {
       props: { statusData, hasReviewPermission },
       state: { comment, file, status },
       onChangeHandler,
-      submitHandler
+      submitHandler,
     } = this;
     let icon;
-    if (statusData.status_display === "Rejected") {
-      icon = "la-close";
-    } else if (statusData.status_display === "Approved") {
-      icon = "la-check";
-    } else if (statusData.status_display === "Flagged") {
-      icon = "la-flag";
-    } else if (statusData.status_display === "Pending") {
-      icon = "la-hourglass-2";
+    if (statusData.status_display === 'Rejected') {
+      icon = 'la-close';
+    } else if (statusData.status_display === 'Approved') {
+      icon = 'la-check';
+    } else if (statusData.status_display === 'Flagged') {
+      icon = 'la-flag';
+    } else if (statusData.status_display === 'Pending') {
+      icon = 'la-hourglass-2';
     }
     return (
       <div
@@ -94,7 +106,8 @@ class StatusTab extends Component {
       >
         <div className="status-view">
           <a
-            href="#"
+            tabIndex="0"
+            role="button"
             className={
               statusData.status_display &&
               statusData.status_display.toLowerCase()
@@ -109,24 +122,34 @@ class StatusTab extends Component {
             <form className="edit-form" onSubmit={submitHandler}>
               <InputElement
                 tag="textarea"
-                label="Comment"
+                label="app.comment"
                 htmlFor="comment"
                 name="comment"
                 placeholder="Please put your comment here."
                 value={comment}
                 changeHandler={onChangeHandler}
+                translation
               />
               <div className="form-group">
-                <label>attach file</label>
+                <label>
+                  <FormattedMessage
+                    id="app.attach-file"
+                    defaultMessage="Attach File"
+                  />
+                </label>
                 <div className="upload-form">
                   <div className="fieldsight-btn">
                     <label htmlFor="upload-btn">
-                      upload <i className="la la-cloud-upload" />
+                      <FormattedMessage
+                        id="app.upload"
+                        defaultMessage="Upload"
+                      />
+                      <i className="la la-cloud-upload" />
                     </label>
                     <input
                       type="file"
                       id="upload-btn"
-                      onChange={e => onChangeHandler(e, "file")}
+                      onChange={e => onChangeHandler(e, 'file')}
                     />
                   </div>
                 </div>
@@ -135,35 +158,41 @@ class StatusTab extends Component {
               <div className="form-group flexrow">
                 <div className="custom-checkbox display-inline">
                   <RadioElement
-                    label="Approve"
+                    label="app.approve"
                     name="status"
                     value="3"
                     className="approved"
-                    checked={status === "3"}
+                    checked={status === '3'}
                     changeHandler={onChangeHandler}
+                    translation
                   />
                   <RadioElement
-                    label="Flag"
+                    label="app.flag"
                     name="status"
                     value="2"
                     className="flagged"
-                    checked={status === "2"}
+                    checked={status === '2'}
                     changeHandler={onChangeHandler}
+                    translation
                   />
 
                   <RadioElement
-                    label="Reject"
+                    label="app.reject"
                     name="status"
                     value="1"
                     className="rejected"
-                    checked={status === "1"}
+                    checked={status === '1'}
                     changeHandler={onChangeHandler}
+                    translation
                   />
                 </div>
               </div>
               <div className="form-group pull-right">
                 <button type="submit" className="fieldsight-btn">
-                  Save
+                  <FormattedMessage
+                    id="app.save"
+                    defaultMessage="Save"
+                  />
                 </button>
               </div>
             </form>

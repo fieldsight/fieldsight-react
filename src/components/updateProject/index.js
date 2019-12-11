@@ -1,65 +1,74 @@
-import React, { Component } from "react";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import Cropper from "react-cropper";
-import InputElement from "../common/InputElement";
-import RightContentCard from "../common/RightContentCard";
-import SelectElement from "../common/SelectElement";
-import RadioElement from "../common/RadioElement";
-import Modal from "../common/Modal";
+import React, { Component } from 'react';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import Cropper from 'react-cropper';
+import InputElement from '../common/InputElement';
+import RightContentCard from '../common/RightContentCard';
+import SelectElement from '../common/SelectElement';
+import RadioElement from '../common/RadioElement';
+import Modal from '../common/Modal';
+
+/* eslint-disable camelcase */
 
 class UpdateProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      first_name: "",
-      last_name: "",
-      address: "",
-      phone: "",
-      skype: "",
-      primary_number: "",
-      secondary_number: "",
-      office_number: "",
-      viber: "",
-      whatsapp: "",
-      wechat: "",
-      line: "",
-      tango: "",
-      hike: "",
-      qq: "",
-      google_talk: "",
-      twitter: "",
-      profile_picture: "",
-      timezone: [{ id: "", name: "----" }],
-      selectTimeZone: "",
-      selectedGender: "Male",
+      first_name: '',
+      last_name: '',
+      address: '',
+      phone: '',
+      skype: '',
+      primary_number: '',
+      secondary_number: '',
+      office_number: '',
+      viber: '',
+      whatsapp: '',
+      wechat: '',
+      line: '',
+      tango: '',
+      hike: '',
+      qq: '',
+      google_talk: '',
+      twitter: '',
+      profile_picture: '',
+      timezone: [{ id: '', name: '----' }],
+      selectTimeZone: '',
+      selectedGender: 'Male',
       showCropper: false,
-      cropResult: "",
-      src: "",
-      show: false
+      cropResult: '',
+      src: '',
+      show: false,
     };
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
-    const urls = [`/fv3/api/get-profile/${id}/`, `/fv3/api/timezones/`];
+    const urls = [
+      `/fv3/api/get-profile/${id}/`,
+      `/fv3/api/timezones/`,
+    ];
+
+    const { timezone } = this.state;
 
     axios
       .all(
-        urls.map((url, i) => {
+        urls.map(url => {
           return axios.get(url);
-        })
+        }),
       )
       .then(
-        axios.spread((get_profile, timezone) => {
-          const timezoneArr = this.state.timezone;
+        axios.spread((get_profile, timezones) => {
+          const timezoneArr = timezone;
 
-          timezone.data &&
-            timezone.data.map(zoneArr => timezoneArr.push(zoneArr));
+          if (timezone.data) {
+            timezones.data.map(zoneArr => timezoneArr.push(zoneArr));
+          }
+
           this.setState({
             timezone: timezoneArr,
             first_name: get_profile.data.first_name,
@@ -83,79 +92,104 @@ class UpdateProfile extends Component {
             selectedGender: get_profile.data.gender,
             cropResult:
               get_profile.data.profile_picture &&
-              get_profile.data.profile_picture
+              get_profile.data.profile_picture,
           });
-        })
+        }),
       );
   }
 
   onChangeHandler = e => {
     const { value, name } = e.target;
-    this.setState({
-      ...this.state,
-      [name]: value
-    });
+    this.setState(state => ({
+      ...state,
+      [name]: value,
+    }));
   };
+
   onSubmitHandler = e => {
     e.preventDefault();
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
+    const {
+      first_name,
+      last_name,
+      address,
+      phone,
+      skype,
+      primary_number,
+      secondary_number,
+      office_number,
+      viber,
+      whatsapp,
+      wechat,
+      line,
+      tango,
+      hike,
+      qq,
+      google_talk,
+      twitter,
+
+      selectTimeZone,
+      selectedGender,
+
+      cropResult,
+    } = this.state;
 
     const updateProfile = {};
-    updateProfile.first_name = this.state.first_name;
-    updateProfile.last_name = this.state.last_name;
-    updateProfile.address = this.state.address;
-    updateProfile.phone = this.state.phone;
-    updateProfile.skype = this.state.skype;
-    updateProfile.primary_number = this.state.primary_number;
-    updateProfile.secondary_number = this.state.secondary_number;
-    updateProfile.office_number = this.state.office_number;
-    updateProfile.viber = this.state.viber;
-    updateProfile.whatsapp = this.state.whatsapp;
-    updateProfile.wechat = this.state.wechat;
-    updateProfile.line = this.state.line;
-    updateProfile.tango = this.state.tango;
-    updateProfile.hike = this.state.hike;
-    updateProfile.qq = this.state.qq;
-    updateProfile.google_talk = this.state.google_talk;
-    updateProfile.twitter = this.state.twitter;
-    updateProfile.selectTimeZone = this.state.selectTimeZone;
-    updateProfile.gender = this.state.selectedGender;
-    updateProfile.profile_picture = this.state.cropResult;
+    updateProfile.first_name = first_name;
+    updateProfile.last_name = last_name;
+    updateProfile.address = address;
+    updateProfile.phone = phone;
+    updateProfile.skype = skype;
+    updateProfile.primary_number = primary_number;
+    updateProfile.secondary_number = secondary_number;
+    updateProfile.office_number = office_number;
+    updateProfile.viber = viber;
+    updateProfile.whatsapp = whatsapp;
+    updateProfile.wechat = wechat;
+    updateProfile.line = line;
+    updateProfile.tango = tango;
+    updateProfile.hike = hike;
+    updateProfile.qq = qq;
+    updateProfile.google_talk = google_talk;
+    updateProfile.twitter = twitter;
+    updateProfile.selectTimeZone = selectTimeZone;
+    updateProfile.gender = selectedGender;
+    updateProfile.profile_picture = cropResult;
 
     axios
       .post(`/fv3/api/update-profile/${id}/`, updateProfile)
       .then(req => {
         if (req.status === 201) {
           this.setState({
-            first_name: "",
-            last_name: "",
-            address: "",
-            phone: "",
-            skype: "",
-            primary_number: "",
-            secondary_number: "",
-            office_number: "",
-            viber: "",
-            whatsapp: "",
-            wechat: "",
-            line: "",
-            tango: "",
-            hike: "",
-            qq: "",
-            google_talk: "",
-            twitter: "",
-            profile_picture: "",
-            timezone: [{ id: "", name: "----" }],
-            selectTimeZone: "",
-            selectedGender: "0",
+            first_name: '',
+            last_name: '',
+            address: '',
+            phone: '',
+            skype: '',
+            primary_number: '',
+            secondary_number: '',
+            office_number: '',
+            viber: '',
+            whatsapp: '',
+            wechat: '',
+            line: '',
+            tango: '',
+            hike: '',
+            qq: '',
+            google_talk: '',
+            twitter: '',
+            profile_picture: '',
+            timezone: [{ id: '', name: '----' }],
+            selectTimeZone: '',
+            selectedGender: '0',
             showCropper: false,
-            cropResult: "",
-            src: "",
-            show: false
+            cropResult: '',
+            src: '',
+            show: false,
           });
           // this.props.history.push(``);
         }
@@ -167,20 +201,21 @@ class UpdateProfile extends Component {
     const { value } = e.target;
 
     this.setState({
-      selectTimeZone: value
+      selectTimeZone: value,
     });
   };
+
   handleGender = e => {
     const { value } = e.target;
 
-    if (value === "Male") {
+    if (value === 'Male') {
       this.setState({
-        selectedGender: value
+        selectedGender: value,
       });
     }
-    if (value === "Female") {
+    if (value === 'Female') {
       this.setState({
-        selectedGender: value
+        selectedGender: value,
       });
     }
   };
@@ -191,28 +226,29 @@ class UpdateProfile extends Component {
       this.setState({
         src: reader.result,
         showCropper: true,
-        show: true
+        show: true,
       });
     };
     reader.readAsDataURL(file[0]);
   };
 
   cropImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
 
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
+
   render() {
     const {
       state: {
@@ -237,16 +273,20 @@ class UpdateProfile extends Component {
         selectTimeZone,
         selectedGender,
         cropResult,
-        showCropper
+        showCropper,
+        src,
       },
       onChangeHandler,
       onSubmitHandler,
-      handleGender
+      handleGender,
     } = this;
     return (
       <>
         <RightContentCard title="Update Profile">
-          <form className="edit-form" onSubmit={e => onSubmitHandler(e)}>
+          <form
+            className="edit-form"
+            onSubmit={e => onSubmitHandler(e)}
+          >
             <div className="col-sm-12">
               <div className="row">
                 <div className="col-xl-4 col-md-6">
@@ -276,14 +316,14 @@ class UpdateProfile extends Component {
                 <div className="col-xl-4 col-md-6">
                   <RadioElement
                     name="Gender"
-                    checked={selectedGender === "Male"}
+                    checked={selectedGender === 'Male'}
                     changeHandler={handleGender}
                     label="Male"
                     value="Male"
                   />
                   <RadioElement
                     name="Gender"
-                    checked={selectedGender === "Female"}
+                    checked={selectedGender === 'Female'}
                     changeHandler={handleGender}
                     label="Female"
                     value="Female"
@@ -465,27 +505,34 @@ class UpdateProfile extends Component {
                 </div>
                 <div className="col-xl-4 col-md-6">
                   <div className="form-group">
-                    <label> {cropResult ? "Preview" : "Attach File"}</label>
+                    <label>
+                      {cropResult ? 'Preview' : 'Attach File'}
+                    </label>
 
                     {cropResult ? (
                       <Dropzone
-                        onDrop={acceptedFile => this.readFile(acceptedFile)}
+                        onDrop={acceptedFile => {
+                          this.readFile(acceptedFile);
+                        }}
                       >
                         {({ getRootProps, getInputProps }) => {
                           return (
                             <section>
                               <div className="upload-form">
-                                <img
-                                  src={this.state.cropResult}
-                                  alt="Cropped Image"
-                                />
+                                <img src={cropResult} alt="" />
                               </div>
 
                               <div {...getRootProps()}>
-                                <input {...getInputProps()} multiple={false} />
+                                <input
+                                  {...getInputProps()}
+                                  multiple={false}
+                                />
                                 <div className="upload-icon" />
 
-                                <button className="fieldsight-btn">
+                                <button
+                                  className="fieldsight-btn"
+                                  type="button"
+                                >
                                   Upload
                                   <i className="la la-cloud-upload" />
                                 </button>
@@ -496,7 +543,9 @@ class UpdateProfile extends Component {
                       </Dropzone>
                     ) : (
                       <Dropzone
-                        onDrop={acceptedFile => this.readFile(acceptedFile)}
+                        onDrop={acceptedFile => {
+                          this.readFile(acceptedFile);
+                        }}
                       >
                         {({ getRootProps, getInputProps }) => {
                           return (
@@ -511,7 +560,10 @@ class UpdateProfile extends Component {
                                       />
                                       <div className="upload-icon" />
                                       <h3>Drag & Drop an image</h3>
-                                      <button className="fieldsight-btn">
+                                      <button
+                                        className="fieldsight-btn"
+                                        type="button"
+                                      >
                                         Upload
                                         <i className="la la-cloud-upload" />
                                       </button>
@@ -531,22 +583,26 @@ class UpdateProfile extends Component {
                 <Modal title="Preview" toggleModal={this.closeModal}>
                   <div className="row">
                     <div className="col-md-6">
-                      <div className="card-body" style={{ padding: 0 }}>
+                      <div
+                        className="card-body"
+                        style={{ padding: 0 }}
+                      >
                         <figure>
                           <Cropper
                             style={{ height: 400, width: 300 }}
                             aspectRatio={1 / 1}
                             preview=".img-preview"
                             guides={false}
-                            src={this.state.src}
+                            src={src}
                             ref={cropper => {
                               this.cropper = cropper;
                             }}
                           />
                           <button
                             className="fieldsight-btn"
-                            style={{ marginTop: "15px" }}
+                            style={{ marginTop: '15px' }}
                             onClick={this.cropImage}
+                            type="button"
                           >
                             Save Image
                           </button>
@@ -554,14 +610,17 @@ class UpdateProfile extends Component {
                       </div>
                     </div>
                     <div className="col-md-6">
-                      <div className="card-body" style={{ padding: 0 }}>
+                      <div
+                        className="card-body"
+                        style={{ padding: 0 }}
+                      >
                         <figure>
                           <div
                             className="img-preview"
                             style={{
-                              width: "100%",
+                              width: '100%',
                               height: 400,
-                              overflow: "hidden"
+                              overflow: 'hidden',
                             }}
                           />
                         </figure>
@@ -571,7 +630,10 @@ class UpdateProfile extends Component {
                 </Modal>
               )}
 
-              <button type="submit" className="fieldsight-btn pull-right">
+              <button
+                type="submit"
+                className="fieldsight-btn pull-right"
+              >
                 save
               </button>
             </div>

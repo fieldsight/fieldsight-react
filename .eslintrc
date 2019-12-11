@@ -1,0 +1,54 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "template-curly-spacing": "off",
+    "indent": "off",
+    "max-len": [
+      1,
+      70,
+      2,
+      {
+        "ignoreComments": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true
+      }
+    ],
+    "prettier/prettier": ["error"],
+    "react/jsx-filename-extension": [
+      1,
+      { "extensions": [".js", ".jsx"] }
+    ],
+    "react/prop-types": ["off"],
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": true }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "no-unused-vars": "warn",
+    "no-console": 1,
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": [
+      "warn",
+      { "aspects": ["invalidHref"] }
+    ],
+    "no-underscore-dangle": "off",
+    "react/destructuring-assignment": "warn",
+    "jsx-a11y/label-has-associated-control": "off",
+    "no-restricted-globals": "warn",
+    "no-unneeded-ternary": "off",
+    "no-debugger": "off",
+    "react/static-property-placement": "off",
+    "react/sort-comp": "off",
+    "no-nested-ternary": "off",
+    "react/jsx-wrap-multilines": [
+      "error",
+      { "declaration": false, "assignment": false }
+    ]
+  },
+  "env": {
+    "browser": true
+  }
+}

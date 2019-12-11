@@ -1,4 +1,7 @@
-import React from "react";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+/* eslint-disable   react/prop-types */
 
 const RadioElement = ({
   name,
@@ -6,7 +9,8 @@ const RadioElement = ({
   className,
   changeHandler,
   label,
-  value
+  value,
+  translation,
 }) => (
   <div className={`radiobox ${className}`}>
     <label>
@@ -18,7 +22,11 @@ const RadioElement = ({
         value={value}
       />
       <i className="helper" />
-      {label}
+      {translation === true ? (
+        <FormattedMessage id={label} defaultMessage={label} />
+      ) : (
+        label
+      )}
     </label>
   </div>
 );

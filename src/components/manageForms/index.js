@@ -1,71 +1,73 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
-import SideNav from "./SideNav";
+import React, { Component } from 'react';
+import axios from 'axios';
+import SideNav from './SideNav';
+/* eslint-disable   react/destructuring-assignment */
 
 class ManageForms extends Component {
-  state = {
-    popupModal: false,
-    selectedModals: null,
-    heading: null,
-    modalDatas: null,
-    breadcrumb: {}
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      popupModal: false,
+      breadcrumb: {},
+    };
+  }
+
   componentDidMount() {
     const {
       match: {
         url,
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
-    const splitArr = url.split("/");
-    const isProjectForm = splitArr.includes("project");
-    const isSiteForm = splitArr.includes("site");
+    const splitArr = url.split('/');
+    const isProjectForm = splitArr.includes('project');
+    const isSiteForm = splitArr.includes('site');
     if (isProjectForm) {
       axios
         .get(`fv3/api/manage-forms/breadcrums/?project_id=${id}`)
         .then(res => {
           this.setState({
-            breadcrumb: res.data
+            breadcrumb: res.data,
           });
         })
-        .catch(err => {});
+        .catch(() => {});
     } else if (isSiteForm) {
       axios
         .get(`fv3/api/manage-forms/breadcrums/?site_id=${id}`)
         .then(res => {
           this.setState({
-            breadcrumb: res.data
+            breadcrumb: res.data,
           });
         })
-        .catch(err => {});
+        .catch(() => {});
     }
   }
 
-  OpenTabHandler = (e, url) => {
-    window.open(url, "_blank");
-  };
-
   closePopup = () => {
     this.setState({
-      popupModal: false
+      popupModal: false,
     });
   };
+
   commonPopupHandler = () => {
     this.setState({
-      popupModal: true
+      popupModal: true,
     });
   };
+
   render() {
     const { breadcrumb } = this.state;
     return (
-      <Fragment>
+      <>
         <nav aria-label="breadcrumb" role="navigation">
           {Object.keys(breadcrumb).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href={breadcrumb.name_url}>{breadcrumb.name}</a>
               </li>
-              <li className="breadcrumb-item">{breadcrumb.current_page}</li>
+              <li className="breadcrumb-item">
+                {breadcrumb.current_page}
+              </li>
             </ol>
           )}
           {/* <ol className="breadcrumb">
@@ -76,13 +78,13 @@ class ManageForms extends Component {
         </nav>
         <div className="row">
           <SideNav
-            OpenTabHandler={this.OpenTabHandler}
+            // OpenTabHandler={this.OpenTabHandler}
             commonPopupHandler={this.commonPopupHandler}
             closePopup={this.closePopup}
             popupModal={this.state.popupModal}
           />
         </div>
-      </Fragment>
+      </>
     );
   }
 }

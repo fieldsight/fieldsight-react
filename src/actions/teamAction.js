@@ -1,16 +1,16 @@
-import axios from "axios";
-import { GET_TEAMS, GET_TRANSLATION } from "./types";
+import axios from 'axios';
+import { GET_TEAMS, GET_TRANSLATION } from './types';
 
-export const getTeam = id => dispatch => {
+export const getTeam = () => dispatch => {
   axios
     .get(`/fv3/api/teams/`)
     .then(res => {
       dispatch({
         type: GET_TEAMS,
-        payload: res.data
+        payload: res.data,
       });
     })
-    .catch(err => {
+    .catch(() => {
       // dispatch({
       //   type: SITE_DASHBOARD_ERR
       // });
@@ -20,6 +20,6 @@ export const getTeam = id => dispatch => {
 export const getTranslate = value => dispatch => {
   dispatch({
     type: GET_TRANSLATION,
-    payload: value
+    payload: value,
   });
 };

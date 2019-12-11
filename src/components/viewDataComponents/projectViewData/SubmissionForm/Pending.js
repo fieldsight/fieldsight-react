@@ -1,103 +1,169 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import StatusTable from "../../responded/StatusTable";
-import WithPagination from "../../../../hoc/WithPagination";
-import axios from "axios";
-import { DotLoader } from "../../../myForm/Loader";
+import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import StatusTable from '../../responded/StatusTable';
+import WithPagination from '../../../../hoc/WithPagination';
+import { DotLoader } from '../../../myForm/Loader';
+/* eslint-disable react/destructuring-assignment */
+
+/* eslint-disable react/prop-types */
 
 class PendingTable extends Component {
-  state = {
-    pending_submissions: []
-  };
   componentDidMount() {
-    if (!!this.props.id) {
-      this.props.paginationHandler(1, null, {
-        type: "viewByStatus",
-        projectId: this.props.id,
-        status: "pending"
+    const { id, paginationHandler } = this.props;
+    if (id) {
+      paginationHandler(1, null, {
+        type: 'viewByStatus',
+        projectId: id,
+        status: 'pending',
       });
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
       this.props.handleBreadCrumb(this.props.breadcrumbs);
     }
   }
+
   render() {
     const {
-      props: { data, showViewData, dLoader, id }
+      props: {
+        data,
+        showViewData,
+        dLoader,
+        siteList,
+        id,
+        fromData,
+        toData,
+        totalCount,
+        pageNum,
+        paginationHandler,
+        renderPageNumbers,
+      },
+      state: { count, previous, next },
     } = this;
 
     return (
-      <React.Fragment>
+      <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>Pending Submissions</h5>
+          <h5>
+            <FormattedMessage
+              id="app.pending-submissions"
+              defaultMessage="Pending Submissions"
+            />
+          </h5>
           <div className="dash-btn">
-            <Link to={`/project-responses/${id}/general`}>
-              <button className="fieldsight-btn">View by Status</button>
-            </Link>
+            <button
+              type="button"
+              onClick={showViewData}
+              className="fieldsight-btn"
+            >
+              {data ? (
+                <FormattedMessage
+                  id="app.view-by-form"
+                  defaultMessage="View By Form"
+                />
+              ) : (
+                <FormattedMessage
+                  id="app.view-by-status"
+                  defaultMessage="View By Status"
+                />
+              )}
+            </button>
           </div>
         </div>
-        {dLoader == false ? (
+        {dLoader === false ? (
           <>
             <div className="card-body">
               <StatusTable
-                submission={this.props.siteList}
-                count={this.state.count}
-                next={this.state.next}
-                previous={this.state.previous}
-                projectId={this.props.id}
+                submission={siteList}
+                count={count}
+                next={next}
+                previous={previous}
+                projectId={id}
               />
             </div>
 
-            {this.props.siteList && this.props.siteList.length > 0 ? (
+            {siteList && siteList.length > 0 ? (
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing <span>{this.props.fromData}</span> to{" "}
+                      <FormattedMessage
+                        id="app.showing"
+                        defaultMessage="Showing"
+                      />
+                      <span>{fromData}</span>
+                      <FormattedMessage
+                        id="app.to"
+                        defaultMessage="to"
+                      />
                       <span>
-                        {" "}
-                        {this.props.toData > this.props.totalCount
-                          ? this.props.totalCount
-                          : this.props.toData}{" "}
-                      </span>{" "}
-                      of <span>{this.props.totalCount}</span> entries.
+                        {toData > totalCount ? totalCount : toData}
+                      </span>
+                      <FormattedMessage
+                        id="app.of"
+                        defaultMessage="of"
+                      />
+                      <span>{totalCount}</span>
+                      <FormattedMessage
+                        id="app.entries"
+                        defaultMessage="entries"
+                      />
+                      .
                     </p>
                   </div>
-                  {this.props.toData < this.props.totalCount ? (
+                  {toData < totalCount ? (
                     <div className="table-pagination">
                       <ul>
                         <li className="page-item">
                           <a
-                            onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum - 1,
-                                null,
-                                project_id
-                              )
-                            }
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum - 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'pending',
+                              });
+                            }}
+                            onClick={() => {
+                              paginationHandler(pageNum - 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'pending',
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-left" />
                           </a>
                         </li>
 
-                        {this.props.renderPageNumbers({
-                          type: "viewByStatus",
-                          projectId: this.props.id,
-                          status: "pending"
+                        {renderPageNumbers({
+                          type: 'viewByStatus',
+                          projectId: id,
+                          status: 'pending',
                         })}
 
                         <li className="page-item ">
                           <a
-                            onClick={e =>
-                              this.props.paginationHandler(
-                                this.props.pageNum + 1,
-                                null,
-                                project_id
-                              )
-                            }
+                            tabIndex="0"
+                            role="button"
+                            onKeyDown={() => {
+                              paginationHandler(pageNum + 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'pending',
+                              });
+                            }}
+                            onClick={() => {
+                              paginationHandler(pageNum + 1, null, {
+                                type: 'viewByStatus',
+                                projectId: id,
+                                status: 'pending',
+                              });
+                            }}
                           >
                             <i className="la la-long-arrow-right" />
                           </a>
@@ -111,7 +177,12 @@ class PendingTable extends Component {
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
-                    <p>Sorry No Data</p>
+                    <p>
+                      <FormattedMessage
+                        id="app.sorryNoData"
+                        defaultMessage="Sorry No Data"
+                      />
+                    </p>
                   </div>
                 </div>
               </div>
@@ -120,8 +191,9 @@ class PendingTable extends Component {
         ) : (
           <DotLoader />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
+
 export default WithPagination(PendingTable);

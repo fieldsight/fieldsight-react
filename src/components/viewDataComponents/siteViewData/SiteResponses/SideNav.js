@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
+import React, { PureComponent } from 'react';
+import { Switch, Route, Link, withRouter } from 'react-router-dom';
 
-import General from "./General";
-import Scheduled from "./Scheduled";
-import Staged from "./Staged";
+import General from './General';
+import Scheduled from './Scheduled';
+import Staged from './Staged';
 
-class SideNav extends Component {
+class SideNav extends PureComponent {
   render() {
     const {
       match: {
         url,
-        params: { id }
+        params: { id },
       },
       location: { pathname },
-      handleBreadCrumb
+      handleBreadCrumb,
     } = this.props;
 
     return (
@@ -22,7 +22,7 @@ class SideNav extends Component {
           <div className="left-sidebar new-sidebar sticky-top">
             <div
               className="card no-boxshadow"
-              style={{ minHeight: this.props.height }}
+              // style={{ minHeight: this.props.height }}
             >
               <div className="card-header main-card-header">
                 <h5>View Data</h5>
@@ -34,9 +34,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/general`}
                         className={
-                          pathname == `${url}/general`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname === `${url}/general`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         General forms
@@ -46,9 +46,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/scheduled`}
                         className={
-                          pathname == `${url}/scheduled`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname === `${url}/scheduled`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         Scheduled forms
@@ -58,9 +58,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/stage`}
                         className={
-                          pathname == `${url}/stage`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname === `${url}/stage`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         Staged forms
@@ -79,7 +79,7 @@ class SideNav extends Component {
                 <Switch>
                   <Route
                     exact
-                    path={`${this.props.match.url}/general`}
+                    path={`${url}/general`}
                     render={props => (
                       <General
                         id={id}
@@ -91,7 +91,7 @@ class SideNav extends Component {
                   />
 
                   <Route
-                    path={`${this.props.match.url}/scheduled`}
+                    path={`${url}/scheduled`}
                     render={props => (
                       <Scheduled
                         id={id}
@@ -102,7 +102,7 @@ class SideNav extends Component {
                     )}
                   />
                   <Route
-                    path={`${this.props.match.url}/stage`}
+                    path={`${url}/stage`}
                     render={props => (
                       <Staged
                         id={id}
