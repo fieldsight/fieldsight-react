@@ -62,7 +62,7 @@ export default class StandardReportTable extends Component {
                           </span>
                           <span>
                             <a
-                              onClick={() => this.props.editAction(each)}
+                              onClick={() => this.props.reqSync(each.report_id)}
                               className="pending td-edit-btn td-btn"
                             >
                               <OverlayTrigger

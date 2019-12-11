@@ -4,7 +4,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default class StageReportTable extends Component {
   render() {
-    const { loader, stages, formatDate, canSyncOrEdit } = this.props;
+    const { loader, stages, formatDate, canSyncOrEdit, reqSync } = this.props;
 
     return (
       <Table responsive="xl" className="table  table-bordered  dataTable ">
@@ -74,9 +74,7 @@ export default class StageReportTable extends Component {
                                     </span>
                                     <span>
                                       <a
-                                        onClick={() =>
-                                          this.props.editAction(sub)
-                                        }
+                                        onClick={() => reqSync(sub.report_id)}
                                         className="pending td-edit-btn td-btn"
                                       >
                                         <OverlayTrigger

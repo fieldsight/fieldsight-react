@@ -7,6 +7,7 @@ import SyncScheduleForm from "./form";
 import ReportTable from "./reportTable";
 import StandardReportTable from "./standardReportTable";
 import StageReportTable from "./stageReportTable";
+import { successToast, errorToast } from "../../utils/toastHandler";
 
 const formatDate = date => {
   const dateIdx = date.getDate();
@@ -138,6 +139,21 @@ export default class SyncSchedule extends Component {
     });
   };
 
+  handleSyncReq = id => {
+    Axios.post(`/fv3/api/report-sync/${id}/`)
+      .then(res => {
+        if (res.data) {
+          // console.log("res", res.data);
+
+          successToast("Report", "synced");
+        }
+      })
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.detail);
+      });
+  };
+
   render() {
     const {
       state: {
@@ -188,6 +204,7 @@ export default class SyncSchedule extends Component {
                     getReportName={getReportName}
                     formatDate={formatDate}
                     canSyncOrEdit={canSyncOrEdit}
+                    reqSync={this.handleSyncReq}
                   />
                 </Fragment>
               ))}
@@ -201,6 +218,7 @@ export default class SyncSchedule extends Component {
                     scheduleType={getReportName(general[0])}
                     formatDate={formatDate}
                     canSyncOrEdit={canSyncOrEdit}
+                    reqSync={this.handleSyncReq}
                   />
                 </Fragment>
               ))}
@@ -214,6 +232,7 @@ export default class SyncSchedule extends Component {
                     scheduleType={getReportName(schedule[0])}
                     canSyncOrEdit={canSyncOrEdit}
                     formatDate={formatDate}
+                    reqSync={this.handleSyncReq}
                   />
                 </Fragment>
               ))}
@@ -227,6 +246,7 @@ export default class SyncSchedule extends Component {
                     scheduleType={getReportName(survey[0])}
                     canSyncOrEdit={canSyncOrEdit}
                     formatDate={formatDate}
+                    reqSync={this.handleSyncReq}
                   />
                 </Fragment>
               ))}
@@ -245,6 +265,7 @@ export default class SyncSchedule extends Component {
                       scheduleType={getReportName(stage[0])}
                       canSyncOrEdit={canSyncOrEdit}
                       formatDate={formatDate}
+                      reqSync={this.handleSyncReq}
                     />
                   </Fragment>
                 );
