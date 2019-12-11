@@ -43,12 +43,6 @@ class CreateProfile extends Component {
   }
 
   componentDidMount() {
-    const {
-      match: {
-        params: { id },
-      },
-    } = this.props;
-
     axios.get(`/fv3/api/timezones/`).then(res => {
       if (res.data) {
         this.setState(state => {
@@ -75,28 +69,50 @@ class CreateProfile extends Component {
         params: { id },
       },
     } = this.props;
+    const {
+      first_name,
+      last_name,
+      address,
+      phone,
+      skype,
+      primary_number,
+      secondary_number,
+      office_number,
+      viber,
+      whatsapp,
+      wechat,
+      line,
+      tango,
+      hike,
+      qq,
+      google_talk,
+      twitter,
+      selectTimeZone,
+      selectedGender,
+      cropResult,
+    } = this.state;
 
     const createProfile = {};
-    createProfile.first_name = this.state.first_name;
-    createProfile.last_name = this.state.last_name;
-    createProfile.address = this.state.address;
-    createProfile.phone = this.state.phone;
-    createProfile.skype = this.state.skype;
-    createProfile.primary_number = this.state.primary_number;
-    createProfile.secondary_number = this.state.secondary_number;
-    createProfile.office_number = this.state.office_number;
-    createProfile.viber = this.state.viber;
-    createProfile.whatsapp = this.state.whatsapp;
-    createProfile.wechat = this.state.wechat;
-    createProfile.line = this.state.line;
-    createProfile.tango = this.state.tango;
-    createProfile.hike = this.state.hike;
-    createProfile.qq = this.state.qq;
-    createProfile.google_talk = this.state.google_talk;
-    createProfile.twitter = this.state.twitter;
-    createProfile.selectTimeZone = this.state.selectTimeZone;
-    createProfile.gender = this.state.selectedGender;
-    createProfile.profile_picture = this.state.cropResult;
+    createProfile.first_name = first_name;
+    createProfile.last_name = last_name;
+    createProfile.address = address;
+    createProfile.phone = phone;
+    createProfile.skype = skype;
+    createProfile.primary_number = primary_number;
+    createProfile.secondary_number = secondary_number;
+    createProfile.office_number = office_number;
+    createProfile.viber = viber;
+    createProfile.whatsapp = whatsapp;
+    createProfile.wechat = wechat;
+    createProfile.line = line;
+    createProfile.tango = tango;
+    createProfile.hike = hike;
+    createProfile.qq = qq;
+    createProfile.google_talk = google_talk;
+    createProfile.twitter = twitter;
+    createProfile.selectTimeZone = selectTimeZone;
+    createProfile.gender = selectedGender;
+    createProfile.profile_picture = cropResult;
 
     axios
       .post(`/fv3/api/create-profile/${id}/`, createProfile)
@@ -212,6 +228,7 @@ class CreateProfile extends Component {
         selectedGender,
         cropResult,
         showCropper,
+        src,
       },
       onChangeHandler,
       onSubmitHandler,
@@ -456,10 +473,7 @@ class CreateProfile extends Component {
                           return (
                             <section>
                               <div className="upload-form">
-                                <img
-                                  src={this.state.cropResult}
-                                  alt=""
-                                />
+                                <img src={cropResult} alt="" />
                               </div>
 
                               <div {...getRootProps()}>
@@ -533,7 +547,7 @@ class CreateProfile extends Component {
                             aspectRatio={1 / 1}
                             preview=".img-preview"
                             guides={false}
-                            src={this.state.src}
+                            src={src}
                             ref={cropper => {
                               this.cropper = cropper;
                             }}

@@ -37,7 +37,7 @@ class DashboardCounter extends Component {
         {submissionData &&
           submissionData.map(submission => (
             <Link
-              to={`/site-responses/${siteid}/${submission[0]}`}
+              to={`/site-submission-responses/${siteid}/${submission[0]}`}
               className="col-xl-3 col-md-6"
               key={uuid()}
             >

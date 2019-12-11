@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
@@ -29,8 +30,6 @@ class PendingTable extends Component {
   render() {
     const {
       props: {
-        data,
-        showViewData,
         dLoader,
         siteList,
         id,
@@ -41,7 +40,6 @@ class PendingTable extends Component {
         paginationHandler,
         renderPageNumbers,
       },
-      state: { count, previous, next },
     } = this;
 
     return (
@@ -54,23 +52,14 @@ class PendingTable extends Component {
             />
           </h5>
           <div className="dash-btn">
-            <button
-              type="button"
-              onClick={showViewData}
-              className="fieldsight-btn"
-            >
-              {data ? (
-                <FormattedMessage
-                  id="app.view-by-form"
-                  defaultMessage="View By Form"
-                />
-              ) : (
+            <Link to={`/project-responses/${id}/general`}>
+              <button type="button" className="fieldsight-btn">
                 <FormattedMessage
                   id="app.view-by-status"
                   defaultMessage="View By Status"
                 />
-              )}
-            </button>
+              </button>
+            </Link>
           </div>
         </div>
         {dLoader === false ? (
@@ -78,9 +67,9 @@ class PendingTable extends Component {
             <div className="card-body">
               <StatusTable
                 submission={siteList}
-                count={count}
-                next={next}
-                previous={previous}
+                // count={count}
+                // next={next}
+                // previous={previous}
                 projectId={id}
               />
             </div>

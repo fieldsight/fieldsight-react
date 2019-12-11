@@ -30,10 +30,8 @@ class RejectedTable extends Component {
   render() {
     const {
       props: {
-        data,
-        showViewData,
         dLoader,
-        url,
+
         siteList,
         fromData,
         toData,
@@ -55,12 +53,8 @@ class RejectedTable extends Component {
             />
           </h5>
           <div className="dash-btn">
-            <Link to={url}>
-              <button
-                type="button"
-                onClick={showViewData}
-                className="fieldsight-btn"
-              >
+            <Link to={`/project-responses/${id}/general`}>
+              <button type="button" className="fieldsight-btn">
                 <FormattedMessage
                   id="app.view-by-status"
                   defaultMessage="View By Status"

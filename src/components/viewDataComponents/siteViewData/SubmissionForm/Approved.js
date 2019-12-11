@@ -31,8 +31,7 @@ class ApprovedTable extends Component {
     const {
       props: {
         id,
-        data,
-        showViewData,
+
         dLoader,
         siteList,
         fromData,

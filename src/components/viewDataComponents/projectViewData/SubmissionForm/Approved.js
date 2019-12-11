@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
@@ -29,8 +30,6 @@ class ApprovedTable extends Component {
   render() {
     const {
       props: {
-        data,
-        showViewData,
         dLoader,
         id,
         siteList,
@@ -53,16 +52,14 @@ class ApprovedTable extends Component {
             />
           </h5>
           <div className="dash-btn">
-            <button
-              type="button"
-              onClick={showViewData}
-              className="fieldsight-btn"
-            >
-              <FormattedMessage
-                id="app.view-by-status"
-                defaultMessage="View By Status"
-              />
-            </button>
+            <Link to={`/project-responses/${id}/general`}>
+              <button type="button" className="fieldsight-btn">
+                <FormattedMessage
+                  id="app.view-by-status"
+                  defaultMessage="View By Status"
+                />
+              </button>
+            </Link>
           </div>
         </div>
         {dLoader === false ? (

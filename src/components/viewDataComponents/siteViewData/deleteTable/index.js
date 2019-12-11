@@ -1,30 +1,16 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import SiteDeleteTable from '../../responded/DeleteTable';
 
-class DeleteTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      deletedForms: [],
-    };
-  }
-
-  static getDerivedStateFromProps(props) {
-    return {
-      deletedForms: props.deletedForms,
-    };
-  }
-
+/* eslint-disable camelcase */
+class DeleteTable extends PureComponent {
   render() {
-    const {
-      state: { deletedForms },
-      props: { id },
-    } = this;
+    const { id, deleted_forms } = this.props;
+
     return (
       <>
         <SiteDeleteTable
-          deleted_forms={deletedForms}
+          deleted_forms={deleted_forms}
           id={id}
           table="site"
         />

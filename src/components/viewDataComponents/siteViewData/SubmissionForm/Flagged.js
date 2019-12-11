@@ -28,8 +28,6 @@ class FlaggedTable extends Component {
   render() {
     const {
       props: {
-        data,
-        showViewData,
         dLoader,
         siteList,
         fromData,
@@ -52,11 +50,7 @@ class FlaggedTable extends Component {
           </h5>
           <div className="dash-btn">
             <Link to={`/site-responses/${id}/general`}>
-              <button
-                type="button"
-                onClick={showViewData}
-                className="fieldsight-btn"
-              >
+              <button type="button" className="fieldsight-btn">
                 <FormattedMessage
                   id="app.view-by-status"
                   defaultMessage="View By Status"

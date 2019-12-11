@@ -36,15 +36,8 @@ export default class ResetPassword extends Component {
       formData.append('resetPsw', resetPsw);
       formData.append('confirmResetPsw', confirmResetPsw);
       Axios.post(``, formData)
-        .then(res => {
-          // if (res.data) {
-          //   successToast(res.data.message);
-          // }
-        })
-        .catch(err => {
-          // const errors = err.response;
-          // errorToast(errors.data.old_password[0]);
-        });
+        .then()
+        .catch();
     }
   };
 

@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
+import React, { PureComponent } from 'react';
+import { Switch, Route, Link, withRouter } from 'react-router-dom';
 
-import ApprovedTable from "./Approved";
-import PendingTable from "./Pending";
-import RejectedTable from "./Rejected";
-import FlaggedTable from "./Flagged";
+import ApprovedTable from './Approved';
+import PendingTable from './Pending';
+import RejectedTable from './Rejected';
+import FlaggedTable from './Flagged';
 
-class SideNav extends Component {
+class SideNav extends PureComponent {
   render() {
     const {
       match: {
         url,
-        params: { id }
+        params: { id },
       },
       location: { pathname },
-      handleBreadCrumb
+      handleBreadCrumb,
     } = this.props;
 
     return (
@@ -23,7 +23,7 @@ class SideNav extends Component {
           <div className="left-sidebar new-sidebar sticky-top">
             <div
               className="card no-boxshadow"
-              style={{ minHeight: this.props.height }}
+              // style={{ minHeight: this.props.height }}
             >
               <div className="card-header main-card-header">
                 <h5>View Data</h5>
@@ -35,9 +35,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/rejected`}
                         className={
-                          pathname == `${url}/rejected`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname === `${url}/rejected`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         Rejected Submissions
@@ -47,9 +47,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/flagged`}
                         className={
-                          pathname == `${url}/flagged`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname === `${url}/flagged`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         Flagged Submissions
@@ -59,9 +59,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/pending`}
                         className={
-                          pathname == `${url}/pending`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname === `${url}/pending`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         Pending Submissions
@@ -71,9 +71,9 @@ class SideNav extends Component {
                       <Link
                         to={`${url}/approved`}
                         className={
-                          pathname == `${url}/approved`
-                            ? "nav-link active"
-                            : "nav-link"
+                          pathname === `${url}/approved`
+                            ? 'nav-link active'
+                            : 'nav-link'
                         }
                       >
                         Approved Submissions
@@ -91,7 +91,7 @@ class SideNav extends Component {
               <div className="tab-content">
                 <Switch>
                   <Route
-                    path={`${this.props.match.url}/approved`}
+                    path={`${url}/approved`}
                     render={props => (
                       <ApprovedTable
                         id={id}
@@ -103,7 +103,7 @@ class SideNav extends Component {
                   />
 
                   <Route
-                    path={`${this.props.match.url}/flagged`}
+                    path={`${url}/flagged`}
                     render={props => (
                       <FlaggedTable
                         id={id}
@@ -114,7 +114,7 @@ class SideNav extends Component {
                     )}
                   />
                   <Route
-                    path={`${this.props.match.url}/pending`}
+                    path={`${url}/pending`}
                     render={props => (
                       <PendingTable
                         id={id}
@@ -126,7 +126,7 @@ class SideNav extends Component {
                   />
 
                   <Route
-                    path={`${this.props.match.url}/rejected`}
+                    path={`${url}/rejected`}
                     render={props => (
                       <RejectedTable
                         id={id}

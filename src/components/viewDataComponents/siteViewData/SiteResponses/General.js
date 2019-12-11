@@ -126,11 +126,13 @@ class ManageGeneralForm extends Component {
 
             <div className="card-body">
               {!hide && (
-                <DeleteTable
-                  deleted_forms={deleted_forms}
-                  id={id}
-                  loader={generals_loading}
-                />
+                <>
+                  <DeleteTable
+                    deleted_forms={deleted_forms}
+                    id={id}
+                    loader={generals_loading}
+                  />
+                </>
               )}
             </div>
           </div>

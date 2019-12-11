@@ -75,7 +75,7 @@ class ManageScheduledForm extends Component {
             <DotLoader />
           )}
         </div>
-        {deleted_forms.length > 0 && (
+        {deleted_forms && deleted_forms.length > 0 && (
           <div className="card no-boxshadow">
             <div className="card-header main-card-header sub-card-header">
               <h5>

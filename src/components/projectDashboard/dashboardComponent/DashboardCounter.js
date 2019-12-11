@@ -44,25 +44,25 @@ class DashboardCounter extends React.PureComponent {
           <ShowCount
             name="pending"
             count={projectActivity.pending_submissions}
-            link={`/project-responses/${id}/pending`}
+            link={`/project-submission-responses/${id}/pending`}
             id="app.pending"
           />
           <ShowCount
             name="approved"
             count={projectActivity.approved_submissions}
-            link={`/project-responses/${id}/approved`}
+            link={`/project-submission-responses/${id}/approved`}
             id="app.approved"
           />
           <ShowCount
             name="flagged"
             count={projectActivity.flagged_submissions}
-            link={`/project-responses/${id}/flagged`}
+            link={`/project-submission-responses/${id}/flagged`}
             id="app.flagged"
           />
           <ShowCount
             name="rejected"
             count={projectActivity.rejected_submissions}
-            link={`/project-responses/${id}/rejected`}
+            link={`/project-submission-responses/${id}/rejected`}
             id="app.pending"
           />
         </div>
