@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import Axios from "axios";
+import { toast } from "react-toastify";
 
 import { DotLoader } from "../myForm/Loader";
 import Modal from "../common/Modal";
@@ -154,7 +155,12 @@ export default class SyncSchedule extends Component {
     Axios.post(`/fv3/api/report-sync/${id}/`)
       .then(res => {
         if (res.data) {
-          successToast(res.data.detail);
+          toast.success(res.data.detail, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true
+          });
         }
       })
       .catch(err => {
