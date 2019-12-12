@@ -154,9 +154,7 @@ export default class SyncSchedule extends Component {
     Axios.post(`/fv3/api/report-sync/${id}/`)
       .then(res => {
         if (res.data) {
-          // console.log("res", res.data);
-
-          successToast("Report", "synced");
+          successToast(res.data.detail);
         }
       })
       .catch(err => {

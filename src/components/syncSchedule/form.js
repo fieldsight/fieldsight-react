@@ -44,8 +44,9 @@ export default class Form extends Component {
 
   handleScheduleTypeChange = e => {
     const { value } = e.target;
+
     this.setState(() => {
-      if (value > 1)
+      if (value === "0" || value === "1")
         return {
           scheduleType: value,
           selectedDayOnWeek: null,
@@ -113,7 +114,7 @@ export default class Form extends Component {
         selectedReport
         // selectedType
       },
-      props: { getReportName, getScheduleType }
+      props: { getReportName }
     } = this;
     let dayOptions = [];
     for (var i = 1; i <= 31; i += 1) {
@@ -121,10 +122,10 @@ export default class Form extends Component {
       else dayOptions.push({ id: 0, name: "Last" });
     }
     const scheduleOptions = [
-      { id: 0, name: "Manual" },
-      { id: 1, name: "Daily" },
-      { id: 2, name: "Weekly" },
-      { id: 3, name: "Monthly" }
+      { id: "0", name: "Manual" },
+      { id: "1", name: "Daily" },
+      { id: "2", name: "Weekly" },
+      { id: "3", name: "Monthly" }
     ];
 
     return (
