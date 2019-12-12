@@ -10,7 +10,6 @@ const RadioElement = ({
 }) => (
   <div className={`radiobox ${className}`}>
     <label>
-      {" "}
       <input
         type="radio"
         name={name}

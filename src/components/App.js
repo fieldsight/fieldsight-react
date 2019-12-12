@@ -52,7 +52,10 @@ import Mapparent from "./team/Mapparent";
 import SyncSchedule from "./syncSchedule";
 import messages_en from "../translations/en.json";
 import messages_ne from "../translations/ne.json";
-import SelectElement from "../components/common/SelectElement";
+
+import ResetPassword from "./ResetPassword";
+import UpdateProfile from "./updateProject";
+import CreateProfile from "./ProfileAdd";
 
 const messages = {
   ne: messages_ne,
@@ -253,6 +256,20 @@ class App extends Component {
                     <Route
                       path="/sync-schedule/:projectId"
                       render={props => <SyncSchedule {...props} />}
+                    />
+                    <Route
+                      path="/reset-password"
+                      render={props => <ResetPassword {...props} />}
+                    />
+
+                    <Route
+                      path="/update-profile/:id"
+                      render={props => <UpdateProfile {...props} />}
+                    />
+
+                    <Route
+                      path="/create-profile/:id"
+                      render={props => <CreateProfile {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
