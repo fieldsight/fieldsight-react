@@ -8,9 +8,10 @@ import SyncScheduleForm from "./form";
 import ReportTable from "./reportTable";
 import StandardReportTable from "./standardReportTable";
 import StageReportTable from "./stageReportTable";
-import { successToast, errorToast } from "../../utils/toastHandler";
+import { errorToast } from "../../utils/toastHandler";
 
-const formatDate = date => {
+const formatDate = e => {
+  const date = new Date(e);
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
