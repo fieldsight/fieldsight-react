@@ -4,13 +4,13 @@ import SelectElement from "../common/SelectElement";
 import { errorToast, successToast } from "../../utils/toastHandler";
 
 const weekOptions = [
-  { id: 1, name: "Mon" },
-  { id: 2, name: "Tue" },
-  { id: 3, name: "Wed" },
-  { id: 4, name: "Thurs" },
-  { id: 5, name: "Fri" },
-  { id: 6, name: "Sat" },
-  { id: 7, name: "Sun" }
+  { id: 1, name: "Monday" },
+  { id: 2, name: "Tueday" },
+  { id: 3, name: "Wednesday" },
+  { id: 4, name: "Thursday" },
+  { id: 5, name: "Friday" },
+  { id: 6, name: "Saturday" },
+  { id: 7, name: "Sunday" }
 ];
 
 export default class Form extends Component {
@@ -25,16 +25,16 @@ export default class Form extends Component {
         : "",
       selectedType: props.data.report_type && props.data.report_type,
       reportId: props.data.report_id && props.data.report_id,
-      scheduleType: props.data.scheduleType
-        ? props.getScheduleType(props.data.scheduleType)
+      scheduleType: props.data.schedule_type
+        ? props.getScheduleType(props.data.schedule_type)
         : 0,
       selectedDayOnWeek:
-        props.data.scheduleType &&
-        props.data.scheduleType === "Weekly" &&
+        props.data.schedule_type &&
+        props.data.schedule_type === "Weekly" &&
         props.data.day,
       selectedDayOnMonth:
-        props.data.scheduleType &&
-        props.data.scheduleType === "Monthly" &&
+        props.data.schedule_type &&
+        props.data.schedule_type === "Monthly" &&
         props.data.day,
       isFormSelected: false,
       formList: [],
@@ -113,7 +113,7 @@ export default class Form extends Component {
         selectedReport
         // selectedType
       },
-      props: { getReportName }
+      props: { getReportName, getScheduleType }
     } = this;
     let dayOptions = [];
     for (var i = 1; i <= 31; i += 1) {
@@ -121,10 +121,10 @@ export default class Form extends Component {
       else dayOptions.push({ id: 0, name: "Last" });
     }
     const scheduleOptions = [
-      { id: 0, name: "manual" },
-      { id: 1, name: "daily" },
-      { id: 2, name: "weekly" },
-      { id: 3, name: "monthly" }
+      { id: 0, name: "Manual" },
+      { id: 1, name: "Daily" },
+      { id: 2, name: "Weekly" },
+      { id: 3, name: "Monthly" }
     ];
 
     return (
@@ -152,19 +152,19 @@ export default class Form extends Component {
                 value={selectedDayOnWeek}
                 changeHandler={this.handleSelectedDayChange}
               />
-              <span>Day</span>
+              {/* <span>Day</span> */}
             </div>
           )}
           {scheduleType === "3" && (
             <div className="every-week flex">
-              <span className="ml-0">every</span>
+              <span className="ml-0">sync on day</span>
               <SelectElement
                 classname="border-0"
                 options={dayOptions}
                 value={selectedDayOnMonth}
                 changeHandler={this.handleSelectedMonthDayChange}
               />
-              <span>Date of Month</span>
+              {/* <span>of Month</span> */}
             </div>
           )}
           <div className="form-group pull-right no-margin">

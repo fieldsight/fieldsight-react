@@ -5,7 +5,14 @@ import Sheet from "../../static/images/sheets.png";
 
 export default class StageReportTable extends Component {
   render() {
-    const { loader, stages, formatDate, canSyncOrEdit, reqSync } = this.props;
+    const {
+      loader,
+      stages,
+      formatDate,
+      canSyncOrEdit,
+      reqSync,
+      getDayOnWeeklySchedule
+    } = this.props;
 
     return (
       <Table responsive="xl" className="table  table-bordered  dataTable ">
@@ -49,13 +56,23 @@ export default class StageReportTable extends Component {
                                 </label>
                                 <p>{sub.description && sub.description}</p>
                               </td>
-                              <td>{sub.schedule_type}</td>
+                              <td>
+                                {sub.schedule_type === "Weekly"
+                                  ? `${
+                                      sub.schedule_type
+                                    } on ${getDayOnWeeklySchedule(sub.day)}`
+                                  : sub.schedule_type === "Monthly"
+                                  ? ` ${sub.schedule_type} on day ${sub.day}`
+                                  : sub.schedule_type}
+                              </td>
                               <td>
                                 {sub.spreadsheet_id ? (
-                                  <a href={sub.spreadsheet_id}>
+                                  <a href={sub.spreadsheet_id} target="_blank">
                                     <OverlayTrigger
                                       placement="top"
-                                      overlay={<Tooltip>Google Sheet</Tooltip>}
+                                      overlay={
+                                        <Tooltip>View Google Sheet</Tooltip>
+                                      }
                                     >
                                       <img
                                         src={Sheet}
@@ -64,12 +81,13 @@ export default class StageReportTable extends Component {
                                     </OverlayTrigger>
                                   </a>
                                 ) : (
-                                  "Not Synced Yet"
+                                  "No sheet created"
                                 )}
                               </td>
                               <td>
-                                {sub.last_synced_date &&
-                                  formatDate(sub.last_synced_date)}
+                                {sub.last_synced_date
+                                  ? formatDate(sub.last_synced_date)
+                                  : "Not Synced Yet"}
                               </td>
                               <td>
                                 {canSyncOrEdit && (

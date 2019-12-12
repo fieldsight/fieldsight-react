@@ -10,7 +10,8 @@ export default class ReportTable extends Component {
       data,
       scheduleType,
       formatDate,
-      canSyncOrEdit
+      canSyncOrEdit,
+      getDayOnWeeklySchedule
     } = this.props;
     return (
       <>
@@ -44,24 +45,33 @@ export default class ReportTable extends Component {
                       </label>
                       <p>{each.description && each.description}</p>
                     </td>
-                    <td>{each.schedule_type}</td>
+                    <td>
+                      {each.schedule_type === "Weekly"
+                        ? `${each.schedule_type} on ${getDayOnWeeklySchedule(
+                            each.day
+                          )}`
+                        : each.schedule_type === "Monthly"
+                        ? ` ${each.schedule_type} on day ${each.day}`
+                        : each.schedule_type}
+                    </td>
                     <td>
                       {each.spreadsheet_id ? (
-                        <a href={each.spreadsheet_id}>
+                        <a href={each.spreadsheet_id} target="_blank">
                           <OverlayTrigger
                             placement="top"
-                            overlay={<Tooltip>Google Sheet</Tooltip>}
+                            overlay={<Tooltip>View Google Sheet</Tooltip>}
                           >
                             <img src={Sheet} style={{ height: "15px" }} />
                           </OverlayTrigger>
                         </a>
                       ) : (
-                        "Not Synced Yet"
+                        "No sheet created"
                       )}
                     </td>
                     <td>
-                      {each.last_synced_date &&
-                        formatDate(each.last_synced_date)}
+                      {each.last_synced_date
+                        ? formatDate(each.last_synced_date)
+                        : "Not synced yet"}
                     </td>
                     <td>
                       {canSyncOrEdit && (

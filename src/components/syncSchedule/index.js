@@ -18,17 +18,28 @@ const formatDate = date => {
 
 const getScheduleType = schedule => {
   if (schedule === "Manual") {
-    return 0;
+    return "0";
   }
   if (schedule === "Daily") {
-    return 1;
+    return "1";
   }
   if (schedule === "Weekly") {
-    return 2;
+    return "2";
   }
   if (schedule === "Monthly") {
-    return 3;
+    return "3";
   }
+  return null;
+};
+
+const getDayOnWeeklySchedule = day => {
+  if (day === 1) return "Mondays";
+  if (day === 2) return "Tuesdays";
+  if (day === 3) return "Wednesdays";
+  if (day === 4) return "Thursdays";
+  if (day === 5) return "Fridays";
+  if (day === 6) return "Saturdays";
+  if (day === 7) return "Sundays";
   return null;
 };
 
@@ -179,15 +190,15 @@ export default class SyncSchedule extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a>Setting</a>
+              <a>Reports</a>
             </li>
           </ol>
         </nav>
         <div className="card">
           <div className="card-header main-card-header">
             <h5>
-              <i className="la la-building" />
-              Project Schedule List
+              {/* <i className="la la-building" /> */}
+              Google Sheet Sync Management
             </h5>
           </div>
 
@@ -205,6 +216,7 @@ export default class SyncSchedule extends Component {
                     formatDate={formatDate}
                     canSyncOrEdit={canSyncOrEdit}
                     reqSync={this.handleSyncReq}
+                    getDayOnWeeklySchedule={getDayOnWeeklySchedule}
                   />
                 </Fragment>
               ))}
@@ -219,6 +231,7 @@ export default class SyncSchedule extends Component {
                     formatDate={formatDate}
                     canSyncOrEdit={canSyncOrEdit}
                     reqSync={this.handleSyncReq}
+                    getDayOnWeeklySchedule={getDayOnWeeklySchedule}
                   />
                 </Fragment>
               ))}
@@ -233,6 +246,7 @@ export default class SyncSchedule extends Component {
                     canSyncOrEdit={canSyncOrEdit}
                     formatDate={formatDate}
                     reqSync={this.handleSyncReq}
+                    getDayOnWeeklySchedule={getDayOnWeeklySchedule}
                   />
                 </Fragment>
               ))}
@@ -247,6 +261,7 @@ export default class SyncSchedule extends Component {
                     canSyncOrEdit={canSyncOrEdit}
                     formatDate={formatDate}
                     reqSync={this.handleSyncReq}
+                    getDayOnWeeklySchedule={getDayOnWeeklySchedule}
                   />
                 </Fragment>
               ))}
@@ -266,13 +281,14 @@ export default class SyncSchedule extends Component {
                       canSyncOrEdit={canSyncOrEdit}
                       formatDate={formatDate}
                       reqSync={this.handleSyncReq}
+                      getDayOnWeeklySchedule={getDayOnWeeklySchedule}
                     />
                   </Fragment>
                 );
               })}
             {showForm && (
               <Modal
-                title="Edit Project Schedule Settings"
+                title="Edit Schedule"
                 toggleModal={this.handleToggleFlag}
                 classname="md-body"
               >
