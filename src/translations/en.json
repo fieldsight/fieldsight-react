@@ -42,9 +42,9 @@
   "app.hike": "Hike",
   "app.tango": "Tango",
   "app.line": "Line",
-  "app.qq": "",
-  "app.google-talk": "",
-  "app.twitter": "",
+  "app.qq": "QQ",
+  "app.google-talk": "Google Talk",
+  "app.twitter": "Twitter",
   "app.profile-picture": "Profile Picture",
   "app.timeZone": "TimeZone",
   "app.save": "Save",
@@ -297,7 +297,7 @@
   "app.teamSettings": "Team Settings",
   "app.settings": "Settings",
   "app.teamInformation": "Team Information",
-  "app.mapLayers": "Map Layers",
+  "app.mapLayers": "Map Layer",
   "app.accountInformation": "Account Information",
   "app.projectSettings": "Project Settings",
   "app.projectInformation": "Project Information",
@@ -412,5 +412,8 @@
   "app.to": "to",
   "app.of": "of",
   "app.entries": "entries",
-  "app.typeofSchedule": "Type of schedule"
+  "app.typeofSchedule": "Type of schedule",
+  "app.male": "Male",
+  "app.female": "Female",
+  "app.createProfile": "Create Profile"
 }

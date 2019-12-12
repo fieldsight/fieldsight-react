@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
-
+import { FormattedMessage } from 'react-intl';
 import ApprovedTable from './Approved';
 import PendingTable from './Pending';
 import RejectedTable from './Rejected';
@@ -26,7 +26,12 @@ class SideNav extends PureComponent {
               // style={{ minHeight: this.props.height }}
             >
               <div className="card-header main-card-header">
-                <h5>View Data</h5>
+                <h5>
+                  <FormattedMessage
+                    id="app.view-data"
+                    defaultMessage="View Data"
+                  />
+                </h5>
               </div>
               <div className="card-body">
                 <div className="manage_group">
@@ -40,7 +45,10 @@ class SideNav extends PureComponent {
                             : 'nav-link'
                         }
                       >
-                        Rejected Submissions
+                        <FormattedMessage
+                          id="app.rejected-submissions"
+                          defaultMessage="Rejected Submissions"
+                        />
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -52,7 +60,10 @@ class SideNav extends PureComponent {
                             : 'nav-link'
                         }
                       >
-                        Flagged Submissions
+                        <FormattedMessage
+                          id="app.flagged-submissions"
+                          defaultMessage="Flagged Submissions"
+                        />
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -64,7 +75,10 @@ class SideNav extends PureComponent {
                             : 'nav-link'
                         }
                       >
-                        Pending Submissions
+                        <FormattedMessage
+                          id="app.pending-submissions"
+                          defaultMessage="Pending Submissions"
+                        />
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -76,7 +90,10 @@ class SideNav extends PureComponent {
                             : 'nav-link'
                         }
                       >
-                        Approved Submissions
+                        <FormattedMessage
+                          id="app.approved-submissions"
+                          defaultMessage="Approved Submissions"
+                        />
                       </Link>
                     </li>
                   </ul>

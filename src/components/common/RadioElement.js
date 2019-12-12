@@ -22,7 +22,7 @@ const RadioElement = ({
         value={value}
       />
       <i className="helper" />
-      {translation === true ? (
+      {translation ? (
         <FormattedMessage id={label} defaultMessage={label} />
       ) : (
         label

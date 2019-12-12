@@ -14,8 +14,8 @@ const InputElement = ({
   changeHandler,
   removeBtn,
   removeHandler,
-  classname,
   translation,
+  classname,
   ...rest
 }) => (
   <div className={`form-group ${classname}`}>

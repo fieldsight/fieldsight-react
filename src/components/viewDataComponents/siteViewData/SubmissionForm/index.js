@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import SideNav from './SideNav';
 
 export default class SubmissionForm extends Component {

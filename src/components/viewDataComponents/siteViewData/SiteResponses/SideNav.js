@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
-
+import { FormattedMessage } from 'react-intl';
 import General from './General';
 import Scheduled from './Scheduled';
 import Staged from './Staged';
@@ -25,7 +25,13 @@ class SideNav extends PureComponent {
               // style={{ minHeight: this.props.height }}
             >
               <div className="card-header main-card-header">
-                <h5>View Data</h5>
+                <h5>
+                  {' '}
+                  <FormattedMessage
+                    id="app.view-data"
+                    defaultMessage="View Data"
+                  />
+                </h5>
               </div>
               <div className="card-body">
                 <div className="manage_group">
@@ -39,7 +45,10 @@ class SideNav extends PureComponent {
                             : 'nav-link'
                         }
                       >
-                        General forms
+                        <FormattedMessage
+                          id="app.general-forms"
+                          defaultMessage="General forms"
+                        />
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -51,7 +60,10 @@ class SideNav extends PureComponent {
                             : 'nav-link'
                         }
                       >
-                        Scheduled forms
+                        <FormattedMessage
+                          id="app.scheduled-form"
+                          defaultMessage="Scheduled forms"
+                        />
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -63,7 +75,10 @@ class SideNav extends PureComponent {
                             : 'nav-link'
                         }
                       >
-                        Staged forms
+                        <FormattedMessage
+                          id="app.staged-form"
+                          defaultMessage="Staged forms"
+                        />
                       </Link>
                     </li>
                   </ul>

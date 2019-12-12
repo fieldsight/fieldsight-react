@@ -130,7 +130,7 @@ export default class MapLayer extends Component {
 
     return (
       <>
-        <RightContentCard title="Map Layer">
+        <RightContentCard title="app.mapLayers">
           {dotLoader && <DotLoader />}
           {!dotLoader && (
             <form onSubmit={onSubmitHandler}>
