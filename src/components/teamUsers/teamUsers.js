@@ -107,7 +107,7 @@ export default class TeamUser extends Component {
                       <tr key={key}>
                         <td>
                           <a
-                            href={`/fieldsight/application/#/profile/${users.id}`}
+                            href={`/users/profile/${users.id}`}
                             className="pending table-profile"
                           >
                             <figure>
