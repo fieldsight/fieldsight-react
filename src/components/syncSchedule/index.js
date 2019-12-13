@@ -15,7 +15,8 @@ const formatDate = e => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
-  return year + "-" + monthIndex + "-" + dateIdx;
+  const time = date.toLocaleTimeString();
+  return `${year}- ${monthIndex}-${dateIdx}  ${time}`;
 };
 
 const getScheduleType = schedule => {
