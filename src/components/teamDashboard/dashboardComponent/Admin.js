@@ -10,7 +10,10 @@ const AdminListItem = ({ admin }) => {
       </figure>
       <div className="content">
         <h6>
-          <a href={`/users/profile/${admin.id}/`} target=" _blank">
+          <a
+            href={`/fieldsight/application/#/profile/${admin.id}/`}
+            target=" _blank"
+          >
             {admin.full_name}
           </a>
         </h6>

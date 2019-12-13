@@ -27,11 +27,13 @@ const withPagination = WrappedComponent => {
         case "projectSiteList":
           return `fv3/api/project-site-list/?page=${page_num}&project=${payload.projectId}`;
         case "mySiteList":
-          return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}`;
+          if (!!payload.profileId)
+            return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}&profile=${payload.profileId}`;
+          else
+            return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}`;
 
         case "regionSite":
           return `fv3/api/regional-sites/?page=${page_num}&region=${payload.projectId}`;
-
         case "projectRegionList":
           return `fv3/api/project-regions/?page=${page_num}&project=${payload.projectId}`;
 
@@ -112,6 +114,7 @@ const withPagination = WrappedComponent => {
       } else {
         paginateUrl = this.getUrl(page_num, payload);
       }
+
       this.setState(
         {
           toData: toNum,

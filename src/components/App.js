@@ -48,9 +48,8 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
-import TeamMap from "./team/TeamMap";
 import Mapparent from "./team/Mapparent";
-
+import SyncSchedule from "./syncSchedule";
 import messages_en from "../translations/en.json";
 import messages_ne from "../translations/ne.json";
 
@@ -254,7 +253,10 @@ class App extends Component {
                       path="/project-version-submission/:id/:fid"
                       render={props => <VersionSubmissionData {...props} />}
                     />
-
+                    <Route
+                      path="/sync-schedule/:projectId"
+                      render={props => <SyncSchedule {...props} />}
+                    />
                     <Route
                       path="/reset-password"
                       render={props => <ResetPassword {...props} />}
