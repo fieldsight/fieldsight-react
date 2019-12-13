@@ -29,13 +29,13 @@ export default class Form extends Component {
         ? props.getScheduleType(props.data.schedule_type)
         : 0,
       selectedDayOnWeek:
-        props.data.schedule_type &&
-        props.data.schedule_type === "Weekly" &&
-        props.data.day,
+        props.data.schedule_type && props.data.schedule_type === "Weekly"
+          ? props.data.day
+          : 1,
       selectedDayOnMonth:
-        props.data.schedule_type &&
-        props.data.schedule_type === "Monthly" &&
-        props.data.day,
+        props.data.schedule_type && props.data.schedule_type === "Monthly"
+          ? props.data.day
+          : 1,
       isFormSelected: false,
       formList: [],
       projectId: props.projectId
