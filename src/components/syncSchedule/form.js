@@ -23,7 +23,7 @@ export default class Form extends Component {
           ? props.data.title
           : props.data.report_type
         : "",
-      selectedType: props.data.report_type && props.data.report_type,
+      // selectedType: props.data.report_type && props.data.report_type,
       reportId: props.data.report_id && props.data.report_id,
       scheduleType: props.data.schedule_type
         ? props.getScheduleType(props.data.schedule_type)
@@ -79,12 +79,8 @@ export default class Form extends Component {
       }
     } = this;
     const body = {
-      spreadsheet_id: null,
-      grid_id: null,
-      range: null,
-      report_type: selectedType,
+      // report_type: selectedType,
       schedule_type: scheduleType,
-      description: null,
       project: JSON.parse(projectId),
       day:
         scheduleType === "2" && selectedDayOnWeek
