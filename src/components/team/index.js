@@ -165,7 +165,7 @@ class Teams extends Component {
                             <td>{project.users}</td>
                             <td>
                               <a
-                                href={`/users/profile/${project.team_owner_id}`}
+                                href={`/fieldsight/application/#/profile/${project.team_owner_id}`}
                                 className="pending table-profile"
                               >
                                 {project.team_owner}
@@ -209,11 +209,8 @@ const mapStateToProps = ({ teams }) => {
   };
 };
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getTeam,
-      getTranslate
-    }
-  )
+  connect(mapStateToProps, {
+    getTeam,
+    getTranslate
+  })
 )(Teams);

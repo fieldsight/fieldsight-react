@@ -9,18 +9,23 @@ class Mapparent extends Component {
     
       this.state = {
          map:'projectmap',
-         projectpk:''
+         projectpk:'',
+         projectname:''
       };
     };
-    popupCLick=(mapstr,e)=>{
+    popupCLick=(mapstr,e,name)=>{
+        console.log(e,name)
         this.setState({projectpk:e})
-        this.setState({map:mapstr})
+        this.setState({map:mapstr,projectname:name})
+    }
+    detailstoprojects=()=>{
+        this.setState({map:'projectmap'})
     }
     
     render() {
         return (
             <div>
-                {this.state.map=='projectmap'?<TeamMap popupCLick={this.popupCLick} />:<DetailsMap popupCLick={this.popupCLick} projectpk={this.state.projectpk} />}
+                {this.state.map=='projectmap'?<TeamMap popupCLick={this.popupCLick} />:<DetailsMap projectname={this.state.projectname} detailstoprojects={this.detailstoprojects} projectpk={this.state.projectpk} />}
             </div>
         );
     }

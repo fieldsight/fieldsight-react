@@ -161,11 +161,17 @@ class EditTeam extends Component {
         );
       })
       .catch(err => {
+        const error = err.response.data;
+
         this.setState(
           {
             isLoading: false
           },
-          errorToast
+
+          () =>
+            Object.entries(error).map(([key, value]) => {
+              return errorToast(`${value}`);
+            })
         );
       });
   };

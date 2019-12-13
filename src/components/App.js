@@ -49,14 +49,17 @@ import "cropperjs/dist/cropper.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";
-import TeamMap from "./team/TeamMap";
 import Mapparent from "./team/Mapparent";
-
+import SyncSchedule from "./syncSchedule";
 import messages_en from "../translations/en.json";
 import messages_ne from "../translations/ne.json";
 import SelectElement from "../components/common/SelectElement";
 import Header from "./headers";
 import SideNav from "./sideNav";
+
+import ResetPassword from "./ResetPassword";
+import UpdateProfile from "./updateProject";
+import CreateProfile from "./ProfileAdd";
 
 const messages = {
   ne: messages_ne,
@@ -241,38 +244,55 @@ class App extends Component {
                     render={props => <EditSite {...props} page="subSite" />}
                   />
 
-                  <Route
-                    path="/project-responses/:id"
-                    render={props => <ViewData {...props} />}
-                  />
-                  <Route
-                    path="/site-responses/:id"
-                    render={props => <SiteData {...props} />}
-                  />
-                  <Route
-                    path="/submission-data/:id/:fid"
-                    render={props => <SubmissionData {...props} />}
-                  />
-                  <Route
-                    path="/site-submission-data/:id/:fid"
-                    render={props => <SiteSubmissionData {...props} />}
-                  />
-                  <Route
-                    path="/site-version-submission/:id/:fid"
-                    render={props => <VersionSiteSubmission {...props} />}
-                  />
-                  <Route
-                    path="/project-version-submission/:id/:fid"
-                    render={props => <VersionSubmissionData {...props} />}
-                  />
-                  <Route path="/change-password" render={props => <ChangePassword {...props} />} />
-                </Switch>
-                <ToastContainer />
-              </Router>
-            </main>
-            {/* </div> */}
+                    <Route
+                      path="/project-responses/:id"
+                      render={props => <ViewData {...props} />}
+                    />
+                    <Route
+                      path="/site-responses/:id"
+                      render={props => <SiteData {...props} />}
+                    />
+                    <Route
+                      path="/submission-data/:id/:fid"
+                      render={props => <SubmissionData {...props} />}
+                    />
+                    <Route
+                      path="/site-submission-data/:id/:fid"
+                      render={props => <SiteSubmissionData {...props} />}
+                    />
+                    <Route
+                      path="/site-version-submission/:id/:fid"
+                      render={props => <VersionSiteSubmission {...props} />}
+                    />
+                    <Route
+                      path="/project-version-submission/:id/:fid"
+                      render={props => <VersionSubmissionData {...props} />}
+                    />
+                     <Route path="/change-password" render={props => <ChangePassword {...props} />} />
+                    <Route
+                      path="/sync-schedule/:projectId"
+                      render={props => <SyncSchedule {...props} />}
+                    />
+                    <Route
+                      path="/reset-password"
+                      render={props => <ResetPassword {...props} />}
+                    />
+
+                    <Route
+                      path="/update-profile/:id"
+                      render={props => <UpdateProfile {...props} />}
+                    />
+
+                    <Route
+                      path="/create-profile/:id"
+                      render={props => <CreateProfile {...props} />}
+                    />
+                  </Switch>
+                  <ToastContainer />
+                </Router>
+              </main>
+            </div>
           </div>
-        </div>
       </IntlProvider>
     );
   }

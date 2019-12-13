@@ -32,7 +32,7 @@ const SelectElement = ({
                   ? option.name
                   : option.key
                   ? option.key
-                  : option
+                  : ""
               }
               key={`${
                 option.name
@@ -41,7 +41,7 @@ const SelectElement = ({
                   ? option.value
                   : option.identifier
                   ? option.identifier
-                  : option
+                  : ""
               }${i}`}
             >
               {option.name
@@ -50,7 +50,7 @@ const SelectElement = ({
                 ? option.value
                 : option.identifier
                 ? option.identifier
-                : option}
+                : ""}
             </option>
           ))}
         </select>

@@ -197,6 +197,10 @@ class SiteInformation extends Component {
       };
 
       const modifiedJsonQuestions = jsonQuestions.map(question => {
+        if (question.form_id && typeof question.form_id === "string") {
+          question.form_id = JSON.parse(question.form_id);
+          return question;
+        }
         if (question.question_type === "MCQ") {
           const options = [];
 
@@ -328,6 +332,7 @@ class SiteInformation extends Component {
 
   onSubmitHandler = () => {
     const isValid = this.validationHandler();
+
     if (!isValid) return;
     this.setState({
       showConfirmation: true

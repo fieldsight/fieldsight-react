@@ -67,21 +67,43 @@ class YourTeamSideBar extends Component {
                               eventKey={i.toString()}
                             >
                               {team.name}
-                              {team.has_organization_access && (
-                                <span
-                                  onClick={e =>
-                                    this.OpenTabHandler(team.team_url)
-                                  }
-                                  className="goto"
-                                >
-                                  <OverlayTrigger
-                                    placement="top"
-                                    overlay={<Tooltip>Go to dashboard</Tooltip>}
+                              <span>
+                                {!!team.can_delete_role && (
+                                  <span
+                                    className="td-delete-btn td-btn"
+                                    onClick={() => {
+                                      this.props.requestCheckRoles(
+                                        "team",
+                                        team.id
+                                      );
+                                    }}
                                   >
-                                    <i className="la la-external-link" />
-                                  </OverlayTrigger>
-                                </span>
-                              )}
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Delete</Tooltip>}
+                                    >
+                                      <i className="la la-trash-o" />
+                                    </OverlayTrigger>
+                                  </span>
+                                )}
+                                {team.has_organization_access && (
+                                  <span
+                                    onClick={e =>
+                                      this.OpenTabHandler(team.team_url)
+                                    }
+                                    className="goto"
+                                  >
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>Go to dashboard</Tooltip>
+                                      }
+                                    >
+                                      <i className="la la-external-link" />
+                                    </OverlayTrigger>
+                                  </span>
+                                )}
+                              </span>
                               <p>{team.address}</p>
                             </Accordion.Toggle>
                           </h5>
@@ -100,30 +122,54 @@ class YourTeamSideBar extends Component {
                                   key={i}
                                 >
                                   <a
-                                    onClick={event => {
-                                      this.props.requestRegions(project.id);
+                                    onClick={() => {
                                       this.props.requestSite(project.id);
+                                      this.props.requestRegions(project.id);
                                       this.props.requestSubmission(project.id);
                                       this.props.requestMap(project.id);
                                     }}
                                   >
                                     {project.name}
                                   </a>
-                                  {project.has_project_access && (
-                                    <a
-                                      className="project-link"
-                                      href={project.project_url}
-                                    >
-                                      <OverlayTrigger
-                                        placement="top"
-                                        overlay={
-                                          <Tooltip>Go to dashboard</Tooltip>
+                                  <div>
+                                    {project.has_project_access && (
+                                      <span
+                                        onClick={e =>
+                                          this.OpenTabHandler(
+                                            project.project_url
+                                          )
                                         }
+                                        className="project-link"
                                       >
-                                        <i className="la la-external-link" />
-                                      </OverlayTrigger>
-                                    </a>
-                                  )}
+                                        <OverlayTrigger
+                                          placement="top"
+                                          overlay={
+                                            <Tooltip>Go to dashboard</Tooltip>
+                                          }
+                                        >
+                                          <i className="la la-external-link" />
+                                        </OverlayTrigger>
+                                      </span>
+                                    )}
+                                    {!!project.can_delete_role && (
+                                      <span
+                                        className="td-delete-btn td-btn"
+                                        onClick={() => {
+                                          this.props.requestCheckRoles(
+                                            "project",
+                                            project.id
+                                          );
+                                        }}
+                                      >
+                                        <OverlayTrigger
+                                          placement="top"
+                                          overlay={<Tooltip>Delete</Tooltip>}
+                                        >
+                                          <i className="la la-trash-o" />
+                                        </OverlayTrigger>
+                                      </span>
+                                    )}
+                                  </div>
                                 </li>
                               ))}
                             </ul>

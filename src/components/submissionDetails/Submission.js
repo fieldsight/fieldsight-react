@@ -214,8 +214,6 @@ class Submission extends Component {
       site.latitude &&
       site.longitude
     ) {
-      console.log("geoloc", submission.answer);
-
       let splitedGeoLocation = [];
       let latitude = "";
       let longitude = "";
@@ -249,7 +247,6 @@ class Submission extends Component {
         latitude && latitude,
         longitude && longitude
       );
-      console.log("dist", distance);
 
       if (distance < 500) {
         bounds = this.getSmallBound(latlngObj);
@@ -357,19 +354,31 @@ class Submission extends Component {
                   {format(submission.answer, ["MMMM Do YYYY,  h:mm:ss a"])}
                 </time>
               ) : submission.type == "select one" ? (
-                submission.selected &&
-                Object.entries(submission.selected).map(one => {
-                  <p key={uuid()}>
-                    {this.splitSubmissionObj(one[1].label, one[1].name)}
-                  </p>;
-                })
+                !submission.selected ? (
+                  <p>{submission.answer}</p>
+                ) : (
+                  submission.selected &&
+                  Object.entries(submission.selected).map(one => {
+                    return (
+                      <p key={uuid()}>
+                        {this.getLabelAndName(one[1].label, one[1].name)}
+                      </p>
+                    );
+                  })
+                )
               ) : submission.type == "select all that apply" ? (
-                submission.selected &&
-                Object.entries(submission.selected).map(many => (
-                  <p key={uuid()}>
-                    {this.splitSubmissionObj(many[1].label, many[1].name)}
-                  </p>
-                ))
+                !submission.selected ? (
+                  <p>{submission.answer}</p>
+                ) : (
+                  submission.selected &&
+                  Object.entries(submission.selected).map(many => {
+                    return (
+                      <p key={uuid()}>
+                        {this.getLabelAndName(many[1].label, many[1].name)}
+                      </p>
+                    );
+                  })
+                )
               ) : (
                 <p>{submission.answer}</p>
               )}

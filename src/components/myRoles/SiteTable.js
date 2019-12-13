@@ -120,14 +120,24 @@ class SiteTable extends Component {
                             </td>
                             {this.props.profileId && (
                               <td>
-                                <a className="td-delete-btn td-btn">
-                                  <OverlayTrigger
-                                    placement="top"
-                                    overlay={<Tooltip>Delete</Tooltip>}
+                                {item.can_delete_role && (
+                                  <a
+                                    className="td-delete-btn td-btn"
+                                    onClick={() => {
+                                      this.props.requestCheckRoles(
+                                        "site",
+                                        item.id
+                                      );
+                                    }}
                                   >
-                                    <i className="la la-trash-o" />
-                                  </OverlayTrigger>
-                                </a>
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Delete</Tooltip>}
+                                    >
+                                      <i className="la la-trash-o" />
+                                    </OverlayTrigger>
+                                  </a>
+                                )}
                               </td>
                             )}
                           </tr>
@@ -159,42 +169,74 @@ class SiteTable extends Component {
                 <ul>
                   <li
                     className={` page-item ${
-                      this.props.pageNum == 1 ? "disable-btn" : ""
+                      this.props.pageNum == 1 ? "disabled" : ""
                     }`}
                   >
                     <a
                       onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum - 1,
-                          null,
-                          { type: "mySiteList", projectId: this.props.siteId }
-                        )
+                        !!this.props.profileId
+                          ? this.props.paginationHandler(
+                              this.props.pageNum - 1,
+                              null,
+                              {
+                                type: "mySiteList",
+                                projectId: this.props.siteId,
+                                profileId: this.props.profileId
+                              }
+                            )
+                          : this.props.paginationHandler(
+                              this.props.pageNum - 1,
+                              null,
+                              {
+                                type: "mySiteList",
+                                projectId: this.props.siteId
+                              }
+                            )
                       }
                     >
                       <i className={`la la-long-arrow-left `} />
                     </a>
                   </li>
 
-                  {this.props.renderPageNumbers({
-                    type: "mySiteList",
-                    projectId: this.props.siteId
-                  })}
+                  {!!this.props.profileId
+                    ? this.props.renderPageNumbers({
+                        type: "siteListByProfileId",
+                        projectId: this.props.siteId,
+                        profileId: this.props.profileId
+                      })
+                    : this.props.renderPageNumbers({
+                        type: "mySiteList",
+                        projectId: this.props.siteId
+                      })}
 
                   <li
                     className={`page-item  ${
                       this.props.pageNum ==
                       Math.ceil(this.props.totalCount / 200)
-                        ? " disable-btn"
+                        ? " disabled"
                         : ""
                     }`}
                   >
                     <a
                       onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum + 1,
-                          null,
-                          { type: "mySiteList", projectId: this.props.siteId }
-                        )
+                        !!this.props.profileId
+                          ? this.props.paginationHandler(
+                              this.props.pageNum + 1,
+                              null,
+                              {
+                                type: "mySiteList",
+                                projectId: this.props.siteId,
+                                profileId: this.props.profileId
+                              }
+                            )
+                          : this.props.paginationHandler(
+                              this.props.pageNum + 1,
+                              null,
+                              {
+                                type: "mySiteList",
+                                projectId: this.props.siteId
+                              }
+                            )
                       }
                     >
                       <i className={`la la-long-arrow-right`} />

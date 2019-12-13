@@ -87,8 +87,7 @@ module.exports = env => {
         new CopyWebpackPlugin([{ from: "src/static/" }]),
         new DashboardPlugin(),
         new Dotenv()
-      ],
-      devtool: PLATFORM === "production" ? "" : "eval-source-map"
+      ]
     }
   ]);
 };
