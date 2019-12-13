@@ -89,13 +89,7 @@
     @include flexBetween;
   }
 
-  .container {
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-  }
+
 
   .no-bg {
     background-color: none !important;
@@ -208,26 +202,27 @@
       }
 
       &.dashboard-header {
+        border:0;
         .dash-pf {
           @include flex_start;
           align-items: center;
           flex-wrap: nowrap;
 
           figure {
-            flex:0 0 60px;
-            -ms-flex:0 0 60px;
-            max-width: 60px;
-            width: 60px !important;
-            height: 60px;
+            flex:0 0 65px;
+            -ms-flex:0 0 65px;
+            max-width: 65px;
+            
             @include coverbg;
             @include radius50;
             margin: 0 1rem 0 0;
             position: relative;
 
-            // img {
-            //   @extend figure;
-            //   height: 60px;
-            // }
+            img {
+              @include radius50;
+              width: 65px;
+              height: 65px;
+            }
 
             figcaption {
               @include overlay;
@@ -291,17 +286,20 @@
 
           .dash-pf-content {
             h5 {
-              line-height: 1.5rem;
+              font-size:1.5rem;
+              line-height: 1.3rem;
             }
 
             span {
-              font-size: 0.775rem;
-              color: rgba($color-primary, 0.7);
-              margin: 0.25rem 0;
+              font-size: .8125rem;
+              color: $color-secondary;
+              font-weight: 500;;
+              margin: 0.6125rem 0;
               display: inline-block;
             }
           }
         }
+        
       }
     }
 
@@ -428,7 +426,6 @@
 
   span {
     position: relative;
-
     width: 11px;
     height: 11px;
     background-color: $color-yellow;
