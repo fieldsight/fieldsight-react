@@ -66,7 +66,8 @@ export default class SyncSchedule extends Component {
       scheduledReports: [],
       surveyReports: [],
       stagedReports: [],
-      canSyncOrEdit: false
+      canSyncOrEdit: false,
+      breadcrumbs: {}
     };
   }
 
@@ -92,6 +93,7 @@ export default class SyncSchedule extends Component {
             const surveyReports = [];
             const stagedReports = [];
             let canSyncOrEdit = false;
+            let breadcrumbs = {};
             resData.map(each => {
               if (each[0] === "standard_reports") {
                 standardReports.push(each);
@@ -111,6 +113,9 @@ export default class SyncSchedule extends Component {
               if (each[0] === "can_edit_or_sync") {
                 canSyncOrEdit = each[1];
               }
+              if (each[0] === "breadcrumbs") {
+                breadcrumbs = each[1];
+              }
             });
             this.setState({
               reportList: resData,
@@ -120,7 +125,8 @@ export default class SyncSchedule extends Component {
               surveyReports,
               stagedReports,
               canSyncOrEdit,
-              loader: false
+              loader: false,
+              breadcrumbs
             });
           }
         })
@@ -182,7 +188,8 @@ export default class SyncSchedule extends Component {
         scheduledReports,
         surveyReports,
         stagedReports,
-        canSyncOrEdit
+        canSyncOrEdit,
+        breadcrumbs
       },
       props: {
         match: {
@@ -194,11 +201,19 @@ export default class SyncSchedule extends Component {
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
+          {breadcrumbs && Object.keys(breadcrumbs).length > 0 && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.project_url}>{breadcrumbs.project}</a>
+              </li>
+              <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+            </ol>
+          )}
+          {/* <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a>Reports</a>
+              <a>Forms</a>
             </li>
-          </ol>
+          </ol> */}
         </nav>
         <div className="card">
           <div className="card-header main-card-header">
