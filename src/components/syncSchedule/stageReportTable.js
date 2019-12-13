@@ -28,7 +28,7 @@ export default class StageReportTable extends Component {
         <tbody>
           {!loader && stages.length === 0 ? (
             <tr>
-              <td colSpan={4}>No Form added yet.</td>
+              <td colSpan={5}>No Form added yet.</td>
             </tr>
           ) : (
             <>
@@ -36,11 +36,11 @@ export default class StageReportTable extends Component {
                 stages.map(stage => (
                   <Fragment key={`stage_${stage.id}`}>
                     <tr>
-                      <td colSpan={4}>Stage: {stage.stage}</td>
+                      <td colSpan={5}>Stage: {stage.stage}</td>
                     </tr>
                     {!loader && stage.sub_stages && stage.sub_stages === 0 ? (
                       <tr>
-                        <td colSpan={4}>No Substage added yet.</td>
+                        <td colSpan={5}>No Substage added yet.</td>
                       </tr>
                     ) : (
                       <>
@@ -109,19 +109,23 @@ export default class StageReportTable extends Component {
                                         </OverlayTrigger>
                                       </a>
                                     </span>
-                                    <span>
-                                      <a
-                                        onClick={() => reqSync(sub.report_id)}
-                                        className="pending td-edit-btn td-btn"
-                                      >
-                                        <OverlayTrigger
-                                          placement="top"
-                                          overlay={<Tooltip>Sync Now</Tooltip>}
+                                    {sub.schedule_type === "Manual" && (
+                                      <span>
+                                        <a
+                                          onClick={() => reqSync(sub.report_id)}
+                                          className="pending td-edit-btn td-btn"
                                         >
-                                          <i className="la la-refresh ml-2" />
-                                        </OverlayTrigger>
-                                      </a>
-                                    </span>
+                                          <OverlayTrigger
+                                            placement="top"
+                                            overlay={
+                                              <Tooltip>Sync Now</Tooltip>
+                                            }
+                                          >
+                                            <i className="la la-refresh ml-2" />
+                                          </OverlayTrigger>
+                                        </a>
+                                      </span>
+                                    )}
                                   </>
                                 )}
                               </td>

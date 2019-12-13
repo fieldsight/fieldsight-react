@@ -32,7 +32,7 @@ export default class StandardReportTable extends Component {
           <tbody>
             {!loader && data.length === 0 ? (
               <tr>
-                <td colSpan={4}>No Form added yet.</td>
+                <td colSpan={5}>No Form added yet.</td>
               </tr>
             ) : (
               <>
@@ -86,19 +86,23 @@ export default class StandardReportTable extends Component {
                               </OverlayTrigger>
                             </a>
                           </span>
-                          <span>
-                            <a
-                              onClick={() => this.props.reqSync(each.report_id)}
-                              className="pending td-edit-btn td-btn"
-                            >
-                              <OverlayTrigger
-                                placement="top"
-                                overlay={<Tooltip>Sync Now</Tooltip>}
+                          {each.schedule_type === "Manual" && (
+                            <span>
+                              <a
+                                onClick={() =>
+                                  this.props.reqSync(each.report_id)
+                                }
+                                className="pending td-edit-btn td-btn"
                               >
-                                <i className="la la-refresh ml-2" />
-                              </OverlayTrigger>
-                            </a>
-                          </span>
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Sync Now</Tooltip>}
+                                >
+                                  <i className="la la-refresh ml-2" />
+                                </OverlayTrigger>
+                              </a>
+                            </span>
+                          )}
                         </>
                       )}
                     </td>
