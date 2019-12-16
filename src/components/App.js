@@ -50,7 +50,7 @@ import ResetPassword from './ResetPassword';
 import UpdateProfile from './updateProject';
 import CreateProfile from './ProfileAdd';
 
-import MyReports from './reports/MyReports';
+import MyReports from './reports';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
