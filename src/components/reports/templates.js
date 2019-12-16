@@ -1,7 +1,47 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+import { Dropdown } from 'react-bootstrap';
 
-export default class Templates extends PureComponent {
+export default class Templates extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showCrude: false,
+    };
+  }
+
+  handleClick = () => {
+    this.setState(
+      {
+        showCrude: true,
+      },
+      () => console.log(this.state),
+    );
+  };
+
   render() {
+    const { showCrude } = this.state;
+    const DataCrude = [
+      {
+        id: '1',
+        title: 'Edit',
+        link: '/change-password',
+      },
+      {
+        id: '2',
+        title: 'Add a template',
+        link: '#',
+      },
+      {
+        id: '3',
+        title: 'Share',
+        link: '#',
+      },
+      {
+        id: '4',
+        title: 'Delete',
+        link: '#',
+      },
+    ];
     return (
       <div className="card-body">
         <div className="standard-tempalte">
@@ -19,32 +59,31 @@ export default class Templates extends PureComponent {
               </div>
             </div>
             <div className="dropdown report-option">
-              <button
-                type="button"
-                className="dropdown-toggle common-button no-border is-icon"
-                data-toggle="dropdown"
-              >
-                <i className="material-icons">more_vert</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  Edit
-                </a>
-                <a className="dropdown-item" href="#">
-                  Add a template
-                </a>
-                <a className="dropdown-item" href="#">
-                  Share
-                </a>
-                <a className="dropdown-item" href="#">
-                  Delete
-                </a>
-              </div>
+              <Dropdown drop="left">
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Data"
+                  className="dropdown-toggle common-button no-border is-icon"
+                >
+                  <i className="material-icons">more_vert</i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                  {DataCrude.map(item => (
+                    <Dropdown.Item
+                      href={item.link}
+                      key={item.id}
+                      target="_blank"
+                    >
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
           </div>
           <div className="report-list">
             <div className="row">
-              <div className="col-md-8">
+              <div className="col-md-12">
                 <div className="report-content">
                   <h4>Site Information</h4>
                   <p>
@@ -56,32 +95,31 @@ export default class Templates extends PureComponent {
               </div>
             </div>
             <div className="dropdown report-option">
-              <button
-                type="button"
-                className="dropdown-toggle common-button no-border is-icon"
-                data-toggle="dropdown"
-              >
-                <i className="material-icons">more_vert</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  Edit
-                </a>
-                <a className="dropdown-item" href="#">
-                  Add a template
-                </a>
-                <a className="dropdown-item" href="#">
-                  Share
-                </a>
-                <a className="dropdown-item" href="#">
-                  Delete
-                </a>
-              </div>
+              <Dropdown drop="left">
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Data"
+                  className="dropdown-toggle common-button no-border is-icon"
+                >
+                  <i className="material-icons">more_vert</i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                  {DataCrude.map(item => (
+                    <Dropdown.Item
+                      href={item.link}
+                      key={item.id}
+                      target="_blank"
+                    >
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
           </div>
           <div className="report-list">
             <div className="row">
-              <div className="col-md-8">
+              <div className="col-md-12">
                 <div className="report-content">
                   <h4>Progress Report</h4>
                   <p>
@@ -93,109 +131,30 @@ export default class Templates extends PureComponent {
               </div>
             </div>
             <div className="dropdown report-option">
-              <button
-                type="button"
-                className="dropdown-toggle common-button no-border is-icon"
-                data-toggle="dropdown"
-              >
-                <i className="material-icons">more_vert</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  Edit
-                </a>
-                <a className="dropdown-item" href="#">
-                  Add a template
-                </a>
-                <a className="dropdown-item" href="#">
-                  Share
-                </a>
-                <a className="dropdown-item" href="#">
-                  Delete
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="report-list">
-            <div className="row">
-              <div className="col-md-8">
-                <div className="report-content">
-                  <h4>Form Data</h4>
-                  <p>
-                    Export of forms data and site information an Excel
-                    File, generated with filters in region, types and
-                    time range.
-                  </p>
-                  <ul className="form-data">
-                    <li>
-                      <a href="#"> general forms</a>
-                      <div className="form-data-list ">
-                        <p>Testing yet again</p>
-                        <p>Retrofiting Go/No-Go with Measurement</p>
-                        <p>TSC Visitors - STFC</p>
-                        <p>Corrective Action App</p>
-                        <p>Baseline Survey</p>
-                      </div>
-                    </li>
-                    <li>
-                      <a href="#"> scheduled forms</a>
-                      <div className="form-data-list">
-                        <p>Testing yet again</p>
-                        <p>Retrofiting Go/No-Go with Measurement</p>
-                        <p>TSC Visitors - STFC</p>
-                        <p>Corrective Action App</p>
-                        <p>Baseline Survey</p>
-                      </div>
-                    </li>
-                    <li>
-                      <a href="#"> survey forms</a>
-                      <div className="form-data-list">
-                        <p>Testing yet again</p>
-                        <p>Retrofiting Go/No-Go with Measurement</p>
-                        <p>TSC Visitors - STFC</p>
-                        <p>Corrective Action App</p>
-                        <p>Baseline Survey</p>
-                      </div>
-                    </li>
-                    <li>
-                      <a href="#"> staged forms</a>
-                      <div className="form-data-list">
-                        <p>Testing yet again</p>
-                        <p>Retrofiting Go/No-Go with Measurement</p>
-                        <p>TSC Visitors - STFC</p>
-                        <p>Corrective Action App</p>
-                        <p>Baseline Survey</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="dropdown report-option">
-              <button
-                type="button"
-                className="dropdown-toggle common-button no-border is-icon"
-                data-toggle="dropdown"
-              >
-                <i className="material-icons">more_vert</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  Edit
-                </a>
-                <a className="dropdown-item" href="#">
-                  Add a template
-                </a>
-                <a className="dropdown-item" href="#">
-                  Share
-                </a>
-                <a className="dropdown-item" href="#">
-                  Delete
-                </a>
-              </div>
+              <Dropdown drop="left">
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Data"
+                  className="dropdown-toggle common-button no-border is-icon"
+                >
+                  <i className="material-icons">more_vert</i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                  {DataCrude.map(item => (
+                    <Dropdown.Item
+                      href={item.link}
+                      key={item.id}
+                      target="_blank"
+                    >
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
           </div>
         </div>
+
         <div className="custom-template">
           <h2 className="my-3">custom</h2>
           <div className="report-list">
