@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Dropdown } from 'react-bootstrap';
-import CountCard from '../../common/CountCard';
-import { AvatarContentLoader } from '../../common/Loader';
-import SubmissionModal from './SubmissionModel';
+import CountCard from '../common/CountCard';
+import { AvatarContentLoader } from '../common/Loader';
+import SubmissionModal from './dashboardComponent/SubmissionModel';
 /* eslint-disable react/prop-types  */
 /* eslint-disable react/no-array-index-key  */
 
