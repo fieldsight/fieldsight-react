@@ -34,7 +34,9 @@ export default class Form extends Component {
           : 1,
       selectedDayOnMonth:
         props.data.schedule_type && props.data.schedule_type === "Monthly"
-          ? props.data.day
+          ? props.data.day === 0
+            ? 31
+            : props.data.day
           : 1,
       isFormSelected: false,
       formList: [],
@@ -58,12 +60,14 @@ export default class Form extends Component {
 
   handleSelectedDayChange = e => {
     const { value } = e.target;
-    this.setState({ selectedDayOnWeek: JSON.parse(value) });
+    this.setState({ selectedDayOnWeek: value });
   };
 
   handleSelectedMonthDayChange = e => {
     const { value } = e.target;
-    this.setState({ selectedDayOnMonth: JSON.parse(value) });
+    this.setState({
+      selectedDayOnMonth: value
+    });
   };
 
   handleSubmit = e => {
@@ -86,7 +90,9 @@ export default class Form extends Component {
         scheduleType === "2" && selectedDayOnWeek
           ? selectedDayOnWeek
           : scheduleType === "3" && selectedDayOnMonth
-          ? selectedDayOnMonth
+          ? selectedDayOnMonth === "31"
+            ? "0"
+            : selectedDayOnMonth
           : null
     };
 
@@ -115,7 +121,7 @@ export default class Form extends Component {
     let dayOptions = [];
     for (var i = 1; i <= 31; i += 1) {
       if (i <= 30) dayOptions.push({ id: i, name: i });
-      else dayOptions.push({ id: 0, name: "Last" });
+      else dayOptions.push({ id: i, name: "Last" });
     }
     const scheduleOptions = [
       { id: "0", name: "Manual" },
@@ -123,6 +129,8 @@ export default class Form extends Component {
       { id: "2", name: "Weekly" },
       { id: "3", name: "Monthly" }
     ];
+
+    console.log("dyoption", dayOptions, selectedDayOnMonth);
 
     return (
       <>
