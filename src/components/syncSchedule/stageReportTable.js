@@ -62,7 +62,9 @@ export default class StageReportTable extends Component {
                                       sub.schedule_type
                                     } on ${getDayOnWeeklySchedule(sub.day)}`
                                   : sub.schedule_type === "Monthly"
-                                  ? ` ${sub.schedule_type} on day ${sub.day}`
+                                  ? sub.day === 0
+                                    ? ` ${sub.schedule_type} on last day`
+                                    : ` ${sub.schedule_type} on day ${sub.day}`
                                   : sub.schedule_type}
                               </td>
                               <td>
