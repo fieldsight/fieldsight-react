@@ -48,7 +48,9 @@ export default class StandardReportTable extends Component {
                             each.day
                           )}`
                         : each.schedule_type === "Monthly"
-                        ? ` ${each.schedule_type} on day ${each.day}`
+                        ? each.day === 0
+                          ? ` ${each.schedule_type} on last day`
+                          : ` ${each.schedule_type} on day ${each.day}`
                         : each.schedule_type}
                     </td>
                     <td>
