@@ -75,14 +75,24 @@ class RegionTable extends PureComponent {
                       <td>{region.role}</td>
                       {profileId && (
                         <td>
-                          <a className="td-delete-btn td-btn">
-                            <OverlayTrigger
-                              placement="top"
-                              overlay={<Tooltip>Delete</Tooltip>}
+                          {region.can_delete_role && (
+                            <a
+                              className="td-delete-btn td-btn"
+                              onClick={() => {
+                                this.props.requestCheckRoles(
+                                  "region",
+                                  region.id
+                                );
+                              }}
                             >
-                              <i className="la la-trash-o" />
-                            </OverlayTrigger>
-                          </a>
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Delete</Tooltip>}
+                              >
+                                <i className="la la-trash-o" />
+                              </OverlayTrigger>
+                            </a>
+                          )}
                         </td>
                       )}
                     </tr>

@@ -1,0 +1,120 @@
+.common-select {
+    position: relative;
+
+    .select-wrapper {
+        position: relative;
+        background-color: transparent;
+        border: 1px solid $primary-light-1;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        height: calc(2rem + 2px);
+        padding: .375rem 1.75rem .375rem .75rem;
+        vertical-align: middle;
+        background-size: 8px 10px;
+        @include radius(5px);
+        @include transition(all .3s ease-in-out);
+
+        span {
+            &.select-item {
+                color: $primary-light-1;
+                font-size: .75rem;
+                text-transform: capitalize;
+                @include line-clamp(1);
+            }
+        }
+
+        ul {
+            position: absolute;
+            width: 100%;
+            top: 140%;
+            left: 0;
+            right: 0;
+            background-color: $color-white;
+            @include radius(5px);
+            opacity: 0;
+            visibility: hidden;
+            @include transition(all .5s ease-in-out);
+            z-index: 2;
+            @include box_shadow(0 1px 6px rgba($heading-color,.16));
+
+            li {
+                padding: .25rem .6125rem;
+                @include transition(all .3s linear);
+                &.active,
+                &:hover {
+                    background-color: $secondary-light-1;
+                }
+            }
+        }
+
+        &::after {
+            right: .6125rem;
+            @include translatey;
+            content: 'expand_more';
+            font-family: 'Material Icons';
+            z-index: 2;
+            color: $primary-light;
+            pointer-events: none;
+            font-size: 1.2rem;
+        }
+
+        &.select-toggle {
+            background-color: $secondary-light-2;
+
+            span {
+                &.select-item {
+                    color: $heading-color;
+                }
+            }
+
+            &::after {
+                color: $heading-color;
+            }
+
+            ul {
+                top: 100%;
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    }
+
+    .selected-data {
+        @include display-flex(flex);
+        @include justify-content-start;
+        @include align-items-center;
+        width: 100%;
+        z-index: 1;
+
+        span {
+            padding: .25rem .5rem;
+            background-color: $secondary-light-1;
+            font-size: .75rem;
+            color: $color-secondary;
+            margin-top: 1rem;
+            @include radius(4px);
+            @include display-flex(flex);
+            @include justify-content-between;
+            @include align-items-center;
+
+            &:not(:last-child) {
+                margin-right: .25rem;
+            }
+            small{
+                cursor:pointer;
+                font-size: .875rem;
+                &:hover{
+                    color:$color-secondary;
+                }
+                &::before{
+                    content:'|';
+                    color:$color-white;
+                    display: inline-block;
+                    margin:0 .25rem;
+
+                }
+            }
+        }
+    }
+}

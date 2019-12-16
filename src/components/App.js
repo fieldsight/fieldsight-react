@@ -124,29 +124,29 @@ class App extends Component {
                       )}
                     />
 
-                    <Route
-                      path="/site-dashboard/:id"
-                      render={props => <SiteDashboard {...props} />}
-                    />
+                  <Route
+                    path="/site-dashboard/:id"
+                    render={props => <SiteDashboard {...props} />}
+                  />
 
-                    <Route
-                      path="/my-roles"
-                      render={props => <MyrolesMain {...props} />}
-                    />
+                  <Route
+                    path="/my-roles"
+                    render={props => <MyrolesMain {...props} />}
+                  />
 
-                    <Route
-                      path="/profile/:profileId"
-                      render={props => <MyrolesMain {...props} />}
-                    />
+                  <Route
+                    path="/profile/:profileId"
+                    render={props => <MyrolesMain {...props} />}
+                  />
 
-                    <Route
-                      path="/regional-site/:id"
-                      render={props => <RegionSite {...props} />}
-                    />
-                    <Route
-                      path="/site-documents/:id"
-                      render={props => <SiteDocument {...props} />}
-                    />
+                  <Route
+                    path="/regional-site/:id"
+                    render={props => <RegionSite {...props} />}
+                  />
+                  <Route
+                    path="/site-documents/:id"
+                    render={props => <SiteDocument {...props} />}
+                  />
 
                     <Route
                       path="/project-dashboard/:id"
@@ -163,29 +163,26 @@ class App extends Component {
                       render={props => <SiteUsers {...props} />}
                     />
 
-                    <Route
-                      path="/project-users/:id"
-                      render={props => <ProjectUser {...props} />}
-                    />
+                  <Route
+                    path="/project-users/:id"
+                    render={props => <ProjectUser {...props} />}
+                  />
 
-                    <Route
-                      path="/team-users/:id"
-                      render={props => <TeamUser {...props} />}
-                    />
+                  <Route
+                    path="/team-users/:id"
+                    render={props => <TeamUser {...props} />}
+                  />
 
-                    <Route
-                      path="/team-projects/:id"
-                      render={props => <ProjectList {...props} />}
-                    />
-                    <Route
-                      path="/teams"
-                      render={props => <Teams {...props} />}
-                    />
+                  <Route
+                    path="/team-projects/:id"
+                    render={props => <ProjectList {...props} />}
+                  />
+                  <Route path="/teams" render={props => <Teams {...props} />} />
 
-                    <Route
-                      path="/map"
-                      render={props => <Mapparent {...props} />}
-                    />
+                  <Route
+                    path="/map"
+                    render={props => <Mapparent {...props} />}
+                  />
 
                     <Route
                       path="/project_logs/:id"
@@ -281,7 +278,11 @@ class App extends Component {
                         <VersionSubmissionData {...props} />
                       )}
                     />
-
+                     <Route path="/change-password" render={props => <ChangePassword {...props} />} />
+                    <Route
+                      path="/sync-schedule/:projectId"
+                      render={props => <SyncSchedule {...props} />}
+                    />
                     <Route
                       path="/reset-password"
                       render={props => <ResetPassword {...props} />}
@@ -307,7 +308,6 @@ class App extends Component {
               </main>
             </div>
           </div>
-        </div>
       </IntlProvider>
     );
   }

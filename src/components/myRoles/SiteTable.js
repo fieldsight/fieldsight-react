@@ -201,9 +201,14 @@ class SiteTable extends Component {
                                       <Tooltip>Delete</Tooltip>
                                     }
                                   >
-                                    <i className="la la-trash-o" />
-                                  </OverlayTrigger>
-                                </a>
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Delete</Tooltip>}
+                                    >
+                                      <i className="la la-trash-o" />
+                                    </OverlayTrigger>
+                                  </a>
+                                )}
                               </td>
                             )}
                           </tr>

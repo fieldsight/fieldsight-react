@@ -133,6 +133,7 @@ const withPagination = WrappedComponent => {
       } else {
         paginateUrl = this.getUrl(page_num, payload);
       }
+
       this.setState(
         {
           toData: toNum,
