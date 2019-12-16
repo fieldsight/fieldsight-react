@@ -38,7 +38,7 @@ import TeamSetting from "./settings/TeamSettings";
 import SubmissionData from "./viewDataComponents/projectViewData/SubmissionTable";
 
 import ManageForms from "./manageForms";
-import ChangePassword from './changePassword';
+import ChangePassword from "./changePassword";
 
 import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -108,15 +108,15 @@ class App extends Component {
     return (
       <IntlProvider locale={language} messages={messages[selected]}>
         <div id="fieldsight-new" className="fieldsight-new">
-          <Header
+          {/* <Header
             toggleClass={this.state.toggleClass}
             handleToggle={this.handleToggle}
-          />
+          /> */}
           <div
             id="main-container"
             className={`${!this.state.toggleClass ? "minified" : ""}`}
           >
-            <SideNav handleToggle={this.handleToggle} />
+            {/* <SideNav handleToggle={this.handleToggle} /> */}
             {/* <div className="container-fluid"> */}
             <main id="main-content" className="main-content">
               <Router>
@@ -244,55 +244,58 @@ class App extends Component {
                     render={props => <EditSite {...props} page="subSite" />}
                   />
 
-                    <Route
-                      path="/project-responses/:id"
-                      render={props => <ViewData {...props} />}
-                    />
-                    <Route
-                      path="/site-responses/:id"
-                      render={props => <SiteData {...props} />}
-                    />
-                    <Route
-                      path="/submission-data/:id/:fid"
-                      render={props => <SubmissionData {...props} />}
-                    />
-                    <Route
-                      path="/site-submission-data/:id/:fid"
-                      render={props => <SiteSubmissionData {...props} />}
-                    />
-                    <Route
-                      path="/site-version-submission/:id/:fid"
-                      render={props => <VersionSiteSubmission {...props} />}
-                    />
-                    <Route
-                      path="/project-version-submission/:id/:fid"
-                      render={props => <VersionSubmissionData {...props} />}
-                    />
-                     <Route path="/change-password" render={props => <ChangePassword {...props} />} />
-                    <Route
-                      path="/sync-schedule/:projectId"
-                      render={props => <SyncSchedule {...props} />}
-                    />
-                    <Route
-                      path="/reset-password"
-                      render={props => <ResetPassword {...props} />}
-                    />
+                  <Route
+                    path="/project-responses/:id"
+                    render={props => <ViewData {...props} />}
+                  />
+                  <Route
+                    path="/site-responses/:id"
+                    render={props => <SiteData {...props} />}
+                  />
+                  <Route
+                    path="/submission-data/:id/:fid"
+                    render={props => <SubmissionData {...props} />}
+                  />
+                  <Route
+                    path="/site-submission-data/:id/:fid"
+                    render={props => <SiteSubmissionData {...props} />}
+                  />
+                  <Route
+                    path="/site-version-submission/:id/:fid"
+                    render={props => <VersionSiteSubmission {...props} />}
+                  />
+                  <Route
+                    path="/project-version-submission/:id/:fid"
+                    render={props => <VersionSubmissionData {...props} />}
+                  />
+                  <Route
+                    path="/change-password"
+                    render={props => <ChangePassword {...props} />}
+                  />
+                  <Route
+                    path="/sync-schedule/:projectId"
+                    render={props => <SyncSchedule {...props} />}
+                  />
+                  <Route
+                    path="/reset-password"
+                    render={props => <ResetPassword {...props} />}
+                  />
 
-                    <Route
-                      path="/update-profile/:id"
-                      render={props => <UpdateProfile {...props} />}
-                    />
+                  <Route
+                    path="/update-profile/:id"
+                    render={props => <UpdateProfile {...props} />}
+                  />
 
-                    <Route
-                      path="/create-profile/:id"
-                      render={props => <CreateProfile {...props} />}
-                    />
-                  </Switch>
-                  <ToastContainer />
-                </Router>
-              </main>
-            </div>
+                  <Route
+                    path="/create-profile/:id"
+                    render={props => <CreateProfile {...props} />}
+                  />
+                </Switch>
+                <ToastContainer />
+              </Router>
+            </main>
           </div>
+        </div>
       </IntlProvider>
     );
   }
