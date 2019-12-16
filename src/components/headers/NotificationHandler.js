@@ -1,18 +1,31 @@
 import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import format from "date-fns/format";
-import { BlockContentLoader } from "./Loader";
 import { Link } from "react-router-dom";
 import uuid from "uuid/v4";
+import { BlockContentLoader } from "../common/Loader";
 
-class Logs extends Component {
-  state = {
-    width: false
-  };
-  getLog = (data, user_id) => {
+class NotificationHandler extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      width: false
+    };
+  }
+
+  componentDidUpdate() {
+    if (this.timeLineDiv) {
+      const anchorList = this.timeLineDiv.getElementsByTagName("a");
+      for (let i = 0; i < anchorList.length; i++) {
+        anchorList[i].setAttribute("target", "_blank");
+      }
+    }
+  }
+
+  getLog = (data, userId) => {
     let content = "";
     const formdetail = data.get_event_name.split("form");
-
     switch (data.type) {
       case 0:
         content =
@@ -269,7 +282,7 @@ class Logs extends Component {
         }
         return content;
       case 12:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             '<span style="color:green;"><b>Sucessfully</b></span> ' +
             data.extra_message +
@@ -432,7 +445,7 @@ class Logs extends Component {
           "</a></b> form.";
         return content;
       case 21:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             "<b>TASK INFO : </b>" +
             data.extra_message +
@@ -457,7 +470,7 @@ class Logs extends Component {
         }
         return content;
       case 22:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             "<b>TASK INFO : </b>" +
             data.extra_message +
@@ -737,7 +750,7 @@ class Logs extends Component {
           "</a></b>.";
         return content;
       case 35:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             '<span style="color:green;"><b>Sucessfully</b></span> ' +
             data.extra_message +
@@ -762,7 +775,7 @@ class Logs extends Component {
         }
         return content;
       case 36:
-        if (data.source_uid == user_id) {
+        if (data.source_uid == userId) {
           content =
             '<span style="color:green;"><b>Sucessfully</b></span> deleted ' +
             data.extra_message +
@@ -1057,95 +1070,66 @@ class Logs extends Component {
     return colorArr[Math.floor(Math.random() * colorArr.length)];
   };
 
-  componentDidUpdate() {
-    if (this.timeLineDiv) {
-      const anchorList = this.timeLineDiv.getElementsByTagName("a");
-      for (let i = 0; i < anchorList.length; i++) {
-        anchorList[i].setAttribute("target", "_blank");
-      }
-    }
-  }
-
   render() {
     const {
-      props: { siteLogs, showContentLoader, siteId, type, user_id, fullPage },
-      groupByDate,
-      getColor,
+      props: { notifications, showContentLoader, userId, handleDownloadFile },
       getLog,
-      sitewidth
     } = this;
-
     return (
-      <div className={fullPage ? "col-md-12" : "col-xl-4 col-md-12"}>
-        <div className="card logs">
-          <div className="card-header main-card-header sub-card-header">
-            <h5>Logs</h5>
-
-            {siteLogs.length > 0 ? (
-              fullPage ? null : (
-                <Link
-                  to={`/${type}_logs/${siteId}/`}
-                  className="fieldsight-btn"
-                >
-                  View all
-                </Link>
-              )
-            ) : null}
-          </div>
-          <div className="card-body">
-            <div
-              className="logs-list"
-              style={fullPage ? {} : { position: "relative", height: "314px" }}
-            >
-              {showContentLoader ? (
-                <BlockContentLoader number={2} height="150px" />
-              ) : (
-                <PerfectScrollbar>
-                  {siteLogs.length > 0 ? (
-                    <div
-                      className="timeline"
-                      ref={el => (this.timeLineDiv = el)}
-                    >
-                      {groupByDate(siteLogs).map(siteLog => {
+     
+        <div
+          className="thumb-list mr-0 "
+          style={{ position: "relative", height: "314px" }}
+        >
+          {showContentLoader ? (
+            <BlockContentLoader number={2} height="150px" />
+          ) : (
+              <PerfectScrollbar>
+                {notifications.length > 0 ? (
+                    <ul className="notification-menu">
+                      <li className="dropdown-header">You have 5 notifications</li>
+                      {notifications.map(notification => {
                         return (
-                          <div className="timeline-list" key={uuid()}>
-                            <time>{siteLog.date}</time>
-                            <ul>
-                              {siteLog.logs.map(log => (
-                                <li className="blue" key={uuid()}>
-                                  <div className="event-list ">
-                                    <figure>
-                                      <img src={log.source_img} alt="logo" />
-                                    </figure>
-                                    <div className="log-content">
-                                      <span className="time">
-                                        {format(log.date, ["h:mm a"])}
-                                      </span>
-
-                                      <div
-                                        dangerouslySetInnerHTML={{
-                                          __html: getLog(log, user_id)
-                                        }}
-                                      />
-                                    </div>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                          <li key={uuid()}>
+                            <a>
+                              <figure>
+                                <img src={notification.source_img} alt="user" />
+                              </figure>
+                              <div className="notify-info">
+                                <p dangerouslySetInnerHTML={{
+                                  __html: getLog(notification, userId)
+                                }}
+                                />
+                                <span className="time">
+                                  {`Added on ${format(notification.date, ["MMMM, DD, YYYY, h:mm a"])}`}
+                                </span>
+                                {notification.file && <div className="download-file"
+                                  onClick={() => { handleDownloadFile(notification.file) }}>
+                                  <b>download file</b>
+                                </div>}
+                              </div>
+                            </a>
+                          </li>
                         );
                       })}
-                    </div>
-                  ) : (
+                      {/* <li className="dropdown-footer">
+                        <a className="text-center">
+                          <span>View All</span>
+                          <span>Mark all as seen</span> </a>
+                      </li> */}
+                    </ul>
+                  
+
+                ) : (
                     <p> No Data Available </p>
                   )}
-                </PerfectScrollbar>
-              )}
-            </div>
-          </div>
+              </PerfectScrollbar>
+            )}
         </div>
-      </div>
+    
+      // </div>
+      //   </div>
     );
   }
 }
-export default Logs;
+export default NotificationHandler;

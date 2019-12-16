@@ -1,0 +1,35 @@
+.fs-row {
+    @include display-flex(flex);
+    @include flex-wrap(wrap);
+    margin-left: 7.5px;
+    margin-right: 7.5px;
+
+    [class*=fs-col] {
+        position: relative;
+        width: 100%;
+        min-height: 1px;
+        padding-left: 7.5px;
+        padding-right: 7.5px;
+
+        &.fs-5 {
+            @include flex-base(0 0 40%);
+            max-width: 40%;
+        }
+
+        &.fs-7 {
+            @include flex-base(0 0 60%);
+            max-width: 60%;
+        }
+    }
+
+    &.no-gutters {
+        margin-right: 0;
+        margin-left: 0;
+
+        [class*=fs-col] {
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+
+}

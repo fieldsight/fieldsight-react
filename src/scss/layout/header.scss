@@ -1,6 +1,6 @@
 .site-header {
     background-color: $color-blue;
-    padding: .6125rem 0;
+    padding: .6125rem 1rem;
 
     .header-wrapper {
         @include flexBetween;
@@ -54,6 +54,9 @@
                         height: 36px;
                         @include radius50;
                     }
+                }
+                &:hover{
+                    background-color:transparent;
                 }
             }
 
@@ -113,40 +116,18 @@
                                 }
                             }
                         }
-                    }
-
-                    &.user-menu {
-                        .dropdown-menu {
-                            width: 200px;
-                        }
-                    }
-
-                    &.notifications-menu {
-                        .dropdown-toggle {
-                            i {
-                                font-size: 1rem;
-                            }
-
-                            sup {
-                                width: 16px;
-                                height: 16px;
-                                @include radius50;
-                                background-color: $color-yellow;
-                                @include flexvr;
-                                top: -.5rem;
-                            }
-                        }
-
-                        .dropdown-menu {
+                        .notification-menu {
                             li {
                                 a {
                                     @include flexStart;
+                                    flex-wrap: nowrap;
 
                                     figure {
                                         margin: 0 .6125rem 0 0;
                                         -ms-flex: 0 0 24px;
                                         flex: 0 0 24px;
                                         max-width: 24px;
+                                        height: 24px;
 
                                         img {
                                             width: 24px;
@@ -162,10 +143,16 @@
                                         p {
                                             font-size: .875rem;
                                             margin: 0;
+                                            font-weight: 300;
 
                                             b {
                                                 color: $color-blue;
                                                 font-weight: 400;
+                                                a{
+                                                    padding:0;
+                                                    display: inline-block;
+                                                    font-weight: 400;;
+                                                }
                                             }
                                         }
 
@@ -193,6 +180,31 @@
                                 }
                             }
                         }
+                    }
+
+                    &.user-menu {
+                        .dropdown-menu {
+                            width: 200px;
+                        }
+                    }
+
+                    &.notifications-menu {
+                        .dropdown-toggle {
+                            i {
+                                font-size: 1rem;
+                            }
+
+                            sup {
+                                width: 16px;
+                                height: 16px;
+                                @include radius50;
+                                background-color: $color-yellow;
+                                @include flexvr;
+                                top: -.5rem;
+                            }
+                        }
+
+                        
                     }
                 }
 

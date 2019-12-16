@@ -1,4 +1,7 @@
 .fieldsight-new {
+  #main-container{
+    padding:0 1rem;
+  }
   .routing-list {
     @include flex_start;
     align-items: center;
@@ -10,16 +13,11 @@
     }
   }
 
-  #main-content {
-    position: relative;
-    margin: 0;
-  }
-
   .main-content {
     position: relative;
     margin-left: 240px;
-    -webkit-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
   }
 
   .main-sidebar {
@@ -29,24 +27,24 @@
     top: 67px;
     left: 0;
     background: $color-blue;
-    -webkit-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;
-    z-index: 99;
-    .sidebar-menu{
-      li{
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    z-index: 9999;
+    .sidebar-menu {
+      li {
         border-bottom: 1px solid lighten($color-blue, 5%);
-        a{
-         padding:1rem;
+        a {
+          padding: 1rem;
           color: $color-white;
           display: block;
           -webkit-transition: all 0.3s ease;
           transition: all 0.3s ease;
           font-size: 1rem;
           font-weight: 300;
-          i{
-            margin-right: .5rem;
+          i {
+            margin-right: 0.5rem;
           }
-          &:hover{
+          &:hover {
             background-color: lighten($color-blue, 5%);
           }
         }
@@ -82,7 +80,7 @@
           margin: 0;
           @include radius(50%);
           flex: 0 0 40px;
-          -ms-flex:0 0 40px;
+          -ms-flex: 0 0 40px;
           overflow: hidden;
           margin-right: 1rem;
 
@@ -98,7 +96,7 @@
         .content {
           h6 {
             margin-bottom: 0.2rem;
-            font-size: .845rem;
+            font-size: 0.845rem;
 
             a {
               color: $color-primary;
@@ -197,12 +195,12 @@
         border-bottom: 1px solid $color-bg;
 
         h6 {
-          font-size: .875rem;
+          font-size: 0.875rem;
           font-weight: 500;
           margin: 0;
 
           a {
-            font-size: .875rem;
+            font-size: 0.875rem;
             font-family: $ubuntu;
             font-weight: 500;
           }
@@ -328,7 +326,6 @@
     margin-bottom: 2rem;
 
     .identity-form {
-
       // padding:1rem;
       .form-group {
         @include clear;
@@ -436,7 +433,7 @@
               margin: 0;
               border-bottom: 1px solid $color-bg;
               word-break: break-all;
-              label{
+              label {
                 word-break: break-all;
               }
             }
@@ -518,11 +515,10 @@
           border-bottom: 1px solid $color-bg;
 
           figure {
-            
             @include radius50;
             display: inline-block;
-            flex:0 0 50px;
-            -ms-flex:0 0 50px;
+            flex: 0 0 50px;
+            -ms-flex: 0 0 50px;
             max-width: 50px;
             margin-right: 15px;
             margin-bottom: 0;
@@ -572,7 +568,6 @@
               display: block;
               padding-left: 1.3rem;
               position: relative;
-
 
               &::before {
                 content: "\f274";
@@ -632,7 +627,6 @@
 
     &.stage-accordion {
       .card {
-
         .card-header {
           @include flexjust;
           justify-content: flex-start;
@@ -647,7 +641,7 @@
               font-size: 1.2rem;
 
               &:last-child {
-                margin-left: -.875rem;
+                margin-left: -0.875rem;
               }
             }
 
@@ -668,16 +662,14 @@
               text-transform: capitalize;
 
               span.edit-stage {
-                margin-left: .5rem;
+                margin-left: 0.5rem;
 
                 i {
-                  font-size: .875rem;
+                  font-size: 0.875rem;
                 }
               }
             }
           }
-
-
         }
 
         .card-body {
@@ -686,22 +678,23 @@
           }
 
           table {
-            margin-top: .25rem;
+            margin-top: 0.25rem;
           }
         }
 
         .dragable-stage {
-          padding:0;
-          background:transparent;
-          margin:0;
-          border:0;
+          padding: 0;
+          background: transparent;
+          margin: 0;
+          border: 0;
           .card-header {
             h5 {
               width: calc(100% - 30px);
 
               button.btn-link {
                 pointer-events: none;
-                span.edit-stage,&::after {
+                span.edit-stage,
+                &::after {
                   display: none;
                 }
                 // &::after{
@@ -716,7 +709,7 @@
               cursor: move;
             }
           }
-          &::before{
+          &::before {
             display: none;
           }
         }
@@ -748,7 +741,6 @@
 
         .card-header {
           h5.rotate {
-
             a,
             button.btn.btn-link {
               &::after {
@@ -757,7 +749,6 @@
             }
 
             &.non-rotate {
-
               a,
               button.btn.btn-link {
                 &::after {

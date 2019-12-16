@@ -1,0 +1,90 @@
+.fieldsight-new {
+    .report-table {
+        .report-table-header {
+            @include display-flex(flex);
+            @include justify-content-end;
+            @include align-items-center;
+
+            .dropdown {
+                .common-button {
+                    min-width: auto;
+                    padding: .35rem 1rem;
+                    position: relative;
+
+                    &.is-border {
+                        &.is-icon {
+                            font-size: .75rem;
+
+                            i {
+                                font-size: 1rem;
+                                &.arrow-icon{
+                                    margin:0 0 0 .6125rem;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &:not(:last-child) {
+                    margin-right: .6125rem;
+                }
+            }
+        }
+
+        table {
+            &.table {
+                thead {
+                    border-bottom: 2px solid $secondary-light-1;
+
+                    tr {
+
+
+                        th {
+                            border: 0;
+                            font-size: .75rem;
+                        }
+                    }
+                }
+
+                tbody {
+                    tr {
+                        border-bottom: 1px solid $bg-light;
+
+                        td {
+                            border: 0;
+                            font-size: .75rem;
+                            color: $primary-light-1;
+                        }
+                    }
+                }
+            }
+        }
+
+        .report-table-footer {
+            @include display-flex(flex);
+            @include justify-content-center;
+            @include align-items-center;
+
+            .table-data-counter {
+                span {
+                    color: $primary-light-1;
+                    font-size: .75rem;
+
+                    b {
+                        color: $heading-color;
+                    }
+                }
+
+                &:not(:last-child) {
+                    &::after {
+                        content: '|';
+                        display: inline-block;
+                        margin: 0 .5rem;
+                        color: $primary-light-1;
+                        font-size: .65rem;
+                    }
+                }
+            }
+        }
+    }
+}

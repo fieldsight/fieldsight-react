@@ -1,0 +1,72 @@
+[class*=common-tab] {
+    @include display-flex(flex);
+    @include justify-content-start;
+
+    li {
+        font-size: .9375rem;
+        padding: .5rem;
+        text-transform: capitalize;
+        box-shadow: none;
+        font-weight: 500;
+        cursor: pointer;
+        @include transition(all .5s linear);
+        @include radius(5px);
+
+        &:not(:last-child) {
+            margin-right: 3rem;
+        }
+
+    }
+
+    &.is-bg {
+        li {
+
+            padding: .5rem 1rem;
+            font-size: .8125rem;
+            color:$primary-light;
+
+            &.current,
+            &:hover {
+                color: $color-white;
+                background-color: $color-secondary;
+                border-color: $color-secondary;
+            }
+            &:not(:last-child) {
+                margin-right: 1rem;
+            }
+        }
+    }
+
+    &.is-line {
+        li {
+            background-color: transparent;
+            color: $heading-color;
+            position: relative;
+
+            &::after {
+                content: '';
+                position: absolute;
+                width: 0;
+                left: 0;
+                bottom: 0;
+                height: 1.5px;
+                background-color: $color-secondary;
+                @include transition(width .3s linear);
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            &.current,
+            &:hover {
+                color: $color-secondary;
+
+                &::after {
+                    width: 100%;
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+        }
+    }
+
+}
