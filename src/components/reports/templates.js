@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+/* eslint-disable */
 
 export default class Templates extends PureComponent {
   render() {

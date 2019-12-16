@@ -1,9 +1,10 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Sheet from "../../static/images/sheets.png";
+import React, { PureComponent } from 'react';
+import Table from 'react-bootstrap/Table';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import Sheet from '../../static/images/sheets.png';
+/* eslint-disable react/destructuring-assignment */
 
-export default class StandardReportTable extends Component {
+export default class StandardReportTable extends PureComponent {
   render() {
     const {
       loader,
@@ -12,14 +13,17 @@ export default class StandardReportTable extends Component {
       getReportName,
       formatDate,
       canSyncOrEdit,
-      getDayOnWeeklySchedule
+      getDayOnWeeklySchedule,
     } = this.props;
     return (
       <>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: 'flex' }}>
           <h6>{scheduleType}</h6>
         </div>
-        <Table responsive="xl" className="table  table-bordered  dataTable ">
+        <Table
+          responsive="xl"
+          className="table  table-bordered  dataTable "
+        >
           <thead>
             <tr>
               <th>Report Name</th>
@@ -43,11 +47,11 @@ export default class StandardReportTable extends Component {
                       <p>{each.description && each.description}</p>
                     </td>
                     <td>
-                      {each.schedule_type === "Weekly"
-                        ? `${each.schedule_type} on ${getDayOnWeeklySchedule(
-                            each.day
-                          )}`
-                        : each.schedule_type === "Monthly"
+                      {each.schedule_type === 'Weekly'
+                        ? `${
+                            each.schedule_type
+                          } on ${getDayOnWeeklySchedule(each.day)}`
+                        : each.schedule_type === 'Monthly'
                         ? each.day === 0
                           ? ` ${each.schedule_type} on last day`
                           : ` ${each.schedule_type} on day ${each.day}`
@@ -55,50 +59,76 @@ export default class StandardReportTable extends Component {
                     </td>
                     <td>
                       {each.spreadsheet_id ? (
-                        <a href={each.spreadsheet_id} target="_blank">
+                        <a
+                          href={each.spreadsheet_id}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <OverlayTrigger
                             placement="top"
-                            overlay={<Tooltip>View Google Sheet</Tooltip>}
+                            overlay={
+                              <Tooltip>View Google Sheet</Tooltip>
+                            }
                           >
-                            <img src={Sheet} style={{ height: "15px" }} />
+                            <img
+                              src={Sheet}
+                              style={{ height: '15px' }}
+                              alt="sheet"
+                            />
                           </OverlayTrigger>
                         </a>
                       ) : (
-                        "No sheet created"
+                        'No sheet created'
                       )}
                     </td>
                     <td>
                       {each.last_synced_date
                         ? formatDate(each.last_synced_date)
-                        : "Not Synced Yet"}
+                        : 'Not Synced Yet'}
                     </td>
                     <td>
                       {canSyncOrEdit && (
                         <>
                           <span>
                             <a
-                              onClick={() => this.props.editAction(each)}
+                              role="button"
+                              tabIndex="0"
+                              onClick={() => {
+                                this.props.editAction(each);
+                              }}
+                              onKeyDown={() => {
+                                this.props.editAction(each);
+                              }}
                               className="pending td-edit-btn td-btn"
                             >
                               <OverlayTrigger
                                 placement="top"
-                                overlay={<Tooltip>Edit Schedule</Tooltip>}
+                                overlay={
+                                  <Tooltip>Edit Schedule</Tooltip>
+                                }
                               >
                                 <i className="la la-edit" />
                               </OverlayTrigger>
                             </a>
                           </span>
-                          {each.schedule_type === "Manual" && (
+                          {each.schedule_type === 'Manual' && (
                             <span>
                               <a
-                                onClick={() =>
-                                  this.props.reqSync(each.report_id)
-                                }
+                                role="button"
+                                tabIndex="0"
+                                onKeyDown={() => {
+                                  this.props.reqSync(each.report_id);
+                                }}
+                                onClick={() => {
+                                  this.props.reqSync(each.report_id);
+                                }}
                                 className="pending td-edit-btn td-btn"
                               >
                                 <OverlayTrigger
                                   placement="top"
-                                  overlay={<Tooltip>Sync Now</Tooltip>}
+                                  overlay={
+                                    <Tooltip>Sync Now</Tooltip>
+                                  }
                                 >
                                   <i className="la la-refresh ml-2" />
                                 </OverlayTrigger>

@@ -330,11 +330,12 @@ class ScheduleForms extends Component {
     const { id, xf, isEditForm, isProjectForm } = this.state;
     const monthDay =
       data.scheduleType === 2 && data.selectedMonthlyDays
-        ? data.selectedMonthlyDays === "31"
+        ? data.selectedMonthlyDays === '31'
           ? 0
           : data.selectedMonthlyDays
         : 0;
-    const selectedDay = data.scheduleType !== 2 ? data.selectedDays : [];
+    const selectedDay =
+      data.scheduleType !== 2 ? data.selectedDays : [];
     const frequency = data.scheduleType !== 0 ? data.frequency : 0;
     this.setState({ loadReq: true }, () => {
       if (!isEditForm) {
@@ -345,7 +346,7 @@ class ScheduleForms extends Component {
           xf,
           default_submission_status: data.status,
           schedule_level_id: data.scheduleType,
-          frequency: frequency,
+          frequency,
           selected_days: selectedDay,
           month_day: monthDay,
 
@@ -397,7 +398,7 @@ class ScheduleForms extends Component {
           id: data.id,
           default_submission_status: data.status,
           schedule_level_id: data.scheduleType,
-          frequency: frequency,
+          frequency,
           selected_days: selectedDay,
           month_day: monthDay,
           date_range_start: formatDate(data.startDate),

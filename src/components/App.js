@@ -82,7 +82,7 @@ class App extends Component {
     super(props);
     this.state = {
       height: 0,
-      region: false,
+      // region: false,
       // selectedLanguage: language,
       toggleClass: false,
     };
@@ -99,18 +99,18 @@ class App extends Component {
   }
 
   updateWindowDimensions = () => {
-    return (this.state.height = window.innerHeight - 181);
+    this.state.height = window.innerHeight - 181;
   };
 
   handleToggle = () => {
-    this.setState(state => ({
+    return this.setState(state => ({
       toggleClass: !state.toggleClass,
     }));
   };
 
   render() {
     const { selected } = this.props;
-
+    const { toggleClass, height } = this.state;
     return (
       <IntlProvider locale={selected} messages={messages[selected]}>
         <div id="fieldsight-new" className="fieldsight-new">
@@ -120,7 +120,7 @@ class App extends Component {
           /> */}
           <div
             id="main-container"
-            className={`${!this.state.toggleClass ? 'minified' : ''}`}
+            className={`${!toggleClass ? 'minified' : ''}`}
           >
             {/* <SideNav handleToggle={this.handleToggle} /> */}
             {/* <div className="container-fluid"> */}
@@ -134,10 +134,7 @@ class App extends Component {
                   <Route
                     path="/team-settings/:id"
                     render={props => (
-                      <TeamSetting
-                        {...props}
-                        height={this.state.height}
-                      />
+                      <TeamSetting {...props} height={height} />
                     )}
                   />
                   <Route
@@ -320,6 +317,25 @@ class App extends Component {
                   <Route
                     path="/my-reports/:id"
                     render={props => <MyReports {...props} />}
+                  />
+
+                  <Route
+                    path="/project-responses/:id"
+                    render={props => <SpecificViewData {...props} />}
+                  />
+                  <Route
+                    path="/project-submission-responses/:id"
+                    render={props => <SubmissionForm {...props} />}
+                  />
+                  <Route
+                    path="/site-responses/:id"
+                    render={props => <SiteViewData {...props} />}
+                  />
+                  <Route
+                    path="/site-submission-responses/:id"
+                    render={props => (
+                      <SiteSubmissionForm {...props} />
+                    )}
                   />
                 </Switch>
                 <ToastContainer />

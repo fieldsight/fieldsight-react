@@ -212,39 +212,41 @@ class DashboardHeader extends React.Component {
                   countName=""
                   countNumber={totalSubmissions}
                   icon="la-copy"
-                  //noSubmissionText={true}
+                  // noSubmissionText={true}
                 />
               </Link>
               <a
                 href={`/fieldsight/application/#/project-users/${id}/`}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <CountCard
                   countName="User"
                   countNumber={totalUsers}
                   icon="la-user"
-                  noSubmissionText={true}
+                  noSubmissionText
                 />
               </a>
               <a
                 href={`/fieldsight/application/?project=${id}#/project-sitelist`}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <CountCard
                   countName="site"
                   countNumber={totalSites}
                   icon="la-map-marker"
-                  noSubmissionText={true}
+                  noSubmissionText
                 />
               </a>
             </div>
             {isProjectManager && (
               <button
-                role="button"
+                type="button"
                 onClick={() => this.setState({ openmodel: true })}
                 className="common-button is-border is-icon"
               >
-                <i className="material-icons">library_add</i>{' '}
+                <i className="material-icons">library_add</i>
                 <span>Add data</span>
               </button>
             )}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MyReports from './MyReports';
 import ShareWithMe from './SharedWithMe';
 import Templates from './templates';
+/* eslint-disable */
 
 class Reports extends Component {
   constructor(props) {

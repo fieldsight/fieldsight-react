@@ -606,7 +606,7 @@ class GlobalModalForm extends Component {
     for (let i = 1; i <= 12; i += 1) {
       monthOPtions.push({ key: i, name: i });
     }
-    for (var i = 1; i <= 31; i++) {
+    for (let i = 1; i <= 31; i += 1) {
       if (i <= 30) dayOptions.push({ id: i, name: i });
       else dayOptions.push({ id: i, name: 'Last' });
     }
