@@ -1,0 +1,108 @@
+.custom-group {
+    @include display-flex(flex);
+    @include flex-wrap(wrap);
+    @include align-items-stretch;
+    border: 1px solid $primary-light-1;
+    @include radius(5px);
+
+    input {
+        &.custom-control {
+            position: relative;
+            @include flex-base(1 1 auto);
+            width: 1%;
+            margin-bottom: 0;
+            background-clip: padding-box;
+            display: block;
+            background-color: $color-white;
+            background-clip: padding-box;
+            @include box_shadow(none);
+            border: 0;
+            height: calc(1.8rem + 2px);
+            padding: .375rem 1.75rem .375rem .75rem;
+            &:focus{
+                background-color:$secondary-light-2;
+                box-shadow: none;
+                -webkit-outline:none;
+                outline:none;
+            }
+        }
+    }
+
+    .custom-group-append {
+        margin-left: -1px;
+        @include display-flex(flex);
+
+        .custom-group-text {
+            @include display-flex(flex);
+            @include align-items-center;
+            padding: .375rem .75rem;
+            margin-bottom: 0;
+
+            font-weight: 400;
+            line-height: 1.5;
+            color: $primary-light;
+            text-align: center;
+            white-space: nowrap;
+
+            i {
+                font-size: 1rem;
+            }
+        }
+    }
+}
+.inline-flex{
+    @include display-flex(flex);
+    @include align-items-center;
+    @include flex-wrap(no-wrap);
+    .custom-group{
+        @include flex-base(50%);
+        // &:after{
+        //     content:'arrow_right_alt';
+        //     font-family: 'Material Icons';
+        //     display: inline-block;
+        //     color:$color-secondary;
+        //     margin:0 1rem;
+        // }
+    }
+    .icon-between{
+        margin:0 1rem;
+        color:$primary-light;
+    }
+}
+.fieldsight-new{
+    form{
+        .form-group{
+            &.inline-form-group{
+                @include display-flex(flex);
+                @include justify-content-start;
+                @include align-items-center;
+                label{
+                  margin-right:.6125rem;
+                  margin-bottom: 0;
+                  max-width: 70px;
+                  width:100%;
+                }
+                .common-select{
+                  @include flex-base(1 1 auto);
+                }
+              }
+        }
+    }
+}
+
+.form-group{
+    &.inline-form-group{
+        @include display-flex(flex);
+        @include justify-content-start;
+        @include align-items-center;
+        label{
+          margin-right:.6125rem;
+          margin-bottom: 0;
+          max-width: 70px;
+          width:100%;
+        }
+        .common-select{
+          @include flex-base(1 1 auto);
+        }
+      }
+}
