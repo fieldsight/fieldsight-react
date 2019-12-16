@@ -102,14 +102,14 @@ class GlobalModalForm extends Component {
           ? getArrValue(this.props.formData.selected_days, 7)
           : false
     },
-    selectedDays:
-      this.props.formData && this.props.formData.selected_days
-        ? this.props.formData.schedule_level_id === 2
-          ? this.props.formData.selected_days[0] === 0
-            ? ["31"]
-            : this.props.formData.selected_days
-          : this.props.formData.selected_days
-        : [],
+    selectedDays: this.props.formData && this.props.formData.selected_days,
+    selectedMonthlyDays:
+      this.props.formData &&
+      this.props.formData.schedule_level_id === 2 &&
+      this.props.formData.month_day === 0
+        ? 31
+        : this.props.formData.month_day,
+
     weeklyArrDays: {
       mon:
         this.props.formData &&
@@ -155,7 +155,9 @@ class GlobalModalForm extends Component {
           : false
     },
     frequency:
-      this.props.formData && this.props.formData.frequency
+      this.props.formData &&
+      this.props.formData.schedule_level_id !== 0 &&
+      this.props.formData.frequency
         ? this.props.formData.frequency
         : 1,
     notifyIncomplete:
@@ -279,7 +281,8 @@ class GlobalModalForm extends Component {
       } else if (name == "scheduleType") {
         return {
           scheduleType: JSON.parse(value),
-          selectedDays: []
+          selectedDays: [],
+          selectedMonthlyDays: ""
         };
       } else if (name == "notifyIncomplete") {
         return {
@@ -497,7 +500,7 @@ class GlobalModalForm extends Component {
   handleDaySelect = e => {
     const { value } = e.target;
     this.setState({
-      selectedDays: [value]
+      selectedMonthlyDays: value
     });
   };
   handleSubmit = e => {
@@ -530,13 +533,11 @@ class GlobalModalForm extends Component {
         scheduleType,
         dailyArrDays,
         weeklyArrDays,
-        selectedDays,
+        selectedMonthlyDays,
         frequency,
         notifyIncomplete
       }
     } = this;
-
-    // console.log(this.props, "props", selectedDays);
 
     let weekOptions = [];
     let monthOPtions = [];
@@ -548,8 +549,8 @@ class GlobalModalForm extends Component {
       monthOPtions.push({ key: i, name: i });
     }
     for (var i = 1; i <= 31; i++) {
-      if (i <= 30) dayOptions.push({ key: i, name: i });
-      else dayOptions.push({ key: i, name: "Last" });
+      if (i <= 30) dayOptions.push({ id: i, name: i });
+      else dayOptions.push({ id: i, name: "Last" });
     }
     return (
       <>
@@ -719,7 +720,7 @@ class GlobalModalForm extends Component {
                   <span>Months on day</span>
                   <SelectElement
                     options={dayOptions}
-                    value={selectedDays[0]}
+                    value={selectedMonthlyDays}
                     changeHandler={this.handleDaySelect}
                   />
                 </div>

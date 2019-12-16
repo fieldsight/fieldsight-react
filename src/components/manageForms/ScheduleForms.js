@@ -309,12 +309,14 @@ class ScheduleForms extends Component {
   };
   handleScheduleForm = data => {
     const { id, xf, isEditForm, isProjectForm } = this.state;
-    const selectedDay =
-      data.scheduleType === 2
-        ? data.selectedDays[0] === "31"
-          ? ["0"]
-          : data.selectedDays
-        : data.selectedDays;
+    const monthDay =
+      data.scheduleType === 2 && data.selectedMonthlyDays
+        ? data.selectedMonthlyDays === "31"
+          ? 0
+          : data.selectedMonthlyDays
+        : 0;
+    const selectedDay = data.scheduleType !== 2 ? data.selectedDays : [];
+    const frequency = data.scheduleType !== 0 ? data.frequency : 0;
     this.setState({ loadReq: true }, () => {
       if (!isEditForm) {
         const postUrl = !!isProjectForm
@@ -324,8 +326,10 @@ class ScheduleForms extends Component {
           xf: xf,
           default_submission_status: data.status,
           schedule_level_id: data.scheduleType,
-          frequency: data.frequency,
+          frequency: frequency,
           selected_days: selectedDay,
+          month_day: monthDay,
+
           date_range_start: formatDate(data.startDate),
           ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
           setting: {
@@ -372,8 +376,9 @@ class ScheduleForms extends Component {
           id: data.id,
           default_submission_status: data.status,
           schedule_level_id: data.scheduleType,
-          frequency: data.frequency,
+          frequency: frequency,
           selected_days: selectedDay,
+          month_day: monthDay,
           date_range_start: formatDate(data.startDate),
           ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
           setting: {
