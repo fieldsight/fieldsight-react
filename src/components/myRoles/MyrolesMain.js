@@ -203,12 +203,7 @@ class MyrolesMain extends Component {
   };
 
   requestSubmission = id => {
-    const { profileId } = this.state;
-
-    const submission_url = !!profileId
-      ? `fv3/api/submissions-map/?project=${id}&type=submissions&profile=${profileId}`
-      : `fv3/api/submissions-map/?project=${id}&type=submissions`;
-
+    const submission_url = `fv3/api/submissions-map/?project=${id}&type=submissions`;
     this.setState({
       submissionLoader: true,
     });
@@ -248,11 +243,7 @@ class MyrolesMain extends Component {
 
   onChangeHandler = e => {
     const searchValue = e.target.value;
-    const { siteId, profileId } = this.state;
-    const url = !!profileId
-      ? `fv3/api/my-sites/?project=${siteId}&profile=${profileId}&q=${this.state.searchQuery}`
-      : `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`;
-
+    const { siteId } = this.state;
     this.setState({ searchQuery: searchValue }, () => {
       const {
         props: { searchHandler },
@@ -481,7 +472,6 @@ class MyrolesMain extends Component {
                         regions={regions}
                         RegionLoader={RegionLoader}
                         profileId={profileId}
-                        requestCheckRoles={this.requestCheckRoles}
                       />
                     )}
                     {rightTab === 'site' && (
@@ -501,7 +491,6 @@ class MyrolesMain extends Component {
                         toData={toData}
                         totalCount={totalCount}
                         profileId={profileId}
-                        requestCheckRoles={this.requestCheckRoles}
                       />
                     )}
 
@@ -582,43 +571,6 @@ class MyrolesMain extends Component {
               </a>
             </div>
           </Modal>
-        )}
-        {checkRole && (
-          <Modal
-            title="Which of the following roles do you want to Delete?"
-            toggleModal={this.cancelHandler}
-          >
-            {/* <div className="row"> */}
-            <ul>
-              {roles &&
-                roles.length > 0 &&
-                roles.map(role => (
-                  <li key={`role_${role.role_id}`}>
-                    <label>
-                      <strong>{role.group_name}</strong>
-                    </label>
-                    &nbsp;
-                    <a
-                      className="td-delete-btn td-btn"
-                      onClick={() => {
-                        this.handleToggleDelete(role.role_id);
-                      }}
-                    >
-                      Delete
-                    </a>
-                  </li>
-                ))}
-            </ul>
-            {/* </div> */}
-          </Modal>
-        )}
-        {isDelConfirm && (
-          <DeleteModal
-            onCancel={this.handleToggleDelete}
-            onConfirm={this.requestDeleteRole}
-            onToggle={this.handleToggleDelete}
-            message="Are you sure to delete the role?"
-          />
         )}
       </>
     );

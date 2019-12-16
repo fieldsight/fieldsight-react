@@ -1,13 +1,45 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
-class MyReports extends PureComponent {
+class MyReports extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: 'myReports',
+    };
+  }
+
+  toggleTab = result => {
+    if (result === 'myReports') {
+      console.log('hello');
+    }
+  };
+
   render() {
+    const { activeTab } = this.state;
     return (
       <div className="reports mrb-30">
         <div className="card">
           <div className="reports-header mt-4">
             <ul className="common-tab is-bg">
-              <li className="current">My reports</li>
+              <li className="current">
+                <a
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => {
+                    this.toggleTab('myReports');
+                  }}
+                  className={
+                    activeTab === 'myReports'
+                      ? 'nav-link active'
+                      : 'nav-link'
+                  }
+                  onClick={() => {
+                    this.toggleTab('myReports');
+                  }}
+                >
+                  My reports
+                </a>
+              </li>
               <li>shared with me</li>
               <li>templates</li>
             </ul>

@@ -112,17 +112,10 @@ class YourTeamSideBar extends Component {
                                       </Tooltip>
                                     }
                                   >
-                                    <OverlayTrigger
-                                      placement="top"
-                                      overlay={
-                                        <Tooltip>Go to dashboard</Tooltip>
-                                      }
-                                    >
-                                      <i className="la la-external-link" />
-                                    </OverlayTrigger>
-                                  </span>
-                                )}
-                              </span>
+                                    <i className="la la-external-link" />
+                                  </OverlayTrigger>
+                                </span>
+                              )}
                               <p>{team.address}</p>
                             </Accordion.Toggle>
                           </h5>
@@ -170,37 +163,11 @@ class YourTeamSideBar extends Component {
                                             Go to dashboard
                                           </Tooltip>
                                         }
-                                        className="project-link"
                                       >
-                                        <OverlayTrigger
-                                          placement="top"
-                                          overlay={
-                                            <Tooltip>Go to dashboard</Tooltip>
-                                          }
-                                        >
-                                          <i className="la la-external-link" />
-                                        </OverlayTrigger>
-                                      </span>
-                                    )}
-                                    {!!project.can_delete_role && (
-                                      <span
-                                        className="td-delete-btn td-btn"
-                                        onClick={() => {
-                                          this.props.requestCheckRoles(
-                                            "project",
-                                            project.id
-                                          );
-                                        }}
-                                      >
-                                        <OverlayTrigger
-                                          placement="top"
-                                          overlay={<Tooltip>Delete</Tooltip>}
-                                        >
-                                          <i className="la la-trash-o" />
-                                        </OverlayTrigger>
-                                      </span>
-                                    )}
-                                  </div>
+                                        <i className="la la-external-link" />
+                                      </OverlayTrigger>
+                                    </a>
+                                  )}
                                 </li>
                               ))}
                             </ul>
