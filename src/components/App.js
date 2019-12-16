@@ -50,6 +50,8 @@ import ResetPassword from './ResetPassword';
 import UpdateProfile from './updateProject';
 import CreateProfile from './ProfileAdd';
 
+import MyReports from './reports/MyReports';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -293,6 +295,11 @@ class App extends Component {
                     <Route
                       path="/create-profile/:id"
                       render={props => <CreateProfile {...props} />}
+                    />
+
+                    <Route
+                      path="/my-reports/:id"
+                      render={props => <MyReports {...props} />}
                     />
                   </Switch>
                   <ToastContainer />
