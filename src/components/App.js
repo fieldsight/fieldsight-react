@@ -261,14 +261,14 @@ class App extends Component {
                     )}
                   />
 
-                  <Route
+                  {/* <Route
                     path="/project-responses/:id"
                     render={props => <ViewData {...props} />}
                   />
                   <Route
                     path="/site-responses/:id"
                     render={props => <SiteData {...props} />}
-                  />
+                  /> */}
                   <Route
                     path="/submission-data/:id/:fid"
                     render={props => <SubmissionData {...props} />}

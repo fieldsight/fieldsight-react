@@ -14,34 +14,46 @@ export default class Templates extends Component {
 
   toggleTab = result => {
     if (result === 'general') {
-      this.setState({
-        viewForm: true,
-      });
+      this.setState(
+        preveState => ({
+          general: !preveState.general,
+          scheduled: preveState.scheduled,
+          survey: preveState.survey,
+          staged: preveState.staged,
+        }),
+        () => {
+          console.log(this.state.general, '------');
+        },
+      );
     }
     if (result === 'scheduled') {
-      this.setState({
-        viewForm: true,
-      });
+      this.setState(preveState => ({
+        general: preveState.general,
+        scheduled: !preveState.scheduled,
+        survey: preveState.survey,
+        staged: preveState.staged,
+      }));
     }
     if (result === 'survey') {
-      this.setState({
-        viewForm: true,
-      });
+      this.setState(preveState => ({
+        general: preveState.general,
+        scheduled: preveState.scheduled,
+        survey: !preveState.survey,
+        staged: preveState.staged,
+      }));
     }
     if (result === 'staged') {
-      this.setState({
-        viewForm: true,
-      });
+      this.setState(preveState => ({
+        general: preveState.general,
+        scheduled: preveState.scheduled,
+        survey: preveState.survey,
+        staged: !preveState.staged,
+      }));
     }
-    // else {
-    //   this.setState({
-    //     viewForm: '',
-    //   });
-    // }
   };
 
   render() {
-    const { viewForm } = this.state;
+    const { general, scheduled, survey, staged } = this.state;
     const DataCrude = [
       {
         id: '1',
@@ -199,9 +211,14 @@ export default class Templates extends Component {
                       >
                         general forms
                       </a>
-                      {console.log(viewForm, 'viewForm')}
+
                       <div
-                        className={viewForm ? 'form-data-list' : ''}
+                        className="form-data-list"
+                        style={
+                          general === true
+                            ? { display: 'block' }
+                            : { display: 'none' }
+                        }
                       >
                         <p>Testing yet again</p>
                         <p>Retrofiting Go/No-Go with Measurement</p>
@@ -224,7 +241,12 @@ export default class Templates extends Component {
                         scheduled forms
                       </a>
                       <div
-                        className={viewForm ? 'form-data-list' : ''}
+                        className="form-data-list"
+                        style={
+                          scheduled === true
+                            ? { display: 'block' }
+                            : { display: 'none' }
+                        }
                       >
                         <p>Testing yet again</p>
                         <p>Retrofiting Go/No-Go with Measurement</p>
@@ -247,7 +269,12 @@ export default class Templates extends Component {
                         survey forms
                       </a>
                       <div
-                        className={viewForm ? 'form-data-list' : ''}
+                        className="form-data-list"
+                        style={
+                          survey === true
+                            ? { display: 'block' }
+                            : { display: 'none' }
+                        }
                       >
                         <p>Testing yet again</p>
                         <p>Retrofiting Go/No-Go with Measurement</p>
@@ -270,10 +297,11 @@ export default class Templates extends Component {
                         staged forms
                       </a>
                       <div
-                        className={
-                          viewForm === 'staged'
-                            ? ''
-                            : 'form-data-list'
+                        className="form-data-list"
+                        style={
+                          staged === true
+                            ? { display: 'block' }
+                            : { display: 'none' }
                         }
                       >
                         <p>Testing yet again</p>
@@ -312,7 +340,15 @@ export default class Templates extends Component {
             </div>
           </div>
         </div>
-
+        <div>
+          {console.log(this.state.general, 'general')}
+          <button
+            type="button"
+            onClick={() => this.setState({ general: true })}
+          >
+            example
+          </button>
+        </div>
         <div className="custom-template">
           <h2 className="my-3">custom</h2>
           <div className="report-list">
