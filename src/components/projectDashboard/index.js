@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import DashboardHeader from './DashboardHeader';
 import ProjectDashboardComponent from './dashboardComponent';
-
+import Reports from '../reports';
 import {
   getProjectDashboard,
   getRegionData,
@@ -13,7 +13,7 @@ import {
 /* eslint-disable react/destructuring-assignment */
 
 const INITIAL_STATE = {
-  // activeTab: 'site',
+  activeTab: 'home',
   showHeaderModal: false,
   showSubmissionModal: false,
   showCropper: false,
@@ -61,6 +61,12 @@ class ProjectDashboard extends React.Component {
       );
     }
   }
+
+  toggleTab = tab => {
+    this.setState({
+      activeTab: tab,
+    });
+  };
 
   closeModal = type => {
     // if (type) {
@@ -118,7 +124,7 @@ class ProjectDashboard extends React.Component {
       },
     } = this.props;
 
-    const { showCropper, showGallery } = this.state;
+    const { showCropper, showGallery, activeTab } = this.state;
 
     return (
       <>
@@ -156,28 +162,35 @@ class ProjectDashboard extends React.Component {
             showGallery={showGallery}
             isProjectManager={is_project_manager}
             surveyData={surveyData}
+            activeTab={activeTab}
+            toggleTab={this.toggleTab}
           />
-          <ProjectDashboardComponent
-            terms_and_labels={terms_and_labels}
-            id={id}
-            map={map}
-            showContentLoader={projectDashboardLoader}
-            has_region={has_region}
-            regionData={regionData}
-            projectRegionDataLoader={projectRegionDataLoader}
-            getRegionData={this.props.getRegionData}
-            is_project_manager={is_project_manager}
-            projectId={projectId}
-            project_activity={project_activity}
-            form_submissions_chart_data={form_submissions_chart_data}
-            site_progress_chart_data={site_progress_chart_data}
-            contacts={contacts}
-            public_desc={public_desc}
-            project_managers={project_managers}
-            logs={logs}
-            progressTableData={progressTableData}
-            progressLoader={progressLoader}
-          />
+          {activeTab !== 'reports' && (
+            <ProjectDashboardComponent
+              terms_and_labels={terms_and_labels}
+              id={id}
+              map={map}
+              showContentLoader={projectDashboardLoader}
+              has_region={has_region}
+              regionData={regionData}
+              projectRegionDataLoader={projectRegionDataLoader}
+              getRegionData={this.props.getRegionData}
+              is_project_manager={is_project_manager}
+              projectId={projectId}
+              project_activity={project_activity}
+              form_submissions_chart_data={
+                form_submissions_chart_data
+              }
+              site_progress_chart_data={site_progress_chart_data}
+              contacts={contacts}
+              public_desc={public_desc}
+              project_managers={project_managers}
+              logs={logs}
+              progressTableData={progressTableData}
+              progressLoader={progressLoader}
+            />
+          )}
+          {activeTab === 'reports' && <Reports />}
         </div>
       </>
     );
