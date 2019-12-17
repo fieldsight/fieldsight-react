@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
+/* eslint-disable  */
 
 export default class Templates extends Component {
   constructor(props) {
