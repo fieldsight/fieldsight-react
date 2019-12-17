@@ -52,7 +52,7 @@ import CreateProfile from './ProfileAdd';
 // import Header from "./headers";
 // import SideNav from "./sideNav";
 import ChangePassword from './changePassword';
-import MyReports from './reports';
+
 import SyncSchedule from './syncSchedule';
 // import SelectElement from "../components/common/SelectElement";
 
@@ -312,11 +312,6 @@ class App extends Component {
                   <Route
                     path="/create-profile/:id"
                     render={props => <CreateProfile {...props} />}
-                  />
-
-                  <Route
-                    path="/my-reports/:id"
-                    render={props => <MyReports {...props} />}
                   />
 
                   <Route
