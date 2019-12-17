@@ -1,14 +1,14 @@
-import React, { Component, Fragment } from "react";
-import Axios from "axios";
-import { toast } from "react-toastify";
+import React, { Component, Fragment } from 'react';
+import Axios from 'axios';
+import { toast } from 'react-toastify';
 
-import { DotLoader } from "../myForm/Loader";
-import Modal from "../common/Modal";
-import SyncScheduleForm from "./form";
-import ReportTable from "./reportTable";
-import StandardReportTable from "./standardReportTable";
-import StageReportTable from "./stageReportTable";
-import { errorToast } from "../../utils/toastHandler";
+import { DotLoader } from '../myForm/Loader';
+import Modal from '../common/Modal';
+import SyncScheduleForm from './form';
+import ReportTable from './reportTable';
+import StandardReportTable from './standardReportTable';
+import StageReportTable from './stageReportTable';
+import { errorToast } from '../../utils/toastHandler';
 
 const formatDate = e => {
   const date = new Date(e);
@@ -20,36 +20,38 @@ const formatDate = e => {
 };
 
 const getScheduleType = schedule => {
-  if (schedule === "Manual") {
-    return "0";
+  if (schedule === 'Manual') {
+    return '0';
   }
-  if (schedule === "Daily") {
-    return "1";
+  if (schedule === 'Daily') {
+    return '1';
   }
-  if (schedule === "Weekly") {
-    return "2";
+  if (schedule === 'Weekly') {
+    return '2';
   }
-  if (schedule === "Monthly") {
-    return "3";
+  if (schedule === 'Monthly') {
+    return '3';
   }
   return null;
 };
 
 const getDayOnWeeklySchedule = day => {
-  if (day === 1) return "Mondays";
-  if (day === 2) return "Tuesdays";
-  if (day === 3) return "Wednesdays";
-  if (day === 4) return "Thursdays";
-  if (day === 5) return "Fridays";
-  if (day === 6) return "Saturdays";
-  if (day === 7) return "Sundays";
+  if (day === 1) return 'Mondays';
+  if (day === 2) return 'Tuesdays';
+  if (day === 3) return 'Wednesdays';
+  if (day === 4) return 'Thursdays';
+  if (day === 5) return 'Fridays';
+  if (day === 6) return 'Saturdays';
+  if (day === 7) return 'Sundays';
   return null;
 };
 
 const getReportName = report => {
-  const split = report.split("_");
-  const newStr = split.map(str => str.replace(/^\w/, c => c.toUpperCase()));
-  return newStr.join(" ");
+  const split = report.split('_');
+  const newStr = split.map(str =>
+    str.replace(/^\w/, c => c.toUpperCase()),
+  );
+  return newStr.join(' ');
 };
 
 export default class SyncSchedule extends Component {
@@ -57,7 +59,7 @@ export default class SyncSchedule extends Component {
     super(props);
 
     this.state = {
-      reportList: [],
+      // reportList: [],
       loader: false,
       showForm: false,
       data: {},
@@ -67,15 +69,15 @@ export default class SyncSchedule extends Component {
       surveyReports: [],
       stagedReports: [],
       canSyncOrEdit: false,
-      breadcrumbs: {}
+      breadcrumbs: {},
     };
   }
 
   componentWillMount() {
     const {
       match: {
-        params: { projectId }
-      }
+        params: { projectId },
+      },
     } = this.props;
 
     this.requestList(projectId);
@@ -83,7 +85,9 @@ export default class SyncSchedule extends Component {
 
   requestList = projectId => {
     this.setState({ loader: true }, () => {
-      Axios.get(`/fv3/api/report-sync-settings-list/?project_id=${projectId}`)
+      Axios.get(
+        `/fv3/api/report-sync-settings-list/?project_id=${projectId}`,
+      )
         .then(res => {
           if (res.data) {
             const resData = Object.entries(res.data);
@@ -95,30 +99,31 @@ export default class SyncSchedule extends Component {
             let canSyncOrEdit = false;
             let breadcrumbs = {};
             resData.map(each => {
-              if (each[0] === "standard_reports") {
+              if (each[0] === 'standard_reports') {
                 standardReports.push(each);
               }
-              if (each[0] === "general_reports") {
+              if (each[0] === 'general_reports') {
                 generalReports.push(each);
               }
-              if (each[0] === "schedule_reports") {
+              if (each[0] === 'schedule_reports') {
                 scheduledReports.push(each);
               }
-              if (each[0] === "survey_reports") {
+              if (each[0] === 'survey_reports') {
                 surveyReports.push(each);
               }
-              if (each[0] === "stage_reports") {
+              if (each[0] === 'stage_reports') {
                 stagedReports.push(each);
               }
-              if (each[0] === "can_edit_or_sync") {
-                canSyncOrEdit = each[1];
+              if (each[0] === 'can_edit_or_sync') {
+                canSyncOrEdit = { ...each[1] };
               }
-              if (each[0] === "breadcrumbs") {
-                breadcrumbs = each[1];
+              if (each[0] === 'breadcrumbs') {
+                breadcrumbs = { ...each[1] };
               }
+              return null;
             });
             this.setState({
-              reportList: resData,
+              // reportList: resData,
               standardReports,
               generalReports,
               scheduledReports,
@@ -126,7 +131,7 @@ export default class SyncSchedule extends Component {
               stagedReports,
               canSyncOrEdit,
               loader: false,
-              breadcrumbs
+              breadcrumbs,
             });
           }
         })
@@ -144,18 +149,18 @@ export default class SyncSchedule extends Component {
   updateListOnSuccess = data => {
     this.setState(
       {
-        showForm: false
+        showForm: false,
       },
       () => {
         this.requestList(data.project);
-      }
+      },
     );
   };
 
   handleEdit = data => {
     this.setState({
       showForm: true,
-      data
+      data,
     });
   };
 
@@ -164,10 +169,10 @@ export default class SyncSchedule extends Component {
       .then(res => {
         if (res.data) {
           toast.success(res.data.detail, {
-            position: "top-right",
+            position: 'top-right',
             autoClose: 5000,
             hideProgressBar: false,
-            closeOnClick: true
+            closeOnClick: true,
           });
         }
       })
@@ -189,13 +194,13 @@ export default class SyncSchedule extends Component {
         surveyReports,
         stagedReports,
         canSyncOrEdit,
-        breadcrumbs
+        breadcrumbs,
       },
       props: {
         match: {
-          params: { projectId }
-        }
-      }
+          params: { projectId },
+        },
+      },
     } = this;
 
     return (
@@ -204,9 +209,13 @@ export default class SyncSchedule extends Component {
           {breadcrumbs && Object.keys(breadcrumbs).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href={breadcrumbs.project_url}>{breadcrumbs.project}</a>
+                <a href={breadcrumbs.project_url}>
+                  {breadcrumbs.project}
+                </a>
               </li>
-              <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+              <li className="breadcrumb-item">
+                {breadcrumbs.current_page}
+              </li>
             </ol>
           )}
           {/* <ol className="breadcrumb">
@@ -290,7 +299,7 @@ export default class SyncSchedule extends Component {
               stagedReports.map(stage => {
                 return (
                   <Fragment key={`report_${stage[0]}`}>
-                    <div style={{ display: "flex" }}>
+                    <div style={{ display: 'flex' }}>
                       <h6>{getReportName(stage[0])}</h6>
                     </div>
 

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+/* eslint-disable */
 
 class SharedWithMe extends PureComponent {
   render() {

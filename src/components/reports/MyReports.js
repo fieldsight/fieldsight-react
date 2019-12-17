@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+/* eslint-disable */
 
 class MyReports extends Component {
   constructor(props) {

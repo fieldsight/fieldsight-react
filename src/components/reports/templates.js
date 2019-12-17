@@ -5,26 +5,48 @@ export default class Templates extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showCrude: false,
+      general: false,
+      scheduled: false,
+      survey: false,
+      staged: false,
     };
   }
 
-  handleClick = () => {
-    this.setState(
-      {
-        showCrude: true,
-      },
-      () => console.log(this.state),
-    );
+  toggleTab = result => {
+    if (result === 'general') {
+      this.setState({
+        viewForm: true,
+      });
+    }
+    if (result === 'scheduled') {
+      this.setState({
+        viewForm: true,
+      });
+    }
+    if (result === 'survey') {
+      this.setState({
+        viewForm: true,
+      });
+    }
+    if (result === 'staged') {
+      this.setState({
+        viewForm: true,
+      });
+    }
+    // else {
+    //   this.setState({
+    //     viewForm: '',
+    //   });
+    // }
   };
 
   render() {
-    const { showCrude } = this.state;
+    const { viewForm } = this.state;
     const DataCrude = [
       {
         id: '1',
         title: 'Edit',
-        link: '/change-password',
+        link: '#',
       },
       {
         id: '2',
@@ -125,7 +147,7 @@ export default class Templates extends Component {
                   <p>
                     Export of key progress indicators like submission
                     count, status and site visits generated from
-                    Staged Forms..
+                    Staged Forms.
                   </p>
                 </div>
               </div>
@@ -151,6 +173,142 @@ export default class Templates extends Component {
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
+            </div>
+          </div>
+          <div className="report-list">
+            <div className="row">
+              <div className="col-md-8">
+                <div className="report-content">
+                  <h4>Form Data</h4>
+                  <p>
+                    Export of forms data and site information an Excel
+                    File, generated with filters in region, types and
+                    time range.
+                  </p>
+                  <ul className="form-data">
+                    <li>
+                      <a
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          this.toggleTab('general');
+                        }}
+                        onClick={() => {
+                          this.toggleTab('general');
+                        }}
+                      >
+                        general forms
+                      </a>
+                      {console.log(viewForm, 'viewForm')}
+                      <div
+                        className={viewForm ? 'form-data-list' : ''}
+                      >
+                        <p>Testing yet again</p>
+                        <p>Retrofiting Go/No-Go with Measurement</p>
+                        <p>TSC Visitors - STFC</p>
+                        <p>Corrective Action App</p>
+                        <p>Baseline Survey</p>
+                      </div>
+                    </li>
+                    <li>
+                      <a
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          this.toggleTab('scheduled');
+                        }}
+                        onClick={() => {
+                          this.toggleTab('scheduled');
+                        }}
+                      >
+                        scheduled forms
+                      </a>
+                      <div
+                        className={viewForm ? 'form-data-list' : ''}
+                      >
+                        <p>Testing yet again</p>
+                        <p>Retrofiting Go/No-Go with Measurement</p>
+                        <p>TSC Visitors - STFC</p>
+                        <p>Corrective Action App</p>
+                        <p>Baseline Survey</p>
+                      </div>
+                    </li>
+                    <li>
+                      <a
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          this.toggleTab('survey');
+                        }}
+                        onClick={() => {
+                          this.toggleTab('survey');
+                        }}
+                      >
+                        survey forms
+                      </a>
+                      <div
+                        className={viewForm ? 'form-data-list' : ''}
+                      >
+                        <p>Testing yet again</p>
+                        <p>Retrofiting Go/No-Go with Measurement</p>
+                        <p>TSC Visitors - STFC</p>
+                        <p>Corrective Action App</p>
+                        <p>Baseline Survey</p>
+                      </div>
+                    </li>
+                    <li>
+                      <a
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          this.toggleTab('staged');
+                        }}
+                        onClick={() => {
+                          this.toggleTab('staged');
+                        }}
+                      >
+                        staged forms
+                      </a>
+                      <div
+                        className={
+                          viewForm === 'staged'
+                            ? ''
+                            : 'form-data-list'
+                        }
+                      >
+                        <p>Testing yet again</p>
+                        <p>Retrofiting Go/No-Go with Measurement</p>
+                        <p>TSC Visitors - STFC</p>
+                        <p>Corrective Action App</p>
+                        <p>Baseline Survey</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="dropdown report-option">
+              <button
+                type="button"
+                className="dropdown-toggle common-button no-border is-icon"
+                data-toggle="dropdown"
+              >
+                <i className="material-icons">more_vert</i>
+              </button>
+              <div className="dropdown-menu dropdown-menu-right">
+                <a className="dropdown-item" href="#">
+                  Edit
+                </a>
+                <a className="dropdown-item" href="#">
+                  Add a template
+                </a>
+                <a className="dropdown-item" href="#">
+                  Share
+                </a>
+                <a className="dropdown-item" href="#">
+                  Delete
+                </a>
+              </div>
             </div>
           </div>
         </div>

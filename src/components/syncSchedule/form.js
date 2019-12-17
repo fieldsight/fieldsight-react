@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import Axios from "axios";
-import SelectElement from "../common/SelectElement";
-import { errorToast, successToast } from "../../utils/toastHandler";
+import React, { Component } from 'react';
+import Axios from 'axios';
+import SelectElement from '../common/SelectElement';
+import { errorToast, successToast } from '../../utils/toastHandler';
+/* eslint-disable react/destructuring-assignment */
 
 const weekOptions = [
-  { id: 1, name: "Monday" },
-  { id: 2, name: "Tueday" },
-  { id: 3, name: "Wednesday" },
-  { id: 4, name: "Thursday" },
-  { id: 5, name: "Friday" },
-  { id: 6, name: "Saturday" },
-  { id: 7, name: "Sunday" }
+  { id: 1, name: 'Monday' },
+  { id: 2, name: 'Tueday' },
+  { id: 3, name: 'Wednesday' },
+  { id: 4, name: 'Thursday' },
+  { id: 5, name: 'Friday' },
+  { id: 6, name: 'Saturday' },
+  { id: 7, name: 'Sunday' },
 ];
 
 export default class Form extends Component {
@@ -19,26 +20,27 @@ export default class Form extends Component {
 
     this.state = {
       selectedReport: props.data.report_type
-        ? props.data.report_type === "form"
+        ? props.data.report_type === 'form'
           ? props.data.title
           : props.data.report_type
-        : "",
-      // selectedType: props.data.report_type && props.data.report_type,
+        : '',
       reportId: props.data.report_id && props.data.report_id,
       scheduleType: props.data.schedule_type
         ? props.getScheduleType(props.data.schedule_type)
         : 0,
       selectedDayOnWeek:
-        props.data.schedule_type && props.data.schedule_type === "Weekly"
+        props.data.schedule_type &&
+        props.data.schedule_type === 'Weekly'
           ? props.data.day
           : 1,
       selectedDayOnMonth:
-        props.data.schedule_type && props.data.schedule_type === "Monthly"
-          ? props.data.day
+        props.data.schedule_type &&
+        props.data.schedule_type === 'Monthly'
+          ? props.data.day === 0
+            ? 31
+            : props.data.day
           : 1,
-      isFormSelected: false,
-      formList: [],
-      projectId: props.projectId
+      projectId: props.projectId,
     };
   }
 
@@ -46,11 +48,11 @@ export default class Form extends Component {
     const { value } = e.target;
 
     this.setState(() => {
-      if (value === "0" || value === "1")
+      if (value === '0' || value === '1')
         return {
           scheduleType: value,
           selectedDayOnWeek: null,
-          selectedDayOnMonth: null
+          selectedDayOnMonth: null,
         };
       return { scheduleType: value };
     });
@@ -58,42 +60,47 @@ export default class Form extends Component {
 
   handleSelectedDayChange = e => {
     const { value } = e.target;
-    this.setState({ selectedDayOnWeek: JSON.parse(value) });
+    this.setState({ selectedDayOnWeek: value });
   };
 
   handleSelectedMonthDayChange = e => {
     const { value } = e.target;
-    this.setState({ selectedDayOnMonth: JSON.parse(value) });
+    this.setState({
+      selectedDayOnMonth: value,
+    });
   };
 
   handleSubmit = e => {
     e.preventDefault();
     const {
       state: {
-        selectedType,
         scheduleType,
         selectedDayOnWeek,
         selectedDayOnMonth,
         reportId,
-        projectId
-      }
+        projectId,
+      },
     } = this;
     const body = {
-      // report_type: selectedType,
       schedule_type: scheduleType,
       project: JSON.parse(projectId),
       day:
-        scheduleType === "2" && selectedDayOnWeek
+        scheduleType === '2' && selectedDayOnWeek
           ? selectedDayOnWeek
-          : scheduleType === "3" && selectedDayOnMonth
-          ? selectedDayOnMonth
-          : null
+          : scheduleType === '3' && selectedDayOnMonth
+          ? selectedDayOnMonth === '31'
+            ? '0'
+            : selectedDayOnMonth
+          : null,
     };
 
-    Axios.put(`/fv3/api/update-report-sync-settings/${reportId}/`, body)
+    Axios.put(
+      `/fv3/api/update-report-sync-settings/${reportId}/`,
+      body,
+    )
       .then(res => {
         this.props.handleSuccess(res.data);
-        successToast("form", "updated");
+        successToast('form', 'updated');
       })
       .catch(err => {
         const errors = err.response;
@@ -107,21 +114,20 @@ export default class Form extends Component {
         selectedDayOnWeek,
         selectedDayOnMonth,
         scheduleType,
-        selectedReport
-        // selectedType
+        selectedReport,
       },
-      props: { getReportName }
+      props: { getReportName },
     } = this;
-    let dayOptions = [];
-    for (var i = 1; i <= 31; i += 1) {
+    const dayOptions = [];
+    for (let i = 1; i <= 31; i += 1) {
       if (i <= 30) dayOptions.push({ id: i, name: i });
-      else dayOptions.push({ id: 0, name: "Last" });
+      else dayOptions.push({ id: i, name: 'Last' });
     }
     const scheduleOptions = [
-      { id: "0", name: "Manual" },
-      { id: "1", name: "Daily" },
-      { id: "2", name: "Weekly" },
-      { id: "3", name: "Monthly" }
+      { id: '0', name: 'Manual' },
+      { id: '1', name: 'Daily' },
+      { id: '2', name: 'Weekly' },
+      { id: '3', name: 'Monthly' },
     ];
 
     return (
@@ -140,7 +146,7 @@ export default class Form extends Component {
               changeHandler={this.handleScheduleTypeChange}
             />
           </div>
-          {scheduleType === "2" && (
+          {scheduleType === '2' && (
             <div className="every-week flex">
               <span className="ml-0">every</span>
               <SelectElement
@@ -152,7 +158,7 @@ export default class Form extends Component {
               {/* <span>Day</span> */}
             </div>
           )}
-          {scheduleType === "3" && (
+          {scheduleType === '3' && (
             <div className="every-week flex">
               <span className="ml-0">sync on day</span>
               <SelectElement

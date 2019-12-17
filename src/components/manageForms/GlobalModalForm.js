@@ -68,70 +68,103 @@ class GlobalModalForm extends Component {
           : 0,
       dailyArrDays: {
         mon:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 0 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 1)
             : false,
         tue:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 0 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 2)
             : false,
         wed:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 0 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 3)
             : false,
         thu:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 0 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 4)
             : false,
         fri:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 0 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 5)
             : false,
         sat:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 0 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 6)
             : false,
         sun:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 0 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 7)
             : false,
       },
-      selectedDays:
-        props.formData && props.formData.selected_days
-          ? props.formData.selected_days
-          : [],
+      selectedDays: props.formData && props.formData.selected_days,
+      selectedMonthlyDays:
+        props.formData &&
+        props.formData.schedule_level_id === 2 &&
+        props.formData.month_day === 0
+          ? 31
+          : props.formData.month_day,
       weeklyArrDays: {
         mon:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 1 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 1)
             : false,
         tue:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 1 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 2)
             : false,
         wed:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 1 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 3)
             : false,
         thu:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 1 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 4)
             : false,
         fri:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 1 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 5)
             : false,
         sat:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 1 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 6)
             : false,
         sun:
-          props.formData && props.formData.selected_days
+          props.formData &&
+          props.formData.schedule_level_id === 1 &&
+          props.formData.selected_days
             ? getArrValue(props.formData.selected_days, 7)
             : false,
       },
       frequency:
-        props.formData && props.formData.frequency
+        props.formData &&
+        props.formData.schedule_level_id !== 0 &&
+        props.formData.frequency
           ? props.formData.frequency
           : 1,
       notifyIncomplete:
@@ -269,6 +302,7 @@ class GlobalModalForm extends Component {
         return {
           scheduleType: JSON.parse(value),
           selectedDays: [],
+          selectedMonthlyDays: '',
         };
       }
       if (name === 'notifyIncomplete') {
@@ -522,7 +556,7 @@ class GlobalModalForm extends Component {
   handleDaySelect = e => {
     const { value } = e.target;
     this.setState({
-      selectedDays: [JSON.parse(value)],
+      selectedMonthlyDays: value,
     });
   };
 
@@ -557,7 +591,7 @@ class GlobalModalForm extends Component {
         scheduleType,
         dailyArrDays,
         weeklyArrDays,
-        selectedDays,
+        selectedMonthlyDays,
         frequency,
         notifyIncomplete,
       },
@@ -573,8 +607,8 @@ class GlobalModalForm extends Component {
       monthOPtions.push({ key: i, name: i });
     }
     for (let i = 1; i <= 31; i += 1) {
-      if (i <= 30) dayOptions.push({ key: i, name: i });
-      else dayOptions.push({ key: 0, name: 'Last' });
+      if (i <= 30) dayOptions.push({ id: i, name: i });
+      else dayOptions.push({ id: i, name: 'Last' });
     }
     return (
       <>
@@ -755,7 +789,7 @@ class GlobalModalForm extends Component {
                   <span>Months on day</span>
                   <SelectElement
                     options={dayOptions}
-                    value={selectedDays[0]}
+                    value={selectedMonthlyDays}
                     changeHandler={this.handleDaySelect}
                   />
                 </div>
