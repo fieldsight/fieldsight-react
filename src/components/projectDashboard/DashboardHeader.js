@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Dropdown } from 'react-bootstrap';
-import CountCard from '../../common/CountCard';
-import { AvatarContentLoader } from '../../common/Loader';
-import SubmissionModal from './SubmissionModel';
+import CountCard from '../common/CountCard';
+import { AvatarContentLoader } from '../common/Loader';
+import SubmissionModal from './dashboardComponent/SubmissionModel';
 /* eslint-disable react/prop-types  */
 /* eslint-disable react/no-array-index-key  */
 
@@ -50,6 +50,8 @@ class DashboardHeader extends React.Component {
       isProjectManager,
       totalSubmissions,
       surveyData,
+      activeTab,
+      toggleTab,
     } = this.props;
 
     const { openmodel } = this.state;
@@ -251,6 +253,53 @@ class DashboardHeader extends React.Component {
               </button>
             )}
           </div>
+          <ul className="common-tab is-line mt-4">
+            <li className={activeTab === 'home' ? 'current' : ''}>
+              <a
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  toggleTab('home');
+                }}
+                onClick={() => {
+                  toggleTab('home');
+                }}
+              >
+                Home
+              </a>
+            </li>
+
+            <li
+              className={activeTab === 'dashboard' ? 'current' : ''}
+            >
+              <a
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  toggleTab('dashboard');
+                }}
+                onClick={() => {
+                  toggleTab('dashboard');
+                }}
+              >
+                Dashboard
+              </a>
+            </li>
+            <li className={activeTab === 'reports' ? 'current' : ''}>
+              <a
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  toggleTab('reports');
+                }}
+                onClick={() => {
+                  toggleTab('reports');
+                }}
+              >
+                Reports
+              </a>
+            </li>
+          </ul>
           {openmodel && (
             <SubmissionModal
               surveyData={surveyData}
