@@ -1,18 +1,96 @@
 import React, { Component } from 'react';
+import InputElement from '../../common/InputElement';
+import CustomMultiSelect from '../CustomMultiSelect';
+import Metrics from './metrics';
+import SelectedColumn from './selectedColumn';
 /* eslint-disable */
+
+const checkboxOption = [
+  { id: 1, name: 'region-1' },
+  { id: 2, name: 'region-2' },
+  { id: 3, name: 'region-3' },
+];
 
 export default class AddNewReport extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isform: 'true',
+      data: {
+        reportName: '',
+        desc: '',
+        reportType: [],
+      },
+      toggleSelectClass: false,
+      collapseClass: false,
     };
   }
 
+  handleChange = e => {
+    const { name, value } = e.target;
+    this.setState(state => ({
+      data: {
+        ...state.data,
+        [name]: value,
+      },
+    }));
+  };
+
+  handleToggleClass = () => {
+    this.setState(({ toggleSelectClass }) => ({
+      toggleSelectClass: !toggleSelectClass,
+    }));
+  };
+
+  handleToggleCollapse = () => {
+    this.setState(({ collapseClass }) => ({
+      collapseClass: !collapseClass,
+    }));
+  };
+
+  handleCheckReportType = e => {
+    const {
+      target: { name, checked },
+    } = e;
+
+    this.setState(
+      state => {
+        if (checked) {
+          return {
+            data: {
+              ...state.data,
+
+              reportType: [...state.data.reportType, name],
+            },
+          };
+        }
+        if (!checked) {
+          return {
+            data: {
+              ...state.data,
+              reportType: state.data.reportType.filter(
+                type => type !== name,
+              ),
+            },
+          };
+        }
+        return null;
+      },
+      () => {
+        console.log('in checkbox', this.state.data);
+      },
+    );
+  };
+
   render() {
     const {
-      state: { isform },
+      state: {
+        data: { reportName, desc, reportType },
+        toggleSelectClass,
+        collapseClass,
+      },
     } = this;
+    console.log('state', collapseClass);
+
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -20,60 +98,88 @@ export default class AddNewReport extends Component {
             <div className="report-generator">
               <h3 className="mb-3">New report</h3>
               <div className="filter-all-header">
-                <form className="floating-form">
-                  <div className="form-group">
-                    <input
-                      type="text"
-                      className="form-control report-name"
-                      required=""
-                    />
-                    <label for="input">Report Name</label>
-                  </div>
-                  <div className="form-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      required=""
-                    />
-                    <label for="input">description</label>
-                  </div>
+                <form
+                  className="floating-form "
+                  onSubmit={e => {
+                    e.preventDefault();
+                  }}
+                >
+                  <InputElement
+                    formType="editForm"
+                    tag="input"
+                    type="text"
+                    required
+                    label="Report Name"
+                    name="reportName"
+                    value={reportName}
+                    changeHandler={this.handleChange}
+                  />
+                  <InputElement
+                    formType="editForm"
+                    tag="input"
+                    type="text"
+                    required
+                    label="Description"
+                    name="desc"
+                    value={desc}
+                    changeHandler={this.handleChange}
+                  />
                   <div className="report-type">
                     <div className="row">
                       <div className="col-lg-3 col-md-4">
                         <div className="form-group inline-form-group">
                           <label className="">Report type</label>
-                          <div className="common-select">
-                            <div className="select-wrapper">
+                          <CustomMultiSelect
+                            toggleSelectClass={toggleSelectClass}
+                            handleToggleClass={this.handleToggleClass}
+                            checkboxOption={checkboxOption}
+                            handleCheck={this.handleCheckReportType}
+                            selectedArr={reportType}
+                          />
+                          {/* <div className="common-select">
+                            <div
+                              className={`select-wrapper ${
+                                toggleSelectClass
+                                  ? 'select-toggle'
+                                  : ''
+                              }`}
+                              onClick={() => {
+                                this.handleToggleClass();
+                              }}
+                            >
                               <span className="select-item">
                                 User
                               </span>
                               <ul>
-                                <li>
-                                  <div className="custom-control custom-checkbox">
-                                    <input
-                                      type="checkbox"
-                                      className="custom-control-input"
-                                      id="region-1"
-                                      name="region-1"
-                                      value=""
+                                {checkboxOption.map(option => (
+                                  <li key={`option_${option.id}`}>
+                                    <CustomCheckBox
+                                      className="custom-control custom-checkbox"
+                                      customInputClass="custom-control-input"
+                                      customLabelClass="custom-control-label"
+                                      label={option.name}
+                                      name={option.name}
+                                      checked={reportType.includes(
+                                        option.name,
+                                      )}
+                                      changeHandler={
+                                        this.handleCheckReportType
+                                      }
                                     />
-                                    <label
-                                      className="custom-control-label"
-                                      for="region-1"
-                                    >
-                                      region-1
-                                    </label>
-                                  </div>
-                                </li>
+                                  </li>
+                                ))}
                               </ul>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                       <div className="col-lg-9 col-md-8">
                         <button
                           className="common-button is-disable is-icon pull-right is-bg"
-                          role="button"
+                          type="button"
+                          onClick={() => {
+                            this.handleToggleCollapse();
+                          }}
                         >
                           <i className="material-icons">
                             filter_list
@@ -90,187 +196,14 @@ export default class AddNewReport extends Component {
               </div>
               <div className="report-accordion">
                 <div className="row ">
-                  <div className="col-lg-7 col-md-7">
-                    <div className="acc-item">
-                      <div className="acc-header active">
-                        <h5>metrics</h5>
-                      </div>
-                      <div className="acc-body">
-                        <div className="fs-row no-gutters">
-                          <div className="fs-5 fs-col">
-                            <div className="custom-group">
-                              <div className="custom-group-append">
-                                <span className="custom-group-text">
-                                  <i className="material-icons">
-                                    search
-                                  </i>
-                                </span>
-                              </div>
-                              <input
-                                className="custom-control"
-                                placeholder="Quick search ..."
-                              />
-                            </div>
-                            <ul className="metric-list">
-                              <li>No. of Approved Submissions</li>
-                              <li className="active">
-                                No. of Rejected Submissions
-                              </li>
-                              <li>
-                                <div className="custom-control custom-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="metric-list-1"
-                                    name="metric-list-1"
-                                    value=""
-                                  />
-                                  <label
-                                    className="custom-control-label"
-                                    for="metric-list-1"
-                                  >
-                                    region-1
-                                  </label>
-                                </div>
-                              </li>
-                              <li>No. of Approved Submissions</li>
-                              <li>No. of Rejected Submissions</li>
-                            </ul>
-                          </div>
-                          <div className="fs-7 fs-col">
-                            <ul className="role-list">
-                              <h6>User role</h6>
-                              <li>
-                                <div className="custom-control custom-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="selected-1"
-                                    name="selected-1"
-                                    value=""
-                                  />
-                                  <label
-                                    className="custom-control-label"
-                                    for="selected-1"
-                                  >
-                                    metric-1
-                                  </label>
-                                </div>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="acc-item">
-                      <div className="acc-header">
-                        <h5>site information</h5>
-                      </div>
-                      <div className="acc-body">
-                        <div className="form-list">
-                          <div className="row">
-                            <div className="col-lg-6">
-                              <div className="form-group">
-                                <label className="mb-2">
-                                  site information
-                                </label>
-                                <div className="common-select">
-                                  <div className="select-wrapper">
-                                    <span className="select-item">
-                                      form answer
-                                    </span>
-                                    <ul>
-                                      <li>
-                                        <div className="custom-control custom-checkbox">
-                                          <input
-                                            type="checkbox"
-                                            className="custom-control-input"
-                                            id="site-1"
-                                            name="site-1"
-                                            value=""
-                                          />
-                                          <label
-                                            className="custom-control-label"
-                                            for="site-1"
-                                          >
-                                            site-1
-                                          </label>
-                                        </div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-lg-6">
-                              <div className="form-group">
-                                <label className="mb-2">values</label>
-                                <div className="common-select">
-                                  <div className="select-wrapper">
-                                    <span className="select-item">
-                                      maximum
-                                    </span>
-                                    <ul>
-                                      <li>
-                                        <div className="custom-control custom-checkbox">
-                                          <input
-                                            type="checkbox"
-                                            className="custom-control-input"
-                                            id="values-1"
-                                            name="values-1"
-                                            value=""
-                                          />
-                                          <label
-                                            className="custom-control-label"
-                                            for="values-1"
-                                          >
-                                            values-1
-                                          </label>
-                                        </div>
-                                      </li>
-                                      <li className="active">
-                                        <div className="custom-control custom-checkbox">
-                                          <input
-                                            type="checkbox"
-                                            className="custom-control-input"
-                                            id="values-2"
-                                            name="values-2"
-                                          />
-                                          <label
-                                            class="custom-control-label"
-                                            for="values-2"
-                                          >
-                                            values-2
-                                          </label>
-                                        </div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-lg-6">
-                      <div className="form-group">
-                        <label className="mb-2">Forms</label>
-                        <div className="common-select">
-                          <div className="select-wrapper">
-                            <span className="select-item">
-                              select forms{' '}
-                            </span>
-                            <ul>
-                              <li>Form-1</li>
-                              <li className="active">form-2</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <Metrics
+                    toggleSelectClass={toggleSelectClass}
+                    handleToggleClass={this.handleToggleClass}
+                    checkboxOption={checkboxOption}
+                    handleCheck={this.handleCheckReportType}
+                    selectedArr={reportType}
+                  />
+                  <SelectedColumn />
                 </div>
               </div>
             </div>
