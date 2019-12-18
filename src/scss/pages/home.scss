@@ -1,6 +1,6 @@
 .fieldsight-new {
-  #main-container{
-    padding:0 1rem;
+  #main-container {
+    padding: 0 1rem;
   }
   .routing-list {
     @include flex_start;
@@ -15,7 +15,7 @@
 
   .main-content {
     position: relative;
-    margin-left: 240px;
+    margin-left: 0;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
   }
@@ -53,8 +53,8 @@
   }
 
   .minified {
-    .main-content {
-      margin: 0;
+    #main-content {
+      margin-left: 240px;
     }
 
     .main-sidebar {
