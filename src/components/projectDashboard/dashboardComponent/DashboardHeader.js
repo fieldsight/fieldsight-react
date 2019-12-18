@@ -1,5 +1,4 @@
 import React from "react";
-import MaterialIcon from "@material/react-material-icon";
 import Cropper from "react-cropper";
 import { Link } from "react-router-dom";
 import pf from "../../../static/images/pf.jpg";
