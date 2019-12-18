@@ -18,7 +18,7 @@ class ReportList extends Component {
 
   render() {
     const { activeTab } = this.state;
-    const { toggleSection } = this.props;
+    const { toggleSection, id } = this.props;
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -88,7 +88,7 @@ class ReportList extends Component {
           </div>
           {activeTab === 'myReports' && <MyReports />}
           {activeTab === 'sharedWithMe' && <ShareWithMe />}
-          {activeTab === 'templates' && <Templates />}
+          {activeTab === 'templates' && <Templates id={id} />}
         </div>
       </div>
     );

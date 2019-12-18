@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
-/* eslint-disable  */
+import axios from 'axios';
 
 export default class Templates extends Component {
   constructor(props) {
@@ -10,8 +10,60 @@ export default class Templates extends Component {
       scheduled: false,
       survey: false,
       staged: false,
+      generalData: [],
+      scheduledData: [],
+      surveyData: [],
+      stagedData: [],
+      id: '',
+      customReports: [],
+      standardReports: [],
     };
   }
+
+  componentDidMount() {
+    const { id } = this.props;
+    this.setState({
+      id,
+    });
+    axios
+      .get(`/v4/api/reporting/reports-list/1/?type=custom`)
+      .then(res => {
+        this.setState({
+          customReports: res.data.custom_reports,
+          standardReports: res.data.standard_reports,
+        });
+      });
+  }
+
+  reportHandeler = data => {
+    axios
+      .get(
+        `/v4/api/reporting/project-form-data/${this.state.id}/?form_type=${data}`,
+      )
+      .then(res => {
+        if (data === 'general') {
+          this.setState({
+            generalData: res.data,
+          });
+        }
+        if (data === 'scheduled') {
+          this.setState({
+            scheduledData: res.data,
+          });
+        }
+        if (data === 'survey') {
+          this.setState({
+            surveyData: res.data,
+          });
+        }
+        if (data === 'stage') {
+          this.setState({
+            stagedData: res.data,
+          });
+        }
+      })
+      .catch();
+  };
 
   toggleTab = result => {
     if (result === 'general') {
@@ -23,38 +75,72 @@ export default class Templates extends Component {
           staged: preveState.staged,
         }),
         () => {
-          console.log(this.state.general, '------');
+          if (this.state.general) {
+            this.reportHandeler('general');
+          }
         },
       );
     }
     if (result === 'scheduled') {
-      this.setState(preveState => ({
-        general: preveState.general,
-        scheduled: !preveState.scheduled,
-        survey: preveState.survey,
-        staged: preveState.staged,
-      }));
+      this.setState(
+        preveState => ({
+          general: preveState.general,
+          scheduled: !preveState.scheduled,
+          survey: preveState.survey,
+          staged: preveState.staged,
+        }),
+        () => {
+          if (this.state.scheduled) {
+            this.reportHandeler('scheduled');
+          }
+        },
+      );
     }
     if (result === 'survey') {
-      this.setState(preveState => ({
-        general: preveState.general,
-        scheduled: preveState.scheduled,
-        survey: !preveState.survey,
-        staged: preveState.staged,
-      }));
+      this.setState(
+        preveState => ({
+          general: preveState.general,
+          scheduled: preveState.scheduled,
+          survey: !preveState.survey,
+          staged: preveState.staged,
+        }),
+        () => {
+          if (this.state.survey) {
+            this.reportHandeler('survey');
+          }
+        },
+      );
     }
-    if (result === 'staged') {
-      this.setState(preveState => ({
-        general: preveState.general,
-        scheduled: preveState.scheduled,
-        survey: preveState.survey,
-        staged: !preveState.staged,
-      }));
+    if (result === 'stage') {
+      this.setState(
+        preveState => ({
+          general: preveState.general,
+          scheduled: preveState.scheduled,
+          survey: preveState.survey,
+          staged: !preveState.staged,
+        }),
+        () => {
+          if (this.state.staged) {
+            this.reportHandeler('stage');
+          }
+        },
+      );
     }
   };
 
   render() {
-    const { general, scheduled, survey, staged } = this.state;
+    const {
+      general,
+      scheduled,
+      survey,
+      staged,
+      generalData,
+      scheduledData,
+      surveyData,
+      stagedData,
+      customReports,
+      standardReports,
+    } = this.state;
     const DataCrude = [
       {
         id: '1',
@@ -77,117 +163,102 @@ export default class Templates extends Component {
         link: '#',
       },
     ];
+
+    const projectSummery = [
+      {
+        id: '1',
+        title: 'Preview Pdf',
+        link: `/fieldsight/project/report/summary/${this.state.id}/`,
+      },
+    ];
+
+    const siteInformation = [
+      {
+        id: '1',
+        title: 'Generate  Excel',
+        link: '#',
+      },
+    ];
+
+    const formatDate = e => {
+      const date = new Date(e);
+      const dateIdx = date.getDate();
+      const monthIndex = date.getMonth() + 1;
+      const year = date.getFullYear();
+      const time = date.toLocaleTimeString();
+
+      return (
+        <>
+          <p>{` ${year}- ${monthIndex}-${dateIdx}`}</p>
+          <p>{time}</p>
+        </>
+      );
+    };
     return (
       <div className="card-body">
         <div className="standard-tempalte">
           <h2 className="my-3">Standard</h2>
-          <div className="report-list">
-            <div className="row">
-              <div className="col-md-12">
-                <div className="report-content">
-                  <h4>Project Summary</h4>
-                  <p>
-                    Contains high level overview of the project in
-                    form of numbers, graphs and map..
-                  </p>
+          {standardReports.length > 0 &&
+            standardReports.map(standardReport => (
+              <div className="report-list" key={standardReport.title}>
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="report-content">
+                      <h4>{standardReport.title}</h4>
+                      <p>{standardReport.description}</p>
+                    </div>
+                  </div>
                 </div>
+                {standardReport.title === 'Project Summary' ? (
+                  <div className="dropdown report-option">
+                    <Dropdown drop="left">
+                      <Dropdown.Toggle
+                        variant=""
+                        id="dropdown-Data"
+                        className="dropdown-toggle common-button no-border is-icon"
+                      >
+                        <i className="material-icons">more_vert</i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                        {projectSummery.map(item => (
+                          <Dropdown.Item
+                            href={item.link}
+                            key={item.id}
+                            target="_blank"
+                          >
+                            {item.title}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                ) : (
+                  <div className="dropdown report-option">
+                    <Dropdown drop="left">
+                      <Dropdown.Toggle
+                        variant=""
+                        id="dropdown-Data"
+                        className="dropdown-toggle common-button no-border is-icon"
+                      >
+                        <i className="material-icons">more_vert</i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                        {siteInformation.map(item => (
+                          <Dropdown.Item
+                            href={item.link}
+                            key={item.id}
+                            target="_blank"
+                          >
+                            {item.title}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                )}
               </div>
-            </div>
-            <div className="dropdown report-option">
-              <Dropdown drop="left">
-                <Dropdown.Toggle
-                  variant=""
-                  id="dropdown-Data"
-                  className="dropdown-toggle common-button no-border is-icon"
-                >
-                  <i className="material-icons">more_vert</i>
-                </Dropdown.Toggle>
-                <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                  {DataCrude.map(item => (
-                    <Dropdown.Item
-                      href={item.link}
-                      key={item.id}
-                      target="_blank"
-                    >
-                      {item.title}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </div>
-          <div className="report-list">
-            <div className="row">
-              <div className="col-md-12">
-                <div className="report-content">
-                  <h4>Site Information</h4>
-                  <p>
-                    Export of key progress indicators like submission
-                    count, status and site visits generated from
-                    Staged Forms.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="dropdown report-option">
-              <Dropdown drop="left">
-                <Dropdown.Toggle
-                  variant=""
-                  id="dropdown-Data"
-                  className="dropdown-toggle common-button no-border is-icon"
-                >
-                  <i className="material-icons">more_vert</i>
-                </Dropdown.Toggle>
-                <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                  {DataCrude.map(item => (
-                    <Dropdown.Item
-                      href={item.link}
-                      key={item.id}
-                      target="_blank"
-                    >
-                      {item.title}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </div>
-          <div className="report-list">
-            <div className="row">
-              <div className="col-md-12">
-                <div className="report-content">
-                  <h4>Progress Report</h4>
-                  <p>
-                    Export of key progress indicators like submission
-                    count, status and site visits generated from
-                    Staged Forms.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="dropdown report-option">
-              <Dropdown drop="left">
-                <Dropdown.Toggle
-                  variant=""
-                  id="dropdown-Data"
-                  className="dropdown-toggle common-button no-border is-icon"
-                >
-                  <i className="material-icons">more_vert</i>
-                </Dropdown.Toggle>
-                <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                  {DataCrude.map(item => (
-                    <Dropdown.Item
-                      href={item.link}
-                      key={item.id}
-                      target="_blank"
-                    >
-                      {item.title}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </div>
+            ))}
+
           <div className="report-list">
             <div className="row">
               <div className="col-md-8">
@@ -221,11 +292,13 @@ export default class Templates extends Component {
                             : { display: 'none' }
                         }
                       >
-                        <p>Testing yet again</p>
-                        <p>Retrofiting Go/No-Go with Measurement</p>
-                        <p>TSC Visitors - STFC</p>
-                        <p>Corrective Action App</p>
-                        <p>Baseline Survey</p>
+                        {generalData.length > 0 ? (
+                          generalData.map(genInfo => (
+                            <p key={genInfo.id}>{genInfo.title}</p>
+                          ))
+                        ) : (
+                          <p>No Data</p>
+                        )}
                       </div>
                     </li>
                     <li>
@@ -241,6 +314,7 @@ export default class Templates extends Component {
                       >
                         scheduled forms
                       </a>
+
                       <div
                         className="form-data-list"
                         style={
@@ -249,11 +323,13 @@ export default class Templates extends Component {
                             : { display: 'none' }
                         }
                       >
-                        <p>Testing yet again</p>
-                        <p>Retrofiting Go/No-Go with Measurement</p>
-                        <p>TSC Visitors - STFC</p>
-                        <p>Corrective Action App</p>
-                        <p>Baseline Survey</p>
+                        {scheduledData.length > 0 ? (
+                          scheduledData.map(scheinfo => (
+                            <p key={scheinfo.id}>{scheinfo.title}</p>
+                          ))
+                        ) : (
+                          <p>No Data</p>
+                        )}
                       </div>
                     </li>
                     <li>
@@ -277,11 +353,13 @@ export default class Templates extends Component {
                             : { display: 'none' }
                         }
                       >
-                        <p>Testing yet again</p>
-                        <p>Retrofiting Go/No-Go with Measurement</p>
-                        <p>TSC Visitors - STFC</p>
-                        <p>Corrective Action App</p>
-                        <p>Baseline Survey</p>
+                        {surveyData.length > 0 ? (
+                          surveyData.map(surData => (
+                            <p key={surData.id}>{surData.title}</p>
+                          ))
+                        ) : (
+                          <p>No Data</p>
+                        )}
                       </div>
                     </li>
                     <li>
@@ -289,10 +367,10 @@ export default class Templates extends Component {
                         tabIndex="0"
                         role="button"
                         onKeyDown={() => {
-                          this.toggleTab('staged');
+                          this.toggleTab('stage');
                         }}
                         onClick={() => {
-                          this.toggleTab('staged');
+                          this.toggleTab('stage');
                         }}
                       >
                         staged forms
@@ -305,11 +383,22 @@ export default class Templates extends Component {
                             : { display: 'none' }
                         }
                       >
-                        <p>Testing yet again</p>
-                        <p>Retrofiting Go/No-Go with Measurement</p>
-                        <p>TSC Visitors - STFC</p>
-                        <p>Corrective Action App</p>
-                        <p>Baseline Survey</p>
+                        {stagedData.length > 0 ? (
+                          stagedData.map(satData => (
+                            <ul key={satData.id}>
+                              <li>{satData.name}</li>
+                              <li>
+                                {satData.sub_stages.map(sub => (
+                                  <ul>
+                                    <li>{sub.form_name}</li>
+                                  </ul>
+                                ))}
+                              </li>
+                            </ul>
+                          ))
+                        ) : (
+                          <p>No Data</p>
+                        )}
                       </div>
                     </li>
                   </ul>
@@ -317,197 +406,81 @@ export default class Templates extends Component {
               </div>
             </div>
             <div className="dropdown report-option">
-              <button
-                type="button"
-                className="dropdown-toggle common-button no-border is-icon"
-                data-toggle="dropdown"
-              >
-                <i className="material-icons">more_vert</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  Edit
-                </a>
-                <a className="dropdown-item" href="#">
-                  Add a template
-                </a>
-                <a className="dropdown-item" href="#">
-                  Share
-                </a>
-                <a className="dropdown-item" href="#">
-                  Delete
-                </a>
-              </div>
+              <Dropdown drop="left">
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Data"
+                  className="dropdown-toggle common-button no-border is-icon"
+                >
+                  <i className="material-icons">more_vert</i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                  {DataCrude.map(item => (
+                    <Dropdown.Item
+                      href={item.link}
+                      key={item.id}
+                      target="_blank"
+                    >
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
           </div>
         </div>
-        <div>
-          {console.log(this.state.general, 'general')}
-          <button
-            type="button"
-            onClick={() => this.setState({ general: true })}
-          >
-            example
-          </button>
-        </div>
+
         <div className="custom-template">
           <h2 className="my-3">custom</h2>
-          <div className="report-list">
-            <div className="row">
-              <div className="col-md-8">
-                <div className="report-content">
-                  <h4>RF Strongbacks Ground Floor</h4>
-                  <p>
-                    Export of key progress indicators like submission
-                    count, status and site visits generated from
-                    Staged Forms.
-                  </p>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="report-share-time">
-                  <div className="report-item created-time">
-                    <h6>Date Created</h6>
-                    <p>October 17th 2019</p>
-                    <time>10:17:03 am</time>
+          {customReports.length > 0 &&
+            customReports.map(custom => (
+              <div className="report-list" key={custom.id}>
+                <div className="row">
+                  <div className="col-md-8">
+                    <div className="report-content">
+                      <h4>{custom.title}</h4>
+                      <p>{custom.description}</p>
+                    </div>
                   </div>
-                  <div className="report-item share-report">
-                    <h6>Added by</h6>
-                    <ul className="shared-list">
-                      <li>Santosh khanal</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="dropdown report-option">
-              <button
-                type="button"
-                className="dropdown-toggle common-button no-border is-icon"
-                data-toggle="dropdown"
-              >
-                <i className="material-icons">more_vert</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  Edit
-                </a>
-                <a className="dropdown-item" href="#">
-                  Add a template
-                </a>
-                <a className="dropdown-item" href="#">
-                  Share
-                </a>
-                <a className="dropdown-item" href="#">
-                  Delete
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="report-list">
-            <div className="row">
-              <div className="col-md-8">
-                <div className="report-content">
-                  <h4>Retrofitting Go/No-Go with Measurement</h4>
-                  <p>
-                    Export of key progress indicators like submission
-                    count, status and site visits generated from
-                    Staged Forms.
-                  </p>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="report-share-time">
-                  <div className="report-item created-time">
-                    <h6>Date Created</h6>
-                    <p>October 17th 2019</p>
-                    <time>10:17:03 am</time>
-                  </div>
-                  <div className="report-item share-report">
-                    <h6>Added by</h6>
-                    <ul className="shared-list">
-                      <li>Santosh khanal</li>
-                    </ul>
+                  <div className="col-md-4">
+                    <div className="report-share-time">
+                      <div className="report-item created-time">
+                        <h6>Date Created</h6>
+                        <>{formatDate(custom.created_at)}</>
+                      </div>
+                      <div className="report-item share-report">
+                        <h6>Added by</h6>
+                        <ul className="shared-list">
+                          <li>{custom.owner_full_name}</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="dropdown report-option">
-              <button
-                type="button"
-                className="dropdown-toggle common-button no-border is-icon"
-                data-toggle="dropdown"
-              >
-                <i className="material-icons">more_vert</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  Edit
-                </a>
-                <a className="dropdown-item" href="#">
-                  Add a template
-                </a>
-                <a className="dropdown-item" href="#">
-                  Share
-                </a>
-                <a className="dropdown-item" href="#">
-                  Delete
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="report-list">
-            <div className="row">
-              <div className="col-md-8">
-                <div className="report-content">
-                  <h4>Retrofitting Go/No-Go with Measurement</h4>
-                  <p>
-                    Export of key progress indicators like submission
-                    count, status and site visits generated from
-                    Staged Forms.
-                  </p>
+                <div className="dropdown report-option">
+                  <Dropdown drop="left">
+                    <Dropdown.Toggle
+                      variant=""
+                      id="dropdown-Data"
+                      className="dropdown-toggle common-button no-border is-icon"
+                    >
+                      <i className="material-icons">more_vert</i>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                      {DataCrude.map(item => (
+                        <Dropdown.Item
+                          href={item.link}
+                          key={item.id}
+                          target="_blank"
+                        >
+                          {item.title}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </div>
               </div>
-              <div className="col-md-4">
-                <div className="report-share-time">
-                  <div className="report-item created-time">
-                    <h6>Date Created</h6>
-                    <p>October 17th 2019</p>
-                    <time>10:17:03 am</time>
-                  </div>
-                  <div className="report-item share-report">
-                    <h6>Added by</h6>
-                    <ul className="shared-list">
-                      <li>Santosh khanal</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="dropdown report-option">
-              <button
-                type="button"
-                className="dropdown-toggle common-button no-border is-icon"
-                data-toggle="dropdown"
-              >
-                <i className="material-icons">more_vert</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#">
-                  Edit
-                </a>
-                <a className="dropdown-item" href="#">
-                  Add a template
-                </a>
-                <a className="dropdown-item" href="#">
-                  Share
-                </a>
-                <a className="dropdown-item" href="#">
-                  Delete
-                </a>
-              </div>
-            </div>
-          </div>
+            ))}
         </div>
       </div>
     );

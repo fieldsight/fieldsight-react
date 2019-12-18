@@ -13,6 +13,7 @@ export default class AddNewReport extends Component {
     const {
       state: { isform },
     } = this;
+    console.log(this.props, 'props');
     return (
       <div className="reports mrb-30">
         <div className="card">

@@ -56,6 +56,8 @@ import ChangePassword from './changePassword';
 import SyncSchedule from './syncSchedule';
 // import SelectElement from "../components/common/SelectElement";
 
+import FilterDataFilter from './reports/FormDataFilter';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -261,14 +263,6 @@ class App extends Component {
                     )}
                   />
 
-                  {/* <Route
-                    path="/project-responses/:id"
-                    render={props => <ViewData {...props} />}
-                  />
-                  <Route
-                    path="/site-responses/:id"
-                    render={props => <SiteData {...props} />}
-                  /> */}
                   <Route
                     path="/submission-data/:id/:fid"
                     render={props => <SubmissionData {...props} />}
@@ -331,6 +325,11 @@ class App extends Component {
                     render={props => (
                       <SiteSubmissionForm {...props} />
                     )}
+                  />
+
+                  <Route
+                    path="/form-data/:id"
+                    render={props => <FilterDataFilter {...props} />}
                   />
                 </Switch>
                 <ToastContainer />
