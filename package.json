@@ -12,6 +12,7 @@
     "build": "node server"
   },
   "dependencies": {
+    "@material/react-material-icon": "^0.15.0",
     "animate.css": "^3.7.2",
     "array-move": "^2.1.0",
     "axios": "^0.19.0",
@@ -65,7 +66,7 @@
     "babel-loader": "^8.0.0-beta.0",
     "babel-plugin-react-intl": "^4.1.20",
     "babel-plugin-transform-remove-console": "^6.9.4",
-    "compression-webpack-plugin": "^3.0.0",
+    "compression-webpack-plugin": "^3.0.1",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
     "dotenv-webpack": "^1.7.0",
