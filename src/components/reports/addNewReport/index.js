@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import InputElement from '../../common/InputElement';
 import CustomMultiSelect from '../CustomMultiSelect';
 import Metrics from './metrics';
+import DataFilter from './dataFilter';
 import SelectedColumn from './selectedColumn';
 /* eslint-disable */
 
@@ -135,6 +136,7 @@ export default class AddNewReport extends Component {
                             checkboxOption={checkboxOption}
                             handleCheck={this.handleCheckReportType}
                             selectedArr={reportType}
+                            placeholderTxt="User"
                           />
                           {/* <div className="common-select">
                             <div
@@ -206,6 +208,13 @@ export default class AddNewReport extends Component {
                   <SelectedColumn />
                 </div>
               </div>
+              <DataFilter
+                toggleSelectClass={toggleSelectClass}
+                handleToggleClass={this.handleToggleClass}
+                checkboxOption={checkboxOption}
+                handleCheck={this.handleCheckReportType}
+                selectedArr={reportType}
+              />
             </div>
           </div>
         </div>

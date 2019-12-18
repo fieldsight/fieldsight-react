@@ -28,6 +28,7 @@ export default class SiteInformation extends PureComponent {
                     checkboxOption={checkboxOption}
                     handleCheck={handleCheck}
                     selectedArr={selectedArr}
+                    placeholderTxt="Form Answer"
                   />
                 </div>
               </div>
@@ -40,6 +41,7 @@ export default class SiteInformation extends PureComponent {
                     checkboxOption={checkboxOption}
                     handleCheck={handleCheck}
                     selectedArr={selectedArr}
+                    placeholderTxt="Maximum"
                   />
                 </div>
               </div>

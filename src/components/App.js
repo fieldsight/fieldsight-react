@@ -56,7 +56,7 @@ import ChangePassword from './changePassword';
 import SyncSchedule from './syncSchedule';
 // import SelectElement from "../components/common/SelectElement";
 
-import AddNewReport from './reports/addNewReport';
+// import AddNewReport from './reports/addNewReport';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -333,10 +333,10 @@ class App extends Component {
                       <SiteSubmissionForm {...props} />
                     )}
                   />
-                  <Route
+                  {/* <Route
                     path="/new-report"
                     render={props => <AddNewReport {...props} />}
-                  />
+                  /> */}
                 </Switch>
                 <ToastContainer />
               </Router>

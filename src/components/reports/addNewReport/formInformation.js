@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import CustomSelect from '../CustomSelect';
 import CustomMultiSelect from '../CustomMultiSelect';
+/* eslint-disable */
 
 export default class FormInformation extends PureComponent {
   render() {
@@ -64,6 +65,7 @@ export default class FormInformation extends PureComponent {
                     checkboxOption={checkboxOption}
                     handleCheck={handleCheck}
                     selectedArr={selectedArr}
+                    placeholderTxt="Select"
                   />
                 </div>
                 <button

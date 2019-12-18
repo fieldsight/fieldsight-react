@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import CustomCheckBox from '../CustomCheckbox';
 import UserRole from './userRole';
 import SiteInformation from './siteInformation';
-import FormInformation from './FormInformation';
+import FormInformation from './formInformation';
 /* eslint-disable */
 
 // const checkboxOption = [
