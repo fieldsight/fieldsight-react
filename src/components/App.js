@@ -40,12 +40,12 @@ import SubmissionData from "./viewDataComponents/projectViewData/SubmissionTable
 import ManageForms from "./manageForms";
 import ChangePassword from "./changePassword";
 
-import store from "../store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "cropperjs/dist/cropper.css";
+import "@material/react-material-icon/dist/material-icon.css";
 import "../css/line-awesome.min.css";
 import "../scss/style.scss";
 import "../css/custom.css";

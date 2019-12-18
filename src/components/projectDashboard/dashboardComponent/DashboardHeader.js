@@ -1,4 +1,5 @@
 import React from "react";
+import MaterialIcon from "@material/react-material-icon";
 import Cropper from "react-cropper";
 import { Link } from "react-router-dom";
 import pf from "../../../static/images/pf.jpg";
@@ -189,7 +190,7 @@ class DashboardHeader extends React.Component {
                 onClick={() => this.setState({ openmodel: true })}
                 className="common-button is-border is-icon"
               >
-                <i className="material-icons">library_add</i>{" "}
+                <i className="material-icons">library_add</i>
                 <span>Add data</span>
               </button>
             )}
