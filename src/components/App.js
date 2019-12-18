@@ -58,6 +58,7 @@ import SyncSchedule from './syncSchedule';
 
 import FilterDataFilter from './reports/FormDataFilter';
 
+// import AddNewReport from './reports/addNewReport';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -331,6 +332,10 @@ class App extends Component {
                     path="/form-data/:id"
                     render={props => <FilterDataFilter {...props} />}
                   />
+                  {/* <Route
+                    path="/new-report"
+                    render={props => <AddNewReport {...props} />}
+                  /> */}
                 </Switch>
                 <ToastContainer />
               </Router>
