@@ -76,7 +76,7 @@ export default class Metrics extends Component {
       handleCheck,
       selectedArr,
     } = this.props;
-    // console.log('render', submissionType);
+    console.log('render', submissionType);
 
     return (
       <div className="col-lg-7 col-md-7">
@@ -106,11 +106,11 @@ export default class Metrics extends Component {
                   {Submissions.map(submission => (
                     <li
                       key={`submission_${submission.id}`}
-                      className={
-                        submissionType === submission.name
-                          ? 'active'
-                          : ''
-                      }
+                      // className={
+                      //   submissionType === submission.name
+                      //     ? 'active'
+                      //     : ''
+                      // }
                       onKeyDown={() => {
                         this.handleSubmissionType(submission.name);
                       }}

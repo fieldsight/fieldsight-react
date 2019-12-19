@@ -83,3 +83,7 @@ export const GET_SITE_VIEW = 'GET_SITE_VIEW';
 
 // Translation
 // export const GET_TRANSLATION = "GET_TRANSLATION";
+
+// Reports
+export const GET_METRICS_DATA = 'GET_METRICS_DATA';
+export const REPORT_LOADER = 'REPORT_LOADER';
