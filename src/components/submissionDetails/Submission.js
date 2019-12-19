@@ -136,6 +136,7 @@ class Submission extends Component {
       {name && <i>({name})</i>}
     </span>
   );
+
   handleRepeatedSubmission = submission => {
     return (
       <Accordion key={uuid()} defaultActiveKey={submission.name}>
@@ -359,6 +360,8 @@ class Submission extends Component {
                 ) : (
                   submission.selected &&
                   Object.entries(submission.selected).map(one => {
+                    if (typeof one[1].label === "object")
+                      return this.splitSubmissionObj(one[1].label, one[1].name);
                     return (
                       <p key={uuid()}>
                         {this.getLabelAndName(one[1].label, one[1].name)}
