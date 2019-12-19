@@ -46,10 +46,12 @@ class SideNav extends Component {
                 const types = list.data.site_types;
                 return {
                   regionOptions: [
+                    { id: "all", identifier: "select_all", name: "select all" },
                     ...regions,
                     { id: 0, identifier: "unassigned", name: "unassigned" }
                   ],
                   typeOptions: [
+                    { id: "all", identifier: "select_all", name: "select all" },
                     ...types,
                     { id: 0, identifier: "undefined", name: "undefined" }
                   ],

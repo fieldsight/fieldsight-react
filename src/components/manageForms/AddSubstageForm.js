@@ -63,8 +63,24 @@ class AddSubstageForm extends Component {
     const typeSelected = formData && formData.setting && formData.setting.types;
 
     if (this._isMounted) {
-      let newRegionArr = [];
-      let newTypeArr = [];
+      let newRegionArr = [
+        {
+          id: "all",
+          identifier: "select_all",
+          name: "select all",
+          value: "select_all",
+          label: "select all"
+        }
+      ];
+      let newTypeArr = [
+        {
+          id: "all",
+          identifier: "select_all",
+          name: "select all",
+          value: "select_all",
+          label: "select all"
+        }
+      ];
       regionOptions.map(each => {
         if (stagedRegions.indexOf(each.id) > -1) {
           newRegionArr.push({
