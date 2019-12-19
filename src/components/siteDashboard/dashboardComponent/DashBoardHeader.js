@@ -219,7 +219,7 @@ class DashboardHeader extends Component {
             )}
           </div>
         </div>
-        <div className="card-body">
+        <div className="card-body dashboard-header-bottom">
           <div className="flex-between">
             <div className="header-count">
               <Link to={`/site-responses/${siteId}/general`} target="_blank">
