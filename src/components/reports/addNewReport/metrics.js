@@ -122,9 +122,7 @@ export default class Metrics extends Component {
                       {checkboxOption.map(option => (
                         <Fragment key={`option_${option.id}`}>
                           <CustomCheckBox
-                            className="custom-control custom-checkbox"
-                            customInputClass="custom-control-input"
-                            customLabelClass="custom-control-label"
+                            id={option.id}
                             label={option.name}
                             name={option.name}
                             checked={submissions.includes(

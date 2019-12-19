@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import InputElement from '../../common/InputElement';
-// import CustomMultiSelect from '../CustomMultiSelect';
-// import CustomCheckBox from '../CustomCheckbox';
+import CustomMultiSelect from '../CustomMultiSelect';
 import Metrics from './metrics';
 import DataFilter from './dataFilter';
 import SelectedColumn from './selectedColumn';
@@ -39,8 +38,6 @@ export default class AddNewReport extends Component {
   };
 
   handleToggleClass = () => {
-    console.log('in toggle');
-
     this.setState(({ toggleSelectClass }) => ({
       toggleSelectClass: !toggleSelectClass,
     }));
@@ -56,39 +53,29 @@ export default class AddNewReport extends Component {
     const {
       target: { name, checked },
     } = e;
-    console.log('check', e.target);
 
-    this.setState(
-      state => {
-        if (checked) {
-          return {
-            data: {
-              ...state.data,
+    this.setState(state => {
+      if (checked) {
+        return {
+          data: {
+            ...state.data,
 
-              reportType: [...state.data.reportType, name],
-            },
-          };
-        }
-        if (!checked) {
-          return {
-            data: {
-              ...state.data,
-              reportType: state.data.reportType.filter(
-                type => type !== name,
-              ),
-            },
-          };
-        }
-        return null;
-      },
-      () => {
-        console.log('in checkbox', this.state.data);
-      },
-    );
-  };
-
-  handleTry = () => {
-    console.log('in try');
+            reportType: [...state.data.reportType, name],
+          },
+        };
+      }
+      if (!checked) {
+        return {
+          data: {
+            ...state.data,
+            reportType: state.data.reportType.filter(
+              type => type !== name,
+            ),
+          },
+        };
+      }
+      return null;
+    });
   };
 
   render() {
@@ -139,68 +126,14 @@ export default class AddNewReport extends Component {
                       <div className="col-lg-3 col-md-4">
                         <div className="form-group inline-form-group">
                           <label className="">Report type</label>
-                          {/* <CustomMultiSelect
+                          <CustomMultiSelect
                             toggleSelectClass={toggleSelectClass}
                             handleToggleClass={this.handleToggleClass}
                             checkboxOption={checkboxOption}
                             handleCheck={this.handleCheckReportType}
                             selectedArr={reportType}
                             placeholderTxt="User"
-                          /> */}
-                          <div className="common-select">
-                            <div
-                              className={`select-wrapper ${
-                                toggleSelectClass
-                                  ? 'select-toggle'
-                                  : ''
-                              }`}
-                              onClick={() => {
-                                this.handleToggleClass();
-                              }}
-                            >
-                              <span className="select-item">
-                                User
-                              </span>
-                              <ul>
-                                {checkboxOption.map(option => (
-                                  <li key={`option_${option.id}`}>
-                                    <div className="custom-control custom-checkbox">
-                                      <input
-                                        type="checkbox"
-                                        name={option.name}
-                                        checked={reportType.includes(
-                                          option.name,
-                                        )}
-                                        onChange={() => {
-                                          this.handleTry();
-                                        }}
-                                        className="custom-control-input"
-                                      />
-                                      <label
-                                        className="custom-control-label"
-                                        style={{ paddingLeft: '2em' }}
-                                      >
-                                        {option.name}
-                                      </label>
-                                    </div>
-                                    {/* <CustomCheckBox
-                                      className="custom-control custom-checkbox"
-                                      customInputClass="custom-control-input"
-                                      customLabelClass="custom-control-label"
-                                      label={option.name}
-                                      name={option.name}
-                                      checked={reportType.includes(
-                                        option.name,
-                                      )}
-                                      changeHandler={
-                                        this.handleCheckReportType
-                                      }
-                                    /> */}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
+                          />
                         </div>
                       </div>
                       <div className="col-lg-9 col-md-8">
@@ -226,23 +159,23 @@ export default class AddNewReport extends Component {
               </div>
               <div className="report-accordion">
                 <div className="row ">
-                  {/* <Metrics
+                  <Metrics
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={this.handleToggleClass}
                     checkboxOption={checkboxOption}
                     handleCheck={this.handleCheckReportType}
                     selectedArr={reportType}
                   />
-                  <SelectedColumn /> */}
+                  <SelectedColumn />
                 </div>
               </div>
-              {/* <DataFilter
+              <DataFilter
                 toggleSelectClass={toggleSelectClass}
                 handleToggleClass={this.handleToggleClass}
                 checkboxOption={checkboxOption}
                 handleCheck={this.handleCheckReportType}
                 selectedArr={reportType}
-              /> */}
+              />
             </div>
           </div>
         </div>

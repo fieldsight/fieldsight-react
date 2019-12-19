@@ -15,9 +15,7 @@ export default class SelectedColumn extends PureComponent {
               <i className="material-icons">drag_indicator</i>
             </span>
             <CustomCheckBox
-              className="custom-control custom-checkbox"
-              customInputClass="custom-control-input"
-              customLabelClass="custom-control-label"
+              id="Active users"
               label="Active users"
               name="Active users"
               // checked={submissions.includes(
