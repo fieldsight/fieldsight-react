@@ -18,7 +18,7 @@ const CustomCheckBox = ({
       {...rest}
       name={name}
       checked={checked}
-      onChange={changeHandler}
+      onChange={e => changeHandler(e)}
       className={customInputClass}
     />
     <label

@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
 import CustomMultiSelect from './CustomMultiSelect';
 import CustomCheckBox from './CustomCheckbox';
+import CollapseFilterTable from './CollapseFilterTable';
 /* eslint-disable*/
 
-export default class FormDataFilter extends PureComponent {
+export default class ExportDataFilter extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,6 +12,7 @@ export default class FormDataFilter extends PureComponent {
       open: false,
       siteOpen: false,
       siteSelected: [],
+      applyButton: false,
     };
   }
 
@@ -89,6 +91,16 @@ export default class FormDataFilter extends PureComponent {
     }));
   };
 
+  handleApply = () => {
+    console.log(this.state.applyButton, 'kkkkk');
+    this.setState(
+      prevState => ({
+        applyButton: !prevState.applyButton,
+      }),
+      () => console.log(this.state.applyButton),
+    );
+  };
+
   render() {
     const regionDropDown = [
       { id: '1', name: 'Illiterate' },
@@ -103,7 +115,7 @@ export default class FormDataFilter extends PureComponent {
     ];
     const {
       changeHandler,
-      state: { selected, open, siteOpen },
+      state: { selected, open, siteOpen, applyButton },
     } = this;
     console.log(this.state.selected, 'selected');
 
@@ -119,7 +131,7 @@ export default class FormDataFilter extends PureComponent {
                 <div className="row">
                   <div className="col-md-12">
                     <div className="report-content">
-                      <h4>Form Data</h4>
+                      <h4>Export Data</h4>
                       <p>
                         Export of forms data and site information an
                         Excel File, generated with filters in region,
@@ -247,13 +259,15 @@ export default class FormDataFilter extends PureComponent {
                       <button
                         disabled
                         type="submit"
-                        className="common-button mt-3 is-bg"
+                        // className="common-button mt-3 is-bg"
+                        onClick={() => this.handleApply}
                       >
                         Apply
                       </button>
                     </div>
                   </div>
                 </form>
+                {applyButton && <CollapseFilterTable />}
               </div>
             </div>
           </div>

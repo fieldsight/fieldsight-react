@@ -27,12 +27,12 @@ export default class CustomMultiSelect extends PureComponent {
             {checkboxOption.map(option => (
               <li key={`option_${option.id}`}>
                 <CustomCheckBox
-                  className="custom-control custom-checkbox"
-                  customInputClass="custom-control-input"
-                  customLabelClass="custom-control-label"
+                  // className="custom-control custom-checkbox"
+                  // customInputClass="custom-control-input"
+                  // customLabelClass="custom-control-label"
                   label={option.name}
                   name={option.name}
-                  checked={selectedArr.includes(option.name)}
+                  checked={selectedArr[option.name]}
                   changeHandler={handleCheck}
                 />
               </li>

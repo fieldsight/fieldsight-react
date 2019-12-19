@@ -57,6 +57,7 @@ import SyncSchedule from './syncSchedule';
 // import SelectElement from "../components/common/SelectElement";
 
 import FilterDataFilter from './reports/FormDataFilter';
+import ExportDataFilter from './reports/ExportDataFilter';
 
 // import AddNewReport from './reports/addNewReport';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -330,8 +331,9 @@ class App extends Component {
 
                   <Route
                     path="/form-data/:id"
-                    render={props => <FilterDataFilter {...props} />}
+                    render={props => <ExportDataFilter {...props} />}
                   />
+
                   {/* <Route
                     path="/new-report"
                     render={props => <AddNewReport {...props} />}
