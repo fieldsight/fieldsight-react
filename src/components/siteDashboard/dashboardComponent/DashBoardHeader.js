@@ -220,50 +220,55 @@ class DashboardHeader extends Component {
           </div>
         </div>
         <div className="card-body">
-          <div className="header-count">
-            <Link to={`/site-responses/${siteId}/general`} target="_blank">
-              <CountCard
-                countName=""
-                countNumber={totalSubmission}
-                icon="la-clone"
-              />
-            </Link>
-            <a
-              href={`/fieldsight/application/#/site-users/${siteId}/`}
-              target="_blank"
-            >
-              <CountCard
-                countName="User"
-                countNumber={totalUsers}
-                icon="la-user"
-                noSubmissionText={true}
-              />
-            </a>
-            {enableSubsites && (
-              <a onClick={() => openModal("Subsites")}>
+          <div className="flex-between">
+            <div className="header-count">
+              <Link to={`/site-responses/${siteId}/general`} target="_blank">
                 <CountCard
-                  countName="Subsite"
-                  countNumber={totalSubsites}
-                  icon="la-map-marker"
+                  countName=""
+                  countNumber={totalSubmission}
+                  icon="la-clone"
+                />
+              </Link>
+              <a
+                href={`/fieldsight/application/#/site-users/${siteId}/`}
+                target="_blank"
+              >
+                <CountCard
+                  countName="User"
+                  countNumber={totalUsers}
+                  icon="la-user"
                   noSubmissionText={true}
                 />
               </a>
-            )}
+              {enableSubsites && (
+                <a onClick={() => openModal("Subsites")}>
+                  <CountCard
+                    countName="Subsite"
+                    countNumber={totalSubsites}
+                    icon="la-map-marker"
+                    noSubmissionText={true}
+                  />
+                </a>
+              )}
+
+              <CountCard
+                countName="Progress"
+                icon="la-signal"
+                countNumber={currentProgress}
+                noSubmissionText={true}
+              />
+            </div>
 
             {hasWritePermission && (
-              <div className="add-data">
-                <a onClick={() => openModal("Header")}>
-                  {" "}
-                  add data <i className="la la-plus" />
-                </a>
-              </div>
+              <button
+                role="button"
+                onClick={() => openModal("Header")}
+                className="common-button is-border is-icon"
+              >
+                <i className="material-icons">library_add</i>
+                <span>Add data</span>
+              </button>
             )}
-            <CountCard
-              countName="Progress"
-              icon="la-signal"
-              countNumber={currentProgress}
-              noSubmissionText={true}
-            />
           </div>
 
           {showModal && (
