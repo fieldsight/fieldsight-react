@@ -81,11 +81,34 @@ export default class Metrics extends Component {
 
   handleCheckChildren = (e, data, child) => {
     const { checked, name } = e.target;
-    console.log(data, 'data', checked, child);
-
-    // this.setState(state => {
-    //   if(checked)
-    // })
+    const { submissions } = this.state;
+    this.setState(state => {
+      if (checked) {
+        const newSubmissions = submissions.map(sub => {
+          // if (sub.code === data.code) {
+          //   return { ...sub.children, child };
+          // }
+        });
+        // return {
+        //   submissions: newSubmissions,
+        // };
+      }
+      if (!checked) {
+        const filteredData = submissions.map(sub => {
+          if (sub.code === data.code) {
+            const ch = sub.children.filter(
+              i => i.code !== child.code,
+            );
+            return { ...sub, children: ch };
+          }
+          return sub;
+        });
+        // console.log('sub', checked, filteredData);
+        return {
+          submissions: filteredData,
+        };
+      }
+    });
   };
 
   render() {

@@ -18,16 +18,25 @@ export default class UserRole extends PureComponent {
           <li>
             {/* <div className="custom-control custom-checkbox"> */}
             {selectedMetric.children &&
-              selectedMetric.children.map(child => {
+              selectedMetric.children.map((child, i) => {
                 const isChecked =
                   parentData.length > 0 &&
                   parentData.map(each => {
+                    // console.log('dfdf', each.children);
                     if (each.children.length > 0) {
-                      return each.children.map(item => {
-                        item.code === child.code;
-                      });
+                      return each.children.filter(
+                        item => item.code === child.code,
+                      );
                     }
                   });
+                console.log(
+                  //   selectedMetric,
+                  //   child,
+                  //   'in userrole',
+                  isChecked,
+                  '---',
+                  //   parentData,
+                );
 
                 return (
                   <Fragment key={child.code}>
@@ -35,7 +44,11 @@ export default class UserRole extends PureComponent {
                       id={child.code}
                       label={child.label}
                       name={child.code}
-                      checked={isChecked}
+                      checked={
+                        isChecked[0] &&
+                        isChecked[0][0] &&
+                        isChecked[0][0].code === child.code
+                      }
                       changeHandler={e => {
                         handleCheckChildren(e, selectedMetric, child);
                       }}
