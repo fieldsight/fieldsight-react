@@ -24,3 +24,6 @@
 @import "pages/package";
 @import "pages/map";
 @import "pages/report";
+
+$material-design-icons-font-directory-path: "~material-design-icons-iconfont/dist/fonts/";
+@import "~material-design-icons-iconfont/src/material-design-icons";
