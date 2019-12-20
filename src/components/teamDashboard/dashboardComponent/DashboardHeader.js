@@ -113,7 +113,7 @@ class DashboardHeader extends Component {
               <CountCard
                 countName="project"
                 countNumber={totalProjects}
-                icon="la la-tasks"
+                icon="la la la-server"
                 noSubmissionText={true}
               />
             </a>
