@@ -52,8 +52,11 @@ export const getSubmissionDetail = id => dispatch => {
         dispatch({
           type: SHOW_SUBMISSION_ERR_MSG,
           err: {
-            msg: err.response.data.detail,
-            status: err.response.status,
+            msg:
+              err.response &&
+              err.response.data &&
+              err.response.data.detail,
+            status: err.response && err.response.status,
           },
         });
         dispatch({

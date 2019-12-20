@@ -13,6 +13,7 @@ export default class CustomMultiSelect extends PureComponent {
       handleCheck,
       selectedArr,
       placeholderTxt,
+      site,
     } = this.props;
 
     return (
@@ -33,9 +34,11 @@ export default class CustomMultiSelect extends PureComponent {
                   <CustomCheckBox
                     id={uuid()}
                     name={option.name}
-                    checked={selectedArr.includes(option.name)}
+                    checked={selectedArr.includes(option.id)}
                     changeHandler={handleCheck}
                     label={option.name}
+                    site={site}
+                    value={option.id}
                   />
                 </li>
               ))}

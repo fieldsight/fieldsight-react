@@ -344,8 +344,6 @@ class App extends Component {
             </main>
           </div>
         </div>
-        {/* </div> */}
-        {/* </div> */}
       </IntlProvider>
     );
   }
