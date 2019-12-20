@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import CustomCheckBox from '../CustomCheckbox';
 import UserRole from './userRole';
 import SiteInformation from './siteInformation';
@@ -22,14 +24,29 @@ export default class Metrics extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isActive: false,
+      metrics: props.data,
+      toggleSelectClass: false,
+      submissionType: {},
       submissions: [],
-      submissionType: '',
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      this.setState({
+        metrics: this.props.data,
+      });
+    }
   }
 
   toggleActive = () => {
     this.setState(({ isActive }) => ({ isActive: !isActive }));
+  };
+
+  handleToggleClass = () => {
+    this.setState(({ toggleSelectClass }) => ({
+      toggleSelectClass: !toggleSelectClass,
+    }));
   };
 
   onChangeHandler = () => {
@@ -44,39 +61,42 @@ export default class Metrics extends Component {
     const {
       target: { name, checked },
     } = e;
+    const { submissionType } = this.state;
+    this.setState(state => {
+      if (checked) {
+        return {
+          submissions: [...state.submissions, submissionType],
+        };
+      }
+      if (!checked) {
+        return {
+          submissions: state.submissions.filter(
+            type => type.code !== name,
+          ),
+        };
+      }
+      return null;
+    });
+  };
 
-    this.setState(
-      state => {
-        if (checked) {
-          return {
-            submissions: [...state.submissions, name],
-          };
-        }
-        if (!checked) {
-          return {
-            submissions: state.submissions.filter(
-              type => type !== name,
-            ),
-          };
-        }
-        return null;
-      },
-      () => {
-        // console.log('in checkbox', this.state.data);
-      },
-    );
+  handleCheckChildren = (e, data, child) => {
+    const { checked, name } = e.target;
+    console.log(data, 'data', checked, child);
+
+    // this.setState(state => {
+    //   if(checked)
+    // })
   };
 
   render() {
-    const { submissions, submissionType } = this.state;
     const {
+      metrics,
+      submissions,
+      submissionType,
       toggleSelectClass,
-      handleToggleClass,
-      checkboxOption,
-      handleCheck,
-      selectedArr,
-    } = this.props;
-    console.log('render', submissionType);
+    } = this.state;
+
+    // console.log('metrics', submissions);
 
     return (
       <div className="col-lg-7 col-md-7">
@@ -102,47 +122,65 @@ export default class Metrics extends Component {
                     }}
                   />
                 </div>
-                <ul className="metric-list">
-                  {Submissions.map(submission => (
-                    <li
-                      key={`submission_${submission.id}`}
-                      // className={
-                      //   submissionType === submission.name
-                      //     ? 'active'
-                      //     : ''
-                      // }
-                      onKeyDown={() => {
-                        this.handleSubmissionType(submission.name);
-                      }}
-                      onClick={() => {
-                        this.handleSubmissionType(submission.name);
-                      }}
-                    >
-                      {`No. of ${submission.name} Submissions`}
-                      {checkboxOption.map(option => (
-                        <Fragment key={`option_${option.id}`}>
+                <div
+                  style={{
+                    position: 'relative',
+                    height: `300px `,
+                  }}
+                >
+                  <PerfectScrollbar>
+                    <ul className="metric-list">
+                      {metrics.map(item => (
+                        <li
+                          key={item.code}
+                          className={
+                            submissionType.code === item.code
+                              ? 'active'
+                              : ''
+                          }
+                          onKeyDown={() => {
+                            this.handleSubmissionType(item);
+                          }}
+                          onClick={() => {
+                            this.handleSubmissionType(item);
+                          }}
+                        >
                           <CustomCheckBox
-                            id={option.id}
-                            label={option.name}
-                            name={option.name}
-                            checked={submissions.includes(
-                              option.name,
-                            )}
+                            id={item.code}
+                            label={item.label}
+                            name={item.code}
+                            // checked={
+                            //   submissions.length > 0
+                            //     ? submissions.map(each => {
+                            //         console.log(
+                            //           'inside ckbx',
+                            //           each.code,
+                            //           item.code,
+                            //         );
+                            //       })
+                            //     : false
+                            // }
                             changeHandler={this.handleCheckReportType}
                           />
-                        </Fragment>
+                        </li>
                       ))}
-                    </li>
-                  ))}
-                </ul>
+                    </ul>
+                  </PerfectScrollbar>
+                </div>
               </div>
-              <UserRole
-                handleCheckReportType={this.handleCheckReportType}
-              />
+              {submissionType &&
+                submissionType.children &&
+                submissionType.children.length > 0 && (
+                  <UserRole
+                    selectedMetric={submissionType}
+                    handleCheckChildren={this.handleCheckChildren}
+                    parentData={submissions}
+                  />
+                )}
             </div>
           </div>
         </div>
-        <SiteInformation
+        {/* <SiteInformation
           toggleSelectClass={toggleSelectClass}
           handleToggleClass={handleToggleClass}
           checkboxOption={checkboxOption}
@@ -155,7 +193,7 @@ export default class Metrics extends Component {
           checkboxOption={checkboxOption}
           handleCheck={handleCheck}
           selectedArr={selectedArr}
-        />
+        /> */}
       </div>
     );
   }

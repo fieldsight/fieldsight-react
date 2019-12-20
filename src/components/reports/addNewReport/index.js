@@ -34,7 +34,7 @@ class AddNewReport extends Component {
   }
 
   componentWillMount() {
-    this.props.getMetricsData();
+    this.props.getMetricsData('137');
   }
 
   componentDidUpdate(prevProps) {
@@ -124,7 +124,14 @@ class AddNewReport extends Component {
         reportReducer: { reportLoader },
       },
     } = this;
-    // console.log('state', this.state.data);
+
+    const metricsArr = metrics.filter(metric =>
+      metric.types.includes(selectedReportType),
+    );
+
+    console.log('state', selectedReportType, metricsArr);
+
+    // debugger;
 
     return (
       <div className="reports mrb-30">
@@ -206,14 +213,8 @@ class AddNewReport extends Component {
               </div>
               <div className="report-accordion">
                 <div className="row ">
-                  {/* <Metrics
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={this.handleToggleClass}
-                    checkboxOption={checkboxOption}
-                    handleCheck={this.handleCheckReportType}
-                    selectedArr={selectedReportType}
-                  />
-                  <SelectedColumn /> */}
+                  <Metrics data={metricsArr} />
+                  {/* <SelectedColumn /> */}
                 </div>
               </div>
               {/* <DataFilter

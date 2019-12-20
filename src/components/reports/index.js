@@ -9,6 +9,7 @@ class Reports extends Component {
     super(props);
     this.state = {
       activeSection: 'reportList',
+      id: '137',
     };
   }
 
@@ -17,14 +18,14 @@ class Reports extends Component {
   };
 
   render() {
-    const { activeSection } = this.state;
+    const { activeSection, id } = this.state;
     return (
       <>
         {activeSection === 'reportList' && (
           <ReportList toggleSection={this.toggleSection} />
         )}
         {activeSection === 'addReport' && (
-          <AddNewReport toggleSection={this.toggleSection} />
+          <AddNewReport toggleSection={this.toggleSection} id={id} />
         )}
       </>
     );
