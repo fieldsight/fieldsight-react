@@ -298,71 +298,59 @@ class DashboardHeader extends Component {
             )}
           </div>
         </div>
-        <div className="card-body">
-          <div className="header-count">
-            <Link
-              to={`/site-responses/${siteId}/general`}
-              target="_blank"
-            >
-              <CountCard
-                countName=""
-                countNumber={totalSubmission}
-                icon="la-clone"
-              />
-            </Link>
-            <a
-              href={`/fieldsight/application/#/site-users/${siteId}/`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <CountCard
-                countName="User"
-                countNumber={totalUsers}
-                icon="la-user"
-                noSubmissionText
-              />
-            </a>
-            {enableSubsites && (
-              <a
-                tabIndex="0"
-                role="button"
-                onKeyDown={() => {
-                  closeModal('Subsites');
-                }}
-                onClick={() => openModal('Subsites')}
+        <div className="card-body dashboard-header-bottom">
+          <div className="flex-between">
+            <div className="header-count">
+              <Link
+                to={`/site-responses/${siteId}/general`}
+                target="_blank"
               >
                 <CountCard
-                  countName="Subsite"
-                  countNumber={totalSubsites}
-                  icon="la-map-marker"
-                  noSubmissionText
+                  countName=""
+                  countNumber={totalSubmission}
+                  icon="la-clone"
+                />
+              </Link>
+              <a
+                href={`/fieldsight/application/#/site-users/${siteId}/`}
+                target="_blank"
+              >
+                <CountCard
+                  countName="User"
+                  countNumber={totalUsers}
+                  icon="la-user"
+                  noSubmissionText={true}
                 />
               </a>
-            )}
+              {enableSubsites && (
+                <a onClick={() => openModal('Subsites')}>
+                  <CountCard
+                    countName="Subsite"
+                    countNumber={totalSubsites}
+                    icon="la-map-marker"
+                    noSubmissionText={true}
+                  />
+                </a>
+              )}
+
+              <CountCard
+                countName="Progress"
+                icon="la-signal"
+                countNumber={currentProgress}
+                noSubmissionText={true}
+              />
+            </div>
 
             {hasWritePermission && (
-              <div className="add-data">
-                <a
-                  tabIndex="0"
-                  role="button"
-                  onKeyDown={() => openModal('Header')}
-                  className="popup-close"
-                  onClick={() => openModal('Header')}
-                >
-                  <FormattedMessage
-                    id="app.addData"
-                    defaultMessage="Add Data"
-                  />
-                  <i className="la la-plus" />
-                </a>
-              </div>
+              <button
+                role="button"
+                onClick={() => openModal('Header')}
+                className="common-button is-border is-icon"
+              >
+                <i className="material-icons">library_add</i>
+                <span>Add data</span>
+              </button>
             )}
-            <CountCard
-              countName="Progress"
-              icon="la-signal"
-              countNumber={currentProgress}
-              noSubmissionText
-            />
           </div>
 
           {showModal && (
