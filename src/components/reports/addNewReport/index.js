@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getMetricsData } from '../../../actions/reportActions';
 import InputElement from '../../common/InputElement';
-import CustomMultiSelect from '../CustomMultiSelect';
+import CustomSelect from '../CustomSelect';
+// import CustomMultiSelect from '../CustomMultiSelect';
 import Metrics from './metrics';
 import DataFilter from './dataFilter';
 import SelectedColumn from './selectedColumn';
@@ -12,22 +15,40 @@ const checkboxOption = [
   { id: 3, name: 'region-3' },
 ];
 
-export default class AddNewReport extends Component {
+class AddNewReport extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {
         reportName: '',
         desc: '',
-        reportType: [],
+        selectedReportType: '',
+        selectedMetrics: [],
       },
+      reportType: [],
+      metrics: [],
       toggleSelectClass: false,
       collapseClass: false,
+      loader: false,
     };
+  }
+
+  componentWillMount() {
+    this.props.getMetricsData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.reportReducer !== this.props.reportReducer) {
+      this.setState({
+        reportType: this.props.reportReducer.reportTypes,
+        metrics: this.props.reportReducer.metrics,
+      });
+    }
   }
 
   handleChange = e => {
     const { name, value } = e.target;
+
     this.setState(state => ({
       data: {
         ...state.data,
@@ -53,44 +74,57 @@ export default class AddNewReport extends Component {
       target: { name, checked },
     } = e;
 
-    this.setState(
-      state => {
-        if (checked) {
-          return {
-            data: {
-              ...state.data,
+    this.setState(state => {
+      if (checked) {
+        return {
+          data: {
+            ...state.data,
 
-              reportType: [...state.data.reportType, name],
-            },
-          };
-        }
-        if (!checked) {
-          return {
-            data: {
-              ...state.data,
-              reportType: state.data.reportType.filter(
-                type => type !== name,
-              ),
-            },
-          };
-        }
-        return null;
+            selectedReportType: [
+              ...state.data.selectedReportType,
+              name,
+            ],
+          },
+        };
+      }
+      if (!checked) {
+        return {
+          data: {
+            ...state.data,
+            selectedReportType: state.data.selectedReportType.filter(
+              type => type !== name,
+            ),
+          },
+        };
+      }
+      return null;
+    });
+  };
+
+  handleReportTypeChange = e => {
+    const { value } = e.target;
+    this.setState(state => ({
+      data: {
+        ...state.data,
+        selectedReportType: JSON.parse(value),
       },
-      () => {
-        console.log('in checkbox', this.state.data);
-      },
-    );
+    }));
   };
 
   render() {
     const {
       state: {
-        data: { reportName, desc, reportType },
+        data: { reportName, desc, selectedReportType },
+        reportType,
+        metrics,
         toggleSelectClass,
-        collapseClass,
+        // collapseClass,
+      },
+      props: {
+        reportReducer: { reportLoader },
       },
     } = this;
-    console.log('state', collapseClass);
+    // console.log('state', this.state.data);
 
     return (
       <div className="reports mrb-30">
@@ -130,49 +164,23 @@ export default class AddNewReport extends Component {
                       <div className="col-lg-3 col-md-4">
                         <div className="form-group inline-form-group">
                           <label className="">Report type</label>
-                          <CustomMultiSelect
-                            toggleSelectClass={toggleSelectClass}
-                            handleToggleClass={this.handleToggleClass}
-                            checkboxOption={checkboxOption}
-                            handleCheck={this.handleCheckReportType}
-                            selectedArr={reportType}
-                            placeholderTxt="User"
-                          />
-                          {/* <div className="common-select">
-                            <div
-                              className={`select-wrapper ${
-                                toggleSelectClass
-                                  ? 'select-toggle'
-                                  : ''
-                              }`}
-                              onClick={() => {
-                                this.handleToggleClass();
-                              }}
-                            >
-                              <span className="select-item">
-                                User
-                              </span>
-                              <ul>
-                                {checkboxOption.map(option => (
-                                  <li key={`option_${option.id}`}>
-                                    <CustomCheckBox
-                                      className="custom-control custom-checkbox"
-                                      customInputClass="custom-control-input"
-                                      customLabelClass="custom-control-label"
-                                      label={option.name}
-                                      name={option.name}
-                                      checked={reportType.includes(
-                                        option.name,
-                                      )}
-                                      changeHandler={
-                                        this.handleCheckReportType
-                                      }
-                                    />
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div> */}
+                          {!reportLoader && (
+                            <CustomSelect
+                              toggleSelectClass={toggleSelectClass}
+                              handleToggleClass={
+                                this.handleToggleClass
+                              }
+                              name={reportType.filter(
+                                each =>
+                                  each.id === selectedReportType,
+                              )}
+                              options={reportType}
+                              value={selectedReportType}
+                              handleSelect={
+                                this.handleReportTypeChange
+                              }
+                            />
+                          )}
                         </div>
                       </div>
                       <div className="col-lg-9 col-md-8">
@@ -198,23 +206,23 @@ export default class AddNewReport extends Component {
               </div>
               <div className="report-accordion">
                 <div className="row ">
-                  <Metrics
+                  {/* <Metrics
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={this.handleToggleClass}
                     checkboxOption={checkboxOption}
                     handleCheck={this.handleCheckReportType}
-                    selectedArr={reportType}
+                    selectedArr={selectedReportType}
                   />
-                  <SelectedColumn />
+                  <SelectedColumn /> */}
                 </div>
               </div>
-              <DataFilter
+              {/* <DataFilter
                 toggleSelectClass={toggleSelectClass}
                 handleToggleClass={this.handleToggleClass}
                 checkboxOption={checkboxOption}
                 handleCheck={this.handleCheckReportType}
-                selectedArr={reportType}
-              />
+                selectedArr={selectedReportType}
+              /> */}
             </div>
           </div>
         </div>
@@ -222,3 +230,11 @@ export default class AddNewReport extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ reportReducer }) => ({
+  reportReducer,
+});
+
+export default connect(mapStateToProps, {
+  getMetricsData,
+})(AddNewReport);

@@ -76,7 +76,7 @@ export default class Metrics extends Component {
       handleCheck,
       selectedArr,
     } = this.props;
-    // console.log('render', submissionType);
+    console.log('render', submissionType);
 
     return (
       <div className="col-lg-7 col-md-7">
@@ -106,11 +106,11 @@ export default class Metrics extends Component {
                   {Submissions.map(submission => (
                     <li
                       key={`submission_${submission.id}`}
-                      className={
-                        submissionType === submission.name
-                          ? 'active'
-                          : ''
-                      }
+                      // className={
+                      //   submissionType === submission.name
+                      //     ? 'active'
+                      //     : ''
+                      // }
                       onKeyDown={() => {
                         this.handleSubmissionType(submission.name);
                       }}
@@ -122,9 +122,7 @@ export default class Metrics extends Component {
                       {checkboxOption.map(option => (
                         <Fragment key={`option_${option.id}`}>
                           <CustomCheckBox
-                            className="custom-control custom-checkbox"
-                            customInputClass="custom-control-input"
-                            customLabelClass="custom-control-label"
+                            id={option.id}
                             label={option.name}
                             name={option.name}
                             checked={submissions.includes(

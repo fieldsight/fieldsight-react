@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
+
 import CustomCheckBox from './CustomCheckbox';
+
 /* eslint-disable */
 
 export default class CustomMultiSelect extends PureComponent {
@@ -12,31 +14,31 @@ export default class CustomMultiSelect extends PureComponent {
       selectedArr,
       placeholderTxt,
     } = this.props;
+
     return (
       <div className="common-select">
         <div
-          className={`select-wrapper ${
-            toggleSelectClass ? 'select-toggle' : ''
-          }`}
-          onClick={() => {
-            handleToggleClass();
-          }}
+          className={
+            toggleSelectClass
+              ? 'select-wrapper select-toggle'
+              : 'select-wrapper'
+          }
+          onClick={handleToggleClass}
         >
           <span className="select-item">{placeholderTxt}</span>
           <ul>
-            {checkboxOption.map(option => (
-              <li key={`option_${option.id}`}>
-                <CustomCheckBox
-                  // className="custom-control custom-checkbox"
-                  // customInputClass="custom-control-input"
-                  // customLabelClass="custom-control-label"
-                  label={option.name}
-                  name={option.name}
-                  checked={selectedArr[option.name]}
-                  changeHandler={handleCheck}
-                />
-              </li>
-            ))}
+            {checkboxOption.length > 0 &&
+              checkboxOption.map(option => (
+                <li key={`option_${option.id}`}>
+                  <CustomCheckBox
+                    id={option.id}
+                    name={option.name}
+                    checked={selectedArr.includes(option.name)}
+                    changeHandler={handleCheck}
+                    label={option.name}
+                  />
+                </li>
+              ))}
           </ul>
         </div>
       </div>

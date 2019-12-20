@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import ReportList from './reportList';
 import AddNewReport from './addNewReport';
 /* eslint-disable */

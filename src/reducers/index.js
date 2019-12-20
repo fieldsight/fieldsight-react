@@ -11,6 +11,7 @@ import projectLogsReducer from './projectLogsReducer';
 import viewDataReducer from './viewDataReducer';
 import manageFormReducer from './manageFormReducer';
 import siteViewDataReducer from './siteViewDataReducer';
+import reportReducer from './reportReducer';
 
 export default combineReducers({
   submissionDetail: submissionDetailReducer,
@@ -25,4 +26,5 @@ export default combineReducers({
   projectViewData: viewDataReducer,
   manageForms: manageFormReducer,
   siteViewData: siteViewDataReducer,
+  reportReducer,
 });

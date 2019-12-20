@@ -122,7 +122,7 @@ class App extends Component {
             toggleClass={this.state.toggleClass}
             handleToggle={this.handleToggle}
           /> */}
-          <div
+          {/* <div
             id="main-container"
             className={`${!toggleClass ? 'minified' : ''}`}
           >
@@ -344,6 +344,8 @@ class App extends Component {
             </main>
           </div>
         </div>
+        {/* </div> */}
+        {/* </div> */}
       </IntlProvider>
     );
   }
