@@ -314,21 +314,27 @@ class DashboardHeader extends Component {
               <a
                 href={`/fieldsight/application/#/site-users/${siteId}/`}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <CountCard
                   countName="User"
                   countNumber={totalUsers}
                   icon="la-user"
-                  noSubmissionText={true}
+                  noSubmissionText
                 />
               </a>
               {enableSubsites && (
-                <a onClick={() => openModal('Subsites')}>
+                <a
+                  onClick={() => openModal('Subsites')}
+                  role="button"
+                  tabIndex="0"
+                  onKeyDown={() => openModal('Subsites')}
+                >
                   <CountCard
                     countName="Subsite"
                     countNumber={totalSubsites}
                     icon="la-map-marker"
-                    noSubmissionText={true}
+                    noSubmissionText
                   />
                 </a>
               )}
@@ -337,13 +343,13 @@ class DashboardHeader extends Component {
                 countName="Progress"
                 icon="la-signal"
                 countNumber={currentProgress}
-                noSubmissionText={true}
+                noSubmissionText
               />
             </div>
 
             {hasWritePermission && (
               <button
-                role="button"
+                type="button"
                 onClick={() => openModal('Header')}
                 className="common-button is-border is-icon"
               >

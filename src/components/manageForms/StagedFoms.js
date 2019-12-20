@@ -145,9 +145,8 @@ class StagedForms extends Component {
       selectedRegion.map(each => {
         if (typeof each.id === 'string') {
           return true;
-        } else {
-          return false;
         }
+        return false;
       });
     const isSelectedAllRegion =
       selectedAllRegionArr.length > 0
@@ -167,9 +166,8 @@ class StagedForms extends Component {
       selectedType.map(each => {
         if (typeof each.id === 'string') {
           return true;
-        } else {
-          return false;
         }
+        return false;
       });
     const isSelectedAllType =
       selectedAllTypeArr.length > 0
@@ -189,11 +187,13 @@ class StagedForms extends Component {
       const mapType =
         selectedTypeArr.length > 0 ? selectedTypeArr : [];
       const newOrder =
-        typeof order === 'number' ? order : state.data.length + 1;
-      if (props.popupModal && order === newOrder) {
-        const updateStageApi = state.isProjectForm
-          ? `fv3/api/manage-forms/stages/${id}/?project_id=${state.id}`
-          : `fv3/api/manage-forms/stages/${id}/?site_id=${state.id}`;
+        typeof order === 'number'
+          ? order
+          : this.state.data.length + 1;
+      if (this.props.popupModal && order === newOrder) {
+        const updateStageApi = this.state.isProjectForm
+          ? `fv3/api/manage-forms/stages/${id}/?project_id=${this.state.id}`
+          : `fv3/api/manage-forms/stages/${id}/?site_id=${this.state.id}`;
         const body = {
           name,
           tags: mapType,
@@ -371,9 +371,8 @@ class StagedForms extends Component {
       data.regionSelected.map(each => {
         if (typeof each.id === 'string') {
           return true;
-        } else {
-          return false;
         }
+        return false;
       });
     const isSelectedAllRegion =
       selectedAllRegionArr.length > 0
@@ -391,9 +390,8 @@ class StagedForms extends Component {
       data.typeSelected.map(each => {
         if (typeof each.id === 'string') {
           return true;
-        } else {
-          return false;
         }
+        return false;
       });
     const isSelectedAllType =
       selectedAllTypeArr.length > 0

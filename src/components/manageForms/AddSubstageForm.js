@@ -70,7 +70,7 @@ class AddSubstageForm extends Component {
       formData && formData.setting && formData.setting.types;
 
     if (this._isMounted) {
-      let newRegionArr = [
+      const newRegionArr = [
         {
           id: 'all',
           identifier: 'select_all',
@@ -79,7 +79,7 @@ class AddSubstageForm extends Component {
           label: 'select all',
         },
       ];
-      let newTypeArr = [
+      const newTypeArr = [
         {
           id: 'all',
           identifier: 'select_all',

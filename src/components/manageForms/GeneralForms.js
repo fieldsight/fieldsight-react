@@ -272,9 +272,8 @@ class GeneralForms extends Component {
       data.regionSelected.map(each => {
         if (typeof each.id === 'string') {
           return true;
-        } else {
-          return false;
         }
+        return false;
       });
     const isSelectedAllRegion =
       selectedAllRegionArr.length > 0
@@ -294,9 +293,8 @@ class GeneralForms extends Component {
       data.typeSelected.map(each => {
         if (typeof each.id === 'string') {
           return true;
-        } else {
-          return false;
         }
+        return false;
       });
     const isSelectedAllType =
       selectedAllTypeArr.length > 0
@@ -342,7 +340,7 @@ class GeneralForms extends Component {
                   loadReq: false,
                 }),
                 () => {
-                  props.closePopup();
+                  this.props.closePopup();
                   successToast('form ', 'added');
                 },
               );
