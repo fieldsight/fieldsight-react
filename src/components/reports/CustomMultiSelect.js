@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-
+import uuid from 'uuid/v4';
 import CustomCheckBox from './CustomCheckbox';
 
 /* eslint-disable */
@@ -31,7 +31,7 @@ export default class CustomMultiSelect extends PureComponent {
               checkboxOption.map(option => (
                 <li key={`option_${option.id}`}>
                   <CustomCheckBox
-                    id={option.id}
+                    id={uuid()}
                     name={option.name}
                     checked={selectedArr.includes(option.name)}
                     changeHandler={handleCheck}
