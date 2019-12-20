@@ -6,8 +6,8 @@
             position: relative;
             flex-wrap: nowrap;
             a{
-                flex: 0 0 150px;
-                max-width: 150px;
+                flex: 0 0 164px;
+                max-width: 164px;
                 width: 100%;
                 &:not(:last-child){
                     margin-right: 1rem;
@@ -20,8 +20,8 @@
                 @include animate_all(all 0.5s);
                 padding: 0.5rem 0.6125rem;
                 min-height: 65px;
-                flex: 0 0 150px;
-                max-width: 150px;
+                flex: 0 0 164px;
+                max-width: 164px;
                 width: 100%;
 
                 .count-icon {

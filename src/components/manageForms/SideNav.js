@@ -92,6 +92,7 @@ class SideNav extends Component {
                 const types = list.data.site_types;
                 return {
                   regionOptions: [
+                    { id: "all", identifier: "select_all", name: "select all" },
                     ...regions,
                     {
                       id: 0,
@@ -100,6 +101,7 @@ class SideNav extends Component {
                     },
                   ],
                   typeOptions: [
+                    { id: "all", identifier: "select_all", name: "select all" },
                     ...types,
                     {
                       id: 0,
