@@ -415,7 +415,7 @@ class Submission extends Component {
                     'MMMM Do YYYY,  h:mm:ss a',
                   ])}
                 </time>
-              ) : submission.type == 'select one' ? (
+              ) : submission.type === 'select one' ? (
                 !submission.selected ? (
                   <p>{submission.answer}</p>
                 ) : (
@@ -436,7 +436,7 @@ class Submission extends Component {
                     );
                   })
                 )
-              ) : submission.type == 'select all that apply' ? (
+              ) : submission.type === 'select all that apply' ? (
                 !submission.selected ? (
                   <p>{submission.answer}</p>
                 ) : (

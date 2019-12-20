@@ -328,8 +328,6 @@ class ScheduleForms extends Component {
 
   handleScheduleForm = data => {
     const { id, xf, isEditForm, isProjectForm } = this.state;
-    const { typeOptions, regionOptions } = this.props;
-
     const monthDay =
       data.scheduleType === 2 && data.selectedMonthlyDays
         ? data.selectedMonthlyDays === '31'
@@ -339,50 +337,6 @@ class ScheduleForms extends Component {
     const selectedDay =
       data.scheduleType !== 2 ? data.selectedDays : [];
     const frequency = data.scheduleType !== 0 ? data.frequency : 0;
-    const selectedAllRegionArr =
-      data.regionSelected.length > 0 &&
-      data.regionSelected.map(each => {
-        if (typeof each.id === 'string') {
-          return true;
-        } else {
-          return false;
-        }
-      });
-    const isSelectedAllRegion =
-      selectedAllRegionArr.length > 0
-        ? selectedAllRegionArr.indexOf(true) > -1
-          ? true
-          : false
-        : '';
-    const selectedRegionArr = isSelectedAllRegion
-      ? regionOptions
-          .filter(region => region.id !== 'all')
-          .map(item => item.id)
-      : data.regionSelected.length > 0 &&
-        data.regionSelected.map(each => each.id);
-
-    const selectedAllTypeArr =
-      data.typeSelected.length > 0 &&
-      data.typeSelected.map(each => {
-        if (typeof each.id === 'string') {
-          return true;
-        } else {
-          return false;
-        }
-      });
-    const isSelectedAllType =
-      selectedAllTypeArr.length > 0
-        ? selectedAllTypeArr.indexOf(true) > -1
-          ? true
-          : false
-        : '';
-    const selectedTypeArr = isSelectedAllType
-      ? typeOptions
-          .filter(type => type.id !== 'all')
-          .map(item => item.id)
-      : data.typeSelected.length > 0 &&
-        data.typeSelected.map(each => each.id);
-
     this.setState({ loadReq: true }, () => {
       if (!isEditForm) {
         const postUrl = isProjectForm
@@ -405,9 +359,14 @@ class ScheduleForms extends Component {
             can_edit: data.isEdit,
             donor_visibility: data.isDonor,
             regions:
-              selectedRegionArr.length > 0 ? selectedRegionArr : [],
-            types: selectedTypeArr.length > 0 ? selectedTypeArr : [],
+              data.regionSelected && data.regionSelected.length > 0
+                ? data.regionSelected.map(each => each.id)
+                : [],
             can_delete: data.isDelete,
+            types:
+              data.typeSelected && data.typeSelected.length > 0
+                ? data.typeSelected.map(each => each.id)
+                : [],
           },
         };
 
@@ -448,9 +407,14 @@ class ScheduleForms extends Component {
           }),
           setting: {
             id: data.settingId,
+            types:
+              data.typeSelected && data.typeSelected.length > 0
+                ? data.typeSelected.map(each => each.id)
+                : [],
             regions:
-              selectedRegionArr.length > 0 ? selectedRegionArr : [],
-            types: selectedTypeArr.length > 0 ? selectedTypeArr : [],
+              !!data.regionSelected && data.regionSelected.length > 0
+                ? data.regionSelected.map(each => each.id)
+                : [],
             notify_incomplete_schedule: data.notifyIncomplete,
             can_edit: data.isEdit,
             donor_visibility: data.isDonor,
