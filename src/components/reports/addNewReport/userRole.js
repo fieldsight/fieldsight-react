@@ -13,11 +13,9 @@ export default class UserRole extends PureComponent {
           <li>
             {/* <div className="custom-control custom-checkbox"> */}
             <CustomCheckBox
-              className="custom-control custom-checkbox"
-              customInputClass="custom-control-input"
-              customLabelClass="custom-control-label"
-              label={'selected-1'}
-              name={'selected-1'}
+              id="selected-1"
+              label="selected-1"
+              name="selected-1"
               // checked={submissions.includes(
               //   "selected-1",
               // )}

@@ -28,6 +28,7 @@ export default class AddNewReport extends Component {
 
   handleChange = e => {
     const { name, value } = e.target;
+
     this.setState(state => ({
       data: {
         ...state.data,
@@ -53,33 +54,29 @@ export default class AddNewReport extends Component {
       target: { name, checked },
     } = e;
 
-    this.setState(
-      state => {
-        if (checked) {
-          return {
-            data: {
-              ...state.data,
+    console.log(e.target);
+    this.setState(state => {
+      if (checked) {
+        return {
+          data: {
+            ...state.data,
 
-              reportType: [...state.data.reportType, name],
-            },
-          };
-        }
-        if (!checked) {
-          return {
-            data: {
-              ...state.data,
-              reportType: state.data.reportType.filter(
-                type => type !== name,
-              ),
-            },
-          };
-        }
-        return null;
-      },
-      () => {
-        console.log('in checkbox', this.state.data);
-      },
-    );
+            reportType: [...state.data.reportType, name],
+          },
+        };
+      }
+      if (!checked) {
+        return {
+          data: {
+            ...state.data,
+            reportType: state.data.reportType.filter(
+              type => type !== name,
+            ),
+          },
+        };
+      }
+      return null;
+    });
   };
 
   render() {
@@ -87,10 +84,10 @@ export default class AddNewReport extends Component {
       state: {
         data: { reportName, desc, reportType },
         toggleSelectClass,
-        collapseClass,
+        // collapseClass,
       },
     } = this;
-    console.log('state', collapseClass);
+    // console.log('state', this.state.data);
 
     return (
       <div className="reports mrb-30">
@@ -138,41 +135,6 @@ export default class AddNewReport extends Component {
                             selectedArr={reportType}
                             placeholderTxt="User"
                           />
-                          {/* <div className="common-select">
-                            <div
-                              className={`select-wrapper ${
-                                toggleSelectClass
-                                  ? 'select-toggle'
-                                  : ''
-                              }`}
-                              onClick={() => {
-                                this.handleToggleClass();
-                              }}
-                            >
-                              <span className="select-item">
-                                User
-                              </span>
-                              <ul>
-                                {checkboxOption.map(option => (
-                                  <li key={`option_${option.id}`}>
-                                    <CustomCheckBox
-                                      className="custom-control custom-checkbox"
-                                      customInputClass="custom-control-input"
-                                      customLabelClass="custom-control-label"
-                                      label={option.name}
-                                      name={option.name}
-                                      checked={reportType.includes(
-                                        option.name,
-                                      )}
-                                      changeHandler={
-                                        this.handleCheckReportType
-                                      }
-                                    />
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div> */}
                         </div>
                       </div>
                       <div className="col-lg-9 col-md-8">

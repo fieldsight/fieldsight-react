@@ -2,27 +2,28 @@ import React from 'react';
 /* eslint-disable  react/prop-types */
 
 const CustomCheckBox = ({
+  id,
   name,
   checked,
-  className,
   changeHandler,
   label,
-  translation,
-  customInputClass,
-  customLabelClass,
+  // translation,
   ...rest
 }) => (
-  <div className={className}>
+  <div className="custom-control custom-checkbox">
     <input
       type="checkbox"
-      {...rest}
+      className="custom-control-input"
+      id={id}
       name={name}
       checked={checked}
-      onChange={e => changeHandler(e)}
-      className={customInputClass}
+      onChange={changeHandler}
+      value={id}
+      {...rest}
     />
     <label
-      className={customLabelClass}
+      className="custom-control-label"
+      htmlFor={id}
       style={{ paddingLeft: '2em' }}
     >
       {label}
