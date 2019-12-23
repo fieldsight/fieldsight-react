@@ -5,6 +5,10 @@
             padding: 0 1rem;
             margin: 1rem 0;
 
+            .fieldsight-popup {
+                z-index: 99;
+            }
+
             .map {
                 z-index: 2;
             }
@@ -64,17 +68,47 @@
 
                             .input-group-append {
                                 margin: 0;
-
+                                position: relative;
+                                cursor: pointer;
                                 .input-group-text {
                                     background-color: $color-white;
                                     border: 0;
                                     border-left: 1px solid $color-bg;
                                 }
+                                ul{
+                                    position: absolute;
+                                    right:0;
+                                    left:auto;
+                                    min-width: 130px;
+                                    background-color: $color-white;
+                                    opacity: 0;
+                                    visibility: hidden;
+                                    @include transition(all .5s ease-in-out);
+                                    @include box-shadow(0 2px 6px rgba($color-primary,.20));
+                                    top:130%;
+                                    li{
+                                        a{
+                                            display: block;
+                                            padding:.25rem .5rem;
+                                            font-size:.75rem;
+                                            color:$primary-light;
+                                            &:hover{
+                                                background-color: $color-border;
+                                            }
+                                        }
+                                        &:not(:last-child){
+                                            border-bottom: 1px solid $color-border;
+                                        }
+                                    }
+                                }
+                                &.open{
+                                    ul{
+                                        top:100%;
+                                        opacity: 1;
+                                        visibility: visible;
+                                    }
+                                }
                             }
-                        }
-
-                        &.search {
-                            margin: .6125rem 0 0 0;
                         }
                     }
 
@@ -202,8 +236,8 @@
                     margin-top: 1.5rem;
 
                     button.fieldsight-btn {
-                        flex: 0 0 48%;
-                        max-width: 48%;
+                        flex: 0 0 47%;
+                        max-width: 47%;
                         text-transform: uppercase;
                     }
                 }
@@ -272,6 +306,46 @@
                     border-bottom: 1px solid $color-bg;
                     font-size: 1rem;
                     font-weight: 500;
+                    position: relative;
+                    @include transition(all .3s ease-in-out);
+
+                    ul {
+                        position: absolute;
+                        top: 100%;
+                        left: 100%;
+                        right: auto;
+                        background-color: $color-white;
+                        min-width: 80px;
+                        opacity: 0;
+                        visibility: hidden;
+                        @include transition(all .5s ease-in-out);
+
+                        li {
+                            display: block;
+                            padding: .25rem .5rem;
+                            font-size: .75rem;
+                            color: $primary-light;
+                            @include transition(all .3s ease-in-out);
+
+                            &:not(:last-child) {
+                                border-bottom: 1px solid $color-bg;
+                            }
+
+                            &:hover {
+                                background-color: $color-bg;
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        background-color: $color-bg;
+
+                        ul {
+                            opacity: 1;
+                            visibility: visible;
+                            top: 0;
+                        }
+                    }
                 }
 
                 &.top {
@@ -283,10 +357,19 @@
 
     .map-filter-data {
         .filter-data {
-            display: none;
-
-            &.display-data {
-                display: block;
+            .classes {
+                .form-group {
+                    &.inline-form-group {
+                        .form-control {
+                            border: 1px solid $primary-light-1;
+                            height: calc(1.8rem + 2px);
+                            padding: .375rem 1.75rem .375rem .75rem;
+                        }
+                    }
+                }
+            }
+            .filter-content{
+                display: none;
             }
         }
 
@@ -296,6 +379,12 @@
         h6 {
             font-size: .875rem;
             text-transform: capitalize;
+        }
+        .filter-list-title{
+            align-items: center;
+        }
+        .form-group {
+            margin: 0;
         }
 
         li {
@@ -307,7 +396,6 @@
             .form-group {
                 flex: 0 0 50%;
                 max-width: 50%;
-                margin: 0;
 
                 .custom-checkbox {
                     margin: 0;
@@ -337,47 +425,32 @@
                     flex: 0 0 40%;
                     max-width: 40%;
                     align-items: center;
-                    input[type="color"] {
-                        @include radius50;
-                        display: inline-block;
-                        width:12px;
-                        height: 1rem;
-                        border:none;
-                        cursor: pointer;
-                        margin-right: .5rem;
-                        position: relative;
-                        padding:0;
-                        background-color: transparent;
-                    }
-                    a {
-                        color: $color-blue;
-                        
 
-                        i {
+                    small {
+                        display: inline-block;
+                        width: 2rem;
+                        height: 1rem;
+                        background-color: $color-blue;
+                        margin-right: .6125rem;
+                    }
+
+                    input {
+                        &.layer-shape {
+                            display: inline-block;
+                            width: 2rem;
+                            height: 1rem;
+                            border: none;
+                            cursor: pointer;
                             margin-right: .5rem;
                             position: relative;
-
-                            &.layer-shape {
-                                width: 12px;
-                                height: 12px;
-                                @include radius50;
-                                display: inline-block;
-
-                               
-
-                                &.pending {
-                                    background-color: $color-blue;
-                                }
-
-                                &.flagged {
-                                    background-color: $color-yellow;
-                                }
-
-                                &.approved {
-                                    background-color: $color-green;
-                                }
-                            }
+                            padding: 0;
+                            background-color: transparent;
+                            font-size: .75rem;
                         }
+                    }
+
+                    a {
+                        color: $color-blue;
                     }
                 }
             }
