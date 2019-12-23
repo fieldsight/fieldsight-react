@@ -124,15 +124,49 @@ class StagedForms extends Component {
 
   handleSubmitStageForm = data => {
     const { name, desc, selectedRegion, selectedType, order, id } = data;
+    const { typeOptions, regionOptions } = this.props;
+
+    const selectedAllRegionArr =
+      selectedRegion.length > 0 &&
+      selectedRegion.map(each => {
+        if (typeof each.id === "string") {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    const isSelectedAllRegion =
+      selectedAllRegionArr.length > 0
+        ? selectedAllRegionArr.indexOf(true) > -1
+          ? true
+          : false
+        : "";
+    const selectedRegionArr = isSelectedAllRegion
+      ? regionOptions.filter(region => region.id !== "all").map(item => item.id)
+      : selectedRegion.length > 0 && selectedRegion.map(each => each.id);
+
+    const selectedAllTypeArr =
+      selectedType.length > 0 &&
+      selectedType.map(each => {
+        if (typeof each.id === "string") {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    const isSelectedAllType =
+      selectedAllTypeArr.length > 0
+        ? selectedAllTypeArr.indexOf(true) > -1
+          ? true
+          : false
+        : "";
+    const selectedTypeArr = isSelectedAllType
+      ? typeOptions.filter(type => type.id !== "all").map(item => item.id)
+      : selectedType.length > 0 && selectedType.map(each => each.id);
+
     this.setState({ loadReq: true }, () => {
-      const mapRegion =
-        !!selectedRegion && !!selectedRegion.length > 0
-          ? selectedRegion.map(each => each.id)
-          : [];
-      const mapType =
-        !!selectedType && !!selectedType.length > 0
-          ? selectedType.map(each => each.id)
-          : [];
+      const mapRegion = selectedRegionArr.length > 0 ? selectedRegionArr : [];
+      const mapType = selectedTypeArr.length > 0 ? selectedTypeArr : [];
       const newOrder =
         typeof order == "number" ? order : this.state.data.length + 1;
       if (this.props.popupModal && order == newOrder) {
@@ -291,7 +325,47 @@ class StagedForms extends Component {
   };
 
   handleCreateForm = data => {
-    const { stageId, substageId, xf } = this.state;
+    const { stageId, substageId, xf, stagedRegions, stagedTypes } = this.state;
+
+    const selectedAllRegionArr =
+      data.regionSelected.length > 0 &&
+      data.regionSelected.map(each => {
+        if (typeof each.id === "string") {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    const isSelectedAllRegion =
+      selectedAllRegionArr.length > 0
+        ? selectedAllRegionArr.indexOf(true) > -1
+          ? true
+          : false
+        : "";
+    const selectedRegionArr = isSelectedAllRegion
+      ? stagedRegions.filter(region => region.id !== "all")
+      : data.regionSelected.length > 0 &&
+        data.regionSelected.map(each => each.id);
+
+    const selectedAllTypeArr =
+      data.typeSelected.length > 0 &&
+      data.typeSelected.map(each => {
+        if (typeof each.id === "string") {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    const isSelectedAllType =
+      selectedAllTypeArr.length > 0
+        ? selectedAllTypeArr.indexOf(true) > -1
+          ? true
+          : false
+        : "";
+    const selectedTypeArr = isSelectedAllType
+      ? stagedTypes.filter(type => type.id !== "all")
+      : data.typeSelected.length > 0 && data.typeSelected.map(each => each.id);
+
     this.setState({ loadReq: true }, () => {
       if (!!substageId) {
         const body = {
@@ -303,14 +377,8 @@ class StagedForms extends Component {
           xf: !!xf == true ? JSON.parse(xf) : "",
           default_submission_status: data.status,
           setting: {
-            types:
-              !!data.typeSelected && data.typeSelected.length > 0
-                ? data.typeSelected.map(each => each.id)
-                : [],
-            regions:
-              !!data.regionSelected && data.regionSelected.length > 0
-                ? data.regionSelected.map(each => each.id)
-                : [],
+            types: selectedTypeArr.length > 0 ? selectedTypeArr : [],
+            regions: selectedRegionArr.length > 0 ? selectedRegionArr : [],
             donor_visibility: data.isDonor,
             can_edit: data.isEdit,
             can_delete: data.isDelete,
@@ -361,14 +429,8 @@ class StagedForms extends Component {
           xf: !!xf == true ? JSON.parse(xf) : "",
           default_submission_status: data.status,
           setting: {
-            types:
-              !!data.typeSelected && data.typeSelected.length > 0
-                ? data.typeSelected.map(each => each.id)
-                : [],
-            regions:
-              !!data.regionSelected && data.regionSelected.length > 0
-                ? data.regionSelected.map(each => each.id)
-                : [],
+            types: selectedTypeArr.length > 0 ? selectedTypeArr : [],
+            regions: selectedRegionArr.length > 0 ? selectedRegionArr : [],
             donor_visibility: data.isDonor,
             can_edit: data.isEdit,
             can_delete: data.isDelete
