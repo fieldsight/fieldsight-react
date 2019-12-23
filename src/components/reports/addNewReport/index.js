@@ -27,6 +27,9 @@ class AddNewReport extends Component {
       },
       reportType: [],
       metrics: [],
+      metricArr: [],
+      siteInfoArr: [],
+      formInfoArr: [],
       toggleSelectClass: false,
       collapseClass: false,
       loader: false,
@@ -103,20 +106,54 @@ class AddNewReport extends Component {
 
   handleReportTypeChange = e => {
     const { value } = e.target;
-    this.setState(state => ({
-      data: {
-        ...state.data,
-        selectedReportType: JSON.parse(value),
+    this.setState(
+      state => ({
+        data: {
+          ...state.data,
+          selectedReportType: JSON.parse(value),
+        },
+      }),
+      () => {
+        const {
+          metrics,
+          data: { selectedReportType },
+        } = this.state;
+        const metricsArr = metrics.filter(metric =>
+          metric.types.includes(selectedReportType),
+        );
+
+        this.setState({
+          metricArr: metricsArr.filter(
+            item => item.category === 'default',
+          ),
+          siteInfoArr: metricsArr.filter(
+            item => item.category === 'site_information',
+          ),
+          formInfoArr: metricsArr.filter(
+            item => item.category === 'form_information',
+          ),
+        });
       },
+    );
+  };
+
+  handleSelectChange = selectedArr => {
+    this.setState(state => ({
+      data: { ...state.data, selectedMetrics: selectedArr },
     }));
   };
 
   render() {
     const {
       state: {
-        data: { reportName, desc, selectedReportType },
+        data: {
+          reportName,
+          desc,
+          selectedReportType,
+          selectedMetrics,
+        },
         reportType,
-        metrics,
+        metricArr,
         toggleSelectClass,
         // collapseClass,
       },
@@ -125,13 +162,7 @@ class AddNewReport extends Component {
       },
     } = this;
 
-    const metricsArr = metrics.filter(metric =>
-      metric.types.includes(selectedReportType),
-    );
-
-    console.log('state', selectedReportType, metricsArr);
-
-    // debugger;
+    // console.log('state', selectedReportType, selectedMetrics);
 
     return (
       <div className="reports mrb-30">
@@ -213,8 +244,11 @@ class AddNewReport extends Component {
               </div>
               <div className="report-accordion">
                 <div className="row ">
-                  <Metrics data={metricsArr} />
-                  {/* <SelectedColumn /> */}
+                  <Metrics
+                    data={metricArr}
+                    handleSelectChange={this.handleSelectChange}
+                  />
+                  {/* <SelectedColumn selected={selectedMetrics} /> */}
                 </div>
               </div>
               {/* <DataFilter

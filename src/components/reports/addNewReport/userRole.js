@@ -4,12 +4,22 @@ import CustomCheckBox from '../CustomCheckbox';
 /* eslint-disable */
 
 export default class UserRole extends PureComponent {
+  requestIfChecked = row => {
+    const { parentData } = this.props;
+    const arr = [];
+    parentData.length > 0 &&
+      parentData.map(each => {
+        if (each.children.length > 0) {
+          each.children.map(item => {
+            if (item.code === row.code) return arr.push(item);
+          });
+        }
+      });
+    return arr;
+  };
+
   render() {
-    const {
-      selectedMetric,
-      handleCheckChildren,
-      parentData,
-    } = this.props;
+    const { selectedMetric, handleCheckChildren } = this.props;
 
     return (
       <div className="fs-7 fs-col">
@@ -18,25 +28,12 @@ export default class UserRole extends PureComponent {
           <li>
             {/* <div className="custom-control custom-checkbox"> */}
             {selectedMetric.children &&
-              selectedMetric.children.map((child, i) => {
+              selectedMetric.children.map(child => {
+                const requestChecked = this.requestIfChecked(child);
                 const isChecked =
-                  parentData.length > 0 &&
-                  parentData.map(each => {
-                    // console.log('dfdf', each.children);
-                    if (each.children.length > 0) {
-                      return each.children.filter(
-                        item => item.code === child.code,
-                      );
-                    }
-                  });
-                console.log(
-                  //   selectedMetric,
-                  //   child,
-                  //   'in userrole',
-                  isChecked,
-                  '---',
-                  //   parentData,
-                );
+                  requestChecked &&
+                  requestChecked[0] &&
+                  requestChecked[0].code === child.code;
 
                 return (
                   <Fragment key={child.code}>
@@ -44,11 +41,7 @@ export default class UserRole extends PureComponent {
                       id={child.code}
                       label={child.label}
                       name={child.code}
-                      checked={
-                        isChecked[0] &&
-                        isChecked[0][0] &&
-                        isChecked[0][0].code === child.code
-                      }
+                      checked={isChecked ? true : false}
                       changeHandler={e => {
                         handleCheckChildren(e, selectedMetric, child);
                       }}

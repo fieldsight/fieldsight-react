@@ -7,19 +7,6 @@ import SiteInformation from './siteInformation';
 import FormInformation from './formInformation';
 /* eslint-disable */
 
-// const checkboxOption = [
-//   { id: 1, name: 'region-1' },
-//   { id: 2, name: 'region-2' },
-//   { id: 3, name: 'region-3' },
-// ];
-
-const Submissions = [
-  { id: 1, name: 'approved' },
-  { id: 2, name: 'rejected' },
-  { id: 3, name: 'flag' },
-  { id: 4, name: 'pending' },
-];
-
 export default class Metrics extends Component {
   constructor(props) {
     super(props);
@@ -62,53 +49,65 @@ export default class Metrics extends Component {
       target: { name, checked },
     } = e;
     const { submissionType } = this.state;
-    this.setState(state => {
-      if (checked) {
-        return {
-          submissions: [...state.submissions, submissionType],
-        };
-      }
-      if (!checked) {
-        return {
-          submissions: state.submissions.filter(
-            type => type.code !== name,
-          ),
-        };
-      }
-      return null;
-    });
+    this.setState(
+      state => {
+        if (checked) {
+          return {
+            submissions: [...state.submissions, submissionType],
+          };
+        }
+        if (!checked) {
+          return {
+            submissions: state.submissions.filter(
+              type => type.code !== name,
+            ),
+          };
+        }
+        return null;
+      },
+      () => {
+        this.props.handleSelectChange(this.state.submissions);
+      },
+    );
   };
 
   handleCheckChildren = (e, data, child) => {
-    const { checked, name } = e.target;
+    const { checked } = e.target;
     const { submissions } = this.state;
-    this.setState(state => {
-      if (checked) {
-        const newSubmissions = submissions.map(sub => {
-          // if (sub.code === data.code) {
-          //   return { ...sub.children, child };
-          // }
-        });
-        // return {
-        //   submissions: newSubmissions,
-        // };
-      }
-      if (!checked) {
-        const filteredData = submissions.map(sub => {
-          if (sub.code === data.code) {
-            const ch = sub.children.filter(
-              i => i.code !== child.code,
-            );
-            return { ...sub, children: ch };
-          }
-          return sub;
-        });
-        // console.log('sub', checked, filteredData);
-        return {
-          submissions: filteredData,
-        };
-      }
-    });
+
+    this.setState(
+      () => {
+        if (checked) {
+          const newSubmissions = submissions.map(sub => {
+            if (sub.code === data.code) {
+              const children = [...sub.children, child];
+              return { ...sub, children };
+            }
+            return { sub };
+          });
+          return {
+            submissions: newSubmissions,
+          };
+        }
+        if (!checked) {
+          const filteredData = submissions.map(sub => {
+            if (sub.code === data.code) {
+              const ch = sub.children.filter(
+                i => i.code !== child.code,
+              );
+              return { ...sub, children: ch };
+            }
+            return sub;
+          });
+          return {
+            submissions: filteredData,
+          };
+        }
+      },
+      () => {
+        this.props.handleSelectChange(this.state.submissions);
+      },
+    );
   };
 
   render() {
@@ -119,7 +118,7 @@ export default class Metrics extends Component {
       toggleSelectClass,
     } = this.state;
 
-    // console.log('metrics', submissions);
+    console.log('metrics', submissions);
 
     return (
       <div className="col-lg-7 col-md-7">
