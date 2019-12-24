@@ -15,6 +15,7 @@ const CountCard = ({
       <div className={`count-icon ${className ? className : ''}`}>
         <i className={`la ${icon}`}> </i>
       </div>
+
       <div className="count-content">
         {countName !== 'Progress' && (
           <h4>{countNumber !== 0 && countNumber}</h4>
@@ -25,82 +26,86 @@ const CountCard = ({
         <h6>
           {noSubmissionText ? (
             countNumber === 0 ? (
-              <>
-                {countName === 'User' || countName === 'user' ? (
-                  <>
-                    <FormattedMessage
-                      id="app.no-user"
-                      defaultMessage=" No User"
-                    />
-                  </>
-                ) : (
-                  ''
-                )}
-                {countName === 'project' ? (
-                  <>
-                    <FormattedMessage
-                      id="app.no-projects"
-                      defaultMessage="No Project"
-                    />
-                  </>
-                ) : (
-                  ''
-                )}
+              `No ${countName}` || (
+                <>
+                  {countName === 'User' || countName === 'user' ? (
+                    <>
+                      <FormattedMessage
+                        id="app.no-user"
+                        defaultMessage=" No User"
+                      />
+                    </>
+                  ) : (
+                    ''
+                  )}
+                  {countName === 'project' ? (
+                    <>
+                      <FormattedMessage
+                        id="app.no-projects"
+                        defaultMessage="No Project"
+                      />
+                    </>
+                  ) : (
+                    ''
+                  )}
 
-                {countName === 'site' ? (
-                  <FormattedMessage
-                    id="app.no-site"
-                    defaultMessage=" No Site"
-                  />
-                ) : (
-                  ''
-                )}
-                {countName === 'Progress' ? (
-                  <FormattedMessage
-                    id="app.no-progress"
-                    defaultMessage=" No Progress"
-                  />
-                ) : (
-                  ''
-                )}
-              </>
-            ) : (
-              <>
-                {countName === 'User' || countName === 'user' ? (
-                  <FormattedMessage
-                    id="app.user"
-                    defaultMessage="User"
-                  />
-                ) : (
-                  ''
-                )}
-                {countName === 'site' ? (
-                  <FormattedMessage
-                    id="app.site"
-                    defaultMessage="Site"
-                  />
-                ) : (
-                  ''
-                )}
-                {countName === 'Progress' ? (
-                  <FormattedMessage
-                    id="app.progress"
-                    defaultMessage="Progress"
-                  />
-                ) : (
-                  ''
-                )}
-                {countName === 'project' ? (
-                  <>
+                  {countName === 'site' ? (
                     <FormattedMessage
-                      id="app.project"
-                      defaultMessage="Project"
+                      id="app.no-site"
+                      defaultMessage=" No Site"
                     />
-                  </>
-                ) : (
-                  ''
-                )}
-              </>
+                  ) : (
+                    ''
+                  )}
+                  {countName === 'Progress' ? (
+                    <FormattedMessage
+                      id="app.no-progress"
+                      defaultMessage=" No Progress"
+                    />
+                  ) : (
+                    ''
+                  )}
+                </>
+              )
+            ) : (
+              `${countName}` || (
+                <>
+                  {countName === 'User' || countName === 'user' ? (
+                    <FormattedMessage
+                      id="app.user"
+                      defaultMessage="User"
+                    />
+                  ) : (
+                    ''
+                  )}
+                  {countName === 'site' ? (
+                    <FormattedMessage
+                      id="app.site"
+                      defaultMessage="Site"
+                    />
+                  ) : (
+                    ''
+                  )}
+                  {countName === 'Progress' ? (
+                    <FormattedMessage
+                      id="app.progress"
+                      defaultMessage="Progress"
+                    />
+                  ) : (
+                    ''
+                  )}
+                  {countName === 'project' ? (
+                    <>
+                      <FormattedMessage
+                        id="app.project"
+                        defaultMessage="Project"
+                      />
+                    </>
+                  ) : (
+                    ''
+                  )}
+                </>
+              )
             )
           ) : countNumber === 0 ? (
             <>

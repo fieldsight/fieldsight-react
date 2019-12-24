@@ -252,7 +252,7 @@ class TeamDashboard extends Component {
       openModal,
       handleFirstStepSelect,
     } = this;
-    // console.log("props", this.props);
+    console.log('props', map);
     const packageSelected = Object.keys(plan).length > 0;
     return (
       <>

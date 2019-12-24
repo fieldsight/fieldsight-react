@@ -49,12 +49,17 @@ import Mapparent from './team/Mapparent';
 import ResetPassword from './ResetPassword';
 import UpdateProfile from './updateProject';
 import CreateProfile from './ProfileAdd';
+
 // import Header from "./headers";
 // import SideNav from "./sideNav";
 import ChangePassword from './changePassword';
 
 import SyncSchedule from './syncSchedule';
 // import SelectElement from "../components/common/SelectElement";
+
+import AdminDashboard from './adminDashboard';
+import SuperAdminFormEdit from './superAdminEdit';
+import SuperAdminForm from './superAdminForm';
 
 import FilterDataFilter from './reports/FormDataFilter';
 import ExportDataFilter from './reports/ExportDataFilter';
@@ -330,10 +335,20 @@ class App extends Component {
                   render={props => <ExportDataFilter {...props} />}
                 />
 
-                {/* <Route
-                    path="/new-report"
-                    render={props => <AddNewReport {...props} />}
-                  /> */}
+                <Route
+                  path="/admin-dashboard/:id"
+                  render={props => <AdminDashboard {...props} />}
+                />
+
+                <Route
+                  path="/create-super-admin"
+                  render={props => <SuperAdminForm {...props} />}
+                />
+
+                <Route
+                  path="/edit-super-admin/:id"
+                  render={props => <SuperAdminFormEdit {...props} />}
+                />
               </Switch>
               <ToastContainer />
             </Router>
