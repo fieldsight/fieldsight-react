@@ -31,6 +31,10 @@ class AddNewReport extends Component {
       submissionType: {},
       submissions: [],
       userList: [],
+      siteInfoList: [],
+      metaAttributes: [],
+      selectedMetas: [],
+      siteValues: [],
     };
   }
 
@@ -43,6 +47,7 @@ class AddNewReport extends Component {
       this.setState({
         reportType: this.props.reportReducer.reportTypes,
         metrics: this.props.reportReducer.metrics,
+        metaAttributes: this.props.reportReducer.metaAttributes,
       });
     }
     if (prevState.submissions !== this.state.submissions) {
@@ -189,47 +194,15 @@ class AddNewReport extends Component {
     });
   };
 
-  handleCheckChildren = (e, data, child) => {
-    const { checked } = e.target;
-    const { submissions } = this.state;
-
-    this.setState(() => {
-      if (checked) {
-        const newSubmissions = submissions.map(sub => {
-          if (sub.code === data.code) {
-            const children = [...sub.children, child];
-            return { ...sub, children };
-          }
-          return { sub };
-        });
-        return {
-          submissions: newSubmissions,
-        };
-      }
-      if (!checked) {
-        const filteredData = submissions.map(sub => {
-          if (sub.code === data.code) {
-            const ch = sub.children.filter(
-              i => i.code !== child.code,
-            );
-            return { ...sub, children: ch };
-          }
-          return sub;
-        });
-        return {
-          submissions: filteredData,
-        };
-      }
-      return null;
-    });
-  };
-
   handleChangeArray = item => {
     this.setState(state => {
       const list = state.data.selectedMetrics;
       const filteredArr = list.filter(li => li.code !== item.code);
       const filteredUserArr = state.userList.filter(
         u => u.code !== item.code,
+      );
+      const filteredMetaArr = state.selectedMetas.filter(
+        m => m.code !== item.code,
       );
       const filteredSubmissionArr = state.submissions.filter(
         s => s.code !== item.code,
@@ -241,12 +214,88 @@ class AddNewReport extends Component {
         },
         userList: filteredUserArr,
         submissions: filteredSubmissionArr,
+        selectedMetas: filteredMetaArr,
       };
     });
   };
 
   handleSelectChange = payload => {
     console.log('payload', payload);
+  };
+
+  handleChangeMeta = (e, meta) => {
+    const { name, checked } = e.target;
+    const { data, selectedMetas } = this.state;
+    this.setState(
+      state => {
+        if (checked) {
+          const newList = data.selectedMetrics.filter(
+            i => i.code !== name,
+          );
+          return {
+            selectedMetas: [...state.selectedMetas, meta],
+            data: {
+              ...state.data,
+              selectedMetrics: [...newList, meta],
+            },
+          };
+        }
+        if (!checked) {
+          const newList = data.selectedMetrics.filter(
+            i => i.code !== name,
+          );
+          const filterMetas = selectedMetas.filter(
+            type => type.code !== name,
+          );
+          return {
+            submissions: filterMetas,
+            data: {
+              ...state.data,
+              selectedMetrics: [...newList, filterMetas],
+            },
+          };
+        }
+        return null;
+      },
+      () => {
+        const { selectedMetas, siteInfoArr } = this.state;
+        const filteredValues = [];
+        selectedMetas &&
+          selectedMetas.length > 0 &&
+          selectedMetas.map(each => {
+            if (
+              each.type === 'Text' ||
+              each.type === 'FormSubStat' ||
+              each.type === 'MCQ' ||
+              each.type === 'Date'
+            ) {
+              if (siteInfoArr.length > 0) {
+                siteInfoArr.map(site => {
+                  if (
+                    site.label === 'Actual' ||
+                    site.label === 'Most Common' ||
+                    site.label === 'All Values'
+                  ) {
+                    filteredValues.push(site);
+                  }
+                });
+              }
+            }
+          });
+        console.log(
+          selectedMetas,
+          '----',
+          siteInfoArr,
+          'insode',
+          filteredValues,
+        );
+        this.setState({ siteValues: filteredValues });
+      },
+    );
+  };
+
+  handleSelectSiteInfo = item => {
+    console.log('site ma', item);
   };
 
   render() {
@@ -265,13 +314,18 @@ class AddNewReport extends Component {
         submissions,
         usersArr,
         userList,
+        siteInfoArr,
+        siteInfoList,
+        metaAttributes,
+        selectedMetas,
+        siteValues,
       },
       props: {
         reportReducer: { reportLoader },
       },
     } = this;
 
-    // console.log(selectedMetrics, 'state', submissions, userList);
+    console.log(selectedMetas, 'state', siteValues, 'value');
 
     return (
       <div className="reports mrb-30">
@@ -357,21 +411,24 @@ class AddNewReport extends Component {
                     data={metricArr}
                     users={usersArr}
                     userList={userList}
+                    siteInfo={siteInfoArr}
+                    siteInfoList={siteInfoList}
+                    metaAttributes={metaAttributes}
+                    selectedMetas={selectedMetas}
+                    handleSelectMeta={this.handleChangeMeta}
                     submissionType={submissionType}
                     submissions={submissions}
                     handleSubmissionType={this.handleSubmissionType}
                     handleCheckSubmissionType={
                       this.handleCheckSubmissionType
                     }
-                    handleCheckChildren={this.handleCheckChildren}
                     handleCheckUser={this.handleChecKUser}
+                    handleSelectSiteInfo={this.handleSelectSiteInfo}
                   />
                   <SelectedColumn
                     selected={selectedMetrics}
                     handleSelectChange={this.handleSelectChange}
-                    // handleParentChange={this.handleCheckReportType}
                     handleCheckSubmissionType={this.handleChangeArray}
-                    handleCheckChildren={this.handleCheckChildren}
                   />
                 </div>
               </div>

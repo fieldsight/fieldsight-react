@@ -1,14 +1,19 @@
 import React, { PureComponent } from 'react';
+
 import CustomMultiSelect from '../CustomMultiSelect';
+/* eslint-disable */
 
 export default class SiteInformation extends PureComponent {
   render() {
     const {
       toggleSelectClass,
-      handleCheck,
       handleToggleClass,
-      checkboxOption,
-      selectedArr,
+      siteInfoArr,
+      selectedList,
+      handleSelectValue,
+      handleSelectMeta,
+      metaAttributes,
+      selectedMetas,
     } = this.props;
 
     return (
@@ -25,9 +30,9 @@ export default class SiteInformation extends PureComponent {
                   <CustomMultiSelect
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={handleToggleClass}
-                    checkboxOption={checkboxOption}
-                    handleCheck={handleCheck}
-                    selectedArr={selectedArr}
+                    checkboxOption={metaAttributes}
+                    handleCheck={handleSelectMeta}
+                    selectedArr={selectedMetas}
                     placeholderTxt="Form Answer"
                   />
                 </div>
@@ -35,14 +40,14 @@ export default class SiteInformation extends PureComponent {
               <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">values</label>
-                  <CustomMultiSelect
+                  {/* <CustomMultiSelect
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={handleToggleClass}
                     checkboxOption={checkboxOption}
                     handleCheck={handleCheck}
                     selectedArr={selectedArr}
                     placeholderTxt="Maximum"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

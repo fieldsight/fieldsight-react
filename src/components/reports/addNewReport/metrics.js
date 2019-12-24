@@ -3,7 +3,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import CustomCheckBox from '../CustomCheckbox';
 import UserRole from './userRole';
-// import SiteInformation from './siteInformation';
+import SiteInformation from './siteInformation';
 // import FormInformation from './formInformation';
 /* eslint-disable */
 
@@ -13,6 +13,7 @@ export default class Metrics extends Component {
     this.state = {
       metrics: props.data,
       users: props.users,
+      siteInfo: props.siteInfo,
       toggleSelectClass: false,
     };
   }
@@ -26,6 +27,11 @@ export default class Metrics extends Component {
     if (prevProps.users !== this.props.users) {
       this.setState({
         users: this.props.users,
+      });
+    }
+    if (prevProps.siteInfo !== this.props.siteInfo) {
+      this.setState({
+        siteInfo: this.props.siteInfo,
       });
     }
   }
@@ -45,9 +51,23 @@ export default class Metrics extends Component {
   };
 
   render() {
-    const { metrics, users } = this.state;
-    const { submissions, submissionType, userList } = this.props;
-    // console.log('metrics', users);
+    const {
+      metrics,
+      users,
+      siteInfo,
+      toggleSelectClass,
+    } = this.state;
+    const {
+      submissions,
+      submissionType,
+      userList,
+      siteInfoList,
+      handleSelectSiteInfo,
+      metaAttributes,
+      selectedMetas,
+      handleSelectMeta,
+    } = this.props;
+    // console.log('metrics', siteInfo);
 
     return (
       <div className="col-lg-7 col-md-7">
@@ -130,14 +150,17 @@ export default class Metrics extends Component {
             </div>
           </div>
         </div>
-        {/* <SiteInformation
+        <SiteInformation
           toggleSelectClass={toggleSelectClass}
-          handleToggleClass={handleToggleClass}
-          checkboxOption={checkboxOption}
-          handleCheck={handleCheck}
-          selectedArr={selectedArr}
+          handleToggleClass={this.handleToggleClass}
+          siteInfoArr={siteInfo}
+          selectedList={siteInfoList}
+          handleSelectValue={handleSelectSiteInfo}
+          metaAttributes={metaAttributes}
+          selectedMetas={selectedMetas}
+          handleSelectMeta={handleSelectMeta}
         />
-        <FormInformation
+        {/* <FormInformation
           toggleSelectClass={toggleSelectClass}
           handleToggleClass={handleToggleClass}
           checkboxOption={checkboxOption}
