@@ -1,11 +1,12 @@
 .fieldsight-new {
-  .fieldsight-btn {
+  .fieldsight-btn,
+  button.fieldsight-btn {
     height: 30px;
     display: inline-block;
     vertical-align: middle;
     padding: 5px 10px;
     background: $color-blue;
-    color: $color-white !important;
+    color: $color-white;
     box-shadow: none;
     border: none;
     text-transform: capitalize;
@@ -15,7 +16,7 @@
     @include radius(4px);
     @include animate_all(all 0.5s);
     cursor: pointer;
-    @include box_shadow($boxshadow:0 1px 6px rgba(57, 73, 76, 0.35));
+    @include box_shadow($boxshadow: 0 1px 6px rgba(57, 73, 76, 0.35));
 
     i {
       margin-left: 0.5rem;
@@ -37,7 +38,6 @@
 
     &.flagged-btn {
       background: $color-yellow;
-
     }
 
     // &.icon-btn{
@@ -47,8 +47,6 @@
     //     margin:0;
     //   }
     // }
-
-
 
     &:hover {
       color: $color-white;
@@ -66,12 +64,11 @@
     &.flagged-btn {
       background-color: $color-yellow;
     }
-    &.disable-btn{
-      background-color:$color-bg;
-      opacity: .75;
-      cursor:not-allowed;
+    &.disable-btn {
+      background-color: $color-bg;
+      opacity: 0.75;
+      cursor: not-allowed;
     }
-
   }
 
   .dash-btn {
@@ -83,7 +80,6 @@
 
       i {
         margin: 0;
-
       }
 
       span {
@@ -125,7 +121,7 @@
         }
 
         &.show {
-          @include animZoom-before
+          @include animZoom-before;
         }
       }
 
@@ -134,11 +130,10 @@
         padding-right: 1rem;
 
         &:before {
-
           @include translatey;
           right: 7px;
           content: "\f110";
-          font-family: 'LineAwesome';
+          font-family: "LineAwesome";
           z-index: 99;
           font-size: 0.875rem;
         }
@@ -168,7 +163,6 @@
 
   .download {
     color: $color-download !important;
-    ;
   }
 
   .edit,
@@ -185,7 +179,6 @@
   strong.pending,
   .pending {
     color: $color-blue !important;
-    ;
     text-transform: capitalize;
   }
 
@@ -199,7 +192,6 @@
   strong.flagged,
   .flagged {
     color: $color-yellow !important;
-    ;
     text-transform: capitalize;
   }
 
@@ -207,7 +199,6 @@
   strong.rejected,
   .rejected {
     color: $color-red !important;
-    ;
     text-transform: capitalize;
   }
 
@@ -232,7 +223,7 @@
         color: $color-white;
         @include radius(50%);
         margin-left: 0.635rem;
-        @include box_shadow($boxshadow:0 1px 6px rgba(57, 73, 76, 0.35));
+        @include box_shadow($boxshadow: 0 1px 6px rgba(57, 73, 76, 0.35));
       }
     }
 
@@ -254,21 +245,20 @@
         span {
           background-color: transparent;
           border: 1px solid $color-bg;
-          color:$color-blue;
+          color: $color-blue;
           box-shadow: none;
-          &.deploy.active{
-            border-color:$color-green;
-            background-color:$color-green;
-            color:$color-white;
+          &.deploy.active {
+            border-color: $color-green;
+            background-color: $color-green;
+            color: $color-white;
           }
-          &.reorder{
-            i:last-child{
-              margin-left:-10px;
+          &.reorder {
+            i:last-child {
+              margin-left: -10px;
             }
           }
         }
       }
-
     }
   }
 
@@ -298,8 +288,30 @@
     }
   }
 }
-.disable{
-  color:$color-bg;
+.buttons {
+  button.fieldsight-btn,
+  a.fieldsight-btn {
+    text-transform: capitalize;
+    padding: 0.5rem 1rem;
+
+    &.bg-btn {
+      background-color: $color-blue;
+    }
+
+    &.border-btn {
+      background-color: transparent;
+      border: 1px solid $color-blue;
+      color: $color-blue;
+
+      &:hover {
+        background-color: $color-blue;
+        color: $color-white;
+      }
+    }
+  }
+}
+.disable {
+  color: $color-bg;
 }
 .dropdown {
   button.dropdown-toggle {
@@ -320,7 +332,7 @@
       -webkit-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
       transform: rotate(45deg);
-      vertical-align: .1rem;
+      vertical-align: 0.1rem;
     }
   }
 
@@ -331,12 +343,12 @@
 
     a {
       &.dropdown-item {
-        padding: .5rem 1rem;
-        font-size: .75rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
         color: $primary-light;
         font-weight: 500;
         border-bottom: 1px solid $color-bg;
-        @include transition(all .5s linear);
+        @include transition(all 0.5s linear);
 
         &:hover {
           background-color: $color-bg;

@@ -32,13 +32,14 @@ import SiteData from "./viewDataComponents/siteViewData";
 import SiteSubmissionData from "./viewDataComponents/siteViewData/FormSubmission";
 import VersionSubmissionData from "./viewDataComponents/projectViewData/VersionTable";
 import VersionSiteSubmission from "./viewDataComponents/siteViewData/VersionTable";
-
 import TeamDashboard from "./teamDashboard";
 import TeamSetting from "./settings/TeamSettings";
 import SubmissionData from "./viewDataComponents/projectViewData/SubmissionTable";
 
 import ManageForms from "./manageForms";
 import ChangePassword from "./changePassword";
+
+import MapFilter from "./mapfilter/MapFilter";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -116,6 +117,7 @@ class App extends Component {
             className={`${!this.state.toggleClass ? "minified" : ""}`}
           > */}
           {/* <SideNav handleToggle={this.handleToggle} /> */}
+          {/* <div id="main-container" class="minified"> */}
           {/* <div className="container-fluid"> */}
           <main id="main-content" className="main-content">
             <Router>
@@ -283,10 +285,15 @@ class App extends Component {
                   path="/create-profile/:id"
                   render={props => <CreateProfile {...props} />}
                 />
+                <Route
+                  path="/mapfilter"
+                  render={props => <MapFilter {...props} />}
+                />
               </Switch>
               <ToastContainer />
             </Router>
           </main>
+          {/* </div> */}
         </div>
         {/* </div> */}
       </IntlProvider>

@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
+
 // import { FormattedMessage } from "react-intl";
 import withPagination from "../../hoc/WithPagination";
 
@@ -223,9 +224,9 @@ class ProjectDashboard extends React.Component {
                   <h5>{terms_and_labels && terms_and_labels.site} Map</h5>
                   <div className="dash-btn">
                     <a
-                      href={`/fieldsight/proj-map/${id}/`}
+                      href={`/fieldsight/application/#/mapfilter/`}
                       className="fieldsight-btn left-icon"
-                      target="_blank"
+                      // target="_blank"
                     >
                       <i className="la la-map" /> Full map
                     </a>
