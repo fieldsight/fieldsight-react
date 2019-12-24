@@ -1,55 +1,36 @@
 import React, { PureComponent, Fragment } from 'react';
 import CustomCheckBox from '../CustomCheckbox';
 
-/* eslint-disable */
-
 export default class UserRole extends PureComponent {
-  requestIfChecked = row => {
-    const { parentData } = this.props;
-    const arr = [];
-    parentData.length > 0 &&
-      parentData.map(each => {
-        if (each.children.length > 0) {
-          each.children.map(item => {
-            if (item.code === row.code) return arr.push(item);
-          });
-        }
-      });
-    return arr;
-  };
-
   render() {
-    const { selectedMetric, handleCheckChildren } = this.props;
+    const { users, handleCheckUser, userList } = this.props;
 
     return (
       <div className="fs-7 fs-col">
         <ul className="role-list">
           <h6>User role</h6>
           <li>
-            {/* <div className="custom-control custom-checkbox"> */}
-            {selectedMetric.children &&
-              selectedMetric.children.map(child => {
-                const requestChecked = this.requestIfChecked(child);
+            {users &&
+              users.map(user => {
+                const filterList = userList.filter(
+                  i => i.code === user.code,
+                );
                 const isChecked =
-                  requestChecked &&
-                  requestChecked[0] &&
-                  requestChecked[0].code === child.code;
-
+                  filterList && filterList[0] ? true : false;
                 return (
-                  <Fragment key={child.code}>
+                  <Fragment key={user.code}>
                     <CustomCheckBox
-                      id={child.code}
-                      label={child.label}
-                      name={child.code}
-                      checked={isChecked ? true : false}
+                      id={user.code}
+                      label={user.label}
+                      name={user.code}
+                      checked={isChecked}
                       changeHandler={e => {
-                        handleCheckChildren(e, selectedMetric, child);
+                        handleCheckUser(e, user);
                       }}
                     />
                   </Fragment>
                 );
               })}
-            {/* </div> */}
           </li>
         </ul>
       </div>
