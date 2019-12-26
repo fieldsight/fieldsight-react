@@ -6,6 +6,62 @@ import CustomMultiSelect from './CustomMultiSelect';
 import CustomCheckBox from './CustomCheckbox';
 import CollapseFilterTable from './CollapseFilterTable';
 
+/* eslint-disable */
+
+const CustomInput = (value, onclick) => (
+  <div className="custom-group-append">
+    <span className="custom-group-text">
+      <i className="material-icons">calendar_today</i>
+      <button className="example-custom-input" onClick={onClick}>
+        {value}
+      </button>
+      {/* <input
+        // onChange={onChange}
+        placeholder="gfdghj"
+        value={value}
+        // isSecure={isSecure}
+        // id={id}
+        onClick={onClick}
+      /> */}
+    </span>
+  </div>
+);
+
+const Input = ({
+  onChange,
+  placeholder,
+  value,
+  isSecure,
+  id,
+  onClick,
+}) => (
+  <div
+  // style={{ position: 'relative' }}
+  >
+    <i
+      onClick={onClick}
+      className="material-icons"
+      value={value}
+      // style={{
+      //   position: 'absolute',
+      //   top: '0.3rem',
+      //   left: '5px',
+      //   fontSize: '1rem',
+      // }}
+    >
+      calendar_today
+    </i>
+
+    <input
+      onClick={onClick}
+      className="dateInput"
+      value={value}
+      type="text"
+      // style={{ paddingLeft: '33px' }}
+    />
+  </div>
+);
+
 export default class ExportDataFilter extends PureComponent {
   constructor(props) {
     super(props);
@@ -241,7 +297,14 @@ export default class ExportDataFilter extends PureComponent {
                             />
                             <div className="custom-group-append">
                               <span className="custom-group-text">
-                                <i className="material-icons">
+                                <i
+                                  className="material-icons"
+                                  style={{
+                                    position: 'absolute',
+                                    bottom: '39px',
+                                    marginLeft: '5.9rem',
+                                  }}
+                                >
                                   calendar_today
                                 </i>
                               </span>
@@ -253,21 +316,28 @@ export default class ExportDataFilter extends PureComponent {
                             </i>
                           </span>
                           <div className="custom-group">
-                            <DatePicker
+                            {/* <DatePicker
                               placeholderText="End Date"
                               name="endedDate"
                               selected={this.state.endedDate}
                               onChange={this.onEndChangeHandler}
                               className="form-control"
                               dateFormat="yyyy-MM-dd"
+                              customInput={<CustomInput />}
+                            /> */}
+                            {/* <i className="material-icons">
+                                calendar_today
+                              </i>
+                            </DatePicker> */}
+                            <DatePicker
+                              value={this.state.endedDate}
+                              dateFormat="yyyy-MM-dd"
+                              customInput={<Input />}
+                              selected={this.state.endedDate}
+                              onChange={date =>
+                                this.setState({ endedDate: date })
+                              }
                             />
-                            <div className="custom-group-append">
-                              <span className="custom-group-text">
-                                <i className="material-icons">
-                                  calendar_today
-                                </i>
-                              </span>
-                            </div>
                           </div>
                         </div>
                       </div>

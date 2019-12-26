@@ -152,6 +152,7 @@ export default class FormDataFilter extends PureComponent {
         link: '#',
       },
     ];
+
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -163,6 +164,19 @@ export default class FormDataFilter extends PureComponent {
                 <div className="row">
                   <div className="col-md-12">
                     <div className="report-content">
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={this.props.handleForm}
+                        >
+                          back
+                        </button>
+                      </div>
                       <h4>Form Data</h4>
                       <p>
                         Export of forms data and site information an
