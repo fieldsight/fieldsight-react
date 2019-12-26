@@ -8,7 +8,7 @@ export default class SiteInformation extends PureComponent {
     const {
       toggleSelectClass,
       handleToggleClass,
-      siteInfoArr,
+      siteValues,
       selectedList,
       handleSelectValue,
       handleSelectMeta,
@@ -40,14 +40,14 @@ export default class SiteInformation extends PureComponent {
               <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">values</label>
-                  {/* <CustomMultiSelect
+                  <CustomMultiSelect
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={handleToggleClass}
-                    checkboxOption={checkboxOption}
-                    handleCheck={handleCheck}
-                    selectedArr={selectedArr}
-                    placeholderTxt="Maximum"
-                  /> */}
+                    checkboxOption={siteValues}
+                    handleCheck={handleSelectValue}
+                    selectedArr={selectedList}
+                    placeholderTxt="Form Values"
+                  />
                 </div>
               </div>
             </div>

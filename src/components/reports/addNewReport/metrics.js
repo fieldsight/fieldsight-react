@@ -13,7 +13,7 @@ export default class Metrics extends Component {
     this.state = {
       metrics: props.data,
       users: props.users,
-      siteInfo: props.siteInfo,
+      // siteInfo: props.siteInfo,
       toggleSelectClass: false,
     };
   }
@@ -29,11 +29,11 @@ export default class Metrics extends Component {
         users: this.props.users,
       });
     }
-    if (prevProps.siteInfo !== this.props.siteInfo) {
-      this.setState({
-        siteInfo: this.props.siteInfo,
-      });
-    }
+    // if (prevProps.siteInfo !== this.props.siteInfo) {
+    //   this.setState({
+    //     siteInfo: this.props.siteInfo,
+    //   });
+    // }
   }
 
   toggleActive = () => {
@@ -54,7 +54,7 @@ export default class Metrics extends Component {
     const {
       metrics,
       users,
-      siteInfo,
+      // siteInfo,
       toggleSelectClass,
     } = this.state;
     const {
@@ -62,6 +62,7 @@ export default class Metrics extends Component {
       submissionType,
       userList,
       siteInfoList,
+      siteValues,
       handleSelectSiteInfo,
       metaAttributes,
       selectedMetas,
@@ -153,7 +154,7 @@ export default class Metrics extends Component {
         <SiteInformation
           toggleSelectClass={toggleSelectClass}
           handleToggleClass={this.handleToggleClass}
-          siteInfoArr={siteInfo}
+          siteValues={siteValues}
           selectedList={siteInfoList}
           handleSelectValue={handleSelectSiteInfo}
           metaAttributes={metaAttributes}

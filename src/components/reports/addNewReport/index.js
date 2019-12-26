@@ -220,7 +220,7 @@ class AddNewReport extends Component {
   };
 
   handleSelectChange = payload => {
-    console.log('payload', payload);
+    // console.log('payload', payload);
   };
 
   handleChangeMeta = (e, meta) => {
@@ -248,7 +248,7 @@ class AddNewReport extends Component {
             type => type.code !== name,
           );
           return {
-            submissions: filterMetas,
+            selectedMetas: filterMetas,
             data: {
               ...state.data,
               selectedMetrics: [...newList, filterMetas],
@@ -258,40 +258,80 @@ class AddNewReport extends Component {
         return null;
       },
       () => {
-        const { selectedMetas, siteInfoArr } = this.state;
-        const filteredValues = [];
-        selectedMetas &&
-          selectedMetas.length > 0 &&
-          selectedMetas.map(each => {
-            if (
-              each.type === 'Text' ||
-              each.type === 'FormSubStat' ||
-              each.type === 'MCQ' ||
-              each.type === 'Date'
-            ) {
-              if (siteInfoArr.length > 0) {
-                siteInfoArr.map(site => {
-                  if (
-                    site.label === 'Actual' ||
-                    site.label === 'Most Common' ||
-                    site.label === 'All Values'
-                  ) {
-                    filteredValues.push(site);
-                  }
-                });
-              }
-            }
-          });
-        console.log(
-          selectedMetas,
-          '----',
-          siteInfoArr,
-          'insode',
-          filteredValues,
-        );
-        this.setState({ siteValues: filteredValues });
+        const { selectedMetas } = this.state;
+        const arr = [];
+        const isText = false;
+        selectedMetas.map(each => {
+          if (
+            each.type === 'Text' ||
+            each.type === 'FormSubStat' ||
+            each.type === 'MCQ' ||
+            each.type === 'Date' ||
+            each.type === 'FormQuestionAnswerStatus '
+          ) {
+            arr.push('text');
+          }
+          if (each.type === 'Form ' && each.input_type === 'Text') {
+            arr.push('text');
+          }
+          if (
+            each.type === 'Number' ||
+            each.type === 'FormSubCountQuestion'
+          ) {
+            arr.push('number');
+          }
+        });
+        if (arr.includes('number')) {
+          this.handleAllValueTypes();
+        } else {
+          this.handleTextValueTypes();
+        }
       },
     );
+  };
+
+  handleAllValueTypes = () => {
+    const { selectedMetas, siteValues, siteInfoArr } = this.state;
+    let filteredSiteValues = [];
+    if (siteInfoArr.length > 0) {
+      siteInfoArr.map(site => {
+        filteredSiteValues.push(site);
+      });
+    }
+    this.setState({ siteValues: filteredSiteValues });
+  };
+
+  handleTextValueTypes = () => {
+    const { selectedMetas, siteValues, siteInfoArr } = this.state;
+    let filteredSiteValues = [];
+    const someArr = siteValues;
+    if (siteInfoArr.length > 0) {
+      siteInfoArr.map(info => {
+        if (someArr.length > 0) {
+          filteredSiteValues = someArr.filter(some => {
+            if (
+              some.code === 'actual' ||
+              some.code === 'most_common' ||
+              some.code === 'all_values'
+            ) {
+              return true;
+            } else {
+              return false;
+            }
+          });
+        } else {
+          if (
+            info.code === 'actual' ||
+            info.code === 'most_common' ||
+            info.code === 'all_values'
+          ) {
+            filteredSiteValues.push(info);
+          }
+        }
+      });
+    }
+
+    this.setState({ siteValues: filteredSiteValues });
   };
 
   handleSelectSiteInfo = item => {
@@ -325,7 +365,7 @@ class AddNewReport extends Component {
       },
     } = this;
 
-    console.log(selectedMetas, 'state', siteValues, 'value');
+    // console.log(siteInfoArr, 'state', siteValues, 'value');
 
     return (
       <div className="reports mrb-30">
@@ -411,7 +451,7 @@ class AddNewReport extends Component {
                     data={metricArr}
                     users={usersArr}
                     userList={userList}
-                    siteInfo={siteInfoArr}
+                    siteValues={siteValues}
                     siteInfoList={siteInfoList}
                     metaAttributes={metaAttributes}
                     selectedMetas={selectedMetas}
