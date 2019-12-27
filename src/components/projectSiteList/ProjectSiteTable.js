@@ -12,7 +12,9 @@ let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
 
-const project_id = window.project_id ? window.project_id : 137;
+const project_id = window.project_id
+  ? window.project_id
+  : process.env.PROJECT_ID;
 
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
