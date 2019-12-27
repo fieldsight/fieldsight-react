@@ -62,6 +62,7 @@ import UserList from './reports/users/usersTable';
 import UserProfile from './reports/users/userProfile/index';
 import RegionDashboard from './reports/regionDashboard/index';
 import UserManage from './reports/users/userManage';
+import MyFormTable from './reports/myForm';
 
 // import AddNewReport from './reports/addNewReport';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -352,6 +353,11 @@ class App extends Component {
                 <Route
                   path="/user-manage"
                   render={props => <UserManage {...props} />}
+                />
+
+                <Route
+                  path="/myFormtable"
+                  render={props => <MyFormTable {...props} />}
                 />
               </Switch>
               <ToastContainer />
