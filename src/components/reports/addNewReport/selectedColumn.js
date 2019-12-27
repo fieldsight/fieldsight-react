@@ -17,7 +17,10 @@ const DragHandle = sortableHandle(
         <span className="drag-icon">
           <i className="material-icons">drag_indicator</i>
         </span>
-        <label>{label}</label>
+        {!item.value && <label>{label}</label>}
+        {!!item.value && (
+          <label>{`${label} (${item.value.label})`}</label>
+        )}
         <span>
           <a
             className="rejected td-edit-btn td-btn"
