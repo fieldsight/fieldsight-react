@@ -1,0 +1,124 @@
+.report-accordion {
+    background-color: $secondary-light-2;
+
+    .acc-item {
+        border-right:1px solid $bg-light;
+        border-bottom:1px solid $bg-light;
+        .acc-header {
+            background-color: $secondary-light-2;
+            position: relative;
+            cursor: pointer;
+            h5 {
+                color: $color-secondary;
+                text-transform: uppercase;
+                font-weight: 500;
+                font-size: .75rem;
+                padding: .6125rem;
+                letter-spacing: 1px;
+            }
+            &::after {
+                @include translatey;
+                right: .5rem;
+                content: 'expand_more';
+                font-family: 'Material Icons';
+                text-transform: initial;
+                font-size: 1.3rem;
+                font-weight: 400;
+                color: $primary-light;
+            }
+            &.active{
+                &::after {
+                    @include translatey;
+                    right: .5rem;
+                    content: 'expand_less';
+                    font-family: 'Material Icons';
+                    text-transform: initial;
+                    font-size: 1.3rem;
+                    font-weight: 400;
+                    color: $color-secondary;
+                } 
+            }
+        }
+
+        .acc-body {
+            .form-list{
+                background-color: $color-white;
+                padding:.6125rem;
+            }
+            .custom-group{
+                border:0;
+                border-bottom:1px solid $primary-light-1;
+                .custom-group-append{
+                    margin:0;
+                    .custom-group-text{
+                        background-color: $color-white;
+                        padding-right: 0;
+                    }
+                }
+            }
+            ul {
+                background-color: $color-white;
+
+                h6 {
+                    font-size: .75rem;
+                    color: $primary-light;
+                    padding: .6125rem .6125rem 0 .6125rem;
+                }
+
+                li {
+                    padding: .25rem 1rem;
+                    @include transition(all .3s ease-in-out);
+                    position: relative;
+                    cursor: pointer;
+
+                    &:hover,
+                    &.active {
+                        background-color: $secondary-light-2;
+                    }
+                }
+
+                &.metric-list {
+                    li {
+                        &::after {
+                            right: .6125rem;
+                            @include translatey;
+                            content: 'keyboard_arrow_right';
+                            font-family: 'Material Icons';
+                            z-index: 2;
+                            color: $primary-light;
+                            pointer-events: none;
+                            font-size: 1.2rem;
+                        }
+                    }
+                }
+
+                &.role-list {
+                    margin-left: .45rem;
+                }
+            }
+        }
+    }
+
+    .selected-list {
+        h6 {
+            font-size: .75rem;
+            color: $primary-light;
+            margin-bottom:1rem;
+            padding: .6125rem 0 0 0;
+        }
+        li{
+            @include display-flex(flex);
+            @include justify-content-start;
+            @include align-items-center;
+            span{
+                &.drag-icon{
+                    margin:.15rem .25rem 0 .6125rem;
+                    i{
+                        color:$bg-light;
+                        font-size:1rem;
+                    }
+                }
+            }
+        }
+    }
+}

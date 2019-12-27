@@ -1,6 +1,6 @@
-#app {
-  padding: 0 8px;
-}
+// #app {
+//   padding: 0 1rem;
+// }
 .fieldsight-new {
   .mr-0,
   .no-margin {
@@ -70,14 +70,26 @@
   .pd-0 {
     padding: 0;
   }
-
-  .container {
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+  .flex{
+    @include flex;
   }
+  .flex-start{
+    @include flexStart;
+  }
+  .flex-end{
+    @include flexEnd;
+  }
+  .flex-center{
+    @include flexCenter;
+  }
+  .flexvr{
+    @include flexvr;
+  }
+  .flex-between{
+    @include flexBetween;
+  }
+
+
 
   .no-bg {
     background-color: none !important;
@@ -136,6 +148,9 @@
             color: $color-white;
             @include radius4;
             margin-left: 0.635rem;
+            i.la-ellipsis-v:last-child{
+              margin-left:-10px;
+            }
           }
         }
       }
@@ -187,23 +202,26 @@
       }
 
       &.dashboard-header {
+        border:0;
         .dash-pf {
           @include flex_start;
           align-items: center;
           flex-wrap: nowrap;
 
           figure {
-            max-width: 60px;
-            width: 60px !important;
-            height: 60px;
+            flex:0 0 65px;
+            -ms-flex:0 0 65px;
+            max-width: 65px;
+            
             @include coverbg;
             @include radius50;
             margin: 0 1rem 0 0;
             position: relative;
 
             img {
-              @extend figure;
-              height: 60px;
+              @include radius50;
+              width: 65px;
+              height: 65px;
             }
 
             figcaption {
@@ -268,17 +286,20 @@
 
           .dash-pf-content {
             h5 {
-              line-height: 1.5rem;
+              font-size:1.5rem;
+              line-height: 1.3rem;
             }
 
             span {
-              font-size: 0.775rem;
-              color: rgba($color-primary, 0.7);
-              margin: 0.25rem 0;
+              font-size: .8125rem;
+              color: $color-secondary;
+              font-weight: 500;;
+              margin: 0.6125rem 0;
               display: inline-block;
             }
           }
         }
+        
       }
     }
 
@@ -340,6 +361,25 @@
       color: rgb(165, 163, 163) !important;
     }
   }
+  span.drag-icon {
+    display: inline-block;
+
+    i {
+      margin-left: -10px;
+      color: darken($color-bg, 10%);
+      font-size: 1.2rem;
+
+      &:last-child {
+        margin-left: -.875rem;
+      }
+    }
+
+    &:hover {
+      cursor: -moz-move;
+      cursor: -webkit-move;
+      cursor: move;
+    }
+  }
 
   .display-inline {
     @include flexjust;
@@ -386,7 +426,6 @@
 
   span {
     position: relative;
-
     width: 11px;
     height: 11px;
     background-color: $color-yellow;
@@ -401,4 +440,7 @@
   .cursor {
     background-color: rgba($color-green, 0.4);
   }
+}
+.border-none{
+  border:none;
 }

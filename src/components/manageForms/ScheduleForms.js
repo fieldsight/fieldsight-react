@@ -10,6 +10,8 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import ScheduleFormTable from "./ScheduleFormTable";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
+import ManageModal from "./ManageModal";
+import Loader from "../common/Loader";
 
 const formatDate = date => {
   const dateIdx = date.getDate();
@@ -36,21 +38,30 @@ class ScheduleForms extends Component {
     formId: "",
     formTitle: "",
     isProjectForm: "",
-    myFormList: [],
-    projectFormList: [],
-    sharedFormList: [],
-    isEditForm: false
+    myFormList: this.props.myForms,
+    projectFormList: this.props.projectForms,
+    sharedFormList: this.props.sharedForms,
+    isEditForm: false,
+    fsxf: "",
+    loadReq: false
   };
 
-  requestScheduleForm(id) {
+  requestScheduleForm(id, checkUrl) {
+    const apiUrl = checkUrl
+      ? `fv3/api/manage-forms/schedule/?project_id=${id}`
+      : `fv3/api/manage-forms/schedule/?site_id=${id}`;
+
     axios
-      .get(`fv3/api/manage-forms/schedule/?project_id=${id}`)
+      .get(apiUrl)
       .then(res => {
-        if (this._isMounted) {
+        if (this._isMounted && res.data) {
           this.setState({ data: res.data, loader: false });
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   }
 
   componentDidMount() {
@@ -63,107 +74,199 @@ class ScheduleForms extends Component {
     } = this.props;
     const splitArr = url.split("/");
     const isProjectForm = splitArr.includes("project");
-
+    const isSiteForm = splitArr.includes("site");
     if (isProjectForm) {
       this.setState(
         {
           loader: true,
           isProjectForm
         },
-        this.requestScheduleForm(id)
+        this.requestScheduleForm(id, true)
+      );
+    } else if (isSiteForm) {
+      this.setState(
+        {
+          loader: true,
+          isProjectForm: false
+        },
+        this.requestScheduleForm(id, false)
       );
     }
   }
 
-  changeDeployStatus = (formId, isDeploy) => {
-    const { id } = this.state;
-    axios
-      .post(
-        `fv3/api/manage-forms/deploy/?project_id=${id}&type=schedule&id=${formId}`,
-        { is_deployed: !isDeploy }
-      )
-      .then(res => {
-        this.setState(
-          state => {
-            const newData = this.state.data;
-            newData.map(each => {
-              const arrItem = { ...each };
+  onChangeHandler = async e => {
+    const { activeTab } = this.state;
+    const searchValue = e.target.value;
 
-              if (each.id == formId) {
-                each.is_deployed = !isDeploy;
-              }
-              return arrItem;
-            });
-            return { data: newData };
-          },
-          () => {
-            successToast("Form", "updated");
-          }
-        );
-      })
-      .catch(err => {});
+    if (searchValue) {
+      if (activeTab == "myForms") {
+        const filteredData = await this.props.myForms.filter(form => {
+          return (
+            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        });
+
+        this.setState({
+          myFormList: filteredData
+        });
+      } else if (activeTab == "projectForms") {
+        const awaitedData = await this.props.projectForms.map(project => {
+          const filteredData = project.forms.filter(form => {
+            return (
+              form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+              form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            );
+          });
+          return { ...project, forms: filteredData };
+        });
+        this.setState({
+          projectFormList: awaitedData
+        });
+      } else if (activeTab == "sharedForms") {
+        const filteredData = await this.props.sharedForms.filter(form => {
+          return (
+            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        });
+
+        this.setState({
+          sharedFormList: filteredData
+        });
+      }
+    } else {
+      this.setState({
+        myFormList: this.props.myForms,
+        sharedFormList: this.props.sharedForms,
+        projectFormList: this.props.projectForms
+      });
+    }
+  };
+
+  changeDeployStatus = (formId, isDeploy) => {
+    const { id, isProjectForm } = this.state;
+    this.setState({ loadReq: true }, () => {
+      const deployUrl = !!isProjectForm
+        ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=schedule&id=${formId}`
+        : `fv3/api/manage-forms/deploy/?site_id=${id}&type=schedule&id=${formId}`;
+      axios
+        .post(deployUrl, { is_deployed: !isDeploy })
+        .then(res => {
+          this.setState(
+            state => {
+              const newData = this.state.data;
+              newData.map(each => {
+                const arrItem = { ...each };
+
+                if (each.id == formId) {
+                  each.is_deployed = !isDeploy;
+                }
+                return arrItem;
+              });
+              return { data: newData, loadReq: false };
+            },
+            () => {
+              successToast("Deploy Status", "updated");
+            }
+          );
+        })
+        .catch(err => {
+          this.setState({ loadReq: false }, () => {
+            const errors = err.response;
+            errorToast(errors.data.error);
+          });
+        });
+    });
   };
   deleteItem = (formId, isDeploy) => {
-    const { id } = this.state;
-    axios
-      .post(
-        `fv3/api/manage-forms/delete/?project_id=${id}&type=schedule&id=${formId}`,
-        { is_deployed: isDeploy }
-      )
-      .then(res => {
-        this.setState(
-          {
-            data: this.state.data.filter(each => each.id != formId)
-          },
-          () => {
-            successToast("Form", "deleted");
-          }
-        );
-      })
-      .catch(err => {});
+    const { id, isProjectForm } = this.state;
+    this.setState({ loadReq: true }, () => {
+      const deleteUrl = !!isProjectForm
+        ? `fv3/api/manage-forms/delete/?project_id=${id}&type=schedule&id=${formId}`
+        : `fv3/api/manage-forms/delete/?site_id=${id}&type=schedule&id=${formId}`;
+      axios
+        .post(deleteUrl, { is_deployed: isDeploy })
+        .then(res => {
+          this.setState(
+            {
+              data: this.state.data.filter(each => each.id != formId),
+              loadReq: false
+            },
+            () => {
+              successToast("Form", "deleted");
+            }
+          );
+        })
+        .catch(err => {
+          this.setState({ loadReq: false }, () => {
+            const errors = err.response;
+            errorToast(errors.data.error);
+          });
+        });
+    });
   };
 
-  handleEditGuide = (data, formId) => {
+  handleEditGuide = (data, formId, fsxf) => {
     this.setState({
       editGuide: !this.state.editGuide,
       guideData: data ? data : {},
-      editFormId: formId
+      editFormId: formId,
+      fsxf: fsxf
     });
   };
   handleUpdateGuide = data => {
-    const { id } = this.state;
-    const formData = new FormData();
-    if (data.title) formData.append("title", data.title);
-    if (data.text) formData.append("text", data.text);
-    if (data.pdf) {
-      formData.append("is_pdf", data.pdf ? true : false);
-      formData.append("pdf", data.pdf);
-    }
-    if (data.fsxf) formData.append("fsxf", data.fsxf);
-    if (data.images && data.images.length > 0) {
-      data.images.map((each, i) => {
-        if (!each.image) formData.append(`new_images_${i + 1}`, each);
-      });
-    }
-    if (data.id) {
-      formData.append("id", data.id);
-    }
-    axios
-      .post(`forms/api/save_educational_material/`, formData)
-      .then(res => {
-        this.setState(
-          {
-            editGuide: false
-          },
-          () => {
-            this.requestGeneralForm(id);
-            successToast("update", "successfully");
-          }
-        );
-      })
-      .catch(err => {
-        errorToast(err);
-      });
+    const { fsxf, editFormId } = this.state;
+    this.setState({ loadReq: true }, () => {
+      const formData = new FormData();
+
+      if (data.title) formData.append("title", data.title);
+      if (data.text) formData.append("text", data.text);
+      if (data.pdf) formData.append("pdf", data.pdf);
+      if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
+      if (fsxf) formData.append("fsxf", fsxf);
+      if (data.images && data.images.length > 0) {
+        data.images.map((each, i) => {
+          if (!each.image) formData.append(`new_images_${i + 1}`, each);
+        });
+      }
+      if (data.id) {
+        formData.append("id", data.id);
+      }
+
+      axios
+        .post(`forms/api/save_educational_material/`, formData)
+        .then(res => {
+          if (res.data)
+            this.setState(
+              state => {
+                const item = this.state.data;
+                item.map(each => {
+                  const newItem = { ...each };
+                  if (each.id == editFormId) {
+                    each.em = res.data;
+                  }
+                  return newItem;
+                });
+
+                return {
+                  editGuide: false,
+                  data: item,
+                  loadReq: false
+                };
+              },
+              () => {
+                successToast("form", "updated");
+              }
+            );
+        })
+        .catch(err => {
+          this.setState({ loadReq: false }, () => {
+            const errors = err.response;
+            errorToast(errors.data.error);
+          });
+        });
+    });
   };
 
   handleMyFormChange = (e, title) => {
@@ -196,115 +299,167 @@ class ScheduleForms extends Component {
       formId: "",
       showFormModal: false,
       activeTab: "myForms",
-      myFormList: [],
-      projectFormList: [],
-      sharedFormList: [],
-      xf: ""
+      myFormList: this.props.myForms,
+      projectFormList: this.props.projectForms,
+      sharedFormList: this.props.sharedForms,
+      xf: "",
+      isEditForm: false
     });
     this.props.closePopup();
   };
   handleScheduleForm = data => {
-    const { id, xf, isEditForm } = this.state;
-    if (!isEditForm) {
-      const payload = {
-        xf: xf,
-        default_submission_status: data.status,
-        schedule_level_id: data.scheduleType,
-        frequency: data.frequency,
+    const { id, xf, isEditForm, isProjectForm } = this.state;
+    const { typeOptions, regionOptions } = this.props;
 
-        selected_days: data.selectedDays,
-        date_range_start: formatDate(data.startDate),
-        ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
-        setting: {
-          notify_incomplete_schedule: data.notifyIncomplete,
-          can_edit: data.isEdit,
-          donor_visibility: data.isDonor,
-          regions:
-            data.regionSelected.length > 0
-              ? data.regionSelected.map(each => each.id)
-              : [],
-          can_delete: data.isDelete,
-          types:
-            data.typeSelected.length > 0
-              ? data.typeSelected.map(each => each.id)
-              : []
+    const monthDay =
+      data.scheduleType === 2 && data.selectedMonthlyDays
+        ? data.selectedMonthlyDays === "31"
+          ? 0
+          : data.selectedMonthlyDays
+        : 0;
+    const selectedDay = data.scheduleType !== 2 ? data.selectedDays : [];
+    const frequency = data.scheduleType !== 0 ? data.frequency : 0;
+    const selectedAllRegionArr =
+      data.regionSelected.length > 0 &&
+      data.regionSelected.map(each => {
+        if (typeof each.id === "string") {
+          return true;
+        } else {
+          return false;
         }
-      };
+      });
+    const isSelectedAllRegion =
+      selectedAllRegionArr.length > 0
+        ? selectedAllRegionArr.indexOf(true) > -1
+          ? true
+          : false
+        : "";
+    const selectedRegionArr = isSelectedAllRegion
+      ? regionOptions.filter(region => region.id !== "all").map(item => item.id)
+      : data.regionSelected.length > 0 &&
+        data.regionSelected.map(each => each.id);
 
-      axios
-        .post(`fv3/api/manage-forms/schedule/?project_id=${id}`, payload)
-        .then(res => {
-          this.setState(
-            {
-              data: [...this.state.data, res.data]
-            },
-            () => {
-              this.handleClosePopup();
-              successToast("form ", "added");
-            }
-          );
-        })
-        .catch(err => {
-          errorToast(err);
-        });
-    } else {
-      const payload = {
-        id: data.id,
-
-        default_submission_status: data.status,
-        schedule_level_id: data.scheduleType,
-        frequency: data.frequency,
-        selected_days: data.selectedDays,
-        date_range_start: formatDate(data.startDate),
-        ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
-        setting: {
-          id: data.settingId,
-          types:
-            data.typeSelected.length > 0
-              ? data.typeSelected.map(each => each.id)
-              : [],
-          regions:
-            data.regionSelected.length > 0
-              ? data.regionSelected.map(each => each.id)
-              : [],
-          notify_incomplete_schedule: data.notifyIncomplete,
-          can_edit: data.isEdit,
-          donor_visibility: data.isDonor,
-          can_delete: data.isDelete,
-          form: xf
+    const selectedAllTypeArr =
+      data.typeSelected.length > 0 &&
+      data.typeSelected.map(each => {
+        if (typeof each.id === "string") {
+          return true;
+        } else {
+          return false;
         }
-      };
+      });
+    const isSelectedAllType =
+      selectedAllTypeArr.length > 0
+        ? selectedAllTypeArr.indexOf(true) > -1
+          ? true
+          : false
+        : "";
+    const selectedTypeArr = isSelectedAllType
+      ? typeOptions.filter(type => type.id !== "all").map(item => item.id)
+      : data.typeSelected.length > 0 && data.typeSelected.map(each => each.id);
 
-      axios
-        .put(
-          `fv3/api/manage-forms/schedule/${data.id}/?project_id=${id}`,
-          payload
-        )
-        .then(res => {
-          this.setState(
-            state => {
-              const arr = this.state.data;
-              const newArr = arr.map(item => {
-                if (item.id == res.data.id) {
-                  return res.data;
-                } else {
-                  return item;
-                }
-              });
-              return {
-                data: newArr
-              };
-            },
-            () => {
-              this.handleClosePopup();
-              successToast("form", "updated");
-            }
-          );
-        })
-        .catch(err => {
-          errorToast(err);
-        });
-    }
+    this.setState({ loadReq: true }, () => {
+      if (!isEditForm) {
+        const postUrl = !!isProjectForm
+          ? `fv3/api/manage-forms/schedule/?project_id=${id}`
+          : `fv3/api/manage-forms/schedule/?site_id=${id}`;
+        const payload = {
+          xf: xf,
+          default_submission_status: data.status,
+          schedule_level_id: data.scheduleType,
+          frequency: frequency,
+          selected_days: selectedDay,
+          month_day: monthDay,
+
+          date_range_start: formatDate(data.startDate),
+          ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
+          setting: {
+            notify_incomplete_schedule: data.notifyIncomplete,
+            can_edit: data.isEdit,
+            donor_visibility: data.isDonor,
+            regions: selectedRegionArr.length > 0 ? selectedRegionArr : [],
+            types: selectedTypeArr.length > 0 ? selectedTypeArr : [],
+            can_delete: data.isDelete
+          }
+        };
+
+        axios
+          .post(postUrl, payload)
+          .then(res => {
+            this.setState(
+              {
+                data: [...this.state.data, res.data],
+                loadReq: false
+              },
+              () => {
+                this.handleClosePopup();
+                successToast("form ", "added");
+              }
+            );
+          })
+          .catch(err => {
+            this.setState({ loadReq: false }, () => {
+              const errors = err.response;
+              errorToast(errors.data.error);
+            });
+          });
+      } else {
+        const updateUrl = !!isProjectForm
+          ? `fv3/api/manage-forms/schedule/${data.id}/?project_id=${id}`
+          : `fv3/api/manage-forms/schedule/${data.id}/?site_id=${id}`;
+        const payload = {
+          id: data.id,
+          default_submission_status: data.status,
+          schedule_level_id: data.scheduleType,
+          frequency: frequency,
+          selected_days: selectedDay,
+          month_day: monthDay,
+          date_range_start: formatDate(data.startDate),
+          ...(!!data.endDate && { date_range_end: formatDate(data.endDate) }),
+          setting: {
+            id: data.settingId,
+            regions: selectedRegionArr.length > 0 ? selectedRegionArr : [],
+            types: selectedTypeArr.length > 0 ? selectedTypeArr : [],
+            notify_incomplete_schedule: data.notifyIncomplete,
+            can_edit: data.isEdit,
+            donor_visibility: data.isDonor,
+            can_delete: data.isDelete,
+            form: xf
+          }
+        };
+
+        axios
+          .put(updateUrl, payload)
+          .then(res => {
+            this.setState(
+              state => {
+                const arr = this.state.data;
+                const newArr = arr.map(item => {
+                  if (item.id == res.data.id) {
+                    return res.data;
+                  } else {
+                    return item;
+                  }
+                });
+                return {
+                  data: newArr,
+                  loadReq: false
+                };
+              },
+              () => {
+                this.handleClosePopup();
+                successToast("form", "updated");
+              }
+            );
+          })
+          .catch(err => {
+            this.setState({ loadReq: false }, () => {
+              const errors = err.response;
+              errorToast(errors.data.error);
+            });
+          });
+      }
+    });
   };
   handleEditScheduleForm = data => {
     this.setState(
@@ -318,6 +473,7 @@ class ScheduleForms extends Component {
       }
     );
   };
+
   render() {
     const {
       state: {
@@ -329,16 +485,15 @@ class ScheduleForms extends Component {
         activeTab,
         formData,
         formTitle,
-        optionRegion,
         myFormList,
         projectFormList,
         sharedFormList,
-        isEditForm
+        isEditForm,
+        isProjectForm
       },
       props: { typeOptions, regionOptions },
       handleClosePopup
     } = this;
-    // console.log("props", this.props);
 
     return (
       <div className="col-xl-9 col-lg-8">
@@ -349,7 +504,8 @@ class ScheduleForms extends Component {
           showText={true}
         >
           {loader && <DotLoader />}
-          {!loader && (
+
+          {!loader && !!isProjectForm && (
             <ScheduleFormTable
               data={data}
               loader={loader}
@@ -357,27 +513,36 @@ class ScheduleForms extends Component {
               deleteItem={this.deleteItem}
               handleEditGuide={this.handleEditGuide}
               handleEditForm={this.handleEditScheduleForm}
+              formTable="project"
             />
           )}
-
+          {!loader && !isProjectForm && (
+            <ScheduleFormTable
+              data={data}
+              loader={loader}
+              changeDeployStatus={this.changeDeployStatus}
+              deleteItem={this.deleteItem}
+              handleEditGuide={this.handleEditGuide}
+              handleEditForm={this.handleEditScheduleForm}
+              formTable="site"
+            />
+          )}
           {this.props.popupModal && (
             <Modal
               title="Add Scheduled Form"
               toggleModal={handleClosePopup}
               classname="manage-body md-body"
+              // handleSubmit={this.handleScheduleForm}
             >
               <GlobalModalForm
                 formType="schedule"
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                myForms={this.props.myForms}
-                projectForms={this.props.projectForms}
-                sharedForms={this.props.sharedForms}
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleScheduleForm}
-                formData={formData}
+                formData={!!isEditForm && formData}
                 isEditForm={isEditForm}
                 isProjectWide={false}
               />
@@ -394,13 +559,14 @@ class ScheduleForms extends Component {
             </Modal>
           )}
           {showFormModal && (
-            <Modal
+            <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
               classname="manage-body md-body"
+              handleSubmit={this.handleSaveForm}
             >
               <AddForm
                 activeTab={activeTab}
@@ -410,10 +576,12 @@ class ScheduleForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                handleSaveForm={this.handleSaveForm}
+                // handleSaveForm={this.handleSaveForm}
+                loader={this.props.formLoader}
               />
-            </Modal>
+            </ManageModal>
           )}
+          {this.state.loadReq && <Loader />}
         </RightContentCard>
       </div>
     );

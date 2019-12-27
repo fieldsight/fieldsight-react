@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import SideNav from "./SideNav";
-import Modal from "../common/Modal";
 
 class ManageForms extends Component {
   state = {
@@ -20,9 +19,19 @@ class ManageForms extends Component {
     } = this.props;
     const splitArr = url.split("/");
     const isProjectForm = splitArr.includes("project");
+    const isSiteForm = splitArr.includes("site");
     if (isProjectForm) {
       axios
         .get(`fv3/api/manage-forms/breadcrums/?project_id=${id}`)
+        .then(res => {
+          this.setState({
+            breadcrumb: res.data
+          });
+        })
+        .catch(err => {});
+    } else if (isSiteForm) {
+      axios
+        .get(`fv3/api/manage-forms/breadcrums/?site_id=${id}`)
         .then(res => {
           this.setState({
             breadcrumb: res.data
@@ -41,21 +50,9 @@ class ManageForms extends Component {
       popupModal: false
     });
   };
-  commonPopupHandler = (
-    e,
-    selectedModal,
-    modalData,
-    modalHeading,
-    modalType,
-    shareUrl
-  ) => {
+  commonPopupHandler = () => {
     this.setState({
       popupModal: true
-      // heading: modalHeading,
-      // selectedModals: selectedModal,
-      // modalDatas: modalData,
-      // modalTypes: modalType,
-      // shareUrls: shareUrl
     });
   };
   render() {
@@ -66,11 +63,9 @@ class ManageForms extends Component {
           {Object.keys(breadcrumb).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href={breadcrumb.organization_url}>
-                  {breadcrumb.organization}
-                </a>
+                <a href={breadcrumb.name_url}>{breadcrumb.name}</a>
               </li>
-              <li className="breadcrumb-item">{breadcrumb.name}</li>
+              <li className="breadcrumb-item">{breadcrumb.current_page}</li>
             </ol>
           )}
           {/* <ol className="breadcrumb">

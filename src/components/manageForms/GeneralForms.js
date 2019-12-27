@@ -9,6 +9,8 @@ import { errorToast, successToast } from "../../utils/toastHandler";
 import EditFormGuide from "./EditFormGuide";
 import AddForm from "./AddForm";
 import GeneralFormTable from "./GeneralFormTable";
+import ManageModal from "./ManageModal";
+import Loader from "../common/Loader";
 
 class GeneralForms extends Component {
   _isMounted = false;
@@ -24,25 +26,33 @@ class GeneralForms extends Component {
     formData: {},
     xf: "",
     loader: false,
+    loadReq: false,
     loaded: 0,
     formId: "",
     formTitle: "",
     isProjectForm: "",
-    myFormList: [],
-    projectFormList: [],
-    sharedFormList: [],
+    myFormList: this.props.myForms,
+    projectFormList: this.props.projectForms,
+    sharedFormList: this.props.sharedForms,
     isEditForm: false
   };
 
-  requestGeneralForm(id) {
+  requestGeneralForm(id, checkUrl) {
+    const apiUrl = checkUrl
+      ? `fv3/api/manage-forms/general/?project_id=${id}`
+      : `fv3/api/manage-forms/general/?site_id=${id}`;
+
     axios
-      .get(`fv3/api/manage-forms/general/?project_id=${id}`)
+      .get(apiUrl)
       .then(res => {
         if (this._isMounted) {
           this.setState({ data: res.data, loader: false });
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors.data.error);
+      });
   }
 
   componentDidMount() {
@@ -55,14 +65,22 @@ class GeneralForms extends Component {
     } = this.props;
     const splitArr = url.split("/");
     const isProjectForm = splitArr.includes("project");
-
+    const isSiteForm = splitArr.includes("site");
     if (isProjectForm) {
       this.setState(
         {
           loader: true,
           isProjectForm
         },
-        this.requestGeneralForm(id)
+        this.requestGeneralForm(id, true)
+      );
+    } else if (isSiteForm) {
+      this.setState(
+        {
+          loader: true,
+          isProjectForm: false
+        },
+        this.requestGeneralForm(id, false)
       );
     }
   }
@@ -84,51 +102,76 @@ class GeneralForms extends Component {
   }
 
   changeDeployStatus = (formId, isDeploy) => {
-    const { id } = this.state;
-    axios
-      .post(
-        `fv3/api/manage-forms/deploy/?project_id=${id}&type=general&id=${formId}`,
-        { is_deployed: !isDeploy }
-      )
-      .then(res => {
-        this.setState(
-          state => {
-            const newData = this.state.data;
-            newData.map(each => {
-              const arrItem = { ...each };
+    const { id, isProjectForm } = this.state;
+    this.setState(
+      {
+        loadReq: true
+      },
+      () => {
+        const deployUrl = !!isProjectForm
+          ? `fv3/api/manage-forms/deploy/?project_id=${id}&type=general&id=${formId}`
+          : `fv3/api/manage-forms/deploy/?site_id=${id}&type=general&id=${formId}`;
+        axios
+          .post(deployUrl, { is_deployed: !isDeploy })
+          .then(res => {
+            this.setState(
+              state => {
+                const newData = this.state.data;
+                newData.map(each => {
+                  const arrItem = { ...each };
 
-              if (each.id == formId) {
-                each.is_deployed = !isDeploy;
+                  if (each.id == formId) {
+                    each.is_deployed = !isDeploy;
+                  }
+                  return arrItem;
+                });
+                return { data: newData, loadReq: false };
+              },
+              () => {
+                successToast("Deploy Status", "updated");
               }
-              return arrItem;
+            );
+          })
+          .catch(err => {
+            this.setState({ loadReq: false }, () => {
+              const errors = err.response;
+              errorToast(errors.data.error);
             });
-            return { data: newData };
-          },
-          () => {
-            successToast("Form", "updated");
-          }
-        );
-      })
-      .catch(err => {});
+          });
+      }
+    );
   };
   deleteItem = (formId, isDeploy) => {
-    const { id } = this.state;
-    axios
-      .post(
-        `fv3/api/manage-forms/delete/?project_id=${id}&type=general&id=${formId}`,
-        { is_deployed: isDeploy }
-      )
-      .then(res => {
-        this.setState(
-          {
-            data: this.state.data.filter(each => each.id != formId)
-          },
-          () => {
-            successToast("Form", "deleted");
-          }
-        );
-      })
-      .catch(err => {});
+    const { id, isProjectForm } = this.state;
+    this.setState(
+      {
+        loadReq: true
+      },
+      () => {
+        const deleteUrl = !!isProjectForm
+          ? `fv3/api/manage-forms/delete/?project_id=${id}&type=general&id=${formId}`
+          : `fv3/api/manage-forms/delete/?site_id=${id}&type=general&id=${formId}`;
+        axios
+          .post(deleteUrl, { is_deployed: isDeploy })
+          .then(res => {
+            this.setState(
+              {
+                data: this.state.data.filter(each => each.id != formId),
+                loadReq: false
+              },
+              () => {
+                successToast("Form", "deleted");
+              }
+            );
+          })
+          .catch(err => {
+            this.setState({ loadReq: false }, () => {
+              const errors = err.response;
+              errorToast(errors.data.error);
+            });
+          });
+      }
+    );
   };
   handleEditGuide = (data, formId) => {
     this.setState({
@@ -139,141 +182,217 @@ class GeneralForms extends Component {
   };
   handleUpdateGuide = data => {
     const { id, editFormId } = this.state;
-    const formData = new FormData();
-    if (data.title) formData.append("title", data.title);
-    if (data.text) formData.append("text", data.text);
-    if (data.pdf) formData.append("pdf", data.pdf);
-    if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
-    if (editFormId) formData.append("fsxf", editFormId);
-    if (data.images && data.images.length > 0) {
-      data.images.map((each, i) => {
-        if (!each.image) formData.append(`new_images_${i + 1}`, each);
-      });
-    }
-    if (data.id) {
-      formData.append("id", data.id);
-    }
-    axios
-      .post(`forms/api/save_educational_material/`, formData)
-      .then(res => {
-        this.setState(
-          {
-            editGuide: false
-          },
-          () => {
-            this.requestGeneralForm(id);
-            successToast("updated", "successfully");
-          }
-        );
-      })
-      .catch(err => {
-        errorToast(err);
-      });
+    this.setState(
+      {
+        loadReq: true
+      },
+      () => {
+        const formData = new FormData();
+        if (data.title) formData.append("title", data.title);
+        if (data.text) formData.append("text", data.text);
+        if (data.pdf) formData.append("pdf", data.pdf);
+        if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
+        if (editFormId) formData.append("fsxf", editFormId);
+        if (data.images && data.images.length > 0) {
+          data.images.map((each, i) => {
+            if (!each.image) formData.append(`new_images_${i + 1}`, each);
+          });
+        }
+        if (data.id) {
+          formData.append("id", data.id);
+        }
+        axios
+          .post(`forms/api/save_educational_material/`, formData)
+          .then(res => {
+            if (res.data) {
+              this.setState(
+                state => {
+                  const item = this.state.data;
+                  item.map(each => {
+                    const newItem = { ...each };
+                    if (each.id == editFormId) {
+                      each.em = res.data;
+                    }
+                    return newItem;
+                  });
+
+                  return {
+                    editGuide: false,
+                    data: item,
+                    loadReq: false
+                  };
+                },
+                () => {
+                  successToast("form", "updated");
+                }
+              );
+            }
+          })
+          .catch(err => {
+            this.setState({ loadReq: false }, () => {
+              const errors = err.response;
+              errorToast(errors.data.error);
+            });
+          });
+      }
+    );
   };
   handleClosePopup = () => {
-    this.setState({
-      formTitle: "",
-      formId: "",
-      showFormModal: false,
-      activeTab: "myForms",
-      myFormList: [],
-      projectFormList: [],
-      sharedFormList: [],
-      xf: ""
-    });
-    this.props.closePopup();
+    this.setState(
+      {
+        formTitle: "",
+        formId: "",
+        showFormModal: false,
+        activeTab: "myForms",
+        myFormList: this.props.myForms,
+        projectFormList: this.props.projectForms,
+        sharedFormList: this.props.sharedForms,
+        xf: "",
+        isEditForm: false
+      },
+      () => {
+        this.props.closePopup();
+      }
+    );
   };
 
   handleCreateGeneralForm = data => {
-    const { id, xf, isEditForm } = this.state;
-    if (!isEditForm) {
-      const payload = {
-        xf: xf,
-        default_submission_status: data.status,
-        setting: {
-          types:
-            data.typeSelected.length > 0
-              ? data.typeSelected.map(each => each.id)
-              : [],
-          regions:
-            data.regionSelected.length > 0
-              ? data.regionSelected.map(each => each.id)
-              : [],
-          donor_visibility: data.isDonor,
-          can_edit: data.isEdit,
-          can_delete: data.isDelete
+    const { id, xf, isEditForm, isProjectForm } = this.state;
+    const { typeOptions, regionOptions } = this.props;
+    const selectedAllRegionArr =
+      data.regionSelected.length > 0 &&
+      data.regionSelected.map(each => {
+        if (typeof each.id === "string") {
+          return true;
+        } else {
+          return false;
         }
-      };
-      axios
-        .post(`fv3/api/manage-forms/general/?project_id=${id}`, payload)
-        .then(res => {
-          this.setState(
-            {
-              data: [...this.state.data, res.data]
-            },
-            () => {
-              this.props.closePopup();
-              successToast("form ", "added");
+      });
+    const isSelectedAllRegion =
+      selectedAllRegionArr.length > 0
+        ? selectedAllRegionArr.indexOf(true) > -1
+          ? true
+          : false
+        : "";
+    const selectedRegionArr = isSelectedAllRegion
+      ? regionOptions.filter(region => region.id !== "all").map(item => item.id)
+      : data.regionSelected.length > 0 &&
+        data.regionSelected.map(each => each.id);
+
+    const selectedAllTypeArr =
+      data.typeSelected.length > 0 &&
+      data.typeSelected.map(each => {
+        if (typeof each.id === "string") {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    const isSelectedAllType =
+      selectedAllTypeArr.length > 0
+        ? selectedAllTypeArr.indexOf(true) > -1
+          ? true
+          : false
+        : "";
+    const selectedTypeArr = isSelectedAllType
+      ? typeOptions.filter(type => type.id !== "all").map(item => item.id)
+      : data.typeSelected.length > 0 && data.typeSelected.map(each => each.id);
+
+    this.setState(
+      {
+        loadReq: true
+      },
+      () => {
+        if (!isEditForm) {
+          const postUrl = !!isProjectForm
+            ? `fv3/api/manage-forms/general/?project_id=${id}`
+            : `fv3/api/manage-forms/general/?site_id=${id}`;
+          const payload = {
+            xf: xf,
+            default_submission_status: data.status,
+            setting: {
+              types: selectedTypeArr.length > 0 ? selectedTypeArr : [],
+              regions: selectedRegionArr.length > 0 ? selectedRegionArr : [],
+              donor_visibility: data.isDonor,
+              can_edit: data.isEdit,
+              can_delete: data.isDelete
             }
-          );
-        })
-        .catch(err => {
-          errorToast(err);
-        });
-    } else {
-      const payload = {
-        id: data.id,
-        default_submission_status: data.status,
-        responses_count: 0,
-        em: data.em,
-        is_deployed: data.isDeploy,
-        setting: {
-          id: data.settingId,
-
-          can_edit: data.isEdit,
-          donor_visibility: data.isDonor,
-          regions:
-            data.regionSelected.length > 0
-              ? data.regionSelected.map(each => each.id)
-              : [],
-          can_delete: data.isDelete,
-          types:
-            data.typeSelected.length > 0
-              ? data.typeSelected.map(each => each.id)
-              : []
-        }
-      };
-
-      axios
-        .put(
-          `fv3/api/manage-forms/general/${data.id}/?project_id=${id}`,
-          payload
-        )
-        .then(res => {
-          this.setState(
-            state => {
-              const arr = this.state.data;
-              const newArr = arr.map(item => {
-                if (item.id == res.data.id) {
-                  return res.data;
-                } else {
-                  return item;
+          };
+          axios
+            .post(postUrl, payload)
+            .then(res => {
+              this.setState(
+                {
+                  data: [...this.state.data, res.data],
+                  loadReq: false
+                },
+                () => {
+                  this.props.closePopup();
+                  successToast("form ", "added");
                 }
+              );
+            })
+            .catch(err => {
+              this.setState({ loadReq: false }, () => {
+                const errors = err.response;
+                errorToast(errors.data.error);
               });
-              return {
-                data: newArr
-              };
-            },
-            () => {
-              this.handleClosePopup();
-              successToast("form", "updated");
+            });
+        } else {
+          const updateUrl = !!isProjectForm
+            ? `fv3/api/manage-forms/general/${data.id}/?project_id=${id}`
+            : `fv3/api/manage-forms/general/${data.id}/?site_id=${id}`;
+
+          const payload = {
+            id: data.id,
+            default_submission_status: data.status,
+            responses_count: 0,
+            em: data.em,
+            is_deployed: data.isDeploy,
+            setting: {
+              id: data.settingId,
+
+              can_edit: data.isEdit,
+              donor_visibility: data.isDonor,
+              can_delete: data.isDelete,
+              regions: selectedRegionArr.length > 0 ? selectedRegionArr : [],
+              types: selectedTypeArr.length > 0 ? selectedTypeArr : []
             }
-          );
-        })
-        .catch(err => {
-          errorToast(err);
-        });
-    }
+          };
+
+          axios
+            .put(updateUrl, payload)
+            .then(res => {
+              this.setState(
+                state => {
+                  const arr = this.state.data;
+                  const newArr = arr.map(item => {
+                    if (item.id == res.data.id) {
+                      return res.data;
+                    } else {
+                      return item;
+                    }
+                  });
+                  return {
+                    data: newArr,
+                    loadReq: false
+                  };
+                },
+                () => {
+                  this.handleClosePopup();
+                  successToast("form", "updated");
+                }
+              );
+            })
+            .catch(err => {
+              this.setState({ loadReq: false }, () => {
+                const errors = err.response;
+                errorToast(errors.data.error);
+              });
+            });
+        }
+      }
+    );
   };
 
   handleEditGeneralForm = data => {
@@ -303,17 +422,12 @@ class GeneralForms extends Component {
   };
 
   onChangeHandler = async e => {
-    const {
-      activeTab,
-      myFormList,
-      projectFormList,
-      sharedFormList
-    } = this.state;
+    const { activeTab } = this.state;
     const searchValue = e.target.value;
 
     if (searchValue) {
       if (activeTab == "myForms") {
-        const filteredData = await myFormList.filter(form => {
+        const filteredData = await this.props.myForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -324,7 +438,7 @@ class GeneralForms extends Component {
           myFormList: filteredData
         });
       } else if (activeTab == "projectForms") {
-        const awaitedData = await projectFormList.map(project => {
+        const awaitedData = await this.props.projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
               form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -337,7 +451,7 @@ class GeneralForms extends Component {
           projectFormList: awaitedData
         });
       } else if (activeTab == "sharedForms") {
-        const filteredData = await sharedFormList.filter(form => {
+        const filteredData = await this.props.sharedForms.filter(form => {
           return (
             form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
             form.owner.toLowerCase().includes(searchValue.toLowerCase())
@@ -383,12 +497,12 @@ class GeneralForms extends Component {
         myFormList,
         projectFormList,
         sharedFormList,
-        isEditForm
+        isEditForm,
+        isProjectForm
       },
       props: { typeOptions, regionOptions },
       handleClosePopup
     } = this;
-    // console.log("in render", formTitle);
 
     return (
       <div className="col-xl-9 col-lg-8">
@@ -399,7 +513,7 @@ class GeneralForms extends Component {
           showText={true}
         >
           {loader && <DotLoader />}
-          {!loader && (
+          {!loader && !!isProjectForm && (
             <GeneralFormTable
               data={data}
               loader={loader}
@@ -407,6 +521,18 @@ class GeneralForms extends Component {
               changeDeployStatus={this.changeDeployStatus}
               deleteItem={this.deleteItem}
               handleEditForm={this.handleEditGeneralForm}
+              formTable="project"
+            />
+          )}
+          {!loader && !isProjectForm && (
+            <GeneralFormTable
+              data={data}
+              loader={loader}
+              handleEditGuide={this.handleEditGuide}
+              changeDeployStatus={this.changeDeployStatus}
+              deleteItem={this.deleteItem}
+              handleEditForm={this.handleEditGeneralForm}
+              formTable="site"
             />
           )}
           {this.props.popupModal && (
@@ -414,19 +540,17 @@ class GeneralForms extends Component {
               title="Add General Form"
               toggleModal={handleClosePopup}
               classname="md-body"
+              // handleSubmit={this.handleCreateGeneralForm}
             >
               <GlobalModalForm
                 formType="general"
                 regionOptions={regionOptions}
                 typeOptions={typeOptions}
-                myForms={this.props.myForms}
-                projectForms={this.props.projectForms}
-                sharedForms={this.props.sharedForms}
                 toggleFormModal={this.toggleFormModal}
                 handleToggleForm={handleClosePopup}
                 formTitle={formTitle}
                 handleCreateForm={this.handleCreateGeneralForm}
-                formData={formData}
+                formData={!!isEditForm && formData}
                 isEditForm={isEditForm}
                 isProjectWide={false}
               />
@@ -443,13 +567,14 @@ class GeneralForms extends Component {
             </Modal>
           )}
           {showFormModal && (
-            <Modal
+            <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
               showButton={true}
               showText="Create Form"
               url="/forms/create/"
               classname="manage-body md-body"
+              handleSubmit={this.handleSaveForm}
             >
               <AddForm
                 activeTab={activeTab}
@@ -459,11 +584,12 @@ class GeneralForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                handleSaveForm={this.handleSaveForm}
+                // handleSaveForm={this.handleSaveForm}
                 loader={this.props.formLoader}
               />
-            </Modal>
+            </ManageModal>
           )}
+          {this.state.loadReq && <Loader />}
         </RightContentCard>
       </div>
     );

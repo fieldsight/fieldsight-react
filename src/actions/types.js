@@ -7,6 +7,7 @@ export const GET_SUBMISSION_DETAIL = "GET_SUBMISSION_DETAIL";
 export const POST_SUBMISSION_DETAIL = "POST_SUBMISSION_DETAIL";
 export const UPDATE_SUBMISSION_DETAIL = "UPDATE_SUBMISSION_DETAIL";
 export const TOGGLE_NULL_SUBMISSIONS_ANSWER = "TOGGLE_NULL_SUBMISSIONS_ANSWER";
+export const SHOW_SUBMISSION_ERR_MSG = "SHOW_SUBMISSION_ERR_MSG";
 
 // Site Dashboard Actions
 export const GET_SITE_DASHBOARD = "GET_SITE_DASHBOARD";
@@ -59,8 +60,22 @@ export const GET_PROJECT_LIST = "GET_PROJECT_LIST";
 export const GET_PROJECT_USER = "GET_PROJECT_USER";
 
 //Project Log
- export const GET_LOGS ="GET_LOGS";
+export const GET_LOGS = "GET_LOGS";
 
- //Teams
- export const GET_TEAMS = "GET_TEAMS";
- 
+//Teams
+export const GET_TEAMS = "GET_TEAMS";
+export const GET_TRANSLATION = "GET_TRANSLATION";
+
+//ProjectViewData
+export const GET_PROJECT_VIEW = "GET_PROJECT_VIEW";
+
+//SiteviewData
+export const GET_SITE_VIEW = "GET_SITE_VIEW";
+
+//Translation
+//export const GET_TRANSLATION = "GET_TRANSLATION";
+
+export const GET_MY_TASK = "GET_MY_TASK";
+export const GET_OTHER_TASK = "GET_OTHER_TASK";
+export const GET_NOTIFICATIONS = "GET_NOTIFICATIONS";
+export const NAV_LOADER = "NAV_LOADER"

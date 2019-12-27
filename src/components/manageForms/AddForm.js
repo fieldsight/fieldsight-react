@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import RadioElement from "../common/RadioElement";
 import { DotLoader } from "../myForm/Loader";
+
 class AddForm extends Component {
   render() {
     const {
@@ -16,7 +17,6 @@ class AddForm extends Component {
         loader
       }
     } = this;
-    console.log("project", loader);
 
     return (
       <>
@@ -65,28 +65,26 @@ class AddForm extends Component {
         {loader && <DotLoader />}
 
         {!loader && activeTab === "myForms" && (
-          <div
-            className="thumb-list mr-0 "
-            style={{ position: "relative", height: "327px" }}
-          >
+          <div className="thumb-list mr-0 ">
+            {/* <form
+              className="floating-form"
+              onSubmit={e => {
+                e.preventDefault();
+              }}
+            > */}
+            <div className="form-group search-group mrt-15">
+              <input
+                type="search"
+                className="form-control"
+                placeholder="Search"
+                onChange={onChangeHandler}
+              />
+              <i className="la la-search" />
+            </div>
             {formList.length == 0 ? (
               <div>No Form Available</div>
             ) : (
-              <form
-                className="floating-form"
-                onSubmit={e => {
-                  e.preventDefault();
-                }}
-              >
-                <div className="form-group search-group">
-                  <input
-                    type="search"
-                    className="form-control"
-                    placeholder="Search"
-                    onChange={onChangeHandler}
-                  />
-                  <i className="la la-search" />
-                </div>
+              <div>
                 {formList.map((each, i) => {
                   return (
                     <div className="form-group" key={`form_${i}`}>
@@ -109,43 +107,42 @@ class AddForm extends Component {
                     </div>
                   );
                 })}
-                <div className="form-group pull-right no-margin">
-                  <button
-                    type="button"
-                    className="fieldsight-btn"
-                    onClick={handleSaveForm}
-                  >
-                    Save
-                  </button>
-                </div>
-              </form>
+                {/* <div className="form-group pull-right no-margin">
+                    <button
+                      type="button"
+                      className="fieldsight-btn"
+                      onClick={handleSaveForm}
+                    >
+                      Save
+                    </button>
+                  </div> */}
+              </div>
             )}
+            {/* </form> */}
           </div>
         )}
 
         {!loader && activeTab === "projectForms" && (
-          <div
-            className="thumb-list mr-0 "
-            style={{ position: "relative", height: "327px" }}
-          >
+          <div className="thumb-list mr-0 ">
+            {/* <form
+              className="floating-form"
+              onSubmit={e => {
+                e.preventDefault();
+              }}
+            > */}
+            <div className="form-group search-group mrt-15">
+              <input
+                type="search"
+                className="form-control"
+                placeholder="Search"
+                onChange={onChangeHandler}
+              />
+              <i className="la la-search" />
+            </div>
             {projectList.length == 0 ? (
               <div>No Form Available</div>
             ) : (
-              <form
-                className="floating-form"
-                onSubmit={e => {
-                  e.preventDefault();
-                }}
-              >
-                <div className="form-group search-group">
-                  <input
-                    type="search"
-                    className="form-control"
-                    placeholder="Search"
-                    onChange={onChangeHandler}
-                  />
-                  <i className="la la-search" />
-                </div>
+              <div>
                 {projectList.map((each, i) => (
                   <Fragment key={`form_${i}`}>
                     {each.forms && each.forms.length > 0 && (
@@ -177,44 +174,43 @@ class AddForm extends Component {
                     )}
                   </Fragment>
                 ))}
-                <div className="form-group pull-right no-margin">
-                  <button
-                    type="button"
-                    className="fieldsight-btn"
-                    onClick={handleSaveForm}
-                  >
-                    Save
-                  </button>
-                </div>
-              </form>
+                {/* <div className="form-group pull-right no-margin">
+                    <button
+                      type="button"
+                      className="fieldsight-btn"
+                      onClick={handleSaveForm}
+                    >
+                      Save
+                    </button>
+                  </div> */}
+              </div>
             )}
+            {/* </form> */}
           </div>
         )}
 
         {!loader && activeTab === "sharedForms" && (
-          <div
-            className="thumb-list mr-0 "
-            style={{ position: "relative", height: "327px" }}
-          >
+          <div className="thumb-list mr-0 ">
+            {/* <form
+              className="floating-form"
+              onSubmit={e => {
+                e.preventDefault();
+              }}
+            > */}
+            <div className="form-group search-group mrt-15">
+              <input
+                type="search"
+                className="form-control"
+                placeholder=""
+                placeholder="Search"
+                onChange={onChangeHandler}
+              />
+              <i className="la la-search" />
+            </div>
             {sharedList.length == 0 ? (
               <div>No Form Available</div>
             ) : (
-              <form
-                className="floating-form"
-                onSubmit={e => {
-                  e.preventDefault();
-                }}
-              >
-                <div className="form-group search-group">
-                  <input
-                    type="search"
-                    className="form-control"
-                    placeholder=""
-                    placeholder="Search"
-                    onChange={onChangeHandler}
-                  />
-                  <i className="la la-search" />
-                </div>
+              <div>
                 {sharedList.map((each, i) => {
                   return (
                     <div className="form-group" key={`form_${i}`}>
@@ -237,17 +233,18 @@ class AddForm extends Component {
                     </div>
                   );
                 })}
-                <div className="form-group pull-right no-margin">
-                  <button
-                    type="button"
-                    className="fieldsight-btn"
-                    onClick={handleSaveForm}
-                  >
-                    Save
-                  </button>
-                </div>
-              </form>
+                {/* <div className="form-group pull-right no-margin">
+                    <button
+                      type="button"
+                      className="fieldsight-btn"
+                      onClick={handleSaveForm}
+                    >
+                      Save
+                    </button>
+                  </div> */}
+              </div>
             )}
+            {/* </form> */}
           </div>
         )}
       </>

@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
-import makeAnimated from "react-select/animated";
 
 import InputElement from "../common/InputElement";
-import RadioElement from "../common/RadioElement";
-const animatedComponents = makeAnimated();
 
 class AddStageForm extends Component {
   state = {
@@ -13,7 +10,7 @@ class AddStageForm extends Component {
       selectedType: [],
       name: this.props.stageData ? this.props.stageData.name : "",
       desc: this.props.stageData ? this.props.stageData.description : "",
-      order: this.props.stageData ? this.props.stageData.order : 0,
+      order: this.props.stageData ? this.props.stageData.order : null,
       id: this.props.stageData ? this.props.stageData.id : ""
     },
     regionDropdown: [],
@@ -36,7 +33,7 @@ class AddStageForm extends Component {
     let selectedRegion = [];
     let selectedType = [];
     if (Object.keys(stageData).length > 0) {
-      if (!!stageData.regions && stageData.regions.length > 0) {
+      if (stageData.regions.length > 0) {
         regionOptions.map(region => {
           if (stageData.regions.indexOf(region.id) > -1) {
             selectedRegion.push({
@@ -46,7 +43,11 @@ class AddStageForm extends Component {
             });
           }
         });
-      } else if (stageData.tags && stageData.tags.length > 0) {
+        // } else {
+        //   selectedRegion = newRegionArr;
+      }
+
+      if (stageData.tags.length > 0) {
         typeOptions.map(type => {
           if (stageData.tags.indexOf(type.id) > -1) {
             selectedType.push({
@@ -56,6 +57,8 @@ class AddStageForm extends Component {
             });
           }
         });
+        // } else {
+        //   selectedType = newTypeArr;
       }
     } else {
       (selectedRegion = newRegionArr), (selectedType = newTypeArr);
@@ -119,8 +122,13 @@ class AddStageForm extends Component {
     const isEdit = Object.keys(this.props.stageData).length > 0 ? true : false;
 
     return (
-      <form className="floating-form " onSubmit={handleSubmitForm}>
-        <div className="form-group">
+      <form
+        className="floating-form "
+        onSubmit={e => {
+          e.preventDefault();
+        }}
+      >
+        <div>
           <InputElement
             formType="editForm"
             tag="input"
@@ -131,51 +139,56 @@ class AddStageForm extends Component {
             value={name}
             changeHandler={handleChange}
           />
-        </div>
-        {hasLoaded && (
-          <div className="form-group">
-            <label>Regions</label>
-            <Select
-              // closeMenuOnSelect={false}
-              onChange={handleSelectRegionChange}
-              options={regionDropdown}
-              isMulti={true}
-              defaultValue={selectedRegion}
-              components={animatedComponents}
-            />
-          </div>
-        )}
-        {hasLoaded && (
-          <div className="form-group">
-            <label>Types</label>
-            <Select
-              closeMenuOnSelect={true}
-              components={animatedComponents}
-              onChange={handleSelectTypeChange}
-              defaultValue={selectedType}
-              isMulti
-              options={typeDropdown}
-            />
-          </div>
-        )}
-        <div className="form-group">
+          {/* </div> */}
+          {regionDropdown && regionDropdown.length > 0 && (
+            <div>
+              <label>Regions</label>
+              {hasLoaded && (
+                <Select
+                  defaultValue={selectedRegion}
+                  isMulti={true}
+                  options={regionDropdown}
+                  onChange={handleSelectRegionChange}
+                />
+              )}
+            </div>
+          )}
+          {typeDropdown && typeDropdown.length > 0 && (
+            <div>
+              <label>Types</label>
+              {hasLoaded && (
+                <Select
+                  defaultValue={selectedType}
+                  isMulti
+                  options={typeDropdown}
+                  onChange={handleSelectTypeChange}
+                />
+              )}
+            </div>
+          )}
           <InputElement
+            classname="border-0"
             formType="editForm"
             tag="input"
             type="text"
-            required={true}
+            // required={true}
             label="Description"
             name="desc"
             value={desc}
             changeHandler={handleChange}
           />
         </div>
-
+        {/* <div className="modal-footer"> */}
         <div className="form-group pull-right no-margin">
-          <button type="submit" className="fieldsight-btn">
-            {!!isEdit ? "Save" : "Add"}
+          <button
+            type="button"
+            className="fieldsight-btn"
+            onClick={handleSubmitForm}
+          >
+            Save
           </button>
         </div>
+        {/* </div> */}
       </form>
     );
   }

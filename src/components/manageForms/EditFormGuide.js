@@ -129,7 +129,7 @@ class EditFormGuide extends Component {
               changeHandler={handleChange}
             />
           </div>
-          <div className="col-md-6 col-md-8">
+          <div className="col-md-12">
             <div className="form-group">
               <label> Attached Images</label>
               {srcs.length > 0 ? (
@@ -188,7 +188,7 @@ class EditFormGuide extends Component {
               )}
             </div>
           </div>
-          <div className="col-md-6 col-md-8">
+          <div className="col-md-12">
             <div className="form-group">
               <label>{" Attach File"}</label>
               {is_pdf ? (
@@ -250,16 +250,13 @@ class EditFormGuide extends Component {
               )}
             </div>
           </div>
-          <div className="col-sm-6">
-            <button
-              type="submit"
-              className="fieldsight-btn pull-right col-sm-6"
-            >
+          <div className="col-md-12">
+            <button type="submit" className="fieldsight-btn pull-right ">
               Save Changes
             </button>
             <button
               type="button"
-              className="fieldsight-btn pull-right col-sm-6"
+              className="fieldsight-btn pull-right"
               onClick={handleCancel}
             >
               Cancel

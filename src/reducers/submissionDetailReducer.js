@@ -5,7 +5,8 @@ import {
   POST_SUBMISSION_DETAIL,
   SHOW_DOT_LOADER,
   UPDATE_SUBMISSION_DETAIL,
-  TOGGLE_NULL_SUBMISSIONS_ANSWER
+  TOGGLE_NULL_SUBMISSIONS_ANSWER,
+  SHOW_SUBMISSION_ERR_MSG
 } from "../actions/types";
 
 import copy from "../utils/cloneNestedObject";
@@ -27,7 +28,10 @@ const initialState = {
   loading: false,
   initialLoader: true,
   has_review_permission: false,
-  hideNullValues: false
+  hideNullValues: false,
+  submission_err: null,
+  breadcrumb: {},
+  is_survey: false
 };
 
 const getNullFilteredSubmission = submissions => {
@@ -73,7 +77,8 @@ export default function(state = initialState, action) {
     case START_SUBMISSION_LOADER:
       return {
         ...state,
-        loading: true
+        loading: true,
+        submission_err: null
       };
     case STOP_SUBMISSION_LOADER:
       return {
@@ -96,7 +101,9 @@ export default function(state = initialState, action) {
         edit_url: action.payload.edit_url,
         download_url: action.payload.download_url,
         has_review_permission: action.payload.has_review_permission,
-        initialLoader: false
+        breadcrumb: action.payload.breadcrumbs,
+        is_survey: action.payload.is_survey
+        // initialLoader: false
       };
     case POST_SUBMISSION_DETAIL:
       return {
@@ -120,6 +127,11 @@ export default function(state = initialState, action) {
         download_url: action.payload.download_url
       };
     }
+
+    case SHOW_SUBMISSION_ERR_MSG:
+      return {
+        submission_err: action.err
+      };
     default:
       return state;
   }

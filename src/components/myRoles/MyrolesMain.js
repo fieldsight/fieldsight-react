@@ -11,11 +11,12 @@ import MapPage from "./MapPage";
 import { successToast, errorToast } from "../../utils/toastHandler";
 import withPagination from "../../hoc/WithPagination";
 import Modal from "../common/Modal";
+import DeleteModal from "../common/DeleteModal";
 
 class MyrolesMain extends Component {
   state = {
     invite: null,
-    rightTab: "region",
+    rightTab: "site",
     profile: [],
     invitation: [],
     roles: [],
@@ -31,50 +32,64 @@ class MyrolesMain extends Component {
     teamId: null,
     siteId: null,
     myGuide: false,
-    searchQuery: ""
+    searchQuery: "",
+    profileId: "",
+    roles: [],
+    checkRole: false,
+    type: "",
+    typeId: "",
+    roleId: "",
+    isDelConfirm: false
   };
 
- // componentDidMount() {
-  componentWillMount(){
+  // componentDidMount() {
+  componentWillMount() {
     const { profileId } = this.props.match.params;
-    let url = profileId
+
+    const url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
       : `fv3/api/myroles/`;
     this._isMounted = true;
-    axios
-      .get(`${url}`)
+    this.setState(
+      {
+        profileId
+      },
+      () => {
+        axios
+          .get(`${url}`)
 
-      .then(res => {
-        if (this._isMounted) {
-          if (res.status === 200) {
-            const modifiedTeam = res.data.teams.map((team, i) => {
-              return i === 0
-                ? { ...team, accord: true }
-                : { ...team, accord: false };
-            });
+          .then(res => {
+            if (this._isMounted) {
+              if (res.status === 200) {
+                const modifiedTeam = res.data.teams.map((team, i) => {
+                  return i === 0
+                    ? { ...team, accord: true }
+                    : { ...team, accord: false };
+                });
 
-            if (res.data.teams.length > 0) {
-              this.setState({
-                initialTeamId: res.data.teams[0].projects[0].id
-              });
+                if (res.data.teams.length > 0) {
+                  this.setState({
+                    initialTeamId: res.data.teams[0].projects[0].id
+                  });
+                }
+
+                this.setState({
+                  profile: res.data.profile,
+                  invitation: res.data.invitations,
+                  roles: res.data.roles,
+                  teams: modifiedTeam,
+                  dLoader: false,
+                  RegionLoader: false,
+                  myGuide: res.data.profile.guide_popup
+                });
+              }
             }
-
-            this.setState({
-              profile: res.data.profile,
-              invitation: res.data.invitations,
-              roles: res.data.roles,
-              teams: modifiedTeam,
-              dLoader: false,
-              RegionLoader: false,
-              myGuide: res.data.profile.guide_popup
-            });
-          }
-        }
-      })
-      .catch(err => {});
-     
+          })
+          .catch(err => {});
+      }
+    );
   }
-  
+
   invitationOpen = (e, data) => {
     if (this.state.invite == "hide") {
       this.setState({
@@ -158,7 +173,11 @@ class MyrolesMain extends Component {
   };
 
   requestRegions = id => {
-    const url = "fv3/api/my-regions/?project=" + id;
+    const { profileId } = this.state;
+    const url = !!profileId
+      ? "fv3/api/my-regions/?project=" + id + "&profile=" + profileId
+      : "fv3/api/my-regions/?project=" + id;
+
     this.setState({
       teamId: id,
       RegionLoader: true
@@ -173,16 +192,21 @@ class MyrolesMain extends Component {
               RegionLoader: false
             },
             () => {
-              this.state, "dfghjh";
+              // this.state, "dfghjh";
             }
           );
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   requestSite = id => {
-    const site_url = "fv3/api/my-sites/?project=" + id;
+    const { profileId } = this.state;
+
+    const site_url = profileId
+      ? "fv3/api/my-sites/?project=" + id + "&profile=" + profileId
+      : "fv3/api/my-sites/?project=" + id;
+
     this.setState({
       siteLoader: true,
       siteId: id
@@ -198,15 +222,27 @@ class MyrolesMain extends Component {
     //     }
     //   })
     //   .catch(err => {});
-
-    this.props.paginationHandler(1, null, {
-      type: "mySiteList",
-      projectId: id
-    });
+    if (profileId) {
+      this.props.paginationHandler(1, null, {
+        type: "mySiteList",
+        projectId: id,
+        profileId
+      });
+    } else {
+      this.props.paginationHandler(1, null, {
+        type: "mySiteList",
+        projectId: id
+      });
+    }
   };
 
   requestSubmission = id => {
-    const submission_url = `fv3/api/submissions-map/?project=${id}&type=submissions`;
+    const { profileId } = this.state;
+
+    const submission_url = !!profileId
+      ? `fv3/api/submissions-map/?project=${id}&type=submissions&profile=${profileId}`
+      : `fv3/api/submissions-map/?project=${id}&type=submissions`;
+
     this.setState({
       submissionLoader: true
     });
@@ -224,8 +260,10 @@ class MyrolesMain extends Component {
   };
 
   requestMap = id => {
-    //const id =309
-    const submission_url = `fv3/api/submissions-map/?project=${id}&type=map`;
+    const { profileId } = this.state;
+    const submission_url = !!profileId
+      ? `fv3/api/submissions-map/?project=${id}&type=map&profile=${profileId}`
+      : `fv3/api/submissions-map/?project=${id}&type=map`;
 
     axios
       .get(`${submission_url}`)
@@ -241,30 +279,70 @@ class MyrolesMain extends Component {
 
   cancelHandler = () => {
     this.setState({
-      myGuide: false
+      myGuide: false,
+      checkRole: false
     });
   };
 
   onChangeHandler = e => {
     const searchValue = e.target.value;
-    const { siteId } = this.state;
+    const { siteId, profileId } = this.state;
+    const url = !!profileId
+      ? `fv3/api/my-sites/?project=${siteId}&profile=${profileId}&q=${this.state.searchQuery}`
+      : `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`;
+
     this.setState({ searchQuery: searchValue }, () => {
-      this.props.searchHandler(
-        this.state.searchQuery,
-        `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`,
-        {
-          type: "mySiteList",
-          projectId: siteId
-        }
-      );
+      this.props.searchHandler(this.state.searchQuery, url, {
+        type: "mySiteList",
+        projectId: siteId
+      });
     });
   };
+
+  requestCheckRoles = (type, id) => {
+    const { profileId } = this.state;
+    this.setState({ checkRole: true, type, typeId: id }, () => {
+      axios
+        .get(`/fv3/api/check-role/${profileId}/${type}/${id}/`)
+        .then(res => {
+          if (res.data) {
+            this.setState({ roles: res.data });
+          }
+        })
+        .catch(() => {});
+    });
+  };
+
+  handleToggleDelete = roleId => {
+    this.setState(state => {
+      if (roleId) return { roleId, isDelConfirm: !state.isDelConfirm };
+      return { isDelConfirm: !isDelConfirm };
+    });
+  };
+
+  requestDeleteRole = () => {
+    const { type, roleId, typeId } = this.state;
+    axios
+      .post(`fv3/api/remove-role/${type}/${roleId}/${typeId}/`)
+      .then(res => {
+        if (res.data) {
+          this.setState({
+            isDelConfirm: false,
+            checkRole: false
+          }),
+            successToast("role", "deleted");
+        }
+      })
+      .catch(err => {
+        const error = err.response && err.response.data;
+        errorToast(error);
+      });
+  };
+
   render() {
-    const { profileId } = this.props.match.params;
-    const {myGuide} =this.state;
-   
-   
-    
+    // const { profileId } = this.props.match.params;
+    const { myGuide, profileId, roles, checkRole, isDelConfirm } = this.state;
+
     return (
       <>
         <div className="card mrb-30">
@@ -286,6 +364,7 @@ class MyrolesMain extends Component {
             requestMap={this.requestMap}
             regions={this.state.regions}
             addPermission={this.state.profile.can_create_team}
+            requestCheckRoles={this.requestCheckRoles}
           />
 
           <div className="col-xl-8 col-lg-7">
@@ -300,18 +379,6 @@ class MyrolesMain extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == "region"
-                              ? "nav-link active"
-                              : "nav-link"
-                          }
-                          onClick={e => this.rightTabOpen(e, "region")}
-                        >
-                          Regions
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          className={
                             this.state.rightTab == "site"
                               ? "nav-link active"
                               : "nav-link"
@@ -319,6 +386,18 @@ class MyrolesMain extends Component {
                           onClick={e => this.rightTabOpen(e, "site")}
                         >
                           Sites
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className={
+                            this.state.rightTab == "region"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          onClick={e => this.rightTabOpen(e, "region")}
+                        >
+                          Regions
                         </a>
                       </li>
                       <li className="nav-item">
@@ -364,17 +443,16 @@ class MyrolesMain extends Component {
                             display: "flex"
                           }}
                         >
-                         <input
+                          <input
                             type="search"
                             className="form-control"
                             onChange={this.onChangeHandler}
                             placeholder="Search"
                           />
-                          <div style={{marginTop:" 0.6rem"}}>
-                          <i className="la la-search"  />
+                          <div style={{ marginTop: " 0.6rem" }}>
+                            <i className="la la-search" />
                           </div>
                           {/* <label htmlFor="input">Search</label> */}
-                         
                         </div>
                       </form>
                       // </div>
@@ -390,19 +468,24 @@ class MyrolesMain extends Component {
 
                     {this.state.rightTab == "region" && (
                       <RegionTable
+                        // initialTeamId={this.state.initialTeamId}
+                        // requestRegions={this.requestRegions}
+                        // requestSite={this.requestSite}
+                        // requestSubmission={this.requestSubmission}
+                        // requestMap={this.requestMap}
+                        regions={this.state.regions}
+                        RegionLoader={this.state.RegionLoader}
+                        profileId={profileId}
+                        requestCheckRoles={this.requestCheckRoles}
+                      />
+                    )}
+                    {this.state.rightTab == "site" && (
+                      <SiteTable
                         initialTeamId={this.state.initialTeamId}
                         requestRegions={this.requestRegions}
                         requestSite={this.requestSite}
                         requestSubmission={this.requestSubmission}
                         requestMap={this.requestMap}
-                        regions={this.state.regions}
-                        RegionLoader={this.state.RegionLoader}
-                        profileId={profileId}
-                      />
-                    )}
-
-                    {this.state.rightTab == "site" && (
-                      <SiteTable
                         site={this.props.siteList}
                         siteLoader={this.state.dLoader}
                         renderPageNumbers={this.props.renderPageNumbers}
@@ -413,6 +496,7 @@ class MyrolesMain extends Component {
                         toData={this.props.toData}
                         totalCount={this.props.totalCount}
                         profileId={profileId}
+                        requestCheckRoles={this.requestCheckRoles}
                       />
                     )}
 
@@ -469,6 +553,43 @@ class MyrolesMain extends Component {
               </a>
             </div>
           </Modal>
+        )}
+        {checkRole && (
+          <Modal
+            title="Which of the following roles do you want to Delete?"
+            toggleModal={this.cancelHandler}
+          >
+            {/* <div className="row"> */}
+            <ul>
+              {roles &&
+                roles.length > 0 &&
+                roles.map(role => (
+                  <li key={`role_${role.role_id}`}>
+                    <label>
+                      <strong>{role.group_name}</strong>
+                    </label>
+                    &nbsp;
+                    <a
+                      className="td-delete-btn td-btn"
+                      onClick={() => {
+                        this.handleToggleDelete(role.role_id);
+                      }}
+                    >
+                      Delete
+                    </a>
+                  </li>
+                ))}
+            </ul>
+            {/* </div> */}
+          </Modal>
+        )}
+        {isDelConfirm && (
+          <DeleteModal
+            onCancel={this.handleToggleDelete}
+            onConfirm={this.requestDeleteRole}
+            onToggle={this.handleToggleDelete}
+            message="Are you sure to delete the role?"
+          />
         )}
       </>
     );

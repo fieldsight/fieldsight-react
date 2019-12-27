@@ -40,6 +40,7 @@ export default class SiteAdd extends Component {
       }
     );
   };
+
   render() {
     const {
       onChangeHandler,
@@ -82,9 +83,10 @@ export default class SiteAdd extends Component {
         deleteConfirm
       }
     } = this.props;
+    // console.log(jsondata, "jsondata");
 
     return (
-      <RightContentCard title="New Site">
+      <RightContentCard title=" Site Form">
         <div
           style={{
             display: "flex",
@@ -94,13 +96,17 @@ export default class SiteAdd extends Component {
             top: "4px"
           }}
         >
-          <a
-            className="fieldsight-btn rejected-btn"
-            style={{ boxShadow: "none" }}
-            onClick={handleDelete}
-          >
-            Delete
-          </a>
+          {this.props.delete_perm === true ? (
+            <a
+              className="fieldsight-btn rejected-btn"
+              style={{ boxShadow: "none" }}
+              onClick={handleDelete}
+            >
+              Delete
+            </a>
+          ) : (
+            ""
+          )}
         </div>
         <form className="edit-form" onSubmit={onSubmitHandler}>
           <div className="row">
@@ -128,11 +134,12 @@ export default class SiteAdd extends Component {
                 changeHandler={onChangeHandler}
               />
             </div>
-            {this.props.region !== "" ? (
+
+            {this.props.region !== undefined ? (
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
-                  label="Regions"
+                  label="Region"
                   options={
                     !!region && region.length > 0
                       ? region.map(region => region)
@@ -148,7 +155,7 @@ export default class SiteAdd extends Component {
             <div className="col-xl-4 col-md-6">
               <SelectElement
                 className="form-control"
-                label="Types"
+                label="Site Type"
                 options={
                   site_types && site_types.length > 0
                     ? site_types.map(region => region)
@@ -336,13 +343,17 @@ export default class SiteAdd extends Component {
                 )}
               </div>
             </div>
-
+          </div>
+          <div className="row">
             {!!this.props.jsondata &&
               this.props.jsondata.map((data, key) => {
                 return (
                   <Fragment key={key}>
                     {data.question_type === "Text" ? (
-                      <div className="col-xl-4 col-md-6">
+                      <div
+                        className="col-xl-4 col-md-6"
+                        style={{ paddingBottom: "16px" }}
+                      >
                         <InputElement
                           formType="editForm"
                           tag="input"
@@ -360,7 +371,10 @@ export default class SiteAdd extends Component {
                       ""
                     )}
                     {data.question_type === "Date" ? (
-                      <div className="col-xl-4 col-md-6">
+                      <div
+                        className="col-xl-4 col-md-6"
+                        style={{ paddingBottom: "16px" }}
+                      >
                         <InputElement
                           formType="editForm"
                           tag="input"
@@ -378,7 +392,10 @@ export default class SiteAdd extends Component {
                       ""
                     )}
                     {data.question_type === "MCQ" ? (
-                      <div className="form-group col-xl-4 col-md-6">
+                      <div
+                        className="form-group col-xl-4 col-md-6"
+                        style={{ paddingBottom: "16px" }}
+                      >
                         <label>{data.question_text}</label>
                         <select
                           className="form-control"
@@ -423,14 +440,15 @@ export default class SiteAdd extends Component {
                     ) : (
                       ""
                     )}
+
                     {data.question_type === "Link" ? (
                       <Select
                         data={data.project_id}
-                        onchange={ondynamiChangeHandler}
+                        //onchange={ondynamiChangeHandler}
                         value={this.props.project_info[data.question_name]}
                         type={data.question_text}
-                        selectedValue={this.selectedValue}
                         name={data.question_name}
+                        selectedValue={this.props.selectedValue}
                       />
                     ) : (
                       ""
@@ -488,6 +506,7 @@ export default class SiteAdd extends Component {
             </div>
           </Modal>
         )}
+
         {deleteConfirm && (
           <Modal
             title={"Are you sure you want to delete " + name + " ?"}

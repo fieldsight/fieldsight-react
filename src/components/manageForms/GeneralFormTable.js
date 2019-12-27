@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import Modal from "../common/DeleteModal";
+import DeleteModal from "../common/DeleteModal";
 
 const getStatus = value => {
   if (value == 0) return <span>pending</span>;
@@ -20,7 +23,208 @@ const formatDate = date => {
   return year + "-" + monthIndex + "-" + dateIdx;
 };
 
+const EducationMaterialForProject = props => {
+  const { formTable, item, editForm } = props;
+  if (formTable == "project") {
+    return (
+      <span>
+        <a onClick={() => editForm(item.em, item.id)}>
+          <i className="la la-book" />
+          {item.em ? item.em.title : ""}
+        </a>
+      </span>
+    );
+  } else if (formTable == "site") {
+    return (
+      <span>
+        {!!item.site && (
+          <a onClick={() => editForm(item.em, item.id)}>
+            <i className="la la-book" />
+            {item.em ? item.em.title : ""}
+          </a>
+        )}
+      </span>
+    );
+  }
+};
+const GetActionForProject = props => {
+  const {
+    formTable,
+    item,
+    deployAction,
+    isDelete,
+    handleToggle,
+    handleCancel,
+    handleConfirm,
+    editAction
+  } = props;
+  if (formTable == "project") {
+    return (
+      <div>
+        {!!item.is_deployed && (
+          <a
+            className="rejected td-edit-btn td-btn"
+            onClick={() => deployAction(item.id, item.is_deployed)}
+          >
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Undeploy</Tooltip>}
+            >
+              <i className="la la-rocket"> </i>
+            </OverlayTrigger>
+          </a>
+        )}
+        {!item.is_deployed && (
+          <span>
+            <a
+              className="td-edit-btn td-btn approved"
+              onClick={() => deployAction(item.id, item.is_deployed)}
+            >
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Deploy</Tooltip>}
+              >
+                <i className="la la-rocket"> </i>
+              </OverlayTrigger>
+            </a>
+          </span>
+        )}
+        <a
+          onClick={() => editAction(item)}
+          className="pending td-edit-btn td-btn"
+        >
+          <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+            <i className="la la-edit"> </i>
+          </OverlayTrigger>
+        </a>
+
+        {!item.is_deployed && (
+          <span>
+            <a
+              className="rejected td-edit-btn td-btn"
+              onClick={() => handleToggle(item.id, item.is_deployed)}
+            >
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Delete</Tooltip>}
+              >
+                <i className="la la-trash"> </i>
+              </OverlayTrigger>
+            </a>
+          </span>
+        )}
+        {isDelete && (
+          <DeleteModal
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            onToggle={handleToggle}
+            message={
+              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+            }
+          />
+        )}
+      </div>
+    );
+  } else if (formTable == "site") {
+    return (
+      <div>
+        {!!item.site && !!item.is_deployed && (
+          <a
+            className="rejected td-edit-btn td-btn"
+            onClick={() => deployAction(item.id, item.is_deployed)}
+          >
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Undeploy</Tooltip>}
+            >
+              <i className="la la-rocket"> </i>
+            </OverlayTrigger>
+          </a>
+        )}
+        {!!item.site && !item.is_deployed && (
+          <span>
+            <a
+              className="td-edit-btn td-btn approved"
+              onClick={() => deployAction(item.id, item.is_deployed)}
+            >
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Deploy</Tooltip>}
+              >
+                <i className="la la-rocket"> </i>
+              </OverlayTrigger>
+            </a>
+          </span>
+        )}
+        {!!item.site && (
+          <a
+            onClick={() => editAction(item)}
+            className="pending td-edit-btn td-btn"
+          >
+            <OverlayTrigger placement="top" overlay={<Tooltip>Edit</Tooltip>}>
+              <i className="la la-edit"> </i>
+            </OverlayTrigger>
+          </a>
+        )}
+        {!!item.site && !item.is_deployed && (
+          <span>
+            <a
+              className="rejected td-edit-btn td-btn"
+              onClick={() => handleToggle(item.id, item.is_deployed)}
+            >
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Delete</Tooltip>}
+              >
+                <i className="la la-trash"> </i>
+              </OverlayTrigger>
+            </a>
+          </span>
+        )}
+        {isDelete && (
+          <DeleteModal
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            onToggle={handleToggle}
+            message={
+              "Deleting this form will also delete submissions to this form. Do you want to proceed?"
+            }
+          />
+        )}
+      </div>
+    );
+  }
+};
+
 class GeneralFormTable extends Component {
+  state = {
+    confirmDelete: false,
+    formId: "",
+    isDeploy: false
+  };
+
+  handleToggle = (formId, isDeploy) => {
+    this.setState({
+      confirmDelete: !this.state.confirmDelete,
+      formId,
+      isDeploy
+    });
+  };
+
+  handleConfirm = () => {
+    this.setState(
+      {
+        confirmDelete: false
+      },
+      () => {
+        this.props.deleteItem(this.state.formId, this.state.isDeploy);
+      }
+    );
+  };
+  handleCancel = () => {
+    this.setState({ confirmDelete: false });
+  };
+
   render() {
     const {
       props: {
@@ -28,100 +232,82 @@ class GeneralFormTable extends Component {
         loader,
         handleEditGuide,
         changeDeployStatus,
-        deleteItem,
-        handleEditForm
+        handleEditForm,
+        formTable
       }
     } = this;
-    return (
-      <Table responsive="xl" className="table  table-bordered  dataTable">
-        <thead>
-          <tr>
-            <th>form title</th>
-            <th>Responses</th>
-            <th>Form Guide</th>
-            <th>assigned date</th>
-            <th>Default status</th>
-            <th width="15%">Action</th>
-          </tr>
-        </thead>
 
-        <tbody>
-          {!loader && data.length === 0 && (
+    return (
+      <>
+        {!loader && data.length === 0 ? (
+          <div>No Form added yet.</div>
+        ) : (
+          <Table
+            responsive="xl"
+            className="table  table-bordered  dataTable "
+          >
+            <thead>
+              <tr>
+                <th>form title</th>
+                <th>Responses</th>
+                <th>Form Guide</th>
+                <th>assigned date</th>
+                <th>Default status</th>
+                <th width="15%">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {/* {!loader && data.length === 0 && (
             <tr>
-              <td>
+              <td colSpan={6}>
                 <p>No Form Data Available</p>
               </td>
             </tr>
-          )}
-          {!loader &&
-            data.map((item, i) => (
-              <tr key={i}>
-                <td>{item.xf ? item.xf.title : ""}</td>
-                <td>{item.responses_count}</td>
-                <td>
-                  <a onClick={() => handleEditGuide(item.em, item.id)}>
-                    <i className="la la-book" />
-                    {item.em ? item.em.title : ""}
-                  </a>
-                </td>
-                <td>
-                  <time>
-                    <i className="la la-clock-o"></i>{" "}
-                    {formatDate(new Date(item.date_created))}
-                  </time>
-                </td>
-                <td>
-                  <a
-                    href="#"
-                    className={getClass(item.default_submission_status)}
-                  >
-                    {getStatus(item.default_submission_status)}
-                  </a>
-                </td>
-                <td>
-                  {!!item.is_deployed && (
-                    <a
-                      className="flagged td-edit-btn"
-                      onClick={() =>
-                        changeDeployStatus(item.id, item.is_deployed)
-                      }
-                    >
-                      <i className="la la-close"> </i>
-                    </a>
-                  )}
-                  {!item.is_deployed && (
-                    <span>
-                      <a
-                        className="td-edit-btn approved"
-                        onClick={() =>
-                          changeDeployStatus(item.id, item.is_deployed)
-                        }
+          )} */}
+              {!loader &&
+                data.map((item, i) => (
+                  <tr key={i}>
+                    <td>{item.xf ? item.xf.title : ""}</td>
+                    <td>{item.responses_count}</td>
+                    <td>
+                      <EducationMaterialForProject
+                        formTable={formTable}
+                        item={item}
+                        editForm={handleEditGuide}
+                      />
+                    </td>
+                    <td>
+                      <time>
+                        <i className="la la-clock-o"></i>{" "}
+                        {formatDate(new Date(item.date_created))}
+                      </time>
+                    </td>
+                    <td>
+                      <span
+                        className={getClass(item.default_submission_status)}
                       >
-                        <i className="la la-rocket"> </i>
-                      </a>
-                    </span>
-                  )}
-                  <a
-                    onClick={() => handleEditForm(item)}
-                    className="pending td-edit-btn"
-                  >
-                    <i className="la la-edit"> </i>
-                  </a>
-                  {!item.is_deployed && (
-                    <span>
-                      <a
-                        className="rejected td-edit-btn"
-                        onClick={() => deleteItem(item.id, item.is_deployed)}
-                      >
-                        <i className="la la-trash"> </i>
-                      </a>
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+                        {getStatus(item.default_submission_status)}
+                      </span>
+                    </td>
+                    <td>
+                      <GetActionForProject
+                        formTable={formTable}
+                        item={item}
+                        deployAction={changeDeployStatus}
+                        isDelete={this.state.confirmDelete}
+                        handleConfirm={this.handleConfirm}
+                        handleToggle={this.handleToggle}
+                        handleCancel={this.handleCancel}
+                        editAction={handleEditForm}
+                      />
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        )}
+      </>
     );
   }
 }

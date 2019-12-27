@@ -1,6 +1,6 @@
 import React from "react";
 import Cropper from "react-cropper";
-
+import { Link } from "react-router-dom";
 import pf from "../../../static/images/pf.jpg";
 import { Button, Dropdown } from "react-bootstrap";
 import CountCard from "../../common/CountCard";
@@ -72,7 +72,10 @@ class DashboardHeader extends React.Component {
         title: "Generate Report",
         link: `/fieldsight/project-dashboard/${id}/`
       },
-      { title: "View Data", link: `/forms/project-responses/${id}/` }
+      {
+        title: "View Data",
+        link: `/fieldsight/application/#/project-responses/${id}/general/`
+      }
     ];
 
     return (
@@ -148,45 +151,49 @@ class DashboardHeader extends React.Component {
             )}
           </div>
         </div>
-        <div className="card-body">
-          <div className="header-count">
-            <a href={`/forms/project-responses/${id}/`} target="_blank">
-              <CountCard
-                countName=""
-                countNumber={totalSubmissions}
-                icon="la-copy"
-                // noSubmissionText={true}
-              />
-            </a>
-            <a
-              href={`/fieldsight/application/#/project-users/${id}/`}
-              target="_blank"
-            >
-              <CountCard
-                countName="User"
-                countNumber={totalUsers}
-                icon="la-user"
-                noSubmissionText={true}
-              />
-            </a>
-            <a
-              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
-              target="_blank"
-            >
-              <CountCard
-                countName="site"
-                countNumber={totalSites}
-                icon="la-map-marker"
-                noSubmissionText={true}
-              />
-            </a>
+        <div className="card-body dashboard-header-bottom">
+          <div className="flex-between">
+            <div className="header-count">
+              <Link to={`/project-responses/${id}/general`} target="_blank">
+                <CountCard
+                  countName=""
+                  countNumber={totalSubmissions}
+                  icon="la-copy"
+                  //noSubmissionText={true}
+                />
+              </Link>
+              <a
+                href={`/fieldsight/application/#/project-users/${id}/`}
+                target="_blank"
+              >
+                <CountCard
+                  countName="User"
+                  countNumber={totalUsers}
+                  icon="la-user"
+                  noSubmissionText={true}
+                />
+              </a>
+              <a
+                href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+                target="_blank"
+              >
+                <CountCard
+                  countName="site"
+                  countNumber={totalSites}
+                  icon="la-map-marker"
+                  noSubmissionText={true}
+                />
+              </a>
+            </div>
             {isProjectManager && (
-              <div className="add-data">
-                <a onClick={() => this.setState({ openmodel: true })}>
-                  {" "}
-                  add data <i className="la la-plus" />
-                </a>
-              </div>
+              <button
+                role="button"
+                onClick={() => this.setState({ openmodel: true })}
+                className="common-button is-border is-icon"
+              >
+                <i className="material-icons">library_add</i>
+                <span>Add data</span>
+              </button>
             )}
           </div>
           {openmodel && (

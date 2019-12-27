@@ -1,0 +1,486 @@
+.fieldsight-new {
+    .card {
+        .map-wrapper {
+            position: relative;
+            padding: 0 1rem;
+            margin: 1rem 0;
+
+            .fieldsight-popup {
+                z-index: 99;
+            }
+
+            .map {
+                z-index: 2;
+            }
+
+            .map-sidebar {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                background-color: $color-border;
+                max-width: 240px;
+                width: 100%;
+                z-index: 99;
+
+
+
+                .sidebar-wrapper {
+                    padding: .6125rem;
+
+                    .sidebar-title {
+                        align-items: center;
+                        border-bottom: 1px solid $color-bg;
+                        padding-bottom: .6125rem;
+
+                        h4 {
+                            font-size: .875rem;
+                            font-weight: 500;
+                            color: $color-blue;
+                        }
+
+                        .filters {
+                            align-items: center;
+
+                            i {
+                                @include flexvr;
+                                width: 24px;
+                                height: 24px;
+                                background-color: $color-white;
+                                @include radius4;
+                                color: $color-blue;
+                                cursor: pointer;
+
+                                &:first-child {
+                                    margin-right: .5rem;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                form {
+                    .form-group {
+                        .input-group {
+                            input.form-control {
+                                padding-left: .6125rem;
+                                border: 0;
+                            }
+
+                            .input-group-append {
+                                margin: 0;
+                                position: relative;
+                                cursor: pointer;
+                                .input-group-text {
+                                    background-color: $color-white;
+                                    border: 0;
+                                    border-left: 1px solid $color-bg;
+                                }
+                                ul{
+                                    position: absolute;
+                                    right:0;
+                                    left:auto;
+                                    min-width: 130px;
+                                    background-color: $color-white;
+                                    opacity: 0;
+                                    visibility: hidden;
+                                    @include transition(all .5s ease-in-out);
+                                    @include box-shadow(0 2px 6px rgba($color-primary,.20));
+                                    top:130%;
+                                    li{
+                                        a{
+                                            display: block;
+                                            padding:.25rem .5rem;
+                                            font-size:.75rem;
+                                            color:$primary-light;
+                                            &:hover{
+                                                background-color: $color-border;
+                                            }
+                                        }
+                                        &:not(:last-child){
+                                            border-bottom: 1px solid $color-border;
+                                        }
+                                    }
+                                }
+                                &.open{
+                                    ul{
+                                        top:100%;
+                                        opacity: 1;
+                                        visibility: visible;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .map-accordion {
+                        .card {
+                            box-shadow: none;
+                            background-color: transparent;
+                            border-bottom: 1px solid rgba($color-blue, .2);
+                            border-radius: 0;
+
+                            .card-header {
+                                background-color: transparent;
+                                padding: .5rem 0;
+
+                                .btn-link,
+                                .card-link {
+                                    font-size: .875rem;
+                                    font-weight: 500;
+                                    color: $color-blue;
+                                    position: relative;
+                                    display: block;
+                                    text-decoration: none;
+                                    text-transform: capitalize;
+
+                                    &:after {
+                                        content: "\f110";
+                                        /* fa-chevron-down */
+                                        font-family: 'LineAwesome';
+                                        position: absolute;
+                                        right: 0;
+                                    }
+
+                                    ;
+                                }
+
+                                .btn-link,
+                                .card-link[aria-expanded="true"]:after {
+                                    content: "\f113";
+                                    /* fa-chevron-up */
+                                }
+                            }
+
+                            .card-body {
+                                background-color: $color-white;
+                                padding: .6125rem;
+
+                                .sidebar-list {
+                                    .form-group {
+                                        margin: 0;
+
+                                        .checkbox {
+                                            margin: 0;
+                                            border-bottom: 1px solid $color-bg;
+                                            padding: .5rem 0;
+
+                                            label {
+                                                font-size: .775rem;
+                                                color: rgba($color-primary, .7);
+                                            }
+                                        }
+
+                                        &:last-child {
+                                            .checkbox {
+                                                border: 0;
+                                                padding-bottom: 0;
+                                            }
+                                        }
+
+                                        &:first-child {
+                                            .checkbox {
+                                                padding-top: 0;
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+                    .select-group {
+                        margin-bottom: .6125rem;
+
+                        label {
+                            font-weight: 500;
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+
+                .thumb-list {
+                    ul {
+                        li {
+                            align-items: center;
+                            cursor: pointer;
+
+                            figure {
+                                @include radius4;
+                                background-size: cover;
+                                flex: 0 0 40px;
+                                height: 40px;
+                                max-width: 40px;
+                                margin-right: .6125rem;
+
+                            }
+
+                            .content {
+                                h6 {
+                                    margin: 0;
+                                    font-size: .775rem;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .buttons {
+                    padding-top: .6125rem;
+                    position: absolute;
+                    bottom: 0;
+                    left: 10px;
+                    right: 10px;
+                    background-color: $color-border;
+                    margin-top: 1.5rem;
+
+                    button.fieldsight-btn {
+                        flex: 0 0 47%;
+                        max-width: 47%;
+                        text-transform: uppercase;
+                    }
+                }
+
+                &.left-map-sidebar {
+                    left: 1rem;
+                }
+
+                &.right-map-sidebar {
+                    left: auto;
+                    right: 0;
+                    background-color: transparent;
+
+                    .sidebar-widget {
+                        background-color: $color-border;
+
+                        .widget-title {
+                            font-size: .875rem;
+                            font-weight: 500;
+                            color: $color-blue;
+                            text-transform: capitalize;
+                            padding: .6125rem .6125rem 0 .6125rem;
+                        }
+
+                        .widget-body {
+                            background-color: $color-white;
+                            padding: .6125rem;
+                        }
+
+
+                    }
+
+                    .sidebar-wrapper {
+                        padding: 0;
+                    }
+                }
+
+                .layer-content {
+                    background-color: $color-white;
+                    padding: .6125rem;
+
+                    .layers-list {
+                        display: none;
+
+                        &.display-list {
+                            display: block;
+                        }
+                    }
+                }
+            }
+
+            .map-tool {
+                position: absolute;
+                left: 270px;
+                width: 34px;
+                @include flexvr;
+                z-index: 99;
+                background-color: $color-white;
+
+                a {
+                    display: block;
+                    width: 100%;
+                    height: 34px;
+                    @include flexvr;
+                    color: $color-blue;
+                    border-bottom: 1px solid $color-bg;
+                    font-size: 1rem;
+                    font-weight: 500;
+                    position: relative;
+                    @include transition(all .3s ease-in-out);
+
+                    ul {
+                        position: absolute;
+                        top: 100%;
+                        left: 100%;
+                        right: auto;
+                        background-color: $color-white;
+                        min-width: 80px;
+                        opacity: 0;
+                        visibility: hidden;
+                        @include transition(all .5s ease-in-out);
+
+                        li {
+                            display: block;
+                            padding: .25rem .5rem;
+                            font-size: .75rem;
+                            color: $primary-light;
+                            @include transition(all .3s ease-in-out);
+
+                            &:not(:last-child) {
+                                border-bottom: 1px solid $color-bg;
+                            }
+
+                            &:hover {
+                                background-color: $color-bg;
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        background-color: $color-bg;
+
+                        ul {
+                            opacity: 1;
+                            visibility: visible;
+                            top: 0;
+                        }
+                    }
+                }
+
+                &.top {
+                    top: 0;
+                }
+            }
+        }
+    }
+
+    .map-filter-data {
+        .filter-data {
+            .classes {
+                .form-group {
+                    &.inline-form-group {
+                        .form-control {
+                            border: 1px solid $primary-light-1;
+                            height: calc(1.8rem + 2px);
+                            padding: .375rem 1.75rem .375rem .75rem;
+                        }
+                    }
+                }
+            }
+            .filter-content{
+                display: none;
+            }
+        }
+
+    }
+
+    .filter-list {
+        h6 {
+            font-size: .875rem;
+            text-transform: capitalize;
+        }
+        .filter-list-title{
+            align-items: center;
+        }
+        .form-group {
+            margin: 0;
+        }
+
+        li {
+            @include flexBetween;
+            font-size: .875rem;
+            border-bottom: 1px solid $color-bg;
+            padding: .6125rem;
+
+            .form-group {
+                flex: 0 0 50%;
+                max-width: 50%;
+
+                .custom-checkbox {
+                    margin: 0;
+
+                    .checkbox {
+                        margin: 0;
+
+                        label {
+                            color: $color-primary;
+                            font-size: .875rem;
+                        }
+                    }
+                }
+            }
+
+            span {
+                &.site-info {
+                    flex: 0 0 50%;
+                    max-width: 50%;
+                }
+
+                &.filter-type,
+                &.layer-style {
+                    padding: 0 1rem;
+                    @include flexStart;
+                    align-items: flex-start;
+                    flex: 0 0 40%;
+                    max-width: 40%;
+                    align-items: center;
+
+                    small {
+                        display: inline-block;
+                        width: 2rem;
+                        height: 1rem;
+                        background-color: $color-blue;
+                        margin-right: .6125rem;
+                    }
+
+                    input {
+                        &.layer-shape {
+                            display: inline-block;
+                            width: 2rem;
+                            height: 1rem;
+                            border: none;
+                            cursor: pointer;
+                            margin-right: .5rem;
+                            position: relative;
+                            padding: 0;
+                            background-color: transparent;
+                            font-size: .75rem;
+                        }
+                    }
+
+                    a {
+                        color: $color-blue;
+                    }
+                }
+            }
+
+            a {
+                &.action {
+                    flex: 0 0 10%;
+                    max-width: 10%;
+
+                    i {
+                        color: $color-red;
+                    }
+                }
+
+            }
+
+            &:first-child {
+                padding-top: 0;
+            }
+
+            &:last-child {
+                border-bottom: 0;
+                padding-bottom: 0;
+            }
+        }
+
+    }
+
+    .layer-form {
+        display: none;
+    }
+
+}
