@@ -343,7 +343,7 @@ class ProjectDashboard extends React.Component {
                                       this.props.paginationHandler(
                                         this.props.pageNum - 1,
                                         null,
-                                        project_id
+                                        projectId
                                       )
                                     }
                                   >
@@ -353,7 +353,7 @@ class ProjectDashboard extends React.Component {
 
                                 {this.props.renderPageNumbers({
                                   type: "projectSiteList",
-                                  projectId: project_id
+                                  projectId: projectId
                                 })}
 
                                 <li className="page-item ">
@@ -362,7 +362,7 @@ class ProjectDashboard extends React.Component {
                                       this.props.paginationHandler(
                                         this.props.pageNum + 1,
                                         null,
-                                        project_id
+                                        projectId
                                       )
                                     }
                                   >
@@ -475,14 +475,11 @@ const mapStateToProps = ({ projectDashboard }) => ({
   projectDashboard
 });
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getProjectDashboard,
-      getRegionData,
-      getProgressTableData,
-      getSurveyForm
-    }
-  ),
+  connect(mapStateToProps, {
+    getProjectDashboard,
+    getRegionData,
+    getProgressTableData,
+    getSurveyForm
+  }),
   withPagination
 )(ProjectDashboard);
