@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import CustomSelect from '../CustomSelect';
-import CustomMultiSelect from '../CustomMultiSelect';
+// import CustomMultiSelect from '../CustomMultiSelect';
 /* eslint-disable */
 
 export default class FormInformation extends PureComponent {
   render() {
     const {
       toggleSelectClass,
-      handleCheck,
+      handleFormTypeCheck,
       handleToggleClass,
-      checkboxOption,
-      selectedArr,
+      formTypes,
+      selectedFormType,
     } = this.props;
 
     return (
@@ -24,10 +24,20 @@ export default class FormInformation extends PureComponent {
               <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">Forms type</label>
-                  <CustomSelect label="select forms type" />
+                  <CustomSelect
+                    toggleSelectClass={toggleSelectClass}
+                    handleToggleClass={handleToggleClass}
+                    name={formTypes.filter(
+                      each => each.code === selectedFormType,
+                    )}
+                    options={formTypes}
+                    value={selectedFormType}
+                    handleSelect={handleFormTypeCheck}
+                  />
+                  {/* <CustomSelect label="select forms type" /> */}
                 </div>
               </div>
-              <div className="col-lg-6" />
+              {/* <div className="col-lg-6" />
               <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">Forms</label>
@@ -54,27 +64,27 @@ export default class FormInformation extends PureComponent {
                 >
                   Add
                 </button>
-              </div>
+              </div> */}
 
-              <div className="col-lg-6">
+              {/* <div className="col-lg-6">
                 <div className="form-group">
-                  <label className="mb-2">Questions</label>
-                  <CustomMultiSelect
+                  <label className="mb-2">Questions</label> */}
+              {/* <CustomMultiSelect
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={handleToggleClass}
                     checkboxOption={checkboxOption}
                     handleCheck={handleCheck}
                     selectedArr={selectedArr}
                     placeholderTxt="Select"
-                  />
-                </div>
+                  /> */}
+              {/* </div>
                 <button
                   role="button"
                   className="common-button is-border"
                 >
                   Add
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

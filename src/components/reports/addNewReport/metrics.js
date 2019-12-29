@@ -4,7 +4,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import CustomCheckBox from '../CustomCheckbox';
 import UserRole from './userRole';
 import SiteInformation from './siteInformation';
-// import FormInformation from './formInformation';
+import FormInformation from './formInformation';
 /* eslint-disable */
 
 export default class Metrics extends Component {
@@ -14,6 +14,7 @@ export default class Metrics extends Component {
       metrics: props.data,
       users: props.users,
       toggleSelectClass: false,
+      toggleFormClass: false,
     };
   }
 
@@ -40,12 +41,23 @@ export default class Metrics extends Component {
     }));
   };
 
+  handleFormToggle = () => {
+    this.setState(({ toggleFormClass }) => ({
+      toggleFormClass: !toggleFormClass,
+    }));
+  };
+
   onChangeHandler = () => {
     // console.log('search');
   };
 
   render() {
-    const { metrics, users, toggleSelectClass } = this.state;
+    const {
+      metrics,
+      users,
+      toggleSelectClass,
+      toggleFormClass,
+    } = this.state;
     const {
       submissions,
       submissionType,
@@ -55,8 +67,11 @@ export default class Metrics extends Component {
       metaAttributes,
       selectedMetas,
       handleSelectMeta,
+      formTypes,
+      selectedFormType,
+      handleFormTypeCheck,
     } = this.props;
-    // console.log('metrics', siteInfo);
+    // console.log('metrics', formTypes, '-----', selectedFormType);
 
     return (
       <div className="col-lg-7 col-md-7">
@@ -149,11 +164,12 @@ export default class Metrics extends Component {
           handleSelectMeta={handleSelectMeta}
         />
         {/* <FormInformation
-          toggleSelectClass={toggleSelectClass}
-          handleToggleClass={handleToggleClass}
-          checkboxOption={checkboxOption}
-          handleCheck={handleCheck}
-          selectedArr={selectedArr}
+          toggleSelectClass={toggleFormClass}
+          handleToggleClass={this.handleFormToggle}
+          formTypes={formTypes}
+          selectedFormType={selectedFormType}
+          handleFormTypeCheck={handleFormTypeCheck}
+          // selectedArr={[]}
         /> */}
       </div>
     );

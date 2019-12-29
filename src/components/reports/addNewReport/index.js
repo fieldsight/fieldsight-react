@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getMetricsData } from '../../../actions/reportActions';
+import {
+  getMetricsData,
+  getForms,
+  getFormValues,
+  getFormQuestions,
+  getFormSubmissionCount,
+} from '../../../actions/reportActions';
 import InputElement from '../../common/InputElement';
 import CustomSelect from '../CustomSelect';
 // import CustomMultiSelect from '../CustomMultiSelect';
@@ -17,6 +23,7 @@ class AddNewReport extends Component {
         reportName: '',
         desc: '',
         selectedReportType: '',
+        selectedFormType: '',
         selectedMetrics: [],
       },
       reportType: [],
@@ -35,6 +42,11 @@ class AddNewReport extends Component {
       selectedMetas: [],
       siteValues: [],
       selectedValue: [],
+      formTypes: [],
+      forms: [],
+      formValues: [],
+      formQuestions: [],
+      formSubmissionCounts: [],
     };
   }
 
@@ -42,35 +54,67 @@ class AddNewReport extends Component {
     this.props.getMetricsData('137');
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.reportReducer !== this.props.reportReducer) {
       this.setState({
         reportType: this.props.reportReducer.reportTypes,
         metrics: this.props.reportReducer.metrics,
         metaAttributes: this.props.reportReducer.metaAttributes,
+        formTypes: this.props.reportReducer.formTypes,
       });
-    }
-    if (
-      prevState.selectedMetas !== this.state.selectedMetas ||
-      prevState.selectedValue !== this.state.selectedValue
-    ) {
-      this.handleAddValue();
-      // this.setState({});
     }
   }
 
   handleAddValue = () => {
-    const { selectedMetas, selectedValue } = this.state;
+    const {
+      selectedMetas,
+      selectedValue,
+      data: { selectedMetrics },
+    } = this.state;
     const newArr = [];
-    if (selectedMetas.length > 0 && selectedValue.length > 0) {
-      selectedMetas.map(meta => {
-        selectedValue.map(value => {
-          newArr.push({ ...meta, value });
+    let filteredMetrics = [];
+
+    this.setState(state => {
+      if (
+        selectedMetas.length > 0 &&
+        selectedValue &&
+        selectedValue.length > 0
+      ) {
+        selectedMetas.map(meta => {
+          selectedValue.map(value => {
+            newArr.push({ ...meta, value });
+          });
         });
-      });
-    }
-    this.setState({
-      data: { ...this.state.data, selectedMetrics: newArr },
+        filteredMetrics = selectedMetrics.filter(i => !i.value);
+
+        const arr = [...filteredMetrics, ...newArr];
+        return {
+          data: {
+            ...state.data,
+            selectedMetrics: arr,
+          },
+        };
+      }
+
+      if (selectedValue && selectedValue.length === 0) {
+        filteredMetrics = selectedMetrics.filter(s => !s.value);
+        return {
+          data: {
+            ...state.data,
+            selectedMetrics: filteredMetrics,
+          },
+        };
+      }
+      if (selectedMetas && selectedMetas.length === 0) {
+        filteredMetrics = selectedMetrics.filter(s => !s.value);
+        return {
+          data: {
+            ...state.data,
+            selectedMetrics: filteredMetrics,
+          },
+          selectedValue: [],
+        };
+      }
     });
   };
 
@@ -133,6 +177,17 @@ class AddNewReport extends Component {
       }
       return null;
     });
+  };
+
+  handleFormTypeChange = e => {
+    const { value } = e.target;
+
+    this.setState(state => ({
+      data: {
+        ...state.data,
+        selectedFormType: value,
+      },
+    }));
   };
 
   handleReportTypeChange = e => {
@@ -220,20 +275,53 @@ class AddNewReport extends Component {
   handleChangeArray = item => {
     this.setState(state => {
       const list = state.data.selectedMetrics;
-      const filteredArr = list.filter(li => {
-        if (item.value && li.value.code !== item.value.code) {
-          return true;
+      const filteredArr = list.filter(metric => {
+        if (metric.code && metric.value) {
+          if (metric.code === item.code) {
+            if (metric.value.code !== item.value.code) {
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            return true;
+          }
         }
-        if (!item.value && li.code !== item.code) {
-          return true;
+        if (metric.code && !metric.value) {
+          if (metric.code !== item.code) {
+            return true;
+          } else {
+            return false;
+          }
         }
       });
+
+      const metaList = [];
+      filteredArr.map(f => {
+        if (f.value) {
+          metaList.push(f.code);
+        }
+      });
+      const filteredSelectedMetas = state.selectedMetas.filter(m =>
+        metaList.includes(m.code),
+      );
+
+      const filteredMetaArr = state.selectedValue.filter(v => {
+        return filteredArr.map(f => {
+          if (f.value) {
+            if (f.value.code === v.code) {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        });
+      });
+      // debugger;
       const filteredUserArr = state.userList.filter(
         u => u.code !== item.code,
       );
-      const filteredMetaArr =
-        item.value &&
-        state.selectedValue.filter(m => m.code !== item.value.code);
+
       const filteredSubmissionArr = state.submissions.filter(
         s => s.code !== item.code,
       );
@@ -245,11 +333,12 @@ class AddNewReport extends Component {
         },
         userList: filteredUserArr,
         submissions: filteredSubmissionArr,
+        selectedMetas: filteredSelectedMetas,
         selectedValue: filteredMetaArr,
-        selectedMetas:
-          filteredMetaArr.length === 0
-            ? []
-            : this.state.selectedMetas,
+        siteValues:
+          filteredSelectedMetas.length > 0
+            ? this.state.siteValues
+            : [],
       };
     });
   };
@@ -264,39 +353,26 @@ class AddNewReport extends Component {
   };
 
   handleMetaCheck = (e, meta) => {
-    const { data, selectedMetas } = this.state;
+    const { selectedMetas } = this.state;
     const { name, checked } = e.target;
     this.setState(
       state => {
         if (checked) {
-          const newList = data.selectedMetrics.filter(
-            i => i.code !== name,
-          );
           return {
             selectedMetas: [...state.selectedMetas, meta],
-            // data: {
-            //   ...state.data,
-            //   selectedMetrics: [...newList, meta],
-            // },
           };
         }
         if (!checked) {
-          // const newList = data.selectedMetrics.filter(
-          //   i => i.code !== name,
-          // );
           const filterMetas = selectedMetas.filter(
             type => type.code !== name,
           );
           return {
             selectedMetas: filterMetas,
-            // data: {
-            //   ...state.data,
-            //   selectedMetrics: newList,
-            // },
           };
         }
       },
       () => {
+        this.handleAddValue();
         const { selectedMetas } = this.state;
         const arr = [];
         selectedMetas.map(each => {
@@ -379,21 +455,30 @@ class AddNewReport extends Component {
   handleValueCheck = (e, item) => {
     const { checked } = e.target;
     const { selectedValue } = this.state;
-    this.setState(state => {
-      if (checked) {
-        return {
-          selectedValue: [...state.selectedValue, item],
-        };
-      }
-      if (!checked) {
-        const newMetasArr = selectedValue.filter(
-          s => s.code !== item.code,
-        );
-        return {
-          selectedValue: newMetasArr,
-        };
-      }
-    });
+    this.setState(
+      state => {
+        if (checked) {
+          return {
+            selectedValue: [...state.selectedValue, item],
+          };
+        }
+        if (!checked) {
+          const newMetasArr = selectedValue.filter(
+            s => s.code !== item.code,
+          );
+          return {
+            selectedValue: newMetasArr,
+          };
+        }
+      },
+      () => {
+        this.handleAddValue();
+      },
+    );
+  };
+
+  handleSelectChange = data => {
+    console.log('object', data);
   };
 
   render() {
@@ -404,6 +489,7 @@ class AddNewReport extends Component {
           desc,
           selectedReportType,
           selectedMetrics,
+          selectedFormType,
         },
         reportType,
         metricArr,
@@ -415,6 +501,7 @@ class AddNewReport extends Component {
         metaAttributes,
         selectedMetas,
         siteValues,
+        formTypes,
       },
       props: {
         reportReducer: { reportLoader },
@@ -426,6 +513,7 @@ class AddNewReport extends Component {
     //   'state value',
     //   siteInfoArr,
     // );
+    // console.log('index', selectedMetrics, '-----');
 
     return (
       <div className="reports mrb-30">
@@ -523,6 +611,9 @@ class AddNewReport extends Component {
                     }
                     handleCheckUser={this.handleChecKUser}
                     selectedMetrics={selectedMetrics}
+                    formTypes={formTypes}
+                    selectedFormType={selectedFormType}
+                    handleFormTypeCheck={this.handleFormTypeChange}
                   />
                   <SelectedColumn
                     selected={selectedMetrics}
@@ -552,4 +643,8 @@ const mapStateToProps = ({ reportReducer }) => ({
 
 export default connect(mapStateToProps, {
   getMetricsData,
+  getForms,
+  getFormValues,
+  getFormQuestions,
+  getFormSubmissionCount,
 })(AddNewReport);
