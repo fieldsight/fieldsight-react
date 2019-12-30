@@ -18,7 +18,7 @@ export default class SiteInformation extends Component {
   };
 
   render() {
-    const { toggleValueClass } = this.state;
+    // const { toggleValueClass } = this.state;
     const {
       toggleSelectClass,
       handleToggleClass,
@@ -42,7 +42,10 @@ export default class SiteInformation extends Component {
                   <label className="mb-2">site information</label>
                   <CustomMultiSelect
                     toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={handleToggleClass}
+                    handleToggleClass={() => {
+                      handleToggleClass('siteType');
+                    }}
+                    toggleType="siteType"
                     checkboxOption={metaAttributes}
                     handleCheck={handleSelectMeta}
                     selectedArr={selectedMetas}
@@ -56,11 +59,13 @@ export default class SiteInformation extends Component {
                   <div className="common-select">
                     <div
                       className={
-                        toggleValueClass
+                        toggleSelectClass['siteValue']
                           ? 'select-wrapper select-toggle'
                           : 'select-wrapper'
                       }
-                      onClick={this.handleToggleValueClass}
+                      onClick={() => {
+                        handleToggleClass('siteValue');
+                      }}
                     >
                       <span className="select-item">Form Values</span>
                       <ul>

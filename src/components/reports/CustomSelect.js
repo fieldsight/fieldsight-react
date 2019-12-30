@@ -10,6 +10,7 @@ export default class CustomSelect extends PureComponent {
       options,
       value,
       handleSelect,
+      toggleType,
     } = this.props;
     // console.log('in form comp', options, name, value);
     const label =
@@ -18,6 +19,8 @@ export default class CustomSelect extends PureComponent {
           ? name[0].name
           : name[0].label
           ? name[0].label
+          : name[0].title
+          ? name[0].title
           : ''
         : '';
 
@@ -25,7 +28,7 @@ export default class CustomSelect extends PureComponent {
       <div className="common-select">
         <div
           className={
-            toggleSelectClass
+            toggleSelectClass[toggleType]
               ? 'select-wrapper select-toggle'
               : 'select-wrapper'
           }
@@ -54,9 +57,19 @@ export default class CustomSelect extends PureComponent {
                         : ''
                       : ''
                   }
-                  onClick={handleSelect}
-                  onKeyDown={handleSelect}
-                  value={option.id}
+                  onClick={e => {
+                    handleSelect(e, option);
+                  }}
+                  onKeyDown={e => {
+                    handleSelect(e, option);
+                  }}
+                  value={
+                    option.id
+                      ? option.id
+                      : option.code
+                      ? option.code
+                      : ''
+                  }
                   // role="button"
                   // tabIndex="0"
                 >
@@ -64,6 +77,8 @@ export default class CustomSelect extends PureComponent {
                     ? option.name
                     : option.label
                     ? option.label
+                    : option.title
+                    ? option.title
                     : ''}
                 </li>
               ))}

@@ -13,8 +13,6 @@ export default class Metrics extends Component {
     this.state = {
       metrics: props.data,
       users: props.users,
-      toggleSelectClass: false,
-      toggleFormClass: false,
     };
   }
 
@@ -35,18 +33,6 @@ export default class Metrics extends Component {
     this.setState(({ isActive }) => ({ isActive: !isActive }));
   };
 
-  handleToggleClass = () => {
-    this.setState(({ toggleSelectClass }) => ({
-      toggleSelectClass: !toggleSelectClass,
-    }));
-  };
-
-  handleFormToggle = () => {
-    this.setState(({ toggleFormClass }) => ({
-      toggleFormClass: !toggleFormClass,
-    }));
-  };
-
   onChangeHandler = () => {
     // console.log('search');
   };
@@ -55,8 +41,8 @@ export default class Metrics extends Component {
     const {
       metrics,
       users,
-      toggleSelectClass,
-      toggleFormClass,
+      // toggleSelectClass,
+      // toggleFormClass,
     } = this.state;
     const {
       submissions,
@@ -70,6 +56,14 @@ export default class Metrics extends Component {
       formTypes,
       selectedFormType,
       handleFormTypeCheck,
+      formTypeArr,
+      toggleSelectClass,
+      handleToggleClass,
+      selectedForm,
+      formQuestions,
+      individualFormArr,
+      selectedIndividualForm,
+      handleIndividualFormSelected,
     } = this.props;
     // console.log('metrics', formTypes, '-----', selectedFormType);
 
@@ -156,21 +150,27 @@ export default class Metrics extends Component {
         </div>
         <SiteInformation
           toggleSelectClass={toggleSelectClass}
-          handleToggleClass={this.handleToggleClass}
+          handleToggleClass={handleToggleClass}
           siteValues={siteValues}
           selectedMetrics={selectedMetrics}
           metaAttributes={metaAttributes}
           selectedMetas={selectedMetas}
           handleSelectMeta={handleSelectMeta}
         />
-        {/* <FormInformation
-          toggleSelectClass={toggleFormClass}
-          handleToggleClass={this.handleFormToggle}
+        <FormInformation
+          toggleSelectClass={toggleSelectClass}
+          handleToggleClass={handleToggleClass}
           formTypes={formTypes}
           selectedFormType={selectedFormType}
           handleFormTypeCheck={handleFormTypeCheck}
-          // selectedArr={[]}
-        /> */}
+          formTypeArr={formTypeArr}
+          selectedForm={selectedForm}
+          handleFormSelected={this.props.handleFormSelected}
+          formQuestions={formQuestions}
+          individualFormArr={individualFormArr}
+          selectedIndividualForm={selectedIndividualForm}
+          handleIndividualFormSelected={handleIndividualFormSelected}
+        />
       </div>
     );
   }

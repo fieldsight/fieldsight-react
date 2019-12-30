@@ -1,9 +1,7 @@
 import {
   GET_METRICS_DATA,
   GET_FORM,
-  GET_FORM_VALUES,
   GET_FORM_QUESTIONS,
-  GET_FORM_SUBMISSION_COUNT,
 } from '../actions/types';
 
 const initialState = {
@@ -13,9 +11,7 @@ const initialState = {
   reportLoader: true,
   formTypes: [],
   forms: [],
-  formValues: [],
   formQuestions: [],
-  formSubmissionCounts: [],
 };
 
 export default function(state = initialState, action) {
@@ -29,17 +25,10 @@ export default function(state = initialState, action) {
         formTypes: action.payload.form_types,
         reportLoader: false,
       };
-
     case GET_FORM:
       return {
         ...state,
         forms: action.payload,
-        reportLoader: false,
-      };
-    case GET_FORM_VALUES:
-      return {
-        ...state,
-        formValues: action.payload,
         reportLoader: false,
       };
     case GET_FORM_QUESTIONS:
@@ -48,12 +37,7 @@ export default function(state = initialState, action) {
         formQuestions: action.payload,
         reportLoader: false,
       };
-    case GET_FORM_SUBMISSION_COUNT:
-      return {
-        ...state,
-        formSubmissionCounts: action.payload,
-        reportLoader: false,
-      };
+
     default:
       return state;
   }

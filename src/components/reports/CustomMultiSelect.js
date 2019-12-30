@@ -9,6 +9,7 @@ export default class CustomMultiSelect extends PureComponent {
     const {
       toggleSelectClass,
       handleToggleClass,
+      toggleType,
       checkboxOption,
       handleCheck,
       selectedArr,
@@ -19,7 +20,7 @@ export default class CustomMultiSelect extends PureComponent {
       <div className="common-select">
         <div
           className={
-            toggleSelectClass
+            toggleSelectClass[toggleType]
               ? 'select-wrapper select-toggle'
               : 'select-wrapper'
           }
@@ -38,18 +39,34 @@ export default class CustomMultiSelect extends PureComponent {
             {checkboxOption.length > 0 &&
               checkboxOption.map(option => {
                 const filterList = selectedArr.filter(
-                  i => i.code === option.code,
+                  i => i.code && i.code === option.code,
                 );
                 const isChecked =
                   filterList && filterList[0] ? true : false;
+                const id = option.code
+                  ? option.code
+                  : option.id
+                  ? option.id
+                  : '';
+                const name = option.code
+                  ? option.code
+                  : option.name
+                  ? option.name
+                  : '';
                 return (
-                  <li key={`option_${option.code}`}>
+                  <li
+                    key={`option_${
+                      option.code
+                        ? option.code
+                        : option.id && option.id
+                    }`}
+                  >
                     <div className="custom-control custom-checkbox">
                       <input
                         type="checkbox"
                         className="custom-control-input"
-                        id={option.code}
-                        name={option.code}
+                        id={id}
+                        name={name}
                         checked={isChecked}
                         onChange={e => {
                           handleCheck(e, option);
@@ -57,10 +74,10 @@ export default class CustomMultiSelect extends PureComponent {
                       />
                       <label
                         className="custom-control-label"
-                        htmlFor={option.code}
+                        htmlFor={id}
                         style={{ paddingLeft: '2em' }}
                       >
-                        {option.label}
+                        {option.label ? option.label : option.name}
                       </label>
                     </div>
                     {/* <CustomCheckBox

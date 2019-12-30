@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Axios from 'axios';
 import {
   getMetricsData,
   getForms,
-  getFormValues,
   getFormQuestions,
-  getFormSubmissionCount,
 } from '../../../actions/reportActions';
 import InputElement from '../../common/InputElement';
 import CustomSelect from '../CustomSelect';
@@ -15,6 +14,20 @@ import Metrics from './metrics';
 import SelectedColumn from './selectedColumn';
 /* eslint-disable */
 
+const GetType = type => {
+  if (type === 0) {
+    return 'general';
+  }
+  if (type === 1) {
+    return 'scheduled';
+  }
+  if (type === 2) {
+    return 'stage';
+  }
+  if (type === 3) {
+    return 'survey';
+  }
+};
 class AddNewReport extends Component {
   constructor(props) {
     super(props);
@@ -23,16 +36,30 @@ class AddNewReport extends Component {
         reportName: '',
         desc: '',
         selectedReportType: '',
-        selectedFormType: '',
         selectedMetrics: [],
+        formInfo: {
+          selectedFormType: '',
+          selectedForm: '',
+          selectedIndividualForm: '',
+        },
       },
       reportType: [],
       metrics: [],
       metricArr: [],
       siteInfoArr: [],
       formInfoArr: [],
+      formTypeArr: [],
       usersArr: [],
-      toggleSelectClass: false,
+      individualFormArr: [],
+      toggleSelectClass: {
+        reportType: false,
+        siteType: false,
+        siteValue: false,
+        formType: false,
+        formValue: false,
+        formQuestSelect: false,
+        submissionCount: false,
+      },
       collapseClass: false,
       // loader: false,
       submissionType: {},
@@ -43,8 +70,8 @@ class AddNewReport extends Component {
       siteValues: [],
       selectedValue: [],
       formTypes: [],
-      forms: [],
       formValues: [],
+      selectedFormValue: '',
       formQuestions: [],
       formSubmissionCounts: [],
     };
@@ -55,12 +82,51 @@ class AddNewReport extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.reportReducer !== this.props.reportReducer) {
+    if (
+      prevProps.reportReducer.reportTypes !==
+      this.props.reportReducer.reportTypes
+    ) {
       this.setState({
         reportType: this.props.reportReducer.reportTypes,
-        metrics: this.props.reportReducer.metrics,
+      });
+    }
+    if (
+      prevProps.reportReducer.metrics !==
+      this.props.reportReducer.metrics
+    ) {
+      this.setState({ metrics: this.props.reportReducer.metrics });
+    }
+    if (
+      prevProps.reportReducer.metaAttributes !==
+      this.props.reportReducer.metaAttributes
+    ) {
+      this.setState({
         metaAttributes: this.props.reportReducer.metaAttributes,
-        formTypes: this.props.reportReducer.formTypes,
+      });
+    }
+    if (
+      prevProps.reportReducer.formTypes !==
+      this.props.reportReducer.formTypes
+    ) {
+      const forms = this.props.reportReducer.formTypes;
+      const newFormArr = [];
+      for (let i = 0; i < forms.length; i += 1) {
+        newFormArr.push({ id: i, ...forms[i] });
+      }
+      this.setState({ formTypes: newFormArr });
+    }
+
+    if (
+      prevProps.reportReducer.forms !== this.props.reportReducer.forms
+    ) {
+      this.setState({ formTypeArr: this.props.reportReducer.forms });
+    }
+    if (
+      prevProps.reportReducer.formQuestions !==
+      this.props.reportReducer.formQuestions
+    ) {
+      this.setState({
+        formQuestions: this.props.reportReducer.formQuestions,
       });
     }
   }
@@ -129,10 +195,13 @@ class AddNewReport extends Component {
     }));
   };
 
-  handleToggleClass = () => {
-    this.setState(({ toggleSelectClass }) => ({
-      toggleSelectClass: !toggleSelectClass,
-    }));
+  handleToggleClass = toggleFor => {
+    this.setState({
+      toggleSelectClass: {
+        ...this.state.toggleSelectClass,
+        [toggleFor]: !this.state.toggleSelectClass[toggleFor],
+      },
+    });
   };
 
   handleToggleCollapse = () => {
@@ -179,19 +248,9 @@ class AddNewReport extends Component {
     });
   };
 
-  handleFormTypeChange = e => {
-    const { value } = e.target;
-
-    this.setState(state => ({
-      data: {
-        ...state.data,
-        selectedFormType: value,
-      },
-    }));
-  };
-
   handleReportTypeChange = e => {
     const { value } = e.target;
+
     this.setState(
       state => ({
         data: {
@@ -224,6 +283,9 @@ class AddNewReport extends Component {
           ),
           usersArr: metricsArr.filter(
             item => item.category === 'users',
+          ),
+          individualFormArr: metricsArr.filter(
+            item => item.category === 'individual_form',
           ),
         });
       },
@@ -477,8 +539,102 @@ class AddNewReport extends Component {
     );
   };
 
+  handleFormTypeChange = (e, item) => {
+    // const { value } = e.target;
+    this.setState(
+      state => ({
+        data: {
+          ...state.data,
+          formInfo: {
+            ...state.data.formInfo,
+            selectedFormType: item,
+          },
+        },
+      }),
+      () => {
+        const {
+          selectedFormType: { code },
+        } = this.state.data.formInfo;
+
+        this.props.getForms('137', code);
+      },
+    );
+  };
+
+  handleFormSelected = (e, item) => {
+    // const { value } = e.target;
+    this.setState(
+      state => ({
+        data: {
+          ...state.data,
+          formInfo: {
+            ...state.data.formInfo,
+            selectedForm: item,
+          },
+        },
+      }),
+      () => {
+        const {
+          selectedForm: { id },
+        } = this.state.data.formInfo;
+        this.props.getFormQuestions('137', id);
+      },
+    );
+  };
+
+  handleIndividualFormSelected = (e, item) => {
+    const { value } = e.target;
+    this.setState(
+      state => ({
+        data: {
+          ...state.data,
+          formInfo: {
+            ...state.data.formInfo,
+            selectedIndividualForm: item,
+          },
+        },
+      }),
+      () => {
+        // console.log('object', this.state.data.formInfo);
+        // this.props.getFormQuestions('137', this.state.data.formInfo.selectedForm);
+      },
+    );
+  };
+
+  handleFormValueSelected = e => {
+    const { value } = e.target;
+    this.setState({
+      selectedFormValue: JSON.parse(value),
+    });
+  };
+
   handleSelectChange = data => {
-    console.log('object', data);
+    this.setState(state => ({
+      data: {
+        ...state.data,
+        selectedMetrics: data,
+      },
+    }));
+  };
+
+  handleSubmitReport = () => {
+    const { data } = this.state;
+    const body = {
+      type: data.selectedReportType,
+      description: data.desc,
+      title: data.reportName,
+      attributes: data.selectedMetrics,
+    };
+    Axios.post(`/v4/api/reporting/add-report/137/`, body)
+      .then(res => {
+        if (res.data) {
+          console.log('resp success', res.data);
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+    // console.log('object', body);
   };
 
   render() {
@@ -489,7 +645,11 @@ class AddNewReport extends Component {
           desc,
           selectedReportType,
           selectedMetrics,
-          selectedFormType,
+          formInfo: {
+            selectedFormType,
+            selectedForm,
+            selectedIndividualForm,
+          },
         },
         reportType,
         metricArr,
@@ -502,18 +662,17 @@ class AddNewReport extends Component {
         selectedMetas,
         siteValues,
         formTypes,
+        formTypeArr,
+        formValues,
+        formQuestions,
+        individualFormArr,
       },
       props: {
         reportReducer: { reportLoader },
       },
     } = this;
 
-    // console.log(
-    //   this.state.selectedMetrics,
-    //   'state value',
-    //   siteInfoArr,
-    // );
-    // console.log('index', selectedMetrics, '-----');
+    console.log('index', this.state.individualFormArr, '-----');
 
     return (
       <div className="reports mrb-30">
@@ -556,9 +715,10 @@ class AddNewReport extends Component {
                           {!reportLoader && (
                             <CustomSelect
                               toggleSelectClass={toggleSelectClass}
-                              handleToggleClass={
-                                this.handleToggleClass
+                              handleToggleClass={() =>
+                                this.handleToggleClass('reportType')
                               }
+                              toggleType="reportType"
                               name={reportType.filter(
                                 each =>
                                   each.id === selectedReportType,
@@ -596,6 +756,8 @@ class AddNewReport extends Component {
               <div className="report-accordion">
                 <div className="row ">
                   <Metrics
+                    handleToggleClass={this.handleToggleClass}
+                    toggleSelectClass={toggleSelectClass}
                     data={metricArr}
                     users={usersArr}
                     userList={userList}
@@ -614,12 +776,33 @@ class AddNewReport extends Component {
                     formTypes={formTypes}
                     selectedFormType={selectedFormType}
                     handleFormTypeCheck={this.handleFormTypeChange}
+                    formTypeArr={formTypeArr}
+                    selectedForm={selectedForm}
+                    handleFormSelected={this.handleFormSelected}
+                    formQuestions={formQuestions}
+                    individualFormArr={individualFormArr}
+                    selectedIndividualForm={selectedIndividualForm}
+                    handleIndividualFormSelected={
+                      this.handleIndividualFormSelected
+                    }
                   />
                   <SelectedColumn
                     selected={selectedMetrics}
                     handleSelectChange={this.handleSelectChange}
                     handleCheckSubmissionType={this.handleChangeArray}
+                    handleSubmitReport={this.handleSubmitReport}
                   />
+                  <div className="col-lg-6">
+                    <button
+                      type="button"
+                      className="common-button is-bg"
+                      onClick={() => {
+                        this.handleSubmitReport();
+                      }}
+                    >
+                      Add Report
+                    </button>
+                  </div>
                 </div>
               </div>
               {/* <DataFilter
@@ -644,7 +827,5 @@ const mapStateToProps = ({ reportReducer }) => ({
 export default connect(mapStateToProps, {
   getMetricsData,
   getForms,
-  getFormValues,
   getFormQuestions,
-  getFormSubmissionCount,
 })(AddNewReport);

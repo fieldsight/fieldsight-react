@@ -3,9 +3,7 @@ import {
   GET_METRICS_DATA,
   REPORT_LOADER,
   GET_FORM,
-  GET_FORM_VALUES,
   GET_FORM_QUESTIONS,
-  GET_FORM_SUBMISSION_COUNT,
 } from './types';
 /* eslint-disable */
 
@@ -31,35 +29,12 @@ export const getForms = (projectId, type) => dispatch => {
     .catch(() => {});
 };
 
-export const getFormValues = projectId => dispatch => {
-  dispatch({ type: REPORT_LOADER });
-  axios
-    .get(`v4/api/reporting/metrics-data/${projectId}/`)
-    .then(res => {
-      dispatch({ type: GET_FORM_VALUES, payload: res.data });
-    })
-    .catch(() => {});
-};
-
 export const getFormQuestions = (projectId, id) => dispatch => {
   dispatch({ type: REPORT_LOADER });
   axios
-    .get(`fieldsight/api/project/forms/${projectId}/?id=${id}/`)
+    .get(`fieldsight/api/project/forms/${projectId}/?id=${id}`)
     .then(res => {
       dispatch({ type: GET_FORM_QUESTIONS, payload: res.data });
-    })
-    .catch(() => {});
-};
-
-export const getFormSubmissionCount = projectId => dispatch => {
-  dispatch({ type: REPORT_LOADER });
-  axios
-    .get(`v4/api/reporting/metrics-data/${projectId}/`)
-    .then(res => {
-      dispatch({
-        type: GET_FORM_SUBMISSION_COUNT,
-        payload: res.data,
-      });
     })
     .catch(() => {});
 };
