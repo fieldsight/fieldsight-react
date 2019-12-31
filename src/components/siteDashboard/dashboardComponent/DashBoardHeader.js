@@ -132,9 +132,9 @@ class DashboardHeader extends Component {
               </figure>
               <div className="dash-pf-content">
                 {name && <h5>{name}</h5>}
-                <div className="flex">
+                <div className="type-info">
                   {identifier && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>Identifier:</strong>
                       </label>
@@ -143,7 +143,7 @@ class DashboardHeader extends Component {
                     </div>
                   )}
                   {region && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>Region:</strong>
                       </label>
@@ -154,7 +154,7 @@ class DashboardHeader extends Component {
                 </div>
                 <div className="flex">
                   {address && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>Address:</strong>
                       </label>
@@ -163,7 +163,7 @@ class DashboardHeader extends Component {
                     </div>
                   )}
                   {type && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>Type:</strong>
                       </label>

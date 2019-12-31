@@ -203,6 +203,7 @@
 
       &.dashboard-header {
         border:0;
+        padding:1rem;
         .dash-pf {
           @include flex_start;
           align-items: center;
@@ -286,6 +287,9 @@
           }
 
           .dash-pf-content {
+            .type-info{
+              margin-top:.5rem;
+            }
             h5 {
               font-size:1.5rem;
               line-height: 1.3rem;
@@ -297,6 +301,14 @@
               font-weight: 500;;
               margin: 0.6125rem 0;
               display: inline-block;
+            }
+            .flex{
+              label{
+                margin:0;
+              }
+              span{
+                margin:0;
+              }
             }
           }
         }
