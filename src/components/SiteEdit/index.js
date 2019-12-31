@@ -283,7 +283,8 @@ export default class SiteEdit extends Component {
       .catch();
   };
   render() {
-    const { breadcrumbs } = this.state;
+    const { breadcrumbs, delete_perm } = this.state;
+
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -315,6 +316,7 @@ export default class SiteEdit extends Component {
           handleDelete={this.handleDelete}
           deleteClose={this.deleteClose}
           deleteFile={this.deleteFile}
+          delete_perm={delete_perm}
         />
       </>
     );
