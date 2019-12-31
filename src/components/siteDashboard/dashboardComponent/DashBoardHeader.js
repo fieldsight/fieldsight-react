@@ -152,7 +152,7 @@ class DashboardHeader extends Component {
                     </div>
                   )}
                 </div>
-                <div className="flex">
+                <div className="">
                   {address && (
                     <div className="flex">
                       <label>
