@@ -32,6 +32,8 @@ class AddNewReport extends Component {
           selectedFormType: '',
           selectedForm: '',
           selectedIndividualForm: '',
+          selectedQuestions: [],
+          selectedValue: [],
         },
       },
       reportType: [],
@@ -325,7 +327,24 @@ class AddNewReport extends Component {
     this.setState(state => {
       const list = state.data.selectedMetrics;
       const filteredArr = list.filter(metric => {
-        if (metric.code && metric.value) {
+        if (metric.code && metric.value && !metric.value.code) {
+          if (metric.code === item.code) {
+            if (
+              metric.value.selectedIndividualForm &&
+              item.value.selectedIndividualForm
+            ) {
+              if (
+                metric.value.selectedIndividualForm.id ===
+                item.value.selectedIndividualForm
+              ) {
+                return true;
+              } else {
+                return false;
+              }
+            }
+          }
+        }
+        if (metric.code && metric.value && metric.value.code) {
           if (metric.code === item.code) {
             if (metric.value.code !== item.value.code) {
               return true;
@@ -366,7 +385,7 @@ class AddNewReport extends Component {
           }
         });
       });
-      // debugger;
+
       const filteredUserArr = state.userList.filter(
         u => u.code !== item.code,
       );
@@ -379,6 +398,11 @@ class AddNewReport extends Component {
         data: {
           ...state.data,
           selectedMetrics: filteredArr,
+          formInfo: {
+            selectedFormType: '',
+            selectedForm: '',
+            selectedIndividualForm: '',
+          },
         },
         userList: filteredUserArr,
         submissions: filteredSubmissionArr,

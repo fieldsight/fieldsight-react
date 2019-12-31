@@ -17,9 +17,13 @@ const DragHandle = sortableHandle(
         <span className="drag-icon">
           <i className="material-icons">drag_indicator</i>
         </span>
+        {console.log('object', item)}
         {!item.value && <label>{label}</label>}
-        {!!item.value && (
+        {!!item.value && item.value.label && (
           <label>{`${label} (${item.value.label})`}</label>
+        )}
+        {!!item.value && !item.value.label && (
+          <label>{`${label} (form-info)`}</label>
         )}
         <span>
           <a
