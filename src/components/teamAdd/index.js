@@ -107,7 +107,7 @@ class index extends Component {
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude
     };
-    console.log(data, "data");
+    // console.log(data, "data");
 
     axios
       .post(`fv3/api/team-form/`, data)

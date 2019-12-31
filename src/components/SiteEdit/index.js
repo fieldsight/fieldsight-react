@@ -275,9 +275,18 @@ export default class SiteEdit extends Component {
           this.setState({
             deleteConfirm: false
           });
-          this.props.history.push(
+          history.pushState(
+            {
+              urlPath: `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`
+            },
+            "",
             `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`
           );
+          history.go();
+          // this.props.history.push(
+          //   `/project-sitelist`
+          //   // `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`
+          // );
         }
       })
       .catch();
