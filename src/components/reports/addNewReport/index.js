@@ -7,27 +7,18 @@ import {
   getFormQuestions,
 } from '../../../actions/reportActions';
 import InputElement from '../../common/InputElement';
+import {
+  errorToast,
+  successToast,
+} from '../../../utils/toastHandler';
 import CustomSelect from '../CustomSelect';
+
 // import CustomMultiSelect from '../CustomMultiSelect';
 import Metrics from './metrics';
 // import DataFilter from './dataFilter';
 import SelectedColumn from './selectedColumn';
 /* eslint-disable */
 
-const GetType = type => {
-  if (type === 0) {
-    return 'general';
-  }
-  if (type === 1) {
-    return 'scheduled';
-  }
-  if (type === 2) {
-    return 'stage';
-  }
-  if (type === 3) {
-    return 'survey';
-  }
-};
 class AddNewReport extends Component {
   constructor(props) {
     super(props);
@@ -108,14 +99,10 @@ class AddNewReport extends Component {
       prevProps.reportReducer.formTypes !==
       this.props.reportReducer.formTypes
     ) {
-      const forms = this.props.reportReducer.formTypes;
-      const newFormArr = [];
-      for (let i = 0; i < forms.length; i += 1) {
-        newFormArr.push({ id: i, ...forms[i] });
-      }
-      this.setState({ formTypes: newFormArr });
+      this.setState({
+        formTypes: this.props.reportReducer.formTypes,
+      });
     }
-
     if (
       prevProps.reportReducer.forms !== this.props.reportReducer.forms
     ) {
@@ -569,6 +556,10 @@ class AddNewReport extends Component {
           ...state.data,
           formInfo: {
             ...state.data.formInfo,
+            selectedFormType: {
+              ...state.data.formInfo.selectedFormType,
+              value: { selectedForm: item },
+            },
             selectedForm: item,
           },
         },
@@ -583,19 +574,39 @@ class AddNewReport extends Component {
   };
 
   handleIndividualFormSelected = (e, item) => {
-    const { value } = e.target;
+    // const { value } = e.target;
     this.setState(
-      state => ({
-        data: {
-          ...state.data,
-          formInfo: {
-            ...state.data.formInfo,
-            selectedIndividualForm: item,
+      state => {
+        const {
+          data: { formInfo },
+        } = state;
+        const newValue = {
+          ...formInfo.selectedFormType.value,
+          selectedIndividualForm: item,
+        };
+        const newSelectedType = {
+          ...formInfo.selectedFormType,
+          value: {
+            ...newValue,
           },
-        },
-      }),
+        };
+        return {
+          data: {
+            ...state.data,
+            selectedMetrics: [
+              ...state.data.selectedMetrics,
+              newSelectedType,
+            ],
+            formInfo: {
+              ...state.data.formInfo,
+              selectedFormType: newSelectedType,
+              selectedIndividualForm: item,
+            },
+          },
+        };
+      },
       () => {
-        // console.log('object', this.state.data.formInfo);
+        // console.log('object', this.state.data);
         // this.props.getFormQuestions('137', this.state.data.formInfo.selectedForm);
       },
     );
@@ -623,18 +634,18 @@ class AddNewReport extends Component {
       type: data.selectedReportType,
       description: data.desc,
       title: data.reportName,
-      attributes: data.selectedMetrics,
+      attributes: { ...data.selectedMetrics },
     };
-    Axios.post(`/v4/api/reporting/add-report/137/`, body)
+    Axios.post(`/v4/api/reporting/add-report/499/`, body)
       .then(res => {
         if (res.data) {
-          console.log('resp success', res.data);
+          successToast('Report', 'created');
         }
       })
       .catch(err => {
-        console.log('err', err);
+        const errors = err.response;
+        errorToast(errors.data.error);
       });
-    // console.log('object', body);
   };
 
   render() {
@@ -672,7 +683,7 @@ class AddNewReport extends Component {
       },
     } = this;
 
-    console.log('index', this.state.individualFormArr, '-----');
+    // console.log('index', this.state.individualFormArr, '-----');
 
     return (
       <div className="reports mrb-30">
