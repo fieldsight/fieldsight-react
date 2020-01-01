@@ -124,7 +124,7 @@ class Submission extends Component {
   getLabelAndName = (label, name) => (
     <span>
       {typeof label === 'string' && label}
-      {name && <i>({name})</i>}
+      {name && <i>{`(${name})`}</i>}
     </span>
   );
 

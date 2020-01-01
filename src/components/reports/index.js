@@ -18,14 +18,18 @@ class Reports extends Component {
   };
 
   render() {
-    const { activeSection, id } = this.state;
+    const { activeSection } = this.state;
+    const { projectId } = this.props;
     return (
       <>
         {activeSection === 'reportList' && (
           <ReportList toggleSection={this.toggleSection} />
         )}
         {activeSection === 'addReport' && (
-          <AddNewReport toggleSection={this.toggleSection} id={id} />
+          <AddNewReport
+            toggleSection={this.toggleSection}
+            id={projectId}
+          />
         )}
       </>
     );

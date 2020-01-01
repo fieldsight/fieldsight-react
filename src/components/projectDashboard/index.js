@@ -190,7 +190,9 @@ class ProjectDashboard extends React.Component {
               progressLoader={progressLoader}
             />
           )}
-          {activeTab === 'reports' && <Reports />}
+          {activeTab === 'reports' && (
+            <Reports projectId={projectId} />
+          )}
         </div>
       </>
     );

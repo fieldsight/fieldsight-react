@@ -95,7 +95,7 @@ export default class SiteEdit extends Component {
                   const latitude =
                     position && position[2].split(')')[0];
 
-                  this.setState(state => {
+                  this.setState(() => {
                     if (res.data.regions !== undefined) {
                       res.data.regions.map(each =>
                         regionArr.push(each),
@@ -346,7 +346,14 @@ export default class SiteEdit extends Component {
   };
 
   render() {
-    const { breadcrumbs, delete_perm } = this.state;
+    const {
+      breadcrumbs,
+      delete_perm,
+      src,
+      data,
+      jsondata,
+      cropResult,
+    } = this.state;
 
     return (
       <>

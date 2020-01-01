@@ -69,8 +69,8 @@ class AddNewReport extends Component {
   }
 
   componentWillMount() {
-    this.props.getMetricsData('137');
-    document.addEventListener('click', this.handleClickOutside);
+    this.props.getMetricsData(this.props.id);
+    // document.addEventListener('click', this.handleClickOutside);
   }
 
   componentDidUpdate(prevProps) {
@@ -120,7 +120,7 @@ class AddNewReport extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside);
+    // document.removeEventListener('click', this.handleClickOutside);
   }
 
   setWrapperRef(node) {
@@ -1102,9 +1102,9 @@ class AddNewReport extends Component {
         reportReducer: { reportLoader },
       },
     } = this;
-
+    // console.log('in report add', this.state);
     return (
-      <div className="reports mrb-30">
+      <div className="reports mrb-30" ref={this.setWrapperRef}>
         <div className="card">
           <div className="card-body">
             <div className="report-generator">
@@ -1182,10 +1182,7 @@ class AddNewReport extends Component {
                   </div>
                 </form>
               </div>
-              <div
-                className="report-accordion"
-                ref={this.setWrapperRef}
-              >
+              <div className="report-accordion">
                 <div className="row ">
                   <Metrics
                     handleToggleClass={this.handleToggleClass}
