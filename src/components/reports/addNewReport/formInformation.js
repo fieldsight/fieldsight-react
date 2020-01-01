@@ -1,65 +1,73 @@
 import React, { Component } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import CustomSelect from '../CustomSelect';
 import CustomMultiSelect from '../CustomMultiSelect';
+
 /* eslint-disable */
 
 export default class FormInformation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      jsonQuestions: [],
+      filteredQuestions: [],
     };
   }
   componentDidUpdate(prevProps) {
     if (prevProps.formQuestions !== this.props.formQuestions) {
-      const questions = this.props.formQuestions.map(
-        formQuestions => {
-          if (formQuestions.json) {
-            formQuestions.json.children = this.groupQuestion(
-              formQuestions.json.children,
-            );
-          }
-
-          return formQuestions;
-        },
-      );
+      let filteredQuestions = [];
+      if (this.props.formQuestions.length > 0) {
+        filteredQuestions = this.findQuestion(
+          this.props.formQuestions[0].json.children,
+        );
+      }
       this.setState({
-        jsonQuestions: [
-          // {
-          //   id: 0,
-          //   name: '--Select Form--',
-          //   json: { children: [] },
-          // },
-          ...questions,
-        ],
+        filteredQuestions,
       });
     }
   }
 
-  groupQuestion = formQuestionsChildren => {
-    const groupQuestionName = question => {
-      if (question.type === 'group' || question.type === 'repeat') {
-        question.children = question.children.map(childQuestion => {
-          childQuestion.name = `${question.name}/${childQuestion.name}`;
-          if (
-            childQuestion.type === 'group' ||
-            childQuestion.type === 'repeat'
-          ) {
-            groupQuestionName(childQuestion);
+  findQuestion = (children, type) => {
+    const filteredQuestions = [];
+
+    const filterQuestionByType = questions => {
+      if (type) {
+        questions.forEach(question => {
+          if (question.type === type) {
+            filteredQuestions.push(question);
           }
-          return childQuestion;
+
+          if (
+            question.type === 'group' ||
+            question.type === 'repeat'
+          ) {
+            filterQuestionByType(question.children);
+          }
+        });
+      } else {
+        questions.forEach(question => {
+          if (
+            question.type === 'group' ||
+            question.type === 'repeat'
+          ) {
+            return filterQuestionByType(question.children);
+          }
+          return filteredQuestions.push(question);
         });
       }
-
-      return question;
     };
-    return formQuestionsChildren.map(question => {
-      return groupQuestionName(question);
-    });
+
+    filterQuestionByType(children);
+
+    return filteredQuestions;
+  };
+
+  handleQuestionSelect = (e, item) => {
+    // console.log('selected quest', e.target, item);
   };
 
   render() {
-    const { jsonQuestions } = this.state;
+    const { filteredQuestions } = this.state;
     const {
       toggleSelectClass,
       handleFormTypeCheck,
@@ -68,12 +76,14 @@ export default class FormInformation extends Component {
       selectedFormType,
       formTypeArr,
       selectedForm,
-      formQuestions,
+      selectedQuestions,
       individualFormArr,
       selectedIndividualForm,
       handleIndividualFormSelected,
+      formValue,
+      selectedValueArr,
     } = this.props;
-    // console.log('jsonQuestions', this.state.jsonQuestions);
+    // console.log('jsonQuestions', selectedFormType);
 
     return (
       <div className="acc-item">
@@ -99,7 +109,6 @@ export default class FormInformation extends Component {
                     value={selectedFormType.id}
                     handleSelect={handleFormTypeCheck}
                   />
-                  {/* <CustomSelect label="select forms type" /> */}
                 </div>
               </div>
               <div className="col-lg-6" />
@@ -140,53 +149,120 @@ export default class FormInformation extends Component {
                   />
                 </div>
               </div>
+
               {/* <div className="col-lg-6">
-                <div className="form-group">
-                  <label className="mb-2">Values</label>
-                  <CustomSelect
-                   toggleSelectClass={toggleSelectClass}
-                   handleToggleClass={() => {
-                     handleToggleClass('formValue');
-                   }}
-                   toggleType="formValue"
-                   options={formValues}
-                   name={formValues.filter(
-                     each => each.id === selectedForm,
-                   )}
-                   value={selectedForm}
-                   handleSelect={this.props.handleFormSelected}/>
-                </div>
-              </div> */}
-              <div className="col-lg-6">
                 <button
                   type="button"
                   className="common-button is-border"
                 >
                   Add
                 </button>
-              </div>
+              </div> */}
 
               <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">Questions</label>
+                  {/* <div
+                      style={{
+                        position: 'relative',
+                        height: `300px `,
+                      }}
+                    >
+                      <PerfectScrollbar> */}
                   <CustomMultiSelect
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={() => {
                       handleToggleClass('formQuestSelect');
                     }}
                     toggleType="formQuestSelect"
-                    checkboxOption={jsonQuestions}
-                    handleCheck={() => {}}
-                    selectedArr={[]}
+                    checkboxOption={filteredQuestions}
+                    handleCheck={this.props.handleChangeFormQuest}
+                    selectedArr={selectedQuestions}
                     placeholderTxt="Form Answer"
                   />
+                  {/* </PerfectScrollbar>
+                    </div> */}
                 </div>
-                <button
+                {/* <button
                   role="button"
                   className="common-button is-border"
+                 
                 >
                   Add
-                </button>
+                </button> */}
+              </div>
+              <div className="col-lg-6">
+                <div className="form-group">
+                  <label className="mb-2">Values</label>
+                  <div className="common-select">
+                    <div
+                      className={
+                        toggleSelectClass['formValue']
+                          ? 'select-wrapper select-toggle'
+                          : 'select-wrapper'
+                      }
+                      onClick={() => {
+                        handleToggleClass('formValue');
+                      }}
+                    >
+                      <span className="select-item">Form Values</span>
+                      <ul>
+                        {formValue &&
+                          formValue.length > 0 &&
+                          formValue.map(option => {
+                            // const filterList = selectedMetrics.filter(
+                            //   i =>
+                            //     i.value &&
+                            //     i.value.code === option.code,
+                            // );
+                            // const isChecked =
+                            //   filterList && filterList[0]
+                            //     ? true
+                            //     : false;
+                            return (
+                              <li key={`option_${option.code}`}>
+                                <div className="custom-control custom-checkbox">
+                                  <input
+                                    type="checkbox"
+                                    className="custom-control-input"
+                                    id={option.code}
+                                    name={option.code}
+                                    // checked={isChecked}
+                                    onChange={e => {
+                                      this.props.handleChangeFormQuest(
+                                        e,
+                                        {},
+                                        option,
+                                      );
+                                    }}
+                                  />
+                                  <label
+                                    className="custom-control-label"
+                                    htmlFor={option.code}
+                                    style={{ paddingLeft: '2em' }}
+                                  >
+                                    {option.label}
+                                  </label>
+                                </div>
+                              </li>
+                            );
+                          })}
+                      </ul>
+                    </div>
+                  </div>
+                  {/* <CustomSelect
+                   toggleSelectClass={toggleSelectClass}
+                   handleToggleClass={() => {
+                     handleToggleClass('formValue');
+                   }}
+                   toggleType="formValue"
+                   options={selectedFormValue}
+                  //  name={formValues.filter(
+                  //    each => each.id === selectedForm,
+                  //  )}
+                  //  value={selectedForm}
+                   handleSelect={this.props.handleFormSelected}/> */}
+                </div>
               </div>
             </div>
           </div>

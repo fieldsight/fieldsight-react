@@ -170,6 +170,10 @@ export default class Metrics extends Component {
           individualFormArr={individualFormArr}
           selectedIndividualForm={selectedIndividualForm}
           handleIndividualFormSelected={handleIndividualFormSelected}
+          handleChangeFormQuest={this.props.handleChangeFormQuest}
+          selectedQuestions={this.props.selectedQuestions}
+          formValue={this.props.formValue}
+          selectedValueArr={this.props.selectedValueArr}
         />
       </div>
     );

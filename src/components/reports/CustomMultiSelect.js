@@ -38,8 +38,12 @@ export default class CustomMultiSelect extends PureComponent {
           <ul>
             {checkboxOption.length > 0 &&
               checkboxOption.map(option => {
-                const filterList = selectedArr.filter(
-                  i => i.code && i.code === option.code,
+                const filterList = selectedArr.filter(i =>
+                  i.code
+                    ? i.code === option.code
+                    : i.name
+                    ? i.name === option.name
+                    : '',
                 );
                 const isChecked =
                   filterList && filterList[0] ? true : false;
@@ -47,6 +51,8 @@ export default class CustomMultiSelect extends PureComponent {
                   ? option.code
                   : option.id
                   ? option.id
+                  : option.name
+                  ? option.name
                   : '';
                 const name = option.code
                   ? option.code
@@ -58,7 +64,11 @@ export default class CustomMultiSelect extends PureComponent {
                     key={`option_${
                       option.code
                         ? option.code
-                        : option.id && option.id
+                        : option.id
+                        ? option.id
+                        : option.name
+                        ? option.name
+                        : ''
                     }`}
                   >
                     <div className="custom-control custom-checkbox">

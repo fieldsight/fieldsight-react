@@ -572,6 +572,8 @@ class SiteInformationTable extends Component {
       />
     );
 
+    console.log('filteredQuestions', filteredQuestions);
+
     return (
       <>
         <div className="card">
