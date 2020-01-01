@@ -81,7 +81,7 @@ export default class MyForm extends PureComponent {
                     >
                       <i className="la la-share-alt" />
                     </a>
-                    <ul className="share-drop">
+                    {/* <ul className="share-drop">
                       <li>
                         <a href="#" data-tab="user-share">
                           User
@@ -102,7 +102,7 @@ export default class MyForm extends PureComponent {
                           Global
                         </a>
                       </li>
-                    </ul>
+                    </ul> */}
                   </span>
                   <a
                     href="#"

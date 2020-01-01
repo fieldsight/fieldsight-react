@@ -63,6 +63,7 @@ import UserProfile from './reports/users/userProfile/index';
 import RegionDashboard from './reports/regionDashboard/index';
 import UserManage from './reports/users/userManage';
 import MyFormTable from './reports/myForm';
+import Submission from './reports/submission';
 
 // import AddNewReport from './reports/addNewReport';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -358,6 +359,11 @@ class App extends Component {
                 <Route
                   path="/myFormtable"
                   render={props => <MyFormTable {...props} />}
+                />
+
+                <Route
+                  path="/form-submission"
+                  render={props => <Submission {...props} />}
                 />
               </Switch>
               <ToastContainer />
