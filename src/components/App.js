@@ -56,6 +56,15 @@ import ChangePassword from './changePassword';
 import SyncSchedule from './syncSchedule';
 // import SelectElement from "../components/common/SelectElement";
 
+import FilterDataFilter from './reports/FormDataFilter';
+import ExportDataFilter from './reports/ExportDataFilter';
+import UserList from './reports/users/usersTable';
+import UserProfile from './reports/users/userProfile/index';
+import RegionDashboard from './reports/regionDashboard/index';
+import UserManage from './reports/users/userManage';
+import MyFormTable from './reports/myForm';
+import Submission from './reports/submission';
+
 // import AddNewReport from './reports/addNewReport';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -121,9 +130,9 @@ class App extends Component {
           /> */}
           {/* <div
             id="main-container"
-            className={`${!this.state.toggleClass ? "minified" : ""}`}
-          > */}
-          {/* <SideNav handleToggle={this.handleToggle} /> */}
+            className={`${!toggleClass ? 'minified' : ''}`}
+          >
+            {/* <SideNav handleToggle={this.handleToggle} /> */}
           {/* <div className="container-fluid"> */}
           <main id="main-content" className="main-content">
             <Router>
@@ -135,10 +144,7 @@ class App extends Component {
                 <Route
                   path="/team-settings/:id"
                   render={props => (
-                    <TeamSetting
-                      {...props}
-                      height={this.state.height}
-                    />
+                    <TeamSetting {...props} height={height} />
                   )}
                 />
                 <Route
@@ -266,14 +272,6 @@ class App extends Component {
                 />
 
                 <Route
-                  path="/project-responses/:id"
-                  render={props => <ViewData {...props} />}
-                />
-                <Route
-                  path="/site-responses/:id"
-                  render={props => <SiteData {...props} />}
-                />
-                <Route
                   path="/submission-data/:id/:fid"
                   render={props => <SubmissionData {...props} />}
                 />
@@ -332,17 +330,46 @@ class App extends Component {
                   path="/site-submission-responses/:id"
                   render={props => <SiteSubmissionForm {...props} />}
                 />
-                {/* <Route
-                  path="/new-report"
-                  render={props => <AddNewReport {...props} />}
-                /> */}
+
+                <Route
+                  path="/form-data"
+                  render={props => <ExportDataFilter {...props} />}
+                />
+
+                <Route
+                  path="/userLists"
+                  render={props => <UserList {...props} />}
+                />
+
+                <Route
+                  path="/userProfile"
+                  render={props => <UserProfile {...props} />}
+                />
+
+                <Route
+                  path="/region-dashboard"
+                  render={props => <RegionDashboard {...props} />}
+                />
+
+                <Route
+                  path="/user-manage"
+                  render={props => <UserManage {...props} />}
+                />
+
+                <Route
+                  path="/myFormtable"
+                  render={props => <MyFormTable {...props} />}
+                />
+
+                <Route
+                  path="/form-submission"
+                  render={props => <Submission {...props} />}
+                />
               </Switch>
               <ToastContainer />
             </Router>
           </main>
         </div>
-        {/* </div> */}
-        {/* </div> */}
       </IntlProvider>
     );
   }

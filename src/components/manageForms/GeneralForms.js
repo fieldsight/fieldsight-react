@@ -14,6 +14,8 @@ import Loader from '../common/Loader';
 /* eslint-disable   react/destructuring-assignment */
 /* eslint-disable  consistent-return */
 /* eslint-disable  react/no-did-update-set-state */
+/* eslint-disable  array-callback-return */
+/* eslint-disable  no-undef */
 
 class GeneralForms extends Component {
   _isMounted = false;

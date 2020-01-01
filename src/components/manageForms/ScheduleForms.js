@@ -328,8 +328,6 @@ class ScheduleForms extends Component {
 
   handleScheduleForm = data => {
     const { id, xf, isEditForm, isProjectForm } = this.state;
-    const { typeOptions, regionOptions } = this.props;
-
     const monthDay =
       data.scheduleType === 2 && data.selectedMonthlyDays
         ? data.selectedMonthlyDays === '31'

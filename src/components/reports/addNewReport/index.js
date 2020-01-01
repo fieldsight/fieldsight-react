@@ -331,6 +331,7 @@ class AddNewReport extends Component {
       target: { name, checked },
     } = e;
 
+    console.log(e.target);
     this.setState(state => {
       if (checked) {
         const newList = state.data.selectedMetrics.filter(

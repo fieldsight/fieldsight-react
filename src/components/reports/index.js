@@ -23,7 +23,10 @@ class Reports extends Component {
     return (
       <>
         {activeSection === 'reportList' && (
-          <ReportList toggleSection={this.toggleSection} />
+          <ReportList
+            toggleSection={this.toggleSection}
+            id={this.props.id}
+          />
         )}
         {activeSection === 'addReport' && (
           <AddNewReport

@@ -18,7 +18,7 @@ class ReportList extends Component {
 
   render() {
     const { activeTab } = this.state;
-    const { toggleSection } = this.props;
+    const { toggleSection, id } = this.props;
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -26,8 +26,17 @@ class ReportList extends Component {
             <ul className="common-tab is-bg">
               <li
                 className={activeTab === 'myReports' ? 'current' : ''}
+                onClick={() => {
+                  this.toggleTab('myReports');
+                }}
+                onKeyDown={() => {
+                  this.toggleTab('myReports');
+                }}
+                tabIndex="0"
+                role="button"
               >
-                <a
+                My Reports
+                {/* <a
                   tabIndex="0"
                   role="button"
                   onKeyDown={() => {
@@ -38,14 +47,22 @@ class ReportList extends Component {
                   }}
                 >
                   My reports
-                </a>
+                </a> */}
               </li>
               <li
                 className={
                   activeTab === 'sharedWithMe' ? 'current' : ''
                 }
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  this.toggleTab('sharedWithMe');
+                }}
+                onClick={() => {
+                  this.toggleTab('sharedWithMe');
+                }}
               >
-                <a
+                {/* <a
                   tabIndex="0"
                   role="button"
                   onKeyDown={() => {
@@ -54,14 +71,22 @@ class ReportList extends Component {
                   onClick={() => {
                     this.toggleTab('sharedWithMe');
                   }}
-                >
-                  shared with me
-                </a>
+                > */}
+                shared with me
+                {/* </a> */}
               </li>
               <li
                 className={activeTab === 'templates' ? 'current' : ''}
+                tabIndex="0"
+                role="button"
+                onKeyDown={() => {
+                  this.toggleTab('templates');
+                }}
+                onClick={() => {
+                  this.toggleTab('templates');
+                }}
               >
-                <a
+                {/* <a
                   tabIndex="0"
                   role="button"
                   onKeyDown={() => {
@@ -70,9 +95,9 @@ class ReportList extends Component {
                   onClick={() => {
                     this.toggleTab('templates');
                   }}
-                >
-                  templates
-                </a>
+                > */}
+                templates
+                {/* </a> */}
               </li>
             </ul>
             <button
@@ -88,7 +113,7 @@ class ReportList extends Component {
           </div>
           {activeTab === 'myReports' && <MyReports />}
           {activeTab === 'sharedWithMe' && <ShareWithMe />}
-          {activeTab === 'templates' && <Templates />}
+          {activeTab === 'templates' && <Templates id={id} />}
         </div>
       </div>
     );

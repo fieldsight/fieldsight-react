@@ -18,6 +18,7 @@ const CustomCheckBox = ({
       name={name}
       checked={checked}
       onChange={changeHandler}
+      value={id}
       {...rest}
     />
     <label

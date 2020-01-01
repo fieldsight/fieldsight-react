@@ -11,6 +11,7 @@ export default class CustomMultiSelect extends PureComponent {
       handleCheck,
       selectedArr,
       placeholderTxt,
+      site,
     } = this.props;
 
     return (
