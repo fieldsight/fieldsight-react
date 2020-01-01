@@ -12,7 +12,6 @@ export default class CustomSelect extends PureComponent {
       handleSelect,
       toggleType,
     } = this.props;
-    // console.log('in form comp', options, name, value);
     const label =
       name && name[0]
         ? name[0].name

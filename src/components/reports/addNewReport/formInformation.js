@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import 'react-perfect-scrollbar/dist/css/styles.css';
 import CustomSelect from '../CustomSelect';
 import CustomMultiSelect from '../CustomMultiSelect';
 
@@ -13,6 +11,7 @@ export default class FormInformation extends Component {
       filteredQuestions: [],
     };
   }
+
   componentDidUpdate(prevProps) {
     if (prevProps.formQuestions !== this.props.formQuestions) {
       let filteredQuestions = [];
@@ -62,10 +61,6 @@ export default class FormInformation extends Component {
     return filteredQuestions;
   };
 
-  handleQuestionSelect = (e, item) => {
-    // console.log('selected quest', e.target, item);
-  };
-
   render() {
     const { filteredQuestions } = this.state;
     const {
@@ -81,7 +76,7 @@ export default class FormInformation extends Component {
       selectedIndividualForm,
       handleIndividualFormSelected,
       formValue,
-      selectedValueArr,
+      selectedFormValue,
     } = this.props;
     // console.log('jsonQuestions', selectedFormType);
 
@@ -141,34 +136,19 @@ export default class FormInformation extends Component {
                     }}
                     toggleType="submissionCount"
                     options={individualFormArr}
-                    name={formTypeArr.filter(
-                      each => each.id === selectedIndividualForm.id,
+                    name={individualFormArr.filter(
+                      each =>
+                        each.code === selectedIndividualForm.code,
                     )}
-                    value={selectedIndividualForm.id}
+                    value={selectedIndividualForm.code}
                     handleSelect={handleIndividualFormSelected}
                   />
                 </div>
               </div>
-
-              {/* <div className="col-lg-6">
-                <button
-                  type="button"
-                  className="common-button is-border"
-                >
-                  Add
-                </button>
-              </div> */}
-
               <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">Questions</label>
-                  {/* <div
-                      style={{
-                        position: 'relative',
-                        height: `300px `,
-                      }}
-                    >
-                      <PerfectScrollbar> */}
+
                   <CustomMultiSelect
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={() => {
@@ -180,16 +160,7 @@ export default class FormInformation extends Component {
                     selectedArr={selectedQuestions}
                     placeholderTxt="Form Answer"
                   />
-                  {/* </PerfectScrollbar>
-                    </div> */}
                 </div>
-                {/* <button
-                  role="button"
-                  className="common-button is-border"
-                 
-                >
-                  Add
-                </button> */}
               </div>
               <div className="col-lg-6">
                 <div className="form-group">
@@ -210,15 +181,13 @@ export default class FormInformation extends Component {
                         {formValue &&
                           formValue.length > 0 &&
                           formValue.map(option => {
-                            // const filterList = selectedMetrics.filter(
-                            //   i =>
-                            //     i.value &&
-                            //     i.value.code === option.code,
-                            // );
-                            // const isChecked =
-                            //   filterList && filterList[0]
-                            //     ? true
-                            //     : false;
+                            const filterList = selectedFormValue.filter(
+                              i => i.code === option.code,
+                            );
+                            const isChecked =
+                              filterList && filterList[0]
+                                ? true
+                                : false;
                             return (
                               <li key={`option_${option.code}`}>
                                 <div className="custom-control custom-checkbox">
@@ -227,7 +196,7 @@ export default class FormInformation extends Component {
                                     className="custom-control-input"
                                     id={option.code}
                                     name={option.code}
-                                    // checked={isChecked}
+                                    checked={isChecked}
                                     onChange={e => {
                                       this.props.handleChangeFormQuest(
                                         e,
@@ -250,18 +219,6 @@ export default class FormInformation extends Component {
                       </ul>
                     </div>
                   </div>
-                  {/* <CustomSelect
-                   toggleSelectClass={toggleSelectClass}
-                   handleToggleClass={() => {
-                     handleToggleClass('formValue');
-                   }}
-                   toggleType="formValue"
-                   options={selectedFormValue}
-                  //  name={formValues.filter(
-                  //    each => each.id === selectedForm,
-                  //  )}
-                  //  value={selectedForm}
-                   handleSelect={this.props.handleFormSelected}/> */}
                 </div>
               </div>
             </div>

@@ -12,8 +12,6 @@ import {
   successToast,
 } from '../../../utils/toastHandler';
 import CustomSelect from '../CustomSelect';
-
-// import CustomMultiSelect from '../CustomMultiSelect';
 import Metrics from './metrics';
 // import DataFilter from './dataFilter';
 import SelectedColumn from './selectedColumn';
@@ -35,7 +33,6 @@ class AddNewReport extends Component {
           selectedQuestions: [],
           formValue: [],
           selectedFormValue: [],
-          selectedValueArr: [],
         },
       },
       reportType: [],
@@ -1060,7 +1057,6 @@ class AddNewReport extends Component {
             selectedQuestions,
             formValue,
             selectedFormValue,
-            selectedValueArr,
           },
         },
         reportType,
@@ -1075,7 +1071,6 @@ class AddNewReport extends Component {
         siteValues,
         formTypes,
         formTypeArr,
-        // formValues,
         formQuestions,
         individualFormArr,
       },
@@ -1198,7 +1193,7 @@ class AddNewReport extends Component {
                     handleChangeFormQuest={this.handleChangeFormQuest}
                     selectedQuestions={selectedQuestions}
                     formValue={formValue}
-                    selectedValueArr={selectedValueArr}
+                    selectedFormValue={selectedFormValue}
                   />
                   <SelectedColumn
                     selected={selectedMetrics}

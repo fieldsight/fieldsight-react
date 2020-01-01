@@ -22,10 +22,10 @@ const DragHandle = sortableHandle(
           <label>{`${label} (${item.value.label})`}</label>
         )}
         {!!item.value && item.value.selectedIndividualForm && (
-          <label>{`${label} (form-individual-info)`}</label>
+          <label>{`${label}-${item.value.selectedForm.title} (${item.value.selectedIndividualForm.label})`}</label>
         )}
         {!!item.value && item.value.selectedQuestion && (
-          <label>{`${label} (form-quest-info)`}</label>
+          <label>{`${label}-${item.value.selectedForm.title} (${item.value.selectedQuestion.name}-${item.value.selectedQuestion.form.label})`}</label>
         )}
         <span>
           <a

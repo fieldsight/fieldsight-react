@@ -1,7 +1,4 @@
 import React, { PureComponent } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import 'react-perfect-scrollbar/dist/css/styles.css';
-// import CustomCheckBox from './CustomCheckbox';
 /* eslint-disable */
 
 export default class CustomMultiSelect extends PureComponent {
@@ -28,13 +25,6 @@ export default class CustomMultiSelect extends PureComponent {
         >
           <span className="select-item">{placeholderTxt}</span>
 
-          {/* <div
-            style={{
-              position: 'relative',
-              height: `300px `,
-            }}
-          >
-            <PerfectScrollbar> */}
           <ul>
             {checkboxOption.length > 0 &&
               checkboxOption.map(option => {
@@ -90,19 +80,10 @@ export default class CustomMultiSelect extends PureComponent {
                         {option.label ? option.label : option.name}
                       </label>
                     </div>
-                    {/* <CustomCheckBox
-                    id={option.code}
-                    name={option.code}
-                    checked={selectedArr.includes(option.code)}
-                    changeHandler={handleCheck}
-                    label={option.label}
-                  /> */}
                   </li>
                 );
               })}
           </ul>
-          {/* </PerfectScrollbar>
-          </div> */}
         </div>
       </div>
     );
