@@ -94,6 +94,7 @@ class Submission extends Component {
       question.length > 0
         ? `${question[0]}/${question[1]}`.replace(/\/undefined/, '')
         : '';
+
     return this.getLabelAndName(label, name);
   };
 
@@ -122,8 +123,8 @@ class Submission extends Component {
 
   getLabelAndName = (label, name) => (
     <span>
-      {label}
-      {name && <i>{`(${name})`}</i>}
+      {typeof label === 'string' && label}
+      {name && <i>({name})</i>}
     </span>
   );
 
@@ -242,7 +243,6 @@ class Submission extends Component {
           ansLng: JSON.parse(longitude),
         };
       }
-
       const question =
         typeof submission.question === 'object'
           ? this.splitSubmissionObj(
@@ -442,6 +442,11 @@ class Submission extends Component {
                 ) : (
                   submission.selected &&
                   Object.entries(submission.selected).map(many => {
+                    if (typeof many[1].label === 'object')
+                      return this.splitSubmissionObj(
+                        many[1].label,
+                        many[1].name,
+                      );
                     return (
                       <p key={uuid()}>
                         {this.getLabelAndName(

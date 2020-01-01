@@ -312,9 +312,18 @@ export default class SiteEdit extends Component {
           this.setState({
             deleteConfirm: false,
           });
-          this.props.history.push(
+          history.pushState(
+            {
+              urlPath: `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`,
+            },
+            '',
             `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`,
           );
+          history.go();
+          // this.props.history.push(
+          //   `/project-sitelist`
+          //   // `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`
+          // );
         }
       })
       .catch(() => {
@@ -337,14 +346,8 @@ export default class SiteEdit extends Component {
   };
 
   render() {
-    const {
-      breadcrumbs,
-      src,
-      data,
-      cropResult,
-      delete_perm,
-      jsondata,
-    } = this.state;
+    const { breadcrumbs, delete_perm } = this.state;
+
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -378,7 +381,6 @@ export default class SiteEdit extends Component {
           handleDelete={this.handleDelete}
           deleteClose={this.deleteClose}
           deleteFile={this.deleteFile}
-          selectedValue={this.selectedValue}
           delete_perm={delete_perm}
         />
       </>
