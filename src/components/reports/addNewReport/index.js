@@ -62,15 +62,15 @@ class AddNewReport extends Component {
       siteValues: [],
       selectedValue: [],
       formTypes: [],
-      formValues: [],
-      selectedFormValue: '',
       formQuestions: [],
-      formSubmissionCounts: [],
     };
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
   componentWillMount() {
     this.props.getMetricsData('137');
+    document.addEventListener('click', this.handleClickOutside);
   }
 
   componentDidUpdate(prevProps) {
@@ -119,6 +119,37 @@ class AddNewReport extends Component {
     }
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClickOutside);
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
+  handleClickOutside = () => {
+    this.setState({
+      toggleSelectClass: {
+        reportType: false,
+        siteType: false,
+        siteValue: false,
+        formType: false,
+        formValue: false,
+        formQuestSelect: false,
+        submissionCount: false,
+      },
+    });
+  };
+
+  handleToggleClass = toggleFor => {
+    this.setState(state => ({
+      toggleSelectClass: {
+        ...state.toggleSelectClass,
+        [toggleFor]: !state.toggleSelectClass[toggleFor],
+      },
+    }));
+  };
+
   handleAddValue = () => {
     const {
       selectedMetas,
@@ -135,16 +166,18 @@ class AddNewReport extends Component {
         selectedValue.length > 0
       ) {
         selectedMetas.map(meta => {
-          selectedValue.map(value => {
-            newArr.push({ ...meta, value });
+          return selectedValue.map(value => {
+            return newArr.push({ ...meta, value });
           });
         });
         filteredMetrics = selectedMetrics.filter(i => {
           if (!i.value) {
             return true;
-          } else if (i.value && i.value.selectedForm) {
+          }
+          if (i.value && i.value.selectedForm) {
             return true;
-          } else return false;
+          }
+          return false;
         });
 
         const arr = [...filteredMetrics, ...newArr];
@@ -160,9 +193,11 @@ class AddNewReport extends Component {
         filteredMetrics = selectedMetrics.filter(i => {
           if (!i.value) {
             return true;
-          } else if (i.value && i.value.selectedForm) {
+          }
+          if (i.value && i.value.selectedForm) {
             return true;
-          } else return false;
+          }
+          return false;
         });
         return {
           data: {
@@ -175,9 +210,11 @@ class AddNewReport extends Component {
         filteredMetrics = selectedMetrics.filter(i => {
           if (!i.value) {
             return true;
-          } else if (i.value && i.value.selectedForm) {
+          }
+          if (i.value && i.value.selectedForm) {
             return true;
-          } else return false;
+          }
+          return false;
         });
         return {
           data: {
@@ -187,6 +224,7 @@ class AddNewReport extends Component {
           selectedValue: [],
         };
       }
+      return null;
     });
   };
 
@@ -212,7 +250,7 @@ class AddNewReport extends Component {
         selectedFormValue.length > 0
       ) {
         selectedQuestions.map(meta => {
-          selectedFormValue.map(form => {
+          return selectedFormValue.map(form => {
             const newValue = {
               selectedForm,
               selectedQuestion: { ...meta, form },
@@ -223,7 +261,8 @@ class AddNewReport extends Component {
         filteredMetrics = selectedMetrics.filter(i => {
           if (i.value && i.value.selectedQuestion) {
             return false;
-          } else return true;
+          }
+          return true;
         });
 
         const arr = [...filteredMetrics, ...newArr];
@@ -238,7 +277,8 @@ class AddNewReport extends Component {
         filteredMetrics = selectedMetrics.filter(i => {
           if (i.value && i.value.selectedQuestion) {
             return false;
-          } else return true;
+          }
+          return true;
         });
         return {
           data: {
@@ -251,7 +291,8 @@ class AddNewReport extends Component {
         filteredMetrics = selectedMetrics.filter(i => {
           if (i.value && i.value.selectedQuestion) {
             return false;
-          } else return true;
+          }
+          return true;
         });
         return {
           data: {
@@ -264,6 +305,7 @@ class AddNewReport extends Component {
           },
         };
       }
+      return null;
     });
   };
 
@@ -276,15 +318,6 @@ class AddNewReport extends Component {
         [name]: value,
       },
     }));
-  };
-
-  handleToggleClass = toggleFor => {
-    this.setState({
-      toggleSelectClass: {
-        ...this.state.toggleSelectClass,
-        [toggleFor]: !this.state.toggleSelectClass[toggleFor],
-      },
-    });
   };
 
   handleToggleCollapse = () => {
@@ -300,7 +333,7 @@ class AddNewReport extends Component {
 
     this.setState(state => {
       if (checked) {
-        const newList = this.state.data.selectedMetrics.filter(
+        const newList = state.data.selectedMetrics.filter(
           i => i.code !== name,
         );
         return {
@@ -312,7 +345,7 @@ class AddNewReport extends Component {
         };
       }
       if (!checked) {
-        const newList = this.state.data.selectedMetrics.filter(
+        const newList = state.data.selectedMetrics.filter(
           i => i.code !== name,
         );
 
@@ -447,9 +480,8 @@ class AddNewReport extends Component {
                 item.value.selectedIndividualForm.code
               ) {
                 return true;
-              } else {
-                return false;
               }
+              return false;
             }
             if (
               metric.value.selectedQuestion &&
@@ -464,9 +496,8 @@ class AddNewReport extends Component {
                   item.value.selectedQuestion.form.code
                 ) {
                   return true;
-                } else {
-                  return false;
                 }
+                return false;
               }
             }
           }
@@ -480,20 +511,18 @@ class AddNewReport extends Component {
           if (metric.code === item.code) {
             if (metric.value.code !== item.value.code) {
               return true;
-            } else {
-              return false;
             }
-          } else {
-            return true;
+            return false;
           }
+          return true;
         }
         if (metric.code && !metric.value) {
           if (metric.code !== item.code) {
             return true;
-          } else {
-            return false;
           }
+          return false;
         }
+        return null;
       });
 
       const metaList = [];
@@ -511,9 +540,8 @@ class AddNewReport extends Component {
           if (f.value && !f.value.selectedForm) {
             if (f.value.code === v.code) {
               return true;
-            } else {
-              return false;
             }
+            return false;
           }
         });
       });
@@ -528,17 +556,15 @@ class AddNewReport extends Component {
       const filteredFormType = filteredArr.map(each => {
         if (each.code === selectedFormType.code) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       });
       const filteredForm = filteredArr.map(each => {
         if (each.value && each.value.selectedForm) {
           if (each.value.selectedForm.id === selectedForm.id) {
             return true;
-          } else {
-            return false;
           }
+          return false;
         }
         return false;
       });
@@ -549,9 +575,8 @@ class AddNewReport extends Component {
             selectedIndividualForm.code
           ) {
             return true;
-          } else {
-            return false;
           }
+          return false;
         }
         return false;
       });
@@ -570,9 +595,8 @@ class AddNewReport extends Component {
           if (f.value && f.value.selectedQuestions) {
             if (f.value.selectedQuestions.code === v.code) {
               return true;
-            } else {
-              return false;
             }
+            return false;
           }
         });
       });
@@ -740,7 +764,7 @@ class AddNewReport extends Component {
         const someArr = formValue;
         if (formInfoArr.length > 0) {
           formInfoArr.map(info => {
-            if (someArr.length > 0) {
+            if (someArr && someArr.length > 0) {
               filteredFormValues = someArr.filter(some => {
                 if (
                   some.code === 'form_info_actual' ||
@@ -955,7 +979,7 @@ class AddNewReport extends Component {
             this.handleAllValueTypes('form');
           }
         } else {
-          this.setState({
+          this.setState(state => ({
             data: {
               ...state.data,
               formInfo: {
@@ -963,7 +987,7 @@ class AddNewReport extends Component {
                 selectedFormValue: [],
               },
             },
-          });
+          }));
         }
       },
     );
@@ -1158,7 +1182,10 @@ class AddNewReport extends Component {
                   </div>
                 </form>
               </div>
-              <div className="report-accordion">
+              <div
+                className="report-accordion"
+                ref={this.setWrapperRef}
+              >
                 <div className="row ">
                   <Metrics
                     handleToggleClass={this.handleToggleClass}

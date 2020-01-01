@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import CustomSelect from '../CustomSelect';
 import CustomMultiSelect from '../CustomMultiSelect';
-
 /* eslint-disable */
 
 export default class FormInformation extends Component {
@@ -77,6 +76,7 @@ export default class FormInformation extends Component {
       handleIndividualFormSelected,
       formValue,
       selectedFormValue,
+      handleChangeFormQuest,
     } = this.props;
     // console.log('jsonQuestions', selectedFormType);
 
@@ -156,7 +156,7 @@ export default class FormInformation extends Component {
                     }}
                     toggleType="formQuestSelect"
                     checkboxOption={filteredQuestions}
-                    handleCheck={this.props.handleChangeFormQuest}
+                    handleCheck={handleChangeFormQuest}
                     selectedArr={selectedQuestions}
                     placeholderTxt="Form Answer"
                   />
@@ -168,11 +168,16 @@ export default class FormInformation extends Component {
                   <div className="common-select">
                     <div
                       className={
-                        toggleSelectClass['formValue']
+                        toggleSelectClass.formValue
                           ? 'select-wrapper select-toggle'
                           : 'select-wrapper'
                       }
+                      role="button"
+                      tabIndex="0"
                       onClick={() => {
+                        handleToggleClass('formValue');
+                      }}
+                      onKeyDown={() => {
                         handleToggleClass('formValue');
                       }}
                     >
@@ -198,7 +203,7 @@ export default class FormInformation extends Component {
                                     name={option.code}
                                     checked={isChecked}
                                     onChange={e => {
-                                      this.props.handleChangeFormQuest(
+                                      handleChangeFormQuest(
                                         e,
                                         {},
                                         option,
