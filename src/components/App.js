@@ -49,12 +49,18 @@ import Mapparent from './team/Mapparent';
 import ResetPassword from './ResetPassword';
 import UpdateProfile from './updateProject';
 import CreateProfile from './ProfileAdd';
+
 // import Header from "./headers";
 // import SideNav from "./sideNav";
 import ChangePassword from './changePassword';
 
 import SyncSchedule from './syncSchedule';
 // import SelectElement from "../components/common/SelectElement";
+
+import AdminDashboard from './adminDashboard';
+import SuperAdminFormEdit from './superAdminEdit';
+import SuperAdminForm from './superAdminForm';
+import SuperAdminSetting from './adminDashboard/organizationSettings/settings';
 
 import FilterDataFilter from './reports/FormDataFilter';
 import ExportDataFilter from './reports/ExportDataFilter';
@@ -242,10 +248,33 @@ class App extends Component {
                   path="/project-add/:id"
                   render={props => <ProjectAdd {...props} />}
                 />
-                <Route
+                {/* <Route
                   path="/create-team"
                   render={props => <TeamAdd {...props} />}
                 />
+
+                <Route
+                  path="/create-team/:id"
+                  render={props => <TeamAdd {...props} />}
+                /> */}
+
+                <Route
+                  path="/create-team"
+                  render={({ match: { url } }) => (
+                    <>
+                      <Route
+                        path={`${url}/`}
+                        component={TeamAdd}
+                        exact
+                      />
+                      <Route
+                        path={`${url}/:id`}
+                        component={TeamAdd}
+                      />
+                    </>
+                  )}
+                />
+
                 <Route
                   path="/create-site/:id"
                   render={props => (
@@ -364,6 +393,22 @@ class App extends Component {
                 <Route
                   path="/form-submission"
                   render={props => <Submission {...props} />}
+                  path="/super-organization-dashboard/:id"
+                  render={props => <AdminDashboard {...props} />}
+                />
+
+                <Route
+                  path="/create-super-admin"
+                  render={props => <SuperAdminForm {...props} />}
+                />
+
+                <Route
+                  path="/edit-super-admin/:id"
+                  render={props => <SuperAdminFormEdit {...props} />}
+                />
+                <Route
+                  path="/super-admin-settings/:id"
+                  render={props => <SuperAdminSetting {...props} />}
                 />
               </Switch>
               <ToastContainer />

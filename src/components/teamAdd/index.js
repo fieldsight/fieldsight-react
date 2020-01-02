@@ -56,15 +56,16 @@ class TeamAdd extends Component {
       isLoading: false,
       selectedCountry: '',
       selectedteam: '',
+      id: this.props.match.params ? this.props.match.params.id : '',
     };
   }
 
   componentDidMount() {
-    // const {
-    //   match: {
-    //     params: { id },
-    //   },
-    // } = this.props;
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
     axios
       .get(`/fv3/api/team-types-countries`)
       .then(res => {
@@ -104,6 +105,12 @@ class TeamAdd extends Component {
   onSubmitHandler = e => {
     e.preventDefault();
 
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+
     const data = {
       name: this.state.project.teamName,
       contactnumber: this.state.project.contactnumber,
@@ -116,6 +123,7 @@ class TeamAdd extends Component {
       cropResult: this.state.cropResult,
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude,
+      ...(this.state.id && { parent: this.state.id }),
     };
 
     axios
@@ -232,6 +240,7 @@ class TeamAdd extends Component {
         selectedCountry,
       },
     } = this;
+
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">

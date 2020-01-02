@@ -7,6 +7,7 @@ const RightContentCard = ({
   // hideButton,
   toggleModal,
   children,
+  buttonName,
 }) => (
   <div className="card">
     <div className="card-header main-card-header">
@@ -26,6 +27,7 @@ const RightContentCard = ({
             onKeyDown={toggleModal}
           >
             <span>
+              {buttonName}
               <i className="la la-plus" />
             </span>
           </a>
