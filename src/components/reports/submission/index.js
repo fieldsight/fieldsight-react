@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import SiteDetails from './siteDetails'
+import SiteDetails from './siteDetails';
+
+/* eslint-disable */
 
 export default class Submission extends PureComponent {
   render() {

@@ -29,7 +29,7 @@ export default class Templates extends Component {
       id,
     });
     axios
-      .get(`/v4/api/reporting/reports-list/1/?type=custom`)
+      .get(`/v4/api/reporting/reports-list/${id}/?type=custom`)
       .then(res => {
         this.setState({
           customReports: res.data.custom_reports,
@@ -518,7 +518,10 @@ export default class Templates extends Component {
           </div>
         )}
         {formButton && (
-          <FormDataFilter handleForm={this.handleForm} />
+          <FormDataFilter
+            handleForm={this.handleForm}
+            id={this.state.id}
+          />
         )}
       </>
     );

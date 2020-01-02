@@ -9,7 +9,6 @@ class Reports extends Component {
     super(props);
     this.state = {
       activeSection: 'reportList',
-      id: '137',
     };
   }
 
@@ -25,7 +24,7 @@ class Reports extends Component {
         {activeSection === 'reportList' && (
           <ReportList
             toggleSection={this.toggleSection}
-            id={this.props.id}
+            id={projectId}
           />
         )}
         {activeSection === 'addReport' && (
