@@ -21,26 +21,16 @@ class DashboardHeader extends PureComponent {
   render() {
     const ManageDropDown = [
       {
-        title: 'User',
+        title: 'Users',
         link: '#',
       },
       {
-        title: 'site',
+        title: 'Teams',
         link: '#',
       },
       {
-        title: 'Progress',
-        link: '#',
-      },
-    ];
-    const DataDropDown = [
-      {
-        title: 'Generate Report',
-        link: '#',
-      },
-      {
-        title: 'View Data',
-        link: '#',
+        title: 'Settings',
+        link: `/fieldsight/application/#/super-admin-settings/${this.props.superAdminId}`,
       },
     ];
 
@@ -120,29 +110,6 @@ class DashboardHeader extends PureComponent {
             </div>
           )}
           <div className="dash-btn">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Data"
-                className="fieldsight-btn"
-              >
-                <i className="la la-paste" />
-
-                <span>Data</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                {DataDropDown.map((item, i) => (
-                  <Dropdown.Item
-                    href={item.link}
-                    key={i}
-                    target="_blank"
-                  >
-                    {item.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-
             <Dropdown>
               <Dropdown.Toggle
                 variant=""

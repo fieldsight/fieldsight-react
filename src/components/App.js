@@ -60,6 +60,7 @@ import SyncSchedule from './syncSchedule';
 import AdminDashboard from './adminDashboard';
 import SuperAdminFormEdit from './superAdminEdit';
 import SuperAdminForm from './superAdminForm';
+import SuperAdminSetting from './adminDashboard/organizationSettings/settings';
 
 import FilterDataFilter from './reports/FormDataFilter';
 import ExportDataFilter from './reports/ExportDataFilter';
@@ -241,10 +242,33 @@ class App extends Component {
                   path="/project-add/:id"
                   render={props => <ProjectAdd {...props} />}
                 />
-                <Route
+                {/* <Route
                   path="/create-team"
                   render={props => <TeamAdd {...props} />}
                 />
+
+                <Route
+                  path="/create-team/:id"
+                  render={props => <TeamAdd {...props} />}
+                /> */}
+
+                <Route
+                  path="/create-team"
+                  render={({ match: { url } }) => (
+                    <>
+                      <Route
+                        path={`${url}/`}
+                        component={TeamAdd}
+                        exact
+                      />
+                      <Route
+                        path={`${url}/:id`}
+                        component={TeamAdd}
+                      />
+                    </>
+                  )}
+                />
+
                 <Route
                   path="/create-site/:id"
                   render={props => (
@@ -336,7 +360,7 @@ class App extends Component {
                 />
 
                 <Route
-                  path="/admin-dashboard/:id"
+                  path="/super-organization-dashboard/:id"
                   render={props => <AdminDashboard {...props} />}
                 />
 
@@ -348,6 +372,10 @@ class App extends Component {
                 <Route
                   path="/edit-super-admin/:id"
                   render={props => <SuperAdminFormEdit {...props} />}
+                />
+                <Route
+                  path="/super-admin-settings/:id"
+                  render={props => <SuperAdminSetting {...props} />}
                 />
               </Switch>
               <ToastContainer />

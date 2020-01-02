@@ -22,6 +22,11 @@ class AdminDashboard extends Component {
 
   render() {
     const {
+      match: {
+        params: { id: superAdminId },
+      },
+    } = this.props;
+    const {
       id,
       name,
       phone,
@@ -55,6 +60,7 @@ class AdminDashboard extends Component {
           total_projects={total_projects}
           total_users={total_users}
           total_teams={total_teams}
+          superAdminId={superAdminId}
         />
 
         <div className="row">

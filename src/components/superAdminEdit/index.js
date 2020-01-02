@@ -50,6 +50,7 @@ export default class SuperAdminFormEdit extends Component {
         params: { id },
       },
     } = this.props;
+    console.log(id, this.props);
     const editUrl = axios.get(
       `/fv3/api/super-organization-lists/${id}/`,
     );
@@ -202,17 +203,11 @@ export default class SuperAdminFormEdit extends Component {
       },
     } = this;
 
-    const countrySelect = [
-      { id: '1', name: 'nepal' },
-      { id: '2', name: 'India' },
-      { id: '3', name: 'NPL' },
-      { id: '4', name: 'the State' },
-      { id: '5', name: 'greece' },
-    ];
+    console.log(this.props);
 
     return (
       <>
-        <nav aria-label="breadcrumb" role="navigation">
+        {/* <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li
               className="breadcrumb-item active"
@@ -221,7 +216,7 @@ export default class SuperAdminFormEdit extends Component {
               Edit Super User
             </li>
           </ol>
-        </nav>
+        </nav> */}
         <RightContentCard title="Edit Super Admin">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">

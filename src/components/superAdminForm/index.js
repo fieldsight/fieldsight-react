@@ -40,7 +40,7 @@ export default class SuperAdminForm extends Component {
       },
       zoom: 13,
       Selectedtypes: '',
-      country: '',
+      country: [],
     };
   }
 
@@ -48,6 +48,7 @@ export default class SuperAdminForm extends Component {
     axios
       .get(`/fv3/api/team-types-countries`)
       .then(res => {
+        console.log(res);
         this.setState({
           country: res.data.countries,
         });
