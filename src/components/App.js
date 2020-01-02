@@ -393,6 +393,8 @@ class App extends Component {
                 <Route
                   path="/form-submission"
                   render={props => <Submission {...props} />}
+                />
+                <Route
                   path="/super-organization-dashboard/:id"
                   render={props => <AdminDashboard {...props} />}
                 />
