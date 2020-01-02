@@ -111,8 +111,13 @@ class ReportList extends Component {
               <span>New report</span>
             </button>
           </div>
-          {activeTab === 'myReports' && <MyReports />}
-          {activeTab === 'sharedWithMe' && <ShareWithMe />}
+          {activeTab === 'myReports' && (
+            <MyReports
+              id={id}
+              toggleSection={this.props.toggleSection}
+            />
+          )}
+          {activeTab === 'sharedWithMe' && <ShareWithMe id={id} />}
           {activeTab === 'templates' && <Templates id={id} />}
         </div>
       </div>

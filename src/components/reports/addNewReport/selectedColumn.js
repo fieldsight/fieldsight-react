@@ -69,7 +69,7 @@ const SortableContainer = sortableContainer(({ children }) => {
     <div
       style={{
         position: 'relative',
-        height: `300px `,
+        height: `500px `,
       }}
     >
       <PerfectScrollbar>

@@ -2,6 +2,7 @@ import {
   GET_METRICS_DATA,
   GET_FORM,
   GET_FORM_QUESTIONS,
+  GET_REPORTS_LIST,
 } from '../actions/types';
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   formTypes: [],
   forms: [],
   formQuestions: [],
+  reportList: [],
 };
 
 export default function(state = initialState, action) {
@@ -37,7 +39,12 @@ export default function(state = initialState, action) {
         formQuestions: action.payload,
         reportLoader: false,
       };
-
+    case GET_REPORTS_LIST:
+      return {
+        ...state,
+        reportList: action.payload,
+        reportLoader: false,
+      };
     default:
       return state;
   }

@@ -4,6 +4,7 @@ import {
   REPORT_LOADER,
   GET_FORM,
   GET_FORM_QUESTIONS,
+  GET_REPORTS_LIST,
 } from './types';
 /* eslint-disable */
 
@@ -35,6 +36,16 @@ export const getFormQuestions = (projectId, id) => dispatch => {
     .get(`fieldsight/api/project/forms/${projectId}/?id=${id}`)
     .then(res => {
       dispatch({ type: GET_FORM_QUESTIONS, payload: res.data });
+    })
+    .catch(() => {});
+};
+
+export const getReportsList = (id, type) => dispatch => {
+  dispatch({ type: REPORT_LOADER });
+  axios
+    .get(`v4/api/reporting/reports-list/${id}/?type=${type}`)
+    .then(res => {
+      dispatch({ type: GET_REPORTS_LIST, payload: res.data });
     })
     .catch(() => {});
 };

@@ -9,15 +9,21 @@ class Reports extends Component {
     super(props);
     this.state = {
       activeSection: 'reportList',
+      formData: {},
     };
   }
 
-  toggleSection = section => {
-    this.setState({ activeSection: section });
+  toggleSection = (section, data) => {
+    this.setState(() => {
+      if (data) {
+        return { activeSection: section, formData: data };
+      }
+      return { activeSection: section };
+    });
   };
 
   render() {
-    const { activeSection } = this.state;
+    const { activeSection, formData } = this.state;
     const { projectId } = this.props;
     return (
       <>
@@ -31,6 +37,7 @@ class Reports extends Component {
           <AddNewReport
             toggleSection={this.toggleSection}
             id={projectId}
+            data={formData}
           />
         )}
       </>

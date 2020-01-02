@@ -22,6 +22,7 @@ class AddNewReport extends Component {
     super(props);
     this.state = {
       data: {
+        reportId: '',
         reportName: '',
         desc: '',
         selectedReportType: '',
@@ -73,6 +74,111 @@ class AddNewReport extends Component {
     // document.addEventListener('click', this.handleClickOutside);
   }
 
+  componentDidMount() {
+    if (this.props.data && Object.keys(this.props.data).length > 0) {
+      const { data: report } = this.props;
+      const reportId = report.id;
+      const userList = report.attributes.filter(
+        r => r.category === 'users',
+      );
+      const submissions = report.attributes.filter(
+        r => r.category === 'default',
+      );
+      let selectedFormType = {};
+      let selectedForm = {};
+      let selectedIndividualForm = {};
+      const selectedQuestions = [];
+      const selectedFormValue = [];
+      const selectedMetas = [];
+      const selectedValue = [];
+
+      report.attributes.map(r => {
+        if (r.value && !r.value.selectedForm) {
+          const { code, type, id, value, label } = r;
+          if (selectedMetas.length > 0) {
+            selectedMetas.map(meta => {
+              if (meta.code !== code) {
+                selectedMetas.push({ code, type, id, label });
+              }
+            });
+          }
+          if (selectedMetas.length === 0) {
+            selectedMetas.push({ code, type, id, label });
+          }
+          if (selectedValue.length === 0) {
+            selectedValue.push({ ...value });
+          }
+          if (selectedValue.length > 0) {
+            selectedValue.map(s => {
+              if (s.code !== value.code) {
+                selectedValue.push({ ...value });
+              }
+            });
+          }
+        }
+        if (r.value && r.value.selectedForm) {
+          const { code, id, value, label } = r;
+          selectedFormType = { code, id, label };
+          selectedForm = value.selectedForm;
+          if (value.selectedIndividualForm) {
+            selectedIndividualForm = value.selectedIndividualForm;
+          }
+          if (value.selectedQuestion) {
+            const { type, name, form } = value.selectedQuestion;
+            if (selectedQuestions.length === 0) {
+              selectedQuestions.push({ type, name });
+            }
+            if (selectedQuestions.length > 0) {
+              selectedQuestions.map(q => {
+                if (q.name !== value.selectedQuestion.name) {
+                  selectedQuestions.push({ type, name });
+                }
+              });
+            }
+            if (selectedFormValue.length === 0) {
+              selectedFormValue.push({ ...form });
+            }
+            if (selectedFormValue.length > 0) {
+              selectedFormValue.map(v => {
+                if (v.code !== value.selectedQuestion.form.code) {
+                  selectedFormValue.push({ ...form });
+                }
+              });
+            }
+          }
+        }
+      });
+      this.setState(
+        state => ({
+          data: {
+            ...state.data,
+            reportId,
+            reportName: report.title,
+            desc: report.description,
+            selectedReportType: report.type,
+            selectedMetrics: report.attributes,
+            formInfo: {
+              ...state.data.formInfo,
+              selectedFormType,
+              selectedForm,
+              selectedIndividualForm,
+              selectedQuestions,
+              selectedFormValue,
+            },
+          },
+          userList,
+          submissions,
+          selectedMetas,
+          selectedValue,
+        }),
+        () => {
+          this.props.getForms(this.props.id, selectedFormType.code);
+          this.props.getFormQuestions(this.props.id, selectedForm.id);
+        },
+      );
+    }
+  }
+
   componentDidUpdate(prevProps) {
     if (
       prevProps.reportReducer.reportTypes !==
@@ -86,7 +192,12 @@ class AddNewReport extends Component {
       prevProps.reportReducer.metrics !==
       this.props.reportReducer.metrics
     ) {
-      this.setState({ metrics: this.props.reportReducer.metrics });
+      this.setState(
+        { metrics: this.props.reportReducer.metrics },
+        () => {
+          this.setArrays();
+        },
+      );
     }
     if (
       prevProps.reportReducer.metaAttributes !==
@@ -331,7 +442,6 @@ class AddNewReport extends Component {
       target: { name, checked },
     } = e;
 
-    console.log(e.target);
     this.setState(state => {
       if (checked) {
         const newList = state.data.selectedMetrics.filter(
@@ -380,31 +490,40 @@ class AddNewReport extends Component {
         selectedMetas: [],
       }),
       () => {
-        const {
-          metrics,
-          data: { selectedReportType },
-        } = this.state;
-        const metricsArr = metrics.filter(metric =>
-          metric.types.includes(selectedReportType),
-        );
+        this.setArrays();
+      },
+    );
+  };
 
-        this.setState({
-          metricArr: metricsArr.filter(
-            item => item.category === 'default',
-          ),
-          siteInfoArr: metricsArr.filter(
-            item => item.category === 'site_information',
-          ),
-          formInfoArr: metricsArr.filter(
-            item => item.category === 'form_information',
-          ),
-          usersArr: metricsArr.filter(
-            item => item.category === 'users',
-          ),
-          individualFormArr: metricsArr.filter(
-            item => item.category === 'individual_form',
-          ),
-        });
+  setArrays = () => {
+    const {
+      metrics,
+      data: { selectedReportType },
+    } = this.state;
+    const metricsArr = metrics.filter(metric =>
+      metric.types.includes(selectedReportType),
+    );
+
+    this.setState(
+      {
+        metricArr: metricsArr.filter(
+          item => item.category === 'default',
+        ),
+        siteInfoArr: metricsArr.filter(
+          item => item.category === 'site_information',
+        ),
+        formInfoArr: metricsArr.filter(
+          item => item.category === 'form_information',
+        ),
+        usersArr: metricsArr.filter(
+          item => item.category === 'users',
+        ),
+        individualFormArr: metricsArr.filter(
+          item => item.category === 'individual_form',
+        ),
+      },
+      () => {
+        this.setFormValue();
       },
     );
   };
@@ -827,7 +946,7 @@ class AddNewReport extends Component {
   };
 
   handleFormTypeChange = (e, item) => {
-    // const { value } = e.target;
+    const { id } = this.props;
     this.setState(
       state => ({
         data: {
@@ -843,7 +962,7 @@ class AddNewReport extends Component {
           selectedFormType: { code },
         } = this.state.data.formInfo;
 
-        this.props.getForms('137', code);
+        this.props.getForms(id, code);
       },
     );
   };
@@ -868,7 +987,7 @@ class AddNewReport extends Component {
         const {
           selectedForm: { id },
         } = this.state.data.formInfo;
-        this.props.getFormQuestions('137', id);
+        this.props.getFormQuestions(this.props.id, id);
       },
     );
   };
@@ -959,41 +1078,44 @@ class AddNewReport extends Component {
         }
       },
       () => {
-        const {
-          data: {
-            formInfo: { selectedQuestions },
-          },
-        } = this.state;
-        this.handleAddFormValue();
-        const arr = [];
-        selectedQuestions.map(each => {
-          if (each.type === 'integer') {
-            arr.push('number');
-          } else {
-            arr.push('text');
-          }
-        });
-        if (arr.length > 0) {
-          if (arr.includes('text')) {
-            this.handleTextValueTypes('form');
-          } else {
-            this.handleAllValueTypes('form');
-          }
-        } else {
-          this.setState(state => ({
-            data: {
-              ...state.data,
-              formInfo: {
-                ...state.data.formInfo,
-                selectedFormValue: [],
-              },
-            },
-          }));
-        }
+        this.setFormValue();
       },
     );
   };
 
+  setFormValue = () => {
+    const {
+      data: {
+        formInfo: { selectedQuestions },
+      },
+    } = this.state;
+    this.handleAddFormValue();
+    const arr = [];
+    selectedQuestions.map(each => {
+      if (each.type === 'integer') {
+        arr.push('number');
+      } else {
+        arr.push('text');
+      }
+    });
+    if (arr.length > 0) {
+      if (arr.includes('text')) {
+        this.handleTextValueTypes('form');
+      } else {
+        this.handleAllValueTypes('form');
+      }
+    } else {
+      this.setState(state => ({
+        data: {
+          ...state.data,
+          formInfo: {
+            ...state.data.formInfo,
+            selectedFormValue: [],
+          },
+        },
+      }));
+    }
+  };
   handleFormValueCheck = (e, item) => {
     const { checked } = e.target;
     const {
@@ -1055,16 +1177,34 @@ class AddNewReport extends Component {
       title: data.reportName,
       attributes: JSON.stringify(data.selectedMetrics),
     };
-    Axios.post(`/v4/api/reporting/add-report/499/`, body)
-      .then(res => {
-        if (res.data) {
-          successToast('Report', 'created');
-        }
-      })
-      .catch(err => {
-        const errors = err.response;
-        errorToast(errors.data.error);
-      });
+    if (data.reportId) {
+      Axios.put(`/v4/api/reporting/report/${data.reportId}/`, body)
+        .then(res => {
+          if (res.data) {
+            successToast('Report', 'updated');
+            this.props.toggleSection('reportList');
+          }
+        })
+        .catch(err => {
+          const errors = err.response;
+          errorToast(errors.data.error);
+        });
+    } else {
+      Axios.post(
+        `/v4/api/reporting/add-report/${this.props.id}/`,
+        body,
+      )
+        .then(res => {
+          if (res.data) {
+            successToast('Report', 'created');
+            this.props.toggleSection('reportList');
+          }
+        })
+        .catch(err => {
+          const errors = err.response;
+          errorToast(errors.data.error);
+        });
+    }
   };
 
   render() {
@@ -1101,15 +1241,18 @@ class AddNewReport extends Component {
       },
       props: {
         reportReducer: { reportLoader },
+        data,
       },
     } = this;
-    // console.log('in report add', this.state);
+    const isEdit =
+      data && Object.keys(data).length > 0 ? true : false;
     return (
       <div className="reports mrb-30" ref={this.setWrapperRef}>
         <div className="card">
           <div className="card-body">
             <div className="report-generator">
-              <h3 className="mb-3">New report</h3>
+              {isEdit && <h3 className="mb-3">Edit report</h3>}
+              {!isEdit && <h3 className="mb-3">New report</h3>}
               <div className="filter-all-header">
                 <form
                   className="floating-form "
