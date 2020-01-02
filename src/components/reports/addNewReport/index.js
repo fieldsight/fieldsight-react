@@ -524,6 +524,7 @@ class AddNewReport extends Component {
       },
       () => {
         this.setFormValue();
+        this.setSiteValue();
       },
     );
   };
@@ -781,30 +782,34 @@ class AddNewReport extends Component {
         }
       },
       () => {
-        this.handleAddValue();
-        const { selectedMetas } = this.state;
-        const arr = [];
-        selectedMetas.map(each => {
-          if (
-            each.type === 'Number' ||
-            each.type === 'FormSubCountQuestion'
-          ) {
-            arr.push('number');
-          } else {
-            arr.push('text');
-          }
-        });
-        if (arr.length > 0) {
-          if (arr.includes('text')) {
-            this.handleTextValueTypes('site');
-          } else {
-            this.handleAllValueTypes('site');
-          }
-        } else {
-          this.setState({ siteValues: [] });
-        }
+        this.setSiteValue();
       },
     );
+  };
+
+  setSiteValue = () => {
+    this.handleAddValue();
+    const { selectedMetas } = this.state;
+    const arr = [];
+    selectedMetas.map(each => {
+      if (
+        each.type === 'Number' ||
+        each.type === 'FormSubCountQuestion'
+      ) {
+        arr.push('number');
+      } else {
+        arr.push('text');
+      }
+    });
+    if (arr.length > 0) {
+      if (arr.includes('text')) {
+        this.handleTextValueTypes('site');
+      } else {
+        this.handleAllValueTypes('site');
+      }
+    } else {
+      this.setState({ siteValues: [] });
+    }
   };
 
   handleAllValueTypes = type => {
