@@ -125,10 +125,8 @@ export default class FormInformation extends Component {
                   />
                 </div>
               </div>
-              <div className="col-lg-6">
-
-              </div>
-              <div className="col-lg-12">
+              <div className="col-lg-6" />
+              {/* <div className="col-lg-12">
                 <div className="form-group inline-form-group">
                   <div className="custom-control custom-radio">
                     <input type="radio" className="custom-control-input" id="yes" name="yes" value="" />
@@ -140,7 +138,7 @@ export default class FormInformation extends Component {
                     <label className="custom-control-label" for="no">Illiterate</label>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="col-lg-6">
                 <div className="form-group">
