@@ -125,26 +125,23 @@ export default class FormInformation extends Component {
                   />
                 </div>
               </div>
-              <div className="col-lg-6" />
               <div className="col-lg-6">
-                <div className="form-group">
-                  <label className="mb-2">Submission count</label>
-                  <CustomSelect
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('submissionCount');
-                    }}
-                    toggleType="submissionCount"
-                    options={individualFormArr}
-                    name={individualFormArr.filter(
-                      each =>
-                        each.code === selectedIndividualForm.code,
-                    )}
-                    value={selectedIndividualForm.code}
-                    handleSelect={handleIndividualFormSelected}
-                  />
+
+              </div>
+              <div className="col-lg-12">
+                <div className="form-group inline-form-group">
+                  <div className="custom-control custom-radio">
+                    <input type="radio" className="custom-control-input" id="yes" name="yes" value="" />
+                    <label className="custom-control-label" for="yes">Yes</label>
+                  </div>
+
+                  <div className="custom-control custom-radio">
+                    <input type="radio" className="custom-control-input" id="no" name="yes" value="" />
+                    <label className="custom-control-label" for="no">Illiterate</label>
+                  </div>
                 </div>
               </div>
+
               <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">Questions</label>
@@ -162,6 +159,7 @@ export default class FormInformation extends Component {
                   />
                 </div>
               </div>
+
               <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">Values</label>
@@ -224,6 +222,25 @@ export default class FormInformation extends Component {
                       </ul>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="form-group">
+                  <label className="mb-2">Submission count</label>
+                  <CustomSelect
+                    toggleSelectClass={toggleSelectClass}
+                    handleToggleClass={() => {
+                      handleToggleClass('submissionCount');
+                    }}
+                    toggleType="submissionCount"
+                    options={individualFormArr}
+                    name={individualFormArr.filter(
+                      each =>
+                        each.code === selectedIndividualForm.code,
+                    )}
+                    value={selectedIndividualForm.code}
+                    handleSelect={handleIndividualFormSelected}
+                  />
                 </div>
               </div>
             </div>
