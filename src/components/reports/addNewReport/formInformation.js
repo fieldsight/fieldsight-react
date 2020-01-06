@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import CustomSelect from '../CustomSelect';
 import CustomMultiSelect from '../CustomMultiSelect';
+import CustomRadioButton from '../CustomRadioButton';
+
 /* eslint-disable */
 
 export default class FormInformation extends Component {
@@ -8,6 +10,7 @@ export default class FormInformation extends Component {
     super(props);
     this.state = {
       filteredQuestions: [],
+      status: 0,
     };
   }
 
@@ -60,8 +63,13 @@ export default class FormInformation extends Component {
     return filteredQuestions;
   };
 
+  handleRadioChange = e => {
+    const { value } = e.target;
+    this.setState({ status: JSON.parse(value) });
+  };
+
   render() {
-    const { filteredQuestions } = this.state;
+    const { filteredQuestions, status } = this.state;
     const {
       toggleSelectClass,
       handleFormTypeCheck,
@@ -126,121 +134,135 @@ export default class FormInformation extends Component {
                 </div>
               </div>
               <div className="col-lg-6" />
-              {/* <div className="col-lg-12">
+              <div className="col-lg-12">
                 <div className="form-group inline-form-group">
-                  <div className="custom-control custom-radio">
-                    <input type="radio" className="custom-control-input" id="yes" name="yes" value="" />
-                    <label className="custom-control-label" for="yes">Yes</label>
-                  </div>
-
-                  <div className="custom-control custom-radio">
-                    <input type="radio" className="custom-control-input" id="no" name="yes" value="" />
-                    <label className="custom-control-label" for="no">Illiterate</label>
-                  </div>
-                </div>
-              </div> */}
-
-              <div className="col-lg-6">
-                <div className="form-group">
-                  <label className="mb-2">Questions</label>
-
-                  <CustomMultiSelect
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('formQuestSelect');
-                    }}
-                    toggleType="formQuestSelect"
-                    checkboxOption={filteredQuestions}
-                    handleCheck={handleChangeFormQuest}
-                    selectedArr={selectedQuestions}
-                    placeholderTxt="Form Answer"
+                  <CustomRadioButton
+                    label="Form Info"
+                    name="status"
+                    id={0}
+                    changeHandler={this.handleRadioChange}
+                    value={0}
+                    checked={status === 0}
+                  />
+                  <CustomRadioButton
+                    label="Form Metrics"
+                    name="status"
+                    id={1}
+                    changeHandler={this.handleRadioChange}
+                    value={1}
+                    checked={status === 1}
                   />
                 </div>
               </div>
+              {status === 0 && (
+                <>
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label className="mb-2">Questions</label>
 
-              <div className="col-lg-6">
-                <div className="form-group">
-                  <label className="mb-2">Values</label>
-                  <div className="common-select">
-                    <div
-                      className={
-                        toggleSelectClass.formValue
-                          ? 'select-wrapper select-toggle'
-                          : 'select-wrapper'
-                      }
-                      role="button"
-                      tabIndex="0"
-                      onClick={() => {
-                        handleToggleClass('formValue');
-                      }}
-                      onKeyDown={() => {
-                        handleToggleClass('formValue');
-                      }}
-                    >
-                      <span className="select-item">Form Values</span>
-                      <ul>
-                        {formValue &&
-                          formValue.length > 0 &&
-                          formValue.map(option => {
-                            const filterList = selectedFormValue.filter(
-                              i => i.code === option.code,
-                            );
-                            const isChecked =
-                              filterList && filterList[0]
-                                ? true
-                                : false;
-                            return (
-                              <li key={`option_${option.code}`}>
-                                <div className="custom-control custom-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id={option.code}
-                                    name={option.code}
-                                    checked={isChecked}
-                                    onChange={e => {
-                                      handleChangeFormQuest(
-                                        e,
-                                        {},
-                                        option,
-                                      );
-                                    }}
-                                  />
-                                  <label
-                                    className="custom-control-label"
-                                    htmlFor={option.code}
-                                    style={{ paddingLeft: '2em' }}
-                                  >
-                                    {option.label}
-                                  </label>
-                                </div>
-                              </li>
-                            );
-                          })}
-                      </ul>
+                      <CustomMultiSelect
+                        toggleSelectClass={toggleSelectClass}
+                        handleToggleClass={() => {
+                          handleToggleClass('formQuestSelect');
+                        }}
+                        toggleType="formQuestSelect"
+                        checkboxOption={filteredQuestions}
+                        handleCheck={handleChangeFormQuest}
+                        selectedArr={selectedQuestions}
+                        placeholderTxt="Form Answer"
+                      />
                     </div>
                   </div>
+
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label className="mb-2">Values</label>
+                      <div className="common-select">
+                        <div
+                          className={
+                            toggleSelectClass.formValue
+                              ? 'select-wrapper select-toggle'
+                              : 'select-wrapper'
+                          }
+                          role="button"
+                          tabIndex="0"
+                          onClick={() => {
+                            handleToggleClass('formValue');
+                          }}
+                          onKeyDown={() => {
+                            handleToggleClass('formValue');
+                          }}
+                        >
+                          <span className="select-item">
+                            Form Values
+                          </span>
+                          <ul>
+                            {formValue &&
+                              formValue.length > 0 &&
+                              formValue.map(option => {
+                                const filterList = selectedFormValue.filter(
+                                  i => i.code === option.code,
+                                );
+                                const isChecked =
+                                  filterList && filterList[0]
+                                    ? true
+                                    : false;
+                                return (
+                                  <li key={`option_${option.code}`}>
+                                    <div className="custom-control custom-checkbox">
+                                      <input
+                                        type="checkbox"
+                                        className="custom-control-input"
+                                        id={option.code}
+                                        name={option.code}
+                                        checked={isChecked}
+                                        onChange={e => {
+                                          handleChangeFormQuest(
+                                            e,
+                                            {},
+                                            option,
+                                          );
+                                        }}
+                                      />
+                                      <label
+                                        className="custom-control-label"
+                                        htmlFor={option.code}
+                                        style={{ paddingLeft: '2em' }}
+                                      >
+                                        {option.label}
+                                      </label>
+                                    </div>
+                                  </li>
+                                );
+                              })}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+              {status === 1 && (
+                <div className="col-lg-6">
+                  <div className="form-group">
+                    <label className="mb-2">Submission count</label>
+                    <CustomSelect
+                      toggleSelectClass={toggleSelectClass}
+                      handleToggleClass={() => {
+                        handleToggleClass('submissionCount');
+                      }}
+                      toggleType="submissionCount"
+                      options={individualFormArr}
+                      name={individualFormArr.filter(
+                        each =>
+                          each.code === selectedIndividualForm.code,
+                      )}
+                      value={selectedIndividualForm.code}
+                      handleSelect={handleIndividualFormSelected}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="col-lg-6">
-                <div className="form-group">
-                  <label className="mb-2">Submission count</label>
-                  <CustomSelect
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('submissionCount');
-                    }}
-                    toggleType="submissionCount"
-                    options={individualFormArr}
-                    name={individualFormArr.filter(
-                      each =>
-                        each.code === selectedIndividualForm.code,
-                    )}
-                    value={selectedIndividualForm.code}
-                    handleSelect={handleIndividualFormSelected}
-                  />
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

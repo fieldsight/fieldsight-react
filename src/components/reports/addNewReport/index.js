@@ -30,7 +30,7 @@ class AddNewReport extends Component {
         formInfo: {
           selectedFormType: '',
           selectedForm: '',
-          selectedIndividualForm: '',
+          selectedIndividualForm: [],
           selectedQuestions: [],
           formValue: [],
           selectedFormValue: [],
@@ -86,7 +86,7 @@ class AddNewReport extends Component {
       );
       let selectedFormType = {};
       let selectedForm = {};
-      let selectedIndividualForm = {};
+      let selectedIndividualForm = [];
       const selectedQuestions = [];
       const selectedFormValue = [];
       const selectedMetas = [];
@@ -121,7 +121,32 @@ class AddNewReport extends Component {
           selectedFormType = { code, id, label };
           selectedForm = value.selectedForm;
           if (value.selectedIndividualForm) {
-            selectedIndividualForm = value.selectedIndividualForm;
+            const {
+              category,
+              code,
+              types,
+              label,
+            } = value.selectedIndividualForm;
+            if (selectedIndividualForm.length === 0) {
+              selectedIndividualForm.push({
+                category,
+                code,
+                types,
+                label,
+              });
+            }
+            if (selectedIndividualForm.length === 0) {
+              selectedIndividualForm.map(i => {
+                if (i.code !== code) {
+                  selectedIndividualForm.push({
+                    category,
+                    code,
+                    types,
+                    label,
+                  });
+                }
+              });
+            }
           }
           if (value.selectedQuestion) {
             const { type, name, form } = value.selectedQuestion;
@@ -170,6 +195,7 @@ class AddNewReport extends Component {
           submissions,
           selectedMetas,
           selectedValue,
+          collapseClass: true,
         }),
         () => {
           this.props.getForms(this.props.id, selectedFormType.code);
@@ -347,14 +373,55 @@ class AddNewReport extends Component {
           selectedForm,
           selectedQuestions,
           selectedFormValue,
+          selectedIndividualForm,
         },
         selectedMetrics,
       },
     } = this.state;
 
     const newArr = [];
+    const newIndividualFormArr = [];
     let filteredMetrics = [];
     this.setState(state => {
+      if (selectedIndividualForm.length > 0) {
+        selectedIndividualForm.map(i => {
+          const val = {
+            selectedForm,
+            selectedIndividualForm: i,
+          };
+          return newIndividualFormArr.push({
+            ...selectedFormType,
+            value: val,
+          });
+        });
+        filteredMetrics = selectedMetrics.filter(i => {
+          if (i.value && i.value.selectedIndividualForm) {
+            return false;
+          }
+          return true;
+        });
+        const arr = [...filteredMetrics, ...newIndividualFormArr];
+        return {
+          data: {
+            ...state.data,
+            selectedMetrics: arr,
+          },
+        };
+      }
+      if (selectedIndividualForm.length === 0) {
+        filteredMetrics = selectedMetrics.filter(i => {
+          if (i.value && i.value.selectedIndividualForm) {
+            return false;
+          }
+          return true;
+        });
+        return {
+          data: {
+            ...state.data,
+            selectedMetrics: filteredMetrics,
+          },
+        };
+      }
       if (
         selectedQuestions.length > 0 &&
         selectedFormValue &&
@@ -491,6 +558,7 @@ class AddNewReport extends Component {
       }),
       () => {
         this.setArrays();
+        this.handleToggleCollapse();
       },
     );
   };
@@ -689,18 +757,19 @@ class AddNewReport extends Component {
         }
         return false;
       });
-      const filteredIndividualForm = filteredArr.map(each => {
-        if (each.value && each.value.selectedIndividualForm) {
-          if (
-            each.value.selectedIndividualForm.code ===
-            selectedIndividualForm.code
-          ) {
-            return true;
-          }
-          return false;
-        }
-        return false;
-      });
+
+      const filteredIndividualForm = selectedIndividualForm.filter(
+        ind => {
+          return filteredArr.map(f => {
+            if (f.value && f.value.selectedIndividualForm) {
+              if (f.value.selectedIndividualForm.code === ind.code) {
+                return true;
+              }
+              return false;
+            }
+          });
+        },
+      );
       const formValues = [];
       filteredArr.map(f => {
         if (f.value && f.value.selectedForm) {
@@ -711,7 +780,7 @@ class AddNewReport extends Component {
         formValues.includes(m.code),
       );
 
-      const filteredFormValue = selectedFormValue.map(v => {
+      const filteredFormValue = selectedFormValue.filter(v => {
         return filteredArr.map(f => {
           if (f.value && f.value.selectedQuestions) {
             if (f.value.selectedQuestions.code === v.code) {
@@ -721,6 +790,7 @@ class AddNewReport extends Component {
           }
         });
       });
+
       return {
         data: {
           ...state.data,
@@ -732,11 +802,7 @@ class AddNewReport extends Component {
             selectedForm: filteredForm.includes(true)
               ? selectedForm
               : {},
-            selectedIndividualForm: filteredIndividualForm.includes(
-              true,
-            )
-              ? selectedIndividualForm
-              : {},
+            selectedIndividualForm: filteredIndividualForm,
             selectedQuestions: filteredFormQuestions,
             selectedFormValue: filteredFormValue,
           },
@@ -998,34 +1064,62 @@ class AddNewReport extends Component {
   };
 
   handleIndividualFormSelected = (e, item) => {
-    this.setState(state => {
-      const {
-        data: { formInfo },
-      } = state;
-      const newValue = {
-        ...formInfo.selectedFormType.value,
-        selectedIndividualForm: item,
-      };
-      const newSelectedType = {
-        ...formInfo.selectedFormType,
-        value: {
-          ...newValue,
-        },
-      };
-      return {
-        data: {
-          ...state.data,
-          selectedMetrics: [
-            ...state.data.selectedMetrics,
-            newSelectedType,
-          ],
-          formInfo: {
-            ...state.data.formInfo,
-            selectedIndividualForm: item,
-          },
-        },
-      };
-    });
+    const { value } = e.target;
+    let isItemPresent = false;
+    let selectedIndividualForm = [];
+    this.setState(
+      state => {
+        const {
+          data: { formInfo },
+          selectedMetrics,
+        } = state;
+        const arr = [];
+        let metricValue = [];
+
+        if (formInfo.selectedIndividualForm.length > 0) {
+          formInfo.selectedIndividualForm.map(i => {
+            if (i.code === item.code) {
+              return arr.push(true);
+            } else {
+              selectedIndividualForm.push(i);
+              return arr.push(false);
+            }
+          });
+        }
+        isItemPresent = arr.includes(true);
+        if (isItemPresent) {
+          selectedIndividualForm = formInfo.selectedIndividualForm.filter(
+            s => s.code !== item.code,
+          );
+          return {
+            data: {
+              ...state.data,
+              formInfo: {
+                ...state.data.formInfo,
+                selectedIndividualForm,
+              },
+            },
+          };
+        } else {
+          selectedIndividualForm.push({ ...item });
+          return {
+            data: {
+              ...state.data,
+              formInfo: {
+                ...state.data.formInfo,
+                selectedIndividualForm: [
+                  ...state.data.formInfo.selectedIndividualForm,
+                  item,
+                ],
+              },
+            },
+          };
+        }
+      },
+      () => {
+        this.handleAddFormValue();
+      },
+    );
   };
 
   handleFormValueSelected = e => {
@@ -1121,6 +1215,7 @@ class AddNewReport extends Component {
       }));
     }
   };
+
   handleFormValueCheck = (e, item) => {
     const { checked } = e.target;
     const {
@@ -1243,12 +1338,15 @@ class AddNewReport extends Component {
         formTypeArr,
         formQuestions,
         individualFormArr,
+        collapseClass,
       },
       props: {
         reportReducer: { reportLoader },
         data,
+        toggleSection,
       },
     } = this;
+    // console.log('index', selectedIndividualForm, selectedMetrics);
     const isEdit =
       data && Object.keys(data).length > 0 ? true : false;
     return (
@@ -1256,8 +1354,20 @@ class AddNewReport extends Component {
         <div className="card">
           <div className="card-body">
             <div className="report-generator">
-              {isEdit && <h3 className="mb-3">Edit report</h3>}
-              {!isEdit && <h3 className="mb-3">New report</h3>}
+              <div className="reports-header mt-4">
+                {isEdit && <h3 className="mb-3">Edit report</h3>}
+                {!isEdit && <h3 className="mb-3">New report</h3>}
+                <button
+                  type="button"
+                  className="common-button is-bg is-icon"
+                  onClick={() => {
+                    toggleSection('reportList');
+                  }}
+                >
+                  {/* <i className="material-icons">add_circle</i> */}
+                  <span>Cancel</span>
+                </button>
+              </div>
               <div className="filter-all-header">
                 <form
                   className="floating-form "
@@ -1331,62 +1441,68 @@ class AddNewReport extends Component {
                   </div>
                 </form>
               </div>
-              <div className="report-accordion">
-                <div className="row ">
-                  <Metrics
-                    handleToggleClass={this.handleToggleClass}
-                    toggleSelectClass={toggleSelectClass}
-                    data={metricArr}
-                    users={usersArr}
-                    userList={userList}
-                    siteValues={siteValues}
-                    metaAttributes={metaAttributes}
-                    selectedMetas={selectedMetas}
-                    handleSelectMeta={this.handleChangeMeta}
-                    submissionType={submissionType}
-                    submissions={submissions}
-                    handleSubmissionType={this.handleSubmissionType}
-                    handleCheckSubmissionType={
-                      this.handleCheckSubmissionType
-                    }
-                    handleCheckUser={this.handleChecKUser}
-                    selectedMetrics={selectedMetrics}
-                    formTypes={formTypes}
-                    selectedFormType={selectedFormType}
-                    handleFormTypeCheck={this.handleFormTypeChange}
-                    formTypeArr={formTypeArr}
-                    selectedForm={selectedForm}
-                    handleFormSelected={this.handleFormSelected}
-                    formQuestions={formQuestions}
-                    individualFormArr={individualFormArr}
-                    selectedIndividualForm={selectedIndividualForm}
-                    handleIndividualFormSelected={
-                      this.handleIndividualFormSelected
-                    }
-                    handleChangeFormQuest={this.handleChangeFormQuest}
-                    selectedQuestions={selectedQuestions}
-                    formValue={formValue}
-                    selectedFormValue={selectedFormValue}
-                  />
-                  <SelectedColumn
-                    selected={selectedMetrics}
-                    handleSelectChange={this.handleSelectChange}
-                    handleCheckSubmissionType={this.handleChangeArray}
-                    handleSubmitReport={this.handleSubmitReport}
-                  />
-                  <div className="col-lg-6">
-                    <button
-                      type="button"
-                      className="common-button is-bg"
-                      onClick={() => {
-                        this.handleSubmitReport();
-                      }}
-                    >
-                      Add Report
-                    </button>
+              {collapseClass && (
+                <div className="report-accordion">
+                  <div className="row ">
+                    <Metrics
+                      handleToggleClass={this.handleToggleClass}
+                      toggleSelectClass={toggleSelectClass}
+                      data={metricArr}
+                      users={usersArr}
+                      userList={userList}
+                      siteValues={siteValues}
+                      metaAttributes={metaAttributes}
+                      selectedMetas={selectedMetas}
+                      handleSelectMeta={this.handleChangeMeta}
+                      submissionType={submissionType}
+                      submissions={submissions}
+                      handleSubmissionType={this.handleSubmissionType}
+                      handleCheckSubmissionType={
+                        this.handleCheckSubmissionType
+                      }
+                      handleCheckUser={this.handleChecKUser}
+                      selectedMetrics={selectedMetrics}
+                      formTypes={formTypes}
+                      selectedFormType={selectedFormType}
+                      handleFormTypeCheck={this.handleFormTypeChange}
+                      formTypeArr={formTypeArr}
+                      selectedForm={selectedForm}
+                      handleFormSelected={this.handleFormSelected}
+                      formQuestions={formQuestions}
+                      individualFormArr={individualFormArr}
+                      selectedIndividualForm={selectedIndividualForm}
+                      handleIndividualFormSelected={
+                        this.handleIndividualFormSelected
+                      }
+                      handleChangeFormQuest={
+                        this.handleChangeFormQuest
+                      }
+                      selectedQuestions={selectedQuestions}
+                      formValue={formValue}
+                      selectedFormValue={selectedFormValue}
+                    />
+                    <SelectedColumn
+                      selected={selectedMetrics}
+                      handleSelectChange={this.handleSelectChange}
+                      handleCheckSubmissionType={
+                        this.handleChangeArray
+                      }
+                      handleSubmitReport={this.handleSubmitReport}
+                    />
+                    <div className="col-lg-6">
+                      <button
+                        type="button"
+                        className="common-button is-bg"
+                        onClick={() => {
+                          this.handleSubmitReport();
+                        }}
+                      >
+                        Add Report
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
               {/* <DataFilter
                 toggleSelectClass={toggleSelectClass}
                 handleToggleClass={this.handleToggleClass}
