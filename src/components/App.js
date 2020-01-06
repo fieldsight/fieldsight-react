@@ -380,7 +380,7 @@ class App extends Component {
                   render={props => <SuperAdminFormEdit {...props} />}
                 />
                 <Route
-                  path="/admin-settings/:id"
+                  path="/organization-settings/:id"
                   render={props => <SuperAdminSetting {...props} />}
                 />
                 <Route

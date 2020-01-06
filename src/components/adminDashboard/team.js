@@ -23,7 +23,7 @@ export default class TeamTable extends PureComponent {
                     <div className="content">
                       <h6>
                         <a
-                          href={`/fieldsight/application/#/project-dashboard/${each.id}`}
+                          href={`/fieldsight/application/#/team-dashboard/${each.id}`}
                         >
                           {each.name}
                         </a>
