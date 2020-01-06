@@ -26,7 +26,6 @@ export default class MyForm extends Component {
     axios
       .get(`/fv3/api/manage-super-organizations-library/${id}/`)
       .then(res => {
-        console.log(res, 'res');
         this.setState({
           forms: res.data.forms,
           selected_forms: res.data.selected_forms,
@@ -68,7 +67,7 @@ export default class MyForm extends Component {
   handleSaveForm = () => {
     const { id } = this.props;
     const body = { xf_ids: this.state.selected };
-    console.log(body, 'body');
+
     axios
       .post(
         `/fv3/api/manage-super-organizations-library/${id}/`,
@@ -103,7 +102,6 @@ export default class MyForm extends Component {
         body,
       )
       .then(res => {
-        console.log(res);
         if (res.status === 200) {
           const delet = selected_forms.filter(
             data => form_id !== data.id,
@@ -141,11 +139,11 @@ export default class MyForm extends Component {
       handleCancle,
       handleConfirm,
     } = this;
-    console.log(selected_forms, 'selected_teams');
+
     return (
       <>
         <RightContentCard
-          title="Form Library"
+          title="Form"
           addButton
           toggleModal={this.handleChange}
           buttonName="Add "
@@ -161,7 +159,7 @@ export default class MyForm extends Component {
             toggleModal={this.handleClosePopup}
             showButton
             showText="create form"
-            url={`/fieldsight/application/#/create-team/${id}`}
+            url="#"
           >
             <form className="floating-form">
               <ul>

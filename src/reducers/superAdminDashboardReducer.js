@@ -22,6 +22,8 @@ const initialState = {
   teams: [],
   map: {},
   showContentLoader: false,
+  organizationDashboardLoader: true,
+  admins: [],
 };
 
 export default function(state = initialState, action) {
@@ -46,6 +48,8 @@ export default function(state = initialState, action) {
         teams: action.payload.teams,
         map: action.payload.map,
         showContentLoader: true,
+        admins: action.payload.admins,
+        organizationDashboardLoader: false,
       };
     default:
       return state;

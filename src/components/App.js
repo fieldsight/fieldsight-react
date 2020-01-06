@@ -366,6 +366,24 @@ class App extends Component {
                 />
 
                 <Route
+                  path="/organization-dashboard/:id"
+                  render={props => <AdminDashboard {...props} />}
+                />
+
+                <Route
+                  path="/create-super-admin"
+                  render={props => <SuperAdminForm {...props} />}
+                />
+
+                <Route
+                  path="/edit-admin/:id"
+                  render={props => <SuperAdminFormEdit {...props} />}
+                />
+                <Route
+                  path="/admin-settings/:id"
+                  render={props => <SuperAdminSetting {...props} />}
+                />
+                <Route
                   path="/userLists"
                   render={props => <UserList {...props} />}
                 />

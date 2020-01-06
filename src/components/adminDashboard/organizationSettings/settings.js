@@ -4,6 +4,7 @@ import SuperAdminFormEdit from '../../superAdminEdit';
 import LeftSideBar from './leftSideBar';
 import Teams from './teams';
 import MyForm from './myForms';
+import { RegionProvider } from '../../../context';
 
 export default class SuperAdminSetting extends PureComponent {
   render() {
@@ -15,7 +16,7 @@ export default class SuperAdminSetting extends PureComponent {
     } = this.props;
 
     return (
-      <>
+      <RegionProvider>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item ">
@@ -53,7 +54,7 @@ export default class SuperAdminSetting extends PureComponent {
                     exact
                     path={`${url}`}
                     render={props => (
-                      <SuperAdminFormEdit {...props} />
+                      <SuperAdminFormEdit id={id} {...props} />
                     )}
                   />
                   <Route
@@ -70,7 +71,7 @@ export default class SuperAdminSetting extends PureComponent {
             </div>
           </div>
         </div>
-      </>
+      </RegionProvider>
     );
   }
 }

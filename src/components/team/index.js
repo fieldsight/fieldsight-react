@@ -77,21 +77,21 @@ class Teams extends Component {
     const { results } = this.state;
     const { selected } = this.props;
 
-    const selectLanguage = [
-      { id: 'en', name: 'Eng' },
-      { id: 'ne', name: 'Nep' },
-    ];
+    // const selectLanguage = [
+    //   { id: 'en', name: 'Eng' },
+    //   { id: 'ne', name: 'Nep' },
+    // ];
     return (
       <>
         <div className="card">
-          <div>
+          {/* <div>
             <SelectElement
               options={selectLanguage}
               label="Select Language"
               changeHandler={this.onLanguageChangeHandler}
               value={selected}
             />
-          </div>
+          </div> */}
           <div
             className="card-header 
           main-card-header sub-card-header"
