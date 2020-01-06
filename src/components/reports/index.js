@@ -15,16 +15,17 @@ class Reports extends Component {
 
   toggleSection = (section, data) => {
     this.setState(() => {
-      if (data) {
+      if (data && section === 'addReport') {
         return { activeSection: section, formData: data };
       }
-      return { activeSection: section };
+      return { activeSection: section, formData: {} };
     });
   };
 
   render() {
     const { activeSection, formData } = this.state;
     const { projectId } = this.props;
+
     return (
       <>
         {activeSection === 'reportList' && (

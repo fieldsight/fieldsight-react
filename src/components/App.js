@@ -412,6 +412,24 @@ class App extends Component {
                   path="/form-submission"
                   render={props => <Submission {...props} />}
                 />
+                <Route
+                  path="/super-organization-dashboard/:id"
+                  render={props => <AdminDashboard {...props} />}
+                />
+
+                <Route
+                  path="/create-super-admin"
+                  render={props => <SuperAdminForm {...props} />}
+                />
+
+                <Route
+                  path="/edit-super-admin/:id"
+                  render={props => <SuperAdminFormEdit {...props} />}
+                />
+                <Route
+                  path="/super-admin-settings/:id"
+                  render={props => <SuperAdminSetting {...props} />}
+                />
               </Switch>
               <ToastContainer />
             </Router>
