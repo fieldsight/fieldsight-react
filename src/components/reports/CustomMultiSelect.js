@@ -28,7 +28,7 @@ export default class CustomMultiSelect extends PureComponent {
 
           <ul>
             {checkboxOption.length > 0 &&
-              checkboxOption.map(option => {
+              checkboxOption.map((option, index) => {
                 const filterList = selectedArr.filter(i =>
                   i.code
                     ? i.code === option.code
@@ -60,7 +60,7 @@ export default class CustomMultiSelect extends PureComponent {
                         : option.name
                         ? option.name
                         : ''
-                    }`}
+                    }_${index}`}
                   >
                     <div className="custom-control custom-checkbox">
                       <input

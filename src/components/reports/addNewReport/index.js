@@ -17,54 +17,56 @@ import Metrics from './metrics';
 import SelectedColumn from './selectedColumn';
 /* eslint-disable */
 
+const InitialState = {
+  data: {
+    reportId: '',
+    reportName: '',
+    desc: '',
+    selectedReportType: '',
+    selectedMetrics: [],
+    formInfo: {
+      selectedFormType: '',
+      selectedForm: '',
+      selectedIndividualForm: [],
+      selectedQuestions: [],
+      formValue: [],
+      selectedFormValue: [],
+    },
+  },
+  reportType: [],
+  metrics: [],
+  metricArr: [],
+  siteInfoArr: [],
+  formInfoArr: [],
+  formTypeArr: [],
+  usersArr: [],
+  individualFormArr: [],
+  toggleSelectClass: {
+    reportType: false,
+    siteType: false,
+    siteValue: false,
+    formType: false,
+    formValue: false,
+    formQuestSelect: false,
+    submissionCount: false,
+  },
+  collapseClass: false,
+  // loader: false,
+  submissionType: {},
+  submissions: [],
+  userList: [],
+  metaAttributes: [],
+  selectedMetas: [],
+  siteValues: [],
+  selectedValue: [],
+  formTypes: [],
+  formQuestions: [],
+};
+
 class AddNewReport extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: {
-        reportId: '',
-        reportName: '',
-        desc: '',
-        selectedReportType: '',
-        selectedMetrics: [],
-        formInfo: {
-          selectedFormType: '',
-          selectedForm: '',
-          selectedIndividualForm: [],
-          selectedQuestions: [],
-          formValue: [],
-          selectedFormValue: [],
-        },
-      },
-      reportType: [],
-      metrics: [],
-      metricArr: [],
-      siteInfoArr: [],
-      formInfoArr: [],
-      formTypeArr: [],
-      usersArr: [],
-      individualFormArr: [],
-      toggleSelectClass: {
-        reportType: false,
-        siteType: false,
-        siteValue: false,
-        formType: false,
-        formValue: false,
-        formQuestSelect: false,
-        submissionCount: false,
-      },
-      collapseClass: false,
-      // loader: false,
-      submissionType: {},
-      submissions: [],
-      userList: [],
-      metaAttributes: [],
-      selectedMetas: [],
-      siteValues: [],
-      selectedValue: [],
-      formTypes: [],
-      formQuestions: [],
-    };
+    this.state = InitialState;
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }
@@ -260,6 +262,12 @@ class AddNewReport extends Component {
     // document.removeEventListener('click', this.handleClickOutside);
   }
 
+  clearState() {
+    this.setState({ ...InitialState }, () => {
+      this.props.toggleSection('reportList');
+    });
+  }
+
   setWrapperRef(node) {
     this.wrapperRef = node;
   }
@@ -365,7 +373,7 @@ class AddNewReport extends Component {
     });
   };
 
-  handleAddFormValue = () => {
+  handleAddFormValue = valueFor => {
     const {
       data: {
         formInfo: {
@@ -383,7 +391,10 @@ class AddNewReport extends Component {
     const newIndividualFormArr = [];
     let filteredMetrics = [];
     this.setState(state => {
-      if (selectedIndividualForm.length > 0) {
+      if (
+        valueFor === 'selectedIndividualForm' &&
+        selectedIndividualForm.length > 0
+      ) {
         selectedIndividualForm.map(i => {
           const val = {
             selectedForm,
@@ -408,7 +419,10 @@ class AddNewReport extends Component {
           },
         };
       }
-      if (selectedIndividualForm.length === 0) {
+      if (
+        valueFor === 'selectedIndividualForm' &&
+        selectedIndividualForm.length === 0
+      ) {
         filteredMetrics = selectedMetrics.filter(i => {
           if (i.value && i.value.selectedIndividualForm) {
             return false;
@@ -423,6 +437,7 @@ class AddNewReport extends Component {
         };
       }
       if (
+        valueFor === 'selectedValue' &&
         selectedQuestions.length > 0 &&
         selectedFormValue &&
         selectedFormValue.length > 0
@@ -451,7 +466,11 @@ class AddNewReport extends Component {
           },
         };
       }
-      if (selectedFormValue && selectedFormValue.length === 0) {
+      if (
+        valueFor === 'selectedValue' &&
+        selectedFormValue &&
+        selectedFormValue.length === 0
+      ) {
         filteredMetrics = selectedMetrics.filter(i => {
           if (i.value && i.value.selectedQuestion) {
             return false;
@@ -465,7 +484,11 @@ class AddNewReport extends Component {
           },
         };
       }
-      if (selectedQuestions && selectedQuestions.length === 0) {
+      if (
+        valueFor === 'selectedValue' &&
+        selectedQuestions &&
+        selectedQuestions.length === 0
+      ) {
         filteredMetrics = selectedMetrics.filter(i => {
           if (i.value && i.value.selectedQuestion) {
             return false;
@@ -1117,7 +1140,7 @@ class AddNewReport extends Component {
         }
       },
       () => {
-        this.handleAddFormValue();
+        this.handleAddFormValue('selectedIndividualForm');
       },
     );
   };
@@ -1188,7 +1211,7 @@ class AddNewReport extends Component {
         formInfo: { selectedQuestions },
       },
     } = this.state;
-    this.handleAddFormValue();
+    this.handleAddFormValue('selectedValue');
     const arr = [];
     selectedQuestions.map(each => {
       if (each.type === 'integer') {
@@ -1255,7 +1278,7 @@ class AddNewReport extends Component {
         }
       },
       () => {
-        this.handleAddFormValue();
+        this.handleAddFormValue('selectedValue');
       },
     );
   };
@@ -1282,7 +1305,8 @@ class AddNewReport extends Component {
         .then(res => {
           if (res.data) {
             successToast('Report', 'updated');
-            this.props.toggleSection('reportList');
+            this.clearState();
+            // this.props.toggleSection('reportList');
           }
         })
         .catch(err => {
@@ -1297,7 +1321,7 @@ class AddNewReport extends Component {
         .then(res => {
           if (res.data) {
             successToast('Report', 'created');
-            this.props.toggleSection('reportList');
+            this.clearState();
           }
         })
         .catch(err => {
@@ -1361,7 +1385,7 @@ class AddNewReport extends Component {
                   type="button"
                   className="common-button is-bg is-icon"
                   onClick={() => {
-                    toggleSection('reportList');
+                    this.clearState();
                   }}
                 >
                   {/* <i className="material-icons">add_circle</i> */}
