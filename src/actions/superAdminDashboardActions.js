@@ -1,8 +1,5 @@
 import axios from 'axios';
-import {
-  GET_SUPERADMIN_DASHBOARD,
-  SHOW_SUPERADMIN_DASHBOARD_LOADER,
-} from './types';
+import { GET_SUPERADMIN_DASHBOARD } from './types';
 
 /* eslint-disable */
 export const getSuperAdminDashboard = id => dispatch => {
