@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage } from 'react-intl';
-import { AvatarContentLoader } from '../../common/Loader';
+import { AvatarContentLoader } from '../common/Loader';
 
 const AdminListItem = ({ admin }) => {
   return (
@@ -35,7 +34,7 @@ class Admin extends PureComponent {
           style={{ position: 'relative', height: '296px' }}
         >
           <>
-            {showContentLoader ? (
+            {!showContentLoader ? (
               <AvatarContentLoader
                 number={6}
                 width="100%"
@@ -46,18 +45,15 @@ class Admin extends PureComponent {
                 <ul>
                   {admin.length > 0 ? (
                     admin.map(each => (
-                      <AdminListItem
-                        admin={each}
-                        key={`admin_${each.id}`}
-                      />
+                      <>
+                        <AdminListItem
+                          admin={each}
+                          key={`admin_${each.id}`}
+                        />
+                      </>
                     ))
                   ) : (
-                    <p>
-                      <FormattedMessage
-                        id="app.noDataAvailable"
-                        defaultMessage="No Data Available"
-                      />
-                    </p>
+                    <p>No Data Available</p>
                   )}
                 </ul>
               </PerfectScrollbar>

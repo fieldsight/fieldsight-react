@@ -6,6 +6,7 @@ import RightContentCard from '../common/RightContentCard';
 import InputElement from '../common/InputElement';
 import CheckBox from '../common/CheckBox';
 import SelectElement from '../common/SelectElement';
+
 import 'leaflet/dist/leaflet.css';
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
@@ -45,12 +46,10 @@ export default class SuperAdminFormEdit extends Component {
   }
 
   componentDidMount() {
-    const {
-      match: {
-        params: { id },
-      },
-    } = this.props;
-    console.log(id, this.props);
+    const { id } = this.props;
+
+    console.log(this.props.id, 'organizationId');
+
     const editUrl = axios.get(
       `/fv3/api/super-organization-lists/${id}/`,
     );
@@ -65,8 +64,8 @@ export default class SuperAdminFormEdit extends Component {
           const position =
             responses[0].data.location &&
             responses[0].data.location.split('');
-          const longitude = position && position[1].split('(')[1];
-          const latitude = position && position[2].split(')')[0];
+          // const longitude = position && position[1].split('(')[1];
+          // const latitude = position && position[2].split(')')[0];
           console.log(responses, 'res');
           this.setState({
             name: responses[0].data.name,
@@ -78,10 +77,10 @@ export default class SuperAdminFormEdit extends Component {
             public_desc: responses[0].data.public_desc,
             additional_desc: responses[0].data.additional_desc,
             is_active: responses[0].data.is_active,
-            position: {
-              latitude: latitude,
-              longitude: longitude,
-            },
+            // position: {
+            //   latitude: latitude,
+            //   longitude: longitude,
+            // },
             zoom: 13,
             Selectedtypes: responses[0].data.country,
             country: responses[1].data.countries,
@@ -111,6 +110,7 @@ export default class SuperAdminFormEdit extends Component {
 
   onSubmitHandler = e => {
     e.preventDefault();
+    const { id } = this.props;
 
     const data = {
       name: this.state.name,
@@ -127,7 +127,7 @@ export default class SuperAdminFormEdit extends Component {
       longitude: this.state.position.longitude,
     };
     axios
-      .put(`/fv3/api/super-organization-form/`, data)
+      .put(`/fv3/api/super-organization-lists/${id}/`, data)
       .then(req => {
         if (req === 201) {
           this.setState({
@@ -202,8 +202,6 @@ export default class SuperAdminFormEdit extends Component {
         Selectedtypes,
       },
     } = this;
-
-    console.log(this.props);
 
     return (
       <>

@@ -1,27 +1,36 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import CustomCheckBox from '../CustomCheckbox';
-
-/* eslint-disable */
 
 export default class UserRole extends PureComponent {
   render() {
-    const { handleCheckReportType } = this.props;
+    const { users, handleCheckUser, userList } = this.props;
+
     return (
       <div className="fs-7 fs-col">
         <ul className="role-list">
           <h6>User role</h6>
           <li>
-            {/* <div className="custom-control custom-checkbox"> */}
-            <CustomCheckBox
-              id="selected-1"
-              label="selected-1"
-              name="selected-1"
-              // checked={submissions.includes(
-              //   "selected-1",
-              // )}
-              changeHandler={handleCheckReportType}
-            />
-            {/* </div> */}
+            {users &&
+              users.map(user => {
+                const filterList = userList.filter(
+                  i => i.code === user.code,
+                );
+                const isChecked =
+                  filterList && filterList[0] ? true : false;
+                return (
+                  <Fragment key={user.code}>
+                    <CustomCheckBox
+                      id={user.code}
+                      label={user.label}
+                      name={user.code}
+                      checked={isChecked}
+                      changeHandler={e => {
+                        handleCheckUser(e, user);
+                      }}
+                    />
+                  </Fragment>
+                );
+              })}
           </li>
         </ul>
       </div>

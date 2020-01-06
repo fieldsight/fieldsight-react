@@ -15,7 +15,7 @@ export default class LeftSideBar extends PureComponent {
       {
         id: '1',
         to: `${url}`,
-        path: `${url}`,
+        path: `${url}/${id}`,
         title: 'Organization Information',
       },
       {
@@ -28,7 +28,7 @@ export default class LeftSideBar extends PureComponent {
         id: '3',
         to: `${url}/my-form`,
         path: `${url}/my-form`,
-        title: 'Form Library',
+        title: 'Form',
       },
     ];
 

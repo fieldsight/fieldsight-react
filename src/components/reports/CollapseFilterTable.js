@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-// /* eslint-disable */
+/* eslint-disable */
 
 export default class CollapseFilterTable extends PureComponent {
   render() {

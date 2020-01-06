@@ -25,12 +25,8 @@ class DashboardHeader extends PureComponent {
         link: '#',
       },
       {
-        title: 'Teams',
-        link: '#',
-      },
-      {
         title: 'Settings',
-        link: `/fieldsight/application/#/super-admin-settings/${this.props.superAdminId}`,
+        link: `/fieldsight/application/#/admin-settings/${this.props.superAdminId}`,
       },
     ];
 
@@ -48,8 +44,8 @@ class DashboardHeader extends PureComponent {
 
     const countHeader = [
       {
-        title: 'Total Site',
-        total_sites: `${this.props.total_sites}`,
+        title: 'Total Team',
+        total_sites: `${this.props.total_teams}`,
         link: '#',
       },
       {
@@ -58,13 +54,14 @@ class DashboardHeader extends PureComponent {
         link: '#',
       },
       {
-        title: 'Total User',
-        total_sites: `${this.props.total_users}`,
+        title: 'Total Site',
+        total_sites: `${this.props.total_sites}`,
         link: '#',
       },
+
       {
-        title: 'Total Teams',
-        total_sites: `${this.props.total_teams}`,
+        title: 'Total User',
+        total_sites: `${this.props.total_users}`,
         link: '#',
       },
     ];

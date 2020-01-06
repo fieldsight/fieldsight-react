@@ -3,14 +3,27 @@ import { connect } from 'react-redux';
 import DashboardHeader from './dashboardHeader';
 // import DashboardComponents from './dashboardComponent';
 import SiteMap from '../common/SiteMap';
-import DashboardCounter from './dashboardCounter';
+// import DashboardCounter from './dashboardCounter';
 import About from './about';
 import Project from './projectLists';
+import TeamTable from './team';
+import Admin from './admin';
 import { getSuperAdminDashboard } from '../../actions/superAdminDashboardActions';
 
 /* eslint-disable camelcase */
 
 class AdminDashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: 'teams',
+      projects: [],
+      masterprojects: [],
+      teams: [],
+      masterteams: [],
+    };
+  }
+
   componentDidMount() {
     const {
       match: {
@@ -19,6 +32,92 @@ class AdminDashboard extends Component {
     } = this.props;
     this.props.getSuperAdminDashboard(superAdminId);
   }
+
+  componentWillReceiveProps(nextprops) {
+    this.setState({
+      projects: nextprops.superAdminDashboard.projects,
+      masterprojects: nextprops.superAdminDashboard.projects,
+      teams: nextprops.superAdminDashboard.teams,
+      masterteams: nextprops.superAdminDashboard.teams,
+      admins: nextprops.superAdminDashboard.admins,
+      masteradmins: nextprops.superAdminDashboard.admins,
+    });
+  }
+
+  toggleTab = formType => {
+    this.setState({
+      activeTab: formType,
+    });
+  };
+
+  onChangeHandler = e => {
+    const {
+      target: { value },
+    } = e;
+
+    const { projects, masterprojects } = this.state;
+
+    if (value) {
+      const search = projects.filter(project => {
+        return project.name
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      });
+      this.setState({
+        projects: search,
+      });
+    } else {
+      this.setState({
+        projects: masterprojects,
+      });
+    }
+  };
+
+  teamSearch = e => {
+    const {
+      target: { value },
+    } = e;
+
+    const { teams, masterteams } = this.state;
+
+    if (value) {
+      const search = teams.filter(project => {
+        return project.name
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      });
+      this.setState({
+        teams: search,
+      });
+    } else {
+      this.setState({
+        teams: masterteams,
+      });
+    }
+  };
+
+  adminSearch = e => {
+    const {
+      target: { value },
+    } = e;
+
+    const { admins, masteradmins } = this.state;
+
+    if (value) {
+      const search = admins.filter(project => {
+        return project.full_name
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      });
+      this.setState({
+        admins: search,
+      });
+    } else {
+      this.setState({
+        admins: masteradmins,
+      });
+    }
+  };
 
   render() {
     const {
@@ -45,7 +144,12 @@ class AdminDashboard extends Component {
       teams,
       map,
       showContentLoader,
+      admins,
+      organizationDashboardLoader,
     } = this.props.superAdminDashboard;
+    const { activeTab } = this.state;
+    const total_team = teams.length;
+    const total_project = projects.length;
 
     return (
       <div className="right-content no-bg new-dashboard">
@@ -57,14 +161,14 @@ class AdminDashboard extends Component {
           logo={logo}
           showContentLoader={showContentLoader}
           total_sites={total_sites}
-          total_projects={total_projects}
+          total_projects={total_project}
           total_users={total_users}
-          total_teams={total_teams}
+          total_teams={total_team}
           superAdminId={superAdminId}
         />
 
         <div className="row">
-          <div className="col-lg-8">
+          <div className="col-lg-6">
             <div className="card map">
               <div className="card-header main-card-header sub-card-header">
                 <h5>Project Maps</h5>
@@ -83,51 +187,58 @@ class AdminDashboard extends Component {
               <div className="card-body">
                 <SiteMap
                   map={map}
-                  showContentLoader={showContentLoader}
+                  showContentLoader={organizationDashboardLoader}
                 />
               </div>
             </div>
           </div>
-          <div className="col-lg-4">
-            <div className="card project-list">
+          <div className="col-lg-6">
+            <div className="card region-table">
               <div className="card-header main-card-header sub-card-header">
-                <h5>Projects</h5>
-                <div className="dash-btn">
-                  <form className="floating-form">
-                    <div className="form-group mr-0">
-                      <input
-                        type="search"
-                        className="form-control"
-                        required
-                      />
-                      <label htmlFor="input">Search</label>
-                      <i className="la la-search" />
-                    </div>
-                  </form>
-                  <a
-                    href="/fieldsight/org-map/"
-                    className="fieldsight-btn"
-                    // target="_blank"
-                  >
-                    <i className="la la-plus" />
-                  </a>
-                </div>
-              </div>
-              <Project projects={teams} />
-            </div>
-          </div>
-        </div>
-        <DashboardCounter submissions={submissions} />
-        <div className="about-section ">
-          <div className="row">
-            <About contacts={contact} desc={additional_desc} />
-            {/* <About contacts={contact} desc={public_desc} /> */}
-            <div className="col-lg-4">
-              <div className="card admin">
-                <div className="card-header main-card-header sub-card-header">
-                  <h5>Admin </h5>
+                {/* <div className="form-group"> */}
+                <ul className="nav nav-tabs ">
+                  <li className="nav-item">
+                    <a
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
+                        this.toggleTab('teams');
+                      }}
+                      className={
+                        activeTab === 'teams'
+                          ? 'nav-link active'
+                          : 'nav-link'
+                      }
+                      onClick={() => {
+                        this.toggleTab('teams');
+                      }}
+                    >
+                      teams
+                    </a>
+                  </li>
 
-                  {/* <h5>Admin</h5>
+                  <li className="nav-item">
+                    <a
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
+                        this.toggleTab('project');
+                      }}
+                      className={
+                        activeTab === 'project'
+                          ? 'nav-link active'
+                          : 'nav-link'
+                      }
+                      onClick={() => {
+                        this.toggleTab('project');
+                      }}
+                    >
+                      project
+                    </a>
+                  </li>
+                </ul>
+                {/* </div> */}
+                {activeTab === 'teams' && (
                   <div className="dash-btn">
                     <form className="floating-form">
                       <div className="form-group mr-0">
@@ -135,6 +246,7 @@ class AdminDashboard extends Component {
                           type="search"
                           className="form-control"
                           required
+                          onChange={this.teamSearch}
                         />
                         <label htmlFor="input">Search</label>
                         <i className="la la-search" />
@@ -143,12 +255,84 @@ class AdminDashboard extends Component {
                     <a href="#" className="fieldsight-btn">
                       <i className="la la-plus" />
                     </a>
-                  </div> */}
+                  </div>
+                )}
+                {activeTab === 'project' && (
+                  <div className="dash-btn">
+                    <form
+                      className="floating-form"
+                      onSubmit={e => {
+                        e.preventDefault();
+                      }}
+                    >
+                      <div className="form-group mr-0">
+                        <input
+                          type="search"
+                          className="form-control"
+                          placeholder="Search"
+                          onChange={this.onChangeHandler}
+                        />
+
+                        <i className="la la-search" />
+                      </div>
+                    </form>
+                    {/* {is_project_manager && ( */}
+                    <a
+                      href="/fieldsight/application/#/create-site/"
+                      target="_blank"
+                      className="fieldsight-btn"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="la la-plus" />
+                    </a>
+                    {/* )} */}
+                  </div>
+                )}
+              </div>
+
+              {activeTab === 'project' && (
+                <>
+                  <Project projects={this.state.projects} />
+                </>
+              )}
+
+              {activeTab === 'teams' && (
+                <TeamTable teams={this.state.teams} />
+              )}
+            </div>
+          </div>
+        </div>
+        {/* <DashboardCounter submissions={submissions} /> */}
+        <div className="about-section ">
+          <div className="row">
+            <About contacts={contact} desc={additional_desc} />
+            {/* <About contacts={contact} desc={public_desc} /> */}
+            <div className="col-lg-4">
+              <div className="card admin">
+                <div className="card-header main-card-header sub-card-header">
+                  <h5>Admin</h5>
+                  <div className="dash-btn">
+                    <form className="floating-form">
+                      <div className="form-group mr-0">
+                        <input
+                          type="search"
+                          className="form-control"
+                          required
+                          onChange={this.adminSearch}
+                        />
+                        <label htmlFor="input">Search</label>
+                        <i className="la la-search" />
+                      </div>
+                    </form>
+                    <a href="#" className="fieldsight-btn">
+                      <i className="la la-plus" />
+                    </a>
+                  </div>
                 </div>
-                {/* <Admin
-                  admin={admin}
+                <Admin
+                  admin={this.state.admins}
                   showContentLoader={showContentLoader}
-                /> */}
+                />
               </div>
             </div>
           </div>

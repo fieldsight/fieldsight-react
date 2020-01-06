@@ -10,14 +10,24 @@ export default class CustomSelect extends PureComponent {
       options,
       value,
       handleSelect,
+      toggleType,
     } = this.props;
-    const label = name[0] && name[0].name;
+    const label =
+      name && name[0]
+        ? name[0].name
+          ? name[0].name
+          : name[0].label
+          ? name[0].label
+          : name[0].title
+          ? name[0].title
+          : ''
+        : '';
 
     return (
       <div className="common-select">
         <div
           className={
-            toggleSelectClass
+            toggleSelectClass[toggleType]
               ? 'select-wrapper select-toggle'
               : 'select-wrapper'
           }
@@ -32,15 +42,43 @@ export default class CustomSelect extends PureComponent {
               options.length > 0 &&
               options.map(option => (
                 <li
-                  key={`option_${option.id}`}
-                  className={option.id === value ? 'active' : ''}
-                  onClick={handleSelect}
-                  onKeyDown={handleSelect}
-                  value={option.id}
+                  key={`option_${
+                    option.id ? option.id : option.code
+                  }`}
+                  className={
+                    option.id
+                      ? option.id === value
+                        ? 'active'
+                        : ''
+                      : option.code
+                      ? option.code === value
+                        ? 'active'
+                        : ''
+                      : ''
+                  }
+                  onClick={e => {
+                    handleSelect(e, option);
+                  }}
+                  onKeyDown={e => {
+                    handleSelect(e, option);
+                  }}
+                  value={
+                    option.id
+                      ? option.id
+                      : option.code
+                      ? option.code
+                      : ''
+                  }
                   // role="button"
                   // tabIndex="0"
                 >
-                  {option.name}
+                  {option.name
+                    ? option.name
+                    : option.label
+                    ? option.label
+                    : option.title
+                    ? option.title
+                    : ''}
                 </li>
               ))}
           </ul>

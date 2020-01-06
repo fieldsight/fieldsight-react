@@ -151,9 +151,9 @@ class DashboardHeader extends Component {
               </figure>
               <div className="dash-pf-content">
                 {name && <h5>{name}</h5>}
-                <div className="flex">
+                <div className="type-info">
                   {identifier && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>
                           <FormattedMessage
@@ -168,7 +168,7 @@ class DashboardHeader extends Component {
                     </div>
                   )}
                   {region && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>
                           <FormattedMessage
@@ -183,9 +183,9 @@ class DashboardHeader extends Component {
                     </div>
                   )}
                 </div>
-                <div className="flex">
+                <div className="">
                   {address && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>
                           <FormattedMessage
@@ -201,7 +201,7 @@ class DashboardHeader extends Component {
                     </div>
                   )}
                   {type && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>
                           <FormattedMessage
@@ -224,39 +224,30 @@ class DashboardHeader extends Component {
           )}
 
           <div className="dash-btn">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Data"
-                className="fieldsight-btn"
-              >
-                <i className="fa fa-paste" />
+            {hasWritePermission && (
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Data"
+                  className="fieldsight-btn"
+                >
+                  <i className="fa fa-paste" />
+                  <span>Data</span>
+                </Dropdown.Toggle>
 
-                <span>
-                  <FormattedMessage
-                    id="app.data"
-                    defaultMessage="Data"
-                    description="Data"
-                  />
-                </span>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu className="dropdown-menu-right">
-                {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item
-                    href={item.link}
-                    key={i}
-                    target="_blank"
-                  >
-                    <FormattedMessage
-                      id={item.id}
-                      defaultMessage={item.title}
-                      description={item.title}
-                    />
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+                <Dropdown.Menu className="dropdown-menu-right">
+                  {ManageDropdown.map((item, i) => (
+                    <Dropdown.Item
+                      href={item.link}
+                      key={i}
+                      target="_blank"
+                    >
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
 
             {hasWritePermission && (
               <Dropdown>
@@ -298,71 +289,65 @@ class DashboardHeader extends Component {
             )}
           </div>
         </div>
-        <div className="card-body">
-          <div className="header-count">
-            <Link
-              to={`/site-responses/${siteId}/general`}
-              target="_blank"
-            >
-              <CountCard
-                countName=""
-                countNumber={totalSubmission}
-                icon="la-clone"
-              />
-            </Link>
-            <a
-              href={`/fieldsight/application/#/site-users/${siteId}/`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <CountCard
-                countName="User"
-                countNumber={totalUsers}
-                icon="la-user"
-                noSubmissionText
-              />
-            </a>
-            {enableSubsites && (
-              <a
-                tabIndex="0"
-                role="button"
-                onKeyDown={() => {
-                  closeModal('Subsites');
-                }}
-                onClick={() => openModal('Subsites')}
+        <div className="card-body dashboard-header-bottom">
+          <div className="flex-between">
+            <div className="header-count">
+              <Link
+                to={`/site-responses/${siteId}/general`}
+                target="_blank"
               >
                 <CountCard
-                  countName="Subsite"
-                  countNumber={totalSubsites}
-                  icon="la-map-marker"
+                  countName=""
+                  countNumber={totalSubmission}
+                  icon="la-clone"
+                />
+              </Link>
+              <a
+                href={`/fieldsight/application/#/site-users/${siteId}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <CountCard
+                  countName="User"
+                  countNumber={totalUsers}
+                  icon="la-user"
                   noSubmissionText
                 />
               </a>
-            )}
+              {enableSubsites && (
+                <a
+                  onClick={() => openModal('Subsites')}
+                  role="button"
+                  tabIndex="0"
+                  onKeyDown={() => openModal('Subsites')}
+                >
+                  <CountCard
+                    countName="Subsite"
+                    countNumber={totalSubsites}
+                    icon="la-map-marker"
+                    noSubmissionText
+                  />
+                </a>
+              )}
+
+              <CountCard
+                countName="Progress"
+                icon="la-signal"
+                countNumber={currentProgress}
+                noSubmissionText
+              />
+            </div>
 
             {hasWritePermission && (
-              <div className="add-data">
-                <a
-                  tabIndex="0"
-                  role="button"
-                  onKeyDown={() => openModal('Header')}
-                  className="popup-close"
-                  onClick={() => openModal('Header')}
-                >
-                  <FormattedMessage
-                    id="app.addData"
-                    defaultMessage="Add Data"
-                  />
-                  <i className="la la-plus" />
-                </a>
-              </div>
+              <button
+                type="button"
+                onClick={() => openModal('Header')}
+                className="common-button is-border is-icon"
+              >
+                <i className="material-icons">library_add</i>
+                <span>Add data</span>
+              </button>
             )}
-            <CountCard
-              countName="Progress"
-              icon="la-signal"
-              countNumber={currentProgress}
-              noSubmissionText
-            />
           </div>
 
           {showModal && (

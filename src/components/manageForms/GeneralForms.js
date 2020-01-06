@@ -267,10 +267,50 @@ class GeneralForms extends Component {
   };
 
   handleCreateGeneralForm = data => {
-    const {
-      state: { id, xf, isEditForm, isProjectForm },
-      props,
-    } = this;
+    const { id, xf, isEditForm, isProjectForm } = this.state;
+    const { typeOptions, regionOptions } = this.props;
+    const selectedAllRegionArr =
+      data.regionSelected.length > 0 &&
+      data.regionSelected.map(each => {
+        if (typeof each.id === 'string') {
+          return true;
+        }
+        return false;
+      });
+    const isSelectedAllRegion =
+      selectedAllRegionArr.length > 0
+        ? selectedAllRegionArr.indexOf(true) > -1
+          ? true
+          : false
+        : '';
+    const selectedRegionArr = isSelectedAllRegion
+      ? regionOptions
+          .filter(region => region.id !== 'all')
+          .map(item => item.id)
+      : data.regionSelected.length > 0 &&
+        data.regionSelected.map(each => each.id);
+
+    const selectedAllTypeArr =
+      data.typeSelected.length > 0 &&
+      data.typeSelected.map(each => {
+        if (typeof each.id === 'string') {
+          return true;
+        }
+        return false;
+      });
+    const isSelectedAllType =
+      selectedAllTypeArr.length > 0
+        ? selectedAllTypeArr.indexOf(true) > -1
+          ? true
+          : false
+        : '';
+    const selectedTypeArr = isSelectedAllType
+      ? typeOptions
+          .filter(type => type.id !== 'all')
+          .map(item => item.id)
+      : data.typeSelected.length > 0 &&
+        data.typeSelected.map(each => each.id);
+
     this.setState(
       {
         loadReq: true,
@@ -285,13 +325,9 @@ class GeneralForms extends Component {
             default_submission_status: data.status,
             setting: {
               types:
-                data.typeSelected && data.typeSelected.length > 0
-                  ? data.typeSelected.map(each => each.id)
-                  : [],
+                selectedTypeArr.length > 0 ? selectedTypeArr : [],
               regions:
-                data.regionSelected && data.regionSelected.length > 0
-                  ? data.regionSelected.map(each => each.id)
-                  : [],
+                selectedRegionArr.length > 0 ? selectedRegionArr : [],
               donor_visibility: data.isDonor,
               can_edit: data.isEdit,
               can_delete: data.isDelete,
@@ -306,7 +342,7 @@ class GeneralForms extends Component {
                   loadReq: false,
                 }),
                 () => {
-                  props.closePopup();
+                  this.props.closePopup();
                   successToast('form ', 'added');
                 },
               );
@@ -333,15 +369,11 @@ class GeneralForms extends Component {
 
               can_edit: data.isEdit,
               donor_visibility: data.isDonor,
-              regions:
-                data.regionSelected && data.regionSelected.length > 0
-                  ? data.regionSelected.map(each => each.id)
-                  : [],
               can_delete: data.isDelete,
+              regions:
+                selectedRegionArr.length > 0 ? selectedRegionArr : [],
               types:
-                data.typeSelected && data.typeSelected.length > 0
-                  ? data.typeSelected.map(each => each.id)
-                  : [],
+                selectedTypeArr.length > 0 ? selectedTypeArr : [],
             },
           };
 

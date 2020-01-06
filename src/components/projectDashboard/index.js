@@ -123,6 +123,7 @@ class ProjectDashboard extends React.Component {
         params: { id: projectId },
       },
     } = this.props;
+    console.log(map, 'map');
 
     const { showCropper, showGallery, activeTab } = this.state;
 
@@ -190,7 +191,9 @@ class ProjectDashboard extends React.Component {
               progressLoader={progressLoader}
             />
           )}
-          {activeTab === 'reports' && <Reports id={projectId} />}
+          {activeTab === 'reports' && (
+            <Reports projectId={projectId} />
+          )}
         </div>
       </>
     );

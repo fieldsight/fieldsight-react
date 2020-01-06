@@ -29,8 +29,9 @@ export default class FormDataFilter extends PureComponent {
   }
 
   componentDidMount() {
-    const siteType = `/fieldsight/api/site-types/1/`;
-    const projectRegions = `/fieldsight/api/project-regions/1/`;
+    const { id } = this.props;
+    const siteType = `/fieldsight/api/site-types/${id}/`;
+    const projectRegions = `/fieldsight/api/project-regions/${id}/`;
 
     const requestSiteType = axios.get(siteType);
     const requestProjectRegions = axios.get(projectRegions);
@@ -45,7 +46,7 @@ export default class FormDataFilter extends PureComponent {
           });
         }),
       )
-      .catch(errors => {
+      .catch(() => {
         // react on errors.
       });
   }
@@ -152,6 +153,7 @@ export default class FormDataFilter extends PureComponent {
         link: '#',
       },
     ];
+
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -163,6 +165,19 @@ export default class FormDataFilter extends PureComponent {
                 <div className="row">
                   <div className="col-md-12">
                     <div className="report-content">
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={this.props.handleForm}
+                        >
+                          back
+                        </button>
+                      </div>
                       <h4>Form Data</h4>
                       <p>
                         Export of forms data and site information an

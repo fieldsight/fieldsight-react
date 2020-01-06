@@ -64,6 +64,12 @@ import SuperAdminSetting from './adminDashboard/organizationSettings/settings';
 
 import FilterDataFilter from './reports/FormDataFilter';
 import ExportDataFilter from './reports/ExportDataFilter';
+import UserList from './reports/users/usersTable';
+import UserProfile from './reports/users/userProfile/index';
+import RegionDashboard from './reports/regionDashboard/index';
+import UserManage from './reports/users/userManage';
+import MyFormTable from './reports/myForm';
+import Submission from './reports/submission';
 
 // import AddNewReport from './reports/addNewReport';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -355,12 +361,12 @@ class App extends Component {
                 />
 
                 <Route
-                  path="/form-data/:id"
+                  path="/form-data"
                   render={props => <ExportDataFilter {...props} />}
                 />
 
                 <Route
-                  path="/super-organization-dashboard/:id"
+                  path="/organization-dashboard/:id"
                   render={props => <AdminDashboard {...props} />}
                 />
 
@@ -370,12 +376,41 @@ class App extends Component {
                 />
 
                 <Route
-                  path="/edit-super-admin/:id"
+                  path="/edit-admin/:id"
                   render={props => <SuperAdminFormEdit {...props} />}
                 />
                 <Route
-                  path="/super-admin-settings/:id"
+                  path="/admin-settings/:id"
                   render={props => <SuperAdminSetting {...props} />}
+                />
+                <Route
+                  path="/userLists"
+                  render={props => <UserList {...props} />}
+                />
+
+                <Route
+                  path="/userProfile"
+                  render={props => <UserProfile {...props} />}
+                />
+
+                <Route
+                  path="/region-dashboard"
+                  render={props => <RegionDashboard {...props} />}
+                />
+
+                <Route
+                  path="/user-manage"
+                  render={props => <UserManage {...props} />}
+                />
+
+                <Route
+                  path="/myFormtable"
+                  render={props => <MyFormTable {...props} />}
+                />
+
+                <Route
+                  path="/form-submission"
+                  render={props => <Submission {...props} />}
                 />
               </Switch>
               <ToastContainer />

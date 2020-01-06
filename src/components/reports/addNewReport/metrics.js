@@ -1,31 +1,32 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import CustomCheckBox from '../CustomCheckbox';
 import UserRole from './userRole';
 import SiteInformation from './siteInformation';
 import FormInformation from './formInformation';
 /* eslint-disable */
 
-// const checkboxOption = [
-//   { id: 1, name: 'region-1' },
-//   { id: 2, name: 'region-2' },
-//   { id: 3, name: 'region-3' },
-// ];
-
-const Submissions = [
-  { id: 1, name: 'approved' },
-  { id: 2, name: 'rejected' },
-  { id: 3, name: 'flag' },
-  { id: 4, name: 'pending' },
-];
-
 export default class Metrics extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isActive: false,
-      submissions: [],
-      submissionType: '',
+      metrics: props.data,
+      users: props.users,
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      this.setState({
+        metrics: this.props.data,
+      });
+    }
+    if (prevProps.users !== this.props.users) {
+      this.setState({
+        users: this.props.users,
+      });
+    }
   }
 
   toggleActive = () => {
@@ -36,47 +37,36 @@ export default class Metrics extends Component {
     // console.log('search');
   };
 
-  handleSubmissionType = type => {
-    this.setState({ submissionType: type });
-  };
-
-  handleCheckReportType = e => {
-    const {
-      target: { name, checked },
-    } = e;
-
-    this.setState(
-      state => {
-        if (checked) {
-          return {
-            submissions: [...state.submissions, name],
-          };
-        }
-        if (!checked) {
-          return {
-            submissions: state.submissions.filter(
-              type => type !== name,
-            ),
-          };
-        }
-        return null;
-      },
-      () => {
-        // console.log('in checkbox', this.state.data);
-      },
-    );
-  };
-
   render() {
-    const { submissions, submissionType } = this.state;
     const {
+      metrics,
+      users,
+      // toggleSelectClass,
+      // toggleFormClass,
+    } = this.state;
+    const {
+      submissions,
+      submissionType,
+      userList,
+      siteValues,
+      selectedMetrics,
+      metaAttributes,
+      selectedMetas,
+      handleSelectMeta,
+      formTypes,
+      selectedFormType,
+      handleFormTypeCheck,
+      formTypeArr,
       toggleSelectClass,
       handleToggleClass,
-      checkboxOption,
-      handleCheck,
-      selectedArr,
+      selectedForm,
+      formQuestions,
+      individualFormArr,
+      selectedIndividualForm,
+      handleIndividualFormSelected,
+      selectedFormValue,
     } = this.props;
-    console.log('render', submissionType);
+    // console.log('metrics', formTypes, '-----', selectedFormType);
 
     return (
       <div className="col-lg-7 col-md-7">
@@ -102,59 +92,90 @@ export default class Metrics extends Component {
                     }}
                   />
                 </div>
-                <ul className="metric-list">
-                  {Submissions.map(submission => (
-                    <li
-                      key={`submission_${submission.id}`}
-                      // className={
-                      //   submissionType === submission.name
-                      //     ? 'active'
-                      //     : ''
-                      // }
-                      onKeyDown={() => {
-                        this.handleSubmissionType(submission.name);
-                      }}
-                      onClick={() => {
-                        this.handleSubmissionType(submission.name);
-                      }}
-                    >
-                      {`No. of ${submission.name} Submissions`}
-                      {checkboxOption.map(option => (
-                        <Fragment key={`option_${option.id}`}>
-                          <CustomCheckBox
-                            id={option.id}
-                            label={option.name}
-                            name={option.name}
-                            checked={submissions.includes(
-                              option.name,
-                            )}
-                            changeHandler={this.handleCheckReportType}
-                          />
-                        </Fragment>
-                      ))}
-                    </li>
-                  ))}
-                </ul>
+                <div
+                  style={{
+                    position: 'relative',
+                    height: `300px `,
+                  }}
+                >
+                  <PerfectScrollbar>
+                    <ul className="metric-list">
+                      {metrics.map(item => {
+                        const filterList = submissions.filter(
+                          i => i.code === item.code,
+                        );
+                        const isChecked =
+                          filterList && filterList[0] ? true : false;
+
+                        return (
+                          <li
+                            key={item.code}
+                            className={
+                              submissionType.code === item.code
+                                ? 'active'
+                                : ''
+                            }
+                            onKeyDown={() => {
+                              this.props.handleSubmissionType(item);
+                            }}
+                            onClick={() => {
+                              this.props.handleSubmissionType(item);
+                            }}
+                          >
+                            <CustomCheckBox
+                              id={item.code}
+                              label={item.label}
+                              name={item.code}
+                              checked={isChecked}
+                              changeHandler={
+                                this.props.handleCheckSubmissionType
+                              }
+                            />
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </PerfectScrollbar>
+                </div>
               </div>
-              <UserRole
-                handleCheckReportType={this.handleCheckReportType}
-              />
+              {users && users.length > 0 && (
+                <UserRole
+                  users={users}
+                  handleCheckUser={this.props.handleCheckUser}
+                  userList={userList}
+                  // parentData={submissions}
+                />
+              )}
             </div>
           </div>
         </div>
         <SiteInformation
           toggleSelectClass={toggleSelectClass}
           handleToggleClass={handleToggleClass}
-          checkboxOption={checkboxOption}
-          handleCheck={handleCheck}
-          selectedArr={selectedArr}
+          siteValues={siteValues}
+          selectedMetrics={selectedMetrics}
+          metaAttributes={metaAttributes}
+          selectedMetas={selectedMetas}
+          handleSelectMeta={handleSelectMeta}
         />
         <FormInformation
           toggleSelectClass={toggleSelectClass}
           handleToggleClass={handleToggleClass}
-          checkboxOption={checkboxOption}
-          handleCheck={handleCheck}
-          selectedArr={selectedArr}
+          selectedMetrics={selectedMetrics}
+          formTypes={formTypes}
+          selectedFormType={selectedFormType}
+          handleFormTypeCheck={handleFormTypeCheck}
+          formTypeArr={formTypeArr}
+          selectedForm={selectedForm}
+          handleFormSelected={this.props.handleFormSelected}
+          formQuestions={formQuestions}
+          individualFormArr={individualFormArr}
+          selectedIndividualForm={selectedIndividualForm}
+          handleIndividualFormSelected={handleIndividualFormSelected}
+          handleChangeFormQuest={this.props.handleChangeFormQuest}
+          selectedQuestions={this.props.selectedQuestions}
+          formValue={this.props.formValue}
+          selectedFormValue={selectedFormValue}
         />
       </div>
     );

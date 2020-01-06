@@ -17,6 +17,7 @@ export default class Settings extends PureComponent {
     const {
       match: { path },
     } = this.props;
+    console.log(path, 'path');
 
     return (
       <RegionProvider>

@@ -42,6 +42,7 @@ export default class TeamSettings extends Component {
       },
       height,
     } = this.props;
+
     const { teamData, teamName } = this.state;
 
     return (
