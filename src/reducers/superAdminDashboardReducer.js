@@ -1,7 +1,4 @@
-import {
-  GET_SUPERADMIN_DASHBOARD,
-  SHOW_SUPERADMIN_DASHBOARD_LOADER,
-} from '../actions/types';
+import { GET_SUPERADMIN_DASHBOARD } from '../actions/types';
 
 const initialState = {
   id: '',

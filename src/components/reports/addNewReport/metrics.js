@@ -38,12 +38,7 @@ export default class Metrics extends Component {
   };
 
   render() {
-    const {
-      metrics,
-      users,
-      // toggleSelectClass,
-      // toggleFormClass,
-    } = this.state;
+    const { metrics, users } = this.state;
     const {
       submissions,
       submissionType,
@@ -86,7 +81,7 @@ export default class Metrics extends Component {
                   <input
                     className="custom-control"
                     type="search"
-                    placeholder="Quick search ..."
+                    placeholder="Quick search metrics ..."
                     onChange={() => {
                       this.onChangeHandler();
                     }}
@@ -99,7 +94,7 @@ export default class Metrics extends Component {
                   }}
                 >
                   <PerfectScrollbar>
-                    <ul className="metric-list">
+                    <ul className="role-list">
                       {metrics.map(item => {
                         const filterList = submissions.filter(
                           i => i.code === item.code,
@@ -143,7 +138,6 @@ export default class Metrics extends Component {
                   users={users}
                   handleCheckUser={this.props.handleCheckUser}
                   userList={userList}
-                  // parentData={submissions}
                 />
               )}
             </div>

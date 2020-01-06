@@ -24,14 +24,14 @@ const InitialState = {
     desc: '',
     selectedReportType: '',
     selectedMetrics: [],
-    formInfo: {
-      selectedFormType: '',
-      selectedForm: '',
-      selectedIndividualForm: [],
-      selectedQuestions: [],
-      formValue: [],
-      selectedFormValue: [],
-    },
+  },
+  formInfo: {
+    selectedFormType: '',
+    selectedForm: '',
+    selectedIndividualForm: [],
+    selectedQuestions: [],
+    formValue: [],
+    selectedFormValue: [],
   },
   reportType: [],
   metrics: [],
@@ -184,14 +184,14 @@ class AddNewReport extends Component {
             desc: report.description,
             selectedReportType: report.type,
             selectedMetrics: report.attributes,
-            formInfo: {
-              ...state.data.formInfo,
-              selectedFormType,
-              selectedForm,
-              selectedIndividualForm,
-              selectedQuestions,
-              selectedFormValue,
-            },
+          },
+          formInfo: {
+            ...state.data.formInfo,
+            selectedFormType,
+            selectedForm,
+            selectedIndividualForm,
+            selectedQuestions,
+            selectedFormValue,
           },
           userList,
           submissions,
@@ -375,15 +375,13 @@ class AddNewReport extends Component {
 
   handleAddFormValue = valueFor => {
     const {
-      data: {
-        formInfo: {
-          selectedFormType,
-          selectedForm,
-          selectedQuestions,
-          selectedFormValue,
-          selectedIndividualForm,
-        },
-        selectedMetrics,
+      data: { selectedMetrics },
+      formInfo: {
+        selectedFormType,
+        selectedForm,
+        selectedQuestions,
+        selectedFormValue,
+        selectedIndividualForm,
       },
     } = this.state;
 
@@ -499,10 +497,10 @@ class AddNewReport extends Component {
           data: {
             ...state.data,
             selectedMetrics: filteredMetrics,
-            formInfo: {
-              ...state.data.formInfo,
-              formValue: [],
-            },
+          },
+          formInfo: {
+            ...state.formInfo,
+            formValue: [],
           },
         };
       }
@@ -664,14 +662,12 @@ class AddNewReport extends Component {
 
   handleChangeArray = item => {
     const {
-      data: {
-        formInfo: {
-          selectedFormType,
-          selectedForm,
-          selectedIndividualForm,
-          selectedQuestions,
-          selectedFormValue,
-        },
+      formInfo: {
+        selectedFormType,
+        selectedForm,
+        selectedIndividualForm,
+        selectedQuestions,
+        selectedFormValue,
       },
     } = this.state;
     this.setState(state => {
@@ -818,17 +814,18 @@ class AddNewReport extends Component {
         data: {
           ...state.data,
           selectedMetrics: filteredArr,
-          formInfo: {
-            selectedFormType: filteredFormType.includes(true)
-              ? selectedFormType
-              : {},
-            selectedForm: filteredForm.includes(true)
-              ? selectedForm
-              : {},
-            selectedIndividualForm: filteredIndividualForm,
-            selectedQuestions: filteredFormQuestions,
-            selectedFormValue: filteredFormValue,
-          },
+        },
+        formInfo: {
+          ...state.formInfo,
+          selectedFormType: filteredFormType.includes(true)
+            ? selectedFormType
+            : {},
+          selectedForm: filteredForm.includes(true)
+            ? selectedForm
+            : {},
+          selectedIndividualForm: filteredIndividualForm,
+          selectedQuestions: filteredFormQuestions,
+          selectedFormValue: filteredFormValue,
         },
         userList: filteredUserArr,
         submissions: filteredSubmissionArr,
@@ -920,12 +917,9 @@ class AddNewReport extends Component {
           });
         }
         return {
-          data: {
-            ...state.data,
-            formInfo: {
-              ...state.data.formInfo,
-              formValue: filteredValues,
-            },
+          formInfo: {
+            ...state.formInfo,
+            formValue: filteredValues,
           },
         };
       }
@@ -937,9 +931,7 @@ class AddNewReport extends Component {
       siteValues,
       siteInfoArr,
       formInfoArr,
-      data: {
-        formInfo: { formValue },
-      },
+      formInfo,
     } = this.state;
 
     this.setState(state => {
@@ -975,7 +967,7 @@ class AddNewReport extends Component {
       }
       if (type === 'form') {
         let filteredFormValues = [];
-        const someArr = formValue;
+        const someArr = formInfo.formValue;
         if (formInfoArr.length > 0) {
           formInfoArr.map(info => {
             if (someArr && someArr.length > 0) {
@@ -1002,12 +994,9 @@ class AddNewReport extends Component {
           });
         }
         return {
-          data: {
-            ...state.data,
-            formInfo: {
-              ...state.data.formInfo,
-              formValue: filteredFormValues,
-            },
+          formInfo: {
+            ...state.formInfo,
+            formValue: filteredFormValues,
           },
         };
       }
@@ -1043,18 +1032,15 @@ class AddNewReport extends Component {
     const { id } = this.props;
     this.setState(
       state => ({
-        data: {
-          ...state.data,
-          formInfo: {
-            ...state.data.formInfo,
-            selectedFormType: item,
-          },
+        formInfo: {
+          ...state.formInfo,
+          selectedFormType: item,
         },
       }),
       () => {
         const {
           selectedFormType: { code },
-        } = this.state.data.formInfo;
+        } = this.state.formInfo;
 
         this.props.getForms(id, code);
       },
@@ -1065,39 +1051,31 @@ class AddNewReport extends Component {
     // const { value } = e.target;
     this.setState(
       state => ({
-        data: {
-          ...state.data,
-          formInfo: {
-            ...state.data.formInfo,
-            selectedFormType: {
-              ...state.data.formInfo.selectedFormType,
-              value: { selectedForm: item },
-            },
-            selectedForm: item,
+        formInfo: {
+          ...state.formInfo,
+          selectedFormType: {
+            ...state.formInfo.selectedFormType,
+            value: { selectedForm: item },
           },
+          selectedForm: item,
         },
       }),
       () => {
         const {
           selectedForm: { id },
-        } = this.state.data.formInfo;
+        } = this.state.formInfo;
         this.props.getFormQuestions(this.props.id, id);
       },
     );
   };
 
   handleIndividualFormSelected = (e, item) => {
-    const { value } = e.target;
     let isItemPresent = false;
     let selectedIndividualForm = [];
     this.setState(
       state => {
-        const {
-          data: { formInfo },
-          selectedMetrics,
-        } = state;
+        const { formInfo } = state;
         const arr = [];
-        let metricValue = [];
 
         if (formInfo.selectedIndividualForm.length > 0) {
           formInfo.selectedIndividualForm.map(i => {
@@ -1115,26 +1093,20 @@ class AddNewReport extends Component {
             s => s.code !== item.code,
           );
           return {
-            data: {
-              ...state.data,
-              formInfo: {
-                ...state.data.formInfo,
-                selectedIndividualForm,
-              },
+            formInfo: {
+              ...state.formInfo,
+              selectedIndividualForm,
             },
           };
         } else {
           selectedIndividualForm.push({ ...item });
           return {
-            data: {
-              ...state.data,
-              formInfo: {
-                ...state.data.formInfo,
-                selectedIndividualForm: [
-                  ...state.data.formInfo.selectedIndividualForm,
-                  item,
-                ],
-              },
+            formInfo: {
+              ...state.formInfo,
+              selectedIndividualForm: [
+                ...state.formInfo.selectedIndividualForm,
+                item,
+              ],
             },
           };
         }
@@ -1163,24 +1135,19 @@ class AddNewReport extends Component {
 
   handleFormQuestionCheck = (e, item) => {
     const {
-      data: {
-        formInfo: { selectedQuestions },
-      },
+      formInfo: { selectedQuestions },
     } = this.state;
     const { name, checked } = e.target;
     this.setState(
       state => {
         if (checked) {
           return {
-            data: {
-              ...state.data,
-              formInfo: {
-                ...state.data.formInfo,
-                selectedQuestions: [
-                  ...state.data.formInfo.selectedQuestions,
-                  item,
-                ],
-              },
+            formInfo: {
+              ...state.formInfo,
+              selectedQuestions: [
+                ...state.formInfo.selectedQuestions,
+                item,
+              ],
             },
           };
         }
@@ -1189,12 +1156,9 @@ class AddNewReport extends Component {
             quest => quest.name !== name,
           );
           return {
-            data: {
-              ...state.data,
-              formInfo: {
-                ...state.data.formInfo,
-                selectedQuestions: filterQuest,
-              },
+            formInfo: {
+              ...state.formInfo,
+              selectedQuestions: filterQuest,
             },
           };
         }
@@ -1207,9 +1171,7 @@ class AddNewReport extends Component {
 
   setFormValue = () => {
     const {
-      data: {
-        formInfo: { selectedQuestions },
-      },
+      formInfo: { selectedQuestions },
     } = this.state;
     this.handleAddFormValue('selectedValue');
     const arr = [];
@@ -1228,12 +1190,9 @@ class AddNewReport extends Component {
       }
     } else {
       this.setState(state => ({
-        data: {
-          ...state.data,
-          formInfo: {
-            ...state.data.formInfo,
-            selectedFormValue: [],
-          },
+        formInfo: {
+          ...state.formInfo,
+          selectedFormValue: [],
         },
       }));
     }
@@ -1242,23 +1201,18 @@ class AddNewReport extends Component {
   handleFormValueCheck = (e, item) => {
     const { checked } = e.target;
     const {
-      data: {
-        formInfo: { selectedFormValue },
-      },
+      formInfo: { selectedFormValue },
     } = this.state;
     this.setState(
       state => {
         if (checked) {
           return {
-            data: {
-              ...state.data,
-              formInfo: {
-                ...state.data.formInfo,
-                selectedFormValue: [
-                  ...state.data.formInfo.selectedFormValue,
-                  item,
-                ],
-              },
+            formInfo: {
+              ...state.formInfo,
+              selectedFormValue: [
+                ...state.formInfo.selectedFormValue,
+                item,
+              ],
             },
           };
         }
@@ -1267,12 +1221,9 @@ class AddNewReport extends Component {
             s => s.code !== item.code,
           );
           return {
-            data: {
-              ...state.data,
-              formInfo: {
-                ...state.data.formInfo,
-                selectedFormValue: newArr,
-              },
+            formInfo: {
+              ...state.formInfo,
+              selectedFormValue: newArr,
             },
           };
         }
@@ -1339,14 +1290,14 @@ class AddNewReport extends Component {
           desc,
           selectedReportType,
           selectedMetrics,
-          formInfo: {
-            selectedFormType,
-            selectedForm,
-            selectedIndividualForm,
-            selectedQuestions,
-            formValue,
-            selectedFormValue,
-          },
+        },
+        formInfo: {
+          selectedFormType,
+          selectedForm,
+          selectedIndividualForm,
+          selectedQuestions,
+          formValue,
+          selectedFormValue,
         },
         reportType,
         metricArr,
@@ -1367,7 +1318,6 @@ class AddNewReport extends Component {
       props: {
         reportReducer: { reportLoader },
         data,
-        toggleSection,
       },
     } = this;
     // console.log('index', selectedIndividualForm, selectedMetrics);
