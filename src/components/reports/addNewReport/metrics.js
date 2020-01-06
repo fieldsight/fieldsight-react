@@ -41,8 +41,6 @@ export default class Metrics extends Component {
     const {
       metrics,
       users,
-      // toggleSelectClass,
-      // toggleFormClass,
     } = this.state;
     const {
       submissions,

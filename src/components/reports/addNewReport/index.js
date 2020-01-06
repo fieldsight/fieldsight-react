@@ -1087,17 +1087,14 @@ class AddNewReport extends Component {
   };
 
   handleIndividualFormSelected = (e, item) => {
-    const { value } = e.target;
     let isItemPresent = false;
     let selectedIndividualForm = [];
     this.setState(
       state => {
         const {
           data: { formInfo },
-          selectedMetrics,
         } = state;
         const arr = [];
-        let metricValue = [];
 
         if (formInfo.selectedIndividualForm.length > 0) {
           formInfo.selectedIndividualForm.map(i => {
@@ -1367,7 +1364,6 @@ class AddNewReport extends Component {
       props: {
         reportReducer: { reportLoader },
         data,
-        toggleSection,
       },
     } = this;
     // console.log('index', selectedIndividualForm, selectedMetrics);
