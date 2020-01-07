@@ -10,7 +10,6 @@ class MyReports extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showCrude: false,
       reportList: [],
     };
   }
@@ -30,14 +29,9 @@ class MyReports extends Component {
       });
     }
   }
-  buttonhandler = () => {
-    this.setState(({ showCrude }) => ({
-      showCrude: !showCrude,
-    }));
-  };
 
   render() {
-    const { reportList, showCrude } = this.state;
+    const { reportList } = this.state;
     const { toggleSection } = this.props;
     const DataCrude = [
       {
@@ -62,7 +56,6 @@ class MyReports extends Component {
       },
     ];
 
-    // console.log('button', showCrude);
     return (
       <div className="card-body">
         {reportList.length > 0 &&
@@ -126,10 +119,12 @@ class MyReports extends Component {
               </div>
             </div>
           ))}
+        {reportList.length === 0 && <div>No Report Found Yet.</div>}
       </div>
     );
   }
 }
+
 const mapStateToProps = ({ reportReducer }) => ({
   reportReducer,
 });

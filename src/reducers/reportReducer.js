@@ -14,6 +14,8 @@ const initialState = {
   forms: [],
   formQuestions: [],
   reportList: [],
+  regions: [],
+  siteTypes: [],
 };
 
 export default function(state = initialState, action) {
@@ -25,6 +27,8 @@ export default function(state = initialState, action) {
         metrics: action.payload.metrics,
         metaAttributes: action.payload.meta_attributes,
         formTypes: action.payload.form_types,
+        regions: action.payload.regions,
+        siteTypes: action.payload.site_types,
         reportLoader: false,
       };
     case GET_FORM:
