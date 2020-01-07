@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import format from 'date-fns/format';
 import { Dropdown } from 'react-bootstrap';
-
+import Loader from '../common/Loader';
 import { getReportsList } from '../../actions/reportActions';
 /* eslint-disable */
 
@@ -32,7 +32,10 @@ class MyReports extends Component {
 
   render() {
     const { reportList } = this.state;
-    const { toggleSection } = this.props;
+    const {
+      toggleSection,
+      reportReducer: { reportLoader },
+    } = this.props;
     const DataCrude = [
       {
         id: '1',
@@ -58,7 +61,9 @@ class MyReports extends Component {
 
     return (
       <div className="card-body">
-        {reportList.length > 0 &&
+        {reportLoader && <Loader />}
+        {!reportLoader &&
+          reportList.length > 0 &&
           reportList.map(report => (
             <div className="report-list" key={report.id}>
               <div className="row">
@@ -119,7 +124,9 @@ class MyReports extends Component {
               </div>
             </div>
           ))}
-        {reportList.length === 0 && <div>No Report Found Yet.</div>}
+        {!reportLoader && reportList.length === 0 && (
+          <div>No Report Found Yet.</div>
+        )}
       </div>
     );
   }

@@ -34,6 +34,11 @@ const InitialState = {
     formValue: [],
     selectedFormValue: [],
   },
+  siteInfo: {
+    selectedMetas: [],
+    siteValues: [],
+    selectedValue: [],
+  },
   reportType: [],
   metrics: [],
   metricArr: [],
@@ -60,9 +65,7 @@ const InitialState = {
   submissions: [],
   userList: [],
   metaAttributes: [],
-  selectedMetas: [],
-  siteValues: [],
-  selectedValue: [],
+
   formTypes: [],
   formQuestions: [],
   filter: {
@@ -202,17 +205,20 @@ class AddNewReport extends Component {
             selectedMetrics: report.attributes,
           },
           formInfo: {
-            ...state.data.formInfo,
+            ...state.formInfo,
             selectedFormType,
             selectedForm,
             selectedIndividualForm,
             selectedQuestions,
             selectedFormValue,
           },
+          siteInfo: {
+            ...state.siteInfo,
+            selectedMetas,
+            selectedValue,
+          },
           userList,
           submissions,
-          selectedMetas,
-          selectedValue,
           collapseClass: true,
           applyFilter: true,
           filter: {
@@ -353,8 +359,7 @@ class AddNewReport extends Component {
 
   handleAddValue = () => {
     const {
-      selectedMetas,
-      selectedValue,
+      siteInfo: { selectedMetas, selectedValue },
       data: { selectedMetrics },
     } = this.state;
     const newArr = [];
@@ -422,7 +427,10 @@ class AddNewReport extends Component {
             ...state.data,
             selectedMetrics: filteredMetrics,
           },
-          selectedValue: [],
+          siteInfo: {
+            ...state.siteInfo,
+            selectedValue: [],
+          },
         };
       }
       return null;
@@ -631,7 +639,18 @@ class AddNewReport extends Component {
         },
         submissions: [],
         userList: [],
-        selectedMetas: [],
+        siteInfo: {
+          ...state.siteInfo,
+          selectedMetas: [],
+          selectedValue: [],
+        },
+        formInfo: {
+          ...state.formInfo,
+          selectedFormType: '',
+          selectedForm: '',
+          selectedQuestions: [],
+          selectedFormValue: [],
+        },
         collapseClass: true,
       }),
       () => {
@@ -798,20 +817,22 @@ class AddNewReport extends Component {
           metaList.push(f.code);
         }
       });
-      const filteredSelectedMetas = state.selectedMetas.filter(m =>
-        metaList.includes(m.code),
+      const filteredSelectedMetas = state.siteInfo.selectedMetas.filter(
+        m => metaList.includes(m.code),
       );
 
-      const filteredMetaArr = state.selectedValue.filter(v => {
-        return filteredArr.map(f => {
-          if (f.value && !f.value.selectedForm) {
-            if (f.value.code === v.code) {
-              return true;
+      const filteredMetaArr = state.siteInfo.selectedValue.filter(
+        v => {
+          return filteredArr.map(f => {
+            if (f.value && !f.value.selectedForm) {
+              if (f.value.code === v.code) {
+                return true;
+              }
+              return false;
             }
-            return false;
-          }
-        });
-      });
+          });
+        },
+      );
 
       const filteredUserArr = state.userList.filter(
         u => u.code !== item.code,
@@ -888,12 +909,15 @@ class AddNewReport extends Component {
         },
         userList: filteredUserArr,
         submissions: filteredSubmissionArr,
-        selectedMetas: filteredSelectedMetas,
-        selectedValue: filteredMetaArr,
-        siteValues:
-          filteredSelectedMetas.length > 0
-            ? this.state.siteValues
-            : [],
+        siteInfo: {
+          ...state.siteInfo,
+          selectedMetas: filteredSelectedMetas,
+          selectedValue: filteredMetaArr,
+          siteValues:
+            filteredSelectedMetas.length > 0
+              ? this.state.siteInfo.siteValues
+              : [],
+        },
       };
     });
   };
@@ -908,13 +932,18 @@ class AddNewReport extends Component {
   };
 
   handleMetaCheck = (e, meta) => {
-    const { selectedMetas } = this.state;
+    const {
+      siteInfo: { selectedMetas },
+    } = this.state;
     const { name, checked } = e.target;
     this.setState(
       state => {
         if (checked) {
           return {
-            selectedMetas: [...state.selectedMetas, meta],
+            siteInfo: {
+              ...state.siteInfo,
+              selectedMetas: [...state.siteInfo.selectedMetas, meta],
+            },
           };
         }
         if (!checked) {
@@ -922,7 +951,10 @@ class AddNewReport extends Component {
             type => type.code !== name,
           );
           return {
-            selectedMetas: filterMetas,
+            siteInfo: {
+              ...state.siteInfo,
+              selectedMetas: filterMetas,
+            },
           };
         }
       },
@@ -934,7 +966,10 @@ class AddNewReport extends Component {
 
   setSiteValue = () => {
     this.handleAddValue();
-    const { selectedMetas } = this.state;
+    const {
+      siteInfo: { selectedMetas },
+    } = this.state;
+
     const arr = [];
     selectedMetas.map(each => {
       if (
@@ -953,21 +988,25 @@ class AddNewReport extends Component {
         this.handleAllValueTypes('site');
       }
     } else {
-      this.setState({ siteValues: [] });
+      this.setState({
+        siteInfo: { ...this.state.siteInfo, siteValues: [] },
+      });
     }
   };
 
   handleAllValueTypes = type => {
     const { siteInfoArr, formInfoArr } = this.state;
     let filteredValues = [];
-    this.setState(() => {
+    this.setState(state => {
       if (type === 'site') {
         if (siteInfoArr.length > 0) {
           siteInfoArr.map(site => {
             filteredValues.push(site);
           });
         }
-        return { siteValues: filteredValues };
+        return {
+          siteInfo: { ...state.siteInfo, siteValues: filteredValues },
+        };
       }
       if (type === 'form') {
         if (formInfoArr.length > 0) {
@@ -987,7 +1026,7 @@ class AddNewReport extends Component {
 
   handleTextValueTypes = type => {
     const {
-      siteValues,
+      siteInfo: { siteValues },
       siteInfoArr,
       formInfoArr,
       formInfo,
@@ -1022,7 +1061,12 @@ class AddNewReport extends Component {
             }
           });
         }
-        return { siteValues: filteredSiteValues };
+        return {
+          siteInfo: {
+            ...state.siteInfo,
+            siteValues: filteredSiteValues,
+          },
+        };
       }
       if (type === 'form') {
         let filteredFormValues = [];
@@ -1064,12 +1108,17 @@ class AddNewReport extends Component {
 
   handleValueCheck = (e, item) => {
     const { checked } = e.target;
-    const { selectedValue } = this.state;
+    const {
+      siteInfo: { selectedValue },
+    } = this.state;
     this.setState(
       state => {
         if (checked) {
           return {
-            selectedValue: [...state.selectedValue, item],
+            siteInfo: {
+              ...state.siteInfo,
+              selectedValue: [...state.siteInfo.selectedValue, item],
+            },
           };
         }
         if (!checked) {
@@ -1077,7 +1126,10 @@ class AddNewReport extends Component {
             s => s.code !== item.code,
           );
           return {
-            selectedValue: newMetasArr,
+            siteInfo: {
+              ...state.siteInfo,
+              selectedValue: newMetasArr,
+            },
           };
         }
       },
@@ -1396,6 +1448,7 @@ class AddNewReport extends Component {
   handleConfirmDelete = () => {
     this.props.toggleSection('reportList');
   };
+
   render() {
     const {
       state: {
@@ -1413,6 +1466,7 @@ class AddNewReport extends Component {
           formValue,
           selectedFormValue,
         },
+        siteInfo: { selectedMetas, siteValues },
         reportType,
         metricArr,
         toggleSelectClass,
@@ -1421,8 +1475,6 @@ class AddNewReport extends Component {
         usersArr,
         userList,
         metaAttributes,
-        selectedMetas,
-        siteValues,
         formTypes,
         formTypeArr,
         formQuestions,

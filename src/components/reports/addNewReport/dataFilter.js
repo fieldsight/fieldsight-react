@@ -21,7 +21,10 @@ export default class DataFilter extends Component {
   }
 
   componentWillMount() {
-    if (this.props.filteredData) {
+    if (
+      this.props.filteredData &&
+      Object.keys(this.props.filteredData).length > 0
+    ) {
       const data = this.props.filteredData;
       this.setState(state => ({
         filterData: {
@@ -72,7 +75,7 @@ export default class DataFilter extends Component {
       filterByRegions,
       applyFilter,
     } = this.props;
-
+    console.log('data filter', regions, siteType);
     return (
       <div className="data-filter filter-bottom ">
         <form onSubmit={this.handleSubmit}>
