@@ -20,8 +20,8 @@ export default class DataFilter extends Component {
     this.state = InitialState;
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.filteredData !== this.props.filteredData) {
+  componentWillMount() {
+    if (this.props.filteredData) {
       const data = this.props.filteredData;
       this.setState(state => ({
         filterData: {
@@ -72,7 +72,6 @@ export default class DataFilter extends Component {
       filterByRegions,
       applyFilter,
     } = this.props;
-    // console.log('filter====', applyFilter);
 
     return (
       <div className="data-filter filter-bottom ">
