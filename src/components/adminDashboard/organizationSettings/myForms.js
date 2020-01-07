@@ -21,7 +21,7 @@ export default class MyForm extends Component {
       selected: [],
       openModal: false,
       form_id: '',
-      selectValue: '0',
+      selectValue: '3',
       generalPopUp: false,
       schedulePopUp: false,
     };
@@ -136,12 +136,12 @@ export default class MyForm extends Component {
         selectValue: value,
       },
       () => {
-        if (value === '1') {
+        if (value === '0') {
           this.setState(prevstate => ({
             generalPopUp: !prevstate.generalPopUp,
           }));
         }
-        if (value === '2') {
+        if (value === '1') {
           this.setState(prevstate => ({
             schedulePopUp: !prevstate.schedulePopUp,
           }));
@@ -159,6 +159,15 @@ export default class MyForm extends Component {
   scheduleCloseButton = () => {
     this.setState({
       schedulePopUp: false,
+    });
+  };
+
+  handleAllModel = res => {
+    this.setState({
+      schedulePopUp: false,
+      popUpPage: false,
+      generalPopUp: false,
+      selected_forms: res.data,
     });
   };
 
@@ -182,9 +191,9 @@ export default class MyForm extends Component {
     } = this;
 
     const option1 = [
-      { id: '0', name: 'Select Option' },
-      { id: '1', name: 'general' },
-      { id: '2', name: 'schedule' },
+      { id: '3', name: 'Select Option' },
+      { id: '0', name: 'general' },
+      { id: '1', name: 'schedule' },
     ];
 
     return (
@@ -193,7 +202,7 @@ export default class MyForm extends Component {
           title="Form"
           addButton
           toggleModal={this.handleChange}
-          buttonName="Add "
+          buttonName="Add"
         >
           <FormTable
             selected_forms={selected_forms}
@@ -244,15 +253,6 @@ export default class MyForm extends Component {
                     value={this.state.selectValue}
                   />
                 </div>
-                <div className="form-group pull-right no-margin">
-                  <button
-                    type="button"
-                    className="fieldsight-btn"
-                    onClick={this.handleSaveForm}
-                  >
-                    Add
-                  </button>
-                </div>
               </div>
             </form>
           </Modal>
@@ -268,21 +268,31 @@ export default class MyForm extends Component {
           />
         )}
 
-        {this.state.selectValue === '1' && generalPopUp && (
+        {this.state.selectValue === '0' && generalPopUp && (
           <Modal
             title="General Form"
             toggleModal={this.generalCloseButton}
           >
-            <GeneralFormModal />
+            <GeneralFormModal
+              selected={this.state.selected}
+              formType={this.state.selectValue}
+              id={this.props.id}
+              handleAllModel={this.handleAllModel}
+            />
           </Modal>
         )}
 
-        {this.state.selectValue === '2' && schedulePopUp && (
+        {this.state.selectValue === '1' && schedulePopUp && (
           <Modal
             title="Schedule Form"
             toggleModal={this.scheduleCloseButton}
           >
-            <ScheduleFormModal />
+            <ScheduleFormModal
+              selected={this.state.selected}
+              formType={this.state.selectValue}
+              handleAllModel={this.handleAllModel}
+              id={this.props.id}
+            />
           </Modal>
         )}
       </>
