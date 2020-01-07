@@ -15,7 +15,9 @@ export default class CustomSelect extends PureComponent {
     const label =
       name && name[0]
         ? name[0].name
-          ? name[0].name
+          ? name[0].form_name
+            ? `${name[0].name}-(${name[0].form_name})`
+            : name[0].name
           : name[0].label
           ? name[0].label
           : name[0].title
@@ -73,7 +75,9 @@ export default class CustomSelect extends PureComponent {
                   // tabIndex="0"
                 >
                   {option.name
-                    ? option.name
+                    ? option.form_name
+                      ? `${option.name}(${option.form_name})`
+                      : option.name
                     : option.label
                     ? option.label
                     : option.title

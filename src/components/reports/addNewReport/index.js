@@ -68,6 +68,7 @@ const InitialState = {
   filter: {
     filterByRegions: [],
     filterBySiteType: [],
+    filterBy: {},
   },
   isDelete: false,
 };
@@ -100,6 +101,7 @@ class AddNewReport extends Component {
       const submissions = report.attributes.filter(
         r => r.category === 'default',
       );
+      const filterBy = report.filter;
       let selectedFormType = {};
       let selectedForm = {};
       let selectedIndividualForm = [];
@@ -213,6 +215,10 @@ class AddNewReport extends Component {
           selectedValue,
           collapseClass: true,
           applyFilter: true,
+          filter: {
+            ...state.filter,
+            filterBy,
+          },
         }),
         () => {
           this.props.getForms(this.props.id, selectedFormType.code);
@@ -261,7 +267,20 @@ class AddNewReport extends Component {
     if (
       prevProps.reportReducer.forms !== this.props.reportReducer.forms
     ) {
-      this.setState({ formTypeArr: this.props.reportReducer.forms });
+      const formList = this.props.reportReducer.forms;
+      const newFormList = [];
+      formList &&
+        formList.map(f => {
+          if (f.sub_stages) {
+            const { name, sub_stages } = f;
+            sub_stages.map(sub => {
+              return newFormList.push({ name, ...sub });
+            });
+          } else {
+            return newFormList.push(f);
+          }
+        });
+      this.setState({ formTypeArr: newFormList });
     }
     if (
       prevProps.reportReducer.formQuestions !==
@@ -1328,14 +1347,24 @@ class AddNewReport extends Component {
       regions: filter.regions,
       site_types: filter.siteType,
     };
-    const body = {
-      type: data.selectedReportType,
-      description: data.desc,
-      title: data.reportName,
-      attributes: JSON.stringify(data.selectedMetrics),
-      filter: JSON.stringify(modifyFilter),
-    };
-    this.requestUpdateForm(reportId, body);
+    this.setState(
+      state => ({
+        filter: {
+          ...state.filter,
+          filterBy: modifyFilter,
+        },
+      }),
+      () => {
+        const body = {
+          type: data.selectedReportType,
+          description: data.desc,
+          title: data.reportName,
+          attributes: JSON.stringify(data.selectedMetrics),
+          filter: JSON.stringify(modifyFilter),
+        };
+        this.requestUpdateForm(reportId, body);
+      },
+    );
   };
 
   requestUpdateForm = (reportId, body) => {
@@ -1400,7 +1429,7 @@ class AddNewReport extends Component {
         individualFormArr,
         collapseClass,
         filterArr,
-        filter: { filterBySiteType, filterByRegions },
+        filter: { filterBySiteType, filterByRegions, filterBy },
         applyFilter,
         isDelete,
       },
@@ -1588,6 +1617,7 @@ class AddNewReport extends Component {
                       filterByRegions={filterByRegions}
                       applyFilter={applyFilter}
                       handleSubmitFilter={this.handleSubmitFilter}
+                      filteredData={filterBy}
                       // checkboxOption={checkboxOption}
                       // handleCheck={this.handleCheckReportType}
                       // selectedArr={selectedReportType}

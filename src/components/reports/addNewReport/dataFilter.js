@@ -12,11 +12,21 @@ const InitialState = {
     endDate: '',
   },
 };
+
 export default class DataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = InitialState;
   }
+
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.filteredData !== this.props.filteredData) {
+  //     console.log('in filter', this.props.filteredData);
+  //       this.setState({
+  //         filterData: this.props.filteredData,
+  //       });
+  //   }
+  // }
 
   handleRegionFilter = (e, item) => {
     this.setState(state => ({
@@ -57,7 +67,7 @@ export default class DataFilter extends Component {
       filterByRegions,
       applyFilter,
     } = this.props;
-    console.log('filter====', applyFilter);
+    // console.log('filter====', applyFilter);
 
     return (
       <div className="data-filter filter-bottom ">
