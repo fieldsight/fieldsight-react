@@ -4,6 +4,9 @@ import RightContentCard from '../../common/RightContentCard';
 import Modal from '../../common/Modal';
 import DeleteModal from '../../common/DeleteModal';
 import FormTable from './formTable';
+import SelectElement from '../../common/SelectElement';
+import GeneralFormModal from './generalForm';
+import ScheduleFormModal from './scheduleform';
 
 /* eslint-disable  react/no-unused-state */
 /* eslint-disable camelcase */
@@ -18,6 +21,9 @@ export default class MyForm extends Component {
       selected: [],
       openModal: false,
       form_id: '',
+      selectValue: '0',
+      generalPopUp: false,
+      schedulePopUp: false,
     };
   }
 
@@ -123,6 +129,39 @@ export default class MyForm extends Component {
     });
   };
 
+  onchange = e => {
+    const { value } = e.target;
+    this.setState(
+      {
+        selectValue: value,
+      },
+      () => {
+        if (value === '1') {
+          this.setState(prevstate => ({
+            generalPopUp: !prevstate.generalPopUp,
+          }));
+        }
+        if (value === '2') {
+          this.setState(prevstate => ({
+            schedulePopUp: !prevstate.schedulePopUp,
+          }));
+        }
+      },
+    );
+  };
+
+  generalCloseButton = () => {
+    this.setState({
+      generalPopUp: false,
+    });
+  };
+
+  scheduleCloseButton = () => {
+    this.setState({
+      schedulePopUp: false,
+    });
+  };
+
   render() {
     const {
       state: {
@@ -131,6 +170,8 @@ export default class MyForm extends Component {
         selected,
         forms,
         openModal,
+        generalPopUp,
+        schedulePopUp,
       },
       props: { id },
       changeHandler,
@@ -139,6 +180,12 @@ export default class MyForm extends Component {
       handleCancle,
       handleConfirm,
     } = this;
+
+    const option1 = [
+      { id: '0', name: 'Select Option' },
+      { id: '1', name: 'general' },
+      { id: '2', name: 'schedule' },
+    ];
 
     return (
       <>
@@ -187,8 +234,16 @@ export default class MyForm extends Component {
                     </li>
                   ))}
               </ul>
-
               <div className="modal-footer">
+                <div className="col-xl-4 col-md-6">
+                  <SelectElement
+                    className="form-control"
+                    options={option1}
+                    changeHandler={this.onchange}
+                    label="type"
+                    value={this.state.selectValue}
+                  />
+                </div>
                 <div className="form-group pull-right no-margin">
                   <button
                     type="button"
@@ -211,6 +266,24 @@ export default class MyForm extends Component {
             title="Warning"
             message="Are u sure u want to delete"
           />
+        )}
+
+        {this.state.selectValue === '1' && generalPopUp && (
+          <Modal
+            title="General Form"
+            toggleModal={this.generalCloseButton}
+          >
+            <GeneralFormModal />
+          </Modal>
+        )}
+
+        {this.state.selectValue === '2' && schedulePopUp && (
+          <Modal
+            title="Schedule Form"
+            toggleModal={this.scheduleCloseButton}
+          >
+            <ScheduleFormModal />
+          </Modal>
         )}
       </>
     );

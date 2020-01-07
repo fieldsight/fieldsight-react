@@ -252,7 +252,10 @@ class AdminDashboard extends Component {
                         <i className="la la-search" />
                       </div>
                     </form>
-                    <a href="#" className="fieldsight-btn">
+                    <a
+                      href={`/fieldsight/application/#/create-team/${id}`}
+                      className="fieldsight-btn"
+                    >
                       <i className="la la-plus" />
                     </a>
                   </div>
@@ -277,14 +280,7 @@ class AdminDashboard extends Component {
                       </div>
                     </form>
                     {/* {is_project_manager && ( */}
-                    <a
-                      href="/fieldsight/application/#/create-site/"
-                      target="_blank"
-                      className="fieldsight-btn"
-                      rel="noopener noreferrer"
-                    >
-                      <i className="la la-plus" />
-                    </a>
+
                     {/* )} */}
                   </div>
                 )}
@@ -324,9 +320,6 @@ class AdminDashboard extends Component {
                         <i className="la la-search" />
                       </div>
                     </form>
-                    <a href="#" className="fieldsight-btn">
-                      <i className="la la-plus" />
-                    </a>
                   </div>
                 </div>
                 <Admin

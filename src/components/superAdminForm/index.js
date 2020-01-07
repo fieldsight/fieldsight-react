@@ -179,7 +179,7 @@ export default class SuperAdminForm extends Component {
             </li>
           </ol>
         </nav>
-        <RightContentCard title="New Super Admin">
+        <RightContentCard title="New organization">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">
               <div className="col-xl-4 col-md-6">
