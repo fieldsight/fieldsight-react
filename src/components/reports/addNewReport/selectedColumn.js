@@ -21,12 +21,26 @@ const DragHandle = sortableHandle(
         {!!item.value && item.value.label && (
           <label>{`${label} (${item.value.label})`}</label>
         )}
-        {!!item.value && item.value.selectedIndividualForm && (
-          <label>{`${label}-${item.value.selectedForm.title} (${item.value.selectedIndividualForm.label})`}</label>
-        )}
-        {!!item.value && item.value.selectedQuestion && (
-          <label>{`${label}-${item.value.selectedForm.title} (${item.value.selectedQuestion.name}-${item.value.selectedQuestion.form.label})`}</label>
-        )}
+        {!!item.value &&
+          item.value.selectedIndividualForm &&
+          item.value.selectedForm.title && (
+            <label>{`${label}-${item.value.selectedForm.title} (${item.value.selectedIndividualForm.label})`}</label>
+          )}
+        {!!item.value &&
+          item.value.selectedIndividualForm &&
+          item.value.selectedForm.form_name && (
+            <label>{`${label}-${item.value.selectedForm.form_name} (${item.value.selectedIndividualForm.label})`}</label>
+          )}
+        {!!item.value &&
+          item.value.selectedQuestion &&
+          item.value.selectedForm.title && (
+            <label>{`${label}-${item.value.selectedForm.title} (${item.value.selectedQuestion.name}-${item.value.selectedQuestion.form.label})`}</label>
+          )}
+        {!!item.value &&
+          item.value.selectedQuestion &&
+          item.value.selectedForm.form_name && (
+            <label>{`${label}-${item.value.selectedForm.form_name}- (${item.value.selectedQuestion.name}-${item.value.selectedQuestion.form.label})`}</label>
+          )}
         <span>
           <a
             className="rejected td-edit-btn td-btn"
