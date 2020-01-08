@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import CustomSelect from '../CustomSelect';
+/* eslint-disable */
 
 const InitialState = {
   filterData: {
@@ -19,14 +20,21 @@ export default class DataFilter extends Component {
     this.state = InitialState;
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.filteredData !== this.props.filteredData) {
-  //     console.log('in filter', this.props.filteredData);
-  //       this.setState({
-  //         filterData: this.props.filteredData,
-  //       });
-  //   }
-  // }
+  componentWillMount() {
+    if (
+      this.props.filteredData &&
+      Object.keys(this.props.filteredData).length > 0
+    ) {
+      const data = this.props.filteredData;
+      this.setState(state => ({
+        filterData: {
+          ...state.filterData,
+          regions: data.regions,
+          siteType: data.site_types,
+        },
+      }));
+    }
+  }
 
   handleRegionFilter = (e, item) => {
     this.setState(state => ({
@@ -67,8 +75,7 @@ export default class DataFilter extends Component {
       filterByRegions,
       applyFilter,
     } = this.props;
-    // console.log('filter====', applyFilter);
-
+    console.log('data filter', regions, siteType);
     return (
       <div className="data-filter filter-bottom ">
         <form onSubmit={this.handleSubmit}>
