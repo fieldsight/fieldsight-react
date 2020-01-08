@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import DatePicker from 'react-datepicker';
-import CustomSelect from '../CustomSelect';
+// import DatePicker from 'react-datepicker';
+import CustomMultiSelect from '../CustomMultiSelect';
+// import CustomSelect from '../CustomSelect';
 /* eslint-disable */
 
 const InitialState = {
   filterData: {
     project: '',
-    regions: '',
-    siteType: '',
+    regions: [],
+    siteType: [],
     userRole: '',
     startDate: '',
     endDate: '',
@@ -37,21 +38,62 @@ export default class DataFilter extends Component {
   }
 
   handleRegionFilter = (e, item) => {
-    this.setState(state => ({
-      filterData: {
-        ...state.filterData,
-        regions: item,
-      },
-    }));
+    const {
+      target: { checked },
+    } = e;
+    const {
+      filterData: { regions },
+    } = this.state;
+
+    this.setState(state => {
+      if (checked) {
+        return {
+          filterData: {
+            ...state.filterData,
+            regions: [...state.filterData.regions, item],
+          },
+        };
+      }
+      if (!checked) {
+        const filterRegions = regions.filter(r => r.id !== item.id);
+        return {
+          filterData: {
+            ...state.filterData,
+            regions: filterRegions,
+          },
+        };
+      }
+      return null;
+    });
   };
 
   handleSiteTypeFilter = (e, item) => {
-    this.setState(state => ({
-      filterData: {
-        ...state.filterData,
-        siteType: item,
-      },
-    }));
+    const {
+      target: { checked },
+    } = e;
+    const {
+      filterData: { siteType },
+    } = this.state;
+    this.setState(state => {
+      if (checked) {
+        return {
+          filterData: {
+            ...state.filterData,
+            siteType: [...state.filterData.siteType, item],
+          },
+        };
+      }
+      if (!checked) {
+        const filterSiteType = siteType.filter(s => s.id !== item.id);
+        return {
+          filterData: {
+            ...state.filterData,
+            siteType: filterSiteType,
+          },
+        };
+      }
+      return null;
+    });
   };
 
   handleSubmit = e => {
@@ -90,18 +132,16 @@ export default class DataFilter extends Component {
               <div className="col-xl-2 col-md-6">
                 <div className="form-group inline-form-group">
                   <label className="mb-2">region</label>
-                  <CustomSelect
+                  <CustomMultiSelect
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={() => {
                       handleToggleClass('filterRegion');
                     }}
                     toggleType="filterRegion"
-                    name={filterByRegions.filter(
-                      each => each.id === regions.id,
-                    )}
-                    options={filterByRegions}
-                    value={regions.id}
-                    handleSelect={this.handleRegionFilter}
+                    checkboxOption={filterByRegions}
+                    handleCheck={this.handleRegionFilter}
+                    selectedArr={regions}
+                    placeholderTxt="Select Regions"
                   />
                 </div>
               </div>
@@ -110,7 +150,19 @@ export default class DataFilter extends Component {
               <div className="col-xl-2 col-md-6">
                 <div className="form-group inline-form-group">
                   <label className="mb-2">site type</label>
-                  <CustomSelect
+                  <CustomMultiSelect
+                    toggleSelectClass={toggleSelectClass}
+                    handleToggleClass={() => {
+                      handleToggleClass('filterSiteType');
+                    }}
+                    toggleType="filterSiteType"
+                    checkboxOption={filterBySiteType}
+                    handleCheck={this.handleSiteTypeFilter}
+                    selectedArr={siteType}
+                    placeholderTxt="Select Site Types"
+                  />
+
+                  {/* <CustomSelect
                     toggleSelectClass={toggleSelectClass}
                     handleToggleClass={() => {
                       handleToggleClass('filterSiteType');
@@ -122,7 +174,7 @@ export default class DataFilter extends Component {
                     options={filterBySiteType}
                     value={siteType.id}
                     handleSelect={this.handleSiteTypeFilter}
-                  />
+                  /> */}
                 </div>
               </div>
             )}
