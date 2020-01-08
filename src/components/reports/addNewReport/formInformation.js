@@ -2,8 +2,47 @@ import React, { Component } from 'react';
 import CustomSelect from '../CustomSelect';
 import CustomMultiSelect from '../CustomMultiSelect';
 import CustomRadioButton from '../CustomRadioButton';
-
+// import findQuestionWithGroup from '../../../utils/findQuestionWithGroup';
 /* eslint-disable */
+
+const groupQuestion = formQuestionsChildren => {
+  const groupQuestionName = question => {
+    if (question.type === 'group' || question.type === 'repeat') {
+      question.children = question.children.map(childQuestion => {
+        childQuestion.name = `${question.name}/${childQuestion.name}`;
+        if (
+          childQuestion.type === 'group' ||
+          childQuestion.type === 'repeat'
+        ) {
+          groupQuestionName(childQuestion);
+        }
+        return childQuestion;
+      });
+    }
+
+    return question;
+  };
+  return formQuestionsChildren.map(question => {
+    return groupQuestionName(question);
+  });
+};
+
+const findQuestion = children => {
+  const filteredQuestions = [];
+
+  const filterQuestionByType = questions => {
+    questions.forEach(question => {
+      if (question.type === 'group' || question.type === 'repeat') {
+        return filterQuestionByType(question.children);
+      }
+      return filteredQuestions.push(question);
+    });
+  };
+
+  filterQuestionByType(children);
+
+  return filteredQuestions;
+};
 
 export default class FormInformation extends Component {
   constructor(props) {
@@ -18,50 +57,16 @@ export default class FormInformation extends Component {
     if (prevProps.formQuestions !== this.props.formQuestions) {
       let filteredQuestions = [];
       if (this.props.formQuestions.length > 0) {
-        filteredQuestions = this.findQuestion(
+        const groupQuestions = groupQuestion(
           this.props.formQuestions[0].json.children,
         );
+        filteredQuestions = findQuestion(groupQuestions);
       }
       this.setState({
         filteredQuestions,
       });
     }
   }
-
-  findQuestion = (children, type) => {
-    const filteredQuestions = [];
-
-    const filterQuestionByType = questions => {
-      if (type) {
-        questions.forEach(question => {
-          if (question.type === type) {
-            filteredQuestions.push(question);
-          }
-
-          if (
-            question.type === 'group' ||
-            question.type === 'repeat'
-          ) {
-            filterQuestionByType(question.children);
-          }
-        });
-      } else {
-        questions.forEach(question => {
-          if (
-            question.type === 'group' ||
-            question.type === 'repeat'
-          ) {
-            return filterQuestionByType(question.children);
-          }
-          return filteredQuestions.push(question);
-        });
-      }
-    };
-
-    filterQuestionByType(children);
-
-    return filteredQuestions;
-  };
 
   handleRadioChange = e => {
     const { value } = e.target;
@@ -86,7 +91,6 @@ export default class FormInformation extends Component {
       selectedFormValue,
       handleChangeFormQuest,
     } = this.props;
-    // console.log('jsonQuestions', selectedFormType);
 
     return (
       <div className="acc-item">

@@ -75,7 +75,7 @@ export default class DataFilter extends Component {
       filterByRegions,
       applyFilter,
     } = this.props;
-    console.log('data filter', regions, siteType);
+
     return (
       <div className="data-filter filter-bottom ">
         <form onSubmit={this.handleSubmit}>

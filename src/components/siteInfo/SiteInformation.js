@@ -11,6 +11,7 @@ import { errorToast, successToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 import DeleteModel from '../common/DeleteModal';
+/* eslint-disable */
 /* eslint no-param-reassign: ["error", { "props": false }] */
 /* eslint-disable  no-return-await  */
 /* eslint-disable react/destructuring-assignment */
@@ -247,7 +248,6 @@ class SiteInformation extends Component {
 
         return question;
       });
-
       await Promise.all(
         [urls[2], progressUrl].map(
           async (url, i) =>
@@ -494,8 +494,8 @@ class SiteInformation extends Component {
         {isLoading && <Loader />}
         {showConfirmation && (
           <DeleteModel
-            onCancel={confirmHandler}
-            onConfirm={cancelHandler}
+            onCancel={cancelHandler}
+            onConfirm={confirmHandler}
             onToggle={cancelHandler}
             message="Are you sure you want to save the changes?"
             title="Warning"
