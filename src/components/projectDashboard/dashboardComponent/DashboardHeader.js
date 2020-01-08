@@ -110,23 +110,25 @@ class DashboardHeader extends React.Component {
             </div>
           )}
           <div className="dash-btn">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Data"
-                className="fieldsight-btn"
-              >
-                <i className="la la-paste" />
-                <span>Data</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                {DataDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+            {isProjectManager && (
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Data"
+                  className="fieldsight-btn"
+                >
+                  <i className="la la-paste" />
+                  <span>Data</span>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu-right">
+                  {DataDropdown.map((item, i) => (
+                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
 
             {isProjectManager && (
               <Dropdown>

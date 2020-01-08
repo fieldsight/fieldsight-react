@@ -132,9 +132,9 @@ class DashboardHeader extends Component {
               </figure>
               <div className="dash-pf-content">
                 {name && <h5>{name}</h5>}
-                <div className="flex">
+                <div className="type-info">
                   {identifier && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>Identifier:</strong>
                       </label>
@@ -143,7 +143,7 @@ class DashboardHeader extends Component {
                     </div>
                   )}
                   {region && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>Region:</strong>
                       </label>
@@ -152,9 +152,9 @@ class DashboardHeader extends Component {
                     </div>
                   )}
                 </div>
-                <div className="flex">
+                <div className="">
                   {address && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>Address:</strong>
                       </label>
@@ -163,7 +163,7 @@ class DashboardHeader extends Component {
                     </div>
                   )}
                   {type && (
-                    <div className="col-sm-8">
+                    <div className="flex">
                       <label>
                         <strong>Type:</strong>
                       </label>
@@ -179,24 +179,26 @@ class DashboardHeader extends Component {
           )}
 
           <div className="dash-btn">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Data"
-                className="fieldsight-btn"
-              >
-                <i className="fa fa-paste" />
-                <span>Data</span>
-              </Dropdown.Toggle>
+            {hasWritePermission && (
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Data"
+                  className="fieldsight-btn"
+                >
+                  <i className="fa fa-paste" />
+                  <span>Data</span>
+                </Dropdown.Toggle>
 
-              <Dropdown.Menu className="dropdown-menu-right">
-                {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+                <Dropdown.Menu className="dropdown-menu-right">
+                  {ManageDropdown.map((item, i) => (
+                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
 
             {hasWritePermission && (
               <Dropdown>
