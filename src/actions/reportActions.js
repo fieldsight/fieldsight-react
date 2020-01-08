@@ -5,6 +5,7 @@ import {
   GET_FORM,
   GET_FORM_QUESTIONS,
   GET_REPORTS_LIST,
+  APPLY_ACTION_TO_REPORT,
 } from './types';
 /* eslint-disable */
 
@@ -46,6 +47,16 @@ export const getReportsList = (id, type) => dispatch => {
     .get(`v4/api/reporting/reports-list/${id}/?type=${type}`)
     .then(res => {
       dispatch({ type: GET_REPORTS_LIST, payload: res.data });
+    })
+    .catch(() => {});
+};
+
+export const applyActionToReport = (reportId, type) => dispatch => {
+  dispatch({ type: REPORT_LOADER });
+  axios
+    .get(`v4/api/reporting/export/${reportId}/?export_type=${type}`)
+    .then(res => {
+      dispatch({ type: APPLY_ACTION_TO_REPORT, payload: res.data });
     })
     .catch(() => {});
 };
