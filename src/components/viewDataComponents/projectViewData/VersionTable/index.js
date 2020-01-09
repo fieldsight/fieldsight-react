@@ -1,22 +1,21 @@
-import React, { Component } from "react";
-import VersionTable from "../../responded/Version";
-import axios from "axios";
+import React, { Component } from 'react';
+import VersionTable from '../../responded/Version';
 
 class ProjectVersionTable extends Component {
-  state = {
-    id: this.props.match.params && this.props.match.params.id,
-    fid: this.props.match.params && this.props.match.params.fid
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: props.match.params && props.match.params.id,
+      fid: props.match.params && props.match.params.fid,
+    };
+  }
 
   render() {
+    const { id, fid } = this.state;
     return (
-      <React.Fragment>
-        <VersionTable
-          id={this.state.id}
-          fid={this.state.fid}
-          project="project"
-        />
-      </React.Fragment>
+      <>
+        <VersionTable id={id} fid={fid} project="project" />
+      </>
     );
   }
 }

@@ -1,7 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { getSiteUser } from "../../actions/userDocumentActions";
+import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { getSiteUser } from '../../actions/userDocumentActions';
+/* eslint-disable react/destructuring-assignment */
 
 class UserDocument extends Component {
   constructor(props) {
@@ -10,15 +12,15 @@ class UserDocument extends Component {
     this.state = {
       users: [],
       masteruser: [],
-      breadcrumbs: []
+      breadcrumbs: [],
     };
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
     this.props.getSiteUser(id);
   }
@@ -27,31 +29,33 @@ class UserDocument extends Component {
     this.setState({
       users: nextprops.userDocument.users,
       masteruser: nextprops.userDocument.users,
-      breadcrumbs: nextprops.userDocument.breadcrumbs
+      breadcrumbs: nextprops.userDocument.breadcrumbs,
     });
   }
 
   handleChange = async e => {
     const {
-      target: { value }
+      target: { value },
     } = e;
     const { users } = this.state;
     if (value) {
       const search = await users.filter(user => {
         return (
-          user.full_name.toLowerCase().includes(value.toLowerCase()) ||
+          user.full_name
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           user.email.toLowerCase().includes(value.toLowerCase()) ||
           user.username.toLowerCase().includes(value.toLowerCase())
         );
       });
 
       this.setState({
-        users: search
+        users: search,
       });
     } else {
-      this.setState({
-        users: this.state.masteruser
-      });
+      this.setState(state => ({
+        users: state.masteruser,
+      }));
     }
   };
 
@@ -60,31 +64,41 @@ class UserDocument extends Component {
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          {
+          {Object.keys(breadcrumbs).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href={breadcrumbs.site_url}>{breadcrumbs.site}</a>
               </li>
               <li className="breadcrumb-item">{breadcrumbs.name}</li>
             </ol>
-          }
+          )}
         </nav>
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-              <h5>Users</h5>
+              <h5>
+                <FormattedMessage
+                  id="app.users"
+                  defaultMessage="Users"
+                />
+              </h5>
               <div className="dash-btn">
                 <form className="floating-form">
                   <div className="form-group mr-0">
-                    <input
-                      type="search"
-                      className="form-control"
-                      name="search"
-                      onChange={e => this.handleChange(e)}
-                      required
-                    />
-                    <label htmlFor="input">Search</label>
-                    <i className="la la-search"></i>
+                    <label htmlFor="input">
+                      <FormattedMessage
+                        id="app.teams-search"
+                        defaultMessage="Search"
+                      />
+                      <input
+                        type="search"
+                        className="form-control"
+                        name="search"
+                        onChange={e => this.handleChange(e)}
+                        required
+                      />
+                    </label>
+                    <i className="la la-search" />
                   </div>
                 </form>
               </div>
@@ -96,39 +110,59 @@ class UserDocument extends Component {
               >
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>User Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
+                    <th>
+                      <FormattedMessage
+                        id="app.name"
+                        defaultMessage="Name"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.user-name"
+                        defaultMessage="User Name"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.email"
+                        defaultMessage="Email"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.role"
+                        defaultMessage="Role"
+                      />
+                    </th>
                   </tr>
                 </thead>
-
                 <tbody>
-                  {users.map((users, key) => {
+                  {users.map(user => {
                     return (
-                      <tr key={key}>
+                      <tr key={user.id}>
                         <td>
                           <a
-                            href={`/users/profile/${users.id}`}
+                            href={`/users/profile/${user.id}`}
                             className="pending table-profile"
                           >
                             <figure>
                               <img
-                                src={users.profile_picture}
+                                src={user.profile_picture}
                                 alt="site-logo"
                               />
                             </figure>
-                            <h5>{users.full_name}</h5>
+                            <h5>{user.full_name}</h5>
                           </a>
                         </td>
-                        <td>{users.username}</td>
-                        <td>{users.email}</td>
-                        {users.role !== "" && users.role.length > 0 ? (
-                          users.role[0] ? (
-                            <td>{users.role[0]}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        {user.role !== '' && user.role.length > 0 ? (
+                          user.role[0] ? (
+                            <td>{user.role[0]}</td>
                           ) : (
                             <td>
-                              {users.role[0]}/{users.role[1]}
+                              {' '}
+                              {`${user.role[0] / user.role[1]}`}
                             </td>
                           )
                         ) : (
@@ -149,14 +183,11 @@ class UserDocument extends Component {
 
 const mapStateToProps = ({ userDocument }) => {
   return {
-    userDocument
+    userDocument,
   };
 };
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getSiteUser
-    }
-  )
+  connect(mapStateToProps, {
+    getSiteUser,
+  }),
 )(UserDocument);

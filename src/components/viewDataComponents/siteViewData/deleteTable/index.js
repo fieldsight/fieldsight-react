@@ -1,25 +1,22 @@
-import React, { Component } from "react";
-import SiteDeleteTable from "../../responded/DeleteTable";
+import React, { PureComponent } from 'react';
 
-class DeleteTable extends Component {
-  state = {
-    deleted_forms: []
-  };
-  static getDerivedStateFromProps(props, state) {
-    return {
-      deleted_forms: props.deleted_forms
-    };
-  }
+import SiteDeleteTable from '../../responded/DeleteTable';
+
+/* eslint-disable camelcase */
+class DeleteTable extends PureComponent {
   render() {
+    const { id, deleted_forms } = this.props;
+
     return (
-      <React.Fragment>
+      <>
         <SiteDeleteTable
-          deleted_forms={this.state.deleted_forms}
-          id={this.props.id}
+          deleted_forms={deleted_forms}
+          id={id}
           table="site"
         />
-      </React.Fragment>
+      </>
     );
   }
 }
+
 export default DeleteTable;

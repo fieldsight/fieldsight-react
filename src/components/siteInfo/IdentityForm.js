@@ -1,14 +1,15 @@
-import React from "react";
-import SiteInformationCard from "./SiteInformationCard";
-import SiteProgressCard from "./SiteProgressCard";
-import isEmpty from "../../utils/isEmpty";
+import React from 'react';
+import SiteInformationCard from './SiteInformationCard';
+import SiteProgressCard from './SiteProgressCard';
+import isEmpty from '../../utils/isEmpty';
+
 const IdentityForm = ({
   forms,
   terms,
   siteIdentityHandler,
   siteBasicInfo,
   projectSettings,
-  siteProgressHandler
+  siteProgressHandler,
 }) => (
   <div className="identity-form mrb-15">
     <div className="row">
@@ -16,7 +17,9 @@ const IdentityForm = ({
         <div className="site_photo_form">
           <SiteInformationCard
             forms={forms}
-            title={!isEmpty(terms) ? `${terms.site} Photo` : "Site Photo"}
+            title={
+              !isEmpty(terms) ? `${terms.site} Photo` : 'Site Photo'
+            }
             infoType="photo"
             siteIdentityHandler={siteIdentityHandler}
             siteInfo={siteBasicInfo && siteBasicInfo.site_picture}
@@ -27,7 +30,11 @@ const IdentityForm = ({
         <div className="site-location">
           <SiteInformationCard
             forms={forms}
-            title={!isEmpty(terms) ? `${terms.site} Location` : "Site Location"}
+            title={
+              !isEmpty(terms)
+                ? `${terms.site} Location`
+                : 'Site Location'
+            }
             infoType="geopoint"
             siteIdentityHandler={siteIdentityHandler}
             siteInfo={siteBasicInfo && siteBasicInfo.site_location}
@@ -38,7 +45,11 @@ const IdentityForm = ({
         <div className="site-location">
           <SiteProgressCard
             forms={forms}
-            title={!isEmpty(terms) ? `${terms.site} Progress` : "Site Progress"}
+            title={
+              !isEmpty(terms)
+                ? `${terms.site} Progress`
+                : 'Site Progress'
+            }
             projectSettings={projectSettings}
             siteProgressHandler={siteProgressHandler}
           />

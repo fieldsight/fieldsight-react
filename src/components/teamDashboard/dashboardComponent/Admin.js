@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { AvatarContentLoader } from "../../common/Loader";
+import React, { PureComponent } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { FormattedMessage } from 'react-intl';
+import { AvatarContentLoader } from '../../common/Loader';
 
 const AdminListItem = ({ admin }) => {
   return (
@@ -10,10 +11,7 @@ const AdminListItem = ({ admin }) => {
       </figure>
       <div className="content">
         <h6>
-          <a
-            href={`/fieldsight/application/#/profile/${admin.id}/`}
-            target=" _blank"
-          >
+          <a href={`/users/profile/${admin.id}/`} target=" _blank">
             {admin.full_name}
           </a>
         </h6>
@@ -22,7 +20,8 @@ const AdminListItem = ({ admin }) => {
     </li>
   );
 };
-class Admin extends Component {
+
+class Admin extends PureComponent {
   render() {
     const { admin, showContentLoader } = this.props;
 
@@ -30,20 +29,32 @@ class Admin extends Component {
       <div className="card-body">
         <div
           className="thumb-list mr-0 "
-          style={{ position: "relative", height: "296px" }}
+          style={{ position: 'relative', height: '296px' }}
         >
           <>
             {showContentLoader ? (
-              <AvatarContentLoader number={6} width="100%" size="40" />
+              <AvatarContentLoader
+                number={6}
+                width="100%"
+                size="40"
+              />
             ) : (
               <PerfectScrollbar>
                 <ul>
                   {admin.length > 0 ? (
-                    admin.map((admin, i) => (
-                      <AdminListItem admin={admin} key={`admin_${i}`} />
+                    admin.map(each => (
+                      <AdminListItem
+                        admin={each}
+                        key={`admin_${each.id}`}
+                      />
                     ))
                   ) : (
-                    <p> No Data Available </p>
+                    <p>
+                      <FormattedMessage
+                        id="app.noDataAvailable"
+                        defaultMessage="No Data Available"
+                      />
+                    </p>
                   )}
                 </ul>
               </PerfectScrollbar>

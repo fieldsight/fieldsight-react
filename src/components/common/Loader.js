@@ -1,21 +1,25 @@
-import React from "react";
-import { Fade } from "react-reveal";
-import ReactLoader from "react-loader-spinner";
+import React from 'react';
+import { Fade } from 'react-reveal';
+import ReactLoader from 'react-loader-spinner';
+/* eslint-disable   react/no-array-index-key */
 
 export const TableContentLoader = ({ row, column }) => (
   <div className="contentLoading">
     <div className="loading-list table-list">
       <div className="text no-thumb">
         {Array(row)
-          .fill("")
+          .fill('')
           .map((el, ind) => (
             <div className="row" key={ind}>
               {Array(column)
-                .fill("")
+                .fill('')
                 .map((e, i) => (
                   <div className="col" key={i}>
-                    <div className="loading-content" style={{ height: "15px" }}>
-                      {" "}
+                    <div
+                      className="loading-content"
+                      style={{ height: '15px' }}
+                    >
+                      {' '}
                     </div>
                   </div>
                 ))}
@@ -32,11 +36,11 @@ export const GridContentLoader = ({ number, height }) => (
       <div className="text no-thumb">
         <div className="row">
           {Array(number)
-            .fill("")
+            .fill('')
             .map((e, i) => (
               <div className="col-lg-4 col-xs-4" key={i}>
-                <div className="loading-content" style={{ height: height }}>
-                  {" "}
+                <div className="loading-content" style={{ height }}>
+                  {' '}
                 </div>
               </div>
             ))}
@@ -51,11 +55,11 @@ export const BlockContentLoader = ({ number, height }) => (
     <div className="loading-list block-list">
       <div className="text no-thumb">
         {Array(number)
-          .fill("")
+          .fill('')
           .map((e, i) => (
             <div
               className="loading-content"
-              style={{ height: height }}
+              style={{ height }}
               key={i}
             />
           ))}
@@ -67,11 +71,11 @@ export const BlockContentLoader = ({ number, height }) => (
 export const AvatarContentLoader = ({ number, width, size }) => (
   <>
     {Array(number)
-      .fill("")
+      .fill('')
       .map((item, i) => (
-        <div className="contentLoading" style={{ width: width }} key={i}>
+        <div className="contentLoading" style={{ width }} key={i}>
           <div className="loading-list">
-            <div className={`loading-image circle circle-${size}`}>​</div>
+            <div className={`loading-image circle circle-${size}`} />
             <div className="text">
               <div className="loading-content" />
               <div className="loading-content" />
@@ -103,32 +107,37 @@ export const AvatarContentLoader = ({ number, width, size }) => (
 export const DotLoader = ({ height }) => (
   <div
     style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      ...(height && { height: height })
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      ...(height && { height }),
     }}
   >
-    <ReactLoader type="ThreeDots" color="#00628E" height="50" width="50" />
+    <ReactLoader
+      type="ThreeDots"
+      color="#00628E"
+      height="50"
+      width="50"
+    />
   </div>
 );
 
-export default props => (
+export default () => (
   <Fade>
     <div className="fieldsight-popup open">
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          top: "0",
-          left: "0",
-          right: "0",
-          bottom: "0",
-          zIndex: 99999
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
+          zIndex: 99999,
         }}
       >
         <ReactLoader
@@ -138,9 +147,15 @@ export default props => (
           width="50"
         />
 
-        <h6 style={{ color: "#00628E", marginTop: "20px" }}>
+        <h6
+          style={{
+            color: '#00628E',
+            marginTop: '20px',
+          }}
+        >
           Loading... Please wait!
-          {/* Loading... Please wait! {props.loaded && `${props.loaded} %`} */}
+          {/* Loading... Please wait!
+           {props.loaded && `${props.loaded} %`} */}
         </h6>
       </div>
     </div>

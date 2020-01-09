@@ -1,8 +1,10 @@
-import React, { Component } from "react";
-import ProjecTable from "./ProjectTable";
+import React, { PureComponent } from 'react';
+import ProjecTable from './ProjectTable';
+/* eslint-disable react/prop-types  */
 
-class ProjectFormContent extends Component {
+class ProjectFormContent extends PureComponent {
   render() {
+    const { OpenTabHandler, commonPopupHandler } = this.props;
     return (
       <div className="col-xl-9 col-lg-8">
         <div className="right-content">
@@ -10,8 +12,8 @@ class ProjectFormContent extends Component {
             <div className="tab-pane fade show active">
               <div className="card no-boxshadow">
                 <ProjecTable
-                  OpenTabHandler={this.props.OpenTabHandler}
-                  commonPopupHandler={this.props.commonPopupHandler}
+                  OpenTabHandler={OpenTabHandler}
+                  commonPopupHandler={commonPopupHandler}
                 />
               </div>
             </div>

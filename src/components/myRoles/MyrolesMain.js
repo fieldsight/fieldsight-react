@@ -1,103 +1,95 @@
-import React, { Component } from "react";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import axios from "axios";
-import YourTeamSideBar from "./YourTeamSidebar";
-import ProfileTab from "./ProfileTab";
-import RegionTable from "./RegionTable";
-import Submissions from "./Submissions";
-import InviteTab from "./InviteTab";
-import SiteTable from "./SiteTable";
-import MapPage from "./MapPage";
-import { successToast, errorToast } from "../../utils/toastHandler";
-import withPagination from "../../hoc/WithPagination";
-import Modal from "../common/Modal";
-import DeleteModal from "../common/DeleteModal";
+import React, { Component } from 'react';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
+import YourTeamSideBar from './YourTeamSidebar';
+import ProfileTab from './ProfileTab';
+import RegionTable from './RegionTable';
+import Submissions from './Submissions';
+import InviteTab from './InviteTab';
+import SiteTable from './SiteTable';
+import MapPage from './MapPage';
+import { successToast } from '../../utils/toastHandler';
+import withPagination from '../../hoc/WithPagination';
+import Modal from '../common/Modal';
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-unused-state  */
+/* eslint-disable camelcase */
 
 class MyrolesMain extends Component {
-  state = {
-    invite: null,
-    rightTab: "site",
-    profile: [],
-    invitation: [],
-    roles: [],
-    teams: [],
-    initialTeamId: null,
-    site: [],
-    submission: [],
-    regions: [],
-    mapData: [],
-    dLoader: true,
-    siteLoader: true,
-    RegionLoader: true,
-    teamId: null,
-    siteId: null,
-    myGuide: false,
-    searchQuery: "",
-    profileId: "",
-    roles: [],
-    checkRole: false,
-    type: "",
-    typeId: "",
-    roleId: "",
-    isDelConfirm: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      invite: null,
+      rightTab: 'site',
+      profile: [],
+      invitation: [],
+      roles: [],
+      teams: [],
+      initialTeamId: null,
+      site: [],
+      submission: [],
+      regions: [],
+      mapData: [],
+      dLoader: true,
+      siteLoader: true,
+      RegionLoader: true,
+      teamId: null,
+      siteId: null,
+      myGuide: false,
+      searchQuery: '',
+    };
+  }
 
-  // componentDidMount() {
   componentWillMount() {
-    const { profileId } = this.props.match.params;
-
+    const { props } = this;
+    const { profileId } = props.match.params;
     const url = profileId
       ? `fv3/api/myroles/?profile=${profileId}`
       : `fv3/api/myroles/`;
     this._isMounted = true;
-    this.setState(
-      {
-        profileId
-      },
-      () => {
-        axios
-          .get(`${url}`)
+    axios
+      .get(`${url}`)
 
-          .then(res => {
-            if (this._isMounted) {
-              if (res.status === 200) {
-                const modifiedTeam = res.data.teams.map((team, i) => {
-                  return i === 0
-                    ? { ...team, accord: true }
-                    : { ...team, accord: false };
-                });
+      .then(res => {
+        if (this._isMounted) {
+          if (res.status === 200) {
+            const modifiedTeam = res.data.teams.map((team, i) => {
+              return i === 0
+                ? { ...team, accord: true }
+                : { ...team, accord: false };
+            });
 
-                if (res.data.teams.length > 0) {
-                  this.setState({
-                    initialTeamId: res.data.teams[0].projects[0].id
-                  });
-                }
-
-                this.setState({
-                  profile: res.data.profile,
-                  invitation: res.data.invitations,
-                  roles: res.data.roles,
-                  teams: modifiedTeam,
-                  dLoader: false,
-                  RegionLoader: false,
-                  myGuide: res.data.profile.guide_popup
-                });
-              }
+            if (res.data.teams.length > 0) {
+              this.setState({
+                initialTeamId: res.data.teams[0].projects[0].id,
+              });
             }
-          })
-          .catch(err => {});
-      }
-    );
+
+            this.setState({
+              profile: res.data.profile,
+              invitation: res.data.invitations,
+              roles: res.data.roles,
+              teams: modifiedTeam,
+              dLoader: false,
+              RegionLoader: false,
+              myGuide: res.data.profile.guide_popup,
+            });
+          }
+        }
+      })
+      .catch(() => {});
   }
 
-  invitationOpen = (e, data) => {
-    if (this.state.invite == "hide") {
+  invitationOpen = () => {
+    const { invite } = this.state;
+    if (invite === 'hide') {
       this.setState({
-        invite: null
+        invite: null,
       });
     } else {
       this.setState({
-        invite: "hide"
+        invite: 'hide',
       });
     }
   };
@@ -105,12 +97,12 @@ class MyrolesMain extends Component {
   rightTabOpen = (e, data) => {
     this.setState({
       rightTab: data,
-      searchQuery: ""
+      searchQuery: '',
     });
   };
 
   rejectHandler = id => {
-    const reject_url = "fv3/api/decline-invite/" + id + "/";
+    const reject_url = `fv3/api/decline-invite/${id}/`;
 
     axios
       .post(`${reject_url}`)
@@ -118,19 +110,21 @@ class MyrolesMain extends Component {
       .then(res => {
         if (res.status === 200) {
           const newInvitation = [...this.state.invitation];
-          const deletedForm = newInvitation.filter(user => user.id != id);
+          const deletedForm = newInvitation.filter(
+            user => user.id !== id,
+          );
 
           this.setState({
-            invitation: deletedForm
+            invitation: deletedForm,
           });
-          successToast("Invite", "Rejected");
+          successToast('Invite', 'Rejected');
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   acceptHandler = (id, user) => {
-    const accept_url = "fv3/api/accept-invite/" + id + "/" + user + "/";
+    const accept_url = `fv3/api/accept-invite/${id}/${user}/`;
 
     axios
       .post(`${accept_url}`)
@@ -138,49 +132,44 @@ class MyrolesMain extends Component {
       .then(res => {
         if (res.status === 200) {
           const newInvitation = [...this.state.invitation];
-          const deletedForm = newInvitation.filter(user => user.id != id);
+          const deletedForm = newInvitation.filter(
+            each => each.id !== id,
+          );
 
           this.setState({
-            invitation: deletedForm
+            invitation: deletedForm,
           });
 
-          successToast("Invite", "Accepted");
+          successToast('Invite', 'Accepted');
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   acceptAll = () => {
-    const accept_all_url =
-      "fv3/api/accept-all-invites/" + this.state.profile.username + "/";
+    const accept_all_url = `fv3/api/accept-all-invites/
+      ${this.state.profile.username}/`;
 
     axios
       .post(`${accept_all_url}`)
 
       .then(res => {
         if (res.status === 200) {
-          // const newInvitation = [...this.state.invitation];
-          // const deletedForm = newInvitation.filter(user => user.id != id);
-
           this.setState({
-            invitation: []
+            invitation: [],
           });
 
-          successToast("All Invites", "Accepted");
+          successToast('All Invites', 'Accepted');
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   requestRegions = id => {
-    const { profileId } = this.state;
-    const url = !!profileId
-      ? "fv3/api/my-regions/?project=" + id + "&profile=" + profileId
-      : "fv3/api/my-regions/?project=" + id;
-
+    const url = `fv3/api/my-regions/?project=${id}`;
     this.setState({
       teamId: id,
-      RegionLoader: true
+      RegionLoader: true,
     });
     axios
       .get(`${url}`)
@@ -189,11 +178,11 @@ class MyrolesMain extends Component {
           this.setState(
             {
               regions: res.data.regions,
-              RegionLoader: false
+              RegionLoader: false,
             },
-            () => {
-              // this.state, "dfghjh";
-            }
+            // () => {
+            //   this.state, 'dfghjh';
+            // },
           );
         }
       })
@@ -201,50 +190,22 @@ class MyrolesMain extends Component {
   };
 
   requestSite = id => {
-    const { profileId } = this.state;
-
-    const site_url = profileId
-      ? "fv3/api/my-sites/?project=" + id + "&profile=" + profileId
-      : "fv3/api/my-sites/?project=" + id;
-
+    const { paginationHandler } = this.props;
     this.setState({
       siteLoader: true,
-      siteId: id
+      siteId: id,
     });
-    // axios
-    //   .get(`${site_url}`)
-    //   .then(res => {
-    //     if (res.status === 200) {
-    //       this.setState({
-    //         site: res.data.results.data,
-    //         siteLoader: false
-    //       });
-    //     }
-    //   })
-    //   .catch(err => {});
-    if (profileId) {
-      this.props.paginationHandler(1, null, {
-        type: "mySiteList",
-        projectId: id,
-        profileId
-      });
-    } else {
-      this.props.paginationHandler(1, null, {
-        type: "mySiteList",
-        projectId: id
-      });
-    }
+
+    paginationHandler(1, null, {
+      type: 'mySiteList',
+      projectId: id,
+    });
   };
 
   requestSubmission = id => {
-    const { profileId } = this.state;
-
-    const submission_url = !!profileId
-      ? `fv3/api/submissions-map/?project=${id}&type=submissions&profile=${profileId}`
-      : `fv3/api/submissions-map/?project=${id}&type=submissions`;
-
+    const submission_url = `fv3/api/submissions-map/?project=${id}&type=submissions`;
     this.setState({
-      submissionLoader: true
+      submissionLoader: true,
     });
     axios
       .get(`${submission_url}`)
@@ -252,119 +213,105 @@ class MyrolesMain extends Component {
         if (res.status === 200) {
           this.setState({
             submission: res.data,
-            submissionLoader: false
+            submissionLoader: false,
           });
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   requestMap = id => {
-    const { profileId } = this.state;
-    const submission_url = !!profileId
-      ? `fv3/api/submissions-map/?project=${id}&type=map&profile=${profileId}`
-      : `fv3/api/submissions-map/?project=${id}&type=map`;
+    const submission_url = `fv3/api/submissions-map/?project=${id}&type=map`;
 
     axios
       .get(`${submission_url}`)
       .then(res => {
         if (res.status === 200) {
           this.setState({
-            mapData: res.data
+            mapData: res.data,
           });
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   cancelHandler = () => {
     this.setState({
       myGuide: false,
-      checkRole: false
     });
   };
 
   onChangeHandler = e => {
     const searchValue = e.target.value;
-    const { siteId, profileId } = this.state;
-    const url = !!profileId
-      ? `fv3/api/my-sites/?project=${siteId}&profile=${profileId}&q=${this.state.searchQuery}`
-      : `fv3/api/my-sites/?project=${siteId}&q=${this.state.searchQuery}`;
-
+    const { siteId } = this.state;
     this.setState({ searchQuery: searchValue }, () => {
-      this.props.searchHandler(this.state.searchQuery, url, {
-        type: "mySiteList",
-        projectId: siteId
-      });
+      const {
+        props: { searchHandler },
+        state: { searchQuery },
+      } = this;
+      searchHandler(
+        searchQuery,
+        `fv3/api/my-sites/?project=${siteId}&q=${searchQuery}`,
+        {
+          type: 'mySiteList',
+          projectId: siteId,
+        },
+      );
     });
-  };
-
-  requestCheckRoles = (type, id) => {
-    const { profileId } = this.state;
-    this.setState({ checkRole: true, type, typeId: id }, () => {
-      axios
-        .get(`/fv3/api/check-role/${profileId}/${type}/${id}/`)
-        .then(res => {
-          if (res.data) {
-            this.setState({ roles: res.data });
-          }
-        })
-        .catch(() => {});
-    });
-  };
-
-  handleToggleDelete = roleId => {
-    this.setState(state => {
-      if (roleId) return { roleId, isDelConfirm: !state.isDelConfirm };
-      return { isDelConfirm: !isDelConfirm };
-    });
-  };
-
-  requestDeleteRole = () => {
-    const { type, roleId, typeId } = this.state;
-    axios
-      .post(`fv3/api/remove-role/${type}/${roleId}/${typeId}/`)
-      .then(res => {
-        if (res.data) {
-          this.setState({
-            isDelConfirm: false,
-            checkRole: false
-          }),
-            successToast("role", "deleted");
-        }
-      })
-      .catch(err => {
-        const error = err.response && err.response.data;
-        errorToast(error);
-      });
   };
 
   render() {
-    // const { profileId } = this.props.match.params;
-    const { myGuide, profileId, roles, checkRole, isDelConfirm } = this.state;
+    const {
+      match: {
+        params: { profileId },
+      },
+      siteList,
+      renderPageNumbers,
+      pageNum,
+      paginationHandler,
+      fromData,
+      toData,
+      totalCount,
+    } = this.props;
+    const {
+      myGuide,
+      dLoader,
+      profile,
+      teams,
+      teamId,
+      rightTab,
+      submission,
+      invitation,
+      invite,
+      submissionLoader,
+      regions,
+      RegionLoader,
+      initialTeamId,
+      siteId,
+      mapData,
+    } = this.state;
 
     return (
       <>
         <div className="card mrb-30">
           <ProfileTab
-            dLoader={this.state.dLoader}
-            profile={this.state.profile}
+            dLoader={dLoader}
+            profile={profile}
             profileId={profileId}
           />
         </div>
 
         <div className="row">
           <YourTeamSideBar
-            dLoader={this.state.dLoader}
-            teams={this.state.teams}
-            teamId={this.state.teamId}
+            dLoader={dLoader}
+            teams={teams}
+            teamId={teamId}
             requestRegions={this.requestRegions}
             requestSite={this.requestSite}
             requestSubmission={this.requestSubmission}
             requestMap={this.requestMap}
-            regions={this.state.regions}
-            addPermission={this.state.profile.can_create_team}
-            requestCheckRoles={this.requestCheckRoles}
+            regions={regions}
+            addPermission={profile.can_create_team}
           />
 
           <div className="col-xl-8 col-lg-7">
@@ -375,58 +322,102 @@ class MyrolesMain extends Component {
                 <div className="card-body">
                   <div className="nav-wrapper">
                     {/* <!-- tab nav start --> */}
-                    <ul className="nav nav-tabs " id="myTab" role="tablist">
+                    <ul
+                      className="nav nav-tabs "
+                      id="myTab"
+                      role="tablist"
+                    >
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == "site"
-                              ? "nav-link active"
-                              : "nav-link"
+                            rightTab === 'site'
+                              ? 'nav-link active'
+                              : 'nav-link'
                           }
-                          onClick={e => this.rightTabOpen(e, "site")}
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={e => {
+                            this.rightTabOpen(e, 'site');
+                          }}
+                          onClick={e => {
+                            this.rightTabOpen(e, 'site');
+                          }}
                         >
-                          Sites
+                          <FormattedMessage
+                            id="app.sites"
+                            defaultMessage="Sites"
+                          />
                         </a>
                       </li>
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == "region"
-                              ? "nav-link active"
-                              : "nav-link"
+                            rightTab === 'region'
+                              ? 'nav-link active'
+                              : 'nav-link'
                           }
-                          onClick={e => this.rightTabOpen(e, "region")}
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={e => {
+                            this.rightTabOpen(e, 'region');
+                          }}
+                          onClick={e => {
+                            this.rightTabOpen(e, 'region');
+                          }}
                         >
-                          Regions
+                          <FormattedMessage
+                            id="app.regions"
+                            defaultMessage="Regions"
+                          />
                         </a>
                       </li>
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == "submission"
-                              ? "nav-link active"
-                              : "nav-link"
+                            rightTab === 'submission'
+                              ? 'nav-link active'
+                              : 'nav-link'
                           }
-                          onClick={e => this.rightTabOpen(e, "submission")}
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={e => {
+                            this.rightTabOpen(e, 'submission');
+                          }}
+                          onClick={e => {
+                            this.rightTabOpen(e, 'submission');
+                          }}
                         >
-                          Submissions
+                          <FormattedMessage
+                            id="app.submissions"
+                            defaultMessage="Submissions"
+                          />
                         </a>
                       </li>
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.rightTab == "map"
-                              ? "nav-link active"
-                              : "nav-link"
+                            rightTab === 'map'
+                              ? 'nav-link active'
+                              : 'nav-link'
                           }
-                          onClick={e => this.rightTabOpen(e, "map")}
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={e => {
+                            this.rightTabOpen(e, 'map');
+                          }}
+                          onClick={e => {
+                            this.rightTabOpen(e, 'map');
+                          }}
                         >
-                          map
+                          <FormattedMessage
+                            id="app.map"
+                            defaultMessage="map"
+                          />
                         </a>
                       </li>
                     </ul>
 
-                    {this.state.rightTab == "site" && (
+                    {rightTab === 'site' && (
                       // <div className="dash-btn">
                       <form
                         className="floating-form"
@@ -437,10 +428,10 @@ class MyrolesMain extends Component {
                         <div
                           className="form-group mr-0"
                           style={{
-                            top: "-43px",
-                            right: "-597px",
-                            width: "22%",
-                            display: "flex"
+                            top: '-43px',
+                            right: '-597px',
+                            width: '22%',
+                            display: 'flex',
                           }}
                         >
                           <input
@@ -449,59 +440,62 @@ class MyrolesMain extends Component {
                             onChange={this.onChangeHandler}
                             placeholder="Search"
                           />
-                          <div style={{ marginTop: " 0.6rem" }}>
+                          <div style={{ marginTop: ' 0.6rem' }}>
                             <i className="la la-search" />
                           </div>
-                          {/* <label htmlFor="input">Search</label> */}
+                          {/* <label htmlFor="input">
+                          Search
+                          </label> */}
                         </div>
                       </form>
                       // </div>
                     )}
                   </div>
-                  <div className="tab-content mrt-30" id="myTabContent">
-                    {this.state.rightTab == "submission" && (
+                  <div
+                    className="tab-content mrt-30"
+                    id="myTabContent"
+                  >
+                    {rightTab === 'submission' && (
                       <Submissions
-                        submission={this.state.submission}
-                        submissionLoader={this.state.submissionLoader}
+                        submission={submission}
+                        submissionLoader={submissionLoader}
                       />
                     )}
 
-                    {this.state.rightTab == "region" && (
+                    {rightTab === 'region' && (
                       <RegionTable
-                        // initialTeamId={this.state.initialTeamId}
+                        // initialTeamId={initialTeamId}
                         // requestRegions={this.requestRegions}
                         // requestSite={this.requestSite}
                         // requestSubmission={this.requestSubmission}
                         // requestMap={this.requestMap}
-                        regions={this.state.regions}
-                        RegionLoader={this.state.RegionLoader}
+                        regions={regions}
+                        RegionLoader={RegionLoader}
                         profileId={profileId}
-                        requestCheckRoles={this.requestCheckRoles}
                       />
                     )}
-                    {this.state.rightTab == "site" && (
+                    {rightTab === 'site' && (
                       <SiteTable
-                        initialTeamId={this.state.initialTeamId}
+                        initialTeamId={initialTeamId}
                         requestRegions={this.requestRegions}
                         requestSite={this.requestSite}
                         requestSubmission={this.requestSubmission}
                         requestMap={this.requestMap}
-                        site={this.props.siteList}
-                        siteLoader={this.state.dLoader}
-                        renderPageNumbers={this.props.renderPageNumbers}
-                        paginationHandler={this.props.paginationHandler}
-                        siteId={this.state.siteId}
-                        pageNum={this.props.pageNum}
-                        fromData={this.props.fromData}
-                        toData={this.props.toData}
-                        totalCount={this.props.totalCount}
+                        site={siteList}
+                        siteLoader={dLoader}
+                        renderPageNumbers={renderPageNumbers}
+                        paginationHandler={paginationHandler}
+                        siteId={siteId}
+                        pageNum={pageNum}
+                        fromData={fromData}
+                        toData={toData}
+                        totalCount={totalCount}
                         profileId={profileId}
-                        requestCheckRoles={this.requestCheckRoles}
                       />
                     )}
 
-                    {this.state.rightTab == "map" && (
-                      <MapPage mapData={this.state.mapData} />
+                    {rightTab === 'map' && (
+                      <MapPage mapData={mapData} />
                     )}
                   </div>
                 </div>
@@ -510,14 +504,14 @@ class MyrolesMain extends Component {
           </div>
         </div>
 
-        {this.state.invitation.length != 0 && (
+        {invitation.length !== 0 && (
           <div
-            className={"invite-popup invite " + this.state.invite}
-            style={{ zIndex: "1011" }}
+            className={`invite-popup invite ${invite}`}
+            style={{ zIndex: '1011' }}
           >
             <InviteTab
               invitationOpen={this.invitationOpen}
-              invitation={this.state.invitation}
+              invitation={invitation}
               acceptHandler={this.acceptHandler}
               rejectHandler={this.rejectHandler}
               acceptAll={this.acceptAll}
@@ -525,71 +519,58 @@ class MyrolesMain extends Component {
           </div>
         )}
         {myGuide && (
-          <Modal title="Welcome to FieldSight" toggleModal={this.cancelHandler}>
+          <Modal
+            title="Welcome to FieldSight"
+            toggleModal={this.cancelHandler}
+          >
             <div className="guide">
               <p>
-                Hi,&nbsp;
-                <span style={{ textTransform: "capitalize" }}>
+                <FormattedMessage id="app.hi" defaultMessage="Hi," />
+                &nbsp;
+                <span style={{ textTransform: 'capitalize' }}>
                   {this.state.profile.fullname}
-                </span>{" "}
-                seems like you have no role yet.&nbsp;You can get started by
-                creating a team in FieldSight or contact your FieldSight manager
-                to invite you to join projects.
+                </span>
+                <FormattedMessage
+                  id="app.noRole"
+                  defaultMessage="seems like you have no role yet."
+                />
+                &nbsp;
+                <FormattedMessage
+                  id="app.noRole2"
+                  defaultMessage="You can get started by
+                            creating a team in FieldSight or contact your FieldSight manager
+                            to invite you to join projects."
+                />
               </p>
             </div>
             <div className="warning-footer text-center">
               <a
-                href={"/fieldsight/application/#/create-team/"}
+                href="/fieldsight/application/#/create-team/"
                 className="fieldsight-btn"
-                style={{ marginRight: "10px", display: "inline-block" }}
+                style={{
+                  marginRight: '10px',
+                  display: 'inline-block',
+                }}
               >
-                Create Team
+                <FormattedMessage
+                  id="app.createTeam"
+                  defaultMessage="Create Team"
+                />
               </a>
               <a
+                tabIndex="0"
+                role="button"
+                onKeyDown={this.cancelHandler}
                 className="fieldsight-btn rejected-btn"
                 onClick={this.cancelHandler}
               >
-                Cancel
+                <FormattedMessage
+                  id="app.cancel"
+                  defaultMessage="Cancel"
+                />
               </a>
             </div>
           </Modal>
-        )}
-        {checkRole && (
-          <Modal
-            title="Which of the following roles do you want to Delete?"
-            toggleModal={this.cancelHandler}
-          >
-            {/* <div className="row"> */}
-            <ul>
-              {roles &&
-                roles.length > 0 &&
-                roles.map(role => (
-                  <li key={`role_${role.role_id}`}>
-                    <label>
-                      <strong>{role.group_name}</strong>
-                    </label>
-                    &nbsp;
-                    <a
-                      className="td-delete-btn td-btn"
-                      onClick={() => {
-                        this.handleToggleDelete(role.role_id);
-                      }}
-                    >
-                      Delete
-                    </a>
-                  </li>
-                ))}
-            </ul>
-            {/* </div> */}
-          </Modal>
-        )}
-        {isDelConfirm && (
-          <DeleteModal
-            onCancel={this.handleToggleDelete}
-            onConfirm={this.requestDeleteRole}
-            onToggle={this.handleToggleDelete}
-            message="Are you sure to delete the role?"
-          />
         )}
       </>
     );

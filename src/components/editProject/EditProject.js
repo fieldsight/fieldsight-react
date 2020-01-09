@@ -1,60 +1,139 @@
-import React, { Component } from "react";
-import L from "leaflet";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import Cropper from "react-cropper";
-import Modal from "../common/Modal";
-import InputElement from "../common/InputElement";
-import SelectElement from "../common/SelectElement";
-import RightContentCard from "../common/RightContentCard";
-import CheckBox from "../common/CheckBox";
-import Loader from "../common/Loader";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import { RegionContext } from "../../context";
-import "leaflet/dist/leaflet.css";
-import { markerIcon } from "../common/Marker";
+import React, { Component } from 'react';
+import L from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
+import Dropzone from 'react-dropzone';
+import Cropper from 'react-cropper';
+import Modal from '../common/Modal';
+import InputElement from '../common/InputElement';
+import SelectElement from '../common/SelectElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import { errorToast, successToast } from '../../utils/toastHandler';
+import { RegionContext } from '../../context';
+import markerIcon from '../common/Marker';
+
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable consistent-return */
+/* eslint-disable camelcase */
+
+const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
+const iconUrl = require('leaflet/dist/images/marker-icon.png');
+const shadowUrl = require('leaflet/dist/images/marker-shadow.png');
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-  iconUrl: require("leaflet/dist/images/marker-icon.png"),
-  shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
 });
 
-const urls = ["fv3/api/update-project/", "fv3/api/sectors-subsectors/"];
+const urls = [
+  'fv3/api/update-project/',
+  'fv3/api/sectors-subsectors/',
+];
 
 class EditProject extends Component {
   _isMounted = false;
 
   static contextType = RegionContext;
 
-  state = {
-    project: {
-      name: "",
-      phone: "",
-      email: "",
-      address: "",
-      website: "",
-      donor: "",
-      public_desc: "",
-      cluster_sites: false
-    },
-    loaded: 0,
-    sector: [],
-    subSectors: [],
-    selectedSector: "",
-    selectedSubSector: "",
-    position: {
-      latitude: "",
-      longitude: ""
-    },
-    zoom: 13,
-    src: "",
-    showCropper: false,
-    cropResult: "",
-    isLoading: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      project: {
+        name: '',
+        phone: '',
+        email: '',
+        address: '',
+        website: '',
+        donor: '',
+        public_desc: '',
+        cluster_sites: false,
+      },
+      loaded: 0,
+      sector: [],
+      subSectors: [],
+      selectedSector: '',
+      selectedSubSector: '',
+      position: {
+        latitude: '',
+        longitude: '',
+      },
+      zoom: 13,
+      src: '',
+      showCropper: false,
+      cropResult: '',
+      isLoading: false,
+    };
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+    const { projectId } = this.context;
+
+    axios
+      .all(
+        urls.map((url, i) => {
+          return i === 0
+            ? axios.get(`${url}${projectId}/`)
+            : axios.get(url);
+        }),
+      )
+      .then(
+        axios.spread((project, sector) => {
+          if (this._isMounted) {
+            if (project && sector) {
+              const position =
+                project.data.location &&
+                project.data.location.split(' ');
+              const longitude = position && position[1].split('(')[1];
+              const latitude = position && position[2].split(')')[0];
+              const newSubSectors = project.data.sub_sector
+                ? sector.data.find(
+                    sect => sect.id === +project.data.sector,
+                  ).subSectors
+                : [];
+
+              const newSelectedSector = project.data.sector
+                ? project.data.sector
+                : '';
+
+              const newSelectedSubSector = project.data.sub_sector
+                ? project.data.sub_sector
+                : '';
+
+              const newPosition =
+                position && position.length > 0
+                  ? { latitude, longitude }
+                  : { latitude: '', longitude: '' };
+
+              const newCropResult = project.data.logo
+                ? project.data.logo
+                : '';
+
+              this.setState({
+                project: project.data,
+                sector: sector.data,
+                subSectors: newSubSectors,
+                selectedSector: newSelectedSector,
+                selectedSubSector: newSelectedSubSector,
+                cropResult: newCropResult,
+                position: newPosition,
+              });
+            }
+          }
+        }),
+      )
+      .catch(() => {});
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   requestHandler = () => {
     const {
@@ -66,17 +145,17 @@ class EditProject extends Component {
           address,
           website,
           public_desc,
-          cluster_sites,
+          // cluster_sites,
           donor,
-          logo,
-          organization
+          // logo,
+          organization,
         },
         position: { latitude, longitude },
         selectedSector,
         selectedSubSector,
-        cropResult
+        cropResult,
       },
-      context: { projectId }
+      context: { projectId },
     } = this;
 
     const project = {
@@ -93,152 +172,98 @@ class EditProject extends Component {
       longitude,
       sector: selectedSector,
       sub_sector: selectedSubSector,
-      organization
+      organization,
     };
     axios
       .put(`${urls[0]}${projectId}/`, project, {
         onUploadProgress: progressEvent => {
           this.setState({
             loaded: Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            )
+              (progressEvent.loaded * 100) / progressEvent.total,
+            ),
           });
-        }
+        },
       })
-      .then(res => {
+      .then(() => {
         this.setState(
           {
             isLoading: false,
-            loaded: 0
+            loaded: 0,
           },
-          () => successToast("Project", "updated")
+          () => successToast('Project', 'updated'),
         );
       })
       .catch(err => {
         const error = err.response.data;
-
         this.setState(
           {
-            isLoading: false
+            isLoading: false,
           },
           () => {
-            error &&
-              Object.entries(error).map(([key, value]) => {
-                return errorToast(`${value}`);
-              });
-          }
+            Object.entries(error).map(([key, value]) => {
+              return errorToast(`${value}`);
+            });
+          },
         );
       });
   };
 
   onSubmitHandler = e => {
     e.preventDefault();
+
     this.setState(
       {
-        isLoading: true
+        isLoading: true,
       },
-      this.requestHandler
+      this.requestHandler,
     );
   };
 
   onSelectChangeHandler = (e, subSect) => {
     const { value } = e.target;
+    const { subSectors, sector } = this.state;
     if (subSect) {
-      const selectedSubSectorId = this.state.subSectors.find(
-        subSect => subSect.id === +value
+      const selectedSubSectorId = subSectors.find(
+        each => each.id === +value,
       ).id;
       return this.setState({
-        selectedSubSector: selectedSubSectorId
+        selectedSubSector: selectedSubSectorId,
       });
     }
-    const selectedSector = this.state.sector.find(sect => sect.id === +value);
+    const selectedSector = sector.find(sect => sect.id === +value);
     this.setState({
       subSectors: selectedSector.subSectors,
-      selectedSector: selectedSector.id
+      selectedSector: selectedSector.id,
     });
   };
 
   handleCheckboxChange = e =>
-    this.setState({
+    this.setState(state => ({
       project: {
-        ...this.state.project,
-        cluster_sites: e.target.checked
-      }
-    });
+        ...state.project,
+        cluster_sites: e.target.checked,
+      },
+    }));
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
 
     if (position) {
-      this.setState({
+      this.setState(state => ({
         position: {
-          ...this.state.position,
-          [name]: value
-        }
-      });
+          ...state.position,
+          [name]: value,
+        },
+      }));
     }
 
-    this.setState({
+    this.setState(state => ({
       project: {
-        ...this.state.project,
-        [name]: value
-      }
-    });
+        ...state.project,
+        [name]: value,
+      },
+    }));
   };
-
-  componentDidMount() {
-    this._isMounted = true;
-    const { projectId } = this.context;
-
-    axios
-      .all(
-        urls.map((url, i) => {
-          return i === 0 ? axios.get(`${url}${projectId}/`) : axios.get(url);
-        })
-      )
-      .then(
-        axios.spread((project, sector) => {
-          if (this._isMounted) {
-            if (project && sector) {
-              const position =
-                project.data.location && project.data.location.split(" ");
-              const longitude = position && position[1].split("(")[1];
-              const latitude = position && position[2].split(")")[0];
-              const newSubSectors = project.data.sub_sector
-                ? sector.data.find(sect => sect.id === +project.data.sector)
-                    .subSectors
-                : [];
-
-              const newSelectedSector = project.data.sector
-                ? project.data.sector
-                : "";
-
-              const newSelectedSubSector = project.data.sub_sector
-                ? project.data.sub_sector
-                : "";
-
-              const newPosition =
-                position && position.length > 0
-                  ? { latitude, longitude }
-                  : { latitude: "", longitude: "" };
-
-              const newCropResult = project.data.logo ? project.data.logo : "";
-
-              this.setState({
-                project: project.data,
-                sector: sector.data,
-                subSectors: newSubSectors,
-                selectedSector: newSelectedSector,
-                selectedSubSector: newSelectedSubSector,
-                cropResult: newCropResult,
-                position: newPosition
-              });
-            }
-          }
-        })
-      )
-      .catch(err => console.log("err", err));
-  }
 
   readFile = file => {
     const reader = new FileReader();
@@ -249,30 +274,30 @@ class EditProject extends Component {
   };
 
   cropImage = () => {
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
       cropResult: this.cropper.getCroppedCanvas().toDataURL(),
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
 
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
 
   mapClickHandler = e => {
-    this.setState({
+    this.setState(state => ({
       position: {
-        ...this.state.position,
+        ...state.position,
         latitude: e.latlng.lat,
-        longitude: e.latlng.lng
-      }
-    });
+        longitude: e.latlng.lng,
+      },
+    }));
   };
 
   render() {
@@ -287,7 +312,7 @@ class EditProject extends Component {
           website,
           donor,
           public_desc,
-          cluster_sites
+          // cluster_sites,
         },
         sector,
         subSectors,
@@ -296,19 +321,18 @@ class EditProject extends Component {
         cropResult,
         isLoading,
         selectedSector,
-        selectedSubSector
+        selectedSubSector,
       },
       onChangeHandler,
       onSelectChangeHandler,
       onSubmitHandler,
-      handleCheckboxChange,
       readFile,
       closeModal,
-      mapClickHandler
+      mapClickHandler,
     } = this;
 
     return (
-      <RightContentCard title="Edit Project">
+      <RightContentCard title="app.editProject">
         <form className="edit-form" onSubmit={onSubmitHandler}>
           <div className="row">
             <div className="col-xl-4 col-md-6">
@@ -316,29 +340,34 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
-                label="Name"
+                required
+                label="app.name"
                 name="name"
                 value={name}
                 changeHandler={onChangeHandler}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <SelectElement
                 className="form-control"
-                label="Sector"
+                label="app.sector"
                 options={sector.map(sect => sect)}
                 changeHandler={onSelectChangeHandler}
                 value={selectedSector && selectedSector}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <SelectElement
                 className="form-control"
-                label="Sub Sector"
+                label="app.subSector"
                 options={subSectors.map(subSect => subSect)}
-                changeHandler={e => onSelectChangeHandler(e, "subSect")}
+                changeHandler={e => {
+                  onSelectChangeHandler(e, 'subSect');
+                }}
                 value={selectedSubSector && selectedSubSector}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -346,11 +375,12 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
-                label="Phone"
+                required
+                label="app.phone"
                 name="phone"
                 value={phone}
                 changeHandler={onChangeHandler}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -358,11 +388,12 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="email"
-                required={true}
-                label="Email"
+                required
+                label="app.email"
                 name="email"
                 value={email}
                 changeHandler={onChangeHandler}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -370,11 +401,12 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
-                label="Address"
+                required
+                label="app.address"
                 name="address"
                 value={address}
                 changeHandler={onChangeHandler}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -383,10 +415,11 @@ class EditProject extends Component {
                   formType="editForm"
                   tag="input"
                   type="url"
-                  label="website"
+                  label="app.website"
                   name="website"
                   value={website}
                   changeHandler={onChangeHandler}
+                  translation
                 />
               </div>
             </div>
@@ -396,10 +429,11 @@ class EditProject extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  label="Donor"
+                  label="app.donor"
                   name="donor"
                   value={donor}
                   changeHandler={onChangeHandler}
+                  translation
                 />
               </div>
             </div>
@@ -411,28 +445,33 @@ class EditProject extends Component {
                   changeHandler={this.handleCheckboxChange}
                 />
               </div>
-    </div>*/}
+    </div> */}
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"
                 tag="input"
                 type="text"
-                required={true}
-                label="Description"
+                required
+                label="app.description"
                 name="public_desc"
                 value={public_desc}
                 changeHandler={onChangeHandler}
+                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label>
-                  Map <sup>*</sup>
+                  <FormattedMessage
+                    id="app.map"
+                    defaultMessage="Map"
+                  />
+                  <sup>*</sup>
                 </label>
 
                 <div className="map-form">
                   <Map
-                    style={{ height: "205px", marginTop: "1rem" }}
+                    style={{ height: '205px', marginTop: '1rem' }}
                     center={[latitude, longitude]}
                     zoom={this.state.zoom}
                     onClick={mapClickHandler}
@@ -441,9 +480,18 @@ class EditProject extends Component {
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[latitude, longitude]} icon={markerIcon}>
+                    <Marker
+                      position={[latitude, longitude]}
+                      icon={markerIcon}
+                    >
                       <Popup>
-                        <b>Name: </b>
+                        <b>
+                          <FormattedMessage
+                            id="app.name"
+                            defaultMessage="Name"
+                          />
+                          :
+                        </b>
                         {name}
                       </Popup>
                     </Marker>
@@ -455,11 +503,14 @@ class EditProject extends Component {
                         tag="input"
                         type="number"
                         // step="any"
-                        required={true}
-                        label="Latitude"
+                        required
+                        label="app.latitude"
                         name="latitude"
                         value={latitude}
-                        changeHandler={e => onChangeHandler(e, "latitude")}
+                        translation
+                        changeHandler={e => {
+                          onChangeHandler(e, 'latitude');
+                        }}
                       />
                     </div>
 
@@ -468,11 +519,14 @@ class EditProject extends Component {
                         formType="editForm"
                         tag="input"
                         type="number"
-                        required={true}
-                        label="Longitude"
+                        required
+                        label="app.longitude"
                         name="longitude"
                         value={longitude}
-                        changeHandler={e => onChangeHandler(e, "longitude")}
+                        translation
+                        changeHandler={e => {
+                          onChangeHandler(e, 'longitude');
+                        }}
                       />
                     </div>
                   </div>
@@ -482,26 +536,46 @@ class EditProject extends Component {
 
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
-                <label> {cropResult ? "Preview" : "Attach File"}</label>
+                <label>
+                  {cropResult ? (
+                    <FormattedMessage
+                      id="app.preview"
+                      defaultMessage="Preview"
+                    />
+                  ) : (
+                    <FormattedMessage
+                      id="app.attatchFile"
+                      defaultMessage="Attach File"
+                    />
+                  )}
+                </label>
 
                 {cropResult ? (
-                  <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                  <Dropzone
+                    onDrop={acceptedFile => readFile(acceptedFile)}
+                  >
                     {({ getRootProps, getInputProps }) => {
                       return (
                         <section>
                           <div className="upload-form">
-                            <img
-                              src={this.state.cropResult}
-                              alt="Cropped Image"
-                            />
+                            <img src={this.state.cropResult} alt="" />
                           </div>
 
                           <div {...getRootProps()}>
-                            <input {...getInputProps()} multiple={false} />
+                            <input
+                              {...getInputProps()}
+                              multiple={false}
+                            />
                             <div className="upload-icon" />
 
-                            <button className="fieldsight-btn">
-                              Upload
+                            <button
+                              className="fieldsight-btn"
+                              type="button"
+                            >
+                              <FormattedMessage
+                                id="app.upload"
+                                defaultMessage="Upload"
+                              />
                               <i className="la la-cloud-upload" />
                             </button>
                           </div>
@@ -510,7 +584,9 @@ class EditProject extends Component {
                     }}
                   </Dropzone>
                 ) : (
-                  <Dropzone onDrop={acceptedFile => readFile(acceptedFile)}>
+                  <Dropzone
+                    onDrop={acceptedFile => readFile(acceptedFile)}
+                  >
                     {({ getRootProps, getInputProps }) => {
                       return (
                         <section>
@@ -523,9 +599,20 @@ class EditProject extends Component {
                                     multiple={false}
                                   />
                                   <div className="upload-icon" />
-                                  <h3>Drag & Drop an image</h3>
-                                  <button className="fieldsight-btn">
-                                    Upload
+                                  <h3>
+                                    <FormattedMessage
+                                      id="app.drag&DropAnImage"
+                                      defaultMessage="Drag & Drop an image"
+                                    />
+                                  </h3>
+                                  <button
+                                    className="fieldsight-btn"
+                                    type="button"
+                                  >
+                                    <FormattedMessage
+                                      id="app.upload"
+                                      defaultMessage="Upload"
+                                    />
                                     <i className="la la-cloud-upload" />
                                   </button>
                                 </div>
@@ -541,8 +628,14 @@ class EditProject extends Component {
             </div>
 
             <div className="col-sm-12">
-              <button type="submit" className="fieldsight-btn pull-right">
-                Save
+              <button
+                className="fieldsight-btn pull-right"
+                type="submit"
+              >
+                <FormattedMessage
+                  id="app.save"
+                  defaultMessage="Save"
+                />
               </button>
             </div>
           </div>
@@ -565,10 +658,14 @@ class EditProject extends Component {
                     />
                     <button
                       className="fieldsight-btn"
-                      style={{ marginTop: "15px" }}
+                      style={{ marginTop: '15px' }}
                       onClick={this.cropImage}
+                      type="button"
                     >
-                      Save Image
+                      <FormattedMessage
+                        id="app.saveImage"
+                        defaultMessage="Save Image"
+                      />
                     </button>
                   </figure>
                 </div>
@@ -579,9 +676,9 @@ class EditProject extends Component {
                     <div
                       className="img-preview"
                       style={{
-                        width: "100%",
+                        width: '100%',
                         height: 400,
-                        overflow: "hidden"
+                        overflow: 'hidden',
                       }}
                     />
                   </figure>
@@ -593,10 +690,6 @@ class EditProject extends Component {
         {isLoading && <Loader loaded={loaded} />}
       </RightContentCard>
     );
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 

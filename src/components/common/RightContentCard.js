@@ -1,19 +1,33 @@
-import React from "react";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const RightContentCard = ({
   title,
   addButton,
-  hideButton,
+  // hideButton,
   toggleModal,
-  children
+  children,
+  buttonName,
 }) => (
   <div className="card">
     <div className="card-header main-card-header">
-      <h5>{title}</h5>
+      <h5>
+        {typeof title === 'string' ? (
+          <FormattedMessage id={title} defaultMessage={title} />
+        ) : (
+          title
+        )}
+      </h5>
       {addButton && (
         <div className="add-btn">
-          <a onClick={toggleModal}>
+          <a
+            onClick={toggleModal}
+            tabIndex="0"
+            role="button"
+            onKeyDown={toggleModal}
+          >
             <span>
+              {buttonName}
               <i className="la la-plus" />
             </span>
           </a>

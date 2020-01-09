@@ -1,51 +1,29 @@
-import React, { Component, Fragment, createRef } from "react";
-//import { MDBDataTable } from 'mdbreact';
+import React, { Component, createRef } from 'react';
 import {
   Map,
   TileLayer,
   LayersControl,
-  Marker,
-  Popup,
-  GeoJSON
-} from "react-leaflet";
-import L, { latLngBounds } from "leaflet";
-// import "leaflet/dist/leaflet.css";
+  GeoJSON,
+} from 'react-leaflet';
+import L, { latLngBounds } from 'leaflet';
+import { BlockContentLoader } from './Loader';
 
-import { BlockContentLoader } from "./Loader";
-import { markerIcon } from "./Marker";
+const iconUrl = require('../../static/images/marker.png');
+const iconRetinaUrl = require('../../static/images/marker.png');
 
 const { BaseLayer } = LayersControl;
-// const position = [27.7, 85.4];
-
-// const MyMarkersList = data => {
-//   const items = data.markers.map((props, key) => (
-//     <MyPopupMarker key={key} {...props} />
-//   ));
-//   return <Fragment>{items}</Fragment>;
-// };
-
-// const MyPopupMarker = props => (
-//   <Marker
-//     position={[props.geometry.coordinates[1], props.geometry.coordinates[0]]}
-//     icon={markerIcon}
-//   >
-//     <Popup>
-//       <a href={props.url} target="_blank">
-//         {props.properties.name}
-//       </a>
-//     </Popup>
-//   </Marker>
-// );
+/* eslint-disable   react/destructuring-assignment */
+/* eslint-disable   react/no-did-update-set-state */
 
 class SiteMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
       mapData: props.map ? props.map : {},
-      bound: latLngBounds(
-        [29.38217507514529, 87.5390625],
-        [27.293689224852407, 81.474609375]
-      )
+      // bound: latLngBounds(
+      //   [29.38217507514529, 87.5390625],
+      //   [27.293689224852407, 81.474609375],
+      // ),
     };
     this.mapRef = createRef();
     this.groupRef = createRef();
@@ -54,105 +32,101 @@ class SiteMap extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.map !== this.props.map) {
       this.setState({
-        mapData: this.props.map
+        mapData: this.props.map,
       });
     }
   }
-  onEachFeaturePoint(feature, layer) {
+
+  onEachFeaturePoint = (feature, layer) => {
     layer.bindPopup(`<a href=${feature.url} target="_blank">
     ${feature.properties.name}
   </a>`);
-  }
+  };
 
-  pointToLayer(feature, latlng) {
+  pointToLayer = (feature, latlng) => {
     const icon = new L.Icon({
-      iconUrl: require("../../static/images/marker.png"),
-      iconRetinaUrl: require("../../static/images/marker.png"),
+      iconUrl,
+      iconRetinaUrl,
       iconSize: [28, 28],
       iconAnchor: [13, 27],
       popupAnchor: [2, -24],
       shadowUrl: null,
       shadowSize: null,
-      shadowAnchor: null
-      //iconSize: new L.Point(60, 75)
-      //className: "leaflet-div-icon"
+      shadowAnchor: null,
     });
-    return L.marker(latlng, { icon: icon });
-  }
+    return L.marker(latlng, { icon });
+  };
 
   getSmallBound = latlng => {
     if (Object.entries(latlng).length > 0) {
       const { lat, lng } = latlng;
       const bounds = latLngBounds(
         [lat + 0.002, lng + 0.002],
-        [lat - 0.002, lng - 0.002]
+        [lat - 0.002, lng - 0.002],
       );
       return bounds;
     }
+    return null;
   };
-  getLargeBound = latlng => {
-    let bounds = latLngBounds();
-    latlng.forEach(data => {
-      bounds.extend([
-        data.geometry.coordinates[1],
-        data.geometry.coordinates[0]
-      ]);
-    });
-    return bounds;
-  };
+
   returnGeoArr = (loc1, loc2) => {
     if (
-      loc1.geometry.coordinates[0] == loc2.geometry.coordinates[0] &&
-      loc1.geometry.coordinates[1] == loc2.geometry.coordinates[1]
+      loc1.geometry.coordinates[0] === loc2.geometry.coordinates[0] &&
+      loc1.geometry.coordinates[1] === loc2.geometry.coordinates[1]
     ) {
       return null;
-    } else {
-      return loc2;
     }
+    // else {
+    return loc2;
+    // }
   };
+
   render() {
     const {
       props: { showContentLoader },
-      state: { mapData }
+      state: { mapData },
     } = this;
 
     let bounds = latLngBounds();
 
     if (mapData && mapData.features && mapData.features.length > 0) {
-      if (mapData.features.length == 1) {
+      if (mapData.features.length === 1) {
         const latlng = {
           lat: mapData.features[0].geometry.coordinates[1],
-          lng: mapData.features[0].geometry.coordinates[0]
+          lng: mapData.features[0].geometry.coordinates[0],
         };
         bounds = this.getSmallBound(latlng);
       } else if (mapData.features.length > 1) {
-        let newArr = [];
+        const newArr = [];
 
         mapData.features.forEach((data, index) => {
-          newArr.length == 0 && newArr.push(data);
-          if (!!mapData.features[index] && !!mapData.features[index + 1]) {
+          if (newArr.length === 0) newArr.push(data);
+          if (
+            !!mapData.features[index] &&
+            !!mapData.features[index + 1]
+          ) {
             const objGeo = this.returnGeoArr(
               mapData.features[index],
-              mapData.features[index + 1]
+              mapData.features[index + 1],
             );
 
-            if (!!objGeo) {
+            if (objGeo) {
               newArr.push(objGeo);
             }
           }
         });
 
-        if (newArr.length == 1) {
+        if (newArr.length === 1) {
           const latlng = {
             lat: newArr[0].geometry.coordinates[1],
-            lng: newArr[0].geometry.coordinates[0]
+            lng: newArr[0].geometry.coordinates[0],
           };
           bounds = this.getSmallBound(latlng);
         } else {
           newArr.map(data => {
-            bounds.extend([
+            return bounds.extend([
               data.geometry.coordinates[1],
-              data.geometry.coordinates[0]
+              data.geometry.coordinates[0],
             ]);
           });
         }
@@ -167,21 +141,20 @@ class SiteMap extends Component {
           <Map
             center={[
               mapData.features[0].geometry.coordinates[1],
-              mapData.features[0].geometry.coordinates[0]
+              mapData.features[0].geometry.coordinates[0],
             ]}
             zoom={15}
             maxZoom={20}
-            attributionControl={true}
-            zoomControl={true}
-            doubleClickZoom={true}
-            scrollWheelZoom={true}
-            dragging={true}
-            animate={true}
+            attributionControl
+            zoomControl
+            doubleClickZoom
+            scrollWheelZoom
+            dragging
+            animate
             easeLinearity={0.35}
             bounds={bounds}
             ref={this.mapRef}
-            style={{ width: "100%", height: "396px" }}
-            ref={this.mapRef}
+            style={{ width: '100%', height: '396px' }}
           >
             {/* <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -200,7 +173,7 @@ class SiteMap extends Component {
                   attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                   url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
                   maxZoom={20}
-                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                 />
               </BaseLayer>
               <BaseLayer name="Google Hybrid">
@@ -208,7 +181,7 @@ class SiteMap extends Component {
                   attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                   url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
                   maxZoom={20}
-                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                 />
               </BaseLayer>
               <BaseLayer name="Google Satellite">
@@ -216,7 +189,7 @@ class SiteMap extends Component {
                   attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                   url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
                   maxZoom={20}
-                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                 />
               </BaseLayer>
               <BaseLayer name="Google Terrain">
@@ -224,14 +197,14 @@ class SiteMap extends Component {
                   attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                   url="http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
                   maxZoom={20}
-                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                 />
               </BaseLayer>
             </LayersControl>
             <GeoJSON
               data={mapData}
-              onEachFeature={this.onEachFeaturePoint.bind(this)}
-              pointToLayer={this.pointToLayer.bind(this)}
+              onEachFeature={this.onEachFeaturePoint}
+              pointToLayer={this.pointToLayer}
               ref={this.groupRef}
             />
 
@@ -253,7 +226,7 @@ class SiteMap extends Component {
             })} */}
           </Map>
         ) : (
-          <Map zoom={13} style={{ width: "100%", height: "396px" }}>
+          <Map zoom={13} style={{ width: '100%', height: '396px' }}>
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -270,7 +243,7 @@ class SiteMap extends Component {
                   attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                   url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
                   maxZoom={20}
-                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                 />
               </BaseLayer>
               <BaseLayer name="Google Hybrid">
@@ -278,7 +251,7 @@ class SiteMap extends Component {
                   attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                   url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
                   maxZoom={20}
-                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                 />
               </BaseLayer>
               <BaseLayer name="Google Satellite">
@@ -286,7 +259,7 @@ class SiteMap extends Component {
                   attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                   url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
                   maxZoom={20}
-                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                 />
               </BaseLayer>
               <BaseLayer name="Google Terrain">
@@ -294,7 +267,7 @@ class SiteMap extends Component {
                   attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
                   url="http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
                   maxZoom={20}
-                  subdomains={["mt0", "mt1", "mt2", "mt3"]}
+                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                 />
               </BaseLayer>
             </LayersControl>

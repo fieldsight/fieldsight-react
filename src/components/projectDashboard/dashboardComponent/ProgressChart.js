@@ -1,68 +1,76 @@
-import React, { Component } from "react";
-import { Bar } from "react-chartjs-2";
+import React, { PureComponent } from 'react';
+import { Bar } from 'react-chartjs-2';
+/* eslint-disable react/prop-types  */
+
 const options = {
   responsive: true,
   title: {
     display: false,
-    text: "Chart.js Bar Chart"
+    text: 'Chart.js Bar Chart',
   },
   legend: {
-    display: false
+    display: false,
   },
   tooltips: {
-    mode: "index",
-    intersect: false
+    mode: 'index',
+    intersect: false,
   },
   hover: {
-    mode: "nearest",
-    intersect: true
+    mode: 'nearest',
+    intersect: true,
   },
   scales: {
     xAxes: [
       {
         display: true,
         scaleLabel: {
-          display: true
+          display: true,
           // labelString: "Date"
-        }
-      }
+        },
+      },
     ],
     yAxes: [
       {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: "Progress"
-        }
-      }
-    ]
-  }
+          labelString: 'Progress',
+        },
+      },
+    ],
+  },
 };
 
-class ProgressChart extends Component {
+class ProgressChart extends PureComponent {
   render() {
     const { progressData } = this.props;
     const barData = {
       labels: [],
-      datasets: []
+      datasets: [],
     };
 
-    if (progressData.hasOwnProperty("labels")) {
+    if (
+      Object.prototype.hasOwnProperty.call(progressData, 'labels')
+    ) {
+      // progressData.hasOwnProperty('labels')) {
       barData.labels = progressData.labels;
     }
 
-    if (progressData.hasOwnProperty("data")) {
+    if (
+      Object.prototype.hasOwnProperty.call(progressData, 'data')
+      // progressData.hasOwnProperty('data')
+    ) {
       barData.datasets = [
         {
-          label: "Site Progress",
+          label: 'Site Progress',
           data: progressData.data,
 
-          backgroundColor: "#00628E",
-          borderColor: "#00628E",
+          backgroundColor: '#00628E',
+          borderColor: '#00628E',
           fill: true,
 
-          borderWidth: 1
-        }
+          borderWidth: 1,
+        },
       ];
     }
     return (

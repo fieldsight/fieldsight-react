@@ -1,12 +1,17 @@
-import React, { Component } from "react";
-import axios from "axios";
-import "react-perfect-scrollbar/dist/css/styles.css";
+import React, { Component } from 'react';
+import axios from 'axios';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { FormattedMessage } from 'react-intl';
 
 class GlobalModal extends Component {
-  state = {
-    globalUrl: " ",
-    disable: true
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      globalUrl: ' ',
+      disable: true,
+    };
+  }
 
   globalshare = e => {
     const id = this.props.modalDatas;
@@ -23,19 +28,20 @@ class GlobalModal extends Component {
         if (res.status === 201) {
           this.setState({
             globalUrl: res.data.share_link,
-            disable: false
+            disable: false,
           });
         }
       })
-      .catch(err => console.log("err", err));
+      .catch(err => console.log('err', err));
   };
 
   copyHandler = () => {
     this.input.select();
-    document.execCommand("copy");
+    document.execCommand('copy');
   };
 
   render() {
+    const { globalUrl, disable } = this.state;
     return (
       <div className="thumb-list globallist">
         <form onSubmit={this.onSubmit}>
@@ -45,7 +51,7 @@ class GlobalModal extends Component {
               className="form-control"
               ref={el => (this.input = el)}
               placeholder="url"
-              value={this.state.globalUrl}
+              value={globalUrl}
               onChange={() => {}}
             />
 
@@ -55,14 +61,20 @@ class GlobalModal extends Component {
                 className="input-group-text"
                 id="url"
                 title="copy"
-                disabled={this.state.disable}
+                disabled={disable}
               >
-                copy
+                <FormattedMessage
+                  id="app.copy"
+                  defaultMessage="Copy"
+                />
               </button>
             </div>
           </div>
-          <button type="submit" className="fieldsight-btn mrt-30 pull-right">
-            Share
+          <button
+            type="submit"
+            className="fieldsight-btn mrt-30 pull-right"
+          >
+            <FormattedMessage id="app.share" defaultMessage="Share" />
           </button>
         </form>
       </div>

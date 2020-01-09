@@ -1,51 +1,47 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
-import { DotLoader } from "../myForm/Loader";
-import Modal from "../common/Modal";
-import RightContentCard from "../common/RightContentCard";
-import GlobalModalForm from "./GlobalModalForm";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import EditFormGuide from "./EditFormGuide";
-import AddForm from "./AddForm";
-import GeneralFormTable from "./GeneralFormTable";
-import ManageModal from "./ManageModal";
+import { DotLoader } from '../myForm/Loader';
+import Modal from '../common/Modal';
+import RightContentCard from '../common/RightContentCard';
+import GlobalModalForm from './GlobalModalForm';
+import { errorToast, successToast } from '../../utils/toastHandler';
+import EditFormGuide from './EditFormGuide';
+import AddForm from './AddForm';
+import GeneralFormTable from './GeneralFormTable';
+import ManageModal from './ManageModal';
+
+/* eslint-disable   react/destructuring-assignment */
+/* eslint-disable  react/no-did-update-set-state */
 
 class ProjectWideForms extends Component {
   _isMounted = false;
-  state = {
-    id: this.props.match.params ? this.props.match.params.id : "",
-    data: [],
-    deployStatus: false,
-    editGuide: false,
-    guideData: {},
-    editFormId: "",
-    showFormModal: false,
-    activeTab: "myForms",
-    formData: {},
-    xf: "",
-    loader: false,
-    loaded: 0,
-    formId: "",
-    formTitle: "",
-    isProjectForm: "",
-    myFormList: [],
-    projectFormList: [],
-    sharedFormList: [],
-    isEditForm: false,
-    isProjectWide: false
-    // settingId: "",
-  };
 
-  requestGeneralForm(id) {
-    axios
-      .get(`fv3/api/manage-forms/survey/?project_id=${id}`)
-      .then(res => {
-        if (this._isMounted) {
-          this.setState({ data: res.data, loader: false });
-        }
-      })
-      .catch(err => {});
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: this.props.match.params ? this.props.match.params.id : '',
+      data: [],
+      // deployStatus: false,
+      editGuide: false,
+      guideData: {},
+      editFormId: '',
+      showFormModal: false,
+      activeTab: 'myForms',
+      formData: {},
+      xf: '',
+      loader: false,
+      // loaded: 0,
+      formId: '',
+      formTitle: '',
+      // isProjectForm: '',
+      myFormList: [],
+      projectFormList: [],
+      sharedFormList: [],
+      isEditForm: false,
+      isProjectWide: false,
+      // settingId: "",
+    };
   }
 
   componentDidMount() {
@@ -53,39 +49,45 @@ class ProjectWideForms extends Component {
     const {
       match: {
         url,
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
-    const splitArr = url.split("/");
-    const isProjectForm = splitArr.includes("project");
-    const isProjectWide = splitArr.includes("wide");
+    const splitArr = url.split('/');
+    const isProjectForm = splitArr.includes('project');
+    const isProjectWide = splitArr.includes('wide');
 
     if (isProjectForm) {
       this.setState(
         {
           loader: true,
-          isProjectForm,
-          isProjectWide: isProjectWide && isProjectWide
+          // isProjectForm,
+          isProjectWide: isProjectWide && isProjectWide,
         },
-        this.requestGeneralForm(id)
+        this.requestGeneralForm(id),
       );
     }
   }
 
   componentDidUpdate(nextProps) {
-    if (nextProps.myForms != this.props.myForms) {
+    if (nextProps.myForms !== this.props.myForms) {
       this.setState({
-        myFormList: this.props.myForms
-      });
-    } else if (nextProps.projectForms != this.props.projectForms) {
-      this.setState({
-        projectFormList: this.props.projectForms
-      });
-    } else if (nextProps.sharedForms != this.props.sharedForms) {
-      this.setState({
-        sharedFormList: this.props.sharedForms
+        myFormList: this.props.myForms,
       });
     }
+    if (nextProps.projectForms !== this.props.projectForms) {
+      this.setState({
+        projectFormList: this.props.projectForms,
+      });
+    }
+    if (nextProps.sharedForms !== this.props.sharedForms) {
+      this.setState({
+        sharedFormList: this.props.sharedForms,
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   changeDeployStatus = (formId, isDeploy) => {
@@ -93,105 +95,130 @@ class ProjectWideForms extends Component {
     axios
       .post(
         `fv3/api/manage-forms/deploy/?project_id=${id}&type=general&id=${formId}`,
-        { is_deployed: !isDeploy }
+        { is_deployed: !isDeploy },
       )
       .then(res => {
-        this.setState(
-          state => {
-            const newData = this.state.data;
-            newData.map(each => {
-              const arrItem = { ...each };
-
-              if (each.id == formId) {
-                each.is_deployed = !isDeploy;
-              }
-              return arrItem;
-            });
-            return { data: newData };
-          },
-          () => {
-            successToast("Deploy Status", "updated");
-          }
-        );
+        if (res.data) {
+          this.setState(
+            state => {
+              const newData = [];
+              state.data.map(each => {
+                const newEach = { ...each };
+                if (newEach.id === formId) {
+                  newEach.is_deployed = !isDeploy;
+                  return newData.push(newEach);
+                }
+                return newData.push(newEach);
+              });
+              return { data: newData };
+            },
+            () => {
+              successToast('Deploy Status', 'updated');
+            },
+          );
+        }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
+
   deleteItem = (formId, isDeploy) => {
     const { id } = this.state;
     axios
       .post(
         `fv3/api/manage-forms/delete/?project_id=${id}&type=general&id=${formId}`,
-        { is_deployed: isDeploy }
+        { is_deployed: isDeploy },
       )
-      .then(res => {
+      .then(() => {
         this.setState(
-          {
-            data: this.state.data.filter(each => each.id != formId)
-          },
+          state => ({
+            data: state.data.filter(each => each.id !== formId),
+          }),
           () => {
-            successToast("Form", "deleted");
-          }
+            successToast('Form', 'deleted');
+          },
         );
       })
-      .catch(err => {});
+      .catch(() => {});
   };
+
   handleEditGuide = (data, formId) => {
-    this.setState({
-      editGuide: !this.state.editGuide,
+    this.setState(state => ({
+      editGuide: !state.editGuide,
       guideData: data ? data : {},
-      editFormId: formId
-    });
+      editFormId: formId,
+    }));
   };
+
   handleUpdateGuide = data => {
-    const { id, editFormId } = this.state;
+    const { editFormId } = this.state;
     const formData = new FormData();
-    if (data.title) formData.append("title", data.title);
-    if (data.text) formData.append("text", data.text);
-    if (data.pdf) formData.append("pdf", data.pdf);
-    if (data.is_pdf) formData.append("is_pdf", data.is_pdf);
-    if (editFormId) formData.append("fsxf", editFormId);
+    if (data.title) formData.append('title', data.title);
+    if (data.text) formData.append('text', data.text);
+    if (data.pdf) formData.append('pdf', data.pdf);
+    if (data.is_pdf) formData.append('is_pdf', data.is_pdf);
+    if (editFormId) formData.append('fsxf', editFormId);
+
     if (data.images && data.images.length > 0) {
       data.images.map((each, i) => {
         if (!each.image) formData.append(`new_images_${i + 1}`, each);
-        editFormId;
+        return editFormId;
       });
     }
     if (data.id) {
-      formData.append("id", data.id);
+      formData.append('id', data.id);
     }
     axios
       .post(`forms/api/save_educational_material/`, formData)
       .then(res => {
-        this.setState(
-          {
-            editGuide: false
-          },
-          () => {
-            this.requestGeneralForm(id);
-            successToast("updated", "successfully");
-          }
-        );
+        if (res.data) {
+          this.setState(
+            state => {
+              const item = [];
+              state.data.map(each => {
+                const newItem = { ...each };
+                if (newItem.id === editFormId) {
+                  newItem.em = res.data;
+                  return item.push(newItem);
+                }
+                return item.push(newItem);
+              });
+
+              return {
+                data: item,
+                editGuide: false,
+              };
+            },
+            () => {
+              // this.requestGeneralForm(id);
+              successToast('updated', 'successfully');
+            },
+          );
+        }
       })
       .catch(err => {
         errorToast(err);
       });
   };
+
   handleClosePopup = () => {
     this.setState({
-      formTitle: "",
-      formId: "",
+      formTitle: '',
+      formId: '',
       showFormModal: false,
-      activeTab: "myForms",
+      activeTab: 'myForms',
       myFormList: [],
       projectFormList: [],
       sharedFormList: [],
-      xf: "",
-      isEditForm: false
+      xf: '',
+      isEditForm: false,
     });
     this.props.closePopup();
   };
+
   toggleFormModal = () => {
-    this.setState({ showFormModal: !this.state.showFormModal });
+    this.setState(({ showFormModal }) => ({
+      showFormModal: !showFormModal,
+    }));
   };
 
   toggleTab = tab => {
@@ -199,56 +226,69 @@ class ProjectWideForms extends Component {
       activeTab: tab,
       myFormList: this.props.myForms,
       sharedFormList: this.props.sharedForms,
-      projectFormList: this.props.projectForms
+      projectFormList: this.props.projectForms,
     });
   };
 
   onChangeHandler = async e => {
     const { activeTab } = this.state;
+    const { myForms, sharedForms, projectForms } = this.props;
     const searchValue = e.target.value;
 
     if (searchValue) {
-      if (activeTab == "myForms") {
-        const filteredData = await this.props.myForms.filter(form => {
+      if (activeTab === 'myForms') {
+        const filteredData = await myForms.filter(form => {
           return (
-            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            form.title
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            form.owner
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
           );
         });
 
         this.setState({
-          myFormList: filteredData
+          myFormList: filteredData,
         });
-      } else if (activeTab == "projectForms") {
-        const awaitedData = await this.props.projectForms.map(project => {
+      } else if (activeTab === 'projectForms') {
+        const awaitedData = await projectForms.map(project => {
           const filteredData = project.forms.filter(form => {
             return (
-              form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-              form.owner.toLowerCase().includes(searchValue.toLowerCase())
+              form.title
+                .toLowerCase()
+                .includes(searchValue.toLowerCase()) ||
+              form.owner
+                .toLowerCase()
+                .includes(searchValue.toLowerCase())
             );
           });
           return { ...project, forms: filteredData };
         });
         this.setState({
-          projectFormList: awaitedData
+          projectFormList: awaitedData,
         });
-      } else if (activeTab == "sharedForms") {
-        const filteredData = await this.props.sharedForms.filter(form => {
+      } else if (activeTab === 'sharedForms') {
+        const filteredData = await sharedForms.filter(form => {
           return (
-            form.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            form.owner.toLowerCase().includes(searchValue.toLowerCase())
+            form.title
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            form.owner
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
           );
         });
 
         this.setState({
-          sharedFormList: filteredData
+          sharedFormList: filteredData,
         });
       }
     } else {
       this.setState({
-        myFormList: this.props.myForms,
-        sharedFormList: this.props.sharedForms,
-        projectFormList: this.props.projectForms
+        myFormList: myForms,
+        sharedFormList: sharedForms,
+        projectFormList: projectForms,
       });
     }
   };
@@ -267,33 +307,36 @@ class ProjectWideForms extends Component {
           id: data.settingId,
 
           can_edit: data.isEdit,
-          donor_visibility: data.isDonor
-        }
+          donor_visibility: data.isDonor,
+        },
       };
       axios
         .put(
           `fv3/api/manage-forms/survey/${data.id}/?project_id=${id}`,
-          payload
+          payload,
         )
         .then(res => {
           this.setState(
             state => {
-              const data = this.state.data;
-              const newArr = data.map(each => {
-                if (each.id == res.data.id) {
-                  return (each = res.data);
-                } else {
-                  return each;
+              const data1 = state.data;
+              const newArr = data1.map(each => {
+                let newEach = each;
+                if (each.id === res.data.id) {
+                  newEach = res.data;
+                  return newEach;
                 }
+                // else {
+                return each;
+                // }
               });
               return {
-                data: newArr
+                data: newArr,
               };
             },
             () => {
               this.handleClosePopup();
-              successToast("form", "updated");
-            }
+              successToast('form', 'updated');
+            },
           );
         })
         .catch(err => {
@@ -301,26 +344,29 @@ class ProjectWideForms extends Component {
         });
     } else {
       const payload = {
-        xf: xf,
+        xf,
         default_submission_status: data.status,
         setting: {
           donor_visibility: data.isDonor,
           can_edit: data.isEdit,
-          can_delete: data.isDelete
-        }
+          can_delete: data.isDelete,
+        },
       };
 
       axios
-        .post(`fv3/api/manage-forms/survey/?project_id=${id}`, payload)
+        .post(
+          `fv3/api/manage-forms/survey/?project_id=${id}`,
+          payload,
+        )
         .then(res => {
           this.setState(
-            {
-              data: [...this.state.data, res.data]
-            },
+            state => ({
+              data: [...state.data, res.data],
+            }),
             () => {
               this.props.closePopup();
-              successToast("form ", "added");
-            }
+              successToast('form ', 'added');
+            },
           );
         })
         .catch(err => {
@@ -332,27 +378,41 @@ class ProjectWideForms extends Component {
   handleMyFormChange = (e, title) => {
     this.setState({
       formId: e.target.value,
-      formTitle: title
+      formTitle: title,
     });
   };
+
   handleSaveForm = () => {
-    this.setState({
-      xf: this.state.formId,
-      showFormModal: !this.state.showFormModal
-    });
+    this.setState(state => ({
+      xf: state.formId,
+      showFormModal: !state.showFormModal,
+    }));
   };
+
   editForm = data => {
     this.setState(
       {
         formData: data,
         isEditForm: true,
-        formTitle: data.xf.title
+        formTitle: data.xf.title,
       },
       () => {
         this.props.commonPopupHandler();
-      }
+      },
     );
   };
+
+  requestGeneralForm(id) {
+    axios
+      .get(`fv3/api/manage-forms/survey/?project_id=${id}`)
+      .then(res => {
+        if (this._isMounted) {
+          this.setState({ data: res.data, loader: false });
+        }
+      })
+      .catch(() => {});
+  }
+
   render() {
     const {
       state: {
@@ -364,24 +424,24 @@ class ProjectWideForms extends Component {
         activeTab,
         formData,
         formTitle,
-        optionRegion,
+        // optionRegion,
         myFormList,
         projectFormList,
         sharedFormList,
         isProjectWide,
-        isEditForm
+        isEditForm,
       },
       props: { typeOptions, regionOptions },
-      handleClosePopup
+      handleClosePopup,
     } = this;
 
     return (
       <div className="col-xl-9 col-lg-8">
         <RightContentCard
-          title="General Forms"
-          addButton={true}
+          title="app.generate-forms"
+          addButton
           toggleModal={this.props.commonPopupHandler}
-          showText={true}
+          showText
         >
           {loader && <DotLoader />}
           {!loader && (
@@ -417,7 +477,10 @@ class ProjectWideForms extends Component {
             </Modal>
           )}
           {editGuide && (
-            <Modal title="Form Guide" toggleModal={this.handleEditGuide}>
+            <Modal
+              title="Form Guide"
+              toggleModal={this.handleEditGuide}
+            >
               <EditFormGuide
                 data={guideData}
                 handleCancel={this.handleEditGuide}
@@ -429,7 +492,7 @@ class ProjectWideForms extends Component {
             <ManageModal
               title="Add Form"
               toggleModal={this.toggleFormModal}
-              showButton={true}
+              showButton
               showText="Create Form"
               url="/forms/create/"
               classname="dark md-body manage-body"
@@ -450,9 +513,6 @@ class ProjectWideForms extends Component {
         </RightContentCard>
       </div>
     );
-  }
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 export default ProjectWideForms;

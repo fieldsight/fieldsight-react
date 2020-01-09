@@ -1,60 +1,78 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
+
+/* eslint-disable camelcase */
+
+/* eslint-disable consistent-return */
+
+/* esling-disable array-callback-return */
 
 const getDisplayName = WrappedComponent => {
-  return WrappedComponent.displayName || WrappedComponent.name || "Component";
+  return (
+    WrappedComponent.displayName ||
+    WrappedComponent.name ||
+    'Component'
+  );
 };
 
 const withPagination = WrappedComponent => {
   class WithPagination extends Component {
-    state = {
-      siteList: [],
-      totalCount: 0,
-      toData: 200,
-      fromData: 1,
-      pageNum: 1,
-      dLoader: true,
-      per_page: 200,
-      totalPage: null,
-      textVal: null,
-      form_id_string: "",
-      is_survey: false,
-      breadcrumbs: {}
-    };
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        siteList: [],
+        totalCount: 0,
+        toData: 200,
+        fromData: 1,
+        pageNum: 1,
+        dLoader: true,
+        per_page: 200,
+        totalPage: null,
+        textVal: null,
+        form_id_string: '',
+        is_survey: false,
+        breadcrumbs: {},
+      };
+    }
+
+    componentWillUnmount() {
+      this.mounted = false;
+    }
 
     getUrl = (page_num, payload) => {
       switch (payload.type) {
-        case "projectSiteList":
+        case 'projectSiteList':
           return `fv3/api/project-site-list/?page=${page_num}&project=${payload.projectId}`;
-        case "mySiteList":
-          if (!!payload.profileId)
-            return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}&profile=${payload.profileId}`;
-          else
-            return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}`;
+        case 'mySiteList':
+          return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}`;
 
-        case "regionSite":
+        case 'regionSite':
           return `fv3/api/regional-sites/?page=${page_num}&region=${payload.projectId}`;
-        case "projectRegionList":
+
+        case 'projectRegionList':
           return `fv3/api/project-regions/?page=${page_num}&project=${payload.projectId}`;
 
-        case "viewByStatus":
+        case 'viewByStatus':
           return `fv3/api/view-by-status/?page=${page_num}&project=${payload.projectId}&submission_status=${payload.status}`;
-        case "siteStatus":
+        case 'siteStatus':
           return `fv3/api/view-by-status/?page=${page_num}&site=${payload.projectId}&submission_status=${payload.status}`;
-        case "formSubmission":
+        case 'formSubmission':
           return `/fv3/api/forms-submissions/?page=${page_num}&project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
-        case "siteSubmission":
+        case 'siteSubmission':
           return `/fv3/api/forms-submissions/?page=${page_num}&site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+        default:
+          return null;
       }
     };
 
     requestHandler = paginateUrl => {
-      this._isMounted = true;
+      this.mounted = true;
       axios
         .get(`${paginateUrl}`)
 
         .then(res => {
-          if (this._isMounted) {
+          if (this.mounted) {
             if (res.status === 200) {
               // if (res.data.results.query === null) {
               //   this.setState({
@@ -74,16 +92,17 @@ const withPagination = WrappedComponent => {
               //       totalPage: Math.ceil(res.data.count / 200)
               //     });
               //   }
-              //}
+              // }
 
               if (res.data.results.query) {
-                if (res.data.results.query == this.state.textVal) {
+                const { textVal } = this.state;
+                if (res.data.results.query === textVal) {
                   this.setState({
                     siteList: res.data.results.data,
                     dLoader: false,
                     totalCount: res.data.count,
                     textVal: null,
-                    totalPage: Math.ceil(res.data.count / 200)
+                    totalPage: Math.ceil(res.data.count / 200),
                   });
                 }
               } else {
@@ -95,13 +114,13 @@ const withPagination = WrappedComponent => {
                   form_id_string: res.data.results.form_id_string,
                   breadcrumbs: res.data.results.breadcrumbs,
                   totalPage: Math.ceil(res.data.count / 200),
-                  is_survey: res.data.results.is_survey
+                  is_survey: res.data.results.is_survey,
                 });
               }
             }
           }
         })
-        .catch(err => {});
+        .catch(() => {});
     };
 
     paginationHandler = (page_num, searchUrl, payload) => {
@@ -120,36 +139,45 @@ const withPagination = WrappedComponent => {
           toData: toNum,
           fromData: fromNum,
           pageNum: page_num,
-          dLoader: true
+          dLoader: true,
         },
-        () => this.requestHandler(paginateUrl)
+        () => this.requestHandler(paginateUrl),
       );
     };
 
     renderPageNumbers = payload => {
-      if (this.state.totalPage) {
+      const { totalPage, pageNum } = this.state;
+      if (totalPage) {
         const pageNumbers = [];
-        for (let i = 1; i <= this.state.totalPage; i++) {
+        for (let i = 1; i <= totalPage; i += 1) {
           pageNumbers.push(i);
         }
-
         return pageNumbers.map(number => {
-          let classes = this.state.pageNum === number ? "current" : "";
+          const classes = pageNum === number ? 'current' : '';
 
           if (
-            number == 1 ||
-            number == this.state.totalPage ||
-            (number >= this.state.pageNum - 2 &&
-              number <= this.state.pageNum + 2)
+            number === 1 ||
+            number === totalPage ||
+            (number >= pageNum - 2 && number <= pageNum + 2)
           ) {
             return (
               <li key={number} className={classes}>
-                <a onClick={e => this.paginationHandler(number, null, payload)}>
+                <a
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => {
+                    this.paginationHandler(number, null, payload);
+                  }}
+                  onClick={() => {
+                    this.paginationHandler(number, null, payload);
+                  }}
+                >
                   {number}
                 </a>
               </li>
             );
           }
+          return null;
         });
       }
     };
@@ -157,13 +185,13 @@ const withPagination = WrappedComponent => {
     searchHandler = (searchValue, searchUrl, payload) => {
       if (searchValue) {
         this.setState({
-          textVal: searchValue
+          textVal: searchValue,
         });
         this.paginationHandler(1, searchUrl, payload);
       } else {
         this.setState({
           pageNum: 1,
-          textVal: null
+          textVal: null,
         });
         this.paginationHandler(1, null, payload);
       }
@@ -175,7 +203,7 @@ const withPagination = WrappedComponent => {
         searchHandler,
         renderPageNumbers,
         paginationHandler,
-        requestHandler
+        requestHandler,
       } = this;
       return (
         <WrappedComponent
@@ -188,14 +216,10 @@ const withPagination = WrappedComponent => {
         />
       );
     }
-
-    componentWillUnmount() {
-      this._isMounted = false;
-    }
   }
 
   WithPagination.displayName = `WithPagination(${getDisplayName(
-    WrappedComponent
+    WrappedComponent,
   )})`;
 
   return WithPagination;
