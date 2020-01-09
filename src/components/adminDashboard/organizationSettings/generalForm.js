@@ -38,8 +38,12 @@ export default class GeneralFormModal extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
+    const selected = this.props.selected.map(function(x) {
+      return parseInt(x, 10);
+    });
+
     const body = {
-      xf_ids: this.props.selected,
+      xf_ids: selected,
       default_submission_status: JSON.parse(this.state.status),
       form_type: JSON.parse(this.props.formType),
     };

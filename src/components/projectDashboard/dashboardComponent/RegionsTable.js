@@ -57,6 +57,7 @@ class RegionsTable extends React.Component {
                 <TableHeader
                   tableHeader={tableHeader.projectRegions}
                 />
+
                 {data.length > 0 ? (
                   <TableRow
                     tableRow={data}
@@ -66,7 +67,6 @@ class RegionsTable extends React.Component {
                   <tbody>
                     <tr>
                       <td colSpan={4}>
-                        {' '}
                         <FormattedMessage
                           id="app.noFormDataAvailable"
                           defaultMessage="No Form Data Available"

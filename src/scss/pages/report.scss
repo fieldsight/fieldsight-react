@@ -1,4 +1,5 @@
 @import "report-table";
+
 .reports {
 
     h2,
@@ -18,7 +19,6 @@
     }
 
     .reports-header {
-        padding: 0 1rem;
         @include display-flex(flex);
         @include justify-content-between;
         @include align-items-center;
@@ -159,6 +159,10 @@
                     color: $primary-light;
                 }
 
+                &::before {
+                    display: none;
+                }
+
                 &:hover {
                     background-color: $primary-light-1;
                 }
@@ -176,14 +180,24 @@
             // @include display-flex(flex);
             // @include justify-content-between;
             // @include align-items-center;
+            form {
+                .form-group {
+                    &.inline-form-group {
+                        label {
+                            max-width: 90px !important;
+                        }
+                    }
+                }
+            }
+
             button {
                 &.common-button {
                     float: right;
                     position: relative;
 
-                    i{
-                        &.arrow-icon{
-                            margin:0 0 0 .6125rem;
+                    i {
+                        &.arrow-icon {
+                            margin: 0 0 0 .6125rem;
                         }
                     }
                 }

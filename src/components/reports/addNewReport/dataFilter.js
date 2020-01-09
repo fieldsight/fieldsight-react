@@ -119,7 +119,7 @@ export default class DataFilter extends Component {
     } = this.props;
 
     return (
-      <div className="data-filter filter-bottom ">
+      <div className="data-filter filter-bottom mrt-30">
         <form onSubmit={this.handleSubmit}>
           <div className="row">
             {/* <div className="col-xl-2 col-md-6">

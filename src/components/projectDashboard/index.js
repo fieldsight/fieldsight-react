@@ -157,7 +157,7 @@ class ProjectDashboard extends React.Component {
             totalUsers={total_users}
             totalSites={total_sites}
             totalSubmissions={project_activity.total_submissions}
-            id={id}
+            id={projectId}
             showContentLoader={projectDashboardLoader}
             closeModal={this.closeModal}
             openModal={this.openModal}

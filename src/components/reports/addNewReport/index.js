@@ -10,6 +10,7 @@ import {
   applyActionToReport,
   getReportData,
 } from '../../../actions/reportActions';
+import { BlockContentLoader } from '../../common/Loader';
 import InputElement from '../../common/InputElement';
 import {
   errorToast,
@@ -79,6 +80,7 @@ const InitialState = {
   },
   isDelete: false,
   showActions: false,
+  loader: false,
 };
 
 class AddNewReport extends Component {
@@ -103,12 +105,11 @@ class AddNewReport extends Component {
     } = this.props;
     this.setState({ projectId: id }, () => {
       if (reportId) {
-        this.setState({reportId}),
-        this.props.getReportData(reportId)
-      } 
-      this.props.getMetricsData(id)
-    }
-    )
+        this.setState({ reportId }),
+          this.props.getReportData(reportId);
+      }
+      this.props.getMetricsData(id);
+    });
     // document.addEventListener('click', this.handleClickOutside);
   }
 
@@ -203,153 +204,160 @@ class AddNewReport extends Component {
       const msg = this.props.reportReducer.actionResponse.detail;
       successToast(msg);
     }
-    if ( prevProps.reportReducer.reportData !==
-      this.props.reportReducer.reportData) {
-        const {
-          match: {
-            params: { id, reportId },
-          },
-        } = this.props;
-      if (reportId) {
-        const report = this.props.reportReducer.reportData
-        const userList = report.attributes.filter(
-          r => r.category === 'users',
-        );
-        const submissions = report.attributes.filter(
-          r => r.category === 'default',
-        );
-        const filterBy = report.filter;
-        const showActions =
-          Object.keys(report.filter).length > 0 ? true : false;
-        let selectedFormType = {};
-        let selectedForm = {};
-        let selectedIndividualForm = [];
-        const selectedQuestions = [];
-        const selectedFormValue = [];
-        const selectedMetas = [];
-        const selectedValue = [];
-  
-        report.attributes.map(r => {
-          if (r.value && !r.value.selectedForm) {
-            const { code, type, id, value, label } = r;
-            if (selectedMetas.length > 0) {
-              selectedMetas.map(meta => {
-                if (meta.code !== code) {
-                  selectedMetas.push({ code, type, id, label });
-                }
-              });
+    if (
+      prevProps.reportReducer.reportData !==
+      this.props.reportReducer.reportData
+    ) {
+      const {
+        match: {
+          params: { id, reportId },
+        },
+      } = this.props;
+      this.setState({ loader: true }, () => {
+        if (reportId) {
+          const report = this.props.reportReducer.reportData;
+          const userList = report.attributes.filter(
+            r => r.category === 'users',
+          );
+          const submissions = report.attributes.filter(
+            r => r.category === 'default',
+          );
+          const filterBy = report.filter;
+          const showActions =
+            Object.keys(report.filter).length > 0 ? true : false;
+          let selectedFormType = {};
+          let selectedForm = {};
+          let selectedIndividualForm = [];
+          const selectedQuestions = [];
+          const selectedFormValue = [];
+          const selectedMetas = [];
+          const selectedValue = [];
+
+          report.attributes.map(r => {
+            if (r.value && !r.value.selectedForm) {
+              const { code, type, id, value, label } = r;
+              if (selectedMetas.length > 0) {
+                selectedMetas.map(meta => {
+                  if (meta.code !== code) {
+                    selectedMetas.push({ code, type, id, label });
+                  }
+                });
+              }
+              if (selectedMetas.length === 0) {
+                selectedMetas.push({ code, type, id, label });
+              }
+              if (selectedValue.length === 0) {
+                selectedValue.push({ ...value });
+              }
+              if (selectedValue.length > 0) {
+                selectedValue.map(s => {
+                  if (s.code !== value.code) {
+                    selectedValue.push({ ...value });
+                  }
+                });
+              }
             }
-            if (selectedMetas.length === 0) {
-              selectedMetas.push({ code, type, id, label });
-            }
-            if (selectedValue.length === 0) {
-              selectedValue.push({ ...value });
-            }
-            if (selectedValue.length > 0) {
-              selectedValue.map(s => {
-                if (s.code !== value.code) {
-                  selectedValue.push({ ...value });
-                }
-              });
-            }
-          }
-          if (r.value && r.value.selectedForm) {
-            const { code, id, value, label } = r;
-            selectedFormType = { code, id, label };
-            selectedForm = value.selectedForm;
-            if (value.selectedIndividualForm) {
-              const {
-                category,
-                code,
-                types,
-                label,
-              } = value.selectedIndividualForm;
-              if (selectedIndividualForm.length === 0) {
-                selectedIndividualForm.push({
+            if (r.value && r.value.selectedForm) {
+              const { code, id, value, label } = r;
+              selectedFormType = { code, id, label };
+              selectedForm = value.selectedForm;
+              if (value.selectedIndividualForm) {
+                const {
                   category,
                   code,
                   types,
                   label,
-                });
+                } = value.selectedIndividualForm;
+                if (selectedIndividualForm.length === 0) {
+                  selectedIndividualForm.push({
+                    category,
+                    code,
+                    types,
+                    label,
+                  });
+                }
+                if (selectedIndividualForm.length === 0) {
+                  selectedIndividualForm.map(i => {
+                    if (i.code !== code) {
+                      selectedIndividualForm.push({
+                        category,
+                        code,
+                        types,
+                        label,
+                      });
+                    }
+                  });
+                }
               }
-              if (selectedIndividualForm.length === 0) {
-                selectedIndividualForm.map(i => {
-                  if (i.code !== code) {
-                    selectedIndividualForm.push({
-                      category,
-                      code,
-                      types,
-                      label,
-                    });
-                  }
-                });
+              if (value.selectedQuestion) {
+                const { type, name, form } = value.selectedQuestion;
+                if (selectedQuestions.length === 0) {
+                  selectedQuestions.push({ type, name });
+                }
+                if (selectedQuestions.length > 0) {
+                  selectedQuestions.map(q => {
+                    if (q.name !== value.selectedQuestion.name) {
+                      selectedQuestions.push({ type, name });
+                    }
+                  });
+                }
+                if (selectedFormValue.length === 0) {
+                  selectedFormValue.push({ ...form });
+                }
+                if (selectedFormValue.length > 0) {
+                  selectedFormValue.map(v => {
+                    if (v.code !== value.selectedQuestion.form.code) {
+                      selectedFormValue.push({ ...form });
+                    }
+                  });
+                }
               }
             }
-            if (value.selectedQuestion) {
-              const { type, name, form } = value.selectedQuestion;
-              if (selectedQuestions.length === 0) {
-                selectedQuestions.push({ type, name });
+          });
+          this.setState(
+            state => ({
+              data: {
+                ...state.data,
+                reportName: report.title,
+                desc: report.description,
+                selectedReportType: report.type,
+                selectedMetrics: report.attributes,
+              },
+              formInfo: {
+                ...state.formInfo,
+                selectedFormType,
+                selectedForm,
+                selectedIndividualForm,
+                selectedQuestions,
+                selectedFormValue,
+              },
+              siteInfo: {
+                ...state.siteInfo,
+                selectedMetas,
+                selectedValue,
+              },
+              userList,
+              submissions,
+              collapseClass: true,
+              applyFilter: true,
+              filter: {
+                ...state.filter,
+                filterBy,
+              },
+              showActions,
+              loader: false,
+            }),
+            () => {
+              if (selectedFormType.code) {
+                this.props.getForms(id, selectedFormType.code);
               }
-              if (selectedQuestions.length > 0) {
-                selectedQuestions.map(q => {
-                  if (q.name !== value.selectedQuestion.name) {
-                    selectedQuestions.push({ type, name });
-                  }
-                });
+              if (selectedForm.id) {
+                this.props.getFormQuestions(id, selectedForm.id);
               }
-              if (selectedFormValue.length === 0) {
-                selectedFormValue.push({ ...form });
-              }
-              if (selectedFormValue.length > 0) {
-                selectedFormValue.map(v => {
-                  if (v.code !== value.selectedQuestion.form.code) {
-                    selectedFormValue.push({ ...form });
-                  }
-                });
-              }
-            }
-          }
-        });
-        this.setState(
-          state => ({
-            data: {
-              ...state.data,
-              reportName: report.title,
-              desc: report.description,
-              selectedReportType: report.type,
-              selectedMetrics: report.attributes,
             },
-            formInfo: {
-              ...state.formInfo,
-              selectedFormType,
-              selectedForm,
-              selectedIndividualForm,
-              selectedQuestions,
-              selectedFormValue,
-            },
-            siteInfo: {
-              ...state.siteInfo,
-              selectedMetas,
-              selectedValue,
-            },
-            userList,
-            submissions,
-            collapseClass: true,
-            applyFilter: true,
-            filter: {
-              ...state.filter,
-              filterBy,
-            },
-            showActions,
-          }),
-          () => {
-            if (selectedFormType.code && selectedForm.id) {
-              this.props.getForms(id, selectedFormType.code);
-              this.props.getFormQuestions(id, selectedForm.id);
-            }
-          },
-        );
-      }
+          );
+        }
+      });
     }
   }
 
@@ -1410,7 +1418,9 @@ class AddNewReport extends Component {
               }),
               () => {
                 successToast('Report', 'created');
-                history.push(`project-dashboard/${projectId}/report`);
+                this.props.history.push(
+                  `/project-dashboard/${projectId}/report`,
+                );
               },
             );
             // this.clearState();
@@ -1459,6 +1469,9 @@ class AddNewReport extends Component {
               showActions: true,
             });
           }
+          // this.props.history.push(
+          //   `/project-dashboard/${projectId}/report`,
+          // );
           successToast('Report', 'updated');
           // this.clearState();
           // this.props.toggleSection('reportList');
@@ -1466,7 +1479,7 @@ class AddNewReport extends Component {
       })
       .catch(err => {
         const errors = err.response;
-        errorToast(errors.data.error);
+        errorToast(errors);
       });
   };
 
@@ -1479,7 +1492,8 @@ class AddNewReport extends Component {
   };
 
   handleConfirmDelete = () => {
-    this.props.toggleSection('reportList');
+    const { projectId } = this.state;
+    this.props.history.push(`/project-dashboard/${projectId}/report`);
   };
 
   onSyncClick = () => {
@@ -1526,16 +1540,17 @@ class AddNewReport extends Component {
         applyFilter,
         isDelete,
         showActions,
-        projectId,
+        loader,
       },
       props: {
         reportReducer: { reportLoader },
-        data,
+        match: {
+          params: { id, reportId },
+        },
       },
     } = this;
-    // console.log('props report ko', this.props);
-    const isEdit =
-      data && Object.keys(data).length > 0 ? true : false;
+    // console.log('props report ko', this.state);
+    const isEdit = reportId ? true : false;
     const actions = [
       // {
       //   id: 0,
@@ -1558,10 +1573,10 @@ class AddNewReport extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <span>Report</span>
-              {/* <a href={breadcrumbs.organization_url}>
-                  {breadcrumbs.organization}
-                </a> */}
+              {/* <span>Report</span> */}
+              <a href={`/#/project-dashboard/${id}/report`}>
+                Reports
+              </a>
             </li>
             <li className="breadcrumb-item">
               {isEdit ? 'Edit Report' : 'Create Report'}
@@ -1582,7 +1597,7 @@ class AddNewReport extends Component {
                       this.handleToggleDelete();
                     }}
                   >
-                    {/* <i className="material-icons">add_circle</i> */}
+                    <i className="material-icons">close</i>
                     <span>Cancel</span>
                   </button>
                 </div>
@@ -1638,23 +1653,6 @@ class AddNewReport extends Component {
                             )}
                           </div>
                         </div>
-                        <div className="col-lg-9 col-md-8">
-                          <button
-                            className="common-button is-disable is-icon pull-right is-bg"
-                            type="button"
-                            onClick={() => {
-                              this.handleToggleCollapse();
-                            }}
-                          >
-                            <i className="material-icons">
-                              filter_list
-                            </i>
-                            <span>collapse all</span>
-                            <i className="material-icons arrow-icon">
-                              expand_more
-                            </i>
-                          </button>
-                        </div>
                       </div>
                     </div>
                   </form>
@@ -1662,78 +1660,91 @@ class AddNewReport extends Component {
                 {collapseClass && (
                   <>
                     <div className="report-accordion">
-                      <div className="row ">
-                        <Metrics
-                          handleToggleClass={this.handleToggleClass}
-                          toggleSelectClass={toggleSelectClass}
-                          data={metricArr}
-                          users={usersArr}
-                          userList={userList}
-                          siteValues={siteValues}
-                          metaAttributes={metaAttributes}
-                          selectedMetas={selectedMetas}
-                          handleSelectMeta={this.handleChangeMeta}
-                          submissionType={submissionType}
-                          submissions={submissions}
-                          handleSubmissionType={
-                            this.handleSubmissionType
-                          }
-                          handleCheckSubmissionType={
-                            this.handleCheckSubmissionType
-                          }
-                          handleCheckUser={this.handleChecKUser}
-                          selectedMetrics={selectedMetrics}
-                          formTypes={formTypes}
-                          selectedFormType={selectedFormType}
-                          handleFormTypeCheck={
-                            this.handleFormTypeChange
-                          }
-                          formTypeArr={formTypeArr}
-                          selectedForm={selectedForm}
-                          handleFormSelected={this.handleFormSelected}
-                          formQuestions={formQuestions}
-                          individualFormArr={individualFormArr}
-                          selectedIndividualForm={
-                            selectedIndividualForm
-                          }
-                          handleIndividualFormSelected={
-                            this.handleIndividualFormSelected
-                          }
-                          handleChangeFormQuest={
-                            this.handleChangeFormQuest
-                          }
-                          selectedQuestions={selectedQuestions}
-                          formValue={formValue}
-                          selectedFormValue={selectedFormValue}
+                      {loader ? (
+                        <BlockContentLoader
+                          number={10}
+                          height="25px"
                         />
-                        <SelectedColumn
-                          selected={selectedMetrics}
-                          handleSelectChange={this.handleSelectChange}
-                          handleCheckSubmissionType={
-                            this.handleChangeArray
-                          }
-                        />
-                        <div className="col-lg-6">
-                          <button
-                            type="button"
-                            className="common-button is-bg"
-                            onClick={() => {
-                              this.handleSubmitReport();
-                            }}
-                          >
-                            Save Report
-                          </button>
-                          <button
-                            type="button"
-                            className="common-button is-bg"
-                            onClick={() => {
-                              this.handleToggleDelete();
-                            }}
-                          >
-                            Discard Changes
-                          </button>
+                      ) : (
+                        <div className="row ">
+                          <Metrics
+                            handleToggleClass={this.handleToggleClass}
+                            toggleSelectClass={toggleSelectClass}
+                            data={metricArr}
+                            users={usersArr}
+                            userList={userList}
+                            siteValues={siteValues}
+                            metaAttributes={metaAttributes}
+                            selectedMetas={selectedMetas}
+                            handleSelectMeta={this.handleChangeMeta}
+                            submissionType={submissionType}
+                            submissions={submissions}
+                            handleSubmissionType={
+                              this.handleSubmissionType
+                            }
+                            handleCheckSubmissionType={
+                              this.handleCheckSubmissionType
+                            }
+                            handleCheckUser={this.handleChecKUser}
+                            selectedMetrics={selectedMetrics}
+                            formTypes={formTypes}
+                            selectedFormType={selectedFormType}
+                            handleFormTypeCheck={
+                              this.handleFormTypeChange
+                            }
+                            formTypeArr={formTypeArr}
+                            selectedForm={selectedForm}
+                            handleFormSelected={
+                              this.handleFormSelected
+                            }
+                            formQuestions={formQuestions}
+                            individualFormArr={individualFormArr}
+                            selectedIndividualForm={
+                              selectedIndividualForm
+                            }
+                            handleIndividualFormSelected={
+                              this.handleIndividualFormSelected
+                            }
+                            handleChangeFormQuest={
+                              this.handleChangeFormQuest
+                            }
+                            selectedQuestions={selectedQuestions}
+                            formValue={formValue}
+                            selectedFormValue={selectedFormValue}
+                          />
+                          <SelectedColumn
+                            selected={selectedMetrics}
+                            handleSelectChange={
+                              this.handleSelectChange
+                            }
+                            handleCheckSubmissionType={
+                              this.handleChangeArray
+                            }
+                          />
+                          <div className="col-lg-12">
+                            <div className="buttons flex-end">
+                              <button
+                                type="button"
+                                className="common-button is-border"
+                                onClick={() => {
+                                  this.handleToggleDelete();
+                                }}
+                              >
+                                Discard Changes
+                              </button>
+                              <button
+                                type="button"
+                                className="common-button is-bg"
+                                onClick={() => {
+                                  this.handleSubmitReport();
+                                }}
+                              >
+                                Save Report
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                     {filterArr.length > 0 && (
                       <DataFilter

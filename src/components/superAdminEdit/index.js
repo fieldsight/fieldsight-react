@@ -34,7 +34,7 @@ export default class SuperAdminFormEdit extends Component {
       address: '',
       public_desc: '',
       additional_desc: '',
-      is_active: '',
+
       position: {
         latitude: '51.505',
         longitude: '-0.09',
@@ -47,8 +47,6 @@ export default class SuperAdminFormEdit extends Component {
 
   componentDidMount() {
     const { id } = this.props;
-
-    console.log(this.props.id, 'organizationId');
 
     const editUrl = axios.get(
       `/fv3/api/super-organization-lists/${id}/`,
@@ -63,10 +61,11 @@ export default class SuperAdminFormEdit extends Component {
           const responseContryList = responses[1];
           const position =
             responses[0].data.location &&
-            responses[0].data.location.split('');
-          // const longitude = position && position[1].split('(')[1];
-          // const latitude = position && position[2].split(')')[0];
-          console.log(responses, 'res');
+            responses[0].data.location.split(' ');
+
+          const longitude = position && position[1].split('(')[1];
+          const latitude = position && position[2].split(')')[0];
+
           this.setState({
             name: responses[0].data.name,
             phone: responses[0].data.phone,
@@ -77,10 +76,10 @@ export default class SuperAdminFormEdit extends Component {
             public_desc: responses[0].data.public_desc,
             additional_desc: responses[0].data.additional_desc,
             is_active: responses[0].data.is_active,
-            // position: {
-            //   latitude: latitude,
-            //   longitude: longitude,
-            // },
+            position: {
+              latitude: latitude,
+              longitude: longitude,
+            },
             zoom: 13,
             Selectedtypes: responses[0].data.country,
             country: responses[1].data.countries,
@@ -122,7 +121,7 @@ export default class SuperAdminFormEdit extends Component {
       address: this.state.address,
       public_desc: this.state.public_desc,
       additional_desc: this.state.additional_desc,
-      is_active: this.state.is_active,
+
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude,
     };
@@ -140,7 +139,7 @@ export default class SuperAdminFormEdit extends Component {
             address: '',
             public_desc: '',
             additional_desc: '',
-            is_active: '',
+
             position: {
               latitude: '51.505',
               longitude: '-0.09',
@@ -275,15 +274,6 @@ export default class SuperAdminFormEdit extends Component {
                   name="email"
                   value={email}
                   changeHandler={onChangeHandler}
-                  translation
-                />
-              </div>
-              <div className="col-xl-4 col-md-6">
-                <CheckBox
-                  checked={is_active}
-                  changeHandler={this.changeHandler}
-                  label="Active"
-                  value={is_active}
                   translation
                 />
               </div>

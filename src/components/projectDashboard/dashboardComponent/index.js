@@ -38,9 +38,10 @@ class ProjectDashboardComponent extends Component {
 
   toggleTab = formType => {
     const {
-      state: { projectId, activeTab },
-      props: { paginationHandler },
+      state: { activeTab },
+      props: { paginationHandler, projectId },
     } = this;
+
     this.setState(
       {
         activeTab: formType,
