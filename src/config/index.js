@@ -5,8 +5,7 @@ const tokenVal = window.token ? window.token : process.env.TOKEN;
 
 const baseURL = window.base_url
   ? window.base_url
-  : // : 'http://192.168.1.6:8001';
-    // 'http://192.168.1.2:8002/';
+  : // 'http://192.168.1.2:8002/';
     'https://fieldsight.naxa.com.np/';
 // : "https://app.fieldsight.org/";
 
