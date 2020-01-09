@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
-import PropTypes from 'prop-types';
+
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
@@ -66,20 +66,52 @@ class TeamAdd extends Component {
         params: { id },
       },
     } = this.props;
-    axios
-      .get(`/fv3/api/team-types-countries`)
-      .then(res => {
-        this.setState({
-          teamTypes: res.data.team_types,
-          country: res.data.countries,
-          // id,
+
+    const countryList1 = axios.get(`/fv3/api/team-types-countries`);
+    const location1 = axios.get(
+      `/fv3/api/get-organization-location/${id}/`,
+    );
+
+    if (id) {
+      axios
+        .all([countryList1, location1])
+        .then(
+          axios.spread((...responses) => {
+            const countryList = responses[0];
+            const location = responses[1];
+
+            const position =
+              responses[1].data.location &&
+              responses[1].data.location.split(' ');
+
+            const longitude = position && position[1].split('(')[1];
+            const latitude = position && position[2].split(')')[0];
+
+            this.setState({
+              teamTypes: countryList.data.team_types,
+              country: countryList.data.countries,
+              position: {
+                latitude,
+                longitude,
+              },
+            });
+          }),
+        )
+        .catch(errors => {
+          console.error(errors);
         });
-      })
-      .catch(() => {});
-    // if (this._isMounted) {
-    //   if (sector) {
-    //   }
-    // }
+    } else {
+      axios
+        .get(`/fv3/api/team-types-countries`)
+        .then(res => {
+          this.setState({
+            teamTypes: res.data.team_types,
+            country: res.data.countries,
+            // id,
+          });
+        })
+        .catch(() => {});
+    }
   }
 
   onChangeHandler = (e, position) => {
@@ -607,8 +639,5 @@ class TeamAdd extends Component {
     );
   }
 }
-TeamAdd.propTypes = {
-  match: PropTypes.objectOf.isRequired,
-  history: PropTypes.objectOf.isRequired,
-};
+
 export default TeamAdd;

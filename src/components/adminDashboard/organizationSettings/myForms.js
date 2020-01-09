@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import uuid from 'uuid/v4';
+
+import {
+  errorToast,
+  successToast,
+} from '../../../utils/toastHandler';
 import RightContentCard from '../../common/RightContentCard';
 import Modal from '../../common/Modal';
 import DeleteModal from '../../common/DeleteModal';
@@ -16,7 +22,8 @@ export default class MyForm extends Component {
     super(props);
     this.state = {
       popUpPage: false,
-      selected_forms: [],
+      scheduled_forms: [],
+
       forms: [],
       selected: [],
       openModal: false,
@@ -24,6 +31,9 @@ export default class MyForm extends Component {
       selectValue: '3',
       generalPopUp: false,
       schedulePopUp: false,
+      general_forms: [],
+      form_type: '',
+      checkbox: [],
     };
   }
 
@@ -34,16 +44,17 @@ export default class MyForm extends Component {
       .then(res => {
         this.setState({
           forms: res.data.forms,
-          selected_forms: res.data.selected_forms,
+          scheduled_forms: res.data.selected_forms.scheduled_forms,
+          general_forms: res.data.selected_forms.general_forms,
         });
       })
       .catch(err => {});
   }
 
   handleChange = () => {
-    this.setState({
-      popUpPage: true,
-    });
+    this.setState(preveState => ({
+      popUpPage: !preveState.popUpPage,
+    }));
   };
 
   handleClosePopup = () => {
@@ -57,48 +68,34 @@ export default class MyForm extends Component {
 
     if (checked) {
       this.setState(prevState => ({
-        selected: [...prevState.selected, JSON.parse(value)],
+        selected: [...prevState.selected, value],
       }));
     }
 
     if (!checked) {
       this.setState(preveState => ({
         selected: preveState.selected.filter(
-          region => region !== JSON.parse(value),
+          region => region !== value,
         ),
       }));
     }
   };
 
-  handleSaveForm = () => {
-    const { id } = this.props;
-    const body = { xf_ids: this.state.selected };
-
-    axios
-      .post(
-        `/fv3/api/manage-super-organizations-library/${id}/`,
-        body,
-      )
-      .then(res => {
-        if (res.status === 201) {
-          this.setState({
-            popUpPage: false,
-            selected_forms: res.data,
-          });
-        }
-      })
-      .catch(err => {});
-  };
-
-  openDelete = form_id => {
+  openDelete = (form_id, form_type) => {
     this.setState(prevState => ({
       openModal: !prevState.openModal,
       form_id,
+      form_type,
     }));
   };
 
   handleConfirm = () => {
-    const { selected_forms, form_id } = this.state;
+    const {
+      general_forms,
+      scheduled_forms,
+      form_id,
+      form_type,
+    } = this.state;
     const { id } = this.props;
     const body = { xf_id: form_id };
 
@@ -107,19 +104,34 @@ export default class MyForm extends Component {
         `/fv3/api/manage-super-organizations-library/${id}/`,
         body,
       )
-      .then(res => {
+      .then(async res => {
         if (res.status === 200) {
-          const delet = selected_forms.filter(
-            data => form_id !== data.id,
-          );
-          this.setState({
-            selected_forms: delet,
-            openModal: false,
-          });
+          if (form_type === 'general') {
+            successToast('General Form', 'removed');
+            const delet = general_forms.filter(
+              data => form_id !== data.id,
+            );
+
+            await this.setState({
+              general_forms: delet,
+              openModal: false,
+            });
+          }
+          if (form_type === 'scheduled') {
+            successToast('Schedule Form', 'removed');
+            const delet = scheduled_forms.filter(
+              data => form_id !== data.id,
+            );
+
+            await this.setState({
+              scheduled_forms: delet,
+              openModal: false,
+            });
+          }
         }
       })
-      .catch(() => {
-        // console.log(err);
+      .catch(errors => {
+        errorToast(errors.data.message);
       });
   };
 
@@ -163,11 +175,34 @@ export default class MyForm extends Component {
   };
 
   handleAllModel = res => {
-    this.setState({
-      schedulePopUp: false,
-      popUpPage: false,
-      generalPopUp: false,
-      selected_forms: res.data,
+    this.setState(
+      {
+        schedulePopUp: false,
+        popUpPage: false,
+        generalPopUp: false,
+        general_forms: res.data.general_forms,
+        scheduled_forms: res.data.scheduled_forms,
+        selected: [],
+        checkbox: [],
+      },
+      () => successToast('Sucessfully', 'added'),
+    );
+  };
+
+  checkboxhandler = e => {
+    const { id, checked } = e.target;
+    this.setState(prevState => {
+      if (checked) {
+        return { checkbox: [...prevState.checkbox, id] };
+      }
+      if (!checked) {
+        return {
+          checkbox: prevState.checkbox.filter(
+            region => region !== id,
+          ),
+        };
+      }
+      return null;
     });
   };
 
@@ -205,8 +240,9 @@ export default class MyForm extends Component {
           buttonName="Add"
         >
           <FormTable
-            selected_forms={selected_forms}
+            selected_forms={this.state.scheduled_forms}
             openDelete={openDelete}
+            general_forms={this.state.general_forms}
           />
         </RightContentCard>
         {popUpPage && (
@@ -215,21 +251,47 @@ export default class MyForm extends Component {
             toggleModal={this.handleClosePopup}
             showButton
             showText="create form"
-            url="#"
+            url="/forms/create/"
           >
             <form className="floating-form">
               <ul>
+                {/* {forms.length > 0 &&
+                  forms.map(option => (
+                    <li key={option.id}>
+                      <div className="custom-control custom-checkbox">
+                        {console.log(option.id)}
+                        <input
+                          type="checkbox"
+                          className="custom-control-input"
+                          id={option.id}
+                          name={option.title}
+                          checked={this.state.selected[option.id]}
+                          onChange={changeHandler}
+                          value={option.id}
+                        />
+                        <label
+                          className="custom-control-label"
+                          htmlFor={option.id}
+                          style={{ paddingLeft: '2em' }}
+                        >
+                          {option.title}
+                        </label>
+                      </div>
+                    </li>
+                  ))} */}
                 {forms.length > 0 &&
                   forms.map(option => (
-                    <li key={`option_${option.id}`}>
+                    <li key={option.id}>
                       <div className="custom-control custom-checkbox">
                         <input
                           type="checkbox"
                           className="custom-control-input"
                           id={option.id}
                           name={option.title}
-                          checked={selected[option.id]}
-                          onChange={changeHandler}
+                          checked={
+                            this.state.checkbox.includes[option.title]
+                          }
+                          onChange={this.checkboxhandler}
                           value={option.id}
                         />
                         <label
@@ -274,7 +336,8 @@ export default class MyForm extends Component {
             toggleModal={this.generalCloseButton}
           >
             <GeneralFormModal
-              selected={this.state.selected}
+              // selected={this.state.selected}
+              selected={this.state.checkbox}
               formType={this.state.selectValue}
               id={this.props.id}
               handleAllModel={this.handleAllModel}
@@ -288,7 +351,8 @@ export default class MyForm extends Component {
             toggleModal={this.scheduleCloseButton}
           >
             <ScheduleFormModal
-              selected={this.state.selected}
+              // selected={this.state.selected}
+              selected={this.state.checkbox}
               formType={this.state.selectValue}
               handleAllModel={this.handleAllModel}
               id={this.props.id}

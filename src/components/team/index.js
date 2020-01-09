@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Table, Button } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -15,6 +16,7 @@ class Teams extends Component {
     this.state = {
       results: [],
       masterresult: [],
+      organization: [],
       // count: '',
       // selectedLanguage: 'en',
     };
@@ -34,6 +36,7 @@ class Teams extends Component {
     this.setState({
       results: nextprops.teams.teams,
       masterresult: nextprops.teams.teams,
+      organization: nextprops.teams.organizations,
       // count: nextprops.teams.count,
     });
   }
@@ -74,7 +77,7 @@ class Teams extends Component {
   };
 
   render() {
-    const { results } = this.state;
+    const { results, organization } = this.state;
     const { selected } = this.props;
 
     // const selectLanguage = [
@@ -83,6 +86,43 @@ class Teams extends Component {
     // ];
     return (
       <>
+        <div className="sub-regions">
+          <div className="card">
+            <div className="card-header main-card-header">
+              <label>Organizations</label>
+            </div>
+            <div className="card-body">
+              <div className="row">
+                {organization.map((subRegion, i) => (
+                  <div
+                    className="col-xl-3 col-lg-6"
+                    key={subRegion.id}
+                  >
+                    <Link
+                      to={`/organization-dashboard/${subRegion.id}`}
+                    >
+                      <div className="sub-regions-item ">
+                        <h5>{subRegion.name}</h5>
+                        <h6>{subRegion.teams}</h6>
+                        <p>
+                          <label>
+                            <FormattedMessage
+                              id="app.total"
+                              defaultMessage="Total"
+                            />
+                            :
+                          </label>
+                          {subRegion.teams}
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="card">
           {/* <div>
             <SelectElement
@@ -251,9 +291,11 @@ class Teams extends Component {
 }
 
 const mapStateToProps = ({ teams }) => {
-  const { selected } = teams;
+  const { selected, organizations } = teams;
+
   return {
     teams,
+    organizations,
     selected,
   };
 };
