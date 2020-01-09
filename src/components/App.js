@@ -31,7 +31,7 @@ import ProjectAdd from './projectAdd';
 import TeamAdd from './teamAdd';
 import SiteAdd from './siteAdd';
 import EditSite from './SiteEdit';
-
+import MapFilter from './mapfilter/MapFilter';
 import SiteSubmissionData from './viewDataComponents/siteViewData/FormSubmission';
 import VersionSubmissionData from './viewDataComponents/projectViewData/VersionTable';
 import VersionSiteSubmission from './viewDataComponents/siteViewData/VersionTable';
@@ -342,7 +342,10 @@ class App extends Component {
                   path="/create-profile/:id"
                   render={props => <CreateProfile {...props} />}
                 />
-
+                <Route
+                  path="/mapfilter"
+                  render={props => <MapFilter {...props} />}
+                />
                 <Route
                   path="/project-responses/:id"
                   render={props => <SpecificViewData {...props} />}
@@ -434,6 +437,7 @@ class App extends Component {
               <ToastContainer />
             </Router>
           </main>
+          {/* </div> */}
         </div>
       </IntlProvider>
     );
