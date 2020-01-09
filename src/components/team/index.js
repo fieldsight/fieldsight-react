@@ -118,6 +118,14 @@ class Teams extends Component {
                     </Link>
                   </div>
                 ))}
+                <div style={{ marginLeft: '38.9rem' }}>
+                  <a
+                    href="/fieldsight/application/#/create-organization/"
+                    className="fieldsight-btn"
+                  >
+                    <i className="la la-plus" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>

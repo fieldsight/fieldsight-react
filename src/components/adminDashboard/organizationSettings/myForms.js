@@ -23,8 +23,8 @@ export default class MyForm extends Component {
     this.state = {
       popUpPage: false,
       scheduled_forms: [],
-
-      forms: [],
+      selectId: '',
+      forms: [{ id: '', title: 'Select Form' }],
       selected: [],
       openModal: false,
       form_id: '',
@@ -42,10 +42,16 @@ export default class MyForm extends Component {
     axios
       .get(`/fv3/api/manage-super-organizations-library/${id}/`)
       .then(res => {
-        this.setState({
-          forms: res.data.forms,
-          scheduled_forms: res.data.selected_forms.scheduled_forms,
-          general_forms: res.data.selected_forms.general_forms,
+        const newArr = this.state.forms;
+        this.setState(() => {
+          if (res.data.forms !== undefined) {
+            res.data.forms.map(arrPush => newArr.push(arrPush));
+          }
+          return {
+            forms: newArr,
+            scheduled_forms: res.data.selected_forms.scheduled_forms,
+            general_forms: res.data.selected_forms.general_forms,
+          };
         });
       })
       .catch(err => {});
@@ -162,6 +168,13 @@ export default class MyForm extends Component {
     );
   };
 
+  selectHandler = e => {
+    const { value } = e.target;
+    this.setState({
+      selectId: value,
+    });
+  };
+
   generalCloseButton = () => {
     this.setState({
       generalPopUp: false,
@@ -254,31 +267,7 @@ export default class MyForm extends Component {
             url="/forms/create/"
           >
             <form className="floating-form">
-              <ul>
-                {/* {forms.length > 0 &&
-                  forms.map(option => (
-                    <li key={option.id}>
-                      <div className="custom-control custom-checkbox">
-                        {console.log(option.id)}
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id={option.id}
-                          name={option.title}
-                          checked={this.state.selected[option.id]}
-                          onChange={changeHandler}
-                          value={option.id}
-                        />
-                        <label
-                          className="custom-control-label"
-                          htmlFor={option.id}
-                          style={{ paddingLeft: '2em' }}
-                        >
-                          {option.title}
-                        </label>
-                      </div>
-                    </li>
-                  ))} */}
+              {/* <ul>
                 {forms.length > 0 &&
                   forms.map(option => (
                     <li key={option.id}>
@@ -304,9 +293,21 @@ export default class MyForm extends Component {
                       </div>
                     </li>
                   ))}
-              </ul>
-              <div className="modal-footer">
-                <div className="col-xl-4 col-md-6">
+              </ul> */}
+
+              <div className="row">
+                <div className="col-xl-12 col-md-12">
+                  <SelectElement
+                    className="form-control"
+                    options={forms}
+                    changeHandler={this.selectHandler}
+                    label="Form List"
+                    value={this.state.selectId}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xl-12 col-md-12">
                   <SelectElement
                     className="form-control"
                     options={option1}
@@ -336,8 +337,8 @@ export default class MyForm extends Component {
             toggleModal={this.generalCloseButton}
           >
             <GeneralFormModal
-              // selected={this.state.selected}
-              selected={this.state.checkbox}
+              selected={this.state.selectId}
+              // selected={this.state.checkbox}
               formType={this.state.selectValue}
               id={this.props.id}
               handleAllModel={this.handleAllModel}
@@ -351,8 +352,8 @@ export default class MyForm extends Component {
             toggleModal={this.scheduleCloseButton}
           >
             <ScheduleFormModal
-              // selected={this.state.selected}
-              selected={this.state.checkbox}
+              selected={this.state.selectId}
+              // selected={this.state.checkbox}
               formType={this.state.selectValue}
               handleAllModel={this.handleAllModel}
               id={this.props.id}
