@@ -9,12 +9,14 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import PrintControlDefault from 'react-leaflet-easyprint';
+import PrintControlDefault from "react-leaflet-easyprint";
 const PrintControl = withLeaflet(PrintControlDefault);
 
 import MeasureControlDefault from "react-leaflet-measure";
 const MeasureControl = withLeaflet(MeasureControlDefault);
-
+// import MeasureControl from "react-leaflet-measure";
+// import MeasureControlDefault from "react-leaflet-measure";
+// const MeasureControl = withLeaflet(MeasureControlDefault);
 class MapComponent extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +29,15 @@ class MapComponent extends Component {
   render() {
     const position = [this.state.lat, this.state.lng];
     const { height, zoom } = this.props;
+    // const measureOptions = {
+    //   position: "topright",
+    //   primaryLengthUnit: "meters",
+    //   secondaryLengthUnit: "kilometers",
+    //   primaryAreaUnit: "sqmeters",
+    //   secondaryAreaUnit: "acres",
+    //   activeColor: "#db4a29",
+    //   completedColor: "#9b2d14"
+    // };
     const measureOptions = {
       position: "topright",
       primaryLengthUnit: "meters",
@@ -49,10 +60,16 @@ class MapComponent extends Component {
         animate={true}
         style={{ height: height, zIndex: 2 }}
       >
-        <MeasureControl {...measureOptions} />
-        
+        {/* <MeasureControl {...measureOptions} /> */}
+
         {/* <PrintControl ref={(ref) => { this.printControl = ref; }} position="topleft" sizeModes={['Current', 'A4Portrait', 'A4Landscape']} hideControlContainer={false} /> */}
-        <PrintControl position="topleft" sizeModes={['Current', 'A4Portrait', 'A4Landscape']} hideControlContainer={false} title="Export as PNG" exportOnly />
+        <PrintControl
+          position="topleft"
+          sizeModes={["Current", "A4Portrait", "A4Landscape"]}
+          hideControlContainer={false}
+          title="Export as PNG"
+          exportOnly
+        />
 
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -65,6 +82,7 @@ class MapComponent extends Component {
             Easily customizable.
           </Popup>
         </Marker>
+        <MeasureControl {...measureOptions} />
       </Map>
     );
   }

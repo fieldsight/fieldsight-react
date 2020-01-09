@@ -1,7 +1,6 @@
 import React, { Component, createRef } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 
-
 import MapComponent from "./MapComponent";
 import { Accordion, Card, Button } from "react-bootstrap";
 import MapLeftTools from "./MapLeftTools";
@@ -69,6 +68,7 @@ class MapFilter extends Component {
   };
 
   handleTabChange = tab => {
+    console.log("handleTabCHange Clicked");
     this.setState({ activeTab: tab });
   };
   changeLayersTab = tab => {
@@ -88,7 +88,6 @@ class MapFilter extends Component {
   siteInfoDropdown = e => {};
 
   render() {
-    
     const {
       activeTab,
       activeLayers,
@@ -784,7 +783,10 @@ class MapFilter extends Component {
             zoomOutClick={this.zoomOutClick}
             exportClick={this.exportClick}
           />
-          <ModalSettings openModalSetting={this.openModalSetting} modalSetting={modalSetting} />
+          <ModalSettings
+            openModalSetting={this.openModalSetting}
+            modalSetting={modalSetting}
+          />
           <div className="fieldsight-popup dark" id="share-popup" tabIndex="-1">
             <div className="popup-body md-body">
               <div className="card">
