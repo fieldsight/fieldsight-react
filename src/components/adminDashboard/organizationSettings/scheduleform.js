@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
+import format from 'date-fns/format';
 import RadioElement from '../../common/RadioElement';
 import CheckBox from '../../common/CheckBox';
 import SelectElement from '../../common/SelectElement';
@@ -142,31 +143,27 @@ export default class ScheduleFormModal extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log('hello');
-    const { selected } = this.props;
-    // const data = {
-    //   schedule_level_id: this.props.formType,
-    //   month_day: this.state.selectedMonthlyDays,
-    //   date_range_end: this.state.endedDate,
-    //   date_range_start: this.state.startedDate,
-    //   weekDays: this.state.weekDays,
-    //   frequency: this.state.frequency,
-    //   selected_days: this.state.dailyArrDays,
-    //   scheduleType: this.state.scheduleType,
-    //   default_submission_status: this.state.status,
-    //   selected: this.props.selected,
 
-    // };
+    const { selected } = this.props;
 
     const result = this.state.dailyArrDays.map(function(x) {
       return parseInt(x, 10);
     });
 
+    const selectedIdxs = selected.map(function(x) {
+      return parseInt(x, 10);
+    });
+
+    const StarttedDate = format(this.state.startedDate, [
+      'YYYY-MM-DD',
+    ]);
+    const EndedDate = format(this.state.endedDate, ['YYYY-MM-DD']);
+
     const body = {
       schedule_level_id: JSON.parse(this.state.scheduleType),
       form_type: JSON.parse(this.props.formType),
-      date_range_start: this.state.startedDate,
-      date_range_end: this.state.endedDate,
+      date_range_start: StarttedDate,
+      date_range_end: EndedDate,
       ...(this.state.scheduleType === '0' && {
         selected_days: result,
       }),
@@ -176,7 +173,7 @@ export default class ScheduleFormModal extends Component {
       default_submission_status: JSON.parse(this.state.status),
       frequency: JSON.parse(this.state.frequency),
       month_day: JSON.parse(this.state.selectedMonthlyDays),
-      xf_ids: this.props.selected,
+      xf_ids: selectedIdxs,
     };
 
     axios
@@ -186,10 +183,6 @@ export default class ScheduleFormModal extends Component {
       )
       .then(res => {
         if (res.status === 201) {
-          // this.setState({
-          //   popUpPage: false,
-          //   selected_forms: res.data,
-          // });
           this.props.handleAllModel(res);
         }
       })
