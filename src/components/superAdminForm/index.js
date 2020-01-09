@@ -33,10 +33,10 @@ export default class SuperAdminForm extends Component {
       address: '',
       public_desc: '',
       additional_desc: '',
-      is_active: '',
+
       position: {
-        latitude: '51.505',
-        longitude: '-0.09',
+        latitude: '27.7172',
+        longitude: '85.3240',
       },
       zoom: 13,
       Selectedtypes: '',
@@ -48,7 +48,6 @@ export default class SuperAdminForm extends Component {
     axios
       .get(`/fv3/api/team-types-countries`)
       .then(res => {
-        console.log(res);
         this.setState({
           country: res.data.countries,
         });
@@ -85,7 +84,7 @@ export default class SuperAdminForm extends Component {
       address: this.state.address,
       public_desc: this.state.public_desc,
       additional_desc: this.state.additional_desc,
-      is_active: this.state.is_active,
+
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude,
     };
@@ -104,7 +103,7 @@ export default class SuperAdminForm extends Component {
             address: '',
             public_desc: '',
             additional_desc: '',
-            is_active: '',
+
             position: {
               latitude: '51.505',
               longitude: '-0.09',
@@ -175,7 +174,7 @@ export default class SuperAdminForm extends Component {
               className="breadcrumb-item active"
               aria-current="page"
             >
-              Create Super User
+              Create Organization User
             </li>
           </ol>
         </nav>
@@ -239,15 +238,6 @@ export default class SuperAdminForm extends Component {
                   name="email"
                   value={email}
                   changeHandler={onChangeHandler}
-                  translation
-                />
-              </div>
-              <div className="col-xl-4 col-md-6">
-                <CheckBox
-                  checked={is_active}
-                  changeHandler={this.changeHandler}
-                  label="Active"
-                  value={is_active}
                   translation
                 />
               </div>

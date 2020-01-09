@@ -65,7 +65,6 @@ export default class MyForm extends Component {
 
   changeHandler = e => {
     const { id, checked, value } = e.target;
-    console.log(e.target, 'checked', value);
 
     if (checked) {
       this.setState(prevState => ({
@@ -105,7 +104,7 @@ export default class MyForm extends Component {
         `/fv3/api/manage-super-organizations-library/${id}/`,
         body,
       )
-      .then(res => {
+      .then(async res => {
         if (res.status === 200) {
           if (form_type === 'general') {
             successToast('General Form', 'removed');
@@ -113,17 +112,10 @@ export default class MyForm extends Component {
               data => form_id !== data.id,
             );
 
-            this.setState(
-              {
-                general_forms: delet,
-                openModal: false,
-              },
-              () =>
-                console.log(
-                  this.state.general_forms,
-                  'general_forms',
-                ),
-            );
+            await this.setState({
+              general_forms: delet,
+              openModal: false,
+            });
           }
           if (form_type === 'scheduled') {
             successToast('Schedule Form', 'removed');
@@ -131,7 +123,7 @@ export default class MyForm extends Component {
               data => form_id !== data.id,
             );
 
-            this.setState({
+            await this.setState({
               scheduled_forms: delet,
               openModal: false,
             });
@@ -191,8 +183,9 @@ export default class MyForm extends Component {
         general_forms: res.data.general_forms,
         scheduled_forms: res.data.scheduled_forms,
         selected: [],
+        checkbox: [],
       },
-      () => successToast('Form', 'Added'),
+      () => successToast('Sucessfully', 'added'),
     );
   };
 
@@ -238,7 +231,6 @@ export default class MyForm extends Component {
       { id: '1', name: 'schedule' },
     ];
 
-    console.log(this.state.checkbox, 'checkbox');
     return (
       <>
         <RightContentCard
@@ -259,7 +251,7 @@ export default class MyForm extends Component {
             toggleModal={this.handleClosePopup}
             showButton
             showText="create form"
-            url="#"
+            url="/forms/create/"
           >
             <form className="floating-form">
               <ul>
