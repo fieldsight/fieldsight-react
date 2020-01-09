@@ -211,7 +211,6 @@ class SiteInformationTable extends Component {
     const selectedQuestion = filteredQuestions.find(
       question => question.name === value,
     );
-
     if (selectedQuestion.type) {
       this.setState({ selectedQuestion });
     }
@@ -431,8 +430,6 @@ class SiteInformationTable extends Component {
       }
     }
 
-    // console.log('selected Table question', selectedTableQuestion);
-
     const question = {
       label: selectedTableQuestion.question_text,
 
@@ -487,7 +484,6 @@ class SiteInformationTable extends Component {
         form => form.id === +selectedTableQuestion.form_id,
       );
 
-      // console.log('selected form', selectedForm);
       if (selectedForm && Object.keys(selectedForm).length > 0) {
         filteredQuestion = findQuestion(selectedForm.json.children);
       }

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Axios from 'axios';
+import { Dropdown } from 'react-bootstrap';
+
 import {
   getMetricsData,
   getForms,
   getFormQuestions,
+  applyActionToReport,
 } from '../../../actions/reportActions';
 import InputElement from '../../common/InputElement';
 import {
@@ -74,6 +77,7 @@ const InitialState = {
     filterBy: {},
   },
   isDelete: false,
+  showActions: false,
 };
 
 class AddNewReport extends Component {
@@ -105,6 +109,8 @@ class AddNewReport extends Component {
         r => r.category === 'default',
       );
       const filterBy = report.filter;
+      const showActions =
+        Object.keys(report.filter).length > 0 ? true : false;
       let selectedFormType = {};
       let selectedForm = {};
       let selectedIndividualForm = [];
@@ -225,6 +231,7 @@ class AddNewReport extends Component {
             ...state.filter,
             filterBy,
           },
+          showActions,
         }),
         () => {
           this.props.getForms(this.props.id, selectedFormType.code);
@@ -317,6 +324,13 @@ class AddNewReport extends Component {
           filterBySiteType: this.props.reportReducer.siteTypes,
         },
       }));
+    }
+    if (
+      prevProps.reportReducer.actionResponse !==
+      this.props.reportReducer.actionResponse
+    ) {
+      const msg = this.props.reportReducer.actionResponse.detail;
+      successToast(msg);
     }
   }
 
@@ -1423,11 +1437,13 @@ class AddNewReport extends Component {
     Axios.put(`/v4/api/reporting/report/${reportId}/`, body)
       .then(res => {
         if (res.data) {
+          if (Object.keys(res.data.filter).length > 0) {
+            this.setState({
+              showActions: true,
+            });
+          }
           successToast('Report', 'updated');
           // this.clearState();
-          // this.setState(({ applyFilter }) => ({
-          //   applyFilter: !applyFilter,
-          // }));
           // this.props.toggleSection('reportList');
         }
       })
@@ -1447,6 +1463,14 @@ class AddNewReport extends Component {
 
   handleConfirmDelete = () => {
     this.props.toggleSection('reportList');
+  };
+
+  onSyncClick = () => {
+    this.props.applyActionToReport(this.state.reportId, 'sync');
+  };
+
+  onExportCSV = () => {
+    this.props.applyActionToReport(this.state.reportId, 'excel');
   };
 
   render() {
@@ -1484,14 +1508,31 @@ class AddNewReport extends Component {
         filter: { filterBySiteType, filterByRegions, filterBy },
         applyFilter,
         isDelete,
+        showActions,
       },
       props: {
         reportReducer: { reportLoader },
         data,
       },
     } = this;
+
     const isEdit =
       data && Object.keys(data).length > 0 ? true : false;
+    const actions = [
+      // {
+      //   id: 0,
+      //   title: 'sync',
+      //   icon: 'sync',
+      //   menu: [{ key: 1, text: 'Sync Now', link: this.onSyncClick }],
+      // },
+      {
+        id: 1,
+        title: 'export',
+        icon: 'save_alt',
+        menu: [{ key: 1, text: 'Microsoft Excel', link: this.onExportCSV }],
+      },
+    ];
+
     return (
       <div className="reports mrb-30" ref={this.setWrapperRef}>
         <div className="card">
@@ -1675,6 +1716,38 @@ class AddNewReport extends Component {
                       // selectedArr={selectedReportType}
                     />
                   )}
+                  {showActions && (
+                    <div className="report-table  mt-3">
+                      {actions.map(action => (
+                        <Dropdown key={action.title}>
+                          <Dropdown.Toggle
+                            drop="right"
+                            variant=""
+                            id="dropdown-Data"
+                            className="common-button data-toggle is-border is-icon"
+                          >
+                            {action.title}
+                            <i className="material-icons">
+                              {action.icon}
+                            </i>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                            {action.menu.map(item => (
+                              <Dropdown.Item
+                                onClick={() => {
+                                  item.link();
+                                }}
+                                key={item.key}
+                                // target="_blank"
+                              >
+                                {item.text}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      ))}
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -1701,4 +1774,5 @@ export default connect(mapStateToProps, {
   getMetricsData,
   getForms,
   getFormQuestions,
+  applyActionToReport,
 })(AddNewReport);

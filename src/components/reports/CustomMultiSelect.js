@@ -78,7 +78,11 @@ export default class CustomMultiSelect extends PureComponent {
                         htmlFor={id}
                         style={{ paddingLeft: '2em' }}
                       >
-                        {option.label ? option.label : option.name}
+                        {option.type && option.name
+                          ? option.name
+                          : option.label
+                          ? option.label
+                          : option.name}
                       </label>
                     </div>
                   </li>
