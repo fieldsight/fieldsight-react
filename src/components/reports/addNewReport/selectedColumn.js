@@ -57,7 +57,7 @@ const DragHandle = sortableHandle(
               placement="top"
               overlay={<Tooltip>Delete</Tooltip>}
             >
-              <i className="la la-trash" />
+              <i className="material-icons">cancel</i>
             </OverlayTrigger>
           </a>
         </span>

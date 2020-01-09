@@ -2,6 +2,8 @@
     form {
         .form-group {
             .custom-checkbox {
+                padding-left: 0;
+
                 label {
                     color: $primary-light;
                     font-size: .75rem;
@@ -91,7 +93,7 @@
 .custom-checkbox {
     &.custom-control {
         min-height: 1.3rem;
-        padding-left: 1.3rem;
+        padding-left: 0;
     }
 
     label {
@@ -171,6 +173,11 @@
                 background-color: $color-white
             }
         }
+    }
+
+    &.custom-control {
+
+        padding-left: 1.3rem;
     }
 
     .custom-control-input {

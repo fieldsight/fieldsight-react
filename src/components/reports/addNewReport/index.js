@@ -1548,7 +1548,7 @@ class AddNewReport extends Component {
                     this.handleToggleDelete();
                   }}
                 >
-                  {/* <i className="material-icons">add_circle</i> */}
+                  <i className="material-icons">close</i>
                   <span>Cancel</span>
                 </button>
               </div>
@@ -1679,25 +1679,28 @@ class AddNewReport extends Component {
                           this.handleChangeArray
                         }
                       />
-                      <div className="col-lg-6">
-                        <button
-                          type="button"
-                          className="common-button is-bg"
-                          onClick={() => {
-                            this.handleSubmitReport();
-                          }}
-                        >
-                          Save Report
+                      <div className="col-lg-12">
+                        <div className="buttons flex-end">
+
+                          <button
+                            type="button"
+                            className="common-button is-border"
+                            onClick={() => {
+                              this.handleToggleDelete();
+                            }}
+                          >
+                            Discard Changes
                         </button>
-                        <button
-                          type="button"
-                          className="common-button is-bg"
-                          onClick={() => {
-                            this.handleToggleDelete();
-                          }}
-                        >
-                          Discard Changes
+                          <button
+                            type="button"
+                            className="common-button is-bg"
+                            onClick={() => {
+                              this.handleSubmitReport();
+                            }}
+                          >
+                            Save Report
                         </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1711,9 +1714,9 @@ class AddNewReport extends Component {
                       applyFilter={applyFilter}
                       handleSubmitFilter={this.handleSubmitFilter}
                       filteredData={filterBy}
-                      // checkboxOption={checkboxOption}
-                      // handleCheck={this.handleCheckReportType}
-                      // selectedArr={selectedReportType}
+                    // checkboxOption={checkboxOption}
+                    // handleCheck={this.handleCheckReportType}
+                    // selectedArr={selectedReportType}
                     />
                   )}
                   {showActions && (
@@ -1738,7 +1741,7 @@ class AddNewReport extends Component {
                                   item.link();
                                 }}
                                 key={item.key}
-                                // target="_blank"
+                              // target="_blank"
                               >
                                 {item.text}
                               </Dropdown.Item>
