@@ -1,15 +1,16 @@
 import React, { Component, createRef } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import MapComponent from './MapComponent';
 import { Accordion, Card, Button } from 'react-bootstrap';
+import MapComponent from './MapComponent';
 import MapLeftTools from './MapLeftTools';
 import ModalSettings from './ModalSettings';
+
 class MapFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 0,
+      // width: 0,
       height: 0,
       zoom: 8,
       activeTab: 'filters',
@@ -24,9 +25,11 @@ class MapFilter extends Component {
       window.innerWidth >= 992 ? window.innerHeight : 400;
     this.setState({ height: height - 32 });
   }
+
   componentWillMount() {
     this.updateDimensions();
   }
+
   componentDidMount() {
     window.addEventListener(
       'resize',
@@ -40,29 +43,30 @@ class MapFilter extends Component {
       this.updateDimensions.bind(this),
     );
   }
+
   scaleClick = () => {
-    const leafletdraw_icon = document.getElementsByClassName(
+    const leafletdrawIcon = document.getElementsByClassName(
       'js-start',
     )[0];
-    const leafletdraw_container = (document.getElementsByClassName(
+    document.getElementsByClassName(
       'js-interaction',
-    )[0].style.display = 'block');
+    )[0].style.display = 'block';
 
     document.getElementsByClassName('js-toggle')[0].style.display =
       'none';
 
-    leafletdraw_icon.click();
-    leafletdraw_icon.style.display = 'none';
+    leafletdrawIcon.click();
+    leafletdrawIcon.style.display = 'none';
   };
 
   exportClick = () => {
-    const leafletdraw_container = (document.getElementsByClassName(
+    document.getElementsByClassName(
       'leaflet-control-easyPrint-button-export',
-    )[0].style.display = 'none');
-    const exportleaflet_icon = document.getElementsByClassName(
+    )[0].style.display = 'none';
+    const exportLeafletIcon = document.getElementsByClassName(
       'A4Landscape',
     )[0];
-    exportleaflet_icon.click();
+    exportLeafletIcon.click();
   };
 
   zoomInClick = () => {
@@ -71,6 +75,7 @@ class MapFilter extends Component {
       zoom: prevState.zoom + 1,
     }));
   };
+
   zoomOutClick = () => {
     this.setState(prevState => ({
       zoom: prevState.zoom - 1,
@@ -78,24 +83,32 @@ class MapFilter extends Component {
   };
 
   handleTabChange = tab => {
-    console.log('handleTabCHange Clicked');
+    // console.log('handleTabCHange Clicked');
     this.setState({ activeTab: tab });
   };
+
   changeLayersTab = tab => {
     this.setState({ activeLayers: tab });
   };
+
   searchDropdownClick = () => {
-    this.setState({ searchDropdown: !this.state.searchDropdown });
+    // this.setState({ searchDropdown: !this.state.searchDropdown });
+    this.setState(prevState => ({
+      searchDropdown: !prevState.searchDropdown,
+    }));
   };
 
   openModalSetting = () => {
-    this.setState({ modalSetting: !this.state.modalSetting });
+    this.setState(prevState => ({
+      modalSetting: !prevState.modalSetting,
+    }));
   };
 
   refreshClick = () => {
-    console.log('log');
+    // console.log('log');
   };
-  siteInfoDropdown = e => {};
+
+  // siteInfoDropdown = e => {};
 
   render() {
     const {
@@ -104,18 +117,12 @@ class MapFilter extends Component {
       searchDropdown,
       modalSetting,
     } = this.state;
+    const { height, zoom } = this.state;
     return (
       <div className="card">
         <div className="card-body map-wrapper">
-          <div
-            id="map"
-            style={{ height: this.state.height }}
-            className="map"
-          >
-            <MapComponent
-              zoom={this.state.zoom}
-              height={this.state.height}
-            />
+          <div id="map" style={{ height }} className="map">
+            <MapComponent zoom={zoom} height={height} />
           </div>
           <div className="map-sidebar left-map-sidebar">
             <Scrollbars
@@ -140,16 +147,19 @@ class MapFilter extends Component {
                           searchDropdown ? 'open' : ''
                         }`}
                         onClick={this.searchDropdownClick}
+                        onKeyPress={this.searchDropdownClick}
+                        role="link"
+                        tabIndex={-1}
                       >
                         <span className="input-group-text">
-                          <i className="la la-angle-down"></i>
+                          <i className="la la-angle-down" />
                         </span>
                         <ul>
                           <li>
-                            <a href="#">Search by Location</a>
+                            <a>Search by Location</a>
                           </li>
                           <li>
-                            <a href="#">search by Address</a>
+                            <a>search by Address</a>
                           </li>
                         </ul>
                       </span>
@@ -163,9 +173,13 @@ class MapFilter extends Component {
                       className="la la-cogs setting"
                       data-toggle="tooltip"
                       title="Setting"
+                      aria-label="Setting"
                       data-tab="site-info-popup"
                       onClick={this.openModalSetting}
-                    ></i>
+                      onKeyPress={this.handleKeyPress}
+                      role="tab"
+                      tabIndex={0}
+                    />
                   </span>
                 </div>
                 <form className="map-widget mrt-15">
@@ -183,10 +197,13 @@ class MapFilter extends Component {
                         data-toggle="tab"
                         // href="#sidebar-filter"
                         role="tab"
+                        tabIndex={0}
                         aria-controls="sidebar-filter"
-                        aria-selected={`${
-                          activeTab === 'fiters' ? 'true' : 'false'
-                        }`}
+                        // aria-selected={`${
+                        //   activeTab === 'fiters' ? 'true' : 'false'
+                        // }`}
+                        aria-selected="true"
+                        aria-hidden="true"
                         onClick={() => {
                           this.handleTabChange('filters');
                         }}
@@ -203,10 +220,13 @@ class MapFilter extends Component {
                         data-toggle="tab"
                         // href="#sidebar-metric"
                         role="tab"
+                        tabIndex={0}
                         aria-controls="sidebar-metric"
-                        aria-selected={`${
-                          activeTab === 'metrics' ? 'true' : 'false'
-                        }`}
+                        // aria-selected={`${
+                        //   activeTab === 'metrics' ? 'true' : 'false'
+                        // }`}
+                        aria-selected="true"
+                        aria-hidden="true"
                         onClick={() => {
                           this.handleTabChange('metrics');
                         }}
@@ -223,10 +243,13 @@ class MapFilter extends Component {
                         data-toggle="tab"
                         // href="#sidebar-layer"
                         role="tab"
+                        tabIndex={0}
                         aria-controls="sidebar-layer"
-                        aria-selected={`${
-                          activeTab === 'layers' ? 'true' : 'false'
-                        }`}
+                        // aria-selected={`${
+                        //   activeTab === 'layers' ? true : false
+                        // }`}
+                        aria-selected="true"
+                        aria-hidden="true"
                         onClick={() => {
                           this.handleTabChange('layers');
                         }}
@@ -274,7 +297,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         FieldSight Housing
                                         Demonstration Project
                                       </label>
@@ -287,7 +310,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         FieldSight Housing
                                         Demonstration Project
                                       </label>
@@ -300,7 +323,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         FieldSight Housing
                                         Demonstration Project
                                       </label>
@@ -313,7 +336,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         FieldSight Housing
                                         Demonstration Project
                                       </label>
@@ -326,7 +349,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         FieldSight Housing
                                         Demonstration Project
                                       </label>
@@ -360,7 +383,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       0%
                                     </label>
                                   </div>
@@ -372,7 +395,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       1-20%
                                     </label>
                                   </div>
@@ -384,7 +407,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       21-40%
                                     </label>
                                   </div>
@@ -396,7 +419,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       41%-60%
                                     </label>
                                   </div>
@@ -408,7 +431,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       61%-80%
                                     </label>
                                   </div>
@@ -420,7 +443,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       81%-100%
                                     </label>
                                   </div>
@@ -454,7 +477,7 @@ class MapFilter extends Component {
                                         type="radio"
                                         name="radioYes"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       Approved
                                     </label>
                                   </div>
@@ -464,7 +487,7 @@ class MapFilter extends Component {
                                         type="radio"
                                         name="radioYes"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       Pending
                                     </label>
                                   </div>
@@ -474,7 +497,7 @@ class MapFilter extends Component {
                                         type="radio"
                                         name="radioYes"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       Flagged
                                     </label>
                                   </div>
@@ -484,7 +507,7 @@ class MapFilter extends Component {
                                         type="radio"
                                         name="radioYes"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       Rejected
                                     </label>
                                   </div>
@@ -514,7 +537,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       Colony
                                     </label>
                                   </div>
@@ -526,7 +549,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       Pipaltar
                                     </label>
                                   </div>
@@ -538,7 +561,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       Sattale
                                     </label>
                                   </div>
@@ -550,7 +573,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       Barsuchet
                                     </label>
                                   </div>
@@ -562,7 +585,7 @@ class MapFilter extends Component {
                                         type="checkbox"
                                         name="radiobox"
                                       />
-                                      <i className="helper"></i>
+                                      <i className="helper" />
                                       Locantrik
                                     </label>
                                   </div>
@@ -593,7 +616,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         Bidur Municipality
                                       </label>
                                     </div>
@@ -605,7 +628,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         Balkumari
                                       </label>
                                     </div>
@@ -617,7 +640,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         Bageswori
                                       </label>
                                     </div>
@@ -629,7 +652,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         Buntang
                                       </label>
                                     </div>
@@ -641,7 +664,7 @@ class MapFilter extends Component {
                                           type="checkbox"
                                           name="radiobox"
                                         />
-                                        <i className="helper"></i>
+                                        <i className="helper" />
                                         Charghare
                                       </label>
                                     </div>
@@ -659,7 +682,7 @@ class MapFilter extends Component {
                       id="sidebar-metric"
                       role="tabpanel"
                       aria-labelledby="sidebar-metric_tab"
-                    ></div>
+                    />
                     <div
                       className={`tab-pane fade ${
                         activeTab === 'layers' ? 'show active' : ''
@@ -684,7 +707,8 @@ class MapFilter extends Component {
                                     );
                                   }}
                                 />
-                                <i className="helper"></i>Layers
+                                <i className="helper" />
+                                Layers
                               </label>
                             </div>
                             <div className="radiobox ">
@@ -699,7 +723,8 @@ class MapFilter extends Component {
                                     );
                                   }}
                                 />
-                                <i className="helper"></i>Base Layers
+                                <i className="helper" />
+                                Base Layers
                               </label>
                             </div>
                           </div>
@@ -708,7 +733,7 @@ class MapFilter extends Component {
                           className="layers-list display-list"
                           id="layers-list"
                           style={
-                            activeLayers == 'main_layers'
+                            activeLayers === 'main_layers'
                               ? { display: 'block' }
                               : { display: 'none' }
                           }
@@ -720,7 +745,7 @@ class MapFilter extends Component {
                                   type="checkbox"
                                   name="radiobox"
                                 />
-                                <i className="helper"></i>
+                                <i className="helper" />
                                 Bidur Municipality
                               </label>
                             </div>
@@ -732,7 +757,7 @@ class MapFilter extends Component {
                                   type="checkbox"
                                   name="radiobox"
                                 />
-                                <i className="helper"></i>
+                                <i className="helper" />
                                 Balkumari
                               </label>
                             </div>
@@ -744,7 +769,7 @@ class MapFilter extends Component {
                                   type="checkbox"
                                   name="radiobox"
                                 />
-                                <i className="helper"></i>
+                                <i className="helper" />
                                 Bageswori
                               </label>
                             </div>
@@ -756,7 +781,7 @@ class MapFilter extends Component {
                                   type="checkbox"
                                   name="radiobox"
                                 />
-                                <i className="helper"></i>
+                                <i className="helper" />
                                 Buntang
                               </label>
                             </div>
@@ -768,7 +793,7 @@ class MapFilter extends Component {
                                   type="checkbox"
                                   name="radiobox"
                                 />
-                                <i className="helper"></i>
+                                <i className="helper" />
                                 Charghare
                               </label>
                             </div>
@@ -778,7 +803,7 @@ class MapFilter extends Component {
                           className="thumb-list mr-0 layers-list"
                           id="base-layers"
                           style={
-                            activeLayers == 'base_layers'
+                            activeLayers === 'base_layers'
                               ? { display: 'block' }
                               : { display: 'none' }
                           }
@@ -790,7 +815,7 @@ class MapFilter extends Component {
                                   backgroundImage:
                                     "url('images/map.png')",
                                 }}
-                              ></figure>
+                              />
                               <div className="content">
                                 <h6>Open street map </h6>
                               </div>
@@ -801,7 +826,7 @@ class MapFilter extends Component {
                                   backgroundImage:
                                     "url('images/map.png')",
                                 }}
-                              ></figure>
+                              />
                               <div className="content">
                                 <h6>Google street </h6>
                               </div>
@@ -812,7 +837,7 @@ class MapFilter extends Component {
                                   backgroundImage:
                                     "url('images/map.png')",
                                 }}
-                              ></figure>
+                              />
                               <div className="content">
                                 <h6>Google Hybrid </h6>
                               </div>
@@ -823,7 +848,7 @@ class MapFilter extends Component {
                                   backgroundImage:
                                     "url('images/map.png')",
                                 }}
-                              ></figure>
+                              />
                               <div className="content">
                                 <h6>Google satelite </h6>
                               </div>
@@ -834,7 +859,7 @@ class MapFilter extends Component {
                                   backgroundImage:
                                     "url('images/map.png')",
                                 }}
-                              ></figure>
+                              />
                               <div className="content">
                                 <h6>google Terrain </h6>
                               </div>
@@ -845,7 +870,7 @@ class MapFilter extends Component {
                                   backgroundImage:
                                     "url('images/map.png')",
                                 }}
-                              ></figure>
+                              />
                               <div className="content">
                                 <h6>google Terrain </h6>
                               </div>
@@ -859,14 +884,14 @@ class MapFilter extends Component {
                   <div className="buttons flex-between">
                     <button
                       type="button"
-                      role="button"
+                      // role="button"
                       className="fieldsight-btn border-btn"
                     >
                       Cancel
                     </button>
                     <button
                       type="button"
-                      role="button"
+                      // role="button"
                       className="fieldsight-btn bg-btn"
                     >
                       apply
@@ -896,7 +921,7 @@ class MapFilter extends Component {
                 <div className="card-header main-card-header">
                   <h5>share map</h5>
                   <span className="popup-close">
-                    <i className="la la-close"></i>
+                    <i className="la la-close" />
                   </span>
                 </div>
                 <div className="card-body">
@@ -947,14 +972,15 @@ class MapFilter extends Component {
                             required=""
                           />
                           <label htmlFor="input">Search</label>
-                          <i className="la la-search"></i>
+                          <i className="la la-search" />
                         </div>
                         <div className="form-group">
                           <div className="radiobox">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Skills for
-                              Tourism Assessment Form - Test
+                              <i className="helper" />
+                              Skills for Tourism Assessment Form -
+                              Test
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -962,7 +988,7 @@ class MapFilter extends Component {
                               Arun Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -971,8 +997,8 @@ class MapFilter extends Component {
                           <div className="radiobox ">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Certificado de
-                              Comercializacioón 9
+                              <i className="helper" />
+                              Certificado de Comercializacioón 9
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -980,7 +1006,7 @@ class MapFilter extends Component {
                               Santosh kshetri Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -989,8 +1015,9 @@ class MapFilter extends Component {
                           <div className="radiobox ">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Skills for
-                              Tourism Assessment Form - Test
+                              <i className="helper" />
+                              Skills for Tourism Assessment Form -
+                              Test
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -998,7 +1025,7 @@ class MapFilter extends Component {
                               Arun Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -1007,8 +1034,8 @@ class MapFilter extends Component {
                           <div className="radiobox ">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Certificado de
-                              Comercializacioón 9
+                              <i className="helper" />
+                              Certificado de Comercializacioón 9
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -1016,7 +1043,7 @@ class MapFilter extends Component {
                               Santosh kshetri Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -1025,8 +1052,8 @@ class MapFilter extends Component {
                           <div className="radiobox ">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Certificado de
-                              Comercializacioón 9
+                              <i className="helper" />
+                              Certificado de Comercializacioón 9
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -1034,7 +1061,7 @@ class MapFilter extends Component {
                               Santosh kshetri Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -1063,14 +1090,15 @@ class MapFilter extends Component {
                             required=""
                           />
                           <label htmlFor="input">Search</label>
-                          <i className="la la-search"></i>
+                          <i className="la la-search" />
                         </div>
                         <div className="form-group">
                           <div className="radiobox">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Skills for
-                              Tourism Assessment Form - Test
+                              <i className="helper" />
+                              Skills for Tourism Assessment Form -
+                              Test
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -1078,7 +1106,7 @@ class MapFilter extends Component {
                               Arun Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -1087,8 +1115,8 @@ class MapFilter extends Component {
                           <div className="radiobox ">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Certificado de
-                              Comercializacioón 9
+                              <i className="helper" />
+                              Certificado de Comercializacioón 9
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -1096,7 +1124,7 @@ class MapFilter extends Component {
                               Santosh kshetri Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -1105,8 +1133,9 @@ class MapFilter extends Component {
                           <div className="radiobox ">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Skills for
-                              Tourism Assessment Form - Test
+                              <i className="helper" />
+                              Skills for Tourism Assessment Form -
+                              Test
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -1114,7 +1143,7 @@ class MapFilter extends Component {
                               Arun Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -1123,8 +1152,8 @@ class MapFilter extends Component {
                           <div className="radiobox ">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Certificado de
-                              Comercializacioón 9
+                              <i className="helper" />
+                              Certificado de Comercializacioón 9
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -1132,7 +1161,7 @@ class MapFilter extends Component {
                               Santosh kshetri Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -1141,8 +1170,8 @@ class MapFilter extends Component {
                           <div className="radiobox ">
                             <label>
                               <input type="radio" name="radiobox" />
-                              <i className="helper"></i>Certificado de
-                              Comercializacioón 9
+                              <i className="helper" />
+                              Certificado de Comercializacioón 9
                             </label>
                           </div>
                           <div className="select-form-info">
@@ -1150,7 +1179,7 @@ class MapFilter extends Component {
                               Santosh kshetri Bhandari
                             </span>
                             <time>
-                              <i className="la la-clock-o"></i>
+                              <i className="la la-clock-o" />
                               2019-07-30
                             </time>
                           </div>
@@ -1180,7 +1209,7 @@ class MapFilter extends Component {
                 <div className="card-header main-card-header">
                   <h5>Map style</h5>
                   <span className="popup-close">
-                    <i className="la la-close"></i>
+                    <i className="la la-close" />
                   </span>
                 </div>
                 <div className="card-body">
@@ -1274,7 +1303,7 @@ class MapFilter extends Component {
                 <div className="card-header main-card-header">
                   <h5>map</h5>
                   <span className="popup-close">
-                    <i className="la la-close"></i>
+                    <i className="la la-close" />
                   </span>
                 </div>
                 <div className="card-body">
@@ -1287,14 +1316,14 @@ class MapFilter extends Component {
                           required=""
                         />
                         <label htmlFor="input">Search</label>
-                        <i className="la la-search"></i>
+                        <i className="la la-search" />
                       </div>
                       <div className="form-group">
                         <div className="radiobox">
                           <label>
                             <input type="radio" name="radiobox" />
-                            <i className="helper"></i>Skills for
-                            Tourism Assessment Form - Test
+                            <i className="helper" />
+                            Skills for Tourism Assessment Form - Test
                           </label>
                         </div>
                         <div className="select-form-info">
@@ -1302,7 +1331,7 @@ class MapFilter extends Component {
                             Arun Bhandari
                           </span>
                           <time>
-                            <i className="la la-clock-o"></i>
+                            <i className="la la-clock-o" />
                             2019-07-30
                           </time>
                         </div>
@@ -1311,8 +1340,8 @@ class MapFilter extends Component {
                         <div className="radiobox ">
                           <label>
                             <input type="radio" name="radiobox" />
-                            <i className="helper"></i>Certificado de
-                            Comercializacioón 9
+                            <i className="helper" />
+                            Certificado de Comercializacioón 9
                           </label>
                         </div>
                         <div className="select-form-info">
@@ -1320,7 +1349,7 @@ class MapFilter extends Component {
                             Santosh kshetri Bhandari
                           </span>
                           <time>
-                            <i className="la la-clock-o"></i>
+                            <i className="la la-clock-o" />
                             2019-07-30
                           </time>
                         </div>
@@ -1329,8 +1358,8 @@ class MapFilter extends Component {
                         <div className="radiobox ">
                           <label>
                             <input type="radio" name="radiobox" />
-                            <i className="helper"></i>Skills for
-                            Tourism Assessment Form - Test
+                            <i className="helper" />
+                            Skills for Tourism Assessment Form - Test
                           </label>
                         </div>
                         <div className="select-form-info">
@@ -1338,7 +1367,7 @@ class MapFilter extends Component {
                             Arun Bhandari
                           </span>
                           <time>
-                            <i className="la la-clock-o"></i>
+                            <i className="la la-clock-o" />
                             2019-07-30
                           </time>
                         </div>
@@ -1347,8 +1376,8 @@ class MapFilter extends Component {
                         <div className="radiobox ">
                           <label>
                             <input type="radio" name="radiobox" />
-                            <i className="helper"></i>Certificado de
-                            Comercializacioón 9
+                            <i className="helper" />
+                            Certificado de Comercializacioón 9
                           </label>
                         </div>
                         <div className="select-form-info">
@@ -1356,7 +1385,7 @@ class MapFilter extends Component {
                             Santosh kshetri Bhandari
                           </span>
                           <time>
-                            <i className="la la-clock-o"></i>
+                            <i className="la la-clock-o" />
                             2019-07-30
                           </time>
                         </div>
@@ -1365,8 +1394,8 @@ class MapFilter extends Component {
                         <div className="radiobox ">
                           <label>
                             <input type="radio" name="radiobox" />
-                            <i className="helper"></i>Certificado de
-                            Comercializacioón 9
+                            <i className="helper" />
+                            Certificado de Comercializacioón 9
                           </label>
                         </div>
                         <div className="select-form-info">
@@ -1374,7 +1403,7 @@ class MapFilter extends Component {
                             Santosh kshetri Bhandari
                           </span>
                           <time>
-                            <i className="la la-clock-o"></i>
+                            <i className="la la-clock-o" />
                             2019-07-30
                           </time>
                         </div>

@@ -1,10 +1,24 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react';
 import Select from 'react-select';
 import 'react-select-2/dist/css/react-select-2.css';
 
 class ModalSettings extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: 'filters',
+    };
+  }
+
+  handleTabChange = tab => {
+    // console.log('handleTabCHange Clicked');
+    this.setState({ activeTab: tab });
+  };
+
   render() {
     const { openModalSetting, modalSetting } = this.props;
+    const { activeTab } = this.state;
     const options = [
       { value: 'one', label: 'Trying form another project' },
       { value: 'two', label: 'Enter birth date' },
@@ -17,12 +31,15 @@ class ModalSettings extends Component {
         <div className="popup-body">
           <div className="card">
             <div className="card-header main-card-header">
-              <h5>manage filters & Metrics</h5>
+              <h5>Manage filters & Metrics</h5>
               <span
                 className="popup-close"
                 onClick={openModalSetting}
+                onKeyPress={this.handleKeyPress}
+                role="button"
+                tabIndex={0}
               >
-                <i className="la la-close"></i>
+                <i className="la la-close" />
               </span>
             </div>
             <div className="card-body">
@@ -34,39 +51,63 @@ class ModalSettings extends Component {
                 >
                   <li className="nav-item">
                     <a
-                      className="nav-link active"
+                      className={`nav-link ${
+                        activeTab === 'filters' ? 'active show' : ''
+                      }`}
                       id="map-filter_tab"
                       data-toggle="tab"
-                      href="#map-filter"
                       role="tab"
+                      tabIndex={0}
                       aria-controls="map-filter"
                       aria-selected="true"
+                      onClick={() => {
+                        this.handleTabChange('filters');
+                      }}
+                      onKeyPress={() => {
+                        this.handleTabChange('filters');
+                      }}
                     >
                       Filters
                     </a>
                   </li>
                   <li className="nav-item">
                     <a
-                      className="nav-link "
+                      className={`nav-link ${
+                        activeTab === 'metrics' ? 'active show' : ''
+                      }`}
                       id="map-metric_tab"
                       data-toggle="tab"
-                      href="#map-metric"
                       role="tab"
+                      tabIndex={0}
                       aria-controls="map-metric"
-                      aria-selected="false"
+                      aria-selected="true"
+                      onClick={() => {
+                        this.handleTabChange('metrics');
+                      }}
+                      onKeyPress={() => {
+                        this.handleTabChange('metrics');
+                      }}
                     >
                       metrics
                     </a>
                   </li>
                   <li className="nav-item">
                     <a
-                      className="nav-link"
+                      className={`nav-link ${
+                        activeTab === 'layers' ? 'active show' : ''
+                      }`}
                       id="map-layer_tab"
                       data-toggle="tab"
-                      href="#map-layer"
                       role="tab"
+                      tabIndex={0}
                       aria-controls="map-layer"
                       aria-selected="true"
+                      onClick={() => {
+                        this.handleTabChange('layers');
+                      }}
+                      onKeyPress={() => {
+                        this.handleTabChange('layers');
+                      }}
                     >
                       Layers
                     </a>
@@ -77,7 +118,9 @@ class ModalSettings extends Component {
                   id="mapTabContent"
                 >
                   <div
-                    className="tab-pane fade show active"
+                    className={`tab-pane fade ${
+                      activeTab === 'filters' ? 'show active' : ''
+                    }`}
                     id="map-filter"
                     role="tabpanel"
                     aria-labelledby="map-filter_tab"
@@ -96,8 +139,8 @@ class ModalSettings extends Component {
                                 defaultValue="site-data"
                                 defaultChecked
                               />
-                              <i className="helper"></i>site
-                              information
+                              <i className="helper" />
+                              site information
                             </label>
                           </div>
                           <div className="radiobox ">
@@ -107,7 +150,8 @@ class ModalSettings extends Component {
                                 name="radio"
                                 defaultValue="form-data"
                               />
-                              <i className="helper"></i>Form Data
+                              <i className="helper" />
+                              Form Data
                             </label>
                           </div>
                         </div>
@@ -152,7 +196,7 @@ class ModalSettings extends Component {
                       </div>
                       <div className="buttons flex-end">
                         <a
-                          href="#"
+                          // href="#"
                           className=" fieldsight-btn bg-btn"
                         >
                           Add
@@ -167,12 +211,12 @@ class ModalSettings extends Component {
                             site Information
                           </span>
                           <a
-                            href="#"
+                            // href="#"
                             className="action"
                             data-toggle="tooltip"
                             title="Remove"
                           >
-                            <i className="la la-trash"></i>
+                            <i className="la la-trash" />
                           </a>
                         </li>
                         <li>
@@ -183,12 +227,12 @@ class ModalSettings extends Component {
                             Form data
                           </span>
                           <a
-                            href="#"
+                            // href="#"
                             className="action"
                             data-toggle="tooltip"
                             title="Remove"
                           >
-                            <i className="la la-trash"></i>
+                            <i className="la la-trash" />
                           </a>
                         </li>
                         <li>
@@ -199,24 +243,24 @@ class ModalSettings extends Component {
                             site Information
                           </span>
                           <a
-                            href="#"
+                            // href="#"
                             className="action"
                             data-toggle="tooltip"
                             title="Remove"
                           >
-                            <i className="la la-trash"></i>
+                            <i className="la la-trash" />
                           </a>
                         </li>
                       </ul>
                     </div>
                     <div className="buttons flex-end">
-                      <a href="#" className=" fieldsight-btn bg-btn">
-                        Apply
-                      </a>
+                      <a className="fieldsight-btn bg-btn">Apply</a>
                     </div>
                   </div>
                   <div
-                    className="tab-pane fade"
+                    className={`tab-pane fade ${
+                      activeTab === 'metrics' ? 'show active' : ''
+                    }`}
                     id="map-metric"
                     role="tabpanel"
                     aria-labelledby="map-metric_tab"
@@ -235,7 +279,8 @@ class ModalSettings extends Component {
                                 defaultValue="size"
                                 defaultChecked
                               />
-                              <i className="helper"></i>size
+                              <i className="helper" />
+                              size
                             </label>
                           </div>
                           <div className="radiobox ">
@@ -245,7 +290,8 @@ class ModalSettings extends Component {
                                 name="radioYes"
                                 defaultValue="color"
                               />
-                              <i className="helper"></i>Color
+                              <i className="helper" />
+                              Color
                             </label>
                           </div>
                         </div>
@@ -310,8 +356,8 @@ class ModalSettings extends Component {
                                         name="all"
                                         defaultValue=""
                                       />
-                                      <i className="helper"></i>Select
-                                      all
+                                      <i className="helper" />
+                                      Select all
                                     </label>
                                   </div>
                                 </div>
@@ -332,7 +378,7 @@ class ModalSettings extends Component {
                                         <div
                                           id="map"
                                           className="map"
-                                        ></div>
+                                        />
                                         <div className="map-sidebar left-map-sidebar">
                                           <div className="sidebar-wrapper">
                                             <form>
@@ -345,17 +391,18 @@ class ModalSettings extends Component {
                                                   />
                                                   <span className="input-group-append">
                                                     <span className="input-group-text">
-                                                      <i className="la la-angle-down"></i>
+                                                      <i className="la la-angle-down" />
                                                     </span>
                                                     <ul>
                                                       <li>
-                                                        <a href="#">
+                                                        <a>
+                                                          {/* href="#"   */}
                                                           Search by
                                                           loacation
                                                         </a>
                                                       </li>
                                                       <li>
-                                                        <a href="#">
+                                                        <a>
                                                           search by
                                                           address
                                                         </a>
@@ -373,7 +420,7 @@ class ModalSettings extends Component {
                                                   data-toggle="tooltip"
                                                   title="Setting"
                                                   data-tab="site-info-popup"
-                                                ></i>
+                                                />
                                               </span>
                                             </div>
                                             <form className="map-widget mrt-15">
@@ -460,7 +507,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   FieldSight
                                                                   Housing
                                                                   Demonstration
@@ -475,7 +522,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   FieldSight
                                                                   Housing
                                                                   Demonstration
@@ -490,7 +537,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   FieldSight
                                                                   Housing
                                                                   Demonstration
@@ -505,7 +552,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   FieldSight
                                                                   Housing
                                                                   Demonstration
@@ -520,7 +567,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   FieldSight
                                                                   Housing
                                                                   Demonstration
@@ -557,7 +604,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   0%
                                                                 </label>
                                                               </div>
@@ -569,7 +616,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   1-20%
                                                                 </label>
                                                               </div>
@@ -581,7 +628,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   21-40%
                                                                 </label>
                                                               </div>
@@ -593,7 +640,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   41%-60%
                                                                 </label>
                                                               </div>
@@ -605,7 +652,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   61%-80%
                                                                 </label>
                                                               </div>
@@ -617,7 +664,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   81%-100%
                                                                 </label>
                                                               </div>
@@ -651,7 +698,7 @@ class ModalSettings extends Component {
                                                                     type="radio"
                                                                     name="radioYes"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Approved
                                                                 </label>
                                                               </div>
@@ -661,7 +708,7 @@ class ModalSettings extends Component {
                                                                     type="radio"
                                                                     name="radioYes"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Pending
                                                                 </label>
                                                               </div>
@@ -671,7 +718,7 @@ class ModalSettings extends Component {
                                                                     type="radio"
                                                                     name="radioYes"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Flagged
                                                                 </label>
                                                               </div>
@@ -681,7 +728,7 @@ class ModalSettings extends Component {
                                                                     type="radio"
                                                                     name="radioYes"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Rejected
                                                                 </label>
                                                               </div>
@@ -714,7 +761,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Colony
                                                                 </label>
                                                               </div>
@@ -726,7 +773,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Pipaltar
                                                                 </label>
                                                               </div>
@@ -738,7 +785,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Sattale
                                                                 </label>
                                                               </div>
@@ -750,7 +797,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Barsuchet
                                                                 </label>
                                                               </div>
@@ -762,7 +809,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Locantrik
                                                                 </label>
                                                               </div>
@@ -795,7 +842,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Bidur
                                                                   Municipality
                                                                 </label>
@@ -808,7 +855,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Balkumari
                                                                 </label>
                                                               </div>
@@ -820,7 +867,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Bageswori
                                                                 </label>
                                                               </div>
@@ -832,7 +879,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Buntang
                                                                 </label>
                                                               </div>
@@ -844,7 +891,7 @@ class ModalSettings extends Component {
                                                                     type="checkbox"
                                                                     name="radiobox"
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Charghare
                                                                 </label>
                                                               </div>
@@ -860,12 +907,28 @@ class ModalSettings extends Component {
                                                   id="sidebar-metric"
                                                   role="tabpanel"
                                                   aria-labelledby="sidebar-metric_tab"
-                                                ></div>
+                                                />
                                                 <div
-                                                  className="tab-pane fade"
+                                                  className={`tab-pane fade ${
+                                                    activeTab ===
+                                                    'layers'
+                                                      ? 'show active'
+                                                      : ''
+                                                  }`}
                                                   id="sidebar-layer"
-                                                  role="tabpanel"
                                                   aria-labelledby="sidebar-layer_tab"
+                                                  role="tab"
+                                                  tabIndex={0}
+                                                  onClick={() => {
+                                                    this.handleTabChange(
+                                                      'filters',
+                                                    );
+                                                  }}
+                                                  onKeyPress={() => {
+                                                    this.handleTabChange(
+                                                      'filters',
+                                                    );
+                                                  }}
                                                 >
                                                   <div className="layer-content mrt-15">
                                                     <div className="form-group ">
@@ -878,7 +941,7 @@ class ModalSettings extends Component {
                                                               defaultValue="layers"
                                                               defaultChecked
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Layers
                                                           </label>
                                                         </div>
@@ -889,7 +952,7 @@ class ModalSettings extends Component {
                                                               name="radioYes"
                                                               defaultValue="baselayers"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Base
                                                             Layers
                                                           </label>
@@ -907,7 +970,7 @@ class ModalSettings extends Component {
                                                               type="checkbox"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Bidur
                                                             Municipality
                                                           </label>
@@ -920,7 +983,7 @@ class ModalSettings extends Component {
                                                               type="checkbox"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Balkumari
                                                           </label>
                                                         </div>
@@ -932,7 +995,7 @@ class ModalSettings extends Component {
                                                               type="checkbox"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Bageswori
                                                           </label>
                                                         </div>
@@ -944,7 +1007,7 @@ class ModalSettings extends Component {
                                                               type="checkbox"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Buntang
                                                           </label>
                                                         </div>
@@ -956,7 +1019,7 @@ class ModalSettings extends Component {
                                                               type="checkbox"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Charghare
                                                           </label>
                                                         </div>
@@ -973,12 +1036,12 @@ class ModalSettings extends Component {
                                                               backgroundImage:
                                                                 "url('img/map.png')",
                                                             }}
-                                                          ></figure>
+                                                          />
                                                           <div className="content">
                                                             <h6>
                                                               Open
                                                               street
-                                                              map{' '}
+                                                              map
                                                             </h6>
                                                           </div>
                                                         </li>
@@ -988,11 +1051,11 @@ class ModalSettings extends Component {
                                                               backgroundImage:
                                                                 "url('img/map.png')",
                                                             }}
-                                                          ></figure>
+                                                          />
                                                           <div className="content">
                                                             <h6>
                                                               Google
-                                                              street{' '}
+                                                              street
                                                             </h6>
                                                           </div>
                                                         </li>
@@ -1002,11 +1065,11 @@ class ModalSettings extends Component {
                                                               backgroundImage:
                                                                 "url('img/map.png')",
                                                             }}
-                                                          ></figure>
+                                                          />
                                                           <div className="content">
                                                             <h6>
                                                               Google
-                                                              Hybrid{' '}
+                                                              Hybrid
                                                             </h6>
                                                           </div>
                                                         </li>
@@ -1016,11 +1079,11 @@ class ModalSettings extends Component {
                                                               backgroundImage:
                                                                 "url('img/map.png')",
                                                             }}
-                                                          ></figure>
+                                                          />
                                                           <div className="content">
                                                             <h6>
                                                               Google
-                                                              satelite{' '}
+                                                              satelite
                                                             </h6>
                                                           </div>
                                                         </li>
@@ -1030,11 +1093,11 @@ class ModalSettings extends Component {
                                                               backgroundImage:
                                                                 "url('img/map.png')",
                                                             }}
-                                                          ></figure>
+                                                          />
                                                           <div className="content">
                                                             <h6>
                                                               google
-                                                              Terrain{' '}
+                                                              Terrain
                                                             </h6>
                                                           </div>
                                                         </li>
@@ -1044,11 +1107,11 @@ class ModalSettings extends Component {
                                                               backgroundImage:
                                                                 "url('images/map.png')",
                                                             }}
-                                                          ></figure>
+                                                          />
                                                           <div className="content">
                                                             <h6>
                                                               google
-                                                              Terrain{' '}
+                                                              Terrain
                                                             </h6>
                                                           </div>
                                                         </li>
@@ -1061,14 +1124,12 @@ class ModalSettings extends Component {
                                               <div className="buttons flex-between">
                                                 <button
                                                   type="button"
-                                                  role="button"
                                                   className="fieldsight-btn border-btn"
                                                 >
                                                   Cancel
                                                 </button>
                                                 <button
                                                   type="button"
-                                                  role="button"
                                                   className="fieldsight-btn bg-btn"
                                                 >
                                                   apply
@@ -1080,66 +1141,66 @@ class ModalSettings extends Component {
 
                                         <div className="map-tool top">
                                           <a
-                                            href="#"
+                                            // href="#"
                                             data-toggle="tooltip"
                                             title="Zoom In"
                                             data-placement="right"
                                           >
-                                            <i className="la la-plus"></i>
+                                            <i className="la la-plus" />
                                           </a>
                                           <a
-                                            href="#"
+                                            // href="#"
                                             data-toggle="tooltip"
                                             title="Zoom Out"
                                             data-placement="right"
                                           >
-                                            <i className="la la-minus"></i>
+                                            <i className="la la-minus" />
                                           </a>
                                           <a
-                                            href="#"
+                                            // href="#"
                                             data-toggle="tooltip"
                                             title="Drag"
                                             data-placement="right"
                                           >
-                                            <i className="la la-hand-paper"></i>
+                                            <i className="la la-hand-paper" />
                                           </a>
                                           <a
-                                            href="#"
+                                            // href="#"
                                             data-toggle="tooltip"
                                             title="Refresh"
                                             data-placement="right"
                                           >
-                                            <i className="la la-sync"></i>
+                                            <i className="la la-sync" />
                                           </a>
                                         </div>
                                         <div className="map-tool bottom">
                                           <a
-                                            href="#"
+                                            // href="#"
                                             data-toggle="tooltip"
                                             title="Measurement"
                                             data-placement="right"
                                           >
-                                            <i className="la la-server"></i>
+                                            <i className="la la-server" />
                                           </a>
                                           <a
-                                            href="#"
+                                            // href="#"
                                             data-toggle="tooltip"
                                             title="Export"
                                             data-placement="right"
                                           >
-                                            <i className="la la-file-export"></i>
+                                            <i className="la la-file-export" />
                                           </a>
                                           <a
-                                            href="#"
+                                            // href="#"
                                             data-toggle="tooltip"
                                             title="Share"
                                             data-placement="right"
                                             data-tab="share-popup"
                                           >
-                                            <i className="la la-share-alt"></i>
+                                            <i className="la la-share-alt" />
                                           </a>
-                                          <a href="#">
-                                            <i className="la la-save"></i>
+                                          <a>
+                                            <i className="la la-save" />
                                             <ul>
                                               <li>save</li>
                                               <li data-tab="map-list">
@@ -1160,7 +1221,7 @@ class ModalSettings extends Component {
                                                   Metrics
                                                 </h5>
                                                 <span className="popup-close">
-                                                  <i className="la la-close"></i>
+                                                  <i className="la la-close" />
                                                 </span>
                                               </div>
                                               <div className="card-body">
@@ -1236,7 +1297,7 @@ class ModalSettings extends Component {
                                                                   defaultValue="site-data"
                                                                   defaultChecked
                                                                 />
-                                                                <i className="helper"></i>
+                                                                <i className="helper" />
                                                                 site
                                                                 information
                                                               </label>
@@ -1248,7 +1309,7 @@ class ModalSettings extends Component {
                                                                   name="radio"
                                                                   defaultValue="form-data"
                                                                 />
-                                                                <i className="helper"></i>
+                                                                <i className="helper" />
                                                                 Form
                                                                 Data
                                                               </label>
@@ -1317,7 +1378,7 @@ class ModalSettings extends Component {
                                                         </div>
                                                         <div className="buttons flex-end">
                                                           <a
-                                                            href="#"
+                                                            // href="#"
                                                             className=" fieldsight-btn bg-btn"
                                                           >
                                                             Add
@@ -1336,12 +1397,12 @@ class ModalSettings extends Component {
                                                               Information
                                                             </span>
                                                             <a
-                                                              href="#"
+                                                              // href="#"
                                                               className="action"
                                                               data-toggle="tooltip"
                                                               title="Remove"
                                                             >
-                                                              <i className="la la-trash"></i>
+                                                              <i className="la la-trash" />
                                                             </a>
                                                           </li>
                                                           <li>
@@ -1355,12 +1416,12 @@ class ModalSettings extends Component {
                                                               data
                                                             </span>
                                                             <a
-                                                              href="#"
+                                                              // href="#"
                                                               className="action"
                                                               data-toggle="tooltip"
                                                               title="Remove"
                                                             >
-                                                              <i className="la la-trash"></i>
+                                                              <i className="la la-trash" />
                                                             </a>
                                                           </li>
                                                           <li>
@@ -1373,19 +1434,19 @@ class ModalSettings extends Component {
                                                               Information
                                                             </span>
                                                             <a
-                                                              href="#"
+                                                              // href="#"
                                                               className="action"
                                                               data-toggle="tooltip"
                                                               title="Remove"
                                                             >
-                                                              <i className="la la-trash"></i>
+                                                              <i className="la la-trash" />
                                                             </a>
                                                           </li>
                                                         </ul>
                                                       </div>
                                                       <div className="buttons flex-end">
                                                         <a
-                                                          href="#"
+                                                          // href="#"
                                                           className=" fieldsight-btn bg-btn"
                                                         >
                                                           Apply
@@ -1414,7 +1475,7 @@ class ModalSettings extends Component {
                                                                   defaultValue="size"
                                                                   defaultChecked
                                                                 />
-                                                                <i className="helper"></i>
+                                                                <i className="helper" />
                                                                 size
                                                               </label>
                                                             </div>
@@ -1425,7 +1486,7 @@ class ModalSettings extends Component {
                                                                   name="radioYes"
                                                                   defaultValue="color"
                                                                 />
-                                                                <i className="helper"></i>
+                                                                <i className="helper" />
                                                                 Color
                                                               </label>
                                                             </div>
@@ -1525,7 +1586,7 @@ class ModalSettings extends Component {
                                                                           name="all"
                                                                           defaultValue=""
                                                                         />
-                                                                        <i className="helper"></i>
+                                                                        <i className="helper" />
                                                                         Select
                                                                         all
                                                                       </label>
@@ -1544,7 +1605,7 @@ class ModalSettings extends Component {
                                                                           name="layer1"
                                                                           defaultValue=""
                                                                         />
-                                                                        <i className="helper"></i>
+                                                                        <i className="helper" />
                                                                         Layer
                                                                         1
                                                                       </label>
@@ -1561,12 +1622,12 @@ class ModalSettings extends Component {
                                                                   style
                                                                 </span>
                                                                 <a
-                                                                  href="#"
+                                                                  // href="#"
                                                                   className="action"
                                                                   data-toggle="tooltip"
                                                                   title="Remove"
                                                                 >
-                                                                  <i className="la la-trash"></i>
+                                                                  <i className="la la-trash" />
                                                                 </a>
                                                               </li>
                                                               <li>
@@ -1579,7 +1640,7 @@ class ModalSettings extends Component {
                                                                           name="layer1"
                                                                           defaultValue=""
                                                                         />
-                                                                        <i className="helper"></i>
+                                                                        <i className="helper" />
                                                                         Layer
                                                                         2
                                                                       </label>
@@ -1596,12 +1657,12 @@ class ModalSettings extends Component {
                                                                   style
                                                                 </span>
                                                                 <a
-                                                                  href="#"
+                                                                  // href="#"
                                                                   className="action"
                                                                   data-toggle="tooltip"
                                                                   title="Remove"
                                                                 >
-                                                                  <i className="la la-trash"></i>
+                                                                  <i className="la la-trash" />
                                                                 </a>
                                                               </li>
                                                               <li>
@@ -1614,7 +1675,7 @@ class ModalSettings extends Component {
                                                                           name="layer3"
                                                                           defaultValue=""
                                                                         />
-                                                                        <i className="helper"></i>
+                                                                        <i className="helper" />
                                                                         Layer
                                                                         3
                                                                       </label>
@@ -1632,12 +1693,12 @@ class ModalSettings extends Component {
                                                                   style
                                                                 </span>
                                                                 <a
-                                                                  href="#"
+                                                                  // href="#"
                                                                   className="action"
                                                                   data-toggle="tooltip"
                                                                   title="Remove"
                                                                 >
-                                                                  <i className="la la-trash"></i>
+                                                                  <i className="la la-trash" />
                                                                 </a>
                                                               </li>
                                                             </ul>
@@ -1684,7 +1745,7 @@ class ModalSettings extends Component {
                                                                           name="all"
                                                                           defaultValue=""
                                                                         />
-                                                                        <i className="helper"></i>
+                                                                        <i className="helper" />
                                                                         Select
                                                                         all
                                                                       </label>
@@ -1703,7 +1764,7 @@ class ModalSettings extends Component {
                                                                           name="layer1"
                                                                           defaultValue=""
                                                                         />
-                                                                        <i className="helper"></i>
+                                                                        <i className="helper" />
                                                                         Layer
                                                                         1
                                                                       </label>
@@ -1720,12 +1781,12 @@ class ModalSettings extends Component {
                                                                   style
                                                                 </span>
                                                                 <a
-                                                                  href="#"
+                                                                  // href="#"
                                                                   className="action"
                                                                   data-toggle="tooltip"
                                                                   title="Remove"
                                                                 >
-                                                                  <i className="la la-trash"></i>
+                                                                  <i className="la la-trash" />
                                                                 </a>
                                                               </li>
                                                               <li>
@@ -1738,7 +1799,7 @@ class ModalSettings extends Component {
                                                                           name="layer1"
                                                                           defaultValue=""
                                                                         />
-                                                                        <i className="helper"></i>
+                                                                        <i className="helper" />
                                                                         Layer
                                                                         2
                                                                       </label>
@@ -1755,12 +1816,12 @@ class ModalSettings extends Component {
                                                                   style
                                                                 </span>
                                                                 <a
-                                                                  href="#"
+                                                                  // href="#"
                                                                   className="action"
                                                                   data-toggle="tooltip"
                                                                   title="Remove"
                                                                 >
-                                                                  <i className="la la-trash"></i>
+                                                                  <i className="la la-trash" />
                                                                 </a>
                                                               </li>
                                                               <li>
@@ -1773,7 +1834,7 @@ class ModalSettings extends Component {
                                                                           name="layer3"
                                                                           defaultValue=""
                                                                         />
-                                                                        <i className="helper"></i>
+                                                                        <i className="helper" />
                                                                         Layer
                                                                         3
                                                                       </label>
@@ -1791,12 +1852,12 @@ class ModalSettings extends Component {
                                                                   style
                                                                 </span>
                                                                 <a
-                                                                  href="#"
+                                                                  // href="#"
                                                                   className="action"
                                                                   data-toggle="tooltip"
                                                                   title="Remove"
                                                                 >
-                                                                  <i className="la la-trash"></i>
+                                                                  <i className="la la-trash" />
                                                                 </a>
                                                               </li>
                                                             </ul>
@@ -1812,13 +1873,13 @@ class ModalSettings extends Component {
                                                     >
                                                       <div className="add-btn flex-start layer-add">
                                                         <a
-                                                          href="#"
+                                                          // href="#"
                                                           data-tab="scheduled-popup"
                                                         >
                                                           {' '}
-                                                          Add new{' '}
+                                                          Add new
                                                           <span>
-                                                            <i className="la la-plus"></i>
+                                                            <i className="la la-plus" />
                                                           </span>
                                                         </a>
                                                       </div>
@@ -1939,7 +2000,7 @@ class ModalSettings extends Component {
                                                                     name="layer1"
                                                                     defaultValue=""
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Layer
                                                                   1
                                                                 </label>
@@ -1947,17 +2008,16 @@ class ModalSettings extends Component {
                                                             </div>
                                                           </div>
                                                           <span className="layer-style">
-                                                            <small data-tab="map-style"></small>{' '}
+                                                            <small data-tab="map-style" />
                                                             Layer
                                                             style
                                                           </span>
                                                           <a
-                                                            href="#"
                                                             className="action"
                                                             data-toggle="tooltip"
                                                             title="Remove"
                                                           >
-                                                            <i className="la la-trash"></i>
+                                                            <i className="la la-trash" />
                                                           </a>
                                                         </li>
                                                         <li>
@@ -1970,7 +2030,7 @@ class ModalSettings extends Component {
                                                                     name="layer1"
                                                                     defaultValue=""
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Layer
                                                                   2
                                                                 </label>
@@ -1978,17 +2038,17 @@ class ModalSettings extends Component {
                                                             </div>
                                                           </div>
                                                           <span className="layer-style">
-                                                            <small data-tab="map-style"></small>
+                                                            <small data-tab="map-style" />
                                                             layer
                                                             style
                                                           </span>
                                                           <a
-                                                            href="#"
+                                                            // href="#"
                                                             className="action"
                                                             data-toggle="tooltip"
                                                             title="Remove"
                                                           >
-                                                            <i className="la la-trash"></i>
+                                                            <i className="la la-trash" />
                                                           </a>
                                                         </li>
                                                         <li>
@@ -2001,7 +2061,7 @@ class ModalSettings extends Component {
                                                                     name="layer3"
                                                                     defaultValue=""
                                                                   />
-                                                                  <i className="helper"></i>
+                                                                  <i className="helper" />
                                                                   Layer
                                                                   3
                                                                 </label>
@@ -2009,17 +2069,17 @@ class ModalSettings extends Component {
                                                             </div>
                                                           </div>
                                                           <span className="layer-style">
-                                                            <small data-tab="map-style"></small>
+                                                            <small data-tab="map-style" />
                                                             layer
                                                             style
                                                           </span>
                                                           <a
-                                                            href="#"
+                                                            // href="#"
                                                             className="action"
                                                             data-toggle="tooltip"
                                                             title="Remove"
                                                           >
-                                                            <i className="la la-trash"></i>
+                                                            <i className="la la-trash" />
                                                           </a>
                                                         </li>
                                                       </ul>
@@ -2049,7 +2109,7 @@ class ModalSettings extends Component {
                                               <div className="card-header main-card-header">
                                                 <h5>share map</h5>
                                                 <span className="popup-close">
-                                                  <i className="la la-close"></i>
+                                                  <i className="la la-close" />
                                                 </span>
                                               </div>
                                               <div className="card-body">
@@ -2105,7 +2165,7 @@ class ModalSettings extends Component {
                                                         <label htmlFor="input">
                                                           Search
                                                         </label>
-                                                        <i className="la la-search"></i>
+                                                        <i className="la la-search" />
                                                       </div>
                                                       <div className="form-group">
                                                         <div className="radiobox">
@@ -2114,7 +2174,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Skills for
                                                             Tourism
                                                             Assessment
@@ -2128,7 +2188,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2140,7 +2200,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Certificado
                                                             de
                                                             Comercializacioón
@@ -2154,7 +2214,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2166,7 +2226,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Skills for
                                                             Tourism
                                                             Assessment
@@ -2180,7 +2240,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2192,7 +2252,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Certificado
                                                             de
                                                             Comercializacioón
@@ -2206,7 +2266,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2218,7 +2278,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Certificado
                                                             de
                                                             Comercializacioón
@@ -2232,7 +2292,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2263,7 +2323,7 @@ class ModalSettings extends Component {
                                                         <label htmlFor="input">
                                                           Search
                                                         </label>
-                                                        <i className="la la-search"></i>
+                                                        <i className="la la-search" />
                                                       </div>
                                                       <div className="form-group">
                                                         <div className="radiobox">
@@ -2272,7 +2332,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Skills for
                                                             Tourism
                                                             Assessment
@@ -2286,7 +2346,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2298,7 +2358,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Certificado
                                                             de
                                                             Comercializacioón
@@ -2312,7 +2372,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2324,7 +2384,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Skills for
                                                             Tourism
                                                             Assessment
@@ -2338,7 +2398,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2350,7 +2410,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Certificado
                                                             de
                                                             Comercializacioón
@@ -2364,7 +2424,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2376,7 +2436,7 @@ class ModalSettings extends Component {
                                                               type="radio"
                                                               name="radiobox"
                                                             />
-                                                            <i className="helper"></i>
+                                                            <i className="helper" />
                                                             Certificado
                                                             de
                                                             Comercializacioón
@@ -2390,7 +2450,7 @@ class ModalSettings extends Component {
                                                             Bhandari
                                                           </span>
                                                           <time>
-                                                            <i className="la la-clock-o"></i>
+                                                            <i className="la la-clock-o" />
                                                             2019-07-30
                                                           </time>
                                                         </div>
@@ -2420,7 +2480,7 @@ class ModalSettings extends Component {
                                               <div className="card-header main-card-header">
                                                 <h5>Map style</h5>
                                                 <span className="popup-close">
-                                                  <i className="la la-close"></i>
+                                                  <i className="la la-close" />
                                                 </span>
                                               </div>
                                               <div className="card-body">
@@ -2534,7 +2594,7 @@ class ModalSettings extends Component {
                                               <div className="card-header main-card-header">
                                                 <h5>map</h5>
                                                 <span className="popup-close">
-                                                  <i className="la la-close"></i>
+                                                  <i className="la la-close" />
                                                 </span>
                                               </div>
                                               <div className="card-body">
@@ -2549,7 +2609,7 @@ class ModalSettings extends Component {
                                                       <label htmlFor="input">
                                                         Search
                                                       </label>
-                                                      <i className="la la-search"></i>
+                                                      <i className="la la-search" />
                                                     </div>
                                                     <div className="form-group">
                                                       <div className="radiobox">
@@ -2558,7 +2618,7 @@ class ModalSettings extends Component {
                                                             type="radio"
                                                             name="radiobox"
                                                           />
-                                                          <i className="helper"></i>
+                                                          <i className="helper" />
                                                           Skills for
                                                           Tourism
                                                           Assessment
@@ -2571,7 +2631,7 @@ class ModalSettings extends Component {
                                                           Bhandari
                                                         </span>
                                                         <time>
-                                                          <i className="la la-clock-o"></i>
+                                                          <i className="la la-clock-o" />
                                                           2019-07-30
                                                         </time>
                                                       </div>
@@ -2583,7 +2643,7 @@ class ModalSettings extends Component {
                                                             type="radio"
                                                             name="radiobox"
                                                           />
-                                                          <i className="helper"></i>
+                                                          <i className="helper" />
                                                           Certificado
                                                           de
                                                           Comercializacioón
@@ -2597,7 +2657,7 @@ class ModalSettings extends Component {
                                                           Bhandari
                                                         </span>
                                                         <time>
-                                                          <i className="la la-clock-o"></i>
+                                                          <i className="la la-clock-o" />
                                                           2019-07-30
                                                         </time>
                                                       </div>
@@ -2609,7 +2669,7 @@ class ModalSettings extends Component {
                                                             type="radio"
                                                             name="radiobox"
                                                           />
-                                                          <i className="helper"></i>
+                                                          <i className="helper" />
                                                           Skills for
                                                           Tourism
                                                           Assessment
@@ -2622,7 +2682,7 @@ class ModalSettings extends Component {
                                                           Bhandari
                                                         </span>
                                                         <time>
-                                                          <i className="la la-clock-o"></i>
+                                                          <i className="la la-clock-o" />
                                                           2019-07-30
                                                         </time>
                                                       </div>
@@ -2634,7 +2694,7 @@ class ModalSettings extends Component {
                                                             type="radio"
                                                             name="radiobox"
                                                           />
-                                                          <i className="helper"></i>
+                                                          <i className="helper" />
                                                           Certificado
                                                           de
                                                           Comercializacioón
@@ -2648,7 +2708,7 @@ class ModalSettings extends Component {
                                                           Bhandari
                                                         </span>
                                                         <time>
-                                                          <i className="la la-clock-o"></i>
+                                                          <i className="la la-clock-o" />
                                                           2019-07-30
                                                         </time>
                                                       </div>
@@ -2660,7 +2720,7 @@ class ModalSettings extends Component {
                                                             type="radio"
                                                             name="radiobox"
                                                           />
-                                                          <i className="helper"></i>
+                                                          <i className="helper" />
                                                           Certificado
                                                           de
                                                           Comercializacioón
@@ -2674,7 +2734,7 @@ class ModalSettings extends Component {
                                                           Bhandari
                                                         </span>
                                                         <time>
-                                                          <i className="la la-clock-o"></i>
+                                                          <i className="la la-clock-o" />
                                                           2019-07-30
                                                         </time>
                                                       </div>
@@ -2709,8 +2769,8 @@ class ModalSettings extends Component {
                                         name="layer1"
                                         defaultValue=""
                                       />
-                                      <i className="helper"></i>Layer
-                                      1
+                                      <i className="helper" />
+                                      Layer 1
                                     </label>
                                   </div>
                                 </div>
@@ -2724,12 +2784,12 @@ class ModalSettings extends Component {
                                 layer style
                               </span>
                               <a
-                                href="#"
+                                // href="#"
                                 className="action"
                                 data-toggle="tooltip"
                                 title="Remove"
                               >
-                                <i className="la la-trash"></i>
+                                <i className="la la-trash" />
                               </a>
                             </li>
                             <li>
@@ -2742,8 +2802,8 @@ class ModalSettings extends Component {
                                         name="layer1"
                                         defaultValue=""
                                       />
-                                      <i className="helper"></i>Layer
-                                      2
+                                      <i className="helper" />
+                                      Layer 2
                                     </label>
                                   </div>
                                 </div>
@@ -2757,12 +2817,12 @@ class ModalSettings extends Component {
                                 layer style
                               </span>
                               <a
-                                href="#"
+                                // href="#"
                                 className="action"
                                 data-toggle="tooltip"
                                 title="Remove"
                               >
-                                <i className="la la-trash"></i>
+                                <i className="la la-trash" />
                               </a>
                             </li>
                             <li>
@@ -2775,8 +2835,8 @@ class ModalSettings extends Component {
                                         name="layer3"
                                         defaultValue=""
                                       />
-                                      <i className="helper"></i>Layer
-                                      3
+                                      <i className="helper" />
+                                      Layer 3
                                     </label>
                                   </div>
                                 </div>
@@ -2791,12 +2851,12 @@ class ModalSettings extends Component {
                                 layer style
                               </span>
                               <a
-                                href="#"
+                                // href="#"
                                 className="action"
                                 data-toggle="tooltip"
                                 title="Remove"
                               >
-                                <i className="la la-trash"></i>
+                                <i className="la la-trash" />
                               </a>
                             </li>
                           </ul>
@@ -2837,8 +2897,8 @@ class ModalSettings extends Component {
                                         name="all"
                                         defaultValue=""
                                       />
-                                      <i className="helper"></i>Select
-                                      all
+                                      <i className="helper" />
+                                      Select all
                                     </label>
                                   </div>
                                 </div>
@@ -2855,8 +2915,8 @@ class ModalSettings extends Component {
                                         name="layer1"
                                         defaultValue=""
                                       />
-                                      <i className="helper"></i>Layer
-                                      1
+                                      <i className="helper" />
+                                      Layer 1
                                     </label>
                                   </div>
                                 </div>
@@ -2870,12 +2930,12 @@ class ModalSettings extends Component {
                                 layer style
                               </span>
                               <a
-                                href="#"
+                                // href="#"
                                 className="action"
                                 data-toggle="tooltip"
                                 title="Remove"
                               >
-                                <i className="la la-trash"></i>
+                                <i className="la la-trash" />
                               </a>
                             </li>
                             <li>
@@ -2888,8 +2948,8 @@ class ModalSettings extends Component {
                                         name="layer1"
                                         defaultValue=""
                                       />
-                                      <i className="helper"></i>Layer
-                                      2
+                                      <i className="helper" />
+                                      Layer 2
                                     </label>
                                   </div>
                                 </div>
@@ -2903,12 +2963,12 @@ class ModalSettings extends Component {
                                 layer style
                               </span>
                               <a
-                                href="#"
+                                // href="#"
                                 className="action"
                                 data-toggle="tooltip"
                                 title="Remove"
                               >
-                                <i className="la la-trash"></i>
+                                <i className="la la-trash" />
                               </a>
                             </li>
                             <li>
@@ -2921,8 +2981,8 @@ class ModalSettings extends Component {
                                         name="layer3"
                                         defaultValue=""
                                       />
-                                      <i className="helper"></i>Layer
-                                      3
+                                      <i className="helper" />
+                                      Layer 3
                                     </label>
                                   </div>
                                 </div>
@@ -2937,12 +2997,12 @@ class ModalSettings extends Component {
                                 layer style
                               </span>
                               <a
-                                href="#"
+                                // href="#"
                                 className="action"
                                 data-toggle="tooltip"
                                 title="Remove"
                               >
-                                <i className="la la-trash"></i>
+                                <i className="la la-trash" />
                               </a>
                             </li>
                           </ul>
@@ -2951,17 +3011,22 @@ class ModalSettings extends Component {
                     </div>
                   </div>
                   <div
-                    className="tab-pane fade"
+                    className={`tab-pane fade ${
+                      activeTab === 'layers' ? 'show active' : ''
+                    }`}
                     id="map-layer"
                     role="tabpanel"
                     aria-labelledby="map-layer_tab"
                   >
                     <div className="add-btn flex-start layer-add">
-                      <a href="#" data-tab="scheduled-popup">
+                      <a
+                        // href="#"
+                        data-tab="scheduled-popup"
+                      >
                         {' '}
-                        Add new{' '}
+                        Add new
                         <span>
-                          <i className="la la-plus"></i>
+                          <i className="la la-plus" />
                         </span>
                       </a>
                     </div>
@@ -3040,22 +3105,23 @@ class ModalSettings extends Component {
                                   name="layer1"
                                   defaultValue=""
                                 />
-                                <i className="helper"></i>Layer 1
+                                <i className="helper" />
+                                Layer 1
                               </label>
                             </div>
                           </div>
                         </div>
                         <span className="layer-style">
-                          <small data-tab="map-style"></small> Layer
-                          style
+                          <small data-tab="map-style" />
+                          Layer style
                         </span>
                         <a
-                          href="#"
+                          // href="#"
                           className="action"
                           data-toggle="tooltip"
                           title="Remove"
                         >
-                          <i className="la la-trash"></i>
+                          <i className="la la-trash" />
                         </a>
                       </li>
                       <li>
@@ -3075,16 +3141,16 @@ class ModalSettings extends Component {
                           </div>
                         </div>
                         <span className="layer-style">
-                          <small data-tab="map-style"></small>layer
-                          style
+                          <small data-tab="map-style" />
+                          layer style
                         </span>
                         <a
-                          href="#"
+                          // href="#"
                           className="action"
                           data-toggle="tooltip"
                           title="Remove"
                         >
-                          <i className="la la-trash"></i>
+                          <i className="la la-trash" />
                         </a>
                       </li>
                       <li>
@@ -3097,22 +3163,23 @@ class ModalSettings extends Component {
                                   name="layer3"
                                   defaultValue=""
                                 />
-                                <i className="helper"></i>Layer 3
+                                <i className="helper" />
+                                Layer 3
                               </label>
                             </div>
                           </div>
                         </div>
                         <span className="layer-style">
-                          <small data-tab="map-style"></small>layer
-                          style
+                          <small data-tab="map-style" />
+                          layer style
                         </span>
                         <a
-                          href="#"
+                          // href="#"
                           className="action"
                           data-toggle="tooltip"
                           title="Remove"
                         >
-                          <i className="la la-trash"></i>
+                          <i className="la la-trash" />
                         </a>
                       </li>
                     </ul>

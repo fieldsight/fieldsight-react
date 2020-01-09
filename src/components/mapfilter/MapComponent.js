@@ -51,13 +51,13 @@ class MapComponent extends Component {
         center={position}
         zoom={zoom}
         maxZoom={18}
-        attributionControl={true}
+        attributionControl
         zoomControl={false}
-        doubleClickZoom={true}
-        scrollWheelZoom={true}
-        dragging={true}
-        animate={true}
-        style={{ height: height, zIndex: 2 }}
+        doubleClickZoom
+        scrollWheelZoom
+        dragging
+        animate
+        style={{ height, zIndex: 2 }}
       >
         {/* <MeasureControl {...measureOptions} /> */}
 
