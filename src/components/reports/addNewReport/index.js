@@ -1598,7 +1598,9 @@ class AddNewReport extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               {/* <span>Report</span> */}
-              <a href={`/#/project-dashboard/${id}/report`}>
+              <a
+                href={`/fieldsight/application/#/project-dashboard/${id}/report`}
+              >
                 Reports
               </a>
             </li>
