@@ -150,9 +150,9 @@ export default class ScheduleFormModal extends Component {
       return parseInt(x, 10);
     });
 
-    const selectedIdxs = selected.map(function(x) {
-      return parseInt(x, 10);
-    });
+    // const selectedIdxs = selected.map(function(x) {
+    //   return parseInt(x, 10);
+    // });
 
     const StarttedDate = format(this.state.startedDate, [
       'YYYY-MM-DD',
@@ -173,7 +173,7 @@ export default class ScheduleFormModal extends Component {
       default_submission_status: JSON.parse(this.state.status),
       frequency: JSON.parse(this.state.frequency),
       month_day: JSON.parse(this.state.selectedMonthlyDays),
-      xf_ids: selectedIdxs,
+      xf_ids: JSON.parse(selected),
     };
 
     axios

@@ -14,11 +14,14 @@ export default class CustomMultiSelect extends PureComponent {
       site,
     } = this.props;
 
+    const className = toggleSelectClass
+      ? toggleSelectClass
+      : toggleSelectClass[toggleType];
     return (
       <div className="common-select">
         <div
           className={
-            toggleSelectClass[toggleType]
+            className
               ? 'select-wrapper select-toggle'
               : 'select-wrapper'
           }
@@ -40,6 +43,8 @@ export default class CustomMultiSelect extends PureComponent {
                   filterList && filterList[0] ? true : false;
                 const id = option.code
                   ? option.code
+                  : option.identifier
+                  ? option.identifier
                   : option.id
                   ? option.id
                   : option.name
@@ -55,6 +60,8 @@ export default class CustomMultiSelect extends PureComponent {
                     key={`option_${
                       option.code
                         ? option.code
+                        : option.identifier
+                        ? option.identifier
                         : option.id
                         ? option.id
                         : option.name

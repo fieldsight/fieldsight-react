@@ -20,8 +20,7 @@ export default class TeamsTable extends PureComponent {
           <tr>
             <th>Name</th>
             <th>address</th>
-            <th>team owner</th>
-            <th>team owner id</th>
+
             <th>projects</th>
             <th>users</th>
             <th>sites</th>
@@ -44,8 +43,7 @@ export default class TeamsTable extends PureComponent {
                   </a>
                 </td>
                 <td>{teams.address}</td>
-                <td>{teams.team_owner}</td>
-                <td>{teams.team_owner_id}</td>
+
                 <td>{teams.projects}</td>
 
                 <td>{teams.users}</td>

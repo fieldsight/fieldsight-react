@@ -21,7 +21,7 @@ export default class SuperAdminSetting extends PureComponent {
           <ol className="breadcrumb">
             <li className="breadcrumb-item ">
               <a
-                href={`/fieldsight/application/#/super-organization-dashboard/${id}`}
+                href={`/fieldsight/application/#/organization-dashboard/${id}`}
                 style={{ color: '#00628E' }}
               >
                 Organization Dashboard

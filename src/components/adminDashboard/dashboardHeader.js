@@ -47,22 +47,25 @@ class DashboardHeader extends PureComponent {
         title: 'Total Team',
         total_sites: `${this.props.total_teams}`,
         link: '#',
+        icon: 'la-users',
       },
       {
         title: 'Total Project',
         total_sites: `${this.props.total_projects}`,
         link: '#',
+        icon: 'la la la la-server',
       },
       {
         title: 'Total Site',
         total_sites: `${this.props.total_sites}`,
-        link: '#',
+        icon: 'la la-map-marker',
       },
 
       {
         title: 'Total User',
         total_sites: `${this.props.total_users}`,
         link: '#',
+        icon: 'la-user',
       },
     ];
     return (
@@ -134,21 +137,30 @@ class DashboardHeader extends PureComponent {
         <div className="card-body dashboard-header-bottom">
           <div className="flex-between">
             <div className="header-count">
-              {countHeader.map(manage => (
-                <a
-                  href={manage.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  key={manage.title}
-                >
+              {countHeader.map(manage =>
+                manage.link ? (
+                  <a
+                    href={manage.link && manage.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    key={manage.title}
+                  >
+                    <CountCard
+                      countName={manage.title}
+                      countNumber={manage.total_sites}
+                      icon={manage.icon}
+                      noSubmissionText
+                    />
+                  </a>
+                ) : (
                   <CountCard
                     countName={manage.title}
                     countNumber={manage.total_sites}
-                    icon="la-user"
+                    icon={manage.icon}
                     noSubmissionText
                   />
-                </a>
-              ))}
+                ),
+              )}
             </div>
           </div>
         </div>
