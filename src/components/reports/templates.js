@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import FormDataFilter from './FormDataFilter';
 
@@ -150,6 +151,7 @@ export default class Templates extends Component {
       standardReports,
       formButton,
     } = this.state;
+
     const DataCrude = [
       {
         id: '1',
@@ -203,6 +205,8 @@ export default class Templates extends Component {
         </>
       );
     };
+
+    const { id } = this.props;
     return (
       <>
         {!formButton && (
@@ -218,8 +222,27 @@ export default class Templates extends Component {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="report-content">
-                          <h4>{standardReport.title}</h4>
-                          <p>{standardReport.description}</p>
+                          {/* <Link to={`/export-data/${id}`}> */}
+                          {/* <Link
+                            to={{
+                              pathname: `/export-data/${id}`,
+                              state: {
+                                fromNotifications: true,
+                              },
+                            }}
+                          > */}
+                          <Link
+                            to={{
+                              pathname: `/export-data/${id}`,
+
+                              state: {
+                                fromDashboard: standardReport.title,
+                              },
+                            }}
+                          >
+                            <h4>{standardReport.title}</h4>
+                            <p>{standardReport.description}</p>
+                          </Link>
                         </div>
                       </div>
                     </div>
