@@ -136,8 +136,11 @@ export default class MyForm extends Component {
           }
         }
       })
-      .catch(errors => {
-        errorToast(errors.data.message);
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
       });
   };
 

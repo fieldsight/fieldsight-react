@@ -90,6 +90,15 @@ class Teams extends Component {
           <div className="card">
             <div className="card-header main-card-header">
               <label>Organizations</label>
+
+              <div style={{ marginLeft: '69.6rem' }}>
+                <a
+                  href="/fieldsight/application/#/create-organization/"
+                  className="fieldsight-btn"
+                >
+                  <i className="la la-plus" />
+                </a>
+              </div>
             </div>
             <div className="card-body">
               <div className="row">
@@ -103,29 +112,15 @@ class Teams extends Component {
                     >
                       <div className="sub-regions-item ">
                         <h5>{subRegion.name}</h5>
-                        <h6>{subRegion.teams}</h6>
+
                         <p>
-                          <label>
-                            <FormattedMessage
-                              id="app.total"
-                              defaultMessage="Total"
-                            />
-                            :
-                          </label>
+                          <label>Teams :</label>
                           {subRegion.teams}
                         </p>
                       </div>
                     </Link>
                   </div>
                 ))}
-                <div style={{ marginLeft: '38.9rem' }}>
-                  <a
-                    href="/fieldsight/application/#/create-organization/"
-                    className="fieldsight-btn"
-                  >
-                    <i className="la la-plus" />
-                  </a>
-                </div>
               </div>
             </div>
           </div>

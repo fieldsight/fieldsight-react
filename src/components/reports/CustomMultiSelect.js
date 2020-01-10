@@ -14,11 +14,14 @@ export default class CustomMultiSelect extends PureComponent {
       site,
     } = this.props;
 
+    const className = toggleSelectClass
+      ? toggleSelectClass
+      : toggleSelectClass[toggleType];
     return (
       <div className="common-select">
         <div
           className={
-            toggleSelectClass[toggleType]
+            className
               ? 'select-wrapper select-toggle'
               : 'select-wrapper'
           }

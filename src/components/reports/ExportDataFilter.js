@@ -79,8 +79,14 @@ export default class ExportDataFilter extends PureComponent {
   }
 
   componentDidMount() {
-    const siteType = `/fieldsight/api/site-types/1/`;
-    const projectRegions = `/fieldsight/api/project-regions/1/`;
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+    console.log(this.props);
+    const siteType = `/fieldsight/api/site-types/${id}/`;
+    const projectRegions = `/fieldsight/api/project-regions/${id}/`;
 
     const requestSiteType = axios.get(siteType);
     const requestProjectRegions = axios.get(projectRegions);
@@ -101,20 +107,38 @@ export default class ExportDataFilter extends PureComponent {
   }
 
   changeHandlers = (e, info) => {
-    const { id, checked, value } = e.target;
+    const { id, checked } = e.target;
+    console.log(info, 'info', checked);
 
-    if (checked && info === 'region') {
-      this.setState(prevState => ({
-        selected: [...prevState.selected, JSON.parse(value)],
-      }));
-    }
-    if (!checked) {
-      this.setState(preveState => ({
-        selected: preveState.selected.filter(
-          region => region !== JSON.parse(value),
-        ),
-      }));
-    }
+    // if (checked) {
+    //   this.setState(
+    //     prevState => ({
+    //       selected: [...prevState.selected, info.id],
+    //     }),
+    //     () => console.log(this.state.selected, 'selected'),
+    //   );
+    // }
+    // if (!checked) {
+    //   this.setState(preveState => ({
+    //     selected: preveState.selected.filter(
+    //       region => region !== info.id,
+    //     ),
+    //   }));
+    // }
+    this.setState(prevState => {
+      if (checked) {
+        return {
+          selected: [...prevState.selected, info.id],
+        };
+      }
+      if (!checked) {
+        return {
+          selected: preveState.selected.filter(
+            region => region !== info.id,
+          ),
+        };
+      }
+    });
   };
 
   siteHandler = (e, info) => {
@@ -202,6 +226,7 @@ export default class ExportDataFilter extends PureComponent {
         link: '#',
       },
     ];
+    console.log(this.state.selected, 'selected');
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -265,6 +290,7 @@ export default class ExportDataFilter extends PureComponent {
                         />
                       </div>
                     </div>
+                    {/* {console.log(projectRegions, 'projectRegions')} */}
                     <div className="col-lg-3 col-md-6">
                       <div className="form-group">
                         <label className="mb-2">Regions</label>
@@ -272,9 +298,7 @@ export default class ExportDataFilter extends PureComponent {
                           toggleSelectClass={open}
                           handleToggleClass={this.handleToggleClass}
                           checkboxOption={projectRegions}
-                          handleCheck={e => {
-                            this.changeHandlers(e, 'region');
-                          }}
+                          handleCheck={this.changeHandlers}
                           selectedArr={this.state.selected}
                           placeholderTxt="Select Region Type"
                           site="regions"

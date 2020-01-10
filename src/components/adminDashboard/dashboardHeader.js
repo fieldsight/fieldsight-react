@@ -138,7 +138,7 @@ class DashboardHeader extends PureComponent {
           <div className="flex-between">
             <div className="header-count">
               {countHeader.map(manage =>
-                manage.link !== '' ? (
+                manage.link ? (
                   <a
                     href={manage.link && manage.link}
                     target="_blank"

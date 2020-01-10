@@ -58,34 +58,34 @@ class RegionSiteList extends Component {
       });
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.regionId === this.props.regionId) {
-      const { regionId } = this.props;
-      const subRegion = `fv3/api/sub-regions/?region=${regionId}`;
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.regionId === this.props.regionId) {
+  //     const { regionId } = this.props;
+  //     const subRegion = `fv3/api/sub-regions/?region=${regionId}`;
 
-      axios
-        .get(`${subRegion}`)
+  //     axios
+  //       .get(`${subRegion}`)
 
-        .then(res => {
-          if (this._isMounted) {
-            if (res.status === 200) {
-              this.setState({
-                subRegionList: res.data.data,
-                dLoader: false,
-                projectId: res.data.project,
-                terms: res.data.terms_and_labels,
-                breadcrumbs: res.data.breadcrumbs,
-              });
-            }
-          }
-        })
-        .catch(() => {
-          this.setState({
-            // dLoader: false
-          });
-        });
-    }
-  }
+  //       .then(res => {
+  //         if (this._isMounted) {
+  //           if (res.status === 200) {
+  //             this.setState({
+  //               subRegionList: res.data.data,
+  //               dLoader: false,
+  //               projectId: res.data.project,
+  //               terms: res.data.terms_and_labels,
+  //               breadcrumbs: res.data.breadcrumbs,
+  //             });
+  //           }
+  //         }
+  //       })
+  //       .catch(() => {
+  //         this.setState({
+  //           // dLoader: false
+  //         });
+  //       });
+  //   }
+  // }
 
   showPopup = (e, type) => {
     this.setState({
