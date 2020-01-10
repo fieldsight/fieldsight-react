@@ -1677,6 +1677,25 @@ class AddNewReport extends Component {
                             )}
                           </div>
                         </div>
+                        <div class="col-lg-9 col-md-8">
+                          <button
+                            className="common-button is-disable is-icon pull-right is-bg"
+                            type="button"
+                            onClick={() => {
+                              this.handleToggleCollapse();
+                            }}
+                          >
+                            <i className="material-icons">
+                              filter_list
+                            </i>
+                            <span>collapse all</span>
+                            <i className="material-icons arrow-icon">
+                              {collapseClass
+                                ? 'expand_more'
+                                : 'expand_less'}
+                            </i>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </form>
