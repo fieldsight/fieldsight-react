@@ -224,7 +224,9 @@ class AddNewReport extends Component {
           );
           const filterBy = report.filter;
           const showActions =
-            Object.keys(report.filter).length > 0 ? true : false;
+            filterBy && Object.keys(filterBy).length > 0
+              ? true
+              : false;
           let selectedFormType = {};
           let selectedForm = {};
           let selectedIndividualForm = [];
@@ -1181,14 +1183,43 @@ class AddNewReport extends Component {
   };
 
   handleFormTypeChange = (e, item) => {
-    const { projectId } = this.state;
+    const {
+      projectId,
+      data: { selectedMetrics },
+    } = this.state;
     this.setState(
-      state => ({
-        formInfo: {
-          ...state.formInfo,
-          selectedFormType: item,
-        },
-      }),
+      state => {
+        if (
+          state.formInfo.selectedFormType.code &&
+          state.formInfo.selectedFormType.code !== item.code
+        ) {
+          const newMetrics = selectedMetrics.filter(m => {
+            if (m.code && m.value && !!m.value.selectedForm) {
+              return false;
+            }
+            return true;
+          });
+          return {
+            data: {
+              ...state.data,
+              selectedMetrics: newMetrics,
+            },
+            formInfo: {
+              ...state.formInfo,
+              selectedFormType: item,
+              selectedIndividualForm: [],
+              selectedFormValue: [],
+              selectedQuestions: [],
+            },
+          };
+        }
+        return {
+          formInfo: {
+            ...state.formInfo,
+            selectedFormType: item,
+          },
+        };
+      },
       () => {
         const {
           selectedFormType: { code },
@@ -1411,10 +1442,9 @@ class AddNewReport extends Component {
           if (res.data) {
             const reportId = res.data.id;
             this.setState(
-              state => ({
+              () => ({
                 reportId,
                 applyFilter: true,
-                // collapseClass: !collapseClass,
               }),
               () => {
                 successToast('Report', 'created');
@@ -1423,7 +1453,6 @@ class AddNewReport extends Component {
                 );
               },
             );
-            // this.clearState();
           }
         })
         .catch(err => {
@@ -1464,17 +1493,12 @@ class AddNewReport extends Component {
     Axios.put(`/v4/api/reporting/report/${reportId}/`, body)
       .then(res => {
         if (res.data) {
+          successToast('Report', 'updated');
           if (Object.keys(res.data.filter).length > 0) {
             this.setState({
               showActions: true,
             });
           }
-          // this.props.history.push(
-          //   `/project-dashboard/${projectId}/report`,
-          // );
-          successToast('Report', 'updated');
-          // this.clearState();
-          // this.props.toggleSection('reportList');
         }
       })
       .catch(err => {

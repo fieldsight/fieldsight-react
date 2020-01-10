@@ -83,7 +83,7 @@ const SortableContainer = sortableContainer(({ children }) => {
     <div
       style={{
         position: 'relative',
-        height: `500px `,
+        height: `850px `,
       }}
     >
       <PerfectScrollbar>
@@ -128,11 +128,11 @@ export default class SelectedColumn extends Component {
     const { handleCheckSubmissionType } = this.props;
     return (
       <div className="col-lg-5 col-md-5">
+        <h6>
+          Selected columns
+          {data.length > 0 && <span>{`(${data.length})`}</span>}
+        </h6>
         <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
-          <h6>
-            Selected columns
-            {data.length > 0 && <span>{`(${data.length})`}</span>}
-          </h6>
           {data &&
             data.length > 0 &&
             data.map((each, index) => {
