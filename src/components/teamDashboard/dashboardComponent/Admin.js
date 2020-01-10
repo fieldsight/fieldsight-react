@@ -11,7 +11,7 @@ const AdminListItem = ({ admin }) => {
       <div className="content">
         <h6>
           <a
-            href={`/fieldsight/application/#/profile/${admin.id}/`}
+            href={`/users/profile/${admin.id}/`}
             target=" _blank"
           >
             {admin.full_name}
