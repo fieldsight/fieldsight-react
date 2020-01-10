@@ -39,6 +39,8 @@ export default class CustomMultiSelect extends PureComponent {
                     ? i.code === option.code
                     : i.name
                     ? i.name === option.name
+                    : i.id
+                    ? i.id === option.id
                     : '',
                 );
                 const isChecked =
