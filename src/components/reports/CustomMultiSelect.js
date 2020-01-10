@@ -14,9 +14,9 @@ export default class CustomMultiSelect extends PureComponent {
       site,
     } = this.props;
 
-    const className = toggleSelectClass
-      ? toggleSelectClass
-      : toggleSelectClass[toggleType];
+    const className = toggleType
+      ? toggleSelectClass[toggleType]
+      : toggleSelectClass;
     return (
       <div className="common-select">
         <div

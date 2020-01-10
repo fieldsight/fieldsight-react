@@ -1573,7 +1573,7 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('props report ko', this.state);
+    // console.log('props report ko', this.state.toggleSelectClass);
     const isEdit = reportId ? true : false;
     const actions = [
       // {
