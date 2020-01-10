@@ -106,13 +106,13 @@ class Teams extends Component {
                   <div
                     className="col-xl-3 col-lg-6"
                     key={subRegion.id}
+                    style={{ marginBottom: '20px' }}
                   >
                     <Link
                       to={`/organization-dashboard/${subRegion.id}`}
                     >
                       <div className="sub-regions-item ">
                         <h5>{subRegion.name}</h5>
-
                         <p>
                           <label>Teams :</label>
                           {subRegion.teams}
