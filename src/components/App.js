@@ -62,7 +62,7 @@ import SuperAdminFormEdit from './superAdminEdit';
 import SuperAdminForm from './superAdminForm';
 import SuperAdminSetting from './adminDashboard/organizationSettings/settings';
 
-import FilterDataFilter from './reports/FormDataFilter';
+// import FilterDataFilter from './reports/FormDataFilter';
 import ExportDataFilter from './reports/ExportDataFilter';
 import UserList from './reports/users/usersTable';
 import UserProfile from './reports/users/userProfile/index';
@@ -70,8 +70,8 @@ import RegionDashboard from './reports/regionDashboard/index';
 import UserManage from './reports/users/userManage';
 import MyFormTable from './reports/myForm';
 import Submission from './reports/submission';
+import AddNewReport from './reports/addNewReport';
 
-// import AddNewReport from './reports/addNewReport';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -100,7 +100,7 @@ class App extends Component {
       height: 0,
       // region: false,
       // selectedLanguage: language,
-      toggleClass: false,
+      // toggleClass: false,
     };
   }
 
@@ -118,15 +118,15 @@ class App extends Component {
     this.state.height = window.innerHeight - 181;
   };
 
-  handleToggle = () => {
-    return this.setState(state => ({
-      toggleClass: !state.toggleClass,
-    }));
-  };
+  // handleToggle = () => {
+  //   return this.setState(state => ({
+  //     toggleClass: !state.toggleClass,
+  //   }));
+  // };
 
   render() {
     const { selected } = this.props;
-    const { toggleClass, height } = this.state;
+    const { height } = this.state;
     return (
       <IntlProvider locale={selected} messages={messages[selected]}>
         <div id="fieldsight-new" className="fieldsight-new">
@@ -196,6 +196,16 @@ class App extends Component {
                   render={props => <ProjectDashboard {...props} />}
                 />
                 <Route
+                  exact
+                  path="/project/:id/add-report"
+                  render={props => <AddNewReport {...props} />}
+                />
+                <Route
+                  exact
+                  path="/project/:id/edit-report/:reportId"
+                  render={props => <AddNewReport {...props} />}
+                />
+                <Route
                   path="/team-dashboard/:id"
                   render={props => <TeamDashboard {...props} />}
                 />
@@ -248,16 +258,6 @@ class App extends Component {
                   path="/project-add/:id"
                   render={props => <ProjectAdd {...props} />}
                 />
-                {/* <Route
-                  path="/create-team"
-                  render={props => <TeamAdd {...props} />}
-                />
-
-                <Route
-                  path="/create-team/:id"
-                  render={props => <TeamAdd {...props} />}
-                /> */}
-
                 <Route
                   path="/create-team"
                   render={({ match: { url } }) => (

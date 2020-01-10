@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import { Dropdown } from 'react-bootstrap';
 import Loader from '../common/Loader';
@@ -35,28 +36,29 @@ class MyReports extends Component {
     const {
       toggleSection,
       reportReducer: { reportLoader },
+      id,
     } = this.props;
     const DataCrude = [
       {
         id: '1',
         title: 'Edit',
-        toShow: 'addReport',
+        link: `/#/project/${id}/edit-report/`,
       },
-      {
-        id: '2',
-        title: 'Add a template',
-        toShow: '',
-      },
-      {
-        id: '3',
-        title: 'Share',
-        toShow: '',
-      },
-      {
-        id: '4',
-        title: 'Delete',
-        toShow: '',
-      },
+      // {
+      //   id: '2',
+      //   title: 'Add a template',
+      //   toShow: '',
+      // },
+      // {
+      //   id: '3',
+      //   title: 'Share',
+      //   toShow: '',
+      // },
+      // {
+      //   id: '4',
+      //   title: 'Delete',
+      //   toShow: '',
+      // },
     ];
 
     return (
@@ -110,9 +112,7 @@ class MyReports extends Component {
                   <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
                     {DataCrude.map(item => (
                       <Dropdown.Item
-                        onClick={() => {
-                          toggleSection(item.toShow, report);
-                        }}
+                        href={`${item.link}${report.id}`}
                         key={item.id}
                         // target="_blank"
                       >

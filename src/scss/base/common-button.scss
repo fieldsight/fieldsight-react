@@ -53,6 +53,18 @@
             cursor: not-allowed;
         }
 
+        &.is-icon {
+            @include display-flex(flex);
+            @include justify-content-start;
+            @include align-items-center;
+            color: $color-white;
+
+            i {
+                margin-right: .5rem;
+                font-size: .9375rem;
+            }
+        }
+
         &:hover {
             background-color: $secondary-light;
             border-color: $secondary-light;
@@ -108,9 +120,10 @@
                 margin-right: .5rem;
             }
         }
-        &:hover{
+
+        &:hover {
             border-color: $color-secondary;
-            color:$color-secondary;
+            color: $color-secondary;
         }
     }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
 import { compose } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import withPagination from '../../../hoc/WithPagination';
 import SiteMap from '../../common/SiteMap';
