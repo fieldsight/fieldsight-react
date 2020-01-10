@@ -84,7 +84,7 @@ export default class ExportDataFilter extends PureComponent {
         params: { id },
       },
     } = this.props;
-    console.log(this.props);
+
     const siteType = `/fieldsight/api/site-types/${id}/`;
     const projectRegions = `/fieldsight/api/project-regions/${id}/`;
 
@@ -107,34 +107,20 @@ export default class ExportDataFilter extends PureComponent {
   }
 
   changeHandlers = (e, info) => {
-    const { id, checked } = e.target;
-    console.log(info, 'info', checked);
+    const { checked, name } = e.target;
 
-    // if (checked) {
-    //   this.setState(
-    //     prevState => ({
-    //       selected: [...prevState.selected, info.id],
-    //     }),
-    //     () => console.log(this.state.selected, 'selected'),
-    //   );
-    // }
-    // if (!checked) {
-    //   this.setState(preveState => ({
-    //     selected: preveState.selected.filter(
-    //       region => region !== info.id,
-    //     ),
-    //   }));
-    // }
+    const idName = 'id';
     this.setState(prevState => {
       if (checked) {
         return {
-          selected: [...prevState.selected, info.id],
+          selected: [...prevState.selected, { [idName]: info.id }],
         };
       }
       if (!checked) {
+        // console.log(preveState.selected, 'preveState.selected');
         return {
-          selected: preveState.selected.filter(
-            region => region !== info.id,
+          selected: prevState.selected.filter(
+            region => region.id !== info.id,
           ),
         };
       }
@@ -142,23 +128,25 @@ export default class ExportDataFilter extends PureComponent {
   };
 
   siteHandler = (e, info) => {
-    const {
-      target: { id, checked, value },
-    } = e;
-
-    const { siteType, siteSelected } = this.state;
-    if (checked && info === 'site') {
-      this.setState(prevState => ({
-        siteSelected: [...prevState.siteSelected, JSON.parse(value)],
-      }));
-    }
-    if (!checked) {
-      this.setState(preState => ({
-        siteSelected: preState.siteSelected.filter(
-          site => site !== JSON.parse(value),
-        ),
-      }));
-    }
+    const { checked, name } = e.target;
+    const idName = 'id';
+    this.setState(prevState => {
+      if (checked) {
+        return {
+          siteSelected: [
+            ...prevState.siteSelected,
+            { [idName]: info.id },
+          ],
+        };
+      }
+      if (!checked) {
+        return {
+          siteSelected: prevState.siteSelected.filter(
+            region => region.id !== info.id,
+          ),
+        };
+      }
+    });
   };
 
   handleToggleClass = () => {
@@ -173,10 +161,15 @@ export default class ExportDataFilter extends PureComponent {
     }));
   };
 
+  // handleApply = () => {
+  //   this.setState(prevState => ({
+  //     applyButton: !prevState.applyButton,
+  //   }));
+  // };
+
   handleApply = () => {
-    this.setState(prevState => ({
-      applyButton: !prevState.applyButton,
-    }));
+    const region = this.state.selected.map(reg => reg.id);
+    const site = this.state.siteSelected.map(reg => reg.id);
   };
 
   onChangeHandler = date => {
@@ -226,7 +219,7 @@ export default class ExportDataFilter extends PureComponent {
         link: '#',
       },
     ];
-    console.log(this.state.selected, 'selected');
+
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -281,16 +274,13 @@ export default class ExportDataFilter extends PureComponent {
                           toggleSelectClass={siteOpen}
                           handleToggleClass={this.SiteToggleClass}
                           checkboxOption={siteType}
-                          handleCheck={e => {
-                            this.siteHandler(e, 'site');
-                          }}
+                          handleCheck={this.siteHandler}
                           selectedArr={this.state.siteSelected}
                           placeholderTxt="Select Site Type"
                           site="site"
                         />
                       </div>
                     </div>
-                    {/* {console.log(projectRegions, 'projectRegions')} */}
                     <div className="col-lg-3 col-md-6">
                       <div className="form-group">
                         <label className="mb-2">Regions</label>
@@ -319,20 +309,25 @@ export default class ExportDataFilter extends PureComponent {
                               dateFormat="yyyy-MM-dd"
                               className="form-control"
                             />
-                            <div className="custom-group-append">
-                              <span className="custom-group-text">
+                            {/* <div className="custom-group-append">
+                              <span
+                                className="custom-group-text"
+                                style={{
+                                  display: 'inline',
+                                  paddingLeft: '25px',
+                                  flex: '0 0 20%',
+                                }}
+                              >
                                 <i
                                   className="material-icons"
                                   style={{
-                                    position: 'absolute',
-                                    bottom: '39px',
-                                    marginLeft: '5.9rem',
+                                    verticalAlign: 'middle',
                                   }}
                                 >
                                   calendar_today
                                 </i>
                               </span>
-                            </div>
+                            </div> */}
                           </div>
                           <span className="icon-between">
                             <i className="material-icons">
@@ -340,20 +335,19 @@ export default class ExportDataFilter extends PureComponent {
                             </i>
                           </span>
                           <div className="custom-group">
-                            {/* <DatePicker
+                            <DatePicker
                               placeholderText="End Date"
                               name="endedDate"
                               selected={this.state.endedDate}
                               onChange={this.onEndChangeHandler}
                               className="form-control"
                               dateFormat="yyyy-MM-dd"
-                              customInput={<CustomInput />}
-                            /> */}
+                            />
                             {/* <i className="material-icons">
                                 calendar_today
                               </i>
                             </DatePicker> */}
-                            <DatePicker
+                            {/* <DatePicker
                               value={this.state.endedDate}
                               dateFormat="yyyy-MM-dd"
                               customInput={<Input />}
@@ -361,7 +355,7 @@ export default class ExportDataFilter extends PureComponent {
                               onChange={date =>
                                 this.setState({ endedDate: date })
                               }
-                            />
+                            /> */}
                           </div>
                         </div>
                       </div>
