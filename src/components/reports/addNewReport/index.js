@@ -81,6 +81,7 @@ const InitialState = {
   isDelete: false,
   showActions: false,
   loader: false,
+  errors: {},
 };
 
 class AddNewReport extends Component {
@@ -341,7 +342,8 @@ class AddNewReport extends Component {
               userList,
               submissions,
               collapseClass: true,
-              applyFilter: true,
+              applyFilter:
+                report.attributes.length > 0 ? true : false,
               filter: {
                 ...state.filter,
                 filterBy,
@@ -618,12 +620,24 @@ class AddNewReport extends Component {
   handleChange = e => {
     const { name, value } = e.target;
 
-    this.setState(state => ({
-      data: {
-        ...state.data,
-        [name]: value,
+    this.setState(
+      state => ({
+        data: {
+          ...state.data,
+          [name]: value,
+        },
+      }),
+      () => {
+        const { errors } = this.state;
+        this.setState(state => {
+          if (name === 'reportName' && errors[name])
+            return { errors: { ...state.errors, reportName: '' } };
+          if (name === 'desc' && errors[name])
+            return { errors: { ...state.errors, desc: '' } };
+          return null;
+        });
       },
-    }));
+    );
   };
 
   handleToggleCollapse = () => {
@@ -1428,38 +1442,54 @@ class AddNewReport extends Component {
 
   handleSubmitReport = () => {
     const { reportId, data, projectId } = this.state;
-    const body = {
-      type: data.selectedReportType,
-      description: data.desc,
-      title: data.reportName,
-      attributes: JSON.stringify(data.selectedMetrics),
-    };
-    if (reportId) {
-      this.requestUpdateForm(reportId, body);
-    } else {
-      Axios.post(`/v4/api/reporting/add-report/${projectId}/`, body)
-        .then(res => {
-          if (res.data) {
-            const reportId = res.data.id;
-            this.setState(
-              () => ({
-                reportId,
-                applyFilter: true,
-              }),
-              () => {
-                successToast('Report', 'created');
-                this.props.history.push(
-                  `/project-dashboard/${projectId}/report`,
-                );
-              },
-            );
-          }
-        })
-        .catch(err => {
-          const errors = err.response;
-          errors && errorToast();
-        });
+    const errors = this.onValidation();
+    this.setState({
+      errors,
+    });
+    if (errors && Object.keys(errors).length === 0) {
+      const body = {
+        type: data.selectedReportType,
+        description: data.desc,
+        title: data.reportName,
+        attributes: JSON.stringify(data.selectedMetrics),
+      };
+      if (reportId) {
+        this.requestUpdateForm(reportId, body);
+      } else {
+        Axios.post(`/v4/api/reporting/add-report/${projectId}/`, body)
+          .then(res => {
+            if (res.data) {
+              const reportId = res.data.id;
+              this.setState(
+                () => ({
+                  reportId,
+                  applyFilter: true,
+                }),
+                () => {
+                  successToast('Report', 'created');
+                  this.props.history.push(
+                    `/project-dashboard/${projectId}/report`,
+                  );
+                },
+              );
+            }
+          })
+          .catch(err => {
+            const errors = err.response;
+            errors && errorToast(errors && errors.data);
+          });
+      }
     }
+  };
+
+  onValidation = () => {
+    const {
+      data: { reportName, desc },
+    } = this.state;
+    const err = {};
+    if (!reportName) err.reportName = 'required';
+    if (!desc) err.desc = 'required';
+    return err;
   };
 
   handleSubmitFilter = filter => {
@@ -1565,6 +1595,7 @@ class AddNewReport extends Component {
         isDelete,
         showActions,
         loader,
+        errors,
       },
       props: {
         reportReducer: { reportLoader },
@@ -1634,26 +1665,40 @@ class AddNewReport extends Component {
                       e.preventDefault();
                     }}
                   >
-                    <InputElement
-                      formType="editForm"
-                      tag="input"
-                      type="text"
-                      required
-                      label="Report Name"
-                      name="reportName"
-                      value={reportName}
-                      changeHandler={this.handleChange}
-                    />
-                    <InputElement
-                      formType="editForm"
-                      tag="input"
-                      type="text"
-                      required
-                      label="Description"
-                      name="desc"
-                      value={desc}
-                      changeHandler={this.handleChange}
-                    />
+                    <div>
+                      <InputElement
+                        formType="editForm"
+                        tag="input"
+                        type="text"
+                        required
+                        label="Report Name"
+                        name="reportName"
+                        value={reportName}
+                        changeHandler={this.handleChange}
+                      />
+                      {errors && errors.reportName && (
+                        <small style={{ color: 'red' }}>
+                          {`*${errors.reportName}`}
+                        </small>
+                      )}
+                    </div>
+                    <div>
+                      <InputElement
+                        formType="editForm"
+                        tag="input"
+                        type="text"
+                        required
+                        label="Description"
+                        name="desc"
+                        value={desc}
+                        changeHandler={this.handleChange}
+                      />
+                      {errors && errors.desc && (
+                        <small style={{ color: 'red' }}>
+                          {`*${errors.desc}`}
+                        </small>
+                      )}
+                    </div>
                     <div className="report-type">
                       <div className="row">
                         <div className="col-lg-3 col-md-4">
