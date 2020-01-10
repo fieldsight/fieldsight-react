@@ -197,6 +197,7 @@ export default class SuperAdminForm extends Component {
                   tag="input"
                   type="text"
                   label="name"
+                  required
                   name="name"
                   value={name}
                   changeHandler={onChangeHandler}

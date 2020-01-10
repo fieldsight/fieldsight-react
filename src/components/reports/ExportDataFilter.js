@@ -5,6 +5,7 @@ import { Dropdown } from 'react-bootstrap';
 import CustomMultiSelect from './CustomMultiSelect';
 import CustomCheckBox from './CustomCheckbox';
 import CollapseFilterTable from './CollapseFilterTable';
+import { errorToast, successToast } from '../../utils/toastHandler';
 
 /* eslint-disable */
 
@@ -166,10 +167,53 @@ export default class ExportDataFilter extends PureComponent {
   //     applyButton: !prevState.applyButton,
   //   }));
   // };
+  toUpper = str => {
+    return str
+      .toLowerCase()
+      .split(' ')
+      .map(function(word) {
+        return word[0].toLowerCase() + word.substr(1);
+      })
+      .join('_');
+  };
 
   handleApply = () => {
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
     const region = this.state.selected.map(reg => reg.id);
     const site = this.state.siteSelected.map(reg => reg.id);
+    const data = {
+      siteTypes: region,
+      regions: site,
+    };
+
+    const route = this.toUpper(
+      this.props.location.state.fromDashboard,
+    );
+
+    axios
+      .post(
+        `/v4/api/reporting/generate-standard-reports/${id}/?report_type=${route}`,
+        data,
+      )
+      .then(req => {
+        if (req.status === 200) {
+          successToast(req.data.detail);
+          this.setState({
+            selected: [],
+            siteType: [],
+          });
+        }
+      })
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
+      });
   };
 
   onChangeHandler = date => {
@@ -219,6 +263,8 @@ export default class ExportDataFilter extends PureComponent {
         link: '#',
       },
     ];
+
+    const report_type = 'gfhj';
 
     return (
       <div className="reports mrb-30">
@@ -296,20 +342,21 @@ export default class ExportDataFilter extends PureComponent {
                       </div>
                     </div>
 
-                    <div className="col-lg-6 col-md-6">
-                      <div className="form-group icon-between">
-                        <label className="mb-2">Time period</label>
-                        <div className="inline-flex ">
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="Start Date"
-                              name="startedDate"
-                              selected={this.state.startedDate}
-                              onChange={this.onChangeHandler}
-                              dateFormat="yyyy-MM-dd"
-                              className="form-control"
-                            />
-                            {/* <div className="custom-group-append">
+                    {report_type === 'Activity_Type' && (
+                      <div className="col-lg-6 col-md-6">
+                        <div className="form-group icon-between">
+                          <label className="mb-2">Time period</label>
+                          <div className="inline-flex ">
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="Start Date"
+                                name="startedDate"
+                                selected={this.state.startedDate}
+                                onChange={this.onChangeHandler}
+                                dateFormat="yyyy-MM-dd"
+                                className="form-control"
+                              />
+                              {/* <div className="custom-group-append">
                               <span
                                 className="custom-group-text"
                                 style={{
@@ -328,26 +375,26 @@ export default class ExportDataFilter extends PureComponent {
                                 </i>
                               </span>
                             </div> */}
-                          </div>
-                          <span className="icon-between">
-                            <i className="material-icons">
-                              arrow_right_alt
-                            </i>
-                          </span>
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="End Date"
-                              name="endedDate"
-                              selected={this.state.endedDate}
-                              onChange={this.onEndChangeHandler}
-                              className="form-control"
-                              dateFormat="yyyy-MM-dd"
-                            />
-                            {/* <i className="material-icons">
+                            </div>
+                            <span className="icon-between">
+                              <i className="material-icons">
+                                arrow_right_alt
+                              </i>
+                            </span>
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="End Date"
+                                name="endedDate"
+                                selected={this.state.endedDate}
+                                onChange={this.onEndChangeHandler}
+                                className="form-control"
+                                dateFormat="yyyy-MM-dd"
+                              />
+                              {/* <i className="material-icons">
                                 calendar_today
                               </i>
                             </DatePicker> */}
-                            {/* <DatePicker
+                              {/* <DatePicker
                               value={this.state.endedDate}
                               dateFormat="yyyy-MM-dd"
                               customInput={<Input />}
@@ -356,10 +403,11 @@ export default class ExportDataFilter extends PureComponent {
                                 this.setState({ endedDate: date })
                               }
                             /> */}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                     <div className="col-md-12">
                       <button
                         // disabled
