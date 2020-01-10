@@ -42,7 +42,7 @@ class MyReports extends Component {
       {
         id: '1',
         title: 'Edit',
-        link: `/#/project/${id}/edit-report/`,
+        link: `/fieldsight/application/#/project/${id}/edit-report/`,
       },
       // {
       //   id: '2',
