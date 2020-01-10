@@ -10,7 +10,7 @@ import {
   applyActionToReport,
   getReportData,
 } from '../../../actions/reportActions';
-import { BlockContentLoader } from '../../common/Loader';
+// import { BlockContentLoader } from '../../common/Loader';
 import InputElement from '../../common/InputElement';
 import {
   errorToast,
@@ -80,7 +80,6 @@ const InitialState = {
   },
   isDelete: false,
   showActions: false,
-  loader: false,
   errors: {},
 };
 
@@ -214,154 +213,157 @@ class AddNewReport extends Component {
           params: { id, reportId },
         },
       } = this.props;
-      this.setState({ loader: true }, () => {
-        if (reportId) {
-          const report = this.props.reportReducer.reportData;
-          const userList = report.attributes.filter(
-            r => r.category === 'users',
-          );
-          const submissions = report.attributes.filter(
-            r => r.category === 'default',
-          );
-          const filterBy = report.filter;
-          const showActions =
-            filterBy && Object.keys(filterBy).length > 0
-              ? true
-              : false;
-          let selectedFormType = {};
-          let selectedForm = {};
-          let selectedIndividualForm = [];
-          const selectedQuestions = [];
-          const selectedFormValue = [];
-          const selectedMetas = [];
-          const selectedValue = [];
+      // this.setState({ loader: true }, () => {
+      if (reportId) {
+        const report = this.props.reportReducer.reportData;
+        const userList = report.attributes.filter(
+          r => r.category === 'users',
+        );
+        const submissions = report.attributes.filter(
+          r => r.category === 'default',
+        );
+        const filterBy = report.filter;
 
-          report.attributes.map(r => {
-            if (r.value && !r.value.selectedForm) {
-              const { code, type, id, value, label } = r;
-              if (selectedMetas.length > 0) {
-                selectedMetas.map(meta => {
-                  if (meta.code !== code) {
-                    selectedMetas.push({ code, type, id, label });
-                  }
-                });
-              }
-              if (selectedMetas.length === 0) {
-                selectedMetas.push({ code, type, id, label });
-              }
-              if (selectedValue.length === 0) {
-                selectedValue.push({ ...value });
-              }
-              if (selectedValue.length > 0) {
-                selectedValue.map(s => {
-                  if (s.code !== value.code) {
-                    selectedValue.push({ ...value });
-                  }
-                });
-              }
+        const objLen = Object.entries(filterBy).map(e => {
+          if (e[1].length > 0) {
+            return true;
+          }
+          return false;
+        });
+        const showActions = objLen.includes(true) ? true : false;
+        let selectedFormType = {};
+        let selectedForm = {};
+        let selectedIndividualForm = [];
+        const selectedQuestions = [];
+        const selectedFormValue = [];
+        const selectedMetas = [];
+        const selectedValue = [];
+
+        report.attributes.map(r => {
+          if (r.value && !r.value.selectedForm) {
+            const { code, type, id, value, label } = r;
+            if (selectedMetas.length > 0) {
+              selectedMetas.map(meta => {
+                if (meta.code !== code) {
+                  selectedMetas.push({ code, type, id, label });
+                }
+              });
             }
-            if (r.value && r.value.selectedForm) {
-              const { code, id, value, label } = r;
-              selectedFormType = { code, id, label };
-              selectedForm = value.selectedForm;
-              if (value.selectedIndividualForm) {
-                const {
+            if (selectedMetas.length === 0) {
+              selectedMetas.push({ code, type, id, label });
+            }
+            if (selectedValue.length === 0) {
+              selectedValue.push({ ...value });
+            }
+            if (selectedValue.length > 0) {
+              selectedValue.map(s => {
+                if (s.code !== value.code) {
+                  selectedValue.push({ ...value });
+                }
+              });
+            }
+          }
+          if (r.value && r.value.selectedForm) {
+            const { code, id, value, label } = r;
+            selectedFormType = { code, id, label };
+            selectedForm = value.selectedForm;
+            if (value.selectedIndividualForm) {
+              const {
+                category,
+                code,
+                types,
+                label,
+              } = value.selectedIndividualForm;
+              if (selectedIndividualForm.length === 0) {
+                selectedIndividualForm.push({
                   category,
                   code,
                   types,
                   label,
-                } = value.selectedIndividualForm;
-                if (selectedIndividualForm.length === 0) {
-                  selectedIndividualForm.push({
-                    category,
-                    code,
-                    types,
-                    label,
-                  });
-                }
-                if (selectedIndividualForm.length === 0) {
-                  selectedIndividualForm.map(i => {
-                    if (i.code !== code) {
-                      selectedIndividualForm.push({
-                        category,
-                        code,
-                        types,
-                        label,
-                      });
-                    }
-                  });
-                }
+                });
               }
-              if (value.selectedQuestion) {
-                const { type, name, form } = value.selectedQuestion;
-                if (selectedQuestions.length === 0) {
-                  selectedQuestions.push({ type, name });
-                }
-                if (selectedQuestions.length > 0) {
-                  selectedQuestions.map(q => {
-                    if (q.name !== value.selectedQuestion.name) {
-                      selectedQuestions.push({ type, name });
-                    }
-                  });
-                }
-                if (selectedFormValue.length === 0) {
-                  selectedFormValue.push({ ...form });
-                }
-                if (selectedFormValue.length > 0) {
-                  selectedFormValue.map(v => {
-                    if (v.code !== value.selectedQuestion.form.code) {
-                      selectedFormValue.push({ ...form });
-                    }
-                  });
-                }
+              if (selectedIndividualForm.length === 0) {
+                selectedIndividualForm.map(i => {
+                  if (i.code !== code) {
+                    selectedIndividualForm.push({
+                      category,
+                      code,
+                      types,
+                      label,
+                    });
+                  }
+                });
               }
             }
-          });
-          this.setState(
-            state => ({
-              data: {
-                ...state.data,
-                reportName: report.title,
-                desc: report.description,
-                selectedReportType: report.type,
-                selectedMetrics: report.attributes,
-              },
-              formInfo: {
-                ...state.formInfo,
-                selectedFormType,
-                selectedForm,
-                selectedIndividualForm,
-                selectedQuestions,
-                selectedFormValue,
-              },
-              siteInfo: {
-                ...state.siteInfo,
-                selectedMetas,
-                selectedValue,
-              },
-              userList,
-              submissions,
-              collapseClass: true,
-              applyFilter:
-                report.attributes.length > 0 ? true : false,
-              filter: {
-                ...state.filter,
-                filterBy,
-              },
-              showActions,
-              loader: false,
-            }),
-            () => {
-              if (selectedFormType.code) {
-                this.props.getForms(id, selectedFormType.code);
+            if (value.selectedQuestion) {
+              const { type, name, form } = value.selectedQuestion;
+              if (selectedQuestions.length === 0) {
+                selectedQuestions.push({ type, name });
               }
-              if (selectedForm.id) {
-                this.props.getFormQuestions(id, selectedForm.id);
+              if (selectedQuestions.length > 0) {
+                selectedQuestions.map(q => {
+                  if (q.name !== value.selectedQuestion.name) {
+                    selectedQuestions.push({ type, name });
+                  }
+                });
               }
+              if (selectedFormValue.length === 0) {
+                selectedFormValue.push({ ...form });
+              }
+              if (selectedFormValue.length > 0) {
+                selectedFormValue.map(v => {
+                  if (v.code !== value.selectedQuestion.form.code) {
+                    selectedFormValue.push({ ...form });
+                  }
+                });
+              }
+            }
+          }
+        });
+        this.setState(
+          state => ({
+            data: {
+              ...state.data,
+              reportName: report.title,
+              desc: report.description,
+              selectedReportType: report.type,
+              selectedMetrics: report.attributes,
             },
-          );
-        }
-      });
+            formInfo: {
+              ...state.formInfo,
+              selectedFormType,
+              selectedForm,
+              selectedIndividualForm,
+              selectedQuestions,
+              selectedFormValue,
+            },
+            siteInfo: {
+              ...state.siteInfo,
+              selectedMetas,
+              selectedValue,
+            },
+            userList,
+            submissions,
+            collapseClass: true,
+            applyFilter: report.attributes.length > 0 ? true : false,
+            filter: {
+              ...state.filter,
+              filterBy,
+            },
+            showActions,
+            // loader: false,
+          }),
+          () => {
+            if (selectedFormType.code) {
+              this.props.getForms(id, selectedFormType.code);
+            }
+            if (selectedForm.id) {
+              this.props.getFormQuestions(id, selectedForm.id);
+            }
+          },
+        );
+      }
+      // });
     }
   }
 
@@ -1594,7 +1596,7 @@ class AddNewReport extends Component {
         applyFilter,
         isDelete,
         showActions,
-        loader,
+        // loader,
         errors,
       },
       props: {
@@ -1604,7 +1606,7 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('props report ko', this.state.toggleSelectClass);
+    // console.log('props report ko', loader);
     const isEdit = reportId ? true : false;
     const actions = [
       // {
@@ -1750,91 +1752,87 @@ class AddNewReport extends Component {
                 {collapseClass && (
                   <>
                     <div className="report-accordion">
-                      {loader ? (
+                      {/* {loader ? (
                         <BlockContentLoader
                           number={10}
                           height="25px"
                         />
-                      ) : (
-                        <div className="row ">
-                          <Metrics
-                            handleToggleClass={this.handleToggleClass}
-                            toggleSelectClass={toggleSelectClass}
-                            data={metricArr}
-                            users={usersArr}
-                            userList={userList}
-                            siteValues={siteValues}
-                            metaAttributes={metaAttributes}
-                            selectedMetas={selectedMetas}
-                            handleSelectMeta={this.handleChangeMeta}
-                            submissionType={submissionType}
-                            submissions={submissions}
-                            handleSubmissionType={
-                              this.handleSubmissionType
-                            }
-                            handleCheckSubmissionType={
-                              this.handleCheckSubmissionType
-                            }
-                            handleCheckUser={this.handleChecKUser}
-                            selectedMetrics={selectedMetrics}
-                            formTypes={formTypes}
-                            selectedFormType={selectedFormType}
-                            handleFormTypeCheck={
-                              this.handleFormTypeChange
-                            }
-                            formTypeArr={formTypeArr}
-                            selectedForm={selectedForm}
-                            handleFormSelected={
-                              this.handleFormSelected
-                            }
-                            formQuestions={formQuestions}
-                            individualFormArr={individualFormArr}
-                            selectedIndividualForm={
-                              selectedIndividualForm
-                            }
-                            handleIndividualFormSelected={
-                              this.handleIndividualFormSelected
-                            }
-                            handleChangeFormQuest={
-                              this.handleChangeFormQuest
-                            }
-                            selectedQuestions={selectedQuestions}
-                            formValue={formValue}
-                            selectedFormValue={selectedFormValue}
-                          />
-                          <SelectedColumn
-                            selected={selectedMetrics}
-                            handleSelectChange={
-                              this.handleSelectChange
-                            }
-                            handleCheckSubmissionType={
-                              this.handleChangeArray
-                            }
-                          />
-                          <div className="col-lg-12">
-                            <div className="buttons flex-end">
-                              <button
-                                type="button"
-                                className="common-button is-border"
-                                onClick={() => {
-                                  this.handleToggleDelete();
-                                }}
-                              >
-                                Discard Changes
-                              </button>
-                              <button
-                                type="button"
-                                className="common-button is-bg"
-                                onClick={() => {
-                                  this.handleSubmitReport();
-                                }}
-                              >
-                                Save Report
-                              </button>
-                            </div>
+                      ) : ( */}
+                      <div className="row ">
+                        <Metrics
+                          handleToggleClass={this.handleToggleClass}
+                          toggleSelectClass={toggleSelectClass}
+                          data={metricArr}
+                          users={usersArr}
+                          userList={userList}
+                          siteValues={siteValues}
+                          metaAttributes={metaAttributes}
+                          selectedMetas={selectedMetas}
+                          handleSelectMeta={this.handleChangeMeta}
+                          submissionType={submissionType}
+                          submissions={submissions}
+                          handleSubmissionType={
+                            this.handleSubmissionType
+                          }
+                          handleCheckSubmissionType={
+                            this.handleCheckSubmissionType
+                          }
+                          handleCheckUser={this.handleChecKUser}
+                          selectedMetrics={selectedMetrics}
+                          formTypes={formTypes}
+                          selectedFormType={selectedFormType}
+                          handleFormTypeCheck={
+                            this.handleFormTypeChange
+                          }
+                          formTypeArr={formTypeArr}
+                          selectedForm={selectedForm}
+                          handleFormSelected={this.handleFormSelected}
+                          formQuestions={formQuestions}
+                          individualFormArr={individualFormArr}
+                          selectedIndividualForm={
+                            selectedIndividualForm
+                          }
+                          handleIndividualFormSelected={
+                            this.handleIndividualFormSelected
+                          }
+                          handleChangeFormQuest={
+                            this.handleChangeFormQuest
+                          }
+                          selectedQuestions={selectedQuestions}
+                          formValue={formValue}
+                          selectedFormValue={selectedFormValue}
+                        />
+                        <SelectedColumn
+                          selected={selectedMetrics}
+                          handleSelectChange={this.handleSelectChange}
+                          handleCheckSubmissionType={
+                            this.handleChangeArray
+                          }
+                        />
+                        <div className="col-lg-12">
+                          <div className="buttons flex-end">
+                            <button
+                              type="button"
+                              className="common-button is-border"
+                              onClick={() => {
+                                this.handleToggleDelete();
+                              }}
+                            >
+                              Discard Changes
+                            </button>
+                            <button
+                              type="button"
+                              className="common-button is-bg"
+                              onClick={() => {
+                                this.handleSubmitReport();
+                              }}
+                            >
+                              Save Report
+                            </button>
                           </div>
                         </div>
-                      )}
+                      </div>
+                      {/* )} */}
                     </div>
                     {filterArr.length > 0 && (
                       <DataFilter
