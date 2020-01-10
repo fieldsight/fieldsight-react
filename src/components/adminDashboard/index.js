@@ -299,7 +299,7 @@ class AdminDashboard extends Component {
           </div>
         </div>
         {/* <DashboardCounter submissions={submissions} /> */}
-        <div className="about-section ">
+        <div className="about-section  mrt-30">
           <div className="row">
             <About contacts={contact} desc={additional_desc} />
             {/* <About contacts={contact} desc={public_desc} /> */}

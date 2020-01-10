@@ -6,6 +6,7 @@ import RightContentCard from '../common/RightContentCard';
 import InputElement from '../common/InputElement';
 import CheckBox from '../common/CheckBox';
 import SelectElement from '../common/SelectElement';
+import { errorToast, successToast } from '../../utils/toastHandler';
 import 'leaflet/dist/leaflet.css';
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
@@ -92,7 +93,11 @@ export default class SuperAdminForm extends Component {
     axios
       .post(`/fv3/api/super-organization-form/`, data)
       .then(req => {
-        if (req === 201) {
+        if (req.status === 201) {
+          successToast('Form', 'created');
+          this.props.history.push(
+            `/organization-dashboard/${req.data.id}`,
+          );
           this.setState({
             name: '',
             phone: '',
@@ -114,7 +119,12 @@ export default class SuperAdminForm extends Component {
           });
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
+      });
   };
 
   changeHandler = e => {
@@ -174,7 +184,7 @@ export default class SuperAdminForm extends Component {
               className="breadcrumb-item active"
               aria-current="page"
             >
-              Create Organization User
+              Create Organization
             </li>
           </ol>
         </nav>
