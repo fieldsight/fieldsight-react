@@ -1679,7 +1679,7 @@ class AddNewReport extends Component {
                             )}
                           </div>
                         </div>
-                        <div class="col-lg-9 col-md-8">
+                        <div className="col-lg-9 col-md-8">
                           <button
                             className="common-button is-disable is-icon pull-right is-bg"
                             type="button"

@@ -134,6 +134,7 @@ export default class FormInformation extends Component {
                     )}
                     value={selectedForm.id}
                     handleSelect={this.props.handleFormSelected}
+                    height="180px"
                   />
                 </div>
               </div>
@@ -175,6 +176,7 @@ export default class FormInformation extends Component {
                       )}
                       value={selectedIndividualForm.code}
                       handleSelect={handleIndividualFormSelected}
+                      height="180px"
                     />
                   </div>
                 </div>
