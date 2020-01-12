@@ -33,8 +33,30 @@ export default class Metrics extends Component {
     this.setState(({ isActive }) => ({ isActive: !isActive }));
   };
 
-  onChangeHandler = () => {
-    // console.log('search');
+  onMetricsChangeHandler = async e => {
+    const { value } = e.target;
+    const { metrics } = this.state;
+    if (value) {
+      const filteredMetrics = await metrics.filter(m =>
+        m.label.toLowerCase().includes(value.toLowerCase()),
+      );
+      this.setState({ metrics: filteredMetrics });
+    } else {
+      this.setState({ metrics: this.props.data });
+    }
+  };
+
+  onUsersChangeHandler = async e => {
+    const { value } = e.target;
+    const { users } = this.state;
+    if (value) {
+      const filteredUsers = await users.filter(user =>
+        user.label.toLowerCase().includes(value.toLowerCase()),
+      );
+      this.setState({ users: filteredUsers });
+    } else {
+      this.setState({ users: this.props.users });
+    }
   };
 
   render() {
@@ -82,8 +104,8 @@ export default class Metrics extends Component {
                     className="custom-control"
                     type="search"
                     placeholder="Quick search metrics ..."
-                    onChange={() => {
-                      this.onChangeHandler();
+                    onChange={e => {
+                      this.onMetricsChangeHandler(e);
                     }}
                   />
                 </div>
@@ -138,6 +160,7 @@ export default class Metrics extends Component {
                   users={users}
                   handleCheckUser={this.props.handleCheckUser}
                   userList={userList}
+                  onUsersChangeHandler={this.onUsersChangeHandler}
                 />
               )}
             </div>
