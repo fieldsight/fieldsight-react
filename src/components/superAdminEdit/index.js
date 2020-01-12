@@ -6,6 +6,7 @@ import RightContentCard from '../common/RightContentCard';
 import InputElement from '../common/InputElement';
 import CheckBox from '../common/CheckBox';
 import SelectElement from '../common/SelectElement';
+import { errorToast, successToast } from '../../utils/toastHandler';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -128,7 +129,8 @@ export default class SuperAdminFormEdit extends Component {
     axios
       .put(`/fv3/api/super-organization-lists/${id}/`, data)
       .then(req => {
-        if (req === 201) {
+        if (req.status === 201) {
+          successToast('Form', 'edited');
           this.setState({
             name: '',
             phone: '',
@@ -150,7 +152,12 @@ export default class SuperAdminFormEdit extends Component {
           });
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
+      });
   };
 
   changeHandler = e => {
@@ -224,6 +231,7 @@ export default class SuperAdminFormEdit extends Component {
                   type="text"
                   label="name"
                   name="name"
+                  required
                   value={name}
                   changeHandler={onChangeHandler}
                   translation

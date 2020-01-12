@@ -361,7 +361,7 @@ class App extends Component {
                 />
 
                 <Route
-                  path="/form-data/:id"
+                  path="/export-data/:id"
                   render={props => <ExportDataFilter {...props} />}
                 />
 
