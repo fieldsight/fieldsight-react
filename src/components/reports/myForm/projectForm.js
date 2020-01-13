@@ -36,7 +36,7 @@ export default class ProjectFormTable extends PureComponent {
                   </td>
                   <td>
                     <a
-                      href="#"
+                      href="/#"
                       className="td-view-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -45,7 +45,7 @@ export default class ProjectFormTable extends PureComponent {
                       <i className="la la-eye" />
                     </a>
                     <a
-                      href=""
+                      href="/#"
                       className="td-edit-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -54,7 +54,7 @@ export default class ProjectFormTable extends PureComponent {
                       <i className="la la-edit" />
                     </a>
                     <a
-                      href=""
+                      href="/#"
                       className="td-edit-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -63,7 +63,7 @@ export default class ProjectFormTable extends PureComponent {
                       <i className="la la-refresh" />
                     </a>
                     <a
-                      href=""
+                      href="/#"
                       className="td-edit-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -72,7 +72,7 @@ export default class ProjectFormTable extends PureComponent {
                       <i className="la la-clone" />
                     </a>
                     <a
-                      href=""
+                      href="/#"
                       className="td-delete-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -118,7 +118,7 @@ export default class ProjectFormTable extends PureComponent {
                   </td>
                   <td>
                     <a
-                      href="#"
+                      href="/#"
                       className="td-view-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -127,7 +127,7 @@ export default class ProjectFormTable extends PureComponent {
                       <i className="la la-eye" />
                     </a>
                     <a
-                      href=""
+                      href="/#"
                       className="td-edit-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -136,7 +136,7 @@ export default class ProjectFormTable extends PureComponent {
                       <i className="la la-edit" />
                     </a>
                     <a
-                      href=""
+                      href="/#"
                       className="td-edit-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -145,7 +145,7 @@ export default class ProjectFormTable extends PureComponent {
                       <i className="la la-refresh" />
                     </a>
                     <a
-                      href=""
+                      href="/#"
                       className="td-edit-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -154,7 +154,7 @@ export default class ProjectFormTable extends PureComponent {
                       <i className="la la-clone" />
                     </a>
                     <a
-                      href=""
+                      href="/#"
                       className="td-delete-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"

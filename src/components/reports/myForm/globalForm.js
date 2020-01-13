@@ -7,7 +7,7 @@ export default class GlobalFormTable extends PureComponent {
         <div className="card-header main-card-header sub-card-header">
           <h5>Global form</h5>
           <div className="add-btn">
-            <a href="#" data-tab="region-popup">
+            <a href="/#" data-tab="region-popup">
               Add new
               <span>
                 <i className="la la-plus" />

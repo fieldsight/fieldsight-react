@@ -78,7 +78,7 @@ class TeamAdd extends Component {
         .then(
           axios.spread((...responses) => {
             const countryList = responses[0];
-            const location = responses[1];
+            // const location = responses[1];
 
             const position =
               responses[1].data.location &&
@@ -97,9 +97,7 @@ class TeamAdd extends Component {
             });
           }),
         )
-        .catch(errors => {
-          console.error(errors);
-        });
+        .catch();
     } else {
       axios
         .get(`/fv3/api/team-types-countries`)
@@ -137,11 +135,11 @@ class TeamAdd extends Component {
   onSubmitHandler = e => {
     e.preventDefault();
 
-    const {
-      match: {
-        params: { id },
-      },
-    } = this.props;
+    // const {
+    //   match: {
+    //     params: { id },
+    //   },
+    // } = this.props;
 
     const data = {
       name: this.state.project.teamName,

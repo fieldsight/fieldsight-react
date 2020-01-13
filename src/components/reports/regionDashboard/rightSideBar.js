@@ -64,14 +64,14 @@ export default class RightSidebar extends PureComponent {
                   <td>{region.id}</td>
                   <td>{region.name}</td>
                   <td>
-                    <a href="#" className="pending">
+                    <a href="/#" className="pending">
                       {region.id}
                     </a>
                   </td>
                   <td>{region.noOfSites}</td>
                   <td>
                     <a
-                      href="#"
+                      href="/#"
                       className="td-view-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -80,7 +80,7 @@ export default class RightSidebar extends PureComponent {
                       <i className="la la-eye" />
                     </a>
                     <a
-                      href="#"
+                      href="/#"
                       className="td-edit-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -89,7 +89,7 @@ export default class RightSidebar extends PureComponent {
                       <i className="la la-edit" />
                     </a>
                     <a
-                      href="#"
+                      href="/#"
                       className="td-delete-btn"
                       data-toggle="tooltip"
                       data-placement="top"

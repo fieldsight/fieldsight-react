@@ -97,7 +97,7 @@ export default class RightContent extends PureComponent {
                         <i className="la la-search" />
                       </div>
                     </form>
-                    <a href="#" className="fieldsight-btn">
+                    <a href="/#" className="fieldsight-btn">
                       <i className="la la-plus" />
                     </a>
                   </div>
@@ -130,7 +130,7 @@ export default class RightContent extends PureComponent {
                               <td>1</td>
                               <td>
                                 <a
-                                  href="#"
+                                  href="/#"
                                   className="pending table-profile"
                                 >
                                   <figure>
@@ -143,7 +143,7 @@ export default class RightContent extends PureComponent {
                                 </a>
                               </td>
                               <td>
-                                <a href="#" className="pending">
+                                <a href="/#" className="pending">
                                   Krishna B Mijar
                                 </a>
                               </td>
@@ -152,7 +152,7 @@ export default class RightContent extends PureComponent {
                               <td>1</td>
                               <td>
                                 <a
-                                  href="#"
+                                  href="/#"
                                   className="pending table-profile"
                                 >
                                   <figure>
@@ -165,7 +165,7 @@ export default class RightContent extends PureComponent {
                                 </a>
                               </td>
                               <td>
-                                <a href="#" className="pending">
+                                <a href="/#" className="pending">
                                   Krishna B Mijar
                                 </a>
                               </td>
@@ -174,7 +174,7 @@ export default class RightContent extends PureComponent {
                               <td>1</td>
                               <td>
                                 <a
-                                  href="#"
+                                  href="/#"
                                   className="pending table-profile"
                                 >
                                   <figure>
@@ -187,7 +187,7 @@ export default class RightContent extends PureComponent {
                                 </a>
                               </td>
                               <td>
-                                <a href="#" className="pending">
+                                <a href="/#" className="pending">
                                   Krishna B Mijar
                                 </a>
                               </td>
@@ -196,7 +196,7 @@ export default class RightContent extends PureComponent {
                               <td>1</td>
                               <td>
                                 <a
-                                  href="#"
+                                  href="/#"
                                   className="pending table-profile"
                                 >
                                   <figure>
@@ -209,7 +209,7 @@ export default class RightContent extends PureComponent {
                                 </a>
                               </td>
                               <td>
-                                <a href="#" className="pending">
+                                <a href="/#" className="pending">
                                   Krishna B Mijar
                                 </a>
                               </td>
@@ -218,7 +218,7 @@ export default class RightContent extends PureComponent {
                               <td>1</td>
                               <td>
                                 <a
-                                  href="#"
+                                  href="/#"
                                   className="pending table-profile"
                                 >
                                   <figure>
@@ -231,7 +231,7 @@ export default class RightContent extends PureComponent {
                                 </a>
                               </td>
                               <td>
-                                <a href="#" className="pending">
+                                <a href="/#" className="pending">
                                   Krishna B Mijar
                                 </a>
                               </td>
@@ -240,7 +240,7 @@ export default class RightContent extends PureComponent {
                               <td>1</td>
                               <td>
                                 <a
-                                  href="#"
+                                  href="/#"
                                   className="pending table-profile"
                                 >
                                   <figure>
@@ -253,7 +253,7 @@ export default class RightContent extends PureComponent {
                                 </a>
                               </td>
                               <td>
-                                <a href="#" className="pending">
+                                <a href="/#" className="pending">
                                   Krishna B Mijar
                                 </a>
                               </td>
@@ -262,7 +262,7 @@ export default class RightContent extends PureComponent {
                               <td>1</td>
                               <td>
                                 <a
-                                  href="#"
+                                  href="/#"
                                   className="pending table-profile"
                                 >
                                   <figure>
@@ -275,7 +275,7 @@ export default class RightContent extends PureComponent {
                                 </a>
                               </td>
                               <td>
-                                <a href="#" className="pending">
+                                <a href="/#" className="pending">
                                   Krishna B Mijar
                                 </a>
                               </td>
@@ -284,7 +284,7 @@ export default class RightContent extends PureComponent {
                               <td>1</td>
                               <td>
                                 <a
-                                  href="#"
+                                  href="/#"
                                   className="pending table-profile"
                                 >
                                   <figure>
@@ -297,7 +297,7 @@ export default class RightContent extends PureComponent {
                                 </a>
                               </td>
                               <td>
-                                <a href="#" className="pending">
+                                <a href="/#" className="pending">
                                   Krishna B Mijar
                                 </a>
                               </td>
@@ -331,7 +331,7 @@ export default class RightContent extends PureComponent {
                                   <td>{data.id}</td>
                                   <td>
                                     <a
-                                      href="#"
+                                      href="/#"
                                       className="pending table-profile"
                                     >
                                       <figure>
@@ -344,7 +344,7 @@ export default class RightContent extends PureComponent {
                                     </a>
                                   </td>
                                   <td>
-                                    <a href="#" className="pending">
+                                    <a href="/#" className="pending">
                                       {data.address}
                                     </a>
                                   </td>
@@ -370,7 +370,7 @@ export default class RightContent extends PureComponent {
                                   <td>{data.id}</td>
                                   <td>
                                     <a
-                                      href="#"
+                                      href="/#"
                                       className="pending table-profile"
                                     >
                                       <figure>
@@ -383,7 +383,7 @@ export default class RightContent extends PureComponent {
                                     </a>
                                   </td>
                                   <td>
-                                    <a href="#" className="pending">
+                                    <a href="/#" className="pending">
                                       {data.address}
                                     </a>
                                   </td>
@@ -414,7 +414,7 @@ export default class RightContent extends PureComponent {
                         <i className="la la-search" />
                       </div>
                     </form>
-                    <a href="#" className="fieldsight-btn">
+                    <a href="/#" className="fieldsight-btn">
                       <i className="la la-plus" />
                     </a>
                   </div>

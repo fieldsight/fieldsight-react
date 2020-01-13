@@ -5,12 +5,7 @@ import Table from 'react-bootstrap/Table';
 
 export default class TeamsTable extends PureComponent {
   render() {
-    const {
-      selected_teams,
-      handleConfirm,
-      handleDelete,
-      openDelete,
-    } = this.props;
+    const { selected_teams, handleConfirm } = this.props;
     return (
       <Table
         responsive="xl"

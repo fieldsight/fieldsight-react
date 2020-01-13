@@ -71,6 +71,9 @@ import UserManage from './reports/users/userManage';
 import MyFormTable from './reports/myForm';
 import Submission from './reports/submission';
 import AddNewReport from './reports/addNewReport';
+import FormDataFilter from './reports/FormDataFilter';
+import ActivityExportFile from './reports/activityExportFile';
+import UserExportReport from './reports/userExportReport';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -366,6 +369,11 @@ class App extends Component {
                 />
 
                 <Route
+                  path="/form-data/:id/:fid"
+                  render={props => <FormDataFilter {...props} />}
+                />
+
+                <Route
                   path="/organization-dashboard/:id"
                   render={props => <AdminDashboard {...props} />}
                 />
@@ -411,6 +419,15 @@ class App extends Component {
                 <Route
                   path="/form-submission"
                   render={props => <Submission {...props} />}
+                />
+
+                <Route
+                  path="/activity-export/:id"
+                  render={props => <ActivityExportFile {...props} />}
+                />
+                <Route
+                  path="/user-export/:id"
+                  render={props => <UserExportReport {...props} />}
                 />
               </Switch>
               <ToastContainer />
