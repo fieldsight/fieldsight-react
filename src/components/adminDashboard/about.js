@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage } from 'react-intl';
 
 class About extends PureComponent {
   render() {

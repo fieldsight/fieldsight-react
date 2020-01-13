@@ -7,7 +7,7 @@ export default class MyForm extends PureComponent {
         <div className="card-header main-card-header sub-card-header">
           <h5>My Forms</h5>
           <div className="add-btn">
-            <a href="#" data-tab="site-popup">
+            <a href="/#" data-tab="site-popup">
               Add new
               <span>
                 <i className="la la-plus" />
@@ -43,7 +43,7 @@ export default class MyForm extends PureComponent {
                 </td>
                 <td>
                   <a
-                    href="#"
+                    href="/#"
                     className="td-view-btn td-btn"
                     data-toggle="tooltip"
                     data-placement="top"
@@ -53,7 +53,7 @@ export default class MyForm extends PureComponent {
                     <i className="la la-eye" />
                   </a>
                   <a
-                    href="#"
+                    href="/#"
                     className="td-edit-btn td-btn"
                     data-toggle="tooltip"
                     data-placement="top"
@@ -62,7 +62,7 @@ export default class MyForm extends PureComponent {
                     <i className="la la-edit" />
                   </a>
                   <a
-                    href="#"
+                    href="/#"
                     className="td-replace-btn td-btn"
                     data-toggle="tooltip"
                     data-placement="top"
@@ -73,7 +73,7 @@ export default class MyForm extends PureComponent {
                   </a>
                   <span className="share-icon">
                     <a
-                      href=""
+                      href="/#"
                       className="td-share-btn td-btn"
                       data-toggle="tooltip"
                       data-placement="top"
@@ -83,29 +83,29 @@ export default class MyForm extends PureComponent {
                     </a>
                     {/* <ul className="share-drop">
                       <li>
-                        <a href="#" data-tab="user-share">
+                        <a href="/#" data-tab="user-share">
                           User
                         </a>
                       </li>
                       <li>
-                        <a href="#" data-tab="team-share">
+                        <a href="/#" data-tab="team-share">
                           Team
                         </a>
                       </li>
                       <li>
-                        <a href="#" data-tab="project-share">
+                        <a href="/#" data-tab="project-share">
                           Project
                         </a>
                       </li>
                       <li>
-                        <a href="#" data-tab="global-share">
+                        <a href="/#" data-tab="global-share">
                           Global
                         </a>
                       </li>
                     </ul> */}
                   </span>
                   <a
-                    href="#"
+                    href="/#"
                     className="td-delete-btn td-btn"
                     data-toggle="tooltip"
                     data-placement="top"

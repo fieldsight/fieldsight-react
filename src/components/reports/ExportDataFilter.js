@@ -278,11 +278,26 @@ export default class ExportDataFilter extends PureComponent {
                   <div className="col-md-12">
                     <div className="report-content">
                       <h4>Export Data</h4>
-                      <p>
+                      {/* <p>
                         Export of forms data and site information an
                         Excel File, generated with filters in region,
                         types and time range.
-                      </p>
+                      </p> */}
+                      {this.props.location.state.fromDashboard ===
+                        'Site Information' && (
+                        <p>
+                          Export of all site information in an
+                          spreadsheet
+                        </p>
+                      )}
+                      {this.props.location.state.fromDashboard ===
+                        'Progress Report' && (
+                        <p>
+                          Export of key progress indicators like
+                          submission count,status and site visits
+                          generated from Staged Forms.
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

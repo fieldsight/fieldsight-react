@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import RightContentCard from '../common/RightContentCard';
 import InputElement from '../common/InputElement';
-import CheckBox from '../common/CheckBox';
 import SelectElement from '../common/SelectElement';
 import { errorToast, successToast } from '../../utils/toastHandler';
 
@@ -34,8 +33,6 @@ export default class SuperAdminFormEdit extends Component {
       website: '',
       address: '',
       public_desc: '',
-      additional_desc: '',
-
       position: {
         latitude: '51.505',
         longitude: '-0.09',
@@ -75,7 +72,6 @@ export default class SuperAdminFormEdit extends Component {
             website: responses[0].data.website,
             address: responses[0].data.address,
             public_desc: responses[0].data.public_desc,
-            additional_desc: responses[0].data.additional_desc,
             is_active: responses[0].data.is_active,
             position: {
               latitude: latitude,
@@ -121,8 +117,6 @@ export default class SuperAdminFormEdit extends Component {
       country: this.state.Selectedtypes,
       address: this.state.address,
       public_desc: this.state.public_desc,
-      additional_desc: this.state.additional_desc,
-
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude,
     };
@@ -140,8 +134,6 @@ export default class SuperAdminFormEdit extends Component {
             country: '',
             address: '',
             public_desc: '',
-            additional_desc: '',
-
             position: {
               latitude: '51.505',
               longitude: '-0.09',
@@ -202,7 +194,7 @@ export default class SuperAdminFormEdit extends Component {
         country,
         address,
         public_desc,
-        additional_desc,
+
         is_active,
         position: { latitude, longitude },
         Selectedtypes,
@@ -310,24 +302,13 @@ export default class SuperAdminFormEdit extends Component {
                   translation
                 />
               </div>
+
               <div className="col-xl-4 col-md-6">
                 <InputElement
                   formType="editForm"
                   tag="input"
                   type="text"
-                  label="additional_desc"
-                  name="additional_desc"
-                  value={additional_desc}
-                  changeHandler={onChangeHandler}
-                  translation
-                />
-              </div>
-              <div className="col-xl-4 col-md-6">
-                <InputElement
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  label="public_desc"
+                  label="Description"
                   name="public_desc"
                   value={public_desc}
                   changeHandler={onChangeHandler}
