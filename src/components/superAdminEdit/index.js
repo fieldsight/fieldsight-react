@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import RightContentCard from '../common/RightContentCard';
 import InputElement from '../common/InputElement';
-import CheckBox from '../common/CheckBox';
 import SelectElement from '../common/SelectElement';
 import { errorToast, successToast } from '../../utils/toastHandler';
 
