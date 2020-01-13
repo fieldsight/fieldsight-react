@@ -110,7 +110,12 @@ class AddNewReport extends Component {
       }
       this.props.getMetricsData(id);
     });
-    // document.addEventListener('click', this.handleClickOutside);
+    // document.addEventListener('click', () => {
+    //   const getbyId = document.getElementById('radio');
+    //   if (!getbyId) {
+    //     this.handleClickOutside();
+    //   }
+    // });
   }
 
   componentDidUpdate(prevProps) {
