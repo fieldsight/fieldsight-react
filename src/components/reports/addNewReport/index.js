@@ -129,7 +129,9 @@ class AddNewReport extends Component {
       this.setState(
         { metrics: this.props.reportReducer.metrics },
         () => {
-          this.setArrays();
+          if (this.state.metrics.length > 0) {
+            this.setArrays();
+          }
         },
       );
     }
@@ -213,7 +215,7 @@ class AddNewReport extends Component {
           params: { id, reportId },
         },
       } = this.props;
-      // this.setState({ loader: true }, () => {
+      //   // this.setState({ loader: true }, () => {
       if (reportId) {
         const report = this.props.reportReducer.reportData;
         const userList = report.attributes.filter(
@@ -231,6 +233,20 @@ class AddNewReport extends Component {
           return false;
         });
         const showActions = objLen.includes(true) ? true : false;
+
+        const filterToSiteInfo = report.attributes.filter(r => {
+          if (r.value && !r.value.selectedForm) {
+            return true;
+          }
+          return false;
+        });
+        const filterToFormInfo = report.attributes.filter(r => {
+          if (r.value && !!r.value.selectedForm) {
+            return true;
+          }
+          return false;
+        });
+
         let selectedFormType = {};
         let selectedForm = {};
         let selectedIndividualForm = [];
@@ -238,23 +254,31 @@ class AddNewReport extends Component {
         const selectedFormValue = [];
         const selectedMetas = [];
         const selectedValue = [];
-
-        report.attributes.map(r => {
-          if (r.value && !r.value.selectedForm) {
-            const { code, type, id, value, label } = r;
-            if (selectedMetas.length > 0) {
-              selectedMetas.map(meta => {
-                if (meta.code !== code) {
-                  selectedMetas.push({ code, type, id, label });
-                }
-              });
-            }
+        filterToSiteInfo.length > 0 &&
+          filterToSiteInfo.map(f => {
+            const { code, type, id, value, label } = f;
             if (selectedMetas.length === 0) {
               selectedMetas.push({ code, type, id, label });
             }
+            if (selectedMetas.length > 0) {
+              const find = selectedMetas.some(
+                some => some.code === code,
+              );
+
+              if (find) {
+                selectedMetas.push({
+                  code,
+                  type,
+                  id,
+                  label,
+                });
+              }
+            }
+
             if (selectedValue.length === 0) {
               selectedValue.push({ ...value });
             }
+
             if (selectedValue.length > 0) {
               selectedValue.map(s => {
                 if (s.code !== value.code) {
@@ -262,9 +286,11 @@ class AddNewReport extends Component {
                 }
               });
             }
-          }
-          if (r.value && r.value.selectedForm) {
-            const { code, id, value, label } = r;
+          });
+
+        filterToFormInfo.length > 0 &&
+          filterToFormInfo.map(f => {
+            const { code, id, value, label } = f;
             selectedFormType = { code, id, label };
             selectedForm = value.selectedForm;
             if (value.selectedIndividualForm) {
@@ -318,8 +344,7 @@ class AddNewReport extends Component {
                 });
               }
             }
-          }
-        });
+          });
         this.setState(
           state => ({
             data: {
@@ -354,16 +379,20 @@ class AddNewReport extends Component {
             // loader: false,
           }),
           () => {
-            if (selectedFormType.code) {
+            // this.setArrays();
+
+            if (selectedFormType && selectedFormType.code) {
               this.props.getForms(id, selectedFormType.code);
             }
-            if (selectedForm.id) {
+            if (selectedForm && selectedForm.id) {
               this.props.getFormQuestions(id, selectedForm.id);
             }
+            // },
+            // );
+            //   }
           },
         );
       }
-      // });
     }
   }
 
@@ -702,6 +731,7 @@ class AddNewReport extends Component {
           ...state.siteInfo,
           selectedMetas: [],
           selectedValue: [],
+          siteValues: [],
         },
         formInfo: {
           ...state.formInfo,
@@ -709,6 +739,7 @@ class AddNewReport extends Component {
           selectedForm: '',
           selectedQuestions: [],
           selectedFormValue: [],
+          formValue: [],
         },
         collapseClass: true,
       }),
@@ -726,33 +757,48 @@ class AddNewReport extends Component {
     const metricsArr = metrics.filter(metric =>
       metric.types.includes(selectedReportType),
     );
+    if (metricsArr.length > 0) {
+      this.setState(
+        {
+          metricArr: metricsArr.filter(
+            item => item.category === 'default',
+          ),
+          siteInfoArr: metricsArr.filter(
+            item => item.category === 'site_information',
+          ),
+          formInfoArr: metricsArr.filter(
+            item => item.category === 'form_information',
+          ),
+          usersArr: metricsArr.filter(
+            item => item.category === 'users',
+          ),
+          individualFormArr: metricsArr.filter(
+            item => item.category === 'individual_form',
+          ),
+          filterArr: metricsArr.filter(
+            item => item.category === 'filter',
+          ),
+        },
+        () => {
+          const {
+            formInfoArr,
+            siteInfoArr,
+            siteInfo: { selectedMetas },
+            formInfo: { selectedQuestions },
+          } = this.state;
 
-    this.setState(
-      {
-        metricArr: metricsArr.filter(
-          item => item.category === 'default',
-        ),
-        siteInfoArr: metricsArr.filter(
-          item => item.category === 'site_information',
-        ),
-        formInfoArr: metricsArr.filter(
-          item => item.category === 'form_information',
-        ),
-        usersArr: metricsArr.filter(
-          item => item.category === 'users',
-        ),
-        individualFormArr: metricsArr.filter(
-          item => item.category === 'individual_form',
-        ),
-        filterArr: metricsArr.filter(
-          item => item.category === 'filter',
-        ),
-      },
-      () => {
-        this.setFormValue();
-        this.setSiteValue();
-      },
-    );
+          if (siteInfoArr.length > 0 && selectedMetas.length > 0) {
+            this.setSiteValue();
+          }
+          if (
+            formInfoArr.length > 0 &&
+            selectedQuestions.length > 0
+          ) {
+            this.setFormValue();
+          }
+        },
+      );
+    }
   };
 
   handleSubmissionType = type => {
@@ -1026,7 +1072,8 @@ class AddNewReport extends Component {
   setSiteValue = () => {
     this.handleAddValue();
     const {
-      siteInfo: { selectedMetas },
+      siteInfo: { selectedMetas, siteValues },
+      siteInfoArr,
     } = this.state;
 
     const arr = [];
@@ -1041,11 +1088,31 @@ class AddNewReport extends Component {
       }
     });
     if (arr.length > 0) {
-      if (arr.includes('text')) {
-        this.handleTextValueTypes('site');
-      } else {
-        this.handleAllValueTypes('site');
-      }
+      this.setState(state => {
+        if (arr.includes('text')) {
+          const siteTextArr = this.handleTextValueTypes(
+            'site',
+            siteInfoArr,
+            siteValues,
+          );
+          return {
+            siteInfo: {
+              ...state.siteInfo,
+              siteValues: siteTextArr,
+            },
+          };
+        } else {
+          // this.handleAllValueTypes('site');
+          const filteredValues =
+            siteInfoArr.length > 0 && siteInfoArr;
+          return {
+            siteInfo: {
+              ...state.siteInfo,
+              siteValues: filteredValues,
+            },
+          };
+        }
+      });
     } else {
       this.setState({
         siteInfo: { ...this.state.siteInfo, siteValues: [] },
@@ -1053,116 +1120,67 @@ class AddNewReport extends Component {
     }
   };
 
-  handleAllValueTypes = type => {
-    const { siteInfoArr, formInfoArr } = this.state;
+  handleTextValueTypes = (type, toSearchArr, selectedArr) => {
     let filteredValues = [];
-    this.setState(state => {
-      if (type === 'site') {
-        if (siteInfoArr.length > 0) {
-          siteInfoArr.map(site => {
-            filteredValues.push(site);
-          });
-        }
-        return {
-          siteInfo: { ...state.siteInfo, siteValues: filteredValues },
-        };
-      }
-      if (type === 'form') {
-        if (formInfoArr.length > 0) {
-          formInfoArr.map(site => {
-            filteredValues.push(site);
-          });
-        }
-        return {
-          formInfo: {
-            ...state.formInfo,
-            formValue: filteredValues,
-          },
-        };
-      }
-    });
-  };
 
-  handleTextValueTypes = type => {
-    const {
-      siteInfo: { siteValues },
-      siteInfoArr,
-      formInfoArr,
-      formInfo,
-    } = this.state;
-
-    this.setState(state => {
-      if (type === 'site') {
-        let filteredSiteValues = [];
-        const someArr = siteValues;
-        if (siteInfoArr.length > 0) {
-          siteInfoArr.map(info => {
-            if (someArr.length > 0) {
-              filteredSiteValues = someArr.filter(some => {
-                if (
-                  some.code === 'actual' ||
-                  some.code === 'most_common' ||
-                  some.code === 'all_values'
-                ) {
-                  return true;
-                } else {
-                  return false;
-                }
-              });
-            } else {
+    if (type === 'site') {
+      const someArr = selectedArr;
+      if (toSearchArr.length > 0) {
+        toSearchArr.map(info => {
+          if (someArr.length > 0) {
+            filteredValues = someArr.filter(some => {
               if (
-                info.code === 'actual' ||
-                info.code === 'most_common' ||
-                info.code === 'all_values'
+                some.code === 'actual' ||
+                some.code === 'most_common' ||
+                some.code === 'all_values'
               ) {
-                filteredSiteValues.push(info);
+                return true;
+              } else {
+                return false;
               }
+            });
+          } else {
+            if (
+              info.code === 'actual' ||
+              info.code === 'most_common' ||
+              info.code === 'all_values'
+            ) {
+              filteredValues.push(info);
             }
-          });
-        }
-        return {
-          siteInfo: {
-            ...state.siteInfo,
-            siteValues: filteredSiteValues,
-          },
-        };
+          }
+        });
       }
-      if (type === 'form') {
-        let filteredFormValues = [];
-        const someArr = formInfo.formValue;
-        if (formInfoArr.length > 0) {
-          formInfoArr.map(info => {
-            if (someArr && someArr.length > 0) {
-              filteredFormValues = someArr.filter(some => {
-                if (
-                  some.code === 'form_info_actual' ||
-                  some.code === 'form_info_most_common' ||
-                  some.code === 'form_info_all_values'
-                ) {
-                  return true;
-                } else {
-                  return false;
-                }
-              });
-            } else {
+    }
+    if (type === 'form') {
+      const someArr = selectedArr;
+      if (toSearchArr.length > 0) {
+        toSearchArr.map(info => {
+          if (someArr && someArr.length > 0) {
+            filteredValues = someArr.filter(some => {
               if (
-                info.code === 'form_info_actual' ||
-                info.code === 'form_info_most_common' ||
-                info.code === 'form_info_all_values'
+                some.code === 'form_info_actual' ||
+                some.code === 'form_info_most_common' ||
+                some.code === 'form_info_all_values'
               ) {
-                filteredFormValues.push(info);
+                return true;
+              } else {
+                return false;
               }
+            });
+          } else {
+            if (
+              info.code === 'form_info_actual' ||
+              info.code === 'form_info_most_common' ||
+              info.code === 'form_info_all_values'
+            ) {
+              filteredValues.push(info);
             }
-          });
-        }
-        return {
-          formInfo: {
-            ...state.formInfo,
-            formValue: filteredFormValues,
-          },
-        };
+          }
+        });
       }
-    });
+    }
+    return filteredValues;
+    // });
   };
 
   handleValueCheck = (e, item) => {
@@ -1370,8 +1388,10 @@ class AddNewReport extends Component {
 
   setFormValue = () => {
     const {
-      formInfo: { selectedQuestions },
+      formInfo: { selectedQuestions, formValue },
+      formInfoArr,
     } = this.state;
+
     this.handleAddFormValue('selectedValue');
     const arr = [];
     selectedQuestions.map(each => {
@@ -1382,11 +1402,31 @@ class AddNewReport extends Component {
       }
     });
     if (arr.length > 0) {
-      if (arr.includes('text')) {
-        this.handleTextValueTypes('form');
-      } else {
-        this.handleAllValueTypes('form');
-      }
+      this.setState(state => {
+        if (arr.includes('text')) {
+          const formTextArr = this.handleTextValueTypes(
+            'form',
+            formInfoArr,
+            formValue,
+          );
+          return {
+            formInfo: {
+              ...state.formInfo,
+              formValue: formTextArr,
+            },
+          };
+        } else {
+          // this.handleAllValueTypes('form');
+          const filteredValues =
+            formInfoArr.length > 0 && formInfoArr;
+          return {
+            formInfo: {
+              ...state.formInfo,
+              formInfoArr: filteredValues,
+            },
+          };
+        }
+      });
     } else {
       this.setState(state => ({
         formInfo: {
@@ -1596,7 +1636,6 @@ class AddNewReport extends Component {
         applyFilter,
         isDelete,
         showActions,
-        // loader,
         errors,
       },
       props: {
@@ -1606,7 +1645,6 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('props report ko', loader);
     const isEdit = reportId ? true : false;
     const actions = [
       // {
@@ -1630,7 +1668,6 @@ class AddNewReport extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              {/* <span>Report</span> */}
               <a
                 href={`/fieldsight/application/#/project-dashboard/${id}/report`}
               >
@@ -1752,12 +1789,6 @@ class AddNewReport extends Component {
                 {collapseClass && (
                   <>
                     <div className="report-accordion">
-                      {/* {loader ? (
-                        <BlockContentLoader
-                          number={10}
-                          height="25px"
-                        />
-                      ) : ( */}
                       <div className="row ">
                         <Metrics
                           handleToggleClass={this.handleToggleClass}
@@ -1832,7 +1863,6 @@ class AddNewReport extends Component {
                           </div>
                         </div>
                       </div>
-                      {/* )} */}
                     </div>
                     {filterArr.length > 0 && (
                       <DataFilter
@@ -1844,9 +1874,6 @@ class AddNewReport extends Component {
                         applyFilter={applyFilter}
                         handleSubmitFilter={this.handleSubmitFilter}
                         filteredData={filterBy}
-                        // checkboxOption={checkboxOption}
-                        // handleCheck={this.handleCheckReportType}
-                        // selectedArr={selectedReportType}
                       />
                     )}
                     {showActions && (
