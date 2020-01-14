@@ -78,7 +78,7 @@ class Teams extends Component {
 
   render() {
     const { results, organization } = this.state;
-    const { selected } = this.props;
+    const { selected, orgs } = this.props;
 
     // const selectLanguage = [
     //   { id: 'en', name: 'Eng' },
@@ -86,46 +86,47 @@ class Teams extends Component {
     // ];
     return (
       <>
-        <div className="sub-regions">
-          <div className="card">
-            <div className="card-header main-card-header">
-              <label>Organizations</label>
+        {orgs === 'organization' && (
+          <div className="sub-regions">
+            <div className="card">
+              <div className="card-header main-card-header">
+                <label>Organizations</label>
 
-              <div style={{ marginLeft: '69.6rem' }}>
-                <a
-                  href="/fieldsight/application/#/create-organization/"
-                  className="fieldsight-btn"
-                >
-                  <i className="la la-plus" />
-                </a>
-              </div>
-            </div>
-            <div className="card-body">
-              <div className="row">
-                {organization.map((subRegion, i) => (
-                  <div
-                    className="col-xl-3 col-lg-6"
-                    key={subRegion.id}
-                    style={{ marginBottom: '20px' }}
+                <div style={{ marginLeft: '69.6rem' }}>
+                  <a
+                    href="/fieldsight/application/#/create-organization/"
+                    className="fieldsight-btn"
                   >
-                    <Link
-                      to={`/organization-dashboard/${subRegion.id}`}
+                    <i className="la la-plus" />
+                  </a>
+                </div>
+              </div>
+              <div className="card-body">
+                <div className="row">
+                  {organization.map((subRegion, i) => (
+                    <div
+                      className="col-xl-3 col-lg-6"
+                      key={subRegion.id}
+                      style={{ marginBottom: '20px' }}
                     >
-                      <div className="sub-regions-item ">
-                        <h5>{subRegion.name}</h5>
-                        <p>
-                          <label>Teams :</label>
-                          {subRegion.teams}
-                        </p>
-                      </div>
-                    </Link>
-                  </div>
-                ))}
+                      <Link
+                        to={`/organization-dashboard/${subRegion.id}`}
+                      >
+                        <div className="sub-regions-item ">
+                          <h5>{subRegion.name}</h5>
+                          <p>
+                            <label>Teams :</label>
+                            {subRegion.teams}
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
+        )}
         <div className="card">
           {/* <div>
             <SelectElement
@@ -218,12 +219,7 @@ class Teams extends Component {
                           defaultMessage="Users"
                         />
                       </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.team-owner"
-                          defaultMessage="Team Owner"
-                        />
-                      </th>
+
                       <th>
                         <FormattedMessage
                           id="app.action"
@@ -257,14 +253,7 @@ class Teams extends Component {
                             <td>{project.projects}</td>
                             <td>{project.sites}</td>
                             <td>{project.users}</td>
-                            <td>
-                              <a
-                                href={`/fieldsight/application/#/profile/${project.team_owner_id}`}
-                                className="pending table-profile"
-                              >
-                                {project.team_owner}
-                              </a>
-                            </td>
+
                             <td>
                               <a
                                 href={`/fieldsight/application/#/team-dashboard/${project.id}`}

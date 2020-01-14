@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import { Dropdown } from 'react-bootstrap';
 import Loader from '../common/Loader';

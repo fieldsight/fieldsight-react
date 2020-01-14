@@ -4,7 +4,6 @@ import DatePicker from 'react-datepicker';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
 import CustomMultiSelect from './CustomMultiSelect';
-import CustomCheckBox from './CustomCheckbox';
 import CollapseFilterTable from './CollapseFilterTable';
 import { errorToast, successToast } from '../../utils/toastHandler';
 

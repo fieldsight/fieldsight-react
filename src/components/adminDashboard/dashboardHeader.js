@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import CountCard from '../common/CountCard';
 import { AvatarContentLoader } from '../common/Loader';
@@ -19,6 +18,19 @@ class DashboardHeader extends PureComponent {
   openModal = () => {};
 
   render() {
+    const {
+      name,
+      phone,
+      country,
+      additional_desc,
+      logo,
+      showContentLoader,
+      total_sites,
+      total_projects,
+      total_users,
+      superAdminId,
+      total_teams,
+    } = this.props;
     const ManageDropDown = [
       {
         title: 'Users',
@@ -30,41 +42,29 @@ class DashboardHeader extends PureComponent {
       },
     ];
 
-    const {
-      name,
-      phone,
-      country,
-      additional_desc,
-      logo,
-      showContentLoader,
-      total_sites,
-      total_projects,
-      total_users,
-    } = this.props;
-
     const countHeader = [
       {
         title: 'Total Team',
-        total_sites: `${this.props.total_teams}`,
-        link: '#',
+        total_sites: `${total_teams}`,
+        link: `/fieldsight/application/#/organization-teams/${superAdminId}`,
         icon: 'la-users',
       },
       {
         title: 'Total Project',
-        total_sites: `${this.props.total_projects}`,
-        link: '#',
+        total_sites: `${total_projects}`,
+        link: `/fieldsight/application/#/organization-projects/${superAdminId}`,
         icon: 'la la la la-server',
       },
       {
         title: 'Total Site',
-        total_sites: `${this.props.total_sites}`,
+        total_sites: `${total_sites}`,
         icon: 'la la-map-marker',
       },
 
       {
         title: 'Total User',
-        total_sites: `${this.props.total_users}`,
-        link: '#',
+        total_sites: `${total_users}`,
+        link: `/fieldsight/application/#/organization-users/${superAdminId}`,
         icon: 'la-user',
       },
     ];

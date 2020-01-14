@@ -66,32 +66,33 @@ export default class ActivityExportFile extends Component {
     e.preventDefault();
 
     const {
-      match: {
-        params: { id },
+      props: {
+        match: {
+          params: { id },
+        },
+        location: {
+          state: { fromDashboard },
+        },
       },
-      location: {
-        state: { fromDashboard },
-      },
-    } = this.props;
+      state: { startedDate, endedDate, scheduleType, project },
+    } = this;
     const user = 'u';
 
     const data = {
-      start_date: format(this.state.startedDate, ['YYYY-MM-DD']),
-      end_date: format(this.state.endedDate, ['YYYY-MM-DD']),
+      start_date: format(startedDate, ['YYYY-MM-DD']),
+      end_date: format(endedDate, ['YYYY-MM-DD']),
       ...(fromDashboard === 'Activity Report' && {
-        type: this.state.scheduleType,
+        type: scheduleType,
       }),
       ...(fromDashboard === 'Project Logs' && {
-        type: this.state.project,
+        type: project,
       }),
       ...(fromDashboard === 'User Activity Report' && {
-        type: `${user}${this.state.project}`,
+        type: `${user}${project}`,
       }),
     };
 
-    const route = this.toUpper(
-      this.props.location.state.fromDashboard,
-    );
+    const route = this.toUpper(fromDashboard);
 
     axios
       .post(
@@ -113,12 +114,14 @@ export default class ActivityExportFile extends Component {
 
   render() {
     const {
-      state: { scheduleType },
+      state: { scheduleType, startedDate, endedDate },
       props: {
         location: {
           state: { fromDashboard },
         },
       },
+      onChangeHandler,
+      onEndChangeHandler,
     } = this;
     // const {state:{fromDashboard}}=this.props.location
 
@@ -243,8 +246,8 @@ export default class ActivityExportFile extends Component {
                             <DatePicker
                               placeholderText="Start Date"
                               name="startedDate"
-                              selected={this.state.startedDate}
-                              onChange={this.onChangeHandler}
+                              selected={startedDate}
+                              onChange={onChangeHandler}
                               dateFormat="yyyy-MM-dd"
                               className="form-control"
                             />
@@ -258,8 +261,8 @@ export default class ActivityExportFile extends Component {
                             <DatePicker
                               placeholderText="End Date"
                               name="endedDate"
-                              selected={this.state.endedDate}
-                              onChange={this.onEndChangeHandler}
+                              selected={endedDate}
+                              onChange={onEndChangeHandler}
                               className="form-control"
                               dateFormat="yyyy-MM-dd"
                             />
