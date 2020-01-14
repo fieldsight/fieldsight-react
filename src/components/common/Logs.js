@@ -2,10 +2,14 @@ import React, { Component } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import format from "date-fns/format";
 import { BlockContentLoader } from "./Loader";
+import { Link } from "react-router-dom";
 import uuid from "uuid/v4";
 
 class Logs extends Component {
-  getLog = data => {
+  state = {
+    width: false
+  };
+  getLog = (data, user_id) => {
     let content = "";
     const formdetail = data.get_event_name.split("form");
 
@@ -949,7 +953,7 @@ class Logs extends Component {
         const messages = errormsg.split("@error");
         let readableerror = "";
         if (messages.length > 1) {
-          errors = messages[1].split("DETAIL:");
+          const errors = messages[1].split("DETAIL:");
           if (errors.length > 1) {
             readableerror = errors[1];
           } else {
@@ -1064,31 +1068,34 @@ class Logs extends Component {
 
   render() {
     const {
-      props: { siteLogs, showContentLoader, siteId, type },
+      props: { siteLogs, showContentLoader, siteId, type, user_id, fullPage },
       groupByDate,
       getColor,
-      getLog
+      getLog,
+      sitewidth
     } = this;
+
     return (
-      <div className="col-xl-4 col-md-12">
+      <div className={fullPage ? "col-md-12" : "col-xl-4 col-md-12"}>
         <div className="card logs">
           <div className="card-header main-card-header sub-card-header">
             <h5>Logs</h5>
 
             {siteLogs.length > 0 ? (
-              <a
-                href={`/events/${type}_logs/${siteId}/`}
-                className="fieldsight-btn"
-                target="_blank"
-              >
-                view all
-              </a>
+              fullPage ? null : (
+                <Link
+                  to={`/${type}_logs/${siteId}/`}
+                  className="fieldsight-btn"
+                >
+                  View all
+                </Link>
+              )
             ) : null}
           </div>
           <div className="card-body">
             <div
               className="logs-list"
-              style={{ position: "relative", height: "314px" }}
+              style={fullPage ? {} : { position: "relative", height: "314px" }}
             >
               {showContentLoader ? (
                 <BlockContentLoader number={2} height="150px" />
@@ -1099,33 +1106,35 @@ class Logs extends Component {
                       className="timeline"
                       ref={el => (this.timeLineDiv = el)}
                     >
-                      {groupByDate(siteLogs).map(siteLog => (
-                        <div className="timeline-list" key={uuid()}>
-                          <time>{siteLog.date}</time>
-                          <ul>
-                            {siteLog.logs.map(log => (
-                              <li className="blue" key={uuid()}>
-                                <div className="event-list ">
-                                  <figure>
-                                    <img src={log.source_img} alt="logo" />
-                                  </figure>
-                                  <div className="log-content">
-                                    <span className="time">
-                                      {format(log.date, ["h:mm a"])}
-                                    </span>
+                      {groupByDate(siteLogs).map(siteLog => {
+                        return (
+                          <div className="timeline-list" key={uuid()}>
+                            <time>{siteLog.date}</time>
+                            <ul>
+                              {siteLog.logs.map(log => (
+                                <li className="blue" key={uuid()}>
+                                  <div className="event-list ">
+                                    <figure>
+                                      <img src={log.source_img} alt="logo" />
+                                    </figure>
+                                    <div className="log-content">
+                                      <span className="time">
+                                        {format(log.date, ["h:mm a"])}
+                                      </span>
 
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: getLog(log)
-                                      }}
-                                    />
+                                      <div
+                                        dangerouslySetInnerHTML={{
+                                          __html: getLog(log, user_id)
+                                        }}
+                                      />
+                                    </div>
                                   </div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <p> No Data Available </p>

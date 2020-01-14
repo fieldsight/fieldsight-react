@@ -26,11 +26,10 @@ class SiteInformationCard extends Component {
   state = INITIAL_STATE;
 
   componentWillReceiveProps(nextProps) {
-    console.log("componentwilrece");
     let selectedForm = {};
     let selectedQuestion = {};
     let type = "choose";
-    let showForm = false;
+    let showForm;
     let filteredQuestions = [];
 
     if (nextProps.siteInfo && nextProps.siteInfo.form_id) {
@@ -47,7 +46,7 @@ class SiteInformationCard extends Component {
       type = nextProps.siteInfo.question_type;
     }
 
-    if (!isEmpty(selectedForm)) {
+    if (selectedForm && !isEmpty(selectedForm)) {
       showForm = true;
       filteredQuestions = findQuestion(
         selectedForm.json.children,
@@ -60,7 +59,7 @@ class SiteInformationCard extends Component {
       selectedQuestion,
       filteredQuestions,
       type,
-      showForm
+      ...(showForm && { showForm })
     });
   }
 
@@ -112,7 +111,10 @@ class SiteInformationCard extends Component {
     const { value } = e.target;
 
     if (value === "Form") {
-      return this.setState({ type: value, showForm: true });
+      return this.setState(
+        { type: value, showForm: true },
+        this.dataChangeHandler
+      );
     }
     this.setState(
       {
@@ -198,12 +200,14 @@ class SiteInformationCard extends Component {
                   value={!isEmpty(selectedForm) && selectedForm.id}
                 />
 
-                <SelectElement
-                  className="form-control"
-                  options={filteredQuestions}
-                  changeHandler={questionChangeHandler}
-                  value={!isEmpty(selectedQuestion) && selectedQuestion.name}
-                />
+                {selectedForm.id && (
+                  <SelectElement
+                    className="form-control"
+                    options={filteredQuestions}
+                    changeHandler={questionChangeHandler}
+                    value={!isEmpty(selectedQuestion) && selectedQuestion.name}
+                  />
+                )}
               </Fragment>
             )}
           </form>

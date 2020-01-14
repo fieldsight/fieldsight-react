@@ -12,7 +12,9 @@ let base_url = window.base_url
   ? window.base_url
   : "https://fieldsight.naxa.com.np";
 
-const project_id = window.project_id ? window.project_id : 137;
+const project_id = window.project_id
+  ? window.project_id
+  : process.env.PROJECT_ID;
 
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
@@ -24,6 +26,11 @@ class ProjectSiteTable extends Component {
     });
   }
 
+  componentWillUpdate(prevProps) {
+    if (prevProps.breadcrumbs !== this.props.breadcrumbs) {
+      prevProps.breadcrumbhandler(prevProps.breadcrumbs);
+    }
+  }
   onChangeHandler = e => {
     const searchValue = e.target.value;
     this.props.searchHandler(
@@ -57,8 +64,9 @@ class ProjectSiteTable extends Component {
                   type="search"
                   className="form-control"
                   onChange={this.onChangeHandler}
+                  placeholder="Search"
                 />
-                <label htmlFor="input">Search</label>
+
                 <i className="la la-search" />
               </div>
             </form>
@@ -67,12 +75,22 @@ class ProjectSiteTable extends Component {
               onClick={e =>
                 this.props.OpenTabHandler(
                   e,
-                  base_url + "/fieldsight/site/add/" + project_id + "/"
+                  base_url +
+                    "/fieldsight/application/#/create-site/" +
+                    project_id +
+                    "/"
                 )
               }
             >
               <i className="la la-plus" />
             </button>
+            <a
+              className="fieldsight-btn"
+              href={`/fieldsight/multi-site-assign-region/${project_id}/`}
+              target="_blank"
+            >
+              Assign Sites to Regions
+            </a>
             <a
               className="fieldsight-btn"
               href={`/fieldsight/bulksitesample/${project_id}/1/`}
@@ -108,6 +126,7 @@ class ProjectSiteTable extends Component {
                     <th>id</th>
                     <th>Address</th>
                     <th>Region</th>
+                    <th>Type</th>
                     <th>Progress</th>
                     <th>Submissions</th>
                     <th>Latest status</th>
@@ -148,6 +167,7 @@ class ProjectSiteTable extends Component {
                             {item.region}
                           </a>
                         </td>
+                        <td>{item.type}</td>
                         <td>
                           <div className="progress">
                             <div

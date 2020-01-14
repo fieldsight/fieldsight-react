@@ -2,7 +2,8 @@ import {
   GET_PROJECT_DASHBOARD,
   GET_REGION_DATA,
   GET_SITE_LIST,
-  GET_PROGRESS_TABLE_DATA
+  GET_PROGRESS_TABLE_DATA,
+  GET_SURVEY_FORM
 } from "../actions/types";
 
 const initialState = {
@@ -23,13 +24,13 @@ const initialState = {
   map: "",
   terms_and_labels: "",
   breadcrumbs: "",
+  is_project_manager: "",
   projectDashboardLoader: true,
   regionData: [],
-  siteList: [],
   projectRegionDataLoader: true,
-  projectSiteListLoader: true,
   progressLoader: true,
-  progressTableData: {}
+  progressTableData: {},
+  surveyData:[]
 };
 
 export default function(state = initialState, action) {
@@ -46,18 +47,17 @@ export default function(state = initialState, action) {
         regionData: [...action.payload],
         projectRegionDataLoader: false
       };
-    case GET_SITE_LIST:
-      return {
-        ...state,
-        siteList: [...action.payload.results.data],
-        projectSiteListLoader: false
-      };
     case GET_PROGRESS_TABLE_DATA:
       return {
         ...state,
         progressTableData: action.payload,
         progressLoader: false
       };
+      case GET_SURVEY_FORM:
+        return{
+          ...state,
+          surveyData:[...action.payload]
+        }
     default:
       return state;
   }

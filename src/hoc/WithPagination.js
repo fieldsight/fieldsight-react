@@ -16,28 +16,35 @@ const withPagination = WrappedComponent => {
       dLoader: true,
       per_page: 200,
       totalPage: null,
-      textVal: null
+      textVal: null,
+      form_id_string: "",
+      is_survey: false,
+      breadcrumbs: {}
     };
 
     getUrl = (page_num, payload) => {
       switch (payload.type) {
         case "projectSiteList":
-          return `fv3/api/project-site-list/?page=${page_num}&project=${
-            payload.projectId
-          }`;
+          return `fv3/api/project-site-list/?page=${page_num}&project=${payload.projectId}`;
         case "mySiteList":
-          return `fv3/api/my-sites/?page=${page_num}&project=${
-            payload.projectId
-          }`;
+          if (!!payload.profileId)
+            return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}&profile=${payload.profileId}`;
+          else
+            return `fv3/api/my-sites/?page=${page_num}&project=${payload.projectId}`;
 
         case "regionSite":
-          return `fv3/api/regional-sites/?page=${page_num}&region=${
-            payload.projectId
-          }`;
+          return `fv3/api/regional-sites/?page=${page_num}&region=${payload.projectId}`;
         case "projectRegionList":
-          return `fv3/api/project-regions/?page=${page_num}&project=${
-            payload.projectId
-          }`;
+          return `fv3/api/project-regions/?page=${page_num}&project=${payload.projectId}`;
+
+        case "viewByStatus":
+          return `fv3/api/view-by-status/?page=${page_num}&project=${payload.projectId}&submission_status=${payload.status}`;
+        case "siteStatus":
+          return `fv3/api/view-by-status/?page=${page_num}&site=${payload.projectId}&submission_status=${payload.status}`;
+        case "formSubmission":
+          return `/fv3/api/forms-submissions/?page=${page_num}&project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+        case "siteSubmission":
+          return `/fv3/api/forms-submissions/?page=${page_num}&site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
       }
     };
 
@@ -46,7 +53,7 @@ const withPagination = WrappedComponent => {
       axios
         .get(`${paginateUrl}`)
 
-        .then(res => {
+        .then(async res => {
           if (this._isMounted) {
             if (res.status === 200) {
               // if (res.data.results.query === null) {
@@ -80,12 +87,15 @@ const withPagination = WrappedComponent => {
                   });
                 }
               } else {
-                this.setState({
+                await this.setState({
                   siteList: res.data.results.data,
                   dLoader: false,
                   totalCount: res.data.count,
                   textVal: null,
-                  totalPage: Math.ceil(res.data.count / 200)
+                  form_id_string: res.data.results.form_id_string,
+                  breadcrumbs: res.data.results.breadcrumbs,
+                  totalPage: Math.ceil(res.data.count / 200),
+                  is_survey: res.data.results.is_survey
                 });
               }
             }
@@ -134,7 +144,6 @@ const withPagination = WrappedComponent => {
           ) {
             return (
               <li key={number} className={classes}>
-                {" "}
                 <a onClick={e => this.paginationHandler(number, null, payload)}>
                   {number}
                 </a>

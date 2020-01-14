@@ -1,15 +1,16 @@
 import React from "react";
-import uuid from "uuid/v4";
+
 const SelectElement = ({
   formType,
   className,
   label,
   options,
   changeHandler,
-  value
+  value,
+  classname
 }) => {
   return (
-    <div className="form-group">
+    <div className={`form-group ${classname}`}>
       {label && (
         <label>
           {label} {formType === "editForm" && <sup>*</sup>}
@@ -19,23 +20,39 @@ const SelectElement = ({
         <select
           className={className}
           onChange={changeHandler}
-          // onFocus={options.length > 0 ? changeHandler : () => {}}
           value={value ? value : undefined}
+          // value="81881"
         >
-          {/* {options.length > 0 ? ( */}
           {options.map((option, i) => (
             <option
-              value={option.id ? option.id : option.name ? option.name : option}
-              key={`${option.name ? option.name : option}${i}`}
+              value={
+                option.id
+                  ? option.id
+                  : option.name
+                  ? option.name
+                  : option.key
+                  ? option.key
+                  : ""
+              }
+              key={`${
+                option.name
+                  ? option.name
+                  : option.value
+                  ? option.value
+                  : option.identifier
+                  ? option.identifier
+                  : ""
+              }${i}`}
             >
-              {option.name ? option.name : option}
+              {option.name
+                ? option.name
+                : option.value
+                ? option.value
+                : option.identifier
+                ? option.identifier
+                : ""}
             </option>
           ))}
-          {/* ) : value ? (
-          <option>{value}</option>
-        ) : (
-          <option>--Select--</option>
-        )} */}
         </select>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import DashboardHeader from "./dashboardComponent/DashboardHeader";
+import DashboardHeader from "./dashboardComponent/DashBoardHeader";
 import DatatablePage from "./dashboardComponent/DatatablePage";
 import SiteMap from "./dashboardComponent/SiteMap";
 import PhotoGallery from "./dashboardComponent/PhotoGallery";
@@ -27,6 +27,7 @@ import {
 
 //const siteId = window.site_id ? window.site_id : 81704;
 //const siteId = window.site_id ? window.site_id : 81704;
+const user_id = window.user_id ? window.user_id : 1;
 
 const INITIAL_STATE = {
   activeTab: "general",
@@ -34,7 +35,8 @@ const INITIAL_STATE = {
   showSubmissionModal: false,
   showCropper: false,
   showSubsites: false,
-  showGallery: false
+  showGallery: false,
+  siteId: ""
 };
 class SiteDashboard extends Component {
   state = INITIAL_STATE;
@@ -92,6 +94,7 @@ class SiteDashboard extends Component {
 
   componentDidMount() {
     const { id: siteId } = this.props.match.params;
+
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
     this.props.getSiteSubmissions(siteId);
@@ -99,6 +102,9 @@ class SiteDashboard extends Component {
     this.props.getSiteLogs(siteId);
     this.props.getSiteForms(siteId, "general");
     this.props.getRecentPictures(siteId);
+    this.setState({
+      siteId
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -155,7 +161,9 @@ class SiteDashboard extends Component {
           sitePicturesLoader,
           subSitesLoader,
           has_write_permission,
-          breadcrumbs
+          breadcrumbs,
+          current_progress,
+          type
         },
         getSiteForms,
         putCropImage,
@@ -236,6 +244,8 @@ class SiteDashboard extends Component {
                 showGallery={showGallery}
                 hasWritePermission={has_write_permission}
                 projectId={project_id}
+                currentProgress={current_progress}
+                type={type}
               />
               <div className="row">
                 <div className="col-lg-6">
@@ -313,7 +323,10 @@ class SiteDashboard extends Component {
               </div>
               <div className="dashboard-counter mrt-30">
                 <div className="row">
-                  <DashboardCounter submissions={submissions} />
+                  <DashboardCounter
+                    submissions={submissions}
+                    siteid={this.state.siteId}
+                  />
                 </div>
               </div>
               <div className="chart mrb-30">
@@ -395,6 +408,7 @@ class SiteDashboard extends Component {
                     showContentLoader={siteLogsLoader}
                     siteId={siteId}
                     type="site"
+                    user_id={user_id}
                   />
                 </div>
               </div>

@@ -1,5 +1,7 @@
+// #app {
+//   padding: 0 1rem;
+// }
 .fieldsight-new {
-
   .mr-0,
   .no-margin {
     margin: 0 !important;
@@ -68,14 +70,26 @@
   .pd-0 {
     padding: 0;
   }
-
-  .container {
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+  .flex{
+    @include flex;
   }
+  .flex-start{
+    @include flexStart;
+  }
+  .flex-end{
+    @include flexEnd;
+  }
+  .flex-center{
+    @include flexCenter;
+  }
+  .flexvr{
+    @include flexvr;
+  }
+  .flex-between{
+    @include flexBetween;
+  }
+
+
 
   .no-bg {
     background-color: none !important;
@@ -88,127 +102,6 @@
   .tooltip-inner {
     color: $color-white;
     background-color: $color-blue;
-  }
-
-  @media (min-width: 576px) {
-    .container {
-      max-width: 540px;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .container {
-      max-width: 720px;
-    }
-  }
-
-  @media (min-width: 992px) {
-    .container {
-      max-width: 960px;
-    }
-  }
-
-  @media (min-width: 1200px) {
-    .container {
-      max-width: 1140px;
-
-    }
-  }
-
-  @media (min-width: 1400px) {
-    .container {
-      max-width: 1340px;
-    }
-  }
-
-  @media (min-width: 1800px) {
-    .container {
-      max-width: 1440px;
-    }
-  }
-
-  .col-1,
-  .col-2,
-  .col-3,
-  .col-4,
-  .col-5,
-  .col-6,
-  .col-7,
-  .col-8,
-  .col-9,
-  .col-10,
-  .col-11,
-  .col-12,
-  .col,
-  .col-auto,
-  .col-sm-1,
-  .col-sm-2,
-  .col-sm-3,
-  .col-sm-4,
-  .col-sm-5,
-  .col-sm-6,
-  .col-sm-7,
-  .col-sm-8,
-  .col-sm-9,
-  .col-sm-10,
-  .col-sm-11,
-  .col-sm-12,
-  .col-sm,
-  .col-sm-auto,
-  .col-md-1,
-  .col-md-2,
-  .col-md-3,
-  .col-md-4,
-  .col-md-5,
-  .col-md-6,
-  .col-md-7,
-  .col-md-8,
-  .col-md-9,
-  .col-md-10,
-  .col-md-11,
-  .col-md-12,
-  .col-md,
-  .col-md-auto,
-  .col-lg-1,
-  .col-lg-2,
-  .col-lg-3,
-  .col-lg-4,
-  .col-lg-5,
-  .col-lg-6,
-  .col-lg-7,
-  .col-lg-8,
-  .col-lg-9,
-  .col-lg-10,
-  .col-lg-11,
-  .col-lg-12,
-  .col-lg,
-  .col-lg-auto,
-  .col-xl-1,
-  .col-xl-2,
-  .col-xl-3,
-  .col-xl-4,
-  .col-xl-5,
-  .col-xl-6,
-  .col-xl-7,
-  .col-xl-8,
-  .col-xl-9,
-  .col-xl-10,
-  .col-xl-11,
-  .col-xl-12,
-  .col-xl,
-  .col-xl-auto {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .row {
-    margin-right: -15px;
-    margin-left: -15px;
-  }
-
-  .container-fluid {
-    padding-left: 15px;
-    padding-right: 15px;
   }
 
   .table {
@@ -255,6 +148,9 @@
             color: $color-white;
             @include radius4;
             margin-left: 0.635rem;
+            i.la-ellipsis-v:last-child{
+              margin-left:-10px;
+            }
           }
         }
       }
@@ -275,7 +171,6 @@
           margin-right: 0.25rem;
           font-weight: 600;
         }
-
       }
 
       .head-icon {
@@ -295,7 +190,6 @@
         .dash-btn {
           @include translatey;
           right: 1rem;
-          ;
         }
 
         .nav-tabs {
@@ -308,23 +202,28 @@
       }
 
       &.dashboard-header {
+        border:0;
+        padding:1rem;
         .dash-pf {
           @include flex_start;
           align-items: center;
           flex-wrap: nowrap;
 
           figure {
-            max-width: 80px;
-            width:80px;
-            height:80px;
+            flex:0 0 65px;
+            -ms-flex:0 0 65px;
+            max-width: 65px;
+            height: 65px;
+            
             @include coverbg;
             @include radius50;
             margin: 0 1rem 0 0;
             position: relative;
 
             img {
-              @extend figure;
-              height: 80px;
+              @include radius50;
+              width: 65px;
+              height: 65px;
             }
 
             figcaption {
@@ -352,7 +251,7 @@
                 &:hover {
                   background-color: $color-yellow;
                 }
-                &:first-child{
+                &:first-child {
                   margin-right: 0.2rem;
                   background-color: $color-yellow;
                 }
@@ -374,12 +273,12 @@
             }
 
             &:hover {
-              figcaption{
+              figcaption {
                 opacity: 1;
                 visibility: visible;
                 @include animZoom-after;
                 @include backface;
-            }
+              }
               span {
                 opacity: 1;
                 visibility: visible;
@@ -388,18 +287,32 @@
           }
 
           .dash-pf-content {
+            .type-info{
+              margin-top:.5rem;
+            }
             h5 {
-              line-height: 1.5rem;
+              font-size:1.5rem;
+              line-height: 1.3rem;
             }
 
             span {
-              font-size: 0.775rem;
-              color: rgba($color-primary, 0.7);
-              margin: 0.25rem 0;
+              font-size: .8125rem;
+              color: $color-secondary;
+              font-weight: 500;;
+              margin: 0.6125rem 0;
               display: inline-block;
+            }
+            .flex{
+              label{
+                margin:0;
+              }
+              span{
+                margin:0;
+              }
             }
           }
         }
+        
       }
     }
 
@@ -429,7 +342,6 @@
 
     .myform-header {
       position: relative;
-
     }
 
     .bg-header {
@@ -449,7 +361,36 @@
     }
 
     &.no-boxshadow {
-      box-shadow: none
+      box-shadow: none;
+    }
+
+    .deploy-active {
+      color: $color-green !important;
+    }
+    .deploy-inactive {
+      pointer-events: none;
+      cursor: default;
+      text-decoration: none;
+      color: rgb(165, 163, 163) !important;
+    }
+  }
+  span.drag-icon {
+    display: inline-block;
+
+    i {
+      margin-left: -10px;
+      color: darken($color-bg, 10%);
+      font-size: 1.2rem;
+
+      &:last-child {
+        margin-left: -.875rem;
+      }
+    }
+
+    &:hover {
+      cursor: -moz-move;
+      cursor: -webkit-move;
+      cursor: move;
     }
   }
 
@@ -474,7 +415,6 @@
   .twitter {
     color: $twitter;
   }
-
 }
 
 .cursor {
@@ -499,7 +439,6 @@
 
   span {
     position: relative;
-
     width: 11px;
     height: 11px;
     background-color: $color-yellow;
@@ -514,4 +453,7 @@
   .cursor {
     background-color: rgba($color-green, 0.4);
   }
+}
+.border-none{
+  border:none;
 }

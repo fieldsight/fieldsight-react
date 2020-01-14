@@ -22,8 +22,8 @@ export default class Settings extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`/fieldsight/project-dashboard/${
-                  window.project_id ? window.project_id : 182
+                href={`/fieldsight/application/#/project-dashboard/${
+                  window.project_id ? window.project_id : 1
                 }/`}
               >
                 {window.project_name ? window.project_name : "Project Name"}
@@ -40,7 +40,7 @@ export default class Settings extends Component {
             <div className="left-sidebar new-sidebar sticky-top">
               <div className="card">
                 <div className="card-header main-card-header">
-                  <h5>Meta Attributes</h5>
+                  <h5>Project Settings</h5>
                 </div>
                 <div className="card-body">
                   <LeftSidebar />

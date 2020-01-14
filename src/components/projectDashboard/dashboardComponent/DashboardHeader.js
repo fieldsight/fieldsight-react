@@ -1,13 +1,18 @@
 import React from "react";
 import Cropper from "react-cropper";
-
+import { Link } from "react-router-dom";
 import pf from "../../../static/images/pf.jpg";
 import { Button, Dropdown } from "react-bootstrap";
 import CountCard from "../../common/CountCard";
 import { AvatarContentLoader } from "../../common/Loader";
 import { DotLoader } from "../../common/Loader";
+import Modal from "../../common/Modal";
+import SubmissionModal from "./SubmissionModel";
 
 class DashboardHeader extends React.Component {
+  state = {
+    openmodel: false
+  };
   saveImage = () => {
     if (typeof this.cropper.getCroppedCanvas() === "undefined") {
       return;
@@ -38,13 +43,23 @@ class DashboardHeader extends React.Component {
       openModal,
       showCropper,
       termsAndLabels,
-      showGallery
+      showGallery,
+      isProjectManager,
+      totalSubmissions,
+      surveyData
     } = this.props;
+
+    const { openmodel } = this.state;
     const ManageDropdown = [
       { title: "users", link: `/fieldsight/manage/people/project/${id}/` },
-      { title: "forms", link: `/forms/setup-forms/1/${id}` },
+      // { title: "forms", link: `/forms/setup-forms/1/${id}` },
       {
-        title: `Import ${termsAndLabels && termsAndLabels.site}`,
+        title: "forms",
+        link: `/fieldsight/application/#/project/manage-forms/1/${id}/generalform`
+      },
+
+      {
+        title: `${termsAndLabels && termsAndLabels.site}`,
         link: `/fieldsight/application/?project=${id}#/project-sitelist`
       },
       {
@@ -57,7 +72,10 @@ class DashboardHeader extends React.Component {
         title: "Generate Report",
         link: `/fieldsight/project-dashboard/${id}/`
       },
-      { title: "View Data", link: `/forms/project-responses/${id}/` }
+      {
+        title: "View Data",
+        link: `/fieldsight/application/#/project-responses/${id}/general/`
+      }
     ];
 
     return (
@@ -92,72 +110,98 @@ class DashboardHeader extends React.Component {
             </div>
           )}
           <div className="dash-btn">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Data"
-                className="fieldsight-btn"
-              >
-                <i className="la la-paste" />
-                <span>Data</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                {DataDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+            {isProjectManager && (
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Data"
+                  className="fieldsight-btn"
+                >
+                  <i className="la la-paste" />
+                  <span>Data</span>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu-right">
+                  {DataDropdown.map((item, i) => (
+                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
 
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Manage"
-                className="fieldsight-btn"
-              >
-                <i className="la la-cog" />
-                <span>Manage</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+            {isProjectManager && (
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant=""
+                  id="dropdown-Manage"
+                  className="fieldsight-btn"
+                >
+                  <i className="la la-cog" />
+                  <span>Manage</span>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu-right">
+                  {ManageDropdown.map((item, i) => (
+                    <Dropdown.Item href={item.link} key={i} target="_blank">
+                      {item.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
           </div>
         </div>
-        <div className="card-body">
-          <div className="header-count">
-            {/* <a href={`/#`} target="_blank">
-              <CountCard
-                countName="Submissions"
-                countNumber={50}
-                icon="la-copy"
-              />
-            </a> */}
-            <a href={`/fieldsight/proj-users/${id}/`} target="_blank">
-              <CountCard
-                countName="Total Users"
-                countNumber={totalUsers}
-                icon="la-user"
-                noSubmissionText={true}
-              />
-            </a>
-            <a
-              href={`/fieldsight/application/?project=${id}#/project-sitelist`}
-              target="_blank"
-            >
-              <CountCard
-                countName="Total sites"
-                countNumber={totalSites}
-                icon="la-map-marker"
-                noSubmissionText={true}
-              />
-            </a>
+        <div className="card-body dashboard-header-bottom">
+          <div className="flex-between">
+            <div className="header-count">
+              <Link to={`/project-responses/${id}/general`} target="_blank">
+                <CountCard
+                  countName=""
+                  countNumber={totalSubmissions}
+                  icon="la-copy"
+                  //noSubmissionText={true}
+                />
+              </Link>
+              <a
+                href={`/fieldsight/application/#/project-users/${id}/`}
+                target="_blank"
+              >
+                <CountCard
+                  countName="User"
+                  countNumber={totalUsers}
+                  icon="la-user"
+                  noSubmissionText={true}
+                />
+              </a>
+              <a
+                href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+                target="_blank"
+              >
+                <CountCard
+                  countName="site"
+                  countNumber={totalSites}
+                  icon="la-map-marker"
+                  noSubmissionText={true}
+                />
+              </a>
+            </div>
+            {isProjectManager && (
+              <button
+                role="button"
+                onClick={() => this.setState({ openmodel: true })}
+                className="common-button is-border is-icon"
+              >
+                <i className="material-icons">library_add</i>
+                <span>Add data</span>
+              </button>
+            )}
           </div>
+          {openmodel && (
+            <SubmissionModal
+              surveyData={surveyData}
+              toggleModal={() => this.setState({ openmodel: false })}
+            />
+          )}
           {showGallery && (
             <div
               className="gallery-zoom fieldsight-popup open"

@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-
+import PerfectScrollbar from "react-perfect-scrollbar";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
 import { BlockContentLoader } from "../common/Loader";
-
 
 const url = "fv3/api/myroles";
 let base_url = window.base_url
@@ -17,21 +16,25 @@ class YourTeamSideBar extends Component {
   };
 
   render() {
-   
     return (
-      <div className="col-xl-4 col-lg-5"  style={{ position: "relative", height: "500px" }}>
+      <div className="col-xl-4 col-lg-5">
         <div className="left-sidebar new-sidebar sticky-top">
           <div className="card">
             <div className="card-header main-card-header">
               <h5>Your Teams</h5>
-             {this.props.addPermission && <div className="add-btn">
-                <a href="/fieldsight/organization/add/" target="_blank">
-                  Add team
-                  <span>
-                    <i className="la la-plus" />
-                  </span>
-                </a>
-              </div>}
+              {this.props.addPermission && (
+                <div className="add-btn">
+                  <a
+                    href="/fieldsight/application/#/create-team/"
+                    target="_blank"
+                  >
+                    Add team
+                    <span>
+                      <i className="la la-plus" />
+                    </span>
+                  </a>
+                </div>
+              )}
             </div>
 
             {this.props.dLoader && (
@@ -39,77 +42,56 @@ class YourTeamSideBar extends Component {
             )}
 
             {!this.props.dLoader && (
-              <div>
+              <div
+                style={{
+                  position: "relative",
+                  height: "600px"
+                }}
+              >
+                <PerfectScrollbar>
                   <Accordion
                     defaultActiveKey="0"
                     className="sidebar-accordion"
                     id="accordion"
-                   
                   >
-                {this.props.teams.map((team, i) => (
-                
-                    <Card className="no-boxshadow"  key={i}>
-                      <Card.Header>
-                        <figure>
-                          <img src={team.logo} alt="pf" />
-                        </figure>
-                        <h5>
-                          <Accordion.Toggle
-                            as={Button}
-                            variant="link"
-                            eventKey={i.toString()}
-                           
-                          >
-                            {team.name}
-                            {team.has_organization_access && (
-                              <span
-                                onClick={e =>  
-                                  this.OpenTabHandler(team.team_url)
-                                }
-                                className="goto"
-                              >
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={<Tooltip>Go to dashboard</Tooltip>}
-                                >
-                                  <i className="la la-external-link" />
-                                </OverlayTrigger>
-                              </span>
-                            )}
-                            <p>{team.address}</p>
-                          </Accordion.Toggle>
-                        </h5>
-                      </Card.Header>
-
-                      <Accordion.Collapse eventKey={i.toString()}>
-                        <Card.Body>
-                          <ul>
-                         
-                            {team.projects.map((project, i) => (
-                              <li
-                                className={
-                                  project.id == this.props.teamId
-                                    ? "active"
-                                    : null
-                                }
-                                key={i}
-                              >
-                                <a
-                                  onClick={event => {
-                                    this.props.requestRegions(project.id);
-                                    this.props.requestSite(project.id);
-                                    this.props.requestSubmission(project.id);
-                                    this.props.requestMap(project.id);
-                                  }}
-                                >
-                                  {project.name}
-                                </a>
-                                {project.has_project_access && (
-                                  <a
-                                    className="project-link"
-                                    href={`/fieldsight/project-dashboard/${
-                                      project.id
-                                    }/`}
+                    {this.props.teams.map((team, i) => (
+                      <Card className="no-boxshadow" key={i}>
+                        <Card.Header>
+                          <figure>
+                            <img src={team.logo} alt="pf" />
+                          </figure>
+                          <h5>
+                            <Accordion.Toggle
+                              as={Button}
+                              variant="link"
+                              eventKey={i.toString()}
+                            >
+                              {team.name}
+                              <span>
+                                {!!team.can_delete_role && (
+                                  <span
+                                    className="td-delete-btn td-btn"
+                                    onClick={() => {
+                                      this.props.requestCheckRoles(
+                                        "team",
+                                        team.id
+                                      );
+                                    }}
+                                  >
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Delete</Tooltip>}
+                                    >
+                                      <i className="la la-trash-o" />
+                                    </OverlayTrigger>
+                                  </span>
+                                )}
+                                {team.has_organization_access && (
+                                  <span
+                                    onClick={e =>
+                                      this.OpenTabHandler(team.team_url)
+                                    }
+                                    className="goto"
                                   >
                                     <OverlayTrigger
                                       placement="top"
@@ -119,18 +101,84 @@ class YourTeamSideBar extends Component {
                                     >
                                       <i className="la la-external-link" />
                                     </OverlayTrigger>
-                                  </a>
+                                  </span>
                                 )}
-                              </li>
-                            ))}
-                             
-                          </ul>
-                        </Card.Body>
-                      </Accordion.Collapse>
-                    </Card>
-                
-                ))}
+                              </span>
+                              <p>{team.address}</p>
+                            </Accordion.Toggle>
+                          </h5>
+                        </Card.Header>
+
+                        <Accordion.Collapse eventKey={i.toString()}>
+                          <Card.Body>
+                            <ul style={{ position: "relative" }}>
+                              {team.projects.map((project, i) => (
+                                <li
+                                  className={
+                                    project.id == this.props.teamId
+                                      ? "active"
+                                      : null
+                                  }
+                                  key={i}
+                                >
+                                  <a
+                                    onClick={() => {
+                                      this.props.requestSite(project.id);
+                                      this.props.requestRegions(project.id);
+                                      this.props.requestSubmission(project.id);
+                                      this.props.requestMap(project.id);
+                                    }}
+                                  >
+                                    {project.name}
+                                  </a>
+                                  <div>
+                                    {project.has_project_access && (
+                                      <span
+                                        onClick={e =>
+                                          this.OpenTabHandler(
+                                            project.project_url
+                                          )
+                                        }
+                                        className="project-link"
+                                      >
+                                        <OverlayTrigger
+                                          placement="top"
+                                          overlay={
+                                            <Tooltip>Go to dashboard</Tooltip>
+                                          }
+                                        >
+                                          <i className="la la-external-link" />
+                                        </OverlayTrigger>
+                                      </span>
+                                    )}
+                                    {!!project.can_delete_role && (
+                                      <span
+                                        className="td-delete-btn td-btn"
+                                        onClick={() => {
+                                          this.props.requestCheckRoles(
+                                            "project",
+                                            project.id
+                                          );
+                                        }}
+                                      >
+                                        <OverlayTrigger
+                                          placement="top"
+                                          overlay={<Tooltip>Delete</Tooltip>}
+                                        >
+                                          <i className="la la-trash-o" />
+                                        </OverlayTrigger>
+                                      </span>
+                                    )}
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                    ))}
                   </Accordion>
+                </PerfectScrollbar>
               </div>
             )}
           </div>

@@ -1,0 +1,198 @@
+.fieldsight-new {
+    form {
+        .form-group {
+            .custom-checkbox {
+                label {
+                    color: $primary-light;
+                    font-size: .75rem;
+
+
+                    &.custom-control-label {
+                        margin: 0;
+
+                        &::before {
+                            border: 1.5px solid $primary-light;
+                            background-color: $color-white;
+                            @include radius(0);
+                        }
+                    }
+                }
+
+                .custom-control-input {
+                    &:active {
+                        ~.custom-control-label {
+                            &::before {
+                                background-color: transparent;
+                            }
+                        }
+                    }
+
+                    &:checked {
+                        ~.custom-control-label {
+                            color: $color-secondary;
+
+                            &::before {
+                                background-color: $color-secondary;
+                                border-color: $color-secondary;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            .custom-radio {
+                label {
+                    color: $primary-light;
+                    font-size: .75rem;
+                    font-weight: 500;
+
+                    &.custom-control-label {
+                        margin: 0;
+
+                        &::before {
+                            background-color: $color-white
+                        }
+                    }
+                }
+
+                .custom-control-input {
+                    &:active {
+                        ~.custom-control-label {
+                            &::before {
+                                background-color: $color-secondary;
+                            }
+                        }
+                    }
+
+                    &:checked {
+                        ~.custom-control-label {
+                            color: $color-white;
+
+                            &::before {
+                                background-color: $color-secondary;
+                            }
+                        }
+                    }
+
+                }
+
+                &.inline-flex {
+                    @include inline-flex;
+                    align-items: center;
+                }
+            }
+        }
+    }
+}
+
+.custom-checkbox {
+    &.custom-control{
+        min-height: 1.3rem;
+    padding-left: 1.3rem;
+    }
+    label {
+        color: $primary-light;
+        font-size: .75rem;
+
+
+        &.custom-control-label {
+            margin: 0;
+
+            &::before {
+                border: 1.5px solid $primary-light;
+                background-color: $color-white;
+                @include radius(0);
+                position: absolute;
+                top: .25rem;
+                left: 0;
+                display: block;
+                width: .875rem;
+                height: .875rem;
+                pointer-events: none;
+                content: "";
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            &::after {
+                position: absolute;
+                top: .25rem;
+                left: 0;
+                display: block;
+                width: .875rem;
+                height: .875rem;
+                content: "";
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: 50% 50%;
+            }
+        }
+    }
+
+    .custom-control-input {
+        &:active {
+            ~.custom-control-label {
+                &::before {
+                    background-color: transparent;
+                }
+            }
+        }
+
+        &:checked {
+            ~.custom-control-label {
+                color: $color-secondary;
+
+                &::before {
+                    background-color: $color-secondary;
+                    border-color: $color-secondary;
+                }
+            }
+        }
+
+    }
+}
+
+.custom-radio {
+    label {
+        color: $primary-light;
+        font-size: .75rem;
+        font-weight: 500;
+
+        &.custom-control-label {
+            margin: 0;
+
+            &::before {
+                background-color: $color-white
+            }
+        }
+    }
+
+    .custom-control-input {
+        &:active {
+            ~.custom-control-label {
+                &::before {
+                    background-color: $color-secondary;
+                }
+            }
+        }
+
+        &:checked {
+            ~.custom-control-label {
+                color: $color-white;
+
+                &::before {
+                    background-color: $color-secondary;
+                }
+            }
+        }
+
+    }
+
+    &.inline-flex {
+        @include inline-flex;
+        align-items: center;
+    }
+}

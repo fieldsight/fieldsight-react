@@ -36,7 +36,8 @@ class SiteProgressCard extends Component {
     let selectedForm = {};
     let selectedQuestion = {};
     let source = "0";
-    let showForm = false;
+    let showForm;
+
     let showQuestion = false;
     let showTargetNum = false;
     let filteredQuestions = [];
@@ -91,7 +92,7 @@ class SiteProgressCard extends Component {
       filteredQuestions,
       showTargetNum,
       showQuestion,
-      showForm
+      ...(showForm && { showForm })
     });
   }
 
@@ -99,15 +100,16 @@ class SiteProgressCard extends Component {
     const {
       state: { source, selectedForm, selectedQuestion, targetNum }
     } = this;
+
     this.props.siteProgressHandler({
       pull_integer_form: source == "2" ? selectedForm.id : null,
       no_submissions_form: source == "4" ? selectedForm.id : null,
       no_submissions_total_count: targetNum ? +targetNum : null,
-      pull_integer_form_question: selectedQuestion.groupName
-        ? `${selectedQuestion.groupName}/${selectedQuestion.name}`
-        : selectedQuestion.name
-        ? selectedQuestion.name
-        : null,
+      pull_integer_form_question: selectedQuestion.name,
+      // ? selectedQuestion.name
+      // : // : selectedQuestion.name
+      //   // ? selectedQuestion.name
+      //   null,
       source: source,
       deployed: true
     });
@@ -116,25 +118,34 @@ class SiteProgressCard extends Component {
   onChangeHandler = e => {
     const { value } = e.target;
     if (value == "2") {
-      this.setState({
-        ...INITIAL_STATE,
-        showForm: true,
-        showQuestion: true,
-        source: value
-      });
+      this.setState(
+        {
+          ...INITIAL_STATE,
+          showForm: true,
+          showQuestion: true,
+          source: value
+        },
+        this.dataChangeHandler
+      );
     } else if (value == "3") {
-      this.setState({
-        ...INITIAL_STATE,
-        showTargetNum: true,
-        source: value
-      });
+      this.setState(
+        {
+          ...INITIAL_STATE,
+          showTargetNum: true,
+          source: value
+        },
+        this.dataChangeHandler
+      );
     } else if (value == "4") {
-      this.setState({
-        ...INITIAL_STATE,
-        showForm: true,
-        showTargetNum: true,
-        source: value
-      });
+      this.setState(
+        {
+          ...INITIAL_STATE,
+          showForm: true,
+          showTargetNum: true,
+          source: value
+        },
+        this.dataChangeHandler
+      );
     } else {
       this.setState(
         { ...INITIAL_STATE, source: value },
@@ -236,7 +247,7 @@ class SiteProgressCard extends Component {
                 />
               )}
 
-              {showQuestion && forms.length > 0 && (
+              {showQuestion && forms.length > 0 && selectedForm.id && (
                 <SelectElement
                   className="form-control"
                   options={filteredQuestions}

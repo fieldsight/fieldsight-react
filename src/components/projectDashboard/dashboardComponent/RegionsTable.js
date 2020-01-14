@@ -35,7 +35,7 @@ class RegionsTable extends React.Component {
     };
     return (
       <div className="card-body">
-        <div style={{ position: "relative", height: "400px" }}>
+        <div style={{ position: "relative", height: "396px" }}>
           <PerfectScrollbar>
             {loader && <DotLoader />}
             {!loader && (
@@ -44,7 +44,15 @@ class RegionsTable extends React.Component {
                 className="table  table-bordered  dataTable "
               >
                 <TableHeader tableHeader={tableHeader.projectRegions} />
-                <TableRow tableRow={data} page="projectManageRegion" />
+                {data.length > 0 ? (
+                  <TableRow tableRow={data} page="projectManageRegion" />
+                ) : (
+                  <tbody>
+                    <tr>
+                      <td colSpan={4}>No Form Data Available</td>
+                    </tr>
+                  </tbody>
+                )}
               </Table>
             )}
           </PerfectScrollbar>
