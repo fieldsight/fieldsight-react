@@ -34,11 +34,11 @@ class SiteTable extends Component {
           {!this.props.siteLoader && (
             <div>
               <ul style={{ position: "relative", height: "650px" }}>
-                {this.props.site.length === 0 && (
+                {this.props.site && this.props.site.length === 0 && (
                   <p>You do not have any sites.</p>
                 )}
                 <PerfectScrollbar>
-                  {this.props.site.length > 0 && (
+                  {this.props.site && this.props.site.length > 0 && (
                     <Table
                       responsive="xl"
                       className="table  table-bordered  dataTable "
@@ -150,7 +150,7 @@ class SiteTable extends Component {
             </div>
           )}
         </div>
-        {this.props.site.length > 0 && (
+        {this.props.site && this.props.site.length > 0 && (
           <div className="table-footer">
             <div className="showing-rows">
               <p>

@@ -53,7 +53,7 @@ const withPagination = WrappedComponent => {
       axios
         .get(`${paginateUrl}`)
 
-        .then(res => {
+        .then(async res => {
           if (this._isMounted) {
             if (res.status === 200) {
               // if (res.data.results.query === null) {
@@ -87,7 +87,7 @@ const withPagination = WrappedComponent => {
                   });
                 }
               } else {
-                this.setState({
+                await this.setState({
                   siteList: res.data.results.data,
                   dLoader: false,
                   totalCount: res.data.count,
