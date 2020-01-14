@@ -61,6 +61,9 @@ import AdminDashboard from './adminDashboard';
 import SuperAdminFormEdit from './superAdminEdit';
 import SuperAdminForm from './superAdminForm';
 import SuperAdminSetting from './adminDashboard/organizationSettings/settings';
+import OragnizatonProjectList from './organizationProjectList';
+import OrganizationUserList from './organizationUserList';
+import OrganizationTeams from './organizationTeamList';
 
 // import FilterDataFilter from './reports/FormDataFilter';
 import ExportDataFilter from './reports/ExportDataFilter';
@@ -233,7 +236,14 @@ class App extends Component {
                 />
                 <Route
                   path="/teams"
-                  render={props => <Teams {...props} />}
+                  render={props => (
+                    <Teams {...props} orgs="organization" />
+                  )}
+                />
+
+                <Route
+                  path="/organization-teams/:id"
+                  render={props => <OrganizationTeams {...props} />}
                 />
 
                 <Route
@@ -428,6 +438,20 @@ class App extends Component {
                 <Route
                   path="/user-export/:id"
                   render={props => <UserExportReport {...props} />}
+                />
+
+                <Route
+                  path="/organization-projects/:id"
+                  render={props => (
+                    <OragnizatonProjectList {...props} />
+                  )}
+                />
+
+                <Route
+                  path="/organization-users/:id"
+                  render={props => (
+                    <OrganizationUserList {...props} />
+                  )}
                 />
               </Switch>
               <ToastContainer />
