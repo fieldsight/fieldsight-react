@@ -21,7 +21,7 @@ export default class Templates extends Component {
       id: '',
       customReports: [],
       standardReports: [],
-      formButton: false,
+      // formButton: false,
     };
   }
 
@@ -135,11 +135,11 @@ export default class Templates extends Component {
     }
   };
 
-  handleForm = () => {
-    this.setState(preState => ({
-      formButton: !preState.formButton,
-    }));
-  };
+  // handleForm = () => {
+  //   this.setState(preState => ({
+  //     formButton: !preState.formButton,
+  //   }));
+  // };
 
   render() {
     const {
@@ -215,7 +215,7 @@ export default class Templates extends Component {
 
     return (
       <>
-        {!formButton && (
+        {
           <div className="card-body">
             <div className="standard-tempalte">
               <h2 className="my-3">Standard</h2>
@@ -229,11 +229,22 @@ export default class Templates extends Component {
                       <div className="col-md-12">
                         <div className="report-content">
                           {standardReport.title ===
-                            'Project Summary' ||
+                            'Project Summary' && (
+                            <a
+                              href={`/fieldsight/project/report/summary/${id}/`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <h4>{standardReport.title}</h4>
+                              <p>{standardReport.description}</p>
+                            </a>
+                          )}
+
+                          {(standardReport.title ===
+                            'Site Information' ||
                             standardReport.title ===
-                              'Site Information' ||
-                            (standardReport.title ===
-                              'Progress Report' && (
+                              'Progress Report') && (
+                            <>
                               <Link
                                 to={{
                                   pathname: `/export-data/${id}`,
@@ -247,10 +258,13 @@ export default class Templates extends Component {
                                 <h4>{standardReport.title}</h4>
                                 <p>{standardReport.description}</p>
                               </Link>
-                            ))}
+                            </>
+                          )}
 
-                          {standardReport.title ===
-                          'User Activity Report' ? (
+                          {(standardReport.title ===
+                            'Activity Report' ||
+                            standardReport.title ===
+                              'Project Logs') && (
                             <Link
                               to={{
                                 pathname: `/user-export/${id}`,
@@ -263,7 +277,10 @@ export default class Templates extends Component {
                               <h4>{standardReport.title}</h4>
                               <p>{standardReport.description}</p>
                             </Link>
-                          ) : (
+                          )}
+
+                          {standardReport.title ===
+                            'User Activity Report' && (
                             <Link
                               to={{
                                 pathname: `/activity-export/${id}`,
@@ -338,15 +355,14 @@ export default class Templates extends Component {
                 <div className="row">
                   <div className="col-md-8">
                     <div className="report-content">
-                      <a
+                      {/* <a
                         tabIndex="0"
                         role="button"
                         onKeyDown={this.handleForm}
                         onClick={this.handleForm}
-                      >
-                        Form Data
-                      </a>
-
+                      > */}
+                      Form Data
+                      {/* </a> */}
                       <p>
                         Export of forms data and site information an
                         Excel File, generated with filters in region,
@@ -617,10 +633,10 @@ export default class Templates extends Component {
                 ))}
             </div>
           </div>
-        )}
-        {formButton && (
+        }
+        {/* {formButton && (
           <FormDataFilter handleForm={this.handleForm} id={id} />
-        )}
+        )} */}
       </>
     );
   }

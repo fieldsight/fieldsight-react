@@ -25,12 +25,17 @@ export default class UserExportReport extends Component {
 
   componentDidMount() {
     const {
-      params: { id },
-    } = this.props.match;
+      props: {
+        match: {
+          params: { id },
+        },
+      },
+      state: { userType },
+    } = this;
     axios
       .get(`/fieldsight/api/project_managers/${id}/`)
       .then(req => {
-        const newArr = this.state.userType;
+        const newArr = userType;
 
         this.setState(() => {
           if (req.data !== undefined) {
@@ -174,13 +179,6 @@ export default class UserExportReport extends Component {
         title: 'Delete',
         link: '#',
       },
-    ];
-
-    const user = [
-      { id: '1', name: 'ua' },
-      { id: '2', name: 'a' },
-      { id: '12', name: 'B' },
-      { id: '13', name: 'c' },
     ];
 
     return (
