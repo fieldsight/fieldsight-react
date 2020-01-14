@@ -12,7 +12,7 @@ export default class FormTable extends PureComponent {
       openDelete,
       general_forms,
     } = this.props;
-    console.log(selected_forms, 'selected_forms');
+
     return (
       <>
         <label>General Table</label>
@@ -41,7 +41,7 @@ export default class FormTable extends PureComponent {
                       tabIndex="0"
                       className="td-delete-btn"
                       onClick={() => {
-                        this.props.openDelete(teams.id, 'general');
+                        openDelete(teams.id, 'general');
                       }}
                     >
                       <OverlayTrigger
@@ -91,7 +91,7 @@ export default class FormTable extends PureComponent {
                       tabIndex="0"
                       className="td-delete-btn"
                       onClick={() => {
-                        this.props.openDelete(teams.id, 'scheduled');
+                        openDelete(teams.id, 'scheduled');
                       }}
                     >
                       <OverlayTrigger

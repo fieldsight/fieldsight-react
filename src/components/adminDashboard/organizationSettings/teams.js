@@ -58,7 +58,7 @@ export default class Teams extends React.PureComponent {
   };
 
   changeHandler = e => {
-    const { id, checked, value } = e.target;
+    const { checked, value } = e.target;
 
     if (checked) {
       this.setState(prevState => ({
@@ -76,8 +76,11 @@ export default class Teams extends React.PureComponent {
   };
 
   handleSaveForm = () => {
-    const { id } = this.props;
-    const body = { team_ids: this.state.selected };
+    const {
+      props: { id },
+      state: { selected },
+    } = this.props;
+    const body = { team_ids: selected };
     axios
       .post(`/fv3/api/manage-teams/${id}/`, body)
       .then(res => {
@@ -88,7 +91,7 @@ export default class Teams extends React.PureComponent {
           });
         }
       })
-      .catch(err => {});
+      .catch();
   };
 
   openDelete = teams_id => {
@@ -135,8 +138,8 @@ export default class Teams extends React.PureComponent {
         selected_teams,
         is_superuser,
         openModal,
+        selected,
       },
-      handleDelete,
       openDelete,
       handleCancle,
       handleConfirm,
@@ -197,7 +200,7 @@ export default class Teams extends React.PureComponent {
           >
             <TeamList
               teams={teams}
-              selected={this.state.selected}
+              selected={selected}
               changeHandler={this.changeHandler}
             />
           </ManageModal>

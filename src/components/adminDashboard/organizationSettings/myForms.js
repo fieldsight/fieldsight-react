@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import uuid from 'uuid/v4';
 
 import {
   errorToast,
@@ -38,11 +37,14 @@ export default class MyForm extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.props;
+    const {
+      props: { id },
+      state: { forms },
+    } = this;
     axios
       .get(`/fv3/api/manage-super-organizations-library/${id}/`)
       .then(res => {
-        const newArr = this.state.forms;
+        const newArr = forms;
         this.setState(() => {
           if (res.data.forms !== undefined) {
             res.data.forms.map(arrPush => newArr.push(arrPush));
@@ -54,7 +56,7 @@ export default class MyForm extends Component {
           };
         });
       })
-      .catch(err => {});
+      .catch();
   }
 
   handleChange = () => {
@@ -70,7 +72,7 @@ export default class MyForm extends Component {
   };
 
   changeHandler = e => {
-    const { id, checked, value } = e.target;
+    const { checked, value } = e.target;
 
     if (checked) {
       this.setState(prevState => ({
@@ -225,20 +227,26 @@ export default class MyForm extends Component {
   render() {
     const {
       state: {
-        selected_forms,
+        selectValue,
+        scheduled_forms,
+        selectId,
+        general_forms,
+        // selected_forms,
         popUpPage,
-        selected,
+        // selected,
         forms,
         openModal,
         generalPopUp,
         schedulePopUp,
       },
       props: { id },
-      changeHandler,
-      handleClosePopup,
+      // changeHandler,
+      // handleClosePopup,
       openDelete,
       handleCancle,
       handleConfirm,
+      scheduleCloseButton,
+      handleAllModel,
     } = this;
 
     const option1 = [
@@ -256,9 +264,9 @@ export default class MyForm extends Component {
           buttonName="Add"
         >
           <FormTable
-            selected_forms={this.state.scheduled_forms}
+            selected_forms={scheduled_forms}
             openDelete={openDelete}
-            general_forms={this.state.general_forms}
+            general_forms={general_forms}
           />
         </RightContentCard>
         {popUpPage && (
@@ -305,7 +313,7 @@ export default class MyForm extends Component {
                     options={forms}
                     changeHandler={this.selectHandler}
                     label="Form List"
-                    value={this.state.selectId}
+                    value={selectId}
                   />
                 </div>
               </div>
@@ -316,7 +324,7 @@ export default class MyForm extends Component {
                     options={option1}
                     changeHandler={this.onchange}
                     label="type"
-                    value={this.state.selectValue}
+                    value={selectValue}
                   />
                 </div>
               </div>
@@ -334,32 +342,32 @@ export default class MyForm extends Component {
           />
         )}
 
-        {this.state.selectValue === '0' && generalPopUp && (
+        {selectValue === '0' && generalPopUp && (
           <Modal
             title="General Form"
             toggleModal={this.generalCloseButton}
           >
             <GeneralFormModal
-              selected={this.state.selectId}
+              selected={selectId}
               // selected={this.state.checkbox}
-              formType={this.state.selectValue}
-              id={this.props.id}
-              handleAllModel={this.handleAllModel}
+              formType={selectValue}
+              id={id}
+              handleAllModel={handleAllModel}
             />
           </Modal>
         )}
 
-        {this.state.selectValue === '1' && schedulePopUp && (
+        {selectValue === '1' && schedulePopUp && (
           <Modal
             title="Schedule Form"
-            toggleModal={this.scheduleCloseButton}
+            toggleModal={scheduleCloseButton}
           >
             <ScheduleFormModal
-              selected={this.state.selectId}
+              selected={selectId}
               // selected={this.state.checkbox}
-              formType={this.state.selectValue}
-              handleAllModel={this.handleAllModel}
-              id={this.props.id}
+              formType={selectValue}
+              handleAllModel={handleAllModel}
+              id={id}
             />
           </Modal>
         )}

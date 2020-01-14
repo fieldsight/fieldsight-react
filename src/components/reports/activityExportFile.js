@@ -20,7 +20,7 @@ export default class ActivityExportFile extends Component {
   handleYearlyChange = e => {
     const { value } = e.target;
 
-    this.setState(state => {
+    this.setState(() => {
       if (value === 'Daily') {
         return {
           scheduleType: value,
