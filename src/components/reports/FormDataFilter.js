@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
@@ -269,99 +270,114 @@ export default class FormDataFilter extends PureComponent {
         link: '#',
       },
     ];
-
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
     // const report_type = 'gfhj';
 
     return (
-      <div className="reports mrb-30">
-        <div className="card">
-          <div className="card-body">
-            <div className="standard-tempalte">
-              <h3 className="mb-3">Template report</h3>
+      <>
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to={`/project-dashboard/${id}`}>
+                Project Dashboard
+              </Link>
+            </li>
+            <li className="breadcrumb-item">Export Data</li>
+          </ol>
+        </nav>
+        <div className="reports mrb-30">
+          <div className="card">
+            <div className="card-body">
+              <div className="standard-tempalte">
+                <h3 className="mb-3">Template report</h3>
 
-              <div className="report-list">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="report-content">
-                      <h4>Export Data</h4>
-                      <p>
-                        Export of forms data and site information an
-                        Excel File, generated with filters in region,
-                        types and time range.
-                      </p>
+                <div className="report-list">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="report-content">
+                        <h4>Export Data</h4>
+                        <p>
+                          Export of forms data and site information an
+                          Excel File, generated with filters in
+                          region, types and time range.
+                        </p>
+                      </div>
                     </div>
                   </div>
+                  <div className="dropdown report-option">
+                    <Dropdown drop="left">
+                      <Dropdown.Toggle
+                        variant=""
+                        id="dropdown-Data"
+                        className="dropdown-toggle common-button no-border is-icon"
+                      >
+                        <i className="material-icons">more_vert</i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                        {DataCrude.map(item => (
+                          <Dropdown.Item
+                            href={item.link}
+                            key={item.id}
+                            target="_blank"
+                          >
+                            {item.title}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
                 </div>
-                <div className="dropdown report-option">
-                  <Dropdown drop="left">
-                    <Dropdown.Toggle
-                      variant=""
-                      id="dropdown-Data"
-                      className="dropdown-toggle common-button no-border is-icon"
-                    >
-                      <i className="material-icons">more_vert</i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                      {DataCrude.map(item => (
-                        <Dropdown.Item
-                          href={item.link}
-                          key={item.id}
-                          target="_blank"
-                        >
-                          {item.title}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="data-filter mt-3">
-                <h3 className="mb-3">Filters</h3>
-                <form>
-                  <div className="row">
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-group">
-                        <label className="mb-2">Site types</label>
-                        <CustomMultiSelect
-                          toggleSelectClass={siteOpen}
-                          handleToggleClass={this.SiteToggleClass}
-                          checkboxOption={siteType}
-                          handleCheck={this.siteHandler}
-                          selectedArr={this.state.siteSelected}
-                          placeholderTxt="Select Site Type"
-                          site="site"
-                        />
+                <div className="data-filter mt-3">
+                  <h3 className="mb-3">Filters</h3>
+                  <form>
+                    <div className="row">
+                      <div className="col-lg-3 col-md-6">
+                        <div className="form-group">
+                          <label className="mb-2">Site types</label>
+                          <CustomMultiSelect
+                            toggleSelectClass={siteOpen}
+                            handleToggleClass={this.SiteToggleClass}
+                            checkboxOption={siteType}
+                            handleCheck={this.siteHandler}
+                            selectedArr={this.state.siteSelected}
+                            placeholderTxt="Select Site Type"
+                            site="site"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-group">
-                        <label className="mb-2">Regions</label>
-                        <CustomMultiSelect
-                          toggleSelectClass={open}
-                          handleToggleClass={this.handleToggleClass}
-                          checkboxOption={projectRegions}
-                          handleCheck={this.changeHandlers}
-                          selectedArr={this.state.selected}
-                          placeholderTxt="Select Region Type"
-                          site="regions"
-                        />
+                      <div className="col-lg-3 col-md-6">
+                        <div className="form-group">
+                          <label className="mb-2">Regions</label>
+                          <CustomMultiSelect
+                            toggleSelectClass={open}
+                            handleToggleClass={this.handleToggleClass}
+                            checkboxOption={projectRegions}
+                            handleCheck={this.changeHandlers}
+                            selectedArr={this.state.selected}
+                            placeholderTxt="Select Region Type"
+                            site="regions"
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="col-lg-6 col-md-6">
-                      <div className="form-group icon-between">
-                        <label className="mb-2">Time period</label>
-                        <div className="inline-flex ">
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="Start Date"
-                              name="startedDate"
-                              selected={this.state.startedDate}
-                              onChange={this.onChangeHandler}
-                              dateFormat="yyyy-MM-dd"
-                              className="form-control"
-                            />
-                            {/* <div className="custom-group-append">
+                      <div className="col-lg-6 col-md-6">
+                        <div className="form-group icon-between">
+                          <label className="mb-2">Time period</label>
+                          <div className="inline-flex ">
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="Start Date"
+                                name="startedDate"
+                                selected={this.state.startedDate}
+                                onChange={this.onChangeHandler}
+                                dateFormat="yyyy-MM-dd"
+                                className="form-control"
+                              />
+                              {/* <div className="custom-group-append">
                               <span
                                 className="custom-group-text"
                                 style={{
@@ -380,26 +396,26 @@ export default class FormDataFilter extends PureComponent {
                                 </i>
                               </span>
                             </div> */}
-                          </div>
-                          <span className="icon-between">
-                            <i className="material-icons">
-                              arrow_right_alt
-                            </i>
-                          </span>
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="End Date"
-                              name="endedDate"
-                              selected={this.state.endedDate}
-                              onChange={this.onEndChangeHandler}
-                              className="form-control"
-                              dateFormat="yyyy-MM-dd"
-                            />
-                            {/* <i className="material-icons">
+                            </div>
+                            <span className="icon-between">
+                              <i className="material-icons">
+                                arrow_right_alt
+                              </i>
+                            </span>
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="End Date"
+                                name="endedDate"
+                                selected={this.state.endedDate}
+                                onChange={this.onEndChangeHandler}
+                                className="form-control"
+                                dateFormat="yyyy-MM-dd"
+                              />
+                              {/* <i className="material-icons">
                                 calendar_today
                               </i>
                             </DatePicker> */}
-                            {/* <DatePicker
+                              {/* <DatePicker
                               value={this.state.endedDate}
                               dateFormat="yyyy-MM-dd"
                               customInput={<Input />}
@@ -408,29 +424,30 @@ export default class FormDataFilter extends PureComponent {
                                 this.setState({ endedDate: date })
                               }
                             /> */}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="col-md-12">
-                      <button
-                        // disabled
-                        type="button"
-                        className="common-button mt-3 is-bg"
-                        onClick={this.handleApply}
-                      >
-                        Apply
-                      </button>
+                      <div className="col-md-12">
+                        <button
+                          // disabled
+                          type="button"
+                          className="common-button mt-3 is-bg"
+                          onClick={this.handleApply}
+                        >
+                          Apply
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </form>
-                {applyButton && <CollapseFilterTable />}
+                  </form>
+                  {applyButton && <CollapseFilterTable />}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
