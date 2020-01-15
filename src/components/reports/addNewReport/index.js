@@ -1482,8 +1482,50 @@ class AddNewReport extends Component {
     }));
   };
 
-  handleFormInfo = data => {
-    console.log('form info', data);
+  handleFormInfo = ({
+    selectedFormType,
+    selectedForm,
+    selectedQuestions,
+    selectedFormValue,
+  }) => {
+    const addArr = selectedFormValue.map(val => {
+      const input = {
+        ...selectedFormType,
+        value: {
+          selectedForm,
+          selectedQuestion: {
+            ...selectedQuestions,
+            form: { ...val },
+          },
+        },
+      };
+      return input;
+    });
+    const {
+      data: { selectedMetrics },
+    } = this.state;
+
+    this.setState(state => {
+      const filterMetrics = selectedMetrics.filter(m => {
+        if (m.value && m.value.selectedQuestion) {
+          if (
+            m.value.selectedQuestion.name === selectedQuestions.name
+          ) {
+            return false;
+          } else {
+            return true;
+          }
+        } else {
+          return true;
+        }
+      });
+      return {
+        data: {
+          ...state.data,
+          selectedMetrics: [...filterMetrics, ...addArr],
+        },
+      };
+    });
   };
 
   handleSubmitReport = () => {
