@@ -1482,6 +1482,63 @@ class AddNewReport extends Component {
     }));
   };
 
+  addSubmissionCount = (
+    selectedFormType,
+    selectedForm,
+    submissionCount,
+  ) => {
+    const {
+      data: { selectedMetrics },
+    } = this.state;
+    const toshowArr = [];
+    submissionCount.map(each => {
+      const { type, form, metrics } = each;
+      if (
+        type === selectedFormType.code &&
+        form === selectedForm.id
+      ) {
+        metrics.map(m => {
+          toshowArr.push({
+            ...selectedFormType,
+            value: {
+              selectedForm,
+              selectedIndividualForm: {
+                ...m,
+              },
+            },
+          });
+        });
+      }
+    });
+    // console.log(submissionCount, 'object', toshowArr);
+
+    this.setState(state => {
+      const filterMetrics = selectedMetrics.filter(m => {
+        if (m.value && m.value.selectedIndividualForm) {
+          if (m.code === selectedFormType.code) {
+            if (m.value.selectedForm.id === selectedForm.id) {
+              return false;
+            }
+            if (m.value.selectedForm.id !== selectedForm.id) {
+              return true;
+            }
+          } else {
+            return true;
+          }
+        } else {
+          return true;
+        }
+      });
+
+      return {
+        data: {
+          ...state.data,
+          selectedMetrics: [...filterMetrics, ...toshowArr],
+        },
+      };
+    });
+  };
+
   handleFormInfo = ({
     selectedFormType,
     selectedForm,
@@ -1509,9 +1566,16 @@ class AddNewReport extends Component {
       const filterMetrics = selectedMetrics.filter(m => {
         if (m.value && m.value.selectedQuestion) {
           if (
-            m.value.selectedQuestion.name === selectedQuestions.name
+            m.code === selectedFormType.code &&
+            m.value.selectedForm.id === selectedForm.id
           ) {
-            return false;
+            if (
+              m.value.selectedQuestion.name === selectedQuestions.name
+            ) {
+              return false;
+            } else {
+              return true;
+            }
           } else {
             return true;
           }
@@ -1887,6 +1951,7 @@ class AddNewReport extends Component {
                           selectedQuestions={selectedQuestions}
                           formValue={formValue}
                           selectedFormValue={selectedFormValue}
+                          addSubmissionCount={this.addSubmissionCount}
                           handleFormInfo={this.handleFormInfo}
                         />
                         <SelectedColumn

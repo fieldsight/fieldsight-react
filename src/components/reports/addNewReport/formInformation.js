@@ -143,11 +143,6 @@ class FormInformation extends Component {
     return find;
   };
 
-  findItem = (array, item) => {
-    const isItem = array.some(arr => arr.code === item);
-    return isItem;
-  };
-
   handleFormTypeChange = (e, item) => {
     const { projectId } = this.props;
     const {
@@ -243,44 +238,38 @@ class FormInformation extends Component {
         if (checked) {
           let filterSubmissionCount = [];
           if (selectedIndividualForm.length > 0) {
-            filterSubmissionCount = selectedIndividualForm.map(
-              count => {
-                if (count.type === selectedFormType.code) {
-                  if (count.form === selectedForm.id) {
-                    const each = {
-                      type: count.type,
-                      form: count.form,
-                      metrics: [...count.metrics, { ...item }],
-                    };
-                    return each;
-                  } else {
-                    const formobj = {
-                      type: count.type,
-                      form: selectedForm.id,
-                      metrics: [{ ...item }],
-                    };
-                    return formobj;
-                  }
+            selectedIndividualForm.map(count => {
+              const { type, form, metrics } = count;
+              if (type === selectedFormType.code) {
+                if (form === selectedForm.id) {
+                  metrics.push(item);
+                  filterSubmissionCount = count;
+
+                  return filterSubmissionCount;
                 } else {
-                  const countObj = {
-                    type: selectedFormType.code,
+                  filterSubmissionCount = {
+                    type: count.type,
                     form: selectedForm.id,
                     metrics: [{ ...item }],
                   };
-                  return countObj;
+                  return filterSubmissionCount;
                 }
-                // return count;
-              },
-            );
+              } else {
+                filterSubmissionCount = {
+                  type: selectedFormType.code,
+                  form: selectedForm.id,
+                  metrics: [{ ...item }],
+                };
+                return filterSubmissionCount;
+              }
+            });
           }
           if (selectedIndividualForm.length === 0) {
-            filterSubmissionCount = [
-              {
-                type: selectedFormType.code,
-                form: selectedForm.id,
-                metrics: [{ ...item }],
-              },
-            ];
+            filterSubmissionCount = {
+              type: selectedFormType.code,
+              form: selectedForm.id,
+              metrics: [{ ...item }],
+            };
           }
           const filterArr = selectedIndividualForm.filter(i => {
             if (i.type === selectedFormType.code) {
@@ -292,12 +281,13 @@ class FormInformation extends Component {
             }
             return true;
           });
+
           return {
             formInfo: {
               ...state.formInfo,
               selectedIndividualForm: [
                 ...filterArr,
-                ...filterSubmissionCount,
+                { ...filterSubmissionCount },
               ],
             },
             selectAll: false,
@@ -334,7 +324,18 @@ class FormInformation extends Component {
         }
       },
       () => {
-        // this.handleAddFormValue('selectedIndividualForm');
+        const {
+          formInfo: {
+            selectedFormType,
+            selectedForm,
+            selectedIndividualForm,
+          },
+        } = this.state;
+        this.props.addSubmissionCount(
+          selectedFormType,
+          selectedForm,
+          selectedIndividualForm,
+        );
       },
     );
   };
@@ -510,57 +511,73 @@ class FormInformation extends Component {
         selectedIndividualForm,
       },
     } = this.state;
-    this.setState(state => {
-      if (checked) {
-        const filterArr = selectedIndividualForm.filter(i => {
-          if (
-            i.type === selectedFormType.code &&
-            i.form !== selectedForm.id
-          ) {
-            return true;
-          }
-          if (i.type !== selectedFormType.code) {
-            return true;
-          }
-          return false;
-        });
-        return {
-          selectAll: true,
+    this.setState(
+      state => {
+        if (checked) {
+          const filterArr = selectedIndividualForm.filter(i => {
+            if (
+              i.type === selectedFormType.code &&
+              i.form !== selectedForm.id
+            ) {
+              return true;
+            }
+            if (i.type !== selectedFormType.code) {
+              return true;
+            }
+            return false;
+          });
+          return {
+            selectAll: true,
+            formInfo: {
+              ...state.formInfo,
+              selectedIndividualForm: [
+                ...filterArr,
+                {
+                  type: selectedFormType.code,
+                  form: selectedForm.id,
+                  metrics: individualFormArr,
+                },
+              ],
+            },
+          };
+        }
+        if (!checked) {
+          const filterArr = selectedIndividualForm.filter(i => {
+            if (
+              i.type === selectedFormType.code &&
+              i.form !== selectedForm.id
+            ) {
+              return true;
+            }
+            if (i.type !== selectedFormType.code) {
+              return true;
+            }
+            return false;
+          });
+          return {
+            selectAll: false,
+            formInfo: {
+              ...state.formInfo,
+              selectedIndividualForm: filterArr,
+            },
+          };
+        }
+      },
+      () => {
+        const {
           formInfo: {
-            ...state.formInfo,
-            selectedIndividualForm: [
-              ...filterArr,
-              {
-                type: selectedFormType.code,
-                form: selectedForm.id,
-                metrics: individualFormArr,
-              },
-            ],
+            selectedFormType,
+            selectedForm,
+            selectedIndividualForm,
           },
-        };
-      }
-      if (!checked) {
-        const filterArr = selectedIndividualForm.filter(i => {
-          if (
-            i.type === selectedFormType.code &&
-            i.form !== selectedForm.id
-          ) {
-            return true;
-          }
-          if (i.type !== selectedFormType.code) {
-            return true;
-          }
-          return false;
-        });
-        return {
-          selectAll: false,
-          formInfo: {
-            ...state.formInfo,
-            selectedIndividualForm: filterArr,
-          },
-        };
-      }
-    });
+        } = this.state;
+        this.props.addSubmissionCount(
+          selectedFormType,
+          selectedForm,
+          selectedIndividualForm,
+        );
+      },
+    );
   };
 
   handleAddClick = () => {

@@ -86,6 +86,7 @@ export default class Metrics extends Component {
       projectId,
       forms,
       handleFormInfo,
+      addSubmissionCount,
     } = this.props;
     // console.log('metrics', formTypes, '-----', selectedFormType);
 
@@ -201,6 +202,7 @@ export default class Metrics extends Component {
           selectedFormValue={selectedFormValue}
           formInfoArr={formInfoArr}
           handleFormInfo={handleFormInfo}
+          addSubmissionCount={addSubmissionCount}
         />
       </div>
     );
