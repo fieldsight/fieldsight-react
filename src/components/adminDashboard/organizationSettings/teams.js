@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import RightContentCard from '../../common/RightContentCard';
-import Modal from '../../common/Modal';
+import ManageModal from '../../manageForms/ManageModal';
 import DeleteModal from '../../common/DeleteModal';
 import TeamsTable from './teamsTable';
 import TeamList from './teamList';
@@ -27,7 +27,6 @@ export default class Teams extends React.PureComponent {
     axios
       .get(`/fv3/api/manage-teams/${id}/`)
       .then(res => {
-        console.log(res, 'res');
         this.setState({
           selected_teams: res.data.selected_teams,
           teams: res.data.teams,
@@ -35,12 +34,15 @@ export default class Teams extends React.PureComponent {
           // is_superuser: false,
         });
       })
-      .catch(err => {});
+      .catch();
   }
 
   handleChange = () => {
-    const { id } = this.props;
-    if (this.state.is_superuser) {
+    const {
+      props: { id },
+      state: { is_superuser },
+    } = this;
+    if (is_superuser) {
       this.setState({
         popUpPage: true,
       });
@@ -154,7 +156,7 @@ export default class Teams extends React.PureComponent {
             openDelete={openDelete}
           />
         </RightContentCard>
-        {is_superuser && popUpPage && (
+        {/* {is_superuser && popUpPage && (
           <Modal
             title="Add teams"
             toggleModal={this.handleClosePopup}
@@ -182,6 +184,23 @@ export default class Teams extends React.PureComponent {
               </div>
             </form>
           </Modal>
+        )} */}
+
+        {is_superuser && popUpPage && (
+          <ManageModal
+            title="Add teams"
+            toggleModal={this.handleClosePopup}
+            showButton
+            showText="create team"
+            url={`/fieldsight/application/#/create-team/${id}`}
+            handleSubmit={this.handleSaveForm}
+          >
+            <TeamList
+              teams={teams}
+              selected={this.state.selected}
+              changeHandler={this.changeHandler}
+            />
+          </ManageModal>
         )}
 
         {openModal && (

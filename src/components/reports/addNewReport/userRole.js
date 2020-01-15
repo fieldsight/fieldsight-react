@@ -1,15 +1,16 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import CustomCheckBox from '../CustomCheckbox';
 
 export default class UserRole extends PureComponent {
-  onChangeHandler = () => {
-    console.log('search user');
-  };
-
   render() {
-    const { users, handleCheckUser, userList } = this.props;
+    const {
+      users,
+      handleCheckUser,
+      userList,
+      onUsersChangeHandler,
+    } = this.props;
 
     return (
       <div className="fs-7 fs-col">
@@ -23,12 +24,11 @@ export default class UserRole extends PureComponent {
             className="custom-control"
             type="search"
             placeholder="Quick search user roles..."
-            onChange={() => {
-              this.onChangeHandler();
+            onChange={e => {
+              onUsersChangeHandler(e);
             }}
           />
         </div>
-        {/* <h6>User role</h6> */}
         <div
           style={{
             position: 'relative',

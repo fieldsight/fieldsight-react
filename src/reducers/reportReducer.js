@@ -4,6 +4,7 @@ import {
   GET_FORM_QUESTIONS,
   GET_REPORTS_LIST,
   APPLY_ACTION_TO_REPORT,
+  GET_REPORT_DATA,
 } from '../actions/types';
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   regions: [],
   siteTypes: [],
   actionResponse: {},
+  reportData: {},
 };
 
 export default function(state = initialState, action) {
@@ -55,6 +57,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         actionResponse: action.payload,
+        reportLoader: false,
+      };
+    case GET_REPORT_DATA:
+      return {
+        ...state,
+        reportData: action.payload,
         reportLoader: false,
       };
     default:

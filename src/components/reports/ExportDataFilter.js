@@ -3,8 +3,8 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import { Dropdown } from 'react-bootstrap';
 import CustomMultiSelect from './CustomMultiSelect';
-import CustomCheckBox from './CustomCheckbox';
 import CollapseFilterTable from './CollapseFilterTable';
+import { errorToast, successToast } from '../../utils/toastHandler';
 
 /* eslint-disable */
 
@@ -79,8 +79,14 @@ export default class ExportDataFilter extends PureComponent {
   }
 
   componentDidMount() {
-    const siteType = `/fieldsight/api/site-types/1/`;
-    const projectRegions = `/fieldsight/api/project-regions/1/`;
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+
+    const siteType = `/fieldsight/api/site-types/${id}/`;
+    const projectRegions = `/fieldsight/api/project-regions/${id}/`;
 
     const requestSiteType = axios.get(siteType);
     const requestProjectRegions = axios.get(projectRegions);
@@ -101,40 +107,46 @@ export default class ExportDataFilter extends PureComponent {
   }
 
   changeHandlers = (e, info) => {
-    const { id, checked, value } = e.target;
+    const { checked, name } = e.target;
 
-    if (checked && info === 'region') {
-      this.setState(prevState => ({
-        selected: [...prevState.selected, JSON.parse(value)],
-      }));
-    }
-    if (!checked) {
-      this.setState(preveState => ({
-        selected: preveState.selected.filter(
-          region => region !== JSON.parse(value),
-        ),
-      }));
-    }
+    const idName = 'id';
+    this.setState(prevState => {
+      if (checked) {
+        return {
+          selected: [...prevState.selected, { [idName]: info.id }],
+        };
+      }
+      if (!checked) {
+        // console.log(preveState.selected, 'preveState.selected');
+        return {
+          selected: prevState.selected.filter(
+            region => region.id !== info.id,
+          ),
+        };
+      }
+    });
   };
 
   siteHandler = (e, info) => {
-    const {
-      target: { id, checked, value },
-    } = e;
-
-    const { siteType, siteSelected } = this.state;
-    if (checked && info === 'site') {
-      this.setState(prevState => ({
-        siteSelected: [...prevState.siteSelected, JSON.parse(value)],
-      }));
-    }
-    if (!checked) {
-      this.setState(preState => ({
-        siteSelected: preState.siteSelected.filter(
-          site => site !== JSON.parse(value),
-        ),
-      }));
-    }
+    const { checked, name } = e.target;
+    const idName = 'id';
+    this.setState(prevState => {
+      if (checked) {
+        return {
+          siteSelected: [
+            ...prevState.siteSelected,
+            { [idName]: info.id },
+          ],
+        };
+      }
+      if (!checked) {
+        return {
+          siteSelected: prevState.siteSelected.filter(
+            region => region.id !== info.id,
+          ),
+        };
+      }
+    });
   };
 
   handleToggleClass = () => {
@@ -149,10 +161,58 @@ export default class ExportDataFilter extends PureComponent {
     }));
   };
 
+  // handleApply = () => {
+  //   this.setState(prevState => ({
+  //     applyButton: !prevState.applyButton,
+  //   }));
+  // };
+  toUpper = str => {
+    return str
+      .toLowerCase()
+      .split(' ')
+      .map(function(word) {
+        return word[0].toLowerCase() + word.substr(1);
+      })
+      .join('_');
+  };
+
   handleApply = () => {
-    this.setState(prevState => ({
-      applyButton: !prevState.applyButton,
-    }));
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+    const region = this.state.selected.map(reg => reg.id);
+    const site = this.state.siteSelected.map(reg => reg.id);
+    const data = {
+      siteTypes: region,
+      regions: site,
+    };
+
+    const route = this.toUpper(
+      this.props.location.state.fromDashboard,
+    );
+
+    axios
+      .post(
+        `/v4/api/reporting/generate-standard-reports/${id}/?report_type=${route}`,
+        data,
+      )
+      .then(req => {
+        if (req.status === 200) {
+          successToast(req.data.detail);
+          this.setState({
+            selected: [],
+            siteType: [],
+          });
+        }
+      })
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
+      });
   };
 
   onChangeHandler = date => {
@@ -202,6 +262,9 @@ export default class ExportDataFilter extends PureComponent {
         link: '#',
       },
     ];
+
+    const report_type = 'gfhj';
+
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -214,11 +277,26 @@ export default class ExportDataFilter extends PureComponent {
                   <div className="col-md-12">
                     <div className="report-content">
                       <h4>Export Data</h4>
-                      <p>
+                      {/* <p>
                         Export of forms data and site information an
                         Excel File, generated with filters in region,
                         types and time range.
-                      </p>
+                      </p> */}
+                      {this.props.location.state.fromDashboard ===
+                        'Site Information' && (
+                        <p>
+                          Export of all site information in an
+                          spreadsheet
+                        </p>
+                      )}
+                      {this.props.location.state.fromDashboard ===
+                        'Progress Report' && (
+                        <p>
+                          Export of key progress indicators like
+                          submission count,status and site visits
+                          generated from Staged Forms.
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -256,9 +334,7 @@ export default class ExportDataFilter extends PureComponent {
                           toggleSelectClass={siteOpen}
                           handleToggleClass={this.SiteToggleClass}
                           checkboxOption={siteType}
-                          handleCheck={e => {
-                            this.siteHandler(e, 'site');
-                          }}
+                          handleCheck={this.siteHandler}
                           selectedArr={this.state.siteSelected}
                           placeholderTxt="Select Site Type"
                           site="site"
@@ -272,9 +348,7 @@ export default class ExportDataFilter extends PureComponent {
                           toggleSelectClass={open}
                           handleToggleClass={this.handleToggleClass}
                           checkboxOption={projectRegions}
-                          handleCheck={e => {
-                            this.changeHandlers(e, 'region');
-                          }}
+                          handleCheck={this.changeHandlers}
                           selectedArr={this.state.selected}
                           placeholderTxt="Select Region Type"
                           site="regions"
@@ -282,54 +356,59 @@ export default class ExportDataFilter extends PureComponent {
                       </div>
                     </div>
 
-                    <div className="col-lg-6 col-md-6">
-                      <div className="form-group icon-between">
-                        <label className="mb-2">Time period</label>
-                        <div className="inline-flex ">
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="Start Date"
-                              name="startedDate"
-                              selected={this.state.startedDate}
-                              onChange={this.onChangeHandler}
-                              dateFormat="yyyy-MM-dd"
-                              className="form-control"
-                            />
-                            <div className="custom-group-append">
-                              <span className="custom-group-text">
+                    {report_type === 'Activity_Type' && (
+                      <div className="col-lg-6 col-md-6">
+                        <div className="form-group icon-between">
+                          <label className="mb-2">Time period</label>
+                          <div className="inline-flex ">
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="Start Date"
+                                name="startedDate"
+                                selected={this.state.startedDate}
+                                onChange={this.onChangeHandler}
+                                dateFormat="yyyy-MM-dd"
+                                className="form-control"
+                              />
+                              {/* <div className="custom-group-append">
+                              <span
+                                className="custom-group-text"
+                                style={{
+                                  display: 'inline',
+                                  paddingLeft: '25px',
+                                  flex: '0 0 20%',
+                                }}
+                              >
                                 <i
                                   className="material-icons"
                                   style={{
-                                    position: 'absolute',
-                                    bottom: '39px',
-                                    marginLeft: '5.9rem',
+                                    verticalAlign: 'middle',
                                   }}
                                 >
                                   calendar_today
                                 </i>
                               </span>
+                            </div> */}
                             </div>
-                          </div>
-                          <span className="icon-between">
-                            <i className="material-icons">
-                              arrow_right_alt
-                            </i>
-                          </span>
-                          <div className="custom-group">
-                            {/* <DatePicker
-                              placeholderText="End Date"
-                              name="endedDate"
-                              selected={this.state.endedDate}
-                              onChange={this.onEndChangeHandler}
-                              className="form-control"
-                              dateFormat="yyyy-MM-dd"
-                              customInput={<CustomInput />}
-                            /> */}
-                            {/* <i className="material-icons">
+                            <span className="icon-between">
+                              <i className="material-icons">
+                                arrow_right_alt
+                              </i>
+                            </span>
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="End Date"
+                                name="endedDate"
+                                selected={this.state.endedDate}
+                                onChange={this.onEndChangeHandler}
+                                className="form-control"
+                                dateFormat="yyyy-MM-dd"
+                              />
+                              {/* <i className="material-icons">
                                 calendar_today
                               </i>
                             </DatePicker> */}
-                            <DatePicker
+                              {/* <DatePicker
                               value={this.state.endedDate}
                               dateFormat="yyyy-MM-dd"
                               customInput={<Input />}
@@ -337,11 +416,12 @@ export default class ExportDataFilter extends PureComponent {
                               onChange={date =>
                                 this.setState({ endedDate: date })
                               }
-                            />
+                            /> */}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                     <div className="col-md-12">
                       <button
                         // disabled

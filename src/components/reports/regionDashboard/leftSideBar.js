@@ -10,7 +10,6 @@ export default class LeftSidebar extends Component {
   }
 
   accordianHandler = () => {
-    console.log('according');
     this.setState(prevState => ({
       accordian: !prevState.accordian,
     }));

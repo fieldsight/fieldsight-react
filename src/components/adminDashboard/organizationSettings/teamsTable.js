@@ -5,12 +5,7 @@ import Table from 'react-bootstrap/Table';
 
 export default class TeamsTable extends PureComponent {
   render() {
-    const {
-      selected_teams,
-      handleConfirm,
-      handleDelete,
-      openDelete,
-    } = this.props;
+    const { selected_teams, handleConfirm, openDelete } = this.props;
     return (
       <Table
         responsive="xl"
@@ -20,8 +15,7 @@ export default class TeamsTable extends PureComponent {
           <tr>
             <th>Name</th>
             <th>address</th>
-            <th>team owner</th>
-            <th>team owner id</th>
+
             <th>projects</th>
             <th>users</th>
             <th>sites</th>
@@ -44,8 +38,7 @@ export default class TeamsTable extends PureComponent {
                   </a>
                 </td>
                 <td>{teams.address}</td>
-                <td>{teams.team_owner}</td>
-                <td>{teams.team_owner_id}</td>
+
                 <td>{teams.projects}</td>
 
                 <td>{teams.users}</td>
@@ -57,7 +50,7 @@ export default class TeamsTable extends PureComponent {
                     tabIndex="0"
                     className="td-delete-btn"
                     onClick={() => {
-                      this.props.openDelete(teams.id);
+                      openDelete(teams.id);
                     }}
                   >
                     <i className="la la-close" />

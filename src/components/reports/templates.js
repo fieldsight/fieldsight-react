@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import FormDataFilter from './FormDataFilter';
+// import FormDataFilter from './FormDataFilter';
+
+/* eslint-disable react/jsx-indent */
 
 export default class Templates extends Component {
   constructor(props) {
@@ -18,7 +21,7 @@ export default class Templates extends Component {
       id: '',
       customReports: [],
       standardReports: [],
-      formButton: false,
+      // formButton: false,
     };
   }
 
@@ -38,9 +41,10 @@ export default class Templates extends Component {
   }
 
   reportHandeler = data => {
+    const { id } = this.state;
     axios
       .get(
-        `/v4/api/reporting/project-form-data/${this.state.id}/?form_type=${data}`,
+        `/v4/api/reporting/project-form-data/${id}/?form_type=${data}`,
       )
       .then(res => {
         if (data === 'general') {
@@ -68,6 +72,7 @@ export default class Templates extends Component {
   };
 
   toggleTab = result => {
+    const { general, scheduled, survey, staged } = this.state;
     if (result === 'general') {
       this.setState(
         preveState => ({
@@ -77,7 +82,7 @@ export default class Templates extends Component {
           staged: preveState.staged,
         }),
         () => {
-          if (this.state.general) {
+          if (general) {
             this.reportHandeler('general');
           }
         },
@@ -92,7 +97,7 @@ export default class Templates extends Component {
           staged: preveState.staged,
         }),
         () => {
-          if (this.state.scheduled) {
+          if (scheduled) {
             this.reportHandeler('scheduled');
           }
         },
@@ -107,7 +112,7 @@ export default class Templates extends Component {
           staged: preveState.staged,
         }),
         () => {
-          if (this.state.survey) {
+          if (survey) {
             this.reportHandeler('survey');
           }
         },
@@ -122,7 +127,7 @@ export default class Templates extends Component {
           staged: !preveState.staged,
         }),
         () => {
-          if (this.state.staged) {
+          if (staged) {
             this.reportHandeler('stage');
           }
         },
@@ -130,11 +135,11 @@ export default class Templates extends Component {
     }
   };
 
-  handleForm = () => {
-    this.setState(preState => ({
-      formButton: !preState.formButton,
-    }));
-  };
+  // handleForm = () => {
+  //   this.setState(preState => ({
+  //     formButton: !preState.formButton,
+  //   }));
+  // };
 
   render() {
     const {
@@ -148,8 +153,10 @@ export default class Templates extends Component {
       stagedData,
       customReports,
       standardReports,
-      formButton,
+      // formButton,
+      id,
     } = this.state;
+
     const DataCrude = [
       {
         id: '1',
@@ -177,7 +184,7 @@ export default class Templates extends Component {
       {
         id: '1',
         title: 'Preview Pdf',
-        link: `/fieldsight/project/report/summary/${this.state.id}/`,
+        link: `/fieldsight/project/report/summary/${id}/`,
       },
     ];
 
@@ -203,9 +210,12 @@ export default class Templates extends Component {
         </>
       );
     };
+
+    // const { id } = this.props;
+
     return (
       <>
-        {!formButton && (
+        {
           <div className="card-body">
             <div className="standard-tempalte">
               <h2 className="my-3">Standard</h2>
@@ -218,8 +228,72 @@ export default class Templates extends Component {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="report-content">
-                          <h4>{standardReport.title}</h4>
-                          <p>{standardReport.description}</p>
+                          {standardReport.title ===
+                            'Project Summary' && (
+                            <a
+                              href={`/fieldsight/project/report/summary/${id}/`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <h4>{standardReport.title}</h4>
+                              <p>{standardReport.description}</p>
+                            </a>
+                          )}
+
+                          {(standardReport.title ===
+                            'Site Information' ||
+                            standardReport.title ===
+                              'Progress Report') && (
+                            <>
+                              <Link
+                                to={{
+                                  pathname: `/export-data/${id}`,
+
+                                  state: {
+                                    fromDashboard:
+                                      standardReport.title,
+                                  },
+                                }}
+                              >
+                                <h4>{standardReport.title}</h4>
+                                <p>{standardReport.description}</p>
+                              </Link>
+                            </>
+                          )}
+
+                          {(standardReport.title ===
+                            'Activity Report' ||
+                            standardReport.title ===
+                              'Project Logs') && (
+                            <Link
+                              to={{
+                                pathname: `/user-export/${id}`,
+
+                                state: {
+                                  fromDashboard: standardReport.title,
+                                },
+                              }}
+                            >
+                              <h4>{standardReport.title}</h4>
+                              <p>{standardReport.description}</p>
+                            </Link>
+                          )}
+
+                          {standardReport.title ===
+                            'User Activity Report' && (
+                            <Link
+                              to={{
+                                pathname: `/activity-export/${id}`,
+
+                                state: {
+                                  fromDashboard: standardReport.title,
+                                },
+                              }}
+                            >
+                              <h4>{standardReport.title}</h4>
+                              <p>{standardReport.description}</p>
+                            </Link>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -281,15 +355,14 @@ export default class Templates extends Component {
                 <div className="row">
                   <div className="col-md-8">
                     <div className="report-content">
-                      <a
+                      {/* <a
                         tabIndex="0"
                         role="button"
                         onKeyDown={this.handleForm}
                         onClick={this.handleForm}
-                      >
-                        Form Data
-                      </a>
-
+                      > */}
+                      Form Data
+                      {/* </a> */}
                       <p>
                         Export of forms data and site information an
                         Excel File, generated with filters in region,
@@ -321,7 +394,17 @@ export default class Templates extends Component {
                             {generalData.length > 0 ? (
                               generalData.map(genInfo => (
                                 <p key={genInfo.id}>
-                                  {genInfo.title}
+                                  <Link
+                                    to={{
+                                      pathname: `/form-data/${id}/${genInfo.id}`,
+
+                                      state: {
+                                        fromDashboard: genInfo.id,
+                                      },
+                                    }}
+                                  >
+                                    {genInfo.title}
+                                  </Link>
                                 </p>
                               ))
                             ) : (
@@ -353,8 +436,21 @@ export default class Templates extends Component {
                           >
                             {scheduledData.length > 0 ? (
                               scheduledData.map(scheinfo => (
+                                // <p key={scheinfo.id}>
+                                //   {scheinfo.title}
+                                // </p>
                                 <p key={scheinfo.id}>
-                                  {scheinfo.title}
+                                  <Link
+                                    to={{
+                                      pathname: `/form-data/${id}/${scheinfo.id}`,
+
+                                      state: {
+                                        fromDashboard: scheinfo.id,
+                                      },
+                                    }}
+                                  >
+                                    {scheinfo.title}
+                                  </Link>
                                 </p>
                               ))
                             ) : (
@@ -386,7 +482,17 @@ export default class Templates extends Component {
                             {surveyData.length > 0 ? (
                               surveyData.map(surData => (
                                 <p key={surData.id}>
-                                  {surData.title}
+                                  <Link
+                                    to={{
+                                      pathname: `/form-data/${id}/${surData.id}`,
+
+                                      state: {
+                                        fromDashboard: surData.id,
+                                      },
+                                    }}
+                                  >
+                                    {surData.title}
+                                  </Link>
                                 </p>
                               ))
                             ) : (
@@ -422,7 +528,19 @@ export default class Templates extends Component {
                                   <li>
                                     {satData.sub_stages.map(sub => (
                                       <ul>
-                                        <li>{sub.form_name}</li>
+                                        <li key={sub.id}>
+                                          <Link
+                                            to={{
+                                              pathname: `/form-data/${id}/${sub.id}`,
+
+                                              state: {
+                                                fromDashboard: sub.id,
+                                              },
+                                            }}
+                                          >
+                                            {sub.form_name}
+                                          </Link>
+                                        </li>
                                       </ul>
                                     ))}
                                   </li>
@@ -515,13 +633,10 @@ export default class Templates extends Component {
                 ))}
             </div>
           </div>
-        )}
-        {formButton && (
-          <FormDataFilter
-            handleForm={this.handleForm}
-            id={this.state.id}
-          />
-        )}
+        }
+        {/* {formButton && (
+          <FormDataFilter handleForm={this.handleForm} id={id} />
+        )} */}
       </>
     );
   }

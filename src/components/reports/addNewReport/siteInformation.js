@@ -1,24 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import CustomMultiSelect from '../CustomMultiSelect';
 /* eslint-disable */
 
-export default class SiteInformation extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toggleValueClass: false,
-    };
-  }
-
-  handleToggleValueClass = () => {
-    this.setState(({ toggleValueClass }) => ({
-      toggleValueClass: !toggleValueClass,
-    }));
-  };
-
+export default class SiteInformation extends PureComponent {
   render() {
-    // const { toggleValueClass } = this.state;
     const {
       toggleSelectClass,
       handleToggleClass,

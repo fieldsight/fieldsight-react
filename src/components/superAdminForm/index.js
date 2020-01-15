@@ -4,8 +4,8 @@ import axios from 'axios';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import RightContentCard from '../common/RightContentCard';
 import InputElement from '../common/InputElement';
-import CheckBox from '../common/CheckBox';
 import SelectElement from '../common/SelectElement';
+import { errorToast, successToast } from '../../utils/toastHandler';
 import 'leaflet/dist/leaflet.css';
 
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
@@ -32,8 +32,6 @@ export default class SuperAdminForm extends Component {
       website: '',
       address: '',
       public_desc: '',
-      additional_desc: '',
-
       position: {
         latitude: '27.7172',
         longitude: '85.3240',
@@ -83,8 +81,6 @@ export default class SuperAdminForm extends Component {
       country: this.state.Selectedtypes,
       address: this.state.address,
       public_desc: this.state.public_desc,
-      additional_desc: this.state.additional_desc,
-
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude,
     };
@@ -92,7 +88,11 @@ export default class SuperAdminForm extends Component {
     axios
       .post(`/fv3/api/super-organization-form/`, data)
       .then(req => {
-        if (req === 201) {
+        if (req.status === 201) {
+          successToast('Form', 'created');
+          this.props.history.push(
+            `/organization-dashboard/${req.data.id}`,
+          );
           this.setState({
             name: '',
             phone: '',
@@ -114,7 +114,12 @@ export default class SuperAdminForm extends Component {
           });
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
+      });
   };
 
   changeHandler = e => {
@@ -159,7 +164,7 @@ export default class SuperAdminForm extends Component {
         country,
         address,
         public_desc,
-        additional_desc,
+
         is_active,
         position: { latitude, longitude },
         Selectedtypes,
@@ -174,7 +179,7 @@ export default class SuperAdminForm extends Component {
               className="breadcrumb-item active"
               aria-current="page"
             >
-              Create Organization User
+              Create Organization
             </li>
           </ol>
         </nav>
@@ -187,6 +192,7 @@ export default class SuperAdminForm extends Component {
                   tag="input"
                   type="text"
                   label="name"
+                  required
                   name="name"
                   value={name}
                   changeHandler={onChangeHandler}
@@ -271,19 +277,7 @@ export default class SuperAdminForm extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  label="additional_desc"
-                  name="additional_desc"
-                  value={additional_desc}
-                  changeHandler={onChangeHandler}
-                  translation
-                />
-              </div>
-              <div className="col-xl-4 col-md-6">
-                <InputElement
-                  formType="editForm"
-                  tag="input"
-                  type="text"
-                  label="public_desc"
+                  label="description"
                   name="public_desc"
                   value={public_desc}
                   changeHandler={onChangeHandler}

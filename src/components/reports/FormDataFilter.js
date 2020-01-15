@@ -2,16 +2,67 @@ import React, { PureComponent } from 'react';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import { Dropdown } from 'react-bootstrap';
+import format from 'date-fns/format';
 import CustomMultiSelect from './CustomMultiSelect';
-import CustomCheckBox from './CustomCheckbox';
+import CollapseFilterTable from './CollapseFilterTable';
+import { errorToast, successToast } from '../../utils/toastHandler';
 
-// const CustomInput = () => {
-//   <div className="custom-group-append">
-//     <span className="custom-group-text">
-//       <i className="material-icons">calendar_today</i>
-//     </span>
-//   </div>;
-// };
+/* eslint-disable */
+
+const CustomInput = (value, onclick) => (
+  <div className="custom-group-append">
+    <span className="custom-group-text">
+      <i className="material-icons">calendar_today</i>
+      <button className="example-custom-input" onClick={onClick}>
+        {value}
+      </button>
+      {/* <input
+        // onChange={onChange}
+        placeholder="gfdghj"
+        value={value}
+        // isSecure={isSecure}
+        // id={id}
+        onClick={onClick}
+      /> */}
+    </span>
+  </div>
+);
+
+const Input = ({
+  onChange,
+  placeholder,
+  value,
+  isSecure,
+  id,
+  onClick,
+}) => (
+  <div
+  // style={{ position: 'relative' }}
+  >
+    <i
+      onClick={onClick}
+      className="material-icons"
+      value={value}
+      // style={{
+      //   position: 'absolute',
+      //   top: '0.3rem',
+      //   left: '5px',
+      //   fontSize: '1rem',
+      // }}
+    >
+      calendar_today
+    </i>
+
+    <input
+      onClick={onClick}
+      className="dateInput"
+      value={value}
+      type="text"
+      // style={{ paddingLeft: '33px' }}
+    />
+  </div>
+);
+
 export default class FormDataFilter extends PureComponent {
   constructor(props) {
     super(props);
@@ -29,7 +80,12 @@ export default class FormDataFilter extends PureComponent {
   }
 
   componentDidMount() {
-    const { id } = this.props;
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+
     const siteType = `/fieldsight/api/site-types/${id}/`;
     const projectRegions = `/fieldsight/api/project-regions/${id}/`;
 
@@ -46,46 +102,52 @@ export default class FormDataFilter extends PureComponent {
           });
         }),
       )
-      .catch(() => {
+      .catch(errors => {
         // react on errors.
       });
   }
 
   changeHandlers = (e, info) => {
-    const { id, checked, value } = e.target;
+    const { checked, name } = e.target;
 
-    if (checked && info === 'region') {
-      this.setState(prevState => ({
-        selected: [...prevState.selected, JSON.parse(value)],
-      }));
-    }
-    if (!checked) {
-      this.setState(preveState => ({
-        selected: preveState.selected.filter(
-          region => region !== JSON.parse(value),
-        ),
-      }));
-    }
+    const idName = 'id';
+    this.setState(prevState => {
+      if (checked) {
+        return {
+          selected: [...prevState.selected, { [idName]: info.id }],
+        };
+      }
+      if (!checked) {
+        // console.log(preveState.selected, 'preveState.selected');
+        return {
+          selected: prevState.selected.filter(
+            region => region.id !== info.id,
+          ),
+        };
+      }
+    });
   };
 
   siteHandler = (e, info) => {
-    const {
-      target: { id, checked, value },
-    } = e;
-
-    const { siteType, siteSelected } = this.state;
-    if (checked && info === 'site') {
-      this.setState(prevState => ({
-        siteSelected: [...prevState.siteSelected, JSON.parse(value)],
-      }));
-    }
-    if (!checked) {
-      this.setState(preState => ({
-        siteSelected: preState.siteSelected.filter(
-          site => site !== JSON.parse(value),
-        ),
-      }));
-    }
+    const { checked, name } = e.target;
+    const idName = 'id';
+    this.setState(prevState => {
+      if (checked) {
+        return {
+          siteSelected: [
+            ...prevState.siteSelected,
+            { [idName]: info.id },
+          ],
+        };
+      }
+      if (!checked) {
+        return {
+          siteSelected: prevState.siteSelected.filter(
+            region => region.id !== info.id,
+          ),
+        };
+      }
+    });
   };
 
   handleToggleClass = () => {
@@ -100,10 +162,64 @@ export default class FormDataFilter extends PureComponent {
     }));
   };
 
+  // handleApply = () => {
+  //   this.setState(prevState => ({
+  //     applyButton: !prevState.applyButton,
+  //   }));
+  // };
+
+  toUpper = str => {
+    return str
+      .toLowerCase()
+      .split(' ')
+      .map(function(word) {
+        return word[0].toLowerCase() + word.substr(1);
+      })
+      .join('_');
+  };
+
   handleApply = () => {
-    this.setState(prevState => ({
-      applyButton: !prevState.applyButton,
-    }));
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+    const region = this.state.selected.map(reg => reg.id);
+    const site = this.state.siteSelected.map(reg => reg.id);
+    const startDate = format(this.state.startedDate, ['YYYY-MM-DD']);
+    const endDate = format(this.state.endedDate, ['YYYY-MM-DD']);
+    const data = {
+      siteTypes: region,
+      regions: site,
+      fs_ids: [this.props.location.state.fromDashboard],
+      start_date: startDate,
+      end_date: endDate,
+    };
+
+    // const route = this.toUpper(
+    //   this.props.location.state.fromDashboard,
+    // );
+
+    axios
+      .post(
+        `/v4/api/reporting/generate-standard-reports/${id}/?report_type=form`,
+        data,
+      )
+      .then(req => {
+        if (req.status === 200) {
+          successToast(req.data.detail);
+          this.setState({
+            selected: [],
+            siteType: [],
+          });
+        }
+      })
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
+      });
   };
 
   onChangeHandler = date => {
@@ -154,6 +270,8 @@ export default class FormDataFilter extends PureComponent {
       },
     ];
 
+    // const report_type = 'gfhj';
+
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -165,20 +283,7 @@ export default class FormDataFilter extends PureComponent {
                 <div className="row">
                   <div className="col-md-12">
                     <div className="report-content">
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                        }}
-                      >
-                        <button
-                          type="button"
-                          onClick={this.props.handleForm}
-                        >
-                          back
-                        </button>
-                      </div>
-                      <h4>Form Data</h4>
+                      <h4>Export Data</h4>
                       <p>
                         Export of forms data and site information an
                         Excel File, generated with filters in region,
@@ -221,9 +326,7 @@ export default class FormDataFilter extends PureComponent {
                           toggleSelectClass={siteOpen}
                           handleToggleClass={this.SiteToggleClass}
                           checkboxOption={siteType}
-                          handleCheck={e => {
-                            this.siteHandler(e, 'site');
-                          }}
+                          handleCheck={this.siteHandler}
                           selectedArr={this.state.siteSelected}
                           placeholderTxt="Select Site Type"
                           site="site"
@@ -237,9 +340,7 @@ export default class FormDataFilter extends PureComponent {
                           toggleSelectClass={open}
                           handleToggleClass={this.handleToggleClass}
                           checkboxOption={projectRegions}
-                          handleCheck={e => {
-                            this.changeHandlers(e, 'region');
-                          }}
+                          handleCheck={this.changeHandlers}
                           selectedArr={this.state.selected}
                           placeholderTxt="Select Region Type"
                           site="regions"
@@ -259,16 +360,26 @@ export default class FormDataFilter extends PureComponent {
                               onChange={this.onChangeHandler}
                               dateFormat="yyyy-MM-dd"
                               className="form-control"
-                              // customInput={
-                              //   <i className="material-icons">
-                              //     calendar_today
-                              //   </i>
-                              // }
-                            >
-                              <i className="material-icons">
-                                calendar_today
-                              </i>
-                            </DatePicker>
+                            />
+                            {/* <div className="custom-group-append">
+                              <span
+                                className="custom-group-text"
+                                style={{
+                                  display: 'inline',
+                                  paddingLeft: '25px',
+                                  flex: '0 0 20%',
+                                }}
+                              >
+                                <i
+                                  className="material-icons"
+                                  style={{
+                                    verticalAlign: 'middle',
+                                  }}
+                                >
+                                  calendar_today
+                                </i>
+                              </span>
+                            </div> */}
                           </div>
                           <span className="icon-between">
                             <i className="material-icons">
@@ -284,17 +395,24 @@ export default class FormDataFilter extends PureComponent {
                               className="form-control"
                               dateFormat="yyyy-MM-dd"
                             />
-                            <div className="custom-group-append">
-                              <span className="custom-group-text">
-                                <i className="material-icons">
-                                  calendar_today
-                                </i>
-                              </span>
-                            </div>
+                            {/* <i className="material-icons">
+                                calendar_today
+                              </i>
+                            </DatePicker> */}
+                            {/* <DatePicker
+                              value={this.state.endedDate}
+                              dateFormat="yyyy-MM-dd"
+                              customInput={<Input />}
+                              selected={this.state.endedDate}
+                              onChange={date =>
+                                this.setState({ endedDate: date })
+                              }
+                            /> */}
                           </div>
                         </div>
                       </div>
                     </div>
+
                     <div className="col-md-12">
                       <button
                         // disabled
@@ -307,6 +425,7 @@ export default class FormDataFilter extends PureComponent {
                     </div>
                   </div>
                 </form>
+                {applyButton && <CollapseFilterTable />}
               </div>
             </div>
           </div>

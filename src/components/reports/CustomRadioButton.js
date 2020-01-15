@@ -9,7 +9,7 @@ const CustomRadioButton = ({
   checked,
 }) => {
   return (
-    <div className="custom-control custom-radio">
+    <div className="custom-control custom-radio" id="radio">
       <input
         type="radio"
         className="custom-control-input"

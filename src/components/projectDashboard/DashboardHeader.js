@@ -50,10 +50,10 @@ class DashboardHeader extends React.Component {
       isProjectManager,
       totalSubmissions,
       surveyData,
-      activeTab,
-      toggleTab,
+      // activeTab,
+      // toggleTab,
+      path,
     } = this.props;
-
     const { openmodel } = this.state;
     const ManageDropdown = [
       {
@@ -92,6 +92,19 @@ class DashboardHeader extends React.Component {
         title: 'View Data',
         link: `/fieldsight/application/#/project-responses/${id}/general/`,
         id: 'app.view-data',
+      },
+    ];
+    const pathList = [
+      { key: 0, title: 'Home', route: `/project-dashboard/${id}` },
+      {
+        key: 1,
+        title: 'Dashboard',
+        route: `/project-dashboard/${id}`,
+      },
+      {
+        key: 2,
+        title: 'Reports',
+        route: `/project-dashboard/${id}/report`,
       },
     ];
 
@@ -254,51 +267,16 @@ class DashboardHeader extends React.Component {
             )}
           </div>
           <ul className="common-tab is-line mt-4">
-            <li className={activeTab === 'home' ? 'current' : ''}>
-              <a
-                tabIndex="0"
-                role="button"
-                onKeyDown={() => {
-                  toggleTab('home');
-                }}
-                onClick={() => {
-                  toggleTab('home');
-                }}
-              >
-                Home
-              </a>
-            </li>
-
-            <li
-              className={activeTab === 'dashboard' ? 'current' : ''}
-            >
-              <a
-                tabIndex="0"
-                role="button"
-                onKeyDown={() => {
-                  toggleTab('dashboard');
-                }}
-                onClick={() => {
-                  toggleTab('dashboard');
-                }}
-              >
-                Dashboard
-              </a>
-            </li>
-            <li className={activeTab === 'reports' ? 'current' : ''}>
-              <a
-                tabIndex="0"
-                role="button"
-                onKeyDown={() => {
-                  toggleTab('reports');
-                }}
-                onClick={() => {
-                  toggleTab('reports');
-                }}
-              >
-                Reports
-              </a>
-            </li>
+            {pathList.map(list => (
+              <li key={list.key}>
+                <Link
+                  to={list.route}
+                  className={list.route === path ? 'current' : ''}
+                >
+                  {list.title}
+                </Link>
+              </li>
+            ))}
           </ul>
           {openmodel && (
             <SubmissionModal

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
 import { compose } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import withPagination from '../../../hoc/WithPagination';
 import SiteMap from '../../common/SiteMap';
@@ -103,7 +103,7 @@ class ProjectDashboardComponent extends Component {
     } = this.props;
     const { activeTab } = this.state;
     return (
-      <>
+      <div className="new-dashboard">
         <div className="row">
           <div className="col-lg-6">
             <div className="card map">
@@ -488,7 +488,7 @@ class ProjectDashboardComponent extends Component {
             />
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

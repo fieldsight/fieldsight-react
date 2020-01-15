@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Switch, Route, Link, withRouter } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 import MyForm from './myForm';
 import ProjectFormTable from './projectForm';
 import TeamForm from './teamForm';
@@ -87,22 +87,22 @@ export default class SideNav extends PureComponent {
               <Route
                 exact
                 path={`${path}/my-form`}
-                render={props => <MyForm />}
+                render={props => <MyForm {...props} />}
               />
               <Route
                 exact
                 path={`${path}/project-form`}
-                render={props => <ProjectFormTable />}
+                render={props => <ProjectFormTable {...props} />}
               />
               <Route
                 exact
                 path={`${path}/team-form`}
-                render={props => <TeamForm />}
+                render={props => <TeamForm {...props} />}
               />
               <Route
                 exact
                 path={`${path}/global-form`}
-                render={props => <GlobalFormTable />}
+                render={props => <GlobalFormTable {...props} />}
               />
             </Switch>
           </div>

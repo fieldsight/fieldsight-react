@@ -57,10 +57,13 @@ export default class UsersList extends PureComponent {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
+              {/* <a tabIndex="0" role="button" onKeyDown=""> */}
+              <a href="/#" target="/#">
+                Home
+              </a>
             </li>
             <li className="breadcrumb-item">
-              <a href="/fieldsight/organization-dashboard/13/">
+              <a tabIndex="0" role="button" onKeyDown="">
                 Teams
               </a>
             </li>
@@ -89,7 +92,7 @@ export default class UsersList extends PureComponent {
                   <i className="la la-search" />
                 </div>
               </form>
-              <a href="#" className="fieldsight-btn">
+              <a href="/#" className="fieldsight-btn">
                 <i className="la la-plus" />
               </a>
             </div>

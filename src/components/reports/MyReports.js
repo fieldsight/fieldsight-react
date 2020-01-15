@@ -35,28 +35,29 @@ class MyReports extends Component {
     const {
       toggleSection,
       reportReducer: { reportLoader },
+      id,
     } = this.props;
     const DataCrude = [
       {
         id: '1',
         title: 'Edit',
-        toShow: 'addReport',
+        link: `/fieldsight/application/#/project/${id}/edit-report/`,
       },
-      {
-        id: '2',
-        title: 'Add a template',
-        toShow: '',
-      },
-      {
-        id: '3',
-        title: 'Share',
-        toShow: '',
-      },
-      {
-        id: '4',
-        title: 'Delete',
-        toShow: '',
-      },
+      // {
+      //   id: '2',
+      //   title: 'Add a template',
+      //   toShow: '',
+      // },
+      // {
+      //   id: '3',
+      //   title: 'Share',
+      //   toShow: '',
+      // },
+      // {
+      //   id: '4',
+      //   title: 'Delete',
+      //   toShow: '',
+      // },
     ];
 
     return (
@@ -66,7 +67,10 @@ class MyReports extends Component {
           reportList.length > 0 &&
           reportList.map(report => (
             <div className="report-list" key={report.id}>
-              <div className="row">
+              <a
+                className="row"
+                href={`/fieldsight/application/#/project/${id}/edit-report/${report.id}`}
+              >
                 <div className="col-md-8">
                   <div className="report-content">
                     <h4>{report.title}</h4>
@@ -97,7 +101,7 @@ class MyReports extends Component {
                       ))}
                   </div>
                 </div>
-              </div>
+              </a>
               <div className="dropdown report-option">
                 <Dropdown drop="left">
                   <Dropdown.Toggle
@@ -110,9 +114,7 @@ class MyReports extends Component {
                   <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
                     {DataCrude.map(item => (
                       <Dropdown.Item
-                        onClick={() => {
-                          toggleSection(item.toShow, report);
-                        }}
+                        href={`${item.link}${report.id}`}
                         key={item.id}
                         // target="_blank"
                       >

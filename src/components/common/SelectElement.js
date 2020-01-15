@@ -55,6 +55,10 @@ const SelectElement = ({
                   ? option.value
                   : option.identifier
                   ? option.identifier
+                  : option.title
+                  ? option.title
+                  : option.label
+                  ? option.label
                   : ''
               }${i}`}
             >
@@ -64,6 +68,10 @@ const SelectElement = ({
                 ? option.value
                 : option.identifier
                 ? option.identifier
+                : option.title
+                ? option.title
+                : option.label
+                ? option.label
                 : ''}
             </option>
           ))}

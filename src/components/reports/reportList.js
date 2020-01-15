@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import MyReports from './MyReports';
 import ShareWithMe from './SharedWithMe';
 import Templates from './templates';
@@ -100,7 +101,7 @@ class ReportList extends Component {
                 {/* </a> */}
               </li>
             </ul>
-            <button
+            {/* <button
               type="button"
               className="common-button no-border is-icon"
               onClick={() => {
@@ -109,7 +110,14 @@ class ReportList extends Component {
             >
               <i className="material-icons">add_circle</i>
               <span>New report</span>
-            </button>
+            </button> */}
+            <Link
+              to={`/project/${id}/add-report`}
+              className="common-button no-border is-icon"
+            >
+              <i className="material-icons">add_circle</i>
+              <span>New report</span>
+            </Link>
           </div>
           {activeTab === 'myReports' && (
             <MyReports
