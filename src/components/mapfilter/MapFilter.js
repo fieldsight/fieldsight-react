@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import { Accordion, Card, Button } from 'react-bootstrap';
