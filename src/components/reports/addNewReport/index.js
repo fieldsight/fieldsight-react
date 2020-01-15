@@ -110,12 +110,14 @@ class AddNewReport extends Component {
       }
       this.props.getMetricsData(id);
     });
-    // document.addEventListener('click', () => {
-    //   const getbyId = document.getElementById('radio');
-    //   if (!getbyId) {
-    //     this.handleClickOutside();
-    //   }
-    // });
+
+    document.addEventListener('click', e => {
+      const getbyId = e.target.id;
+      const getbyClass = e.target.className;
+      if (getbyClass !== 'select-item' && !getbyId) {
+        this.handleClickOutside();
+      }
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -148,40 +150,40 @@ class AddNewReport extends Component {
         metaAttributes: this.props.reportReducer.metaAttributes,
       });
     }
-    if (
-      prevProps.reportReducer.formTypes !==
-      this.props.reportReducer.formTypes
-    ) {
-      this.setState({
-        formTypes: this.props.reportReducer.formTypes,
-      });
-    }
-    if (
-      prevProps.reportReducer.forms !== this.props.reportReducer.forms
-    ) {
-      const formList = this.props.reportReducer.forms;
-      const newFormList = [];
-      formList &&
-        formList.map(f => {
-          if (f.sub_stages) {
-            const { name, sub_stages } = f;
-            sub_stages.map(sub => {
-              return newFormList.push({ name, ...sub });
-            });
-          } else {
-            return newFormList.push(f);
-          }
-        });
-      this.setState({ formTypeArr: newFormList });
-    }
-    if (
-      prevProps.reportReducer.formQuestions !==
-      this.props.reportReducer.formQuestions
-    ) {
-      this.setState({
-        formQuestions: this.props.reportReducer.formQuestions,
-      });
-    }
+    // if (
+    //   prevProps.reportReducer.formTypes !==
+    //   this.props.reportReducer.formTypes
+    // ) {
+    //   this.setState({
+    //     formTypes: this.props.reportReducer.formTypes,
+    //   });
+    // }
+    // if (
+    //   prevProps.reportReducer.forms !== this.props.reportReducer.forms
+    // ) {
+    //   const formList = this.props.reportReducer.forms;
+    //   const newFormList = [];
+    //   formList &&
+    //     formList.map(f => {
+    //       if (f.sub_stages) {
+    //         const { name, sub_stages } = f;
+    //         sub_stages.map(sub => {
+    //           return newFormList.push({ name, ...sub });
+    //         });
+    //       } else {
+    //         return newFormList.push(f);
+    //       }
+    //     });
+    //   this.setState({ formTypeArr: newFormList });
+    // }
+    // if (
+    //   prevProps.reportReducer.formQuestions !==
+    //   this.props.reportReducer.formQuestions
+    // ) {
+    //   this.setState({
+    //     formQuestions: this.props.reportReducer.formQuestions,
+    //   });
+    // }
     if (
       prevProps.reportReducer.regions !==
       this.props.reportReducer.regions
@@ -270,7 +272,7 @@ class AddNewReport extends Component {
                 some => some.code === code,
               );
 
-              if (find) {
+              if (!find) {
                 selectedMetas.push({
                   code,
                   type,
@@ -402,7 +404,7 @@ class AddNewReport extends Component {
   }
 
   componentWillUnmount() {
-    // document.removeEventListener('click', this.handleClickOutside);
+    document.removeEventListener('click', this.handleClickOutside);
   }
 
   clearState() {
@@ -1339,13 +1341,6 @@ class AddNewReport extends Component {
     );
   };
 
-  handleFormValueSelected = e => {
-    const { value } = e.target;
-    this.setState({
-      selectedFormValue: JSON.parse(value),
-    });
-  };
-
   handleChangeFormQuest = (e, meta, value) => {
     if (meta && Object.keys(meta).length > 0) {
       this.handleFormQuestionCheck(e, meta);
@@ -1487,6 +1482,10 @@ class AddNewReport extends Component {
     }));
   };
 
+  handleFormInfo = data => {
+    console.log('form info', data);
+  };
+
   handleSubmitReport = () => {
     const { reportId, data, projectId } = this.state;
     const errors = this.onValidation();
@@ -1625,15 +1624,16 @@ class AddNewReport extends Component {
         siteInfo: { selectedMetas, siteValues },
         reportType,
         metricArr,
+        formInfoArr,
         toggleSelectClass,
         submissionType,
         submissions,
         usersArr,
         userList,
         metaAttributes,
-        formTypes,
+        // formTypes,
         formTypeArr,
-        formQuestions,
+        // formQuestions,
         individualFormArr,
         collapseClass,
         filterArr,
@@ -1644,9 +1644,14 @@ class AddNewReport extends Component {
         errors,
       },
       props: {
-        reportReducer: { reportLoader },
+        reportReducer: {
+          reportLoader,
+          forms,
+          formTypes,
+          formQuestions,
+        },
         match: {
-          params: { id, reportId },
+          params: { id: projectId, reportId },
         },
       },
     } = this;
@@ -1674,7 +1679,7 @@ class AddNewReport extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`/fieldsight/application/#/project-dashboard/${id}/report`}
+                href={`/fieldsight/application/#/project-dashboard/${projectId}/report`}
               >
                 Reports
               </a>
@@ -1796,6 +1801,7 @@ class AddNewReport extends Component {
                     <div className="report-accordion">
                       <div className="row ">
                         <Metrics
+                          projectId={projectId}
                           handleToggleClass={this.handleToggleClass}
                           toggleSelectClass={toggleSelectClass}
                           data={metricArr}
@@ -1815,6 +1821,7 @@ class AddNewReport extends Component {
                           }
                           handleCheckUser={this.handleChecKUser}
                           selectedMetrics={selectedMetrics}
+                          formInfoArr={formInfoArr}
                           formTypes={formTypes}
                           selectedFormType={selectedFormType}
                           handleFormTypeCheck={
@@ -1824,6 +1831,7 @@ class AddNewReport extends Component {
                           selectedForm={selectedForm}
                           handleFormSelected={this.handleFormSelected}
                           formQuestions={formQuestions}
+                          forms={forms}
                           individualFormArr={individualFormArr}
                           selectedIndividualForm={
                             selectedIndividualForm
@@ -1837,6 +1845,7 @@ class AddNewReport extends Component {
                           selectedQuestions={selectedQuestions}
                           formValue={formValue}
                           selectedFormValue={selectedFormValue}
+                          handleFormInfo={this.handleFormInfo}
                         />
                         <SelectedColumn
                           selected={selectedMetrics}

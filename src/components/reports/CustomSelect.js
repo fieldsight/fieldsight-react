@@ -55,7 +55,11 @@ export default class CustomSelect extends PureComponent {
                   options.map(option => (
                     <li
                       key={`option_${
-                        option.id ? option.id : option.code
+                        option.id
+                          ? option.id
+                          : option.code
+                          ? option.code
+                          : option.name
                       }`}
                       className={
                         option.id
@@ -64,6 +68,10 @@ export default class CustomSelect extends PureComponent {
                             : ''
                           : option.code
                           ? option.code === value
+                            ? 'active'
+                            : ''
+                          : option.name
+                          ? option.name === value
                             ? 'active'
                             : ''
                           : ''
@@ -79,6 +87,8 @@ export default class CustomSelect extends PureComponent {
                           ? option.id
                           : option.code
                           ? option.code
+                          : option.name
+                          ? option.name
                           : ''
                       }
                       // role="button"
