@@ -71,7 +71,6 @@ class SharedWithMe extends Component {
                     <div className="report-item created-time">
                       <h6>Date Created</h6>
                       <p>
-                        {' '}
                         {format(shared.created_at, ['MMMM Do YYYY'])}
                       </p>
                       <time>

@@ -34,11 +34,11 @@ class DashboardHeader extends PureComponent {
     const ManageDropDown = [
       {
         title: 'Users',
-        link: `/fieldsight/manage/people/organization-users/${this.props.superAdminId}/`,
+        link: `/fieldsight/manage/people/organization-users/${superAdminId}/`,
       },
       {
         title: 'Settings',
-        link: `/fieldsight/application/#/organization-settings/${this.props.superAdminId}`,
+        link: `/fieldsight/application/#/organization-settings/${superAdminId}`,
       },
     ];
 

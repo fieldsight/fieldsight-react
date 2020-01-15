@@ -40,7 +40,7 @@ class Admin extends PureComponent {
             ) : (
               <PerfectScrollbar>
                 <ul>
-                  {admin.length > 0 ? (
+                  {admin && admin.length > 0 ? (
                     admin.map(each => (
                       <>
                         <AdminListItem

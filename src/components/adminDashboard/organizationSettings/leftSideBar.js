@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default class LeftSideBar extends PureComponent {
   leftsideNavRoute = () => {
@@ -9,7 +9,7 @@ export default class LeftSideBar extends PureComponent {
         url,
         params: { id },
       },
-    } = this.props.pathname;
+    } = this.props;
 
     const navRoute = [
       {

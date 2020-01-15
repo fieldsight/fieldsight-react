@@ -5,6 +5,7 @@ import {
   GET_REPORTS_LIST,
   APPLY_ACTION_TO_REPORT,
   GET_REPORT_DATA,
+  GET_PROJECT_DETAILS,
 } from '../actions/types';
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   siteTypes: [],
   actionResponse: {},
   reportData: {},
+  projectList: {},
 };
 
 export default function(state = initialState, action) {
@@ -65,6 +67,12 @@ export default function(state = initialState, action) {
         reportData: action.payload,
         reportLoader: false,
       };
+    case GET_PROJECT_DETAILS: {
+      return {
+        ...state,
+        projectList: action.payload.project_managers,
+      };
+    }
     default:
       return state;
   }

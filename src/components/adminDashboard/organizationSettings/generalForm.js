@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Select from 'react-select';
 import axios from 'axios';
 import RadioElement from '../../common/RadioElement';
 
@@ -37,29 +36,30 @@ export default class GeneralFormModal extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log('hello');
-
     // const selected = this.props.selected.map(function(x) {
     //   return parseInt(x, 10);
     // });
-    // debugger;
+    const {
+      props: { selected, formType, id, handleAllModel },
+      state: { status },
+    } = this;
 
     const body = {
-      xf_ids: this.props.selected,
-      default_submission_status: JSON.parse(this.state.status),
-      form_type: JSON.parse(this.props.formType),
+      xf_ids: selected,
+      default_submission_status: JSON.parse(status),
+      form_type: JSON.parse(formType),
     };
     axios
       .post(
-        `/fv3/api/manage-super-organizations-library/${this.props.id}/`,
+        `/fv3/api/manage-super-organizations-library/${id}/`,
         body,
       )
       .then(res => {
         if (res.status === 201) {
-          this.props.handleAllModel(res);
+          handleAllModel(res);
         }
       })
-      .catch(err => {});
+      .catch();
   };
 
   render() {
