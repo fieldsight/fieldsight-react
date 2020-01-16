@@ -65,6 +65,8 @@ import OragnizatonProjectList from './organizationProjectList';
 import OrganizationUserList from './organizationUserList';
 import OrganizationTeams from './organizationTeamList';
 
+import ReportDashboard from './reportDashboard';
+
 // import FilterDataFilter from './reports/FormDataFilter';
 import ExportDataFilter from './reports/ExportDataFilter';
 import UserList from './reports/users/usersTable';
@@ -167,27 +169,22 @@ class App extends Component {
                   path="/project-sitelist"
                   render={props => <SiteList {...props} />}
                 />
-
                 <Route
                   path="/submission-details"
                   render={props => <SubmissionDetails {...props} />}
                 />
-
                 <Route
                   path="/site-dashboard/:id"
                   render={props => <SiteDashboard {...props} />}
                 />
-
                 <Route
                   path="/my-roles"
                   render={props => <MyrolesMain {...props} />}
                 />
-
                 <Route
                   path="/profile/:profileId"
                   render={props => <MyrolesMain {...props} />}
                 />
-
                 <Route
                   path="/regional-site/:id"
                   render={props => <RegionSite {...props} />}
@@ -196,7 +193,6 @@ class App extends Component {
                   path="/site-documents/:id"
                   render={props => <SiteDocument {...props} />}
                 />
-
                 <Route
                   path="/project-dashboard/:id"
                   render={props => <ProjectDashboard {...props} />}
@@ -219,17 +215,14 @@ class App extends Component {
                   path="/site-users/:id"
                   render={props => <SiteUsers {...props} />}
                 />
-
                 <Route
                   path="/project-users/:id"
                   render={props => <ProjectUser {...props} />}
                 />
-
                 <Route
                   path="/team-users/:id"
                   render={props => <TeamUser {...props} />}
                 />
-
                 <Route
                   path="/team-projects/:id"
                   render={props => <ProjectList {...props} />}
@@ -240,17 +233,14 @@ class App extends Component {
                     <Teams {...props} orgs="organization" />
                   )}
                 />
-
                 <Route
                   path="/organization-teams/:id"
                   render={props => <OrganizationTeams {...props} />}
                 />
-
                 <Route
                   path="/map"
                   render={props => <Mapparent {...props} />}
                 />
-
                 <Route
                   path="/project_logs/:id"
                   render={props => <ProjectLog {...props} />}
@@ -287,7 +277,6 @@ class App extends Component {
                     </>
                   )}
                 />
-
                 <Route
                   path="/create-site/:id"
                   render={props => (
@@ -312,7 +301,6 @@ class App extends Component {
                     <EditSite {...props} page="subSite" />
                   )}
                 />
-
                 <Route
                   path="/submission-data/:id/:fid"
                   render={props => <SubmissionData {...props} />}
@@ -345,17 +333,14 @@ class App extends Component {
                   path="/reset-password"
                   render={props => <ResetPassword {...props} />}
                 />
-
                 <Route
                   path="/update-profile/:id"
                   render={props => <UpdateProfile {...props} />}
                 />
-
                 <Route
                   path="/create-profile/:id"
                   render={props => <CreateProfile {...props} />}
                 />
-
                 <Route
                   path="/project-responses/:id"
                   render={props => <SpecificViewData {...props} />}
@@ -372,27 +357,22 @@ class App extends Component {
                   path="/site-submission-responses/:id"
                   render={props => <SiteSubmissionForm {...props} />}
                 />
-
                 <Route
                   path="/export-data/:id"
                   render={props => <ExportDataFilter {...props} />}
                 />
-
                 <Route
                   path="/form-data/:id/:fid"
                   render={props => <FormDataFilter {...props} />}
                 />
-
                 <Route
                   path="/organization-dashboard/:id"
                   render={props => <AdminDashboard {...props} />}
                 />
-
                 <Route
                   path="/create-organization"
                   render={props => <SuperAdminForm {...props} />}
                 />
-
                 <Route
                   path="/edit-admin/:id"
                   render={props => <SuperAdminFormEdit {...props} />}
@@ -405,32 +385,26 @@ class App extends Component {
                   path="/userLists"
                   render={props => <UserList {...props} />}
                 />
-
                 <Route
                   path="/userProfile"
                   render={props => <UserProfile {...props} />}
                 />
-
                 <Route
                   path="/region-dashboard"
                   render={props => <RegionDashboard {...props} />}
                 />
-
                 <Route
                   path="/user-manage"
                   render={props => <UserManage {...props} />}
                 />
-
                 <Route
                   path="/myFormtable"
                   render={props => <MyFormTable {...props} />}
                 />
-
                 <Route
                   path="/form-submission"
                   render={props => <Submission {...props} />}
                 />
-
                 <Route
                   path="/activity-export/:id"
                   render={props => <ActivityExportFile {...props} />}
@@ -439,19 +413,22 @@ class App extends Component {
                   path="/user-export/:id"
                   render={props => <UserExportReport {...props} />}
                 />
-
                 <Route
                   path="/organization-projects/:id"
                   render={props => (
                     <OragnizatonProjectList {...props} />
                   )}
                 />
-
                 <Route
                   path="/organization-users/:id"
                   render={props => (
                     <OrganizationUserList {...props} />
                   )}
+                />
+
+                <Route
+                  path="/report-dashboard/:id"
+                  render={props => <ReportDashboard {...props} />}
                 />
               </Switch>
               <ToastContainer />
