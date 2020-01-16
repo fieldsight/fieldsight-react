@@ -72,7 +72,6 @@ export default class Metrics extends Component {
       handleSelectMeta,
       formTypes,
       selectedFormType,
-      handleFormTypeCheck,
       formTypeArr,
       toggleSelectClass,
       handleToggleClass,
@@ -80,7 +79,6 @@ export default class Metrics extends Component {
       formQuestions,
       individualFormArr,
       selectedIndividualForm,
-      handleIndividualFormSelected,
       selectedFormValue,
       formInfoArr,
       projectId,
@@ -187,16 +185,12 @@ export default class Metrics extends Component {
           selectedMetrics={selectedMetrics}
           formTypes={formTypes}
           selectedFormType={selectedFormType}
-          handleFormTypeCheck={handleFormTypeCheck}
           formTypeArr={formTypeArr}
           selectedForm={selectedForm}
-          handleFormSelected={this.props.handleFormSelected}
           formQuestions={formQuestions}
           forms={forms}
           individualFormArr={individualFormArr}
           selectedIndividualForm={selectedIndividualForm}
-          handleIndividualFormSelected={handleIndividualFormSelected}
-          handleChangeFormQuest={this.props.handleChangeFormQuest}
           selectedQuestions={this.props.selectedQuestions}
           formValue={this.props.formValue}
           selectedFormValue={selectedFormValue}

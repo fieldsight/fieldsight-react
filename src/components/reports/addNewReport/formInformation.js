@@ -75,10 +75,44 @@ class FormInformation extends Component {
   }
 
   componentDidMount() {
+    const { projectId } = this.props;
     if (this.props.formTypes) {
       this.setState({
         formTypes: this.props.formTypes,
       });
+    }
+    if (this.props.selectedFormType) {
+      this.setState(
+        state => ({
+          formInfo: {
+            ...state.formInfo,
+            selectedFormType: this.props.selectedFormType,
+          },
+        }),
+        () => {
+          const {
+            selectedFormType: { code },
+          } = this.state.formInfo;
+
+          this.props.getForms(projectId, code);
+        },
+      );
+    }
+    if (this.props.selectedForm) {
+      this.setState(
+        state => ({
+          formInfo: {
+            ...state.formInfo,
+            selectedForm: this.props.selectedForm,
+          },
+        }),
+        () => {
+          const {
+            selectedForm: { id },
+          } = this.state.formInfo;
+          this.props.getFormQuestions(projectId, id);
+        },
+      );
     }
   }
 
@@ -98,12 +132,28 @@ class FormInformation extends Component {
     if (prevProps.formInfoArr !== this.props.formInfoArr) {
       this.setState({ formInfoArr: this.props.formInfoArr });
     }
+    if (prevProps.formTypes !== this.props.formTypes) {
+      this.setState({ formTypes: this.props.formTypes });
+    }
 
     if (
       prevProps.individualFormArr !== this.props.individualFormArr
     ) {
-      this.setState({
-        individualFormArr: this.props.individualFormArr,
+      const { selectedIndividualForm } = this.props;
+      this.setState(state => {
+        if (selectedIndividualForm.length > 0) {
+          return {
+            formInfo: {
+              ...state.formInfo,
+              selectedIndividualForm: this.props
+                .selectedIndividualForm,
+            },
+            individualFormArr: this.props.individualFormArr,
+          };
+        }
+        return {
+          individualFormArr: this.props.individualFormArr,
+        };
       });
     }
     if (prevProps.forms !== this.props.forms) {
@@ -121,6 +171,18 @@ class FormInformation extends Component {
           }
         });
       this.setState({ formTypeArr: newFormList });
+    }
+
+    if (
+      prevProps.selectedIndividualForm !==
+      this.props.selectedIndividualForm
+    ) {
+      this.setState(state => ({
+        formInfo: {
+          ...state.formInfo,
+          selectedIndividualForm: this.props.selectedIndividualForm,
+        },
+      }));
     }
   }
 
@@ -613,7 +675,7 @@ class FormInformation extends Component {
       handleToggleClass,
       individualFormArr,
     } = this.props;
-    console.log('in form info', this.state);
+    // console.log(this.props, 'in form info', this.state);
     return (
       <div className="acc-item">
         <div className="acc-header">
@@ -641,7 +703,10 @@ class FormInformation extends Component {
                 </div>
               </div>
               <div className="col-lg-6" />
-              <div className="col-lg-6">
+              <div
+                className="col-lg-6"
+                // ref={setForm => (this.node = setForm)}
+              >
                 <div className="form-group">
                   <label className="mb-2">Forms</label>
                   <CustomSelect
@@ -721,47 +786,48 @@ class FormInformation extends Component {
                   >
                     <PerfectScrollbar>
                       <ul className="role-list">
-                        {individualFormArr.map(item => {
-                          const filterList = selectedIndividualForm.filter(
-                            i => {
-                              if (
-                                i.type === selectedFormType.code &&
-                                i.form === selectedForm.id
-                              ) {
+                        {individualFormArr.length > 0 &&
+                          individualFormArr.map(item => {
+                            const filterList = selectedIndividualForm.filter(
+                              i => {
                                 if (
-                                  i.metrics.some(
-                                    m => m.code === item.code,
-                                  )
+                                  i.type === selectedFormType.code &&
+                                  i.form === selectedForm.id
                                 ) {
-                                  return true;
+                                  if (
+                                    i.metrics.some(
+                                      m => m.code === item.code,
+                                    )
+                                  ) {
+                                    return true;
+                                  }
+                                  return false;
                                 }
                                 return false;
-                              }
-                              return false;
-                            },
-                            // i.code === item.code,
-                          );
-                          const isChecked =
-                            filterList && filterList[0]
-                              ? true
-                              : false;
-                          return (
-                            <li key={item.code}>
-                              <CustomCheckBox
-                                id={item.code}
-                                label={item.label}
-                                name={item.code}
-                                checked={isChecked}
-                                changeHandler={e => {
-                                  this.handleIndividualFormSelected(
-                                    e,
-                                    item,
-                                  );
-                                }}
-                              />
-                            </li>
-                          );
-                        })}
+                              },
+                              // i.code === item.code,
+                            );
+                            const isChecked =
+                              filterList && filterList[0]
+                                ? true
+                                : false;
+                            return (
+                              <li key={item.code}>
+                                <CustomCheckBox
+                                  id={item.code}
+                                  label={item.label}
+                                  name={item.code}
+                                  checked={isChecked}
+                                  changeHandler={e => {
+                                    this.handleIndividualFormSelected(
+                                      e,
+                                      item,
+                                    );
+                                  }}
+                                />
+                              </li>
+                            );
+                          })}
                       </ul>
                     </PerfectScrollbar>
                   </div>
