@@ -24,7 +24,7 @@ export default class FormTable extends PureComponent {
             <tr>
               <th>Title</th>
               <th>Default Submission</th>
-              <th>Action</th>
+              {/* <th>Action</th> */}
             </tr>
           </thead>
           <tbody>
@@ -34,7 +34,7 @@ export default class FormTable extends PureComponent {
                 <tr key={teams.id}>
                   <td>{teams.title}</td>
                   <td>{teams.default_submission_status}</td>
-                  <td>
+                  {/* <td>
                     <a
                       role="button"
                       onKeyDown={handleConfirm}
@@ -51,7 +51,7 @@ export default class FormTable extends PureComponent {
                         <i className="la la-close" />
                       </OverlayTrigger>
                     </a>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
           </tbody>
@@ -69,7 +69,7 @@ export default class FormTable extends PureComponent {
               <th>scheduled type</th>
               <th>default submission status</th>
 
-              <th>Action</th>
+              {/* <th>Action</th> */}
             </tr>
           </thead>
           <tbody>
@@ -84,7 +84,7 @@ export default class FormTable extends PureComponent {
                   <td>{teams.scheduled_type}</td>
                   <td>{teams.default_submission_status}</td>
 
-                  <td>
+                  {/* <td>
                     <a
                       role="button"
                       onKeyDown={handleConfirm}
@@ -101,7 +101,7 @@ export default class FormTable extends PureComponent {
                         <i className="la la-close" />
                       </OverlayTrigger>
                     </a>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
           </tbody>
