@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import DatePicker from 'react-datepicker';
-import CustomMultiSelect from '../CustomMultiSelect';
+import CustomMultiSelect from '../common/CustomMultiSelect';
 // import CustomSelect from '../CustomSelect';
 /* eslint-disable */
 

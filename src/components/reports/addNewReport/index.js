@@ -16,7 +16,7 @@ import {
   errorToast,
   successToast,
 } from '../../../utils/toastHandler';
-import CustomSelect from '../CustomSelect';
+import CustomSelect from '../common/CustomSelect';
 import Metrics from './metrics';
 import DataFilter from './dataFilter';
 import SelectedColumn from './selectedColumn';
@@ -107,7 +107,7 @@ class AddNewReport extends Component {
       }
       this.props.getMetricsData(id);
     });
-    document.addEventListener('click', this.handleClick, false);
+    // document.addEventListener('click', this.handleClick, false);
   }
 
   componentDidUpdate(prevProps) {
@@ -367,7 +367,7 @@ class AddNewReport extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClick, false);
+    // document.removeEventListener('click', this.handleClick, false);
   }
 
   clearState() {
@@ -377,10 +377,15 @@ class AddNewReport extends Component {
   }
 
   handleClick = e => {
-    if (this.node.contains(e.target)) {
+    console.log(
+      this.reportRef,
+      'object',
+      this.reportRef && this.reportRef.contains(e.target),
+    );
+    if (this.reportRef && this.reportRef.contains(e.target)) {
       return;
     }
-    // this.handleClickOutside();
+    this.handleClickOutside();
   };
 
   handleClickOutside = () => {
@@ -1543,11 +1548,11 @@ class AddNewReport extends Component {
                     </div>
                     <div className="report-type">
                       <div className="row">
-                        <div className="col-lg-3 col-md-4">
-                          <div
-                            className="form-group inline-form-group"
-                            ref={node => (this.node = node)}
-                          >
+                        <div
+                          className="col-lg-3 col-md-4"
+                          // ref={node => (this.reportRef = node)}
+                        >
+                          <div className="form-group inline-form-group">
                             <label className="">Report type</label>
                             {!reportLoader && (
                               <CustomSelect
@@ -1633,6 +1638,7 @@ class AddNewReport extends Component {
                           selectedFormValue={selectedFormValue}
                           addSubmissionCount={this.addSubmissionCount}
                           handleFormInfo={this.handleFormInfo}
+                          handleClickOutside={this.handleClickOutside}
                         />
                         <SelectedColumn
                           selected={selectedMetrics}

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import CustomSelect from '../CustomSelect';
-import CustomMultiSelect from '../CustomMultiSelect';
-import CustomRadioButton from '../CustomRadioButton';
-import CustomCheckBox from '../CustomCheckbox';
+import CustomSelect from '../common/CustomSelect';
+// import CustomMultiSelect from '../common/CustomMultiSelect';
+import CustomRadioButton from '../common/CustomRadioButton';
+import CustomCheckBox from '../common/CustomCheckbox';
 import {
   getForms,
   getFormQuestions,
@@ -72,6 +72,10 @@ class FormInformation extends Component {
         formValue: [],
       },
     };
+  }
+
+  componentWillMount() {
+    // document.addEventListener('click', this.handleClick, false);
   }
 
   componentDidMount() {
@@ -185,6 +189,27 @@ class FormInformation extends Component {
       }));
     }
   }
+
+  componentWillUnmount() {
+    // document.removeEventListener('click', this.handleClick, false);
+  }
+
+  handleClick = e => {
+    if (this.node && this.node.contains(e.target)) {
+      return;
+    }
+    if (this.setForm && this.setForm.contains(e.target)) {
+      return;
+    }
+    if (this.setFormType && this.setFormType.contains(e.target)) {
+      return;
+    }
+    if (this.setValue && this.setValue.contains(e.target)) {
+      return;
+    }
+
+    this.props.handleClickOutside();
+  };
 
   handleRadioChange = e => {
     const { value } = e.target;
@@ -684,7 +709,10 @@ class FormInformation extends Component {
         <div className="acc-body">
           <div className="form-list">
             <div className="row">
-              <div className="col-lg-6">
+              <div
+                className="col-lg-6"
+                ref={node => (this.setFormType = node)}
+              >
                 <div className="form-group">
                   <label className="mb-2">Forms type</label>
                   <CustomSelect
@@ -705,7 +733,7 @@ class FormInformation extends Component {
               <div className="col-lg-6" />
               <div
                 className="col-lg-6"
-                // ref={setForm => (this.node = setForm)}
+                ref={node => (this.setForm = node)}
               >
                 <div className="form-group">
                   <label className="mb-2">Forms</label>
@@ -831,25 +859,14 @@ class FormInformation extends Component {
                       </ul>
                     </PerfectScrollbar>
                   </div>
-                  {/* <div className="form-group">
-                    <label className="mb-2">Submission count</label>
-                    <CustomMultiSelect
-                      toggleSelectClass={toggleSelectClass}
-                      handleToggleClass={() => {
-                        handleToggleClass('submissionCount');
-                      }}
-                      toggleType="submissionCount"
-                      checkboxOption={individualFormArr}
-                      handleCheck={this.handleIndividualFormSelected}
-                      selectedArr={selectedIndividualForm}
-                      placeholderTxt="Submission Count"
-                    />
-                  </div> */}
                 </div>
               )}
               {status === 1 && (
                 <>
-                  <div className="col-lg-6">
+                  <div
+                    className="col-lg-6"
+                    ref={node => (this.node = node)}
+                  >
                     <div className="form-group">
                       <label className="mb-2">Questions</label>
 
@@ -870,7 +887,10 @@ class FormInformation extends Component {
                     </div>
                   </div>
 
-                  <div className="col-lg-6">
+                  <div
+                    className="col-lg-6"
+                    ref={node => (this.setValue = node)}
+                  >
                     <div className="form-group">
                       <label className="mb-2">Values</label>
                       <div className="common-select">

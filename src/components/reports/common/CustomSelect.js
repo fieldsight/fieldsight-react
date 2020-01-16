@@ -1,10 +1,27 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 /* eslint-disable */
 
-export default class CustomSelect extends PureComponent {
+export default class CustomSelect extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false,
+    };
+  }
+
+  handleOnOpen = () => {
+    this.setState({ isOpen: true });
+  };
+
+  handleonClose = event => {
+    event.stopPropagation();
+    this.setState({ isOpen: false });
+  };
+
   render() {
+    const { isOpen } = this.state;
     const {
       toggleSelectClass,
       handleToggleClass,
@@ -31,26 +48,27 @@ export default class CustomSelect extends PureComponent {
     return (
       <div className="common-select">
         <div
-          className={
-            toggleSelectClass[toggleType]
-              ? 'select-wrapper select-toggle'
-              : 'select-wrapper'
-          }
-          onClick={handleToggleClass}
-          onKeyDown={handleToggleClass}
+          className="select-wrapper select-toggle"
+          // toggleSelectClass[toggleType]
+          // ? 'select-wrapper select-toggle'
+
+          onClick={this.handleOnOpen}
+          onKeyDown={this.handleOnOpen}
           role="button"
           tabIndex="0"
+          onBlur={this.handleonClose}
         >
           <span className="select-item">{label}</span>
           <ul>
             <div
               style={{
                 position: 'relative',
-                height: `${height ? height : 'auto'}`,
+                height: `${isOpen && height ? height : 'auto'}`,
               }}
             >
               <PerfectScrollbar>
-                {options &&
+                {isOpen &&
+                  options &&
                   options.length > 0 &&
                   options.map(option => (
                     <li
@@ -77,10 +95,12 @@ export default class CustomSelect extends PureComponent {
                           : ''
                       }
                       onClick={e => {
-                        handleSelect(e, option);
+                        handleSelect(e, option),
+                          this.handleonClose(e);
                       }}
                       onKeyDown={e => {
-                        handleSelect(e, option);
+                        handleSelect(e, option),
+                          this.handleonClose(e);
                       }}
                       value={
                         option.id

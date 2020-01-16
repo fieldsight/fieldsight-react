@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import CustomCheckBox from '../CustomCheckbox';
+import CustomCheckBox from '../common/CustomCheckbox';
 import UserRole from './userRole';
 import SiteInformation from './siteInformation';
 import FormInformation from './formInformation';
@@ -197,6 +197,7 @@ export default class Metrics extends Component {
           formInfoArr={formInfoArr}
           handleFormInfo={handleFormInfo}
           addSubmissionCount={addSubmissionCount}
+          handleClickOutside={this.props.handleClickOutside}
         />
       </div>
     );

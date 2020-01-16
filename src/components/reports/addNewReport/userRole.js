@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import CustomCheckBox from '../CustomCheckbox';
+import CustomCheckBox from '../common/CustomCheckbox';
 
 export default class UserRole extends PureComponent {
   render() {

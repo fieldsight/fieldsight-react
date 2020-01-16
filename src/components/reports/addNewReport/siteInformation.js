@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import CustomMultiSelect from '../CustomMultiSelect';
+import CustomMultiSelect from '../common/CustomMultiSelect';
 /* eslint-disable */
 
 export default class SiteInformation extends PureComponent {
