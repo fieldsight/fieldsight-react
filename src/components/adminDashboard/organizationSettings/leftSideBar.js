@@ -2,14 +2,14 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 
 export default class LeftSideBar extends PureComponent {
-  leftsideNavRoute = () => {
+  leftsideNavRoute = props => {
     const {
       location: { pathname },
       match: {
         url,
         params: { id },
       },
-    } = this.props;
+    } = props;
 
     const navRoute = [
       {
@@ -52,7 +52,7 @@ export default class LeftSideBar extends PureComponent {
         className="nav nav-tabs flex-column border-tabs"
         // style={{ minHeight: height > 0 ? height : '' }}
       >
-        {this.leftsideNavRoute()}
+        {this.leftsideNavRoute(this.props.pathname)}
       </ul>
     );
   }

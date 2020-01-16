@@ -608,7 +608,7 @@ export default class Templates extends Component {
                         </div>
                       </div>
                     </div>
-                    <div className="dropdown report-option">
+                    {/* <div className="dropdown report-option">
                       <Dropdown drop="left">
                         <Dropdown.Toggle
                           variant=""
@@ -629,7 +629,7 @@ export default class Templates extends Component {
                           ))}
                         </Dropdown.Menu>
                       </Dropdown>
-                    </div>
+                    </div> */}
                   </div>
                 ))}
             </div>

@@ -11,6 +11,7 @@ import {
 import { errorToast, successToast } from '../../utils/toastHandler';
 import Modal from '../common/Modal';
 import ShareModal from './shareModal';
+import DeleteModal from '../common/DeleteModal';
 /* eslint-disable */
 
 class MyReports extends Component {
@@ -20,6 +21,8 @@ class MyReports extends Component {
       reportList: [],
       openShare: false,
       Shareid: '',
+      deleteId: '',
+      openDelete: false,
     };
   }
 
@@ -41,12 +44,23 @@ class MyReports extends Component {
   }
 
   handle = id => {
+    const { reportList } = this.state;
     axios
       .post(
         `/v4/api/reporting/report-action/${id}/?action_type=add_to_templates`,
       )
       .then(res => {
-        successToast(res.data.detail);
+        if (res.status === 200) {
+          const removeTemplate = reportList.filter(
+            tem => id !== tem.id,
+          );
+          this.setState(
+            {
+              reportList: removeTemplate,
+            },
+            () => successToast(res.data.detail),
+          );
+        }
       })
       .catch(err => {
         const error = err.response.data;
@@ -56,16 +70,23 @@ class MyReports extends Component {
       });
   };
 
-  deleteAction = id => {
-    const { reportList } = this.state;
+  deleteAction = () => {
+    const { reportList, deleteId } = this.state;
     axios
-      .delete(`/v4/api/reporting/report/${id}/`)
+      .delete(`/v4/api/reporting/report/${deleteId}/`)
       .then(res => {
         if (res.status === 204) {
-          const delet = reportList.filter(data => id !== data.id);
-          this.setState({
-            reportList: delet,
-          });
+          const delet = reportList.filter(
+            data => deleteId !== data.id,
+          );
+
+          this.setState(
+            {
+              reportList: delet,
+              openDelete: false,
+            },
+            () => successToast('Sucessfully', 'deleted'),
+          );
         }
         // successToast(res.data.detail);
       })
@@ -87,11 +108,29 @@ class MyReports extends Component {
   shareCloseButton = () => {
     this.setState(prevState => ({
       openShare: !prevState.openShare,
+      Shareid: '',
+    }));
+  };
+
+  deleteHandler = deleteId => {
+    this.setState(prevState => ({
+      deleteId,
+      openDelete: !prevState.openDelete,
+    }));
+  };
+
+  closeDeleteHandler = deleteId => {
+    this.setState(prevState => ({
+      openDelete: !prevState.openDelete,
     }));
   };
 
   render() {
-    const { reportList, openShare, Shareid } = this.state;
+    const {
+      state: { reportList, openShare, Shareid, openDelete },
+      deleteAction,
+      closeDeleteHandler,
+    } = this;
 
     const {
       toggleSection,
@@ -106,7 +145,7 @@ class MyReports extends Component {
       },
       {
         id: '2',
-        title: 'Add a template',
+        title: 'Add to template',
         action: this.handle,
       },
       {
@@ -200,7 +239,7 @@ class MyReports extends Component {
                           {item.actionDelete && (
                             <Dropdown.Item
                               onClick={() =>
-                                this.deleteAction(report.id)
+                                this.deleteHandler(report.id)
                               }
                               // target="_blank"
                             >
@@ -240,6 +279,15 @@ class MyReports extends Component {
               shareCloseButton={this.shareCloseButton}
             />
           </Modal>
+        )}
+
+        {openDelete && (
+          <DeleteModal
+            onCancel={closeDeleteHandler}
+            onConfirm={deleteAction}
+            onToggle={closeDeleteHandler}
+            message="Are u sure you want to delete?"
+          />
         )}
       </>
     );
