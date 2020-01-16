@@ -79,7 +79,7 @@ export default class Teams extends React.PureComponent {
     const {
       props: { id },
       state: { selected },
-    } = this.props;
+    } = this;
     const body = { team_ids: selected };
     axios
       .post(`/fv3/api/manage-teams/${id}/`, body)
