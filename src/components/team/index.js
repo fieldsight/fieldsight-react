@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Table, Button } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import SelectElement from '../common/SelectElement';
+// import SelectElement from '../common/SelectElement';
 
 import { getTeam, getTranslate } from '../../actions/teamAction';
 /* eslint-disable react/destructuring-assignment */
@@ -78,7 +78,7 @@ class Teams extends Component {
 
   render() {
     const { results, organization } = this.state;
-    const { selected } = this.props;
+    // const { selected, orgs } = this.props;
 
     // const selectLanguage = [
     //   { id: 'en', name: 'Eng' },
@@ -102,7 +102,7 @@ class Teams extends Component {
             </div>
             <div className="card-body">
               <div className="row">
-                {organization.map((subRegion, i) => (
+                {organization.map(subRegion => (
                   <div
                     className="col-xl-3 col-lg-6"
                     key={subRegion.id}
@@ -218,12 +218,7 @@ class Teams extends Component {
                           defaultMessage="Users"
                         />
                       </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.team-owner"
-                          defaultMessage="Team Owner"
-                        />
-                      </th>
+
                       <th>
                         <FormattedMessage
                           id="app.action"
@@ -257,14 +252,7 @@ class Teams extends Component {
                             <td>{project.projects}</td>
                             <td>{project.sites}</td>
                             <td>{project.users}</td>
-                            <td>
-                              <a
-                                href={`/fieldsight/application/#/profile/${project.team_owner_id}`}
-                                className="pending table-profile"
-                              >
-                                {project.team_owner}
-                              </a>
-                            </td>
+
                             <td>
                               <a
                                 href={`/fieldsight/application/#/team-dashboard/${project.id}`}

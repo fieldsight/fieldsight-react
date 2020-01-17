@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import RightContentCard from '../../common/RightContentCard';
-import Modal from '../../common/Modal';
 import ManageModal from '../../manageForms/ManageModal';
 import DeleteModal from '../../common/DeleteModal';
 import TeamsTable from './teamsTable';
@@ -28,7 +27,6 @@ export default class Teams extends React.PureComponent {
     axios
       .get(`/fv3/api/manage-teams/${id}/`)
       .then(res => {
-        console.log(res, 'res');
         this.setState({
           selected_teams: res.data.selected_teams,
           teams: res.data.teams,
@@ -36,12 +34,15 @@ export default class Teams extends React.PureComponent {
           // is_superuser: false,
         });
       })
-      .catch(err => {});
+      .catch();
   }
 
   handleChange = () => {
-    const { id } = this.props;
-    if (this.state.is_superuser) {
+    const {
+      props: { id },
+      state: { is_superuser },
+    } = this;
+    if (is_superuser) {
       this.setState({
         popUpPage: true,
       });
@@ -57,7 +58,7 @@ export default class Teams extends React.PureComponent {
   };
 
   changeHandler = e => {
-    const { id, checked, value } = e.target;
+    const { checked, value } = e.target;
 
     if (checked) {
       this.setState(prevState => ({
@@ -75,8 +76,11 @@ export default class Teams extends React.PureComponent {
   };
 
   handleSaveForm = () => {
-    const { id } = this.props;
-    const body = { team_ids: this.state.selected };
+    const {
+      props: { id },
+      state: { selected },
+    } = this;
+    const body = { team_ids: selected };
     axios
       .post(`/fv3/api/manage-teams/${id}/`, body)
       .then(res => {
@@ -87,7 +91,7 @@ export default class Teams extends React.PureComponent {
           });
         }
       })
-      .catch(err => {});
+      .catch();
   };
 
   openDelete = teams_id => {
@@ -134,8 +138,8 @@ export default class Teams extends React.PureComponent {
         selected_teams,
         is_superuser,
         openModal,
+        selected,
       },
-      handleDelete,
       openDelete,
       handleCancle,
       handleConfirm,
@@ -196,7 +200,7 @@ export default class Teams extends React.PureComponent {
           >
             <TeamList
               teams={teams}
-              selected={this.state.selected}
+              selected={selected}
               changeHandler={this.changeHandler}
             />
           </ManageModal>

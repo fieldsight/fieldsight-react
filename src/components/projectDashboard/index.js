@@ -16,7 +16,7 @@ import {
 /* eslint-disable react/destructuring-assignment */
 
 const INITIAL_STATE = {
-  activeTab: 'home',
+  // activeTab: 'home',
   showHeaderModal: false,
   showSubmissionModal: false,
   showCropper: false,
@@ -65,11 +65,11 @@ class ProjectDashboard extends React.Component {
     }
   }
 
-  toggleTab = tab => {
-    this.setState({
-      activeTab: tab,
-    });
-  };
+  // toggleTab = tab => {
+  //   this.setState({
+  //     activeTab: tab,
+  //   });
+  // };
 
   closeModal = type => {
     // if (type) {
@@ -128,7 +128,7 @@ class ProjectDashboard extends React.Component {
       },
     } = this.props;
 
-    const { showCropper, showGallery, activeTab } = this.state;
+    const { showCropper, showGallery } = this.state;
     // console.log('url-', this.props);
     return (
       <>

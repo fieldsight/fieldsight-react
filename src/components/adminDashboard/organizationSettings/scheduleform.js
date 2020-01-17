@@ -95,7 +95,7 @@ export default class ScheduleFormModal extends Component {
 
   handleOnWeekCheckbox = e => {
     const { name } = e.target;
-    this.setState(prevstate => {
+    this.setState(() => {
       if (name === '1') {
         return { weekDays: name };
       }
@@ -144,9 +144,21 @@ export default class ScheduleFormModal extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const { selected } = this.props;
+    const {
+      props: { selected, formType, id, handleAllModel },
+      state: {
+        dailyArrDays,
+        startedDate,
+        endedDate,
+        scheduleType,
+        weekDays,
+        status,
+        frequency,
+        selectedMonthlyDays,
+      },
+    } = this;
 
-    const result = this.state.dailyArrDays.map(function(x) {
+    const result = dailyArrDays.map(function(x) {
       return parseInt(x, 10);
     });
 
@@ -154,39 +166,37 @@ export default class ScheduleFormModal extends Component {
     //   return parseInt(x, 10);
     // });
 
-    const StarttedDate = format(this.state.startedDate, [
-      'YYYY-MM-DD',
-    ]);
-    const EndedDate = format(this.state.endedDate, ['YYYY-MM-DD']);
+    const StarttedDate = format(startedDate, ['YYYY-MM-DD']);
+    const EndedDate = format(endedDate, ['YYYY-MM-DD']);
 
     const body = {
-      schedule_level_id: JSON.parse(this.state.scheduleType),
-      form_type: JSON.parse(this.props.formType),
+      schedule_level_id: JSON.parse(scheduleType),
+      form_type: JSON.parse(formType),
       date_range_start: StarttedDate,
       date_range_end: EndedDate,
-      ...(this.state.scheduleType === '0' && {
+      ...(scheduleType === '0' && {
         selected_days: result,
       }),
-      ...(this.state.scheduleType === '1' && {
-        selected_days: this.state.weekDays,
+      ...(scheduleType === '1' && {
+        selected_days: weekDays,
       }),
-      default_submission_status: JSON.parse(this.state.status),
-      frequency: JSON.parse(this.state.frequency),
-      month_day: JSON.parse(this.state.selectedMonthlyDays),
+      default_submission_status: JSON.parse(status),
+      frequency: JSON.parse(frequency),
+      month_day: JSON.parse(selectedMonthlyDays),
       xf_ids: JSON.parse(selected),
     };
 
     axios
       .post(
-        `/fv3/api/manage-super-organizations-library/${this.props.id}/`,
+        `/fv3/api/manage-super-organizations-library/${id}/`,
         body,
       )
       .then(res => {
         if (res.status === 201) {
-          this.props.handleAllModel(res);
+          handleAllModel(res);
         }
       })
-      .catch(err => {});
+      .catch();
   };
 
   render() {
