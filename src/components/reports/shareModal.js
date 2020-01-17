@@ -62,7 +62,10 @@ export default class ShareModal extends Component {
   };
 
   render() {
-    const { forms, Shareid } = this.props;
+    const {
+      props: { forms },
+      state: { checkbox },
+    } = this;
 
     return (
       <>
@@ -76,9 +79,7 @@ export default class ShareModal extends Component {
                     className="custom-control-input"
                     id={option.id}
                     name={option.full_name}
-                    checked={
-                      this.state.checkbox.includes[option.full_name]
-                    }
+                    checked={checkbox.includes[option.full_name]}
                     onChange={this.checkboxhandler}
                     value={option.id}
                   />
