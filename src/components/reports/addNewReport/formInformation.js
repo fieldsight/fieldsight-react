@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import CustomSelect from '../common/CustomSelect';
-// import CustomMultiSelect from '../common/CustomMultiSelect';
 import CustomRadioButton from '../common/CustomRadioButton';
 import CustomCheckBox from '../common/CustomCheckbox';
 import {
@@ -704,11 +703,6 @@ class FormInformation extends Component {
                 <div className="form-group">
                   <label className="mb-2">Forms type</label>
                   <CustomSelect
-                    // toggleSelectClass={toggleSelectClass}
-                    // handleToggleClass={() => {
-                    //   handleToggleClass('formType');
-                    // }}
-                    // toggleType="formType"
                     name={formTypes.filter(
                       each => each.id === selectedFormType.id,
                     )}
@@ -723,11 +717,6 @@ class FormInformation extends Component {
                 <div className="form-group">
                   <label className="mb-2">Forms</label>
                   <CustomSelect
-                    // toggleSelectClass={toggleSelectClass}
-                    // handleToggleClass={() => {
-                    //   handleToggleClass('formSelect');
-                    // }}
-                    // toggleType="formSelect"
                     options={formTypeArr}
                     name={formTypeArr.filter(
                       each => each.id === selectedForm.id,
@@ -742,7 +731,7 @@ class FormInformation extends Component {
               <div className="col-lg-12">
                 <div className="form-group inline-form-group">
                   <CustomRadioButton
-                    label="Form Metric"
+                    label="Submission"
                     name="status"
                     id={0}
                     changeHandler={this.handleRadioChange}
@@ -842,11 +831,6 @@ class FormInformation extends Component {
                       <label className="mb-2">Questions</label>
 
                       <CustomSelect
-                        // toggleSelectClass={toggleSelectClass}
-                        // handleToggleClass={() => {
-                        //   handleToggleClass('formQuestSelect');
-                        // }}
-                        // toggleType="formQuestSelect"
                         name={filteredQuestions.filter(
                           each =>
                             each.name === selectedQuestions.name,

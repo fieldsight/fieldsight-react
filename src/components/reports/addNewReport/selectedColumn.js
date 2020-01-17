@@ -129,7 +129,7 @@ export default class SelectedColumn extends Component {
     return (
       <div className="col-lg-5 col-md-5">
         <h6>
-          Selected columns
+          Selected Columns
           {data.length > 0 && <span>{`(${data.length})`}</span>}
         </h6>
         <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
