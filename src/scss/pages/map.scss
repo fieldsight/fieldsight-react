@@ -85,7 +85,9 @@
                   opacity: 0;
                   visibility: hidden;
                   @include transition(all 0.5s ease-in-out);
-                  @include box-shadow(0 2px 6px rgba($color-primary, 0.2));
+                  @include box-shadow(
+                    0 2px 6px rgba($color-primary, 0.2)
+                  );
                   top: 130%;
                   li {
                     a {
@@ -135,17 +137,17 @@
                   text-transform: capitalize;
 
                   &:after {
-                    content: "\f110";
+                    content: '\f110';
                     /* fa-chevron-down */
-                    font-family: "LineAwesome";
+                    font-family: 'LineAwesome';
                     position: absolute;
                     right: 0;
                   }
                 }
 
                 .btn-link,
-                .card-link[aria-expanded="true"]:after {
-                  content: "\f113";
+                .card-link[aria-expanded='true']:after {
+                  content: '\f113';
                   /* fa-chevron-up */
                 }
               }
@@ -472,5 +474,8 @@
 
   .layer-form {
     display: none;
+  }
+  .custom-file-label {
+    z-index: 0 !important;
   }
 }

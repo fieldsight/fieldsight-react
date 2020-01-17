@@ -10,18 +10,22 @@ class ModalSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: 'filters',
+      activeModalTab: 'filters',
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log('modal setting component');
   }
 
   handleTabChange = tab => {
     // console.log('handleTabCHange Clicked');
-    this.setState({ activeTab: tab });
+    this.setState({ activeModalTab: tab });
   };
 
   render() {
     const { openModalSetting, modalSetting } = this.props;
-    const { activeTab } = this.state;
+    const { activeModalTab } = this.state;
     const options = [
       { value: 'one', label: 'Trying form another project' },
       { value: 'two', label: 'Enter birth date' },
@@ -63,7 +67,9 @@ class ModalSettings extends Component {
                   <li className="nav-item">
                     <a
                       className={`nav-link ${
-                        activeTab === 'filters' ? 'active show' : ''
+                        activeModalTab === 'filters'
+                          ? 'active show'
+                          : ''
                       }`}
                       id="map-filter_tab"
                       data-toggle="tab"
@@ -84,7 +90,9 @@ class ModalSettings extends Component {
                   <li className="nav-item">
                     <a
                       className={`nav-link ${
-                        activeTab === 'metrics' ? 'active show' : ''
+                        activeModalTab === 'metrics'
+                          ? 'active show'
+                          : ''
                       }`}
                       id="map-metric_tab"
                       data-toggle="tab"
@@ -105,7 +113,9 @@ class ModalSettings extends Component {
                   <li className="nav-item">
                     <a
                       className={`nav-link ${
-                        activeTab === 'layers' ? 'active show' : ''
+                        activeModalTab === 'layers'
+                          ? 'active show'
+                          : ''
                       }`}
                       id="map-layer_tab"
                       data-toggle="tab"
@@ -130,7 +140,9 @@ class ModalSettings extends Component {
                 >
                   <div
                     className={`tab-pane fade ${
-                      activeTab === 'filters' ? 'show active' : ''
+                      activeModalTab === 'filters'
+                        ? 'show active'
+                        : ''
                     }`}
                     id="map-filter"
                     role="tabpanel"
@@ -144,7 +156,9 @@ class ModalSettings extends Component {
                   </div>
                   <div
                     className={`tab-pane fade ${
-                      activeTab === 'metrics' ? 'show active' : ''
+                      activeModalTab === 'metrics'
+                        ? 'show active'
+                        : ''
                     }`}
                     id="map-metric"
                     role="tabpanel"
@@ -158,7 +172,7 @@ class ModalSettings extends Component {
                   </div>
                   <div
                     className={`tab-pane fade ${
-                      activeTab === 'layers' ? 'show active' : ''
+                      activeModalTab === 'layers' ? 'show active' : ''
                     }`}
                     id="map-layer"
                     role="tabpanel"

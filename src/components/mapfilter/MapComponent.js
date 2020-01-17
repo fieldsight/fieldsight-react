@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   Map,
   TileLayer,
@@ -9,13 +9,12 @@ import {
 import 'leaflet/dist/leaflet.css';
 import PrintControlDefault from 'react-leaflet-easyprint';
 import MeasureControlDefault from 'react-leaflet-measure';
+import 'react-leaflet-markercluster/dist/styles.min.css';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 
 const PrintControl = withLeaflet(PrintControlDefault);
 const MeasureControl = withLeaflet(MeasureControlDefault);
-// import MeasureControl from "react-leaflet-measure";
-// import MeasureControlDefault from "react-leaflet-measure";
-// const MeasureControl = withLeaflet(MeasureControlDefault);
-class MapComponent extends Component {
+class MapComponent extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,19 +23,22 @@ class MapComponent extends Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    const { geojson } = this.props;
+    const { mapRef, groupRef } = this.props;
+    const map = mapRef.current.leafletElement;
+    const featuregroup = groupRef.current.leafletElement;
+    if (prevProps.geojson !== geojson) {
+      map.fitBounds(featuregroup.getBounds());
+    }
+  }
+
   render() {
-    const { lat, lng } = this.state;
+    const {
+      props: { height, zoom, geojson, mapRef, groupRef },
+      state: { lat, lng },
+    } = this;
     const position = [lat, lng];
-    const { height, zoom } = this.props;
-    // const measureOptions = {
-    //   position: "topright",
-    //   primaryLengthUnit: "meters",
-    //   secondaryLengthUnit: "kilometers",
-    //   primaryAreaUnit: "sqmeters",
-    //   secondaryAreaUnit: "acres",
-    //   activeColor: "#db4a29",
-    //   completedColor: "#9b2d14"
-    // };
     const measureOptions = {
       position: 'topright',
       primaryLengthUnit: 'meters',
@@ -48,11 +50,12 @@ class MapComponent extends Component {
     };
     return (
       <Map
+        ref={mapRef}
         center={position}
-        zoom={zoom}
+        zoom={8}
         maxZoom={18}
         attributionControl
-        zoomControl={false}
+        zoomControl
         doubleClickZoom
         scrollWheelZoom
         dragging
@@ -60,8 +63,6 @@ class MapComponent extends Component {
         style={{ height, zIndex: 2 }}
       >
         {/* <MeasureControl {...measureOptions} /> */}
-
-        {/* <PrintControl ref={(ref) => { this.printControl = ref; }} position="topleft" sizeModes={['Current', 'A4Portrait', 'A4Landscape']} hideControlContainer={false} /> */}
         <PrintControl
           position="topleft"
           sizeModes={['Current', 'A4Portrait', 'A4Landscape']}
@@ -69,18 +70,37 @@ class MapComponent extends Component {
           title="Export as PNG"
           exportOnly
         />
-
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <Marker position={position}>
-          <Popup>
-            A pretty CSS3 popup.
-            <br />
-            Easily customizable.
-          </Popup>
-        </Marker>
+        {/* <FeatureGroup
+          ref={groupRef}
+          
+          }} */}
+        <MarkerClusterGroup ref={groupRef}>
+          {geojson[0] &&
+            geojson[0].features &&
+            geojson[0].features.map(each => {
+              const location = each.geometry.coordinates;
+              const { id } = each;
+              const projectName = each.properties.name;
+              return (
+                <Marker
+                  key={id}
+                  position={[location[1], location[0]]}
+                >
+                  <Popup>
+                    <span>
+                      <label>{projectName}</label>
+                    </span>
+                    <br />
+                  </Popup>
+                </Marker>
+              );
+            })}
+        </MarkerClusterGroup>
+        {/* </FeatureGroup> */}
         <MeasureControl {...measureOptions} />
       </Map>
     );

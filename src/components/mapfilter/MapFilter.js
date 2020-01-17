@@ -1,23 +1,43 @@
-import React, { Component } from 'react';
-import { Scrollbars } from 'react-custom-scrollbars';
+import React, { Component, createRef } from 'react';
+import { connect } from 'react-redux';
 
-import { Accordion, Card, Button } from 'react-bootstrap';
 import MapComponent from './MapComponent';
 import MapLeftTools from './MapLeftTools';
 import ModalSettings from './ModalSettings';
+import {
+  getPrimaryMarkerGeojson,
+  getSecondaryMarkerGeojson,
+  getProjectsList,
+  getProjectsRegionTypes,
+} from '../../actions/mapFilterActions';
+import MainSidebarTab from './SidebarTabsComponents/MainSidebarTab';
 
+const INITIAL_STATE = {
+  height: 0,
+  activeTab: 'filters',
+  activeLayers: 'main_layers',
+  searchDropdown: false,
+  modalSetting: false,
+  checkedItems: [],
+  clonePrimaryGeojson: [
+    {
+      crs: {
+        type: 'name',
+        properties: {
+          name: 'EPSG:4326',
+        },
+      },
+      type: 'FeatureCollection',
+      features: [],
+    },
+  ],
+};
 class MapFilter extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // width: 0,
-      height: 0,
-      zoom: 8,
-      activeTab: 'filters',
-      activeLayers: 'main_layers',
-      searchDropdown: false,
-      modalSetting: false,
-    };
+    this.state = INITIAL_STATE;
+    this.mapRef = createRef();
+    this.groupRef = createRef();
   }
 
   updateDimensions() {
@@ -35,6 +55,9 @@ class MapFilter extends Component {
       'resize',
       this.updateDimensions.bind(this),
     );
+    this.props.getPrimaryMarkerGeojson();
+    this.props.getProjectsList();
+    this.props.getProjectsRegionTypes();
   }
 
   componentWillUnmount() {
@@ -69,26 +92,45 @@ class MapFilter extends Component {
     exportLeafletIcon.click();
   };
 
+  exportLandscapeClick = () => {
+    document.getElementsByClassName(
+      'leaflet-control-easyPrint-button-export',
+    )[0].style.display = 'none';
+    const exportLeafletIcon = document.getElementsByClassName(
+      'A4Landscape',
+    )[0];
+    exportLeafletIcon.click();
+  };
+
+  exportPortraitClick = () => {
+    document.getElementsByClassName(
+      'leaflet-control-easyPrint-button-export',
+    )[0].style.display = 'none';
+    const exportLeafletIcon = document.getElementsByClassName(
+      'A4Portrait',
+    )[0];
+    exportLeafletIcon.click();
+  };
+
   zoomInClick = () => {
     // this.map.zoomIn();
-    this.setState(prevState => ({
-      zoom: prevState.zoom + 1,
-    }));
+    document.getElementsByClassName(
+      'leaflet-control-zoom-in',
+    )[0].style.display = 'none';
+    const zoominclick = document.getElementsByClassName(
+      'leaflet-control-zoom-in',
+    )[0];
+    zoominclick.click();
   };
 
   zoomOutClick = () => {
-    this.setState(prevState => ({
-      zoom: prevState.zoom - 1,
-    }));
-  };
-
-  handleTabChange = tab => {
-    // console.log('handleTabCHange Clicked');
-    this.setState({ activeTab: tab });
-  };
-
-  changeLayersTab = tab => {
-    this.setState({ activeLayers: tab });
+    document.getElementsByClassName(
+      'leaflet-control-zoom-out',
+    )[0].style.display = 'none';
+    const zoomoutclick = document.getElementsByClassName(
+      'leaflet-control-zoom-out',
+    )[0];
+    zoomoutclick.click();
   };
 
   searchDropdownClick = () => {
@@ -105,807 +147,151 @@ class MapFilter extends Component {
   };
 
   refreshClick = () => {
-    // console.log('log');
+    const map = this.mapRef.current.leafletElement;
+    const featuregroup = this.groupRef.current.leafletElement;
+    map.fitBounds(featuregroup.getBounds());
   };
 
-  // siteInfoDropdown = e => {};
+  handleRegionChange = e => {
+    const item = e.target.name;
+    const isChecked = e.target.checked;
+    const { checkedItems } = this.state;
+    if (isChecked === true) {
+      const joined = checkedItems.concat(item);
+      this.setState({ checkedItems: joined });
+    } else {
+      const filteredData = checkedItems.filter(data => data !== item);
+      this.setState({ checkedItems: filteredData });
+    }
+  };
+
+  applyFilter = () => {
+    // console.log('applyfilter');
+    // console.log(
+    //   this.props.mapFilterReducer.primaryGeojson,
+    //   'primaryGeojson',
+    // );
+    const {
+      props: {
+        mapFilterReducer: { primaryGeojson },
+      },
+      state: { checkedItems },
+    } = this;
+    const filtered = primaryGeojson[0].features.filter(data =>
+      checkedItems.includes(data.region),
+    );
+
+    const { clonePrimaryGeojson } = this.state;
+    clonePrimaryGeojson[0].features = filtered;
+
+    this.setState({
+      clonePrimaryGeojson,
+    });
+    // this.setState((prevState){
+
+    // })
+  };
 
   render() {
     const {
-      activeTab,
-      activeLayers,
-      searchDropdown,
-      modalSetting,
-    } = this.state;
-    const { height, zoom } = this.state;
+      props: {
+        mapFilterReducer: {
+          primaryGeojson,
+          projectsList,
+          projectsRegionTypes,
+        },
+        // match: {
+        //   params: { id: siteId },
+        // },
+      },
+      state: { height, zoom, searchDropdown, modalSetting },
+    } = this;
     return (
       <div className="card">
         <div className="card-body map-wrapper">
           <div id="map" style={{ height }} className="map">
-            <MapComponent zoom={zoom} height={height} />
+            <MapComponent
+              zoom={zoom}
+              height={height}
+              geojson={primaryGeojson}
+              mapRef={this.mapRef}
+              groupRef={this.groupRef}
+            />
           </div>
           <div className="map-sidebar left-map-sidebar">
-            <Scrollbars
+            {/* <Scrollbars
               style={{
                 position: 'relative',
                 overflow: 'hidden',
                 width: 'auto',
                 height: '100%',
               }}
-            >
-              <div className="sidebar-wrapper">
-                <form>
-                  <div className="form-group search">
-                    <div className="input-group">
-                      <input
-                        type="search"
-                        className="form-control"
-                        placeholder="Search By site Name"
-                      />
-                      <span
-                        className={`input-group-append ${
-                          searchDropdown ? 'open' : ''
-                        }`}
-                        onClick={this.searchDropdownClick}
-                        onKeyPress={this.searchDropdownClick}
-                        role="link"
-                        tabIndex={-1}
-                      >
-                        <span className="input-group-text">
-                          <i className="la la-angle-down" />
-                        </span>
-                        <ul>
-                          <li>
-                            <a>Search by Location</a>
-                          </li>
-                          <li>
-                            <a>search by Address</a>
-                          </li>
-                        </ul>
+            > */}
+            <div className="sidebar-wrapper">
+              <form>
+                <div className="form-group search">
+                  <div className="input-group">
+                    <input
+                      type="search"
+                      className="form-control"
+                      placeholder="Search By site Name"
+                    />
+                    <span
+                      className={`input-group-append ${
+                        searchDropdown ? 'open' : ''
+                      }`}
+                      onClick={this.searchDropdownClick}
+                      onKeyPress={this.searchDropdownClick}
+                      role="link"
+                      tabIndex={-1}
+                    >
+                      <span className="input-group-text">
+                        <i className="la la-angle-down" />
                       </span>
-                    </div>
+                      <ul>
+                        <li>
+                          <a>Search by Location</a>
+                        </li>
+                        <li>
+                          <a>search by Address</a>
+                        </li>
+                      </ul>
+                    </span>
                   </div>
-                </form>
-                <div className="sidebar-title flex-between">
-                  <h4>Map</h4>
-                  <span className="filters flex-end">
-                    <i
-                      className="la la-cogs setting"
-                      data-toggle="tooltip"
-                      title="Setting"
-                      aria-label="Setting"
-                      data-tab="site-info-popup"
-                      onClick={this.openModalSetting}
-                      onKeyPress={this.handleKeyPress}
-                      role="tab"
-                      tabIndex={0}
-                    />
-                  </span>
                 </div>
-                <form className="map-widget mrt-15">
-                  <ul
-                    className="nav nav-tabs flex-between"
-                    id="filterTab"
-                    role="tablist"
-                  >
-                    <li className="nav-item">
-                      <a
-                        className={`nav-link ${
-                          activeTab === 'filters' ? 'active show' : ''
-                        }`}
-                        id="sidebar-filter_tab"
-                        data-toggle="tab"
-                        // href="#sidebar-filter"
-                        role="tab"
-                        tabIndex={0}
-                        aria-controls="sidebar-filter"
-                        // aria-selected={`${
-                        //   activeTab === 'fiters' ? 'true' : 'false'
-                        // }`}
-                        aria-selected="true"
-                        aria-hidden="true"
-                        onClick={() => {
-                          this.handleTabChange('filters');
-                        }}
-                      >
-                        Filters
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className={`nav-link ${
-                          activeTab === 'metrics' ? 'active show' : ''
-                        }`}
-                        id="sidebar-metric_tab"
-                        data-toggle="tab"
-                        // href="#sidebar-metric"
-                        role="tab"
-                        tabIndex={0}
-                        aria-controls="sidebar-metric"
-                        // aria-selected={`${
-                        //   activeTab === 'metrics' ? 'true' : 'false'
-                        // }`}
-                        aria-selected="true"
-                        aria-hidden="true"
-                        onClick={() => {
-                          this.handleTabChange('metrics');
-                        }}
-                      >
-                        metrics
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className={`nav-link ${
-                          activeTab === 'layers' ? 'active show' : ''
-                        }`}
-                        id="sidebar-layer_tab"
-                        data-toggle="tab"
-                        // href="#sidebar-layer"
-                        role="tab"
-                        tabIndex={0}
-                        aria-controls="sidebar-layer"
-                        // aria-selected={`${
-                        //   activeTab === 'layers' ? true : false
-                        // }`}
-                        aria-selected="true"
-                        aria-hidden="true"
-                        onClick={() => {
-                          this.handleTabChange('layers');
-                        }}
-                      >
-                        Layers
-                      </a>
-                    </li>
-                  </ul>
-                  <div className="tab-content" id="filterTabContent">
-                    <div
-                      className={`tab-pane fade ${
-                        activeTab === 'filters' ? 'show active' : ''
-                      }`}
-                      id="sidebar-filter"
-                      role="tabpanel"
-                      aria-labelledby="sidebar-filter_tab"
-                    >
-                      <Accordion
-                        id="accordion"
-                        className="map-accordion"
-                      >
-                        <Card>
-                          <Card.Header
-                            onClick={e => {
-                              this.toggleAccordion(e);
-                            }}
-                          >
-                            <Accordion.Toggle
-                              as={Card.Link}
-                              className="card-link btn-link"
-                              // variant="link"
-                              eventKey="0"
-                            >
-                              Project
-                            </Accordion.Toggle>
-                          </Card.Header>
-                          <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                              <div className="card-body">
-                                <div className="sidebar-list">
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        FieldSight Housing
-                                        Demonstration Project
-                                      </label>
-                                    </div>
-                                  </div>
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        FieldSight Housing
-                                        Demonstration Project
-                                      </label>
-                                    </div>
-                                  </div>
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        FieldSight Housing
-                                        Demonstration Project
-                                      </label>
-                                    </div>
-                                  </div>
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        FieldSight Housing
-                                        Demonstration Project
-                                      </label>
-                                    </div>
-                                  </div>
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        FieldSight Housing
-                                        Demonstration Project
-                                      </label>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </Card.Body>
-                          </Accordion.Collapse>
-                        </Card>
-                        <Card>
-                          {/* <div className="card"> */}
-                          <Card.Header>
-                            <Accordion.Toggle
-                              as={Card.Link}
-                              className="card-link btn-link"
-                              // variant="link"
-                              eventKey="1"
-                            >
-                              Progress
-                            </Accordion.Toggle>
-                          </Card.Header>
-                          <Accordion.Collapse eventKey="1">
-                            <Card.Body>
-                              {/* <div className="card-body"> */}
-                              <div className="sidebar-list">
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      0%
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      1-20%
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      21-40%
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      41%-60%
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      61%-80%
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      81%-100%
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                              {/* </div> */}
-                              {/* </div> */}
-                              {/* </div> */}
-                            </Card.Body>
-                          </Accordion.Collapse>
-                        </Card>
-                        <Card>
-                          {/* <div className="card"> */}
-                          <Card.Header>
-                            <Accordion.Toggle
-                              as={Card.Link}
-                              className="card-link btn-link"
-                              // variant="link"
-                              eventKey="2"
-                            >
-                              Form Status
-                            </Accordion.Toggle>
-                          </Card.Header>
-                          <Accordion.Collapse eventKey="2">
-                            <Card.Body>
-                              <div className="form-group flexrow checkbox-group">
-                                <div className="custom-checkbox display-inline">
-                                  <div className="radiobox approved">
-                                    <label>
-                                      <input
-                                        type="radio"
-                                        name="radioYes"
-                                      />
-                                      <i className="helper" />
-                                      Approved
-                                    </label>
-                                  </div>
-                                  <div className="radiobox pending">
-                                    <label>
-                                      <input
-                                        type="radio"
-                                        name="radioYes"
-                                      />
-                                      <i className="helper" />
-                                      Pending
-                                    </label>
-                                  </div>
-                                  <div className="radiobox flagged">
-                                    <label>
-                                      <input
-                                        type="radio"
-                                        name="radioYes"
-                                      />
-                                      <i className="helper" />
-                                      Flagged
-                                    </label>
-                                  </div>
-                                  <div className="radiobox rejected">
-                                    <label>
-                                      <input
-                                        type="radio"
-                                        name="radioYes"
-                                      />
-                                      <i className="helper" />
-                                      Rejected
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                            </Card.Body>
-                          </Accordion.Collapse>
-                        </Card>
-                        <Card>
-                          <Card.Header>
-                            <Accordion.Toggle
-                              as={Card.Link}
-                              className="card-link btn-link"
-                              // variant="link"
-                              eventKey="3"
-                            >
-                              Site Type
-                            </Accordion.Toggle>
-                          </Card.Header>
-                          <Accordion.Collapse eventKey="3">
-                            <Card.Body>
-                              <div className="sidebar-list">
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      Colony
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      Pipaltar
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      Sattale
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      Barsuchet
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="form-group">
-                                  <div className="checkbox">
-                                    <label>
-                                      <input
-                                        type="checkbox"
-                                        name="radiobox"
-                                      />
-                                      <i className="helper" />
-                                      Locantrik
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                            </Card.Body>
-                          </Accordion.Collapse>
-                        </Card>
-                        <Card>
-                          <Card.Header>
-                            <Accordion.Toggle
-                              as={Card.Link}
-                              className="card-link btn-link"
-                              // variant="link"
-                              eventKey="4"
-                            >
-                              Region
-                            </Accordion.Toggle>
-                          </Card.Header>
-                          <Accordion.Collapse eventKey="4">
-                            <Card.Body>
-                              <div className="card-body">
-                                <div className="sidebar-list">
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        Bidur Municipality
-                                      </label>
-                                    </div>
-                                  </div>
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        Balkumari
-                                      </label>
-                                    </div>
-                                  </div>
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        Bageswori
-                                      </label>
-                                    </div>
-                                  </div>
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        Buntang
-                                      </label>
-                                    </div>
-                                  </div>
-                                  <div className="form-group">
-                                    <div className="checkbox">
-                                      <label>
-                                        <input
-                                          type="checkbox"
-                                          name="radiobox"
-                                        />
-                                        <i className="helper" />
-                                        Charghare
-                                      </label>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </Card.Body>
-                          </Accordion.Collapse>
-                        </Card>
-                      </Accordion>
-                    </div>
-
-                    <div
-                      className="tab-pane fade"
-                      id="sidebar-metric"
-                      role="tabpanel"
-                      aria-labelledby="sidebar-metric_tab"
-                    />
-                    <div
-                      className={`tab-pane fade ${
-                        activeTab === 'layers' ? 'show active' : ''
-                      }`}
-                      id="sidebar-layer"
-                      role="tabpanel"
-                      aria-labelledby="sidebar-layer_tab"
-                    >
-                      <div className="layer-content mrt-15">
-                        <div className="form-group ">
-                          <div className="custom-checkbox display-inline">
-                            <div className="radiobox ">
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="radioYes"
-                                  defaultValue="layers"
-                                  defaultChecked
-                                  onClick={() => {
-                                    this.changeLayersTab(
-                                      'main_layers',
-                                    );
-                                  }}
-                                />
-                                <i className="helper" />
-                                Layers
-                              </label>
-                            </div>
-                            <div className="radiobox ">
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="radioYes"
-                                  defaultValue="baselayers"
-                                  onClick={() => {
-                                    this.changeLayersTab(
-                                      'base_layers',
-                                    );
-                                  }}
-                                />
-                                <i className="helper" />
-                                Base Layers
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="layers-list display-list"
-                          id="layers-list"
-                          style={
-                            activeLayers === 'main_layers'
-                              ? { display: 'block' }
-                              : { display: 'none' }
-                          }
-                        >
-                          <div className="form-group">
-                            <div className="checkbox">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  name="radiobox"
-                                />
-                                <i className="helper" />
-                                Bidur Municipality
-                              </label>
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <div className="checkbox">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  name="radiobox"
-                                />
-                                <i className="helper" />
-                                Balkumari
-                              </label>
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <div className="checkbox">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  name="radiobox"
-                                />
-                                <i className="helper" />
-                                Bageswori
-                              </label>
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <div className="checkbox">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  name="radiobox"
-                                />
-                                <i className="helper" />
-                                Buntang
-                              </label>
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <div className="checkbox">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  name="radiobox"
-                                />
-                                <i className="helper" />
-                                Charghare
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="thumb-list mr-0 layers-list"
-                          id="base-layers"
-                          style={
-                            activeLayers === 'base_layers'
-                              ? { display: 'block' }
-                              : { display: 'none' }
-                          }
-                        >
-                          <ul>
-                            <li>
-                              <figure
-                                style={{
-                                  backgroundImage:
-                                    "url('images/map.png')",
-                                }}
-                              />
-                              <div className="content">
-                                <h6>Open street map </h6>
-                              </div>
-                            </li>
-                            <li>
-                              <figure
-                                style={{
-                                  backgroundImage:
-                                    "url('images/map.png')",
-                                }}
-                              />
-                              <div className="content">
-                                <h6>Google street </h6>
-                              </div>
-                            </li>
-                            <li>
-                              <figure
-                                style={{
-                                  backgroundImage:
-                                    "url('images/map.png')",
-                                }}
-                              />
-                              <div className="content">
-                                <h6>Google Hybrid </h6>
-                              </div>
-                            </li>
-                            <li>
-                              <figure
-                                style={{
-                                  backgroundImage:
-                                    "url('images/map.png')",
-                                }}
-                              />
-                              <div className="content">
-                                <h6>Google satelite </h6>
-                              </div>
-                            </li>
-                            <li>
-                              <figure
-                                style={{
-                                  backgroundImage:
-                                    "url('images/map.png')",
-                                }}
-                              />
-                              <div className="content">
-                                <h6>google Terrain </h6>
-                              </div>
-                            </li>
-                            <li>
-                              <figure
-                                style={{
-                                  backgroundImage:
-                                    "url('images/map.png')",
-                                }}
-                              />
-                              <div className="content">
-                                <h6>google Terrain </h6>
-                              </div>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="buttons flex-between">
-                    <button
-                      type="button"
-                      // role="button"
-                      className="fieldsight-btn border-btn"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      // role="button"
-                      className="fieldsight-btn bg-btn"
-                    >
-                      apply
-                    </button>
-                  </div>
-                </form>
+              </form>
+              <div className="sidebar-title flex-between">
+                <h4>Map</h4>
+                <span className="filters flex-end">
+                  <i
+                    className="la la-cogs setting"
+                    data-toggle="tooltip"
+                    title="Setting"
+                    aria-label="Setting"
+                    data-tab="site-info-popup"
+                    onClick={this.openModalSetting}
+                    onKeyPress={this.handleKeyPress}
+                    role="tab"
+                    tabIndex={0}
+                  />
+                </span>
               </div>
-            </Scrollbars>
+              <MainSidebarTab
+                projectsList={projectsList}
+                projectsRegionTypes={projectsRegionTypes}
+                applyFilter={this.applyFilter}
+                handleRegionChange={this.handleRegionChange}
+              />
+            </div>
+            {/* </Scrollbars> */}
           </div>
           <MapLeftTools
             scaleClick={this.scaleClick}
             zoomInClick={this.zoomInClick}
             zoomOutClick={this.zoomOutClick}
-            exportClick={this.exportClick}
+            exportPortraitClick={this.exportPortraitClick}
+            exportLandscapeClick={this.exportLandscapeClick}
+            refreshClick={this.refreshClick}
           />
           <ModalSettings
             openModalSetting={this.openModalSetting}
@@ -1428,4 +814,19 @@ class MapFilter extends Component {
   }
 }
 
-export default MapFilter;
+const mapStateToProps = ({ mapFilterReducer }) => ({
+  mapFilterReducer,
+});
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     getPrimaryGeojson: () =>
+//       dispatch({ type: 'GET_PRIMARY_MARKER_GEOJSON' }),
+//   };
+// };
+
+export default connect(mapStateToProps, {
+  getPrimaryMarkerGeojson,
+  getSecondaryMarkerGeojson,
+  getProjectsList,
+  getProjectsRegionTypes,
+})(MapFilter);

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { TwitterPicker } from 'react-color';
 
 class Metrics extends Component {
   constructor(props) {
@@ -24,7 +23,6 @@ class Metrics extends Component {
   };
 
   onFilterContentChange = e => {
-    console.log(e.currentTarget, 'check');
     this.setState({ metricsFilterContent: e.currentTarget.value });
   };
 
@@ -43,7 +41,6 @@ class Metrics extends Component {
         <div className="map-filter-data metric-filter">
           <div className="form-group ">
             <label className="mb-2">Select filter type</label>
-            <TwitterPicker />
             <div className="custom-checkbox display-inline">
               <div className="radiobox ">
                 <label>
@@ -140,7 +137,7 @@ class Metrics extends Component {
               >
                 <option
                   disabled
-                  selected
+                  defaultChecked
                   value="none"
                   defaultValue="none"
                 >

@@ -13,6 +13,7 @@ import manageFormReducer from './manageFormReducer';
 import siteViewDataReducer from './siteViewDataReducer';
 import reportReducer from './reportReducer';
 import superAdminDashboardReducer from './superAdminDashboardReducer';
+import mapFilterReducer from './mapFilterReducer';
 
 export default combineReducers({
   submissionDetail: submissionDetailReducer,
@@ -28,5 +29,6 @@ export default combineReducers({
   manageForms: manageFormReducer,
   siteViewData: siteViewDataReducer,
   reportReducer,
+  mapFilterReducer,
   superAdminDashboard: superAdminDashboardReducer,
 });

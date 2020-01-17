@@ -12,7 +12,8 @@ class MapLeftTools extends Component {
       zoomOutClick,
       refreshClick,
       scaleClick,
-      exportClick,
+      exportLandscapeClick,
+      exportPortraitClick,
     } = this.props;
     return (
       <>
@@ -75,16 +76,31 @@ class MapLeftTools extends Component {
           >
             <i className="la la-server" />
           </a>
-          <a
-            onClick={exportClick}
-            onKeyPress={exportClick}
-            data-toggle="tooltip"
-            title="Export"
-            data-placement="right"
-            role="button"
-            tabIndex={0}
-          >
+
+          <a>
             <i className="la la-download" />
+            <ul>
+              <li
+                onClick={exportLandscapeClick}
+                onKeyPress={exportLandscapeClick}
+                role="presentation"
+                data-toggle="tooltip"
+                title="ExportLandscape"
+                data-placement="right"
+              >
+                Landscape
+              </li>
+              <li
+                onClick={exportPortraitClick}
+                onKeyPress={exportPortraitClick}
+                role="presentation"
+                data-toggle="tooltip"
+                title="ExportPortrait"
+                data-placement="right"
+              >
+                Potrait
+              </li>
+            </ul>
           </a>
           <a
             data-toggle="tooltip"
@@ -94,6 +110,7 @@ class MapLeftTools extends Component {
           >
             <i className="la la-share-alt" />
           </a>
+
           <a>
             <i className="la la-save" />
             <ul>

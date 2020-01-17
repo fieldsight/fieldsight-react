@@ -1,18 +1,40 @@
 import React, { Component } from 'react';
+import Select from 'react-select';
 
 class Layers extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      addLayerClicked: false,
+      uploadType: 'csv',
+    };
   }
 
+  handleAddNewLayer = () => {
+    this.setState(prevState => ({
+      addLayerClicked: !prevState.addLayerClicked,
+    }));
+  };
+
   render() {
+    const { addLayerClicked, uploadType } = this.state;
+    const uploadTypeOptions = [
+      { value: 'csv', label: 'CSV' },
+      { value: 'geojson', label: 'Geojson' },
+      { value: 'kml', label: 'Kml' },
+      { value: 'shapefile', label: 'Shapefile' },
+    ];
+
     return (
       <>
         <div className="add-btn flex-start layer-add">
           <a
             // href="#"
+            onClick={this.handleAddNewLayer}
             data-tab="scheduled-popup"
+            role="button"
+            tabIndex={0}
+            onKeyPress={this.handleAddNewLayer}
           >
             {' '}
             Add new
@@ -21,7 +43,14 @@ class Layers extends Component {
             </span>
           </a>
         </div>
-        <div className="layer-form mrt-30">
+        <div
+          className="layer-form mrt-30"
+          style={
+            addLayerClicked === true
+              ? { display: 'block' }
+              : { display: 'none' }
+          }
+        >
           <h6>Add layer</h6>
           <div className="form-group">
             <input type="text" className="form-control" required />
@@ -29,12 +58,13 @@ class Layers extends Component {
           </div>
           <div className="form-group">
             <label>upload type</label>
-            <select className="wide">
-              <option>CSV</option>
-              <option>Geojson</option>
-              <option>Kml</option>
-              <option>Shapefile</option>
-            </select>
+            <Select
+              name="questionOptionsColor"
+              className="wide"
+              value={uploadType}
+              onChange={this.onChangeUploadType}
+              options={uploadTypeOptions}
+            />
           </div>
           <div className="form-group">
             <label className="mb-2">upload file</label>
@@ -55,21 +85,23 @@ class Layers extends Component {
 
           <div className="form-group">
             <label>Latitude</label>
-            <select className="wide">
-              <option>27.77</option>
-              <option>27.77</option>
-              <option>27.77</option>
-              <option>27.77</option>
-            </select>
+            <Select
+              name="questionOptionsColor"
+              className="wide"
+              value={uploadType}
+              onChange={this.onChangeUploadType}
+              options={uploadTypeOptions}
+            />
           </div>
           <div className="form-group">
             <label>Longitude</label>
-            <select className="wide">
-              <option>27.77</option>
-              <option>27.77</option>
-              <option>27.77</option>
-              <option>27.77</option>
-            </select>
+            <Select
+              name="questionOptionsColor"
+              className="wide"
+              value={uploadType}
+              onChange={this.onChangeUploadType}
+              options={uploadTypeOptions}
+            />
           </div>
           <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
