@@ -701,7 +701,7 @@ class FormInformation extends Component {
             <div className="row">
               <div className="col-lg-6">
                 <div className="form-group">
-                  <label className="mb-2">Forms type</label>
+                  <label className="mb-2">Form Type</label>
                   <CustomSelect
                     name={formTypes.filter(
                       each => each.id === selectedFormType.id,
