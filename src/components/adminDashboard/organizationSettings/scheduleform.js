@@ -145,7 +145,7 @@ export default class ScheduleFormModal extends Component {
     e.preventDefault();
 
     const {
-      props: { selected, formType, id, handleAllModel },
+      props: { selected, formType, id, handleAllModel, organization },
       state: {
         dailyArrDays,
         startedDate,
@@ -183,9 +183,14 @@ export default class ScheduleFormModal extends Component {
       default_submission_status: JSON.parse(status),
       frequency: JSON.parse(frequency),
       month_day: JSON.parse(selectedMonthlyDays),
-      xf_ids: JSON.parse(selected),
+      xf_ids:
+        selected !== ''
+          ? JSON.parse(selected)
+          : organization
+          ? JSON.parse(organization)
+          : '',
     };
-
+    console.log(body, 'body');
     axios
       .post(
         `/fv3/api/manage-super-organizations-library/${id}/`,

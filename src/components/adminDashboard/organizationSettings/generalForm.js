@@ -40,15 +40,21 @@ export default class GeneralFormModal extends Component {
     //   return parseInt(x, 10);
     // });
     const {
-      props: { selected, formType, id, handleAllModel },
+      props: { selected, formType, id, handleAllModel, organization },
       state: { status },
     } = this;
-
+    debugger;
     const body = {
-      xf_ids: selected,
+      xf_ids:
+        selected !== ''
+          ? JSON.parse(selected)
+          : organization
+          ? JSON.parse(organization)
+          : '',
       default_submission_status: JSON.parse(status),
       form_type: JSON.parse(formType),
     };
+
     axios
       .post(
         `/fv3/api/manage-super-organizations-library/${id}/`,

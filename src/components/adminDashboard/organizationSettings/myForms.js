@@ -12,6 +12,7 @@ import FormTable from './formTable';
 import SelectElement from '../../common/SelectElement';
 import GeneralFormModal from './generalForm';
 import ScheduleFormModal from './scheduleform';
+// import OrganizationForm from './organizationForm';
 
 /* eslint-disable  react/no-unused-state */
 /* eslint-disable camelcase */
@@ -33,6 +34,9 @@ export default class MyForm extends Component {
       general_forms: [],
       form_type: '',
       checkbox: [],
+      activeTab: 'myForms',
+      organization_library_forms: [],
+      selectOrganization: [],
     };
   }
 
@@ -44,6 +48,7 @@ export default class MyForm extends Component {
     axios
       .get(`/fv3/api/manage-super-organizations-library/${id}/`)
       .then(res => {
+        console.log(res, 'res');
         const newArr = forms;
         this.setState(() => {
           if (res.data.forms !== undefined) {
@@ -53,6 +58,8 @@ export default class MyForm extends Component {
             forms: newArr,
             scheduled_forms: res.data.selected_forms.scheduled_forms,
             general_forms: res.data.selected_forms.general_forms,
+            organization_library_forms:
+              res.data.organization_library_forms,
           };
         });
       })
@@ -202,6 +209,8 @@ export default class MyForm extends Component {
         scheduled_forms: res.data.scheduled_forms,
         selected: [],
         checkbox: [],
+        selectId: [],
+        selectOrganization: [],
       },
       () => successToast('Sucessfully', 'added'),
     );
@@ -224,6 +233,20 @@ export default class MyForm extends Component {
     });
   };
 
+  toggleTab = result => {
+    this.setState({
+      activeTab: result,
+    });
+  };
+
+  OrganizationHandler = e => {
+    const { value } = e.target;
+
+    this.setState({
+      selectOrganization: value,
+    });
+  };
+
   render() {
     const {
       state: {
@@ -238,6 +261,9 @@ export default class MyForm extends Component {
         openModal,
         generalPopUp,
         schedulePopUp,
+        activeTab,
+        organization_library_forms,
+        selectOrganization,
       },
       props: { id },
       // changeHandler,
@@ -247,6 +273,7 @@ export default class MyForm extends Component {
       handleConfirm,
       scheduleCloseButton,
       handleAllModel,
+      toggleTab,
     } = this;
 
     const option1 = [
@@ -277,58 +304,96 @@ export default class MyForm extends Component {
             showText="create form"
             url="/forms/create/"
           >
-            <form className="floating-form">
-              {/* <ul>
-                {forms.length > 0 &&
-                  forms.map(option => (
-                    <li key={option.id}>
-                      <div className="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id={option.id}
-                          name={option.title}
-                          checked={
-                            this.state.checkbox.includes[option.title]
-                          }
-                          onChange={this.checkboxhandler}
-                          value={option.id}
-                        />
-                        <label
-                          className="custom-control-label"
-                          htmlFor={option.id}
-                          style={{ paddingLeft: '2em' }}
-                        >
-                          {option.title}
-                        </label>
-                      </div>
-                    </li>
-                  ))}
-              </ul> */}
+            <ul className="nav nav-tabs ">
+              <li className="nav-item">
+                <a
+                  className={
+                    activeTab === 'myForms'
+                      ? 'nav-link active'
+                      : 'nav-link'
+                  }
+                  onClick={() => toggleTab('myForms')}
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => toggleTab('myForms')}
+                >
+                  My Forms
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className={
+                    activeTab === 'organizationForm'
+                      ? 'nav-link active'
+                      : 'nav-link'
+                  }
+                  onClick={() => toggleTab('organizationForm')}
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => toggleTab('organizationForm')}
+                >
+                  Organization Forms
+                </a>
+              </li>
+            </ul>
 
-              <div className="row">
-                <div className="col-xl-12 col-md-12">
-                  <SelectElement
-                    className="form-control"
-                    options={forms}
-                    changeHandler={this.selectHandler}
-                    label="Form List"
-                    value={selectId}
-                  />
+            {activeTab === 'myForms' && (
+              <form className="floating-form">
+                <div className="row">
+                  <div className="col-xl-12 col-md-12">
+                    <SelectElement
+                      className="form-control"
+                      options={forms}
+                      changeHandler={this.selectHandler}
+                      label="Form List"
+                      value={selectId}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-xl-12 col-md-12">
-                  <SelectElement
-                    className="form-control"
-                    options={option1}
-                    changeHandler={this.onchange}
-                    label="type"
-                    value={selectValue}
-                  />
+                <div className="row">
+                  <div className="col-xl-12 col-md-12">
+                    <SelectElement
+                      className="form-control"
+                      options={option1}
+                      changeHandler={this.onchange}
+                      label="type"
+                      value={selectValue}
+                    />
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            )}
+            {activeTab === 'organizationForm' && (
+              <form className="floating-form">
+                <div className="row">
+                  <div className="col-xl-12 col-md-12">
+                    <SelectElement
+                      className="form-control"
+                      options={organization_library_forms}
+                      changeHandler={this.OrganizationHandler}
+                      label="Form List"
+                      value={selectOrganization}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-xl-12 col-md-12">
+                    <SelectElement
+                      className="form-control"
+                      options={option1}
+                      changeHandler={this.onchange}
+                      label="type"
+                      value={selectValue}
+                    />
+                  </div>
+                </div>
+              </form>
+              // <OrganizationForm
+              //   organization_library_forms={
+              //     organization_library_forms
+              //   }
+              // />
+            )}
           </Modal>
         )}
 
@@ -351,6 +416,7 @@ export default class MyForm extends Component {
               selected={selectId}
               // selected={this.state.checkbox}
               formType={selectValue}
+              organization={selectOrganization}
               id={id}
               handleAllModel={handleAllModel}
             />
@@ -364,6 +430,7 @@ export default class MyForm extends Component {
           >
             <ScheduleFormModal
               selected={selectId}
+              organization={selectOrganization}
               // selected={this.state.checkbox}
               formType={selectValue}
               handleAllModel={handleAllModel}
