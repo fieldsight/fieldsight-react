@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
@@ -168,9 +169,16 @@ class MyReports extends Component {
             reportList.length > 0 &&
             reportList.map(report => (
               <div className="report-list" key={report.id}>
-                <a
+                <Link
                   className="row"
-                  href={`/fieldsight/application/#/project/${id}/edit-report/${report.id}`}
+                  to={{
+                    pathname: `/report-dashboard/${report.id}`,
+
+                    state: {
+                      title: report.title,
+                      attributes: report.attributes,
+                    },
+                  }}
                 >
                   <div className="col-md-8">
                     <div className="report-content">
@@ -204,7 +212,7 @@ class MyReports extends Component {
                         ))}
                     </div>
                   </div>
-                </a>
+                </Link>
                 <div className="dropdown report-option">
                   <Dropdown drop="left">
                     <Dropdown.Toggle

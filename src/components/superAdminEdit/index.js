@@ -120,11 +120,10 @@ export default class SuperAdminFormEdit extends Component {
       latitude: this.state.position.latitude,
       longitude: this.state.position.longitude,
     };
-    // debugger;
+
     axios
       .put(`/fv3/api/super-organization-lists/${id}/`, data)
       .then(req => {
-        console.log(req, 'req');
         if (req.status === 200) {
           successToast('Form', 'updated');
         }
