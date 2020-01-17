@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import CustomCheckBox from '../CustomCheckbox';
+import CustomCheckBox from '../common/CustomCheckbox';
 import UserRole from './userRole';
 import SiteInformation from './siteInformation';
 import FormInformation from './formInformation';
@@ -72,7 +72,6 @@ export default class Metrics extends Component {
       handleSelectMeta,
       formTypes,
       selectedFormType,
-      handleFormTypeCheck,
       formTypeArr,
       toggleSelectClass,
       handleToggleClass,
@@ -80,8 +79,12 @@ export default class Metrics extends Component {
       formQuestions,
       individualFormArr,
       selectedIndividualForm,
-      handleIndividualFormSelected,
       selectedFormValue,
+      formInfoArr,
+      projectId,
+      forms,
+      handleFormInfo,
+      addSubmissionCount,
     } = this.props;
     // console.log('metrics', formTypes, '-----', selectedFormType);
 
@@ -112,7 +115,7 @@ export default class Metrics extends Component {
                 <div
                   style={{
                     position: 'relative',
-                    height: `300px `,
+                    height: `200px `,
                   }}
                 >
                   <PerfectScrollbar>
@@ -176,23 +179,25 @@ export default class Metrics extends Component {
           handleSelectMeta={handleSelectMeta}
         />
         <FormInformation
+          projectId={projectId}
           toggleSelectClass={toggleSelectClass}
           handleToggleClass={handleToggleClass}
           selectedMetrics={selectedMetrics}
           formTypes={formTypes}
           selectedFormType={selectedFormType}
-          handleFormTypeCheck={handleFormTypeCheck}
           formTypeArr={formTypeArr}
           selectedForm={selectedForm}
-          handleFormSelected={this.props.handleFormSelected}
           formQuestions={formQuestions}
+          forms={forms}
           individualFormArr={individualFormArr}
           selectedIndividualForm={selectedIndividualForm}
-          handleIndividualFormSelected={handleIndividualFormSelected}
-          handleChangeFormQuest={this.props.handleChangeFormQuest}
           selectedQuestions={this.props.selectedQuestions}
           formValue={this.props.formValue}
           selectedFormValue={selectedFormValue}
+          formInfoArr={formInfoArr}
+          handleFormInfo={handleFormInfo}
+          addSubmissionCount={addSubmissionCount}
+          handleClickOutside={this.props.handleClickOutside}
         />
       </div>
     );

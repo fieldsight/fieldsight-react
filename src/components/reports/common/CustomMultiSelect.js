@@ -1,10 +1,27 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 /* eslint-disable */
 
-export default class CustomMultiSelect extends PureComponent {
+export default class CustomMultiSelect extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false,
+    };
+  }
+
+  handleOnOpen = () => {
+    this.setState({ isOpen: true });
+  };
+
+  handleonClose = event => {
+    event.stopPropagation();
+    this.setState({ isOpen: false });
+  };
+
   render() {
+    const { isOpen } = this.state;
     const {
       toggleSelectClass,
       handleToggleClass,
@@ -28,6 +45,10 @@ export default class CustomMultiSelect extends PureComponent {
               : 'select-wrapper'
           }
           onClick={handleToggleClass}
+          onKeyDown={handleToggleClass}
+          role="button"
+          tabIndex="0"
+          // onBlur={this.handleonClose}
         >
           <span className="select-item">{placeholderTxt}</span>
 
@@ -35,7 +56,7 @@ export default class CustomMultiSelect extends PureComponent {
             <div
               style={{
                 position: 'relative',
-                height: `350px`,
+                height: `200px`,
               }}
             >
               <PerfectScrollbar>
@@ -79,6 +100,12 @@ export default class CustomMultiSelect extends PureComponent {
                             ? option.name
                             : ''
                         }_${index}`}
+                        // onClick={e => {
+                        //   this.handleonClose(e);
+                        // }}
+                        // onKeyDown={e => {
+                        //   this.handleonClose(e);
+                        // }}
                       >
                         <div className="custom-control custom-checkbox">
                           <input

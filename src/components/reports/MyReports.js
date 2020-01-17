@@ -172,17 +172,25 @@ class MyReports extends Component {
                 <Link
                   className="row"
                   to={{
-                    pathname: `/report-dashboard/${report.id}`,
-
-                    state: {
-                      title: report.title,
-                      attributes: report.attributes,
-                    },
+                    pathname: `/project/${id}/edit-report/${report.id}`,
+                    fromRow: true,
                   }}
                 >
                   <div className="col-md-8">
                     <div className="report-content">
-                      <h4>{report.title}</h4>
+                      <Link
+                        className="row"
+                        to={{
+                          pathname: `/report-dashboard/${report.id}`,
+
+                          state: {
+                            title: report.title,
+                            attributes: report.attributes,
+                          },
+                        }}
+                      >
+                        <h4>{report.title}</h4>
+                      </Link>
                       <p>{report.description}</p>
                     </div>
                   </div>
@@ -266,6 +274,29 @@ class MyReports extends Component {
                             </Dropdown.Item>
                           )}
                         </div>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+                {/* </Link> */}
+                <div className="dropdown report-option">
+                  <Dropdown drop="left">
+                    <Dropdown.Toggle
+                      variant=""
+                      id="dropdown-Data"
+                      className="dropdown-toggle common-button no-border is-icon"
+                    >
+                      <i className="material-icons">more_vert</i>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                      {DataCrude.map(item => (
+                        <Dropdown.Item
+                          href={`${item.link}${report.id}`}
+                          key={item.id}
+                          // target="_blank"
+                        >
+                          {item.title}
+                        </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
