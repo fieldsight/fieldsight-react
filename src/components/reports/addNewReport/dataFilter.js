@@ -27,11 +27,25 @@ export default class DataFilter extends Component {
       Object.keys(this.props.filteredData).length > 0
     ) {
       const data = this.props.filteredData;
+      const regions =
+        data.regions.length === this.props.regions.length
+          ? [
+              { id: 'all_regions', name: 'Select All' },
+              ...data.regions,
+            ]
+          : data.regions;
+      const siteType =
+        data.site_types.length === this.props.siteTypes.length
+          ? [
+              { id: 'all_regions', name: 'Select All' },
+              ...data.site_types,
+            ]
+          : data.site_types;
       this.setState(state => ({
         filterData: {
           ...state.filterData,
-          regions: data.regions,
-          siteType: data.site_types,
+          regions,
+          siteType,
         },
       }));
     }
@@ -39,29 +53,48 @@ export default class DataFilter extends Component {
 
   handleRegionFilter = (e, item) => {
     const {
-      target: { checked },
+      target: { checked, id },
     } = e;
+    const { filterByRegions } = this.props;
     const {
       filterData: { regions },
     } = this.state;
 
     this.setState(state => {
       if (checked) {
-        return {
-          filterData: {
-            ...state.filterData,
-            regions: [...state.filterData.regions, item],
-          },
-        };
+        if (id === 'all_regions') {
+          return {
+            filterData: {
+              ...state.filterData,
+              regions: filterByRegions,
+            },
+          };
+        } else {
+          return {
+            filterData: {
+              ...state.filterData,
+              regions: [...state.filterData.regions, item],
+            },
+          };
+        }
       }
       if (!checked) {
-        const filterRegions = regions.filter(r => r.id !== item.id);
-        return {
-          filterData: {
-            ...state.filterData,
-            regions: filterRegions,
-          },
-        };
+        if (id === 'all_regions') {
+          return {
+            filterData: {
+              ...state.filterData,
+              regions: [],
+            },
+          };
+        } else {
+          const filterRegions = regions.filter(r => r.id !== item.id);
+          return {
+            filterData: {
+              ...state.filterData,
+              regions: filterRegions,
+            },
+          };
+        }
       }
       return null;
     });
@@ -69,28 +102,49 @@ export default class DataFilter extends Component {
 
   handleSiteTypeFilter = (e, item) => {
     const {
-      target: { checked },
+      target: { checked, id },
     } = e;
+    const { filterBySiteType } = this.props;
     const {
       filterData: { siteType },
     } = this.state;
     this.setState(state => {
       if (checked) {
-        return {
-          filterData: {
-            ...state.filterData,
-            siteType: [...state.filterData.siteType, item],
-          },
-        };
+        if (id === 'all_sitetypes') {
+          return {
+            filterData: {
+              ...state.filterData,
+              siteType: filterBySiteType,
+            },
+          };
+        } else {
+          return {
+            filterData: {
+              ...state.filterData,
+              siteType: [...state.filterData.siteType, item],
+            },
+          };
+        }
       }
       if (!checked) {
-        const filterSiteType = siteType.filter(s => s.id !== item.id);
-        return {
-          filterData: {
-            ...state.filterData,
-            siteType: filterSiteType,
-          },
-        };
+        if (id === 'all_sitetypes') {
+          return {
+            filterData: {
+              ...state.filterData,
+              siteType: [],
+            },
+          };
+        } else {
+          const filterSiteType = siteType.filter(
+            s => s.id !== item.id,
+          );
+          return {
+            filterData: {
+              ...state.filterData,
+              siteType: filterSiteType,
+            },
+          };
+        }
       }
       return null;
     });

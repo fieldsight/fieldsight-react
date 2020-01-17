@@ -80,8 +80,8 @@ const InitialState = {
 
   formQuestions: [],
   filter: {
-    filterByRegions: [],
-    filterBySiteType: [],
+    filterByRegions: [{ id: 'all_regions', name: 'Select All' }],
+    filterBySiteType: [{ id: 'all_sitetypes', name: 'Select All' }],
     filterBy: {},
   },
   isDelete: false,
@@ -153,7 +153,10 @@ class AddNewReport extends Component {
       this.setState(state => ({
         filter: {
           ...state.filter,
-          filterByRegions: this.props.reportReducer.regions,
+          filterByRegions: [
+            ...state.filter.filterByRegions,
+            ...this.props.reportReducer.regions,
+          ],
         },
       }));
     }
@@ -164,7 +167,10 @@ class AddNewReport extends Component {
       this.setState(state => ({
         filter: {
           ...state.filter,
-          filterBySiteType: this.props.reportReducer.siteTypes,
+          filterBySiteType: [
+            ...state.filter.filterBySiteType,
+            ...this.props.reportReducer.siteTypes,
+          ],
         },
       }));
     }
@@ -557,10 +563,11 @@ class AddNewReport extends Component {
         },
         formInfo: {
           ...state.formInfo,
-          selectedFormType: '',
-          selectedForm: '',
+          selectedFormType: {},
+          selectedForm: {},
           selectedQuestions: [],
           selectedFormValue: [],
+          selectedIndividualForm: [],
           formValue: [],
         },
         collapseClass: true,
@@ -1182,10 +1189,11 @@ class AddNewReport extends Component {
 
   handleSubmitFilter = filter => {
     const { reportId, data } = this.state;
+    const { regions, siteType } = filter;
 
     const modifyFilter = {
-      regions: filter.regions,
-      site_types: filter.siteType,
+      regions: regions.filter(r => r.id !== 'all_regions'),
+      site_types: siteType.filter(r => r.id !== 'all_sitetypes'),
     };
     this.setState(
       state => ({
@@ -1273,9 +1281,7 @@ class AddNewReport extends Component {
         usersArr,
         userList,
         metaAttributes,
-        // formTypes,
         formTypeArr,
-        // formQuestions,
         individualFormArr,
         collapseClass,
         filterArr,
@@ -1291,6 +1297,8 @@ class AddNewReport extends Component {
           forms,
           formTypes,
           formQuestions,
+          siteTypes,
+          regions,
         },
         match: {
           params: { id: projectId, reportId },
@@ -1401,11 +1409,6 @@ class AddNewReport extends Component {
                             <label className="">Report type</label>
                             {!reportLoader && (
                               <CustomSelect
-                                toggleSelectClass={toggleSelectClass}
-                                handleToggleClass={() =>
-                                  this.handleToggleClass('reportType')
-                                }
-                                toggleType="reportType"
                                 name={reportType.filter(
                                   each =>
                                     each.id === selectedReportType,
@@ -1525,41 +1528,43 @@ class AddNewReport extends Component {
                         applyFilter={applyFilter}
                         handleSubmitFilter={this.handleSubmitFilter}
                         filteredData={filterBy}
+                        siteTypes={siteTypes}
+                        regions={regions}
                       />
                     )}
-                    {showActions && (
-                      <div className="report-table  mt-3">
-                        {actions.map(action => (
-                          <Dropdown key={action.title}>
-                            <Dropdown.Toggle
-                              drop="right"
-                              variant=""
-                              id="dropdown-Data"
-                              className="common-button data-toggle is-border is-icon"
-                            >
-                              {action.title}
-                              <i className="material-icons">
-                                {action.icon}
-                              </i>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                              {action.menu.map(item => (
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    item.link();
-                                  }}
-                                  key={item.key}
-                                  // target="_blank"
-                                >
-                                  {item.text}
-                                </Dropdown.Item>
-                              ))}
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        ))}
-                      </div>
-                    )}
                   </>
+                )}
+                {showActions && (
+                  <div className="report-table  mt-3">
+                    {actions.map(action => (
+                      <Dropdown key={action.title}>
+                        <Dropdown.Toggle
+                          drop="right"
+                          variant=""
+                          id="dropdown-Data"
+                          className="common-button data-toggle is-border is-icon"
+                        >
+                          {action.title}
+                          <i className="material-icons">
+                            {action.icon}
+                          </i>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                          {action.menu.map(item => (
+                            <Dropdown.Item
+                              onClick={() => {
+                                item.link();
+                              }}
+                              key={item.key}
+                              // target="_blank"
+                            >
+                              {item.text}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    ))}
+                  </div>
                 )}
               </div>
               {isDelete && (

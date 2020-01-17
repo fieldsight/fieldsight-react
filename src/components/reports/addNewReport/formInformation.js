@@ -74,10 +74,6 @@ class FormInformation extends Component {
     };
   }
 
-  componentWillMount() {
-    // document.addEventListener('click', this.handleClick, false);
-  }
-
   componentDidMount() {
     const { projectId } = this.props;
     if (this.props.formTypes) {
@@ -188,28 +184,23 @@ class FormInformation extends Component {
         },
       }));
     }
+    if (prevProps.selectedFormType !== this.props.selectedFormType) {
+      this.setState(state => ({
+        formInfo: {
+          ...state.formInfo,
+          selectedFormType: this.props.selectedFormType,
+        },
+      }));
+    }
+    if (prevProps.selectedForm !== this.props.selectedForm) {
+      this.setState(state => ({
+        formInfo: {
+          ...state.formInfo,
+          selectedForm: this.props.selectedForm,
+        },
+      }));
+    }
   }
-
-  componentWillUnmount() {
-    // document.removeEventListener('click', this.handleClick, false);
-  }
-
-  handleClick = e => {
-    if (this.node && this.node.contains(e.target)) {
-      return;
-    }
-    if (this.setForm && this.setForm.contains(e.target)) {
-      return;
-    }
-    if (this.setFormType && this.setFormType.contains(e.target)) {
-      return;
-    }
-    if (this.setValue && this.setValue.contains(e.target)) {
-      return;
-    }
-
-    this.props.handleClickOutside();
-  };
 
   handleRadioChange = e => {
     const { value } = e.target;
@@ -709,18 +700,15 @@ class FormInformation extends Component {
         <div className="acc-body">
           <div className="form-list">
             <div className="row">
-              <div
-                className="col-lg-6"
-                ref={node => (this.setFormType = node)}
-              >
+              <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">Forms type</label>
                   <CustomSelect
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('formType');
-                    }}
-                    toggleType="formType"
+                    // toggleSelectClass={toggleSelectClass}
+                    // handleToggleClass={() => {
+                    //   handleToggleClass('formType');
+                    // }}
+                    // toggleType="formType"
                     name={formTypes.filter(
                       each => each.id === selectedFormType.id,
                     )}
@@ -731,18 +719,15 @@ class FormInformation extends Component {
                 </div>
               </div>
               <div className="col-lg-6" />
-              <div
-                className="col-lg-6"
-                ref={node => (this.setForm = node)}
-              >
+              <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">Forms</label>
                   <CustomSelect
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('formSelect');
-                    }}
-                    toggleType="formSelect"
+                    // toggleSelectClass={toggleSelectClass}
+                    // handleToggleClass={() => {
+                    //   handleToggleClass('formSelect');
+                    // }}
+                    // toggleType="formSelect"
                     options={formTypeArr}
                     name={formTypeArr.filter(
                       each => each.id === selectedForm.id,
@@ -852,19 +837,16 @@ class FormInformation extends Component {
               )}
               {status === 1 && (
                 <>
-                  <div
-                    className="col-lg-6"
-                    ref={node => (this.node = node)}
-                  >
+                  <div className="col-lg-6">
                     <div className="form-group">
                       <label className="mb-2">Questions</label>
 
                       <CustomSelect
-                        toggleSelectClass={toggleSelectClass}
-                        handleToggleClass={() => {
-                          handleToggleClass('formQuestSelect');
-                        }}
-                        toggleType="formQuestSelect"
+                        // toggleSelectClass={toggleSelectClass}
+                        // handleToggleClass={() => {
+                        //   handleToggleClass('formQuestSelect');
+                        // }}
+                        // toggleType="formQuestSelect"
                         name={filteredQuestions.filter(
                           each =>
                             each.name === selectedQuestions.name,
@@ -877,10 +859,7 @@ class FormInformation extends Component {
                     </div>
                   </div>
 
-                  <div
-                    className="col-lg-6"
-                    ref={node => (this.setValue = node)}
-                  >
+                  <div className="col-lg-6">
                     <div className="form-group">
                       <label className="mb-2">Values</label>
                       <div className="common-select">
