@@ -42,7 +42,14 @@ const InitialState = {
   siteInfo: {
     selectedMetas: [],
     siteValues: [],
-    selectedValue: [],
+    selectedValue: [
+      {
+        category: 'site_information',
+        code: 'actual',
+        types: [0],
+        label: 'Actual',
+      },
+    ],
   },
   reportType: [],
   metrics: [],
@@ -107,7 +114,6 @@ class AddNewReport extends Component {
       }
       this.props.getMetricsData(id);
     });
-    // document.addEventListener('click', this.handleClick, false);
   }
 
   componentDidUpdate(prevProps) {
@@ -177,6 +183,7 @@ class AddNewReport extends Component {
         match: {
           params: { id, reportId },
         },
+        location: { fromRow },
       } = this.props;
       //   // this.setState({ loader: true }, () => {
       if (reportId) {
@@ -349,11 +356,11 @@ class AddNewReport extends Component {
           siteInfo: {
             ...state.siteInfo,
             selectedMetas,
-            selectedValue,
+            // selectedValue,
           },
           userList,
           submissions,
-          collapseClass: true,
+          collapseClass: fromRow ? false : true,
           applyFilter: report.attributes.length > 0 ? true : false,
           filter: {
             ...state.filter,
@@ -367,40 +374,12 @@ class AddNewReport extends Component {
   }
 
   componentWillUnmount() {
-    // document.removeEventListener('click', this.handleClick, false);
+    this.clearState();
   }
 
   clearState() {
-    this.setState({ ...InitialState }, () => {
-      this.props.toggleSection('reportList');
-    });
+    this.setState({ ...InitialState });
   }
-
-  handleClick = e => {
-    console.log(
-      this.reportRef,
-      'object',
-      this.reportRef && this.reportRef.contains(e.target),
-    );
-    if (this.reportRef && this.reportRef.contains(e.target)) {
-      return;
-    }
-    this.handleClickOutside();
-  };
-
-  handleClickOutside = () => {
-    this.setState({
-      toggleSelectClass: {
-        reportType: false,
-        siteType: false,
-        siteValue: false,
-        formType: false,
-        formValue: false,
-        formQuestSelect: false,
-        submissionCount: false,
-      },
-    });
-  };
 
   handleToggleClass = toggleFor => {
     this.setState(state => ({
@@ -481,145 +460,10 @@ class AddNewReport extends Component {
             ...state.data,
             selectedMetrics: filteredMetrics,
           },
-          siteInfo: {
-            ...state.siteInfo,
-            selectedValue: [],
-          },
-        };
-      }
-      return null;
-    });
-  };
-
-  handleAddFormValue = valueFor => {
-    const {
-      data: { selectedMetrics },
-      formInfo: {
-        selectedFormType,
-        selectedForm,
-        selectedQuestions,
-        selectedFormValue,
-        selectedIndividualForm,
-      },
-    } = this.state;
-
-    const newArr = [];
-    const newIndividualFormArr = [];
-    let filteredMetrics = [];
-    this.setState(state => {
-      if (
-        valueFor === 'selectedIndividualForm' &&
-        selectedIndividualForm.length > 0
-      ) {
-        selectedIndividualForm.map(i => {
-          const val = {
-            selectedForm,
-            selectedIndividualForm: i,
-          };
-          return newIndividualFormArr.push({
-            ...selectedFormType,
-            value: val,
-          });
-        });
-        filteredMetrics = selectedMetrics.filter(i => {
-          if (i.value && i.value.selectedIndividualForm) {
-            return false;
-          }
-          return true;
-        });
-        const arr = [...filteredMetrics, ...newIndividualFormArr];
-        return {
-          data: {
-            ...state.data,
-            selectedMetrics: arr,
-          },
-        };
-      }
-      if (
-        valueFor === 'selectedIndividualForm' &&
-        selectedIndividualForm.length === 0
-      ) {
-        filteredMetrics = selectedMetrics.filter(i => {
-          if (i.value && i.value.selectedIndividualForm) {
-            return false;
-          }
-          return true;
-        });
-        return {
-          data: {
-            ...state.data,
-            selectedMetrics: filteredMetrics,
-          },
-        };
-      }
-      if (
-        valueFor === 'selectedValue' &&
-        selectedQuestions.length > 0 &&
-        selectedFormValue &&
-        selectedFormValue.length > 0
-      ) {
-        selectedQuestions.map(meta => {
-          return selectedFormValue.map(form => {
-            const newValue = {
-              selectedForm,
-              selectedQuestion: { ...meta, form },
-            };
-            newArr.push({ ...selectedFormType, value: newValue });
-          });
-        });
-        filteredMetrics = selectedMetrics.filter(i => {
-          if (i.value && i.value.selectedQuestion) {
-            return false;
-          }
-          return true;
-        });
-
-        const arr = [...filteredMetrics, ...newArr];
-        return {
-          data: {
-            ...state.data,
-            selectedMetrics: arr,
-          },
-        };
-      }
-      if (
-        valueFor === 'selectedValue' &&
-        selectedFormValue &&
-        selectedFormValue.length === 0
-      ) {
-        filteredMetrics = selectedMetrics.filter(i => {
-          if (i.value && i.value.selectedQuestion) {
-            return false;
-          }
-          return true;
-        });
-        return {
-          data: {
-            ...state.data,
-            selectedMetrics: filteredMetrics,
-          },
-        };
-      }
-      if (
-        valueFor === 'selectedValue' &&
-        selectedQuestions &&
-        selectedQuestions.length === 0
-      ) {
-        filteredMetrics = selectedMetrics.filter(i => {
-          if (i.value && i.value.selectedQuestion) {
-            return false;
-          }
-          return true;
-        });
-        return {
-          data: {
-            ...state.data,
-            selectedMetrics: filteredMetrics,
-          },
-          formInfo: {
-            ...state.formInfo,
-            formValue: [],
-          },
+          // siteInfo: {
+          //   ...state.siteInfo,
+          //   selectedValue: [],
+          // },
         };
       }
       return null;
@@ -998,9 +842,9 @@ class AddNewReport extends Component {
     if (meta && Object.keys(meta).length > 0) {
       this.handleMetaCheck(e, meta);
     }
-    if (value && Object.keys(value).length > 0) {
-      this.handleValueCheck(e, value);
-    }
+    // if (value && Object.keys(value).length > 0) {
+    //   this.handleValueCheck(e, value);
+    // }
   };
 
   handleMetaCheck = (e, meta) => {
@@ -1031,7 +875,8 @@ class AddNewReport extends Component {
         }
       },
       () => {
-        this.setSiteValue();
+        this.handleAddValue();
+        // this.setSiteValue();
       },
     );
   };
@@ -1452,7 +1297,7 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('class', this.state.toggleSelectClass);
+    // console.log('class', this.state.siteInfo.selectedValue);
     const isEdit = reportId ? true : false;
     const actions = [
       // {
@@ -1638,7 +1483,6 @@ class AddNewReport extends Component {
                           selectedFormValue={selectedFormValue}
                           addSubmissionCount={this.addSubmissionCount}
                           handleFormInfo={this.handleFormInfo}
-                          handleClickOutside={this.handleClickOutside}
                         />
                         <SelectedColumn
                           selected={selectedMetrics}

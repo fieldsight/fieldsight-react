@@ -68,9 +68,12 @@ class MyReports extends Component {
           reportList.length > 0 &&
           reportList.map(report => (
             <div className="report-list" key={report.id}>
-              <a
+              <Link
                 className="row"
-                href={`/fieldsight/application/#/project/${id}/edit-report/${report.id}`}
+                to={{
+                  pathname: `/project/${id}/edit-report/${report.id}`,
+                  fromRow: true,
+                }}
               >
                 <div className="col-md-8">
                   <div className="report-content">
@@ -102,7 +105,7 @@ class MyReports extends Component {
                       ))}
                   </div>
                 </div>
-              </a>
+              </Link>
               <div className="dropdown report-option">
                 <Dropdown drop="left">
                   <Dropdown.Toggle

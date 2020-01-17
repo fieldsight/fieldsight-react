@@ -787,17 +787,6 @@ class FormInformation extends Component {
                         this.selectAllSubmissionCount(e);
                       }}
                     />
-                    {/* <span
-                      className="flex-end"
-                      role="button"
-                      tabIndex="0"
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => {
-                        this.selectAllSubmissionCount();
-                      }}
-                    >
-                      Select All
-                    </span> */}
                   </div>
                   <div className="acc-item">
                     <div className="acc-body">
@@ -809,7 +798,7 @@ class FormInformation extends Component {
                   <div
                     style={{
                       position: 'relative',
-                      height: `300px `,
+                      height: `200px `,
                     }}
                   >
                     <PerfectScrollbar>
@@ -883,6 +872,7 @@ class FormInformation extends Component {
                         options={filteredQuestions}
                         value={selectedQuestions.name}
                         handleSelect={this.handleChangeFormQuest}
+                        height="180px"
                       />
                     </div>
                   </div>

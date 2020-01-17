@@ -32,7 +32,7 @@ export default class UserRole extends PureComponent {
         <div
           style={{
             position: 'relative',
-            height: `300px `,
+            height: `200px `,
           }}
         >
           <PerfectScrollbar>

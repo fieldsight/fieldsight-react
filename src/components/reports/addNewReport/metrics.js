@@ -115,7 +115,7 @@ export default class Metrics extends Component {
                 <div
                   style={{
                     position: 'relative',
-                    height: `300px `,
+                    height: `200px `,
                   }}
                 >
                   <PerfectScrollbar>

@@ -56,7 +56,7 @@ export default class CustomMultiSelect extends Component {
             <div
               style={{
                 position: 'relative',
-                height: `${isOpen ? '350px' : ''}`,
+                height: `200px`,
               }}
             >
               <PerfectScrollbar>
