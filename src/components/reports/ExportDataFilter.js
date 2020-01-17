@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { Dropdown } from 'react-bootstrap';
 import CustomMultiSelect from './common/CustomMultiSelect';
+// import CustomCheckBox from './CustomCheckbox';
 import CollapseFilterTable from './CollapseFilterTable';
 import { errorToast, successToast } from '../../utils/toastHandler';
 
