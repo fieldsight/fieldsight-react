@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
 
 /* eslint-disable camelcase */
 
@@ -27,15 +28,15 @@ export default class TeamsTable extends PureComponent {
             selected_teams.map(teams => (
               <tr key={teams.id}>
                 <td>
-                  <a
-                    href={teams.logo}
+                  <Link
+                    to={`/team-dashboard/${teams.id}`}
                     className="pending table-profile"
                   >
                     <figure>
                       <img src={teams.logo} alt="site-logo" />
                     </figure>
                     <h5>{teams.name}</h5>
-                  </a>
+                  </Link>
                 </td>
                 <td>{teams.address}</td>
 

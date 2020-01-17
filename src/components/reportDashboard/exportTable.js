@@ -12,10 +12,10 @@ export default class ExportTable extends PureComponent {
       >
         <thead>
           <tr>
-            <th> Name</th>
+            <th>Created By</th>
             <th>File</th>
             <th>Status</th>
-            <th>Created By</th>
+            <th>Created Date</th>
             <th>Action</th>
           </tr>
         </thead>

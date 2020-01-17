@@ -30,6 +30,12 @@ export default class LeftSideBar extends PureComponent {
         path: `${url}/my-form`,
         title: 'Form',
       },
+      {
+        id: '4',
+        to: `${url}/library`,
+        path: `${url}/library`,
+        title: 'Library',
+      },
     ];
 
     return navRoute.map(route => (
