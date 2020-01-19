@@ -189,7 +189,9 @@ class AddNewReport extends Component {
         match: {
           params: { id, reportId },
         },
-        location: { fromRow },
+        location: {
+          state: { fromRow },
+        },
       } = this.props;
       //   // this.setState({ loader: true }, () => {
       if (reportId) {
@@ -1305,7 +1307,7 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('class', this.state.siteInfo.selectedValue);
+    // console.log('class', this.props.location);
     const isEdit = reportId ? true : false;
     const actions = [
       // {

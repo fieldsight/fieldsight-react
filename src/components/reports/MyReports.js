@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { compose } from 'redux';
+import { Link, withRouter } from 'react-router-dom';
 import format from 'date-fns/format';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
@@ -126,6 +127,14 @@ class MyReports extends Component {
     }));
   };
 
+  handleClickTitle = (e, reportId) => {
+    const { id } = this.props;
+    this.props.history.push({
+      pathname: `/project/${id}/edit-report/${reportId}`,
+      state: { fromRow: true },
+    });
+  };
+
   render() {
     const {
       state: { reportList, openShare, Shareid, openDelete },
@@ -169,17 +178,25 @@ class MyReports extends Component {
             reportList.length > 0 &&
             reportList.map(report => (
               <div className="report-list" key={report.id}>
-                <Link
+                <div
+                  className="row"
+                  role="button"
+                  tabIndex="1"
+                  onClick={e => {
+                    this.handleClickTitle(e, report.id);
+                  }}
+                >
+                  {/* <Link
                   className="row"
                   to={{
                     pathname: `/project/${id}/edit-report/${report.id}`,
                     fromRow: true,
                   }}
-                >
+                > */}
                   <div className="col-md-8">
                     <div className="report-content">
                       <Link
-                        className="row"
+                        // className="row"
                         to={{
                           pathname: `/report-dashboard/${report.id}`,
 
@@ -189,7 +206,17 @@ class MyReports extends Component {
                           },
                         }}
                       >
-                        <h4>{report.title}</h4>
+                        <h4>
+                          {/* <span
+                          role="button"
+                          tabIndex="1"
+                          onClick={() => {
+                            this.handleClickTitle();
+                          }}
+                        > */}
+                          {report.title}
+                          {/* </span> */}
+                        </h4>
                       </Link>
                       <p>{report.description}</p>
                     </div>
@@ -220,7 +247,9 @@ class MyReports extends Component {
                         ))}
                     </div>
                   </div>
-                </Link>
+                  {/* </Link> */}
+                </div>
+
                 <div className="dropdown report-option">
                   <Dropdown drop="left">
                     <Dropdown.Toggle
@@ -336,7 +365,10 @@ class MyReports extends Component {
 const mapStateToProps = ({ reportReducer }) => ({
   reportReducer,
 });
-export default connect(mapStateToProps, {
-  getReportsList,
-  getProjectData,
-})(MyReports);
+export default compose(
+  withRouter,
+  connect(mapStateToProps, {
+    getReportsList,
+    getProjectData,
+  }),
+)(MyReports);

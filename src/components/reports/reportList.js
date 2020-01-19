@@ -19,7 +19,7 @@ class ReportList extends Component {
 
   render() {
     const { activeTab } = this.state;
-    const { toggleSection, id } = this.props;
+    const { id } = this.props;
     return (
       <div className="reports mrb-30">
         <div className="card">
@@ -101,16 +101,6 @@ class ReportList extends Component {
                 {/* </a> */}
               </li>
             </ul>
-            {/* <button
-              type="button"
-              className="common-button no-border is-icon"
-              onClick={() => {
-                toggleSection('addReport');
-              }}
-            >
-              <i className="material-icons">add_circle</i>
-              <span>New report</span>
-            </button> */}
             <Link
               to={`/project/${id}/add-report`}
               className="common-button no-border is-icon"
@@ -119,12 +109,7 @@ class ReportList extends Component {
               <span>New report</span>
             </Link>
           </div>
-          {activeTab === 'myReports' && (
-            <MyReports
-              id={id}
-              toggleSection={this.props.toggleSection}
-            />
-          )}
+          {activeTab === 'myReports' && <MyReports id={id} />}
           {activeTab === 'sharedWithMe' && <ShareWithMe id={id} />}
           {activeTab === 'templates' && <Templates id={id} />}
         </div>

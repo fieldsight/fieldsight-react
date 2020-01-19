@@ -665,10 +665,6 @@ class FormInformation extends Component {
       handleToggleClass,
       individualFormArr,
     } = this.props;
-    // console.log(
-    //   'in form info',
-    //   this.state.formInfo.selectedIndividualForm,
-    // );
     return (
       <div className="acc-item">
         <div className="acc-header">
