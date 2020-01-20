@@ -121,8 +121,10 @@ class AddNewReport extends Component {
       prevProps.reportReducer.reportTypes !==
       this.props.reportReducer.reportTypes
     ) {
+      const types = this.props.reportReducer.reportTypes;
+      const typeArr = types.filter(t => t.id === 0 || t.id > 3);
       this.setState({
-        reportType: this.props.reportReducer.reportTypes,
+        reportType: typeArr,
       });
     }
     if (

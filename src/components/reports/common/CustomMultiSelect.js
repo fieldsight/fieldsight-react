@@ -62,8 +62,6 @@ export default class CustomMultiSelect extends Component {
               <PerfectScrollbar>
                 {checkboxOption.length > 0 &&
                   checkboxOption.map((option, index) => {
-                    console.log(option, 'option');
-                    // debugger;
                     const filterList = selectedArr.filter(i =>
                       i.code
                         ? i.code === option.code
@@ -85,7 +83,6 @@ export default class CustomMultiSelect extends Component {
                       : option.name
                       ? option.name
                       : '';
-                    console.log(filterList, selectedArr);
                     const name = option.code
                       ? option.code
                       : option.name
