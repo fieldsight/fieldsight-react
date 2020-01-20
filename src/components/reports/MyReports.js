@@ -26,12 +26,15 @@ class MyReports extends Component {
       deleteId: '',
       openDelete: false,
       url: false,
+      reportLoader: false,
     };
   }
 
   componentWillMount() {
     const { id } = this.props;
-    this.props.getReportsList(id, 'my_reports');
+    this.setState({ reportLoader: true }, () => {
+      this.props.getReportsList(id, 'my_reports');
+    });
     this.props.getProjectData(id);
   }
 
@@ -42,6 +45,7 @@ class MyReports extends Component {
     ) {
       this.setState({
         reportList: this.props.reportReducer.reportList,
+        reportLoader: false,
       });
     }
   }
@@ -138,14 +142,19 @@ class MyReports extends Component {
 
   render() {
     const {
-      state: { reportList, openShare, Shareid, openDelete },
+      state: {
+        reportList,
+        openShare,
+        Shareid,
+        openDelete,
+        reportLoader,
+      },
       deleteAction,
       closeDeleteHandler,
     } = this;
 
     const {
-      toggleSection,
-      reportReducer: { reportLoader, projectList },
+      reportReducer: { projectList },
       id,
     } = this.props;
     const DataCrude = [
@@ -187,57 +196,18 @@ class MyReports extends Component {
                     this.handleClickTitle(e, report.id);
                   }}
                 >
-                  {/* <Link
-                  className="row"
-                  to={{
-                    pathname: `/project/${id}/edit-report/${report.id}`,
-                    fromRow: true,
-                  }}
-                > */}
                   <div className="col-md-8">
                     <div className="report-content">
                       <Link
-                        // className="row"
                         to={{
                           pathname: `/report-dashboard/${report.id}`,
-
                           state: {
                             title: report.title,
                             attributes: report.attributes,
                           },
                         }}
-                      > */}
-                      {/* <div
-                        // onClick={() =>
-                        //   this.props.history.push({
-                        //     pathname: `/report-dashboard/${id}`,
-
-                        //     state: { title: tle, attributes: attri },
-                        //   })
-                        // }
-                        onClick={() => {
-                          this.setState(
-                            { url: !this.state.url },
-                            () => console.log(this.state.url, 'url'),
-                          );
-                        }}
-                      > */}
-                      <div
-                        onClick={() => {
-                          this.redirectTitle;
-                        }}
                       >
-                        <h4>
-                          {/* <span
-                          role="button"
-                          tabIndex="1"
-                          onClick={() => {
-                            this.handleClickTitle();
-                          }}
-                        > */}
-                          {report.title}
-                          {/* </span> */}
-                        </h4>
+                        <h4>{report.title}</h4>
                       </Link>
                       <p>{report.description}</p>
                     </div>
@@ -268,7 +238,6 @@ class MyReports extends Component {
                         ))}
                     </div>
                   </div>
-                  {/* </Link> */}
                 </div>
 
                 <div className="dropdown report-option">
@@ -324,29 +293,6 @@ class MyReports extends Component {
                             </Dropdown.Item>
                           )}
                         </div>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-                {/* </Link> */}
-                <div className="dropdown report-option">
-                  <Dropdown drop="left">
-                    <Dropdown.Toggle
-                      variant=""
-                      id="dropdown-Data"
-                      className="dropdown-toggle common-button no-border is-icon"
-                    >
-                      <i className="material-icons">more_vert</i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                      {DataCrude.map(item => (
-                        <Dropdown.Item
-                          href={`${item.link}${report.id}`}
-                          key={item.id}
-                          // target="_blank"
-                        >
-                          {item.title}
-                        </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
