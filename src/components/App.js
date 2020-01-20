@@ -80,6 +80,7 @@ import FormDataFilter from './reports/FormDataFilter';
 import ActivityExportFile from './reports/activityExportFile';
 import UserExportReport from './reports/userExportReport';
 
+import ExcelExport from './excelExport';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -429,6 +430,10 @@ class App extends Component {
                 <Route
                   path="/report-dashboard/:id"
                   render={props => <ReportDashboard {...props} />}
+                />
+                <Route
+                  path="/exports/:isProject/:formId/:id/:version"
+                  render={props => <ExcelExport {...props} />}
                 />
               </Switch>
               <ToastContainer />
