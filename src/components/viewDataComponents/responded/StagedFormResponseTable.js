@@ -114,21 +114,26 @@ export default class SurveyFormResponseTable extends PureComponent {
                                     </Link>
                                   )}
 
-                                  {sub_stages.download_url ===
-                                  null ? (
-                                    <a className="edit-tag tag disable-pointer">
-                                      <i className="la la-download" />
-                                    </a>
-                                  ) : (
+                                  {table === 'site' ? (
                                     <a
-                                      href={sub_stages.download_url}
+                                      href={`/fieldsight/application/#/exports/0/${sub_stages.fsxf_id.id}/${id}/0`}
                                       className="edit-tag tag"
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
-                                      <i className="la la-download" />
+                                      <i className="la la-download " />
+                                    </a>
+                                  ) : (
+                                    <a
+                                      href={`/fieldsight/application/#/exports/1/${sub_stages.fsxf_id.id}/${id}/0`}
+                                      className="edit-tag tag"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      <i className="la la-download " />
                                     </a>
                                   )}
+
                                   {table === 'site' ? (
                                     <Link
                                       className="pending-tag tag"
