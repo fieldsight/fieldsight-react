@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import CustomSelect from '../common/CustomSelect';
-// import CustomMultiSelect from '../common/CustomMultiSelect';
 import CustomRadioButton from '../common/CustomRadioButton';
 import CustomCheckBox from '../common/CustomCheckbox';
 import {
@@ -94,7 +93,7 @@ class FormInformation extends Component {
             selectedFormType: { code },
           } = this.state.formInfo;
 
-          this.props.getForms(projectId, code);
+          code && this.props.getForms(projectId, code);
         },
       );
     }
@@ -110,7 +109,7 @@ class FormInformation extends Component {
           const {
             selectedForm: { id },
           } = this.state.formInfo;
-          this.props.getFormQuestions(projectId, id);
+          id && this.props.getFormQuestions(projectId, id);
         },
       );
     }
@@ -314,58 +313,33 @@ class FormInformation extends Component {
     this.setState(
       state => {
         if (checked) {
-          let filterSubmissionCount = [];
-          if (selectedIndividualForm.length > 0) {
-            selectedIndividualForm.map(count => {
-              const { type, form, metrics } = count;
-              if (type === selectedFormType.code) {
-                if (form === selectedForm.id) {
-                  metrics.push(item);
-                  filterSubmissionCount = count;
-
-                  return filterSubmissionCount;
-                } else {
-                  filterSubmissionCount = {
-                    type: count.type,
-                    form: selectedForm.id,
-                    metrics: [{ ...item }],
-                  };
-                  return filterSubmissionCount;
-                }
-              } else {
-                filterSubmissionCount = {
-                  type: selectedFormType.code,
-                  form: selectedForm.id,
-                  metrics: [{ ...item }],
-                };
-                return filterSubmissionCount;
-              }
-            });
-          }
-          if (selectedIndividualForm.length === 0) {
-            filterSubmissionCount = {
-              type: selectedFormType.code,
-              form: selectedForm.id,
-              metrics: [{ ...item }],
-            };
-          }
-          const filterArr = selectedIndividualForm.filter(i => {
-            if (i.type === selectedFormType.code) {
-              if (i.form === selectedForm.id) {
-                return false;
-              } else {
-                return true;
-              }
-            }
-            return true;
-          });
-
+          const sameArr = selectedIndividualForm.filter(
+            f =>
+              f.type === selectedFormType.code &&
+              f.form === selectedForm.id,
+          );
+          sameArr[0]
+            ? sameArr[0].metrics.push(item)
+            : sameArr.push({
+                type: selectedFormType.code,
+                form: selectedForm.id,
+                metrics: [{ ...item }],
+              });
+          const diffForm = selectedIndividualForm.filter(
+            f =>
+              f.type === selectedFormType.code &&
+              f.form !== selectedForm.id,
+          );
+          const diffType = selectedIndividualForm.filter(
+            f => f.type !== selectedFormType.code,
+          );
           return {
             formInfo: {
               ...state.formInfo,
               selectedIndividualForm: [
-                ...filterArr,
-                { ...filterSubmissionCount },
+                ...sameArr,
+                ...diffForm,
+                ...diffType,
               ],
             },
             selectAll: false,
@@ -691,7 +665,6 @@ class FormInformation extends Component {
       handleToggleClass,
       individualFormArr,
     } = this.props;
-    // console.log(this.props, 'in form info', this.state);
     return (
       <div className="acc-item">
         <div className="acc-header">
@@ -702,13 +675,8 @@ class FormInformation extends Component {
             <div className="row">
               <div className="col-lg-6">
                 <div className="form-group">
-                  <label className="mb-2">Forms type</label>
+                  <label className="mb-2">Form Type</label>
                   <CustomSelect
-                    // toggleSelectClass={toggleSelectClass}
-                    // handleToggleClass={() => {
-                    //   handleToggleClass('formType');
-                    // }}
-                    // toggleType="formType"
                     name={formTypes.filter(
                       each => each.id === selectedFormType.id,
                     )}
@@ -723,11 +691,6 @@ class FormInformation extends Component {
                 <div className="form-group">
                   <label className="mb-2">Forms</label>
                   <CustomSelect
-                    // toggleSelectClass={toggleSelectClass}
-                    // handleToggleClass={() => {
-                    //   handleToggleClass('formSelect');
-                    // }}
-                    // toggleType="formSelect"
                     options={formTypeArr}
                     name={formTypeArr.filter(
                       each => each.id === selectedForm.id,
@@ -742,7 +705,7 @@ class FormInformation extends Component {
               <div className="col-lg-12">
                 <div className="form-group inline-form-group">
                   <CustomRadioButton
-                    label="Form Metric"
+                    label="Submission"
                     name="status"
                     id={0}
                     changeHandler={this.handleRadioChange}
@@ -842,11 +805,6 @@ class FormInformation extends Component {
                       <label className="mb-2">Questions</label>
 
                       <CustomSelect
-                        // toggleSelectClass={toggleSelectClass}
-                        // handleToggleClass={() => {
-                        //   handleToggleClass('formQuestSelect');
-                        // }}
-                        // toggleType="formQuestSelect"
                         name={filteredQuestions.filter(
                           each =>
                             each.name === selectedQuestions.name,

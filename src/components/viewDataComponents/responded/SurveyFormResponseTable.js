@@ -103,36 +103,28 @@ export default class SurveyFormResponseTable extends Component {
                         </Link>
                       </td>
                       <td>
-                        {
-                          <Link
-                            className="view-tag tag"
-                            to={`/submission-data/${id}/${survey.id}`}
-                          >
-                            <i className="la la-eye" />
-                          </Link>
-                        }
-                        {survey.download_url === null ? (
-                          <a className="edit-tag tag disable-pointer">
-                            <i className="la la-download" />
-                          </a>
-                        ) : (
-                          <a
-                            href={survey.download_url}
-                            className="edit-tag tag"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="la la-download" />
-                          </a>
-                        )}
-                        {
-                          <Link
-                            className="pending-tag tag"
-                            to={`/project-version-submission/${id}/${survey.id}`}
-                          >
-                            <i className="la la-clone " />
-                          </Link>
-                        }
+                        <Link
+                          className="view-tag tag"
+                          to={`/submission-data/${id}/${survey.id}`}
+                        >
+                          <i className="la la-eye" />
+                        </Link>
+
+                        <a
+                          href={`/fieldsight/application/#/exports/1/${survey.id}/${id}/0`}
+                          className="edit-tag tag"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className="la la-download " />
+                        </a>
+
+                        <Link
+                          className="pending-tag tag"
+                          to={`/project-version-submission/${id}/${survey.id}`}
+                        >
+                          <i className="la la-clone " />
+                        </Link>
                       </td>
                     </tr>
                   );
