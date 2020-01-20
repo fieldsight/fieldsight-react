@@ -40,7 +40,9 @@ const SelectElement = ({
           {options.map((option, i) => (
             <option
               value={
-                option.id
+                option.xf_id
+                  ? option.xf_id
+                  : option.id
                   ? option.id
                   : option.name
                   ? option.name
@@ -59,6 +61,8 @@ const SelectElement = ({
                   ? option.title
                   : option.label
                   ? option.label
+                  : option.title
+                  ? option.title
                   : ''
               }${i}`}
             >

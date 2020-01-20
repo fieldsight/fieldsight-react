@@ -24,6 +24,7 @@ class MyReports extends Component {
       Shareid: '',
       deleteId: '',
       openDelete: false,
+      url: false,
     };
   }
 
@@ -126,6 +127,17 @@ class MyReports extends Component {
     }));
   };
 
+  // redirectTitle = (id, tle, attri) => {
+  //   this.props.history.push({
+  //     pathname: `/report-dashboard/${id}`,
+
+  //     state: { title: tle, attributes: attri },
+  //   });
+  // };
+  redirectTitle = () => {
+    console.log('hello');
+  };
+
   render() {
     const {
       state: { reportList, openShare, Shareid, openDelete },
@@ -178,7 +190,7 @@ class MyReports extends Component {
                 >
                   <div className="col-md-8">
                     <div className="report-content">
-                      <Link
+                      {/* <Link
                         className="row"
                         to={{
                           pathname: `/report-dashboard/${report.id}`,
@@ -188,9 +200,30 @@ class MyReports extends Component {
                             attributes: report.attributes,
                           },
                         }}
+                      > */}
+                      {/* <div
+                        // onClick={() =>
+                        //   this.props.history.push({
+                        //     pathname: `/report-dashboard/${id}`,
+
+                        //     state: { title: tle, attributes: attri },
+                        //   })
+                        // }
+                        onClick={() => {
+                          this.setState(
+                            { url: !this.state.url },
+                            () => console.log(this.state.url, 'url'),
+                          );
+                        }}
+                      > */}
+                      <div
+                        onClick={() => {
+                          this.redirectTitle;
+                        }}
                       >
                         <h4>{report.title}</h4>
-                      </Link>
+                      </div>
+                      {/* </Link> */}
                       <p>{report.description}</p>
                     </div>
                   </div>
