@@ -1453,6 +1453,7 @@ class AddNewReport extends Component {
                       <div className="row ">
                         <Metrics
                           projectId={projectId}
+                          selectedReportType={selectedReportType}
                           handleToggleClass={this.handleToggleClass}
                           toggleSelectClass={toggleSelectClass}
                           data={metricArr}
