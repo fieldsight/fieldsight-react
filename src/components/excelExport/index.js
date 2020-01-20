@@ -41,11 +41,11 @@ class ExcelExport extends Component {
   componentWillMount() {
     const {
       match: {
-        params: { isProject, formId, id },
+        params: { isProject, formId, id, version },
       },
     } = this.props;
     this.setState({ loader: true }, () => {
-      this.props.getExportList(isProject, formId, id);
+      this.props.getExportList(isProject, formId, id, version);
     });
   }
 
@@ -53,11 +53,16 @@ class ExcelExport extends Component {
     try {
       const {
         match: {
-          params: { isProject, formId, id },
+          params: { isProject, formId, id, version },
         },
       } = this.props;
       setInterval(async () => {
-        await this.props.getExportList(isProject, formId, id);
+        await this.props.getExportList(
+          isProject,
+          formId,
+          id,
+          version,
+        );
       }, 10000);
     } catch (e) {
       errorToast(e);

@@ -11,10 +11,11 @@ export const getExportList = (
   isProject,
   formId,
   projectId,
+  versionId,
 ) => dispatch => {
   axios
     .get(
-      `fv3/api/kobo/exports/?is_project=${isProject}&fsxf=${formId}&id=${projectId}/`,
+      `fv3/api/kobo/exports/?is_project=${isProject}&fsxf=${formId}&id=${projectId}&version=${versionId}`,
     )
     .then(res => {
       dispatch({ type: GET_EXPORT_LIST, payload: res.data });
