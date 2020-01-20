@@ -22,7 +22,7 @@ export default function(state = initialState, action) {
     case CREATE_EXPORT:
       return {
         ...state,
-        createResp: action.payload,
+        createResp: action.payload && action.payload.message,
       };
     case DELETE_EXPORT:
       return {

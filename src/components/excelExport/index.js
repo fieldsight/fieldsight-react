@@ -12,6 +12,8 @@ import {
   deleteExport,
   downloadExport,
 } from '../../actions/exportExcelActions';
+import { errorToast, successToast } from '../../utils/toastHandler';
+/* eslint-disable */
 
 const options = [
   { id: '/', name: '/(Slash)' },
@@ -25,6 +27,7 @@ class ExcelExport extends Component {
       exportHistory: [],
       loader: false,
       showModal: false,
+      modalLoader: false,
       // isDelete: false,
       // isCreated: false,
       // isDownloaded: false,
@@ -46,10 +49,37 @@ class ExcelExport extends Component {
     });
   }
 
+  async componentDidMount() {
+    try {
+      const {
+        match: {
+          params: { isProject, formId, id },
+        },
+      } = this.props;
+      setInterval(async () => {
+        await this.props.getExportList(isProject, formId, id);
+      }, 10000);
+    } catch (e) {
+      errorToast(e);
+    }
+  }
+
   componentDidUpdate(prevProps) {
     const { excelExport } = this.props;
+    const { showModal } = this.state;
     if (prevProps.excelExport.exportList !== excelExport.exportList) {
       this.setList(excelExport.exportList);
+    }
+    if (
+      prevProps.excelExport.createResp !== excelExport.createResp &&
+      excelExport.createResp !== ''
+    ) {
+      successToast(excelExport.createResp);
+      if (showModal) {
+        this.setState({ modalLoader: false }, () => {
+          this.handleToggleModal();
+        });
+      }
     }
   }
 
@@ -99,6 +129,7 @@ class ExcelExport extends Component {
     const { data } = this.state;
     let body = {};
     if (type === 'advanced') {
+      this.setState({ modalLoader: true });
       body = {
         dont_split_select_multiples: data.dontSplitSelectMultiples,
         group_delimiter: data.groupDelimiter,
@@ -130,6 +161,7 @@ class ExcelExport extends Component {
       loader,
       showModal,
       data: { groupDelimiter, dontSplitSelectMultiples },
+      modalLoader,
     } = this.state;
     return (
       <div className="card">
@@ -184,18 +216,23 @@ class ExcelExport extends Component {
                     <tr key={`excel_${history.id}`}>
                       <td>{index + 1}</td>
                       <td>
-                        <a
-                          role="button"
-                          tabIndex="0"
-                          onClick={() => {
-                            this.handleDownload(history.id);
-                          }}
-                          onKeyDown={() => {
-                            this.handleDownload(history.id);
-                          }}
-                        >
-                          {history.filename}
-                        </a>
+                        {history.internal_status === 1 && (
+                          <a
+                            role="button"
+                            tabIndex="0"
+                            onClick={() => {
+                              this.handleDownload(history.id);
+                            }}
+                            onKeyDown={() => {
+                              this.handleDownload(history.id);
+                            }}
+                          >
+                            {history.filename}
+                          </a>
+                        )}
+                        {history.internal_status !== 1 && (
+                          <span>{history.status_title}</span>
+                        )}
                       </td>
                       <td>
                         {format(
@@ -260,6 +297,7 @@ class ExcelExport extends Component {
                       onClick={() => {
                         this.handleSubmit('advanced');
                       }}
+                      disabled={modalLoader}
                     >
                       Save
                     </button>
