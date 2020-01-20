@@ -29,7 +29,7 @@ export default class SiteEdit extends Component {
         latitude: '51.505',
         longitude: '-0.09',
       },
-      // zoom: 13,
+      zoom: 13,
       src: '',
       showCropper: false,
       cropResult: '',
@@ -378,7 +378,7 @@ export default class SiteEdit extends Component {
           readFile={this.readFile}
           closeModal={this.closeModal}
           handleCheckboxChange={this.handleCheckboxChange}
-          zoom={13}
+          zoom={this.state.zoom}
           src={src}
           project_info={data}
           jsondata={jsondata}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import RadioElement from '../../common/RadioElement';
 
+/* eslint-disable  camelcase */
 export default class GeneralFormModal extends Component {
   constructor(props) {
     super(props);
@@ -40,15 +41,29 @@ export default class GeneralFormModal extends Component {
     //   return parseInt(x, 10);
     // });
     const {
-      props: { selected, formType, id, handleAllModel },
+      props: {
+        selected,
+        formType,
+        id,
+        handleAllModel,
+        organization,
+        is_form_library,
+      },
       state: { status },
     } = this;
 
     const body = {
-      xf_ids: selected,
+      xf_ids:
+        selected !== ''
+          ? JSON.parse(selected)
+          : organization
+          ? JSON.parse(organization)
+          : '',
       default_submission_status: JSON.parse(status),
       form_type: JSON.parse(formType),
+      ...(is_form_library && { is_form_library }),
     };
+
     axios
       .post(
         `/fv3/api/manage-super-organizations-library/${id}/`,
@@ -108,6 +123,13 @@ export default class GeneralFormModal extends Component {
                 </div>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={this.props.handleFormType}
+              className="fieldsight-btn"
+            >
+              Select Form
+            </button>
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import SuperAdminFormEdit from '../../superAdminEdit';
 import LeftSideBar from './leftSideBar';
 import Teams from './teams';
 import MyForm from './myForms';
+import Library from './library';
 import { RegionProvider } from '../../../context';
 
 export default class SuperAdminSetting extends PureComponent {
@@ -65,6 +66,11 @@ export default class SuperAdminSetting extends PureComponent {
                   <Route
                     path={`${url}/my-form`}
                     render={props => <MyForm {...props} id={id} />}
+                  />
+
+                  <Route
+                    path={`${url}/library`}
+                    render={props => <Library {...props} id={id} />}
                   />
                 </Switch>
               </div>

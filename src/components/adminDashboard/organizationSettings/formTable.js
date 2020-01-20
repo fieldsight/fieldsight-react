@@ -15,97 +15,105 @@ export default class FormTable extends PureComponent {
 
     return (
       <>
-        <label>General Table</label>
-        <Table
-          responsive="xl"
-          className="table  table-bordered  dataTable "
-        >
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Default Submission</th>
-              {/* <th>Action</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {general_forms &&
-              general_forms.length > 0 &&
-              general_forms.map(teams => (
-                <tr key={teams.id}>
-                  <td>{teams.title}</td>
-                  <td>{teams.default_submission_status}</td>
-                  {/* <td>
-                    <a
-                      role="button"
-                      onKeyDown={handleConfirm}
-                      tabIndex="0"
-                      className="td-delete-btn"
-                      onClick={() => {
-                        openDelete(teams.id, 'general');
-                      }}
-                    >
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip>Remove</Tooltip>}
+        <label style={{ fontWeight: 'bold' }}>General Forms</label>
+        {general_forms.length > 0 ? (
+          <Table
+            responsive="xl"
+            className="table  table-bordered  dataTable "
+          >
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Default Submission Status</th>
+                {/* <th>Action</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {general_forms &&
+                general_forms.length > 0 &&
+                general_forms.map(teams => (
+                  <tr key={teams.id}>
+                    <td>{teams.title}</td>
+                    <td>{teams.default_submission_status}</td>
+                    <td>
+                      <a
+                        role="button"
+                        onKeyDown={handleConfirm}
+                        tabIndex="0"
+                        className="td-delete-btn"
+                        onClick={() => {
+                          openDelete(teams.id, 'general');
+                        }}
                       >
-                        <i className="la la-close" />
-                      </OverlayTrigger>
-                    </a>
-                  </td> */}
-                </tr>
-              ))}
-          </tbody>
-        </Table>
-        <label>Schedule Table</label>
-        <Table
-          responsive="xl"
-          className="table  table-bordered  dataTable "
-        >
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>start date</th>
-              <th>end date</th>
-              <th>scheduled type</th>
-              <th>default submission status</th>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={<Tooltip>Remove</Tooltip>}
+                        >
+                          <i className="la la-close" />
+                        </OverlayTrigger>
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        ) : (
+          <p>No general forms assigned yet.</p>
+        )}
+        <label style={{ fontWeight: 'bold' }}>Scheduled Forms</label>
+        {selected_forms.length > 0 ? (
+          <Table
+            responsive="xl"
+            className="table  table-bordered  dataTable "
+          >
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>start date</th>
+                <th>end date</th>
+                <th>schedule type</th>
+                <th>default submission status</th>
 
-              {/* <th>Action</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {selected_forms &&
-              selected_forms.length > 0 &&
-              selected_forms.map(teams => (
-                <tr key={teams.id}>
-                  <td>{teams.title}</td>
-                  <td>{teams.start_date}</td>
+                {/* <th>Action</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {selected_forms &&
+                selected_forms.length > 0 &&
+                selected_forms.map(teams => (
+                  <tr key={teams.id}>
+                    <td>{teams.title}</td>
+                    <td>{teams.start_date}</td>
 
-                  <td>{teams.end_date}</td>
-                  <td>{teams.scheduled_type}</td>
-                  <td>{teams.default_submission_status}</td>
+                    <td>{teams.end_date}</td>
+                    <td>{teams.scheduled_type}</td>
+                    <td>{teams.default_submission_status}</td>
 
-                  {/* <td>
-                    <a
-                      role="button"
-                      onKeyDown={handleConfirm}
-                      tabIndex="0"
-                      className="td-delete-btn"
-                      onClick={() => {
-                        openDelete(teams.id, 'scheduled');
-                      }}
-                    >
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip>Remove</Tooltip>}
+                    <td>
+                      <a
+                        role="button"
+                        onKeyDown={handleConfirm}
+                        tabIndex="0"
+                        className="td-delete-btn"
+                        onClick={() => {
+                          openDelete(teams.id, 'scheduled');
+                        }}
                       >
-                        <i className="la la-close" />
-                      </OverlayTrigger>
-                    </a>
-                  </td> */}
-                </tr>
-              ))}
-          </tbody>
-        </Table>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={<Tooltip>Remove</Tooltip>}
+                        >
+                          <i className="la la-close" />
+                        </OverlayTrigger>
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        ) : (
+          <p>No scheduled forms assigned yet.</p>
+        )}
       </>
     );
   }

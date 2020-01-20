@@ -6,6 +6,7 @@ import RadioElement from '../../common/RadioElement';
 import CheckBox from '../../common/CheckBox';
 import SelectElement from '../../common/SelectElement';
 
+/* eslint-disable  camelcase */
 export default class ScheduleFormModal extends Component {
   constructor(props) {
     super(props);
@@ -145,7 +146,14 @@ export default class ScheduleFormModal extends Component {
     e.preventDefault();
 
     const {
-      props: { selected, formType, id, handleAllModel },
+      props: {
+        selected,
+        formType,
+        id,
+        handleAllModel,
+        organization,
+        is_form_library,
+      },
       state: {
         dailyArrDays,
         startedDate,
@@ -174,6 +182,7 @@ export default class ScheduleFormModal extends Component {
       form_type: JSON.parse(formType),
       date_range_start: StarttedDate,
       date_range_end: EndedDate,
+      ...(is_form_library && { is_form_library }),
       ...(scheduleType === '0' && {
         selected_days: result,
       }),
@@ -183,7 +192,10 @@ export default class ScheduleFormModal extends Component {
       default_submission_status: JSON.parse(status),
       frequency: JSON.parse(frequency),
       month_day: JSON.parse(selectedMonthlyDays),
-      xf_ids: JSON.parse(selected),
+      xf_ids:
+        selected !== ''
+          ? JSON.parse(selected)
+          : JSON.parse(organization),
     };
 
     axios
@@ -446,6 +458,13 @@ export default class ScheduleFormModal extends Component {
                 </div>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={this.props.handleFormType}
+              className="fieldsight-btn"
+            >
+              Select Form
+            </button>
           </div>
         </div>
 

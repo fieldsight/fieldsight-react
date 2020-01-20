@@ -25,6 +25,7 @@ class MyReports extends Component {
       Shareid: '',
       deleteId: '',
       openDelete: false,
+      url: false,
     };
   }
 
@@ -204,6 +205,26 @@ class MyReports extends Component {
                             title: report.title,
                             attributes: report.attributes,
                           },
+                        }}
+                      > */}
+                      {/* <div
+                        // onClick={() =>
+                        //   this.props.history.push({
+                        //     pathname: `/report-dashboard/${id}`,
+
+                        //     state: { title: tle, attributes: attri },
+                        //   })
+                        // }
+                        onClick={() => {
+                          this.setState(
+                            { url: !this.state.url },
+                            () => console.log(this.state.url, 'url'),
+                          );
+                        }}
+                      > */}
+                      <div
+                        onClick={() => {
+                          this.redirectTitle;
                         }}
                       >
                         <h4>
