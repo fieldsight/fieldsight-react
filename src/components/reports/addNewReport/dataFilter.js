@@ -47,6 +47,7 @@ export default class DataFilter extends Component {
     ) {
       const data = this.props.filteredData;
       const regions =
+        data.regions &&
         data.regions.length === this.props.regions.length
           ? [
               { id: 'all_regions', name: 'Select All' },
@@ -54,6 +55,7 @@ export default class DataFilter extends Component {
             ]
           : data.regions;
       const siteType =
+        data.site_types &&
         data.site_types.length === this.props.siteTypes.length
           ? [
               { id: 'all_sitetypes', name: 'Select All' },
@@ -61,6 +63,7 @@ export default class DataFilter extends Component {
             ]
           : data.site_types;
       const userRoles =
+        data.user_roles &&
         data.user_roles.length === this.props.userRoles.length
           ? [
               { id: 'all_userroles', name: 'Select All' },

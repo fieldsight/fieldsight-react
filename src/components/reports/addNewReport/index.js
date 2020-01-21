@@ -282,51 +282,60 @@ class AddNewReport extends Component {
           });
 
         if (filterToFormInfo.length > 0) {
+          const forDefaultTypeAndForm = filterToFormInfo.filter(
+            each => each.value && each.value.selectedForm,
+          );
+          const { value, ...rest } = forDefaultTypeAndForm[0];
+          selectedFormType = { ...rest };
+          selectedForm = value.selectedForm;
+
           const newArr = filterToFormInfo.filter(
             each => each.value && each.value.selectedIndividualForm,
           );
-          const { value, ...rest } = newArr[0];
-          selectedFormType = { ...rest };
-          selectedForm = value.selectedForm;
-          newArr.map(newItem => {
-            const { code, value } = newItem;
-            if (selectedIndividualForm.length === 0) {
-              selectedIndividualForm.push({
-                type: code,
-                form: value.selectedForm.id,
-                metrics: [{ ...value.selectedIndividualForm }],
-              });
-            } else {
-              selectedIndividualForm.map(ind => {
-                const { type, form, metrics } = ind;
-                if (type === code) {
-                  if (form === value.selectedForm.id) {
-                    // debugger;
-                    selectedIndividualForm.push({
-                      type,
-                      form,
-                      metrics: [
-                        ...metrics,
-                        { ...value.selectedIndividualForm },
-                      ],
-                    });
+          if (newArr && newArr.length > 0) {
+            newArr.map(newItem => {
+              const { code, value } = newItem;
+              if (selectedIndividualForm.length === 0) {
+                selectedIndividualForm.push({
+                  type: code,
+                  form: value.selectedForm.id,
+                  metrics: [{ ...value.selectedIndividualForm }],
+                });
+              } else {
+                const arr = [];
+                selectedIndividualForm.map(ind => {
+                  const { type, form, metrics } = ind;
+                  if (type === code) {
+                    if (form === value.selectedForm.id) {
+                      arr.push({
+                        type,
+                        form,
+                        metrics: [
+                          ...metrics,
+                          { ...value.selectedIndividualForm },
+                        ],
+                      });
+                    } else {
+                      arr.push({
+                        type,
+                        form: value.selectedForm.id,
+                        metrics: [
+                          { ...value.selectedIndividualForm },
+                        ],
+                      });
+                    }
                   } else {
-                    selectedIndividualForm.push({
-                      type,
+                    arr.push({
+                      type: code,
                       form: value.selectedForm.id,
                       metrics: [{ ...value.selectedIndividualForm }],
                     });
                   }
-                } else {
-                  selectedIndividualForm.push({
-                    type: code,
-                    form: value.selectedForm.id,
-                    metrics: [{ ...value.selectedIndividualForm }],
-                  });
-                }
-              });
-            }
-          });
+                });
+                selectedIndividualForm = arr;
+              }
+            });
+          }
           // filterToFormInfo.map(f => {
           //   const {code, id, label, value} =f
           //   if (value.selectedIndividualForm) {

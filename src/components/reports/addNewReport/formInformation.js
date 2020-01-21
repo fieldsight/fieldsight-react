@@ -138,8 +138,16 @@ class FormInformation extends Component {
     if (
       prevProps.individualFormArr !== this.props.individualFormArr
     ) {
-      const { selectedIndividualForm } = this.props;
+      const {
+        selectedIndividualForm,
+        individualFormArr,
+      } = this.props;
       this.setState(state => {
+        const selectAll =
+          selectedIndividualForm[0] &&
+          selectedIndividualForm[0].metrics &&
+          individualFormArr.length ===
+            selectedIndividualForm[0].metrics.length;
         if (selectedIndividualForm.length > 0) {
           return {
             formInfo: {
@@ -148,10 +156,12 @@ class FormInformation extends Component {
                 .selectedIndividualForm,
             },
             individualFormArr: this.props.individualFormArr,
+            selectAll,
           };
         }
         return {
           individualFormArr: this.props.individualFormArr,
+          selectAll,
         };
       });
     }
