@@ -143,17 +143,16 @@ export default class ReportDashboard extends Component {
                 View Export table
               </button>
             </div>
-            {/* <div className="report-table  mt-3">
-              <div className="dropdown">
-                <button
-                  type="button"
-                  className="common-button data-toggle is-border is-icon dropdown-toggle btn btn-"
-                >
-                  export
-                  <i className="material-icons">save_alt</i>
-                </button>
-              </div>
-            </div> */}
+
+            <button
+              type="button"
+              className="common-button data-toggle is-border is-icon"
+              data-toggle="dropdown"
+            >
+              <i className="material-icons">save_alt</i>
+              <span>export</span>
+              <i className="material-icons arrow-icon">expand_more</i>
+            </button>
           </form>
         </RightContentCard>
         {viewBtn && (

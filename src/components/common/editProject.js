@@ -59,6 +59,7 @@ class EditProject extends Component {
       onSubmitHandler,
       sector,
       selectedSector,
+      identifier,
       name,
       phone,
       email,
@@ -78,6 +79,7 @@ class EditProject extends Component {
       showCropper,
       closeModal,
       src,
+      errorFlag,
       // isLoading,
       subSectors,
       readFile,
@@ -88,6 +90,21 @@ class EditProject extends Component {
       <RightContentCard title={title}>
         <form className="edit-form" onSubmit={onSubmitHandler}>
           <div className="row">
+            <div className="col-xl-4 col-md-6">
+              <InputElement
+                formType="editForm"
+                tag="input"
+                type="text"
+                required
+                label="identifier"
+                name="identifier"
+                value={identifier}
+                changeHandler={onChangeHandler}
+                translation
+              />
+              {errorFlag && <p>plz write more words</p>}
+            </div>
+
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"
