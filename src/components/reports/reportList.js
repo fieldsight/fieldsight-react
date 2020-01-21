@@ -37,18 +37,6 @@ class ReportList extends Component {
                 role="button"
               >
                 My Reports
-                {/* <a
-                  tabIndex="0"
-                  role="button"
-                  onKeyDown={() => {
-                    this.toggleTab('myReports');
-                  }}
-                  onClick={() => {
-                    this.toggleTab('myReports');
-                  }}
-                >
-                  My reports
-                </a> */}
               </li>
               <li
                 className={
@@ -63,18 +51,7 @@ class ReportList extends Component {
                   this.toggleTab('sharedWithMe');
                 }}
               >
-                {/* <a
-                  tabIndex="0"
-                  role="button"
-                  onKeyDown={() => {
-                    this.toggleTab('sharedWithMe');
-                  }}
-                  onClick={() => {
-                    this.toggleTab('sharedWithMe');
-                  }}
-                > */}
                 shared with me
-                {/* </a> */}
               </li>
               <li
                 className={activeTab === 'templates' ? 'current' : ''}
@@ -87,18 +64,7 @@ class ReportList extends Component {
                   this.toggleTab('templates');
                 }}
               >
-                {/* <a
-                  tabIndex="0"
-                  role="button"
-                  onKeyDown={() => {
-                    this.toggleTab('templates');
-                  }}
-                  onClick={() => {
-                    this.toggleTab('templates');
-                  }}
-                > */}
                 templates
-                {/* </a> */}
               </li>
             </ul>
             <Link
