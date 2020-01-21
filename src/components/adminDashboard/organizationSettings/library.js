@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import RightContentCard from '../../common/RightContentCard';
-
+import ManageModal from '../../manageForms/ManageModal';
 import Modal from '../../common/Modal';
 
 import {
@@ -218,13 +218,12 @@ export default class Library extends Component {
             openDelete={this.openDelete}
           />
         </RightContentCard>
+
         {popUpPage && (
-          <Modal
-            title="Add Form"
+          <ManageModal
+            title="Add Organization Library"
             toggleModal={this.handleClosePopup}
-            // showButton
-            // showText="create form"
-            // url="/forms/create/"
+            handleSubmit={this.handleSubmit}
           >
             <form className="floating-form">
               <>
@@ -275,19 +274,8 @@ export default class Library extends Component {
                   </div>
                 </ul>
               </>
-              <div className="modal-footer">
-                <div className="form-group pull-right no-margin">
-                  <button
-                    type="button"
-                    className="fieldsight-btn"
-                    onClick={this.handleSubmit}
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
             </form>
-          </Modal>
+          </ManageModal>
         )}
         {openDeleteModal && (
           <DeleteModal

@@ -17,6 +17,8 @@ import DeleteModal from '../common/DeleteModal';
 /* eslint-disable */
 
 class MyReports extends Component {
+  intervalID;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -38,6 +40,14 @@ class MyReports extends Component {
     this.props.getProjectData(id);
   }
 
+  // componentDidMount() {
+  //   const { id } = this.props;
+  //   this.intervalID = setInterval(
+  //   //   this.props.getProjectData(id).bind(this),
+  //   //   10000,
+  //   // );
+  // }
+
   componentDidUpdate(prevProps) {
     if (
       prevProps.reportReducer.reportList !==
@@ -48,6 +58,10 @@ class MyReports extends Component {
         reportLoader: false,
       });
     }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalID);
   }
 
   handle = id => {
@@ -188,57 +202,73 @@ class MyReports extends Component {
             reportList.length > 0 &&
             reportList.map(report => (
               <div className="report-list" key={report.id}>
-                <div
-                  className="row"
-                  role="button"
-                  tabIndex="1"
-                  onClick={e => {
-                    this.handleClickTitle(e, report.id);
+                <Link
+                  to={{
+                    pathname: `/view-report/${report.id}`,
+                    state: {
+                      title: report.title,
+                      description: report.description,
+                      attributes: report.attributes,
+                      reportId: report.id,
+                      projectid: id,
+                    },
                   }}
                 >
-                  <div className="col-md-8">
-                    <div className="report-content">
-                      <Link
+                  <div
+                    className="row"
+                    role="button"
+                    // tabIndex="1"
+                    // onClick={e => {
+                    //   this.handleClickTitle(e, report.id);
+                    // }}
+                  >
+                    <div className="col-md-8">
+                      <div className="report-content">
+                        {/* <Link
                         to={{
-                          pathname: `/report-dashboard/${report.id}`,
+                          pathname: `/view-report/${report.id}`,
                           state: {
                             title: report.title,
+                            description: report.description,
                             attributes: report.attributes,
+                            reportId: report.id,
+                            projectid: id,
                           },
                         }}
-                      >
+                      > */}
                         <h4>{report.title}</h4>
-                      </Link>
-                      <p>{report.description}</p>
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="report-share-time">
-                      <div className="report-item created-time">
-                        <h6>Date Created</h6>
-                        <p>
-                          {format(report.created_at, [
-                            'MMMM Do YYYY',
-                          ])}
-                        </p>
-                        <time>
-                          {format(report.created_at, ['h:mm a'])}
-                        </time>
+
+                        <p>{report.description}</p>
                       </div>
-                      {report.shared_with.length > 0 &&
-                        report.shared_with.map(() => (
-                          <div className="report-item share-report">
-                            <h6>Shared with</h6>
-                            <ul className="shared-list">
-                              <li>Santosh khanal</li>
-                              <li>Jasica standford</li>
-                              <li>Khusbu basnet</li>
-                            </ul>
-                          </div>
-                        ))}
+                    </div>
+                    <div className="col-md-4">
+                      <div className="report-share-time">
+                        <div className="report-item created-time">
+                          <h6>Date Created</h6>
+                          <p>
+                            {format(report.created_at, [
+                              'MMMM Do YYYY',
+                            ])}
+                          </p>
+                          <time>
+                            {format(report.created_at, ['h:mm a'])}
+                          </time>
+                        </div>
+                        {report.shared_with.length > 0 &&
+                          report.shared_with.map(() => (
+                            <div className="report-item share-report">
+                              <h6>Shared with</h6>
+                              <ul className="shared-list">
+                                <li>Santosh khanal</li>
+                                <li>Jasica standford</li>
+                                <li>Khusbu basnet</li>
+                              </ul>
+                            </div>
+                          ))}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
 
                 <div className="dropdown report-option">
                   <Dropdown drop="left">

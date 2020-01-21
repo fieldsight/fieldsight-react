@@ -189,9 +189,6 @@ class AddNewReport extends Component {
         match: {
           params: { id, reportId },
         },
-        location: {
-          state: { fromRow },
-        },
       } = this.props;
       //   // this.setState({ loader: true }, () => {
       if (reportId) {
@@ -368,7 +365,7 @@ class AddNewReport extends Component {
           },
           userList,
           submissions,
-          collapseClass: fromRow ? false : true,
+          collapseClass: true,
           applyFilter: report.attributes.length > 0 ? true : false,
           filter: {
             ...state.filter,

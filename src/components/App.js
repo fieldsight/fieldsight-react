@@ -428,7 +428,7 @@ class App extends Component {
                 />
 
                 <Route
-                  path="/report-dashboard/:id"
+                  path="/view-report/:id"
                   render={props => <ReportDashboard {...props} />}
                 />
                 <Route

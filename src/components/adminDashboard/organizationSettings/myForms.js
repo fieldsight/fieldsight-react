@@ -23,11 +23,11 @@ export default class MyForm extends Component {
       popUpPage: false,
       scheduled_forms: [],
       selectId: '',
-      forms: [{ xf_id: '', title: 'Select Form' }],
+      forms: [{ xf_id: '', title: 'No forms to select' }],
       selected: '',
       openModal: false,
       form_id: '',
-      selectValue: '3',
+      // selectValue: '3',
       generalPopUp: false,
       schedulePopUp: false,
       general_forms: [],
@@ -35,7 +35,7 @@ export default class MyForm extends Component {
       checkbox: [],
       activeTab: 'myForms',
       organization_library_forms: [
-        { xf_id: '', title: 'Select Library organization' },
+        { xf_id: '', title: 'No library organization to select' },
       ],
       selectOrganization: '',
       radioForms: '0',
@@ -63,11 +63,24 @@ export default class MyForm extends Component {
               orgArr.push(arrPush),
             );
           }
+
           return {
-            forms: newArr,
+            forms:
+              res.data.forms.length > 0 ? res.data.forms : newArr,
             scheduled_forms: res.data.selected_forms.scheduled_forms,
             general_forms: res.data.selected_forms.general_forms,
-            organization_library_forms: orgArr,
+            organization_library_forms:
+              res.data.organization_library_forms.length > 0
+                ? res.data.organization_library_forms
+                : orgArr,
+            selectId:
+              res.data.forms.length > 0
+                ? res.data.forms[0].xf_id
+                : '',
+            selectOrganization:
+              res.data.organization_library_forms.length > 0
+                ? res.data.organization_library_forms[0].xf_id
+                : '',
           };
         });
       })
@@ -167,26 +180,26 @@ export default class MyForm extends Component {
     });
   };
 
-  onchange = e => {
-    const { value } = e.target;
-    this.setState(
-      {
-        selectValue: value,
-      },
-      () => {
-        if (value === '0') {
-          this.setState(prevstate => ({
-            generalPopUp: !prevstate.generalPopUp,
-          }));
-        }
-        if (value === '1') {
-          this.setState(prevstate => ({
-            schedulePopUp: !prevstate.schedulePopUp,
-          }));
-        }
-      },
-    );
-  };
+  // onchange = e => {
+  //   const { value } = e.target;
+  //   this.setState(
+  //     {
+  //       selectValue: value,
+  //     },
+  //     () => {
+  //       if (value === '0') {
+  //         this.setState(prevstate => ({
+  //           generalPopUp: !prevstate.generalPopUp,
+  //         }));
+  //       }
+  //       if (value === '1') {
+  //         this.setState(prevstate => ({
+  //           schedulePopUp: !prevstate.schedulePopUp,
+  //         }));
+  //       }
+  //     },
+  //   );
+  // };
 
   selectHandler = e => {
     const { value } = e.target;
@@ -309,7 +322,7 @@ export default class MyForm extends Component {
   render() {
     const {
       state: {
-        selectValue,
+        // selectValue,
         scheduled_forms,
         selectId,
         general_forms,
@@ -355,11 +368,11 @@ export default class MyForm extends Component {
 
         {popUpPage && (
           <Modal
-            title="Add Submission Status"
+            title="Add Organization Default Forms"
             toggleModal={this.handleClosePopup}
             showButton
             showText="Create Form"
-            url="/forms/create/"
+            url="/fieldsight/application/#/create-organization"
           >
             <form
               className="floating-form"
@@ -369,7 +382,7 @@ export default class MyForm extends Component {
                 <div className="selected-form">
                   <div className="selected-text">
                     <div className="form-group flexrow checkbox-group">
-                      <label>Default submission status</label>
+                      <label>Form Types</label>
                       <div className="custom-checkbox display-inline">
                         <RadioElement
                           label="General Forms"
@@ -380,8 +393,8 @@ export default class MyForm extends Component {
                           checked={radioForms === '0'}
                         />
                         <RadioElement
-                          label="Scheduled"
-                          className="Scheduled"
+                          label="Scheduled Forms"
+                          className="Scheduled Forms"
                           name="status"
                           value={1}
                           changeHandler={this.handleRadioChange}
@@ -466,7 +479,7 @@ export default class MyForm extends Component {
                       className="form-control"
                       options={forms}
                       changeHandler={this.selectHandler}
-                      label="Form List"
+                      // label="Form List"
                       value={selectId}
                     />
                   </div>
@@ -481,7 +494,7 @@ export default class MyForm extends Component {
                       className="form-control"
                       options={organization_library_forms}
                       changeHandler={this.OrganizationHandler}
-                      label="Organization Library Form"
+                      // label="Organization Library Form"
                       value={selectOrganization}
                     />
                   </div>
