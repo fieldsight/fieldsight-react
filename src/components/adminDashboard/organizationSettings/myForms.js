@@ -224,10 +224,10 @@ export default class MyForm extends Component {
         generalPopUp: false,
         general_forms: res.data.general_forms,
         scheduled_forms: res.data.scheduled_forms,
-        selected: [],
-        checkbox: [],
-        selectId: [],
-        selectOrganization: [],
+        selected: '',
+        // checkbox: [],
+        selectId: '',
+        selectOrganization: '',
         // organization_library_forms: res.data
         //   .organization_library_forms
         //   ? res.data.organization_library_forms
