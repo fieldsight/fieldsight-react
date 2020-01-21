@@ -8,14 +8,13 @@ class FiltersTab extends Component {
     this.state = {};
   }
 
-  filterChange = () => {};
-
   render() {
     const {
       activeTab,
       projectsList,
       projectsRegionTypes,
       handleRegionChange,
+      handleSiteChange,
     } = this.props;
     return (
       <div
@@ -228,7 +227,12 @@ class FiltersTab extends Component {
                               <label>
                                 <input
                                   type="checkbox"
-                                  name="radiobox"
+                                  name={data.name}
+                                  // checked={this.state.checkedItems.includes(
+                                  //   data.name,
+                                  // )}
+                                  onChange={handleSiteChange}
+                                  // onChange={this.filterChange}
                                 />
                                 <i className="helper" />
                                 {data.name}

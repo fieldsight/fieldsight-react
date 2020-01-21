@@ -9,6 +9,7 @@ import {
   getSecondaryMarkerGeojson,
   getProjectsList,
   getProjectsRegionTypes,
+  getFilteredPrimaryGeojson,
 } from '../../actions/mapFilterActions';
 import MainSidebarTab from './SidebarTabsComponents/MainSidebarTab';
 
@@ -18,19 +19,9 @@ const INITIAL_STATE = {
   activeLayers: 'main_layers',
   searchDropdown: false,
   modalSetting: false,
-  checkedItems: [],
-  clonePrimaryGeojson: [
-    {
-      crs: {
-        type: 'name',
-        properties: {
-          name: 'EPSG:4326',
-        },
-      },
-      type: 'FeatureCollection',
-      features: [],
-    },
-  ],
+  checkedRegionItems: [],
+  checkedSiteItems: [],
+  isfiltered: false,
 };
 class MapFilter extends Component {
   constructor(props) {
@@ -48,6 +39,10 @@ class MapFilter extends Component {
 
   componentWillMount() {
     this.updateDimensions();
+    this.props.getPrimaryMarkerGeojson();
+    this.props.getProjectsList();
+    this.props.getProjectsRegionTypes();
+    console.log(this.props, 'willmount');
   }
 
   componentDidMount() {
@@ -55,9 +50,8 @@ class MapFilter extends Component {
       'resize',
       this.updateDimensions.bind(this),
     );
-    this.props.getPrimaryMarkerGeojson();
-    this.props.getProjectsList();
-    this.props.getProjectsRegionTypes();
+
+    console.log(this.props, 'did mount');
   }
 
   componentWillUnmount() {
@@ -154,14 +148,35 @@ class MapFilter extends Component {
 
   handleRegionChange = e => {
     const item = e.target.name;
-    const isChecked = e.target.checked;
-    const { checkedItems } = this.state;
-    if (isChecked === true) {
-      const joined = checkedItems.concat(item);
-      this.setState({ checkedItems: joined });
+    const isRegionChecked = e.target.checked;
+    const { checkedRegionItems } = this.state;
+    if (isRegionChecked === true) {
+      const joined = checkedRegionItems.concat(item);
+      this.setState({ checkedRegionItems: joined });
     } else {
-      const filteredData = checkedItems.filter(data => data !== item);
-      this.setState({ checkedItems: filteredData });
+      const filteredData = checkedRegionItems.filter(
+        data => data !== item,
+      );
+      this.setState({ checkedRegionItems: filteredData });
+    }
+    // this.setState({ isfiltered: true });
+    // this.setState({
+    //   isfiltered: true,
+    // });
+  };
+
+  handleSiteChange = e => {
+    const item = e.target.name;
+    const isSiteChecked = e.target.checked;
+    const { checkedSiteItems } = this.state;
+    if (isSiteChecked === true) {
+      const joined = checkedSiteItems.concat(item);
+      this.setState({ checkedSiteItems: joined });
+    } else {
+      const filteredData = checkedSiteItems.filter(
+        data => data !== item,
+      );
+      this.setState({ checkedSiteItems: filteredData });
     }
   };
 
@@ -171,22 +186,73 @@ class MapFilter extends Component {
     //   this.props.mapFilterReducer.primaryGeojson,
     //   'primaryGeojson',
     // );
-    const {
-      props: {
-        mapFilterReducer: { primaryGeojson },
+    this.props.getFilteredPrimaryGeojson({
+      filterByType: {
+        region: this.state.checkedRegionItems,
+        site_type: this.state.checkedSiteItems,
       },
-      state: { checkedItems },
-    } = this;
-    const filtered = primaryGeojson[0].features.filter(data =>
-      checkedItems.includes(data.region),
-    );
-
-    const { clonePrimaryGeojson } = this.state;
-    clonePrimaryGeojson[0].features = filtered;
-
-    this.setState({
-      clonePrimaryGeojson,
     });
+    // const {
+    //   props: {
+    //     mapFilterReducer: { primaryGeojson },
+    //   },
+    //   state: {
+    //     checkedRegionItems,
+    //     checkedSiteItems,
+    //     clonePrimaryGeojson,
+    //   },
+    // } = this;
+
+    // console.log(checkedRegionItems.length, 'length');
+    // console.log(clonePrimaryGeojson, 'cloneGeojson');
+    // if (checkedRegionItems.length !== 0) {
+    //   const filtered = primaryGeojson[0].features.filter(data =>
+    //     checkedRegionItems.includes(data.region),
+    //   );
+    //   this.setState({ isfiltered: true });
+    //   // const { clonePrimaryGeojson } = this.state;
+    //   console.log('if');
+    //   // clonePrimaryGeojson[0].features = filtered;
+    //   this.setState({
+    //     clonePrimaryGeojson: {
+    //       0: {
+    //         ...clonePrimaryGeojson[0], // merge with the original `state.items`
+    //         features: filtered,
+    //       },
+    //     },
+    //   });
+    // } else {
+    //   // console.log('else');
+    //   // console.log(this.props.mapFilterReducer);
+    //   this.setState({
+    //     clonePrimaryGeojson: primaryGeojson,
+    //     isfiltered: false,
+    //   });
+    // }
+    // if (checkedSiteItems.length !== 0) {
+    //   const filtered = primaryGeojson[0].features.filter(data =>
+    //     checkedSiteItems.includes(data.site_type),
+    //   );
+    //   this.setState({ isfiltered: true });
+    //   // const { clonePrimaryGeojson } = this.state;
+    //   console.log('if');
+    //   // clonePrimaryGeojson[0].features = filtered;
+    //   this.setState({
+    //     clonePrimaryGeojson: {
+    //       0: {
+    //         ...clonePrimaryGeojson[0], // merge with the original `state.items`
+    //         features: filtered,
+    //       },
+    //     },
+    //   });
+    // } else {
+    //   // console.log('else');
+    //   // console.log(this.props.mapFilterReducer);
+    //   this.setState({
+    //     clonePrimaryGeojson: primaryGeojson,
+    //     isfiltered: false,
+    //   });
+    // }
     // this.setState((prevState){
 
     // })
@@ -199,12 +265,19 @@ class MapFilter extends Component {
           primaryGeojson,
           projectsList,
           projectsRegionTypes,
+          clonePrimaryGeojson,
         },
         // match: {
         //   params: { id: siteId },
         // },
       },
-      state: { height, zoom, searchDropdown, modalSetting },
+      state: {
+        height,
+        zoom,
+        searchDropdown,
+        modalSetting,
+        isfiltered,
+      },
     } = this;
     return (
       <div className="card">
@@ -214,8 +287,10 @@ class MapFilter extends Component {
               zoom={zoom}
               height={height}
               geojson={primaryGeojson}
+              clonePrimaryGeojson={clonePrimaryGeojson}
               mapRef={this.mapRef}
               groupRef={this.groupRef}
+              isfiltered={isfiltered}
             />
           </div>
           <div className="map-sidebar left-map-sidebar">
@@ -281,6 +356,7 @@ class MapFilter extends Component {
                 projectsRegionTypes={projectsRegionTypes}
                 applyFilter={this.applyFilter}
                 handleRegionChange={this.handleRegionChange}
+                handleSiteChange={this.handleSiteChange}
               />
             </div>
             {/* </Scrollbars> */}
@@ -829,4 +905,5 @@ export default connect(mapStateToProps, {
   getSecondaryMarkerGeojson,
   getProjectsList,
   getProjectsRegionTypes,
+  getFilteredPrimaryGeojson,
 })(MapFilter);

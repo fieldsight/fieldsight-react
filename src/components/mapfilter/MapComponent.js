@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Component } from 'react';
 import {
   Map,
   TileLayer,
@@ -14,7 +14,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 
 const PrintControl = withLeaflet(PrintControlDefault);
 const MeasureControl = withLeaflet(MeasureControlDefault);
-class MapComponent extends PureComponent {
+class MapComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,18 +24,21 @@ class MapComponent extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { geojson } = this.props;
+    const { geojson, clonePrimaryGeojson } = this.props;
     const { mapRef, groupRef } = this.props;
     const map = mapRef.current.leafletElement;
     const featuregroup = groupRef.current.leafletElement;
-    if (prevProps.geojson !== geojson) {
+    // if (prevProps.geojson !== geojson) {
+    //   map.fitBounds(featuregroup.getBounds());
+    // }
+    if (prevProps.clonePrimaryGeojson !== clonePrimaryGeojson) {
       map.fitBounds(featuregroup.getBounds());
     }
   }
 
   render() {
     const {
-      props: { height, zoom, geojson, mapRef, groupRef },
+      props: { height, mapRef, groupRef, clonePrimaryGeojson },
       state: { lat, lng },
     } = this;
     const position = [lat, lng];
@@ -78,10 +81,11 @@ class MapComponent extends PureComponent {
           ref={groupRef}
           
           }} */}
+        {/* {isfiltered === true ? ( */}
         <MarkerClusterGroup ref={groupRef}>
-          {geojson[0] &&
-            geojson[0].features &&
-            geojson[0].features.map(each => {
+          {clonePrimaryGeojson[0] &&
+            clonePrimaryGeojson[0].features &&
+            clonePrimaryGeojson[0].features.map(each => {
               const location = each.geometry.coordinates;
               const { id } = each;
               const projectName = each.properties.name;
@@ -100,7 +104,31 @@ class MapComponent extends PureComponent {
               );
             })}
         </MarkerClusterGroup>
-        {/* </FeatureGroup> */}
+        {/* ) : ( */}
+        {/* <MarkerClusterGroup ref={groupRef}>
+            {geojson[0] &&
+              geojson[0].features &&
+              geojson[0].features.map(each => {
+                const location = each.geometry.coordinates;
+                const { id } = each;
+                const projectName = each.properties.name;
+                return (
+                  <Marker
+                    key={id}
+                    position={[location[1], location[0]]}
+                  >
+                    <Popup>
+                      <span>
+                        <label>{projectName}</label>
+                      </span>
+                      <br />
+                    </Popup>
+                  </Marker>
+                );
+              })}
+          </MarkerClusterGroup>
+        )} */}
+        {/* {/* </FeatureGroup> */}
         <MeasureControl {...measureOptions} />
       </Map>
     );

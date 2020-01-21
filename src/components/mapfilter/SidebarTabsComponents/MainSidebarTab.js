@@ -28,6 +28,7 @@ class MainSidebarTab extends Component {
         projectsRegionTypes,
         applyFilter,
         handleRegionChange,
+        handleSiteChange,
       },
       // match: {
       //   params: { id: siteId },
@@ -115,6 +116,7 @@ class MainSidebarTab extends Component {
         <div className="tab-content" id="filterTabContent">
           <FiltersTab
             handleRegionChange={handleRegionChange}
+            handleSiteChange={handleSiteChange}
             activeTab={activeTab}
             projectsList={projectsList}
             projectsRegionTypes={projectsRegionTypes}

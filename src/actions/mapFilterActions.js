@@ -4,6 +4,7 @@ import {
   GET_SECONDARY_MARKER_GEOJSON,
   GET_PROJECTS_LIST,
   GET_PROJECTS_REGION_TYPES,
+  FILTER_PRIMARYGEOJSON,
 } from './types';
 
 export const getPrimaryMarkerGeojson = id => dispatch => {
@@ -53,4 +54,10 @@ export const getProjectsRegionTypes = id => dispatch => {
       });
     })
     .catch(() => {});
+};
+export const getFilteredPrimaryGeojson = payload => dispatch => {
+  dispatch({
+    type: FILTER_PRIMARYGEOJSON,
+    payload,
+  });
 };

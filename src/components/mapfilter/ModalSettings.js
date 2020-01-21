@@ -14,10 +14,6 @@ class ModalSettings extends Component {
     };
   }
 
-  componentDidUpdate(prevProps) {
-    console.log('modal setting component');
-  }
-
   handleTabChange = tab => {
     // console.log('handleTabCHange Clicked');
     this.setState({ activeModalTab: tab });
