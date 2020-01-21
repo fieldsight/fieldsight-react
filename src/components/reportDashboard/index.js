@@ -131,17 +131,29 @@ export default class ReportDashboard extends Component {
                 type="button"
                 className="fieldsight-btn"
                 onClick={() => this.handleEdit(projectid, reportId)}
+                style={{ margin: '8px' }}
               >
                 Edit Report
               </button>
               <button
                 type="button"
                 className="fieldsight-btn"
-                onClick={this.handleView}
+                onClick={() => this.handleView()}
               >
                 View Export table
               </button>
             </div>
+            {/* <div className="report-table  mt-3">
+              <div className="dropdown">
+                <button
+                  type="button"
+                  className="common-button data-toggle is-border is-icon dropdown-toggle btn btn-"
+                >
+                  export
+                  <i className="material-icons">save_alt</i>
+                </button>
+              </div>
+            </div> */}
           </form>
         </RightContentCard>
         {viewBtn && (
