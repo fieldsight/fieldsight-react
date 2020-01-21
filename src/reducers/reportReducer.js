@@ -19,6 +19,7 @@ const initialState = {
   reportList: [],
   regions: [],
   siteTypes: [],
+  userRoles: [],
   actionResponse: {},
   reportData: {},
   projectList: {},
@@ -35,6 +36,7 @@ export default function(state = initialState, action) {
         formTypes: action.payload.form_types,
         regions: action.payload.regions,
         siteTypes: action.payload.site_types,
+        userRoles: action.payload.user_roles,
         reportLoader: false,
       };
     case GET_FORM:

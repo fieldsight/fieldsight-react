@@ -70,6 +70,7 @@ const InitialState = {
     submissionCount: false,
     filterRegion: false,
     filterSiteType: false,
+    filterUserRole: false,
   },
   collapseClass: false,
   // loader: false,
@@ -83,6 +84,7 @@ const InitialState = {
     filterByRegions: [{ id: 'all_regions', name: 'Select All' }],
     filterBySiteType: [{ id: 'all_sitetypes', name: 'Select All' }],
     filterBy: {},
+    filterByUserRoles: [{ id: 'all_userroles', name: 'Select All' }],
   },
   isDelete: false,
   showActions: false,
@@ -172,6 +174,20 @@ class AddNewReport extends Component {
           filterBySiteType: [
             ...state.filter.filterBySiteType,
             ...this.props.reportReducer.siteTypes,
+          ],
+        },
+      }));
+    }
+    if (
+      prevProps.reportReducer.userRoles !==
+      this.props.reportReducer.userRoles
+    ) {
+      this.setState(state => ({
+        filter: {
+          ...state.filter,
+          filterByUserRoles: [
+            ...state.filter.filterByUserRoles,
+            ...this.props.reportReducer.userRoles,
           ],
         },
       }));
@@ -1193,11 +1209,12 @@ class AddNewReport extends Component {
 
   handleSubmitFilter = filter => {
     const { reportId, data } = this.state;
-    const { regions, siteType } = filter;
+    const { regions, siteType, userRoles } = filter;
 
     const modifyFilter = {
       regions: regions.filter(r => r.id !== 'all_regions'),
       site_types: siteType.filter(r => r.id !== 'all_sitetypes'),
+      user_roles: userRoles.filter(u => u.id !== 'all_userroles'),
     };
     this.setState(
       state => ({
@@ -1289,7 +1306,12 @@ class AddNewReport extends Component {
         individualFormArr,
         collapseClass,
         filterArr,
-        filter: { filterBySiteType, filterByRegions, filterBy },
+        filter: {
+          filterBySiteType,
+          filterByRegions,
+          filterBy,
+          filterByUserRoles,
+        },
         applyFilter,
         isDelete,
         showActions,
@@ -1302,6 +1324,7 @@ class AddNewReport extends Component {
           formTypes,
           formQuestions,
           siteTypes,
+          userRoles,
           regions,
         },
         match: {
@@ -1535,6 +1558,9 @@ class AddNewReport extends Component {
                         filteredData={filterBy}
                         siteTypes={siteTypes}
                         regions={regions}
+                        userRoles={userRoles}
+                        filterByUserRoles={filterByUserRoles}
+                        selectedReportType={selectedReportType}
                       />
                     )}
                   </>
