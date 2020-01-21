@@ -1206,12 +1206,20 @@ class AddNewReport extends Component {
 
   handleSubmitFilter = filter => {
     const { reportId, data } = this.state;
-    const { regions, siteType, userRoles } = filter;
+    const {
+      regions,
+      siteType,
+      userRoles,
+      startDate,
+      endDate,
+    } = filter;
 
     const modifyFilter = {
       regions: regions.filter(r => r.id !== 'all_regions'),
       site_types: siteType.filter(r => r.id !== 'all_sitetypes'),
       user_roles: userRoles.filter(u => u.id !== 'all_userroles'),
+      start_date: startDate,
+      end_date: endDate,
     };
     this.setState(
       state => ({

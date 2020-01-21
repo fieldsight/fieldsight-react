@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import DatePicker from 'react-datepicker';
 import CustomMultiSelect from '../common/CustomMultiSelect';
 // import CustomSelect from '../CustomSelect';
 /* eslint-disable */
 
-const CustomInput = React.forwardRef(props => (
-  <div className="custom-group">
+const CustomInput = React.forwardRef((props, ref) => (
+  <div className="custom-group" ref={ref}>
     <input
       className="custom-control"
       value={props.value ? props.value : props.placeholderText}
@@ -36,6 +36,8 @@ export default class DataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = InitialState;
+    this.startRef = createRef();
+    this.endRef = createRef();
   }
 
   componentWillMount() {
@@ -65,13 +67,16 @@ export default class DataFilter extends Component {
               ...data.user_roles,
             ]
           : data.user_roles;
-
+      const startDate = new Date(data.start_date);
+      const endDate = new Date(data.end_date);
       this.setState(state => ({
         filterData: {
           ...state.filterData,
           regions,
           siteType,
           userRoles,
+          startDate,
+          endDate,
         },
       }));
     }
@@ -390,6 +395,7 @@ export default class DataFilter extends Component {
                       dateFormat="yyyy-MM-dd"
                       customInput={
                         <CustomInput
+                          ref={this.startRef}
                           placeholderText="Start Date"
                           value={startDate}
                         />
@@ -413,6 +419,7 @@ export default class DataFilter extends Component {
                       onChange={this.handleEndDateChange}
                       customInput={
                         <CustomInput
+                          ref={this.endRef}
                           placeholderText="End Date"
                           value={endDate}
                         />
