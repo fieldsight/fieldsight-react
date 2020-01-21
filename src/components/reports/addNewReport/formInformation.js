@@ -664,6 +664,7 @@ class FormInformation extends Component {
       toggleSelectClass,
       handleToggleClass,
       individualFormArr,
+      selectedReportType,
     } = this.props;
     return (
       <div className="acc-item">
@@ -702,26 +703,28 @@ class FormInformation extends Component {
                 </div>
               </div>
               <div className="col-lg-6" />
-              <div className="col-lg-12">
-                <div className="form-group inline-form-group">
-                  <CustomRadioButton
-                    label="Submission"
-                    name="status"
-                    id={0}
-                    changeHandler={this.handleRadioChange}
-                    value={0}
-                    checked={status === 0}
-                  />
-                  <CustomRadioButton
-                    label="Form Data"
-                    name="status"
-                    id={1}
-                    changeHandler={this.handleRadioChange}
-                    value={1}
-                    checked={status === 1}
-                  />
+              {selectedReportType < 3 && (
+                <div className="col-lg-12">
+                  <div className="form-group inline-form-group">
+                    <CustomRadioButton
+                      label="Submission"
+                      name="status"
+                      id={0}
+                      changeHandler={this.handleRadioChange}
+                      value={0}
+                      checked={status === 0}
+                    />
+                    <CustomRadioButton
+                      label="Form Data"
+                      name="status"
+                      id={1}
+                      changeHandler={this.handleRadioChange}
+                      value={1}
+                      checked={status === 1}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
               {status === 0 && (
                 <div className="col-lg-6">
                   <div>

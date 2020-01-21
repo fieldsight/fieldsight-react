@@ -1,18 +1,35 @@
 import React, { Component } from 'react';
-// import DatePicker from 'react-datepicker';
+import DatePicker from 'react-datepicker';
 import CustomMultiSelect from '../common/CustomMultiSelect';
 // import CustomSelect from '../CustomSelect';
 /* eslint-disable */
+
+const CustomInput = React.forwardRef(props => (
+  <div className="custom-group">
+    <input
+      className="custom-control"
+      value={props.value ? props.value : props.placeholderText}
+      onClick={props.onClick}
+      readOnly
+    />
+    <div className="custom-group-append">
+      <span className="custom-group-text">
+        <i className="material-icons">calendar_today</i>
+      </span>
+    </div>
+  </div>
+));
 
 const InitialState = {
   filterData: {
     project: '',
     regions: [],
     siteType: [],
-    userRole: '',
+    userRoles: [],
     startDate: '',
     endDate: '',
   },
+  errors: {},
 };
 
 export default class DataFilter extends Component {
@@ -37,15 +54,24 @@ export default class DataFilter extends Component {
       const siteType =
         data.site_types.length === this.props.siteTypes.length
           ? [
-              { id: 'all_regions', name: 'Select All' },
+              { id: 'all_sitetypes', name: 'Select All' },
               ...data.site_types,
             ]
           : data.site_types;
+      const userRoles =
+        data.user_roles.length === this.props.userRoles.length
+          ? [
+              { id: 'all_userroles', name: 'Select All' },
+              ...data.user_roles,
+            ]
+          : data.user_roles;
+
       this.setState(state => ({
         filterData: {
           ...state.filterData,
           regions,
           siteType,
+          userRoles,
         },
       }));
     }
@@ -150,6 +176,56 @@ export default class DataFilter extends Component {
     });
   };
 
+  handleUserRoleFilter = (e, item) => {
+    const {
+      target: { checked, id },
+    } = e;
+    const { filterByUserRoles } = this.props;
+    const {
+      filterData: { userRoles },
+    } = this.state;
+    this.setState(state => {
+      if (checked) {
+        if (id === 'all_userroles') {
+          return {
+            filterData: {
+              ...state.filterData,
+              userRoles: filterByUserRoles,
+            },
+          };
+        } else {
+          return {
+            filterData: {
+              ...state.filterData,
+              userRoles: [...state.filterData.userRoles, item],
+            },
+          };
+        }
+      }
+      if (!checked) {
+        if (id === 'all_userroles') {
+          return {
+            filterData: {
+              ...state.filterData,
+              userRoles: [],
+            },
+          };
+        } else {
+          const filterUserRoles = userRoles.filter(
+            s => s.id !== item.id,
+          );
+          return {
+            filterData: {
+              ...state.filterData,
+              userRoles: filterUserRoles,
+            },
+          };
+        }
+      }
+      return null;
+    });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.handleSubmitFilter(this.state.filterData);
@@ -159,9 +235,73 @@ export default class DataFilter extends Component {
     this.setState({ ...InitialState });
   };
 
+  handleStartDateChange = e => {
+    const {
+      filterData: { endDate },
+    } = this.state;
+    const errors = {};
+    this.setState(
+      state => {
+        if (endDate && e > endDate) {
+          errors.endDate = 'Invalid Date';
+          return {
+            filterData: {
+              ...state.filterData,
+              endDate: e,
+            },
+            errors,
+          };
+        }
+        return {
+          filterData: {
+            ...state.filterData,
+            startDate: e,
+          },
+          errors,
+        };
+      },
+      () => {
+        console.log(e, 'object', this.state.filterData);
+      },
+    );
+  };
+
+  handleEndDateChange = e => {
+    const {
+      filterData: { startDate },
+    } = this.state;
+    const errors = {};
+    this.setState(state => {
+      if (e < startDate) {
+        errors.endDate = 'Invalid Date';
+        return {
+          filterData: {
+            ...state.filterData,
+            startDate: e,
+          },
+          errors,
+        };
+      }
+      return {
+        filterData: {
+          ...state.filterData,
+          endDate: e,
+        },
+        errors,
+      };
+    });
+  };
+
   render() {
     const {
-      filterData: { regions, siteType },
+      filterData: {
+        regions,
+        siteType,
+        startDate,
+        endDate,
+        userRoles,
+      },
+      errors,
     } = this.state;
     const {
       toggleSelectClass,
@@ -169,9 +309,11 @@ export default class DataFilter extends Component {
       filterArr,
       filterBySiteType,
       filterByRegions,
+      filterByUserRoles,
       applyFilter,
+      selectedReportType,
     } = this.props;
-
+    // console.log('object', this.state);
     return (
       <div className="data-filter filter-bottom mrt-30">
         <form onSubmit={this.handleSubmit}>
@@ -215,45 +357,76 @@ export default class DataFilter extends Component {
                     selectedArr={siteType}
                     placeholderTxt="Select Site Types"
                   />
-
-                  {/* <CustomSelect
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('filterSiteType');
-                    }}
-                    toggleType="filterSiteType"
-                    name={filterBySiteType.filter(
-                      each => each.id === siteType.id,
-                    )}
-                    options={filterBySiteType}
-                    value={siteType.id}
-                    handleSelect={this.handleSiteTypeFilter}
-                  /> */}
                 </div>
               </div>
             )}
-            {/* <div className="col-xl-2 col-md-6">
-              <div className="form-group inline-form-group">
-                <label className="mb-2">user roles</label>
-                <CustomSelect label="select user roles" />
-              </div>
-            </div> */}
-            {/* <div className="col-xl-5 col-md-6">
-              <div className="form-group icon-between inline-form-group">
-                <label className="">Time period</label>
-                <div className="inline-flex ">
-                  <div className="custom-group">
-                    <DatePicker placeholderText="Start Date" />
+
+            {selectedReportType === 4 &&
+              filterArr.some(f => f.code === 'user_roles') && (
+                <div className="col-xl-2 col-md-6">
+                  <div className="form-group inline-form-group">
+                    <label className="mb-2">user roles</label>
+                    <CustomMultiSelect
+                      toggleSelectClass={toggleSelectClass}
+                      handleToggleClass={() => {
+                        handleToggleClass('filterUserRole');
+                      }}
+                      toggleType="filterUserRole"
+                      checkboxOption={filterByUserRoles}
+                      handleCheck={this.handleUserRoleFilter}
+                      selectedArr={userRoles}
+                      placeholderTxt="Select User Roles"
+                    />
                   </div>
-                  <span className="icon-between">
-                    <i className="material-icons">arrow_right_alt</i>
-                  </span>
-                  <div className="custom-group">
-                    <DatePicker placeholderText="End Date" />
+                </div>
+              )}
+
+            {selectedReportType === 5 && (
+              <div className="col-xl-5 col-md-6">
+                <div className="form-group icon-between inline-form-group">
+                  <label className="">Time period</label>
+                  <div className="inline-flex ">
+                    <DatePicker
+                      dateFormat="yyyy-MM-dd"
+                      customInput={
+                        <CustomInput
+                          placeholderText="Start Date"
+                          value={startDate}
+                        />
+                      }
+                      onChange={this.handleStartDateChange}
+                      selected={startDate}
+                    />
+                    {errors && errors.startDate && (
+                      <span color="red" className="error">
+                        {errors.startDate}
+                      </span>
+                    )}
+                    <span className="icon-between">
+                      <i className="material-icons">
+                        arrow_right_alt
+                      </i>
+                    </span>
+                    <DatePicker
+                      dateFormat="yyyy-MM-dd"
+                      selected={endDate}
+                      onChange={this.handleEndDateChange}
+                      customInput={
+                        <CustomInput
+                          placeholderText="End Date"
+                          value={endDate}
+                        />
+                      }
+                    />
+                    {errors && errors.endDate && (
+                      <span color="red" className="error">
+                        {errors.endDate}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
-            </div> */}
+            )}
             {/* <div className="col-xl-2 col-md-6">
               <div className="form-group inline-form-group">
                 <label className="">Site information</label>
