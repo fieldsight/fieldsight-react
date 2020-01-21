@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
-
 import {
   getMetricsData,
   getForms,
@@ -10,7 +9,6 @@ import {
   applyActionToReport,
   getReportData,
 } from '../../../actions/reportActions';
-// import { BlockContentLoader } from '../../common/Loader';
 import InputElement from '../../common/InputElement';
 import {
   errorToast,
@@ -78,7 +76,6 @@ const InitialState = {
   submissions: [],
   userList: [],
   metaAttributes: [],
-
   formQuestions: [],
   filter: {
     filterByRegions: [{ id: 'all_regions', name: 'Select All' }],
@@ -205,10 +202,9 @@ class AddNewReport extends Component {
     ) {
       const {
         match: {
-          params: { id, reportId },
+          params: { reportId },
         },
       } = this.props;
-      //   // this.setState({ loader: true }, () => {
       if (reportId) {
         const report = this.props.reportReducer.reportData;
         const userList = report.attributes.filter(
@@ -336,37 +332,6 @@ class AddNewReport extends Component {
               }
             });
           }
-          // filterToFormInfo.map(f => {
-          //   const {code, id, label, value} =f
-          //   if (value.selectedIndividualForm) {
-
-          //   }
-          // })
-
-          // if (value.selectedQuestion) {
-          //   const { type, name, form } = value.selectedQuestion;
-          //   if (selectedQuestions.length === 0) {
-          //     selectedQuestions.push({ type, name });
-          //   }
-          //   if (selectedQuestions.length > 0) {
-          //     selectedQuestions.map(q => {
-          //       if (q.name !== value.selectedQuestion.name) {
-          //         selectedQuestions.push({ type, name });
-          //       }
-          //     });
-          //   }
-          //   if (selectedFormValue.length === 0) {
-          //     selectedFormValue.push({ ...form });
-          //   }
-          //   if (selectedFormValue.length > 0) {
-          //     selectedFormValue.map(v => {
-          //       if (v.code !== value.selectedQuestion.form.code) {
-          //         selectedFormValue.push({ ...form });
-          //       }
-          //     });
-          //   }
-          // }
-          // });
         }
 
         this.setState(state => ({
@@ -399,7 +364,6 @@ class AddNewReport extends Component {
             filterBy,
           },
           showActions,
-          // loader: false,
         }));
       }
     }
@@ -420,6 +384,22 @@ class AddNewReport extends Component {
         [toggleFor]: !state.toggleSelectClass[toggleFor],
       },
     }));
+  };
+
+  handleSiteAddValue = data => {
+    const { selectedMetas, selectedValue } = data;
+    this.setState(
+      state => ({
+        siteInfo: {
+          ...state.siteInfo,
+          selectedMetas,
+          selectedValue,
+        },
+      }),
+      () => {
+        this.handleAddValue();
+      },
+    );
   };
 
   handleAddValue = () => {
@@ -584,7 +564,7 @@ class AddNewReport extends Component {
         siteInfo: {
           ...state.siteInfo,
           selectedMetas: [],
-          selectedValue: [],
+          // selectedValue: [],
           siteValues: [],
         },
         formInfo: {
@@ -636,20 +616,12 @@ class AddNewReport extends Component {
         },
         () => {
           const {
-            formInfoArr,
             siteInfoArr,
             siteInfo: { selectedMetas },
-            formInfo: { selectedQuestions },
           } = this.state;
 
           if (siteInfoArr.length > 0 && selectedMetas.length > 0) {
             this.setSiteValue();
-          }
-          if (
-            formInfoArr.length > 0 &&
-            selectedQuestions.length > 0
-          ) {
-            this.setFormValue();
           }
         },
       );
@@ -861,7 +833,7 @@ class AddNewReport extends Component {
         siteInfo: {
           ...state.siteInfo,
           selectedMetas: filteredSelectedMetas,
-          selectedValue: filteredMetaArr,
+          // selectedValue: filteredMetaArr,
           siteValues:
             filteredSelectedMetas.length > 0
               ? this.state.siteInfo.siteValues
@@ -869,49 +841,6 @@ class AddNewReport extends Component {
         },
       };
     });
-  };
-
-  handleChangeMeta = (e, meta, value) => {
-    if (meta && Object.keys(meta).length > 0) {
-      this.handleMetaCheck(e, meta);
-    }
-    // if (value && Object.keys(value).length > 0) {
-    //   this.handleValueCheck(e, value);
-    // }
-  };
-
-  handleMetaCheck = (e, meta) => {
-    const {
-      siteInfo: { selectedMetas },
-    } = this.state;
-    const { name, checked } = e.target;
-    this.setState(
-      state => {
-        if (checked) {
-          return {
-            siteInfo: {
-              ...state.siteInfo,
-              selectedMetas: [...state.siteInfo.selectedMetas, meta],
-            },
-          };
-        }
-        if (!checked) {
-          const filterMetas = selectedMetas.filter(
-            type => type.code !== name,
-          );
-          return {
-            siteInfo: {
-              ...state.siteInfo,
-              selectedMetas: filterMetas,
-            },
-          };
-        }
-      },
-      () => {
-        this.handleAddValue();
-        // this.setSiteValue();
-      },
-    );
   };
 
   setSiteValue = () => {
@@ -999,39 +928,6 @@ class AddNewReport extends Component {
 
     return filteredValues;
     // });
-  };
-
-  handleValueCheck = (e, item) => {
-    const { checked } = e.target;
-    const {
-      siteInfo: { selectedValue },
-    } = this.state;
-    this.setState(
-      state => {
-        if (checked) {
-          return {
-            siteInfo: {
-              ...state.siteInfo,
-              selectedValue: [...state.siteInfo.selectedValue, item],
-            },
-          };
-        }
-        if (!checked) {
-          const newMetasArr = selectedValue.filter(
-            s => s.code !== item.code,
-          );
-          return {
-            siteInfo: {
-              ...state.siteInfo,
-              selectedValue: newMetasArr,
-            },
-          };
-        }
-      },
-      () => {
-        this.handleAddValue();
-      },
-    );
   };
 
   handleSelectChange = data => {
@@ -1306,7 +1202,7 @@ class AddNewReport extends Component {
           formValue,
           selectedFormValue,
         },
-        siteInfo: { selectedMetas, siteValues },
+        siteInfo: { selectedMetas, siteValues, selectedValue },
         reportType,
         metricArr,
         formInfoArr,
@@ -1346,7 +1242,7 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('class', this.props.location);
+    // console.log('class', this.state.siteInfo);
     const isEdit = reportId ? true : false;
     const actions = [
       // {
@@ -1499,9 +1395,9 @@ class AddNewReport extends Component {
                           users={usersArr}
                           userList={userList}
                           siteValues={siteValues}
+                          selectedValue={selectedValue}
                           metaAttributes={metaAttributes}
                           selectedMetas={selectedMetas}
-                          handleSelectMeta={this.handleChangeMeta}
                           submissionType={submissionType}
                           submissions={submissions}
                           handleSubmissionType={
@@ -1528,6 +1424,7 @@ class AddNewReport extends Component {
                           selectedFormValue={selectedFormValue}
                           addSubmissionCount={this.addSubmissionCount}
                           handleFormInfo={this.handleFormInfo}
+                          handleSiteAddValue={this.handleSiteAddValue}
                         />
                         <SelectedColumn
                           selected={selectedMetrics}

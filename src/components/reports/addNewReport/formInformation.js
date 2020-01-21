@@ -743,7 +743,7 @@ class FormInformation extends Component {
                       id="select_all"
                       label="Select All"
                       name="select_all"
-                      checked={selectAll}
+                      checked={!!selectAll ? true : false}
                       changeHandler={e => {
                         this.selectAllSubmissionCount(e);
                       }}
