@@ -69,7 +69,6 @@ export default class Metrics extends Component {
       selectedMetrics,
       metaAttributes,
       selectedMetas,
-      handleSelectMeta,
       formTypes,
       selectedFormType,
       formTypeArr,
@@ -86,6 +85,8 @@ export default class Metrics extends Component {
       handleFormInfo,
       addSubmissionCount,
       selectedReportType,
+      handleSiteAddValue,
+      selectedValue,
     } = this.props;
     // console.log('metrics', formTypes, '-----', selectedFormType);
 
@@ -175,10 +176,11 @@ export default class Metrics extends Component {
             toggleSelectClass={toggleSelectClass}
             handleToggleClass={handleToggleClass}
             siteValues={siteValues}
+            selectedValue={selectedValue}
             selectedMetrics={selectedMetrics}
             metaAttributes={metaAttributes}
             selectedMetas={selectedMetas}
-            handleSelectMeta={handleSelectMeta}
+            handleSiteAddValue={handleSiteAddValue}
           />
         )}
         <FormInformation

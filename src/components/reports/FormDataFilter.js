@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
-import CustomMultiSelect from './common/CustomMultiSelect';
 // import CustomCheckBox from './CustomCheckbox';
+import CustomMultiSelect from './common/CustomMultiSelect';
+import FilterByDate from './common/filterByDate';
+import FilterByData from './common/filterByData';
 import CollapseFilterTable from './CollapseFilterTable';
 import { errorToast, successToast } from '../../utils/toastHandler';
 
@@ -277,7 +278,6 @@ export default class FormDataFilter extends PureComponent {
       },
     } = this.props;
     // const report_type = 'gfhj';
-
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -337,97 +337,38 @@ export default class FormDataFilter extends PureComponent {
                   <form>
                     <div className="row">
                       <div className="col-lg-3 col-md-6">
-                        <div className="form-group">
-                          <label className="mb-2">Site types</label>
-                          <CustomMultiSelect
-                            toggleSelectClass={siteOpen}
-                            handleToggleClass={this.SiteToggleClass}
-                            checkboxOption={siteType}
-                            handleCheck={this.siteHandler}
-                            selectedArr={this.state.siteSelected}
-                            placeholderTxt="Select Site Type"
-                            site="site"
-                          />
-                        </div>
+                        <FilterByData
+                          className="form-group"
+                          label="site types"
+                          toggleSelectClass={siteOpen}
+                          handleToggleClass={this.SiteToggleClass}
+                          data={siteType}
+                          changeHandler={this.siteHandler}
+                          selectedArr={this.state.siteSelected}
+                          placeholderTxt="Select Site Type"
+                        />
                       </div>
                       <div className="col-lg-3 col-md-6">
-                        <div className="form-group">
-                          <label className="mb-2">Regions</label>
-                          <CustomMultiSelect
-                            toggleSelectClass={open}
-                            handleToggleClass={this.handleToggleClass}
-                            checkboxOption={projectRegions}
-                            handleCheck={this.changeHandlers}
-                            selectedArr={this.state.selected}
-                            placeholderTxt="Select Region Type"
-                            site="regions"
-                          />
-                        </div>
+                        <FilterByData
+                          className="form-group"
+                          label="Regions"
+                          toggleSelectClass={open}
+                          handleToggleClass={this.handleToggleClass}
+                          data={projectRegions}
+                          changeHandler={this.changeHandlers}
+                          selectedArr={this.state.selected}
+                          placeholderTxt="Select Region Type"
+                        />
                       </div>
 
                       <div className="col-lg-6 col-md-6">
-                        <div className="form-group icon-between">
-                          <label className="mb-2">Time period</label>
-                          <div className="inline-flex ">
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="Start Date"
-                                name="startedDate"
-                                selected={this.state.startedDate}
-                                onChange={this.onChangeHandler}
-                                dateFormat="yyyy-MM-dd"
-                                className="form-control"
-                              />
-                              {/* <div className="custom-group-append">
-                              <span
-                                className="custom-group-text"
-                                style={{
-                                  display: 'inline',
-                                  paddingLeft: '25px',
-                                  flex: '0 0 20%',
-                                }}
-                              >
-                                <i
-                                  className="material-icons"
-                                  style={{
-                                    verticalAlign: 'middle',
-                                  }}
-                                >
-                                  calendar_today
-                                </i>
-                              </span>
-                            </div> */}
-                            </div>
-                            <span className="icon-between">
-                              <i className="material-icons">
-                                arrow_right_alt
-                              </i>
-                            </span>
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="End Date"
-                                name="endedDate"
-                                selected={this.state.endedDate}
-                                onChange={this.onEndChangeHandler}
-                                className="form-control"
-                                dateFormat="yyyy-MM-dd"
-                              />
-                              {/* <i className="material-icons">
-                                calendar_today
-                              </i>
-                            </DatePicker> */}
-                              {/* <DatePicker
-                              value={this.state.endedDate}
-                              dateFormat="yyyy-MM-dd"
-                              customInput={<Input />}
-                              selected={this.state.endedDate}
-                              onChange={date =>
-                                this.setState({ endedDate: date })
-                              }
-                            /> */}
-                            </div>
-                          </div>
-                        </div>
+                        <FilterByDate
+                          className="form-group icon-between"
+                          startDate={this.state.startedDate}
+                          endDate={this.state.endedDate}
+                          startDateHandler={this.onChangeHandler}
+                          endDateHandler={this.onEndChangeHandler}
+                        />
                       </div>
 
                       <div className="col-md-12">
