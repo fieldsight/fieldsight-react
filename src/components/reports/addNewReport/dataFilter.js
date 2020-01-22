@@ -248,30 +248,25 @@ export default class DataFilter extends Component {
       filterData: { endDate },
     } = this.state;
     const errors = {};
-    this.setState(
-      state => {
-        if (endDate && e > endDate) {
-          errors.endDate = 'Invalid Date';
-          return {
-            filterData: {
-              ...state.filterData,
-              endDate: e,
-            },
-            errors,
-          };
-        }
+    this.setState(state => {
+      if (endDate && e > endDate) {
+        errors.endDate = 'Invalid Date';
         return {
           filterData: {
             ...state.filterData,
-            startDate: e,
+            endDate: e,
           },
           errors,
         };
-      },
-      () => {
-        console.log(e, 'object', this.state.filterData);
-      },
-    );
+      }
+      return {
+        filterData: {
+          ...state.filterData,
+          startDate: e,
+        },
+        errors,
+      };
+    });
   };
 
   handleEndDateChange = e => {

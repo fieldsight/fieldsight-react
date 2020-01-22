@@ -1,27 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 /* eslint-disable */
 
-export default class CustomMultiSelect extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-    };
-  }
-
-  handleOnOpen = () => {
-    this.setState({ isOpen: true });
-  };
-
-  handleonClose = event => {
-    event.stopPropagation();
-    this.setState({ isOpen: false });
-  };
-
+export default class CustomMultiSelect extends PureComponent {
   render() {
-    const { isOpen } = this.state;
     const {
       toggleSelectClass,
       handleToggleClass,
@@ -32,7 +15,6 @@ export default class CustomMultiSelect extends Component {
       placeholderTxt,
       site,
     } = this.props;
-
     const className = toggleType
       ? toggleSelectClass[toggleType]
       : toggleSelectClass;
@@ -44,11 +26,12 @@ export default class CustomMultiSelect extends Component {
               ? 'select-wrapper select-toggle'
               : 'select-wrapper'
           }
-          onClick={handleToggleClass}
-          onKeyDown={handleToggleClass}
+          onFocus={handleToggleClass}
+          // onKeyDown={handleToggleClass}
+          // onClick={handleToggleClass}
           role="button"
           tabIndex="0"
-          // onBlur={this.handleonClose}
+          onBlur={handleToggleClass}
         >
           <span className="select-item">{placeholderTxt}</span>
 
@@ -101,14 +84,11 @@ export default class CustomMultiSelect extends Component {
                             ? option.name
                             : ''
                         }_${index}`}
-                        // onClick={e => {
-                        //   this.handleonClose(e);
-                        // }}
-                        // onKeyDown={e => {
-                        //   this.handleonClose(e);
-                        // }}
                       >
-                        <div className="custom-control custom-checkbox">
+                        <div
+                          className="custom-control custom-checkbox"
+                          id="checkbox"
+                        >
                           <input
                             type="checkbox"
                             className="custom-control-input"
