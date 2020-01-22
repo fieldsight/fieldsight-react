@@ -33,6 +33,7 @@ class TeamAdd extends Component {
 
     this.state = {
       project: {
+        identifier: '',
         teamName: '',
         contactnumber: '',
         email: '',
@@ -57,6 +58,7 @@ class TeamAdd extends Component {
       selectedCountry: '',
       selectedteam: '',
       id: this.props.match.params ? this.props.match.params.id : '',
+      errorFlag: false,
     };
   }
 
@@ -114,22 +116,38 @@ class TeamAdd extends Component {
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
-    this.setState(state => {
-      if (position) {
+    this.setState(
+      state => {
+        if (position) {
+          return {
+            position: {
+              ...state.position,
+              [name]: value,
+            },
+          };
+        }
         return {
-          position: {
-            ...state.position,
+          project: {
+            ...state.project,
             [name]: value,
           },
         };
-      }
-      return {
-        project: {
-          ...state.project,
-          [name]: value,
-        },
-      };
-    });
+      },
+      () => {
+        if (name === 'identifier') {
+          if (value.trim().length < 5) {
+            this.setState({
+              errorFlag: true,
+            });
+          }
+          if (value.trim().length > 5) {
+            this.setState({
+              errorFlag: false,
+            });
+          }
+        }
+      },
+    );
   };
 
   onSubmitHandler = e => {
@@ -142,6 +160,7 @@ class TeamAdd extends Component {
     // } = this.props;
 
     const data = {
+      identifier: this.state.project.identifier,
       name: this.state.project.teamName,
       contactnumber: this.state.project.contactnumber,
       email: this.state.project.email,
@@ -162,6 +181,7 @@ class TeamAdd extends Component {
         if (res.status === 201) {
           this.setState({
             project: {
+              identifier: '',
               teamName: '',
               contactnumber: '',
               email: '',
@@ -249,6 +269,7 @@ class TeamAdd extends Component {
       closeModal,
       state: {
         project: {
+          identifier,
           teamName,
           contactnumber,
           email,
@@ -289,6 +310,23 @@ class TeamAdd extends Component {
         <RightContentCard title="app.newTeam">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">
+              <div className="col-xl-4 col-md-6">
+                <InputElement
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  required
+                  label="identifier"
+                  name="identifier"
+                  value={identifier}
+                  changeHandler={onChangeHandler}
+                />
+                {this.state.errorFlag && (
+                  <span style={{ color: 'red' }}>
+                    identifier should be more then 5 character
+                  </span>
+                )}
+              </div>
               <div className="col-xl-4 col-md-6">
                 <InputElement
                   formType="editForm"

@@ -7,7 +7,6 @@ import {
   GET_REPORTS_LIST,
   APPLY_ACTION_TO_REPORT,
   GET_REPORT_DATA,
-  GET_PROJECT_DETAILS,
 } from './types';
 /* eslint-disable */
 
@@ -69,15 +68,6 @@ export const getReportData = reportId => dispatch => {
     .get(`/v4/api/reporting/report/${reportId}/`)
     .then(res => {
       dispatch({ type: GET_REPORT_DATA, payload: res.data });
-    })
-    .catch(() => {});
-};
-
-export const getProjectData = reportId => dispatch => {
-  axios
-    .get(`fv3/api/project/${reportId}/`)
-    .then(res => {
-      dispatch({ type: GET_PROJECT_DETAILS, payload: res.data });
     })
     .catch(() => {});
 };

@@ -8,6 +8,7 @@ const RightContentCard = ({
   toggleModal,
   children,
   buttonName,
+  editflag,
 }) => (
   <div className="card">
     <div className="card-header main-card-header">
@@ -27,8 +28,9 @@ const RightContentCard = ({
             onKeyDown={toggleModal}
           >
             <span>
+              {editflag && <i className="la la-edit" />}
               {buttonName}
-              <i className="la la-plus" />
+              {!editflag && <i className="la la-plus" />}
             </span>
           </a>
         </div>

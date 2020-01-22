@@ -65,7 +65,7 @@ import OragnizatonProjectList from './organizationProjectList';
 import OrganizationUserList from './organizationUserList';
 import OrganizationTeams from './organizationTeamList';
 
-import ReportDashboard from './reportDashboard';
+import ReportDashboard from './reports/viewReport';
 
 // import FilterDataFilter from './reports/FormDataFilter';
 import ExportDataFilter from './reports/ExportDataFilter';
@@ -428,7 +428,7 @@ class App extends Component {
                 />
 
                 <Route
-                  path="/view-report/:id"
+                  path="/view-report/:pid/:id"
                   render={props => <ReportDashboard {...props} />}
                 />
                 <Route

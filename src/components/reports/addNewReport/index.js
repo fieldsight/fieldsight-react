@@ -1329,7 +1329,7 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('class', this.props.location);
+
     const isEdit = reportId ? true : false;
     const actions = [
       // {

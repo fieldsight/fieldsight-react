@@ -26,6 +26,7 @@ export default class SuperAdminFormEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      identifier: '',
       name: '',
       phone: '',
       fax: '',
@@ -40,6 +41,7 @@ export default class SuperAdminFormEdit extends Component {
       zoom: 13,
       Selectedtypes: '',
       country: '',
+      errorFlag: false,
     };
   }
 
@@ -65,6 +67,7 @@ export default class SuperAdminFormEdit extends Component {
           const latitude = position && position[2].split(')')[0];
 
           this.setState({
+            identifier: responses[0].data.identifier,
             name: responses[0].data.name,
             phone: responses[0].data.phone,
             fax: responses[0].data.fax,
@@ -98,10 +101,26 @@ export default class SuperAdminFormEdit extends Component {
         },
       }));
     }
-    return this.setState(prevState => ({
-      ...prevState.project,
-      [name]: value,
-    }));
+    return this.setState(
+      prevState => ({
+        ...prevState.project,
+        [name]: value,
+      }),
+      () => {
+        if (name === 'identifier') {
+          if (value.trim().length < 5) {
+            this.setState({
+              errorFlag: true,
+            });
+          }
+          if (value.trim().length > 5) {
+            this.setState({
+              errorFlag: false,
+            });
+          }
+        }
+      },
+    );
   };
 
   onSubmitHandler = e => {
@@ -109,6 +128,7 @@ export default class SuperAdminFormEdit extends Component {
     const { id } = this.props;
 
     const data = {
+      identifier: this.state.identifier,
       name: this.state.name,
       phone: this.state.phone,
       fax: this.state.fax,
@@ -170,6 +190,7 @@ export default class SuperAdminFormEdit extends Component {
 
       onSelectChangeHandler,
       state: {
+        identifier,
         name,
         phone,
         fax,
@@ -200,6 +221,23 @@ export default class SuperAdminFormEdit extends Component {
         <RightContentCard title="Edit Organization">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">
+              <div className="col-xl-4 col-md-6">
+                <InputElement
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  required
+                  label="identifier"
+                  name="identifier"
+                  value={identifier}
+                  changeHandler={onChangeHandler}
+                />
+                {this.state.errorFlag && (
+                  <span style={{ color: 'red' }}>
+                    identifier should be more then 5 character
+                  </span>
+                )}
+              </div>
               <div className="col-xl-4 col-md-6">
                 <InputElement
                   formType="editForm"

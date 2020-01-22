@@ -102,7 +102,11 @@ class EditProject extends Component {
                 changeHandler={onChangeHandler}
                 translation
               />
-              {errorFlag && <p>plz write more words</p>}
+              {errorFlag && (
+                <span style={{ color: 'red' }}>
+                  identifier should be more then 5 character
+                </span>
+              )}
             </div>
 
             <div className="col-xl-4 col-md-6">
