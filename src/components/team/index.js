@@ -78,7 +78,7 @@ class Teams extends Component {
 
   render() {
     const { results, organization } = this.state;
-    console.log(results, 'results');
+
     // const { selected, orgs } = this.props;
 
     // const selectLanguage = [
