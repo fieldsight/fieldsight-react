@@ -1,8 +1,36 @@
 import React, { PureComponent } from 'react';
-/* eslint-disable */
+import { connect } from 'react-redux';
+import { Dropdown } from 'react-bootstrap';
+import { applyActionToReport } from '../../actions/reportActions';
+import { errorToast, successToast } from '../../utils/toastHandler';
 
-export default class CollapseFilterTable extends PureComponent {
+class CollapseFilterTable extends PureComponent {
+  onExportCSV = () => {
+    this.props.applyActionToReport(this.props.id, 'excel');
+  };
+
+  componentDidUpdate(nextProps) {
+    const {
+      props: {
+        reportReducer: { actionResponse },
+      },
+    } = this;
+    if (actionResponse !== nextProps.reportReducer.actionResponse) {
+      successToast(actionResponse.detail);
+    }
+  }
+
   render() {
+    const actions = [
+      {
+        id: 1,
+        title: 'export',
+        icon: 'save_alt',
+        menu: [
+          { key: 1, text: 'Microsoft Excel', link: this.onExportCSV },
+        ],
+      },
+    ];
     return (
       <div className="report-table  mt-3">
         <div className="report-table-header">
@@ -29,7 +57,7 @@ export default class CollapseFilterTable extends PureComponent {
               <a className="dropdown-item">sync</a>
             </div>
           </div>
-          <div className="dropdown">
+          {/* <div className="dropdown">
             <button
               type="button"
               className="common-button data-toggle is-border is-icon"
@@ -46,7 +74,34 @@ export default class CollapseFilterTable extends PureComponent {
                 keyhole markup zipped document(.kmz)
               </a>
             </div>
-          </div>
+          </div> */}
+
+          {actions.map(action => (
+            <Dropdown key={action.title}>
+              <Dropdown.Toggle
+                drop="right"
+                variant=""
+                id="dropdown-Data"
+                className="common-button data-toggle is-border is-icon"
+              >
+                {action.title}
+                <i className="material-icons">{action.icon}</i>
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                {action.menu.map(item => (
+                  <Dropdown.Item
+                    onClick={() => {
+                      item.link();
+                    }}
+                    key={item.key}
+                    // target="_blank"
+                  >
+                    {item.text}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          ))}
         </div>
         <div className="table-responsive my-2">
           <table className="table ">
@@ -327,3 +382,11 @@ export default class CollapseFilterTable extends PureComponent {
     );
   }
 }
+
+const mapStateToProps = ({ reportReducer }) => ({
+  reportReducer,
+});
+
+export default connect(mapStateToProps, {
+  applyActionToReport,
+})(CollapseFilterTable);

@@ -12,6 +12,7 @@ export default class ProjectAdd extends Component {
     super(props);
     this.state = {
       project: {
+        identifier: '',
         name: '',
         phone: '',
         email: '',
@@ -20,6 +21,7 @@ export default class ProjectAdd extends Component {
         donor: '',
         public_desc: '',
         cluster_sites: false,
+        errorFlag: false,
       },
       // loaded: 0,
       sector: [],
@@ -83,6 +85,7 @@ export default class ProjectAdd extends Component {
   onSubmitHandler = e => {
     e.preventDefault();
     const {
+      identifier,
       id,
       project,
       selectedSector,
@@ -90,7 +93,9 @@ export default class ProjectAdd extends Component {
       position,
       cropResult,
     } = this.state;
+
     const data = {
+      identifier: project.identifier,
       organization: id,
       name: project.name,
       phone: project.phone,
@@ -176,6 +181,7 @@ export default class ProjectAdd extends Component {
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
+
     if (position) {
       return this.setState(state => ({
         position: {
@@ -185,12 +191,28 @@ export default class ProjectAdd extends Component {
       }));
     }
 
-    return this.setState(state => ({
-      project: {
-        ...state.project,
-        [name]: value,
+    return this.setState(
+      state => ({
+        project: {
+          ...state.project,
+          [name]: value,
+        },
+      }),
+      () => {
+        if (name === 'identifier') {
+          if (value.trim().length < 5) {
+            this.setState({
+              errorFlag: true,
+            });
+          }
+          if (value.trim().length > 5) {
+            this.setState({
+              errorFlag: false,
+            });
+          }
+        }
       },
-    }));
+    );
   };
 
   readFile = file => {
@@ -231,6 +253,7 @@ export default class ProjectAdd extends Component {
   render() {
     const {
       project: {
+        identifier,
         name,
         phone,
         email,
@@ -240,6 +263,7 @@ export default class ProjectAdd extends Component {
         cluster_sites,
         donor,
         id,
+        // errorFlag,
       },
       sector,
       position: { latitude, longitude },
@@ -261,12 +285,14 @@ export default class ProjectAdd extends Component {
           )}
         </nav>
         <Edit
+          errorFlag={this.state.errorFlag}
           context={id}
           _isMounted={false}
           onSubmitHandler={this.onSubmitHandler}
           onChangeHandler={this.onChangeHandler}
           sector={sector}
           onSelectChangeHandler={this.onSelectChangeHandler}
+          identifier={identifier}
           name={name}
           phone={phone}
           email={email}

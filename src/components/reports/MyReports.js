@@ -6,15 +6,13 @@ import format from 'date-fns/format';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
 import Loader from '../common/Loader';
-import {
-  getReportsList,
-  getProjectData,
-} from '../../actions/reportActions';
+import { getReportsList } from '../../actions/reportActions';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import Modal from '../common/Modal';
 import ShareModal from './shareModal';
 import DeleteModal from '../common/DeleteModal';
-/* eslint-disable */
+
+/* eslint-disable react/no-did-update-set-state */
 
 class MyReports extends Component {
   intervalID;
@@ -27,7 +25,7 @@ class MyReports extends Component {
       Shareid: '',
       deleteId: '',
       openDelete: false,
-      url: false,
+
       reportLoader: false,
     };
   }
@@ -37,7 +35,7 @@ class MyReports extends Component {
     this.setState({ reportLoader: true }, () => {
       this.props.getReportsList(id, 'my_reports');
     });
-    this.props.getProjectData(id);
+    // this.props.getProjectData(id);
   }
 
   // componentDidMount() {
@@ -202,40 +200,10 @@ class MyReports extends Component {
             reportList.length > 0 &&
             reportList.map(report => (
               <div className="report-list" key={report.id}>
-                <Link
-                  to={{
-                    pathname: `/view-report/${report.id}`,
-                    state: {
-                      title: report.title,
-                      description: report.description,
-                      attributes: report.attributes,
-                      reportId: report.id,
-                      projectid: id,
-                    },
-                  }}
-                >
-                  <div
-                    className="row"
-                    role="button"
-                    // tabIndex="1"
-                    // onClick={e => {
-                    //   this.handleClickTitle(e, report.id);
-                    // }}
-                  >
+                <Link to={`/view-report/${id}/${report.id}`}>
+                  <div className="row">
                     <div className="col-md-8">
                       <div className="report-content">
-                        {/* <Link
-                        to={{
-                          pathname: `/view-report/${report.id}`,
-                          state: {
-                            title: report.title,
-                            description: report.description,
-                            attributes: report.attributes,
-                            reportId: report.id,
-                            projectid: id,
-                          },
-                        }}
-                      > */}
                         <h4>{report.title}</h4>
 
                         <p>{report.description}</p>
@@ -303,10 +271,9 @@ class MyReports extends Component {
 
                           {item.actionDelete && (
                             <Dropdown.Item
-                              onClick={() =>
-                                this.deleteHandler(report.id)
-                              }
-                              // target="_blank"
+                              onClick={() => {
+                                this.deleteHandler(report.id);
+                              }}
                             >
                               {item.title}
                             </Dropdown.Item>
@@ -314,9 +281,9 @@ class MyReports extends Component {
 
                           {item.actionShare && (
                             <Dropdown.Item
-                              onClick={() =>
-                                this.ShareAction(report.id)
-                              }
+                              onClick={() => {
+                                this.ShareAction(report.id);
+                              }}
                               // target="_blank"
                             >
                               {item.title}
@@ -366,6 +333,5 @@ export default compose(
   withRouter,
   connect(mapStateToProps, {
     getReportsList,
-    getProjectData,
   }),
 )(MyReports);

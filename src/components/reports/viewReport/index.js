@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import RightContentCard from '../common/RightContentCard';
-import Modal from '../common/Modal';
+import { connect } from 'react-redux';
+import { Dropdown } from 'react-bootstrap';
+import { getReportData } from '../../../actions/reportActions';
+import RightContentCard from '../../common/RightContentCard';
+import Modal from '../../common/Modal';
 import ExportTable from './exportTable';
 import MetricsTable from './metricTable';
-import { DotLoader } from '../myForm/Loader';
+import { DotLoader } from '../../myForm/Loader';
+import CollapseFilterTable from '../CollapseFilterTable';
 
-/* elslint-disable */
-export default class ReportDashboard extends Component {
+class ReportDashboard extends Component {
   intervalID;
 
   constructor(props) {
@@ -18,6 +21,17 @@ export default class ReportDashboard extends Component {
       viewBtn: false,
       loader: false,
     };
+  }
+
+  componentWillMount() {
+    const {
+      props: {
+        match: {
+          params: { id },
+        },
+      },
+    } = this;
+    this.props.getReportData(id);
   }
 
   componentDidMount() {
@@ -79,67 +93,54 @@ export default class ReportDashboard extends Component {
     const {
       props: {
         match: {
-          params: { id },
+          params: { id, pid },
         },
-        location: {
-          state: {
-            title,
-            attributes,
-            description,
-            projectid,
-            reportId,
-          },
+        reportReducer: {
+          reportData: { attributes, title, description },
         },
+        // location: {
+        //   state: {
+        //     title,
+        //     attributes,
+        //     description,
+        //     projectid,
+        //     reportId,
+        //   },
+        // },
       },
       state: { exportData, viewBtn, loader },
     } = this;
 
     return (
       <>
-        <RightContentCard title="Report View">
+        <RightContentCard
+          title={title}
+          addButton
+          toggleModal={() => this.handleEdit(pid, id)}
+          buttonName=" Edit "
+          editflag
+        >
           <form className="floating-form">
             <div className="form-group">
-              <input
-                type="text"
-                className="form-control report-name"
-                defaultValue={title}
-                required
-              />
-              <label htmlFor="input">Report Name</label>
+              <span style={{ color: 'grey' }}>{description}</span>
             </div>
             <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                defaultValue={description}
-                required
-              />
-              <label htmlFor="input">description</label>
+              <span style={{ color: 'grey' }}>Number of Columns</span>
+              :
+              <span style={{ color: 'grey' }}>
+                {attributes && attributes.length}
+              </span>
             </div>
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                defaultValue={attributes.length}
-                required
-              />
-              <label htmlFor="input">Metric Count</label>
-            </div>
+
+            <CollapseFilterTable id={id} />
 
             <div className="form-group pull-right no-margin">
               <button
                 type="button"
                 className="fieldsight-btn"
-                onClick={() => this.handleEdit(projectid, reportId)}
+                onClick={() => this.handleView()}
               >
-                Edit Report
-              </button>
-              <button
-                type="button"
-                className="fieldsight-btn"
-                onClick={this.handleView}
-              >
-                View Export table
+                Previous Exports
               </button>
             </div>
           </form>
@@ -160,3 +161,11 @@ export default class ReportDashboard extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ reportReducer }) => ({
+  reportReducer,
+});
+
+export default connect(mapStateToProps, {
+  getReportData,
+})(ReportDashboard);
