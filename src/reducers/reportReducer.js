@@ -34,9 +34,13 @@ export default function(state = initialState, action) {
         metrics: action.payload.metrics,
         metaAttributes: action.payload.meta_attributes,
         formTypes: action.payload.form_types,
-        regions: action.payload.regions,
-        siteTypes: action.payload.site_types,
-        userRoles: action.payload.user_roles,
+        regions: action.payload.regions ? action.payload.regions : [],
+        siteTypes: action.payload.site_types
+          ? action.payload.site_types
+          : [],
+        userRoles: action.payload.user_roles
+          ? action.payload.user_roles
+          : [],
         reportLoader: false,
       };
     case GET_FORM:

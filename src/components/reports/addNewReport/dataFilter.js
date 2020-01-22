@@ -1,24 +1,10 @@
-import React, { Component, createRef } from 'react';
-import DatePicker from 'react-datepicker';
+import React, { Component } from 'react';
 import CustomMultiSelect from '../common/CustomMultiSelect';
+import FilterByDate from '../common/filterByDate';
+import FilterByData from '../common/filterByData';
+
 // import CustomSelect from '../CustomSelect';
 /* eslint-disable */
-
-const CustomInput = React.forwardRef((props, ref) => (
-  <div className="custom-group" ref={ref}>
-    <input
-      className="custom-control"
-      value={props.value ? props.value : props.placeholderText}
-      onClick={props.onClick}
-      readOnly
-    />
-    <div className="custom-group-append">
-      <span className="custom-group-text">
-        <i className="material-icons">calendar_today</i>
-      </span>
-    </div>
-  </div>
-));
 
 const InitialState = {
   filterData: {
@@ -36,8 +22,6 @@ export default class DataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = InitialState;
-    this.startRef = createRef();
-    this.endRef = createRef();
   }
 
   componentWillMount() {
@@ -329,107 +313,68 @@ export default class DataFilter extends Component {
             </div> */}
             {filterArr.some(f => f.code === 'regions') && (
               <div className="col-xl-2 col-md-6">
-                <div className="form-group inline-form-group">
-                  <label className="mb-2">region</label>
-                  <CustomMultiSelect
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('filterRegion');
-                    }}
-                    toggleType="filterRegion"
-                    checkboxOption={filterByRegions}
-                    handleCheck={this.handleRegionFilter}
-                    selectedArr={regions}
-                    placeholderTxt="Select Regions"
-                  />
-                </div>
+                <FilterByData
+                  className="form-group inline-form-group"
+                  label="region"
+                  toggleSelectClass={toggleSelectClass}
+                  handleToggleClass={() => {
+                    handleToggleClass('filterRegion');
+                  }}
+                  toggleType="filterRegion"
+                  data={filterByRegions}
+                  changeHandler={this.handleRegionFilter}
+                  selectedArr={regions}
+                  placeholderTxt="Select Regions"
+                />
               </div>
             )}
             {filterArr.some(f => f.code === 'site_types') && (
               <div className="col-xl-2 col-md-6">
-                <div className="form-group inline-form-group">
-                  <label className="mb-2">site type</label>
-                  <CustomMultiSelect
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('filterSiteType');
-                    }}
-                    toggleType="filterSiteType"
-                    checkboxOption={filterBySiteType}
-                    handleCheck={this.handleSiteTypeFilter}
-                    selectedArr={siteType}
-                    placeholderTxt="Select Site Types"
-                  />
-                </div>
+                <FilterByData
+                  className="form-group inline-form-group"
+                  label="site type"
+                  toggleSelectClass={toggleSelectClass}
+                  handleToggleClass={() => {
+                    handleToggleClass('filterSiteType');
+                  }}
+                  toggleType="filterSiteType"
+                  data={filterBySiteType}
+                  changeHandler={this.handleSiteTypeFilter}
+                  selectedArr={siteType}
+                  placeholderTxt="Select Site Types"
+                />
               </div>
             )}
 
             {selectedReportType === 4 &&
               filterArr.some(f => f.code === 'user_roles') && (
                 <div className="col-xl-2 col-md-6">
-                  <div className="form-group inline-form-group">
-                    <label className="mb-2">user roles</label>
-                    <CustomMultiSelect
-                      toggleSelectClass={toggleSelectClass}
-                      handleToggleClass={() => {
-                        handleToggleClass('filterUserRole');
-                      }}
-                      toggleType="filterUserRole"
-                      checkboxOption={filterByUserRoles}
-                      handleCheck={this.handleUserRoleFilter}
-                      selectedArr={userRoles}
-                      placeholderTxt="Select User Roles"
-                    />
-                  </div>
+                  <FilterByData
+                    className="form-group inline-form-group"
+                    label="user roles"
+                    toggleSelectClass={toggleSelectClass}
+                    handleToggleClass={() => {
+                      handleToggleClass('filterUserRole');
+                    }}
+                    toggleType="filterUserRole"
+                    data={filterByUserRoles}
+                    changeHandler={this.handleUserRoleFilter}
+                    selectedArr={userRoles}
+                    placeholderTxt="Select User Roles"
+                  />
                 </div>
               )}
 
             {selectedReportType === 5 && (
               <div className="col-xl-5 col-md-6">
-                <div className="form-group icon-between inline-form-group">
-                  <label className="">Time period</label>
-                  <div className="inline-flex ">
-                    <DatePicker
-                      dateFormat="yyyy-MM-dd"
-                      customInput={
-                        <CustomInput
-                          ref={this.startRef}
-                          placeholderText="Start Date"
-                          value={startDate}
-                        />
-                      }
-                      onChange={this.handleStartDateChange}
-                      selected={startDate}
-                    />
-                    {errors && errors.startDate && (
-                      <span color="red" className="error">
-                        {errors.startDate}
-                      </span>
-                    )}
-                    <span className="icon-between">
-                      <i className="material-icons">
-                        arrow_right_alt
-                      </i>
-                    </span>
-                    <DatePicker
-                      dateFormat="yyyy-MM-dd"
-                      selected={endDate}
-                      onChange={this.handleEndDateChange}
-                      customInput={
-                        <CustomInput
-                          ref={this.endRef}
-                          placeholderText="End Date"
-                          value={endDate}
-                        />
-                      }
-                    />
-                    {errors && errors.endDate && (
-                      <span color="red" className="error">
-                        {errors.endDate}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <FilterByDate
+                  className="form-group icon-between inline-form-group"
+                  startDate={startDate}
+                  endDate={endDate}
+                  startDateHandler={this.handleStartDateChange}
+                  endDateHandler={this.handleEndDateChange}
+                  errors={errors}
+                />
               </div>
             )}
             {/* <div className="col-xl-2 col-md-6">
