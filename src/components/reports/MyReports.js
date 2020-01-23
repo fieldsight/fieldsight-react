@@ -104,7 +104,7 @@ class MyReports extends Component {
               reportList: delet,
               openDelete: false,
             },
-            () => successToast('Sucessfully', 'deleted'),
+            () => successToast('Report', 'deleted'),
           );
         }
         // successToast(res.data.detail);

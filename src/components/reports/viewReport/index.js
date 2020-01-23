@@ -59,12 +59,17 @@ class ReportDashboard extends Component {
           params: { id },
         },
       },
+      state: { viewBtn },
     } = this;
-    axios.get(`/v4/api/reporting/export/logs/?id=${id}`).then(req => {
-      this.setState({
-        exportData: req.data.results,
-      });
-    });
+    if (viewBtn) {
+      axios
+        .get(`/v4/api/reporting/export/logs/?id=${id}`)
+        .then(req => {
+          this.setState({
+            exportData: req.data.results,
+          });
+        });
+    }
   };
 
   handleView = () => {
@@ -105,9 +110,9 @@ class ReportDashboard extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`/fieldsight/application/#/project-dashboard/${pid}`}
+                href={`/fieldsight/application/#/project-dashboard/${pid}/report`}
               >
-                Project Dashboard
+                Report
               </a>
             </li>
             <li className="breadcrumb-item">View Report</li>

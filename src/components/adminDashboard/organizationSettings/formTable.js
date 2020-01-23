@@ -25,7 +25,9 @@ export default class FormTable extends PureComponent {
               <tr>
                 <th>Title</th>
                 <th>Default Submission Status</th>
-                {/* <th>Action</th> */}
+                <th>total submission</th>
+                <th>Last Response</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -35,6 +37,8 @@ export default class FormTable extends PureComponent {
                   <tr key={teams.id}>
                     <td>{teams.title}</td>
                     <td>{teams.default_submission_status}</td>
+                    <td>{teams.total_submissions}</td>
+                    <td>{teams.last_response_on}</td>
                     <td>
                       <a
                         role="button"
@@ -73,8 +77,9 @@ export default class FormTable extends PureComponent {
                 <th>end date</th>
                 <th>schedule type</th>
                 <th>default submission status</th>
-
-                {/* <th>Action</th> */}
+                <th>total submission</th>
+                <th>Last Response</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -88,6 +93,8 @@ export default class FormTable extends PureComponent {
                     <td>{teams.end_date}</td>
                     <td>{teams.scheduled_type}</td>
                     <td>{teams.default_submission_status}</td>
+                    <td>{teams.total_submissions}</td>
+                    <td>{teams.last_response_on}</td>
 
                     <td>
                       <a

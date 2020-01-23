@@ -180,27 +180,6 @@ export default class MyForm extends Component {
     });
   };
 
-  // onchange = e => {
-  //   const { value } = e.target;
-  //   this.setState(
-  //     {
-  //       selectValue: value,
-  //     },
-  //     () => {
-  //       if (value === '0') {
-  //         this.setState(prevstate => ({
-  //           generalPopUp: !prevstate.generalPopUp,
-  //         }));
-  //       }
-  //       if (value === '1') {
-  //         this.setState(prevstate => ({
-  //           schedulePopUp: !prevstate.schedulePopUp,
-  //         }));
-  //       }
-  //     },
-  //   );
-  // };
-
   selectHandler = e => {
     const { value } = e.target;
     this.setState(
@@ -238,15 +217,10 @@ export default class MyForm extends Component {
         general_forms: res.data.general_forms,
         scheduled_forms: res.data.scheduled_forms,
         selected: '',
-        // checkbox: [],
         selectId: '',
         selectOrganization: '',
-        // organization_library_forms: res.data
-        //   .organization_library_forms
-        //   ? res.data.organization_library_forms
-        //   : [{ xf_id: '', title: 'Select Library organization' }],
       },
-      () => successToast('Sucessfully', 'added'),
+      () => successToast('Organization Default Form', 'added'),
     );
   };
 
@@ -322,13 +296,10 @@ export default class MyForm extends Component {
   render() {
     const {
       state: {
-        // selectValue,
         scheduled_forms,
         selectId,
         general_forms,
-        // selected_forms,
         popUpPage,
-        // selected,
         forms,
         openModal,
         generalPopUp,
@@ -341,8 +312,6 @@ export default class MyForm extends Component {
         selectedName,
       },
       props: { id },
-      // changeHandler,
-      // handleClosePopup,
       openDelete,
       handleCancle,
       handleConfirm,
@@ -410,9 +379,7 @@ export default class MyForm extends Component {
               <GeneralFormModal
                 selected={selectId}
                 organization={selectOrganization}
-                // selected={this.state.checkbox}
                 formType={radioForms}
-                // organization={selectOrganization}
                 id={id}
                 handleAllModel={handleAllModel}
                 handleFormType={this.handleFormType}
@@ -424,7 +391,6 @@ export default class MyForm extends Component {
               <ScheduleFormModal
                 selected={selectId}
                 organization={selectOrganization}
-                // selected={this.state.checkbox}
                 formType={radioForms}
                 handleAllModel={handleAllModel}
                 id={id}
@@ -494,7 +460,6 @@ export default class MyForm extends Component {
                       className="form-control"
                       options={organization_library_forms}
                       changeHandler={this.OrganizationHandler}
-                      // label="Organization Library Form"
                       value={selectOrganization}
                     />
                   </div>

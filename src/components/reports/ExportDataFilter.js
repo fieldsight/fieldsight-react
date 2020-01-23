@@ -1,68 +1,10 @@
 import React, { PureComponent } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
 import { Dropdown } from 'react-bootstrap';
 import CustomMultiSelect from './common/CustomMultiSelect';
-// import CustomCheckBox from './CustomCheckbox';
 import CollapseFilterTable from './CollapseFilterTable';
 import { errorToast, successToast } from '../../utils/toastHandler';
-
-/* eslint-disable */
-
-const CustomInput = (value, onclick) => (
-  <div className="custom-group-append">
-    <span className="custom-group-text">
-      <i className="material-icons">calendar_today</i>
-      <button className="example-custom-input" onClick={onClick}>
-        {value}
-      </button>
-      {/* <input
-        // onChange={onChange}
-        placeholder="gfdghj"
-        value={value}
-        // isSecure={isSecure}
-        // id={id}
-        onClick={onClick}
-      /> */}
-    </span>
-  </div>
-);
-
-const Input = ({
-  onChange,
-  placeholder,
-  value,
-  isSecure,
-  id,
-  onClick,
-}) => (
-  <div
-  // style={{ position: 'relative' }}
-  >
-    <i
-      onClick={onClick}
-      className="material-icons"
-      value={value}
-      // style={{
-      //   position: 'absolute',
-      //   top: '0.3rem',
-      //   left: '5px',
-      //   fontSize: '1rem',
-      // }}
-    >
-      calendar_today
-    </i>
-
-    <input
-      onClick={onClick}
-      className="dateInput"
-      value={value}
-      type="text"
-      // style={{ paddingLeft: '33px' }}
-    />
-  </div>
-);
 
 export default class ExportDataFilter extends PureComponent {
   constructor(props) {
@@ -75,8 +17,6 @@ export default class ExportDataFilter extends PureComponent {
       applyButton: false,
       projectRegions: [],
       siteType: [],
-      startedDate: '',
-      endedDate: '',
     };
   }
 
@@ -97,16 +37,13 @@ export default class ExportDataFilter extends PureComponent {
       .all([requestProjectRegions, requestSiteType])
       .then(
         axios.spread((...responses) => {
-          console.log(responses, 'responses');
           this.setState({
             siteType: responses[1].data,
             projectRegions: responses[0].data,
           });
         }),
       )
-      .catch(errors => {
-        // react on errors.
-      });
+      .catch();
   }
 
   changeHandlers = (e, info) => {
@@ -120,13 +57,13 @@ export default class ExportDataFilter extends PureComponent {
         };
       }
       if (!checked) {
-        // console.log(preveState.selected, 'preveState.selected');
         return {
           selected: prevState.selected.filter(
             region => region.id !== info.id,
           ),
         };
       }
+      return null;
     });
   };
 
@@ -149,6 +86,7 @@ export default class ExportDataFilter extends PureComponent {
           ),
         };
       }
+      return null;
     });
   };
 
@@ -164,11 +102,6 @@ export default class ExportDataFilter extends PureComponent {
     }));
   };
 
-  // handleApply = () => {
-  //   this.setState(prevState => ({
-  //     applyButton: !prevState.applyButton,
-  //   }));
-  // };
   toUpper = str => {
     return str
       .toLowerCase()
@@ -218,18 +151,6 @@ export default class ExportDataFilter extends PureComponent {
       });
   };
 
-  onChangeHandler = date => {
-    this.setState({
-      startedDate: date,
-    });
-  };
-
-  onEndChangeHandler = date => {
-    this.setState({
-      endedDate: date,
-    });
-  };
-
   render() {
     const {
       changeHandler,
@@ -271,8 +192,6 @@ export default class ExportDataFilter extends PureComponent {
         params: { id },
       },
     } = this.props;
-
-    const report_type = 'gdgfhj';
 
     return (
       <>
@@ -372,77 +291,8 @@ export default class ExportDataFilter extends PureComponent {
                         </div>
                       </div>
 
-                      {report_type === 'Activity_Type' && (
-                        <div className="col-lg-6 col-md-6">
-                          <div className="form-group icon-between">
-                            <label className="mb-2">
-                              Time period
-                            </label>
-                            <div className="inline-flex ">
-                              <div className="custom-group">
-                                <DatePicker
-                                  placeholderText="Start Date"
-                                  name="startedDate"
-                                  selected={this.state.startedDate}
-                                  onChange={this.onChangeHandler}
-                                  dateFormat="yyyy-MM-dd"
-                                  className="form-control"
-                                />
-                                {/* <div className="custom-group-append">
-                              <span
-                                className="custom-group-text"
-                                style={{
-                                  display: 'inline',
-                                  paddingLeft: '25px',
-                                  flex: '0 0 20%',
-                                }}
-                              >
-                                <i
-                                  className="material-icons"
-                                  style={{
-                                    verticalAlign: 'middle',
-                                  }}
-                                >
-                                  calendar_today
-                                </i>
-                              </span>
-                            </div> */}
-                              </div>
-                              <span className="icon-between">
-                                <i className="material-icons">
-                                  arrow_right_alt
-                                </i>
-                              </span>
-                              <div className="custom-group">
-                                <DatePicker
-                                  placeholderText="End Date"
-                                  name="endedDate"
-                                  selected={this.state.endedDate}
-                                  onChange={this.onEndChangeHandler}
-                                  className="form-control"
-                                  dateFormat="yyyy-MM-dd"
-                                />
-                                {/* <i className="material-icons">
-                                calendar_today
-                              </i>
-                            </DatePicker> */}
-                                {/* <DatePicker
-                              value={this.state.endedDate}
-                              dateFormat="yyyy-MM-dd"
-                              customInput={<Input />}
-                              selected={this.state.endedDate}
-                              onChange={date =>
-                                this.setState({ endedDate: date })
-                              }
-                            /> */}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
                       <div className="col-md-12">
                         <button
-                          // disabled
                           type="button"
                           className="common-button mt-3 is-bg"
                           onClick={this.handleApply}
