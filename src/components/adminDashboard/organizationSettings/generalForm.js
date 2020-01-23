@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import RadioElement from '../../common/RadioElement';
+import Loader from '../../common/Loader';
 
 /* eslint-disable  camelcase */
 export default class GeneralFormModal extends Component {
@@ -8,6 +9,7 @@ export default class GeneralFormModal extends Component {
     super(props);
     this.state = {
       status: '0',
+      saveLoader: '',
     };
   }
 
@@ -37,9 +39,9 @@ export default class GeneralFormModal extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // const selected = this.props.selected.map(function(x) {
-    //   return parseInt(x, 10);
-    // });
+    this.setState({
+      saveLoader: false,
+    });
     const {
       props: {
         selected,
@@ -72,73 +74,79 @@ export default class GeneralFormModal extends Component {
       .then(res => {
         if (res.status === 201) {
           handleAllModel(res);
+          this.setState(State => ({
+            saveLoader: !State.saveLoader,
+          }));
         }
       })
       .catch();
   };
 
   render() {
-    const { status } = this.state;
+    const { status, saveLoader } = this.state;
 
     return (
-      <form className="floating-form" onSubmit={this.handleSubmit}>
-        <div className="form-form">
-          <div className="selected-form">
-            <div className="selected-text">
-              <div className="form-group flexrow checkbox-group">
-                <label>Default submission status</label>
-                <div className="custom-checkbox display-inline">
-                  <RadioElement
-                    label="Approved"
-                    className="approved"
-                    name="status"
-                    value={3}
-                    changeHandler={this.handleRadioChange}
-                    checked={status === '3'}
-                  />
-                  <RadioElement
-                    label="Pending"
-                    className="pending"
-                    name="status"
-                    value={0}
-                    changeHandler={this.handleRadioChange}
-                    checked={status === '0'}
-                  />
-                  <RadioElement
-                    label="Flagged"
-                    className="flagged"
-                    name="status"
-                    value={2}
-                    changeHandler={this.handleRadioChange}
-                    checked={status === '2'}
-                  />
-                  <RadioElement
-                    label="Rejected"
-                    className="rejected"
-                    name="status"
-                    value={1}
-                    changeHandler={this.handleRadioChange}
-                    checked={status === '1'}
-                  />
+      <>
+        {saveLoader === false && <Loader />}
+        <form className="floating-form" onSubmit={this.handleSubmit}>
+          <div className="form-form">
+            <div className="selected-form">
+              <div className="selected-text">
+                <div className="form-group flexrow checkbox-group">
+                  <label>Default submission status</label>
+                  <div className="custom-checkbox display-inline">
+                    <RadioElement
+                      label="Approved"
+                      className="approved"
+                      name="status"
+                      value={3}
+                      changeHandler={this.handleRadioChange}
+                      checked={status === '3'}
+                    />
+                    <RadioElement
+                      label="Pending"
+                      className="pending"
+                      name="status"
+                      value={0}
+                      changeHandler={this.handleRadioChange}
+                      checked={status === '0'}
+                    />
+                    <RadioElement
+                      label="Flagged"
+                      className="flagged"
+                      name="status"
+                      value={2}
+                      changeHandler={this.handleRadioChange}
+                      checked={status === '2'}
+                    />
+                    <RadioElement
+                      label="Rejected"
+                      className="rejected"
+                      name="status"
+                      value={1}
+                      changeHandler={this.handleRadioChange}
+                      checked={status === '1'}
+                    />
+                  </div>
                 </div>
               </div>
+              <button
+                type="button"
+                onClick={this.props.handleFormType}
+                className="fieldsight-btn"
+              >
+                Select Form
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={this.props.handleFormType}
-              className="fieldsight-btn"
-            >
-              Select Form
+          </div>
+
+          <div className="form-group pull-right no-margin">
+            <button type="submit" className="fieldsight-btn">
+              Save
             </button>
           </div>
-        </div>
-
-        <div className="form-group pull-right no-margin">
-          <button type="submit" className="fieldsight-btn">
-            Save
-          </button>
-        </div>
-      </form>
+        </form>
+      </>
     );
   }
 }

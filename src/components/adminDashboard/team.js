@@ -13,7 +13,6 @@ export default class TeamTable extends PureComponent {
         >
           <PerfectScrollbar>
             <ul>
-              {/* <h1>hello</h1> */}
               {teams.length > 0 &&
                 teams.map(each => (
                   <li key={each.id}>

@@ -27,7 +27,6 @@ export default class MyForm extends Component {
       selected: '',
       openModal: false,
       form_id: '',
-      // selectValue: '3',
       generalPopUp: false,
       schedulePopUp: false,
       general_forms: [],
@@ -41,6 +40,7 @@ export default class MyForm extends Component {
       radioForms: '0',
       formTypePopUp: false,
       selectedName: '',
+      loader: false,
     };
   }
 
@@ -81,6 +81,7 @@ export default class MyForm extends Component {
               res.data.organization_library_forms.length > 0
                 ? res.data.organization_library_forms[0].xf_id
                 : '',
+            loader: true,
           };
         });
       })
@@ -310,6 +311,7 @@ export default class MyForm extends Component {
         radioForms,
         formTypePopUp,
         selectedName,
+        loader,
       },
       props: { id },
       openDelete,
@@ -332,6 +334,7 @@ export default class MyForm extends Component {
             selected_forms={scheduled_forms}
             openDelete={openDelete}
             general_forms={general_forms}
+            loader={loader}
           />
         </RightContentCard>
 
@@ -341,7 +344,7 @@ export default class MyForm extends Component {
             toggleModal={this.handleClosePopup}
             showButton
             showText="Create Form"
-            url="/fieldsight/application/#/create-organization"
+            url="/forms/create"
           >
             <form
               className="floating-form"

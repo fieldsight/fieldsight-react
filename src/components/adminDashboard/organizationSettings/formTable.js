@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import Table from 'react-bootstrap/Table';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { DotLoader } from '../../myForm/Loader';
 
 /* eslint-disable camelcase */
 
@@ -11,12 +12,13 @@ export default class FormTable extends PureComponent {
       handleConfirm,
       openDelete,
       general_forms,
+      loader,
     } = this.props;
 
     return (
       <>
         <label style={{ fontWeight: 'bold' }}>General Forms</label>
-        {general_forms.length > 0 ? (
+        {loader ? (
           <Table
             responsive="xl"
             className="table  table-bordered  dataTable "
@@ -62,10 +64,11 @@ export default class FormTable extends PureComponent {
             </tbody>
           </Table>
         ) : (
-          <p>No general forms assigned yet.</p>
+          // <p>No general forms assigned yet.</p>
+          <DotLoader />
         )}
         <label style={{ fontWeight: 'bold' }}>Scheduled Forms</label>
-        {selected_forms.length > 0 ? (
+        {loader ? (
           <Table
             responsive="xl"
             className="table  table-bordered  dataTable "
@@ -119,7 +122,8 @@ export default class FormTable extends PureComponent {
             </tbody>
           </Table>
         ) : (
-          <p>No scheduled forms assigned yet.</p>
+          // <p>No scheduled forms assigned yet.</p>
+          <DotLoader />
         )}
       </>
     );
