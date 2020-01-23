@@ -19,6 +19,7 @@ import Metrics from './metrics';
 import DataFilter from './dataFilter';
 import SelectedColumn from './selectedColumn';
 import DeleteModal from '../../common/DeleteModal';
+import { BlockContentLoader } from '../../common/Loader';
 
 /* eslint-disable */
 
@@ -334,37 +335,42 @@ class AddNewReport extends Component {
           }
         }
 
-        this.setState(state => ({
-          data: {
-            ...state.data,
-            reportName: report.title,
-            desc: report.description,
-            selectedReportType: report.type,
-            selectedMetrics: report.attributes,
+        this.setState(
+          state => ({
+            data: {
+              ...state.data,
+              reportName: report.title,
+              desc: report.description,
+              selectedReportType: report.type,
+              selectedMetrics: report.attributes,
+            },
+            formInfo: {
+              ...state.formInfo,
+              selectedFormType,
+              selectedForm,
+              selectedIndividualForm,
+              selectedQuestions,
+              selectedFormValue,
+            },
+            siteInfo: {
+              ...state.siteInfo,
+              selectedMetas,
+              // selectedValue,
+            },
+            userList,
+            submissions,
+            collapseClass: true,
+            applyFilter: report.attributes.length > 0 ? true : false,
+            filter: {
+              ...state.filter,
+              filterBy,
+            },
+            showActions,
+          }),
+          () => {
+            this.setArrays();
           },
-          formInfo: {
-            ...state.formInfo,
-            selectedFormType,
-            selectedForm,
-            selectedIndividualForm,
-            selectedQuestions,
-            selectedFormValue,
-          },
-          siteInfo: {
-            ...state.siteInfo,
-            selectedMetas,
-            // selectedValue,
-          },
-          userList,
-          submissions,
-          collapseClass: true,
-          applyFilter: report.attributes.length > 0 ? true : false,
-          filter: {
-            ...state.filter,
-            filterBy,
-          },
-          showActions,
-        }));
+        );
       }
     }
   }
@@ -1242,7 +1248,7 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('class', this.state.siteInfo);
+    // console.log('class', this.state.metricArr);
     const isEdit = reportId ? true : false;
     const actions = [
       // {
