@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import MyReports from './MyReports';
 import ShareWithMe from './SharedWithMe';
 import Templates from './templates';
-/* eslint-disable */
 
 class ReportList extends Component {
   constructor(props) {
@@ -27,14 +26,14 @@ class ReportList extends Component {
             <ul className="common-tab is-bg">
               <li
                 className={activeTab === 'myReports' ? 'current' : ''}
+                // tabIndex="0"
+                role="presentation"
                 onClick={() => {
                   this.toggleTab('myReports');
                 }}
                 onKeyDown={() => {
                   this.toggleTab('myReports');
                 }}
-                tabIndex="0"
-                role="button"
               >
                 My Reports
               </li>
@@ -42,8 +41,8 @@ class ReportList extends Component {
                 className={
                   activeTab === 'sharedWithMe' ? 'current' : ''
                 }
-                tabIndex="0"
-                role="button"
+                // tabIndex="0"
+                role="presentation"
                 onKeyDown={() => {
                   this.toggleTab('sharedWithMe');
                 }}
@@ -55,8 +54,8 @@ class ReportList extends Component {
               </li>
               <li
                 className={activeTab === 'templates' ? 'current' : ''}
-                tabIndex="0"
-                role="button"
+                // tabIndex="0"
+                role="presentation"
                 onKeyDown={() => {
                   this.toggleTab('templates');
                 }}
