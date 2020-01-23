@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { Dropdown } from 'react-bootstrap';
 import { getReportData } from '../../../actions/reportActions';
 import RightContentCard from '../../common/RightContentCard';
 import Modal from '../../common/Modal';
 import ExportTable from './exportTable';
-import MetricsTable from './metricTable';
 import { DotLoader } from '../../myForm/Loader';
 import CollapseFilterTable from '../CollapseFilterTable';
 
@@ -98,21 +95,24 @@ class ReportDashboard extends Component {
         reportReducer: {
           reportData: { attributes, title, description },
         },
-        // location: {
-        //   state: {
-        //     title,
-        //     attributes,
-        //     description,
-        //     projectid,
-        //     reportId,
-        //   },
-        // },
       },
       state: { exportData, viewBtn, loader },
     } = this;
 
     return (
       <>
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <a
+                href={`/fieldsight/application/#/project-dashboard/${pid}`}
+              >
+                Project Dashboard
+              </a>
+            </li>
+            <li className="breadcrumb-item">View Report</li>
+          </ol>
+        </nav>
         <RightContentCard
           title={title}
           addButton

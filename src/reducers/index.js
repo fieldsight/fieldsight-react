@@ -14,6 +14,7 @@ import siteViewDataReducer from './siteViewDataReducer';
 import reportReducer from './reportReducer';
 import superAdminDashboardReducer from './superAdminDashboardReducer';
 import excelExportReducer from './excelExportReducer';
+import translationReducer from './templateReducer';
 
 export default combineReducers({
   submissionDetail: submissionDetailReducer,
@@ -31,4 +32,5 @@ export default combineReducers({
   reportReducer,
   superAdminDashboard: superAdminDashboardReducer,
   excelExport: excelExportReducer,
+  translationReducer,
 });

@@ -30,9 +30,7 @@ class VersionTable extends Component {
           loader: true,
         });
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch();
   }
 
   render() {

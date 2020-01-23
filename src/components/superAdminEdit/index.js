@@ -19,7 +19,7 @@ L.Icon.Default.mergeOptions({
   iconUrl,
   shadowUrl,
 });
-/* eslint-disable */
+
 /* eslint-disable  camelcase */
 
 export default class SuperAdminFormEdit extends Component {
@@ -57,8 +57,6 @@ export default class SuperAdminFormEdit extends Component {
       .all([editUrl, contryListUrl])
       .then(
         axios.spread((...responses) => {
-          const responseedit = responses[0];
-          const responseContryList = responses[1];
           const position =
             responses[0].data.location &&
             responses[0].data.location.split(' ');
@@ -75,10 +73,9 @@ export default class SuperAdminFormEdit extends Component {
             website: responses[0].data.website,
             address: responses[0].data.address,
             public_desc: responses[0].data.public_desc,
-            is_active: responses[0].data.is_active,
             position: {
-              latitude: latitude,
-              longitude: longitude,
+              latitude,
+              longitude,
             },
             zoom: 13,
             Selectedtypes: responses[0].data.country,
@@ -86,9 +83,7 @@ export default class SuperAdminFormEdit extends Component {
           });
         }),
       )
-      .catch(errors => {
-        // react on errors.
-      });
+      .catch();
   }
 
   onChangeHandler = (e, position) => {
@@ -125,27 +120,41 @@ export default class SuperAdminFormEdit extends Component {
 
   onSubmitHandler = e => {
     e.preventDefault();
-    const { id } = this.props;
+    const {
+      props: { id },
+      state: {
+        identifier,
+        name,
+        phone,
+        fax,
+        email,
+        website,
+        Selectedtypes,
+        address,
+        public_desc,
+        position: { latitude, longitude },
+      },
+    } = this;
 
     const data = {
-      identifier: this.state.identifier,
-      name: this.state.name,
-      phone: this.state.phone,
-      fax: this.state.fax,
-      email: this.state.email,
-      website: this.state.website,
-      country: this.state.Selectedtypes,
-      address: this.state.address,
-      public_desc: this.state.public_desc,
-      latitude: this.state.position.latitude,
-      longitude: this.state.position.longitude,
+      identifier,
+      name,
+      phone,
+      fax,
+      email,
+      website,
+      country: Selectedtypes,
+      address,
+      public_desc,
+      latitude,
+      longitude,
     };
 
     axios
       .put(`/fv3/api/super-organization-lists/${id}/`, data)
       .then(req => {
         if (req.status === 200) {
-          successToast('Form', 'updated');
+          successToast('Organization', 'updated');
         }
       })
       .catch(err => {
@@ -154,14 +163,6 @@ export default class SuperAdminFormEdit extends Component {
           return errorToast(`${value}`);
         });
       });
-  };
-
-  changeHandler = e => {
-    const { checked } = e.target;
-
-    this.setState({
-      is_active: checked,
-    });
   };
 
   mapClickHandler = e => {
@@ -185,9 +186,7 @@ export default class SuperAdminFormEdit extends Component {
     const {
       onChangeHandler,
       onSubmitHandler,
-      changeHandler,
       mapClickHandler,
-
       onSelectChangeHandler,
       state: {
         identifier,
@@ -199,10 +198,10 @@ export default class SuperAdminFormEdit extends Component {
         country,
         address,
         public_desc,
-
-        is_active,
         position: { latitude, longitude },
         Selectedtypes,
+        errorFlag,
+        zoom,
       },
     } = this;
 
@@ -232,7 +231,7 @@ export default class SuperAdminFormEdit extends Component {
                   value={identifier}
                   changeHandler={onChangeHandler}
                 />
-                {this.state.errorFlag && (
+                {errorFlag && (
                   <span style={{ color: 'red' }}>
                     identifier should be more then 5 character
                   </span>
@@ -350,7 +349,7 @@ export default class SuperAdminFormEdit extends Component {
                     <Map
                       style={{ height: '205px', marginTop: '1rem' }}
                       center={[latitude, longitude]}
-                      zoom={this.state.zoom}
+                      zoom={zoom}
                       onClick={mapClickHandler}
                     >
                       <TileLayer

@@ -12,8 +12,8 @@ import LibraryTable from './libraryTable';
 
 import DeleteModal from '../../common/DeleteModal';
 
-/* eslint-disable  */
 /* eslint-disable  react/no-unused-state */
+/* eslint-disable camelcase */
 export default class Library extends Component {
   constructor(props) {
     super(props);
