@@ -1,6 +1,7 @@
 import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
 
+import Loader from '../common/Loader';
 import MapComponent from './MapComponent';
 import MapLeftTools from './MapLeftTools';
 import ModalSettings from './ModalSettings';
@@ -21,7 +22,11 @@ const INITIAL_STATE = {
   modalSetting: false,
   checkedRegionItems: [],
   checkedSiteItems: [],
+  checkedProgressItems: [],
+  checkedStatusItem: [],
+  checkedProjectItems: [],
   isfiltered: false,
+  isLoading: true,
 };
 class MapFilter extends Component {
   constructor(props) {
@@ -42,7 +47,7 @@ class MapFilter extends Component {
     this.props.getPrimaryMarkerGeojson();
     this.props.getProjectsList();
     this.props.getProjectsRegionTypes();
-    console.log(this.props, 'willmount');
+    // console.log(this.props, 'willmount');
   }
 
   componentDidMount() {
@@ -50,8 +55,59 @@ class MapFilter extends Component {
       'resize',
       this.updateDimensions.bind(this),
     );
+  }
 
-    console.log(this.props, 'did mount');
+  toggleLoader = () => {
+    this.setState({ isLoading: false });
+  };
+
+  toggleZoomforFilter = () => {
+    this.mapRef.current.leafletElement.setZoom(7);
+  };
+
+  insertProjectNameInState = () => {
+    const {
+      mapFilterReducer: { projectsList },
+    } = this.props;
+    const { checkedProjectItems } = this.state;
+    if (projectsList) {
+      if (projectsList.length >= 1) {
+        projectsList.map((data, key) => {
+          return this.setState({
+            checkedProjectItems: checkedProjectItems.concat(
+              data.name,
+            ),
+          });
+        });
+      }
+    }
+    // projectList &&
+    //   projectList.map(data => {
+    //     console.log(data, 'data');
+    //     // this.setState({
+    //     //   checkedProjectItems: checkedProjectItems.push(data.project),
+    //     // });
+    //   });
+  };
+
+  componentDidUpdate(prevProps) {
+    const {
+      mapFilterReducer: { clonePrimaryGeojson, projectsList },
+    } = this.props;
+
+    if (
+      prevProps.mapFilterReducer.clonePrimaryGeojson !==
+      clonePrimaryGeojson
+    ) {
+      this.toggleLoader();
+    }
+    // console.log(clonePrimaryGeojson, 'clo');
+    if (clonePrimaryGeojson.length === 0) {
+      this.toggleZoomforFilter();
+    }
+    if (prevProps.mapFilterReducer.projectsList !== projectsList) {
+      this.insertProjectNameInState();
+    }
   }
 
   componentWillUnmount() {
@@ -180,82 +236,85 @@ class MapFilter extends Component {
     }
   };
 
+  handleStatusChange = e => {
+    const {
+      target: { value, checked },
+    } = e;
+    this.setState({ checkedStatusItem: [parseInt(value, 10)] });
+  };
+
+  handleProjectChange = e => {
+    // const {
+    //   target: { value, checked },
+    // } = e;
+    // this.setState({ checkedProjectItems: [value] });
+    const item = e.target.name;
+    const isProjectChecked = e.target.checked;
+    const { checkedProjectItems } = this.state;
+    if (isProjectChecked === true) {
+      this.setState({ checkedProjectItems: [item] });
+    } else {
+      const filteredData = checkedProjectItems.filter(
+        data => data !== item,
+      );
+      this.setState({ checkedProjectItems: filteredData });
+    }
+  };
+
+  // handleProgressChange = e => {
+  //   const {
+  //     state: { checkedProgressItems },
+  //   } = this;
+  //   const {
+  //     target: { name, checked },
+  //   } = e;
+  //   console.log(name, 'name');
+  //   console.log(checked, 'checked');
+  //   this.setState(preState => {
+  //     if (checked) {
+  //       return {
+  //         checkedProgressItems: [
+  //           ...preState.checkedProgressItems,
+  //           name,
+  //         ],
+  //       };
+  //     }
+  //     if (!checked) {
+  //       const newArr = checkedProgressItems.filter(
+  //         daily => daily[name] !== name,
+  //       );
+  //       return { checkedProgressItems: newArr };
+  //     }
+  //     return null;
+  //   });
+  // };
+  handleProgressChange = e => {
+    const item = e.target.name;
+    const isProgressChecked = e.target.checked;
+    const { checkedProgressItems } = this.state;
+    if (isProgressChecked === true) {
+      const joined = checkedProgressItems.concat(item);
+      this.setState({ checkedProgressItems: joined });
+    } else {
+      const filteredData = checkedProgressItems.filter(
+        data => data !== item,
+      );
+      this.setState({ checkedProgressItems: filteredData });
+    }
+  };
+
   applyFilter = () => {
-    // console.log('applyfilter');
-    // console.log(
-    //   this.props.mapFilterReducer.primaryGeojson,
-    //   'primaryGeojson',
-    // );
     this.props.getFilteredPrimaryGeojson({
       filterByType: {
-        region: this.state.checkedRegionItems,
+        project: this.state.checkedProjectItems,
+        progress: this.state.checkedProgressItems,
+        status: this.state.checkedStatusItem,
         site_type: this.state.checkedSiteItems,
+        region: this.state.checkedRegionItems,
       },
     });
-    // const {
-    //   props: {
-    //     mapFilterReducer: { primaryGeojson },
-    //   },
-    //   state: {
-    //     checkedRegionItems,
-    //     checkedSiteItems,
-    //     clonePrimaryGeojson,
-    //   },
-    // } = this;
-
-    // console.log(checkedRegionItems.length, 'length');
-    // console.log(clonePrimaryGeojson, 'cloneGeojson');
-    // if (checkedRegionItems.length !== 0) {
-    //   const filtered = primaryGeojson[0].features.filter(data =>
-    //     checkedRegionItems.includes(data.region),
-    //   );
-    //   this.setState({ isfiltered: true });
-    //   // const { clonePrimaryGeojson } = this.state;
-    //   console.log('if');
-    //   // clonePrimaryGeojson[0].features = filtered;
-    //   this.setState({
-    //     clonePrimaryGeojson: {
-    //       0: {
-    //         ...clonePrimaryGeojson[0], // merge with the original `state.items`
-    //         features: filtered,
-    //       },
-    //     },
-    //   });
-    // } else {
-    //   // console.log('else');
-    //   // console.log(this.props.mapFilterReducer);
-    //   this.setState({
-    //     clonePrimaryGeojson: primaryGeojson,
-    //     isfiltered: false,
-    //   });
-    // }
-    // if (checkedSiteItems.length !== 0) {
-    //   const filtered = primaryGeojson[0].features.filter(data =>
-    //     checkedSiteItems.includes(data.site_type),
-    //   );
-    //   this.setState({ isfiltered: true });
-    //   // const { clonePrimaryGeojson } = this.state;
-    //   console.log('if');
-    //   // clonePrimaryGeojson[0].features = filtered;
-    //   this.setState({
-    //     clonePrimaryGeojson: {
-    //       0: {
-    //         ...clonePrimaryGeojson[0], // merge with the original `state.items`
-    //         features: filtered,
-    //       },
-    //     },
-    //   });
-    // } else {
-    //   // console.log('else');
-    //   // console.log(this.props.mapFilterReducer);
-    //   this.setState({
-    //     clonePrimaryGeojson: primaryGeojson,
-    //     isfiltered: false,
-    //   });
-    // }
-    // this.setState((prevState){
-
-    // })
+    this.toggleZoomforFilter();
+    // const { mapFilterReducer: clonePrimaryGeojson } = this.props;
   };
 
   render() {
@@ -272,6 +331,7 @@ class MapFilter extends Component {
         // },
       },
       state: {
+        isLoading,
         height,
         zoom,
         searchDropdown,
@@ -281,6 +341,7 @@ class MapFilter extends Component {
     } = this;
     return (
       <div className="card">
+        {isLoading && <Loader loaded={isLoading} />}
         <div className="card-body map-wrapper">
           <div id="map" style={{ height }} className="map">
             <MapComponent
@@ -325,10 +386,10 @@ class MapFilter extends Component {
                       </span>
                       <ul>
                         <li>
-                          <a>Search by Location</a>
+                          <a>Search by Name</a>
                         </li>
                         <li>
-                          <a>search by Address</a>
+                          <a>Search by Address</a>
                         </li>
                       </ul>
                     </span>
@@ -357,6 +418,10 @@ class MapFilter extends Component {
                 applyFilter={this.applyFilter}
                 handleRegionChange={this.handleRegionChange}
                 handleSiteChange={this.handleSiteChange}
+                handleProgressChange={this.handleProgressChange}
+                handleCheckbox={this.handleCheckbox}
+                handleStatusChange={this.handleStatusChange}
+                handleProjectChange={this.handleProjectChange}
               />
             </div>
             {/* </Scrollbars> */}

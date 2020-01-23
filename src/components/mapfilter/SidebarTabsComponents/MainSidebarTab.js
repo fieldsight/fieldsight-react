@@ -29,6 +29,10 @@ class MainSidebarTab extends Component {
         applyFilter,
         handleRegionChange,
         handleSiteChange,
+        handleProgressChange,
+        handleCheckbox,
+        handleStatusChange,
+        handleProjectChange,
       },
       // match: {
       //   params: { id: siteId },
@@ -120,10 +124,14 @@ class MainSidebarTab extends Component {
             activeTab={activeTab}
             projectsList={projectsList}
             projectsRegionTypes={projectsRegionTypes}
+            handleProgressChange={handleProgressChange}
+            handleCheckbox={handleCheckbox}
+            handleStatusChange={handleStatusChange}
+            handleProjectChange={handleProjectChange}
           />
-          <MetricsTab />
+          <MetricsTab activeTab={activeTab} />
           <LayersTab
-            handleRegionChange={handleRegionChange}
+            // handleRegionChange={handleRegionChange}
             activeTab={activeTab}
             activeLayers={activeLayers}
             changeLayersTab={this.changeLayersTab}
