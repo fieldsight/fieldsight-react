@@ -335,7 +335,7 @@ class Templates extends Component {
                           onKeyDown={() => {
                             this.generalhandle('general');
                           }}
-                          onClick={e => {
+                          onClick={() => {
                             this.generalhandle('general');
                           }}
                         >
