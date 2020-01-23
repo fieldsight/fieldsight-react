@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
-// import FormDataFilter from './FormDataFilter';
+import {
+  getReportList,
+  getFormType,
+} from '../../actions/templateAction';
 
 /* eslint-disable react/jsx-indent */
 
-export default class Templates extends Component {
+class Templates extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,148 +18,117 @@ export default class Templates extends Component {
       scheduled: false,
       survey: false,
       staged: false,
-      generalData: [],
-      scheduledData: [],
-      surveyData: [],
-      stagedData: [],
       id: '',
-      customReports: [],
-      standardReports: [],
-      // formButton: false,
     };
   }
 
   componentDidMount() {
     const { id } = this.props;
+
     this.setState({
       id,
     });
-    axios
-      .get(`/v4/api/reporting/reports-list/${id}/?type=custom`)
-      .then(res => {
-        this.setState({
-          customReports: res.data.custom_reports,
-          standardReports: res.data.standard_reports,
-        });
-      });
+
+    this.props.getReportList(id);
   }
 
-  reportHandeler = data => {
-    const { id } = this.state;
-    axios
-      .get(
-        `/v4/api/reporting/project-form-data/${id}/?form_type=${data}`,
-      )
-      .then(res => {
-        if (data === 'general') {
-          this.setState({
-            generalData: res.data,
-          });
-        }
-        if (data === 'scheduled') {
-          this.setState({
-            scheduledData: res.data,
-          });
-        }
-        if (data === 'survey') {
-          this.setState({
-            surveyData: res.data,
-          });
-        }
-        if (data === 'stage') {
-          this.setState({
-            stagedData: res.data,
-          });
-        }
-      })
-      .catch();
+  generalhandle = result => {
+    const {
+      translationReducer: { generalData },
+    } = this.props;
+
+    const { general, id } = this.state;
+    if (
+      result === 'general' &&
+      !general &&
+      generalData.length === 0
+    ) {
+      this.props.getFormType(id, result);
+    }
+    this.setState(prevState => ({
+      general: !prevState.general,
+      scheduled: false,
+      survey: false,
+      staged: false,
+    }));
   };
 
-  toggleTab = result => {
-    const { general, scheduled, survey, staged } = this.state;
-    if (result === 'general') {
-      this.setState(
-        preveState => ({
-          general: !preveState.general,
-          scheduled: preveState.scheduled,
-          survey: preveState.survey,
-          staged: preveState.staged,
-        }),
-        () => {
-          if (general) {
-            this.reportHandeler('general');
-          }
-        },
-      );
+  scheduledhandle = result => {
+    const {
+      translationReducer: { scheduledData },
+    } = this.props;
+
+    const { scheduled, id } = this.state;
+    if (
+      result === 'scheduled' &&
+      !scheduled &&
+      scheduledData.length === 0
+    ) {
+      this.props.getFormType(id, result);
     }
-    if (result === 'scheduled') {
-      this.setState(
-        preveState => ({
-          general: preveState.general,
-          scheduled: !preveState.scheduled,
-          survey: preveState.survey,
-          staged: preveState.staged,
-        }),
-        () => {
-          if (scheduled) {
-            this.reportHandeler('scheduled');
-          }
-        },
-      );
-    }
-    if (result === 'survey') {
-      this.setState(
-        preveState => ({
-          general: preveState.general,
-          scheduled: preveState.scheduled,
-          survey: !preveState.survey,
-          staged: preveState.staged,
-        }),
-        () => {
-          if (survey) {
-            this.reportHandeler('survey');
-          }
-        },
-      );
-    }
-    if (result === 'stage') {
-      this.setState(
-        preveState => ({
-          general: preveState.general,
-          scheduled: preveState.scheduled,
-          survey: preveState.survey,
-          staged: !preveState.staged,
-        }),
-        () => {
-          if (staged) {
-            this.reportHandeler('stage');
-          }
-        },
-      );
-    }
+    this.setState(prevState => ({
+      general: false,
+      scheduled: !prevState.scheduled,
+      survey: false,
+      staged: false,
+    }));
   };
 
-  // handleForm = () => {
-  //   this.setState(preState => ({
-  //     formButton: !preState.formButton,
-  //   }));
-  // };
+  surveyhandle = result => {
+    const {
+      translationReducer: { surveyData },
+    } = this.props;
+
+    const { survey, id } = this.state;
+    if (result === 'survey' && !survey && surveyData.length === 0) {
+      this.props.getFormType(id, result);
+    }
+    this.setState(prevState => ({
+      general: false,
+      scheduled: false,
+      survey: !prevState.survey,
+      staged: false,
+    }));
+  };
+
+  stagedhandle = result => {
+    const {
+      translationReducer: { stagedData },
+    } = this.props;
+
+    const { staged, id } = this.state;
+    if (result === 'stage' && !staged && stagedData.length === 0) {
+      this.props.getFormType(id, result);
+    }
+    this.setState(prevState => ({
+      general: false,
+      scheduled: false,
+      survey: false,
+      staged: !prevState.staged,
+    }));
+  };
 
   render() {
     const {
-      general,
-      scheduled,
-      survey,
-      staged,
-      generalData,
-      scheduledData,
-      surveyData,
-      stagedData,
-      customReports,
-      standardReports,
-      // formButton,
-      id,
-    } = this.state;
+      state: {
+        general,
+        scheduled,
+        survey,
+        staged,
+
+        id,
+      },
+      props: {
+        translationReducer: {
+          generalData,
+          scheduledData,
+          surveyData,
+          stagedData,
+          customReports,
+          standardReports,
+        },
+      },
+    } = this;
 
     const DataCrude = [
       {
@@ -212,63 +184,41 @@ export default class Templates extends Component {
       );
     };
 
-    // const { id } = this.props;
-
     return (
       <>
-        {
-          <div className="card-body">
-            <div className="standard-tempalte">
-              <h2 className="my-3">Standard</h2>
-              {standardReports.length > 0 &&
-                standardReports.map(standardReport => (
-                  <div
-                    className="report-list"
-                    key={standardReport.title}
-                  >
-                    <div className="row">
-                      <div className="col-md-12">
-                        <div className="report-content">
-                          {standardReport.title ===
-                            'Project Summary' && (
-                            <a
-                              href={`/fieldsight/project/report/summary/${id}/`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <h4>{standardReport.title}</h4>
-                              <p>{standardReport.description}</p>
-                            </a>
-                          )}
+        <div className="card-body">
+          <div className="standard-tempalte">
+            <h2 className="my-3">Standard</h2>
+            {standardReports !== undefined &&
+              standardReports.length > 0 &&
+              standardReports.map(standardReport => (
+                <div
+                  className="report-list"
+                  key={standardReport.title}
+                >
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="report-content">
+                        {standardReport.title ===
+                          'Project Summary' && (
+                          <a
+                            href={`/fieldsight/project/report/summary/${id}/`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <h4>{standardReport.title}</h4>
+                            <p>{standardReport.description}</p>
+                          </a>
+                        )}
 
-                          {(standardReport.title ===
-                            'Site Information' ||
-                            standardReport.title ===
-                              'Progress Report') && (
-                            <>
-                              <Link
-                                to={{
-                                  pathname: `/export-data/${id}`,
-
-                                  state: {
-                                    fromDashboard:
-                                      standardReport.title,
-                                  },
-                                }}
-                              >
-                                <h4>{standardReport.title}</h4>
-                                <p>{standardReport.description}</p>
-                              </Link>
-                            </>
-                          )}
-
-                          {(standardReport.title ===
-                            'Activity Report' ||
-                            standardReport.title ===
-                              'Project Logs') && (
+                        {(standardReport.title ===
+                          'Site Information' ||
+                          standardReport.title ===
+                            'Progress Report') && (
+                          <>
                             <Link
                               to={{
-                                pathname: `/user-export/${id}`,
+                                pathname: `/export-data/${id}`,
 
                                 state: {
                                   fromDashboard: standardReport.title,
@@ -278,337 +228,47 @@ export default class Templates extends Component {
                               <h4>{standardReport.title}</h4>
                               <p>{standardReport.description}</p>
                             </Link>
-                          )}
+                          </>
+                        )}
 
-                          {standardReport.title ===
-                            'User Activity Report' && (
-                            <Link
-                              to={{
-                                pathname: `/activity-export/${id}`,
+                        {(standardReport.title ===
+                          'Activity Report' ||
+                          standardReport.title ===
+                            'Project Logs') && (
+                          <Link
+                            to={{
+                              pathname: `/user-export/${id}`,
 
-                                state: {
-                                  fromDashboard: standardReport.title,
-                                },
-                              }}
-                            >
-                              <h4>{standardReport.title}</h4>
-                              <p>{standardReport.description}</p>
-                            </Link>
-                          )}
-                        </div>
+                              state: {
+                                fromDashboard: standardReport.title,
+                              },
+                            }}
+                          >
+                            <h4>{standardReport.title}</h4>
+                            <p>{standardReport.description}</p>
+                          </Link>
+                        )}
+
+                        {standardReport.title ===
+                          'User Activity Report' && (
+                          <Link
+                            to={{
+                              pathname: `/activity-export/${id}`,
+
+                              state: {
+                                fromDashboard: standardReport.title,
+                              },
+                            }}
+                          >
+                            <h4>{standardReport.title}</h4>
+                            <p>{standardReport.description}</p>
+                          </Link>
+                        )}
                       </div>
-                    </div>
-                    {standardReport.title === 'Project Summary' ? (
-                      <div className="dropdown report-option">
-                        <Dropdown drop="left">
-                          <Dropdown.Toggle
-                            variant=""
-                            id="dropdown-Data"
-                            className="dropdown-toggle common-button no-border is-icon"
-                          >
-                            <i className="material-icons">
-                              more_vert
-                            </i>
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                            {projectSummery.map(item => (
-                              <Dropdown.Item
-                                href={item.link}
-                                key={item.id}
-                                target="_blank"
-                              >
-                                {item.title}
-                              </Dropdown.Item>
-                            ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                    ) : (
-                      <div className="dropdown report-option">
-                        <Dropdown drop="left">
-                          <Dropdown.Toggle
-                            variant=""
-                            id="dropdown-Data"
-                            className="dropdown-toggle common-button no-border is-icon"
-                          >
-                            <i className="material-icons">
-                              more_vert
-                            </i>
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                            {siteInformation.map(item => (
-                              <Dropdown.Item
-                                href={item.link}
-                                key={item.id}
-                                target="_blank"
-                              >
-                                {item.title}
-                              </Dropdown.Item>
-                            ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-              <div className="report-list">
-                <div className="row">
-                  <div className="col-md-8">
-                    <div className="report-content">
-                      {/* <a
-                        tabIndex="0"
-                        role="button"
-                        onKeyDown={this.handleForm}
-                        onClick={this.handleForm}
-                      > */}
-                      Form Data
-                      {/* </a> */}
-                      <p>
-                        Export of forms data and site information an
-                        Excel File, generated with filters in region,
-                        types and time range.
-                      </p>
-                      <ul className="form-data">
-                        <li>
-                          <a
-                            tabIndex="0"
-                            role="button"
-                            onKeyDown={() => {
-                              this.toggleTab('general');
-                            }}
-                            onClick={() => {
-                              this.toggleTab('general');
-                            }}
-                          >
-                            general forms
-                          </a>
-
-                          <div
-                            className="form-data-list"
-                            style={
-                              general === true
-                                ? { display: 'block' }
-                                : { display: 'none' }
-                            }
-                          >
-                            {generalData.length > 0 ? (
-                              generalData.map(genInfo => (
-                                <p key={genInfo.id}>
-                                  <Link
-                                    to={{
-                                      pathname: `/form-data/${id}/${genInfo.id}`,
-
-                                      state: {
-                                        fromDashboard: genInfo.id,
-                                      },
-                                    }}
-                                  >
-                                    {genInfo.title}
-                                  </Link>
-                                </p>
-                              ))
-                            ) : (
-                              <p>No Data</p>
-                            )}
-                          </div>
-                        </li>
-                        <li>
-                          <a
-                            tabIndex="0"
-                            role="button"
-                            onKeyDown={() => {
-                              this.toggleTab('scheduled');
-                            }}
-                            onClick={() => {
-                              this.toggleTab('scheduled');
-                            }}
-                          >
-                            scheduled forms
-                          </a>
-
-                          <div
-                            className="form-data-list"
-                            style={
-                              scheduled === true
-                                ? { display: 'block' }
-                                : { display: 'none' }
-                            }
-                          >
-                            {scheduledData.length > 0 ? (
-                              scheduledData.map(scheinfo => (
-                                // <p key={scheinfo.id}>
-                                //   {scheinfo.title}
-                                // </p>
-                                <p key={scheinfo.id}>
-                                  <Link
-                                    to={{
-                                      pathname: `/form-data/${id}/${scheinfo.id}`,
-
-                                      state: {
-                                        fromDashboard: scheinfo.id,
-                                      },
-                                    }}
-                                  >
-                                    {scheinfo.title}
-                                  </Link>
-                                </p>
-                              ))
-                            ) : (
-                              <p>No Data</p>
-                            )}
-                          </div>
-                        </li>
-                        <li>
-                          <a
-                            tabIndex="0"
-                            role="button"
-                            onKeyDown={() => {
-                              this.toggleTab('survey');
-                            }}
-                            onClick={() => {
-                              this.toggleTab('survey');
-                            }}
-                          >
-                            survey forms
-                          </a>
-                          <div
-                            className="form-data-list"
-                            style={
-                              survey === true
-                                ? { display: 'block' }
-                                : { display: 'none' }
-                            }
-                          >
-                            {surveyData.length > 0 ? (
-                              surveyData.map(surData => (
-                                <p key={surData.id}>
-                                  <Link
-                                    to={{
-                                      pathname: `/form-data/${id}/${surData.id}`,
-
-                                      state: {
-                                        fromDashboard: surData.id,
-                                      },
-                                    }}
-                                  >
-                                    {surData.title}
-                                  </Link>
-                                </p>
-                              ))
-                            ) : (
-                              <p>No Data</p>
-                            )}
-                          </div>
-                        </li>
-                        <li>
-                          <a
-                            tabIndex="0"
-                            role="button"
-                            onKeyDown={() => {
-                              this.toggleTab('stage');
-                            }}
-                            onClick={() => {
-                              this.toggleTab('stage');
-                            }}
-                          >
-                            staged forms
-                          </a>
-                          <div
-                            className="form-data-list"
-                            style={
-                              staged === true
-                                ? { display: 'block' }
-                                : { display: 'none' }
-                            }
-                          >
-                            {stagedData.length > 0 ? (
-                              stagedData.map(satData => (
-                                <ul key={satData.id}>
-                                  <li>{satData.name}</li>
-                                  <li>
-                                    {satData.sub_stages.map(sub => (
-                                      <ul>
-                                        <li key={sub.id}>
-                                          <Link
-                                            to={{
-                                              pathname: `/form-data/${id}/${sub.id}`,
-
-                                              state: {
-                                                fromDashboard: sub.id,
-                                              },
-                                            }}
-                                          >
-                                            {sub.form_name}
-                                          </Link>
-                                        </li>
-                                      </ul>
-                                    ))}
-                                  </li>
-                                </ul>
-                              ))
-                            ) : (
-                              <p>No Data</p>
-                            )}
-                          </div>
-                        </li>
-                      </ul>
                     </div>
                   </div>
-                </div>
-                <div className="dropdown report-option">
-                  <Dropdown drop="left">
-                    <Dropdown.Toggle
-                      variant=""
-                      id="dropdown-Data"
-                      className="dropdown-toggle common-button no-border is-icon"
-                    >
-                      <i className="material-icons">more_vert</i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                      {DataCrude.map(item => (
-                        <Dropdown.Item
-                          href={item.link}
-                          key={item.id}
-                          target="_blank"
-                        >
-                          {item.title}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-            </div>
-
-            <div className="custom-template">
-              <h2 className="my-3">custom</h2>
-              {customReports.length > 0 &&
-                customReports.map(custom => (
-                  <div className="report-list" key={custom.id}>
-                    <div className="row">
-                      <div className="col-md-8">
-                        <div className="report-content">
-                          <h4>{custom.title}</h4>
-                          <p>{custom.description}</p>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="report-share-time">
-                          <div className="report-item created-time">
-                            <h6>Date Created</h6>
-                            <>{formatDate(custom.created_at)}</>
-                          </div>
-                          <div className="report-item share-report">
-                            <h6>Added by</h6>
-                            <ul className="shared-list">
-                              <li>{custom.owner_full_name}</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* <div className="dropdown report-option">
+                  {standardReport.title === 'Project Summary' ? (
+                    <div className="dropdown report-option">
                       <Dropdown drop="left">
                         <Dropdown.Toggle
                           variant=""
@@ -618,7 +278,7 @@ export default class Templates extends Component {
                           <i className="material-icons">more_vert</i>
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                          {DataCrude.map(item => (
+                          {projectSummery.map(item => (
                             <Dropdown.Item
                               href={item.link}
                               key={item.id}
@@ -629,16 +289,298 @@ export default class Templates extends Component {
                           ))}
                         </Dropdown.Menu>
                       </Dropdown>
-                    </div> */}
+                    </div>
+                  ) : (
+                    <div className="dropdown report-option">
+                      <Dropdown drop="left">
+                        <Dropdown.Toggle
+                          variant=""
+                          id="dropdown-Data"
+                          className="dropdown-toggle common-button no-border is-icon"
+                        >
+                          <i className="material-icons">more_vert</i>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                          {siteInformation.map(item => (
+                            <Dropdown.Item
+                              href={item.link}
+                              key={item.id}
+                              target="_blank"
+                            >
+                              {item.title}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+            <div className="report-list">
+              <div className="row">
+                <div className="col-md-8">
+                  <div className="report-content">
+                    Form Data
+                    <p>
+                      Export of forms data and site information an
+                      Excel File, generated with filters in region,
+                      types and time range.
+                    </p>
+                    <ul className="form-data">
+                      <li>
+                        <a
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={() => {
+                            this.generalhandle('general');
+                          }}
+                          onClick={e => {
+                            this.generalhandle('general');
+                          }}
+                        >
+                          general forms
+                        </a>
+                        <div
+                          className="form-data-list"
+                          style={
+                            general === true
+                              ? { display: 'block' }
+                              : { display: 'none' }
+                          }
+                        >
+                          {generalData !== undefined &&
+                          generalData.length > 0 ? (
+                            generalData.map(genInfo => (
+                              <p key={genInfo.id}>
+                                <Link
+                                  to={{
+                                    pathname: `/form-data/${id}/${genInfo.id}`,
+
+                                    state: {
+                                      fromDashboard: genInfo.id,
+                                    },
+                                  }}
+                                >
+                                  {genInfo.title}
+                                </Link>
+                              </p>
+                            ))
+                          ) : (
+                            <p>No Data</p>
+                          )}
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={() => {
+                            this.scheduledhandle('scheduled');
+                          }}
+                          onClick={() => {
+                            this.scheduledhandle('scheduled');
+                          }}
+                        >
+                          scheduled forms
+                        </a>
+
+                        <div
+                          className="form-data-list"
+                          style={
+                            scheduled === true
+                              ? { display: 'block' }
+                              : { display: 'none' }
+                          }
+                        >
+                          {scheduledData !== undefined &&
+                          scheduledData.length > 0 ? (
+                            scheduledData.map(scheinfo => (
+                              <p key={scheinfo.id}>
+                                <Link
+                                  to={{
+                                    pathname: `/form-data/${id}/${scheinfo.id}`,
+
+                                    state: {
+                                      fromDashboard: scheinfo.id,
+                                    },
+                                  }}
+                                >
+                                  {scheinfo.title}
+                                </Link>
+                              </p>
+                            ))
+                          ) : (
+                            <p>No Data</p>
+                          )}
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={() => {
+                            this.surveyhandle('survey');
+                          }}
+                          onClick={() => {
+                            this.surveyhandle('survey');
+                          }}
+                        >
+                          survey forms
+                        </a>
+                        <div
+                          className="form-data-list"
+                          style={
+                            survey === true
+                              ? { display: 'block' }
+                              : { display: 'none' }
+                          }
+                        >
+                          {surveyData !== undefined &&
+                          surveyData.length > 0 ? (
+                            surveyData.map(surData => (
+                              <p key={surData.id}>
+                                <Link
+                                  to={{
+                                    pathname: `/form-data/${id}/${surData.id}`,
+
+                                    state: {
+                                      fromDashboard: surData.id,
+                                    },
+                                  }}
+                                >
+                                  {surData.title}
+                                </Link>
+                              </p>
+                            ))
+                          ) : (
+                            <p>No Data</p>
+                          )}
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          tabIndex="0"
+                          role="button"
+                          onKeyDown={() => {
+                            this.stagedhandle('stage');
+                          }}
+                          onClick={() => {
+                            this.stagedhandle('stage');
+                          }}
+                        >
+                          staged forms
+                        </a>
+                        <div
+                          className="form-data-list"
+                          style={
+                            staged === true
+                              ? { display: 'block' }
+                              : { display: 'none' }
+                          }
+                        >
+                          {stagedData !== undefined &&
+                          stagedData.length > 0 ? (
+                            stagedData.map(satData => (
+                              <ul key={satData.id}>
+                                <li>{satData.name}</li>
+                                <li>
+                                  {satData.sub_stages.map(sub => (
+                                    <ul>
+                                      <li key={sub.id}>
+                                        <Link
+                                          to={{
+                                            pathname: `/form-data/${id}/${sub.id}`,
+
+                                            state: {
+                                              fromDashboard: sub.id,
+                                            },
+                                          }}
+                                        >
+                                          {sub.form_name}
+                                        </Link>
+                                      </li>
+                                    </ul>
+                                  ))}
+                                </li>
+                              </ul>
+                            ))
+                          ) : (
+                            <p>No Data</p>
+                          )}
+                        </div>
+                      </li>
+                    </ul>
                   </div>
-                ))}
+                </div>
+              </div>
+              <div className="dropdown report-option">
+                <Dropdown drop="left">
+                  <Dropdown.Toggle
+                    variant=""
+                    id="dropdown-Data"
+                    className="dropdown-toggle common-button no-border is-icon"
+                  >
+                    <i className="material-icons">more_vert</i>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                    {DataCrude.map(item => (
+                      <Dropdown.Item
+                        href={item.link}
+                        key={item.id}
+                        target="_blank"
+                      >
+                        {item.title}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
             </div>
           </div>
-        }
-        {/* {formButton && (
-          <FormDataFilter handleForm={this.handleForm} id={id} />
-        )} */}
+
+          <div className="custom-template">
+            <h2 className="my-3">custom</h2>
+            {customReports !== undefined &&
+              customReports.length > 0 &&
+              customReports.map(custom => (
+                <div className="report-list" key={custom.id}>
+                  <div className="row">
+                    <div className="col-md-8">
+                      <div className="report-content">
+                        <h4>{custom.title}</h4>
+                        <p>{custom.description}</p>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="report-share-time">
+                        <div className="report-item created-time">
+                          <h6>Date Created</h6>
+                          <>{formatDate(custom.created_at)}</>
+                        </div>
+                        <div className="report-item share-report">
+                          <h6>Added by</h6>
+                          <ul className="shared-list">
+                            <li>{custom.owner_full_name}</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
       </>
     );
   }
 }
+
+const mapStateToProps = ({ translationReducer }) => ({
+  translationReducer,
+});
+
+export default connect(mapStateToProps, {
+  getReportList,
+  getFormType,
+})(Templates);

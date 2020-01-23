@@ -18,7 +18,7 @@ L.Icon.Default.mergeOptions({
   iconUrl,
   shadowUrl,
 });
-/* eslint-disable */
+
 /* eslint-disable  camelcase */
 
 export default class SuperAdminForm extends Component {
@@ -50,6 +50,7 @@ export default class SuperAdminForm extends Component {
       .then(res => {
         this.setState({
           country: res.data.countries,
+          Selectedtypes: res.data.countries[0].key,
         });
       })
       .catch(() => {});
@@ -89,26 +90,40 @@ export default class SuperAdminForm extends Component {
 
   onSubmitHandler = e => {
     e.preventDefault();
+    const {
+      state: {
+        identifier,
+        name,
+        phone,
+        fax,
+        email,
+        website,
+        address,
+        public_desc,
+        position: { latitude, longitude },
+        Selectedtypes,
+      },
+    } = this;
 
     const data = {
-      identifier: this.state.identifier,
-      name: this.state.name,
-      phone: this.state.phone,
-      fax: this.state.fax,
-      email: this.state.email,
-      website: this.state.website,
-      country: this.state.Selectedtypes,
-      address: this.state.address,
-      public_desc: this.state.public_desc,
-      latitude: this.state.position.latitude,
-      longitude: this.state.position.longitude,
+      identifier,
+      name,
+      phone,
+      fax,
+      email,
+      website,
+      country: Selectedtypes,
+      address,
+      public_desc,
+      latitude,
+      longitude,
     };
 
     axios
       .post(`/fv3/api/super-organization-form/`, data)
       .then(req => {
         if (req.status === 201) {
-          successToast('Form', 'created');
+          successToast('Organization', 'created');
           this.props.history.push(
             `/organization-dashboard/${req.data.id}`,
           );
@@ -122,15 +137,12 @@ export default class SuperAdminForm extends Component {
             country: '',
             address: '',
             public_desc: '',
-            additional_desc: '',
-
             position: {
               latitude: '51.505',
               longitude: '-0.09',
             },
             zoom: 13,
             Selectedtypes: '',
-            id: '',
           });
         }
       })
@@ -140,14 +152,6 @@ export default class SuperAdminForm extends Component {
           return errorToast(`${value}`);
         });
       });
-  };
-
-  changeHandler = e => {
-    const { checked } = e.target;
-
-    this.setState({
-      is_active: checked,
-    });
   };
 
   mapClickHandler = e => {
@@ -171,9 +175,7 @@ export default class SuperAdminForm extends Component {
     const {
       onChangeHandler,
       onSubmitHandler,
-      changeHandler,
       mapClickHandler,
-
       onSelectChangeHandler,
       state: {
         identifier,
@@ -185,10 +187,10 @@ export default class SuperAdminForm extends Component {
         country,
         address,
         public_desc,
-
-        is_active,
         position: { latitude, longitude },
         Selectedtypes,
+        errorFlag,
+        zoom,
       },
     } = this;
 
@@ -218,7 +220,7 @@ export default class SuperAdminForm extends Component {
                   value={identifier}
                   changeHandler={onChangeHandler}
                 />
-                {this.state.errorFlag && (
+                {errorFlag && (
                   <span style={{ color: 'red' }}>
                     identifier should be more then 5 character
                   </span>
@@ -335,7 +337,7 @@ export default class SuperAdminForm extends Component {
                     <Map
                       style={{ height: '205px', marginTop: '1rem' }}
                       center={[latitude, longitude]}
-                      zoom={this.state.zoom}
+                      zoom={zoom}
                       onClick={mapClickHandler}
                     >
                       <TileLayer

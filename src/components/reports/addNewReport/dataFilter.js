@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import CustomMultiSelect from '../common/CustomMultiSelect';
 import FilterByDate from '../common/filterByDate';
 import FilterByData from '../common/filterByData';
 

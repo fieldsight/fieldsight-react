@@ -136,8 +136,7 @@ class SiteTable extends Component {
                           <tr key={i}>
                             <td>
                               <a
-                                href={` /fieldsight/application/#/site-dashboard/
-                                  ${item.id}`}
+                                href={` /fieldsight/application/#/site-dashboard/${item.id}`}
                                 className="pending table-profile"
                               >
                                 <h5>{item.name}</h5>

@@ -105,3 +105,7 @@ export const GET_EXPORT_LIST = 'GET_EXPORT_LIST';
 export const CREATE_EXPORT = 'CREATE_EXPORT';
 export const DELETE_EXPORT = 'DELETE_EXPORT';
 export const DOWNLOAD_EXPORT = 'DOWNLOAD_EXPORT';
+
+// templates
+export const GET_FORM_TYPES = 'GET_FORM_TYPES';
+export const GET_REPORT_LIST = 'GET_REPORT_LIST';

@@ -54,10 +54,7 @@ export default class LeftSideBar extends PureComponent {
 
   render() {
     return (
-      <ul
-        className="nav nav-tabs flex-column border-tabs"
-        // style={{ minHeight: height > 0 ? height : '' }}
-      >
+      <ul className="nav nav-tabs flex-column border-tabs">
         {this.leftsideNavRoute(this.props.pathname)}
       </ul>
     );
