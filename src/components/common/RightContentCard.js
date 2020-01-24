@@ -36,7 +36,6 @@ const RightContentCard = ({
         </div>
       )}
     </div>
-
     <div className="card-body">{children}</div>
   </div>
 );

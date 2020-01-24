@@ -3,11 +3,12 @@ import axios from 'axios';
 import RightContentCard from '../../common/RightContentCard';
 import ManageModal from '../../manageForms/ManageModal';
 import Modal from '../../common/Modal';
-
+import Loader from '../../common/Loader';
 import {
   errorToast,
   successToast,
 } from '../../../utils/toastHandler';
+
 import LibraryTable from './libraryTable';
 
 import DeleteModal from '../../common/DeleteModal';
@@ -34,6 +35,8 @@ export default class Library extends Component {
       selected_organization_library_forms: [],
       libraryId: '',
       openDeleteModal: false,
+      loader: false,
+      saveLoader: '',
     };
   }
 
@@ -50,6 +53,7 @@ export default class Library extends Component {
             organization_library_forms: res.data.forms,
             selected_organization_library_forms:
               res.data.selected_organization_library_forms,
+            loader: true,
           };
         });
       })
@@ -113,6 +117,9 @@ export default class Library extends Component {
 
   handleSubmit = e => {
     e.preventDefault(e);
+    this.setState({
+      saveLoader: false,
+    });
 
     const {
       props: { id },
@@ -133,13 +140,21 @@ export default class Library extends Component {
       )
       .then(res => {
         if (res.status === 201) {
-          this.setState({
+          successToast('Organization Library Form', 'created');
+          this.setState(State => ({
+            saveLoader: !State.saveLoader,
             popUpPage: false,
             selected_organization_library_forms:
               res.data.organization_library_forms,
             selectedArr: [],
-          });
+          }));
         }
+      })
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
       });
   };
 
@@ -150,7 +165,7 @@ export default class Library extends Component {
     }));
   };
 
-  handleCancle = () => {
+  handleCancel = () => {
     this.setState({
       openDeleteModal: false,
     });
@@ -197,14 +212,18 @@ export default class Library extends Component {
         openDeleteModal,
         organization_library_forms,
         selected_organization_library_forms,
+        loader,
+        saveLoader,
       },
       props: { id },
-      handleCancle,
+      handleCancel,
       handleConfirm,
     } = this;
 
     return (
       <>
+        {saveLoader === false && <Loader />}
+
         <RightContentCard
           title="Organization Library Forms"
           addButton
@@ -216,6 +235,7 @@ export default class Library extends Component {
               selected_organization_library_forms
             }
             openDelete={this.openDelete}
+            loader={loader}
           />
         </RightContentCard>
 
@@ -224,6 +244,9 @@ export default class Library extends Component {
             title="Add Organization Library"
             toggleModal={this.handleClosePopup}
             handleSubmit={this.handleSubmit}
+            showButton
+            showText="Create Form"
+            url="/forms/create"
           >
             <form className="floating-form">
               <>
@@ -279,11 +302,11 @@ export default class Library extends Component {
         )}
         {openDeleteModal && (
           <DeleteModal
-            onCancel={handleCancle}
+            onCancel={handleCancel}
             onConfirm={handleConfirm}
-            onToggle={handleCancle}
+            onToggle={handleCancel}
             title="Warning"
-            message="Are u sure u want to delete"
+            message="Are u sure u want to remove?"
           />
         )}
       </>

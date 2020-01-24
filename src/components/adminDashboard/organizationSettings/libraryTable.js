@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Table from 'react-bootstrap/Table';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { DotLoader } from '../../myForm/Loader';
 
 /*  eslint-disable  */
 export default class LibraryTable extends Component {
   render() {
-    const { organization_library_forms } = this.props;
-    return (
+    const { organization_library_forms, loader } = this.props;
+    return loader ? (
       <Table
         responsive="xl"
         className="table  table-bordered  dataTable "
@@ -15,7 +16,6 @@ export default class LibraryTable extends Component {
         <thead>
           <tr>
             <th>Title</th>
-
             <th>Action</th>
           </tr>
         </thead>
@@ -47,6 +47,8 @@ export default class LibraryTable extends Component {
             ))}
         </tbody>
       </Table>
+    ) : (
+      <DotLoader />
     );
   }
 }
