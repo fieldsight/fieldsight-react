@@ -9,8 +9,6 @@ const RightContentCard = ({
   children,
   buttonName,
   editflag,
-  showButton,
-  component,
 }) => (
   <div className="card">
     <div className="card-header main-card-header">
@@ -23,37 +21,21 @@ const RightContentCard = ({
       </h5>
       {addButton && (
         <div className="add-btn">
-          {component === 'teams' && showButton ? (
-            <a
-              onClick={toggleModal}
-              tabIndex="0"
-              role="button"
-              onKeyDown={toggleModal}
-            >
-              <span>
-                {editflag && <i className="la la-edit" />}
-                {buttonName}
-                {!editflag && <i className="la la-plus" />}
-              </span>
-            </a>
-          ) : (
-            <a
-              onClick={toggleModal}
-              tabIndex="0"
-              role="button"
-              onKeyDown={toggleModal}
-            >
-              <span>
-                {editflag && <i className="la la-edit" />}
-                {buttonName}
-                {!editflag && <i className="la la-plus" />}
-              </span>
-            </a>
-          )}
+          <a
+            onClick={toggleModal}
+            tabIndex="0"
+            role="button"
+            onKeyDown={toggleModal}
+          >
+            <span>
+              {editflag && <i className="la la-edit" />}
+              {buttonName}
+              {!editflag && <i className="la la-plus" />}
+            </span>
+          </a>
         </div>
       )}
     </div>
-
     <div className="card-body">{children}</div>
   </div>
 );

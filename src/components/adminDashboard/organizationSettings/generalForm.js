@@ -3,13 +3,15 @@ import axios from 'axios';
 import RadioElement from '../../common/RadioElement';
 import Loader from '../../common/Loader';
 
-/* eslint-disable  camelcase */
+/* eslint-disable */
 export default class GeneralFormModal extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
       status: '0',
-      saveLoader: '',
+      saveLoader: false,
     };
   }
 
@@ -37,11 +39,7 @@ export default class GeneralFormModal extends Component {
     }
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.setState({
-      saveLoader: false,
-    });
+  handleRequest = () => {
     const {
       props: {
         selected,
@@ -73,21 +71,44 @@ export default class GeneralFormModal extends Component {
       )
       .then(res => {
         if (res.status === 201) {
-          handleAllModel(res);
-          this.setState(State => ({
-            saveLoader: !State.saveLoader,
-          }));
+          if (this._isMounted) {
+            this.setState(
+              prevState => ({
+                saveLoader: false,
+              }),
+              () => {
+                handleAllModel(res);
+              },
+            );
+          }
         }
       })
       .catch();
   };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.setState(
+      {
+        saveLoader: true,
+      },
+      this.handleRequest,
+    );
+  };
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   render() {
     const { status, saveLoader } = this.state;
 
     return (
       <>
-        {saveLoader === false && <Loader />}
+        {saveLoader && <Loader />}
         <form className="floating-form" onSubmit={this.handleSubmit}>
           <div className="form-form">
             <div className="selected-form">

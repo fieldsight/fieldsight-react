@@ -17,6 +17,8 @@ import RadioElement from '../../common/RadioElement';
 /* eslint-disable camelcase */
 
 export default class MyForm extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -49,43 +51,47 @@ export default class MyForm extends Component {
       props: { id },
       state: { forms, organization_library_forms },
     } = this;
-    axios
-      .get(`/fv3/api/manage-super-organizations-library/${id}/`)
-      .then(res => {
-        const newArr = forms;
-        const orgArr = organization_library_forms;
-        this.setState(() => {
-          if (res.data.forms !== undefined) {
-            res.data.forms.map(arrPush => newArr.push(arrPush));
-          }
-          if (res.data.organization_library_forms !== undefined) {
-            res.data.organization_library_forms.map(arrPush =>
-              orgArr.push(arrPush),
-            );
-          }
+    this._isMounted = true;
+    if (this._isMounted) {
+      axios
+        .get(`/fv3/api/manage-super-organizations-library/${id}/`)
+        .then(res => {
+          const newArr = forms;
+          const orgArr = organization_library_forms;
+          this.setState(() => {
+            if (res.data.forms !== undefined) {
+              res.data.forms.map(arrPush => newArr.push(arrPush));
+            }
+            if (res.data.organization_library_forms !== undefined) {
+              res.data.organization_library_forms.map(arrPush =>
+                orgArr.push(arrPush),
+              );
+            }
 
-          return {
-            forms:
-              res.data.forms.length > 0 ? res.data.forms : newArr,
-            scheduled_forms: res.data.selected_forms.scheduled_forms,
-            general_forms: res.data.selected_forms.general_forms,
-            organization_library_forms:
-              res.data.organization_library_forms.length > 0
-                ? res.data.organization_library_forms
-                : orgArr,
-            selectId:
-              res.data.forms.length > 0
-                ? res.data.forms[0].xf_id
-                : '',
-            selectOrganization:
-              res.data.organization_library_forms.length > 0
-                ? res.data.organization_library_forms[0].xf_id
-                : '',
-            loader: true,
-          };
-        });
-      })
-      .catch();
+            return {
+              forms:
+                res.data.forms.length > 0 ? res.data.forms : newArr,
+              scheduled_forms:
+                res.data.selected_forms.scheduled_forms,
+              general_forms: res.data.selected_forms.general_forms,
+              organization_library_forms:
+                res.data.organization_library_forms.length > 0
+                  ? res.data.organization_library_forms
+                  : orgArr,
+              selectId:
+                res.data.forms.length > 0
+                  ? res.data.forms[0].xf_id
+                  : '',
+              selectOrganization:
+                res.data.organization_library_forms.length > 0
+                  ? res.data.organization_library_forms[0].xf_id
+                  : '',
+              loader: true,
+            };
+          });
+        })
+        .catch();
+    }
   }
 
   handleChange = () => {
@@ -210,19 +216,21 @@ export default class MyForm extends Component {
   };
 
   handleAllModel = res => {
-    this.setState(
-      {
-        schedulePopUp: false,
-        popUpPage: false,
-        generalPopUp: false,
-        general_forms: res.data.general_forms,
-        scheduled_forms: res.data.scheduled_forms,
-        selected: '',
-        selectId: '',
-        selectOrganization: '',
-      },
-      () => successToast('Organization Default Form', 'added'),
-    );
+    if (this._isMounted) {
+      this.setState(
+        {
+          schedulePopUp: false,
+          popUpPage: false,
+          generalPopUp: false,
+          general_forms: res.data.general_forms,
+          scheduled_forms: res.data.scheduled_forms,
+          selected: '',
+          selectId: '',
+          selectOrganization: '',
+        },
+        () => successToast('Organization Default Form', 'added'),
+      );
+    }
   };
 
   checkboxhandler = e => {
@@ -293,6 +301,10 @@ export default class MyForm extends Component {
       formTypePopUp: !prevState.formTypePopUp,
     }));
   };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   render() {
     const {

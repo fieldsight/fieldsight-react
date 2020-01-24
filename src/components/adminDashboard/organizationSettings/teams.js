@@ -48,15 +48,18 @@ export default class Teams extends React.PureComponent {
   handleChange = () => {
     const {
       props: { id },
-      state: { is_superuser },
+      state: { is_superuser, loader },
     } = this;
+
     if (is_superuser) {
       this.setState({
         popUpPage: true,
       });
-    } else {
-      this.props.history.push(`/create-team/${id}`);
     }
+
+    // } else {
+    //   this.props.history.push(`/create-team/${id}`);
+    // }
   };
 
   handleClosePopup = () => {
@@ -182,13 +185,12 @@ export default class Teams extends React.PureComponent {
     return (
       <>
         {saveLoader === false && <Loader />}
+
         <RightContentCard
           title="Manage Teams"
           addButton
           toggleModal={this.handleChange}
           buttonName="Add Teams"
-          showButton={loader}
-          component="teams"
         >
           <TeamsTable
             selected_teams={selected_teams}

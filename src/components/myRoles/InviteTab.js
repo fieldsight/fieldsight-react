@@ -77,7 +77,6 @@ class InviteTab extends PureComponent {
                     </p>
                     <div className="invite-btn">
                       <a
-                        href="#"
                         className="accept-btn"
                         tabIndex="0"
                         role="button"

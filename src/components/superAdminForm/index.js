@@ -39,7 +39,7 @@ export default class SuperAdminForm extends Component {
       },
       zoom: 13,
       Selectedtypes: '',
-      country: [],
+      country: [{ value: 'Select Option ', key: '' }],
       errorFlag: false,
     };
   }
@@ -48,9 +48,16 @@ export default class SuperAdminForm extends Component {
     axios
       .get(`/fv3/api/team-types-countries`)
       .then(res => {
-        this.setState({
-          country: res.data.countries,
-          Selectedtypes: res.data.countries[0].key,
+        const newArr = this.state.country;
+        this.setState(() => {
+          if (res.data.countries !== undefined) {
+            res.data.countries.map(country => newArr.push(country));
+          }
+
+          return {
+            country: newArr,
+            // Selectedtypes: res.data.countries[0].key,
+          };
         });
       })
       .catch(() => {});

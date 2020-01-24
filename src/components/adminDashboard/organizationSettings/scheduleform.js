@@ -8,7 +8,11 @@ import SelectElement from '../../common/SelectElement';
 import Loader from '../../common/Loader';
 
 /* eslint-disable  camelcase */
+/* eslint-disable  react/jsx-one-expression-per-line */
+
 export default class ScheduleFormModal extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -21,11 +25,18 @@ export default class ScheduleFormModal extends Component {
       saveLoader: '',
       startedDate: '',
       endedDate: '',
+      errorStatedDate: '',
+      errorEndedDate: '',
     };
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
   }
 
   handleRadioChange = e => {
     const { value } = e.target;
+
     if (value === '0') {
       this.setState({
         status: value,
@@ -55,6 +66,7 @@ export default class ScheduleFormModal extends Component {
     const {
       target: { name, checked },
     } = e;
+
     this.setState(preState => {
       if (checked) {
         return {
@@ -73,11 +85,13 @@ export default class ScheduleFormModal extends Component {
 
   handleFrequencyChange = e => {
     const { value } = e.target;
+
     this.setState({ frequency: value });
   };
 
   handleYearlyChange = e => {
     const { value } = e.target;
+
     if (value === '0') {
       this.setState({
         scheduleType: value,
@@ -97,6 +111,7 @@ export default class ScheduleFormModal extends Component {
 
   handleOnWeekCheckbox = e => {
     const { name } = e.target;
+
     this.setState(() => {
       if (name === '1') {
         return { weekDays: name };
@@ -126,28 +141,76 @@ export default class ScheduleFormModal extends Component {
 
   handleDaySelect = e => {
     const { value } = e.target;
+
     this.setState({
       selectedMonthlyDays: value,
     });
   };
 
   handleStartDateChange = date => {
-    this.setState({
-      startedDate: date,
-    });
+    const { startedDate } = this.state;
+
+    this.setState(
+      {
+        startedDate: date,
+      },
+      () => {
+        if (startedDate !== '') {
+          this.setState({
+            errorStatedDate: '',
+          });
+        }
+      },
+    );
   };
 
   handleEndDate = date => {
-    this.setState({
-      endedDate: date,
-    });
+    const { endedDate } = this.state;
+
+    this.setState(
+      {
+        endedDate: date,
+      },
+      () => {
+        if (endedDate !== '') {
+          this.setState({
+            errorEndedDate: '',
+          });
+        }
+      },
+    );
   };
+
+  handleDateValidation() {
+    const { endedDate, startedDate } = this.state;
+
+    if (!startedDate) {
+      this.setState({
+        errorStatedDate: 'Started date is required',
+      });
+    }
+    if (!endedDate) {
+      this.setState({
+        errorEndedDate: 'Ended date is required',
+      });
+    }
+  }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.setState({
-      saveLoader: false,
-    });
+    const { endedDate, startedDate } = this.state;
+    this.handleDateValidation();
+    if (endedDate && startedDate) {
+      this.setState(
+        {
+          saveLoader: false,
+        },
+        this.requestHandler,
+      );
+    }
+  };
+
+  requestHandler = () => {
     const {
       props: {
         selected,
@@ -168,15 +231,9 @@ export default class ScheduleFormModal extends Component {
         selectedMonthlyDays,
       },
     } = this;
-
     const result = dailyArrDays.map(function(x) {
       return parseInt(x, 10);
     });
-
-    // const selectedIdxs = selected.map(function(x) {
-    //   return parseInt(x, 10);
-    // });
-
     const StarttedDate = format(startedDate, ['YYYY-MM-DD']);
     const EndedDate = format(endedDate, ['YYYY-MM-DD']);
 
@@ -208,14 +265,22 @@ export default class ScheduleFormModal extends Component {
       )
       .then(res => {
         if (res.status === 201) {
-          handleAllModel(res);
-          this.setState(State => ({
-            saveLoader: !State.saveLoader,
-          }));
+          if (this._isMounted) {
+            this.setState(
+              State => ({
+                saveLoader: !State.saveLoader,
+              }),
+              () => handleAllModel(res),
+            );
+          }
         }
       })
       .catch();
   };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   render() {
     const {
@@ -228,6 +293,8 @@ export default class ScheduleFormModal extends Component {
       endedDate,
       startedDate,
       saveLoader,
+      errorStatedDate,
+      errorEndedDate,
     } = this.state;
 
     const weeks = [];
@@ -414,6 +481,11 @@ export default class ScheduleFormModal extends Component {
                         className="form-control"
                       />
                     </div>
+                    {errorStatedDate && (
+                      <small style={{ color: 'red' }}>
+                        *{errorStatedDate}
+                      </small>
+                    )}
                   </div>
                   <div className="col-xl-6">
                     <div className="form-group mrt-15">
@@ -426,6 +498,12 @@ export default class ScheduleFormModal extends Component {
                         className="form-control"
                       />
                     </div>
+
+                    {errorEndedDate && (
+                      <small style={{ color: 'red' }}>
+                        *{errorEndedDate}
+                      </small>
+                    )}
                   </div>
                 </div>
 
