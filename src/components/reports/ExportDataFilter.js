@@ -15,8 +15,8 @@ export default class ExportDataFilter extends PureComponent {
       siteOpen: false,
       siteSelected: [],
       applyButton: false,
-      projectRegions: [],
-      siteType: [],
+      projectRegions: [{ id: 'all_regions', name: 'Select All' }],
+      siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
     };
   }
 
@@ -26,40 +26,61 @@ export default class ExportDataFilter extends PureComponent {
         params: { id },
       },
     } = this.props;
+    const { projectRegions, siteType } = this.state;
+    const siteTypesApi = `/fieldsight/api/site-types/${id}/`;
+    const projectRegionApi = `/fieldsight/api/project-regions/${id}/`;
 
-    const siteType = `/fieldsight/api/site-types/${id}/`;
-    const projectRegions = `/fieldsight/api/project-regions/${id}/`;
-
-    const requestSiteType = axios.get(siteType);
-    const requestProjectRegions = axios.get(projectRegions);
+    const requestSiteType = axios.get(siteTypesApi);
+    const requestProjectRegions = axios.get(projectRegionApi);
 
     axios
       .all([requestProjectRegions, requestSiteType])
       .then(
         axios.spread((...responses) => {
-          this.setState({
-            siteType: responses[1].data,
-            projectRegions: responses[0].data,
-          });
+          const regions = [...projectRegions, ...responses[0].data];
+          const sites = [...siteType, ...responses[1].data];
+          this.setState(() => ({
+            projectRegions: regions,
+            selected: regions.map(each => {
+              return { id: each.id };
+            }),
+            siteType: sites,
+            siteSelected: sites.map(each => {
+              return { id: each.id };
+            }),
+          }));
         }),
       )
       .catch();
   }
 
   changeHandlers = (e, info) => {
-    const { checked, name } = e.target;
-
-    const idName = 'id';
+    const { checked } = e.target;
+    const { id } = info;
+    const { projectRegions } = this.state;
     this.setState(prevState => {
       if (checked) {
+        if (id === 'all_regions') {
+          const allId = projectRegions.map(each => {
+            return { id: each.id };
+          });
+          return {
+            selected: allId,
+          };
+        }
         return {
-          selected: [...prevState.selected, { [idName]: info.id }],
+          selected: [...prevState.selected, { id }],
         };
       }
       if (!checked) {
+        if (id === 'all_regions') {
+          return {
+            selected: [],
+          };
+        }
         return {
           selected: prevState.selected.filter(
-            region => region.id !== info.id,
+            region => region.id !== id && region.id !== 'all_regions',
           ),
         };
       }
@@ -68,21 +89,33 @@ export default class ExportDataFilter extends PureComponent {
   };
 
   siteHandler = (e, info) => {
-    const { checked, name } = e.target;
-    const idName = 'id';
+    const { checked } = e.target;
+    const { id } = info;
+    const { siteType } = this.state;
+
     this.setState(prevState => {
       if (checked) {
+        if (id === 'all_sitetypes') {
+          const allId = siteType.map(each => {
+            return { id: each.id };
+          });
+          return {
+            siteSelected: allId,
+          };
+        }
         return {
-          siteSelected: [
-            ...prevState.siteSelected,
-            { [idName]: info.id },
-          ],
+          siteSelected: [...prevState.siteSelected, { id }],
         };
       }
       if (!checked) {
+        if (id === 'all_sitetypes') {
+          return {
+            siteSelected: [],
+          };
+        }
         return {
           siteSelected: prevState.siteSelected.filter(
-            region => region.id !== info.id,
+            site => site.id !== id && site.id !== 'all_sitetypes',
           ),
         };
       }
@@ -153,7 +186,6 @@ export default class ExportDataFilter extends PureComponent {
 
   render() {
     const {
-      changeHandler,
       state: {
         selected,
         open,
@@ -164,6 +196,7 @@ export default class ExportDataFilter extends PureComponent {
         siteSelected,
       },
     } = this;
+    // console.log('in export', projectRegions, selected);
     const DataCrude = [
       {
         id: '1',
@@ -270,7 +303,7 @@ export default class ExportDataFilter extends PureComponent {
                             handleToggleClass={this.SiteToggleClass}
                             checkboxOption={siteType}
                             handleCheck={this.siteHandler}
-                            selectedArr={this.state.siteSelected}
+                            selectedArr={siteSelected}
                             placeholderTxt="Select Site Type"
                             site="site"
                           />
@@ -284,7 +317,7 @@ export default class ExportDataFilter extends PureComponent {
                             handleToggleClass={this.handleToggleClass}
                             checkboxOption={projectRegions}
                             handleCheck={this.changeHandlers}
-                            selectedArr={this.state.selected}
+                            selectedArr={selected}
                             placeholderTxt="Select Region Type"
                             site="regions"
                           />
