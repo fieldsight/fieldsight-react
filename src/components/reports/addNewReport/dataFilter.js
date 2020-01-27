@@ -8,9 +8,9 @@ import FilterByData from '../common/filterByData';
 const InitialState = {
   filterData: {
     project: '',
-    regions: [],
-    siteType: [],
-    userRoles: [],
+    regions: [{ id: 'all_regions', name: 'Select All' }],
+    siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
+    userRoles: [{ id: 'all_userroles', name: 'Select All' }],
     startDate: '',
     endDate: '',
   },
@@ -66,6 +66,34 @@ export default class DataFilter extends Component {
         },
       }));
     }
+    if (this.props.filterByRegions) {
+      this.setState(state => ({
+        filterData: {
+          ...state.filterData,
+          regions: this.props.filterByRegions,
+        },
+      }));
+    }
+    if (this.props.filterBySiteType) {
+      this.setState(state => ({
+        filterData: {
+          ...state.filterData,
+          siteType: this.props.filterBySiteType,
+        },
+      }));
+    }
+    if (this.props.filterByUserRoles) {
+      this.setState(state => ({
+        filterData: {
+          ...state.filterData,
+          userRoles: this.props.filterByUserRoles,
+        },
+      }));
+    }
+  }
+
+  componentWillUnmount() {
+    this.setState({ ...InitialState });
   }
 
   handleRegionFilter = (e, item) => {
@@ -299,7 +327,7 @@ export default class DataFilter extends Component {
       applyFilter,
       selectedReportType,
     } = this.props;
-    // console.log('object', this.state);
+    // console.log('object', this.props);
     return (
       <div className="data-filter filter-bottom mrt-30">
         <form onSubmit={this.handleSubmit}>
