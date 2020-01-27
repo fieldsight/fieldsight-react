@@ -1088,7 +1088,7 @@ class AddNewReport extends Component {
                 () => {
                   successToast('Report', 'created');
                   this.props.history.push(
-                    `/project-dashboard/${projectId}/report`,
+                    `/view-report/${projectId}/${reportId}`,
                   );
                 },
               );
