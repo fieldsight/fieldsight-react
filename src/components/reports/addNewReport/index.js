@@ -1230,6 +1230,7 @@ class AddNewReport extends Component {
           siteTypes,
           userRoles,
           regions,
+          projectCreatedOn,
         },
         match: {
           params: { id: projectId, reportId },
@@ -1450,6 +1451,7 @@ class AddNewReport extends Component {
                         userRoles={userRoles}
                         filterByUserRoles={filterByUserRoles}
                         selectedReportType={selectedReportType}
+                        projectCreatedOn={projectCreatedOn}
                       />
                     )}
                   </>

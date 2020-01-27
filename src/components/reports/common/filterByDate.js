@@ -48,6 +48,7 @@ export default class FilterByDate extends Component {
             }
             onChange={startDateHandler}
             selected={startDate}
+            minDate={startDate}
           />
           {errors && errors.startDate && (
             <span color="red" className="error">
@@ -68,6 +69,7 @@ export default class FilterByDate extends Component {
                 value={endDate}
               />
             }
+            maxDate={endDate}
           />
           {errors && errors.endDate && (
             <span color="red" className="error">

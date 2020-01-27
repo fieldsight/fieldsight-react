@@ -12,7 +12,7 @@ const InitialState = {
     siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
     userRoles: [{ id: 'all_userroles', name: 'Select All' }],
     startDate: '',
-    endDate: '',
+    endDate: new Date(),
   },
   errors: {},
 };
@@ -90,6 +90,14 @@ export default class DataFilter extends Component {
         },
       }));
     }
+    if (this.props.projectCreatedOn) {
+      this.setState(state => ({
+        filterData: {
+          ...state.filterData,
+          startDate: new Date(this.props.projectCreatedOn),
+        },
+      }));
+    }
   }
 
   componentWillUnmount() {
@@ -132,7 +140,9 @@ export default class DataFilter extends Component {
             },
           };
         } else {
-          const filterRegions = regions.filter(r => r.id !== item.id);
+          const filterRegions = regions.filter(
+            r => r.id !== item.id && r.id !== 'all_regions',
+          );
           return {
             filterData: {
               ...state.filterData,
@@ -181,7 +191,7 @@ export default class DataFilter extends Component {
           };
         } else {
           const filterSiteType = siteType.filter(
-            s => s.id !== item.id,
+            s => s.id !== item.id && s.id !== 'all_sitetypes',
           );
           return {
             filterData: {
@@ -231,7 +241,7 @@ export default class DataFilter extends Component {
           };
         } else {
           const filterUserRoles = userRoles.filter(
-            s => s.id !== item.id,
+            s => s.id !== item.id && s.id !== 'all_userroles',
           );
           return {
             filterData: {
