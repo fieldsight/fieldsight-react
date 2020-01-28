@@ -111,6 +111,12 @@ class Templates extends Component {
     }));
   };
 
+  handleCustomLink = reportid => {
+    const { id } = this.props;
+    console.log(reportid, id, this.props, 'reportid');
+    this.props.history.push(`/project/${id}/edit-report/${reportid}`);
+  };
+
   render() {
     const {
       state: {
@@ -145,11 +151,6 @@ class Templates extends Component {
         link: '#',
       },
       {
-        id: '2',
-        title: 'Add a template',
-        link: '#',
-      },
-      {
         id: '3',
         title: 'Share',
         link: '#',
@@ -158,6 +159,14 @@ class Templates extends Component {
         id: '4',
         title: 'Delete',
         link: '#',
+      },
+    ];
+
+    const CustomCrude = [
+      {
+        id: '1',
+        title: 'Edit',
+        link: '',
       },
     ];
 
@@ -173,7 +182,7 @@ class Templates extends Component {
       {
         id: '1',
         title: 'Generate  Excel',
-        link: '#',
+        link: this.handleCustomLink,
       },
     ];
 
@@ -589,9 +598,7 @@ class Templates extends Component {
                   <div className="row">
                     <div className="col-md-8">
                       <div className="report-content">
-                        <Link
-                          to={`/project/${id}/edit-report/${custom.id}`}
-                        >
+                        <Link to={`/view-report/${id}/${custom.id}`}>
                           <h4>{custom.title}</h4>
                           <p>{custom.description}</p>
                         </Link>
@@ -611,6 +618,31 @@ class Templates extends Component {
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div className="dropdown report-option">
+                    <Dropdown drop="left">
+                      <Dropdown.Toggle
+                        variant=""
+                        id="dropdown-Data"
+                        className="dropdown-toggle common-button no-border is-icon"
+                      >
+                        <i className="material-icons">more_vert</i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                        {CustomCrude.map(item => (
+                          <Dropdown.Item
+                            // href={item.link}
+                            // key={item.id}
+                            // target="_blank"
+                            onClick={() => {
+                              this.handleCustomLink(item.id);
+                            }}
+                          >
+                            {item.title}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </div>
                 </div>
               ))}

@@ -56,9 +56,12 @@ export default class TotalOrganizationSubmission extends Component {
           <thead>
             <tr>
               <th>Project Name</th>
+              <th>team</th>
               <th>total submission</th>
-              <th>teams</th>
-              <th>Last Response</th>
+              <th>pending</th>
+              <th>approved</th>
+              <th>rejected</th>
+              <th>flagged</th>
             </tr>
           </thead>
           <tbody>
@@ -67,8 +70,11 @@ export default class TotalOrganizationSubmission extends Component {
                 <tr key={sub.id}>
                   <td>{sub.name}</td>
                   <td>{sub.team}</td>
-                  <td>{sub.submissions}</td>
-                  <td>{sub.last_response_on}</td>
+                  <td>{sub.total_submissions}</td>
+                  <td>{sub.submissions.pending}</td>
+                  <td>{sub.submissions.approved}</td>
+                  <td>{sub.submissions.rejected}</td>
+                  <td>{sub.submissions.flagged}</td>
                 </tr>
               ))}
           </tbody>

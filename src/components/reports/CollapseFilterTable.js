@@ -5,12 +5,15 @@ import { applyActionToReport } from '../../actions/reportActions';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import Modal from '../common/Modal';
 import Sheet from '../../static/images/sheets.png';
+import editReportSheet from './editReportSheet';
 
+/* eslint-disable react/jsx-one-expression-per-line */
 class CollapseFilterTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       openModal: false,
+      openEditModal: false,
     };
   }
 
@@ -41,15 +44,21 @@ class CollapseFilterTable extends Component {
     }));
   };
 
+  handleEdit = () => {
+    this.setState(state => ({
+      openEditModal: !state.openEditModal,
+    }));
+  };
+
+  handleEditClose = () => {
+    this.setState(state => ({
+      openEditModal: !state.openEditModal,
+    }));
+  };
+
   render() {
-    const { openModal } = this.state;
+    const { openModal, openEditModal } = this.state;
     const actions = [
-      {
-        id: 1,
-        title: 'export',
-        icon: 'save_alt',
-        menu: [{ key: 1, text: 'As Excel', link: this.onExportCSV }],
-      },
       {
         id: 2,
         title: 'sync',
@@ -61,6 +70,12 @@ class CollapseFilterTable extends Component {
             link: this.onSyncHandler,
           },
         ],
+      },
+      {
+        id: 1,
+        title: 'export',
+        icon: 'save_alt',
+        menu: [{ key: 1, text: 'As Excel', link: this.onExportCSV }],
       },
     ];
 
@@ -386,13 +401,34 @@ class CollapseFilterTable extends Component {
             title="Report Sync to Google Sheet"
             toggleModal={this.handleToggle}
           >
-            <button type="button">
-              <img
-                src={Sheet}
-                style={{ height: '25px' }}
-                alt="sheet"
-              />
-            </button>
+            <div>
+              <div>
+                <img
+                  src={Sheet}
+                  style={{ height: '20px' }}
+                  alt="sheet"
+                />
+                <button type="button">View Report</button>
+              </div>
+
+              <div style={{ display: 'flex' }}>
+                <label>Schedule Type</label>:<p>Weekly on sunday</p>
+              </div>
+              <div style={{ display: 'flex' }}>
+                <label>Last Sync</label>:<p>2019-10-10</p>
+              </div>
+              <button type="button" onClick={this.handleEdit}>
+                Edit Schedule
+              </button>
+            </div>
+          </Modal>
+        )}
+        {openEditModal && (
+          <Modal
+            title="Edit Report"
+            toggleModal={this.handleEditClose}
+          >
+            <editReportSheet />
           </Modal>
         )}
       </>
