@@ -134,10 +134,10 @@ class Templates extends Component {
           stagedLoader,
           scheduledLoader,
           surveyLoader,
+          projectCreatedOn,
         },
       },
     } = this;
-
     const DataCrude = [
       {
         id: '1',
@@ -375,9 +375,9 @@ class Templates extends Component {
                                   <Link
                                     to={{
                                       pathname: `/form-data/${id}/${genInfo.id}`,
-
                                       state: {
                                         fromDashboard: genInfo.id,
+                                        projectCreatedOn,
                                       },
                                     }}
                                   >
@@ -426,9 +426,9 @@ class Templates extends Component {
                                   <Link
                                     to={{
                                       pathname: `/form-data/${id}/${scheinfo.id}`,
-
                                       state: {
                                         fromDashboard: scheinfo.id,
+                                        projectCreatedOn,
                                       },
                                     }}
                                   >
@@ -479,6 +479,7 @@ class Templates extends Component {
 
                                       state: {
                                         fromDashboard: surData.id,
+                                        projectCreatedOn,
                                       },
                                     }}
                                   >
@@ -531,9 +532,9 @@ class Templates extends Component {
                                           <Link
                                             to={{
                                               pathname: `/form-data/${id}/${sub.id}`,
-
                                               state: {
                                                 fromDashboard: sub.id,
+                                                projectCreatedOn,
                                               },
                                             }}
                                           >

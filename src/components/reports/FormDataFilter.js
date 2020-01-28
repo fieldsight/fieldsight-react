@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
@@ -12,7 +12,7 @@ import { errorToast, successToast } from '../../utils/toastHandler';
 
 /* eslint-disable */
 
-export default class FormDataFilter extends PureComponent {
+export default class FormDataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -228,6 +228,8 @@ export default class FormDataFilter extends PureComponent {
         projectRegions,
         siteType,
         siteSelected,
+        startedDate,
+        endedDate,
       },
     } = this;
     const DataCrude = [
@@ -256,8 +258,11 @@ export default class FormDataFilter extends PureComponent {
       match: {
         params: { id },
       },
+      location: {
+        state: { projectCreatedOn },
+      },
     } = this.props;
-    // const report_type = 'gfhj';
+
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -344,10 +349,14 @@ export default class FormDataFilter extends PureComponent {
                       <div className="col-lg-6 col-md-6">
                         <FilterByDate
                           className="form-group icon-between"
-                          startDate={this.state.startedDate}
-                          endDate={this.state.endedDate}
+                          startDate={
+                            startedDate || new Date(projectCreatedOn)
+                          }
+                          endDate={endedDate || new Date()}
                           startDateHandler={this.onChangeHandler}
                           endDateHandler={this.onEndChangeHandler}
+                          createdDate={new Date(projectCreatedOn)}
+                          tillDate={new Date()}
                         />
                       </div>
 

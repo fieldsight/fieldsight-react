@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
@@ -6,7 +6,7 @@ import CustomMultiSelect from './common/CustomMultiSelect';
 import CollapseFilterTable from './CollapseFilterTable';
 import { errorToast, successToast } from '../../utils/toastHandler';
 
-export default class ExportDataFilter extends PureComponent {
+export default class ExportDataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -150,6 +150,9 @@ export default class ExportDataFilter extends PureComponent {
       match: {
         params: { id },
       },
+      location: {
+        state: { fromDashboard },
+      },
     } = this.props;
     const region = this.state.selected.map(reg => reg.id);
     const site = this.state.siteSelected.map(reg => reg.id);
@@ -158,9 +161,7 @@ export default class ExportDataFilter extends PureComponent {
       regions: site,
     };
 
-    const route = this.toUpper(
-      this.props.location.state.fromDashboard,
-    );
+    const route = this.toUpper(fromDashboard);
 
     axios
       .post(
@@ -224,6 +225,9 @@ export default class ExportDataFilter extends PureComponent {
       match: {
         params: { id },
       },
+      location: {
+        state: { fromDashboard, projectCreatedOn },
+      },
     } = this.props;
 
     return (
@@ -250,15 +254,13 @@ export default class ExportDataFilter extends PureComponent {
                       <div className="report-content">
                         <h4>Export Data</h4>
 
-                        {this.props.location.state.fromDashboard ===
-                          'Site Information' && (
+                        {fromDashboard === 'Site Information' && (
                           <p>
                             Export of all site information in an
                             spreadsheet
                           </p>
                         )}
-                        {this.props.location.state.fromDashboard ===
-                          'Progress Report' && (
+                        {fromDashboard === 'Progress Report' && (
                           <p>
                             Export of key progress indicators like
                             submission count,status and site visits
