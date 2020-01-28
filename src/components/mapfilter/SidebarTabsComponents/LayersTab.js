@@ -7,7 +7,12 @@ class LayersTab extends Component {
   }
 
   render() {
-    const { activeTab, activeLayers, changeLayersTab } = this.props;
+    const {
+      activeTab,
+      activeLayers,
+      changeLayersTab,
+      handleBaseLayer,
+    } = this.props;
     return (
       <div
         className={`tab-pane fade ${
@@ -116,60 +121,93 @@ class LayersTab extends Component {
             }
           >
             <ul>
-              <li>
+              <li
+                role="presentation"
+                onKeyPress={() => {
+                  handleBaseLayer('openstreet');
+                }}
+                onClick={() => {
+                  handleBaseLayer('openstreet');
+                }}
+              >
                 <figure
                   style={{
-                    backgroundImage: "url('images/map.png')",
+                    backgroundImage: "url('images/1.png')",
                   }}
                 />
                 <div className="content">
                   <h6>Open street map </h6>
                 </div>
               </li>
-              <li>
+              <li
+                role="presentation"
+                onKeyPress={() => {
+                  handleBaseLayer('googlestreet');
+                }}
+                onClick={() => {
+                  handleBaseLayer('googlestreet');
+                }}
+              >
                 <figure
                   style={{
-                    backgroundImage: "url('images/map.png')",
+                    backgroundImage:
+                      "url('images/3googlestreet.png')",
                   }}
                 />
                 <div className="content">
                   <h6>Google street </h6>
                 </div>
               </li>
-              <li>
+              <li
+                role="presentation"
+                onKeyPress={() => {
+                  handleBaseLayer('googlehybrid');
+                }}
+                onClick={() => {
+                  handleBaseLayer('googlehybrid');
+                }}
+              >
                 <figure
                   style={{
-                    backgroundImage: "url('images/map.png')",
+                    backgroundImage:
+                      "url('images/5googlehybrid.png')",
                   }}
                 />
                 <div className="content">
                   <h6>Google Hybrid </h6>
                 </div>
               </li>
-              <li>
+              <li
+                role="presentation"
+                onKeyPress={() => {
+                  handleBaseLayer('googlesatellite');
+                }}
+                onClick={() => {
+                  handleBaseLayer('googlesatellite');
+                }}
+              >
                 <figure
                   style={{
-                    backgroundImage: "url('images/map.png')",
+                    backgroundImage:
+                      "url('images/4googlesatellite.png')",
                   }}
                 />
                 <div className="content">
                   <h6>Google satelite </h6>
                 </div>
               </li>
-              <li>
+              <li
+                role="presentation"
+                onKeyPress={() => {
+                  handleBaseLayer('googleterrain');
+                }}
+                onClick={() => {
+                  handleBaseLayer('googleterrain');
+                }}
+              >
                 <figure
                   style={{
-                    backgroundImage: "url('images/map.png')",
-                  }}
-                />
-                <div className="content">
-                  <h6>google Terrain </h6>
-                </div>
-              </li>
-              <li>
-                <figure
-                  style={{
-                    backgroundImage: "url('images/map.png')",
+                    backgroundImage: "url('images/2.png')",
                   }}
                 />
                 <div className="content">

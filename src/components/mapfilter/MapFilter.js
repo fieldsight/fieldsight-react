@@ -1,5 +1,12 @@
 import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
+import {
+  OpenStreetMapProvider,
+  GeoSearchControl,
+} from 'leaflet-geosearch';
+import L from 'leaflet';
+import { Typeahead } from 'react-bootstrap-typeahead';
+// import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import Loader from '../common/Loader';
 import MapComponent from './MapComponent';
@@ -11,6 +18,8 @@ import {
   getProjectsList,
   getProjectsRegionTypes,
   getFilteredPrimaryGeojson,
+  getSearchPrimaryGeojson,
+  refreshGeojsonData,
 } from '../../actions/mapFilterActions';
 import MainSidebarTab from './SidebarTabsComponents/MainSidebarTab';
 
@@ -27,6 +36,13 @@ const INITIAL_STATE = {
   checkedProjectItems: [],
   isfiltered: false,
   isLoading: true,
+  colorBySelection: '',
+  sizeBySelection: '',
+  searchText: '',
+  isAddressSearched: false,
+  addressSearch: [],
+  searchByItem: 'address',
+  selectedBaseLayer: 'openstreet',
 };
 class MapFilter extends Component {
   constructor(props) {
@@ -34,6 +50,7 @@ class MapFilter extends Component {
     this.state = INITIAL_STATE;
     this.mapRef = createRef();
     this.groupRef = createRef();
+    this.markerRef = createRef();
   }
 
   updateDimensions() {
@@ -55,10 +72,85 @@ class MapFilter extends Component {
       'resize',
       this.updateDimensions.bind(this),
     );
+    const provider = new OpenStreetMapProvider();
+    const form = document.querySelector('form');
+    console.log(form, 'form');
+    const input = form.querySelector('.searchinput');
+    const searchselect = form.querySelector(
+      '.search-control-info-list',
+    );
+    console.log(input, 'input');
+
+    console.log(searchselect, 'searchselect');
+    // const { addressSearch } = this.state;
+    let results = [];
+    searchselect.addEventListener('click', async el => {
+      const selectedIndex = el.target.value;
+      console.log(selectedIndex, 'index');
+      const bbox = results[selectedIndex].bounds;
+      // const first = new L.LatLng(bbox[0], bbox[2]);
+      // const second = new L.LatLng(bbox[1], bbox[3]);
+      // const bounds = new L.LatLngBounds([first, second]);
+      const southWest = L.latLng(bbox[0][0], bbox[0][1]);
+      const northEast = L.latLng(bbox[1][0], bbox[1][1]);
+      const bounds = L.latLngBounds(southWest, northEast);
+      this.mapRef.current.leafletElement.fitBounds(bounds);
+      this.mapRef.current.leafletElement.setZoom(12);
+    });
+    input.addEventListener('keyup', async event => {
+      // event.preventDefault();
+
+      results = await provider.search({ query: input.value });
+      console.log(results); // » [{}, {}, {}, ...]
+      if (results.length > 0) {
+        this.setState({
+          isAddressSearched: true,
+          addressSearch: results,
+        });
+      }
+
+      if (results.length <= 0) {
+        this.setState({
+          isAddressSearched: false,
+          addressSearch: results,
+        });
+      }
+    });
+    const specifiedElement = document.getElementsByClassName(
+      'search-custom',
+    );
+
+    // I'm using "click" but it works with any event
+    document.addEventListener('click', async event => {
+      const isClickInside = specifiedElement[0].contains(
+        event.target,
+      );
+
+      if (!isClickInside) {
+        this.setState({
+          isAddressSearched: false,
+          searchDropdown: false,
+        });
+        // the click was outside the specifiedElement, do something
+      }
+    });
   }
 
+  handleBaseLayer = selectedBaseLayer => {
+    this.setState({ selectedBaseLayer });
+  };
+
+  handleMetricsChange = (e, usedState) => {
+    console.log(e.value, usedState);
+    if (usedState === 'Color') {
+      this.setState({ colorBySelection: e.value });
+    } else if (usedState === 'Size') {
+      this.setState({ sizeBySelection: e.value });
+    }
+  };
+
   toggleLoader = () => {
-    this.setState({ isLoading: false });
+    this.setState({ isLoading: false, searchByItem: 'name' });
   };
 
   toggleZoomforFilter = () => {
@@ -197,9 +289,10 @@ class MapFilter extends Component {
   };
 
   refreshClick = () => {
-    const map = this.mapRef.current.leafletElement;
-    const featuregroup = this.groupRef.current.leafletElement;
-    map.fitBounds(featuregroup.getBounds());
+    // const map = this.mapRef.current.leafletElement;
+    // const featuregroup = this.groupRef.current.leafletElement;
+    // map.fitBounds(featuregroup.getBounds());
+    this.props.refreshGeojsonData();
   };
 
   handleRegionChange = e => {
@@ -235,6 +328,10 @@ class MapFilter extends Component {
       this.setState({ checkedSiteItems: filteredData });
     }
   };
+
+  // handleMetricsChange = e => {
+  //   console.log(e.target.value);
+  // };
 
   handleStatusChange = e => {
     const {
@@ -317,6 +414,22 @@ class MapFilter extends Component {
     // const { mapFilterReducer: clonePrimaryGeojson } = this.props;
   };
 
+  handleSearchChange = e => {
+    this.setState({ searchText: e.target.value });
+  };
+
+  handleSearchEnter = e => {
+    if (e.key === 'Enter') {
+      this.props.getSearchPrimaryGeojson({
+        keyword: this.state.searchText,
+      });
+    }
+  };
+
+  SearchBy = e => {
+    this.setState({ searchByItem: e.target.name });
+  };
+
   render() {
     const {
       props: {
@@ -331,12 +444,19 @@ class MapFilter extends Component {
         // },
       },
       state: {
+        searchText,
         isLoading,
         height,
         zoom,
         searchDropdown,
         modalSetting,
         isfiltered,
+        colorBySelection,
+        sizeBySelection,
+        isAddressSearched,
+        addressSearch,
+        searchByItem,
+        selectedBaseLayer,
       },
     } = this;
     return (
@@ -345,13 +465,19 @@ class MapFilter extends Component {
         <div className="card-body map-wrapper">
           <div id="map" style={{ height }} className="map">
             <MapComponent
+              selectedBaseLayer={selectedBaseLayer}
               zoom={zoom}
               height={height}
               geojson={primaryGeojson}
               clonePrimaryGeojson={clonePrimaryGeojson}
               mapRef={this.mapRef}
               groupRef={this.groupRef}
+              markerRef={this.markerRef}
               isfiltered={isfiltered}
+              colorBySelection={colorBySelection}
+              sizeBySelection={sizeBySelection}
+              projectsList={projectsList}
+              projectsRegionTypes={projectsRegionTypes}
             />
           </div>
           <div className="map-sidebar left-map-sidebar">
@@ -364,14 +490,71 @@ class MapFilter extends Component {
               }}
             > */}
             <div className="sidebar-wrapper">
-              <form>
+              <form className="search-custom">
                 <div className="form-group search">
                   <div className="input-group">
+                    {/* {searchByItem === 'address' ? ( */}
                     <input
+                      style={{
+                        display:
+                          searchByItem === 'address'
+                            ? 'flex'
+                            : 'none',
+                      }}
                       type="search"
-                      className="form-control"
-                      placeholder="Search By site Name"
+                      // value={searchText}
+                      className="form-control searchinput"
+                      // onChange={this.handleSearchChange}
+                      // onKeyDown={this.handleSearchEnter}
+                      placeholder="Search By Site Region"
                     />
+                    <section
+                      className={`search-control-info-wrapper ${
+                        isAddressSearched
+                          ? ''
+                          : 'search-control-info-wrapper-close'
+                      }`}
+                    >
+                      <section className="search-control-info">
+                        <ul
+                          className="search-control-info-list"
+                          style={{ maxHeight: '260px' }}
+                        >
+                          {addressSearch &&
+                            addressSearch.map((data, key) => {
+                              return (
+                                <li
+                                  value={key}
+                                  className="search-control-info-list-item candidate"
+                                >
+                                  {data.label}
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      </section>
+                    </section>
+                    <input
+                      style={{
+                        display:
+                          searchByItem === 'name' ? 'flex' : 'none',
+                      }}
+                      type="search"
+                      value={searchText}
+                      className="form-control"
+                      onChange={this.handleSearchChange}
+                      onKeyDown={this.handleSearchEnter}
+                      placeholder="Search By Site Name"
+                    />
+                    {/* )} */}
+                    {/* <Typeahead
+                      className="custom-css-typeahead"
+                      placeholder="Search By Site Name"
+                      onChange={selected => {
+                        // Handle selections...
+                      }}
+                      options={['varun', 'deepak', 'ram']}
+                    /> */}
                     <span
                       className={`input-group-append ${
                         searchDropdown ? 'open' : ''
@@ -386,10 +569,28 @@ class MapFilter extends Component {
                       </span>
                       <ul>
                         <li>
-                          <a>Search by Name</a>
+                          <a
+                            value="name"
+                            name="name"
+                            role="link"
+                            tabIndex={-1}
+                            onKeyPress={this.SearchBy}
+                            onClick={this.SearchBy}
+                          >
+                            Search by Name
+                          </a>
                         </li>
                         <li>
-                          <a>Search by Address</a>
+                          <a
+                            value="address"
+                            name="address"
+                            role="link"
+                            tabIndex={-1}
+                            onKeyPress={this.SearchBy}
+                            onClick={this.SearchBy}
+                          >
+                            Search by Address
+                          </a>
                         </li>
                       </ul>
                     </span>
@@ -419,13 +620,122 @@ class MapFilter extends Component {
                 handleRegionChange={this.handleRegionChange}
                 handleSiteChange={this.handleSiteChange}
                 handleProgressChange={this.handleProgressChange}
-                handleCheckbox={this.handleCheckbox}
                 handleStatusChange={this.handleStatusChange}
                 handleProjectChange={this.handleProjectChange}
+                handleMetricsChange={this.handleMetricsChange}
+                handleBaseLayer={this.handleBaseLayer}
               />
             </div>
             {/* </Scrollbars> */}
           </div>
+          <div
+            className="map-sidebar right-map-sidebar"
+            style={{ background: 'white' }}
+          >
+            <div className="sidebar-wrapper">
+              <div className="sidebar-title flex-between">
+                <h4>Legend</h4>
+              </div>
+            </div>
+            {/* <div>
+              <div className="panel-wrap mt-3">
+                <div className="panel-header">
+                  <b>View Site By:</b>
+                </div>
+                <div className="panel-section">
+                  <div id="legend">
+                    <div id="form_legend">
+                      <div style={{ marginTop: '-8px' }}>
+                        <div id="form_legend">
+                          <div style={{ marginTop: '-8px' }}>
+                            <div
+                              className="circle"
+                              style={{
+                                border: '1px solid black',
+                                background: '#FF0000',
+                              }}
+                            />
+                            <span>0%</span>
+                          </div>
+                          <br />
+                          <div style={{ marginTop: '-8px' }}>
+                            <div
+                              className="circle"
+                              style={{
+                                border: '1px solid black',
+                                background: '#f66565',
+                              }}
+                            />
+                            <span>1-20%</span>
+                          </div>
+                          <br />
+                          <div style={{ marginTop: '-8px' }}>
+                            <div
+                              className="circle"
+                              style={{
+                                border: '1px solid black',
+                                background: '#f4c08c',
+                              }}
+                            />
+                            <span>21-40%</span>
+                          </div>
+                          <br />
+                          <div style={{ marginTop: '-8px' }}>
+                            <div
+                              className="circle"
+                              style={{
+                                border: '1px solid black',
+                                background: '#FFFF00',
+                              }}
+                            />
+                            <span>41-60%</span>
+                          </div>
+                          <br />
+                          <div style={{ marginTop: '-8px' }}>
+                            <div
+                              className="circle"
+                              style={{
+                                border: '1px solid black',
+                                background: '#7FFF00',
+                              }}
+                            />
+                            <span>61-80%</span>
+                          </div>
+                          <br />
+                          <div style={{ marginTop: '-8px' }}>
+                            <div
+                              className="circle"
+                              style={{
+                                border: '1px solid black',
+                                background: '#00FF00',
+                              }}
+                            />
+                            <span>81-99%</span>
+                          </div>
+                          <br />
+                          <div style={{ marginTop: '-8px' }}>
+                            <div
+                              className="circle"
+                              style={{
+                                border: '1px solid black',
+                                background: '#069806',
+                              }}
+                            />
+                            <span>100%</span>
+                          </div>
+                          <br />
+                        </div>
+                        <span>100%</span>
+                      </div>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div> */}
+          </div>
+
           <MapLeftTools
             scaleClick={this.scaleClick}
             zoomInClick={this.zoomInClick}
@@ -971,4 +1281,6 @@ export default connect(mapStateToProps, {
   getProjectsList,
   getProjectsRegionTypes,
   getFilteredPrimaryGeojson,
+  getSearchPrimaryGeojson,
+  refreshGeojsonData,
 })(MapFilter);

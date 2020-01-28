@@ -5,33 +5,49 @@ class MetricsTab extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedColorOption: null,
-      selectedSizeOption: null,
+      colorBySelection: '',
+      sizeBySelection: '',
     };
   }
 
-  colorSelectChange = selectedColorOption => {
-    this.setState({ selectedColorOption });
-  };
+  // colorSelectChange = selectedColorOption => {
+  //   this.setState({ selectedColorOption });
+  // };
 
-  sizeSelectChange = selectedSizeOption => {
-    this.setState({ selectedSizeOption });
-  };
+  // sizeSelectChange = selectedSizeOption => {
+  //   this.setState({ selectedSizeOption });
+  // };
+  // handleMetricsChange = (e, usedState) => {
+  //   if (usedState === 'Color') {
+  //     this.setState({ colorBySelection: e.value });
+  //   } else if (usedState === 'Size') {
+  //     this.setState({ sizeBySelection: e.value });
+  //   }
+  // };
 
   render() {
     const colorOption = [
-      { value: 'projects', label: 'Projects' },
+      { value: 'project', label: 'Projects' },
       { value: 'progress', label: 'Progress' },
-      { value: 'formstatus', label: 'Form Status' },
+      { value: 'status', label: 'Form Status' },
+      { value: 'site_type', label: 'Site Type' },
+      { value: 'region', label: 'Region' },
     ];
     const sizeOption = [
-      { value: 'projects', label: 'Projects' },
+      { value: 'project', label: 'Projects' },
       { value: 'progress', label: 'Progress' },
-      { value: 'formstatus', label: 'Form Status' },
+      { value: 'status', label: 'Form Status' },
+      { value: 'site_type', label: 'Site Type' },
+      { value: 'region', label: 'Region' },
     ];
     const {
-      props: { activeTab },
-      state: { selectedColorOption, selectedSizeOption },
+      props: {
+        activeTab,
+        handleMetricsChange,
+        // colorBySelection,
+        // sizeBySelection,
+      },
+      state: { colorBySelection, sizeBySelection },
     } = this;
     return (
       <div
@@ -45,13 +61,14 @@ class MetricsTab extends Component {
       >
         <div className="form-group">
           {/* <label>Color</label> */}
-
           <label>Change Color By:</label>
           <Select
-            name="siteinfo"
+            name="siteinfo color"
             className="wide"
-            value={selectedColorOption}
-            onChange={this.colorSelectChange}
+            // value={colorBySelection}
+            onChange={e => {
+              handleMetricsChange(e, 'Color');
+            }}
             options={colorOption}
           />
         </div>
@@ -60,10 +77,12 @@ class MetricsTab extends Component {
 
           <label>Change Size By:</label>
           <Select
-            name="siteinfo"
+            name="siteinfo size"
             className="wide"
-            value={selectedSizeOption}
-            onChange={this.sizeSelectChange}
+            // value={sizeBySelection}
+            onChange={e => {
+              handleMetricsChange(e, 'Size');
+            }}
             options={sizeOption}
           />
         </div>
@@ -71,5 +90,15 @@ class MetricsTab extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ mapFilterReducer }) => ({
+  mapFilterReducer,
+});
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     getPrimaryGeojson: () =>
+//       dispatch({ type: 'GET_PRIMARY_MARKER_GEOJSON' }),
+//   };
+// };
 
 export default MetricsTab;

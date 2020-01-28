@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import FiltersTab from './FiltersTab';
 import MetricsTab from './MetricsTab';
 import LayersTab from './LayersTab';
 
-class MainSidebarTab extends Component {
+class MainSidebarTab extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,6 +33,8 @@ class MainSidebarTab extends Component {
         handleCheckbox,
         handleStatusChange,
         handleProjectChange,
+        handleMetricsChange,
+        handleBaseLayer,
       },
       // match: {
       //   params: { id: siteId },
@@ -129,12 +131,18 @@ class MainSidebarTab extends Component {
             handleStatusChange={handleStatusChange}
             handleProjectChange={handleProjectChange}
           />
-          <MetricsTab activeTab={activeTab} />
+          <MetricsTab
+            activeTab={activeTab}
+            handleMetricsChange={handleMetricsChange}
+            // colorBySelection={colorBySelection}
+            // sizeBySelection={sizeBySelection}
+          />
           <LayersTab
             // handleRegionChange={handleRegionChange}
             activeTab={activeTab}
             activeLayers={activeLayers}
             changeLayersTab={this.changeLayersTab}
+            handleBaseLayer={handleBaseLayer}
           />
         </div>
 

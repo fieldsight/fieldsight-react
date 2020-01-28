@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import 'react-select-2/dist/css/react-select-2.css';
 import Filters from './ModalOptions/Filters';
 import Metrics from './ModalOptions/Metrics';
 import Layers from './ModalOptions/Layers';
 
-class ModalSettings extends Component {
+class ModalSettings extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
