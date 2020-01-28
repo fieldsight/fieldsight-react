@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
 // import CustomCheckBox from './CustomCheckbox';
-import CustomMultiSelect from './common/CustomMultiSelect';
+import CollapseFilterTable from './CollapseFilterTable';
 import FilterByDate from './common/filterByDate';
 import FilterByData from './common/filterByData';
-import CollapseFilterTable from './CollapseFilterTable';
 import { errorToast, successToast } from '../../utils/toastHandler';
 
 /* eslint-disable */
@@ -24,7 +23,8 @@ export default class FormDataFilter extends Component {
       projectRegions: [{ id: 'all_regions', name: 'Select All' }],
       siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
       startedDate: '',
-      endedDate: '',
+      endedDate: new Date(),
+      showPreview: false,
     };
   }
 
@@ -32,6 +32,9 @@ export default class FormDataFilter extends Component {
     const {
       match: {
         params: { id },
+      },
+      location: {
+        state: { projectCreatedOn },
       },
     } = this.props;
     const { projectRegions, siteType } = this.state;
@@ -63,6 +66,10 @@ export default class FormDataFilter extends Component {
       .catch(() => {
         // react on errors.
       });
+
+    this.setState({
+      startedDate: new Date(projectCreatedOn),
+    });
   }
 
   changeHandlers = (e, info) => {
@@ -187,6 +194,7 @@ export default class FormDataFilter extends Component {
           this.setState({
             selected: [],
             siteType: [],
+            showPreview: true,
           });
         }
       })
@@ -199,14 +207,30 @@ export default class FormDataFilter extends Component {
   };
 
   onChangeHandler = date => {
-    this.setState({
-      startedDate: date,
+    const { endedDate } = this.state;
+    this.setState(() => {
+      if (endedDate && date > endedDate) {
+        return {
+          endedDate: date,
+        };
+      }
+      return {
+        startedDate: date,
+      };
     });
   };
 
   onEndChangeHandler = date => {
-    this.setState({
-      endedDate: date,
+    const { startedDate } = this.state;
+    this.setState(() => {
+      if (date < startedDate) {
+        return {
+          startedDate: date,
+        };
+      }
+      return {
+        endedDate: date,
+      };
     });
   };
 
@@ -222,6 +246,7 @@ export default class FormDataFilter extends Component {
         siteSelected,
         startedDate,
         endedDate,
+        showPreview,
       },
     } = this;
     const DataCrude = [
@@ -248,7 +273,7 @@ export default class FormDataFilter extends Component {
     ];
     const {
       match: {
-        params: { id },
+        params: { id, fid },
       },
       location: {
         state: { projectCreatedOn },
@@ -341,10 +366,8 @@ export default class FormDataFilter extends Component {
                       <div className="col-lg-6 col-md-6">
                         <FilterByDate
                           className="form-group icon-between"
-                          startDate={
-                            startedDate || new Date(projectCreatedOn)
-                          }
-                          endDate={endedDate || new Date()}
+                          startDate={startedDate && startedDate}
+                          endDate={endedDate}
                           startDateHandler={this.onChangeHandler}
                           endDateHandler={this.onEndChangeHandler}
                           createdDate={new Date(projectCreatedOn)}
@@ -367,6 +390,7 @@ export default class FormDataFilter extends Component {
                   {applyButton && <CollapseFilterTable />}
                 </div>
               </div>
+              {showPreview && <CollapseFilterTable id={fid} />}
             </div>
           </div>
         </div>
