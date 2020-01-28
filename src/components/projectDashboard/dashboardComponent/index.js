@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-
+import {
+  getRegionData,
+  getProgressTableData,
+  getSurveyForm,
+} from '../../../actions/projectDashboardActions';
 import withPagination from '../../../hoc/WithPagination';
 import SiteMap from '../../common/SiteMap';
 import RegionsTable from './RegionsTable';
@@ -30,26 +35,33 @@ class ProjectDashboardComponent extends Component {
 
   componentWillMount() {
     const { projectId } = this.props;
+    this.props.getProgressTableData(projectId);
+    this.props.getSurveyForm(projectId);
     this.props.paginationHandler(1, null, {
       type: 'projectSiteList',
       projectId,
     });
   }
 
+  componentDidMount() {
+    const { projectId } = this.props;
+    this.props.getProgressTableData(projectId);
+  }
+
   toggleTab = formType => {
     const {
-      state: { activeTab },
       props: { paginationHandler, projectId },
     } = this;
-
     this.setState(
       {
         activeTab: formType,
       },
       () => {
+        const { activeTab } = this.state;
         if (activeTab === 'region') {
           this.props.getRegionData(projectId);
-        } else if (activeTab === 'site') {
+        }
+        if (activeTab === 'site') {
           paginationHandler(1, null, {
             type: 'projectSiteList',
             projectId,
@@ -74,12 +86,6 @@ class ProjectDashboardComponent extends Component {
 
   render() {
     const {
-      terms_and_labels,
-      id,
-      map,
-      showContentLoader,
-      has_region,
-      is_project_manager,
       projectId,
       siteList,
       dLoader,
@@ -89,17 +95,25 @@ class ProjectDashboardComponent extends Component {
       pageNum,
       paginationHandler,
       renderPageNumbers,
-      project_activity,
-      form_submissions_chart_data,
-      site_progress_chart_data,
-      contacts,
-      public_desc,
-      project_managers,
-      logs,
-      regionData,
-      projectRegionDataLoader,
-      progressTableData,
-      progressLoader,
+      projectDashboard: {
+        terms_and_labels,
+        id,
+        map,
+        showContentLoader,
+        has_region,
+        is_project_manager,
+        project_activity,
+        form_submissions_chart_data,
+        site_progress_chart_data,
+        contacts,
+        public_desc,
+        project_managers,
+        logs,
+        regionData,
+        projectRegionDataLoader,
+        progressTableData,
+        progressLoader,
+      },
     } = this.props;
     const { activeTab } = this.state;
     return (
@@ -360,7 +374,7 @@ class ProjectDashboardComponent extends Component {
               )}
               {activeTab === 'region' && (
                 <RegionsTable
-                  id={projectId}
+                  // id={projectId}
                   loader={projectRegionDataLoader}
                   data={regionData}
                   terms={terms_and_labels}
@@ -492,8 +506,15 @@ class ProjectDashboardComponent extends Component {
     );
   }
 }
-
+const mapStateToProps = ({ projectDashboard }) => ({
+  projectDashboard,
+});
 export default compose(
   withPagination,
   injectIntl,
+  connect(mapStateToProps, {
+    getRegionData,
+    getProgressTableData,
+    getSurveyForm,
+  }),
 )(ProjectDashboardComponent);
