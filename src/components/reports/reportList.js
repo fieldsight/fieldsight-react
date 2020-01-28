@@ -66,13 +66,15 @@ class ReportList extends Component {
                 templates
               </li>
             </ul>
-            <Link
-              to={`/project/${id}/add-report`}
-              className="common-button no-border is-icon"
-            >
-              <i className="material-icons">add_circle</i>
-              <span>New report</span>
-            </Link>
+            {activeTab === 'myReports' && (
+              <Link
+                to={`/project/${id}/add-report`}
+                className="common-button no-border is-icon"
+              >
+                <i className="material-icons">add_circle</i>
+                <span>New report</span>
+              </Link>
+            )}
           </div>
           {activeTab === 'myReports' && <MyReports id={id} />}
           {activeTab === 'sharedWithMe' && <ShareWithMe id={id} />}
