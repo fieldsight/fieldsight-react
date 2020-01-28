@@ -6,12 +6,7 @@ import DashboardHeader from './DashboardHeader';
 import ProjectDashboardComponent from './dashboardComponent';
 import Reports from '../reports';
 
-import {
-  getProjectDashboard,
-  getRegionData,
-  getProgressTableData,
-  getSurveyForm,
-} from '../../actions/projectDashboardActions';
+import { getProjectDashboard } from '../../actions/projectDashboardActions';
 /* eslint-disable camelcase */
 /* eslint-disable react/destructuring-assignment */
 
@@ -41,9 +36,6 @@ class ProjectDashboard extends React.Component {
       },
     } = this.props;
     this.props.getProjectDashboard(projectId);
-    this.props.getProgressTableData(projectId);
-    this.props.getSurveyForm(projectId);
-    // this.setState({ projectId });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,19 +49,10 @@ class ProjectDashboard extends React.Component {
         },
         () => {
           props.getProjectDashboard(projectId);
-          props.getProgressTableData(projectId);
-
-          // this.setState({ projectId });
         },
       );
     }
   }
-
-  // toggleTab = tab => {
-  //   this.setState({
-  //     activeTab: tab,
-  //   });
-  // };
 
   closeModal = type => {
     // if (type) {
@@ -96,28 +79,16 @@ class ProjectDashboard extends React.Component {
   render() {
     const {
       projectDashboard: {
-        id,
         name,
         address,
         public_desc,
         logo,
-        contacts,
         project_activity,
         total_sites,
         total_users,
-        project_managers,
-        has_region,
-        logs,
-        form_submissions_chart_data,
-        site_progress_chart_data,
-        map,
         terms_and_labels,
         breadcrumbs,
         projectDashboardLoader,
-        regionData,
-        projectRegionDataLoader,
-        progressTableData,
-        progressLoader,
         is_project_manager,
         surveyData,
       },
@@ -166,8 +137,6 @@ class ProjectDashboard extends React.Component {
             showGallery={showGallery}
             isProjectManager={is_project_manager}
             surveyData={surveyData}
-            // activeTab={activeTab}
-            // toggleTab={this.toggleTab}
             path={url}
           />
         </div>
@@ -178,27 +147,7 @@ class ProjectDashboard extends React.Component {
             render={props => (
               <ProjectDashboardComponent
                 {...props}
-                terms_and_labels={terms_and_labels}
-                id={id}
-                map={map}
-                showContentLoader={projectDashboardLoader}
-                has_region={has_region}
-                regionData={regionData}
-                projectRegionDataLoader={projectRegionDataLoader}
-                getRegionData={this.props.getRegionData}
-                is_project_manager={is_project_manager}
                 projectId={projectId}
-                project_activity={project_activity}
-                form_submissions_chart_data={
-                  form_submissions_chart_data
-                }
-                site_progress_chart_data={site_progress_chart_data}
-                contacts={contacts}
-                public_desc={public_desc}
-                project_managers={project_managers}
-                logs={logs}
-                progressTableData={progressTableData}
-                progressLoader={progressLoader}
               />
             )}
           />
@@ -221,8 +170,5 @@ export default compose(
   withRouter,
   connect(mapStateToProps, {
     getProjectDashboard,
-    getRegionData,
-    getProgressTableData,
-    getSurveyForm,
   }),
 )(ProjectDashboard);
