@@ -13,8 +13,9 @@ import SelectElement from '../../common/SelectElement';
 import GeneralFormModal from './generalForm';
 import ScheduleFormModal from './scheduleform';
 import RadioElement from '../../common/RadioElement';
+import ManageModal from '../../manageForms/ManageModal';
 
-/* eslint-disable camelcase */
+/* eslint-disable */
 
 export default class MyForm extends Component {
   _isMounted = false;
@@ -43,6 +44,8 @@ export default class MyForm extends Component {
       formTypePopUp: false,
       selectedName: '',
       loader: false,
+      selectedId: '',
+      selectedArr: [],
     };
   }
 
@@ -187,21 +190,21 @@ export default class MyForm extends Component {
     });
   };
 
-  selectHandler = e => {
-    const { value } = e.target;
-    this.setState(
-      {
-        selectId: value,
-      },
-      () => {
-        if (value) {
-          this.setState(prevState => ({
-            formTypePopUp: !prevState.formTypePopUp,
-          }));
-        }
-      },
-    );
-  };
+  // selectHandler = e => {
+  //   const { value } = e.target;
+  //   this.setState(
+  //     {
+  //       selectId: value,
+  //     },
+  //     () => {
+  //       if (value) {
+  //         this.setState(prevState => ({
+  //           formTypePopUp: !prevState.formTypePopUp,
+  //         }));
+  //       }
+  //     },
+  //   );
+  // };
 
   generalCloseButton = () => {
     this.setState({
@@ -256,19 +259,21 @@ export default class MyForm extends Component {
     });
   };
 
-  OrganizationHandler = e => {
-    const { value } = e.target;
+  OrganizationHandler = id => {
+    // const { value } = e.target;
 
     this.setState(
       {
-        selectOrganization: value,
+        selectOrganization: id,
+        formTypePopUp: false,
       },
       () => {
-        if (value) {
-          this.setState(prevState => ({
-            formTypePopUp: !prevState.formTypePopUp,
-          }));
-        }
+        const displayName = this.state.organization_library_forms.filter(
+          form => id === form.xf_id,
+        );
+        this.setState({
+          selectedArr: displayName,
+        });
       },
     );
   };
@@ -306,6 +311,23 @@ export default class MyForm extends Component {
     this._isMounted = false;
   }
 
+  handleForm(id) {
+    this.setState(
+      {
+        selectId: id,
+        formTypePopUp: false,
+      },
+      () => {
+        const displayName = this.state.forms.filter(
+          form => id === form.xf_id,
+        );
+        this.setState({
+          selectedArr: displayName,
+        });
+      },
+    );
+  }
+
   render() {
     const {
       state: {
@@ -324,6 +346,7 @@ export default class MyForm extends Component {
         formTypePopUp,
         selectedName,
         loader,
+        selectedArr,
       },
       props: { id },
       openDelete,
@@ -337,10 +360,10 @@ export default class MyForm extends Component {
     return (
       <>
         <RightContentCard
-          title="Organization Default Forms"
+          title="Organization Default Form"
           addButton
           toggleModal={this.handleChange}
-          buttonName="Add"
+          // buttonName="Add"
         >
           <FormTable
             selected_forms={scheduled_forms}
@@ -369,7 +392,7 @@ export default class MyForm extends Component {
                       <label>Form Types</label>
                       <div className="custom-checkbox display-inline">
                         <RadioElement
-                          label="General Forms"
+                          label="General Form"
                           className="General Forms"
                           name="status"
                           value={0}
@@ -377,7 +400,7 @@ export default class MyForm extends Component {
                           checked={radioForms === '0'}
                         />
                         <RadioElement
-                          label="Scheduled Forms"
+                          label="Scheduled Form"
                           className="Scheduled Forms"
                           name="status"
                           value={1}
@@ -399,6 +422,7 @@ export default class MyForm extends Component {
                 handleAllModel={handleAllModel}
                 handleFormType={this.handleFormType}
                 selectedName={selectedName}
+                SelectedArr={selectedArr}
               />
             )}
 
@@ -410,6 +434,7 @@ export default class MyForm extends Component {
                 handleAllModel={handleAllModel}
                 id={id}
                 handleFormType={this.handleFormType}
+                SelectedArr={selectedArr}
               />
             )}
           </Modal>
@@ -453,33 +478,59 @@ export default class MyForm extends Component {
             </ul>
 
             {activeTab === 'myForms' && (
-              <form className="floating-form">
-                <div className="row">
-                  <div className="col-xl-12 col-md-12">
-                    <SelectElement
-                      className="form-control"
-                      options={forms}
-                      changeHandler={this.selectHandler}
-                      // label="Form List"
-                      value={selectId}
-                    />
-                  </div>
-                </div>
-              </form>
+              <ul>
+                {forms.map(formList => (
+                  <li key={formList.xf_id}>
+                    <a
+                      role="button"
+                      onKeyDown={handleConfirm}
+                      tabIndex="0"
+                      className="td-delete-btn"
+                      onClick={() => {
+                        this.handleForm(formList.xf_id);
+                      }}
+                    >
+                      {formList.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             )}
+
             {activeTab === 'organizationForm' && (
-              <form className="floating-form">
-                <div className="row">
-                  <div className="col-xl-12 col-md-12">
-                    <SelectElement
-                      className="form-control"
-                      options={organization_library_forms}
-                      changeHandler={this.OrganizationHandler}
-                      value={selectOrganization}
-                    />
-                  </div>
-                </div>
-              </form>
+              // <form className="floating-form">
+              //   <div className="row">
+              //     <div className="col-xl-12 col-md-12">
+              //       {/* <SelectElement
+              //         className="form-control"
+              //         options={organization_library_forms}
+              //         changeHandler={this.OrganizationHandler}
+              //         value={selectOrganization}
+              //       /> */}
+              //     </div>
+              //   </div>
+              // </form>
+              <ul>
+                {organization_library_forms ? (
+                  organization_library_forms.map(formList => (
+                    <li key={formList.xf_id}>
+                      <a
+                        role="button"
+                        onKeyDown={handleConfirm}
+                        tabIndex="0"
+                        className="td-delete-btn"
+                        onClick={() => {
+                          this.OrganizationHandler(formList.xf_id);
+                        }}
+                      >
+                        {formList.title}
+                      </a>
+                    </li>
+                  ))
+                ) : (
+                  <p>No organization library forms </p>
+                )}
+              </ul>
             )}
           </Modal>
         )}

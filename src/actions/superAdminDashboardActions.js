@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { GET_SUPERADMIN_DASHBOARD } from './types';
+import {
+  GET_SUPERADMIN_DASHBOARD,
+  GET_ADMIN_PROGRESS_TABLE_LIST,
+} from './types';
 
 /* eslint-disable */
 export const getSuperAdminDashboard = id => dispatch => {
@@ -14,4 +17,15 @@ export const getSuperAdminDashboard = id => dispatch => {
     .catch(() => {});
 };
 
+export const getProgressTable = id => dispatch => {
+  axios
+    .get(`/fv3/api/organization-forms/${id}/`)
+    .then(res => {
+      dispatch({
+        type: GET_ADMIN_PROGRESS_TABLE_LIST,
+        payload: res.data,
+      });
+    })
+    .catch(() => {});
+};
 // export default getSuperAdminDashboard;

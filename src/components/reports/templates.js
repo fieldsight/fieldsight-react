@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Loader from '../common/Loader';
+import { DotLoader } from '../myForm/Loader';
 
 import {
   getReportList,
@@ -126,6 +128,8 @@ class Templates extends Component {
           stagedData,
           customReports,
           standardReports,
+          loader,
+          formLoader,
         },
       },
     } = this;
@@ -189,8 +193,9 @@ class Templates extends Component {
         <div className="card-body">
           <div className="standard-tempalte">
             <h2 className="my-3">Standard</h2>
-            {standardReports !== undefined &&
-              standardReports.length > 0 &&
+            {loader &&
+            standardReports !== undefined &&
+            standardReports.length > 0 ? (
               standardReports.map(standardReport => (
                 <div
                   className="report-list"
@@ -315,7 +320,10 @@ class Templates extends Component {
                     </div>
                   )}
                 </div>
-              ))}
+              ))
+            ) : (
+              <Loader />
+            )}
 
             <div className="report-list">
               <div className="row">
@@ -349,7 +357,8 @@ class Templates extends Component {
                               : { display: 'none' }
                           }
                         >
-                          {generalData !== undefined &&
+                          {formLoader &&
+                          generalData !== undefined &&
                           generalData.length > 0 ? (
                             generalData.map(genInfo => (
                               <p key={genInfo.id}>
@@ -367,7 +376,7 @@ class Templates extends Component {
                               </p>
                             ))
                           ) : (
-                            <p>No Data</p>
+                            <DotLoader />
                           )}
                         </div>
                       </li>
@@ -393,7 +402,8 @@ class Templates extends Component {
                               : { display: 'none' }
                           }
                         >
-                          {scheduledData !== undefined &&
+                          {formLoader &&
+                          scheduledData !== undefined &&
                           scheduledData.length > 0 ? (
                             scheduledData.map(scheinfo => (
                               <p key={scheinfo.id}>
@@ -411,7 +421,7 @@ class Templates extends Component {
                               </p>
                             ))
                           ) : (
-                            <p>No Data</p>
+                            <DotLoader />
                           )}
                         </div>
                       </li>
@@ -436,7 +446,8 @@ class Templates extends Component {
                               : { display: 'none' }
                           }
                         >
-                          {surveyData !== undefined &&
+                          {formLoader &&
+                          surveyData !== undefined &&
                           surveyData.length > 0 ? (
                             surveyData.map(surData => (
                               <p key={surData.id}>
@@ -454,7 +465,7 @@ class Templates extends Component {
                               </p>
                             ))
                           ) : (
-                            <p>No Data</p>
+                            <DotLoader />
                           )}
                         </div>
                       </li>
@@ -479,7 +490,8 @@ class Templates extends Component {
                               : { display: 'none' }
                           }
                         >
-                          {stagedData !== undefined &&
+                          {formLoader &&
+                          stagedData !== undefined &&
                           stagedData.length > 0 ? (
                             stagedData.map(satData => (
                               <ul key={satData.id}>
@@ -506,7 +518,7 @@ class Templates extends Component {
                               </ul>
                             ))
                           ) : (
-                            <p>No Data</p>
+                            <DotLoader />
                           )}
                         </div>
                       </li>
@@ -541,7 +553,8 @@ class Templates extends Component {
 
           <div className="custom-template">
             <h2 className="my-3">custom</h2>
-            {customReports !== undefined &&
+            {loader &&
+              customReports !== undefined &&
               customReports.length > 0 &&
               customReports.map(custom => (
                 <div className="report-list" key={custom.id}>

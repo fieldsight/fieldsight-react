@@ -95,7 +95,7 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required
+                // required
                 label="identifier"
                 name="identifier"
                 value={identifier}

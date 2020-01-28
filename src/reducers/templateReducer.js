@@ -7,6 +7,8 @@ const initialState = {
   scheduledData: [],
   surveyData: [],
   stagedData: [],
+  loader: false,
+  formLoader: false,
 };
 
 export default function(state = initialState, action) {
@@ -16,7 +18,9 @@ export default function(state = initialState, action) {
         ...state,
         customReports: action.payload.custom_reports,
         standardReports: action.payload.standard_reports,
+        loader: true,
       };
+
     case GET_FORM_TYPES:
       return {
         ...state,
@@ -25,6 +29,7 @@ export default function(state = initialState, action) {
           action.flag === 'scheduled' ? action.payload : [],
         surveyData: action.flag === 'survey' ? action.payload : [],
         stagedData: action.flag === 'stage' ? action.payload : [],
+        formLoader: true,
       };
     default:
       return state;

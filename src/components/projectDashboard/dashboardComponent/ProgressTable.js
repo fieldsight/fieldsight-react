@@ -121,6 +121,7 @@ class ProgressTable extends React.PureComponent {
   render() {
     const { data, loader } = this.props;
     const sn = 1;
+
     return (
       <>
         {loader ? (

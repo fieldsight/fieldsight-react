@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
-
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
@@ -174,38 +174,43 @@ class TeamAdd extends Component {
       longitude: this.state.position.longitude,
       ...(this.state.id && { parent: this.state.id }),
     };
-
-    axios
-      .post(`fv3/api/team-form/`, data)
-      .then(res => {
-        if (res.status === 201) {
-          this.setState({
-            project: {
-              identifier: '',
-              teamName: '',
-              contactnumber: '',
-              email: '',
-              address: '',
-              website: '',
-              publicDescription: '',
-              logo: '',
-            },
-            position: {
-              latitude: '51.505',
-              longitude: '-0.09',
-            },
-            zoom: 13,
-            src: '',
-            showCropper: false,
-            cropResult: '',
-            isLoading: false,
-            selectedCountry: '',
-            selectedteam: '',
-          });
-          this.props.history.push(`/team-dashboard/${res.data.id}`);
-        }
-      })
-      .catch(() => {});
+    if (this.state.project.identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
+      });
+    } else {
+      axios
+        .post(`fv3/api/team-form/`, data)
+        .then(res => {
+          if (res.status === 201) {
+            this.setState({
+              project: {
+                identifier: '',
+                teamName: '',
+                contactnumber: '',
+                email: '',
+                address: '',
+                website: '',
+                publicDescription: '',
+                logo: '',
+              },
+              position: {
+                latitude: '51.505',
+                longitude: '-0.09',
+              },
+              zoom: 13,
+              src: '',
+              showCropper: false,
+              cropResult: '',
+              isLoading: false,
+              selectedCountry: '',
+              selectedteam: '',
+            });
+            this.props.history.push(`/team-dashboard/${res.data.id}`);
+          }
+        })
+        .catch(() => {});
+    }
   };
 
   mapClickHandler = e => {
@@ -290,12 +295,26 @@ class TeamAdd extends Component {
         selectedteam,
         selectedCountry,
       },
+      props: {
+        match: {
+          params: { id },
+        },
+      },
     } = this;
 
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
+            {id ? (
+              <li className="breadcrumb-item">
+                <Link to={`/team-dashboard/${id}`}>
+                  Team Dashboard
+                </Link>
+              </li>
+            ) : (
+              ''
+            )}
             <li
               className="breadcrumb-item active"
               aria-current="page"
@@ -361,7 +380,6 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required
                   label="app.contactNumber"
                   name="contactnumber"
                   value={contactnumber}
@@ -374,7 +392,6 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="email"
-                  required
                   label="app.email"
                   name="email"
                   value={email}
@@ -401,7 +418,6 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required
                   label="app.address"
                   name="address"
                   value={address}
@@ -431,7 +447,6 @@ class TeamAdd extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required
                     label="app.description"
                     name="publicDescription"
                     value={publicDescription}

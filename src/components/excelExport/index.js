@@ -152,10 +152,6 @@ class ExcelExport extends Component {
     this.props.deleteExport(formId);
   };
 
-  handleDownload = exportId => {
-    this.props.downloadExport(exportId);
-  };
-
   handleToggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
@@ -222,16 +218,7 @@ class ExcelExport extends Component {
                       <td>{index + 1}</td>
                       <td>
                         {history.internal_status === 1 && (
-                          <a
-                            role="button"
-                            tabIndex="0"
-                            onClick={() => {
-                              this.handleDownload(history.id);
-                            }}
-                            onKeyDown={() => {
-                              this.handleDownload(history.id);
-                            }}
-                          >
+                          <a href={history.file_url}>
                             {history.filename}
                           </a>
                         )}
@@ -268,7 +255,7 @@ class ExcelExport extends Component {
         {showModal && (
           <Modal
             title="Advanced Export"
-            toggleModal={this.toggleModal}
+            toggleModal={this.handleToggleModal}
           >
             <div className="row">
               <div className="col-xs-6">

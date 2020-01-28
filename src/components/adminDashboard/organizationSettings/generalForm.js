@@ -3,7 +3,7 @@ import axios from 'axios';
 import RadioElement from '../../common/RadioElement';
 import Loader from '../../common/Loader';
 
-/* eslint-disable */
+/* eslint-disable camelcase */
 export default class GeneralFormModal extends Component {
   _isMounted = false;
 
@@ -99,6 +99,7 @@ export default class GeneralFormModal extends Component {
   componentDidMount() {
     this._isMounted = true;
   }
+
   componentWillUnmount() {
     this._isMounted = false;
   }
@@ -158,6 +159,10 @@ export default class GeneralFormModal extends Component {
               >
                 Select Form
               </button>
+              {this.props.SelectedArr &&
+                this.props.SelectedArr.map(name => (
+                  <p key={name.xf_id}>{name.title}</p>
+                ))}
             </div>
           </div>
 

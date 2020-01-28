@@ -39,6 +39,7 @@ export default class ProjectAdd extends Component {
       isLoading: false,
       // redirect: false,
       breadcrumbs: {},
+      id: this.props.match.params ? this.props.match.params.id : '',
     };
   }
 
@@ -49,6 +50,7 @@ export default class ProjectAdd extends Component {
         params: { id },
       },
     } = this.props;
+
     axios
       .get(`/fv3/api/sectors-subsectors/`)
       .then(res => {
@@ -112,45 +114,51 @@ export default class ProjectAdd extends Component {
       cropResult,
     };
 
-    axios
-      .post(`fv3/api/add-project/${id}/`, data)
-      .then(res => {
-        if (res.status === 201) {
-          successToast('Project', 'Created');
-          this.setState({
-            project: {
-              name: '',
-              phone: '',
-              email: '',
-              address: '',
-              website: '',
-              donor: '',
-              public_desc: '',
-              cluster_sites: false,
-            },
-            // loaded: 0,
-            sector: [],
-            subSectors: [],
-            selectedSector: '',
-            selectedSubSector: '',
-            position: {
-              latitude: '28.3949',
-              longitude: '-0.09',
-            },
-            cropResult: '',
-            // redirect: true,
-          });
-          this.props.history.push(
-            `/project-dashboard/${res.data.id}`,
-          );
-        }
-      })
-      .catch(err => {
-        const error = err.response.data;
-        Object.entries(error).map(([key, value]) => {
-          return errorToast(`${value}`);
-        });
+    if (this.state.project.identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
       });
+    } else {
+      axios
+        .post(`fv3/api/add-project/${id}/`, data)
+        .then(res => {
+          if (res.status === 201) {
+            successToast('Project', 'Created');
+            this.setState({
+              project: {
+                name: '',
+                phone: '',
+                email: '',
+                address: '',
+                website: '',
+                donor: '',
+                public_desc: '',
+                cluster_sites: false,
+              },
+              // loaded: 0,
+              sector: [],
+              subSectors: [],
+              selectedSector: '',
+              selectedSubSector: '',
+              position: {
+                latitude: '28.3949',
+                longitude: '-0.09',
+              },
+              cropResult: '',
+              // redirect: true,
+            });
+            this.props.history.push(
+              `/project-dashboard/${res.data.id}`,
+            );
+          }
+        })
+        .catch(err => {
+          const error = err.response.data;
+          Object.entries(error).map(([key, value]) => {
+            return errorToast(`${value}`);
+          });
+        });
+    }
   };
 
   onSelectChangeHandler = (e, subSect) => {

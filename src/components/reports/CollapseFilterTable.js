@@ -26,8 +26,21 @@ class CollapseFilterTable extends PureComponent {
         id: 1,
         title: 'export',
         icon: 'save_alt',
+        menu: [{ key: 1, text: 'As Excel', link: this.onExportCSV }],
+      },
+    ];
+
+    const sync = [
+      {
+        id: 1,
+        title: 'export',
+        icon: 'save_alt',
         menu: [
-          { key: 1, text: 'Microsoft Excel', link: this.onExportCSV },
+          {
+            key: 1,
+            text: 'To Google Sheets',
+            link: this.onExportCSV,
+          },
         ],
       },
     ];

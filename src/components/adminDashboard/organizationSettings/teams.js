@@ -190,7 +190,7 @@ export default class Teams extends React.PureComponent {
           title="Manage Teams"
           addButton
           toggleModal={this.handleChange}
-          buttonName="Add Teams"
+          // buttonName="Add Teams"
         >
           <TeamsTable
             selected_teams={selected_teams}
