@@ -37,7 +37,7 @@ class Templates extends Component {
 
   generalhandle = result => {
     const {
-      translationReducer: { generalData },
+      templateReducer: { generalData },
     } = this.props;
 
     const { general, id } = this.state;
@@ -58,7 +58,7 @@ class Templates extends Component {
 
   scheduledhandle = result => {
     const {
-      translationReducer: { scheduledData },
+      templateReducer: { scheduledData },
     } = this.props;
 
     const { scheduled, id } = this.state;
@@ -79,7 +79,7 @@ class Templates extends Component {
 
   surveyhandle = result => {
     const {
-      translationReducer: { surveyData },
+      templateReducer: { surveyData },
     } = this.props;
 
     const { survey, id } = this.state;
@@ -96,7 +96,7 @@ class Templates extends Component {
 
   stagedhandle = result => {
     const {
-      translationReducer: { stagedData },
+      templateReducer: { stagedData },
     } = this.props;
 
     const { staged, id } = this.state;
@@ -122,7 +122,7 @@ class Templates extends Component {
         id,
       },
       props: {
-        translationReducer: {
+        templateReducer: {
           generalData,
           scheduledData,
           surveyData,
@@ -621,8 +621,8 @@ class Templates extends Component {
   }
 }
 
-const mapStateToProps = ({ translationReducer }) => ({
-  translationReducer,
+const mapStateToProps = ({ templateReducer }) => ({
+  templateReducer,
 });
 
 export default connect(mapStateToProps, {
