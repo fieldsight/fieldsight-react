@@ -12,60 +12,6 @@ import { errorToast, successToast } from '../../utils/toastHandler';
 
 /* eslint-disable */
 
-const CustomInput = (value, onclick) => (
-  <div className="custom-group-append">
-    <span className="custom-group-text">
-      <i className="material-icons">calendar_today</i>
-      <button className="example-custom-input" onClick={onClick}>
-        {value}
-      </button>
-      {/* <input
-        // onChange={onChange}
-        placeholder="gfdghj"
-        value={value}
-        // isSecure={isSecure}
-        // id={id}
-        onClick={onClick}
-      /> */}
-    </span>
-  </div>
-);
-
-const Input = ({
-  onChange,
-  placeholder,
-  value,
-  isSecure,
-  id,
-  onClick,
-}) => (
-  <div
-  // style={{ position: 'relative' }}
-  >
-    <i
-      onClick={onClick}
-      className="material-icons"
-      value={value}
-      // style={{
-      //   position: 'absolute',
-      //   top: '0.3rem',
-      //   left: '5px',
-      //   fontSize: '1rem',
-      // }}
-    >
-      calendar_today
-    </i>
-
-    <input
-      onClick={onClick}
-      className="dateInput"
-      value={value}
-      type="text"
-      // style={{ paddingLeft: '33px' }}
-    />
-  </div>
-);
-
 export default class FormDataFilter extends PureComponent {
   constructor(props) {
     super(props);
@@ -75,8 +21,8 @@ export default class FormDataFilter extends PureComponent {
       siteOpen: false,
       siteSelected: [],
       applyButton: false,
-      projectRegions: [],
-      siteType: [],
+      projectRegions: [{ id: 'all_regions', name: 'Select All' }],
+      siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
       startedDate: '',
       endedDate: '',
     };
@@ -88,68 +34,103 @@ export default class FormDataFilter extends PureComponent {
         params: { id },
       },
     } = this.props;
+    const { projectRegions, siteType } = this.state;
 
-    const siteType = `/fieldsight/api/site-types/${id}/`;
-    const projectRegions = `/fieldsight/api/project-regions/${id}/`;
+    const siteTypeApi = `/fieldsight/api/site-types/${id}/`;
+    const projectRegionsApi = `/fieldsight/api/project-regions/${id}/`;
 
-    const requestSiteType = axios.get(siteType);
-    const requestProjectRegions = axios.get(projectRegions);
+    const requestSiteType = axios.get(siteTypeApi);
+    const requestProjectRegions = axios.get(projectRegionsApi);
 
     axios
       .all([requestProjectRegions, requestSiteType])
       .then(
         axios.spread((...responses) => {
+          const regions = [...projectRegions, ...responses[0].data];
+          const sites = [...siteType, ...responses[1].data];
           this.setState({
-            siteType: responses[1].data,
-            projectRegions: responses[0].data,
+            projectRegions: regions,
+            selected: regions.map(each => {
+              return { id: each.id };
+            }),
+            siteType: sites,
+            siteSelected: sites.map(each => {
+              return { id: each.id };
+            }),
           });
         }),
       )
-      .catch(errors => {
+      .catch(() => {
         // react on errors.
       });
   }
 
   changeHandlers = (e, info) => {
-    const { checked, name } = e.target;
-
-    const idName = 'id';
+    const { checked } = e.target;
+    const { id } = info;
+    const { projectRegions } = this.state;
     this.setState(prevState => {
       if (checked) {
+        if (id === 'all_regions') {
+          const allId = projectRegions.map(each => {
+            return { id: each.id };
+          });
+          return {
+            selected: allId,
+          };
+        }
         return {
-          selected: [...prevState.selected, { [idName]: info.id }],
+          selected: [...prevState.selected, { id }],
         };
       }
       if (!checked) {
-        // console.log(preveState.selected, 'preveState.selected');
+        if (id === 'all_regions') {
+          return {
+            selected: [],
+          };
+        }
         return {
           selected: prevState.selected.filter(
-            region => region.id !== info.id,
+            region => region.id !== id && region.id !== 'all_regions',
           ),
         };
       }
+      return null;
     });
   };
 
   siteHandler = (e, info) => {
-    const { checked, name } = e.target;
-    const idName = 'id';
+    const { checked } = e.target;
+    const { id } = info;
+    const { siteType } = this.state;
+
     this.setState(prevState => {
       if (checked) {
+        if (id === 'all_sitetypes') {
+          const allId = siteType.map(each => {
+            return { id: each.id };
+          });
+          return {
+            siteSelected: allId,
+          };
+        }
         return {
-          siteSelected: [
-            ...prevState.siteSelected,
-            { [idName]: info.id },
-          ],
+          siteSelected: [...prevState.siteSelected, { id }],
         };
       }
       if (!checked) {
+        if (id === 'all_sitetypes') {
+          return {
+            siteSelected: [],
+          };
+        }
         return {
           siteSelected: prevState.siteSelected.filter(
-            region => region.id !== info.id,
+            site => site.id !== id && site.id !== 'all_sitetypes',
           ),
         };
       }
+      return null;
     });
   };
 
@@ -239,7 +220,6 @@ export default class FormDataFilter extends PureComponent {
 
   render() {
     const {
-      changeHandler,
       state: {
         selected,
         open,
@@ -344,7 +324,7 @@ export default class FormDataFilter extends PureComponent {
                           handleToggleClass={this.SiteToggleClass}
                           data={siteType}
                           changeHandler={this.siteHandler}
-                          selectedArr={this.state.siteSelected}
+                          selectedArr={siteSelected}
                           placeholderTxt="Select Site Type"
                         />
                       </div>
@@ -356,7 +336,7 @@ export default class FormDataFilter extends PureComponent {
                           handleToggleClass={this.handleToggleClass}
                           data={projectRegions}
                           changeHandler={this.changeHandlers}
-                          selectedArr={this.state.selected}
+                          selectedArr={selected}
                           placeholderTxt="Select Region Type"
                         />
                       </div>

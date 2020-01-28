@@ -23,6 +23,7 @@ const initialState = {
   actionResponse: {},
   reportData: {},
   projectList: {},
+  projectCreatedOn: '',
 };
 
 export default function(state = initialState, action) {
@@ -42,6 +43,8 @@ export default function(state = initialState, action) {
           ? action.payload.user_roles
           : [],
         reportLoader: false,
+        projectCreatedOn:
+          action.payload.created_date && action.payload.created_date,
       };
     case GET_FORM:
       return {

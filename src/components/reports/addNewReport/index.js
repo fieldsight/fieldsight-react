@@ -85,7 +85,6 @@ const InitialState = {
     filterByUserRoles: [{ id: 'all_userroles', name: 'Select All' }],
   },
   isDelete: false,
-  showActions: false,
   errors: {},
 };
 
@@ -222,7 +221,6 @@ class AddNewReport extends Component {
           }
           return false;
         });
-        const showActions = objLen.includes(true) ? true : false;
 
         const filterToSiteInfo = report.attributes.filter(r => {
           if (r.value && !r.value.selectedForm) {
@@ -365,7 +363,6 @@ class AddNewReport extends Component {
               ...state.filter,
               filterBy,
             },
-            showActions,
           }),
           () => {
             this.setArrays();
@@ -1091,7 +1088,7 @@ class AddNewReport extends Component {
                 () => {
                   successToast('Report', 'created');
                   this.props.history.push(
-                    `/project-dashboard/${projectId}/report`,
+                    `/view-report/${projectId}/${reportId}`,
                   );
                 },
               );
@@ -1153,15 +1150,15 @@ class AddNewReport extends Component {
   };
 
   requestUpdateForm = (reportId, body) => {
+    const { projectId } = this.state;
+
     Axios.put(`/v4/api/reporting/report/${reportId}/`, body)
       .then(res => {
         if (res.data) {
           successToast('Report', 'updated');
-          if (Object.keys(res.data.filter).length > 0) {
-            this.setState({
-              showActions: true,
-            });
-          }
+          this.props.history.push(
+            `/view-report/${projectId}/${reportId}`,
+          );
         }
       })
       .catch(err => {
@@ -1181,14 +1178,6 @@ class AddNewReport extends Component {
   handleConfirmDelete = () => {
     const { projectId } = this.state;
     this.props.history.push(`/project-dashboard/${projectId}/report`);
-  };
-
-  onSyncClick = () => {
-    this.props.applyActionToReport(this.state.reportId, 'sync');
-  };
-
-  onExportCSV = () => {
-    this.props.applyActionToReport(this.state.reportId, 'excel');
   };
 
   render() {
@@ -1230,7 +1219,6 @@ class AddNewReport extends Component {
         },
         applyFilter,
         isDelete,
-        showActions,
         errors,
       },
       props: {
@@ -1242,6 +1230,7 @@ class AddNewReport extends Component {
           siteTypes,
           userRoles,
           regions,
+          projectCreatedOn,
         },
         match: {
           params: { id: projectId, reportId },
@@ -1250,22 +1239,6 @@ class AddNewReport extends Component {
     } = this;
     // console.log('class', this.state.metricArr);
     const isEdit = reportId ? true : false;
-    const actions = [
-      // {
-      //   id: 0,
-      //   title: 'sync',
-      //   icon: 'sync',
-      //   menu: [{ key: 1, text: 'Sync Now', link: this.onSyncClick }],
-      // },
-      {
-        id: 1,
-        title: 'export',
-        icon: 'save_alt',
-        menu: [
-          { key: 1, text: 'Microsoft Excel', link: this.onExportCSV },
-        ],
-      },
-    ];
 
     return (
       <>
@@ -1478,41 +1451,10 @@ class AddNewReport extends Component {
                         userRoles={userRoles}
                         filterByUserRoles={filterByUserRoles}
                         selectedReportType={selectedReportType}
+                        projectCreatedOn={projectCreatedOn}
                       />
                     )}
                   </>
-                )}
-                {showActions && (
-                  <div className="report-table  mt-3">
-                    {actions.map(action => (
-                      <Dropdown key={action.title}>
-                        <Dropdown.Toggle
-                          drop="right"
-                          variant=""
-                          id="dropdown-Data"
-                          className="common-button data-toggle is-border is-icon"
-                        >
-                          {action.title}
-                          <i className="material-icons">
-                            {action.icon}
-                          </i>
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                          {action.menu.map(item => (
-                            <Dropdown.Item
-                              onClick={() => {
-                                item.link();
-                              }}
-                              key={item.key}
-                              // target="_blank"
-                            >
-                              {item.text}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    ))}
-                  </div>
                 )}
               </div>
               {isDelete && (
