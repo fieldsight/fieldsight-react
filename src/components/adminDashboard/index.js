@@ -309,15 +309,15 @@ class AdminDashboard extends Component {
             </div>
           </div>
         </div>
-        {/* <div className="progress-table mrb-30">
+        <div className="progress-table mrb-30">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-              <h5>Submissions</h5>
+              <h5>Progress Table</h5>
             </div>
 
             <ProgressTable progressTable={progressTable} />
           </div>
-        </div> */}
+        </div>
         {/* <DashboardCounter submissions={submissions} /> */}
         <div className="about-section  mrt-30">
           <div className="row">

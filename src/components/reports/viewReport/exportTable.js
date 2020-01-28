@@ -15,13 +15,17 @@ export default class ExportTable extends Component {
   handleFileName = name => {
     const fileName = name !== null ? name.split('/') : '';
     const newName =
-      fileName[5] !== undefined || null || ''
-        ? fileName[5] && fileName[5].split('_')
+      fileName[6] !== undefined || null || ''
+        ? fileName[6] && fileName[6].split('_')
         : '';
-    const newFileName =
+    const FileName =
       newName !== undefined || null || '' ? newName[2] : '';
+    const newFile =
+      FileName !== undefined || null || '' ? FileName.split('?') : '';
+    const title =
+      newFile !== undefined || null || '' ? newFile[0] : '';
 
-    return name !== null ? newFileName : '';
+    return name !== null ? title : '';
   };
 
   openDeleteModal = id => {
@@ -51,62 +55,63 @@ export default class ExportTable extends Component {
     } = this;
     return (
       <>
-        <Table
-          responsive="xl"
-          className="table  table-bordered  dataTable "
-        >
-          <thead>
-            <tr>
-              <th>File Name</th>
-              <th>Created By</th>
-              <th>Status</th>
-              <th>Created Date</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+        {exportData && exportData.length > 0 ? (
+          <Table
+            responsive="xl"
+            className="table  table-bordered  dataTable "
+          >
+            <thead>
+              <tr>
+                <th>File Name</th>
+                <th>Created By</th>
+                <th>Status</th>
+                <th>Created Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {exportData.length > 0 ? (
-              exportData.map(expo => {
-                const name = this.handleFileName(expo.file);
-                return (
-                  <tr key={expo.id}>
-                    {expo.get_status_display !== 'Failed' && (
-                      <>
-                        <td>{name}</td>
-                        <td>{expo.source_name}</td>
+            <tbody>
+              {exportData.length > 0 &&
+                exportData.map(expo => {
+                  const name = this.handleFileName(expo.file);
+                  return (
+                    <tr key={expo.id}>
+                      {expo.get_status_display !== 'Failed' && (
+                        <>
+                          <td>{name}</td>
+                          <td>{expo.source_name}</td>
 
-                        <td>{expo.get_status_display}</td>
+                          <td>{expo.get_status_display}</td>
 
-                        <td>
-                          {format(expo.date_added, ['YYYY-MM-DD'])}
-                        </td>
-                        <td>
-                          <a href={expo.file}>
-                            <i className="la la-download " />
-                          </a>
-                          <a
-                            role="button"
-                            onKeyDown={openDeleteModal}
-                            tabIndex="0"
-                            className="td-delete-btn"
-                            onClick={() => {
-                              openDeleteModal(expo.id);
-                            }}
-                          >
-                            <i className="la la-trash-o" />
-                          </a>
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                );
-              })
-            ) : (
-              <p>No data</p>
-            )}
-          </tbody>
-        </Table>
+                          <td>
+                            {format(expo.date_added, ['YYYY-MM-DD'])}
+                          </td>
+                          <td>
+                            <a href={expo.file}>
+                              <i className="la la-download " />
+                            </a>
+                            <a
+                              role="button"
+                              onKeyDown={openDeleteModal}
+                              tabIndex="0"
+                              className="td-delete-btn"
+                              onClick={() => {
+                                openDeleteModal(expo.id);
+                              }}
+                            >
+                              <i className="la la-trash-o" />
+                            </a>
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </Table>
+        ) : (
+          <p>No data</p>
+        )}
         {deletebtn && (
           <DeleteModal
             onCancel={CloseDeleteModal}
