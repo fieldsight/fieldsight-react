@@ -9,6 +9,9 @@ const initialState = {
   stagedData: [],
   loader: false,
   formLoader: false,
+  scheduledLoader: false,
+  stagedLoader: false,
+  surveyLoader: false,
 };
 
 export default function(state = initialState, action) {
@@ -29,7 +32,10 @@ export default function(state = initialState, action) {
           action.flag === 'scheduled' ? action.payload : [],
         surveyData: action.flag === 'survey' ? action.payload : [],
         stagedData: action.flag === 'stage' ? action.payload : [],
-        formLoader: true,
+        formLoader: action.flag === 'general' ? true : false,
+        scheduledLoader: action.flag === 'scheduled' ? true : false,
+        stagedLoader: action.flag === 'stage' ? true : false,
+        surveyLoader: action.flag === 'survey' ? true : false,
       };
     default:
       return state;

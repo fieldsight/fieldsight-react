@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from 'react-router-dom';
 import Loader from '../common/Loader';
 import { DotLoader } from '../myForm/Loader';
@@ -130,6 +131,9 @@ class Templates extends Component {
           standardReports,
           loader,
           formLoader,
+          stagedLoader,
+          scheduledLoader,
+          surveyLoader,
         },
       },
     } = this;
@@ -347,37 +351,44 @@ class Templates extends Component {
                             this.generalhandle('general');
                           }}
                         >
-                          general forms
+                          General Forms
                         </a>
                         <div
                           className="form-data-list"
                           style={
                             general === true
-                              ? { display: 'block' }
+                              ? {
+                                  display: 'block',
+                                  position: 'relative',
+                                  height: `200px `,
+                                }
                               : { display: 'none' }
                           }
                         >
-                          {formLoader &&
-                          generalData !== undefined &&
-                          generalData.length > 0 ? (
-                            generalData.map(genInfo => (
-                              <p key={genInfo.id}>
-                                <Link
-                                  to={{
-                                    pathname: `/form-data/${id}/${genInfo.id}`,
+                          <PerfectScrollbar>
+                            {!formLoader && <DotLoader />}
+                            {formLoader &&
+                            generalData !== undefined &&
+                            generalData.length > 0 ? (
+                              generalData.map(genInfo => (
+                                <p key={genInfo.id}>
+                                  <Link
+                                    to={{
+                                      pathname: `/form-data/${id}/${genInfo.id}`,
 
-                                    state: {
-                                      fromDashboard: genInfo.id,
-                                    },
-                                  }}
-                                >
-                                  {genInfo.title}
-                                </Link>
-                              </p>
-                            ))
-                          ) : (
-                            <DotLoader />
-                          )}
+                                      state: {
+                                        fromDashboard: genInfo.id,
+                                      },
+                                    }}
+                                  >
+                                    {genInfo.title}
+                                  </Link>
+                                </p>
+                              ))
+                            ) : (
+                              <p>No data</p>
+                            )}
+                          </PerfectScrollbar>
                         </div>
                       </li>
                       <li>
@@ -391,38 +402,44 @@ class Templates extends Component {
                             this.scheduledhandle('scheduled');
                           }}
                         >
-                          scheduled forms
+                          Scheduled Forms
                         </a>
 
                         <div
                           className="form-data-list"
                           style={
                             scheduled === true
-                              ? { display: 'block' }
+                              ? {
+                                  display: 'block',
+                                  position: 'relative',
+                                  height: `200px `,
+                                }
                               : { display: 'none' }
                           }
                         >
-                          {formLoader &&
-                          scheduledData !== undefined &&
-                          scheduledData.length > 0 ? (
-                            scheduledData.map(scheinfo => (
-                              <p key={scheinfo.id}>
-                                <Link
-                                  to={{
-                                    pathname: `/form-data/${id}/${scheinfo.id}`,
+                          <PerfectScrollbar>
+                            {!scheduledLoader && <DotLoader />}
+                            {scheduledData !== undefined &&
+                            scheduledData.length > 0 ? (
+                              scheduledData.map(scheinfo => (
+                                <p key={scheinfo.id}>
+                                  <Link
+                                    to={{
+                                      pathname: `/form-data/${id}/${scheinfo.id}`,
 
-                                    state: {
-                                      fromDashboard: scheinfo.id,
-                                    },
-                                  }}
-                                >
-                                  {scheinfo.title}
-                                </Link>
-                              </p>
-                            ))
-                          ) : (
-                            <DotLoader />
-                          )}
+                                      state: {
+                                        fromDashboard: scheinfo.id,
+                                      },
+                                    }}
+                                  >
+                                    {scheinfo.title}
+                                  </Link>
+                                </p>
+                              ))
+                            ) : (
+                              <p>No Data</p>
+                            )}
+                          </PerfectScrollbar>
                         </div>
                       </li>
                       <li>
@@ -436,37 +453,43 @@ class Templates extends Component {
                             this.surveyhandle('survey');
                           }}
                         >
-                          survey forms
+                          Survey Forms
                         </a>
                         <div
                           className="form-data-list"
                           style={
                             survey === true
-                              ? { display: 'block' }
+                              ? {
+                                  display: 'block',
+                                  position: 'relative',
+                                  height: `200px `,
+                                }
                               : { display: 'none' }
                           }
                         >
-                          {formLoader &&
-                          surveyData !== undefined &&
-                          surveyData.length > 0 ? (
-                            surveyData.map(surData => (
-                              <p key={surData.id}>
-                                <Link
-                                  to={{
-                                    pathname: `/form-data/${id}/${surData.id}`,
+                          <PerfectScrollbar>
+                            {!surveyLoader && <DotLoader />}
+                            {surveyData !== undefined &&
+                            surveyData.length > 0 ? (
+                              surveyData.map(surData => (
+                                <p key={surData.id}>
+                                  <Link
+                                    to={{
+                                      pathname: `/form-data/${id}/${surData.id}`,
 
-                                    state: {
-                                      fromDashboard: surData.id,
-                                    },
-                                  }}
-                                >
-                                  {surData.title}
-                                </Link>
-                              </p>
-                            ))
-                          ) : (
-                            <DotLoader />
-                          )}
+                                      state: {
+                                        fromDashboard: surData.id,
+                                      },
+                                    }}
+                                  >
+                                    {surData.title}
+                                  </Link>
+                                </p>
+                              ))
+                            ) : (
+                              <p>No data</p>
+                            )}
+                          </PerfectScrollbar>
                         </div>
                       </li>
                       <li>
@@ -480,46 +503,52 @@ class Templates extends Component {
                             this.stagedhandle('stage');
                           }}
                         >
-                          staged forms
+                          Staged Forms
                         </a>
                         <div
                           className="form-data-list"
                           style={
                             staged === true
-                              ? { display: 'block' }
+                              ? {
+                                  display: 'block',
+                                  position: 'relative',
+                                  height: `200px `,
+                                }
                               : { display: 'none' }
                           }
                         >
-                          {formLoader &&
-                          stagedData !== undefined &&
-                          stagedData.length > 0 ? (
-                            stagedData.map(satData => (
-                              <ul key={satData.id}>
-                                <li>{satData.name}</li>
-                                <li>
-                                  {satData.sub_stages.map(sub => (
-                                    <ul>
-                                      <li key={sub.id}>
-                                        <Link
-                                          to={{
-                                            pathname: `/form-data/${id}/${sub.id}`,
+                          <PerfectScrollbar>
+                            {!stagedLoader && <DotLoader />}
+                            {stagedData !== undefined &&
+                            stagedData.length > 0 ? (
+                              stagedData.map(satData => (
+                                <ul key={satData.id}>
+                                  <li>{satData.name}</li>
+                                  <li>
+                                    {satData.sub_stages.map(sub => (
+                                      <ul>
+                                        <li key={sub.id}>
+                                          <Link
+                                            to={{
+                                              pathname: `/form-data/${id}/${sub.id}`,
 
-                                            state: {
-                                              fromDashboard: sub.id,
-                                            },
-                                          }}
-                                        >
-                                          {sub.form_name}
-                                        </Link>
-                                      </li>
-                                    </ul>
-                                  ))}
-                                </li>
-                              </ul>
-                            ))
-                          ) : (
-                            <DotLoader />
-                          )}
+                                              state: {
+                                                fromDashboard: sub.id,
+                                              },
+                                            }}
+                                          >
+                                            {sub.form_name}
+                                          </Link>
+                                        </li>
+                                      </ul>
+                                    ))}
+                                  </li>
+                                </ul>
+                              ))
+                            ) : (
+                              <p>No data</p>
+                            )}
+                          </PerfectScrollbar>
                         </div>
                       </li>
                     </ul>
@@ -553,16 +582,19 @@ class Templates extends Component {
 
           <div className="custom-template">
             <h2 className="my-3">custom</h2>
-            {loader &&
-              customReports !== undefined &&
+            {customReports !== undefined &&
               customReports.length > 0 &&
               customReports.map(custom => (
                 <div className="report-list" key={custom.id}>
                   <div className="row">
                     <div className="col-md-8">
                       <div className="report-content">
-                        <h4>{custom.title}</h4>
-                        <p>{custom.description}</p>
+                        <Link
+                          to={`/project/${id}/edit-report/${custom.id}`}
+                        >
+                          <h4>{custom.title}</h4>
+                          <p>{custom.description}</p>
+                        </Link>
                       </div>
                     </div>
                     <div className="col-md-4">
