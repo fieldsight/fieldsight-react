@@ -178,38 +178,45 @@ class EditProject extends Component {
       sub_sector: selectedSubSector,
       organization,
     };
-    axios
-      .put(`${urls[0]}${projectId}/`, project, {
-        onUploadProgress: progressEvent => {
-          this.setState({
-            loaded: Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total,
-            ),
-          });
-        },
-      })
-      .then(() => {
-        this.setState(
-          {
-            isLoading: false,
-            loaded: 0,
-          },
-          () => successToast('Project', 'updated'),
-        );
-      })
-      .catch(err => {
-        const error = err.response.data;
-        this.setState(
-          {
-            isLoading: false,
-          },
-          () => {
-            Object.entries(error).map(([key, value]) => {
-              return errorToast(`${value}`);
+
+    if (this.state.project.identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
+      });
+    } else {
+      axios
+        .put(`${urls[0]}${projectId}/`, project, {
+          onUploadProgress: progressEvent => {
+            this.setState({
+              loaded: Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total,
+              ),
             });
           },
-        );
-      });
+        })
+        .then(() => {
+          this.setState(
+            {
+              isLoading: false,
+              loaded: 0,
+            },
+            () => successToast('Project', 'updated'),
+          );
+        })
+        .catch(err => {
+          const error = err.response.data;
+          this.setState(
+            {
+              isLoading: false,
+            },
+            // () => {
+            //   Object.entries(error).map(([key, value]) => {
+            //     return errorToast(`${value}`);
+            //   });
+            // },
+          );
+        });
+    }
   };
 
   onSubmitHandler = e => {

@@ -67,6 +67,19 @@ class DashboardHeader extends PureComponent {
         link: `/fieldsight/application/#/organization-users/${superAdminId}`,
         icon: 'la-user',
       },
+      {
+        title: 'Submission',
+        total_sites: `${total_users}`,
+        link: `#`,
+        icon: 'la-copy',
+      },
+
+      // {
+      //   title: 'Total Submission',
+      //   total_sites: `${total_users}`,
+      //   link: `#`,
+      //   icon: 'la-copy',
+      // },
     ];
     return (
       <div className="card mrb-30">

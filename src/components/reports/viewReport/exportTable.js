@@ -66,7 +66,7 @@ export default class ExportTable extends Component {
           </thead>
 
           <tbody>
-            {exportData.length > 0 &&
+            {exportData.length > 0 ? (
               exportData.map(expo => {
                 const name = this.handleFileName(expo.file);
                 return (
@@ -101,7 +101,10 @@ export default class ExportTable extends Component {
                     )}
                   </tr>
                 );
-              })}
+              })
+            ) : (
+              <p>No data</p>
+            )}
           </tbody>
         </Table>
         {deletebtn && (

@@ -125,40 +125,45 @@ export default class SuperAdminForm extends Component {
       latitude,
       longitude,
     };
-
-    axios
-      .post(`/fv3/api/super-organization-form/`, data)
-      .then(req => {
-        if (req.status === 201) {
-          successToast('Organization', 'created');
-          this.props.history.push(
-            `/organization-dashboard/${req.data.id}`,
-          );
-          this.setState({
-            identifier: '',
-            name: '',
-            phone: '',
-            fax: '',
-            email: '',
-            website: '',
-            country: '',
-            address: '',
-            public_desc: '',
-            position: {
-              latitude: '51.505',
-              longitude: '-0.09',
-            },
-            zoom: 13,
-            Selectedtypes: '',
-          });
-        }
-      })
-      .catch(err => {
-        const error = err.response.data;
-        Object.entries(error).map(([key, value]) => {
-          return errorToast(`${value}`);
-        });
+    if (identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
       });
+    } else {
+      axios
+        .post(`/fv3/api/super-organization-form/`, data)
+        .then(req => {
+          if (req.status === 201) {
+            successToast('Organization', 'created');
+            this.props.history.push(
+              `/organization-dashboard/${req.data.id}`,
+            );
+            this.setState({
+              identifier: '',
+              name: '',
+              phone: '',
+              fax: '',
+              email: '',
+              website: '',
+              country: '',
+              address: '',
+              public_desc: '',
+              position: {
+                latitude: '51.505',
+                longitude: '-0.09',
+              },
+              zoom: 13,
+              Selectedtypes: '',
+            });
+          }
+        })
+        .catch(err => {
+          const error = err.response.data;
+          Object.entries(error).map(([key, value]) => {
+            return errorToast(`${value}`);
+          });
+        });
+    }
   };
 
   mapClickHandler = e => {
@@ -205,11 +210,14 @@ export default class SuperAdminForm extends Component {
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
-            <li
-              className="breadcrumb-item active"
-              aria-current="page"
-            >
-              Create Organization
+            <li className="breadcrumb-item">
+              {/* <Link to={`/organization-dashboard/${id}`}>
+                Organization Dashboard
+              </Link> */}
+              Organization Dashboard
+            </li>
+            <li className="breadcrumb-item">
+              Create Super Organization
             </li>
           </ol>
         </nav>

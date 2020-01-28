@@ -175,13 +175,13 @@ class EditTeam extends Component {
 
     axios
       .put(`${urls[0]}${teamId}/`, team, {
-        onUploadProgress: progressEvent => {
-          this.setState({
-            loaded: Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total,
-            ),
-          });
-        },
+        // onUploadProgress: progressEvent => {
+        //   this.setState({
+        //     loaded: Math.round(
+        //       (progressEvent.loaded * 100) / progressEvent.total,
+        //     ),
+        //   });
+        // },
       })
       .then(() => {
         this.setState(
@@ -200,22 +200,29 @@ class EditTeam extends Component {
             isLoading: false,
           },
 
-          () =>
-            Object.entries(error).map(([key, value]) => {
-              return errorToast(`${value}`);
-            }),
+          // () =>
+          //   Object.entries(error).map(([key, value]) => {
+          //     return errorToast(`${value}`);
+          //   }),
         );
       });
   };
 
   onSubmitHandler = e => {
     e.preventDefault();
-    this.setState(
-      {
-        isLoading: true,
-      },
-      this.requestHandler,
-    );
+    if (this.state.team.identifier.trim().length < 5) {
+      console.log('if');
+      this.setState({
+        errorFlag: true,
+      });
+    } else {
+      this.setState(
+        {
+          isLoading: true,
+        },
+        this.requestHandler,
+      );
+    }
   };
 
   onChangeHandler = (e, position) => {

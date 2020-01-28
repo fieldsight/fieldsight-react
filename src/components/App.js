@@ -64,6 +64,7 @@ import SuperAdminSetting from './adminDashboard/organizationSettings/settings';
 import OragnizatonProjectList from './organizationProjectList';
 import OrganizationUserList from './organizationUserList';
 import OrganizationTeams from './organizationTeamList';
+import TotalOrganizationSubmission from './adminDashboard/organizationSettings/totalOrganizationSubmission';
 
 import ReportDashboard from './reports/viewReport';
 
@@ -434,6 +435,13 @@ class App extends Component {
                 <Route
                   path="/exports/:isProject/:formId/:id/:version"
                   render={props => <ExcelExport {...props} />}
+                />
+
+                <Route
+                  path="/organization-submission/:id/"
+                  render={props => (
+                    <TotalOrganizationSubmission {...props} />
+                  )}
                 />
               </Switch>
               <ToastContainer />

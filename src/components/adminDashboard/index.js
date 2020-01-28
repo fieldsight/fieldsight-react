@@ -8,7 +8,11 @@ import About from './about';
 import Project from './projectLists';
 import TeamTable from './team';
 import Admin from './admin';
-import { getSuperAdminDashboard } from '../../actions/superAdminDashboardActions';
+import {
+  getSuperAdminDashboard,
+  getProgressTable,
+} from '../../actions/superAdminDashboardActions';
+import ProgressTable from './progressTable';
 
 /* eslint-disable camelcase */
 
@@ -33,6 +37,7 @@ class AdminDashboard extends Component {
       },
     } = this;
     this.props.getSuperAdminDashboard(superAdminId);
+    this.props.getProgressTable(superAdminId);
   }
 
   componentWillReceiveProps(nextprops) {
@@ -150,6 +155,7 @@ class AdminDashboard extends Component {
           showContentLoader,
           // admins,
           organizationDashboardLoader,
+          progressTable,
         },
       },
       state: { activeTab, projects, teams, admins },
@@ -303,6 +309,15 @@ class AdminDashboard extends Component {
             </div>
           </div>
         </div>
+        {/* <div className="progress-table mrb-30">
+          <div className="card">
+            <div className="card-header main-card-header sub-card-header">
+              <h5>Submissions</h5>
+            </div>
+
+            <ProgressTable progressTable={progressTable} />
+          </div>
+        </div> */}
         {/* <DashboardCounter submissions={submissions} /> */}
         <div className="about-section  mrt-30">
           <div className="row">
@@ -341,6 +356,11 @@ class AdminDashboard extends Component {
 }
 
 const mapStateToProps = ({ superAdminDashboard }) => {
+  console.log(
+    superAdminDashboard.progressTable,
+    'superAdminDashboard',
+    superAdminDashboard,
+  );
   return {
     superAdminDashboard,
   };
@@ -348,4 +368,5 @@ const mapStateToProps = ({ superAdminDashboard }) => {
 
 export default connect(mapStateToProps, {
   getSuperAdminDashboard,
+  getProgressTable,
 })(AdminDashboard);

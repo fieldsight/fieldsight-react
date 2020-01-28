@@ -150,19 +150,25 @@ export default class SuperAdminFormEdit extends Component {
       longitude,
     };
 
-    axios
-      .put(`/fv3/api/super-organization-lists/${id}/`, data)
-      .then(req => {
-        if (req.status === 200) {
-          successToast('Organization', 'updated');
-        }
-      })
-      .catch(err => {
-        const error = err.response.data;
-        Object.entries(error).map(([key, value]) => {
-          return errorToast(`${value}`);
-        });
+    if (this.state.identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
       });
+    } else {
+      axios
+        .put(`/fv3/api/super-organization-lists/${id}/`, data)
+        .then(req => {
+          if (req.status === 200) {
+            successToast('Organization', 'updated');
+          }
+        })
+        .catch(err => {
+          const error = err.response.data;
+          Object.entries(error).map(([key, value]) => {
+            return errorToast(`${value}`);
+          });
+        });
+    }
   };
 
   mapClickHandler = e => {
@@ -203,18 +209,19 @@ export default class SuperAdminFormEdit extends Component {
         errorFlag,
         zoom,
       },
+      // props: { id },
     } = this;
 
     return (
       <>
         {/* <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
-            <li
-              className="breadcrumb-item active"
-              aria-current="page"
-            >
-              Edit Super User
+            <li className="breadcrumb-item">
+              <Link to={`/organization-dashboard/${id}`}>
+              Organization Dashboard
+              </Link>
             </li>
+            <li className="breadcrumb-item">Edit Super Organization</li>
           </ol>
         </nav> */}
         <RightContentCard title="Edit Organization">

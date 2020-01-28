@@ -238,7 +238,7 @@ export default class FormDataFilter extends PureComponent {
       },
       {
         id: '2',
-        title: 'Add a template',
+        title: 'Add to templates',
         link: '#',
       },
       {
@@ -263,8 +263,8 @@ export default class FormDataFilter extends PureComponent {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to={`/project-dashboard/${id}`}>
-                Project Dashboard
+              <Link to={`/project-dashboard/${id}/report`}>
+                Report
               </Link>
             </li>
             <li className="breadcrumb-item">Export Data</li>

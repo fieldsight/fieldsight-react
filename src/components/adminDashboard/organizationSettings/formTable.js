@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { DotLoader } from '../../myForm/Loader';
 
@@ -17,7 +18,7 @@ export default class FormTable extends PureComponent {
 
     return (
       <>
-        <label style={{ fontWeight: 'bold' }}>General Forms</label>
+        <label style={{ fontWeight: 'bold' }}>General Form</label>
         {loader ? (
           <Table
             responsive="xl"
@@ -39,7 +40,13 @@ export default class FormTable extends PureComponent {
                   <tr key={teams.id}>
                     <td>{teams.title}</td>
                     <td>{teams.default_submission_status}</td>
-                    <td>{teams.total_submissions}</td>
+                    <td>
+                      <Link
+                        to={`/organization-submission/${teams.id}/`}
+                      >
+                        {teams.total_submissions}
+                      </Link>
+                    </td>
                     <td>{teams.last_response_on}</td>
                     <td>
                       <a
@@ -67,7 +74,7 @@ export default class FormTable extends PureComponent {
           // <p>No general forms assigned yet.</p>
           <DotLoader />
         )}
-        <label style={{ fontWeight: 'bold' }}>Scheduled Forms</label>
+        <label style={{ fontWeight: 'bold' }}>Scheduled Form</label>
         {loader ? (
           <Table
             responsive="xl"

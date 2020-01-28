@@ -552,6 +552,10 @@ export default class ScheduleFormModal extends Component {
               >
                 Select Form
               </button>
+              {this.props.SelectedArr &&
+                this.props.SelectedArr.map(name => (
+                  <p key={name.xf_id}>{name.title}</p>
+                ))}
             </div>
           </div>
 

@@ -228,7 +228,7 @@ export default class Library extends Component {
           title="Organization Library Forms"
           addButton
           toggleModal={this.handleChange}
-          buttonName="Add"
+          // buttonName="Add"
         >
           <LibraryTable
             organization_library_forms={
@@ -241,7 +241,7 @@ export default class Library extends Component {
 
         {popUpPage && (
           <ManageModal
-            title="Add Organization Library"
+            title="Add form to library"
             toggleModal={this.handleClosePopup}
             handleSubmit={this.handleSubmit}
             showButton

@@ -1,4 +1,7 @@
-import { GET_SUPERADMIN_DASHBOARD } from '../actions/types';
+import {
+  GET_SUPERADMIN_DASHBOARD,
+  GET_ADMIN_PROGRESS_TABLE_LIST,
+} from '../actions/types';
 
 const initialState = {
   id: '',
@@ -21,6 +24,7 @@ const initialState = {
   showContentLoader: false,
   organizationDashboardLoader: true,
   admins: [],
+  progressTable: [],
 };
 
 export default function(state = initialState, action) {
@@ -47,6 +51,11 @@ export default function(state = initialState, action) {
         showContentLoader: true,
         admins: action.payload.admins,
         organizationDashboardLoader: false,
+      };
+    case GET_ADMIN_PROGRESS_TABLE_LIST:
+      return {
+        progressTable: [...action.payload],
+        ...state,
       };
     default:
       return state;
