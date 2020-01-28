@@ -119,14 +119,7 @@ class Templates extends Component {
 
   render() {
     const {
-      state: {
-        general,
-        scheduled,
-        survey,
-        staged,
-
-        id,
-      },
+      state: { general, scheduled, survey, staged, id },
       props: {
         templateReducer: {
           generalData,
@@ -140,10 +133,10 @@ class Templates extends Component {
           stagedLoader,
           scheduledLoader,
           surveyLoader,
+          projectCreatedOn,
         },
       },
     } = this;
-
     const DataCrude = [
       {
         id: '1',
@@ -237,7 +230,6 @@ class Templates extends Component {
                             <Link
                               to={{
                                 pathname: `/export-data/${id}`,
-
                                 state: {
                                   fromDashboard: standardReport.title,
                                 },
@@ -256,7 +248,6 @@ class Templates extends Component {
                           <Link
                             to={{
                               pathname: `/user-export/${id}`,
-
                               state: {
                                 fromDashboard: standardReport.title,
                               },
@@ -384,9 +375,9 @@ class Templates extends Component {
                                   <Link
                                     to={{
                                       pathname: `/form-data/${id}/${genInfo.id}`,
-
                                       state: {
                                         fromDashboard: genInfo.id,
+                                        projectCreatedOn,
                                       },
                                     }}
                                   >
@@ -435,9 +426,9 @@ class Templates extends Component {
                                   <Link
                                     to={{
                                       pathname: `/form-data/${id}/${scheinfo.id}`,
-
                                       state: {
                                         fromDashboard: scheinfo.id,
+                                        projectCreatedOn,
                                       },
                                     }}
                                   >
@@ -485,9 +476,9 @@ class Templates extends Component {
                                   <Link
                                     to={{
                                       pathname: `/form-data/${id}/${surData.id}`,
-
                                       state: {
                                         fromDashboard: surData.id,
+                                        projectCreatedOn,
                                       },
                                     }}
                                   >
@@ -540,9 +531,9 @@ class Templates extends Component {
                                           <Link
                                             to={{
                                               pathname: `/form-data/${id}/${sub.id}`,
-
                                               state: {
                                                 fromDashboard: sub.id,
+                                                projectCreatedOn,
                                               },
                                             }}
                                           >

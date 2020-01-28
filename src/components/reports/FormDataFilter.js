@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
@@ -12,7 +12,7 @@ import { errorToast, successToast } from '../../utils/toastHandler';
 
 /* eslint-disable */
 
-export default class FormDataFilter extends PureComponent {
+export default class FormDataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -146,12 +146,6 @@ export default class FormDataFilter extends PureComponent {
     }));
   };
 
-  // handleApply = () => {
-  //   this.setState(prevState => ({
-  //     applyButton: !prevState.applyButton,
-  //   }));
-  // };
-
   toUpper = str => {
     return str
       .toLowerCase()
@@ -165,9 +159,10 @@ export default class FormDataFilter extends PureComponent {
   handleApply = () => {
     const {
       match: {
-        params: { id },
+        params: { id, fid },
       },
     } = this.props;
+    // debugger;
     const region = this.state.selected.map(reg => reg.id);
     const site = this.state.siteSelected.map(reg => reg.id);
     const startDate = format(this.state.startedDate, ['YYYY-MM-DD']);
@@ -180,10 +175,6 @@ export default class FormDataFilter extends PureComponent {
       end_date: endDate,
     };
 
-    // const route = this.toUpper(
-    //   this.props.location.state.fromDashboard,
-    // );
-
     axios
       .post(
         `/v4/api/reporting/generate-standard-reports/${id}/?report_type=form`,
@@ -192,6 +183,7 @@ export default class FormDataFilter extends PureComponent {
       .then(req => {
         if (req.status === 200) {
           successToast(req.data.detail);
+          // this.props.history.push(`/view-report/${id}/${fid}`);
           this.setState({
             selected: [],
             siteType: [],
@@ -228,6 +220,8 @@ export default class FormDataFilter extends PureComponent {
         projectRegions,
         siteType,
         siteSelected,
+        startedDate,
+        endedDate,
       },
     } = this;
     const DataCrude = [
@@ -256,8 +250,11 @@ export default class FormDataFilter extends PureComponent {
       match: {
         params: { id },
       },
+      location: {
+        state: { projectCreatedOn },
+      },
     } = this.props;
-    // const report_type = 'gfhj';
+
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -289,7 +286,7 @@ export default class FormDataFilter extends PureComponent {
                       </div>
                     </div>
                   </div>
-                  <div className="dropdown report-option">
+                  {/* <div className="dropdown report-option">
                     <Dropdown drop="left">
                       <Dropdown.Toggle
                         variant=""
@@ -310,7 +307,7 @@ export default class FormDataFilter extends PureComponent {
                         ))}
                       </Dropdown.Menu>
                     </Dropdown>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="data-filter mt-3">
                   <h3 className="mb-3">Filters</h3>
@@ -344,10 +341,14 @@ export default class FormDataFilter extends PureComponent {
                       <div className="col-lg-6 col-md-6">
                         <FilterByDate
                           className="form-group icon-between"
-                          startDate={this.state.startedDate}
-                          endDate={this.state.endedDate}
+                          startDate={
+                            startedDate || new Date(projectCreatedOn)
+                          }
+                          endDate={endedDate || new Date()}
                           startDateHandler={this.onChangeHandler}
                           endDateHandler={this.onEndChangeHandler}
+                          createdDate={new Date(projectCreatedOn)}
+                          tillDate={new Date()}
                         />
                       </div>
 

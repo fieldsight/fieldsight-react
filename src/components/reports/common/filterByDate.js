@@ -29,6 +29,8 @@ export default class FilterByDate extends Component {
       className,
       startDate,
       endDate,
+      createdDate,
+      tillDate,
       startDateHandler,
       endDateHandler,
       errors,
@@ -48,7 +50,7 @@ export default class FilterByDate extends Component {
             }
             onChange={startDateHandler}
             selected={startDate}
-            minDate={startDate}
+            minDate={createdDate}
           />
           {errors && errors.startDate && (
             <span color="red" className="error">
@@ -69,7 +71,7 @@ export default class FilterByDate extends Component {
                 value={endDate}
               />
             }
-            maxDate={endDate}
+            maxDate={tillDate}
           />
           {errors && errors.endDate && (
             <span color="red" className="error">

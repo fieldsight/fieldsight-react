@@ -12,6 +12,7 @@ const initialState = {
   scheduledLoader: false,
   stagedLoader: false,
   surveyLoader: false,
+  projectCreatedOn: '',
 };
 
 export default function(state = initialState, action) {
@@ -21,6 +22,7 @@ export default function(state = initialState, action) {
         ...state,
         customReports: action.payload.custom_reports,
         standardReports: action.payload.standard_reports,
+        projectCreatedOn: action.payload.created_date,
         loader: true,
       };
 

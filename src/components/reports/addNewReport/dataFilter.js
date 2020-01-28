@@ -12,7 +12,7 @@ const InitialState = {
     siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
     userRoles: [{ id: 'all_userroles', name: 'Select All' }],
     startDate: '',
-    endDate: new Date(),
+    endDate: '',
   },
   errors: {},
 };
@@ -20,7 +20,12 @@ const InitialState = {
 export default class DataFilter extends Component {
   constructor(props) {
     super(props);
-    this.state = InitialState;
+    this.state = {
+      ...InitialState,
+      createdDate:
+        props.projectCreatedOn && new Date(props.projectCreatedOn),
+      tillDate: new Date(),
+    };
   }
 
   componentWillMount() {
@@ -101,7 +106,7 @@ export default class DataFilter extends Component {
   }
 
   componentWillUnmount() {
-    this.setState({ ...InitialState });
+    this.handleClear();
   }
 
   handleRegionFilter = (e, item) => {
@@ -261,7 +266,18 @@ export default class DataFilter extends Component {
   };
 
   handleClear = () => {
-    this.setState({ ...InitialState });
+    this.setState(state => ({
+      filterData: {
+        ...state.filterData,
+        regions: [{ id: 'all_regions', name: 'Select All' }],
+        siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
+        userRoles: [{ id: 'all_userroles', name: 'Select All' }],
+        startDate: new Date(this.props.projectCreatedOn),
+        endDate: new Date(),
+      },
+      createdDate: new Date(this.props.projectCreatedOn),
+      tillDate: new Date(),
+    }));
   };
 
   handleStartDateChange = e => {
@@ -325,6 +341,8 @@ export default class DataFilter extends Component {
         endDate,
         userRoles,
       },
+      createdDate,
+      tillDate,
       errors,
     } = this.state;
     const {
@@ -337,7 +355,7 @@ export default class DataFilter extends Component {
       applyFilter,
       selectedReportType,
     } = this.props;
-    // console.log('object', this.props);
+    // console.log('object', this.state);
     return (
       <div className="data-filter filter-bottom mrt-30">
         <form onSubmit={this.handleSubmit}>
@@ -408,6 +426,8 @@ export default class DataFilter extends Component {
                   className="form-group icon-between inline-form-group"
                   startDate={startDate}
                   endDate={endDate}
+                  createdDate={createdDate}
+                  tillDate={tillDate}
                   startDateHandler={this.handleStartDateChange}
                   endDateHandler={this.handleEndDateChange}
                   errors={errors}
