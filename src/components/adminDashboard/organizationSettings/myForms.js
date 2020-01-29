@@ -540,7 +540,7 @@ export default class MyForm extends Component {
             onConfirm={handleConfirm}
             onToggle={handleCancle}
             title="Warning"
-            message="Are u sure u want to delete"
+            message="Are u sure you want to delete"
           />
         )}
       </>

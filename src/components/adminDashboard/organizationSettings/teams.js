@@ -222,7 +222,7 @@ export default class Teams extends React.PureComponent {
             onConfirm={handleConfirm}
             onToggle={handleCancle}
             title="Warning"
-            message="Are u sure u want to remove?"
+            message="Are u sure you want to remove?"
           />
         )}
       </>

@@ -237,7 +237,7 @@ export default class SuperAdminForm extends Component {
                 />
                 {errorFlag && (
                   <span style={{ color: 'red' }}>
-                    identifier should be more then 5 character
+                    Identifier cannot be less than 5 characters.
                   </span>
                 )}
               </div>

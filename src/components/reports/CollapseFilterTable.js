@@ -73,6 +73,10 @@ class CollapseFilterTable extends Component {
     );
   };
 
+  viewHandler = () => {
+    console.log('entered');
+  };
+
   render() {
     const { openModal, openEditModal } = this.state;
     const actions = [
@@ -229,14 +233,20 @@ class CollapseFilterTable extends Component {
             toggleModal={this.handleToggle}
           >
             <div>
-              <div>
+              <a
+                role="button"
+                onKeyDown={this.viewHandler}
+                tabIndex="0"
+                className="td-delete-btn"
+                onClick={() => this.viewHandler}
+              >
                 <img
                   src={Sheet}
                   style={{ height: '20px' }}
                   alt="sheet"
                 />
-                <button type="button">View Report</button>
-              </div>
+                View Report
+              </a>
 
               <div style={{ display: 'flex' }}>
                 <label>Schedule Type</label>:<p>Weekly on sunday</p>

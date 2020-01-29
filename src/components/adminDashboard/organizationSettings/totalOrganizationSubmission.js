@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { DotLoader } from '../../myForm/Loader';
 
 export default class TotalOrganizationSubmission extends Component {
   constructor(props) {
     super(props);
     this.state = {
       submission: [],
+      loader: false,
     };
   }
 
@@ -20,17 +22,16 @@ export default class TotalOrganizationSubmission extends Component {
     axios
       .get(`/fv3/api/organization-project-forms/${id}/`)
       .then(res => {
-        console.log(res, 'res');
         this.setState({
           submission: res.data,
+          loader: true,
         });
       });
   }
 
   render() {
-    console.log(this.state.submission, 'submission');
     const {
-      state: { submission },
+      state: { submission, loader },
     } = this;
     return (
       <>
@@ -65,18 +66,28 @@ export default class TotalOrganizationSubmission extends Component {
             </tr>
           </thead>
           <tbody>
-            {submission.length > 0 &&
-              submission.map(sub => (
-                <tr key={sub.id}>
-                  <td>{sub.name}</td>
-                  <td>{sub.team}</td>
-                  <td>{sub.total_submissions}</td>
-                  <td>{sub.submissions.pending}</td>
-                  <td>{sub.submissions.approved}</td>
-                  <td>{sub.submissions.rejected}</td>
-                  <td>{sub.submissions.flagged}</td>
-                </tr>
-              ))}
+            <>
+              {!loader && <DotLoader />}
+              {submission.length > 0 &&
+                submission.map(sub => (
+                  <tr key={sub.id}>
+                    <td>{sub.name}</td>
+                    <td>{sub.team}</td>
+
+                    <td>
+                      <Link
+                        to={`/organization-submission-data/${sub.id}`}
+                      >
+                        {sub.total_submissions}
+                      </Link>
+                    </td>
+                    <td>{sub.submissions.pending}</td>
+                    <td>{sub.submissions.approved}</td>
+                    <td>{sub.submissions.rejected}</td>
+                    <td>{sub.submissions.flagged}</td>
+                  </tr>
+                ))}
+            </>
           </tbody>
         </Table>
       </>

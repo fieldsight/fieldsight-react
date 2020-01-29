@@ -24,14 +24,13 @@ const ShowRow = ({ name }) => (
 
 const ShowContentRow = ({
   sn,
-
+  id,
   pending,
   approved,
   flagged,
   rejected,
   title,
 }) => {
-  const id = 1;
   const totalSubmissions = pending + approved + flagged + rejected;
   return (
     <tr
@@ -40,7 +39,10 @@ const ShowContentRow = ({
     >
       <td>{sn}</td>
       <td>{title}</td>
-      <a className="pending table-profile">
+      <a
+        className="pending table-profile"
+        href={`/fieldsight/application/#/organization-submission/${id}`}
+      >
         <i className="la la-eye" />
 
         {totalSubmissions === 0
@@ -138,8 +140,6 @@ class ProgressTable extends React.PureComponent {
     const { progressTable, loader } = this.props;
     const sn = 1;
 
-    console.log(progressTable, 'projects');
-
     return (
       <>
         {/* {loader ? (
@@ -182,6 +182,7 @@ class ProgressTable extends React.PureComponent {
                             flagged={schedule.submissions.flagged}
                             rejected={schedule.submissions.rejected}
                             title={schedule.title}
+                            id={schedule.id}
                           />
                         )}
                       </>
@@ -201,6 +202,7 @@ class ProgressTable extends React.PureComponent {
                             flagged={schedule.submissions.flagged}
                             rejected={schedule.submissions.rejected}
                             title={schedule.title}
+                            id={schedule.id}
                           />
                         )}
                       </>

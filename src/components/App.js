@@ -65,6 +65,7 @@ import OragnizatonProjectList from './organizationProjectList';
 import OrganizationUserList from './organizationUserList';
 import OrganizationTeams from './organizationTeamList';
 import TotalOrganizationSubmission from './adminDashboard/organizationSettings/totalOrganizationSubmission';
+import TotalSiteSubmission from './adminDashboard/organizationSettings/totalSiteSubmission';
 
 import ReportDashboard from './reports/viewReport';
 
@@ -442,6 +443,10 @@ class App extends Component {
                   render={props => (
                     <TotalOrganizationSubmission {...props} />
                   )}
+                />
+                <Route
+                  path="/organization-submission-data/:id"
+                  render={props => <TotalSiteSubmission {...props} />}
                 />
               </Switch>
               <ToastContainer />
