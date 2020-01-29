@@ -6,7 +6,8 @@ import ReportList from './reportList';
 class Reports extends PureComponent {
   render() {
     const { projectId } = this.props;
-    return <ReportList id={projectId} />;
+
+    return <ReportList id={projectId} history={this.props.history} />;
   }
 }
 

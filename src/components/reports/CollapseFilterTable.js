@@ -5,7 +5,13 @@ import { applyActionToReport } from '../../actions/reportActions';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import Modal from '../common/Modal';
 import Sheet from '../../static/images/sheets.png';
-import editReportSheet from './editReportSheet';
+import Form from '../syncSchedule/form';
+import {
+  formatDate,
+  getScheduleType,
+  getDayOnWeeklySchedule,
+  getReportName,
+} from '../syncSchedule/index';
 
 /* eslint-disable react/jsx-one-expression-per-line */
 class CollapseFilterTable extends Component {
@@ -54,6 +60,17 @@ class CollapseFilterTable extends Component {
     this.setState(state => ({
       openEditModal: !state.openEditModal,
     }));
+  };
+
+  handleSuccess = data => {
+    this.setState(
+      state => ({
+        openEditModal: !state.openEditModal,
+      }),
+      () => {
+        // api call from here!!!!
+      },
+    );
   };
 
   render() {
@@ -177,196 +194,6 @@ class CollapseFilterTable extends Component {
                     <span className="">No</span>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -428,7 +255,14 @@ class CollapseFilterTable extends Component {
             title="Edit Report"
             toggleModal={this.handleEditClose}
           >
-            <editReportSheet />
+            <Form
+              projectId={this.props.id}
+              handleSuccess={this.handleSuccess}
+              data=""
+              getScheduleType={getScheduleType}
+              getReportName={getReportName}
+              // onCancel={this.handleToggleFlag}
+            />
           </Modal>
         )}
       </>
