@@ -279,7 +279,6 @@ export default class FormDataFilter extends Component {
         state: { projectCreatedOn },
       },
     } = this.props;
-
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -390,7 +389,9 @@ export default class FormDataFilter extends Component {
                   {applyButton && <CollapseFilterTable />}
                 </div>
               </div>
-              {showPreview && <CollapseFilterTable id={fid} />}
+              {showPreview && (
+                <CollapseFilterTable id={fid} type="standard" />
+              )}
             </div>
           </div>
         </div>

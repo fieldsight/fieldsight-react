@@ -6,6 +6,7 @@ import {
   APPLY_ACTION_TO_REPORT,
   GET_REPORT_DATA,
   GET_PROJECT_DETAILS,
+  GET_CUSTOM_REPORT_TABLE_DATA,
 } from '../actions/types';
 
 const initialState = {
@@ -24,6 +25,7 @@ const initialState = {
   reportData: {},
   projectList: {},
   projectCreatedOn: '',
+  customReportTable: {},
 };
 
 export default function(state = initialState, action) {
@@ -80,6 +82,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         projectList: action.payload.project_managers,
+      };
+    }
+    case GET_CUSTOM_REPORT_TABLE_DATA: {
+      return {
+        ...state,
+        customReportTable: action.payload,
       };
     }
     default:
