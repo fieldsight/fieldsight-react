@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
-import { applyActionToReport } from '../../actions/reportActions';
-import { errorToast, successToast } from '../../utils/toastHandler';
+import uuid from 'uuid/v4';
+
+import {
+  applyActionToReport,
+  getCustomReportTableData,
+} from '../../actions/reportActions';
+import { successToast } from '../../utils/toastHandler';
 import Modal from '../common/Modal';
 import Sheet from '../../static/images/sheets.png';
-import editReportSheet from './editReportSheet';
+import Loader from '../common/Loader';
 
 /* eslint-disable react/jsx-one-expression-per-line */
 class CollapseFilterTable extends Component {
@@ -14,23 +19,79 @@ class CollapseFilterTable extends Component {
     this.state = {
       openModal: false,
       openEditModal: false,
+      tableData: {},
+      loader: false,
     };
   }
+
+  componentDidMount() {
+    const { id, type } = this.props;
+    if (!type) {
+      this.setState(
+        {
+          loader: true,
+        },
+        () => {
+          this.props.getCustomReportTableData(id);
+        },
+      );
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      props: {
+        reportReducer: { actionResponse, customReportTable },
+      },
+    } = this;
+    if (actionResponse !== prevProps.reportReducer.actionResponse) {
+      successToast(actionResponse.detail);
+    }
+    if (
+      prevProps.reportReducer.customReportTable !== customReportTable
+    ) {
+      this.setTableData(customReportTable);
+    }
+  }
+
+  setTableData = data => {
+    this.setState(
+      {
+        tableData: data,
+        loader: false,
+      },
+      () => {
+        this.getPivotTable();
+      },
+    );
+  };
+
+  getPivotTable = () => {
+    const { tableData } = this.state;
+    const objArr = tableData && Object.entries(tableData);
+    const headers = [];
+    const cols = [];
+    objArr.map(obj => {
+      const regex = /_/gi;
+      headers.push(obj[0].replace(regex, ' '));
+      cols.push(obj[1]);
+      return null;
+    });
+    const rowData = cols && cols.length > 0 && this.transpose(cols);
+    return { headers, rowData };
+  };
+
+  transpose = a => {
+    return Object.keys(a[0]).map(function(c) {
+      return a.map(function(r) {
+        return r[c];
+      });
+    });
+  };
 
   onExportCSV = () => {
     this.props.applyActionToReport(this.props.id, 'excel');
   };
-
-  componentDidUpdate(nextProps) {
-    const {
-      props: {
-        reportReducer: { actionResponse },
-      },
-    } = this;
-    if (actionResponse !== nextProps.reportReducer.actionResponse) {
-      successToast(actionResponse.detail);
-    }
-  }
 
   onSyncHandler = () => {
     this.setState(state => ({
@@ -57,7 +118,13 @@ class CollapseFilterTable extends Component {
   };
 
   render() {
-    const { openModal, openEditModal } = this.state;
+    const {
+      openModal,
+      openEditModal,
+      tableData,
+      loader,
+    } = this.state;
+    const { type } = this.props;
     const actions = [
       {
         id: 2,
@@ -78,6 +145,8 @@ class CollapseFilterTable extends Component {
         menu: [{ key: 1, text: 'As Excel', link: this.onExportCSV }],
       },
     ];
+    const previewData = this.getPivotTable();
+    // debugger;
 
     return (
       <>
@@ -120,257 +189,38 @@ class CollapseFilterTable extends Component {
               </Dropdown>
             ))}
           </div>
-          <div className="table-responsive my-2">
-            <table className="table ">
-              <thead>
-                <tr>
-                  <th>UID</th>
-                  <th>indentifier</th>
-                  <th>name</th>
-                  <th>Submitted by</th>
-                  <th>status</th>
-                  <th>Submitted on</th>
-                  <th>record</th>
-                  <th>choose</th>
-                  <th>Enter the eng</th>
-                  <th>Select const</th>
-                  <th>Interior</th>
-                  <th>exterior</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="">294980</span>
-                  </td>
-                  <td>
-                    <span className="">R-28-18-8-9-003</span>
-                  </td>
-                  <td>
-                    <span className="">Narahari Nepal</span>
-                  </td>
-                  <td>
-                    <span className="">promisha@buildchan…</span>
-                  </td>
-                  <td>
-                    <span className="">Approved</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">2019-09-18</span>
-                  </td>
-                  <td>
-                    <span className="">Call1</span>
-                  </td>
-                  <td>
-                    <span className="">Bishnu</span>
-                  </td>
-                  <td>
-                    <span className="">Strong back</span>
-                  </td>
-                  <td>
-                    <span className="">Typ4</span>
-                  </td>
-                  <td>
-                    <span className="">No</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="report-table-footer">
+          {!type && (
+            <div className="table-responsive my-2">
+              {loader && <Loader />}
+              {!loader &&
+                tableData &&
+                Object.keys(tableData).length > 0 && (
+                  <table className="table ">
+                    <thead>
+                      <tr>
+                        {previewData &&
+                          previewData.headers.length > 0 &&
+                          previewData.headers.map(header => (
+                            <th key={uuid()}>{header}</th>
+                          ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {previewData &&
+                        previewData.rowData.length > 0 &&
+                        previewData.rowData.map(row => (
+                          <tr key={uuid()}>
+                            {row.map(value => (
+                              <td key={uuid()}> {value}</td>
+                            ))}
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                )}
+            </div>
+          )}
+          {/* <div className="report-table-footer">
             <div className="table-data-counter">
               <span>
                 <b>152</b>
@@ -394,7 +244,7 @@ class CollapseFilterTable extends Component {
                 est.size
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
         {openModal && (
           <Modal
@@ -442,4 +292,5 @@ const mapStateToProps = ({ reportReducer }) => ({
 
 export default connect(mapStateToProps, {
   applyActionToReport,
+  getCustomReportTableData,
 })(CollapseFilterTable);

@@ -17,6 +17,7 @@ export default class ExportDataFilter extends Component {
       applyButton: false,
       projectRegions: [{ id: 'all_regions', name: 'Select All' }],
       siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
+      showPreview: false,
     };
   }
 
@@ -174,6 +175,7 @@ export default class ExportDataFilter extends Component {
           this.setState({
             selected: [],
             siteType: [],
+            showPreview: true,
           });
         }
       })
@@ -194,6 +196,7 @@ export default class ExportDataFilter extends Component {
         applyButton,
         projectRegions,
         siteType,
+        showPreview,
         siteSelected,
       },
     } = this;
@@ -340,6 +343,9 @@ export default class ExportDataFilter extends Component {
                   {applyButton && <CollapseFilterTable />}
                 </div>
               </div>
+              {showPreview && (
+                <CollapseFilterTable id={id} type="standard" />
+              )}
             </div>
           </div>
         </div>
