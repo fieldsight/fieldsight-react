@@ -342,7 +342,7 @@ class TeamAdd extends Component {
                 />
                 {this.state.errorFlag && (
                   <span style={{ color: 'red' }}>
-                    identifier should be more then 5 character
+                    Identifier cannot be less than 5 characters.
                   </span>
                 )}
               </div>

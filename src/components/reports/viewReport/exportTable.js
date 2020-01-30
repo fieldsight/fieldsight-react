@@ -53,6 +53,7 @@ export default class ExportTable extends Component {
       openDeleteModal,
       ConfirmHandler,
     } = this;
+
     return (
       <>
         {exportData && exportData.length > 0 ? (
@@ -76,34 +77,36 @@ export default class ExportTable extends Component {
                   const name = this.handleFileName(expo.file);
                   return (
                     <tr key={expo.id}>
-                      {expo.get_status_display !== 'Failed' && (
-                        <>
-                          <td>{name}</td>
-                          <td>{expo.source_name}</td>
+                      {/* { */}
+                      {/* // expo.get_status_display !== 'Failed' && ( */}
+                      <>
+                        <td>{name}</td>
+                        <td>{expo.source_name}</td>
 
-                          <td>{expo.get_status_display}</td>
+                        <td>{expo.get_status_display}</td>
 
-                          <td>
-                            {format(expo.date_added, ['YYYY-MM-DD'])}
-                          </td>
-                          <td>
-                            <a href={expo.file}>
-                              <i className="la la-download " />
-                            </a>
-                            <a
-                              role="button"
-                              onKeyDown={openDeleteModal}
-                              tabIndex="0"
-                              className="td-delete-btn"
-                              onClick={() => {
-                                openDeleteModal(expo.id);
-                              }}
-                            >
-                              <i className="la la-trash-o" />
-                            </a>
-                          </td>
-                        </>
-                      )}
+                        <td>
+                          {format(expo.date_added, ['YYYY-MM-DD'])}
+                        </td>
+                        <td>
+                          <a href={expo.file}>
+                            <i className="la la-download " />
+                          </a>
+                          <a
+                            role="button"
+                            onKeyDown={openDeleteModal}
+                            tabIndex="0"
+                            className="td-delete-btn"
+                            onClick={() => {
+                              openDeleteModal(expo.id);
+                            }}
+                          >
+                            <i className="la la-trash-o" />
+                          </a>
+                        </td>
+                      </>
+                      {/* // )
+                      // } */}
                     </tr>
                   );
                 })}

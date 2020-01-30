@@ -103,7 +103,14 @@ export default class FormTable extends PureComponent {
                     <td>{teams.end_date}</td>
                     <td>{teams.scheduled_type}</td>
                     <td>{teams.default_submission_status}</td>
-                    <td>{teams.total_submissions}</td>
+                    <td>
+                      <Link
+                        to={`/organization-submission/${teams.id}/`}
+                      >
+                        {teams.total_submissions}
+                      </Link>
+                    </td>
+
                     <td>{teams.last_response_on}</td>
 
                     <td>

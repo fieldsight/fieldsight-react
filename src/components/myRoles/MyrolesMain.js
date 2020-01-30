@@ -302,6 +302,7 @@ class MyrolesMain extends Component {
 
         <div className="row">
           <YourTeamSideBar
+            history={this.props.history}
             dLoader={dLoader}
             teams={teams}
             teamId={teamId}

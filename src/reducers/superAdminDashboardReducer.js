@@ -25,12 +25,14 @@ const initialState = {
   organizationDashboardLoader: true,
   admins: [],
   progressTable: [],
+  total_submissions: '',
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_SUPERADMIN_DASHBOARD:
       return {
+        ...state,
         id: action.payload.id,
         name: action.payload.name,
         phone: action.payload.phone,
@@ -51,11 +53,12 @@ export default function(state = initialState, action) {
         showContentLoader: true,
         admins: action.payload.admins,
         organizationDashboardLoader: false,
+        total_submissions: action.payload.total_submissions,
       };
     case GET_ADMIN_PROGRESS_TABLE_LIST:
       return {
-        progressTable: [...action.payload],
         ...state,
+        progressTable: action.payload,
       };
     default:
       return state;

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router';
 import Loader from '../common/Loader';
 import { DotLoader } from '../myForm/Loader';
 
@@ -12,6 +13,7 @@ import {
 } from '../../actions/templateAction';
 
 /* eslint-disable react/jsx-indent */
+/* eslint-disable  no-unused-expressions */
 
 class Templates extends Component {
   constructor(props) {
@@ -111,15 +113,23 @@ class Templates extends Component {
     }));
   };
 
-  handleCustomLink = reportid => {
+  customReporthandler = reportid => {
     const { id } = this.props;
-    console.log(reportid, id, this.props, 'reportid');
-    this.props.history.push(`/project/${id}/edit-report/${reportid}`);
+    return this.props.history.push(
+      `/project/${id}/edit-report/${reportid}`,
+    );
   };
 
   render() {
     const {
-      state: { general, scheduled, survey, staged, id },
+      state: {
+        general,
+        scheduled,
+        survey,
+        staged,
+
+        id,
+      },
       props: {
         templateReducer: {
           generalData,
@@ -137,6 +147,7 @@ class Templates extends Component {
         },
       },
     } = this;
+
     const DataCrude = [
       {
         id: '1',
@@ -230,6 +241,7 @@ class Templates extends Component {
                             <Link
                               to={{
                                 pathname: `/export-data/${id}`,
+
                                 state: {
                                   fromDashboard: standardReport.title,
                                 },
@@ -248,6 +260,7 @@ class Templates extends Component {
                           <Link
                             to={{
                               pathname: `/user-export/${id}`,
+
                               state: {
                                 fromDashboard: standardReport.title,
                               },
@@ -375,6 +388,7 @@ class Templates extends Component {
                                   <Link
                                     to={{
                                       pathname: `/form-data/${id}/${genInfo.id}`,
+
                                       state: {
                                         fromDashboard: genInfo.id,
                                         projectCreatedOn,
@@ -426,6 +440,7 @@ class Templates extends Component {
                                   <Link
                                     to={{
                                       pathname: `/form-data/${id}/${scheinfo.id}`,
+
                                       state: {
                                         fromDashboard: scheinfo.id,
                                         projectCreatedOn,
@@ -531,6 +546,7 @@ class Templates extends Component {
                                           <Link
                                             to={{
                                               pathname: `/form-data/${id}/${sub.id}`,
+
                                               state: {
                                                 fromDashboard: sub.id,
                                                 projectCreatedOn,
@@ -622,11 +638,9 @@ class Templates extends Component {
                       <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
                         {CustomCrude.map(item => (
                           <Dropdown.Item
-                            // href={item.link}
-                            // key={item.id}
-                            // target="_blank"
+                            key={custom.id}
                             onClick={() => {
-                              this.handleCustomLink(item.id);
+                              this.customReporthandler(custom.id);
                             }}
                           >
                             {item.title}

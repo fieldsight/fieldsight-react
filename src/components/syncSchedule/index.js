@@ -10,7 +10,7 @@ import StandardReportTable from './standardReportTable';
 import StageReportTable from './stageReportTable';
 import { errorToast } from '../../utils/toastHandler';
 
-const formatDate = e => {
+export const formatDate = e => {
   const date = new Date(e);
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
@@ -19,7 +19,7 @@ const formatDate = e => {
   return `${year}- ${monthIndex}-${dateIdx}  ${time}`;
 };
 
-const getScheduleType = schedule => {
+export const getScheduleType = schedule => {
   if (schedule === 'Manual') {
     return '0';
   }
@@ -35,7 +35,7 @@ const getScheduleType = schedule => {
   return null;
 };
 
-const getDayOnWeeklySchedule = day => {
+export const getDayOnWeeklySchedule = day => {
   if (day === 1) return 'Mondays';
   if (day === 2) return 'Tuesdays';
   if (day === 3) return 'Wednesdays';
@@ -46,7 +46,7 @@ const getDayOnWeeklySchedule = day => {
   return null;
 };
 
-const getReportName = report => {
+export const getReportName = report => {
   const split = report.split('_');
   const newStr = split.map(str =>
     str.replace(/^\w/, c => c.toUpperCase()),
