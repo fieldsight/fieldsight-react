@@ -68,13 +68,12 @@ const DragHandle = sortableHandle(
 
 const SortableItem = sortableElement(
   ({ item, label, onChangeHandler }) => (
-    <div className="dragable-stage">
-      <DragHandle
-        label={label}
-        onChangeHandler={onChangeHandler}
-        item={item}
-      />
-    </div>
+
+    <DragHandle
+      label={label}
+      onChangeHandler={onChangeHandler}
+      item={item}
+    />
   ),
 );
 
@@ -83,7 +82,7 @@ const SortableContainer = sortableContainer(({ children }) => {
     <div
       style={{
         position: 'relative',
-        height: `850px `,
+        height: `450px `,
       }}
     >
       <PerfectScrollbar>
@@ -128,25 +127,27 @@ export default class SelectedColumn extends Component {
     const { handleCheckSubmissionType } = this.props;
     return (
       <div className="col-lg-5 col-md-5">
-        <h6>
-          Selected Columns
+        <div className="selected-column">
+          <h6>
+            Selected Columns
           {data.length > 0 && <span>{`(${data.length})`}</span>}
-        </h6>
-        <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
-          {data &&
-            data.length > 0 &&
-            data.map((each, index) => {
-              return (
-                <SortableItem
-                  key={`item_${each.code}_${index}`}
-                  index={index}
-                  label={each.label}
-                  item={each}
-                  onChangeHandler={handleCheckSubmissionType}
-                />
-              );
-            })}
-        </SortableContainer>
+          </h6>
+          <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
+            {data &&
+              data.length > 0 &&
+              data.map((each, index) => {
+                return (
+                  <SortableItem
+                    key={`item_${each.code}_${index}`}
+                    index={index}
+                    label={each.label}
+                    item={each}
+                    onChangeHandler={handleCheckSubmissionType}
+                  />
+                );
+              })}
+          </SortableContainer>
+        </div>
       </div>
     );
   }

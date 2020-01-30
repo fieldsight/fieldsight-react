@@ -1265,7 +1265,7 @@ class AddNewReport extends Component {
                   {!isEdit && <h3 className="mb-3">New report</h3>}
                   <button
                     type="button"
-                    className="common-button is-bg is-icon"
+                    className="common-button no-border is-icon"
                     onClick={() => {
                       this.handleToggleDelete();
                     }}
@@ -1319,7 +1319,7 @@ class AddNewReport extends Component {
                       <div className="row">
                         <div
                           className="col-lg-3 col-md-4"
-                          // ref={node => (this.reportRef = node)}
+                        // ref={node => (this.reportRef = node)}
                         >
                           <div className="form-group inline-form-group">
                             <label className="">Report type</label>
