@@ -1319,7 +1319,7 @@ class AddNewReport extends Component {
                       <div className="row">
                         <div
                           className="col-lg-3 col-md-4"
-                        // ref={node => (this.reportRef = node)}
+                          // ref={node => (this.reportRef = node)}
                         >
                           <div className="form-group inline-form-group">
                             <label className="">Report type</label>
@@ -1413,6 +1413,7 @@ class AddNewReport extends Component {
                           handleCheckSubmissionType={
                             this.handleChangeArray
                           }
+                          selectedReportType={selectedReportType}
                         />
                         <div className="col-lg-12">
                           <div className="buttons flex-end">

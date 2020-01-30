@@ -68,7 +68,6 @@ const DragHandle = sortableHandle(
 
 const SortableItem = sortableElement(
   ({ item, label, onChangeHandler }) => (
-
     <DragHandle
       label={label}
       onChangeHandler={onChangeHandler}
@@ -77,20 +76,22 @@ const SortableItem = sortableElement(
   ),
 );
 
-const SortableContainer = sortableContainer(({ children }) => {
-  return (
-    <div
-      style={{
-        position: 'relative',
-        height: `450px `,
-      }}
-    >
-      <PerfectScrollbar>
-        <ul className="selected-list">{children}</ul>
-      </PerfectScrollbar>
-    </div>
-  );
-});
+const SortableContainer = sortableContainer(
+  ({ selectedReportType, children }) => {
+    return (
+      <div
+        style={{
+          position: 'relative',
+          height: `${selectedReportType < 3 ? '1010px' : '680px'} `,
+        }}
+      >
+        <PerfectScrollbar>
+          <ul className="selected-list">{children}</ul>
+        </PerfectScrollbar>
+      </div>
+    );
+  },
+);
 
 export default class SelectedColumn extends Component {
   constructor(params) {
@@ -124,15 +125,22 @@ export default class SelectedColumn extends Component {
   render() {
     const { data } = this.state;
 
-    const { handleCheckSubmissionType } = this.props;
+    const {
+      handleCheckSubmissionType,
+      selectedReportType,
+    } = this.props;
     return (
       <div className="col-lg-5 col-md-5">
         <div className="selected-column">
           <h6>
             Selected Columns
-          {data.length > 0 && <span>{`(${data.length})`}</span>}
+            {data.length > 0 && <span>{`(${data.length})`}</span>}
           </h6>
-          <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
+          <SortableContainer
+            onSortEnd={this.onSortEnd}
+            selectedReportType={selectedReportType}
+            useDragHandle
+          >
             {data &&
               data.length > 0 &&
               data.map((each, index) => {
