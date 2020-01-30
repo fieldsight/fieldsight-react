@@ -309,7 +309,7 @@ class AdminDashboard extends Component {
             </div>
           </div>
         </div>
-        <div className="progress-table mrb-30">
+        <div className="progress-table mrb-30 mrt-30">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
               <h5>Progress Table</h5>

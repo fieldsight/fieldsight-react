@@ -13,7 +13,7 @@ export default class UserRole extends PureComponent {
     } = this.props;
 
     return (
-      <div className="fs-7 fs-col">
+      <div className="col-md-6">
         <div className="custom-group">
           <div className="custom-group-append">
             <span className="custom-group-text">

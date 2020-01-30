@@ -211,4 +211,16 @@
             padding: 1rem;
         }
     }
+
+    .selected-column {
+        background-color: $color-white;
+        padding: .6125rem;
+        min-height: 100vh;
+    }
+
+    .acc-body {
+        .scrollbar-container {
+            background-color: $color-white;
+        }
+    }
 }
