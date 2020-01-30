@@ -1429,6 +1429,7 @@ class AddNewReport extends Component {
                             <button
                               type="button"
                               className="common-button is-bg"
+                              disabled={selectedMetrics.length === 0}
                               onClick={() => {
                                 this.handleSubmitReport();
                               }}
