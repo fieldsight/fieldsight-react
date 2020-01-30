@@ -25,6 +25,7 @@ class AdminDashboard extends Component {
       masterprojects: [],
       teams: [],
       masterteams: [],
+      loader: false,
     };
   }
 
@@ -37,7 +38,12 @@ class AdminDashboard extends Component {
       },
     } = this;
     this.props.getSuperAdminDashboard(superAdminId);
-    this.props.getProgressTable(superAdminId);
+    this.setState(
+      {
+        loader: true,
+      },
+      () => this.props.getProgressTable(superAdminId),
+    );
   }
 
   componentWillReceiveProps(nextprops) {
@@ -48,6 +54,7 @@ class AdminDashboard extends Component {
       masterteams: nextprops.superAdminDashboard.teams,
       admins: nextprops.superAdminDashboard.admins,
       masteradmins: nextprops.superAdminDashboard.admins,
+      loader: nextprops.superAdminDashboard.progressTable && false,
     });
   }
 
@@ -141,24 +148,17 @@ class AdminDashboard extends Component {
           country,
           additional_desc,
           logo,
-          // total_teams,
-
           total_sites,
-          // total_projects,
           total_users,
-          // submissions,
           contact,
-          // projects,
-          // breadcrumbs,
-          // teams,
           map,
           showContentLoader,
-          // admins,
           organizationDashboardLoader,
           progressTable,
+          total_submissions,
         },
       },
-      state: { activeTab, projects, teams, admins },
+      state: { activeTab, projects, teams, admins, loader },
     } = this;
 
     const total_team = teams.length;
@@ -178,6 +178,7 @@ class AdminDashboard extends Component {
           total_users={total_users}
           total_teams={total_team}
           superAdminId={superAdminId}
+          total_submissions={total_submissions}
         />
 
         <div className="row">
@@ -311,11 +312,14 @@ class AdminDashboard extends Component {
         </div>
         <div className="progress-table mrb-30">
           <div className="card">
-            <div className="card-header main-card-header sub-card-header">
-              <h5>Progress Table</h5>
-            </div>
+            {/* <div className="card-header main-card-header sub-card-header">
+              
+            </div> */}
 
-            <ProgressTable progressTable={progressTable} />
+            <ProgressTable
+              progressTable={progressTable}
+              loader={loader}
+            />
           </div>
         </div>
         {/* <DashboardCounter submissions={submissions} /> */}
@@ -356,11 +360,6 @@ class AdminDashboard extends Component {
 }
 
 const mapStateToProps = ({ superAdminDashboard }) => {
-  console.log(
-    superAdminDashboard.progressTable,
-    'superAdminDashboard',
-    superAdminDashboard,
-  );
   return {
     superAdminDashboard,
   };

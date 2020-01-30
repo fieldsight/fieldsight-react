@@ -445,7 +445,7 @@ class App extends Component {
                   )}
                 />
                 <Route
-                  path="/organization-submission-data/:id"
+                  path="/organization-submission-data/:id/:pid"
                   render={props => <TotalSiteSubmission {...props} />}
                 />
               </Switch>

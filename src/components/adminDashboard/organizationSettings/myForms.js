@@ -379,7 +379,7 @@ export default class MyForm extends Component {
             toggleModal={this.handleClosePopup}
             showButton
             showText="Create Form"
-            url="/forms/create"
+            url="/forms/create/"
           >
             <form
               className="floating-form"

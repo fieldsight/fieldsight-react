@@ -189,7 +189,6 @@ export default class SiteDocument extends Component {
                 <div className="card no-boxshadow">
                   <div className="card-header main-card-header">
                     <h5>
-                      {' '}
                       <FormattedMessage
                         id="app.site-document"
                         defaultMessage="Site documents"

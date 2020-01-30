@@ -30,6 +30,7 @@ class DashboardHeader extends PureComponent {
       total_users,
       superAdminId,
       total_teams,
+      total_submissions,
     } = this.props;
     const ManageDropDown = [
       {
@@ -69,7 +70,7 @@ class DashboardHeader extends PureComponent {
       },
       {
         title: 'Submission',
-        total_sites: `${total_users}`,
+        total_sites: `${total_submissions}`,
         link: `#`,
         icon: 'la-copy',
       },

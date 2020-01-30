@@ -14,6 +14,7 @@ const ManageModal = props => {
   } = props;
   return (
     <Zoom duration={500}>
+      {console.log(url, 'url')}
       <div
         className="fieldsight-popup open"
         style={{ zIndex: 99999 }}
