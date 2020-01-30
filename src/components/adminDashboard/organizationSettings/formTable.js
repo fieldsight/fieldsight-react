@@ -65,6 +65,14 @@ export default class FormTable extends PureComponent {
                           <i className="la la-close" />
                         </OverlayTrigger>
                       </a>
+                      <a
+                        href="#"
+                        className="edit-tag tag"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="la la-download " />
+                      </a>
                     </td>
                   </tr>
                 ))}
@@ -129,6 +137,14 @@ export default class FormTable extends PureComponent {
                         >
                           <i className="la la-close" />
                         </OverlayTrigger>
+                      </a>
+                      <a
+                        href="#"
+                        className="edit-tag tag"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="la la-download " />
                       </a>
                     </td>
                   </tr>
