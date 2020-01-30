@@ -97,8 +97,8 @@ export default class Metrics extends Component {
             <h5>metrics</h5>
           </div>
           <div className="acc-body">
-            <div className="fs-row no-gutters">
-              <div className="fs-5 fs-col">
+            <div className="row">
+              <div className="col-md-6">
                 <div className="custom-group">
                   <div className="custom-group-append">
                     <span className="custom-group-text">

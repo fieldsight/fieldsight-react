@@ -85,6 +85,14 @@
             -webkit-outline: none;
             outline: none;
         }
+
+        &.is-disable {
+            color: $color-white;
+            background-color: $primary-light-1;
+            border-color: transparent;
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
     }
 
     .selected-data {

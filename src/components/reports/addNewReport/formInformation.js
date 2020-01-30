@@ -9,6 +9,7 @@ import {
   getForms,
   getFormQuestions,
 } from '../../../actions/reportActions';
+
 /* eslint-disable */
 
 const groupQuestion = formQuestionsChildren => {
@@ -57,7 +58,6 @@ class FormInformation extends Component {
       status: 0,
       filteredQuestions: [],
       formInfoArr: [],
-      formValueArr: [],
       formTypes: [],
       formTypeArr: [],
       selectAll: false,
@@ -92,8 +92,9 @@ class FormInformation extends Component {
           const {
             selectedFormType: { code },
           } = this.state.formInfo;
-
-          code && this.props.getForms(projectId, code);
+          if (code) {
+            this.props.getForms(projectId, code);
+          }
         },
       );
     }
@@ -109,7 +110,9 @@ class FormInformation extends Component {
           const {
             selectedForm: { id },
           } = this.state.formInfo;
-          id && this.props.getFormQuestions(projectId, id);
+          if (id) {
+            this.props.getFormQuestions(projectId, id);
+          }
         },
       );
     }
@@ -167,19 +170,7 @@ class FormInformation extends Component {
     }
     if (prevProps.forms !== this.props.forms) {
       const formList = this.props.forms;
-      const newFormList = [];
-      formList &&
-        formList.map(f => {
-          if (f.sub_stages) {
-            const { name, sub_stages } = f;
-            sub_stages.map(sub => {
-              return newFormList.push({ name, ...sub });
-            });
-          } else {
-            return newFormList.push(f);
-          }
-        });
-      this.setState({ formTypeArr: newFormList });
+      this.loadForms(formList);
     }
 
     if (
@@ -210,6 +201,22 @@ class FormInformation extends Component {
       }));
     }
   }
+
+  loadForms = formList => {
+    const newFormList = [];
+    if (formList) {
+      formList.map(f => {
+        if (f.sub_stages) {
+          const { name, sub_stages } = f;
+          sub_stages.map(sub => {
+            return newFormList.push({ name, ...sub });
+          });
+        }
+        return newFormList.push(f);
+      });
+    }
+    return this.setState({ formTypeArr: newFormList });
+  };
 
   handleRadioChange = e => {
     const { value } = e.target;
@@ -246,15 +253,14 @@ class FormInformation extends Component {
             },
             selectAll: true,
           };
-        } else {
-          return {
-            formInfo: {
-              ...state.formInfo,
-              selectedFormType: item,
-            },
-            selectAll: false,
-          };
         }
+        return {
+          formInfo: {
+            ...state.formInfo,
+            selectedFormType: item,
+          },
+          selectAll: false,
+        };
       },
       () => {
         const {
@@ -286,19 +292,18 @@ class FormInformation extends Component {
             },
             selectAll: true,
           };
-        } else {
-          return {
-            formInfo: {
-              ...state.formInfo,
-              // selectedFormType: {
-              //   ...state.formInfo.selectedFormType,
-              //   value: { selectedForm: item },
-              // },
-              selectedForm: item,
-            },
-            selectAll: false,
-          };
         }
+        return {
+          formInfo: {
+            ...state.formInfo,
+            // selectedFormType: {
+            //   ...state.formInfo.selectedFormType,
+            //   value: { selectedForm: item },
+            // },
+            selectedForm: item,
+          },
+          selectAll: false,
+        };
       },
       () => {
         const {
@@ -313,28 +318,31 @@ class FormInformation extends Component {
     const {
       target: { name, checked },
     } = e;
-    const {
-      formInfo: {
-        selectedFormType,
-        selectedForm,
-        selectedIndividualForm,
-      },
-    } = this.state;
     this.setState(
       state => {
+        const {
+          formInfo: {
+            selectedFormType,
+            selectedForm,
+            selectedIndividualForm,
+          },
+        } = state;
         if (checked) {
           const sameArr = selectedIndividualForm.filter(
             f =>
               f.type === selectedFormType.code &&
               f.form === selectedForm.id,
           );
-          sameArr[0]
-            ? sameArr[0].metrics.push(item)
-            : sameArr.push({
-                type: selectedFormType.code,
-                form: selectedForm.id,
-                metrics: [{ ...item }],
-              });
+          if (sameArr[0]) {
+            sameArr[0].metrics.push(item);
+          } else {
+            sameArr.push({
+              type: selectedFormType.code,
+              form: selectedForm.id,
+              metrics: [{ ...item }],
+            });
+          }
+
           const diffForm = selectedIndividualForm.filter(
             f =>
               f.type === selectedFormType.code &&
@@ -365,12 +373,12 @@ class FormInformation extends Component {
                 const filter = count.metrics.filter(
                   m => m.code !== name,
                 );
-                const item = {
+                const each = {
                   type: count.type,
                   form: count.form,
                   metrics: [...filter],
                 };
-                return item;
+                return each;
               }
               return count;
             },
@@ -384,6 +392,7 @@ class FormInformation extends Component {
             selectAll: false,
           };
         }
+        return null;
       },
       () => {
         const {
@@ -440,7 +449,8 @@ class FormInformation extends Component {
             formInfoArr: filteredValues,
           },
         };
-      } else {
+      }
+      if (selectedQuestions.type !== 'integer') {
         const formTextArr = this.handleTextValueTypes(
           formInfoArr,
           formValue,
@@ -452,6 +462,7 @@ class FormInformation extends Component {
           },
         };
       }
+      return null;
     });
 
     // arr.push('number');
@@ -523,6 +534,7 @@ class FormInformation extends Component {
             },
           };
         }
+        return null;
       },
       () => {
         // this.handleAddFormValue('selectedValue');
@@ -543,9 +555,8 @@ class FormInformation extends Component {
               some.code === 'form_info_all_values'
             ) {
               return true;
-            } else {
-              return false;
             }
+            return false;
           });
         } else {
           if (
@@ -556,6 +567,7 @@ class FormInformation extends Component {
             filteredValues.push(info);
           }
         }
+        return filteredValues;
       });
     }
 
@@ -565,16 +577,16 @@ class FormInformation extends Component {
 
   selectAllSubmissionCount = e => {
     const { checked } = e.target;
-    const {
-      individualFormArr,
-      formInfo: {
-        selectedFormType,
-        selectedForm,
-        selectedIndividualForm,
-      },
-    } = this.state;
     this.setState(
       state => {
+        const {
+          individualFormArr,
+          formInfo: {
+            selectedFormType,
+            selectedForm,
+            selectedIndividualForm,
+          },
+        } = state;
         if (checked) {
           const filterArr = selectedIndividualForm.filter(i => {
             if (
@@ -624,6 +636,7 @@ class FormInformation extends Component {
             },
           };
         }
+        return null;
       },
       () => {
         const {
@@ -743,7 +756,7 @@ class FormInformation extends Component {
                       id="select_all"
                       label="Select All"
                       name="select_all"
-                      checked={!!selectAll ? true : false}
+                      checked={selectAll ? true : false}
                       changeHandler={e => {
                         this.selectAllSubmissionCount(e);
                       }}
@@ -752,7 +765,7 @@ class FormInformation extends Component {
                   <div className="acc-item">
                     <div className="acc-body">
                       <div className="fs-row no-gutters">
-                        <div className="fs-5 fs-col"></div>
+                        <div className="fs-5 fs-col" />
                       </div>
                     </div>
                   </div>
@@ -900,7 +913,7 @@ class FormInformation extends Component {
                   </div>
                   <div className="col-lg-6">
                     <button
-                      role="button"
+                      type="button"
                       className="common-button is-border flex-end"
                       onClick={() => {
                         this.handleAddClick();

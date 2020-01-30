@@ -1265,7 +1265,7 @@ class AddNewReport extends Component {
                   {!isEdit && <h3 className="mb-3">New report</h3>}
                   <button
                     type="button"
-                    className="common-button is-bg is-icon"
+                    className="common-button no-border is-icon"
                     onClick={() => {
                       this.handleToggleDelete();
                     }}
@@ -1340,7 +1340,9 @@ class AddNewReport extends Component {
                         </div>
                         <div className="col-lg-9 col-md-8">
                           <button
-                            className="common-button is-disable is-icon pull-right is-bg"
+                            className={`common-button ${
+                              collapseClass ? '' : 'is-disable'
+                            } is-icon pull-right is-bg`}
                             type="button"
                             onClick={() => {
                               this.handleToggleCollapse();
@@ -1352,8 +1354,8 @@ class AddNewReport extends Component {
                             <span>collapse all</span>
                             <i className="material-icons arrow-icon">
                               {collapseClass
-                                ? 'expand_more'
-                                : 'expand_less'}
+                                ? 'expand_less'
+                                : 'expand_more'}
                             </i>
                           </button>
                         </div>
@@ -1411,6 +1413,7 @@ class AddNewReport extends Component {
                           handleCheckSubmissionType={
                             this.handleChangeArray
                           }
+                          selectedReportType={selectedReportType}
                         />
                         <div className="col-lg-12">
                           <div className="buttons flex-end">

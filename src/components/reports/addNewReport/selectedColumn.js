@@ -68,30 +68,30 @@ const DragHandle = sortableHandle(
 
 const SortableItem = sortableElement(
   ({ item, label, onChangeHandler }) => (
-    <div className="dragable-stage">
-      <DragHandle
-        label={label}
-        onChangeHandler={onChangeHandler}
-        item={item}
-      />
-    </div>
+    <DragHandle
+      label={label}
+      onChangeHandler={onChangeHandler}
+      item={item}
+    />
   ),
 );
 
-const SortableContainer = sortableContainer(({ children }) => {
-  return (
-    <div
-      style={{
-        position: 'relative',
-        height: `850px `,
-      }}
-    >
-      <PerfectScrollbar>
-        <ul className="selected-list">{children}</ul>
-      </PerfectScrollbar>
-    </div>
-  );
-});
+const SortableContainer = sortableContainer(
+  ({ selectedReportType, children }) => {
+    return (
+      <div
+        style={{
+          position: 'relative',
+          height: `${selectedReportType < 3 ? '1010px' : '680px'} `,
+        }}
+      >
+        <PerfectScrollbar>
+          <ul className="selected-list">{children}</ul>
+        </PerfectScrollbar>
+      </div>
+    );
+  },
+);
 
 export default class SelectedColumn extends Component {
   constructor(params) {
@@ -125,28 +125,37 @@ export default class SelectedColumn extends Component {
   render() {
     const { data } = this.state;
 
-    const { handleCheckSubmissionType } = this.props;
+    const {
+      handleCheckSubmissionType,
+      selectedReportType,
+    } = this.props;
     return (
       <div className="col-lg-5 col-md-5">
-        <h6>
-          Selected Columns
-          {data.length > 0 && <span>{`(${data.length})`}</span>}
-        </h6>
-        <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
-          {data &&
-            data.length > 0 &&
-            data.map((each, index) => {
-              return (
-                <SortableItem
-                  key={`item_${each.code}_${index}`}
-                  index={index}
-                  label={each.label}
-                  item={each}
-                  onChangeHandler={handleCheckSubmissionType}
-                />
-              );
-            })}
-        </SortableContainer>
+        <div className="selected-column">
+          <h6>
+            Selected Columns
+            {data.length > 0 && <span>{`(${data.length})`}</span>}
+          </h6>
+          <SortableContainer
+            onSortEnd={this.onSortEnd}
+            selectedReportType={selectedReportType}
+            useDragHandle
+          >
+            {data &&
+              data.length > 0 &&
+              data.map((each, index) => {
+                return (
+                  <SortableItem
+                    key={`item_${each.code}_${index}`}
+                    index={index}
+                    label={each.label}
+                    item={each}
+                    onChangeHandler={handleCheckSubmissionType}
+                  />
+                );
+              })}
+          </SortableContainer>
+        </div>
       </div>
     );
   }
