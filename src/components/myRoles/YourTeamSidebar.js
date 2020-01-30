@@ -17,6 +17,13 @@ class YourTeamSideBar extends Component {
     window.open(url, '_blank');
   };
 
+  dashboardHandler = id => {
+    console.log(id, 'id');
+    return id !== ''
+      ? this.props.history.push(`organization-dashboard/${id}`)
+      : '';
+  };
+
   render() {
     const {
       dLoader,
@@ -116,7 +123,41 @@ class YourTeamSideBar extends Component {
                                   </OverlayTrigger>
                                 </span>
                               )}
-                              <p>{team.address}</p>
+                              <div style={{ display: 'flex' }}>
+                                {team.organization_name !== '' ? (
+                                  <p>{team.organization_name}</p>
+                                ) : (
+                                  ''
+                                )}
+                                {team.has_super_organization_access && (
+                                  <span
+                                    tabIndex="0"
+                                    role="button"
+                                    onKeyDown={() => {
+                                      this.dashboardHandler(
+                                        team.organization_id,
+                                      );
+                                    }}
+                                    onClick={() => {
+                                      this.dashboardHandler(
+                                        team.organization_id,
+                                      );
+                                    }}
+                                  >
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip>
+                                          Go to organization dashboard
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <i className="la la-external-link" />
+                                    </OverlayTrigger>
+                                  </span>
+                                )}
+                              </div>
+                              {/* <p>{team.address}</p> */}
                             </Accordion.Toggle>
                           </h5>
                         </Card.Header>

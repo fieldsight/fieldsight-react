@@ -10,6 +10,13 @@ import {
 import { successToast } from '../../utils/toastHandler';
 import Modal from '../common/Modal';
 import Sheet from '../../static/images/sheets.png';
+import Form from '../syncSchedule/form';
+import {
+  formatDate,
+  getScheduleType,
+  getDayOnWeeklySchedule,
+  getReportName,
+} from '../syncSchedule/index';
 import Loader from '../common/Loader';
 
 /* eslint-disable react/jsx-one-expression-per-line */
@@ -115,6 +122,21 @@ class CollapseFilterTable extends Component {
     this.setState(state => ({
       openEditModal: !state.openEditModal,
     }));
+  };
+
+  handleSuccess = data => {
+    this.setState(
+      state => ({
+        openEditModal: !state.openEditModal,
+      }),
+      () => {
+        // api call from here!!!!
+      },
+    );
+  };
+
+  viewHandler = () => {
+    console.log('entered');
   };
 
   render() {
@@ -252,14 +274,20 @@ class CollapseFilterTable extends Component {
             toggleModal={this.handleToggle}
           >
             <div>
-              <div>
+              <a
+                role="button"
+                onKeyDown={this.viewHandler}
+                tabIndex="0"
+                className="td-delete-btn"
+                onClick={() => this.viewHandler}
+              >
                 <img
                   src={Sheet}
                   style={{ height: '20px' }}
                   alt="sheet"
                 />
-                <button type="button">View Report</button>
-              </div>
+                View Report
+              </a>
 
               <div style={{ display: 'flex' }}>
                 <label>Schedule Type</label>:<p>Weekly on sunday</p>
@@ -278,7 +306,14 @@ class CollapseFilterTable extends Component {
             title="Edit Report"
             toggleModal={this.handleEditClose}
           >
-            <editReportSheet />
+            <Form
+              projectId={this.props.id}
+              handleSuccess={this.handleSuccess}
+              data=""
+              getScheduleType={getScheduleType}
+              getReportName={getReportName}
+              // onCancel={this.handleToggleFlag}
+            />
           </Modal>
         )}
       </>

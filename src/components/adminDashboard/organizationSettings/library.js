@@ -306,7 +306,7 @@ export default class Library extends Component {
             onConfirm={handleConfirm}
             onToggle={handleCancel}
             title="Warning"
-            message="Are u sure u want to remove?"
+            message="Are u sure you want to remove?"
           />
         )}
       </>

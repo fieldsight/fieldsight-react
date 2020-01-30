@@ -78,7 +78,9 @@ class ReportList extends Component {
           </div>
           {activeTab === 'myReports' && <MyReports id={id} />}
           {activeTab === 'sharedWithMe' && <ShareWithMe id={id} />}
-          {activeTab === 'templates' && <Templates id={id} />}
+          {activeTab === 'templates' && (
+            <Templates id={id} history={this.props.history} />
+          )}
         </div>
       </div>
     );

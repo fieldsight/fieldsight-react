@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { DotLoader } from '../../myForm/Loader';
 
-export default class TotalOrganizationSubmission extends Component {
+class TotalOrganizationSubmission extends Component {
   constructor(props) {
     super(props);
     this.state = {
       submission: [],
+      loader: false,
     };
   }
 
@@ -20,17 +22,21 @@ export default class TotalOrganizationSubmission extends Component {
     axios
       .get(`/fv3/api/organization-project-forms/${id}/`)
       .then(res => {
-        console.log(res, 'res');
         this.setState({
           submission: res.data,
+          loader: true,
         });
       });
   }
 
   render() {
-    console.log(this.state.submission, 'submission');
     const {
-      state: { submission },
+      state: { submission, loader },
+      props: {
+        match: {
+          params: { id },
+        },
+      },
     } = this;
     return (
       <>
@@ -48,38 +54,69 @@ export default class TotalOrganizationSubmission extends Component {
             </li>
           </ol>
         </nav>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-12">
+              <div
+                className="right-content"
+                style={{ minHeight: '512px' }}
+              >
+                <div className="card no-boxshadow">
+                  <div className="card-header main-card-header">
+                    <h5>Organization Submission</h5>
+                  </div>
+                  <div className="card-body ">
+                    {loader ? (
+                      <Table
+                        responsive="xl"
+                        className="table table-bordered dataTable "
+                      >
+                        <thead>
+                          <tr>
+                            <th>Project Name</th>
+                            <th>team</th>
+                            <th>total submission</th>
+                            <th>pending</th>
+                            <th>approved</th>
+                            <th>rejected</th>
+                            <th>flagged</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <>
+                            {submission.length > 0 &&
+                              submission.map(sub => (
+                                <tr key={sub.id}>
+                                  <td>{sub.name}</td>
+                                  <td>{sub.team}</td>
 
-        <Table
-          responsive="xl"
-          className="table table-bordered dataTable "
-        >
-          <thead>
-            <tr>
-              <th>Project Name</th>
-              <th>team</th>
-              <th>total submission</th>
-              <th>pending</th>
-              <th>approved</th>
-              <th>rejected</th>
-              <th>flagged</th>
-            </tr>
-          </thead>
-          <tbody>
-            {submission.length > 0 &&
-              submission.map(sub => (
-                <tr key={sub.id}>
-                  <td>{sub.name}</td>
-                  <td>{sub.team}</td>
-                  <td>{sub.total_submissions}</td>
-                  <td>{sub.submissions.pending}</td>
-                  <td>{sub.submissions.approved}</td>
-                  <td>{sub.submissions.rejected}</td>
-                  <td>{sub.submissions.flagged}</td>
-                </tr>
-              ))}
-          </tbody>
-        </Table>
+                                  <td>
+                                    <Link
+                                      to={`/organization-submission-data/${id}/${sub.id}`}
+                                    >
+                                      {sub.total_submissions}
+                                    </Link>
+                                  </td>
+                                  <td>{sub.submissions.pending}</td>
+                                  <td>{sub.submissions.approved}</td>
+                                  <td>{sub.submissions.rejected}</td>
+                                  <td>{sub.submissions.flagged}</td>
+                                </tr>
+                              ))}
+                          </>
+                        </tbody>
+                      </Table>
+                    ) : (
+                      <DotLoader />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </>
     );
   }
 }
+export default TotalOrganizationSubmission;

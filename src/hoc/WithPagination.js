@@ -61,6 +61,8 @@ const withPagination = WrappedComponent => {
           return `/fv3/api/forms-submissions/?page=${page_num}&project=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
         case 'siteSubmission':
           return `/fv3/api/forms-submissions/?page=${page_num}&site=${payload.projectId}&fsxf_id=${payload.fsxf_id}`;
+        case 'SiteSubmission':
+          return `/fv3/api/forms-submissions/?org_form_lib=${payload.org_form_lib}&project=${payload.projectId}`;
         default:
           return null;
       }
