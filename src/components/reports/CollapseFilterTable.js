@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dropdown } from 'react-bootstrap';
 import uuid from 'uuid/v4';
+import { OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
 
 import {
   applyActionToReport,
@@ -20,6 +20,7 @@ import {
 import Loader from '../common/Loader';
 
 /* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable camelcase */
 class CollapseFilterTable extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +29,7 @@ class CollapseFilterTable extends Component {
       openEditModal: false,
       tableData: {},
       loader: false,
+      data: {},
     };
   }
 
@@ -48,7 +50,11 @@ class CollapseFilterTable extends Component {
   componentDidUpdate(prevProps) {
     const {
       props: {
-        reportReducer: { actionResponse, customReportTable },
+        reportReducer: {
+          actionResponse,
+          customReportTable,
+          report_sync_settings,
+        },
       },
     } = this;
     if (actionResponse !== prevProps.reportReducer.actionResponse) {
@@ -59,7 +65,22 @@ class CollapseFilterTable extends Component {
     ) {
       this.setTableData(customReportTable);
     }
+    if (
+      prevProps.reportReducer.report_sync_settings !==
+      report_sync_settings
+    ) {
+      this.setSyncReportData(report_sync_settings);
+    }
   }
+
+  setSyncReportData = data => {
+    this.setState({
+      data: {
+        ...data,
+        report_id: data.id,
+      },
+    });
+  };
 
   setTableData = data => {
     this.setState(
@@ -125,14 +146,10 @@ class CollapseFilterTable extends Component {
   };
 
   handleSuccess = data => {
-    this.setState(
-      state => ({
-        openEditModal: !state.openEditModal,
-      }),
-      () => {
-        // api call from here!!!!
-      },
-    );
+    this.setState(state => ({
+      openEditModal: !state.openEditModal,
+      openModal: !state.openModal,
+    }));
   };
 
   viewHandler = () => {
@@ -146,29 +163,33 @@ class CollapseFilterTable extends Component {
       tableData,
       loader,
     } = this.state;
-    const { type } = this.props;
+    const {
+      type,
+      reportReducer: { report_sync_settings },
+    } = this.props;
     const actions = [
       {
-        id: 2,
+        id: 1,
         title: 'sync',
         icon: 'expand_more',
         menu: [
           {
-            key: 1,
+            key: 1.1,
             text: 'To Google Sheets',
             link: this.onSyncHandler,
           },
         ],
       },
       {
-        id: 1,
+        id: 2,
         title: 'export',
         icon: 'save_alt',
-        menu: [{ key: 1, text: 'As Excel', link: this.onExportCSV }],
+        menu: [
+          { key: 2.1, text: 'As Excel', link: this.onExportCSV },
+        ],
       },
     ];
     const previewData = this.getPivotTable();
-    // debugger;
 
     return (
       <>
@@ -273,32 +294,66 @@ class CollapseFilterTable extends Component {
             title="Report Sync to Google Sheet"
             toggleModal={this.handleToggle}
           >
-            <div>
-              <a
-                role="button"
-                onKeyDown={this.viewHandler}
-                tabIndex="0"
-                className="td-delete-btn"
-                onClick={() => this.viewHandler}
-              >
-                <img
-                  src={Sheet}
-                  style={{ height: '20px' }}
-                  alt="sheet"
-                />
-                View Report
-              </a>
+            <>
+              <div style={{ display: 'flex' }}>
+                {report_sync_settings.spreadsheet_id !== null ? (
+                  <a
+                    role="button"
+                    onKeyDown={this.viewHandler}
+                    tabIndex="0"
+                    className="td-delete-btn"
+                    onClick={() => this.viewHandler}
+                  >
+                    <img
+                      src={Sheet}
+                      style={{ height: '20px' }}
+                      alt="sheet"
+                    />
+                    View Report
+                  </a>
+                ) : (
+                  <p>No sheet created</p>
+                )}
+                {report_sync_settings.schedule_type === 'Manual' && (
+                  <span>
+                    <a
+                      role="button"
+                      tabIndex="0"
+                      onKeyDown={() => {
+                        this.props.reqSync(
+                          report_sync_settings.report_id,
+                        );
+                      }}
+                      onClick={() => {
+                        this.props.reqSync(
+                          report_sync_settings.report_id,
+                        );
+                      }}
+                      className="pending td-edit-btn td-btn"
+                    >
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip>Sync Now</Tooltip>}
+                      >
+                        <i className="la la-refresh ml-2" />
+                      </OverlayTrigger>
+                    </a>
+                  </span>
+                )}
+              </div>
 
               <div style={{ display: 'flex' }}>
-                <label>Schedule Type</label>:<p>Weekly on sunday</p>
+                <label>Schedule Type</label>:
+                <p>{report_sync_settings.schedule_type}</p>
               </div>
               <div style={{ display: 'flex' }}>
-                <label>Last Sync</label>:<p>2019-10-10</p>
+                <label>Last Sync</label>:
+                <p>{report_sync_settings.last_synced_date}</p>
               </div>
               <button type="button" onClick={this.handleEdit}>
                 Edit Schedule
               </button>
-            </div>
+            </>
           </Modal>
         )}
         {openEditModal && (
@@ -307,9 +362,10 @@ class CollapseFilterTable extends Component {
             toggleModal={this.handleEditClose}
           >
             <Form
-              projectId={this.props.id}
+              projectId={this.props.projectId}
+              reportId={this.props.id}
               handleSuccess={this.handleSuccess}
-              data=""
+              data={this.state.data}
               getScheduleType={getScheduleType}
               getReportName={getReportName}
               // onCancel={this.handleToggleFlag}
