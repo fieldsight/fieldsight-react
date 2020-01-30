@@ -26,6 +26,7 @@ const initialState = {
   projectList: {},
   projectCreatedOn: '',
   customReportTable: {},
+  report_sync_settings: {},
 };
 
 export default function(state = initialState, action) {
@@ -77,6 +78,7 @@ export default function(state = initialState, action) {
         ...state,
         reportData: action.payload,
         reportLoader: false,
+        report_sync_settings: action.payload.report_sync_settings,
       };
     case GET_PROJECT_DETAILS: {
       return {

@@ -125,7 +125,7 @@ class ReportDashboard extends Component {
           buttonName=" Edit "
           editflag
         >
-          <form className="floating-form">
+          <div className="floating-form">
             <div className="form-group">
               <span style={{ color: 'grey' }}>{description}</span>
             </div>
@@ -137,7 +137,7 @@ class ReportDashboard extends Component {
               </span>
             </div>
 
-            <CollapseFilterTable id={id} />
+            <CollapseFilterTable id={id} projectId={pid} />
 
             <div className="form-group pull-right no-margin">
               <button
@@ -148,7 +148,7 @@ class ReportDashboard extends Component {
                 Previous Exports
               </button>
             </div>
-          </form>
+          </div>
         </RightContentCard>
         {viewBtn && (
           <Modal
