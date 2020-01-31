@@ -126,12 +126,12 @@ const getVisibleTodos = (state, action) => {
     ...state,
     ...(filteredData.length > 0 && isSelected === true
       ? {
-          clonePrimaryGeojson: {
-            0: {
+          clonePrimaryGeojson: [
+            {
               ...state.primaryGeojson[0],
               features: filteredData,
             },
-          },
+          ],
         }
       : filteredData.length === 0 && isSelected === false
       ? { clonePrimaryGeojson: state.primaryGeojson }

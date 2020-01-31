@@ -65,7 +65,12 @@ class MetricsTab extends Component {
           <Select
             name="siteinfo color"
             className="wide"
-            // value={colorBySelection}
+            defaultValue={{ value: 'project', label: 'Projects' }}
+            value={
+              colorBySelection === 'project'
+                ? { value: 'project', label: 'Projects' }
+                : colorBySelection[0]
+            }
             onChange={e => {
               handleMetricsChange(e, 'Color');
             }}

@@ -14,7 +14,7 @@ export const getPrimaryMarkerGeojson = id => dispatch => {
   //     type: SHOW_PROJECT_DASHBOARD_LOADERS,
   //   });
   axios
-    .get(`fieldsight/getGeoJson/213/`)
+    .get(`fieldsight/getGeoJson/213/`) // 154
     .then(res => {
       dispatch({
         type: GET_PRIMARY_MARKER_GEOJSON,
@@ -26,7 +26,7 @@ export const getPrimaryMarkerGeojson = id => dispatch => {
 
 export const getSecondaryMarkerGeojson = id => dispatch => {
   axios
-    .get(`fieldsight/api/project/269/sites/geoJSON/`)
+    .get(`fieldsight/api/project/269/sites/geoJSON/`) // 137
     .then(res => {
       dispatch({
         type: GET_SECONDARY_MARKER_GEOJSON,
@@ -37,7 +37,7 @@ export const getSecondaryMarkerGeojson = id => dispatch => {
 };
 export const getProjectsList = id => dispatch => {
   axios
-    .get(`/fieldsight/api/organization/project/269/`)
+    .get(`/fieldsight/api/organization/project/269/`) // 137
     .then(res => {
       dispatch({
         type: GET_PROJECTS_LIST,

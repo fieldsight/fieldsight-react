@@ -36,7 +36,7 @@ const INITIAL_STATE = {
   checkedProjectItems: [],
   isfiltered: false,
   isLoading: true,
-  colorBySelection: '',
+  colorBySelection: 'project',
   sizeBySelection: '',
   searchText: '',
   isAddressSearched: false,
@@ -96,6 +96,11 @@ class MapFilter extends Component {
       const bounds = L.latLngBounds(southWest, northEast);
       this.mapRef.current.leafletElement.fitBounds(bounds);
       this.mapRef.current.leafletElement.setZoom(12);
+
+      // this.mapRef.current.leafletElement.setZoom(12);
+      this.setState({
+        isAddressSearched: false,
+      });
     });
     input.addEventListener('keyup', async event => {
       // event.preventDefault();
@@ -401,6 +406,15 @@ class MapFilter extends Component {
   };
 
   applyFilter = () => {
+    // if (
+    //   this.state.checkedProgressItems.length === 0 &&
+    //   this.state.checkedStatusItem.length === 0 &&
+    //   this.state.checkedSiteItems.length === 0 &&
+    //   this.state.checkedRegionItems.length === 0
+    // ) {
+    //   this.setState({ colorBySelection: 'project' });
+    // }
+
     this.props.getFilteredPrimaryGeojson({
       filterByType: {
         project: this.state.checkedProjectItems,
@@ -411,6 +425,26 @@ class MapFilter extends Component {
       },
     });
     this.toggleZoomforFilter();
+    if (
+      this.state.checkedProgressItems.length === 0 &&
+      this.state.checkedStatusItem.length === 0 &&
+      this.state.checkedSiteItems.length === 0 &&
+      this.state.checkedRegionItems.length === 0
+    ) {
+      this.setState({ colorBySelection: 'project' });
+    }
+    if (this.state.checkedProgressItems.length > 0) {
+      this.setState({ colorBySelection: 'progress' });
+    }
+    if (this.state.checkedStatusItem.length > 0) {
+      this.setState({ colorBySelection: 'status' });
+    }
+    if (this.state.checkedSiteItems.length > 0) {
+      this.setState({ colorBySelection: 'site_type' });
+    }
+    if (this.state.checkedRegionItems.length > 0) {
+      this.setState({ colorBySelection: 'region' });
+    }
     // const { mapFilterReducer: clonePrimaryGeojson } = this.props;
   };
 
@@ -424,6 +458,8 @@ class MapFilter extends Component {
         keyword: this.state.searchText,
       });
     }
+    const markerref = this.mapRef.current.leafletElement;
+    console.log(markerref);
   };
 
   SearchBy = e => {
@@ -478,6 +514,7 @@ class MapFilter extends Component {
               sizeBySelection={sizeBySelection}
               projectsList={projectsList}
               projectsRegionTypes={projectsRegionTypes}
+              primaryGeojson={primaryGeojson}
             />
           </div>
           <div className="map-sidebar left-map-sidebar">
@@ -628,7 +665,7 @@ class MapFilter extends Component {
             </div>
             {/* </Scrollbars> */}
           </div>
-          <div
+          {/* <div
             className="map-sidebar right-map-sidebar"
             style={{ background: 'white' }}
           >
@@ -637,7 +674,7 @@ class MapFilter extends Component {
                 <h4>Legend</h4>
               </div>
             </div>
-            {/* <div>
+            <div>
               <div className="panel-wrap mt-3">
                 <div className="panel-header">
                   <b>View Site By:</b>
@@ -732,9 +769,8 @@ class MapFilter extends Component {
                   </div>
                 </div>
               </div>
-
-            </div> */}
-          </div>
+            </div>
+          </div> */}
 
           <MapLeftTools
             scaleClick={this.scaleClick}
