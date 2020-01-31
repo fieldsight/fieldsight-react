@@ -568,31 +568,33 @@ class Templates extends Component {
                             stagedData.length > 0 ? (
                               stagedData.map(satData => (
                                 <>
-                                  <p>{satData.name}</p>
-                                  <ul>
-                                    {satData.sub_stages.map(sub => (
-                                      <li key={sub.id}>
-                                        <span
-                                          tabIndex="0"
-                                          role="button"
-                                          onKeyDown={() => {
-                                            this.generalLinkhandle(
-                                              sub.id,
-                                              projectCreatedOn,
-                                            );
-                                          }}
-                                          onClick={() => {
-                                            this.generalLinkhandle(
-                                              sub.id,
-                                              projectCreatedOn,
-                                            );
-                                          }}
-                                        >
-                                          {sub.form_name}
-                                        </span>
-                                      </li>
-                                    ))}
-                                  </ul>
+                                  <p>
+                                    {satData.name}
+                                    <ul>
+                                      {satData.sub_stages.map(sub => (
+                                        <li key={sub.id}>
+                                          <span
+                                            tabIndex="0"
+                                            role="button"
+                                            onKeyDown={() => {
+                                              this.generalLinkhandle(
+                                                sub.id,
+                                                projectCreatedOn,
+                                              );
+                                            }}
+                                            onClick={() => {
+                                              this.generalLinkhandle(
+                                                sub.id,
+                                                projectCreatedOn,
+                                              );
+                                            }}
+                                          >
+                                            {sub.form_name}
+                                          </span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </p>
                                 </>
                               ))
                             ) : (
