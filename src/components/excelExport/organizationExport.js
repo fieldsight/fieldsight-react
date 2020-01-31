@@ -138,7 +138,7 @@ class OrganizationExport extends Component {
     return (
       <div className="card">
         <div className="card-header main-card-header">
-          <h5>Organisation Excel Export</h5>
+          <h5>Organization Excel Export</h5>
         </div>
         <div className="card-body">
           <div className="col-lg-12">

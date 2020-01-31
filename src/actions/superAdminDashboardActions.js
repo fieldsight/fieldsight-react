@@ -5,7 +5,6 @@ import {
   GET_ORG_EXPORT_LIST,
   CREATE_ORG_EXPORT,
   DELETE_ORG_EXPORT,
-  DOWNLOAD_ORG_EXPORT,
 } from './types';
 
 /* eslint-disable */
