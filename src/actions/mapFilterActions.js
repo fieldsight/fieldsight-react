@@ -9,12 +9,23 @@ import {
   REFRESH_GEOJSONDATA,
 } from './types';
 
-export const getPrimaryMarkerGeojson = id => dispatch => {
+export const getProjectsList = id => dispatch => {
+  axios
+    .get(`/fieldsight/api/organization/project/${id}/`) // 137
+    .then(res => {
+      dispatch({
+        type: GET_PROJECTS_LIST,
+        payload: res.data,
+      });
+    })
+    .catch(() => {});
+};
+export const getPrimaryMarkerGeojson = url => dispatch => {
   //   dispatch({
   //     type: SHOW_PROJECT_DASHBOARD_LOADERS,
   //   });
   axios
-    .get(`fieldsight/getGeoJson/213/`) // 154
+    .get(url) // 154
     .then(res => {
       dispatch({
         type: GET_PRIMARY_MARKER_GEOJSON,
@@ -26,7 +37,7 @@ export const getPrimaryMarkerGeojson = id => dispatch => {
 
 export const getSecondaryMarkerGeojson = id => dispatch => {
   axios
-    .get(`fieldsight/api/project/269/sites/geoJSON/`) // 137
+    .get(`fieldsight/api/project/${id}/sites/geoJSON/`) // 137
     .then(res => {
       dispatch({
         type: GET_SECONDARY_MARKER_GEOJSON,
@@ -35,20 +46,10 @@ export const getSecondaryMarkerGeojson = id => dispatch => {
     })
     .catch(() => {});
 };
-export const getProjectsList = id => dispatch => {
-  axios
-    .get(`/fieldsight/api/organization/project/269/`) // 137
-    .then(res => {
-      dispatch({
-        type: GET_PROJECTS_LIST,
-        payload: res.data,
-      });
-    })
-    .catch(() => {});
-};
+
 export const getProjectsRegionTypes = id => dispatch => {
   axios
-    .get(`/fv3/api/project-regions-types/269/`)
+    .get(`/fv3/api/project-regions-types/${id}/`)
     .then(res => {
       dispatch({
         type: GET_PROJECTS_REGION_TYPES,

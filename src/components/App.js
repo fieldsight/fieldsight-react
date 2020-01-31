@@ -356,7 +356,7 @@ class App extends Component {
                   render={props => <CreateProfile {...props} />}
                 />
                 <Route
-                  path="/mapfilter"
+                  path="/mapfilter/:id"
                   render={props => <MapFilter {...props} />}
                 />
                 <Route

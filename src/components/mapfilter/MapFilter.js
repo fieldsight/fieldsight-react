@@ -61,9 +61,13 @@ class MapFilter extends Component {
 
   componentWillMount() {
     this.updateDimensions();
-    this.props.getPrimaryMarkerGeojson();
-    this.props.getProjectsList();
-    this.props.getProjectsRegionTypes();
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+    this.props.getProjectsList(id);
+    this.props.getProjectsRegionTypes(id);
     // console.log(this.props, 'willmount');
   }
 
@@ -74,19 +78,19 @@ class MapFilter extends Component {
     );
     const provider = new OpenStreetMapProvider();
     const form = document.querySelector('form');
-    console.log(form, 'form');
+    // console.log(form, 'form');
     const input = form.querySelector('.searchinput');
     const searchselect = form.querySelector(
       '.search-control-info-list',
     );
-    console.log(input, 'input');
+    // console.log(input, 'input');
 
-    console.log(searchselect, 'searchselect');
+    // console.log(searchselect, 'searchselect');
     // const { addressSearch } = this.state;
     let results = [];
     searchselect.addEventListener('click', async el => {
       const selectedIndex = el.target.value;
-      console.log(selectedIndex, 'index');
+      // console.log(selectedIndex, 'index');
       const bbox = results[selectedIndex].bounds;
       // const first = new L.LatLng(bbox[0], bbox[2]);
       // const second = new L.LatLng(bbox[1], bbox[3]);
@@ -106,7 +110,7 @@ class MapFilter extends Component {
       // event.preventDefault();
 
       results = await provider.search({ query: input.value });
-      console.log(results); // » [{}, {}, {}, ...]
+      // console.log(results); // » [{}, {}, {}, ...]
       if (results.length > 0) {
         this.setState({
           isAddressSearched: true,
@@ -146,7 +150,7 @@ class MapFilter extends Component {
   };
 
   handleMetricsChange = (e, usedState) => {
-    console.log(e.value, usedState);
+    // console.log(e.value, usedState);
     if (usedState === 'Color') {
       this.setState({ colorBySelection: e.value });
     } else if (usedState === 'Size') {
@@ -189,9 +193,18 @@ class MapFilter extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      mapFilterReducer: { clonePrimaryGeojson, projectsList },
+      mapFilterReducer: {
+        clonePrimaryGeojson,
+        projectsList,
+        projectPrimaryGeojsonUrl,
+      },
     } = this.props;
-
+    if (
+      prevProps.mapFilterReducer.projectPrimaryGeojsonUrl !==
+      projectPrimaryGeojsonUrl
+    ) {
+      this.props.getPrimaryMarkerGeojson(projectPrimaryGeojsonUrl);
+    }
     if (
       prevProps.mapFilterReducer.clonePrimaryGeojson !==
       clonePrimaryGeojson
@@ -466,8 +479,8 @@ class MapFilter extends Component {
       const mapref = this.markerRef.current.leafletElement;
       const markerref = this.groupRef.current.leafletElement.getLayers();
       mapref.openPopup();
-      console.log(mapref.openPopup());
-      console.log(markerref);
+      // console.log(mapref.openPopup());
+      // console.log(markerref);
     }
   };
 
@@ -645,7 +658,7 @@ class MapFilter extends Component {
               </form>
               <div className="sidebar-title flex-between">
                 <h4>Map</h4>
-                <span className="filters flex-end">
+                {/* <span className="filters flex-end">
                   <i
                     className="la la-cogs setting"
                     data-toggle="tooltip"
@@ -657,7 +670,7 @@ class MapFilter extends Component {
                     role="tab"
                     tabIndex={0}
                   />
-                </span>
+                </span> */}
               </div>
               <MainSidebarTab
                 projectsList={projectsList}

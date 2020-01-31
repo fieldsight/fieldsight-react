@@ -12,6 +12,7 @@ const initialState = {
   primaryGeojson: [],
   clonePrimaryGeojson: [],
   secondaryGeojson: [],
+  projectPrimaryGeojsonUrl: '',
   projectsList: [],
   projectsRegionTypes: [],
   types: [],
@@ -142,6 +143,12 @@ const getVisibleTodos = (state, action) => {
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case GET_PROJECTS_LIST:
+      return {
+        ...state,
+        projectsList: [...action.payload],
+        projectPrimaryGeojsonUrl: action.payload[0].primary_geojson,
+      };
     case GET_PRIMARY_MARKER_GEOJSON:
       return {
         ...state,
@@ -153,11 +160,7 @@ export default function(state = initialState, action) {
         ...state,
         secondaryGeojson: [action.payload],
       };
-    case GET_PROJECTS_LIST:
-      return {
-        ...state,
-        projectsList: [...action.payload],
-      };
+
     case GET_PROJECTS_REGION_TYPES:
       return {
         ...state,

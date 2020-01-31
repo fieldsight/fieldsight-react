@@ -41,7 +41,7 @@ class MapLeftTools extends PureComponent {
           >
             <i className="la la-minus" />
           </a>
-          <a
+          {/* <a
             onClick={refreshClick}
             onKeyPress={refreshClick}
             data-toggle="tooltip"
@@ -51,7 +51,7 @@ class MapLeftTools extends PureComponent {
             tabIndex={0}
           >
             <i className="la la-hand-paper-o" />
-          </a>
+          </a> */}
           <a
             onClick={refreshClick}
             onKeyPress={refreshClick}
@@ -102,7 +102,7 @@ class MapLeftTools extends PureComponent {
               </li>
             </ul>
           </a>
-          <a
+          {/* <a
             data-toggle="tooltip"
             title="Share"
             data-placement="right"
@@ -117,7 +117,7 @@ class MapLeftTools extends PureComponent {
               <li>save</li>
               <li data-tab="map-list">save list</li>
             </ul>
-          </a>
+          </a> */}
         </div>
       </>
     );

@@ -586,7 +586,7 @@ class MapComponent extends PureComponent {
       <>
         <div
           className="map-sidebar left-map-sidebar"
-          style={{ left: '93rem', top: '166px', bottom: '322px' }}
+          style={{ left: '93rem', top: '471px', bottom: '20px' }}
         >
           <div className="sidebar-wrapper">
             <div className="sidebar-title flex-between">
