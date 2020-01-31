@@ -120,6 +120,18 @@ class Templates extends Component {
     );
   };
 
+  generalLinkhandle = (fromDashboard, projectCreatedOn) => {
+    const { id } = this.state;
+
+    return this.props.history.push({
+      pathname: `/form-data/${id}/${fromDashboard}`,
+      state: {
+        fromDashboard,
+        projectCreatedOn,
+      },
+    });
+  };
+
   render() {
     const {
       state: {
@@ -385,18 +397,24 @@ class Templates extends Component {
                             generalData.length > 0 ? (
                               generalData.map(genInfo => (
                                 <p key={genInfo.id}>
-                                  <Link
-                                    to={{
-                                      pathname: `/form-data/${id}/${genInfo.id}`,
-
-                                      state: {
-                                        fromDashboard: genInfo.id,
+                                  <span
+                                    tabIndex="0"
+                                    role="button"
+                                    onKeyDown={() => {
+                                      this.generalLinkhandle(
+                                        genInfo.id,
                                         projectCreatedOn,
-                                      },
+                                      );
+                                    }}
+                                    onClick={() => {
+                                      this.generalLinkhandle(
+                                        genInfo.id,
+                                        projectCreatedOn,
+                                      );
                                     }}
                                   >
                                     {genInfo.title}
-                                  </Link>
+                                  </span>
                                 </p>
                               ))
                             ) : (
@@ -418,7 +436,6 @@ class Templates extends Component {
                         >
                           Scheduled Forms
                         </a>
-
                         <div
                           className="form-data-list"
                           style={
@@ -437,18 +454,24 @@ class Templates extends Component {
                             scheduledData.length > 0 ? (
                               scheduledData.map(scheinfo => (
                                 <p key={scheinfo.id}>
-                                  <Link
-                                    to={{
-                                      pathname: `/form-data/${id}/${scheinfo.id}`,
-
-                                      state: {
-                                        fromDashboard: scheinfo.id,
+                                  <span
+                                    tabIndex="0"
+                                    role="button"
+                                    onKeyDown={() => {
+                                      this.generalLinkhandle(
+                                        scheinfo.id,
                                         projectCreatedOn,
-                                      },
+                                      );
+                                    }}
+                                    onClick={() => {
+                                      this.generalLinkhandle(
+                                        scheinfo.id,
+                                        projectCreatedOn,
+                                      );
                                     }}
                                   >
                                     {scheinfo.title}
-                                  </Link>
+                                  </span>
                                 </p>
                               ))
                             ) : (
@@ -488,17 +511,24 @@ class Templates extends Component {
                             surveyData.length > 0 ? (
                               surveyData.map(surData => (
                                 <p key={surData.id}>
-                                  <Link
-                                    to={{
-                                      pathname: `/form-data/${id}/${surData.id}`,
-                                      state: {
-                                        fromDashboard: surData.id,
+                                  <span
+                                    tabIndex="0"
+                                    role="button"
+                                    onKeyDown={() => {
+                                      this.generalLinkhandle(
+                                        surData.id,
                                         projectCreatedOn,
-                                      },
+                                      );
+                                    }}
+                                    onClick={() => {
+                                      this.generalLinkhandle(
+                                        surData.id,
+                                        projectCreatedOn,
+                                      );
                                     }}
                                   >
                                     {surData.title}
-                                  </Link>
+                                  </span>
                                 </p>
                               ))
                             ) : (
@@ -537,29 +567,33 @@ class Templates extends Component {
                             {stagedData !== undefined &&
                             stagedData.length > 0 ? (
                               stagedData.map(satData => (
-                                <ul key={satData.id}>
-                                  <li>{satData.name}</li>
-                                  <li>
+                                <>
+                                  <p>{satData.name}</p>
+                                  <ul>
                                     {satData.sub_stages.map(sub => (
-                                      <ul>
-                                        <li key={sub.id}>
-                                          <Link
-                                            to={{
-                                              pathname: `/form-data/${id}/${sub.id}`,
-
-                                              state: {
-                                                fromDashboard: sub.id,
-                                                projectCreatedOn,
-                                              },
-                                            }}
-                                          >
-                                            {sub.form_name}
-                                          </Link>
-                                        </li>
-                                      </ul>
+                                      <li key={sub.id}>
+                                        <span
+                                          tabIndex="0"
+                                          role="button"
+                                          onKeyDown={() => {
+                                            this.generalLinkhandle(
+                                              sub.id,
+                                              projectCreatedOn,
+                                            );
+                                          }}
+                                          onClick={() => {
+                                            this.generalLinkhandle(
+                                              sub.id,
+                                              projectCreatedOn,
+                                            );
+                                          }}
+                                        >
+                                          {sub.form_name}
+                                        </span>
+                                      </li>
                                     ))}
-                                  </li>
-                                </ul>
+                                  </ul>
+                                </>
                               ))
                             ) : (
                               <p>No data</p>

@@ -5,49 +5,48 @@ export default class TeamList extends PureComponent {
     const { teams, selected, changeHandler } = this.props;
     return (
       <>
-        <ul>
-          <div
-            style={{
-              position: 'relative',
-              height: `200px`,
-            }}
-          >
-            {teams.length > 0 &&
-              teams.map((option, index) => {
-                const filterList = selected.filter(
-                  i => i.id === option.id,
-                );
+        <div
+          style={{
+            position: 'relative',
+            height: `200px`,
+          }}
+        >
+          {teams.length > 0 &&
+            teams.map((option, index) => {
+              const filterList = selected.filter(
+                i => i.id === option.id,
+              );
 
-                const isChecked =
-                  filterList && filterList[0] ? true : false;
+              const isChecked =
+                filterList && filterList[0] ? true : false;
 
-                return (
-                  <li key={option.id}>
-                    <div className="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        className="custom-control-input"
-                        id={option.id}
-                        name={option.name}
-                        checked={isChecked}
-                        onChange={e => {
-                          changeHandler(e, option);
-                        }}
-                        value={option.id}
-                      />
-                      <label
-                        className="custom-control-label"
-                        htmlFor={option.id}
-                        style={{ paddingLeft: '2em' }}
-                      >
-                        {option.name}
-                      </label>
-                    </div>
-                  </li>
-                );
-              })}
-          </div>
-        </ul>
+              return (
+                <div
+                  className="custom-control custom-checkbox"
+                  key={option.id}
+                >
+                  <input
+                    type="checkbox"
+                    className="custom-control-input"
+                    id={option.id}
+                    name={option.name}
+                    checked={isChecked}
+                    onChange={e => {
+                      changeHandler(e, option);
+                    }}
+                    value={option.id}
+                  />
+                  <label
+                    className="custom-control-label"
+                    htmlFor={option.id}
+                    style={{ paddingLeft: '2em' }}
+                  >
+                    {option.name}
+                  </label>
+                </div>
+              );
+            })}
+        </div>
       </>
     );
   }
