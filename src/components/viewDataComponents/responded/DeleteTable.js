@@ -136,18 +136,23 @@ class DeleteTable extends PureComponent {
                           <i className="la la-eye view-tag tag" />
                         </Link>
                       )}
-                      {deleted.download_url === null ? (
-                        <a className="edit-tag tag disable-pointer">
-                          <i className="la la-download" />
-                        </a>
-                      ) : (
+                      {table === 'site' ? (
                         <a
-                          href={deleted.download_url}
+                          href={`/fieldsight/application/#/exports/0/${deleted.id}/${id}/0`}
                           className="edit-tag tag"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <i className="la la-download" />
+                          <i className="la la-download " />
+                        </a>
+                      ) : (
+                        <a
+                          href={`/fieldsight/application/#/exports/1/${deleted.id}/${id}/0`}
+                          className="edit-tag tag"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className="la la-download " />
                         </a>
                       )}
                       {table === 'site' ? (

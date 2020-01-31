@@ -15,7 +15,7 @@ export default class CustomMultiSelect extends PureComponent {
       placeholderTxt,
       site,
     } = this.props;
-
+    // debugger;
     const className = toggleType
       ? toggleSelectClass[toggleType]
       : toggleSelectClass;
@@ -27,7 +27,12 @@ export default class CustomMultiSelect extends PureComponent {
               ? 'select-wrapper select-toggle'
               : 'select-wrapper'
           }
-          onClick={handleToggleClass}
+          onFocus={handleToggleClass}
+          // onKeyDown={handleToggleClass}
+          // onClick={handleToggleClass}
+          role="button"
+          tabIndex="0"
+          onBlur={handleToggleClass}
         >
           <span className="select-item">{placeholderTxt}</span>
 
@@ -35,7 +40,7 @@ export default class CustomMultiSelect extends PureComponent {
             <div
               style={{
                 position: 'relative',
-                height: `350px`,
+                height: `200px`,
               }}
             >
               <PerfectScrollbar>
@@ -50,6 +55,7 @@ export default class CustomMultiSelect extends PureComponent {
                         ? i.id === option.id
                         : '',
                     );
+
                     const isChecked =
                       filterList && filterList[0] ? true : false;
                     const id = option.code
@@ -80,7 +86,10 @@ export default class CustomMultiSelect extends PureComponent {
                             : ''
                         }_${index}`}
                       >
-                        <div className="custom-control custom-checkbox">
+                        <div
+                          className="custom-control custom-checkbox"
+                          id="checkbox"
+                        >
                           <input
                             type="checkbox"
                             className="custom-control-input"
@@ -100,6 +109,8 @@ export default class CustomMultiSelect extends PureComponent {
                               ? option.name
                               : option.label
                               ? option.label
+                              : option.title
+                              ? option.title
                               : option.name}
                           </label>
                         </div>

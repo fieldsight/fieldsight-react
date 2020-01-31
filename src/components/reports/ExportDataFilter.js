@@ -1,68 +1,12 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
-import DatePicker from 'react-datepicker';
+import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
-import CustomMultiSelect from './CustomMultiSelect';
+import CustomMultiSelect from './common/CustomMultiSelect';
 import CollapseFilterTable from './CollapseFilterTable';
 import { errorToast, successToast } from '../../utils/toastHandler';
 
-/* eslint-disable */
-
-const CustomInput = (value, onclick) => (
-  <div className="custom-group-append">
-    <span className="custom-group-text">
-      <i className="material-icons">calendar_today</i>
-      <button className="example-custom-input" onClick={onClick}>
-        {value}
-      </button>
-      {/* <input
-        // onChange={onChange}
-        placeholder="gfdghj"
-        value={value}
-        // isSecure={isSecure}
-        // id={id}
-        onClick={onClick}
-      /> */}
-    </span>
-  </div>
-);
-
-const Input = ({
-  onChange,
-  placeholder,
-  value,
-  isSecure,
-  id,
-  onClick,
-}) => (
-  <div
-  // style={{ position: 'relative' }}
-  >
-    <i
-      onClick={onClick}
-      className="material-icons"
-      value={value}
-      // style={{
-      //   position: 'absolute',
-      //   top: '0.3rem',
-      //   left: '5px',
-      //   fontSize: '1rem',
-      // }}
-    >
-      calendar_today
-    </i>
-
-    <input
-      onClick={onClick}
-      className="dateInput"
-      value={value}
-      type="text"
-      // style={{ paddingLeft: '33px' }}
-    />
-  </div>
-);
-
-export default class ExportDataFilter extends PureComponent {
+export default class ExportDataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,10 +15,9 @@ export default class ExportDataFilter extends PureComponent {
       siteOpen: false,
       siteSelected: [],
       applyButton: false,
-      projectRegions: [],
-      siteType: [],
-      startedDate: '',
-      endedDate: '',
+      projectRegions: [{ id: 'all_regions', name: 'Select All' }],
+      siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
+      showPreview: false,
     };
   }
 
@@ -84,68 +27,100 @@ export default class ExportDataFilter extends PureComponent {
         params: { id },
       },
     } = this.props;
+    const { projectRegions, siteType } = this.state;
+    const siteTypesApi = `/fieldsight/api/site-types/${id}/`;
+    const projectRegionApi = `/fieldsight/api/project-regions/${id}/`;
 
-    const siteType = `/fieldsight/api/site-types/${id}/`;
-    const projectRegions = `/fieldsight/api/project-regions/${id}/`;
-
-    const requestSiteType = axios.get(siteType);
-    const requestProjectRegions = axios.get(projectRegions);
+    const requestSiteType = axios.get(siteTypesApi);
+    const requestProjectRegions = axios.get(projectRegionApi);
 
     axios
       .all([requestProjectRegions, requestSiteType])
       .then(
         axios.spread((...responses) => {
-          this.setState({
-            siteType: responses[1].data,
-            projectRegions: responses[0].data,
-          });
+          const regions = [...projectRegions, ...responses[0].data];
+          const sites = [...siteType, ...responses[1].data];
+          this.setState(() => ({
+            projectRegions: regions,
+            selected: regions.map(each => {
+              return { id: each.id };
+            }),
+            siteType: sites,
+            siteSelected: sites.map(each => {
+              return { id: each.id };
+            }),
+          }));
         }),
       )
-      .catch(errors => {
-        // react on errors.
-      });
+      .catch();
   }
 
   changeHandlers = (e, info) => {
-    const { checked, name } = e.target;
-
-    const idName = 'id';
+    const { checked } = e.target;
+    const { id } = info;
+    const { projectRegions } = this.state;
     this.setState(prevState => {
       if (checked) {
+        if (id === 'all_regions') {
+          const allId = projectRegions.map(each => {
+            return { id: each.id };
+          });
+          return {
+            selected: allId,
+          };
+        }
         return {
-          selected: [...prevState.selected, { [idName]: info.id }],
+          selected: [...prevState.selected, { id }],
         };
       }
       if (!checked) {
-        // console.log(preveState.selected, 'preveState.selected');
+        if (id === 'all_regions') {
+          return {
+            selected: [],
+          };
+        }
         return {
           selected: prevState.selected.filter(
-            region => region.id !== info.id,
+            region => region.id !== id && region.id !== 'all_regions',
           ),
         };
       }
+      return null;
     });
   };
 
   siteHandler = (e, info) => {
-    const { checked, name } = e.target;
-    const idName = 'id';
+    const { checked } = e.target;
+    const { id } = info;
+    const { siteType } = this.state;
+
     this.setState(prevState => {
       if (checked) {
+        if (id === 'all_sitetypes') {
+          const allId = siteType.map(each => {
+            return { id: each.id };
+          });
+          return {
+            siteSelected: allId,
+          };
+        }
         return {
-          siteSelected: [
-            ...prevState.siteSelected,
-            { [idName]: info.id },
-          ],
+          siteSelected: [...prevState.siteSelected, { id }],
         };
       }
       if (!checked) {
+        if (id === 'all_sitetypes') {
+          return {
+            siteSelected: [],
+          };
+        }
         return {
           siteSelected: prevState.siteSelected.filter(
-            region => region.id !== info.id,
+            site => site.id !== id && site.id !== 'all_sitetypes',
           ),
         };
       }
+      return null;
     });
   };
 
@@ -161,11 +136,6 @@ export default class ExportDataFilter extends PureComponent {
     }));
   };
 
-  // handleApply = () => {
-  //   this.setState(prevState => ({
-  //     applyButton: !prevState.applyButton,
-  //   }));
-  // };
   toUpper = str => {
     return str
       .toLowerCase()
@@ -181,6 +151,9 @@ export default class ExportDataFilter extends PureComponent {
       match: {
         params: { id },
       },
+      location: {
+        state: { fromDashboard },
+      },
     } = this.props;
     const region = this.state.selected.map(reg => reg.id);
     const site = this.state.siteSelected.map(reg => reg.id);
@@ -189,9 +162,7 @@ export default class ExportDataFilter extends PureComponent {
       regions: site,
     };
 
-    const route = this.toUpper(
-      this.props.location.state.fromDashboard,
-    );
+    const route = this.toUpper(fromDashboard);
 
     axios
       .post(
@@ -204,6 +175,7 @@ export default class ExportDataFilter extends PureComponent {
           this.setState({
             selected: [],
             siteType: [],
+            showPreview: true,
           });
         }
       })
@@ -215,21 +187,8 @@ export default class ExportDataFilter extends PureComponent {
       });
   };
 
-  onChangeHandler = date => {
-    this.setState({
-      startedDate: date,
-    });
-  };
-
-  onEndChangeHandler = date => {
-    this.setState({
-      endedDate: date,
-    });
-  };
-
   render() {
     const {
-      changeHandler,
       state: {
         selected,
         open,
@@ -237,9 +196,11 @@ export default class ExportDataFilter extends PureComponent {
         applyButton,
         projectRegions,
         siteType,
+        showPreview,
         siteSelected,
       },
     } = this;
+    // console.log('in export', projectRegions, selected);
     const DataCrude = [
       {
         id: '1',
@@ -263,183 +224,132 @@ export default class ExportDataFilter extends PureComponent {
       },
     ];
 
-    const report_type = 'gfhj';
+    const {
+      match: {
+        params: { id },
+      },
+      location: {
+        state: { fromDashboard, projectCreatedOn },
+      },
+    } = this.props;
 
     return (
-      <div className="reports mrb-30">
-        <div className="card">
-          <div className="card-body">
-            <div className="standard-tempalte">
-              <h3 className="mb-3">Template report</h3>
+      <>
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to={`/project-dashboard/${id}/report`}>
+                Report
+              </Link>
+            </li>
+            <li className="breadcrumb-item">Export Data</li>
+          </ol>
+        </nav>
+        <div className="reports mrb-30">
+          <div className="card">
+            <div className="card-body">
+              <div className="standard-tempalte">
+                <h3 className="mb-3">Template report</h3>
 
-              <div className="report-list">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="report-content">
-                      <h4>Export Data</h4>
-                      {/* <p>
-                        Export of forms data and site information an
-                        Excel File, generated with filters in region,
-                        types and time range.
-                      </p> */}
-                      {this.props.location.state.fromDashboard ===
-                        'Site Information' && (
-                        <p>
-                          Export of all site information in an
-                          spreadsheet
-                        </p>
-                      )}
-                      {this.props.location.state.fromDashboard ===
-                        'Progress Report' && (
-                        <p>
-                          Export of key progress indicators like
-                          submission count,status and site visits
-                          generated from Staged Forms.
-                        </p>
-                      )}
+                <div className="report-list">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="report-content">
+                        <h4>Export Data</h4>
+
+                        {fromDashboard === 'Site Information' && (
+                          <p>
+                            Export of all site information in an
+                            spreadsheet
+                          </p>
+                        )}
+                        {fromDashboard === 'Progress Report' && (
+                          <p>
+                            Export of key progress indicators like
+                            submission count,status and site visits
+                            generated from Staged Forms.
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
+                  <div className="dropdown report-option">
+                    <Dropdown drop="left">
+                      <Dropdown.Toggle
+                        variant=""
+                        id="dropdown-Data"
+                        className="dropdown-toggle common-button no-border is-icon"
+                      >
+                        <i className="material-icons">more_vert</i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                        {DataCrude.map(item => (
+                          <Dropdown.Item
+                            href={item.link}
+                            key={item.id}
+                            target="_blank"
+                          >
+                            {item.title}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
                 </div>
-                <div className="dropdown report-option">
-                  <Dropdown drop="left">
-                    <Dropdown.Toggle
-                      variant=""
-                      id="dropdown-Data"
-                      className="dropdown-toggle common-button no-border is-icon"
-                    >
-                      <i className="material-icons">more_vert</i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                      {DataCrude.map(item => (
-                        <Dropdown.Item
-                          href={item.link}
-                          key={item.id}
-                          target="_blank"
-                        >
-                          {item.title}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="data-filter mt-3">
-                <h3 className="mb-3">Filters</h3>
-                <form>
-                  <div className="row">
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-group">
-                        <label className="mb-2">Site types</label>
-                        <CustomMultiSelect
-                          toggleSelectClass={siteOpen}
-                          handleToggleClass={this.SiteToggleClass}
-                          checkboxOption={siteType}
-                          handleCheck={this.siteHandler}
-                          selectedArr={this.state.siteSelected}
-                          placeholderTxt="Select Site Type"
-                          site="site"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-group">
-                        <label className="mb-2">Regions</label>
-                        <CustomMultiSelect
-                          toggleSelectClass={open}
-                          handleToggleClass={this.handleToggleClass}
-                          checkboxOption={projectRegions}
-                          handleCheck={this.changeHandlers}
-                          selectedArr={this.state.selected}
-                          placeholderTxt="Select Region Type"
-                          site="regions"
-                        />
-                      </div>
-                    </div>
-
-                    {report_type === 'Activity_Type' && (
-                      <div className="col-lg-6 col-md-6">
-                        <div className="form-group icon-between">
-                          <label className="mb-2">Time period</label>
-                          <div className="inline-flex ">
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="Start Date"
-                                name="startedDate"
-                                selected={this.state.startedDate}
-                                onChange={this.onChangeHandler}
-                                dateFormat="yyyy-MM-dd"
-                                className="form-control"
-                              />
-                              {/* <div className="custom-group-append">
-                              <span
-                                className="custom-group-text"
-                                style={{
-                                  display: 'inline',
-                                  paddingLeft: '25px',
-                                  flex: '0 0 20%',
-                                }}
-                              >
-                                <i
-                                  className="material-icons"
-                                  style={{
-                                    verticalAlign: 'middle',
-                                  }}
-                                >
-                                  calendar_today
-                                </i>
-                              </span>
-                            </div> */}
-                            </div>
-                            <span className="icon-between">
-                              <i className="material-icons">
-                                arrow_right_alt
-                              </i>
-                            </span>
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="End Date"
-                                name="endedDate"
-                                selected={this.state.endedDate}
-                                onChange={this.onEndChangeHandler}
-                                className="form-control"
-                                dateFormat="yyyy-MM-dd"
-                              />
-                              {/* <i className="material-icons">
-                                calendar_today
-                              </i>
-                            </DatePicker> */}
-                              {/* <DatePicker
-                              value={this.state.endedDate}
-                              dateFormat="yyyy-MM-dd"
-                              customInput={<Input />}
-                              selected={this.state.endedDate}
-                              onChange={date =>
-                                this.setState({ endedDate: date })
-                              }
-                            /> */}
-                            </div>
-                          </div>
+                <div className="data-filter mt-3">
+                  <h3 className="mb-3">Filters</h3>
+                  <form>
+                    <div className="row">
+                      <div className="col-lg-3 col-md-6">
+                        <div className="form-group">
+                          <label className="mb-2">Site types</label>
+                          <CustomMultiSelect
+                            toggleSelectClass={siteOpen}
+                            handleToggleClass={this.SiteToggleClass}
+                            checkboxOption={siteType}
+                            handleCheck={this.siteHandler}
+                            selectedArr={siteSelected}
+                            placeholderTxt="Select Site Type"
+                            site="site"
+                          />
                         </div>
                       </div>
-                    )}
-                    <div className="col-md-12">
-                      <button
-                        // disabled
-                        type="button"
-                        className="common-button mt-3 is-bg"
-                        onClick={this.handleApply}
-                      >
-                        Apply
-                      </button>
+                      <div className="col-lg-3 col-md-6">
+                        <div className="form-group">
+                          <label className="mb-2">Regions</label>
+                          <CustomMultiSelect
+                            toggleSelectClass={open}
+                            handleToggleClass={this.handleToggleClass}
+                            checkboxOption={projectRegions}
+                            handleCheck={this.changeHandlers}
+                            selectedArr={selected}
+                            placeholderTxt="Select Region Type"
+                            site="regions"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-md-12">
+                        <button
+                          type="button"
+                          className="common-button mt-3 is-bg"
+                          onClick={this.handleApply}
+                        >
+                          Apply
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </form>
-                {applyButton && <CollapseFilterTable />}
+                  </form>
+                  {applyButton && <CollapseFilterTable />}
+                </div>
               </div>
+              {showPreview && (
+                <CollapseFilterTable id={id} type="standard" />
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

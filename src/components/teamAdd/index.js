@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
-
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
@@ -33,6 +33,7 @@ class TeamAdd extends Component {
 
     this.state = {
       project: {
+        identifier: '',
         teamName: '',
         contactnumber: '',
         email: '',
@@ -57,6 +58,7 @@ class TeamAdd extends Component {
       selectedCountry: '',
       selectedteam: '',
       id: this.props.match.params ? this.props.match.params.id : '',
+      errorFlag: false,
     };
   }
 
@@ -114,22 +116,38 @@ class TeamAdd extends Component {
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
-    this.setState(state => {
-      if (position) {
+    this.setState(
+      state => {
+        if (position) {
+          return {
+            position: {
+              ...state.position,
+              [name]: value,
+            },
+          };
+        }
         return {
-          position: {
-            ...state.position,
+          project: {
+            ...state.project,
             [name]: value,
           },
         };
-      }
-      return {
-        project: {
-          ...state.project,
-          [name]: value,
-        },
-      };
-    });
+      },
+      () => {
+        if (name === 'identifier') {
+          if (value.trim().length < 5) {
+            this.setState({
+              errorFlag: true,
+            });
+          }
+          if (value.trim().length > 5) {
+            this.setState({
+              errorFlag: false,
+            });
+          }
+        }
+      },
+    );
   };
 
   onSubmitHandler = e => {
@@ -142,6 +160,7 @@ class TeamAdd extends Component {
     // } = this.props;
 
     const data = {
+      identifier: this.state.project.identifier,
       name: this.state.project.teamName,
       contactnumber: this.state.project.contactnumber,
       email: this.state.project.email,
@@ -155,37 +174,43 @@ class TeamAdd extends Component {
       longitude: this.state.position.longitude,
       ...(this.state.id && { parent: this.state.id }),
     };
-
-    axios
-      .post(`fv3/api/team-form/`, data)
-      .then(res => {
-        if (res.status === 201) {
-          this.setState({
-            project: {
-              teamName: '',
-              contactnumber: '',
-              email: '',
-              address: '',
-              website: '',
-              publicDescription: '',
-              logo: '',
-            },
-            position: {
-              latitude: '51.505',
-              longitude: '-0.09',
-            },
-            zoom: 13,
-            src: '',
-            showCropper: false,
-            cropResult: '',
-            isLoading: false,
-            selectedCountry: '',
-            selectedteam: '',
-          });
-          this.props.history.push(`/team-dashboard/${res.data.id}`);
-        }
-      })
-      .catch(() => {});
+    if (this.state.project.identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
+      });
+    } else {
+      axios
+        .post(`fv3/api/team-form/`, data)
+        .then(res => {
+          if (res.status === 201) {
+            this.setState({
+              project: {
+                identifier: '',
+                teamName: '',
+                contactnumber: '',
+                email: '',
+                address: '',
+                website: '',
+                publicDescription: '',
+                logo: '',
+              },
+              position: {
+                latitude: '51.505',
+                longitude: '-0.09',
+              },
+              zoom: 13,
+              src: '',
+              showCropper: false,
+              cropResult: '',
+              isLoading: false,
+              selectedCountry: '',
+              selectedteam: '',
+            });
+            this.props.history.push(`/team-dashboard/${res.data.id}`);
+          }
+        })
+        .catch(() => {});
+    }
   };
 
   mapClickHandler = e => {
@@ -249,6 +274,7 @@ class TeamAdd extends Component {
       closeModal,
       state: {
         project: {
+          identifier,
           teamName,
           contactnumber,
           email,
@@ -269,12 +295,26 @@ class TeamAdd extends Component {
         selectedteam,
         selectedCountry,
       },
+      props: {
+        match: {
+          params: { id },
+        },
+      },
     } = this;
 
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
+            {id ? (
+              <li className="breadcrumb-item">
+                <Link to={`/team-dashboard/${id}`}>
+                  Team Dashboard
+                </Link>
+              </li>
+            ) : (
+              ''
+            )}
             <li
               className="breadcrumb-item active"
               aria-current="page"
@@ -289,6 +329,23 @@ class TeamAdd extends Component {
         <RightContentCard title="app.newTeam">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">
+              <div className="col-xl-4 col-md-6">
+                <InputElement
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  required
+                  label="identifier"
+                  name="identifier"
+                  value={identifier}
+                  changeHandler={onChangeHandler}
+                />
+                {this.state.errorFlag && (
+                  <span style={{ color: 'red' }}>
+                    Identifier cannot be less than 5 characters.
+                  </span>
+                )}
+              </div>
               <div className="col-xl-4 col-md-6">
                 <InputElement
                   formType="editForm"
@@ -323,7 +380,6 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required
                   label="app.contactNumber"
                   name="contactnumber"
                   value={contactnumber}
@@ -336,7 +392,6 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="email"
-                  required
                   label="app.email"
                   name="email"
                   value={email}
@@ -363,7 +418,6 @@ class TeamAdd extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  required
                   label="app.address"
                   name="address"
                   value={address}
@@ -393,7 +447,6 @@ class TeamAdd extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    required
                     label="app.description"
                     name="publicDescription"
                     value={publicDescription}

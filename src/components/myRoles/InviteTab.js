@@ -32,7 +32,7 @@ class InviteTab extends PureComponent {
             </h5>
             <div className="dash-btn ">
               <a
-                className="popup-close"
+                // className="popup-close"
                 tabIndex="0"
                 role="button"
                 onKeyDown={() => {
@@ -41,7 +41,7 @@ class InviteTab extends PureComponent {
                 onClick={() => {
                   this.props.acceptAll();
                 }}
-                // className="fieldsight-btn left-icon"
+                className="fieldsight-btn left-icon"
               >
                 <i className="la la-check" />
                 <FormattedMessage
@@ -77,7 +77,6 @@ class InviteTab extends PureComponent {
                     </p>
                     <div className="invite-btn">
                       <a
-                        href="#"
                         className="accept-btn"
                         tabIndex="0"
                         role="button"

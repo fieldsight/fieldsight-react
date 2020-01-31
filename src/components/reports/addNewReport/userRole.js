@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import CustomCheckBox from '../CustomCheckbox';
+import CustomCheckBox from '../common/CustomCheckbox';
 
 export default class UserRole extends PureComponent {
   render() {
@@ -13,7 +13,7 @@ export default class UserRole extends PureComponent {
     } = this.props;
 
     return (
-      <div className="fs-7 fs-col">
+      <div className="col-md-6">
         <div className="custom-group">
           <div className="custom-group-append">
             <span className="custom-group-text">
@@ -32,7 +32,7 @@ export default class UserRole extends PureComponent {
         <div
           style={{
             position: 'relative',
-            height: `300px `,
+            height: `200px `,
           }}
         >
           <PerfectScrollbar>

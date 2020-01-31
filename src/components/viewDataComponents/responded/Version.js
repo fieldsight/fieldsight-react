@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
 
-import DotLoader from '../../myForm/Loader';
+import { DotLoader } from '../../myForm/Loader';
 
 class VersionTable extends Component {
   constructor(props) {
@@ -19,13 +19,9 @@ class VersionTable extends Component {
 
   componentDidMount() {
     const { project, id, fid } = this.props;
-    let data = project == 'project' ? 1 : 0;
+    const data = project === 'project' ? 1 : 0;
     axios
-      .get(
-        `/fv3/api/submissions-versions/${
-          project == 'project' ? 1 : 0
-        }/${id}/${fid}/`,
-      )
+      .get(`/fv3/api/submissions-versions/${data}/${id}/${fid}/`)
       .then(res => {
         this.setState({
           latest: res.data.data.latest,
@@ -34,14 +30,14 @@ class VersionTable extends Component {
           loader: true,
         });
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch();
   }
 
   render() {
     const { latest, versions, breadcrumbs, loader } = this.state;
-    const { project } = this.props;
+    const { project, id, fid } = this.props;
+    const isProject = project === 'project' ? 1 : 0;
+
     return (
       <>
         {breadcrumbs && Object.keys(breadcrumbs).length > 0 ? (
@@ -50,12 +46,12 @@ class VersionTable extends Component {
               <li className="breadcrumb-item">
                 <a
                   href={
-                    project == 'project'
+                    project === 'project'
                       ? breadcrumbs.project_url
                       : breadcrumbs.site_url
                   }
                 >
-                  {project == 'project'
+                  {project === 'project'
                     ? breadcrumbs.project_name
                     : breadcrumbs.site_name}
                 </a>
@@ -83,7 +79,7 @@ class VersionTable extends Component {
             </h5>
           </div>
           <div className="card-body">
-            {loader == true ? (
+            {loader === true ? (
               <Table
                 responsive="xl"
                 className="table  table-bordered  dataTable "
@@ -136,40 +132,56 @@ class VersionTable extends Component {
                     <td>{latest.last_response}</td>
                     <td>{latest.total_submissions}</td>
                     <td>
-                      {latest.total_submissions > 0 ? (
+                      {isProject === 0 ? (
                         <a
-                          className="td-delete-btn"
-                          href={latest.download_url}
+                          href={`/fieldsight/application/#/exports/0/${fid}/${id}/${latest.version_id}`}
+                          className="edit-tag tag"
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          <i className="la la-download "></i>
+                          <i className="la la-download " />
                         </a>
                       ) : (
-                        ''
+                        <a
+                          href={`/fieldsight/application/#/exports/1/${fid}/${id}/${latest.version_id}`}
+                          className="edit-tag tag"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className="la la-download " />
+                        </a>
                       )}
                     </td>
                   </tr>
                   {versions &&
                     versions.length > 0 &&
-                    versions.map((version, key) => {
+                    versions.map(version => {
                       return (
-                        <tr key={key}>
+                        <tr key={version.id}>
                           <td>{version.title}</td>
                           <td>{version.version}</td>
                           <td>{version.overidden_date}</td>
                           <td>{version.last_response}</td>
                           <td>{version.total_submissions}</td>
                           <td>
-                            {version.total_submissions > 0 ? (
+                            {isProject === 0 ? (
                               <a
-                                href
-                                className="td-delete-btn"
-                                href={version.download_url}
+                                href={`/fieldsight/application/#/exports/0/${fid}/${id}/${version.version_id}`}
+                                className="edit-tag tag"
                                 target="_blank"
+                                rel="noopener noreferrer"
                               >
-                                <i className="la la-download "></i>
+                                <i className="la la-download " />
                               </a>
                             ) : (
-                              ''
+                              <a
+                                href={`/fieldsight/application/#/exports/1/${fid}/${id}/${version.version_id}`}
+                                className="edit-tag tag"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <i className="la la-download " />
+                              </a>
                             )}
                           </td>
                         </tr>

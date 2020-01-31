@@ -1,12 +1,20 @@
 import React, { PureComponent } from 'react';
 import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { DotLoader } from '../../myForm/Loader';
 
 /* eslint-disable camelcase */
 
 export default class TeamsTable extends PureComponent {
   render() {
-    const { selected_teams, handleConfirm, openDelete } = this.props;
-    return (
+    const {
+      selected_teams,
+      handleConfirm,
+      openDelete,
+      loader,
+    } = this.props;
+    return loader ? (
       <Table
         responsive="xl"
         className="table  table-bordered  dataTable "
@@ -15,7 +23,6 @@ export default class TeamsTable extends PureComponent {
           <tr>
             <th>Name</th>
             <th>address</th>
-
             <th>projects</th>
             <th>users</th>
             <th>sites</th>
@@ -27,15 +34,15 @@ export default class TeamsTable extends PureComponent {
             selected_teams.map(teams => (
               <tr key={teams.id}>
                 <td>
-                  <a
-                    href={teams.logo}
+                  <Link
+                    to={`/team-dashboard/${teams.id}`}
                     className="pending table-profile"
                   >
                     <figure>
                       <img src={teams.logo} alt="site-logo" />
                     </figure>
                     <h5>{teams.name}</h5>
-                  </a>
+                  </Link>
                 </td>
                 <td>{teams.address}</td>
 
@@ -53,13 +60,20 @@ export default class TeamsTable extends PureComponent {
                       openDelete(teams.id);
                     }}
                   >
-                    <i className="la la-close" />
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Remove</Tooltip>}
+                    >
+                      <i className="la la-close" />
+                    </OverlayTrigger>
                   </a>
                 </td>
               </tr>
             ))}
         </tbody>
       </Table>
+    ) : (
+      <DotLoader />
     );
   }
 }

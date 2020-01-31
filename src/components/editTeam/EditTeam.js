@@ -44,6 +44,7 @@ class EditTeam extends Component {
     this.state = {
       teamId: props.match.params ? props.match.params.id : '',
       team: {
+        identifier: '',
         name: '',
         type: '',
         address: '',
@@ -67,6 +68,7 @@ class EditTeam extends Component {
       cropResult: '',
       isLoading: false,
       updateLogo: false,
+      errorFlag: false,
     };
   }
 
@@ -138,6 +140,7 @@ class EditTeam extends Component {
       state: {
         teamId,
         team: {
+          identifier,
           name,
           type,
           address,
@@ -155,6 +158,7 @@ class EditTeam extends Component {
     } = this;
 
     const team = {
+      identifier,
       name,
       type,
       address,
@@ -171,13 +175,13 @@ class EditTeam extends Component {
 
     axios
       .put(`${urls[0]}${teamId}/`, team, {
-        onUploadProgress: progressEvent => {
-          this.setState({
-            loaded: Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total,
-            ),
-          });
-        },
+        // onUploadProgress: progressEvent => {
+        //   this.setState({
+        //     loaded: Math.round(
+        //       (progressEvent.loaded * 100) / progressEvent.total,
+        //     ),
+        //   });
+        // },
       })
       .then(() => {
         this.setState(
@@ -196,22 +200,29 @@ class EditTeam extends Component {
             isLoading: false,
           },
 
-          () =>
-            Object.entries(error).map(([key, value]) => {
-              return errorToast(`${value}`);
-            }),
+          // () =>
+          //   Object.entries(error).map(([key, value]) => {
+          //     return errorToast(`${value}`);
+          //   }),
         );
       });
   };
 
   onSubmitHandler = e => {
     e.preventDefault();
-    this.setState(
-      {
-        isLoading: true,
-      },
-      this.requestHandler,
-    );
+    if (this.state.team.identifier.trim().length < 5) {
+      console.log('if');
+      this.setState({
+        errorFlag: true,
+      });
+    } else {
+      this.setState(
+        {
+          isLoading: true,
+        },
+        this.requestHandler,
+      );
+    }
   };
 
   onChangeHandler = (e, position) => {
@@ -224,12 +235,28 @@ class EditTeam extends Component {
         },
       });
     }
-    this.setState({
-      team: {
-        ...this.state.team,
-        [name]: value,
+    this.setState(
+      {
+        team: {
+          ...this.state.team,
+          [name]: value,
+        },
       },
-    });
+      () => {
+        if (name === 'identifier') {
+          if (value.trim().length < 5) {
+            this.setState({
+              errorFlag: true,
+            });
+          }
+          if (value.trim().length > 5) {
+            this.setState({
+              errorFlag: false,
+            });
+          }
+        }
+      },
+    );
   };
 
   readFile = file => {
@@ -298,6 +325,7 @@ class EditTeam extends Component {
       state: {
         loaded,
         team: {
+          identifier,
           name,
           type,
           address,
@@ -327,6 +355,23 @@ class EditTeam extends Component {
       <RightContentCard title="app.editTeam">
         <form className="edit-form" onSubmit={onSubmitHandler}>
           <div className="row">
+            <div className="col-xl-4 col-md-6">
+              <InputElement
+                formType="editForm"
+                tag="input"
+                type="text"
+                required
+                label="identifier"
+                name="identifier"
+                value={identifier}
+                changeHandler={onChangeHandler}
+              />
+              {this.state.errorFlag && (
+                <span style={{ color: 'red' }}>
+                  Identifier cannot be less than 5 characters.
+                </span>
+              )}
+            </div>
             <div className="col-xl-6 col-md-6">
               <InputElement
                 formType="editForm"

@@ -8,7 +8,11 @@ import About from './about';
 import Project from './projectLists';
 import TeamTable from './team';
 import Admin from './admin';
-import { getSuperAdminDashboard } from '../../actions/superAdminDashboardActions';
+import {
+  getSuperAdminDashboard,
+  getProgressTable,
+} from '../../actions/superAdminDashboardActions';
+import ProgressTable from './progressTable';
 
 /* eslint-disable camelcase */
 
@@ -21,16 +25,25 @@ class AdminDashboard extends Component {
       masterprojects: [],
       teams: [],
       masterteams: [],
+      loader: false,
     };
   }
 
   componentDidMount() {
     const {
-      match: {
-        params: { id: superAdminId },
+      props: {
+        match: {
+          params: { id: superAdminId },
+        },
       },
-    } = this.props;
+    } = this;
     this.props.getSuperAdminDashboard(superAdminId);
+    this.setState(
+      {
+        loader: true,
+      },
+      () => this.props.getProgressTable(superAdminId),
+    );
   }
 
   componentWillReceiveProps(nextprops) {
@@ -41,6 +54,7 @@ class AdminDashboard extends Component {
       masterteams: nextprops.superAdminDashboard.teams,
       admins: nextprops.superAdminDashboard.admins,
       masteradmins: nextprops.superAdminDashboard.admins,
+      loader: nextprops.superAdminDashboard.progressTable && false,
     });
   }
 
@@ -126,28 +140,27 @@ class AdminDashboard extends Component {
       },
     } = this.props;
     const {
-      id,
-      name,
-      phone,
-      country,
-      additional_desc,
-      logo,
-      total_teams,
-      email,
-      total_sites,
-      total_projects,
-      total_users,
-      submissions,
-      contact,
-      projects,
-      breadcrumbs,
-      teams,
-      map,
-      showContentLoader,
-      admins,
-      organizationDashboardLoader,
-    } = this.props.superAdminDashboard;
-    const { activeTab } = this.state;
+      props: {
+        superAdminDashboard: {
+          id,
+          name,
+          phone,
+          country,
+          additional_desc,
+          logo,
+          total_sites,
+          total_users,
+          contact,
+          map,
+          showContentLoader,
+          organizationDashboardLoader,
+          progressTable,
+          total_submissions,
+        },
+      },
+      state: { activeTab, projects, teams, admins, loader },
+    } = this;
+
     const total_team = teams.length;
     const total_project = projects.length;
 
@@ -165,6 +178,7 @@ class AdminDashboard extends Component {
           total_users={total_users}
           total_teams={total_team}
           superAdminId={superAdminId}
+          total_submissions={total_submissions}
         />
 
         <div className="row">
@@ -288,14 +302,24 @@ class AdminDashboard extends Component {
 
               {activeTab === 'project' && (
                 <>
-                  <Project projects={this.state.projects} />
+                  <Project projects={projects} />
                 </>
               )}
 
-              {activeTab === 'teams' && (
-                <TeamTable teams={this.state.teams} />
-              )}
+              {activeTab === 'teams' && <TeamTable teams={teams} />}
             </div>
+          </div>
+        </div>
+        <div className="progress-table mrb-30 mrt-30">
+          <div className="card">
+            {/* <div className="card-header main-card-header sub-card-header">
+              
+            </div> */}
+
+            <ProgressTable
+              progressTable={progressTable}
+              loader={loader}
+            />
           </div>
         </div>
         {/* <DashboardCounter submissions={submissions} /> */}
@@ -323,7 +347,7 @@ class AdminDashboard extends Component {
                   </div>
                 </div>
                 <Admin
-                  admin={this.state.admins}
+                  admin={admins}
                   showContentLoader={showContentLoader}
                 />
               </div>
@@ -343,4 +367,5 @@ const mapStateToProps = ({ superAdminDashboard }) => {
 
 export default connect(mapStateToProps, {
   getSuperAdminDashboard,
+  getProgressTable,
 })(AdminDashboard);

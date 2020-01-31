@@ -5,6 +5,8 @@ import {
   GET_REPORTS_LIST,
   APPLY_ACTION_TO_REPORT,
   GET_REPORT_DATA,
+  GET_PROJECT_DETAILS,
+  GET_CUSTOM_REPORT_TABLE_DATA,
 } from '../actions/types';
 
 const initialState = {
@@ -18,8 +20,13 @@ const initialState = {
   reportList: [],
   regions: [],
   siteTypes: [],
+  userRoles: [],
   actionResponse: {},
   reportData: {},
+  projectList: {},
+  projectCreatedOn: '',
+  customReportTable: {},
+  report_sync_settings: {},
 };
 
 export default function(state = initialState, action) {
@@ -31,9 +38,16 @@ export default function(state = initialState, action) {
         metrics: action.payload.metrics,
         metaAttributes: action.payload.meta_attributes,
         formTypes: action.payload.form_types,
-        regions: action.payload.regions,
-        siteTypes: action.payload.site_types,
+        regions: action.payload.regions ? action.payload.regions : [],
+        siteTypes: action.payload.site_types
+          ? action.payload.site_types
+          : [],
+        userRoles: action.payload.user_roles
+          ? action.payload.user_roles
+          : [],
         reportLoader: false,
+        projectCreatedOn:
+          action.payload.created_date && action.payload.created_date,
       };
     case GET_FORM:
       return {
@@ -64,7 +78,20 @@ export default function(state = initialState, action) {
         ...state,
         reportData: action.payload,
         reportLoader: false,
+        report_sync_settings: action.payload.report_sync_settings,
       };
+    case GET_PROJECT_DETAILS: {
+      return {
+        ...state,
+        projectList: action.payload.project_managers,
+      };
+    }
+    case GET_CUSTOM_REPORT_TABLE_DATA: {
+      return {
+        ...state,
+        customReportTable: action.payload,
+      };
+    }
     default:
       return state;
   }

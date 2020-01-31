@@ -12,6 +12,7 @@ export default class ProjectAdd extends Component {
     super(props);
     this.state = {
       project: {
+        identifier: '',
         name: '',
         phone: '',
         email: '',
@@ -20,6 +21,7 @@ export default class ProjectAdd extends Component {
         donor: '',
         public_desc: '',
         cluster_sites: false,
+        errorFlag: false,
       },
       // loaded: 0,
       sector: [],
@@ -37,6 +39,7 @@ export default class ProjectAdd extends Component {
       isLoading: false,
       // redirect: false,
       breadcrumbs: {},
+      id: this.props.match.params ? this.props.match.params.id : '',
     };
   }
 
@@ -47,6 +50,7 @@ export default class ProjectAdd extends Component {
         params: { id },
       },
     } = this.props;
+
     axios
       .get(`/fv3/api/sectors-subsectors/`)
       .then(res => {
@@ -83,6 +87,7 @@ export default class ProjectAdd extends Component {
   onSubmitHandler = e => {
     e.preventDefault();
     const {
+      identifier,
       id,
       project,
       selectedSector,
@@ -90,7 +95,9 @@ export default class ProjectAdd extends Component {
       position,
       cropResult,
     } = this.state;
+
     const data = {
+      identifier: project.identifier,
       organization: id,
       name: project.name,
       phone: project.phone,
@@ -107,45 +114,51 @@ export default class ProjectAdd extends Component {
       cropResult,
     };
 
-    axios
-      .post(`fv3/api/add-project/${id}/`, data)
-      .then(res => {
-        if (res.status === 201) {
-          successToast('Project', 'Created');
-          this.setState({
-            project: {
-              name: '',
-              phone: '',
-              email: '',
-              address: '',
-              website: '',
-              donor: '',
-              public_desc: '',
-              cluster_sites: false,
-            },
-            // loaded: 0,
-            sector: [],
-            subSectors: [],
-            selectedSector: '',
-            selectedSubSector: '',
-            position: {
-              latitude: '28.3949',
-              longitude: '-0.09',
-            },
-            cropResult: '',
-            // redirect: true,
-          });
-          this.props.history.push(
-            `/project-dashboard/${res.data.id}`,
-          );
-        }
-      })
-      .catch(err => {
-        const error = err.response.data;
-        Object.entries(error).map(([key, value]) => {
-          return errorToast(`${value}`);
-        });
+    if (this.state.project.identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
       });
+    } else {
+      axios
+        .post(`fv3/api/add-project/${id}/`, data)
+        .then(res => {
+          if (res.status === 201) {
+            successToast('Project', 'Created');
+            this.setState({
+              project: {
+                name: '',
+                phone: '',
+                email: '',
+                address: '',
+                website: '',
+                donor: '',
+                public_desc: '',
+                cluster_sites: false,
+              },
+              // loaded: 0,
+              sector: [],
+              subSectors: [],
+              selectedSector: '',
+              selectedSubSector: '',
+              position: {
+                latitude: '28.3949',
+                longitude: '-0.09',
+              },
+              cropResult: '',
+              // redirect: true,
+            });
+            this.props.history.push(
+              `/project-dashboard/${res.data.id}`,
+            );
+          }
+        })
+        .catch(err => {
+          const error = err.response.data;
+          Object.entries(error).map(([key, value]) => {
+            return errorToast(`${value}`);
+          });
+        });
+    }
   };
 
   onSelectChangeHandler = (e, subSect) => {
@@ -176,6 +189,7 @@ export default class ProjectAdd extends Component {
 
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
+
     if (position) {
       return this.setState(state => ({
         position: {
@@ -185,12 +199,28 @@ export default class ProjectAdd extends Component {
       }));
     }
 
-    return this.setState(state => ({
-      project: {
-        ...state.project,
-        [name]: value,
+    return this.setState(
+      state => ({
+        project: {
+          ...state.project,
+          [name]: value,
+        },
+      }),
+      () => {
+        if (name === 'identifier') {
+          if (value.trim().length < 5) {
+            this.setState({
+              errorFlag: true,
+            });
+          }
+          if (value.trim().length > 5) {
+            this.setState({
+              errorFlag: false,
+            });
+          }
+        }
       },
-    }));
+    );
   };
 
   readFile = file => {
@@ -231,6 +261,7 @@ export default class ProjectAdd extends Component {
   render() {
     const {
       project: {
+        identifier,
         name,
         phone,
         email,
@@ -240,6 +271,7 @@ export default class ProjectAdd extends Component {
         cluster_sites,
         donor,
         id,
+        // errorFlag,
       },
       sector,
       position: { latitude, longitude },
@@ -261,12 +293,14 @@ export default class ProjectAdd extends Component {
           )}
         </nav>
         <Edit
+          errorFlag={this.state.errorFlag}
           context={id}
           _isMounted={false}
           onSubmitHandler={this.onSubmitHandler}
           onChangeHandler={this.onChangeHandler}
           sector={sector}
           onSelectChangeHandler={this.onSelectChangeHandler}
+          identifier={identifier}
           name={name}
           phone={phone}
           email={email}

@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default class LeftSideBar extends PureComponent {
-  leftsideNavRoute = () => {
+  leftsideNavRoute = props => {
     const {
       location: { pathname },
       match: {
         url,
         params: { id },
       },
-    } = this.props.pathname;
+    } = props;
 
     const navRoute = [
       {
@@ -28,7 +28,13 @@ export default class LeftSideBar extends PureComponent {
         id: '3',
         to: `${url}/my-form`,
         path: `${url}/my-form`,
-        title: 'Form',
+        title: 'Organization Default Forms',
+      },
+      {
+        id: '4',
+        to: `${url}/library`,
+        path: `${url}/library`,
+        title: 'Organization Library Forms',
       },
     ];
 
@@ -48,11 +54,8 @@ export default class LeftSideBar extends PureComponent {
 
   render() {
     return (
-      <ul
-        className="nav nav-tabs flex-column border-tabs"
-        // style={{ minHeight: height > 0 ? height : '' }}
-      >
-        {this.leftsideNavRoute()}
+      <ul className="nav nav-tabs flex-column border-tabs">
+        {this.leftsideNavRoute(this.props.pathname)}
       </ul>
     );
   }

@@ -45,6 +45,7 @@ class EditProject extends Component {
 
     this.state = {
       project: {
+        identifier: '',
         name: '',
         phone: '',
         email: '',
@@ -68,6 +69,7 @@ class EditProject extends Component {
       showCropper: false,
       cropResult: '',
       isLoading: false,
+      errorFlag: false,
     };
   }
 
@@ -139,6 +141,7 @@ class EditProject extends Component {
     const {
       state: {
         project: {
+          identifier,
           name,
           phone,
           email,
@@ -159,6 +162,7 @@ class EditProject extends Component {
     } = this;
 
     const project = {
+      identifier,
       name,
       phone,
       email,
@@ -174,38 +178,45 @@ class EditProject extends Component {
       sub_sector: selectedSubSector,
       organization,
     };
-    axios
-      .put(`${urls[0]}${projectId}/`, project, {
-        onUploadProgress: progressEvent => {
-          this.setState({
-            loaded: Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total,
-            ),
-          });
-        },
-      })
-      .then(() => {
-        this.setState(
-          {
-            isLoading: false,
-            loaded: 0,
-          },
-          () => successToast('Project', 'updated'),
-        );
-      })
-      .catch(err => {
-        const error = err.response.data;
-        this.setState(
-          {
-            isLoading: false,
-          },
-          () => {
-            Object.entries(error).map(([key, value]) => {
-              return errorToast(`${value}`);
+
+    if (this.state.project.identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
+      });
+    } else {
+      axios
+        .put(`${urls[0]}${projectId}/`, project, {
+          onUploadProgress: progressEvent => {
+            this.setState({
+              loaded: Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total,
+              ),
             });
           },
-        );
-      });
+        })
+        .then(() => {
+          this.setState(
+            {
+              isLoading: false,
+              loaded: 0,
+            },
+            () => successToast('Project', 'updated'),
+          );
+        })
+        .catch(err => {
+          const error = err.response.data;
+          this.setState(
+            {
+              isLoading: false,
+            },
+            // () => {
+            //   Object.entries(error).map(([key, value]) => {
+            //     return errorToast(`${value}`);
+            //   });
+            // },
+          );
+        });
+    }
   };
 
   onSubmitHandler = e => {
@@ -257,12 +268,28 @@ class EditProject extends Component {
       }));
     }
 
-    this.setState(state => ({
-      project: {
-        ...state.project,
-        [name]: value,
+    this.setState(
+      state => ({
+        project: {
+          ...state.project,
+          [name]: value,
+        },
+      }),
+      () => {
+        if (name === 'identifier') {
+          if (value.trim().length < 5) {
+            this.setState({
+              errorFlag: true,
+            });
+          }
+          if (value.trim().length > 5) {
+            this.setState({
+              errorFlag: false,
+            });
+          }
+        }
       },
-    }));
+    );
   };
 
   readFile = file => {
@@ -306,6 +333,7 @@ class EditProject extends Component {
         loaded,
         project: {
           name,
+          identifier,
           phone,
           email,
           address,
@@ -335,6 +363,24 @@ class EditProject extends Component {
       <RightContentCard title="app.editProject">
         <form className="edit-form" onSubmit={onSubmitHandler}>
           <div className="row">
+            <div className="col-xl-4 col-md-6">
+              <InputElement
+                formType="editForm"
+                tag="input"
+                type="text"
+                required
+                label="identifier"
+                name="identifier"
+                value={identifier}
+                changeHandler={onChangeHandler}
+              />
+              {this.state.errorFlag && (
+                <span style={{ color: 'red' }}>
+                  identifier should be more then 5 character
+                </span>
+              )}
+            </div>
+
             <div className="col-xl-4 col-md-6">
               <InputElement
                 formType="editForm"

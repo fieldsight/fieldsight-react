@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
@@ -181,179 +182,197 @@ export default class UserExportReport extends Component {
       },
     ];
 
+    // const {
+    //   match: {
+    //     params: { id },
+    //   },
+    // } = this.props;
+
     return (
-      <div className="reports mrb-30">
-        <div className="card">
-          <div className="card-body">
-            <div className="standard-tempalte">
-              <h3 className="mb-3">Template report</h3>
+      <>
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to={`/project-dashboard/${id}/report`}>
+                Report
+              </Link>
+            </li>
+            <li className="breadcrumb-item">Export Data</li>
+          </ol>
+        </nav>
+        <div className="reports mrb-30">
+          <div className="card">
+            <div className="card-body">
+              <div className="standard-tempalte">
+                <h3 className="mb-3">Template report</h3>
 
-              <div className="report-list">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="report-content">
-                      <h4>Export Data</h4>
+                <div className="report-list">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="report-content">
+                        <h4>Export Data</h4>
 
-                      <p>
-                        Export of User Activities in a selected time
-                        interval.
-                      </p>
+                        <p>
+                          Export of User Activities in a selected time
+                          interval.
+                        </p>
+                      </div>
                     </div>
                   </div>
+                  <div className="dropdown report-option">
+                    <Dropdown drop="left">
+                      <Dropdown.Toggle
+                        variant=""
+                        id="dropdown-Data"
+                        className="dropdown-toggle common-button no-border is-icon"
+                      >
+                        <i className="material-icons">more_vert</i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                        {DataCrude.map(item => (
+                          <Dropdown.Item
+                            href={item.link}
+                            key={item.id}
+                            target="_blank"
+                          >
+                            {item.title}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
                 </div>
-                <div className="dropdown report-option">
-                  <Dropdown drop="left">
-                    <Dropdown.Toggle
-                      variant=""
-                      id="dropdown-Data"
-                      className="dropdown-toggle common-button no-border is-icon"
-                    >
-                      <i className="material-icons">more_vert</i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                      {DataCrude.map(item => (
-                        <Dropdown.Item
-                          href={item.link}
-                          key={item.id}
-                          target="_blank"
-                        >
-                          {item.title}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="data-filter mt-3">
-                <h3 className="mb-3">Activity Report</h3>
+                <div className="data-filter mt-3">
+                  <h3 className="mb-3">Activity Report</h3>
 
-                <form>
-                  <div className="row">
-                    <div className="col-lg-6 col-md-6">
-                      <div className="form-group icon-between">
-                        <label className="mb-2">Time period</label>
-                        <div className="inline-flex ">
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="Start Date"
-                              name="startedDate"
-                              selected={startedDate}
-                              onChange={onChangeHandler}
-                              dateFormat="yyyy-MM-dd"
-                              className="form-control"
-                            />
-                          </div>
-                          <span className="icon-between">
-                            <i className="material-icons">
-                              arrow_right_alt
-                            </i>
-                          </span>
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="End Date"
-                              name="endedDate"
-                              selected={endedDate}
-                              onChange={onEndChangeHandler}
-                              className="form-control"
-                              dateFormat="yyyy-MM-dd"
-                            />
+                  <form>
+                    <div className="row">
+                      <div className="col-lg-6 col-md-6">
+                        <div className="form-group icon-between">
+                          <label className="mb-2">Time period</label>
+                          <div className="inline-flex ">
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="Start Date"
+                                name="startedDate"
+                                selected={startedDate}
+                                onChange={onChangeHandler}
+                                dateFormat="yyyy-MM-dd"
+                                className="form-control"
+                              />
+                            </div>
+                            <span className="icon-between">
+                              <i className="material-icons">
+                                arrow_right_alt
+                              </i>
+                            </span>
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="End Date"
+                                name="endedDate"
+                                selected={endedDate}
+                                onChange={onEndChangeHandler}
+                                className="form-control"
+                                dateFormat="yyyy-MM-dd"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="col-md-12">
-                      <button
-                        // disabled
-                        type="button"
-                        className="common-button mt-3 is-bg"
-                        onClick={this.handleApply}
-                      >
-                        Generate
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-              <div className="data-filter mt-3">
-                <h3 className="mb-3">Individual Activity Report</h3>
-
-                <form>
-                  <div className="row">
-                    <div className="col-lg-6 col-md-6">
-                      <div className="form-group icon-between">
-                        <label className="mb-2">Time period</label>
-                        <div className="inline-flex ">
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="Start Date"
-                              name="startedDate"
-                              selected={preview_startedDate}
-                              onChange={onChangeHandlerPreview}
-                              dateFormat="yyyy-MM-dd"
-                              className="form-control"
-                            />
-                          </div>
-                          <span className="icon-between">
-                            <i className="material-icons">
-                              arrow_right_alt
-                            </i>
-                          </span>
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="End Date"
-                              name="endedDate"
-                              selected={preview_endedDate}
-                              onChange={onEndChangeHandlerPreview}
-                              className="form-control"
-                              dateFormat="yyyy-MM-dd"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-group">
-                        {/* <label className="mb-2"></label> */}
-                        <SelectElement
-                          className="form-control"
-                          label="Select User"
-                          translation
-                          options={userType}
-                          changeHandler={onSelectChangeHandler}
-                          value={Userselected}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-12">
-                      <a
-                        href={`/user/report/activity/${id}/${Userselected}/${format(
-                          preview_startedDate,
-                          ['YYYY-MM-DD'],
-                        )}/${format(preview_endedDate, [
-                          'YYYY-MM-DD',
-                        ])}/`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <div className="col-md-12">
                         <button
                           // disabled
                           type="button"
                           className="common-button mt-3 is-bg"
+                          onClick={this.handleApply}
                         >
-                          Preview
+                          Generate
                         </button>
-                      </a>
+                      </div>
                     </div>
-                  </div>
-                </form>
+                  </form>
+                </div>
+
+                <div className="data-filter mt-3">
+                  <h3 className="mb-3">Individual Activity Report</h3>
+
+                  <form>
+                    <div className="row">
+                      <div className="col-lg-6 col-md-6">
+                        <div className="form-group icon-between">
+                          <label className="mb-2">Time period</label>
+                          <div className="inline-flex ">
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="Start Date"
+                                name="startedDate"
+                                selected={preview_startedDate}
+                                onChange={onChangeHandlerPreview}
+                                dateFormat="yyyy-MM-dd"
+                                className="form-control"
+                              />
+                            </div>
+                            <span className="icon-between">
+                              <i className="material-icons">
+                                arrow_right_alt
+                              </i>
+                            </span>
+                            <div className="custom-group">
+                              <DatePicker
+                                placeholderText="End Date"
+                                name="endedDate"
+                                selected={preview_endedDate}
+                                onChange={onEndChangeHandlerPreview}
+                                className="form-control"
+                                dateFormat="yyyy-MM-dd"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="col-lg-3 col-md-6">
+                        <div className="form-group">
+                          {/* <label className="mb-2"></label> */}
+                          <SelectElement
+                            className="form-control"
+                            label="Select User"
+                            translation
+                            options={userType}
+                            changeHandler={onSelectChangeHandler}
+                            value={Userselected}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-12">
+                        <a
+                          href={`/user/report/activity/${id}/${Userselected}/${format(
+                            preview_startedDate,
+                            ['YYYY-MM-DD'],
+                          )}/${format(preview_endedDate, [
+                            'YYYY-MM-DD',
+                          ])}/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <button
+                            // disabled
+                            type="button"
+                            className="common-button mt-3 is-bg"
+                          >
+                            Preview
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

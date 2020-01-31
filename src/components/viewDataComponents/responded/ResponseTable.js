@@ -143,13 +143,19 @@ class ResponseTable extends PureComponent {
                           <i className="la la-eye view-tag tag" />
                         </Link>
                       )}
-                      {generals.download_url === null ? (
-                        <a className="edit-tag tag disable-pointer">
-                          <i className="la la-download" />
+
+                      {table === 'site' ? (
+                        <a
+                          href={`/fieldsight/application/#/exports/0/${generals.id}/${id}/0`}
+                          className="edit-tag tag"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className="la la-download " />
                         </a>
                       ) : (
                         <a
-                          href={generals.download_url}
+                          href={`/fieldsight/application/#/exports/1/${generals.id}/${id}/0`}
                           className="edit-tag tag"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -157,6 +163,7 @@ class ResponseTable extends PureComponent {
                           <i className="la la-download " />
                         </a>
                       )}
+
                       {table === 'site' ? (
                         generals.fsxf_id ? (
                           <Link

@@ -1,20 +1,133 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import CustomCheckBox from '../common/CustomCheckbox';
 
-import CustomMultiSelect from '../CustomMultiSelect';
+// import CustomMultiSelect from '../common/CustomMultiSelect';
 /* eslint-disable */
 
-export default class SiteInformation extends PureComponent {
+export default class SiteInformation extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      siteInfo: {
+        selectedMetas: [],
+        siteValues: [],
+        selectedValue: [],
+      },
+    };
+  }
+
+  componentDidMount() {
+    const { selectedMetas, selectedValue, siteValues } = this.props;
+    if (selectedMetas) {
+      this.setState(state => ({
+        siteInfo: { ...state.siteInfo, selectedMetas },
+      }));
+    }
+    if (selectedValue) {
+      this.setState(state => ({
+        siteInfo: { ...state.siteInfo, selectedValue },
+      }));
+    }
+    if (siteValues) {
+      this.setState(state => ({
+        siteInfo: { ...state.siteInfo, siteValues },
+      }));
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { selectedMetas } = this.props;
+    if (prevProps.selectedMetas !== selectedMetas) {
+      this.setState(state => ({
+        siteInfo: { ...state.siteInfo, selectedMetas },
+      }));
+    }
+  }
+
+  handleSelectMeta = (e, meta, value) => {
+    if (meta && Object.keys(meta).length > 0) {
+      this.handleMetaCheck(e, meta);
+    }
+    if (value && Object.keys(value).length > 0) {
+      this.handleValueCheck(e, value);
+    }
+  };
+
+  handleMetaCheck = (e, meta) => {
+    const {
+      siteInfo: { selectedMetas },
+    } = this.state;
+    const { name, checked } = e.target;
+    this.setState(
+      state => {
+        if (checked) {
+          return {
+            siteInfo: {
+              ...state.siteInfo,
+              selectedMetas: [...state.siteInfo.selectedMetas, meta],
+            },
+          };
+        }
+        if (!checked) {
+          const filterMetas = selectedMetas.filter(
+            type => type.code !== name,
+          );
+          return {
+            siteInfo: {
+              ...state.siteInfo,
+              selectedMetas: filterMetas,
+            },
+          };
+        }
+      },
+      () => {
+        const { siteInfo } = this.state;
+        this.props.handleSiteAddValue(siteInfo);
+      },
+    );
+  };
+
+  handleValueCheck = (e, item) => {
+    const { checked } = e.target;
+    const {
+      siteInfo: { selectedValue },
+    } = this.state;
+    this.setState(
+      state => {
+        if (checked) {
+          return {
+            siteInfo: {
+              ...state.siteInfo,
+              selectedValue: [...state.siteInfo.selectedValue, item],
+            },
+          };
+        }
+        if (!checked) {
+          const newMetasArr = selectedValue.filter(
+            s => s.code !== item.code,
+          );
+          return {
+            siteInfo: {
+              ...state.siteInfo,
+              selectedValue: newMetasArr,
+            },
+          };
+        }
+      },
+      () => {
+        const { siteInfo } = this.state;
+        this.props.handleSiteAddValue(siteInfo);
+      },
+    );
+  };
+
   render() {
     const {
-      toggleSelectClass,
-      handleToggleClass,
-      siteValues,
-      selectedMetrics,
-      handleSelectMeta,
-      metaAttributes,
-      selectedMetas,
-    } = this.props;
-
+      siteInfo: { selectedMetas, siteValues },
+    } = this.state;
+    const { selectedMetrics, metaAttributes } = this.props;
     return (
       <div className="acc-item">
         <div className="acc-header">
@@ -25,21 +138,45 @@ export default class SiteInformation extends PureComponent {
             <div className="row">
               <div className="col-lg-6">
                 <div className="form-group">
-                  <label className="mb-2">site information</label>
-                  <CustomMultiSelect
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('siteType');
+                  {/* <label className="mb-2">site information</label> */}
+                  <div
+                    style={{
+                      position: 'relative',
+                      height: `200px `,
                     }}
-                    toggleType="siteType"
-                    checkboxOption={metaAttributes}
-                    handleCheck={handleSelectMeta}
-                    selectedArr={selectedMetas}
-                    placeholderTxt="Form Answer"
-                  />
+                  >
+                    <PerfectScrollbar>
+                      <ul className="role-list">
+                        {metaAttributes.length > 0 &&
+                          metaAttributes.map(item => {
+                            const filterList = selectedMetas.filter(
+                              i => i.code === item.code,
+                            );
+                            const isChecked =
+                              filterList && filterList[0]
+                                ? true
+                                : false;
+
+                            return (
+                              <li key={item.code}>
+                                <CustomCheckBox
+                                  id={item.code}
+                                  label={item.label}
+                                  name={item.code}
+                                  checked={isChecked}
+                                  changeHandler={e => {
+                                    this.handleSelectMeta(e, item);
+                                  }}
+                                />
+                              </li>
+                            );
+                          })}
+                      </ul>
+                    </PerfectScrollbar>
+                  </div>
                 </div>
               </div>
-              <div className="col-lg-6">
+              {/* <div className="col-lg-6">
                 <div className="form-group">
                   <label className="mb-2">values</label>
                   <div className="common-select">
@@ -76,7 +213,7 @@ export default class SiteInformation extends PureComponent {
                                     name={option.code}
                                     checked={isChecked}
                                     onChange={e => {
-                                      handleSelectMeta(e, {}, option);
+                                      this.handleSelectMeta(e, {}, option);
                                     }}
                                   />
                                   <label
@@ -94,7 +231,7 @@ export default class SiteInformation extends PureComponent {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

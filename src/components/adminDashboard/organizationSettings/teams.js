@@ -5,6 +5,11 @@ import ManageModal from '../../manageForms/ManageModal';
 import DeleteModal from '../../common/DeleteModal';
 import TeamsTable from './teamsTable';
 import TeamList from './teamList';
+import Loader from '../../common/Loader';
+import {
+  errorToast,
+  successToast,
+} from '../../../utils/toastHandler';
 
 /* eslint-disable camelcase */
 
@@ -19,6 +24,8 @@ export default class Teams extends React.PureComponent {
       is_superuser: '',
       openModal: false,
       teams_id: '',
+      loader: false,
+      saveLoader: '',
     };
   }
 
@@ -32,6 +39,7 @@ export default class Teams extends React.PureComponent {
           teams: res.data.teams,
           is_superuser: res.data.is_superuser,
           // is_superuser: false,
+          loader: true,
         });
       })
       .catch();
@@ -39,16 +47,17 @@ export default class Teams extends React.PureComponent {
 
   handleChange = () => {
     const {
-      props: { id },
       state: { is_superuser },
     } = this;
     if (is_superuser) {
       this.setState({
         popUpPage: true,
       });
-    } else {
-      this.props.history.push(`/create-team/${id}`);
     }
+
+    // } else {
+    //   this.props.history.push(`/create-team/${id}`);
+    // }
   };
 
   handleClosePopup = () => {
@@ -57,38 +66,60 @@ export default class Teams extends React.PureComponent {
     });
   };
 
-  changeHandler = e => {
-    const { id, checked, value } = e.target;
-
-    if (checked) {
-      this.setState(prevState => ({
-        selected: [...prevState.selected, JSON.parse(value)],
-      }));
-    }
-
-    if (!checked) {
-      this.setState(preveState => ({
-        selected: preveState.selected.filter(
-          region => region !== JSON.parse(value),
-        ),
-      }));
-    }
+  changeHandler = async e => {
+    const { checked, value, id } = e.target;
+    await this.setState(prevState => {
+      if (checked) {
+        const key = 'id';
+        return {
+          selected: [
+            ...prevState.selected,
+            { [key]: JSON.parse(id) },
+          ],
+        };
+      }
+      if (!checked) {
+        return {
+          selected: prevState.selected.filter(
+            region => region.id !== JSON.parse(id),
+          ),
+        };
+      }
+      return null;
+    });
   };
 
   handleSaveForm = () => {
-    const { id } = this.props;
-    const body = { team_ids: this.state.selected };
+    const {
+      props: { id },
+      state: { selected },
+    } = this;
+    const result = selected.map(function(x) {
+      return x.id;
+    });
+    const body = { team_ids: result };
+    this.setState({
+      saveLoader: false,
+    });
+
     axios
       .post(`/fv3/api/manage-teams/${id}/`, body)
       .then(res => {
         if (res.status === 200) {
-          this.setState({
+          successToast('Manage Teams', 'created');
+          this.setState(State => ({
+            saveLoader: !State.saveLoader,
             popUpPage: false,
             selected_teams: res.data,
-          });
+          }));
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
+      });
   };
 
   openDelete = teams_id => {
@@ -107,6 +138,7 @@ export default class Teams extends React.PureComponent {
       .post(`/fv3/api/manage-teams/${id}/`, body)
       .then(res => {
         if (res.status === 200) {
+          successToast(res.data.detail);
           const delet = selected_teams.filter(
             data => teams_id !== data.id,
           );
@@ -116,8 +148,11 @@ export default class Teams extends React.PureComponent {
           });
         }
       })
-      .catch(() => {
-        // console.log(err);
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
       });
   };
 
@@ -135,8 +170,10 @@ export default class Teams extends React.PureComponent {
         selected_teams,
         is_superuser,
         openModal,
+        selected,
+        loader,
+        saveLoader,
       },
-      handleDelete,
       openDelete,
       handleCancle,
       handleConfirm,
@@ -145,59 +182,33 @@ export default class Teams extends React.PureComponent {
     const { id } = this.props;
     return (
       <>
+        {saveLoader === false && <Loader />}
+
         <RightContentCard
           title="Manage Teams"
           addButton
           toggleModal={this.handleChange}
-          buttonName="Add Teams"
+          // buttonName="Add Teams"
         >
           <TeamsTable
             selected_teams={selected_teams}
             openDelete={openDelete}
+            loader={loader}
           />
         </RightContentCard>
-        {/* {is_superuser && popUpPage && (
-          <Modal
-            title="Add teams"
-            toggleModal={this.handleClosePopup}
-            showButton
-            showText="create team"
-            url={`/fieldsight/application/#/create-team/${id}`}
-          >
-            <form className="floating-form">
-              <TeamList
-                teams={teams}
-                selected={this.state.selected}
-                changeHandler={this.changeHandler}
-              />
-
-              <div className="modal-footer">
-                <div className="form-group pull-right no-margin">
-                  <button
-                    type="button"
-                    className="fieldsight-btn"
-                    onClick={this.handleSaveForm}
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
-            </form>
-          </Modal>
-        )} */}
 
         {is_superuser && popUpPage && (
           <ManageModal
             title="Add teams"
             toggleModal={this.handleClosePopup}
             showButton
-            showText="create team"
+            showText="Create Team"
             url={`/fieldsight/application/#/create-team/${id}`}
             handleSubmit={this.handleSaveForm}
           >
             <TeamList
               teams={teams}
-              selected={this.state.selected}
+              selected={selected}
               changeHandler={this.changeHandler}
             />
           </ManageModal>
@@ -209,7 +220,7 @@ export default class Teams extends React.PureComponent {
             onConfirm={handleConfirm}
             onToggle={handleCancle}
             title="Warning"
-            message="Are u sure u want to delete "
+            message="Are u sure you want to remove?"
           />
         )}
       </>

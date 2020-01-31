@@ -19,13 +19,14 @@ L.Icon.Default.mergeOptions({
   iconUrl,
   shadowUrl,
 });
-/* eslint-disable */
+
 /* eslint-disable  camelcase */
 
 export default class SuperAdminFormEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      identifier: '',
       name: '',
       phone: '',
       fax: '',
@@ -40,6 +41,7 @@ export default class SuperAdminFormEdit extends Component {
       zoom: 13,
       Selectedtypes: '',
       country: '',
+      errorFlag: false,
     };
   }
 
@@ -55,8 +57,6 @@ export default class SuperAdminFormEdit extends Component {
       .all([editUrl, contryListUrl])
       .then(
         axios.spread((...responses) => {
-          const responseedit = responses[0];
-          const responseContryList = responses[1];
           const position =
             responses[0].data.location &&
             responses[0].data.location.split(' ');
@@ -65,6 +65,7 @@ export default class SuperAdminFormEdit extends Component {
           const latitude = position && position[2].split(')')[0];
 
           this.setState({
+            identifier: responses[0].data.identifier,
             name: responses[0].data.name,
             phone: responses[0].data.phone,
             fax: responses[0].data.fax,
@@ -72,10 +73,9 @@ export default class SuperAdminFormEdit extends Component {
             website: responses[0].data.website,
             address: responses[0].data.address,
             public_desc: responses[0].data.public_desc,
-            is_active: responses[0].data.is_active,
             position: {
-              latitude: latitude,
-              longitude: longitude,
+              latitude,
+              longitude,
             },
             zoom: 13,
             Selectedtypes: responses[0].data.country,
@@ -83,9 +83,7 @@ export default class SuperAdminFormEdit extends Component {
           });
         }),
       )
-      .catch(errors => {
-        // react on errors.
-      });
+      .catch();
   }
 
   onChangeHandler = (e, position) => {
@@ -98,66 +96,79 @@ export default class SuperAdminFormEdit extends Component {
         },
       }));
     }
-    return this.setState(prevState => ({
-      ...prevState.project,
-      [name]: value,
-    }));
+    return this.setState(
+      prevState => ({
+        ...prevState.project,
+        [name]: value,
+      }),
+      () => {
+        if (name === 'identifier') {
+          if (value.trim().length < 5) {
+            this.setState({
+              errorFlag: true,
+            });
+          }
+          if (value.trim().length > 5) {
+            this.setState({
+              errorFlag: false,
+            });
+          }
+        }
+      },
+    );
   };
 
   onSubmitHandler = e => {
     e.preventDefault();
-    const { id } = this.props;
+    const {
+      props: { id },
+      state: {
+        identifier,
+        name,
+        phone,
+        fax,
+        email,
+        website,
+        Selectedtypes,
+        address,
+        public_desc,
+        position: { latitude, longitude },
+      },
+    } = this;
 
     const data = {
-      name: this.state.name,
-      phone: this.state.phone,
-      fax: this.state.fax,
-      email: this.state.email,
-      website: this.state.website,
-      country: this.state.Selectedtypes,
-      address: this.state.address,
-      public_desc: this.state.public_desc,
-      latitude: this.state.position.latitude,
-      longitude: this.state.position.longitude,
+      identifier,
+      name,
+      phone,
+      fax,
+      email,
+      website,
+      country: Selectedtypes,
+      address,
+      public_desc,
+      latitude,
+      longitude,
     };
-    axios
-      .put(`/fv3/api/super-organization-lists/${id}/`, data)
-      .then(req => {
-        if (req.status === 201) {
-          successToast('Form', 'edited');
-          this.setState({
-            name: '',
-            phone: '',
-            fax: '',
-            email: '',
-            website: '',
-            country: '',
-            address: '',
-            public_desc: '',
-            position: {
-              latitude: '51.505',
-              longitude: '-0.09',
-            },
-            zoom: 13,
-            Selectedtypes: '',
-            id: '',
-          });
-        }
-      })
-      .catch(err => {
-        const error = err.response.data;
-        Object.entries(error).map(([key, value]) => {
-          return errorToast(`${value}`);
-        });
+
+    if (this.state.identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
       });
-  };
-
-  changeHandler = e => {
-    const { checked } = e.target;
-
-    this.setState({
-      is_active: checked,
-    });
+    } else {
+      axios
+        .put(`/fv3/api/super-organization-lists/${id}/`, data)
+        .then(req => {
+          if (req.status === 200) {
+            successToast('Organization', 'updated');
+          }
+        })
+        .catch(err => {
+          const error = err.response.data;
+          Object.entries(error).map(([key, value]) => {
+            return errorToast(`${value}`);
+          });
+        });
+    }
   };
 
   mapClickHandler = e => {
@@ -181,11 +192,10 @@ export default class SuperAdminFormEdit extends Component {
     const {
       onChangeHandler,
       onSubmitHandler,
-      changeHandler,
       mapClickHandler,
-
       onSelectChangeHandler,
       state: {
+        identifier,
         name,
         phone,
         fax,
@@ -194,28 +204,46 @@ export default class SuperAdminFormEdit extends Component {
         country,
         address,
         public_desc,
-
-        is_active,
         position: { latitude, longitude },
         Selectedtypes,
+        errorFlag,
+        zoom,
       },
+      // props: { id },
     } = this;
 
     return (
       <>
         {/* <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
-            <li
-              className="breadcrumb-item active"
-              aria-current="page"
-            >
-              Edit Super User
+            <li className="breadcrumb-item">
+              <Link to={`/organization-dashboard/${id}`}>
+              Organization Dashboard
+              </Link>
             </li>
+            <li className="breadcrumb-item">Edit Super Organization</li>
           </ol>
         </nav> */}
         <RightContentCard title="Edit Organization">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">
+              <div className="col-xl-4 col-md-6">
+                <InputElement
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  required
+                  label="identifier"
+                  name="identifier"
+                  value={identifier}
+                  changeHandler={onChangeHandler}
+                />
+                {errorFlag && (
+                  <span style={{ color: 'red' }}>
+                    Identifier cannot be less than 5 characters.
+                  </span>
+                )}
+              </div>
               <div className="col-xl-4 col-md-6">
                 <InputElement
                   formType="editForm"
@@ -328,7 +356,7 @@ export default class SuperAdminFormEdit extends Component {
                     <Map
                       style={{ height: '205px', marginTop: '1rem' }}
                       center={[latitude, longitude]}
-                      zoom={this.state.zoom}
+                      zoom={zoom}
                       onClick={mapClickHandler}
                     >
                       <TileLayer

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import CustomCheckBox from '../CustomCheckbox';
+import CustomCheckBox from '../common/CustomCheckbox';
 import UserRole from './userRole';
 import SiteInformation from './siteInformation';
 import FormInformation from './formInformation';
@@ -69,10 +69,8 @@ export default class Metrics extends Component {
       selectedMetrics,
       metaAttributes,
       selectedMetas,
-      handleSelectMeta,
       formTypes,
       selectedFormType,
-      handleFormTypeCheck,
       formTypeArr,
       toggleSelectClass,
       handleToggleClass,
@@ -80,8 +78,15 @@ export default class Metrics extends Component {
       formQuestions,
       individualFormArr,
       selectedIndividualForm,
-      handleIndividualFormSelected,
       selectedFormValue,
+      formInfoArr,
+      projectId,
+      forms,
+      handleFormInfo,
+      addSubmissionCount,
+      selectedReportType,
+      handleSiteAddValue,
+      selectedValue,
     } = this.props;
     // console.log('metrics', formTypes, '-----', selectedFormType);
 
@@ -92,8 +97,8 @@ export default class Metrics extends Component {
             <h5>metrics</h5>
           </div>
           <div className="acc-body">
-            <div className="fs-row no-gutters">
-              <div className="fs-5 fs-col">
+            <div className="row">
+              <div className="col-md-6">
                 <div className="custom-group">
                   <div className="custom-group-append">
                     <span className="custom-group-text">
@@ -112,7 +117,7 @@ export default class Metrics extends Component {
                 <div
                   style={{
                     position: 'relative',
-                    height: `300px `,
+                    height: `200px `,
                   }}
                 >
                   <PerfectScrollbar>
@@ -166,33 +171,39 @@ export default class Metrics extends Component {
             </div>
           </div>
         </div>
-        <SiteInformation
-          toggleSelectClass={toggleSelectClass}
-          handleToggleClass={handleToggleClass}
-          siteValues={siteValues}
-          selectedMetrics={selectedMetrics}
-          metaAttributes={metaAttributes}
-          selectedMetas={selectedMetas}
-          handleSelectMeta={handleSelectMeta}
-        />
+        {selectedReportType < 3 && (
+          <SiteInformation
+            toggleSelectClass={toggleSelectClass}
+            handleToggleClass={handleToggleClass}
+            siteValues={siteValues}
+            selectedValue={selectedValue}
+            selectedMetrics={selectedMetrics}
+            metaAttributes={metaAttributes}
+            selectedMetas={selectedMetas}
+            handleSiteAddValue={handleSiteAddValue}
+          />
+        )}
         <FormInformation
+          projectId={projectId}
+          selectedReportType={selectedReportType}
           toggleSelectClass={toggleSelectClass}
           handleToggleClass={handleToggleClass}
           selectedMetrics={selectedMetrics}
           formTypes={formTypes}
           selectedFormType={selectedFormType}
-          handleFormTypeCheck={handleFormTypeCheck}
           formTypeArr={formTypeArr}
           selectedForm={selectedForm}
-          handleFormSelected={this.props.handleFormSelected}
           formQuestions={formQuestions}
+          forms={forms}
           individualFormArr={individualFormArr}
           selectedIndividualForm={selectedIndividualForm}
-          handleIndividualFormSelected={handleIndividualFormSelected}
-          handleChangeFormQuest={this.props.handleChangeFormQuest}
           selectedQuestions={this.props.selectedQuestions}
           formValue={this.props.formValue}
           selectedFormValue={selectedFormValue}
+          formInfoArr={formInfoArr}
+          handleFormInfo={handleFormInfo}
+          addSubmissionCount={addSubmissionCount}
+          handleClickOutside={this.props.handleClickOutside}
         />
       </div>
     );

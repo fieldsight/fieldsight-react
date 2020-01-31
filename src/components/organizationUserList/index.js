@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { DotLoader } from '../myForm/Loader';
 
 export default class OrganizationUserList extends Component {
   constructor(props) {
@@ -8,6 +9,7 @@ export default class OrganizationUserList extends Component {
       userList: [],
       masterUserList: [],
       breadCrumbs: {},
+      loader: false,
     };
   }
 
@@ -22,6 +24,7 @@ export default class OrganizationUserList extends Component {
         userList: req.data.users,
         masterUserList: req.data.users,
         breadCrumbs: req.data.breadcrumbs,
+        loader: true,
       });
     });
   }
@@ -52,7 +55,7 @@ export default class OrganizationUserList extends Component {
   };
 
   render() {
-    const { breadCrumbs, userList } = this.state;
+    const { breadCrumbs, userList, loader } = this.state;
     return (
       <>
         {Object.keys(breadCrumbs).length > 0 && (
@@ -87,54 +90,58 @@ export default class OrganizationUserList extends Component {
               </div>
             </div>
             <div className="card-body">
-              <table
-                id="manage_table"
-                className="table dataTable table-bordered  manage_table"
-              >
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>User Name</th>
-                    <th>email</th>
-                    <th>role</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {userList.map(user => {
-                    return (
-                      <tr key={user.id}>
-                        <td>
-                          <a
-                            href={`/users/profile/${user.id}`}
-                            className="pending table-profile"
-                          >
-                            <figure>
-                              <img
-                                src={user.profile_picture}
-                                alt="site-logo"
-                              />
-                            </figure>
-                            <h5>{user.full_name}</h5>
-                          </a>
-                        </td>
-                        <td>{user.username}</td>
-                        <td>{user.email}</td>
-                        {user.role.length > 0 ? (
-                          user.role[0] ? (
-                            <td>{user.role[0]}</td>
+              {loader ? (
+                <table
+                  id="manage_table"
+                  className="table dataTable table-bordered  manage_table"
+                >
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>User Name</th>
+                      <th>email</th>
+                      <th>role</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userList.map(user => {
+                      return (
+                        <tr key={user.id}>
+                          <td>
+                            <a
+                              href={`/users/profile/${user.id}`}
+                              className="pending table-profile"
+                            >
+                              <figure>
+                                <img
+                                  src={user.profile_picture}
+                                  alt="site-logo"
+                                />
+                              </figure>
+                              <h5>{user.full_name}</h5>
+                            </a>
+                          </td>
+                          <td>{user.username}</td>
+                          <td>{user.email}</td>
+                          {user.role.length > 0 ? (
+                            user.role[0] ? (
+                              <td>{user.role[0]}</td>
+                            ) : (
+                              <td>
+                                {`${user.role[0]}/${user.role[1]}`}
+                              </td>
+                            )
                           ) : (
-                            <td>
-                              {`${user.role[0]}/${user.role[1]}`}
-                            </td>
-                          )
-                        ) : (
-                          <td>{}</td>
-                        )}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                            <td>{}</td>
+                          )}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              ) : (
+                <DotLoader />
+              )}
             </div>
           </div>
         </main>

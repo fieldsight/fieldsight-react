@@ -18,13 +18,14 @@ L.Icon.Default.mergeOptions({
   iconUrl,
   shadowUrl,
 });
-/* eslint-disable */
+
 /* eslint-disable  camelcase */
 
 export default class SuperAdminForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      identifier: '',
       name: '',
       phone: '',
       fax: '',
@@ -38,7 +39,8 @@ export default class SuperAdminForm extends Component {
       },
       zoom: 13,
       Selectedtypes: '',
-      country: [],
+      country: [{ value: 'Select Option ', key: '' }],
+      errorFlag: false,
     };
   }
 
@@ -46,8 +48,16 @@ export default class SuperAdminForm extends Component {
     axios
       .get(`/fv3/api/team-types-countries`)
       .then(res => {
-        this.setState({
-          country: res.data.countries,
+        const newArr = this.state.country;
+        this.setState(() => {
+          if (res.data.countries !== undefined) {
+            res.data.countries.map(country => newArr.push(country));
+          }
+
+          return {
+            country: newArr,
+            // Selectedtypes: res.data.countries[0].key,
+          };
         });
       })
       .catch(() => {});
@@ -63,71 +73,97 @@ export default class SuperAdminForm extends Component {
         },
       }));
     }
-    return this.setState(prevState => ({
-      ...prevState.project,
-      [name]: value,
-    }));
+    return this.setState(
+      prevState => ({
+        ...prevState.project,
+        [name]: value,
+      }),
+      () => {
+        if (name === 'identifier') {
+          if (value.trim().length < 5) {
+            this.setState({
+              errorFlag: true,
+            });
+          }
+          if (value.trim().length > 5) {
+            this.setState({
+              errorFlag: false,
+            });
+          }
+        }
+      },
+    );
   };
 
   onSubmitHandler = e => {
     e.preventDefault();
+    const {
+      state: {
+        identifier,
+        name,
+        phone,
+        fax,
+        email,
+        website,
+        address,
+        public_desc,
+        position: { latitude, longitude },
+        Selectedtypes,
+      },
+    } = this;
 
     const data = {
-      name: this.state.name,
-      phone: this.state.phone,
-      fax: this.state.fax,
-      email: this.state.email,
-      website: this.state.website,
-      country: this.state.Selectedtypes,
-      address: this.state.address,
-      public_desc: this.state.public_desc,
-      latitude: this.state.position.latitude,
-      longitude: this.state.position.longitude,
+      identifier,
+      name,
+      phone,
+      fax,
+      email,
+      website,
+      country: Selectedtypes,
+      address,
+      public_desc,
+      latitude,
+      longitude,
     };
-
-    axios
-      .post(`/fv3/api/super-organization-form/`, data)
-      .then(req => {
-        if (req.status === 201) {
-          successToast('Form', 'created');
-          this.props.history.push(
-            `/organization-dashboard/${req.data.id}`,
-          );
-          this.setState({
-            name: '',
-            phone: '',
-            fax: '',
-            email: '',
-            website: '',
-            country: '',
-            address: '',
-            public_desc: '',
-            additional_desc: '',
-
-            position: {
-              latitude: '51.505',
-              longitude: '-0.09',
-            },
-            zoom: 13,
-            Selectedtypes: '',
-            id: '',
-          });
-        }
-      })
-      .catch(err => {
-        const error = err.response.data;
-        Object.entries(error).map(([key, value]) => {
-          return errorToast(`${value}`);
-        });
+    if (identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
       });
-  };
-
-  changeHandler = e => {
-    const { checked } = e.target;
-
-    this.setState({
-      is_active: checked,
-    });
+    } else {
+      axios
+        .post(`/fv3/api/super-organization-form/`, data)
+        .then(req => {
+          if (req.status === 201) {
+            successToast('Organization', 'created');
+            this.props.history.push(
+              `/organization-dashboard/${req.data.id}`,
+            );
+            this.setState({
+              identifier: '',
+              name: '',
+              phone: '',
+              fax: '',
+              email: '',
+              website: '',
+              country: '',
+              address: '',
+              public_desc: '',
+              position: {
+                latitude: '51.505',
+                longitude: '-0.09',
+              },
+              zoom: 13,
+              Selectedtypes: '',
+            });
+          }
+        })
+        .catch(err => {
+          const error = err.response.data;
+          Object.entries(error).map(([key, value]) => {
+            return errorToast(`${value}`);
+          });
+        });
+    }
   };
 
   mapClickHandler = e => {
@@ -151,11 +187,10 @@ export default class SuperAdminForm extends Component {
     const {
       onChangeHandler,
       onSubmitHandler,
-      changeHandler,
       mapClickHandler,
-
       onSelectChangeHandler,
       state: {
+        identifier,
         name,
         phone,
         fax,
@@ -164,10 +199,10 @@ export default class SuperAdminForm extends Component {
         country,
         address,
         public_desc,
-
-        is_active,
         position: { latitude, longitude },
         Selectedtypes,
+        errorFlag,
+        zoom,
       },
     } = this;
 
@@ -175,17 +210,37 @@ export default class SuperAdminForm extends Component {
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
-            <li
-              className="breadcrumb-item active"
-              aria-current="page"
-            >
-              Create Organization
+            <li className="breadcrumb-item">
+              {/* <Link to={`/organization-dashboard/${id}`}>
+                Organization Dashboard
+              </Link> */}
+              Organization Dashboard
+            </li>
+            <li className="breadcrumb-item">
+              Create Super Organization
             </li>
           </ol>
         </nav>
         <RightContentCard title="New organization">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">
+              <div className="col-xl-4 col-md-6">
+                <InputElement
+                  formType="editForm"
+                  tag="input"
+                  type="text"
+                  required
+                  label="identifier"
+                  name="identifier"
+                  value={identifier}
+                  changeHandler={onChangeHandler}
+                />
+                {errorFlag && (
+                  <span style={{ color: 'red' }}>
+                    Identifier cannot be less than 5 characters.
+                  </span>
+                )}
+              </div>
               <div className="col-xl-4 col-md-6">
                 <InputElement
                   formType="editForm"
@@ -297,7 +352,7 @@ export default class SuperAdminForm extends Component {
                     <Map
                       style={{ height: '205px', marginTop: '1rem' }}
                       center={[latitude, longitude]}
-                      zoom={this.state.zoom}
+                      zoom={zoom}
                       onClick={mapClickHandler}
                     >
                       <TileLayer

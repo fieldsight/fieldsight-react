@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Table, Button } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import SelectElement from '../common/SelectElement';
+// import SelectElement from '../common/SelectElement';
 
 import { getTeam, getTranslate } from '../../actions/teamAction';
 /* eslint-disable react/destructuring-assignment */
@@ -78,7 +78,8 @@ class Teams extends Component {
 
   render() {
     const { results, organization } = this.state;
-    const { selected, orgs } = this.props;
+
+    // const { selected, orgs } = this.props;
 
     // const selectLanguage = [
     //   { id: 'en', name: 'Eng' },
@@ -86,47 +87,46 @@ class Teams extends Component {
     // ];
     return (
       <>
-        {orgs === 'organization' && (
-          <div className="sub-regions">
-            <div className="card">
-              <div className="card-header main-card-header">
-                <label>Organizations</label>
+        <div className="sub-regions">
+          <div className="card">
+            <div className="card-header main-card-header">
+              <label>Organizations</label>
 
-                <div style={{ marginLeft: '69.6rem' }}>
-                  <a
-                    href="/fieldsight/application/#/create-organization/"
-                    className="fieldsight-btn"
-                  >
-                    <i className="la la-plus" />
-                  </a>
-                </div>
+              <div style={{ marginLeft: '69.6rem' }}>
+                <a
+                  href="/fieldsight/application/#/create-organization/"
+                  className="fieldsight-btn"
+                >
+                  <i className="la la-plus" />
+                </a>
               </div>
-              <div className="card-body">
-                <div className="row">
-                  {organization.map((subRegion, i) => (
-                    <div
-                      className="col-xl-3 col-lg-6"
-                      key={subRegion.id}
-                      style={{ marginBottom: '20px' }}
+            </div>
+            <div className="card-body">
+              <div className="row">
+                {organization.map(subRegion => (
+                  <div
+                    className="col-xl-3 col-lg-6"
+                    key={subRegion.id}
+                    style={{ marginBottom: '20px' }}
+                  >
+                    <Link
+                      to={`/organization-dashboard/${subRegion.id}`}
                     >
-                      <Link
-                        to={`/organization-dashboard/${subRegion.id}`}
-                      >
-                        <div className="sub-regions-item ">
-                          <h5>{subRegion.name}</h5>
-                          <p>
-                            <label>Teams :</label>
-                            {subRegion.teams}
-                          </p>
-                        </div>
-                      </Link>
-                    </div>
-                  ))}
-                </div>
+                      <div className="sub-regions-item ">
+                        <h5>{subRegion.name}</h5>
+                        <p>
+                          <label>Teams :</label>
+                          {subRegion.teams}
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        )}
+        </div>
+
         <div className="card">
           {/* <div>
             <SelectElement

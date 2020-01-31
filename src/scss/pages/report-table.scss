@@ -17,8 +17,9 @@
 
                             i {
                                 font-size: 1rem;
-                                &.arrow-icon{
-                                    margin:0 0 0 .6125rem;
+
+                                &.arrow-icon {
+                                    margin: 0 0 0 .6125rem;
                                 }
                             }
                         }
@@ -42,6 +43,7 @@
                         th {
                             border: 0;
                             font-size: .75rem;
+                            min-width: 230px;
                         }
                     }
                 }

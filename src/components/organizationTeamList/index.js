@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Table } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { DotLoader } from '../myForm/Loader';
 
 /* eslint-disable react/destructuring-assignment */
 
@@ -12,6 +13,7 @@ export default class OrganizationTeams extends Component {
       results: [],
       masterresult: [],
       breadcrumbs: {},
+      loader: false,
     };
   }
 
@@ -26,6 +28,7 @@ export default class OrganizationTeams extends Component {
         results: req.data.teams,
         masterresult: req.data.teams,
         breadcrumbs: req.data.breadcrumbs,
+        loader: true,
       });
     });
   }
@@ -57,7 +60,7 @@ export default class OrganizationTeams extends Component {
   };
 
   render() {
-    const { results, breadcrumbs } = this.state;
+    const { results, breadcrumbs, loader } = this.state;
 
     return (
       <>
@@ -105,66 +108,70 @@ export default class OrganizationTeams extends Component {
             <div className="card-body">
               <div style={{ position: 'relative', height: '800px' }}>
                 <PerfectScrollbar>
-                  <Table
-                    id="manage_table"
-                    className="table dataTable table-bordered manage_table"
-                  >
-                    <thead>
-                      <tr>
-                        <th>Teams</th>
-                        <th>Address</th>
-                        <th>Projects</th>
-                        <th>Sites</th>
-                        <th>Users</th>
+                  {loader ? (
+                    <Table
+                      id="manage_table"
+                      className="table dataTable table-bordered manage_table"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Teams</th>
+                          <th>Address</th>
+                          <th>Projects</th>
+                          <th>Sites</th>
+                          <th>Users</th>
 
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {results &&
-                        results.length > 0 &&
-                        results.map(project => {
-                          return (
-                            <tr key={project.id}>
-                              <td>
-                                <a
-                                  href={`/fieldsight/application/#/team-dashboard/${project.id}`}
-                                  className="pending table-profile"
-                                >
-                                  <figure>
-                                    <img
-                                      src={project.logo}
-                                      alt="site-logo"
-                                    />
-                                  </figure>
-                                  <h5>{project.name}</h5>
-                                </a>
-                              </td>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {results &&
+                          results.length > 0 &&
+                          results.map(project => {
+                            return (
+                              <tr key={project.id}>
+                                <td>
+                                  <a
+                                    href={`/fieldsight/application/#/team-dashboard/${project.id}`}
+                                    className="pending table-profile"
+                                  >
+                                    <figure>
+                                      <img
+                                        src={project.logo}
+                                        alt="site-logo"
+                                      />
+                                    </figure>
+                                    <h5>{project.name}</h5>
+                                  </a>
+                                </td>
 
-                              <td>{project.address}</td>
-                              <td>{project.projects}</td>
-                              <td>{project.sites}</td>
-                              <td>{project.users}</td>
+                                <td>{project.address}</td>
+                                <td>{project.projects}</td>
+                                <td>{project.sites}</td>
+                                <td>{project.users}</td>
 
-                              <td>
-                                <a
-                                  href={`/fieldsight/application/#/team-dashboard/${project.id}`}
-                                  className="td-view-btn td-btn"
-                                >
-                                  <i className="la la-eye" />
-                                </a>
-                                <a
-                                  href={`/fieldsight/application/#/team-settings/${project.id}`}
-                                  className="td-edit-btn td-btn"
-                                >
-                                  <i className="la la-edit" />
-                                </a>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </Table>
+                                <td>
+                                  <a
+                                    href={`/fieldsight/application/#/team-dashboard/${project.id}`}
+                                    className="td-view-btn td-btn"
+                                  >
+                                    <i className="la la-eye" />
+                                  </a>
+                                  <a
+                                    href={`/fieldsight/application/#/team-settings/${project.id}`}
+                                    className="td-edit-btn td-btn"
+                                  >
+                                    <i className="la la-edit" />
+                                  </a>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </Table>
+                  ) : (
+                    <DotLoader />
+                  )}
                 </PerfectScrollbar>
               </div>
             </div>

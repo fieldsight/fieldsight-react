@@ -10,22 +10,7 @@ import TableHeader from '../../common/TableHeader';
 import TableRow from '../../common/TableRow';
 /* eslint-disable react/destructuring-assignment */
 
-class RegionsTable extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      project_id: JSON.parse(props.id),
-    };
-  }
-
-  componentDidMount() {
-    this.props.paginationHandler(1, null, {
-      type: 'projectRegionList',
-      projectId: this.state.project_id,
-    });
-  }
-
+class RegionsTable extends React.PureComponent {
   render() {
     const { data, loader, terms } = this.props;
 

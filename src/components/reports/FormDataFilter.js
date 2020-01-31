@@ -1,69 +1,17 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
-import DatePicker from 'react-datepicker';
+import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
-import CustomMultiSelect from './CustomMultiSelect';
+// import CustomCheckBox from './CustomCheckbox';
 import CollapseFilterTable from './CollapseFilterTable';
+import FilterByDate from './common/filterByDate';
+import FilterByData from './common/filterByData';
 import { errorToast, successToast } from '../../utils/toastHandler';
 
 /* eslint-disable */
 
-const CustomInput = (value, onclick) => (
-  <div className="custom-group-append">
-    <span className="custom-group-text">
-      <i className="material-icons">calendar_today</i>
-      <button className="example-custom-input" onClick={onClick}>
-        {value}
-      </button>
-      {/* <input
-        // onChange={onChange}
-        placeholder="gfdghj"
-        value={value}
-        // isSecure={isSecure}
-        // id={id}
-        onClick={onClick}
-      /> */}
-    </span>
-  </div>
-);
-
-const Input = ({
-  onChange,
-  placeholder,
-  value,
-  isSecure,
-  id,
-  onClick,
-}) => (
-  <div
-  // style={{ position: 'relative' }}
-  >
-    <i
-      onClick={onClick}
-      className="material-icons"
-      value={value}
-      // style={{
-      //   position: 'absolute',
-      //   top: '0.3rem',
-      //   left: '5px',
-      //   fontSize: '1rem',
-      // }}
-    >
-      calendar_today
-    </i>
-
-    <input
-      onClick={onClick}
-      className="dateInput"
-      value={value}
-      type="text"
-      // style={{ paddingLeft: '33px' }}
-    />
-  </div>
-);
-
-export default class FormDataFilter extends PureComponent {
+export default class FormDataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,10 +20,11 @@ export default class FormDataFilter extends PureComponent {
       siteOpen: false,
       siteSelected: [],
       applyButton: false,
-      projectRegions: [],
-      siteType: [],
+      projectRegions: [{ id: 'all_regions', name: 'Select All' }],
+      siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
       startedDate: '',
-      endedDate: '',
+      endedDate: new Date(),
+      showPreview: false,
     };
   }
 
@@ -84,69 +33,111 @@ export default class FormDataFilter extends PureComponent {
       match: {
         params: { id },
       },
+      location: {
+        state: { projectCreatedOn },
+      },
     } = this.props;
+    const { projectRegions, siteType } = this.state;
 
-    const siteType = `/fieldsight/api/site-types/${id}/`;
-    const projectRegions = `/fieldsight/api/project-regions/${id}/`;
+    const siteTypeApi = `/fieldsight/api/site-types/${id}/`;
+    const projectRegionsApi = `/fieldsight/api/project-regions/${id}/`;
 
-    const requestSiteType = axios.get(siteType);
-    const requestProjectRegions = axios.get(projectRegions);
+    const requestSiteType = axios.get(siteTypeApi);
+    const requestProjectRegions = axios.get(projectRegionsApi);
 
     axios
       .all([requestProjectRegions, requestSiteType])
       .then(
         axios.spread((...responses) => {
+          const regions = [...projectRegions, ...responses[0].data];
+          const sites = [...siteType, ...responses[1].data];
           this.setState({
-            siteType: responses[1].data,
-            projectRegions: responses[0].data,
+            projectRegions: regions,
+            selected: regions.map(each => {
+              return { id: each.id };
+            }),
+            siteType: sites,
+            siteSelected: sites.map(each => {
+              return { id: each.id };
+            }),
           });
         }),
       )
-      .catch(errors => {
+      .catch(() => {
         // react on errors.
       });
+
+    this.setState({
+      startedDate: new Date(projectCreatedOn),
+    });
   }
 
   changeHandlers = (e, info) => {
-    const { checked, name } = e.target;
-
-    const idName = 'id';
+    const { checked } = e.target;
+    const { id } = info;
+    const { projectRegions } = this.state;
     this.setState(prevState => {
       if (checked) {
+        if (id === 'all_regions') {
+          const allId = projectRegions.map(each => {
+            return { id: each.id };
+          });
+          return {
+            selected: allId,
+          };
+        }
         return {
-          selected: [...prevState.selected, { [idName]: info.id }],
+          selected: [...prevState.selected, { id }],
         };
       }
       if (!checked) {
-        // console.log(preveState.selected, 'preveState.selected');
+        if (id === 'all_regions') {
+          return {
+            selected: [],
+          };
+        }
         return {
           selected: prevState.selected.filter(
-            region => region.id !== info.id,
+            region => region.id !== id && region.id !== 'all_regions',
           ),
         };
       }
+      return null;
     });
   };
 
   siteHandler = (e, info) => {
-    const { checked, name } = e.target;
-    const idName = 'id';
+    const { checked } = e.target;
+    const { id } = info;
+    const { siteType } = this.state;
+
     this.setState(prevState => {
       if (checked) {
+        if (id === 'all_sitetypes') {
+          const allId = siteType.map(each => {
+            return { id: each.id };
+          });
+          return {
+            siteSelected: allId,
+          };
+        }
         return {
-          siteSelected: [
-            ...prevState.siteSelected,
-            { [idName]: info.id },
-          ],
+          siteSelected: [...prevState.siteSelected, { id }],
         };
       }
       if (!checked) {
+        if (id === 'all_sitetypes') {
+          return {
+            siteSelected: [],
+          };
+        }
         return {
           siteSelected: prevState.siteSelected.filter(
-            region => region.id !== info.id,
+            site => site.id !== id && site.id !== 'all_sitetypes',
           ),
         };
       }
+      return null;
     });
   };
 
@@ -162,12 +153,6 @@ export default class FormDataFilter extends PureComponent {
     }));
   };
 
-  // handleApply = () => {
-  //   this.setState(prevState => ({
-  //     applyButton: !prevState.applyButton,
-  //   }));
-  // };
-
   toUpper = str => {
     return str
       .toLowerCase()
@@ -181,9 +166,10 @@ export default class FormDataFilter extends PureComponent {
   handleApply = () => {
     const {
       match: {
-        params: { id },
+        params: { id, fid },
       },
     } = this.props;
+    // debugger;
     const region = this.state.selected.map(reg => reg.id);
     const site = this.state.siteSelected.map(reg => reg.id);
     const startDate = format(this.state.startedDate, ['YYYY-MM-DD']);
@@ -196,10 +182,6 @@ export default class FormDataFilter extends PureComponent {
       end_date: endDate,
     };
 
-    // const route = this.toUpper(
-    //   this.props.location.state.fromDashboard,
-    // );
-
     axios
       .post(
         `/v4/api/reporting/generate-standard-reports/${id}/?report_type=form`,
@@ -208,9 +190,11 @@ export default class FormDataFilter extends PureComponent {
       .then(req => {
         if (req.status === 200) {
           successToast(req.data.detail);
+          // this.props.history.push(`/view-report/${id}/${fid}`);
           this.setState({
             selected: [],
             siteType: [],
+            showPreview: true,
           });
         }
       })
@@ -223,20 +207,35 @@ export default class FormDataFilter extends PureComponent {
   };
 
   onChangeHandler = date => {
-    this.setState({
-      startedDate: date,
+    const { endedDate } = this.state;
+    this.setState(() => {
+      if (endedDate && date > endedDate) {
+        return {
+          endedDate: date,
+        };
+      }
+      return {
+        startedDate: date,
+      };
     });
   };
 
   onEndChangeHandler = date => {
-    this.setState({
-      endedDate: date,
+    const { startedDate } = this.state;
+    this.setState(() => {
+      if (date < startedDate) {
+        return {
+          startedDate: date,
+        };
+      }
+      return {
+        endedDate: date,
+      };
     });
   };
 
   render() {
     const {
-      changeHandler,
       state: {
         selected,
         open,
@@ -245,6 +244,9 @@ export default class FormDataFilter extends PureComponent {
         projectRegions,
         siteType,
         siteSelected,
+        startedDate,
+        endedDate,
+        showPreview,
       },
     } = this;
     const DataCrude = [
@@ -255,7 +257,7 @@ export default class FormDataFilter extends PureComponent {
       },
       {
         id: '2',
-        title: 'Add a template',
+        title: 'Add to templates',
         link: '#',
       },
       {
@@ -269,168 +271,131 @@ export default class FormDataFilter extends PureComponent {
         link: '#',
       },
     ];
-
-    // const report_type = 'gfhj';
-
+    const {
+      match: {
+        params: { id, fid },
+      },
+      location: {
+        state: { projectCreatedOn },
+      },
+    } = this.props;
     return (
-      <div className="reports mrb-30">
-        <div className="card">
-          <div className="card-body">
-            <div className="standard-tempalte">
-              <h3 className="mb-3">Template report</h3>
+      <>
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to={`/project-dashboard/${id}/report`}>
+                Report
+              </Link>
+            </li>
+            <li className="breadcrumb-item">Export Data</li>
+          </ol>
+        </nav>
+        <div className="reports mrb-30">
+          <div className="card">
+            <div className="card-body">
+              <div className="standard-tempalte">
+                <h3 className="mb-3">Template report</h3>
 
-              <div className="report-list">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="report-content">
-                      <h4>Export Data</h4>
-                      <p>
-                        Export of forms data and site information an
-                        Excel File, generated with filters in region,
-                        types and time range.
-                      </p>
+                <div className="report-list">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="report-content">
+                        <h4>Export Data</h4>
+                        <p>
+                          Export of forms data and site information an
+                          Excel File, generated with filters in
+                          region, types and time range.
+                        </p>
+                      </div>
                     </div>
                   </div>
+                  {/* <div className="dropdown report-option">
+                    <Dropdown drop="left">
+                      <Dropdown.Toggle
+                        variant=""
+                        id="dropdown-Data"
+                        className="dropdown-toggle common-button no-border is-icon"
+                      >
+                        <i className="material-icons">more_vert</i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                        {DataCrude.map(item => (
+                          <Dropdown.Item
+                            href={item.link}
+                            key={item.id}
+                            target="_blank"
+                          >
+                            {item.title}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div> */}
                 </div>
-                <div className="dropdown report-option">
-                  <Dropdown drop="left">
-                    <Dropdown.Toggle
-                      variant=""
-                      id="dropdown-Data"
-                      className="dropdown-toggle common-button no-border is-icon"
-                    >
-                      <i className="material-icons">more_vert</i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                      {DataCrude.map(item => (
-                        <Dropdown.Item
-                          href={item.link}
-                          key={item.id}
-                          target="_blank"
-                        >
-                          {item.title}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="data-filter mt-3">
-                <h3 className="mb-3">Filters</h3>
-                <form>
-                  <div className="row">
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-group">
-                        <label className="mb-2">Site types</label>
-                        <CustomMultiSelect
+                <div className="data-filter mt-3">
+                  <h3 className="mb-3">Filters</h3>
+                  <form>
+                    <div className="row">
+                      <div className="col-lg-3 col-md-6">
+                        <FilterByData
+                          className="form-group"
+                          label="site types"
                           toggleSelectClass={siteOpen}
                           handleToggleClass={this.SiteToggleClass}
-                          checkboxOption={siteType}
-                          handleCheck={this.siteHandler}
-                          selectedArr={this.state.siteSelected}
+                          data={siteType}
+                          changeHandler={this.siteHandler}
+                          selectedArr={siteSelected}
                           placeholderTxt="Select Site Type"
-                          site="site"
                         />
                       </div>
-                    </div>
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-group">
-                        <label className="mb-2">Regions</label>
-                        <CustomMultiSelect
+                      <div className="col-lg-3 col-md-6">
+                        <FilterByData
+                          className="form-group"
+                          label="Regions"
                           toggleSelectClass={open}
                           handleToggleClass={this.handleToggleClass}
-                          checkboxOption={projectRegions}
-                          handleCheck={this.changeHandlers}
-                          selectedArr={this.state.selected}
+                          data={projectRegions}
+                          changeHandler={this.changeHandlers}
+                          selectedArr={selected}
                           placeholderTxt="Select Region Type"
-                          site="regions"
                         />
                       </div>
-                    </div>
 
-                    <div className="col-lg-6 col-md-6">
-                      <div className="form-group icon-between">
-                        <label className="mb-2">Time period</label>
-                        <div className="inline-flex ">
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="Start Date"
-                              name="startedDate"
-                              selected={this.state.startedDate}
-                              onChange={this.onChangeHandler}
-                              dateFormat="yyyy-MM-dd"
-                              className="form-control"
-                            />
-                            {/* <div className="custom-group-append">
-                              <span
-                                className="custom-group-text"
-                                style={{
-                                  display: 'inline',
-                                  paddingLeft: '25px',
-                                  flex: '0 0 20%',
-                                }}
-                              >
-                                <i
-                                  className="material-icons"
-                                  style={{
-                                    verticalAlign: 'middle',
-                                  }}
-                                >
-                                  calendar_today
-                                </i>
-                              </span>
-                            </div> */}
-                          </div>
-                          <span className="icon-between">
-                            <i className="material-icons">
-                              arrow_right_alt
-                            </i>
-                          </span>
-                          <div className="custom-group">
-                            <DatePicker
-                              placeholderText="End Date"
-                              name="endedDate"
-                              selected={this.state.endedDate}
-                              onChange={this.onEndChangeHandler}
-                              className="form-control"
-                              dateFormat="yyyy-MM-dd"
-                            />
-                            {/* <i className="material-icons">
-                                calendar_today
-                              </i>
-                            </DatePicker> */}
-                            {/* <DatePicker
-                              value={this.state.endedDate}
-                              dateFormat="yyyy-MM-dd"
-                              customInput={<Input />}
-                              selected={this.state.endedDate}
-                              onChange={date =>
-                                this.setState({ endedDate: date })
-                              }
-                            /> */}
-                          </div>
-                        </div>
+                      <div className="col-lg-6 col-md-6">
+                        <FilterByDate
+                          className="form-group icon-between"
+                          startDate={startedDate && startedDate}
+                          endDate={endedDate}
+                          startDateHandler={this.onChangeHandler}
+                          endDateHandler={this.onEndChangeHandler}
+                          createdDate={new Date(projectCreatedOn)}
+                          tillDate={new Date()}
+                        />
+                      </div>
+
+                      <div className="col-md-12">
+                        <button
+                          // disabled
+                          type="button"
+                          className="common-button mt-3 is-bg"
+                          onClick={this.handleApply}
+                        >
+                          Apply
+                        </button>
                       </div>
                     </div>
-
-                    <div className="col-md-12">
-                      <button
-                        // disabled
-                        type="button"
-                        className="common-button mt-3 is-bg"
-                        onClick={this.handleApply}
-                      >
-                        Apply
-                      </button>
-                    </div>
-                  </div>
-                </form>
-                {applyButton && <CollapseFilterTable />}
+                  </form>
+                  {applyButton && <CollapseFilterTable />}
+                </div>
               </div>
+              {showPreview && (
+                <CollapseFilterTable id={fid} type="standard" />
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

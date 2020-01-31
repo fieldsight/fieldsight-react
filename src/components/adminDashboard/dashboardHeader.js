@@ -30,15 +30,16 @@ class DashboardHeader extends PureComponent {
       total_users,
       superAdminId,
       total_teams,
+      total_submissions,
     } = this.props;
     const ManageDropDown = [
       {
         title: 'Users',
-        link: `/fieldsight/manage/people/organization-users/${this.props.superAdminId}/`,
+        link: `/fieldsight/manage/people/organization-users/${superAdminId}/`,
       },
       {
         title: 'Settings',
-        link: `/fieldsight/application/#/organization-settings/${this.props.superAdminId}`,
+        link: `/fieldsight/application/#/organization-settings/${superAdminId}`,
       },
     ];
 
@@ -67,6 +68,19 @@ class DashboardHeader extends PureComponent {
         link: `/fieldsight/application/#/organization-users/${superAdminId}`,
         icon: 'la-user',
       },
+      {
+        title: 'Submission',
+        total_sites: `${total_submissions}`,
+        link: `#`,
+        icon: 'la-copy',
+      },
+
+      // {
+      //   title: 'Total Submission',
+      //   total_sites: `${total_users}`,
+      //   link: `#`,
+      //   icon: 'la-copy',
+      // },
     ];
     return (
       <div className="card mrb-30">

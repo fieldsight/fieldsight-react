@@ -147,8 +147,7 @@ class MyrolesMain extends Component {
   };
 
   acceptAll = () => {
-    const accept_all_url = `fv3/api/accept-all-invites/
-      ${this.state.profile.username}/`;
+    const accept_all_url = `fv3/api/accept-all-invites/${this.state.profile.username}/`;
 
     axios
       .post(`${accept_all_url}`)
@@ -303,6 +302,7 @@ class MyrolesMain extends Component {
 
         <div className="row">
           <YourTeamSideBar
+            history={this.props.history}
             dLoader={dLoader}
             teams={teams}
             teamId={teamId}

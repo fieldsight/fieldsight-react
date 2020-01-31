@@ -4,31 +4,50 @@ export default class TeamList extends PureComponent {
   render() {
     const { teams, selected, changeHandler } = this.props;
     return (
-      <ul>
-        {teams.length > 0 &&
-          teams.map(option => (
-            <li key={`option_${option.id}`}>
-              <div className="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id={option.id}
-                  name={option.name}
-                  checked={selected[option.id]}
-                  onChange={changeHandler}
-                  value={option.id}
-                />
-                <label
-                  className="custom-control-label"
-                  htmlFor={option.id}
-                  style={{ paddingLeft: '2em' }}
+      <>
+        <div
+          style={{
+            position: 'relative',
+            height: `200px`,
+          }}
+        >
+          {teams.length > 0 &&
+            teams.map((option, index) => {
+              const filterList = selected.filter(
+                i => i.id === option.id,
+              );
+
+              const isChecked =
+                filterList && filterList[0] ? true : false;
+
+              return (
+                <div
+                  className="custom-control custom-checkbox"
+                  key={option.id}
                 >
-                  {option.name}
-                </label>
-              </div>
-            </li>
-          ))}
-      </ul>
+                  <input
+                    type="checkbox"
+                    className="custom-control-input"
+                    id={option.id}
+                    name={option.name}
+                    checked={isChecked}
+                    onChange={e => {
+                      changeHandler(e, option);
+                    }}
+                    value={option.id}
+                  />
+                  <label
+                    className="custom-control-label"
+                    htmlFor={option.id}
+                    style={{ paddingLeft: '2em' }}
+                  >
+                    {option.name}
+                  </label>
+                </div>
+              );
+            })}
+        </div>
+      </>
     );
   }
 }
