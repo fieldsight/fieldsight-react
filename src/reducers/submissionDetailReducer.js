@@ -3,25 +3,28 @@ import {
   STOP_SUBMISSION_LOADER,
   START_SUBMISSION_LOADER,
   POST_SUBMISSION_DETAIL,
-  SHOW_DOT_LOADER,
   UPDATE_SUBMISSION_DETAIL,
   TOGGLE_NULL_SUBMISSIONS_ANSWER,
-  SHOW_SUBMISSION_ERR_MSG
-} from "../actions/types";
+  SHOW_SUBMISSION_ERR_MSG,
+} from '../actions/types';
 
-import copy from "../utils/cloneNestedObject";
+import copy from '../utils/cloneNestedObject';
+/* eslint-disable camelcase */
+/* eslint-disable  no-unused-vars */
+
+/* eslint-disable no-param-reassign */
 
 const initialState = {
   master_submission_data: [],
 
   submission_data: [],
-  date_created: "",
-  submitted_by: "",
+  date_created: '',
+  submitted_by: '',
   site: {},
   submission_history: [],
   status_data: {},
   form_type: {},
-  form_name: "",
+  form_name: '',
   fieldsight_instance: null,
   edit_url: null,
   download_url: {},
@@ -31,22 +34,22 @@ const initialState = {
   hideNullValues: false,
   submission_err: null,
   breadcrumb: {},
-  is_survey: false
+  is_survey: false,
 };
 
 const getNullFilteredSubmission = submissions => {
   if (submissions.length === 0) return;
-  const filterNullAnswer = submission => {
+  const FilterNullAnswer = submission => {
     return submission.filter(sub => {
-      if (sub.type === "group" || sub.type === "repeat") {
-        sub.elements = filterNullAnswer(sub.elements);
-        return sub.elements.length > 0 ? true : false;
+      if (sub.type === 'group' || sub.type === 'repeat') {
+        sub.elements = FilterNullAnswer(sub.elements);
+        if (sub.elements.length > 0) return true;
       }
       return sub.answer;
     });
   };
 
-  return filterNullAnswer(submissions);
+  // return new FilterNullAnswer(submissions);
 };
 
 const toggleNullSubmission = state => {
@@ -54,7 +57,7 @@ const toggleNullSubmission = state => {
     return {
       ...state,
       submission_data: state.master_submission_data,
-      hideNullValues: false
+      hideNullValues: false,
     };
   }
   const cloneSubmission = copy(state.submission_data);
@@ -63,7 +66,7 @@ const toggleNullSubmission = state => {
   return {
     ...state,
     submission_data: newSubmission,
-    hideNullValues: true
+    hideNullValues: true,
   };
 };
 
@@ -78,12 +81,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true,
-        submission_err: null
+        submission_err: null,
       };
     case STOP_SUBMISSION_LOADER:
       return {
         ...state,
-        loading: false
+        loading: false,
       };
     case GET_SUBMISSION_DETAIL:
       return {
@@ -102,17 +105,20 @@ export default function(state = initialState, action) {
         download_url: action.payload.download_url,
         has_review_permission: action.payload.has_review_permission,
         breadcrumb: action.payload.breadcrumbs,
-        is_survey: action.payload.is_survey
+        is_survey: action.payload.is_survey,
         // initialLoader: false
       };
     case POST_SUBMISSION_DETAIL:
       return {
         ...state,
-        submission_history: [action.payload, ...state.submission_history],
+        submission_history: [
+          action.payload,
+          ...state.submission_history,
+        ],
         status_data: {
           ...state.status_data,
-          status_display: action.payload.get_new_status_display
-        }
+          status_display: action.payload.get_new_status_display,
+        },
       };
 
     case TOGGLE_NULL_SUBMISSIONS_ANSWER:
@@ -124,13 +130,13 @@ export default function(state = initialState, action) {
         submission_data: [...action.payload.submission_data],
         submitted_by: action.payload.submitted_by,
         edit_url: action.payload.edit_url,
-        download_url: action.payload.download_url
+        download_url: action.payload.download_url,
       };
     }
 
     case SHOW_SUBMISSION_ERR_MSG:
       return {
-        submission_err: action.err
+        submission_err: action.err,
       };
     default:
       return state;

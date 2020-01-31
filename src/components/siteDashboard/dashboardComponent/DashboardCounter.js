@@ -1,37 +1,43 @@
-import React, { Component } from "react";
-import uuid from "uuid/v4";
-import CountCard from "../../common/CountCard";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import uuid from 'uuid/v4';
+import CountCard from '../../common/CountCard';
+/* eslint-disable camelcase */
 
 class DashboardCounter extends Component {
   getIcon = submission => {
-    if (submission === "rejected") {
-      return "la-close";
-    } else if (submission === "approved") {
-      return "la-thumbs-up";
-    } else if (submission === "flagged") {
-      return "la-flag";
-    } else if (submission === "pending") {
-      return "la-hourglass-2";
+    let icon = '';
+    if (submission === 'rejected') {
+      icon = 'la-close';
     }
+    if (submission === 'approved') {
+      icon = 'la-thumbs-up';
+    }
+    if (submission === 'flagged') {
+      icon = 'la-flag';
+    }
+    if (submission === 'pending') {
+      icon = 'la-hourglass-2';
+    }
+    return icon;
   };
 
   render() {
     const {
       props: {
         submissions: { total_submissions, ...restSubmissions },
-        siteid
+        siteid,
       },
-      getIcon
+      getIcon,
     } = this;
     const submissionData = Object.entries(restSubmissions);
 
     return (
-      <React.Fragment>
+      <>
         {submissionData &&
           submissionData.map(submission => (
             <Link
-              to={`/site-responses/${siteid}/${submission[0]}`}
+              to={`/site-submission-responses/${siteid}/${submission[0]}`}
               className="col-xl-3 col-md-6"
               key={uuid()}
             >
@@ -43,7 +49,7 @@ class DashboardCounter extends Component {
               />
             </Link>
           ))}
-      </React.Fragment>
+      </>
     );
   }
 }

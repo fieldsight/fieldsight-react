@@ -1,66 +1,95 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
-import Table from "../common/Table";
-import Modal from "../common/Modal";
-import InputElement from "../common/InputElement";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import { successToast, errorToast } from "../../utils/toastHandler";
-import { RegionContext } from "../../context";
-import isEmpty from "../../utils/isEmpty";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
+import Table from '../common/Table';
+import Modal from '../common/Modal';
+import InputElement from '../common/InputElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import { successToast, errorToast } from '../../utils/toastHandler';
+import { RegionContext } from '../../context';
+import isEmpty from '../../utils/isEmpty';
+import Warning from '../common/DeleteModal';
+/* eslint-disable  react/sort-comp */
 
 const tableHeader = {
-  siteTypes: ["ID", "Type", "Action"]
+  siteTypes: ['app.id', 'app.type', 'app.action'],
 };
 
-const url = "fv3/api/project-site-types/";
+const url = 'fv3/api/project-site-types/';
 
 const INITIAL_STATE = {
   showModal: false,
   siteType: [],
-  selectedId: "",
-  selectedIdentifier: "",
-  selectedName: "",
+  selectedId: '',
+  selectedIdentifier: '',
+  selectedName: '',
   isLoading: false,
-  showDeleteConfirmation: false
+  showDeleteConfirmation: false,
 };
-class SiteType extends Component {
-  static contextType = RegionContext;
 
+class SiteType extends Component {
   _isMounted = false;
 
-  state = INITIAL_STATE;
+  static contextType = RegionContext;
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal
-    }));
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = INITIAL_STATE;
+  }
 
   componentDidMount() {
     this._isMounted = true;
     const { projectId } = this.context;
-    axios
-      .get(`${url}?project=${projectId}`)
-      .then(res => {
-        if (this._isMounted) {
-          this.setState({
-            siteType: res.data
+    this.setState(
+      {
+        isLoading: true,
+      },
+      () => {
+        axios
+          .get(`${url}?project=${projectId}`)
+          .then(res => {
+            if (this._isMounted) {
+              this.setState({
+                siteType: res.data,
+                isLoading: false,
+              });
+            }
+          })
+          .catch(() => {
+            this.setState({ isLoading: false });
           });
-        }
-      })
-      .catch(err => console.log("err", err));
+      },
+    );
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  toggleModal = () => {
+    return this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
 
   requestHandler = () => {
     const {
-      state: { selectedId, selectedIdentifier, selectedName, siteType },
-      context: { projectId, terms }
+      state: {
+        selectedId,
+        selectedIdentifier,
+        selectedName,
+        siteType,
+      },
+      context: { projectId, terms },
     } = this;
 
     if (selectedId) {
       const newSiteType = [...siteType];
-      const selectedSite = newSiteType.find(site => site.id === +selectedId);
+      const selectedSite = newSiteType.find(
+        site => site.id === +selectedId,
+      );
       selectedSite.identifier = selectedIdentifier;
       selectedSite.name = selectedName;
 
@@ -68,28 +97,28 @@ class SiteType extends Component {
         .put(`${url}${selectedId}/`, {
           identifier: selectedSite.identifier,
           name: selectedSite.name,
-          project: selectedSite.project
+          project: selectedSite.project,
         })
-        .then(res => {
+        .then(() => {
           this.setState(
             {
               ...INITIAL_STATE,
-              siteType: newSiteType
+              siteType: newSiteType,
             },
             () =>
               successToast(
-                !isEmpty(terms) ? `${terms.site} Type` : "Site Type",
-                "updated"
-              )
+                !isEmpty(terms) ? `${terms.site} Type` : 'Site Type',
+                'updated',
+              ),
           );
         })
-        .catch(err => {
+        .catch(() => {
           this.setState(
             {
               isLoading: false,
-              selectedId: ""
+              selectedId: '',
             },
-            errorToast
+            errorToast,
           );
         });
     }
@@ -97,59 +126,60 @@ class SiteType extends Component {
     const newSiteType = {
       identifier: selectedIdentifier,
       name: selectedName,
-      project: projectId
+      project: projectId,
     };
 
-    axios
+    return axios
       .post(`${url}?project=${projectId}`, newSiteType)
       .then(res => {
         this.setState(
-          {
+          state => ({
             ...INITIAL_STATE,
-            siteType: [...this.state.siteType, { ...res.data }]
-          },
+            siteType: [...state.siteType, { ...res.data }],
+          }),
           () =>
             successToast(
-              !isEmpty(terms) ? `${terms.site} Type` : "Site Type",
-              "added"
-            )
+              !isEmpty(terms) ? `${terms.site} Type` : 'Site Type',
+              'added',
+            ),
         );
       })
-      .catch(err => {
+      .catch(() => {
         this.setState(
           {
-            isLoading: false
+            isLoading: false,
           },
-          errorToast
+          errorToast,
         );
       });
   };
 
-  onSubmitHandler = (e, edit) => {
+  onSubmitHandler = e => {
     e.preventDefault();
     this.setState(
       {
         isLoading: true,
-        showModal: false
+        showModal: false,
       },
-      this.requestHandler
+      this.requestHandler,
     );
   };
 
   editHandler = id => {
-    const selectedSiteId = this.state.siteType.find(site => site.id === id);
+    const { siteType } = this.state;
+    const selectedSiteId = siteType.find(site => site.id === id);
     this.setState({
       showModal: true,
       selectedId: id,
       selectedIdentifier: selectedSiteId.identifier,
-      selectedName: selectedSiteId.name
+      selectedName: selectedSiteId.name,
     });
   };
 
   removeHandler = id => {
     this.setState({
       showDeleteConfirmation: true,
-      selectedId: id
+      selectedId: id,
     });
   };
 
@@ -157,55 +187,57 @@ class SiteType extends Component {
     this.setState(
       {
         showDeleteConfirmation: false,
-        isLoading: true
+        isLoading: true,
       },
       () => {
         const {
           state: { selectedId, siteType },
-          context: { terms }
+          context: { terms },
         } = this;
 
         const filteredSiteType = siteType.filter(
-          site => site.id !== +selectedId
+          site => site.id !== +selectedId,
         );
         axios
           .delete(`${url}${selectedId}/`)
-          .then(res => {
+          .then(() => {
             this.setState(
               {
                 ...INITIAL_STATE,
-                siteType: filteredSiteType
+                siteType: filteredSiteType,
               },
               () =>
                 successToast(
-                  !isEmpty(terms) ? `${terms.site} Type` : "Site Type",
-                  "deleted"
-                )
+                  !isEmpty(terms)
+                    ? `${terms.site} Type`
+                    : 'Site Type',
+                  'deleted',
+                ),
             );
           })
-          .catch(err => {
+          .catch(() => {
             this.setState(
               {
-                isLoading: false
+                isLoading: false,
               },
-              errorToast
+              errorToast,
             );
           });
-      }
+      },
     );
   };
 
   cancelHandler = () => {
     this.setState({
       showDeleteConfirmation: false,
-      selectedId: ""
+      selectedId: '',
     });
   };
 
   onChangeHandler = e => {
     const { name, value } = e.target;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -218,7 +250,6 @@ class SiteType extends Component {
         selectedIdentifier,
         selectedName,
         showDeleteConfirmation,
-        showDotLoader
       },
       toggleModal,
       editHandler,
@@ -227,90 +258,99 @@ class SiteType extends Component {
       onSubmitHandler,
       cancelHandler,
       confirmHandler,
-      context: { terms }
+      context: { terms },
     } = this;
+
+    const informationDeclare = !isEmpty(terms)
+      ? `${terms.site} Type`
+      : 'Site Type';
     return (
-      <Fragment>
+      <>
         <RightContentCard
-          title={!isEmpty(terms) ? `${terms.site} Type` : "Site Type"}
+          title={
+            !isEmpty(terms) ? (
+              `${terms.site} Type`
+            ) : (
+              <FormattedMessage
+                id="app.siteType"
+                defaultMessage="app.siteType"
+              />
+            )
+          }
           addButton
           toggleModal={toggleModal}
-          hideButton={true}
+          hideButton
         >
-          <Table
-            page="siteType"
-            tableHeader={tableHeader.siteTypes}
-            tableRow={siteType}
-            removeHandler={removeHandler}
-            editHandler={editHandler}
-          />
+          {!isLoading && (
+            <Table
+              page="siteType"
+              tableHeader={tableHeader.siteTypes}
+              tableRow={siteType}
+              removeHandler={removeHandler}
+              editHandler={editHandler}
+            />
+          )}
         </RightContentCard>
         {isLoading && <Loader />}
         {showModal && (
           <Modal
-            title={!isEmpty(terms) ? `Add ${terms.site} Type` : "Add Site Type"}
+            title={
+              !isEmpty(terms)
+                ? `Add ${terms.site} Type`
+                : 'Add Site Type'
+            }
             toggleModal={toggleModal}
           >
-            <form className="floating-form" onSubmit={onSubmitHandler}>
+            <form
+              className="floating-form"
+              onSubmit={onSubmitHandler}
+            >
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
-                label="ID"
+                required
+                label="app.id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
+                translation
               />
               <InputElement
                 tag="textarea"
                 type="text"
-                required={true}
-                label="Type"
+                required
+                label="app.type"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-              />{" "}
+                translation
+              />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  Save
+                  <FormattedMessage
+                    id="app.save"
+                    defaultMessage="Save"
+                  />
                 </button>
               </div>
             </form>
           </Modal>
         )}
         {showDeleteConfirmation && (
-          <Modal title="Warning" toggleModal={cancelHandler}>
-            <div className="warning">
-              <i className="la la-exclamation-triangle" />
-
-              <p>
-                Are you sure you want to delete the{" "}
-                {!isEmpty(terms) ? `${terms.site} Type` : "Site Type"} ?
-              </p>
-            </div>
-            <div className="warning-footer text-center">
-              <a
-                className="fieldsight-btn rejected-btn"
-                onClick={cancelHandler}
-              >
-                cancel
-              </a>
-              <a className="fieldsight-btn" onClick={confirmHandler}>
-                confirm
-              </a>
-            </div>
-          </Modal>
+          <Warning
+            onCancel={cancelHandler}
+            onConfirm={confirmHandler}
+            onToggle={cancelHandler}
+            message={`Are you sure you want to delete the ${informationDeclare} ?`}
+            title="Warning"
+          />
         )}
-      </Fragment>
+      </>
     );
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 }
 

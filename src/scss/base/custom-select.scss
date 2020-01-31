@@ -36,11 +36,12 @@
             visibility: hidden;
             @include transition(all .5s ease-in-out);
             z-index: 2;
-            @include box_shadow(0 1px 6px rgba($heading-color,.16));
+            @include box_shadow(0 1px 6px rgba($heading-color, .16));
 
             li {
                 padding: .25rem .6125rem;
                 @include transition(all .3s linear);
+
                 &.active,
                 &:hover {
                     background-color: $secondary-light-1;
@@ -78,6 +79,20 @@
                 visibility: visible;
             }
         }
+
+        &:focus {
+            box-shadow: none;
+            -webkit-outline: none;
+            outline: none;
+        }
+
+        &.is-disable {
+            color: $color-white;
+            background-color: $primary-light-1;
+            border-color: transparent;
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
     }
 
     .selected-data {
@@ -101,17 +116,20 @@
             &:not(:last-child) {
                 margin-right: .25rem;
             }
-            small{
-                cursor:pointer;
+
+            small {
+                cursor: pointer;
                 font-size: .875rem;
-                &:hover{
-                    color:$color-secondary;
+
+                &:hover {
+                    color: $color-secondary;
                 }
-                &::before{
-                    content:'|';
-                    color:$color-white;
+
+                &::before {
+                    content: '|';
+                    color: $color-white;
                     display: inline-block;
-                    margin:0 .25rem;
+                    margin: 0 .25rem;
 
                 }
             }

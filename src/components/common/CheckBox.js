@@ -1,4 +1,6 @@
-import React from "react";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+/* eslint-disable  react/prop-types */
 
 const CheckBox = ({
   name,
@@ -6,6 +8,7 @@ const CheckBox = ({
   className,
   changeHandler,
   label,
+  translation,
   ...rest
 }) => (
   <div className={`checkbox ${className}`}>
@@ -17,7 +20,12 @@ const CheckBox = ({
         checked={checked}
         onChange={changeHandler}
       />
-      <i className="helper" /> {label}
+      <i className="helper" />
+      {translation === true ? (
+        <FormattedMessage id={label} defaultMessage={label} />
+      ) : (
+        label
+      )}
     </label>
   </div>
 );

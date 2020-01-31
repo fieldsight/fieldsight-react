@@ -1,33 +1,41 @@
-import React, { Component } from "react";
-import Select from "react-select";
+import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
+import Select from 'react-select';
 
-import InputElement from "../common/InputElement";
+import InputElement from '../common/InputElement';
+
+/* eslint-disable   react/destructuring-assignment */
+/* eslint-disable react/no-array-index-key */
 
 class AddStageForm extends Component {
-  state = {
-    form: {
-      selectedRegion: [],
-      selectedType: [],
-      name: this.props.stageData ? this.props.stageData.name : "",
-      desc: this.props.stageData ? this.props.stageData.description : "",
-      order: this.props.stageData ? this.props.stageData.order : null,
-      id: this.props.stageData ? this.props.stageData.id : ""
-    },
-    regionDropdown: [],
-    typeDropdown: [],
-    hasLoaded: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      form: {
+        selectedRegion: [],
+        selectedType: [],
+        name: props.stageData ? props.stageData.name : '',
+        desc: props.stageData ? props.stageData.description : '',
+        order: props.stageData ? props.stageData.order : null,
+        id: props.stageData ? props.stageData.id : '',
+      },
+      regionDropdown: [],
+      typeDropdown: [],
+      hasLoaded: false,
+    };
+  }
+
   componentDidMount() {
     const { typeOptions, regionOptions, stageData } = this.props;
     const newRegionArr = regionOptions.map(each => ({
       ...each,
       value: each.identifier,
-      label: each.name
+      label: each.name,
     }));
     const newTypeArr = typeOptions.map(each => ({
       ...each,
       value: each.identifier,
-      label: each.name
+      label: each.name,
     }));
 
     let selectedRegion = [];
@@ -36,12 +44,13 @@ class AddStageForm extends Component {
       if (stageData.regions.length > 0) {
         regionOptions.map(region => {
           if (stageData.regions.indexOf(region.id) > -1) {
-            selectedRegion.push({
+            return selectedRegion.push({
               ...region,
               value: region.identifier,
-              label: region.name
+              label: region.name,
             });
           }
+          return selectedRegion;
         });
         // } else {
         //   selectedRegion = newRegionArr;
@@ -50,76 +59,87 @@ class AddStageForm extends Component {
       if (stageData.tags.length > 0) {
         typeOptions.map(type => {
           if (stageData.tags.indexOf(type.id) > -1) {
-            selectedType.push({
+            return selectedType.push({
               ...type,
               value: type.identifier,
-              label: type.name
+              label: type.name,
             });
           }
+          return selectedType;
         });
         // } else {
         //   selectedType = newTypeArr;
       }
     } else {
-      (selectedRegion = newRegionArr), (selectedType = newTypeArr);
+      selectedRegion = newRegionArr;
+      selectedType = newTypeArr;
     }
-    this.setState({
+    this.setState(state => ({
       hasLoaded: true,
       regionDropdown: newRegionArr,
       typeDropdown: newTypeArr,
       form: {
-        ...this.state.form,
+        ...state.form,
         selectedRegion,
-        selectedType
-      }
-    });
+        selectedType,
+      },
+    }));
   }
 
   handleChange = e => {
     const { name, value } = e.target;
-
-    this.setState({
+    this.setState(state => ({
       form: {
-        ...this.state.form,
+        ...state.form,
 
-        [name]: value
-      }
-    });
+        [name]: value,
+      },
+    }));
   };
+
   handleSelectRegionChange = region => {
-    this.setState({
+    this.setState(state => ({
       form: {
-        ...this.state.form,
-        selectedRegion: region
-      }
-    });
+        ...state.form,
+        selectedRegion: region,
+      },
+    }));
   };
+
   handleSelectTypeChange = type => {
-    this.setState({
+    this.setState(state => ({
       form: {
-        ...this.state.form,
-        selectedType: type
-      }
-    });
+        ...state.form,
+        selectedType: type,
+      },
+    }));
   };
+
   handleSubmitForm = e => {
     e.preventDefault();
-    this.props.handleSubmit(this.state.form);
+    const {
+      props: { handleSubmit },
+      state: { form },
+    } = this;
+    handleSubmit(form);
   };
+
   render() {
     const {
       state: {
         regionDropdown,
         typeDropdown,
         form: { name, desc, selectedRegion, selectedType },
-        hasLoaded
+        hasLoaded,
       },
       handleChange,
       handleSelectRegionChange,
       handleSelectTypeChange,
-      handleSubmitForm
+      handleSubmitForm,
     } = this;
-    const isEdit = Object.keys(this.props.stageData).length > 0 ? true : false;
+
+    // const isEdit =
+    //   Object.keys(this.props.stageData).length > 0 ? true : false;
 
     return (
       <form
@@ -133,20 +153,26 @@ class AddStageForm extends Component {
             formType="editForm"
             tag="input"
             type="text"
-            required={true}
-            label="Name"
+            required
+            label="app.name"
             name="name"
             value={name}
             changeHandler={handleChange}
+            translation
           />
           {/* </div> */}
           {regionDropdown && regionDropdown.length > 0 && (
             <div>
-              <label>Regions</label>
+              <label>
+                <FormattedMessage
+                  id="app.regions"
+                  defaultMessage="Regions"
+                />
+              </label>
               {hasLoaded && (
                 <Select
                   defaultValue={selectedRegion}
-                  isMulti={true}
+                  isMulti
                   options={regionDropdown}
                   onChange={handleSelectRegionChange}
                 />
@@ -155,7 +181,12 @@ class AddStageForm extends Component {
           )}
           {typeDropdown && typeDropdown.length > 0 && (
             <div>
-              <label>Types</label>
+              <label>
+                <FormattedMessage
+                  id="app.types"
+                  defaultMessage="Types"
+                />
+              </label>
               {hasLoaded && (
                 <Select
                   defaultValue={selectedType}
@@ -171,11 +202,12 @@ class AddStageForm extends Component {
             formType="editForm"
             tag="input"
             type="text"
-            // required={true}
-            label="Description"
+            // required
+            label="app.description"
             name="desc"
             value={desc}
             changeHandler={handleChange}
+            translation
           />
         </div>
         {/* <div className="modal-footer"> */}
@@ -185,7 +217,7 @@ class AddStageForm extends Component {
             className="fieldsight-btn"
             onClick={handleSubmitForm}
           >
-            Save
+            <FormattedMessage id="app.save" defaultMessage="Save" />
           </button>
         </div>
         {/* </div> */}

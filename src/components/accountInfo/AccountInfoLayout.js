@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Elements, StripeProvider } from "react-stripe-elements";
+import React, { PureComponent } from 'react';
+import { Elements, StripeProvider } from 'react-stripe-elements';
+import RightContentCard from '../common/RightContentCard';
+import AccountInfo from './AccountInfo';
+/* eslint-disable  react/prop-types */
 
-import RightContentCard from "../common/RightContentCard";
-import AccountInfo from "./AccountInfo";
-
-class AccountInfoLayout extends Component {
+class AccountInfoLayout extends PureComponent {
   render() {
     const {
-      props: { data, teamId }
+      props: { data, teamId },
     } = this;
 
     return (
@@ -34,31 +34,34 @@ class AccountInfoLayout extends Component {
                     data.subscribed_package.total_charge}
                   /
                   {data.subscribed_package &&
-                  data.subscribed_package.period == "Month"
-                    ? "Mo"
-                    : "Yr"}
+                  data.subscribed_package.period === 'Month'
+                    ? 'Mo'
+                    : 'Yr'}
                 </strong>
               </h6>
               <ul className="list-icon mt-4 mb-4">
                 <li>
-                  <i className="la la-chevron-circle-right"></i>
+                  <i className="la la-chevron-circle-right" />
                   <strong>
                     {data.subscribed_package &&
                       data.subscribed_package.total_submissions}
-                  </strong>{" "}
+                  </strong>
                   Submissions
                 </li>
                 <li>
-                  <i className="la la-chevron-circle-right"></i>
-                  <strong>Unlimited</strong> Users, Projects, Sites
+                  <i className="la la-chevron-circle-right" />
+                  <strong>Unlimited</strong>
+                  Users, Projects, Sites
                 </li>
                 <li>
-                  <i className="la la-chevron-circle-right"></i>
-                  <strong>Unlimited</strong> Forms, Stages & Schedules
+                  <i className="la la-chevron-circle-right" />
+                  <strong>Unlimited</strong>
+                  Forms, Stages & Schedules
                 </li>
                 <li>
-                  <i className="la la-chevron-circle-right"></i>
-                  <strong>Unlimited</strong> Reports, Dashboards & Maps
+                  <i className="la la-chevron-circle-right" />
+                  <strong>Unlimited</strong>
+                  Reports, Dashboards & Maps
                 </li>
               </ul>
             </div>
@@ -66,7 +69,8 @@ class AccountInfoLayout extends Component {
               <a
                 title=""
                 className="btn btn-primary"
-                href={`/fieldsight/organization/#/team-dashboard/${teamId}`}
+                href={`/fieldsight/organization/#/
+                team-dashboard/${teamId}`}
               >
                 Upgrade Your Package
               </a>

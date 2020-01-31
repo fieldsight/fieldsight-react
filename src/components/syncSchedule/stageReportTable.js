@@ -1,9 +1,10 @@
-import React, { Component, Fragment } from "react";
-import Table from "react-bootstrap/Table";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Sheet from "../../static/images/sheets.png";
+import React, { PureComponent, Fragment } from 'react';
+import Table from 'react-bootstrap/Table';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import Sheet from '../../static/images/sheets.png';
+/* eslint-disable react/destructuring-assignment */
 
-export default class StageReportTable extends Component {
+export default class StageReportTable extends PureComponent {
   render() {
     const {
       loader,
@@ -11,11 +12,14 @@ export default class StageReportTable extends Component {
       formatDate,
       canSyncOrEdit,
       reqSync,
-      getDayOnWeeklySchedule
+      getDayOnWeeklySchedule,
     } = this.props;
 
     return (
-      <Table responsive="xl" className="table  table-bordered  dataTable ">
+      <Table
+        responsive="xl"
+        className="table  table-bordered  dataTable "
+      >
         <thead>
           <tr>
             <th>Form Name</th>
@@ -36,9 +40,14 @@ export default class StageReportTable extends Component {
                 stages.map(stage => (
                   <Fragment key={`stage_${stage.id}`}>
                     <tr>
-                      <td colSpan={5}>Stage: {stage.stage}</td>
+                      <td colSpan={5}>
+                        Stage:
+                        {stage.stage}
+                      </td>
                     </tr>
-                    {!loader && stage.sub_stages && stage.sub_stages === 0 ? (
+                    {!loader &&
+                    stage.sub_stages &&
+                    stage.sub_stages === 0 ? (
                       <tr>
                         <td colSpan={5}>No Substage added yet.</td>
                       </tr>
@@ -50,18 +59,22 @@ export default class StageReportTable extends Component {
                             <tr key={`substage_${sub.report_id}`}>
                               <td>
                                 <label>
-                                  {sub.report_type === "form"
+                                  {sub.report_type === 'form'
                                     ? sub.title
                                     : sub.report_type}
                                 </label>
-                                <p>{sub.description && sub.description}</p>
+                                <p>
+                                  {sub.description && sub.description}
+                                </p>
                               </td>
                               <td>
-                                {sub.schedule_type === "Weekly"
+                                {sub.schedule_type === 'Weekly'
                                   ? `${
                                       sub.schedule_type
-                                    } on ${getDayOnWeeklySchedule(sub.day)}`
-                                  : sub.schedule_type === "Monthly"
+                                    } on ${getDayOnWeeklySchedule(
+                                      sub.day,
+                                    )}`
+                                  : sub.schedule_type === 'Monthly'
                                   ? sub.day === 0
                                     ? ` ${sub.schedule_type} on last day`
                                     : ` ${sub.schedule_type} on day ${sub.day}`
@@ -69,58 +82,82 @@ export default class StageReportTable extends Component {
                               </td>
                               <td>
                                 {sub.spreadsheet_id ? (
-                                  <a href={sub.spreadsheet_id} target="_blank">
+                                  <a
+                                    href={sub.spreadsheet_id}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
                                     <OverlayTrigger
                                       placement="top"
                                       overlay={
-                                        <Tooltip>View Google Sheet</Tooltip>
+                                        <Tooltip>
+                                          View Google Sheet
+                                        </Tooltip>
                                       }
                                     >
                                       <img
                                         src={Sheet}
-                                        style={{ height: "15px" }}
+                                        style={{ height: '15px' }}
+                                        alt="sheet"
                                       />
                                     </OverlayTrigger>
                                   </a>
                                 ) : (
-                                  "No sheet created"
+                                  'No sheet created'
                                 )}
                               </td>
                               <td>
                                 {sub.last_synced_date
                                   ? formatDate(sub.last_synced_date)
-                                  : "Not Synced Yet"}
+                                  : 'Not Synced Yet'}
                               </td>
                               <td>
                                 {canSyncOrEdit && (
                                   <>
                                     <span>
                                       <a
-                                        onClick={() =>
-                                          this.props.editAction(sub)
-                                        }
+                                        role="button"
+                                        tabIndex="0"
+                                        onKeyDown={() => {
+                                          this.props.editAction(sub);
+                                        }}
+                                        onClick={() => {
+                                          this.props.editAction(sub);
+                                        }}
                                         className="pending td-edit-btn td-btn"
                                       >
                                         <OverlayTrigger
                                           placement="top"
                                           overlay={
-                                            <Tooltip>Edit Schedule</Tooltip>
+                                            <Tooltip>
+                                              Edit Schedule
+                                            </Tooltip>
                                           }
                                         >
                                           <i className="la la-edit" />
                                         </OverlayTrigger>
                                       </a>
                                     </span>
-                                    {sub.schedule_type === "Manual" && (
+                                    {sub.schedule_type ===
+                                      'Manual' && (
                                       <span>
                                         <a
-                                          onClick={() => reqSync(sub.report_id)}
+                                          role="button"
+                                          tabIndex="0"
+                                          onKeyDown={() => {
+                                            reqSync(sub.report_id);
+                                          }}
+                                          onClick={() => {
+                                            reqSync(sub.report_id);
+                                          }}
                                           className="pending td-edit-btn td-btn"
                                         >
                                           <OverlayTrigger
                                             placement="top"
                                             overlay={
-                                              <Tooltip>Sync Now</Tooltip>
+                                              <Tooltip>
+                                                Sync Now
+                                              </Tooltip>
                                             }
                                           >
                                             <i className="la la-refresh ml-2" />

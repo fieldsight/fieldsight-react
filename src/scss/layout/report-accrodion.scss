@@ -1,13 +1,16 @@
 .report-accordion {
     background-color: $secondary-light-2;
+    padding: .6125rem;
 
     .acc-item {
-        border-right:1px solid $bg-light;
-        border-bottom:1px solid $bg-light;
+        border: 1px solid $bg-light;
+        @include radius(5px);
+
         .acc-header {
             background-color: $secondary-light-2;
             position: relative;
             cursor: pointer;
+
             h5 {
                 color: $color-secondary;
                 text-transform: uppercase;
@@ -15,7 +18,9 @@
                 font-size: .75rem;
                 padding: .6125rem;
                 letter-spacing: 1px;
+                margin: 0;
             }
+
             &::after {
                 @include translatey;
                 right: .5rem;
@@ -26,7 +31,8 @@
                 font-weight: 400;
                 color: $primary-light;
             }
-            &.active{
+
+            &.active {
                 &::after {
                     @include translatey;
                     right: .5rem;
@@ -36,26 +42,30 @@
                     font-size: 1.3rem;
                     font-weight: 400;
                     color: $color-secondary;
-                } 
+                }
             }
         }
 
         .acc-body {
-            .form-list{
+            .form-list {
                 background-color: $color-white;
-                padding:.6125rem;
+                padding: .6125rem;
             }
-            .custom-group{
-                border:0;
-                border-bottom:1px solid $primary-light-1;
-                .custom-group-append{
-                    margin:0;
-                    .custom-group-text{
+
+            .custom-group {
+                border: 0;
+                border-bottom: 1px solid $primary-light-1;
+
+                .custom-group-append {
+                    margin: 0;
+
+                    .custom-group-text {
                         background-color: $color-white;
                         padding-right: 0;
                     }
                 }
             }
+
             ul {
                 background-color: $color-white;
 
@@ -92,30 +102,75 @@
                     }
                 }
 
-                &.role-list {
-                    margin-left: .45rem;
-                }
+                &.role-list {}
             }
+        }
+
+        &:not(:last-child) {
+            margin-bottom: .6125rem;
         }
     }
 
     .selected-list {
+        .dragable-stage {
+            background: transparent;
+            padding: 0;
+            border: 0;
+
+            &::before {
+                display: none;
+            }
+        }
+
         h6 {
             font-size: .75rem;
             color: $primary-light;
-            margin-bottom:1rem;
+            margin-bottom: 1rem;
             padding: .6125rem 0 0 0;
         }
-        li{
+
+        li {
             @include display-flex(flex);
             @include justify-content-start;
             @include align-items-center;
-            span{
-                &.drag-icon{
-                    margin:.15rem .25rem 0 .6125rem;
-                    i{
-                        color:$bg-light;
-                        font-size:1rem;
+
+            div {
+                @include display-flex(flex);
+                @include justify-content-start;
+                @include align-items-center;
+            }
+
+            span {
+                &.drag-icon {
+                    margin: .15rem .25rem 0 .6125rem;
+
+                    i {
+                        color: $bg-light;
+                        font-size: 1rem;
+                    }
+                }
+
+                a {
+                    opacity: 0;
+                    visibility: hidden;
+                    @include transition(all .3s linear);
+
+                    &.rejected {
+
+                        margin-left: .5rem;
+
+                        i {
+                            font-size: 1.2rem;
+                        }
+                    }
+                }
+            }
+
+            &:hover {
+                span {
+                    a {
+                        visibility: visible;
+                        opacity: 1;
                     }
                 }
             }

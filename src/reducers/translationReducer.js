@@ -1,14 +1,14 @@
-import { GET_TRANSLATION } from "../actions/types";
+import { GET_TRANSLATION } from '../actions/types';
 
 const initialState = {
-  selected: ""
+  selected: '',
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_TRANSLATION:
       return {
-        selected: action.payload
+        selected: action.payload,
       };
     default:
       return state;

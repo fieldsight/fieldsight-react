@@ -1,4 +1,9 @@
-import React from "react";
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+/* eslint-disable   react/prop-types */
+/* eslint-disable   react/no-array-index-key */
+/* eslint-disable   no-unneeded-ternary */
 
 const SelectElement = ({
   formType,
@@ -7,15 +12,24 @@ const SelectElement = ({
   options,
   changeHandler,
   value,
-  classname
+  classname,
+  translation,
 }) => {
   return (
     <div className={`form-group ${classname}`}>
-      {label && (
-        <label>
-          {label} {formType === "editForm" && <sup>*</sup>}
-        </label>
-      )}
+      {label &&
+        (translation === true ? (
+          <label>
+            <FormattedMessage id={label} defaultMessage={label} />
+            {formType === 'editForm' && <sup>*</sup>}
+          </label>
+        ) : (
+          <label>
+            {label}
+
+            {formType === 'editForm' && <sup>*</sup>}
+          </label>
+        ))}
       <div className="select-option">
         <select
           className={className}
@@ -26,13 +40,15 @@ const SelectElement = ({
           {options.map((option, i) => (
             <option
               value={
-                option.id
+                option.xf_id
+                  ? option.xf_id
+                  : option.id
                   ? option.id
                   : option.name
                   ? option.name
                   : option.key
                   ? option.key
-                  : ""
+                  : ''
               }
               key={`${
                 option.name
@@ -41,7 +57,13 @@ const SelectElement = ({
                   ? option.value
                   : option.identifier
                   ? option.identifier
-                  : ""
+                  : option.title
+                  ? option.title
+                  : option.label
+                  ? option.label
+                  : option.title
+                  ? option.title
+                  : ''
               }${i}`}
             >
               {option.name
@@ -50,7 +72,11 @@ const SelectElement = ({
                 ? option.value
                 : option.identifier
                 ? option.identifier
-                : ""}
+                : option.title
+                ? option.title
+                : option.label
+                ? option.label
+                : ''}
             </option>
           ))}
         </select>

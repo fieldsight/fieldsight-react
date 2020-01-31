@@ -1,37 +1,44 @@
-import React, { Component } from "react";
-import { Button, Dropdown } from "react-bootstrap";
+import React, { PureComponent } from 'react';
+import { Dropdown } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import { AvatarContentLoader } from '../../common/Loader';
+import CountCard from '../../common/CountCard';
+/* eslint-disable camelcase */
 
-import { AvatarContentLoader } from "../../common/Loader";
-import CountCard from "../../common/CountCard";
-
-class DashboardHeader extends Component {
+class DashboardHeader extends PureComponent {
   render() {
     const {
       name,
       address,
       logo,
-      public_desc,
       totalSites,
       totalUser,
       totalProjects,
       totalSubmissions,
       id,
       showContentLoader,
-      activeTab,
-      closeModal,
-      openModal
+      openModal,
     } = this.props;
 
     const ManageDropdown = [
-      { title: "users", link: `/fieldsight/manage/people/organization/${id}/` },
       {
-        title: "projects",
-        link: `/fieldsight/application/#/team-projects/${id}`
+        key: 0,
+        title: 'users',
+        link: `/fieldsight/manage/people/organization/${id}/`,
+        id: 'app.users',
       },
       {
+        key: 1,
+        title: 'projects',
+        link: `/fieldsight/application/#/team-projects/${id}`,
+        id: 'app.projects',
+      },
+      {
+        key: 2,
         title: `settings`,
-        link: `/fieldsight/application/#/team-settings/${id}`
-      }
+        link: `/fieldsight/application/#/team-settings/${id}`,
+        id: 'app.setting',
+      },
     ];
 
     return (
@@ -44,14 +51,17 @@ class DashboardHeader extends Component {
               <figure
                 style={{
                   backgroundImage: `url(${logo})`,
-                  width: "80px"
+                  width: '80px',
                 }}
               >
                 <span />
                 <figcaption>
                   <a
+                    tabIndex="0"
+                    role="button"
+                    onKeyDown={() => openModal('Gallery')}
                     className="photo-preview"
-                    onClick={() => openModal("Gallery")}
+                    onClick={() => openModal('Gallery')}
                   >
                     <i className="la la-eye" />
                   </a>
@@ -73,12 +83,27 @@ class DashboardHeader extends Component {
                 className="fieldsight-btn"
               >
                 <i className="la la-cog" />
-                <span>Manage</span>
+
+                <span>
+                  <FormattedMessage
+                    id="app.manage"
+                    defaultMessage="Manage"
+                    description="Manage"
+                  />
+                </span>
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
-                {ManageDropdown.map((item, i) => (
-                  <Dropdown.Item href={item.link} key={i} target="_blank">
-                    {item.title}
+                {ManageDropdown.map(item => (
+                  <Dropdown.Item
+                    href={item.link}
+                    key={item.key}
+                    target="_blank"
+                  >
+                    <FormattedMessage
+                      id={item.id}
+                      defaultMessage={item.title}
+                      description={item.title}
+                    />
                   </Dropdown.Item>
                 ))}
               </Dropdown.Menu>
@@ -98,23 +123,25 @@ class DashboardHeader extends Component {
             <a
               href={`/fieldsight/application/#/team-users/${id}`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <CountCard
                 countName="user"
                 countNumber={totalUser}
                 icon="la-user"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
             <a
               href={`/fieldsight/application/#/team-projects/${id}`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <CountCard
                 countName="project"
                 countNumber={totalProjects}
                 icon="la la la-server"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
             <a>
@@ -122,7 +149,7 @@ class DashboardHeader extends Component {
                 countName="site"
                 countNumber={totalSites}
                 icon="la-map-marker"
-                noSubmissionText={true}
+                noSubmissionText
               />
             </a>
           </div>
@@ -131,5 +158,4 @@ class DashboardHeader extends Component {
     );
   }
 }
-
 export default DashboardHeader;

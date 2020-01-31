@@ -1,14 +1,17 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
-import WithContext from "../../hoc/WithContext";
-import Modal from "../common/Modal";
-import Table from "../common/Table";
-import InputElement from "../common/InputElement";
-import RightContentCard from "../common/RightContentCard";
-import Loader from "../common/Loader";
-import isEmpty from "../../utils/isEmpty";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { FormattedMessage } from 'react-intl';
+import DeleteModel from '../common/DeleteModal';
+import WithContext from '../../hoc/WithContext';
+import Modal from '../common/Modal';
+import Table from '../common/Table';
+import InputElement from '../common/InputElement';
+import RightContentCard from '../common/RightContentCard';
+import Loader from '../common/Loader';
+import isEmpty from '../../utils/isEmpty';
+/* eslint-disable react/destructuring-assignment */
 
-const url = "fv3/api/project-regions/";
+const url = 'fv3/api/project-regions/';
 
 class SubRegion extends Component {
   _isMounted = false;
@@ -17,34 +20,45 @@ class SubRegion extends Component {
     this._isMounted = true;
     const {
       match: {
-        params: { subRegionId }
+        params: { subRegionId },
       },
-      value: { setSubRegion, projectId }
+      value: { setSubRegion, projectId },
     } = this.props;
     if (subRegionId) {
       axios
         .get(`${url}?project=${projectId}&region=${subRegionId}`)
         .then(res => {
-          this._isMounted && setSubRegion(res.data, subRegionId);
+          if (this._isMounted) {
+            setSubRegion(res.data, subRegionId);
+          }
         })
-        .catch(err => console.log("Err", err));
+        .catch(() => {});
     }
   }
 
   componentDidUpdate(prevProps) {
     const {
       match: {
-        params: { subRegionId }
+        params: { subRegionId },
       },
-      value: { setSubRegion, projectId }
+      value: { setSubRegion, projectId },
     } = this.props;
     if (prevProps.match.params.subRegionId !== subRegionId) {
       axios
         .get(`${url}?project=${projectId}&region=${subRegionId}`)
         .then(res => {
-          this._isMounted && setSubRegion(res.data, subRegionId);
+          if (this._isMounted) {
+            setSubRegion(res.data, subRegionId);
+          }
         })
-        .catch(err => console.log("Err", err));
+        .catch(() => {});
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    if (this.props.setSubRegion) {
+      this.props.setSubRegion([], '');
     }
   }
 
@@ -65,9 +79,9 @@ class SubRegion extends Component {
           removeHandler,
           confirmHandler,
           cancelHandler,
-          onSubmitHandler
-        }
-      }
+          onSubmitHandler,
+        },
+      },
     } = this;
 
     const tableHeader = {
@@ -75,16 +89,25 @@ class SubRegion extends Component {
         ? [
             `${terms.region} ID`,
             `${terms.region} Name`,
-            ,
-            "Created Date",
-            "Action"
+            'app.created-date',
+            'app.action',
           ]
-        : ["Region ID", "Region Name", "Created Date", "Action"]
+        : [
+            'app.regionId',
+            'app.regionName',
+            'app.created-date',
+            'app.action',
+          ],
     };
+    const message = !isEmpty(terms) ? (
+      `${terms.region}`
+    ) : (
+      <FormattedMessage id="app.regions" defaultMessage="Regions" />
+    );
     return (
-      <Fragment>
+      <>
         <RightContentCard
-          title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+          title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
           addButton
           toggleModal={toggleModal}
         >
@@ -99,35 +122,43 @@ class SubRegion extends Component {
 
         {showModal && (
           <Modal
-            title={!isEmpty(terms) ? `${terms.region}` : "Regions"}
+            title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
             toggleModal={toggleModal}
           >
-            <form className="floating-form" onSubmit={onSubmitHandler}>
+            <form
+              className="floating-form"
+              onSubmit={onSubmitHandler}
+            >
               <InputElement
                 tag="input"
                 type="text"
-                required={true}
-                label="ID"
+                required
+                label="app.id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
+                translation
               />
               <InputElement
                 tag="textarea"
                 type="text"
-                required={true}
-                label="Name"
+                required
+                label="app.name"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-              />{" "}
+                translation
+              />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  Save
+                  <FormattedMessage
+                    id="app.save"
+                    defaultMessage="Save"
+                  />
                 </button>
               </div>
             </form>
@@ -136,35 +167,16 @@ class SubRegion extends Component {
         {isLoading && <Loader />}
 
         {showDeleteConfirmation && (
-          <Modal title="Warning" toggleModal={cancelHandler}>
-            <div className="warning">
-              <i className="la la-exclamation-triangle" />
-
-              <p>
-                Are you sure you want to delete{" "}
-                {!isEmpty(terms) ? `${terms.region}` : "Regions"} ?
-              </p>
-            </div>
-            <div className="warning-footer text-center">
-              <a
-                className="fieldsight-btn rejected-btn"
-                onClick={cancelHandler}
-              >
-                cancel
-              </a>
-              <a className="fieldsight-btn" onClick={confirmHandler}>
-                confirm
-              </a>
-            </div>
-          </Modal>
+          <DeleteModel
+            onCancel={cancelHandler}
+            onConfirm={confirmHandler}
+            onToggle={cancelHandler}
+            message={`Are you sure you want to delete ${message}?`}
+            title="Warning"
+          />
         )}
-      </Fragment>
+      </>
     );
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-    this.props.setSubRegion && this.props.setSubRegion([], "");
   }
 }
 

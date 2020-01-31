@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import axios from "axios";
-import Modal from "../common/Modal";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { getProjectUser } from "../../actions/projectUserActions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { FormattedMessage } from 'react-intl';
+import getProjectUser from '../../actions/projectUserActions';
+/* eslint-disable react/destructuring-assignment */
 
 class ProjectUser extends Component {
   constructor(props) {
@@ -11,15 +11,15 @@ class ProjectUser extends Component {
     this.state = {
       users: [],
       breadcrumbs: [],
-      masteruser: []
+      masteruser: [],
     };
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
     this.props.getProjectUser(id);
   }
@@ -28,28 +28,31 @@ class ProjectUser extends Component {
     this.setState({
       users: nextprops.projectUser.users,
       masteruser: nextprops.projectUser.users,
-      breadcrumbs: nextprops.projectUser.breadcrumbs
+      breadcrumbs: nextprops.projectUser.breadcrumbs,
     });
   }
 
   handleChange = async e => {
     const {
-      target: { value }
+      target: { value },
     } = e;
+    const { users, masteruser } = this.state;
     if (value) {
-      const search = await this.state.users.filter(users => {
+      const search = await users.filter(user => {
         return (
-          users.full_name.toLowerCase().includes(value.toLowerCase()) ||
-          users.email.toLowerCase().includes(value.toLowerCase()) ||
-          users.username.toLowerCase().includes(value.toLowerCase())
+          user.full_name
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          user.email.toLowerCase().includes(value.toLowerCase()) ||
+          user.username.toLowerCase().includes(value.toLowerCase())
         );
       });
       this.setState({
-        users: search
+        users: search,
       });
     } else {
       this.setState({
-        users: this.state.masteruser
+        users: masteruser,
       });
     }
   };
@@ -60,19 +63,26 @@ class ProjectUser extends Component {
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
-          {
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href={breadcrumbs.project_url}>{breadcrumbs.project}</a>
-              </li>
-              <li className="breadcrumb-item">{breadcrumbs.name}</li>
-            </ol>
-          }
+          {/* { */}
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <a href={breadcrumbs.project_url}>
+                {breadcrumbs.project}
+              </a>
+            </li>
+            <li className="breadcrumb-item">{breadcrumbs.name}</li>
+          </ol>
+          {/* } */}
         </nav>
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-              <h5>Project Users</h5>
+              <h5>
+                <FormattedMessage
+                  id="app.project-user"
+                  defaultMessage="Project Users"
+                />
+              </h5>
               <div className="dash-btn">
                 <form className="floating-form">
                   <div className="form-group mr-0">
@@ -82,8 +92,13 @@ class ProjectUser extends Component {
                       onChange={e => this.handleChange(e)}
                       required
                     />
-                    <label htmlFor="input">Search</label>
-                    <i className="la la-search"></i>
+                    <label htmlFor="input">
+                      <FormattedMessage
+                        id="app.teams-search"
+                        defaultMessage="Search"
+                      />
+                    </label>
+                    <i className="la la-search" />
                   </div>
                 </form>
               </div>
@@ -95,38 +110,58 @@ class ProjectUser extends Component {
               >
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>User Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
+                    <th>
+                      <FormattedMessage
+                        id="app.name"
+                        defaultMessage="Name"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.user-name"
+                        defaultMessage="User Name"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.email"
+                        defaultMessage="Email"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.role"
+                        defaultMessage="Role"
+                      />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((users, key) => {
+                  {users.map(user => {
                     return (
-                      <tr key={key}>
+                      <tr key={user.id}>
                         <td>
                           <a
-                            href={`/users/profile/${users.id}`}
+                            href={`/users/profile/${user.id}`}
                             className="pending table-profile"
                           >
                             <figure>
                               <img
-                                src={users.profile_picture}
+                                src={user.profile_picture}
                                 alt="site-logo"
                               />
                             </figure>
-                            <h5>{users.full_name}</h5>
+                            <h5>{user.full_name}</h5>
                           </a>
                         </td>
-                        <td>{users.username}</td>
-                        <td>{users.email}</td>
-                        {users.role.length > 0 ? (
-                          users.role[0] ? (
-                            <td>{users.role[0]}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        {user.role.length > 0 ? (
+                          user.role[0] ? (
+                            <td>{user.role[0]}</td>
                           ) : (
                             <td>
-                              {users.role[0]}/{users.role[1]}
+                              {`${user.role[0]}/${user.role[1]}`}
                             </td>
                           )
                         ) : (
@@ -147,14 +182,11 @@ class ProjectUser extends Component {
 
 const mapStateToProps = ({ projectUser }) => {
   return {
-    projectUser
+    projectUser,
   };
 };
 export default compose(
-  connect(
-    mapStateToProps,
-    {
-      getProjectUser
-    }
-  )
+  connect(mapStateToProps, {
+    getProjectUser,
+  }),
 )(ProjectUser);

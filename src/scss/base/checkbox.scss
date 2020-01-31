@@ -2,6 +2,8 @@
     form {
         .form-group {
             .custom-checkbox {
+                padding-left: 0;
+
                 label {
                     color: $primary-light;
                     font-size: .75rem;
@@ -9,6 +11,7 @@
 
                     &.custom-control-label {
                         margin: 0;
+                        padding-left: 1.4rem;
 
                         &::before {
                             border: 1.5px solid $primary-light;
@@ -49,6 +52,7 @@
 
                     &.custom-control-label {
                         margin: 0;
+                        padding-left: 1.4rem;
 
                         &::before {
                             background-color: $color-white
@@ -67,7 +71,7 @@
 
                     &:checked {
                         ~.custom-control-label {
-                            color: $color-white;
+                            color: $color-secondary;
 
                             &::before {
                                 background-color: $color-secondary;
@@ -87,10 +91,11 @@
 }
 
 .custom-checkbox {
-    &.custom-control{
+    &.custom-control {
         min-height: 1.3rem;
-    padding-left: 1.3rem;
+        padding-left: 0;
     }
+
     label {
         color: $primary-light;
         font-size: .75rem;
@@ -170,6 +175,11 @@
         }
     }
 
+    &.custom-control {
+
+        padding-left: 1.3rem;
+    }
+
     .custom-control-input {
         &:active {
             ~.custom-control-label {
@@ -181,7 +191,7 @@
 
         &:checked {
             ~.custom-control-label {
-                color: $color-white;
+                color: $color-secondary;
 
                 &::before {
                     background-color: $color-secondary;

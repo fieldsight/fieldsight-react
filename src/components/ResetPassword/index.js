@@ -1,19 +1,21 @@
-import React, { Component } from "react";
-import Axios from "axios";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import InputElement from "../common/InputElement";
-import RightContentCard from "../common/RightContentCard";
+import React, { Component } from 'react';
+import Axios from 'axios';
+import InputElement from '../common/InputElement';
+import RightContentCard from '../common/RightContentCard';
+
+/* eslint-disable react/jsx-one-expression-per-line */
 
 export default class ResetPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      resetPsw: "",
-      confirmResetPsw: "",
-      errresetPsw: "",
-      errconfirmResetPsw: ""
+      resetPsw: '',
+      confirmResetPsw: '',
+      errresetPsw: '',
+      errconfirmResetPsw: '',
     };
   }
+
   onSubmitHandler = e => {
     e.preventDefault();
 
@@ -21,73 +23,70 @@ export default class ResetPassword extends Component {
       resetPsw,
       confirmResetPsw,
       errresetPsw,
-      errconfirmResetPsw
+      errconfirmResetPsw,
     } = this.state;
 
     this.handleResetValidation();
 
-    if (errresetPsw !== undefined && errconfirmResetPsw !== undefined) {
+    if (
+      errresetPsw !== undefined &&
+      errconfirmResetPsw !== undefined
+    ) {
       const formData = new FormData();
-      formData.append("resetPsw", resetPsw);
-      formData.append("confirmResetPsw", confirmResetPsw);
+      formData.append('resetPsw', resetPsw);
+      formData.append('confirmResetPsw', confirmResetPsw);
       Axios.post(``, formData)
-        .then(res => {
-          // if (res.data) {
-          //   successToast(res.data.message);
-          // }
-        })
-        .catch(err => {
-          // const errors = err.response;
-          // errorToast(errors.data.old_password[0]);
-        });
+        .then()
+        .catch();
     }
   };
+
   onChangeHandler = e => {
     const { value, name } = e.target;
     this.setState(
       {
-        [name]: value
+        [name]: value,
       },
       () => {
         const { resetPsw, confirmResetPsw } = this.state;
-        if (resetPsw !== "") {
+        if (resetPsw !== '') {
           this.setState({
-            errresetPsw: ""
+            errresetPsw: '',
           });
         }
-        if (confirmResetPsw !== "") {
+        if (confirmResetPsw !== '') {
           this.setState({
-            errconfirmResetPsw: ""
+            errconfirmResetPsw: '',
           });
         }
-      }
+      },
     );
   };
 
   handleResetValidation = () => {
     const testRegex = new RegExp(
-      "^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})"
+      '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})',
     );
     const errors = {};
     const { resetPsw, confirmResetPsw } = this.state;
     // debugger;
     if (!resetPsw) {
       this.setState({
-        errresetPsw: "require"
+        errresetPsw: 'require',
       });
     }
 
     if (!confirmResetPsw) {
-      this.setState({ errconfirmResetPsw: "require" });
+      this.setState({ errconfirmResetPsw: 'require' });
     }
     if (resetPsw !== confirmResetPsw) {
-      this.setState({ errconfirmResetPsw: "Password Mismatch." });
+      this.setState({ errconfirmResetPsw: 'Password Mismatch.' });
     }
     if (resetPsw && !testRegex.test(resetPsw)) {
       this.setState({
         errresetPsw:
-          "The new password must contains at least  one lowercase " +
-          "and one uppercase alphabetical character and 6 characters long."
+          'The new password must contains at least  one lowercase ' +
+          'and one uppercase alphabetical character and 6 characters long.',
       });
     }
 
@@ -99,7 +98,7 @@ export default class ResetPassword extends Component {
       resetPsw,
       confirmResetPsw,
       errresetPsw,
-      errconfirmResetPsw
+      errconfirmResetPsw,
     } = this.state;
     return (
       <>
@@ -123,7 +122,7 @@ export default class ResetPassword extends Component {
               changeHandler={this.onChangeHandler}
             />
             {errresetPsw && errresetPsw && (
-              <small style={{ color: "red" }}>*{errresetPsw}</small>
+              <small style={{ color: 'red' }}>*{errresetPsw}</small>
             )}
             <InputElement
               formType="editForm"
@@ -136,10 +135,15 @@ export default class ResetPassword extends Component {
               changeHandler={this.onChangeHandler}
             />
             {errconfirmResetPsw && errconfirmResetPsw && (
-              <small style={{ color: "red" }}>*{errconfirmResetPsw}</small>
+              <small style={{ color: 'red' }}>
+                *{errconfirmResetPsw}
+              </small>
             )}
             <div className="col-sm-12">
-              <button type="submit" className="fieldsight-btn pull-right">
+              <button
+                type="submit"
+                className="fieldsight-btn pull-right"
+              >
                 Reset Password
               </button>
             </div>

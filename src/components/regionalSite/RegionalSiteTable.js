@@ -1,28 +1,31 @@
-import React, { Component } from "react";
-import Table from "react-bootstrap/Table";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import { TableContentLoader } from "../common/Loader";
-import withPagination from "../../hoc/WithPagination";
-import isEmpty from "../../utils/isEmpty";
+import React, { Component } from 'react';
+import Table from 'react-bootstrap/Table';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { FormattedMessage } from 'react-intl';
+import { TableContentLoader } from '../common/Loader';
+import withPagination from '../../hoc/WithPagination';
+import isEmpty from '../../utils/isEmpty';
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-array-index-key  */
 
-let base_url = window.base_url
-  ? window.base_url
-  : "https://fieldsight.naxa.com.np";
+// let base_url = window.base_url
+//   ? window.base_url
+//   : "https://fieldsight.naxa.com.np";
 
 class RegionalSiteTable extends Component {
   componentDidMount() {
     this.props.paginationHandler(1, null, {
-      type: "regionSite",
-      projectId: this.props.regionId
+      type: 'regionSite',
+      projectId: this.props.regionId,
     });
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.regionId != this.props.regionId) {
+    if (prevProps.regionId !== this.props.regionId) {
       this.props.paginationHandler(1, null, {
-        type: "regionSite",
-        projectId: this.props.regionId
+        type: 'regionSite',
+        projectId: this.props.regionId,
       });
     }
   }
@@ -31,18 +34,29 @@ class RegionalSiteTable extends Component {
     const searchValue = e.target.value;
     this.props.searchHandler(
       searchValue,
-      `fv3/api/regional-sites/?page=1&region=${
-        this.props.regionId
-      }&q=${searchValue}`,
+      `fv3/api/regional-sites/?page=1&region=${this.props.regionId}&q=${searchValue}`,
       {
-        type: "regionSite",
-        projectId: this.props.regionId
-      }
+        type: 'regionSite',
+        projectId: this.props.regionId,
+      },
     );
   };
 
   render() {
-    
+    const {
+      OpenTabHandler,
+      projectId,
+      regionId,
+      dLoader,
+      siteList,
+      fromData,
+      toData,
+      totalCount,
+      pageNum,
+      paginationHandler,
+      renderPageNumbers,
+    } = this.props;
+
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
@@ -65,24 +79,22 @@ class RegionalSiteTable extends Component {
               </div>
             </form>
             <button
+              type="button"
               className="fieldsight-btn"
-              onClick={e =>
-                this.props.OpenTabHandler(
+              onClick={e => {
+                OpenTabHandler(
                   e,
-                  "/fieldsight/application/#/regional-site-add/" +
-                    this.props.projectId +
-                    "/" +
-                    this.props.regionId +
-                    "/"
-                )
-              }
+                  `/fieldsight/application/#/regional-site-add/
+                    ${projectId}/${regionId}/`,
+                );
+              }}
             >
               <i className="la la-plus" />
             </button>
           </div>
         </div>
         <div className="card-body">
-          <div style={{ position: "relative", height: "800px" }}>
+          <div style={{ position: 'relative', height: '800px' }}>
             <PerfectScrollbar>
               <Table
                 responsive="xl"
@@ -91,28 +103,62 @@ class RegionalSiteTable extends Component {
                 <thead>
                   <tr>
                     <th>
-                    {!isEmpty(this.props.terms) ? `${this.props.terms.site} name` : "Site name"}
-                     
+                      {!isEmpty(this.props.terms) ? (
+                        `${this.props.terms.site} name`
+                      ) : (
+                        <FormattedMessage
+                          id="app.site-name"
+                          defaultMessage="Site name"
+                        />
+                      )}
                     </th>
-                    <th>identifier</th>
-                    <th>Address</th>
-                    <th>type</th>
-                    <th>Progress</th>
-                    <th>Submissions</th>
-                    <th>Latest status</th>
+                    <th>
+                      <FormattedMessage
+                        id="app.identifier"
+                        defaultMessage="Identifier"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.address"
+                        defaultMessage="Address"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.type"
+                        defaultMessage="Type"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.progress"
+                        defaultMessage="Progress"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.submissions"
+                        defaultMessage="Submissions"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.latest-status"
+                        defaultMessage="Latest status"
+                      />
+                    </th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {!this.props.dLoader &&
-                    this.props.siteList.map((item, i) => (
+                  {!dLoader &&
+                    siteList.map((item, i) => (
                       <tr key={i}>
                         <td>
                           <a
-                            href={
-                              "/fieldsight/application/#/site-dashboard/" +
-                              item.id
-                            }
+                            href={`/fieldsight/application/#/site-dashboard/
+                              ${item.id}`}
                             className="pending table-profile"
                           >
                             <figure>
@@ -125,7 +171,11 @@ class RegionalSiteTable extends Component {
 
                         <td>{item.address}</td>
                         <td>
-                          <a href="#" className="pending">
+                          <a
+                            tabIndex="0"
+                            role="button"
+                            className="pending"
+                          >
                             {item.type}
                           </a>
                         </td>
@@ -137,10 +187,10 @@ class RegionalSiteTable extends Component {
                               aria-valuenow="40"
                               aria-valuemin="0"
                               aria-valuemax="200"
-                              style={{ width: item.progress + "%" }}
+                              style={{ width: `${item.progress} %` }}
                             >
                               <span className="progress-count">
-                                {item.progress + "%"}
+                                {`${item.progress} %`}
                               </span>
                             </div>
                           </div>
@@ -149,68 +199,92 @@ class RegionalSiteTable extends Component {
                         <td>
                           <a
                             className={
-                              item.status != null
+                              item.status !== null
                                 ? item.status.toLowerCase()
                                 : null
                             }
                           >
-                            {item.status != null
+                            {item.status !== null
                               ? item.status
-                              : "No Submission Yet"}
+                              : 'No Submission Yet'}
                           </a>
                         </td>
                       </tr>
                     ))}
                 </tbody>
               </Table>
-              {this.props.dLoader && <TableContentLoader column={7} row={20} />}
+              {dLoader && <TableContentLoader column={7} row={20} />}
             </PerfectScrollbar>
           </div>
           <div className="table-footer">
             <div className="showing-rows">
               <p>
-                Showing <span>{this.props.fromData}</span> to{" "}
+                <FormattedMessage
+                  id="app.showing"
+                  defaultMessage="Showing"
+                />
+                &nbsp;
+                <span>{fromData}</span>
+                &nbsp;
+                <FormattedMessage id="app.to" defaultMessage="to" />
+                &nbsp;
                 <span>
-                  {" "}
-                  {this.props.toData > this.props.totalCount
-                    ? this.props.totalCount
-                    : this.props.toData}{" "}
-                </span>{" "}
-                of <span>{this.props.totalCount}</span> entries.
+                  {toData > totalCount ? totalCount : toData}
+                </span>
+                &nbsp;
+                <FormattedMessage id="app.of" defaultMessage="of" />
+                &nbsp;
+                <span>{totalCount}</span>
+                &nbsp;
+                <FormattedMessage
+                  id="app.entries"
+                  defaultMessage="entries"
+                />
+                .
               </p>
             </div>
 
-            {this.props.toData < this.props.totalCount ? (
+            {toData < totalCount ? (
               <div className="table-pagination">
                 <ul>
                   <li className="page-item">
                     <a
-                      onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum - 1,
-                          null,
-                          this.props.regionId
-                        )
-                      }
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
+                        paginationHandler(pageNum - 1, null, {
+                          projectId: regionId,
+                        });
+                      }}
+                      onClick={() => {
+                        paginationHandler(pageNum - 1, null, {
+                          projectId: regionId,
+                        });
+                      }}
                     >
                       <i className="la la-long-arrow-left" />
                     </a>
                   </li>
 
-                  {this.props.renderPageNumbers({
-                    type: "regionSite",
-                    projectId: this.props.regionId
+                  {renderPageNumbers({
+                    type: 'regionSite',
+                    projectId: regionId,
                   })}
 
                   <li className="page-item ">
                     <a
-                      onClick={e =>
-                        this.props.paginationHandler(
-                          this.props.pageNum + 1,
-                          null,
-                          this.props.regionId
-                        )
-                      }
+                      tabIndex="0"
+                      role="button"
+                      onKeyDown={() => {
+                        paginationHandler(pageNum + 1, null, {
+                          projectId: regionId,
+                        });
+                      }}
+                      onClick={() => {
+                        paginationHandler(pageNum + 1, null, {
+                          projectId: regionId,
+                        });
+                      }}
                     >
                       <i className="la la-long-arrow-right" />
                     </a>

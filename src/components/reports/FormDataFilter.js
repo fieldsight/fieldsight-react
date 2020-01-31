@@ -1,0 +1,401 @@
+import React, { Component } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { Dropdown } from 'react-bootstrap';
+import format from 'date-fns/format';
+// import CustomCheckBox from './CustomCheckbox';
+import CollapseFilterTable from './CollapseFilterTable';
+import FilterByDate from './common/filterByDate';
+import FilterByData from './common/filterByData';
+import { errorToast, successToast } from '../../utils/toastHandler';
+
+/* eslint-disable */
+
+export default class FormDataFilter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selected: [],
+      open: false,
+      siteOpen: false,
+      siteSelected: [],
+      applyButton: false,
+      projectRegions: [{ id: 'all_regions', name: 'Select All' }],
+      siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
+      startedDate: '',
+      endedDate: new Date(),
+      showPreview: false,
+    };
+  }
+
+  componentDidMount() {
+    const {
+      match: {
+        params: { id },
+      },
+      location: {
+        state: { projectCreatedOn },
+      },
+    } = this.props;
+    const { projectRegions, siteType } = this.state;
+
+    const siteTypeApi = `/fieldsight/api/site-types/${id}/`;
+    const projectRegionsApi = `/fieldsight/api/project-regions/${id}/`;
+
+    const requestSiteType = axios.get(siteTypeApi);
+    const requestProjectRegions = axios.get(projectRegionsApi);
+
+    axios
+      .all([requestProjectRegions, requestSiteType])
+      .then(
+        axios.spread((...responses) => {
+          const regions = [...projectRegions, ...responses[0].data];
+          const sites = [...siteType, ...responses[1].data];
+          this.setState({
+            projectRegions: regions,
+            selected: regions.map(each => {
+              return { id: each.id };
+            }),
+            siteType: sites,
+            siteSelected: sites.map(each => {
+              return { id: each.id };
+            }),
+          });
+        }),
+      )
+      .catch(() => {
+        // react on errors.
+      });
+
+    this.setState({
+      startedDate: new Date(projectCreatedOn),
+    });
+  }
+
+  changeHandlers = (e, info) => {
+    const { checked } = e.target;
+    const { id } = info;
+    const { projectRegions } = this.state;
+    this.setState(prevState => {
+      if (checked) {
+        if (id === 'all_regions') {
+          const allId = projectRegions.map(each => {
+            return { id: each.id };
+          });
+          return {
+            selected: allId,
+          };
+        }
+        return {
+          selected: [...prevState.selected, { id }],
+        };
+      }
+      if (!checked) {
+        if (id === 'all_regions') {
+          return {
+            selected: [],
+          };
+        }
+        return {
+          selected: prevState.selected.filter(
+            region => region.id !== id && region.id !== 'all_regions',
+          ),
+        };
+      }
+      return null;
+    });
+  };
+
+  siteHandler = (e, info) => {
+    const { checked } = e.target;
+    const { id } = info;
+    const { siteType } = this.state;
+
+    this.setState(prevState => {
+      if (checked) {
+        if (id === 'all_sitetypes') {
+          const allId = siteType.map(each => {
+            return { id: each.id };
+          });
+          return {
+            siteSelected: allId,
+          };
+        }
+        return {
+          siteSelected: [...prevState.siteSelected, { id }],
+        };
+      }
+      if (!checked) {
+        if (id === 'all_sitetypes') {
+          return {
+            siteSelected: [],
+          };
+        }
+        return {
+          siteSelected: prevState.siteSelected.filter(
+            site => site.id !== id && site.id !== 'all_sitetypes',
+          ),
+        };
+      }
+      return null;
+    });
+  };
+
+  handleToggleClass = () => {
+    this.setState(prevState => ({
+      open: !prevState.open,
+    }));
+  };
+
+  SiteToggleClass = () => {
+    this.setState(prevState => ({
+      siteOpen: !prevState.siteOpen,
+    }));
+  };
+
+  toUpper = str => {
+    return str
+      .toLowerCase()
+      .split(' ')
+      .map(function(word) {
+        return word[0].toLowerCase() + word.substr(1);
+      })
+      .join('_');
+  };
+
+  handleApply = () => {
+    const {
+      match: {
+        params: { id, fid },
+      },
+    } = this.props;
+    // debugger;
+    const region = this.state.selected.map(reg => reg.id);
+    const site = this.state.siteSelected.map(reg => reg.id);
+    const startDate = format(this.state.startedDate, ['YYYY-MM-DD']);
+    const endDate = format(this.state.endedDate, ['YYYY-MM-DD']);
+    const data = {
+      siteTypes: region,
+      regions: site,
+      fs_ids: [this.props.location.state.fromDashboard],
+      start_date: startDate,
+      end_date: endDate,
+    };
+
+    axios
+      .post(
+        `/v4/api/reporting/generate-standard-reports/${id}/?report_type=form`,
+        data,
+      )
+      .then(req => {
+        if (req.status === 200) {
+          successToast(req.data.detail);
+          // this.props.history.push(`/view-report/${id}/${fid}`);
+          this.setState({
+            selected: [],
+            siteType: [],
+            showPreview: true,
+          });
+        }
+      })
+      .catch(err => {
+        const error = err.response.data;
+        Object.entries(error).map(([key, value]) => {
+          return errorToast(`${value}`);
+        });
+      });
+  };
+
+  onChangeHandler = date => {
+    const { endedDate } = this.state;
+    this.setState(() => {
+      if (endedDate && date > endedDate) {
+        return {
+          endedDate: date,
+        };
+      }
+      return {
+        startedDate: date,
+      };
+    });
+  };
+
+  onEndChangeHandler = date => {
+    const { startedDate } = this.state;
+    this.setState(() => {
+      if (date < startedDate) {
+        return {
+          startedDate: date,
+        };
+      }
+      return {
+        endedDate: date,
+      };
+    });
+  };
+
+  render() {
+    const {
+      state: {
+        selected,
+        open,
+        siteOpen,
+        applyButton,
+        projectRegions,
+        siteType,
+        siteSelected,
+        startedDate,
+        endedDate,
+        showPreview,
+      },
+    } = this;
+    const DataCrude = [
+      {
+        id: '1',
+        title: 'Edit',
+        link: '#',
+      },
+      {
+        id: '2',
+        title: 'Add to templates',
+        link: '#',
+      },
+      {
+        id: '3',
+        title: 'Share',
+        link: '#',
+      },
+      {
+        id: '4',
+        title: 'Delete',
+        link: '#',
+      },
+    ];
+    const {
+      match: {
+        params: { id, fid },
+      },
+      location: {
+        state: { projectCreatedOn },
+      },
+    } = this.props;
+    return (
+      <>
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to={`/project-dashboard/${id}/report`}>
+                Report
+              </Link>
+            </li>
+            <li className="breadcrumb-item">Export Data</li>
+          </ol>
+        </nav>
+        <div className="reports mrb-30">
+          <div className="card">
+            <div className="card-body">
+              <div className="standard-tempalte">
+                <h3 className="mb-3">Template report</h3>
+
+                <div className="report-list">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="report-content">
+                        <h4>Export Data</h4>
+                        <p>
+                          Export of forms data and site information an
+                          Excel File, generated with filters in
+                          region, types and time range.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* <div className="dropdown report-option">
+                    <Dropdown drop="left">
+                      <Dropdown.Toggle
+                        variant=""
+                        id="dropdown-Data"
+                        className="dropdown-toggle common-button no-border is-icon"
+                      >
+                        <i className="material-icons">more_vert</i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                        {DataCrude.map(item => (
+                          <Dropdown.Item
+                            href={item.link}
+                            key={item.id}
+                            target="_blank"
+                          >
+                            {item.title}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div> */}
+                </div>
+                <div className="data-filter mt-3">
+                  <h3 className="mb-3">Filters</h3>
+                  <form>
+                    <div className="row">
+                      <div className="col-lg-3 col-md-6">
+                        <FilterByData
+                          className="form-group"
+                          label="site types"
+                          toggleSelectClass={siteOpen}
+                          handleToggleClass={this.SiteToggleClass}
+                          data={siteType}
+                          changeHandler={this.siteHandler}
+                          selectedArr={siteSelected}
+                          placeholderTxt="Select Site Type"
+                        />
+                      </div>
+                      <div className="col-lg-3 col-md-6">
+                        <FilterByData
+                          className="form-group"
+                          label="Regions"
+                          toggleSelectClass={open}
+                          handleToggleClass={this.handleToggleClass}
+                          data={projectRegions}
+                          changeHandler={this.changeHandlers}
+                          selectedArr={selected}
+                          placeholderTxt="Select Region Type"
+                        />
+                      </div>
+
+                      <div className="col-lg-6 col-md-6">
+                        <FilterByDate
+                          className="form-group icon-between"
+                          startDate={startedDate && startedDate}
+                          endDate={endedDate}
+                          startDateHandler={this.onChangeHandler}
+                          endDateHandler={this.onEndChangeHandler}
+                          createdDate={new Date(projectCreatedOn)}
+                          tillDate={new Date()}
+                        />
+                      </div>
+
+                      <div className="col-md-12">
+                        <button
+                          // disabled
+                          type="button"
+                          className="common-button mt-3 is-bg"
+                          onClick={this.handleApply}
+                        >
+                          Apply
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  {applyButton && <CollapseFilterTable />}
+                </div>
+              </div>
+              {showPreview && (
+                <CollapseFilterTable id={fid} type="standard" />
+              )}
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+}

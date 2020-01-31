@@ -6,81 +6,89 @@ Description: Dashboard for Field Sight
 Version: 1.01
 */
 
- @import url('https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i');
 
- *,
- ::after,
- ::before {
+*,
+::after,
+::before {
     -webkit-box-sizing: border-box !important;
     -moz-box-sizing: border-box !important;
     box-sizing: border-box !important;
- }
- 
- html {
+}
+
+html {
     font-family: $ubuntu;
-     -webkit-text-size-adjust: 100%;
-     -webkit-tap-highlight-color: transparent
- }
- 
- article,
- aside,
- figcaption,
- figure,
- footer,
- header,
- hgroup,
- main,
- nav,
- section {
-     display: block
- }
- 
- body {
-     margin: 0;
-     font-family: $ubuntu !important;
-     font-size: 0.8125rem;
-     font-weight: 400 !important;
-     line-height: 1.2rem;
-     color: $color-primary;
-     letter-spacing: 0.5px;
-     text-align: left;
-     background-color: $color-bg;
- }
- 
- h1,
- h2,
- h3,
- h4,
- h5,
- h6 {
-     margin-top: 0;
-     margin-bottom: .5rem;
-     font-family:$ubuntu !important;
-     font-weight: 500;
-     line-height: 1.2rem !important;
- }
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent
+}
+
+article,
+aside,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section {
+    display: block
+}
+
+body {
+    margin: 0;
+    font-family: $ubuntu !important;
+    font-size: 0.8125rem;
+    font-weight: 400 !important;
+    line-height: 1.2rem;
+    color: $color-primary;
+    letter-spacing: 0.5px;
+    text-align: left;
+    background-color: $color-bg;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 0;
+    margin-bottom: .5rem;
+    font-family: $ubuntu !important;
+    font-weight: 500;
+    line-height: 1.2rem !important;
+}
 
 
- a {
-     color: $color-primary;
-     text-decoration: none;
-     background-color: transparent;
-     @include animate_all(all 0.5s);
-     cursor:pointer;
-     font-family:$ubuntu !important;
- }
- 
- a:hover {
-     color: $color-primary;
-     text-decoration: none;
- }
- img{
-     max-width: 100%;
-     height: auto;
- }
- ul{
-     margin:0;
-     padding:0;
-     list-style: none;
- }
- 
+a {
+    color: $color-primary;
+    text-decoration: none;
+    background-color: transparent;
+    @include animate_all(all 0.5s);
+    cursor: pointer;
+    font-family: $ubuntu !important;
+}
+
+a[role="button"] {
+    &:focus {
+        -webkit-outline: none;
+        outline: none;
+    }
+}
+
+a:hover {
+    color: $color-primary;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}

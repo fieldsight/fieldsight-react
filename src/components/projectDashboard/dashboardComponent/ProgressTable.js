@@ -1,9 +1,9 @@
-import React, { Fragment } from "react";
-import Table from "react-bootstrap/Table";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import { DotLoader } from "../../myForm/Loader";
-import { BlockContentLoader } from "../../common/Loader";
+import React, { Fragment } from 'react';
+import Table from 'react-bootstrap/Table';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { FormattedMessage } from 'react-intl';
+import { BlockContentLoader } from '../../common/Loader';
 
 const ShowRow = ({ name }) => (
   <tr>
@@ -17,6 +17,7 @@ const ShowRow = ({ name }) => (
     <td />
   </tr>
 );
+
 const ShowContentRow = ({
   sn,
   id,
@@ -26,12 +27,12 @@ const ShowContentRow = ({
   approved,
   flagged,
   rejected,
-  formUrl
+  formUrl,
 }) => {
   const totalSubmissions = pending + approved + flagged + rejected;
   return (
     <tr
-      className={id ? "sub-row" : "heading-row"}
+      className={id ? 'sub-row' : 'heading-row'}
       key={id ? `row_${name}_${sn}_${id}` : `row_${name}_${sn}`}
     >
       <td>{id ? `${sn}.${id}` : sn}</td>
@@ -46,23 +47,23 @@ const ShowContentRow = ({
             aria-valuemin="0"
             aria-valuemax="200"
             style={{
-              width: progress + "%"
+              width: `${progress} %`,
             }}
           >
-            <span className="progress-counts">{progress}%</span>
+            <span className="progress-counts">{`${progress}%`}</span>
           </div>
         </div>
       </td>
       <td>
         {formUrl ? (
           <a className="pending table-profile" href={formUrl}>
-            <i className="la la-eye"></i>
+            <i className="la la-eye" />
 
-            {totalSubmissions == 0
-              ? "No Submission"
+            {totalSubmissions === 0
+              ? 'No Submission'
               : totalSubmissions > 1
-              ? totalSubmissions + " Submissions"
-              : totalSubmissions + " Submission "}
+              ? `${totalSubmissions} Submissions`
+              : `${totalSubmissions} Submission`}
           </a>
         ) : (
           {}
@@ -84,52 +85,50 @@ const ShowContentRow = ({
   );
 };
 
-const CheckCase = ({ sub, sn }) => {
-  // if (sub.name) {
-  return (
-    <Fragment key={`stage_${sn}`}>
-      <tr className="heading-row">
-        <td>{sn}</td>
-        <td>{sub.name}</td>
-        <td />
-        <td />
-        <td />
-        <td />
-        <td />
-        <td />
-      </tr>
-      {sub.sub_stages &&
-        sub.sub_stages.length > 0 &&
-        sub.sub_stages.map((item, key) => {
-          return (
-            <ShowContentRow
-              sn={sn}
-              id={key + 1}
-              name={item.form_name}
-              progress={item.progress}
-              pending={item.pending}
-              approved={item.approved}
-              flagged={item.flagged}
-              rejected={item.rejected}
-              formUrl={item.form_url}
-            />
-          );
-        })}
-    </Fragment>
-  );
-  // }
-};
-class ProgressTable extends React.Component {
+const CheckCase = ({ sub, sn }) => (
+  <Fragment key={`sub_${sn}`}>
+    <tr className="heading-row">
+      <td>{sn}</td>
+      <td>{sub.name}</td>
+      <td />
+      <td />
+      <td />
+      <td />
+      <td />
+      <td />
+    </tr>
+    {sub.sub_stages &&
+      sub.sub_stages.length > 0 &&
+      sub.sub_stages.map((item, key) => {
+        return (
+          <ShowContentRow
+            sn={sn}
+            id={key + 1}
+            name={item.form_name}
+            progress={item.progress}
+            pending={item.pending}
+            approved={item.approved}
+            flagged={item.flagged}
+            rejected={item.rejected}
+            formUrl={item.form_url}
+          />
+        );
+      })}
+  </Fragment>
+);
+
+class ProgressTable extends React.PureComponent {
   render() {
     const { data, loader } = this.props;
     const sn = 1;
+
     return (
       <>
         {loader ? (
           <BlockContentLoader number={10} height="25px" />
         ) : (
           <div className="card-body">
-            <div style={{ position: "relative", height: "400px" }}>
+            <div style={{ position: 'relative', height: '400px' }}>
               <PerfectScrollbar>
                 <Table
                   responsive="xl"
@@ -137,19 +136,59 @@ class ProgressTable extends React.Component {
                 >
                   <thead>
                     <tr>
-                      <th>SN</th>
-                      <th>Name</th>
-                      <th>Progress</th>
-                      <th>View Submissions</th>
-                      <th>Pending</th>
-                      <th>Approved</th>
-                      <th>Flagged</th>
-                      <th>Rejected</th>
+                      <th>
+                        <FormattedMessage
+                          id="app.sn"
+                          defaultMessage="SN"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.name"
+                          defaultMessage="Name"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.progress"
+                          defaultMessage="Progress"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.view-submission"
+                          defaultMessage="View Submissions"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.pending"
+                          defaultMessage="Pending"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.approved"
+                          defaultMessage="Approved"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.flagged"
+                          defaultMessage="Flagged"
+                        />
+                      </th>
+                      <th>
+                        <FormattedMessage
+                          id="app.rejected"
+                          defaultMessage="Rejected"
+                        />
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {Object.keys(!!data.generals && data.generals).length >
-                      0 && <ShowRow name="General Forms" />}
+                    {Object.keys(!!data.generals && data.generals)
+                      .length > 0 && <ShowRow name="General Forms" />}
                     {!!data.generals &&
                       data.generals.map((general, id) => (
                         <ShowContentRow
@@ -163,28 +202,35 @@ class ProgressTable extends React.Component {
                           formUrl={general.form_url}
                         />
                       ))}
-                    {Object.keys(!!data.generals && data.generals).length >
-                      0 && <ShowRow />}
-                    {Object.keys(!!data.schedules && data.schedules).length >
-                      0 && <ShowRow name="Scheduled Forms" />}
+                    {Object.keys(!!data.generals && data.generals)
+                      .length > 0 && <ShowRow />}
+                    {Object.keys(!!data.schedules && data.schedules)
+                      .length > 0 && (
+                      <ShowRow name="Scheduled Forms" />
+                    )}
                     {!!data.schedules &&
                       data.schedules.map((schedule, id) => (
                         <ShowContentRow
                           sn={sn + id}
                           name={schedule.name}
-                          progress={schedule.progress_data[0].progress}
+                          progress={
+                            schedule.progress_data[0].progress
+                          }
                           pending={schedule.progress_data[0].pending}
-                          approved={schedule.progress_data[0].approved}
+                          approved={
+                            schedule.progress_data[0].approved
+                          }
                           flagged={schedule.progress_data[0].flagged}
-                          rejected={schedule.progress_data[0].rejected}
+                          rejected={
+                            schedule.progress_data[0].rejected
+                          }
                           formUrl={schedule.form_url}
                         />
                       ))}
-                    {Object.keys(!!data.schedules && data.schedules).length >
-                      0 && <ShowRow />}
-                    {Object.keys(!!data.stages && data.stages).length > 0 && (
-                      <ShowRow name="Staged Forms" />
-                    )}
+                    {Object.keys(!!data.schedules && data.schedules)
+                      .length > 0 && <ShowRow />}
+                    {Object.keys(!!data.stages && data.stages)
+                      .length > 0 && <ShowRow name="Staged Forms" />}
                     {!!data.stages &&
                       data.stages.map((sub, id) => {
                         return <CheckCase sub={sub} sn={sn + id} />;

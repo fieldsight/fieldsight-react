@@ -1,104 +1,121 @@
-import React, { Component } from "react";
-import { errorToast, successToast } from "../../utils/toastHandler";
-import SiteEditForm from "../common/siteEdit";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
+import SiteEditForm from '../common/siteEdit';
+import { errorToast, successToast } from '../../utils/toastHandler';
+/* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable  react/no-unused-state */
+/* eslint-disable no-return-assign */
+
 export default class SiteEdit extends Component {
   _isMounted = false;
-  state = {
-    project: {
-      name: "",
-      site_id: "",
-      phone: "",
-      address: "",
-      public_desc: "",
-      logo: "",
-      weight: "",
-      cluster_sites: false
-    },
-    loaded: 0,
-    jsondata: [],
-    position: {
-      latitude: "51.505",
-      longitude: "-0.09"
-    },
-    zoom: 13,
-    src: "",
-    showCropper: false,
-    cropResult: "",
-    isLoading: false,
-    selectedSiteTypes: "",
-    id: "",
-    selectform: [],
-    selectdata: false,
-    region: [],
-    data: [],
-    regionselected: "",
-    dataSelected: "",
-    id: "",
-    siteId: "",
-    regionalId: "",
-    site_types: [],
-    Selectedtypes: "",
-    project_info: [],
-    project_id: "",
-    show: false,
-    deleteConfirm: false,
-    breadcrumbs: {}
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      project: {
+        name: '',
+        site_id: '',
+        phone: '',
+        address: '',
+        public_desc: '',
+        logo: '',
+        weight: '',
+        cluster_sites: false,
+      },
+      // loaded: 0,
+      jsondata: [],
+      position: {
+        latitude: '51.505',
+        longitude: '-0.09',
+      },
+      zoom: 13,
+      src: '',
+      showCropper: false,
+      cropResult: '',
+      // isLoading: false,
+      // selectedSiteTypes: '',
+      id: '',
+      // selectform: [],
+      // selectdata: false,
+      region: [{ id: null, name: '----' }],
+      data: [],
+      regionselected: '',
+      // dataSelected: '',
+      // siteId: '',
+      // regionalId: '',
+      site_types: [{ id: null, name: '----' }],
+      Selectedtypes: '',
+      // project_info: [],
+      project_id: '',
+      show: false,
+      deleteConfirm: false,
+      // select: [],
+      delete_perm: '',
+      breadcrumbs: {},
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
     const {
       match: {
-        params: { id, siteId, regionalId }
-      }
+        params: { id, siteId, regionalId },
+      },
     } = this.props;
     const urls = [
       `/fv3/api/site-form/${id}/`,
-      `/fv3/api/site-forms-breadcrumbs/?site=${id}&type=edit`
+      `/fv3/api/site-forms-breadcrumbs/?site=${id}&type=edit`,
     ];
 
     axios
       .all(
-        urls.map((url, i) => {
+        urls.map(url => {
           return axios.get(url);
-        })
+        }),
       )
       .then(
         axios.spread((siteForm, breadcrumbRes) => {
-          // console.log("res", siteForm, breadcrumbRes);
-
           if (this._isMounted) {
             if (siteForm && breadcrumbRes) {
               axios
-                .get(`/fv3/api/site-form/?project=${siteForm.data.project}`)
+                .get(
+                  `/fv3/api/site-form/?project=${siteForm.data.project}`,
+                )
                 .then(res => {
-                  let regionArr = this.state.region;
-                  let typeArr = this.state.site_types;
+                  const regionArr = this.state.region;
+                  const typeArr = this.state.site_types;
                   const position =
-                    siteForm.data.location !== "None"
+                    siteForm.data.location !== 'None'
                       ? siteForm.data.location &&
-                        siteForm.data.location.split(" ")
-                      : "";
-                  const longitude = position && position[1].split("(")[1];
-                  const latitude = position && position[2].split(")")[0];
+                        siteForm.data.location.split(' ')
+                      : '';
+                  const longitude =
+                    position && position[1].split('(')[1];
+                  const latitude =
+                    position && position[2].split(')')[0];
 
-                  this.setState(state => {
-                    res.data.regions !== undefined &&
-                      res.data.regions.map(each => regionArr.push(each));
-                    res.data.site_types.map(each => typeArr.push(each));
+                  this.setState(() => {
+                    if (res.data.regions !== undefined) {
+                      res.data.regions.map(each =>
+                        regionArr.push(each),
+                      );
+                    }
+                    if (res.data.site_types !== undefined) {
+                      res.data.site_types.map(each =>
+                        typeArr.push(each),
+                      );
+                    }
                     return {
                       delete_perm: siteForm.data.delete_perm,
                       project_id: siteForm.data.project,
                       jsondata: res.data.json_questions,
                       id,
-                      region:
-                        res.data.regions !== undefined || "" ? regionArr : [],
+                      region: regionArr,
                       siteId,
                       regionalId,
-                      site_types:
-                        res.data.site_types !== undefined || "" ? typeArr : [],
-                      data: siteForm.data,
+                      site_types: typeArr,
+                      // data: siteForm.data,
                       project: {
                         name: siteForm.data.name,
                         site_id: siteForm.data.identifier,
@@ -107,82 +124,92 @@ export default class SiteEdit extends Component {
                         public_desc: siteForm.data.public_desc,
                         logo: siteForm.data.logo,
                         weight: siteForm.data.weight,
-                        cluster_sites: siteForm.data.enable_subsites
+                        cluster_sites: siteForm.data.enable_subsites,
                       },
                       regionselected: siteForm.data.region,
                       Selectedtypes: siteForm.data.type,
-                      data: siteForm.data.site_meta_attributes_answers,
+                      data:
+                        siteForm.data.site_meta_attributes_answers,
                       cropResult: siteForm.data.logo,
                       position: {
                         longitude,
-                        latitude
+                        latitude,
                       },
-                      breadcrumbs: breadcrumbRes.data
+                      breadcrumbs: breadcrumbRes.data,
                     };
                   });
                 })
-                .catch(err => {
-                  console.log(err, "err");
+                .catch(() => {
+                  // console.log(err, 'err');
                 });
             }
           }
-        })
+        }),
       )
-      .catch(err => {
-        console.log(err, "err");
+      .catch(() => {
+        // console.log(err, 'err');
       });
   }
+
   onChangeHandler = (e, position) => {
     const { name, value } = e.target;
     if (position) {
-      return this.setState({
+      return this.setState(state => ({
         position: {
-          ...this.state.position,
-          [name]: value
-        }
-      });
+          ...state.position,
+          [name]: value,
+        },
+      }));
     }
 
-    this.setState({
+    return this.setState(state => ({
       project: {
-        ...this.state.project,
-        [name]: value
-      }
-    });
+        ...state.project,
+        [name]: value,
+      },
+    }));
   };
-  onSubmitHandler = e => {
-    e.preventDefault();
+
+  onSubmitHandler = () => {
     const {
       match: {
-        params: { id }
-      }
+        params: { id },
+      },
     } = this.props;
-    let data = {
-      project: this.state.project_id,
-      name: this.state.project.name,
-      identifier: this.state.project.site_id,
-      phone: this.state.project.phone,
-      address: this.state.project.address,
-      public_desc: this.state.project.public_desc,
-      latitude: this.state.position.latitude,
-      longitude: this.state.position.longitude,
-      ...(!!this.state.project.weight && { weight: this.state.project.weight }),
-      region: this.state.regionselected,
-      type: this.state.Selectedtypes,
-      enable_subsites: this.state.project.cluster_sites,
-      ...(this.state.show && { logo: this.state.cropResult }),
-      site_meta_attributes_ans: JSON.stringify(this.state.data)
+
+    const {
+      project_id,
+      position,
+      project,
+      regionselected,
+      Selectedtypes,
+      cropResult,
+      show,
+      data,
+    } = this.state;
+
+    const body = {
+      project: project_id,
+      name: project.name,
+      identifier: project.site_id,
+      phone: project.phone,
+      address: project.address,
+      public_desc: project.public_desc,
+      latitude: position.latitude,
+      longitude: position.longitude,
+      ...(!!project.weight && { weight: project.weight }),
+      region: regionselected === '----' ? null : regionselected,
+      type: Selectedtypes === '----' ? null : Selectedtypes,
+      enable_subsites: project.cluster_sites,
+      ...(show && { logo: cropResult }),
+      site_meta_attributes_ans: JSON.stringify(data),
     };
 
-    axios({
-      method: "PUT",
-      url: `/fv3/api/site-form/${id}/`,
-      data,
-      headers: { "content-type": "application/json" }
-    })
+    axios
+      .put(`/fv3/api/site-form/${id}/`, body)
       .then(res => {
         if (res.status === 200) {
-          successToast("Site", "updated");
+          successToast('Site', 'updated');
           this.props.history.push(`/site-dashboard/${res.data.id}`);
         }
       })
@@ -193,94 +220,104 @@ export default class SiteEdit extends Component {
         });
       });
   };
+
   mapClickHandler = e => {
-    this.setState({
+    this.setState(state => ({
       position: {
-        ...this.state.position,
+        ...state.position,
         latitude: e.latlng.lat,
-        longitude: e.latlng.lng
-      }
-    });
+        longitude: e.latlng.lng,
+      },
+    }));
   };
+
   onSelectChangeHandler = (e, data) => {
     const { value } = e.target;
-    if (data === "regions") {
+    if (data === 'regions') {
       this.setState({
-        regionselected: value
+        regionselected: value,
       });
-    } else if (data === "site_types") {
+    } else if (data === 'site_types') {
       this.setState({
-        Selectedtypes: value
+        Selectedtypes: value,
       });
     }
   };
+
   readFile = file => {
     const reader = new FileReader();
     reader.onload = () => {
       this.setState({
         src: reader.result,
         showCropper: true,
-        show: true
+        show: true,
       });
     };
     reader.readAsDataURL(file[0]);
   };
 
   handleCheckboxChange = e => {
-    this.setState({
+    this.setState(state => ({
       project: {
-        ...this.state.project,
-        cluster_sites: e.target.checked
-      }
-    });
+        ...state.project,
+        cluster_sites: e.target.checked,
+      },
+    }));
   };
+
   closeModal = () => {
     this.setState({
-      showCropper: false
+      showCropper: false,
     });
   };
+
   cropImage = image => {
     this.setState({
       cropResult: image,
       showCropper: false,
-      src: ""
+      src: '',
     });
   };
+
   ondynamiChangeHandler = e => {
     const {
-      target: { name, value }
+      target: { name, value },
     } = e;
-    this.setState({
+
+    this.setState(prestate => ({
       data: {
-        ...this.state.data,
-        [name]: value
-      }
-    });
+        ...prestate.data,
+        [name]: value,
+      },
+    }));
   };
+
   handleDelete = () => {
     this.setState({
-      deleteConfirm: true
+      deleteConfirm: true,
     });
   };
+
   deleteClose = () => {
     this.setState({
-      deleteConfirm: false
+      deleteConfirm: false,
     });
   };
+
   deleteFile = () => {
     axios
       .delete(`/fv3/api/site-form/${this.state.id}/`)
       .then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.setState({
-            deleteConfirm: false
+            deleteConfirm: false,
           });
           history.pushState(
             {
-              urlPath: `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`
+              urlPath: `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`,
             },
-            "",
-            `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`
+            '',
+            `/fieldsight/application/?project=${this.state.project_id}#/project-sitelist`,
           );
           history.go();
           // this.props.history.push(
@@ -289,10 +326,34 @@ export default class SiteEdit extends Component {
           // );
         }
       })
-      .catch();
+      .catch(() => {
+        // console.log(err);
+      });
   };
+
+  selectedValue = (value, name1) => {
+    const dataArr = Object.keys(this.state.data).filter(Boolean);
+    const obj = {};
+    dataArr.forEach(
+      objKey => (obj[objKey] = this.state.data[objKey]),
+    );
+    this.setState({
+      data: {
+        ...obj,
+        [name1]: value,
+      },
+    });
+  };
+
   render() {
-    const { breadcrumbs, delete_perm } = this.state;
+    const {
+      breadcrumbs,
+      delete_perm,
+      src,
+      data,
+      jsondata,
+      cropResult,
+    } = this.state;
 
     return (
       <>
@@ -302,7 +363,9 @@ export default class SiteEdit extends Component {
               <li className="breadcrumb-item">
                 <a href={breadcrumbs.name_url}>{breadcrumbs.name}</a>
               </li>
-              <li className="breadcrumb-item">{breadcrumbs.current_page}</li>
+              <li className="breadcrumb-item">
+                {breadcrumbs.current_page}
+              </li>
             </ol>
           )}
         </nav>
@@ -315,12 +378,12 @@ export default class SiteEdit extends Component {
           readFile={this.readFile}
           closeModal={this.closeModal}
           handleCheckboxChange={this.handleCheckboxChange}
-          zoom={13}
-          src={this.state.src}
-          project_info={this.state.data}
-          jsondata={this.state.jsondata}
+          zoom={this.state.zoom}
+          src={src}
+          project_info={data}
+          jsondata={jsondata}
           cropImage={this.cropImage}
-          cropResult={this.state.cropResult}
+          cropResult={cropResult}
           ondynamiChangeHandler={this.ondynamiChangeHandler}
           handleDelete={this.handleDelete}
           deleteClose={this.deleteClose}
