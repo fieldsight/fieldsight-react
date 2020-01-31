@@ -31,7 +31,6 @@ class LayersTab extends Component {
                     type="radio"
                     name="radioYes"
                     defaultValue="layers"
-                    defaultChecked
                     onClick={() => {
                       changeLayersTab('main_layers');
                     }}
@@ -46,6 +45,7 @@ class LayersTab extends Component {
                     type="radio"
                     name="radioYes"
                     defaultValue="baselayers"
+                    defaultChecked
                     onClick={() => {
                       changeLayersTab('base_layers');
                     }}
@@ -65,7 +65,7 @@ class LayersTab extends Component {
                 : { display: 'none' }
             }
           >
-            <div className="form-group">
+            {/* <div className="form-group">
               <div className="checkbox">
                 <label>
                   <input type="checkbox" name="radiobox" />
@@ -109,7 +109,7 @@ class LayersTab extends Component {
                   Charghare
                 </label>
               </div>
-            </div>
+            </div> */}
           </div>
           <div
             className="thumb-list mr-0 layers-list"

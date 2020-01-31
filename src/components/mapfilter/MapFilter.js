@@ -293,11 +293,17 @@ class MapFilter extends Component {
     }));
   };
 
-  refreshClick = () => {
-    // const map = this.mapRef.current.leafletElement;
-    // const featuregroup = this.groupRef.current.leafletElement;
-    // map.fitBounds(featuregroup.getBounds());
+  onClickClearBtn = () => {
     this.props.refreshGeojsonData();
+    this.setState({ colorBySelection: 'project' });
+    document.querySelectorAll('.to_reset_checkbox').forEach(el => {
+      const element = el;
+      element.checked = false;
+    });
+    document.querySelectorAll('input[type=radio]').forEach(el => {
+      const element = el;
+      element.checked = false;
+    });
   };
 
   handleRegionChange = e => {
@@ -457,9 +463,12 @@ class MapFilter extends Component {
       this.props.getSearchPrimaryGeojson({
         keyword: this.state.searchText,
       });
+      const mapref = this.markerRef.current.leafletElement;
+      const markerref = this.groupRef.current.leafletElement.getLayers();
+      mapref.openPopup();
+      console.log(mapref.openPopup());
+      console.log(markerref);
     }
-    const markerref = this.mapRef.current.leafletElement;
-    console.log(markerref);
   };
 
   SearchBy = e => {
@@ -661,6 +670,7 @@ class MapFilter extends Component {
                 handleProjectChange={this.handleProjectChange}
                 handleMetricsChange={this.handleMetricsChange}
                 handleBaseLayer={this.handleBaseLayer}
+                onClickClearBtn={this.onClickClearBtn}
               />
             </div>
             {/* </Scrollbars> */}

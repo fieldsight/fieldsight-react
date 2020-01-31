@@ -68,7 +68,11 @@ class MapComponent extends PureComponent {
     //   map.fitBounds(featuregroup.getBounds());
     // }
     // let mcg = null;
-    if (prevProps.colorBySelection !== colorBySelection) {
+    if (
+      prevProps.colorBySelection !== colorBySelection ||
+      (prevProps.clonePrimaryGeojson !== clonePrimaryGeojson &&
+        projectsRegionTypes)
+    ) {
       const allLayers = groupRef.current.leafletElement.getLayers();
 
       const formStatusColor = [
@@ -179,7 +183,6 @@ class MapComponent extends PureComponent {
 
       //   console.log(v, 'mcg');
       if (colorBySelection === 'progress') {
-        console.log('progress xiryo');
         clearProgressLegend();
         progressList.forEach((element, key) => {
           const Progress = (
@@ -197,7 +200,6 @@ class MapComponent extends PureComponent {
               <br />
             </>
           );
-          console.log(Progress, 'projkects');
 
           this.setState((prevState, props) => ({
             progressLegend: prevState.progressLegend.concat(Progress),
@@ -222,7 +224,6 @@ class MapComponent extends PureComponent {
               <br />
             </>
           );
-          console.log(Status, 'projkects');
 
           this.setState((prevState, props) => ({
             statusLegend: prevState.statusLegend.concat(Status),
@@ -270,7 +271,6 @@ class MapComponent extends PureComponent {
               <br />
             </>
           );
-          console.log(SiteType, 'projkects');
 
           this.setState((prevState, props) => ({
             sitetypeLegend: prevState.sitetypeLegend.concat(SiteType),
@@ -319,7 +319,6 @@ class MapComponent extends PureComponent {
               <br />
             </>
           );
-          console.log(Region, 'projkects');
 
           this.setState((prevState, props) => ({
             regionLegend: prevState.regionLegend.concat(Region),
@@ -334,7 +333,6 @@ class MapComponent extends PureComponent {
           // console.log(projectsList);
           // console.log(projectList.length);
           projectsList.forEach((element, key) => {
-            console.log(key, 'key');
             if (
               allLayers[type].options.attribution.project ===
               element.name
@@ -354,7 +352,6 @@ class MapComponent extends PureComponent {
                   <span>{element.name}</span>
                 </div>
               );
-              console.log(Projects, 'projkects');
               this.setState({ projectsLegend: Projects });
             }
           });
@@ -436,7 +433,6 @@ class MapComponent extends PureComponent {
           }
         }
         if (colorBySelection === 'site_type') {
-          console.log('site_type xiryo');
           // console.log(projectsList);
           // console.log(projectList.length);
           siteTypes.forEach((element, key) => {
@@ -458,7 +454,6 @@ class MapComponent extends PureComponent {
           });
         }
         if (colorBySelection === 'region') {
-          console.log('site_type xiryo');
           // console.log(projectsList);
           // console.log(projectList.length);
           regions.forEach((element, key) => {
@@ -595,7 +590,7 @@ class MapComponent extends PureComponent {
         >
           <div className="sidebar-wrapper">
             <div className="sidebar-title flex-between">
-              <h4 style={{ margin: '0 auto' }}>Legend</h4>
+              <h4>Legend</h4>
             </div>
           </div>
           <div
@@ -604,18 +599,17 @@ class MapComponent extends PureComponent {
             }}
             className="panel-header"
           >
-            <b>View Site By:</b>
-            <label
+            <b
               style={{
-                marginLeft: '20px',
-                textTransform: 'uppercase',
-                color: 'red',
+                margin: '0 auto',
+                textTransform: 'capitalize',
+                // color: 'red',
                 fontWeight: 200,
-                border: '2px solid',
+                // border: '2px solid',
               }}
             >
               {colorBySelection}
-            </label>
+            </b>
           </div>
           <div
             className="whole-content"

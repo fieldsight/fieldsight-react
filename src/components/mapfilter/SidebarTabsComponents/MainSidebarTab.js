@@ -8,7 +8,7 @@ class MainSidebarTab extends PureComponent {
     super(props);
     this.state = {
       activeTab: 'filters',
-      activeLayers: 'main_layers',
+      activeLayers: 'base_layers',
     };
   }
 
@@ -24,6 +24,7 @@ class MainSidebarTab extends PureComponent {
   render() {
     const {
       props: {
+        onClickClearBtn,
         projectsList,
         projectsRegionTypes,
         applyFilter,
@@ -149,10 +150,11 @@ class MainSidebarTab extends PureComponent {
         <div className="buttons flex-between">
           <button
             type="button"
+            onClick={onClickClearBtn}
             // role="button"
             className="fieldsight-btn border-btn"
           >
-            Cancel
+            Clear
           </button>
           <button
             type="button"

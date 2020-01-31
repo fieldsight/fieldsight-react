@@ -93,6 +93,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="0_0"
+                            className="to_reset_checkbox"
                             value="0_0"
                             onChange={handleProgressChange}
                           />
@@ -107,6 +108,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="1_20"
+                            className="to_reset_checkbox"
                             value="1_20"
                             onChange={handleProgressChange}
                           />
@@ -121,6 +123,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="21_40"
+                            className="to_reset_checkbox"
                             value="21_40"
                             onChange={handleProgressChange}
                           />
@@ -135,6 +138,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="41_60"
+                            className="to_reset_checkbox"
                             value="41_60"
                             onChange={handleProgressChange}
                           />
@@ -149,6 +153,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="61_80"
+                            className="to_reset_checkbox"
                             value="61_80"
                             onChange={handleProgressChange}
                           />
@@ -163,6 +168,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="81_100"
+                            className="to_reset_checkbox"
                             value="81_100"
                             onChange={handleProgressChange}
                           />
@@ -177,6 +183,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="100_100"
+                            className="to_reset_checkbox"
                             value="100_100"
                             onChange={handleProgressChange}
                           />
@@ -287,6 +294,7 @@ class FiltersTab extends Component {
                                 <input
                                   type="checkbox"
                                   name={data.name}
+                                  className="to_reset_checkbox"
                                   // checked={this.state.checkedItems.includes(
                                   //   data.name,
                                   // )}
@@ -332,6 +340,7 @@ class FiltersTab extends Component {
                                 <input
                                   type="checkbox"
                                   name={data.name}
+                                  className="to_reset_checkbox"
                                   // checked={this.state.checkedItems.includes(
                                   //   data.name,
                                   // )}
