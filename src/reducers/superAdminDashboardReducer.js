@@ -1,6 +1,9 @@
 import {
   GET_SUPERADMIN_DASHBOARD,
   GET_ADMIN_PROGRESS_TABLE_LIST,
+  GET_ORG_EXPORT_LIST,
+  CREATE_ORG_EXPORT,
+  DELETE_ORG_EXPORT,
 } from '../actions/types';
 
 const initialState = {
@@ -26,6 +29,9 @@ const initialState = {
   admins: [],
   progressTable: [],
   total_submissions: '',
+  exportOrgList: [],
+  createExportResp: '',
+  deleteResp: {},
 };
 
 export default function(state = initialState, action) {
@@ -59,6 +65,21 @@ export default function(state = initialState, action) {
       return {
         ...state,
         progressTable: action.payload,
+      };
+    case GET_ORG_EXPORT_LIST:
+      return {
+        ...state,
+        exportOrgList: action.payload,
+      };
+    case CREATE_ORG_EXPORT:
+      return {
+        ...state,
+        createExportResp: action.payload.message,
+      };
+    case DELETE_ORG_EXPORT:
+      return {
+        ...state,
+        deleteResp: action.payload.message,
       };
     default:
       return state;

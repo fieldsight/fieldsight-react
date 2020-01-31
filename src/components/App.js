@@ -82,6 +82,7 @@ import FormDataFilter from './reports/FormDataFilter';
 import ActivityExportFile from './reports/activityExportFile';
 import UserExportReport from './reports/userExportReport';
 
+import OrganizationExport from './excelExport/organizationExport';
 import ExcelExport from './excelExport';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -383,6 +384,10 @@ class App extends Component {
                 <Route
                   path="/organization-settings/:id"
                   render={props => <SuperAdminSetting {...props} />}
+                />
+                <Route
+                  path="/organization-exports/:orgLibId"
+                  render={props => <OrganizationExport {...props} />}
                 />
                 <Route
                   path="/userLists"
