@@ -39,7 +39,7 @@ class DashboardHeader extends PureComponent {
       },
       {
         title: 'Settings',
-        link: `/fieldsight/application/#/organization-settings/${superAdminId}`,
+        link: `/#/organization-settings/${superAdminId}`,
       },
     ];
 

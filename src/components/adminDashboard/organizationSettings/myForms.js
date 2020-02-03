@@ -377,7 +377,6 @@ export default class MyForm extends Component {
       handleAllModel,
       toggleTab,
     } = this;
-
     return (
       <>
         <RightContentCard
@@ -387,6 +386,7 @@ export default class MyForm extends Component {
           // buttonName="Add"
         >
           <FormTable
+            orgId={id}
             selected_forms={scheduled_forms}
             openDelete={openDelete}
             general_forms={general_forms}

@@ -1,8 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage } from 'react-intl';
 import { BlockContentLoader } from '../common/Loader';
 
 /* eslint-disable */
@@ -24,6 +23,7 @@ const ShowRow = ({ name }) => (
 
 const ShowContentRow = ({
   sn,
+  orgId,
   id,
   pending,
   approved,
@@ -41,7 +41,7 @@ const ShowContentRow = ({
       <td>{title}</td>
       <a
         className="pending table-profile"
-        href={`/fieldsight/application/#/organization-submission/${id}`}
+        href={`/fieldsight/application/#/organization-submission/${orgId}/${id}`}
       >
         <i className="la la-eye" />
 
@@ -69,7 +69,7 @@ const ShowContentRow = ({
 
 class ProgressTable extends React.PureComponent {
   render() {
-    const { progressTable, loader } = this.props;
+    const { progressTable, loader, orgId } = this.props;
     const sn = 1;
 
     return (
@@ -111,6 +111,7 @@ class ProgressTable extends React.PureComponent {
                               rejected={schedule.submissions.rejected}
                               title={schedule.title}
                               id={schedule.id}
+                              orgId={orgId}
                             />
                           )}
                         </>
@@ -132,6 +133,7 @@ class ProgressTable extends React.PureComponent {
                               rejected={schedule.submissions.rejected}
                               title={schedule.title}
                               id={schedule.id}
+                              orgId={orgId}
                             />
                           )}
                         </>

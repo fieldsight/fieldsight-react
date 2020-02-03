@@ -317,6 +317,7 @@ class AdminDashboard extends Component {
             </div> */}
 
             <ProgressTable
+              orgId={superAdminId}
               progressTable={progressTable}
               loader={loader}
             />

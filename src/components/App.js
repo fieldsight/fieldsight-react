@@ -379,7 +379,7 @@ class App extends Component {
                   render={props => <SuperAdminForm {...props} />}
                 />
                 <Route
-                  path="/organization-exports/:orgLibId"
+                  path="/organization-exports/:orgId/:orgLibId"
                   render={props => <OrganizationExport {...props} />}
                 />
                 <Route
@@ -444,7 +444,7 @@ class App extends Component {
                   render={props => <ExcelExport {...props} />}
                 />
                 <Route
-                  path="/organization-submission/:id/"
+                  path="/organization-submission/:orgId/:id/"
                   render={props => (
                     <TotalOrganizationSubmission {...props} />
                   )}

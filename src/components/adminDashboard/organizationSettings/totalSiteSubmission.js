@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { DotLoader } from '../../myForm/Loader';
 import WithPagination from '../../../hoc/WithPagination';
@@ -59,7 +58,6 @@ class TotalSiteSubmission extends Component {
 
   delete = () => {
     const { deleteId } = this.state;
-    console.log(deleteId, 'deleteId');
     let list = this.state.siteList;
 
     axios
@@ -136,10 +134,8 @@ class TotalSiteSubmission extends Component {
         renderPageNumbers,
         breadcrumbs,
       },
-      // state: { breadcrumbs },
     } = this;
     const {
-      // breadcrumbs,
       siteSubmission,
       loader,
       siteList,
@@ -148,25 +144,29 @@ class TotalSiteSubmission extends Component {
 
     return (
       <>
-        {breadcrumbs && Object.keys(breadcrumbs).length > 0 && (
-          <nav aria-label="breadcrumb" role="navigation">
+        <nav aria-label="breadcrumb" role="navigation">
+          {breadcrumbs && Object.keys(breadcrumbs).length > 0 && (
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to={breadcrumbs.organization_url}>
+                <a href={breadcrumbs.organization_url}>
                   {breadcrumbs.organization_name}
-                </Link>
+                </a>
               </li>
               <li className="breadcrumb-item">
-                <Link to={breadcrumbs.responses_url}>
+                <a href={breadcrumbs.responses_url}>
                   {breadcrumbs.responses}
-                </Link>
+                </a>
               </li>
-              <li className="breadcrumb-item">
+
+              <li
+                className="breadcrumb-item active"
+                aria-current="page"
+              >
                 {breadcrumbs.current_page}
               </li>
             </ol>
-          </nav>
-        )}
+          )}
+        </nav>
 
         <div className="container-fluid">
           <div className="row">
