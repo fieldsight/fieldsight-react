@@ -206,7 +206,11 @@ class MyReports extends Component {
                       <div className="report-content">
                         <h4>{report.title}</h4>
 
-                        <p>{report.description}</p>
+                        {/* <p>{report.description}</p> */}
+                        <div className="summary-content">
+                          <p><b>Report Type</b><span>my Reports</span></p>
+                          <p><b>no. of datapoints</b><span>100</span></p>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-4">
@@ -254,7 +258,7 @@ class MyReports extends Component {
                             <Dropdown.Item
                               href={`${item.link}${report.id}`}
                               key={item.id}
-                              // target="_blank"
+                            // target="_blank"
                             >
                               {item.title}
                             </Dropdown.Item>
@@ -263,7 +267,7 @@ class MyReports extends Component {
                           {item.action && (
                             <Dropdown.Item
                               onClick={() => this.handle(report.id)}
-                              // target="_blank"
+                            // target="_blank"
                             >
                               {item.title}
                             </Dropdown.Item>
@@ -284,7 +288,7 @@ class MyReports extends Component {
                               onClick={() => {
                                 this.ShareAction(report.id);
                               }}
-                              // target="_blank"
+                            // target="_blank"
                             >
                               {item.title}
                             </Dropdown.Item>
