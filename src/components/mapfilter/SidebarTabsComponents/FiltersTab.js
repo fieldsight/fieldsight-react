@@ -18,6 +18,8 @@ class FiltersTab extends Component {
       handleProgressChange,
       handleStatusChange,
       handleProjectChange,
+      isProgressSelected,
+      handleProgressParentCheckbox,
     } = this.props;
     return (
       <div
@@ -37,6 +39,11 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="0"
               >
+                <input
+                  type="checkbox"
+                  name="projectCheckbox"
+                  defaultChecked
+                />
                 Project
               </Accordion.Toggle>
             </Card.Header>
@@ -80,6 +87,13 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="1"
               >
+                <input
+                  type="checkbox"
+                  name="progressCheckbox"
+                  className="to_reset_checkbox"
+                  checked={isProgressSelected}
+                  onChange={handleProgressParentCheckbox}
+                />
                 Progress
               </Accordion.Toggle>
             </Card.Header>
@@ -93,7 +107,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="0_0"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="0_0"
                             onChange={handleProgressChange}
                           />
@@ -108,7 +122,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="1_20"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="1_20"
                             onChange={handleProgressChange}
                           />
@@ -123,7 +137,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="21_40"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="21_40"
                             onChange={handleProgressChange}
                           />
@@ -138,7 +152,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="41_60"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="41_60"
                             onChange={handleProgressChange}
                           />
@@ -153,7 +167,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="61_80"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="61_80"
                             onChange={handleProgressChange}
                           />
@@ -167,9 +181,9 @@ class FiltersTab extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="81_100"
-                            className="to_reset_checkbox"
-                            value="81_100"
+                            name="81_99"
+                            className="to_reset_checkbox progress_checkbox"
+                            value="81_99"
                             onChange={handleProgressChange}
                           />
                           <i className="helper" />
@@ -183,7 +197,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="100_100"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="100_100"
                             onChange={handleProgressChange}
                           />
@@ -206,6 +220,7 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="2"
               >
+                <input type="checkbox" name="statusCheckbox" />
                 Form Status
               </Accordion.Toggle>
             </Card.Header>
@@ -276,6 +291,7 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="3"
               >
+                <input type="checkbox" name="sitetypeCheckbox" />
                 Site Type
               </Accordion.Toggle>
             </Card.Header>
@@ -321,6 +337,7 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="4"
               >
+                <input type="checkbox" name="regionCheckbox" />
                 Region
               </Accordion.Toggle>
             </Card.Header>

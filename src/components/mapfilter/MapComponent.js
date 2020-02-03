@@ -341,7 +341,7 @@ class MapComponent extends PureComponent {
                 fillColor: otherColors[key],
               });
               const Projects = (
-                <div style={{ marginTop: '-8px' }}>
+                <div>
                   <div
                     className="circle"
                     style={{

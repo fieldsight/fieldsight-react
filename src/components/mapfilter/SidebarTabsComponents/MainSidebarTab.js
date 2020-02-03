@@ -36,6 +36,8 @@ class MainSidebarTab extends PureComponent {
         handleProjectChange,
         handleMetricsChange,
         handleBaseLayer,
+        isProgressSelected,
+        handleProgressParentCheckbox,
       },
       // match: {
       //   params: { id: siteId },
@@ -131,6 +133,10 @@ class MainSidebarTab extends PureComponent {
             handleCheckbox={handleCheckbox}
             handleStatusChange={handleStatusChange}
             handleProjectChange={handleProjectChange}
+            isProgressSelected={isProgressSelected}
+            handleProgressParentCheckbox={
+              handleProgressParentCheckbox
+            }
           />
           <MetricsTab
             activeTab={activeTab}

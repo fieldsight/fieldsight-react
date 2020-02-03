@@ -77,8 +77,7 @@ class MetricsTab extends Component {
             options={colorOption}
           />
         </div>
-        <div className="form-group">
-          {/* <label>Color</label> */}
+        {/* <div className="form-group">
 
           <label>Change Size By:</label>
           <Select
@@ -90,7 +89,7 @@ class MetricsTab extends Component {
             }}
             options={sizeOption}
           />
-        </div>
+        </div> */}
       </div>
     );
   }

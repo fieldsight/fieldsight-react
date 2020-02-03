@@ -43,6 +43,7 @@ const INITIAL_STATE = {
   addressSearch: [],
   searchByItem: 'address',
   selectedBaseLayer: 'openstreet',
+  isProgressSelected: false,
 };
 class MapFilter extends Component {
   constructor(props) {
@@ -191,7 +192,7 @@ class MapFilter extends Component {
     //   });
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const {
       mapFilterReducer: {
         clonePrimaryGeojson,
@@ -218,6 +219,14 @@ class MapFilter extends Component {
     if (prevProps.mapFilterReducer.projectsList !== projectsList) {
       this.insertProjectNameInState();
     }
+    // if (
+    //   prevState.isProgressSelected === this.state.isProgressSelected
+    // ) {
+    //   this.setProgressParentCheckbox();
+    // }
+    // if (this.state.checkedProgressItems.length < 1) {
+    //   this.setState({ isProgressSelected: false });
+    // }
   }
 
   componentWillUnmount() {
@@ -409,18 +418,77 @@ class MapFilter extends Component {
   //     return null;
   //   });
   // };
+
   handleProgressChange = e => {
+    // e.persist();
     const item = e.target.name;
     const isProgressChecked = e.target.checked;
-    const { checkedProgressItems } = this.state;
+    const { checkedProgressItems, isProgressSelected } = this.state;
+
     if (isProgressChecked === true) {
       const joined = checkedProgressItems.concat(item);
-      this.setState({ checkedProgressItems: joined });
+      this.setState({
+        checkedProgressItems: joined,
+        isProgressSelected: true,
+      });
     } else {
       const filteredData = checkedProgressItems.filter(
         data => data !== item,
       );
-      this.setState({ checkedProgressItems: filteredData });
+
+      // this.setState({
+      //   checkedProgressItems: filteredData,
+      // });
+      this.setState({ checkedProgressItems: filteredData }, () => {
+        // console.log(
+        //   `Button Name (▶️️ inside callback) = `,
+        //   this.state.checkedProgressItems,
+        // ),
+        console.log(this.state.checkedProgressItems);
+        if (this.state.checkedProgressItems.length > 0) {
+          this.setState({ isProgressSelected: true });
+        } else {
+          this.setState({ isProgressSelected: false });
+        }
+      });
+    }
+  };
+
+  handleProgressParentCheckbox = e => {
+    console.log(e.target.checked);
+    const { checkedProgressItems } = this.state;
+    if (this.state.isProgressSelected) {
+      const allProgressElement = document.getElementsByClassName(
+        'progress_checkbox',
+      );
+
+      for (let i = 0; i < allProgressElement.length; i += 1) {
+        allProgressElement[i].checked = false;
+      }
+      this.setState({
+        checkedProgressItems: [],
+        isProgressSelected: false,
+      });
+    } else {
+      this.setState({
+        isProgressSelected: true,
+      });
+      if (e.target.checked === true) {
+        const allProgressElement = document.getElementsByClassName(
+          'progress_checkbox',
+        );
+
+        for (let i = 0; i < allProgressElement.length; i += 1) {
+          allProgressElement[i].checked = true;
+          checkedProgressItems.push(allProgressElement[i].name);
+        }
+        this.setState({
+          checkedProgressItems,
+        });
+        // this.setState({
+        //   checkedProgressItems: joined,
+        // });
+      }
     }
   };
 
@@ -515,6 +583,7 @@ class MapFilter extends Component {
         addressSearch,
         searchByItem,
         selectedBaseLayer,
+        isProgressSelected,
       },
     } = this;
     return (
@@ -684,6 +753,10 @@ class MapFilter extends Component {
                 handleMetricsChange={this.handleMetricsChange}
                 handleBaseLayer={this.handleBaseLayer}
                 onClickClearBtn={this.onClickClearBtn}
+                isProgressSelected={isProgressSelected}
+                handleProgressParentCheckbox={
+                  this.handleProgressParentCheckbox
+                }
               />
             </div>
             {/* </Scrollbars> */}

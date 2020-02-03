@@ -81,7 +81,6 @@ const getVisibleTodos = (state, action) => {
           const progressfilter = filteredData.filter(
             data => data[type] >= min && data[type] <= max,
           );
-
           clonefilteredData.push(progressfilter);
         });
         if (clonefilteredData.length === 0) {
