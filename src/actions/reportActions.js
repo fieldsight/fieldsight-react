@@ -8,6 +8,7 @@ import {
   APPLY_ACTION_TO_REPORT,
   GET_REPORT_DATA,
   GET_CUSTOM_REPORT_TABLE_DATA,
+  GET_TO_FILTER_DATA,
 } from './types';
 /* eslint-disable */
 
@@ -80,6 +81,19 @@ export const getCustomReportTableData = reportId => dispatch => {
     .then(res => {
       dispatch({
         type: GET_CUSTOM_REPORT_TABLE_DATA,
+        payload: res.data,
+      });
+    })
+    .catch(() => {});
+};
+
+export const getToFilterData = projectId => dispatch => {
+  dispatch({ type: REPORT_LOADER });
+  axios
+    .get(`/v4/api/reporting/project-report-filter/${projectId}/`)
+    .then(res => {
+      dispatch({
+        type: GET_TO_FILTER_DATA,
         payload: res.data,
       });
     })

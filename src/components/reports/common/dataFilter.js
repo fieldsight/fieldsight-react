@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import FilterByDate from '../common/filterByDate';
-import FilterByData from '../common/filterByData';
+import FilterByDate from './filterByDate';
+import FilterByData from './filterByData';
 
 // import CustomSelect from '../CustomSelect';
 /* eslint-disable */
@@ -20,6 +20,8 @@ const InitialState = {
 export default class DataFilter extends Component {
   constructor(props) {
     super(props);
+    console.log('object', props);
+
     this.state = {
       ...InitialState,
       createdDate:
@@ -29,10 +31,9 @@ export default class DataFilter extends Component {
   }
 
   componentWillMount() {
-    if (
-      this.props.filteredData &&
-      Object.keys(this.props.filteredData).length > 0
-    ) {
+    // debugger;
+
+    if (this.props.filteredData) {
       const data = this.props.filteredData;
       const regions = data.regions
         ? data.regions.length === this.props.regions.length
@@ -355,7 +356,6 @@ export default class DataFilter extends Component {
       applyFilter,
       selectedReportType,
     } = this.props;
-    // console.log('object', this.state);
     return (
       <div className="data-filter filter-bottom mrt-30">
         <form onSubmit={this.handleSubmit}>
@@ -366,7 +366,8 @@ export default class DataFilter extends Component {
                 <CustomSelect label="select Project" />
               </div>
             </div> */}
-            {filterArr.some(f => f.code === 'regions') && (
+            {selectedReportType <= 3 && (
+              // filterArr.some(f => f.code === 'regions') && (
               <div className="col-xl-2 col-md-6">
                 <FilterByData
                   className="form-group inline-form-group"
@@ -383,7 +384,8 @@ export default class DataFilter extends Component {
                 />
               </div>
             )}
-            {filterArr.some(f => f.code === 'site_types') && (
+            {selectedReportType <= 3 && (
+              // filterArr.some(f => f.code === 'site_types') && (
               <div className="col-xl-2 col-md-6">
                 <FilterByData
                   className="form-group inline-form-group"
@@ -401,24 +403,24 @@ export default class DataFilter extends Component {
               </div>
             )}
 
-            {selectedReportType === 4 &&
-              filterArr.some(f => f.code === 'user_roles') && (
-                <div className="col-xl-2 col-md-6">
-                  <FilterByData
-                    className="form-group inline-form-group"
-                    label="user roles"
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('filterUserRole');
-                    }}
-                    toggleType="filterUserRole"
-                    data={filterByUserRoles}
-                    changeHandler={this.handleUserRoleFilter}
-                    selectedArr={userRoles}
-                    placeholderTxt="Select User Roles"
-                  />
-                </div>
-              )}
+            {selectedReportType === 4 && (
+              // filterArr.some(f => f.code === 'user_roles') && (
+              <div className="col-xl-2 col-md-6">
+                <FilterByData
+                  className="form-group inline-form-group"
+                  label="user roles"
+                  toggleSelectClass={toggleSelectClass}
+                  handleToggleClass={() => {
+                    handleToggleClass('filterUserRole');
+                  }}
+                  toggleType="filterUserRole"
+                  data={filterByUserRoles}
+                  changeHandler={this.handleUserRoleFilter}
+                  selectedArr={userRoles}
+                  placeholderTxt="Select User Roles"
+                />
+              </div>
+            )}
 
             {selectedReportType === 5 && (
               <div className="col-xl-5 col-md-6">

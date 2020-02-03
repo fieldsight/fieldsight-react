@@ -87,6 +87,7 @@ export const GET_SITE_VIEW = 'GET_SITE_VIEW';
 // Reports
 export const GET_METRICS_DATA = 'GET_METRICS_DATA';
 export const GET_FORM = 'GET_FORM';
+export const GET_TO_FILTER_DATA = 'GET_TO_FILTER_DATA';
 export const GET_FORM_QUESTIONS = 'GET_FORM_QUESTIONS';
 export const REPORT_LOADER = 'REPORT_LOADER';
 export const GET_REPORTS_LIST = 'GET_REPORTS_LIST';

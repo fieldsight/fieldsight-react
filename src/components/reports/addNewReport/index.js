@@ -16,7 +16,7 @@ import {
 } from '../../../utils/toastHandler';
 import CustomSelect from '../common/CustomSelect';
 import Metrics from './metrics';
-import DataFilter from './dataFilter';
+import DataFilter from '../common/dataFilter';
 import SelectedColumn from './selectedColumn';
 import DeleteModal from '../../common/DeleteModal';
 import { BlockContentLoader } from '../../common/Loader';
@@ -151,6 +151,8 @@ class AddNewReport extends Component {
       prevProps.reportReducer.regions !==
       this.props.reportReducer.regions
     ) {
+      console.log('update region report ma');
+
       this.setState(state => ({
         filter: {
           ...state.filter,
@@ -214,9 +216,9 @@ class AddNewReport extends Component {
           r => r.category === 'default',
         );
         const filterBy = report.filter;
-
+        // debugger;
         const objLen = Object.entries(filterBy).map(e => {
-          if (e[1].length > 0) {
+          if (e[1] && e[1].length > 0) {
             return true;
           }
           return false;
@@ -1237,7 +1239,7 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('class', this.state.metricArr);
+    console.log('addreport', this.props.reportReducer);
     const isEdit = reportId ? true : false;
 
     return (
