@@ -223,142 +223,146 @@ class Templates extends Component {
           <div className="standard-tempalte">
             <h2 className="my-3">Standard</h2>
             {loader &&
-            standardReports !== undefined &&
-            standardReports.length > 0 ? (
-              standardReports.map(standardReport => (
-                <div
-                  className="report-list"
-                  key={standardReport.title}
-                >
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="report-content">
-                        {standardReport.title ===
-                          'Project Summary' && (
-                          <a
-                            href={`/fieldsight/project/report/summary/${id}/`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <h4>{standardReport.title}</h4>
-                            <p>{standardReport.description}</p>
-                          </a>
-                        )}
+              standardReports !== undefined &&
+              standardReports.length > 0 ? (
+                standardReports.map(standardReport => (
+                  <div
+                    className="report-list"
+                    key={standardReport.title}
+                  >
+                    <div className="row">
+                      <div className="col-md-12">
+                        <div className="report-content">
+                          {standardReport.title ===
+                            'Project Summary' && (
+                              <a
+                                href={`/fieldsight/project/report/summary/${id}/`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <h4>{standardReport.title}</h4>
+                                {/* <p>{standardReport.description}</p> */}
+                                <div className="summary-content">
+                                  <p><b>Report Type</b><span>my Reports</span></p>
+                                  <p><b>no. of datapoints</b><span>100</span></p>
+                                </div>
+                              </a>
+                            )}
 
-                        {(standardReport.title ===
-                          'Site Information' ||
-                          standardReport.title ===
+                          {(standardReport.title ===
+                            'Site Information' ||
+                            standardReport.title ===
                             'Progress Report') && (
-                          <>
-                            <Link
-                              to={{
-                                pathname: `/export-data/${id}`,
+                              <>
+                                <Link
+                                  to={{
+                                    pathname: `/export-data/${id}`,
 
-                                state: {
-                                  fromDashboard: standardReport.title,
-                                },
-                              }}
-                            >
-                              <h4>{standardReport.title}</h4>
-                              <p>{standardReport.description}</p>
-                            </Link>
-                          </>
-                        )}
+                                    state: {
+                                      fromDashboard: standardReport.title,
+                                    },
+                                  }}
+                                >
+                                  <h4>{standardReport.title}</h4>
+                                  <p>{standardReport.description}</p>
+                                </Link>
+                              </>
+                            )}
 
-                        {(standardReport.title ===
-                          'Activity Report' ||
-                          standardReport.title ===
+                          {(standardReport.title ===
+                            'Activity Report' ||
+                            standardReport.title ===
                             'Project Logs') && (
-                          <Link
-                            to={{
-                              pathname: `/user-export/${id}`,
+                              <Link
+                                to={{
+                                  pathname: `/user-export/${id}`,
 
-                              state: {
-                                fromDashboard: standardReport.title,
-                              },
-                            }}
-                          >
-                            <h4>{standardReport.title}</h4>
-                            <p>{standardReport.description}</p>
-                          </Link>
-                        )}
+                                  state: {
+                                    fromDashboard: standardReport.title,
+                                  },
+                                }}
+                              >
+                                <h4>{standardReport.title}</h4>
+                                <p>{standardReport.description}</p>
+                              </Link>
+                            )}
 
-                        {standardReport.title ===
-                          'User Activity Report' && (
-                          <Link
-                            to={{
-                              pathname: `/activity-export/${id}`,
+                          {standardReport.title ===
+                            'User Activity Report' && (
+                              <Link
+                                to={{
+                                  pathname: `/activity-export/${id}`,
 
-                              state: {
-                                fromDashboard: standardReport.title,
-                              },
-                            }}
-                          >
-                            <h4>{standardReport.title}</h4>
-                            <p>{standardReport.description}</p>
-                          </Link>
-                        )}
+                                  state: {
+                                    fromDashboard: standardReport.title,
+                                  },
+                                }}
+                              >
+                                <h4>{standardReport.title}</h4>
+                                <p>{standardReport.description}</p>
+                              </Link>
+                            )}
+                        </div>
                       </div>
                     </div>
+                    {standardReport.title === 'Project Summary' ? (
+                      <div className="dropdown report-option">
+                        <Dropdown drop="left">
+                          <Dropdown.Toggle
+                            variant=""
+                            id="dropdown-Data"
+                            className="dropdown-toggle common-button no-border is-icon"
+                          >
+                            <i className="material-icons">more_vert</i>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                            {projectSummery.map(item => (
+                              <Dropdown.Item
+                                href={item.link}
+                                key={item.id}
+                                target="_blank"
+                              >
+                                {item.title}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                    ) : (
+                        <div className="dropdown report-option">
+                          <Dropdown drop="left">
+                            <Dropdown.Toggle
+                              variant=""
+                              id="dropdown-Data"
+                              className="dropdown-toggle common-button no-border is-icon"
+                            >
+                              <i className="material-icons">more_vert</i>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                              {siteInformation.map(item => (
+                                <Dropdown.Item
+                                  href={item.link}
+                                  key={item.id}
+                                  target="_blank"
+                                >
+                                  {item.title}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </div>
+                      )}
                   </div>
-                  {standardReport.title === 'Project Summary' ? (
-                    <div className="dropdown report-option">
-                      <Dropdown drop="left">
-                        <Dropdown.Toggle
-                          variant=""
-                          id="dropdown-Data"
-                          className="dropdown-toggle common-button no-border is-icon"
-                        >
-                          <i className="material-icons">more_vert</i>
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                          {projectSummery.map(item => (
-                            <Dropdown.Item
-                              href={item.link}
-                              key={item.id}
-                              target="_blank"
-                            >
-                              {item.title}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </div>
-                  ) : (
-                    <div className="dropdown report-option">
-                      <Dropdown drop="left">
-                        <Dropdown.Toggle
-                          variant=""
-                          id="dropdown-Data"
-                          className="dropdown-toggle common-button no-border is-icon"
-                        >
-                          <i className="material-icons">more_vert</i>
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                          {siteInformation.map(item => (
-                            <Dropdown.Item
-                              href={item.link}
-                              key={item.id}
-                              target="_blank"
-                            >
-                              {item.title}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <Loader />
-            )}
+                ))
+              ) : (
+                <Loader />
+              )}
 
             <div className="report-list">
               <div className="row">
                 <div className="col-md-8">
                   <div className="report-content">
-                    Form Data
+                    <a href="#"><h4>Form Data</h4></a>
                     <p>
                       Export of forms data and site information an
                       Excel File, generated with filters in region,
@@ -383,43 +387,43 @@ class Templates extends Component {
                           style={
                             general === true
                               ? {
-                                  display: 'block',
-                                  position: 'relative',
-                                  height: `200px `,
-                                }
+                                display: 'block',
+                                position: 'relative',
+                                height: `200px `,
+                              }
                               : { display: 'none' }
                           }
                         >
                           <PerfectScrollbar>
                             {!formLoader && <DotLoader />}
                             {formLoader &&
-                            generalData !== undefined &&
-                            generalData.length > 0 ? (
-                              generalData.map(genInfo => (
-                                <p key={genInfo.id}>
-                                  <span
-                                    tabIndex="0"
-                                    role="button"
-                                    onKeyDown={() => {
-                                      this.generalLinkhandle(
-                                        genInfo.id,
-                                        projectCreatedOn,
-                                      );
-                                    }}
-                                    onClick={() => {
-                                      this.generalLinkhandle(
-                                        genInfo.id,
-                                        projectCreatedOn,
-                                      );
-                                    }}
-                                  >
-                                    {genInfo.title}
-                                  </span>
-                                </p>
-                              ))
-                            ) : (
-                              <p>No data</p>
-                            )}
+                              generalData !== undefined &&
+                              generalData.length > 0 ? (
+                                generalData.map(genInfo => (
+                                  <p key={genInfo.id}>
+                                    <span
+                                      tabIndex="0"
+                                      role="button"
+                                      onKeyDown={() => {
+                                        this.generalLinkhandle(
+                                          genInfo.id,
+                                          projectCreatedOn,
+                                        );
+                                      }}
+                                      onClick={() => {
+                                        this.generalLinkhandle(
+                                          genInfo.id,
+                                          projectCreatedOn,
+                                        );
+                                      }}
+                                    >
+                                      {genInfo.title}
+                                    </span>
+                                  </p>
+                                ))
+                              ) : (
+                                <p>No data</p>
+                              )}
                           </PerfectScrollbar>
                         </div>
                       </li>
@@ -441,42 +445,42 @@ class Templates extends Component {
                           style={
                             scheduled === true
                               ? {
-                                  display: 'block',
-                                  position: 'relative',
-                                  height: `200px `,
-                                }
+                                display: 'block',
+                                position: 'relative',
+                                height: `200px `,
+                              }
                               : { display: 'none' }
                           }
                         >
                           <PerfectScrollbar>
                             {!scheduledLoader && <DotLoader />}
                             {scheduledData !== undefined &&
-                            scheduledData.length > 0 ? (
-                              scheduledData.map(scheinfo => (
-                                <p key={scheinfo.id}>
-                                  <span
-                                    tabIndex="0"
-                                    role="button"
-                                    onKeyDown={() => {
-                                      this.generalLinkhandle(
-                                        scheinfo.id,
-                                        projectCreatedOn,
-                                      );
-                                    }}
-                                    onClick={() => {
-                                      this.generalLinkhandle(
-                                        scheinfo.id,
-                                        projectCreatedOn,
-                                      );
-                                    }}
-                                  >
-                                    {scheinfo.title}
-                                  </span>
-                                </p>
-                              ))
-                            ) : (
-                              <p>No Data</p>
-                            )}
+                              scheduledData.length > 0 ? (
+                                scheduledData.map(scheinfo => (
+                                  <p key={scheinfo.id}>
+                                    <span
+                                      tabIndex="0"
+                                      role="button"
+                                      onKeyDown={() => {
+                                        this.generalLinkhandle(
+                                          scheinfo.id,
+                                          projectCreatedOn,
+                                        );
+                                      }}
+                                      onClick={() => {
+                                        this.generalLinkhandle(
+                                          scheinfo.id,
+                                          projectCreatedOn,
+                                        );
+                                      }}
+                                    >
+                                      {scheinfo.title}
+                                    </span>
+                                  </p>
+                                ))
+                              ) : (
+                                <p>No Data</p>
+                              )}
                           </PerfectScrollbar>
                         </div>
                       </li>
@@ -498,42 +502,42 @@ class Templates extends Component {
                           style={
                             survey === true
                               ? {
-                                  display: 'block',
-                                  position: 'relative',
-                                  height: `200px `,
-                                }
+                                display: 'block',
+                                position: 'relative',
+                                height: `200px `,
+                              }
                               : { display: 'none' }
                           }
                         >
                           <PerfectScrollbar>
                             {!surveyLoader && <DotLoader />}
                             {surveyData !== undefined &&
-                            surveyData.length > 0 ? (
-                              surveyData.map(surData => (
-                                <p key={surData.id}>
-                                  <span
-                                    tabIndex="0"
-                                    role="button"
-                                    onKeyDown={() => {
-                                      this.generalLinkhandle(
-                                        surData.id,
-                                        projectCreatedOn,
-                                      );
-                                    }}
-                                    onClick={() => {
-                                      this.generalLinkhandle(
-                                        surData.id,
-                                        projectCreatedOn,
-                                      );
-                                    }}
-                                  >
-                                    {surData.title}
-                                  </span>
-                                </p>
-                              ))
-                            ) : (
-                              <p>No data</p>
-                            )}
+                              surveyData.length > 0 ? (
+                                surveyData.map(surData => (
+                                  <p key={surData.id}>
+                                    <span
+                                      tabIndex="0"
+                                      role="button"
+                                      onKeyDown={() => {
+                                        this.generalLinkhandle(
+                                          surData.id,
+                                          projectCreatedOn,
+                                        );
+                                      }}
+                                      onClick={() => {
+                                        this.generalLinkhandle(
+                                          surData.id,
+                                          projectCreatedOn,
+                                        );
+                                      }}
+                                    >
+                                      {surData.title}
+                                    </span>
+                                  </p>
+                                ))
+                              ) : (
+                                <p>No data</p>
+                              )}
                           </PerfectScrollbar>
                         </div>
                       </li>
@@ -555,51 +559,51 @@ class Templates extends Component {
                           style={
                             staged === true
                               ? {
-                                  display: 'block',
-                                  position: 'relative',
-                                  height: `200px `,
-                                }
+                                display: 'block',
+                                position: 'relative',
+                                height: `200px `,
+                              }
                               : { display: 'none' }
                           }
                         >
                           <PerfectScrollbar>
                             {!stagedLoader && <DotLoader />}
                             {stagedData !== undefined &&
-                            stagedData.length > 0 ? (
-                              stagedData.map(satData => (
-                                <>
-                                  <p>
-                                    {satData.name}
-                                    <ul>
-                                      {satData.sub_stages.map(sub => (
-                                        <li key={sub.id}>
-                                          <span
-                                            tabIndex="0"
-                                            role="button"
-                                            onKeyDown={() => {
-                                              this.generalLinkhandle(
-                                                sub.id,
-                                                projectCreatedOn,
-                                              );
-                                            }}
-                                            onClick={() => {
-                                              this.generalLinkhandle(
-                                                sub.id,
-                                                projectCreatedOn,
-                                              );
-                                            }}
-                                          >
-                                            {sub.form_name}
-                                          </span>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </p>
-                                </>
-                              ))
-                            ) : (
-                              <p>No data</p>
-                            )}
+                              stagedData.length > 0 ? (
+                                stagedData.map(satData => (
+                                  <>
+                                    <p>
+                                      {satData.name}
+                                      <ul>
+                                        {satData.sub_stages.map(sub => (
+                                          <li key={sub.id}>
+                                            <span
+                                              tabIndex="0"
+                                              role="button"
+                                              onKeyDown={() => {
+                                                this.generalLinkhandle(
+                                                  sub.id,
+                                                  projectCreatedOn,
+                                                );
+                                              }}
+                                              onClick={() => {
+                                                this.generalLinkhandle(
+                                                  sub.id,
+                                                  projectCreatedOn,
+                                                );
+                                              }}
+                                            >
+                                              {sub.form_name}
+                                            </span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </p>
+                                  </>
+                                ))
+                              ) : (
+                                <p>No data</p>
+                              )}
                           </PerfectScrollbar>
                         </div>
                       </li>
