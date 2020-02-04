@@ -20,7 +20,7 @@ const InitialState = {
 export default class DataFilter extends Component {
   constructor(props) {
     super(props);
-    console.log('object', props);
+    // console.log('object', props);
 
     this.state = {
       ...InitialState,
@@ -42,7 +42,7 @@ export default class DataFilter extends Component {
               ...data.regions,
             ]
           : data.regions
-        : [];
+        : this.props.filterByRegions;
       const siteType = data.site_types
         ? data.site_types.length === this.props.siteTypes.length
           ? [
@@ -50,7 +50,7 @@ export default class DataFilter extends Component {
               ...data.site_types,
             ]
           : data.site_types
-        : [];
+        : this.props.filterBySiteType;
       const userRoles = data.user_roles
         ? data.user_roles.length === this.props.userRoles.length
           ? [
@@ -58,9 +58,13 @@ export default class DataFilter extends Component {
               ...data.user_roles,
             ]
           : data.user_roles
-        : [];
-      const startDate = new Date(data.start_date);
-      const endDate = new Date(data.end_date);
+        : this.props.filterByUserRoles;
+      const startDate = data.start_date
+        ? new Date(data.start_date)
+        : new Date(this.props.projectCreatedOn);
+      const endDate = data.end_date
+        ? new Date(data.end_date)
+        : new Date();
       this.setState(state => ({
         filterData: {
           ...state.filterData,
@@ -72,38 +76,38 @@ export default class DataFilter extends Component {
         },
       }));
     }
-    if (this.props.filterByRegions) {
-      this.setState(state => ({
-        filterData: {
-          ...state.filterData,
-          regions: this.props.filterByRegions,
-        },
-      }));
-    }
-    if (this.props.filterBySiteType) {
-      this.setState(state => ({
-        filterData: {
-          ...state.filterData,
-          siteType: this.props.filterBySiteType,
-        },
-      }));
-    }
-    if (this.props.filterByUserRoles) {
-      this.setState(state => ({
-        filterData: {
-          ...state.filterData,
-          userRoles: this.props.filterByUserRoles,
-        },
-      }));
-    }
-    if (this.props.projectCreatedOn) {
-      this.setState(state => ({
-        filterData: {
-          ...state.filterData,
-          startDate: new Date(this.props.projectCreatedOn),
-        },
-      }));
-    }
+    // if (this.props.filterByRegions) {
+    //   this.setState(state => ({
+    //     filterData: {
+    //       ...state.filterData,
+    //       regions: this.props.filterByRegions,
+    //     },
+    //   }));
+    // }
+    // if (this.props.filterBySiteType) {
+    //   this.setState(state => ({
+    //     filterData: {
+    //       ...state.filterData,
+    //       siteType: this.props.filterBySiteType,
+    //     },
+    //   }));
+    // }
+    // if (this.props.filterByUserRoles) {
+    //   this.setState(state => ({
+    //     filterData: {
+    //       ...state.filterData,
+    //       userRoles: this.props.filterByUserRoles,
+    //     },
+    //   }));
+    // }
+    // if (this.props.projectCreatedOn) {
+    //   this.setState(state => ({
+    //     filterData: {
+    //       ...state.filterData,
+    //       startDate: new Date(this.props.projectCreatedOn),
+    //     },
+    //   }));
+    // }
   }
 
   componentWillUnmount() {
