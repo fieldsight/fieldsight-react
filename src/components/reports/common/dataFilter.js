@@ -20,8 +20,6 @@ const InitialState = {
 export default class DataFilter extends Component {
   constructor(props) {
     super(props);
-    // console.log('object', props);
-
     this.state = {
       ...InitialState,
       createdDate:
@@ -31,8 +29,6 @@ export default class DataFilter extends Component {
   }
 
   componentWillMount() {
-    // debugger;
-
     if (this.props.filteredData) {
       const data = this.props.filteredData;
       const regions = data.regions
@@ -76,38 +72,6 @@ export default class DataFilter extends Component {
         },
       }));
     }
-    // if (this.props.filterByRegions) {
-    //   this.setState(state => ({
-    //     filterData: {
-    //       ...state.filterData,
-    //       regions: this.props.filterByRegions,
-    //     },
-    //   }));
-    // }
-    // if (this.props.filterBySiteType) {
-    //   this.setState(state => ({
-    //     filterData: {
-    //       ...state.filterData,
-    //       siteType: this.props.filterBySiteType,
-    //     },
-    //   }));
-    // }
-    // if (this.props.filterByUserRoles) {
-    //   this.setState(state => ({
-    //     filterData: {
-    //       ...state.filterData,
-    //       userRoles: this.props.filterByUserRoles,
-    //     },
-    //   }));
-    // }
-    // if (this.props.projectCreatedOn) {
-    //   this.setState(state => ({
-    //     filterData: {
-    //       ...state.filterData,
-    //       startDate: new Date(this.props.projectCreatedOn),
-    //     },
-    //   }));
-    // }
   }
 
   componentWillUnmount() {

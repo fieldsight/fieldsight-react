@@ -151,8 +151,6 @@ class AddNewReport extends Component {
       prevProps.reportReducer.regions !==
       this.props.reportReducer.regions
     ) {
-      console.log('update region report ma');
-
       this.setState(state => ({
         filter: {
           ...state.filter,
@@ -1115,7 +1113,10 @@ class AddNewReport extends Component {
   };
 
   handleSubmitFilter = filter => {
-    const { reportId, data } = this.state;
+    const {
+      reportId,
+      data: { selectedReportType, desc, reportName, selectedMetrics },
+    } = this.state;
     const {
       regions,
       siteType,
@@ -1125,12 +1126,22 @@ class AddNewReport extends Component {
     } = filter;
 
     const modifyFilter = {
-      regions: regions.filter(r => r.id !== 'all_regions'),
-      site_types: siteType.filter(r => r.id !== 'all_sitetypes'),
-      user_roles: userRoles.filter(u => u.id !== 'all_userroles'),
-      start_date: startDate,
-      end_date: endDate,
+      regions:
+        selectedReportType < 3
+          ? regions.filter(r => r.id !== 'all_regions')
+          : [],
+      site_types:
+        selectedReportType < 3
+          ? siteType.filter(r => r.id !== 'all_sitetypes')
+          : [],
+      user_roles:
+        selectedReportType === 4
+          ? userRoles.filter(u => u.id !== 'all_userroles')
+          : [],
+      start_date: selectedReportType === 5 ? startDate : '',
+      end_date: selectedReportType === 5 ? endDate : '',
     };
+
     this.setState(
       state => ({
         filter: {
@@ -1140,10 +1151,10 @@ class AddNewReport extends Component {
       }),
       () => {
         const body = {
-          type: data.selectedReportType,
-          description: data.desc,
-          title: data.reportName,
-          attributes: JSON.stringify(data.selectedMetrics),
+          type: selectedReportType,
+          description: desc,
+          title: reportName,
+          attributes: JSON.stringify(selectedMetrics),
           filter: JSON.stringify(modifyFilter),
         };
         this.requestUpdateForm(reportId, body);
@@ -1239,7 +1250,6 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    console.log('addreport', this.props.reportReducer);
     const isEdit = reportId ? true : false;
 
     return (

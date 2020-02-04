@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import format from 'date-fns/format';
 import {
   getReportData,
   getToFilterData,
@@ -11,6 +12,12 @@ import ExportTable from './exportTable';
 import { DotLoader } from '../../myForm/Loader';
 import CollapseFilterTable from '../CollapseFilterTable';
 import DataFilter from '../common/dataFilter';
+import {
+  errorToast,
+  successToast,
+} from '../../../utils/toastHandler';
+import { getDayOnWeeklySchedule } from '../../syncSchedule';
+/* eslint-disable */
 
 class ReportDashboard extends Component {
   intervalID;
@@ -36,6 +43,7 @@ class ReportDashboard extends Component {
         filterSiteType: false,
         filterUserRole: false,
       },
+      filterDataLoaded: false,
     };
   }
 
@@ -108,23 +116,16 @@ class ReportDashboard extends Component {
   };
 
   loadRegionFilter = regions => {
-    this.setState(
-      state => ({
-        toFilterList: {
-          ...state.toFilterList,
-          filterByRegions: [
-            ...state.toFilterList.filterByRegions,
-            ...regions,
-          ],
-        },
-      }),
-      () => {
-        console.log(
-          'update region',
-          this.state.toFilterList.filterByRegions,
-        );
+    this.setState(state => ({
+      toFilterList: {
+        ...state.toFilterList,
+        filterByRegions: [
+          ...state.toFilterList.filterByRegions,
+          ...regions,
+        ],
       },
-    );
+      filterDataLoaded: true,
+    }));
   };
 
   loadSiteFilter = sites => {
@@ -135,6 +136,7 @@ class ReportDashboard extends Component {
           ...state.toFilterList.filterBySiteType,
           ...sites,
         ],
+        filterDataLoaded: true,
       },
     }));
   };
@@ -147,6 +149,7 @@ class ReportDashboard extends Component {
           ...state.toFilterList.filterByUserRoles,
           ...userRole,
         ],
+        filterDataLoaded: true,
       },
     }));
   };
@@ -167,17 +170,23 @@ class ReportDashboard extends Component {
           reportData: { attributes, title, description, type },
         },
       },
-      data: { regions, siteType, userRoles, startDate, endDate },
     } = this;
+    const { regions, siteType, userRoles, startDate, endDate } = data;
 
     const modifyFilter = {
-      regions: regions.filter(r => r.id !== 'all_regions'),
-      site_types: siteType.filter(r => r.id !== 'all_sitetypes'),
-      user_roles: userRoles.filter(u => u.id !== 'all_userroles'),
-      start_date: startDate,
-      end_date: endDate,
+      regions:
+        type < 3 ? regions.filter(r => r.id !== 'all_regions') : [],
+      site_types:
+        type < 3
+          ? siteType.filter(r => r.id !== 'all_sitetypes')
+          : [],
+      user_roles:
+        type === 4
+          ? userRoles.filter(u => u.id !== 'all_userroles')
+          : [],
+      start_date: type === 5 ? startDate : '',
+      end_date: type === 5 ? endDate : '',
     };
-    console.log('filter clicked', data);
     const body = {
       type,
       description,
@@ -185,7 +194,30 @@ class ReportDashboard extends Component {
       attributes,
       filter: JSON.stringify(modifyFilter),
     };
-    // this.requestUpdateForm(reportId, body);
+    this.requestUpdateForm(body);
+  };
+
+  requestUpdateForm = body => {
+    const {
+      props: {
+        match: {
+          params: { id },
+        },
+      },
+    } = this;
+
+    axios
+      .put(`/v4/api/reporting/report/${id}/`, body)
+      .then(res => {
+        if (res.data) {
+          successToast('Report', 'updated');
+          this.props.getReportData(id);
+        }
+      })
+      .catch(err => {
+        const errors = err.response;
+        errorToast(errors);
+      });
   };
 
   getData = () => {
@@ -234,7 +266,14 @@ class ReportDashboard extends Component {
           params: { id, pid },
         },
         reportReducer: {
-          reportData: { attributes, title, description, type },
+          reportData: {
+            attributes,
+            title,
+            description,
+            type,
+            created_at,
+          },
+          report_sync_settings,
           regions,
           siteTypes,
           userRoles,
@@ -252,11 +291,10 @@ class ReportDashboard extends Component {
           filterByUserRoles,
         },
         filteredList,
+        filterDataLoaded,
       },
     } = this;
 
-    console.log('viewreport', this.props.reportReducer);
-    // const showFilter = this.props.reportReducer
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -279,17 +317,62 @@ class ReportDashboard extends Component {
           editflag
         >
           <div className="floating-form">
-            <div className="form-group">
-              <span style={{ color: 'grey' }}>{description}</span>
+            <div className="view-report">
+              <p>
+                <b>No of datapoints</b>
+                <span>{attributes && attributes.length}</span>
+              </p>
+              <p>
+                <b>created date</b>
+                <time>{format(created_at, ['MMMM Do YYYY'])}</time>
+              </p>
+              {report_sync_settings &&
+                Object.keys(report_sync_settings).length > 0 && (
+                  <>
+                    <p>
+                      <b>sync scheduled type</b>
+                      <span>
+                        {report_sync_settings.schedule_type ===
+                        'Weekly'
+                          ? `${
+                              report_sync_settings.schedule_type
+                            } on ${getDayOnWeeklySchedule(
+                              report_sync_settings.day,
+                            )}`
+                          : report_sync_settings.schedule_type ===
+                            'Monthly'
+                          ? report_sync_settings.day === 0
+                            ? ` ${report_sync_settings.schedule_type} on last day`
+                            : ` ${report_sync_settings.schedule_type} on day ${report_sync_settings.day}`
+                          : report_sync_settings.schedule_type}
+                      </span>
+                    </p>
+                    {report_sync_settings.last_synced_date && (
+                      <p>
+                        <b>sync date</b>
+                        <time>
+                          {format(
+                            report_sync_settings.last_synced_date,
+                            ['MMMM Do YYYY'],
+                          )}
+                        </time>
+                      </p>
+                    )}
+                    {report_sync_settings.spreadsheet_id && (
+                      <p>
+                        <b>sheet link</b>
+                        <span>
+                          <i className="material-icons">sim_card</i>
+                        </span>
+                      </p>
+                    )}
+                  </>
+                )}
             </div>
-            <div className="form-group">
-              <span style={{ color: 'grey' }}>Number of Columns</span>
-              :
-              <span style={{ color: 'grey' }}>
-                {attributes && attributes.length}
-              </span>
+            <div className="description">
+              <p>{description}</p>
             </div>
-            {/* {Object.keys(projectCreatedOn).length > 0 && (
+            {filterDataLoaded && (
               <DataFilter
                 toggleSelectClass={toggleSelectClass}
                 handleToggleClass={this.handleToggleClass}
@@ -305,38 +388,7 @@ class ReportDashboard extends Component {
                 selectedReportType={type}
                 projectCreatedOn={projectCreatedOn}
               />
-            )} */}
-            <div className="view-report">
-              <p>
-                <b>No of datapoints</b>
-                <span>140</span>
-              </p>
-              <p>
-                <b>created date</b>
-                <time>2076-01-10</time>
-              </p>
-              <p>
-                <b>sync scheduled type</b>
-                <span>140</span>
-              </p>
-              <p>
-                <b>sync date</b>
-                <time>2076-08-15</time>
-              </p>
-              <p>
-                <b>sheet link</b>
-                <span>
-                  <i className="material-icons">sim_card</i>
-                </span>
-              </p>
-            </div>
-            <div className="description">
-              <p>
-                name, description, no. of datapoints, report created
-                date, sync schedule type, sheet link, last sync date
-                time
-              </p>
-            </div>
+            )}
 
             <CollapseFilterTable id={id} projectId={pid} />
 
