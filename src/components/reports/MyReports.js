@@ -236,7 +236,7 @@ class MyReports extends Component {
                           </p>
                           <p>
                             <b>no. of datapoints</b>
-                            <span>{report.attributes.length}</span>
+                            <span>{report.datapoints}</span>
                           </p>
                         </div>
                       </div>

@@ -31,6 +31,7 @@ export default class CustomSelect extends Component {
       handleSelect,
       toggleType,
       height,
+      disable
     } = this.props;
     const label =
       name && name[0]
@@ -48,9 +49,7 @@ export default class CustomSelect extends Component {
     return (
       <div className="common-select">
         <div
-          className="select-wrapper select-toggle"
-          // toggleSelectClass[toggleType]
-          // ? 'select-wrapper select-toggle'
+          className={`${disable ? 'is-disable' : ''} select-wrapper select-toggle`}
 
           onClick={this.handleOnOpen}
           onKeyDown={this.handleOnOpen}

@@ -96,11 +96,11 @@ class DashboardHeader extends React.Component {
     ];
     const pathList = [
       { key: 0, title: 'Home', route: `/project-dashboard/${id}` },
-      {
-        key: 1,
-        title: 'Dashboard',
-        route: `/project-dashboard/${id}`,
-      },
+      // {
+      //   key: 1,
+      //   title: 'Dashboard',
+      //   route: `/project-dashboard/${id}`,
+      // },
       {
         key: 2,
         title: 'Reports',

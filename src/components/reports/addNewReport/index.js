@@ -1346,6 +1346,7 @@ class AddNewReport extends Component {
                                 handleSelect={
                                   this.handleReportTypeChange
                                 }
+                                disable={isEdit}
                               />
                             )}
                           </div>

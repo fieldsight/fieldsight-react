@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import MyReports from './MyReports';
 import ShareWithMe from './SharedWithMe';
-import Templates from './templates';
+import Templates from './templates/index';
 
 class ReportList extends Component {
   constructor(props) {
