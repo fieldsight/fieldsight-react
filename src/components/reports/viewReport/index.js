@@ -112,6 +112,7 @@ class ReportDashboard extends Component {
   loadSelectedFilter = list => {
     this.setState({
       filteredList: list,
+      filterDataLoaded: true,
     });
   };
 
