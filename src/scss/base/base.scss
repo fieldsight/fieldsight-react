@@ -1,7 +1,9 @@
-// #app {
-//   padding: 0 1rem;
-// }
+#app {
+  padding: 0 1rem;
+}
+
 .fieldsight-new {
+
   .mr-0,
   .no-margin {
     margin: 0 !important;
@@ -70,22 +72,28 @@
   .pd-0 {
     padding: 0;
   }
-  .flex{
+
+  .flex {
     @include flex;
   }
-  .flex-start{
+
+  .flex-start {
     @include flexStart;
   }
-  .flex-end{
+
+  .flex-end {
     @include flexEnd;
   }
-  .flex-center{
+
+  .flex-center {
     @include flexCenter;
   }
-  .flexvr{
+
+  .flexvr {
     @include flexvr;
   }
-  .flex-between{
+
+  .flex-between {
     @include flexBetween;
   }
 
@@ -148,8 +156,9 @@
             color: $color-white;
             @include radius4;
             margin-left: 0.635rem;
-            i.la-ellipsis-v:last-child{
-              margin-left:-10px;
+
+            i.la-ellipsis-v:last-child {
+              margin-left: -10px;
             }
           }
         }
@@ -202,19 +211,20 @@
       }
 
       &.dashboard-header {
-        border:0;
-        padding:1rem;
+        border: 0;
+        padding: 1rem;
+
         .dash-pf {
           @include flex_start;
           align-items: center;
           flex-wrap: nowrap;
 
           figure {
-            flex:0 0 65px;
-            -ms-flex:0 0 65px;
+            flex: 0 0 65px;
+            -ms-flex: 0 0 65px;
             max-width: 65px;
             height: 65px;
-            
+
             @include coverbg;
             @include radius50;
             margin: 0 1rem 0 0;
@@ -251,6 +261,7 @@
                 &:hover {
                   background-color: $color-yellow;
                 }
+
                 &:first-child {
                   margin-right: 0.2rem;
                   background-color: $color-yellow;
@@ -279,6 +290,7 @@
                 @include animZoom-after;
                 @include backface;
               }
+
               span {
                 opacity: 1;
                 visibility: visible;
@@ -287,32 +299,36 @@
           }
 
           .dash-pf-content {
-            .type-info{
-              margin-top:.5rem;
+            .type-info {
+              margin-top: .5rem;
             }
+
             h5 {
-              font-size:1.5rem;
+              font-size: 1.5rem;
               line-height: 1.3rem;
             }
 
             span {
               font-size: .8125rem;
               color: $color-secondary;
-              font-weight: 500;;
+              font-weight: 500;
+              ;
               margin: 0.6125rem 0;
               display: inline-block;
             }
-            .flex{
-              label{
-                margin:0;
+
+            .flex {
+              label {
+                margin: 0;
               }
-              span{
-                margin:0;
+
+              span {
+                margin: 0;
               }
             }
           }
         }
-        
+
       }
     }
 
@@ -367,6 +383,7 @@
     .deploy-active {
       color: $color-green !important;
     }
+
     .deploy-inactive {
       pointer-events: none;
       cursor: default;
@@ -374,6 +391,7 @@
       color: rgb(165, 163, 163) !important;
     }
   }
+
   span.drag-icon {
     display: inline-block;
 
@@ -454,6 +472,7 @@
     background-color: rgba($color-green, 0.4);
   }
 }
-.border-none{
-  border:none;
+
+.border-none {
+  border: none;
 }

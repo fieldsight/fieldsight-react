@@ -152,6 +152,28 @@ class MyReports extends Component {
     });
   };
 
+  getType = type => {
+    if (type === 0) {
+      return 'Site';
+    }
+    if (type === 1) {
+      return 'Region';
+    }
+    if (type === 2) {
+      return 'Project';
+    }
+    if (type === 3) {
+      return 'Team';
+    }
+    if (type === 4) {
+      return 'User';
+    }
+    if (type === 5) {
+      return 'Time Series';
+    }
+    return null;
+  };
+
   render() {
     const {
       state: {
@@ -206,7 +228,17 @@ class MyReports extends Component {
                       <div className="report-content">
                         <h4>{report.title}</h4>
 
-                        <p>{report.description}</p>
+                        {/* <p>{report.description}</p> */}
+                        <div className="summary-content">
+                          <p>
+                            <b>Report Type</b>
+                            <span>{this.getType(report.type)}</span>
+                          </p>
+                          <p>
+                            <b>no. of datapoints</b>
+                            <span>{report.attributes.length}</span>
+                          </p>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-4">

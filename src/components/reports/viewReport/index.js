@@ -306,6 +306,38 @@ class ReportDashboard extends Component {
                 projectCreatedOn={projectCreatedOn}
               />
             )} */}
+            <div className="view-report">
+              <p>
+                <b>No of datapoints</b>
+                <span>140</span>
+              </p>
+              <p>
+                <b>created date</b>
+                <time>2076-01-10</time>
+              </p>
+              <p>
+                <b>sync scheduled type</b>
+                <span>140</span>
+              </p>
+              <p>
+                <b>sync date</b>
+                <time>2076-08-15</time>
+              </p>
+              <p>
+                <b>sheet link</b>
+                <span>
+                  <i className="material-icons">sim_card</i>
+                </span>
+              </p>
+            </div>
+            <div className="description">
+              <p>
+                name, description, no. of datapoints, report created
+                date, sync schedule type, sheet link, last sync date
+                time
+              </p>
+            </div>
+
             <CollapseFilterTable id={id} projectId={pid} />
 
             <div className="form-group pull-right no-margin">

@@ -271,7 +271,7 @@ class DashboardHeader extends React.Component {
               <li key={list.key}>
                 <Link
                   to={list.route}
-                  className={list.route === path ? 'current' : ''}
+                  className={list.route === path ? 'current ' : ''}
                 >
                   {list.title}
                 </Link>

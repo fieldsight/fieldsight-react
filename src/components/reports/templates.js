@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import { Redirect } from 'react-router';
 import Loader from '../common/Loader';
 import { DotLoader } from '../myForm/Loader';
@@ -12,8 +12,7 @@ import {
   getFormType,
 } from '../../actions/templateAction';
 
-/* eslint-disable react/jsx-indent */
-/* eslint-disable  no-unused-expressions */
+/* eslint-disable */
 
 class Templates extends Component {
   constructor(props) {
@@ -24,6 +23,7 @@ class Templates extends Component {
       survey: false,
       staged: false,
       id: '',
+      showSub: {},
     };
   }
 
@@ -132,16 +132,23 @@ class Templates extends Component {
     });
   };
 
+  showSubStage = sub => {
+    const { showSub } = this.state;
+    this.setState(() => {
+      if (showSub !== sub) {
+        return {
+          showSub: sub,
+        };
+      }
+      return {
+        showSub: {},
+      };
+    });
+  };
+
   render() {
     const {
-      state: {
-        general,
-        scheduled,
-        survey,
-        staged,
-
-        id,
-      },
+      state: { general, scheduled, survey, staged, showSub, id },
       props: {
         templateReducer: {
           generalData,
@@ -242,6 +249,16 @@ class Templates extends Component {
                           >
                             <h4>{standardReport.title}</h4>
                             <p>{standardReport.description}</p>
+                            {/* <div className="summary-content">
+                              <p>
+                                <b>Report Type</b>
+                                <span>my Reports</span>
+                              </p>
+                              <p>
+                                <b>no. of datapoints</b>
+                                <span>100</span>
+                              </p>
+                            </div> */}
                           </a>
                         )}
 
@@ -358,7 +375,9 @@ class Templates extends Component {
               <div className="row">
                 <div className="col-md-8">
                   <div className="report-content">
-                    Form Data
+                    <a href="#">
+                      <h4>Form Data</h4>
+                    </a>
                     <p>
                       Export of forms data and site information an
                       Excel File, generated with filters in region,
@@ -564,38 +583,59 @@ class Templates extends Component {
                         >
                           <PerfectScrollbar>
                             {!stagedLoader && <DotLoader />}
-                            {stagedData !== undefined &&
-                            stagedData.length > 0 ? (
+                            {stagedData && stagedData.length > 0 ? (
                               stagedData.map(satData => (
-                                <>
-                                  <p>
-                                    {satData.name}
-                                    <ul>
-                                      {satData.sub_stages.map(sub => (
-                                        <li key={sub.id}>
-                                          <span
-                                            tabIndex="0"
-                                            role="button"
-                                            onKeyDown={() => {
-                                              this.generalLinkhandle(
-                                                sub.id,
-                                                projectCreatedOn,
-                                              );
-                                            }}
-                                            onClick={() => {
-                                              this.generalLinkhandle(
-                                                sub.id,
-                                                projectCreatedOn,
-                                              );
-                                            }}
-                                          >
-                                            {sub.form_name}
-                                          </span>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </p>
-                                </>
+                                <p
+                                  // role="button"
+                                  // tabIndex="0"
+                                  className="dropdown"
+                                  key={satData.name}
+                                  onClick={() => {
+                                    this.showSubStage(satData.name);
+                                  }}
+                                  // onKeyDown={() => {
+                                  //   this.showSubStage(satData.name);
+                                  // }}
+                                >
+                                  {satData.name}
+
+                                  <ul
+                                    className="form-data-list"
+                                    style={
+                                      showSub === satData.name &&
+                                      satData.sub_stages.length > 0
+                                        ? {
+                                            display: 'block',
+                                            position: 'relative',
+                                            height: `200px `,
+                                          }
+                                        : { display: 'none' }
+                                    }
+                                  >
+                                    {satData.sub_stages.map(sub => (
+                                      <li key={sub.id}>
+                                        <span
+                                          tabIndex="0"
+                                          role="button"
+                                          onKeyDown={() => {
+                                            this.generalLinkhandle(
+                                              sub.id,
+                                              projectCreatedOn,
+                                            );
+                                          }}
+                                          onClick={() => {
+                                            this.generalLinkhandle(
+                                              sub.id,
+                                              projectCreatedOn,
+                                            );
+                                          }}
+                                        >
+                                          {sub.form_name}
+                                        </span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </p>
                               ))
                             ) : (
                               <p>No data</p>
