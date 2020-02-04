@@ -146,7 +146,7 @@ class OrganizationExport extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`fieldsight/application/#/organization-dashboard/${orgId}`}
+                href={`/fieldsight/application/#/organization-dashboard/${orgId}`}
               >
                 Organization
               </a>
