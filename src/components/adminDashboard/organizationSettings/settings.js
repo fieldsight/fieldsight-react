@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import SuperAdminFormEdit from '../../superAdminEdit';
 import LeftSideBar from './leftSideBar';
@@ -7,7 +7,18 @@ import MyForm from './myForms';
 import Library from './library';
 import { RegionProvider } from '../../../context';
 
-export default class SuperAdminSetting extends PureComponent {
+export default class SuperAdminSetting extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { orgName: '' };
+  }
+
+  reqOrgName = name => {
+    this.setState({
+      orgName: name,
+    });
+  };
+
   render() {
     const {
       match: {
@@ -15,6 +26,7 @@ export default class SuperAdminSetting extends PureComponent {
         params: { id },
       },
     } = this.props;
+    const { orgName } = this.state;
 
     return (
       <RegionProvider>
@@ -25,7 +37,7 @@ export default class SuperAdminSetting extends PureComponent {
                 href={`/fieldsight/application/#/organization-dashboard/${id}`}
                 style={{ color: '#00628E' }}
               >
-                Organization Dashboard
+                {orgName}
               </a>
             </li>
 
@@ -55,7 +67,11 @@ export default class SuperAdminSetting extends PureComponent {
                     exact
                     path={`${url}`}
                     render={props => (
-                      <SuperAdminFormEdit id={id} {...props} />
+                      <SuperAdminFormEdit
+                        id={id}
+                        {...props}
+                        reqOrgName={this.reqOrgName}
+                      />
                     )}
                   />
                   <Route

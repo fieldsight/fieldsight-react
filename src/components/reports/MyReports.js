@@ -14,6 +14,28 @@ import DeleteModal from '../common/DeleteModal';
 
 /* eslint-disable react/no-did-update-set-state */
 
+export const getType = type => {
+  if (type === 0) {
+    return 'Site';
+  }
+  if (type === 1) {
+    return 'Region';
+  }
+  if (type === 2) {
+    return 'Project';
+  }
+  if (type === 3) {
+    return 'Team';
+  }
+  if (type === 4) {
+    return 'User';
+  }
+  if (type === 5) {
+    return 'Time Series';
+  }
+  return null;
+};
+
 class MyReports extends Component {
   intervalID;
 
@@ -206,7 +228,17 @@ class MyReports extends Component {
                       <div className="report-content">
                         <h4>{report.title}</h4>
 
-                        <p>{report.description}</p>
+                        {/* <p>{report.description}</p> */}
+                        <div className="summary-content">
+                          <p>
+                            <b>Report Type</b>
+                            <span>{getType(report.type)}</span>
+                          </p>
+                          <p>
+                            <b>no. of datapoints</b>
+                            <span>{report.datapoints}</span>
+                          </p>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-4">

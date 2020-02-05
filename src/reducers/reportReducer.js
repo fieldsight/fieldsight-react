@@ -7,6 +7,7 @@ import {
   GET_REPORT_DATA,
   GET_PROJECT_DETAILS,
   GET_CUSTOM_REPORT_TABLE_DATA,
+  GET_TO_FILTER_DATA,
 } from '../actions/types';
 
 const initialState = {
@@ -90,6 +91,21 @@ export default function(state = initialState, action) {
       return {
         ...state,
         customReportTable: action.payload,
+      };
+    }
+    case GET_TO_FILTER_DATA: {
+      return {
+        ...state,
+        regions: action.payload.regions ? action.payload.regions : [],
+        siteTypes: action.payload.site_types
+          ? action.payload.site_types
+          : [],
+        userRoles: action.payload.user_roles
+          ? action.payload.user_roles
+          : [],
+        reportLoader: false,
+        projectCreatedOn:
+          action.payload.created_date && action.payload.created_date,
       };
     }
     default:

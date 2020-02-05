@@ -64,23 +64,28 @@ export default class SuperAdminFormEdit extends Component {
           const longitude = position && position[1].split('(')[1];
           const latitude = position && position[2].split(')')[0];
 
-          this.setState({
-            identifier: responses[0].data.identifier,
-            name: responses[0].data.name,
-            phone: responses[0].data.phone,
-            fax: responses[0].data.fax,
-            email: responses[0].data.email,
-            website: responses[0].data.website,
-            address: responses[0].data.address,
-            public_desc: responses[0].data.public_desc,
-            position: {
-              latitude,
-              longitude,
+          this.setState(
+            {
+              identifier: responses[0].data.identifier,
+              name: responses[0].data.name,
+              phone: responses[0].data.phone,
+              fax: responses[0].data.fax,
+              email: responses[0].data.email,
+              website: responses[0].data.website,
+              address: responses[0].data.address,
+              public_desc: responses[0].data.public_desc,
+              position: {
+                latitude,
+                longitude,
+              },
+              zoom: 13,
+              Selectedtypes: responses[0].data.country,
+              country: responses[1].data.countries,
             },
-            zoom: 13,
-            Selectedtypes: responses[0].data.country,
-            country: responses[1].data.countries,
-          });
+            () => {
+              this.props.reqOrgName(this.state.name);
+            },
+          );
         }),
       )
       .catch();
@@ -214,16 +219,6 @@ export default class SuperAdminFormEdit extends Component {
 
     return (
       <>
-        {/* <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to={`/organization-dashboard/${id}`}>
-              Organization Dashboard
-              </Link>
-            </li>
-            <li className="breadcrumb-item">Edit Super Organization</li>
-          </ol>
-        </nav> */}
         <RightContentCard title="Edit Organization">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">

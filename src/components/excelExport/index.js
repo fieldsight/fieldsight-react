@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Table from 'react-bootstrap/Table';
-import format from 'date-fns/format';
 import { DotLoader } from '../myForm/Loader';
-import Modal from '../common/Modal';
-import SelectElement from '../common/SelectElement';
-import CheckBox from '../common/CheckBox';
+
 import {
   getExportList,
   createExport,
@@ -13,12 +9,9 @@ import {
   downloadExport,
 } from '../../actions/exportExcelActions';
 import { errorToast, successToast } from '../../utils/toastHandler';
+import ExportTable from './exportTable';
+import AdvancedExportModal from './advanceExportModal';
 /* eslint-disable */
-
-const options = [
-  { id: '/', name: '/(Slash)' },
-  { id: '.', name: '.(Dot)' },
-];
 
 class ExcelExport extends Component {
   constructor(props) {
@@ -75,6 +68,11 @@ class ExcelExport extends Component {
     if (prevProps.excelExport.exportList !== excelExport.exportList) {
       this.setList(excelExport.exportList);
     }
+
+    if (prevProps.excelExport.deleteResp !== excelExport.deleteResp) {
+      successToast(excelExport.deleteResp);
+    }
+
     if (
       prevProps.excelExport.createResp !== excelExport.createResp &&
       excelExport.createResp !== ''
@@ -92,37 +90,23 @@ class ExcelExport extends Component {
     this.setState({ exportHistory: list, loader: false });
   };
 
-  handleSelectChange = e => {
-    const { value } = e.target;
-    this.setState(state => ({
-      data: {
-        ...state.data,
-        groupDelimiter: value,
+  handleAdvanceSubmit = ({
+    dontSplitSelectMultiples,
+    groupDelimiter,
+  }) => {
+    this.setState(
+      state => ({
+        modalLoader: true,
+        data: {
+          ...state.data,
+          dont_split_select_multiples: dontSplitSelectMultiples,
+          group_delimiter: groupDelimiter,
+        },
+      }),
+      () => {
+        this.handleSubmit('advanced');
       },
-    }));
-  };
-
-  handleCheckBox = e => {
-    const { checked } = e.target;
-    this.setState(state => {
-      if (checked) {
-        return {
-          data: {
-            ...state.data,
-            dontSplitSelectMultiples: 'yes',
-          },
-        };
-      }
-      if (!checked) {
-        return {
-          data: {
-            ...state.data,
-            dontSplitSelectMultiples: 'no',
-          },
-        };
-      }
-      return null;
-    });
+    );
   };
 
   handleSubmit = type => {
@@ -143,13 +127,8 @@ class ExcelExport extends Component {
     this.props.createExport(isProject, formId, id, body);
   };
 
-  handleDelete = () => {
-    const {
-      match: {
-        params: { formId },
-      },
-    } = this.props;
-    this.props.deleteExport(formId);
+  handleDelete = id => {
+    this.props.deleteExport(id);
   };
 
   handleToggleModal = () => {
@@ -161,7 +140,6 @@ class ExcelExport extends Component {
       exportHistory,
       loader,
       showModal,
-      data: { groupDelimiter, dontSplitSelectMultiples },
       modalLoader,
     } = this.state;
     return (
@@ -194,110 +172,18 @@ class ExcelExport extends Component {
           </div>
           {loader && <DotLoader />}
           {!loader && (
-            <Table
-              responsive="xl"
-              className="table  table-bordered  dataTable"
-            >
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>FileName</th>
-                  <th>Date Created</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {exportHistory.length === 0 && (
-                  <tr>
-                    <td colSpan={4}>No Data Available</td>
-                  </tr>
-                )}
-                {exportHistory.length > 0 &&
-                  exportHistory.map((history, index) => (
-                    <tr key={`excel_${history.id}`}>
-                      <td>{index + 1}</td>
-                      <td>
-                        {history.internal_status === 1 && (
-                          <a href={history.file_url}>
-                            {history.filename}
-                          </a>
-                        )}
-                        {history.internal_status !== 1 && (
-                          <span>{history.status_title}</span>
-                        )}
-                      </td>
-                      <td>
-                        {format(
-                          history.created_on,
-                          'MMM D YYYY, h:mm a',
-                        )}
-                      </td>
-                      <td>
-                        <a
-                          role="button"
-                          tabIndex="0"
-                          onClick={() => {
-                            this.handleDelete(history.id);
-                          }}
-                          onKeyDown={() => {
-                            this.handleDelete(history.id);
-                          }}
-                        >
-                          <i className="material-icons">delete</i>
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </Table>
+            <ExportTable
+              exportHistory={exportHistory}
+              handleDelete={this.handleDelete}
+            />
           )}
         </div>
         {showModal && (
-          <Modal
-            title="Advanced Export"
-            toggleModal={this.handleToggleModal}
-          >
-            <div className="row">
-              <div className="col-xs-6">
-                <div className="card-body">
-                  <SelectElement
-                    label=" Delimiter to use to separate group names from
-                      field names"
-                    className="form-control"
-                    options={options}
-                    changeHandler={this.handleSelectChange}
-                    value={groupDelimiter}
-                  />
-                  <CheckBox
-                    checked={dontSplitSelectMultiples === 'yes'}
-                    label="DONT split select multiple choice answers into separate columns"
-                    changeHandler={this.handleCheckBox}
-                  />
-                  <div className="buttons flex-end">
-                    <button
-                      type="button"
-                      className="common-button is-border"
-                      onClick={() => {
-                        this.handleToggleModal();
-                      }}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="common-button is-bg"
-                      onClick={() => {
-                        this.handleSubmit('advanced');
-                      }}
-                      disabled={modalLoader}
-                    >
-                      Save
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Modal>
+          <AdvancedExportModal
+            handleToggleModal={this.handleToggleModal}
+            handleAdvanceSubmit={this.handleAdvanceSubmit}
+            modalLoader={modalLoader}
+          />
         )}
       </div>
     );

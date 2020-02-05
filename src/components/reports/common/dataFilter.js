@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import FilterByDate from '../common/filterByDate';
-import FilterByData from '../common/filterByData';
+import FilterByDate from './filterByDate';
+import FilterByData from './filterByData';
 
 // import CustomSelect from '../CustomSelect';
 /* eslint-disable */
@@ -29,10 +29,7 @@ export default class DataFilter extends Component {
   }
 
   componentWillMount() {
-    if (
-      this.props.filteredData &&
-      Object.keys(this.props.filteredData).length > 0
-    ) {
+    if (this.props.filteredData) {
       const data = this.props.filteredData;
       const regions = data.regions
         ? data.regions.length === this.props.regions.length
@@ -41,7 +38,7 @@ export default class DataFilter extends Component {
               ...data.regions,
             ]
           : data.regions
-        : [];
+        : this.props.filterByRegions;
       const siteType = data.site_types
         ? data.site_types.length === this.props.siteTypes.length
           ? [
@@ -49,7 +46,7 @@ export default class DataFilter extends Component {
               ...data.site_types,
             ]
           : data.site_types
-        : [];
+        : this.props.filterBySiteType;
       const userRoles = data.user_roles
         ? data.user_roles.length === this.props.userRoles.length
           ? [
@@ -57,9 +54,13 @@ export default class DataFilter extends Component {
               ...data.user_roles,
             ]
           : data.user_roles
-        : [];
-      const startDate = new Date(data.start_date);
-      const endDate = new Date(data.end_date);
+        : this.props.filterByUserRoles;
+      const startDate = data.start_date
+        ? new Date(data.start_date)
+        : new Date(this.props.projectCreatedOn);
+      const endDate = data.end_date
+        ? new Date(data.end_date)
+        : new Date();
       this.setState(state => ({
         filterData: {
           ...state.filterData,
@@ -68,38 +69,6 @@ export default class DataFilter extends Component {
           userRoles,
           startDate,
           endDate,
-        },
-      }));
-    }
-    if (this.props.filterByRegions) {
-      this.setState(state => ({
-        filterData: {
-          ...state.filterData,
-          regions: this.props.filterByRegions,
-        },
-      }));
-    }
-    if (this.props.filterBySiteType) {
-      this.setState(state => ({
-        filterData: {
-          ...state.filterData,
-          siteType: this.props.filterBySiteType,
-        },
-      }));
-    }
-    if (this.props.filterByUserRoles) {
-      this.setState(state => ({
-        filterData: {
-          ...state.filterData,
-          userRoles: this.props.filterByUserRoles,
-        },
-      }));
-    }
-    if (this.props.projectCreatedOn) {
-      this.setState(state => ({
-        filterData: {
-          ...state.filterData,
-          startDate: new Date(this.props.projectCreatedOn),
         },
       }));
     }
@@ -355,7 +324,6 @@ export default class DataFilter extends Component {
       applyFilter,
       selectedReportType,
     } = this.props;
-    // console.log('object', this.state);
     return (
       <div className="data-filter filter-bottom mrt-30">
         <form onSubmit={this.handleSubmit}>
@@ -366,7 +334,8 @@ export default class DataFilter extends Component {
                 <CustomSelect label="select Project" />
               </div>
             </div> */}
-            {filterArr.some(f => f.code === 'regions') && (
+            {selectedReportType <= 3 && (
+              // filterArr.some(f => f.code === 'regions') && (
               <div className="col-xl-2 col-md-6">
                 <FilterByData
                   className="form-group inline-form-group"
@@ -383,7 +352,8 @@ export default class DataFilter extends Component {
                 />
               </div>
             )}
-            {filterArr.some(f => f.code === 'site_types') && (
+            {selectedReportType <= 3 && (
+              // filterArr.some(f => f.code === 'site_types') && (
               <div className="col-xl-2 col-md-6">
                 <FilterByData
                   className="form-group inline-form-group"
@@ -401,24 +371,24 @@ export default class DataFilter extends Component {
               </div>
             )}
 
-            {selectedReportType === 4 &&
-              filterArr.some(f => f.code === 'user_roles') && (
-                <div className="col-xl-2 col-md-6">
-                  <FilterByData
-                    className="form-group inline-form-group"
-                    label="user roles"
-                    toggleSelectClass={toggleSelectClass}
-                    handleToggleClass={() => {
-                      handleToggleClass('filterUserRole');
-                    }}
-                    toggleType="filterUserRole"
-                    data={filterByUserRoles}
-                    changeHandler={this.handleUserRoleFilter}
-                    selectedArr={userRoles}
-                    placeholderTxt="Select User Roles"
-                  />
-                </div>
-              )}
+            {selectedReportType === 4 && (
+              // filterArr.some(f => f.code === 'user_roles') && (
+              <div className="col-xl-2 col-md-6">
+                <FilterByData
+                  className="form-group inline-form-group"
+                  label="user roles"
+                  toggleSelectClass={toggleSelectClass}
+                  handleToggleClass={() => {
+                    handleToggleClass('filterUserRole');
+                  }}
+                  toggleType="filterUserRole"
+                  data={filterByUserRoles}
+                  changeHandler={this.handleUserRoleFilter}
+                  selectedArr={userRoles}
+                  placeholderTxt="Select User Roles"
+                />
+              </div>
+            )}
 
             {selectedReportType === 5 && (
               <div className="col-xl-5 col-md-6">

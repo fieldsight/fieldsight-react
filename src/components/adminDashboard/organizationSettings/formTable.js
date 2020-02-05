@@ -9,6 +9,7 @@ import { DotLoader } from '../../myForm/Loader';
 export default class FormTable extends PureComponent {
   render() {
     const {
+      orgId,
       selected_forms,
       handleConfirm,
       openDelete,
@@ -42,7 +43,7 @@ export default class FormTable extends PureComponent {
                     <td>{teams.default_submission_status}</td>
                     <td>
                       <Link
-                        to={`/organization-submission/${teams.id}/`}
+                        to={`/organization-submission/${orgId}/${teams.id}/`}
                       >
                         {teams.total_submissions}
                       </Link>
@@ -64,6 +65,14 @@ export default class FormTable extends PureComponent {
                         >
                           <i className="la la-close" />
                         </OverlayTrigger>
+                      </a>
+                      <a
+                        href={`/fieldsight/application/#/organization-exports/${orgId}/${teams.id}`}
+                        className="edit-tag tag"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="la la-download " />
                       </a>
                     </td>
                   </tr>
@@ -129,6 +138,14 @@ export default class FormTable extends PureComponent {
                         >
                           <i className="la la-close" />
                         </OverlayTrigger>
+                      </a>
+                      <a
+                        href={`/fieldsight/application/#/organization-exports/${orgId}/${teams.id}`}
+                        className="edit-tag tag"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="la la-download " />
                       </a>
                     </td>
                   </tr>

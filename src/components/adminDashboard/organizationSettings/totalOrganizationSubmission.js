@@ -44,7 +44,7 @@ class TotalOrganizationSubmission extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <Link
-                to={`/organization-dashboard/${this.props.match.params.id}/`}
+                to={`/organization-dashboard/${this.props.match.params.orgId}/`}
               >
                 Organization Dashboard
               </Link>

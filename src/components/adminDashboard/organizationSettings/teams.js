@@ -26,6 +26,7 @@ export default class Teams extends React.PureComponent {
       teams_id: '',
       loader: false,
       saveLoader: '',
+      masterTeams: [],
     };
   }
 
@@ -40,6 +41,7 @@ export default class Teams extends React.PureComponent {
           is_superuser: res.data.is_superuser,
           // is_superuser: false,
           loader: true,
+          masterTeams: res.data.teams,
         });
       })
       .catch();
@@ -92,7 +94,7 @@ export default class Teams extends React.PureComponent {
   handleSaveForm = () => {
     const {
       props: { id },
-      state: { selected },
+      state: { selected, masterTeams },
     } = this;
     const result = selected.map(function(x) {
       return x.id;
@@ -111,6 +113,8 @@ export default class Teams extends React.PureComponent {
             saveLoader: !State.saveLoader,
             popUpPage: false,
             selected_teams: res.data,
+            teams: masterTeams,
+            selected: [],
           }));
         }
       })
@@ -162,6 +166,25 @@ export default class Teams extends React.PureComponent {
     });
   };
 
+  onChangeHandler = async e => {
+    const { value } = e.target;
+    const { masterTeams, teams } = this.state;
+    if (value) {
+      const search = await teams.filter(result => {
+        return result.name
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      });
+      this.setState({
+        teams: search,
+      });
+    } else {
+      this.setState({
+        teams: masterTeams,
+      });
+    }
+  };
+
   render() {
     const {
       state: {
@@ -206,11 +229,22 @@ export default class Teams extends React.PureComponent {
             url={`/fieldsight/application/#/create-team/${id}`}
             handleSubmit={this.handleSaveForm}
           >
-            <TeamList
-              teams={teams}
-              selected={selected}
-              changeHandler={this.changeHandler}
-            />
+            <>
+              <div className="form-group search-group mrt-15">
+                <input
+                  type="search"
+                  className="form-control"
+                  placeholder="Search"
+                  onChange={e => this.onChangeHandler(e)}
+                />
+                <i className="la la-search" />
+              </div>
+              <TeamList
+                teams={teams}
+                selected={selected}
+                changeHandler={this.changeHandler}
+              />
+            </>
           </ManageModal>
         )}
 
@@ -220,7 +254,7 @@ export default class Teams extends React.PureComponent {
             onConfirm={handleConfirm}
             onToggle={handleCancle}
             title="Warning"
-            message="Are u sure you want to remove?"
+            message="Are you sure you want to remove?"
           />
         )}
       </>

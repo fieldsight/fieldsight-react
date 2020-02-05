@@ -27,7 +27,7 @@ export default function(state = initialState, action) {
     case DELETE_EXPORT:
       return {
         ...state,
-        deleteResp: action.payload,
+        deleteResp: action.payload.message,
       };
     case DOWNLOAD_EXPORT:
       return {

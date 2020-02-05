@@ -67,7 +67,9 @@ class CollapseFilterTable extends Component {
     }
     if (
       prevProps.reportReducer.report_sync_settings !==
-      report_sync_settings
+        report_sync_settings &&
+      report_sync_settings &&
+      Object.keys(report_sync_settings).length > 0
     ) {
       this.setSyncReportData(report_sync_settings);
     }
