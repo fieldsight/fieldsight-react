@@ -59,6 +59,7 @@ class MetricsTab extends PureComponent {
         aria-labelledby="sidebar-metric_tab"
         tabIndex={-1}
       >
+        <br />
         <div className="form-group">
           {/* <label>Color</label> */}
           <label>Change Color By:</label>

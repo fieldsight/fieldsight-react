@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { PureComponent, createRef } from 'react';
 import { connect } from 'react-redux';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import L from 'leaflet';
@@ -48,7 +48,7 @@ const INITIAL_STATE = {
   isRegionSelected: false,
   loadallGeoLayer: false,
 };
-class MapFilter extends Component {
+class MapFilter extends PureComponent {
   constructor(props) {
     super(props);
     this.state = INITIAL_STATE;
@@ -157,6 +157,7 @@ class MapFilter extends Component {
   handleMetricsChange = (e, usedState) => {
     // console.log(e.value, usedState);
     if (usedState === 'Color') {
+      // this.loaderOn();
       this.setState({ colorBySelection: e.value });
     } else if (usedState === 'Size') {
       this.setState({ sizeBySelection: e.value });
@@ -165,6 +166,12 @@ class MapFilter extends Component {
 
   toggleLoader = () => {
     this.setState({ isLoading: false, searchByItem: 'name' });
+  };
+
+  loaderOn = () => {
+    this.setState(prevState => ({
+      isLoading: !prevState.isLoading,
+    }));
   };
 
   toggleZoomforFilter = () => {
@@ -326,6 +333,13 @@ class MapFilter extends Component {
     this.setState(prevState => ({
       modalSetting: !prevState.modalSetting,
     }));
+  };
+
+  refreshClick = () => {
+    // const map = this.mapRef.current.leafletElement;
+    // const featuregroup = this.groupRef.current.leafletElement;
+    // map.fitBounds(featuregroup.getBounds());
+    this.props.refreshGeojsonData();
   };
 
   onClickClearBtn = () => {
@@ -888,6 +902,7 @@ class MapFilter extends Component {
               projectsList={projectsList}
               projectsRegionTypes={projectsRegionTypes}
               primaryGeojson={primaryGeojson}
+              loaderOn={this.loaderOn}
             />
           </div>
           <div className="map-sidebar left-map-sidebar">
@@ -983,6 +998,11 @@ class MapFilter extends Component {
                       <ul>
                         <li>
                           <a
+                            className={
+                              searchByItem === 'name'
+                                ? 'searchselected'
+                                : ''
+                            }
                             value="name"
                             name="name"
                             role="link"
@@ -995,6 +1015,11 @@ class MapFilter extends Component {
                         </li>
                         <li>
                           <a
+                            className={
+                              searchByItem === 'address'
+                                ? 'searchselected'
+                                : ''
+                            }
                             value="address"
                             name="address"
                             role="link"

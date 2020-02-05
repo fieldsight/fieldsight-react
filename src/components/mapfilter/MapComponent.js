@@ -41,6 +41,7 @@ class MapComponent extends PureComponent {
       groupRef,
       projectsRegionTypes,
       projectsList,
+      loaderOn,
     } = this.props;
     const map = mapRef.current.leafletElement;
     const clearProgressLegend = () => {
@@ -65,8 +66,9 @@ class MapComponent extends PureComponent {
       (prevProps.clonePrimaryGeojson !== clonePrimaryGeojson &&
         projectsRegionTypes)
     ) {
+      // this.loaderOn();
       const allLayers = groupRef.current.leafletElement.getLayers();
-
+      console.log(allLayers);
       const formStatusColor = [
         '#0080ff',
         '#FF0000',
@@ -165,10 +167,15 @@ class MapComponent extends PureComponent {
           end,
           maxLengthValue - 16 + 2,
         );
-
-        for (let x = 0; x < extraColor.length; x += 1) {
-          otherColors.push(extraColor[x]);
+        if (
+          colorBySelection === 'site_type' ||
+          colorBySelection === 'region'
+        ) {
+          for (let x = 0; x < extraColor.length; x += 1) {
+            otherColors.push(extraColor[x]);
+          }
         }
+
         // console.log(otherColors, 'othercolors after loop');
       }
       //   const v = mcg.getLayers();
@@ -326,7 +333,7 @@ class MapComponent extends PureComponent {
           // console.log(projectList.length);
           projectsList.forEach((element, key) => {
             if (
-              allLayers[type].options.attribution.project ===
+              allLayers[type].options.properties.project ===
               element.name
             ) {
               allLayers[type].setStyle({
@@ -349,72 +356,72 @@ class MapComponent extends PureComponent {
           });
         }
         if (colorBySelection === 'progress') {
-          if (allLayers[type].options.attribution.progress === 0) {
+          if (allLayers[type].options.properties.progress === 0) {
             allLayers[type].setStyle({
               fillColor: progressColor[0],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 0 &&
-            allLayers[type].options.attribution.progress <= 20
+            allLayers[type].options.properties.progress > 0 &&
+            allLayers[type].options.properties.progress <= 20
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[1],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 20 &&
-            allLayers[type].options.attribution.progress <= 40
+            allLayers[type].options.properties.progress > 20 &&
+            allLayers[type].options.properties.progress <= 40
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[2],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 40 &&
-            allLayers[type].options.attribution.progress <= 60
+            allLayers[type].options.properties.progress > 40 &&
+            allLayers[type].options.properties.progress <= 60
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[3],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 60 &&
-            allLayers[type].options.attribution.progress <= 80
+            allLayers[type].options.properties.progress > 60 &&
+            allLayers[type].options.properties.progress <= 80
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[4],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 80 &&
-            allLayers[type].options.attribution.progress <= 99
+            allLayers[type].options.properties.progress > 80 &&
+            allLayers[type].options.properties.progress <= 99
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[5],
             });
           }
-          if (allLayers[type].options.attribution.progress === 100) {
+          if (allLayers[type].options.properties.progress === 100) {
             allLayers[type].setStyle({
               fillColor: progressColor[6],
             });
           }
         }
         if (colorBySelection === 'status') {
-          if (allLayers[type].options.attribution !== undefined) {
-            if (allLayers[type].options.attribution.status === 0) {
+          if (allLayers[type].options.properties !== undefined) {
+            if (allLayers[type].options.properties.status === 0) {
               allLayers[type].setStyle({
                 fillColor: formStatusColor[0],
               });
             } else if (
-              allLayers[type].options.attribution.status === 1
+              allLayers[type].options.properties.status === 1
             ) {
               allLayers[type].setStyle({
                 fillColor: formStatusColor[1],
               });
             } else if (
-              allLayers[type].options.attribution.status === 2
+              allLayers[type].options.properties.status === 2
             ) {
               allLayers[type].setStyle({
                 fillColor: formStatusColor[2],
               });
             } else if (
-              allLayers[type].options.attribution.status === 3
+              allLayers[type].options.properties.status === 3
             ) {
               allLayers[type].setStyle({
                 fillColor: formStatusColor[3],
@@ -430,14 +437,13 @@ class MapComponent extends PureComponent {
           siteTypes.forEach((element, key) => {
             // console.log(key, 'key');
             if (
-              allLayers[type].options.attribution.site_type === null
+              allLayers[type].options.properties.site_type === null
             ) {
               allLayers[type].setStyle({
                 fillColor: 'white',
               });
             } else if (
-              allLayers[type].options.attribution.site_type ===
-              element
+              allLayers[type].options.properties.site_type === element
             ) {
               allLayers[type].setStyle({
                 fillColor: otherColors[key],
@@ -450,12 +456,12 @@ class MapComponent extends PureComponent {
           // console.log(projectList.length);
           regions.forEach((element, key) => {
             // console.log(key, 'key');
-            if (allLayers[type].options.attribution.region === null) {
+            if (allLayers[type].options.properties.region === null) {
               allLayers[type].setStyle({
                 fillColor: 'white',
               });
             } else if (
-              allLayers[type].options.attribution.region === element
+              allLayers[type].options.properties.region === element
             ) {
               allLayers[type].setStyle({
                 fillColor: otherColors[key],
@@ -477,54 +483,6 @@ class MapComponent extends PureComponent {
     }
     if (prevProps.clonePrimaryGeojson !== clonePrimaryGeojson) {
       map.fitBounds(groupRef.current.leafletElement.getBounds());
-
-      // console.log(clonePrimaryGeojson, 'clone');
-      // // console.log(this.props.markerRef.current.leafletElement);
-      // // console.log(this.props.groupRef.current.leafletElement);
-
-      // console.log(clonePrimaryGeojson[0].features);
-      // mcg = L.markerClusterGroup({
-      //   chunkedLoading: true,
-      //   // singleMarkerMode: true,
-      //   spiderfyOnMaxZoom: false,
-      // });
-      // clonePrimaryGeojson[0].features.forEach(element => {
-      //   const marker = L.circleMarker(
-      //     [
-      //       element.geometry.coordinates[1],
-      //       element.geometry.coordinates[0],
-      //     ],
-      //     {
-      //       radius: 6,
-      //       fillColor: '#ff7800',
-      //       color: '#000',
-      //       weight: 1,
-      //       opacity: 1,
-      //       fillOpacity: 0.8,
-      //     },
-      //   );
-      //   marker.bindPopup(
-      //     `<strong>${element.project}</strong><br/>${element.region} ${element.progress}, ${element.status}<br/>`,
-      //   );
-      //   marker.feature = {
-      //     properties: {
-      //       project: element.project,
-      //       progress: element.progress,
-      //       status: element.status,
-      //       site_type: element.site_type,
-      //       region: element.region,
-      //     },
-      //     // geometry: undefined,
-      //   };
-      //   mcg.addLayer(marker);
-      //   // console.log(marker, 'markers');
-      //   return marker;
-      // });
-      // map.addLayer(mcg);
-      // console.log(this.props.mapRef.current.leafletElement);
-      // console.log(mcg.getLayers());
-      // console.log(mcg.getLayers(), 'get last');
-      // // allLayers = this.props.mapRef.current.leafletElement._layers;
     }
   }
 
@@ -604,6 +562,7 @@ class MapComponent extends PureComponent {
               margin: '15px',
               overflowY: 'scroll',
               maxHeight: '251px',
+              height: '182px',
             }}
           >
             <div className="panel-wrap mt-3">
@@ -685,7 +644,7 @@ class MapComponent extends PureComponent {
               name="OpenStreetMap"
             >
               <TileLayer
-                attribution='OpenStreetMap © Developer:<a href=" http://naxa.com.np">NAXA</a>'
+                attribution='OpenStreetMap © Developer:<a href="http://naxa.com.np">NAXA</a>'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
             </BaseLayer>
@@ -747,7 +706,7 @@ class MapComponent extends PureComponent {
           }} */}
           {/* {isfiltered === true ? ( */}
           <MarkerClusterGroup
-            disableClusteringAtZoom={14}
+            disableClusteringAtZoom={12}
             ref={groupRef}
           >
             {clonePrimaryGeojson[0] &&
@@ -764,7 +723,8 @@ class MapComponent extends PureComponent {
                       lat: location[1],
                       lng: location[0],
                     }}
-                    attribution={{
+                    // properties={{ name: 'varun' }}
+                    properties={{
                       project: each.project,
                       progress: each.progress,
                       status: each.status,

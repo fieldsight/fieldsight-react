@@ -55,7 +55,7 @@ class FiltersTab extends PureComponent {
                   checked={isProjectSelected}
                   onChange={handleProjectParentCheckbox}
                 />
-                Project
+                Projects
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
@@ -320,7 +320,7 @@ class FiltersTab extends PureComponent {
                   checked={isSiteTypeSelected}
                   onChange={handleSiteTypeParentCheckbox}
                 />
-                Site Type
+                Site Types
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="3">
@@ -372,7 +372,7 @@ class FiltersTab extends PureComponent {
                   checked={isRegionSelected}
                   onChange={handleRegionParentCheckbox}
                 />
-                Region
+                Regions
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="4">

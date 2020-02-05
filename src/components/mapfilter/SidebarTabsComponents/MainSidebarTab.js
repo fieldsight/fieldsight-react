@@ -49,6 +49,7 @@ class MainSidebarTab extends PureComponent {
         selectedBaseLayer,
         geolayersList,
         geolayersOnChange,
+        colorBySelection,
       },
       // match: {
       //   params: { id: siteId },
@@ -164,7 +165,7 @@ class MainSidebarTab extends PureComponent {
           <MetricsTab
             activeTab={activeTab}
             handleMetricsChange={handleMetricsChange}
-            // colorBySelection={colorBySelection}
+            colorBySelection={colorBySelection}
             // sizeBySelection={sizeBySelection}
           />
           <LayersTab
