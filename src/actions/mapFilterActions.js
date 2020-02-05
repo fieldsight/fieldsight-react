@@ -7,6 +7,7 @@ import {
   FILTER_PRIMARYGEOJSON,
   SEARCH_PRIMARYGEOJSON,
   REFRESH_GEOJSONDATA,
+  GET_GEOLAYERS_LIST,
 } from './types';
 
 export const getProjectsList = id => dispatch => {
@@ -74,4 +75,15 @@ export const refreshGeojsonData = payload => dispatch => {
   dispatch({
     type: REFRESH_GEOJSONDATA,
   });
+};
+export const getGeolayersList = id => dispatch => {
+  axios
+    .get(`/fieldsight/api/project/geolayers/${id}/`)
+    .then(res => {
+      dispatch({
+        type: GET_GEOLAYERS_LIST,
+        payload: res.data,
+      });
+    })
+    .catch(() => {});
 };

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Select from 'react-select';
 
-class MetricsTab extends Component {
+class MetricsTab extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,6 +59,7 @@ class MetricsTab extends Component {
         aria-labelledby="sidebar-metric_tab"
         tabIndex={-1}
       >
+        <br />
         <div className="form-group">
           {/* <label>Color</label> */}
           <label>Change Color By:</label>
@@ -77,8 +78,7 @@ class MetricsTab extends Component {
             options={colorOption}
           />
         </div>
-        <div className="form-group">
-          {/* <label>Color</label> */}
+        {/* <div className="form-group">
 
           <label>Change Size By:</label>
           <Select
@@ -90,15 +90,12 @@ class MetricsTab extends Component {
             }}
             options={sizeOption}
           />
-        </div>
+        </div> */}
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ mapFilterReducer }) => ({
-  mapFilterReducer,
-});
 // const mapDispatchToProps = dispatch => {
 //   return {
 //     getPrimaryGeojson: () =>

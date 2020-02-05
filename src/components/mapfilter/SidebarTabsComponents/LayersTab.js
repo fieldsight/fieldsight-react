@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-class LayersTab extends Component {
+export default class LayersTab extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -12,6 +12,9 @@ class LayersTab extends Component {
       activeLayers,
       changeLayersTab,
       handleBaseLayer,
+      selectedBaseLayer,
+      geolayersList,
+      geolayersOnChange,
     } = this.props;
     return (
       <div
@@ -65,51 +68,25 @@ class LayersTab extends Component {
                 : { display: 'none' }
             }
           >
-            {/* <div className="form-group">
-              <div className="checkbox">
-                <label>
-                  <input type="checkbox" name="radiobox" />
-                  <i className="helper" />
-                  Bidur Municipality
-                </label>
-              </div>
-            </div>
-            <div className="form-group">
-              <div className="checkbox">
-                <label>
-                  <input type="checkbox" name="radiobox" />
-                  <i className="helper" />
-                  Balkumari
-                </label>
-              </div>
-            </div>
-            <div className="form-group">
-              <div className="checkbox">
-                <label>
-                  <input type="checkbox" name="radiobox" />
-                  <i className="helper" />
-                  Bageswori
-                </label>
-              </div>
-            </div>
-            <div className="form-group">
-              <div className="checkbox">
-                <label>
-                  <input type="checkbox" name="radiobox" />
-                  <i className="helper" />
-                  Buntang
-                </label>
-              </div>
-            </div>
-            <div className="form-group">
-              <div className="checkbox">
-                <label>
-                  <input type="checkbox" name="radiobox" />
-                  <i className="helper" />
-                  Charghare
-                </label>
-              </div>
-            </div> */}
+            {geolayersList &&
+              geolayersList.map((data, key) => {
+                return (
+                  <div key={data.id} className="form-group">
+                    <div className="checkbox">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name={`geo_layer${key}`}
+                          onChange={geolayersOnChange}
+                          data-value={data.geo_layer}
+                        />
+                        <i className="helper" />
+                        {data.title}
+                      </label>
+                    </div>
+                  </div>
+                );
+              })}
           </div>
           <div
             className="thumb-list mr-0 layers-list"
@@ -122,6 +99,9 @@ class LayersTab extends Component {
           >
             <ul>
               <li
+                className={`${
+                  selectedBaseLayer === 'openstreet' ? 'selected' : ''
+                }`}
                 role="presentation"
                 onKeyPress={() => {
                   handleBaseLayer('openstreet');
@@ -140,6 +120,11 @@ class LayersTab extends Component {
                 </div>
               </li>
               <li
+                className={`${
+                  selectedBaseLayer === 'googlestreet'
+                    ? 'selected'
+                    : ''
+                }`}
                 role="presentation"
                 onKeyPress={() => {
                   handleBaseLayer('googlestreet');
@@ -159,6 +144,11 @@ class LayersTab extends Component {
                 </div>
               </li>
               <li
+                className={`${
+                  selectedBaseLayer === 'googlehybrid'
+                    ? 'selected'
+                    : ''
+                }`}
                 role="presentation"
                 onKeyPress={() => {
                   handleBaseLayer('googlehybrid');
@@ -178,6 +168,11 @@ class LayersTab extends Component {
                 </div>
               </li>
               <li
+                className={`${
+                  selectedBaseLayer === 'googlesatellite'
+                    ? 'selected'
+                    : ''
+                }`}
                 role="presentation"
                 onKeyPress={() => {
                   handleBaseLayer('googlesatellite');
@@ -193,10 +188,15 @@ class LayersTab extends Component {
                   }}
                 />
                 <div className="content">
-                  <h6>Google satelite </h6>
+                  <h6>Google Satelite </h6>
                 </div>
               </li>
               <li
+                className={`${
+                  selectedBaseLayer === 'googleterrain'
+                    ? 'selected'
+                    : ''
+                }`}
                 role="presentation"
                 onKeyPress={() => {
                   handleBaseLayer('googleterrain');
@@ -211,7 +211,7 @@ class LayersTab extends Component {
                   }}
                 />
                 <div className="content">
-                  <h6>google Terrain </h6>
+                  <h6>Google Terrain </h6>
                 </div>
               </li>
             </ul>
@@ -221,5 +221,3 @@ class LayersTab extends Component {
     );
   }
 }
-
-export default LayersTab;
