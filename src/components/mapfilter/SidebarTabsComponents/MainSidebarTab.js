@@ -38,6 +38,17 @@ class MainSidebarTab extends PureComponent {
         handleBaseLayer,
         isProgressSelected,
         handleProgressParentCheckbox,
+        isStatusSelected,
+        handleStatusParentCheckbox,
+        isSiteTypeSelected,
+        handleSiteTypeParentCheckbox,
+        isRegionSelected,
+        handleRegionParentCheckbox,
+        isProjectSelected,
+        handleProjectParentCheckbox,
+        selectedBaseLayer,
+        geolayersList,
+        geolayersOnChange,
       },
       // match: {
       //   params: { id: siteId },
@@ -133,10 +144,22 @@ class MainSidebarTab extends PureComponent {
             handleCheckbox={handleCheckbox}
             handleStatusChange={handleStatusChange}
             handleProjectChange={handleProjectChange}
+            isProjectSelected={isProjectSelected}
+            handleProjectParentCheckbox={handleProjectParentCheckbox}
             isProgressSelected={isProgressSelected}
             handleProgressParentCheckbox={
               handleProgressParentCheckbox
             }
+            isStatusSelected={isStatusSelected}
+            handleStatusParentCheckbox={handleStatusParentCheckbox}
+            isSiteTypeSelected={isSiteTypeSelected}
+            handleSiteTypeParentCheckbox={
+              handleSiteTypeParentCheckbox
+            }
+            isRegionSelected={isRegionSelected}
+            handleRegionParentCheckbox={handleRegionParentCheckbox}
+            onClickClearBtn={onClickClearBtn}
+            applyFilter={applyFilter}
           />
           <MetricsTab
             activeTab={activeTab}
@@ -150,27 +173,10 @@ class MainSidebarTab extends PureComponent {
             activeLayers={activeLayers}
             changeLayersTab={this.changeLayersTab}
             handleBaseLayer={handleBaseLayer}
+            selectedBaseLayer={selectedBaseLayer}
+            geolayersList={geolayersList}
+            geolayersOnChange={geolayersOnChange}
           />
-        </div>
-
-        <div className="buttons flex-between">
-          <button
-            type="button"
-            onClick={onClickClearBtn}
-            // role="button"
-            className="fieldsight-btn border-btn"
-          >
-            Clear
-          </button>
-          <button
-            type="button"
-            onClick={applyFilter}
-            // tabIndex={0}
-            // role="button"
-            className="fieldsight-btn bg-btn"
-          >
-            apply
-          </button>
         </div>
       </form>
     );

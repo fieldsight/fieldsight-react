@@ -1,11 +1,8 @@
 import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
-import {
-  OpenStreetMapProvider,
-  GeoSearchControl,
-} from 'leaflet-geosearch';
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import L from 'leaflet';
-import { Typeahead } from 'react-bootstrap-typeahead';
+import Axios from 'axios';
 // import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import Loader from '../common/Loader';
@@ -20,6 +17,7 @@ import {
   getFilteredPrimaryGeojson,
   getSearchPrimaryGeojson,
   refreshGeojsonData,
+  getGeolayersList,
 } from '../../actions/mapFilterActions';
 import MainSidebarTab from './SidebarTabsComponents/MainSidebarTab';
 
@@ -43,7 +41,12 @@ const INITIAL_STATE = {
   addressSearch: [],
   searchByItem: 'address',
   selectedBaseLayer: 'openstreet',
+  isProjectSelected: true,
   isProgressSelected: false,
+  isStatusSelected: false,
+  isSiteTypeSelected: false,
+  isRegionSelected: false,
+  loadallGeoLayer: false,
 };
 class MapFilter extends Component {
   constructor(props) {
@@ -69,6 +72,7 @@ class MapFilter extends Component {
     } = this.props;
     this.props.getProjectsList(id);
     this.props.getProjectsRegionTypes(id);
+    this.props.getGeolayersList(id);
     // console.log(this.props, 'willmount');
   }
 
@@ -107,7 +111,7 @@ class MapFilter extends Component {
         isAddressSearched: false,
       });
     });
-    input.addEventListener('keyup', async event => {
+    input.addEventListener('keyup', async () => {
       // event.preventDefault();
 
       results = await provider.search({ query: input.value });
@@ -174,7 +178,7 @@ class MapFilter extends Component {
     const { checkedProjectItems } = this.state;
     if (projectsList) {
       if (projectsList.length >= 1) {
-        projectsList.map((data, key) => {
+        projectsList.map(data => {
           return this.setState({
             checkedProjectItems: checkedProjectItems.concat(
               data.name,
@@ -192,7 +196,14 @@ class MapFilter extends Component {
     //   });
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
+    document.getElementsByClassName(
+      'leaflet-control-layers-toggle',
+    )[0].style.display = 'none';
+
+    // if (totalsearchLength === 0) {
+    //   this.props.refreshGeojsonData();
+    // }
     const {
       mapFilterReducer: {
         clonePrimaryGeojson,
@@ -219,6 +230,8 @@ class MapFilter extends Component {
     if (prevProps.mapFilterReducer.projectsList !== projectsList) {
       this.insertProjectNameInState();
     }
+
+    // this.props.refreshGeojsonData();
     // if (
     //   prevState.isProgressSelected === this.state.isProgressSelected
     // ) {
@@ -334,12 +347,25 @@ class MapFilter extends Component {
     const { checkedRegionItems } = this.state;
     if (isRegionChecked === true) {
       const joined = checkedRegionItems.concat(item);
-      this.setState({ checkedRegionItems: joined });
+      this.setState({
+        checkedRegionItems: joined,
+        isRegionSelected: true,
+      });
     } else {
       const filteredData = checkedRegionItems.filter(
         data => data !== item,
       );
-      this.setState({ checkedRegionItems: filteredData });
+      this.setState({ checkedRegionItems: filteredData }, () => {
+        // console.log(
+        //   `Button Name (▶️️ inside callback) = `,
+        //   this.state.checkedProgressItems,
+        // ),
+        if (checkedRegionItems.length > 0) {
+          this.setState({ isRegionSelected: true });
+        } else {
+          this.setState({ isRegionSelected: false });
+        }
+      });
     }
     // this.setState({ isfiltered: true });
     // this.setState({
@@ -353,12 +379,30 @@ class MapFilter extends Component {
     const { checkedSiteItems } = this.state;
     if (isSiteChecked === true) {
       const joined = checkedSiteItems.concat(item);
-      this.setState({ checkedSiteItems: joined });
+      this.setState({
+        checkedSiteItems: joined,
+        isSiteTypeSelected: true,
+      });
     } else {
       const filteredData = checkedSiteItems.filter(
         data => data !== item,
       );
-      this.setState({ checkedSiteItems: filteredData });
+      this.setState(
+        {
+          checkedSiteItems: filteredData,
+        },
+        () => {
+          // console.log(
+          //   `Button Name (▶️️ inside callback) = `,
+          //   this.state.checkedProgressItems,
+          // ),
+          if (checkedSiteItems.length > 0) {
+            this.setState({ isSiteTypeSelected: true });
+          } else {
+            this.setState({ isSiteTypeSelected: false });
+          }
+        },
+      );
     }
   };
 
@@ -368,9 +412,23 @@ class MapFilter extends Component {
 
   handleStatusChange = e => {
     const {
-      target: { value, checked },
+      target: { value },
     } = e;
-    this.setState({ checkedStatusItem: [parseInt(value, 10)] });
+    const { checkedStatusItem } = this.state;
+    this.setState(
+      { checkedStatusItem: [parseInt(value, 10)] },
+      () => {
+        // console.log(
+        //   `Button Name (▶️️ inside callback) = `,
+        //   this.state.checkedProgressItems,
+        // ),
+        if (checkedStatusItem) {
+          this.setState({ isStatusSelected: true });
+        } else {
+          this.setState({ isStatusSelected: false });
+        }
+      },
+    );
   };
 
   handleProjectChange = e => {
@@ -382,12 +440,25 @@ class MapFilter extends Component {
     const isProjectChecked = e.target.checked;
     const { checkedProjectItems } = this.state;
     if (isProjectChecked === true) {
-      this.setState({ checkedProjectItems: [item] });
+      this.setState({
+        checkedProjectItems: [item],
+        isProjectSelected: true,
+      });
     } else {
       const filteredData = checkedProjectItems.filter(
         data => data !== item,
       );
-      this.setState({ checkedProjectItems: filteredData });
+      this.setState({ checkedProjectItems: filteredData }, () => {
+        // console.log(
+        //   `Button Name (▶️️ inside callback) = `,
+        //   this.state.checkedProgressItems,
+        // ),
+        if (checkedProjectItems.length > 0) {
+          this.setState({ isProjectSelected: true });
+        } else {
+          this.setState({ isProjectSelected: false });
+        }
+      });
     }
   };
 
@@ -423,7 +494,7 @@ class MapFilter extends Component {
     // e.persist();
     const item = e.target.name;
     const isProgressChecked = e.target.checked;
-    const { checkedProgressItems, isProgressSelected } = this.state;
+    const { checkedProgressItems } = this.state;
 
     if (isProgressChecked === true) {
       const joined = checkedProgressItems.concat(item);
@@ -444,8 +515,7 @@ class MapFilter extends Component {
         //   `Button Name (▶️️ inside callback) = `,
         //   this.state.checkedProgressItems,
         // ),
-        console.log(this.state.checkedProgressItems);
-        if (this.state.checkedProgressItems.length > 0) {
+        if (checkedProgressItems.length > 0) {
           this.setState({ isProgressSelected: true });
         } else {
           this.setState({ isProgressSelected: false });
@@ -454,10 +524,46 @@ class MapFilter extends Component {
     }
   };
 
+  handleProjectParentCheckbox = e => {
+    const { checkedProjectItems, isProjectSelected } = this.state;
+    if (isProjectSelected) {
+      const allProjectElement = document.getElementsByClassName(
+        'project_checkbox',
+      );
+
+      for (let i = 0; i < allProjectElement.length; i += 1) {
+        allProjectElement[i].checked = false;
+      }
+      this.setState({
+        checkedProjectItems: [],
+        isProjectSelected: false,
+      });
+    } else {
+      this.setState({
+        isProjectSelected: true,
+      });
+      if (e.target.checked === true) {
+        const allProjectElement = document.getElementsByClassName(
+          'project_checkbox',
+        );
+
+        for (let i = 0; i < allProjectElement.length; i += 1) {
+          allProjectElement[i].checked = true;
+          checkedProjectItems.push(allProjectElement[i].name);
+        }
+        this.setState({
+          checkedProjectItems,
+        });
+        // this.setState({
+        //   checkedProgressItems: joined,
+        // });
+      }
+    }
+  };
+
   handleProgressParentCheckbox = e => {
-    console.log(e.target.checked);
-    const { checkedProgressItems } = this.state;
-    if (this.state.isProgressSelected) {
+    const { checkedProgressItems, isProgressSelected } = this.state;
+    if (isProgressSelected) {
       const allProgressElement = document.getElementsByClassName(
         'progress_checkbox',
       );
@@ -492,6 +598,105 @@ class MapFilter extends Component {
     }
   };
 
+  handleStatusParentCheckbox = () => {
+    const { checkedStatusItem, isStatusSelected } = this.state;
+    if (isStatusSelected) {
+      this.setState({
+        isStatusSelected: false,
+        checkedStatusItem: [],
+      });
+      const allStatusElement = document.getElementsByClassName(
+        'status_checkbox',
+      );
+      for (let i = 0; i < allStatusElement.length; i += 1) {
+        allStatusElement[i].checked = false;
+      }
+    } else {
+      this.setState({
+        isStatusSelected: true,
+      });
+      const allStatusElement = document.getElementsByClassName(
+        'status_checkbox',
+      );
+      checkedStatusItem.push(parseInt(allStatusElement[0].value, 10));
+      allStatusElement[0].checked = true;
+    }
+  };
+
+  handleSiteTypeParentCheckbox = e => {
+    const { checkedSiteItems, isSiteTypeSelected } = this.state;
+    if (isSiteTypeSelected) {
+      const allSiteTypeElement = document.getElementsByClassName(
+        'sitetype_checkbox',
+      );
+
+      for (let i = 0; i < allSiteTypeElement.length; i += 1) {
+        allSiteTypeElement[i].checked = false;
+      }
+      this.setState({
+        checkedSiteItems: [],
+        isSiteTypeSelected: false,
+      });
+    } else {
+      this.setState({
+        isSiteTypeSelected: true,
+      });
+      if (e.target.checked === true) {
+        const allSiteTypeElement = document.getElementsByClassName(
+          'sitetype_checkbox',
+        );
+
+        for (let i = 0; i < allSiteTypeElement.length; i += 1) {
+          allSiteTypeElement[i].checked = true;
+          checkedSiteItems.push(allSiteTypeElement[i].name);
+        }
+        this.setState({
+          checkedSiteItems,
+        });
+        // this.setState({
+        //   checkedProgressItems: joined,
+        // });
+      }
+    }
+  };
+
+  handleRegionParentCheckbox = e => {
+    const { checkedRegionItems, isRegionSelected } = this.state;
+    if (isRegionSelected) {
+      const allRegionElement = document.getElementsByClassName(
+        'region_checkbox',
+      );
+
+      for (let i = 0; i < allRegionElement.length; i += 1) {
+        allRegionElement[i].checked = false;
+      }
+      this.setState({
+        checkedRegionItems: [],
+        isRegionSelected: false,
+      });
+    } else {
+      this.setState({
+        isRegionSelected: true,
+      });
+      if (e.target.checked === true) {
+        const allRegionElement = document.getElementsByClassName(
+          'region_checkbox',
+        );
+
+        for (let i = 0; i < allRegionElement.length; i += 1) {
+          allRegionElement[i].checked = true;
+          checkedRegionItems.push(allRegionElement[i].name);
+        }
+        this.setState({
+          checkedRegionItems,
+        });
+        // this.setState({
+        //   checkedProgressItems: joined,
+        // });
+      }
+    }
+  };
+
   applyFilter = () => {
     // if (
     //   this.state.checkedProgressItems.length === 0 &&
@@ -501,35 +706,42 @@ class MapFilter extends Component {
     // ) {
     //   this.setState({ colorBySelection: 'project' });
     // }
-
+    const {
+      checkedProjectItems,
+      checkedProgressItems,
+      checkedStatusItem,
+      checkedSiteItems,
+      checkedRegionItems,
+    } = this.state;
     this.props.getFilteredPrimaryGeojson({
       filterByType: {
-        project: this.state.checkedProjectItems,
-        progress: this.state.checkedProgressItems,
-        status: this.state.checkedStatusItem,
-        site_type: this.state.checkedSiteItems,
-        region: this.state.checkedRegionItems,
+        project: checkedProjectItems,
+        progress: checkedProgressItems,
+        status: checkedStatusItem,
+        site_type: checkedSiteItems,
+        region: checkedRegionItems,
       },
     });
     this.toggleZoomforFilter();
+
     if (
-      this.state.checkedProgressItems.length === 0 &&
-      this.state.checkedStatusItem.length === 0 &&
-      this.state.checkedSiteItems.length === 0 &&
-      this.state.checkedRegionItems.length === 0
+      checkedProgressItems.length === 0 &&
+      checkedStatusItem.length === 0 &&
+      checkedSiteItems.length === 0 &&
+      checkedRegionItems.length === 0
     ) {
       this.setState({ colorBySelection: 'project' });
     }
-    if (this.state.checkedProgressItems.length > 0) {
+    if (checkedProgressItems.length > 0) {
       this.setState({ colorBySelection: 'progress' });
     }
-    if (this.state.checkedStatusItem.length > 0) {
+    if (checkedStatusItem.length > 0) {
       this.setState({ colorBySelection: 'status' });
     }
-    if (this.state.checkedSiteItems.length > 0) {
+    if (checkedSiteItems.length > 0) {
       this.setState({ colorBySelection: 'site_type' });
     }
-    if (this.state.checkedRegionItems.length > 0) {
+    if (checkedRegionItems.length > 0) {
       this.setState({ colorBySelection: 'region' });
     }
     // const { mapFilterReducer: clonePrimaryGeojson } = this.props;
@@ -537,15 +749,80 @@ class MapFilter extends Component {
 
   handleSearchChange = e => {
     this.setState({ searchText: e.target.value });
+    // if (this.state.searchText.length === 0) {
+    //   console.log('inside');
+    //   this.props.refreshGeojsonData();
+    // }
+  };
+
+  geolayersOnChange = e => {
+    const {
+      target: { name },
+    } = e;
+    const { loadallGeoLayer } = this.state;
+    const {
+      props: {
+        mapFilterReducer: { geolayersList },
+      },
+    } = this;
+    const mapref = this.mapRef.current.leafletElement;
+
+    if (loadallGeoLayer === false) {
+      geolayersList.forEach(element => {
+        Axios.get(element.geo_layer)
+          .then(res => {
+            const geolayerData = res.data;
+            window[name] = L.geoJSON(geolayerData, {
+              onEachFeature: function onEachFeature(feature, layer) {
+                let popUpContent = '';
+
+                popUpContent +=
+                  '<table style="width:100%;" id="District-popup" class="popuptable">';
+                Object.keys(layer.feature.properties).forEach(
+                  function mapping(key) {
+                    popUpContent += `<tr><td>${key}</td><td>${layer.feature.properties[key]}</td></tr>`;
+                  },
+                );
+                popUpContent += '</table>';
+                layer.bindPopup(
+                  L.popup({
+                    closeOnClick: true,
+                    closeButton: true,
+                    keepInView: true,
+                    autoPan: true,
+                    maxHeight: 200,
+                    minWidth: 250,
+                  }).setContent(popUpContent),
+                );
+                layer.setStyle({
+                  fillColor: 'green',
+                  weight: 1,
+                  opacity: 1,
+                  color: 'black',
+                  fillOpacity: 0,
+                });
+              },
+            });
+            mapref.addLayer(window[name]);
+          })
+          .catch({});
+      });
+    }
+    if (mapref.hasLayer(window[name])) {
+      mapref.removeLayer(window[name]);
+    } else if (loadallGeoLayer !== false) {
+      mapref.addLayer(window[name]);
+    }
+    this.setState({ loadallGeoLayer: true });
   };
 
   handleSearchEnter = e => {
     if (e.key === 'Enter') {
+      const { searchText } = this.state;
       this.props.getSearchPrimaryGeojson({
-        keyword: this.state.searchText,
+        keyword: searchText,
       });
       const mapref = this.markerRef.current.leafletElement;
-      const markerref = this.groupRef.current.leafletElement.getLayers();
       mapref.openPopup();
       // console.log(mapref.openPopup());
       // console.log(markerref);
@@ -564,6 +841,7 @@ class MapFilter extends Component {
           projectsList,
           projectsRegionTypes,
           clonePrimaryGeojson,
+          geolayersList,
         },
         // match: {
         //   params: { id: siteId },
@@ -583,7 +861,11 @@ class MapFilter extends Component {
         addressSearch,
         searchByItem,
         selectedBaseLayer,
+        isProjectSelected,
         isProgressSelected,
+        isStatusSelected,
+        isSiteTypeSelected,
+        isRegionSelected,
       },
     } = this;
     return (
@@ -618,6 +900,9 @@ class MapFilter extends Component {
               }}
             > */}
             <div className="sidebar-wrapper">
+              <div className="sidebar-title flex-between">
+                <h4>{projectsList[0] && projectsList[0].name}</h4>
+              </div>
               <form className="search-custom">
                 <div className="form-group search">
                   <div className="input-group">
@@ -669,7 +954,7 @@ class MapFilter extends Component {
                       }}
                       type="search"
                       value={searchText}
-                      className="form-control"
+                      className="form-control searchBox"
                       onChange={this.handleSearchChange}
                       onKeyDown={this.handleSearchEnter}
                       placeholder="Search By Site Name"
@@ -753,120 +1038,33 @@ class MapFilter extends Component {
                 handleMetricsChange={this.handleMetricsChange}
                 handleBaseLayer={this.handleBaseLayer}
                 onClickClearBtn={this.onClickClearBtn}
+                isProjectSelected={isProjectSelected}
+                handleProjectParentCheckbox={
+                  this.handleProjectParentCheckbox
+                }
                 isProgressSelected={isProgressSelected}
                 handleProgressParentCheckbox={
                   this.handleProgressParentCheckbox
                 }
+                isStatusSelected={isStatusSelected}
+                handleStatusParentCheckbox={
+                  this.handleStatusParentCheckbox
+                }
+                isSiteTypeSelected={isSiteTypeSelected}
+                handleSiteTypeParentCheckbox={
+                  this.handleSiteTypeParentCheckbox
+                }
+                isRegionSelected={isRegionSelected}
+                handleRegionParentCheckbox={
+                  this.handleRegionParentCheckbox
+                }
+                selectedBaseLayer={selectedBaseLayer}
+                geolayersList={geolayersList}
+                geolayersOnChange={this.geolayersOnChange}
               />
             </div>
             {/* </Scrollbars> */}
           </div>
-          {/* <div
-            className="map-sidebar right-map-sidebar"
-            style={{ background: 'white' }}
-          >
-            <div className="sidebar-wrapper">
-              <div className="sidebar-title flex-between">
-                <h4>Legend</h4>
-              </div>
-            </div>
-            <div>
-              <div className="panel-wrap mt-3">
-                <div className="panel-header">
-                  <b>View Site By:</b>
-                </div>
-                <div className="panel-section">
-                  <div id="legend">
-                    <div id="form_legend">
-                      <div style={{ marginTop: '-8px' }}>
-                        <div id="form_legend">
-                          <div style={{ marginTop: '-8px' }}>
-                            <div
-                              className="circle"
-                              style={{
-                                border: '1px solid black',
-                                background: '#FF0000',
-                              }}
-                            />
-                            <span>0%</span>
-                          </div>
-                          <br />
-                          <div style={{ marginTop: '-8px' }}>
-                            <div
-                              className="circle"
-                              style={{
-                                border: '1px solid black',
-                                background: '#f66565',
-                              }}
-                            />
-                            <span>1-20%</span>
-                          </div>
-                          <br />
-                          <div style={{ marginTop: '-8px' }}>
-                            <div
-                              className="circle"
-                              style={{
-                                border: '1px solid black',
-                                background: '#f4c08c',
-                              }}
-                            />
-                            <span>21-40%</span>
-                          </div>
-                          <br />
-                          <div style={{ marginTop: '-8px' }}>
-                            <div
-                              className="circle"
-                              style={{
-                                border: '1px solid black',
-                                background: '#FFFF00',
-                              }}
-                            />
-                            <span>41-60%</span>
-                          </div>
-                          <br />
-                          <div style={{ marginTop: '-8px' }}>
-                            <div
-                              className="circle"
-                              style={{
-                                border: '1px solid black',
-                                background: '#7FFF00',
-                              }}
-                            />
-                            <span>61-80%</span>
-                          </div>
-                          <br />
-                          <div style={{ marginTop: '-8px' }}>
-                            <div
-                              className="circle"
-                              style={{
-                                border: '1px solid black',
-                                background: '#00FF00',
-                              }}
-                            />
-                            <span>81-99%</span>
-                          </div>
-                          <br />
-                          <div style={{ marginTop: '-8px' }}>
-                            <div
-                              className="circle"
-                              style={{
-                                border: '1px solid black',
-                                background: '#069806',
-                              }}
-                            />
-                            <span>100%</span>
-                          </div>
-                          <br />
-                        </div>
-                        <span>100%</span>
-                      </div>
-                      <br />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
 
           <MapLeftTools
             scaleClick={this.scaleClick}
@@ -1415,4 +1613,5 @@ export default connect(mapStateToProps, {
   getFilteredPrimaryGeojson,
   getSearchPrimaryGeojson,
   refreshGeojsonData,
+  getGeolayersList,
 })(MapFilter);

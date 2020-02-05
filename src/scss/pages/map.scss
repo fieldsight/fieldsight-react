@@ -41,6 +41,7 @@
 
       .map {
         z-index: 2;
+        position: relative;
       }
 
       .map-sidebar {
@@ -51,6 +52,11 @@
         max-width: 240px;
         width: 100%;
         z-index: 99;
+        &.left-map-sidebar {
+          // left: 77rem;
+          // top: 471px;
+          // bottom: 20px;
+        }
 
         .sidebar-wrapper {
           padding: 0.6125rem;
@@ -304,7 +310,9 @@
 
           .layers-list {
             display: none;
-
+            .selected {
+              background: #ece9e9;
+            }
             &.display-list {
               display: block;
             }

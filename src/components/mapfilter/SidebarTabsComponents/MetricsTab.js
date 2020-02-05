@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Select from 'react-select';
 
-class MetricsTab extends Component {
+class MetricsTab extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -95,9 +95,6 @@ class MetricsTab extends Component {
   }
 }
 
-const mapStateToProps = ({ mapFilterReducer }) => ({
-  mapFilterReducer,
-});
 // const mapDispatchToProps = dispatch => {
 //   return {
 //     getPrimaryGeojson: () =>
