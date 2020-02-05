@@ -60,7 +60,7 @@ class MapFilter extends PureComponent {
   updateDimensions() {
     const height =
       window.innerWidth >= 992 ? window.innerHeight : 400;
-    this.setState({ height: height - 32 });
+    this.setState({ height: height - 50 });
   }
 
   componentWillMount() {
