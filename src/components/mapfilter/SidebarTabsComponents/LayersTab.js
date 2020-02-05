@@ -110,11 +110,9 @@ export default class LayersTab extends PureComponent {
                   handleBaseLayer('openstreet');
                 }}
               >
-                <figure
-                  style={{
-                    backgroundImage: "url('images/1.png')",
-                  }}
-                />
+                <figure>
+                  <img alt="1openstreet" src="/static/images/1.png" />
+                </figure>
                 <div className="content">
                   <h6>Open street map </h6>
                 </div>
@@ -133,12 +131,12 @@ export default class LayersTab extends PureComponent {
                   handleBaseLayer('googlestreet');
                 }}
               >
-                <figure
-                  style={{
-                    backgroundImage:
-                      "url('images/3googlestreet.png')",
-                  }}
-                />
+                <figure>
+                  <img
+                    alt="googlestreet"
+                    src="/static/images/3googlestreet.png"
+                  />
+                </figure>
                 <div className="content">
                   <h6>Google street </h6>
                 </div>
@@ -157,12 +155,12 @@ export default class LayersTab extends PureComponent {
                   handleBaseLayer('googlehybrid');
                 }}
               >
-                <figure
-                  style={{
-                    backgroundImage:
-                      "url('images/5googlehybrid.png')",
-                  }}
-                />
+                <figure>
+                  <img
+                    alt="googlehybrid"
+                    src="/static/images/5googlehybrid.png"
+                  />
+                </figure>
                 <div className="content">
                   <h6>Google Hybrid </h6>
                 </div>
@@ -181,12 +179,12 @@ export default class LayersTab extends PureComponent {
                   handleBaseLayer('googlesatellite');
                 }}
               >
-                <figure
-                  style={{
-                    backgroundImage:
-                      "url('images/4googlesatellite.png')",
-                  }}
-                />
+                <figure>
+                  <img
+                    alt="googlesateliite"
+                    src="/static/images/4googlesatellite.png"
+                  />
+                </figure>
                 <div className="content">
                   <h6>Google Satelite </h6>
                 </div>
@@ -205,11 +203,12 @@ export default class LayersTab extends PureComponent {
                   handleBaseLayer('googleterrain');
                 }}
               >
-                <figure
-                  style={{
-                    backgroundImage: "url('images/2.png')",
-                  }}
-                />
+                <figure>
+                  <img
+                    alt="googleterrain"
+                    src="/static/images/2.png"
+                  />
+                </figure>
                 <div className="content">
                   <h6>Google Terrain </h6>
                 </div>
