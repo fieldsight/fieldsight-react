@@ -18,7 +18,7 @@ export default class LayersTab extends PureComponent {
     } = this.props;
     return (
       <div
-        className={`fade ${
+        className={`tab-pane custom_pane fade ${
           activeTab === 'layers' ? 'show active' : ''
         }`}
         id="sidebar-layer"
