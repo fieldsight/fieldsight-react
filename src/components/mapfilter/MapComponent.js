@@ -68,7 +68,6 @@ class MapComponent extends PureComponent {
     ) {
       // this.loaderOn();
       const allLayers = groupRef.current.leafletElement.getLayers();
-      console.log(allLayers);
       const formStatusColor = [
         '#0080ff',
         '#FF0000',

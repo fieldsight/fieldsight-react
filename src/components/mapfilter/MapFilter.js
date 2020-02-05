@@ -60,7 +60,7 @@ class MapFilter extends PureComponent {
   updateDimensions() {
     const height =
       window.innerWidth >= 992 ? window.innerHeight : 400;
-    this.setState({ height: height - 80 });
+    this.setState({ height: height - 85 });
   }
 
   componentWillMount() {
@@ -769,7 +769,7 @@ class MapFilter extends PureComponent {
     // }
   };
 
-  geolayersOnChange = e => {
+  geolayersOnChange = async e => {
     const {
       target: { name },
     } = e;
@@ -786,46 +786,59 @@ class MapFilter extends PureComponent {
         Axios.get(element.geo_layer)
           .then(res => {
             const geolayerData = res.data;
-            window[name] = L.geoJSON(geolayerData, {
-              onEachFeature: function onEachFeature(feature, layer) {
-                let popUpContent = '';
+            window[`geo_layer${element.id}`] = L.geoJSON(
+              geolayerData,
+              {
+                onEachFeature: function onEachFeature(
+                  feature,
+                  layer,
+                ) {
+                  let popUpContent = '';
 
-                popUpContent +=
-                  '<table style="width:100%;" id="District-popup" class="popuptable">';
-                Object.keys(layer.feature.properties).forEach(
-                  function mapping(key) {
-                    popUpContent += `<tr><td>${key}</td><td>${layer.feature.properties[key]}</td></tr>`;
-                  },
-                );
-                popUpContent += '</table>';
-                layer.bindPopup(
-                  L.popup({
-                    closeOnClick: true,
-                    closeButton: true,
-                    keepInView: true,
-                    autoPan: true,
-                    maxHeight: 200,
-                    minWidth: 250,
-                  }).setContent(popUpContent),
-                );
-                layer.setStyle({
-                  fillColor: 'green',
-                  weight: 1,
-                  opacity: 1,
-                  color: 'black',
-                  fillOpacity: 0,
-                });
+                  popUpContent +=
+                    '<table style="width:100%;" id="District-popup" class="popuptable">';
+                  Object.keys(layer.feature.properties).forEach(
+                    function mapping(key) {
+                      popUpContent += `<tr><td>${key}</td><td>${layer.feature.properties[key]}</td></tr>`;
+                    },
+                  );
+                  popUpContent += '</table>';
+                  layer.bindPopup(
+                    L.popup({
+                      closeOnClick: true,
+                      closeButton: true,
+                      keepInView: true,
+                      autoPan: true,
+                      maxHeight: 200,
+                      minWidth: 250,
+                    }).setContent(popUpContent),
+                  );
+                  layer.setStyle({
+                    fillColor: 'green',
+                    weight: 1,
+                    opacity: 1,
+                    color: 'black',
+                    fillOpacity: 0,
+                  });
+                },
               },
-            });
-            mapref.addLayer(window[name]);
+            );
+            window[`geo_layer${element.id}`].addTo(mapref);
+            mapref.removeLayer(window[`geo_layer${element.id}`]);
+            if (!mapref.hasLayer(window[`${name}`])) {
+              mapref.addLayer(window[`${name}`]);
+            }
+            // mapref.addLayer(window[name]);
           })
           .catch({});
       });
     }
-    if (mapref.hasLayer(window[name])) {
-      mapref.removeLayer(window[name]);
-    } else if (loadallGeoLayer !== false) {
-      mapref.addLayer(window[name]);
+    if (loadallGeoLayer === true) {
+      if (mapref.hasLayer(window[`${name}`])) {
+        mapref.removeLayer(window[`${name}`]);
+      } else {
+        mapref.addLayer(window[`${name}`]);
+      }
     }
     this.setState({ loadallGeoLayer: true });
   };
