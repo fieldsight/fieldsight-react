@@ -823,6 +823,7 @@ class MapFilter extends PureComponent {
                 },
               },
             );
+            console.log(window[`geo_layer${element.id}`]);
             window[`geo_layer${element.id}`].addTo(mapref);
             mapref.removeLayer(window[`geo_layer${element.id}`]);
             if (!mapref.hasLayer(window[`${name}`])) {
