@@ -374,7 +374,7 @@ class MapFilter extends PureComponent {
         //   `Button Name (▶️️ inside callback) = `,
         //   this.state.checkedProgressItems,
         // ),
-        if (checkedRegionItems.length > 0) {
+        if (this.state.checkedRegionItems.length > 0) {
           this.setState({ isRegionSelected: true });
         } else {
           this.setState({ isRegionSelected: false });
@@ -391,6 +391,7 @@ class MapFilter extends PureComponent {
     const item = e.target.name;
     const isSiteChecked = e.target.checked;
     const { checkedSiteItems } = this.state;
+    console.log(isSiteChecked, 'checked');
     if (isSiteChecked === true) {
       const joined = checkedSiteItems.concat(item);
       this.setState({
@@ -406,11 +407,7 @@ class MapFilter extends PureComponent {
           checkedSiteItems: filteredData,
         },
         () => {
-          // console.log(
-          //   `Button Name (▶️️ inside callback) = `,
-          //   this.state.checkedProgressItems,
-          // ),
-          if (checkedSiteItems.length > 0) {
+          if (this.state.checkedSiteItems.length > 0) {
             this.setState({ isSiteTypeSelected: true });
           } else {
             this.setState({ isSiteTypeSelected: false });
@@ -467,7 +464,7 @@ class MapFilter extends PureComponent {
         //   `Button Name (▶️️ inside callback) = `,
         //   this.state.checkedProgressItems,
         // ),
-        if (checkedProjectItems.length > 0) {
+        if (this.state.checkedProjectItems.length > 0) {
           this.setState({ isProjectSelected: true });
         } else {
           this.setState({ isProjectSelected: false });
@@ -529,7 +526,7 @@ class MapFilter extends PureComponent {
         //   `Button Name (▶️️ inside callback) = `,
         //   this.state.checkedProgressItems,
         // ),
-        if (checkedProgressItems.length > 0) {
+        if (this.state.checkedProgressItems.length > 0) {
           this.setState({ isProgressSelected: true });
         } else {
           this.setState({ isProgressSelected: false });
