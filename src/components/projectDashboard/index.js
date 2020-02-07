@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import DashboardHeader from './DashboardHeader';
 import ProjectDashboardComponent from './dashboardComponent';
-import Reports from '../reports';
+import Templates from '../reports/templates';
 
 import { getProjectDashboard } from '../../actions/projectDashboardActions';
 /* eslint-disable camelcase */
@@ -154,9 +154,7 @@ class ProjectDashboard extends React.Component {
           <Route
             exact
             path={`${url}/report`}
-            render={props => (
-              <Reports {...props} projectId={projectId} />
-            )}
+            render={props => <Templates {...props} id={projectId} />}
           />
         </Switch>
       </>
