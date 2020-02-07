@@ -30,13 +30,9 @@ class ReportDashboard extends Component {
       loader: false,
       filteredList: {},
       toFilterList: {
-        filterByRegions: [{ id: 'all_regions', name: 'Select All' }],
-        filterBySiteType: [
-          { id: 'all_sitetypes', name: 'Select All' },
-        ],
-        filterByUserRoles: [
-          { id: 'all_userroles', name: 'Select All' },
-        ],
+        filterByRegions: [],
+        filterBySiteType: [],
+        filterByUserRoles: [],
       },
       toggleSelectClass: {
         filterRegion: false,

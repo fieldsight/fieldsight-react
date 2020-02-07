@@ -38,8 +38,14 @@ export default class ExportDataFilter extends Component {
       .all([requestProjectRegions, requestSiteType])
       .then(
         axios.spread((...responses) => {
-          const regions = [...projectRegions, ...responses[0].data];
-          const sites = [...siteType, ...responses[1].data];
+          const regions =
+            responses[0].data.length > 0
+              ? [...projectRegions, ...responses[0].data]
+              : [];
+          const sites =
+            responses[1].data.length > 0
+              ? [...siteType, ...responses[1].data]
+              : [];
           this.setState(() => ({
             projectRegions: regions,
             selected: regions.map(each => {

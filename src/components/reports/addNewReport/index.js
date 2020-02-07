@@ -79,10 +79,10 @@ const InitialState = {
   metaAttributes: [],
   formQuestions: [],
   filter: {
-    filterByRegions: [{ id: 'all_regions', name: 'Select All' }],
-    filterBySiteType: [{ id: 'all_sitetypes', name: 'Select All' }],
+    filterByRegions: [],
+    filterBySiteType: [],
     filterBy: {},
-    filterByUserRoles: [{ id: 'all_userroles', name: 'Select All' }],
+    filterByUserRoles: [],
   },
   isDelete: false,
   errors: {},

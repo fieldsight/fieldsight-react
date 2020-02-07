@@ -8,7 +8,7 @@ import FilterByData from './filterByData';
 const InitialState = {
   filterData: {
     project: '',
-    regions: [{ id: 'all_regions', name: 'Select All' }],
+    regions: [],
     siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
     userRoles: [{ id: 'all_userroles', name: 'Select All' }],
     startDate: '',
@@ -324,6 +324,7 @@ export default class DataFilter extends Component {
       applyFilter,
       selectedReportType,
     } = this.props;
+
     return (
       <div className="data-filter filter-bottom mrt-30">
         <form onSubmit={this.handleSubmit}>
