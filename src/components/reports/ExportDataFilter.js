@@ -38,8 +38,14 @@ export default class ExportDataFilter extends Component {
       .all([requestProjectRegions, requestSiteType])
       .then(
         axios.spread((...responses) => {
-          const regions = [...projectRegions, ...responses[0].data];
-          const sites = [...siteType, ...responses[1].data];
+          const regions =
+            responses[0].data.length > 0
+              ? [...projectRegions, ...responses[0].data]
+              : [];
+          const sites =
+            responses[1].data.length > 0
+              ? [...siteType, ...responses[1].data]
+              : [];
           this.setState(() => ({
             projectRegions: regions,
             selected: regions.map(each => {
@@ -155,13 +161,16 @@ export default class ExportDataFilter extends Component {
         state: { fromDashboard },
       },
     } = this.props;
-    const region = this.state.selected.map(reg => reg.id);
-    const site = this.state.siteSelected.map(reg => reg.id);
+    const region = this.state.selected.filter(
+      reg => reg.id !== 'all_regions',
+    );
+    const site = this.state.siteSelected.filter(
+      s => s.id !== 'all_sitetypes',
+    );
     const data = {
-      siteTypes: region,
-      regions: site,
+      regions: region.map(r => r.id),
+      siteTypes: site.map(s => s.id),
     };
-
     const route = this.toUpper(fromDashboard);
 
     axios

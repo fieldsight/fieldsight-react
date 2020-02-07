@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import Axios from 'axios';
+
 import SuperAdminFormEdit from '../../superAdminEdit';
 import LeftSideBar from './leftSideBar';
 import Teams from './teams';
@@ -10,14 +12,21 @@ import { RegionProvider } from '../../../context';
 export default class SuperAdminSetting extends Component {
   constructor(props) {
     super(props);
-    this.state = { orgName: '' };
+    this.state = { breadcrumb: {} };
   }
 
-  reqOrgName = name => {
-    this.setState({
-      orgName: name,
+  componentWillMount() {
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+    Axios.get(
+      `/fv3/api/settings-breadcrumbs/${id}/?type=organization`,
+    ).then(res => {
+      this.setState({ breadcrumb: res.data });
     });
-  };
+  }
 
   render() {
     const {
@@ -26,7 +35,7 @@ export default class SuperAdminSetting extends Component {
         params: { id },
       },
     } = this.props;
-    const { orgName } = this.state;
+    const { breadcrumb } = this.state;
 
     return (
       <RegionProvider>
@@ -34,15 +43,15 @@ export default class SuperAdminSetting extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item ">
               <a
-                href={`/fieldsight/application/#/organization-dashboard/${id}`}
+                href={breadcrumb.name_url}
                 style={{ color: '#00628E' }}
               >
-                {orgName}
+                {breadcrumb.name}
               </a>
             </li>
 
             <li className="breadcrumb-item" aria-current="page">
-              Organization Settings
+              {breadcrumb.current_page}
             </li>
           </ol>
         </nav>
@@ -67,11 +76,7 @@ export default class SuperAdminSetting extends Component {
                     exact
                     path={`${url}`}
                     render={props => (
-                      <SuperAdminFormEdit
-                        id={id}
-                        {...props}
-                        reqOrgName={this.reqOrgName}
-                      />
+                      <SuperAdminFormEdit id={id} {...props} />
                     )}
                   />
                   <Route

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import CountCard from '../common/CountCard';
 import { AvatarContentLoader } from '../common/Loader';
@@ -167,12 +167,14 @@ class DashboardHeader extends PureComponent {
                     />
                   </a>
                 ) : (
-                  <CountCard
-                    countName={manage.title}
-                    countNumber={manage.total_sites}
-                    icon={manage.icon}
-                    noSubmissionText
-                  />
+                  <Fragment key={manage.title}>
+                    <CountCard
+                      countName={manage.title}
+                      countNumber={manage.total_sites}
+                      icon={manage.icon}
+                      noSubmissionText
+                    />
+                  </Fragment>
                 ),
               )}
             </div>

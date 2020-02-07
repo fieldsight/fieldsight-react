@@ -64,28 +64,23 @@ export default class SuperAdminFormEdit extends Component {
           const longitude = position && position[1].split('(')[1];
           const latitude = position && position[2].split(')')[0];
 
-          this.setState(
-            {
-              identifier: responses[0].data.identifier,
-              name: responses[0].data.name,
-              phone: responses[0].data.phone,
-              fax: responses[0].data.fax,
-              email: responses[0].data.email,
-              website: responses[0].data.website,
-              address: responses[0].data.address,
-              public_desc: responses[0].data.public_desc,
-              position: {
-                latitude,
-                longitude,
-              },
-              zoom: 13,
-              Selectedtypes: responses[0].data.country,
-              country: responses[1].data.countries,
+          this.setState({
+            identifier: responses[0].data.identifier,
+            name: responses[0].data.name,
+            phone: responses[0].data.phone,
+            fax: responses[0].data.fax,
+            email: responses[0].data.email,
+            website: responses[0].data.website,
+            address: responses[0].data.address,
+            public_desc: responses[0].data.public_desc,
+            position: {
+              latitude,
+              longitude,
             },
-            () => {
-              this.props.reqOrgName(this.state.name);
-            },
-          );
+            zoom: 13,
+            Selectedtypes: responses[0].data.country,
+            country: responses[1].data.countries,
+          });
         }),
       )
       .catch();
@@ -113,7 +108,7 @@ export default class SuperAdminFormEdit extends Component {
               errorFlag: true,
             });
           }
-          if (value.trim().length > 5) {
+          if (value.trim().length > 4) {
             this.setState({
               errorFlag: false,
             });
@@ -282,6 +277,7 @@ export default class SuperAdminFormEdit extends Component {
                     className="form-control"
                     label="Country"
                     translation
+                    formType="editForm"
                     options={country}
                     changeHandler={e => onSelectChangeHandler(e)}
                     value={Selectedtypes && Selectedtypes}

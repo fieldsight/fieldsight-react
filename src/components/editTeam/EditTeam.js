@@ -112,18 +112,13 @@ class EditTeam extends Component {
                 ? team.data.logo
                 : '';
 
-              this.setState(
-                {
-                  team: team.data,
-                  teamTypes: teamType,
-                  countryList,
-                  cropResult: newCropResult,
-                  position: newPosition,
-                },
-                () => {
-                  this.props.reqTeamName(team.data.name);
-                },
-              );
+              this.setState({
+                team: team.data,
+                teamTypes: teamType,
+                countryList,
+                cropResult: newCropResult,
+                position: newPosition,
+              });
             }
           }
         }),

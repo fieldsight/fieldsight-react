@@ -49,8 +49,14 @@ export default class FormDataFilter extends Component {
       .all([requestProjectRegions, requestSiteType])
       .then(
         axios.spread((...responses) => {
-          const regions = [...projectRegions, ...responses[0].data];
-          const sites = [...siteType, ...responses[1].data];
+          const regions =
+            responses[0].data.length > 0
+              ? [...projectRegions, ...responses[0].data]
+              : [];
+          const sites =
+            responses[1].data.length > 0
+              ? [...siteType, ...responses[1].data]
+              : [];
           this.setState({
             projectRegions: regions,
             selected: regions.map(each => {
@@ -170,13 +176,17 @@ export default class FormDataFilter extends Component {
       },
     } = this.props;
     // debugger;
-    const region = this.state.selected.map(reg => reg.id);
-    const site = this.state.siteSelected.map(reg => reg.id);
+    const region = this.state.selected.filter(
+      reg => reg.id !== 'all_regions',
+    );
+    const site = this.state.siteSelected.filter(
+      s => s.id !== 'all_sitetypes',
+    );
     const startDate = format(this.state.startedDate, ['YYYY-MM-DD']);
     const endDate = format(this.state.endedDate, ['YYYY-MM-DD']);
     const data = {
-      siteTypes: region,
-      regions: site,
+      siteTypes: site.map(s => s.id),
+      regions: region.map(r => r.id),
       fs_ids: [this.props.location.state.fromDashboard],
       start_date: startDate,
       end_date: endDate,
