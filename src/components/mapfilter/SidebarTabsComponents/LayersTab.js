@@ -18,7 +18,7 @@ export default class LayersTab extends PureComponent {
     } = this.props;
     return (
       <div
-        className={`tab-pane fade ${
+        className={`tab-pane custom_pane fade ${
           activeTab === 'layers' ? 'show active' : ''
         }`}
         id="sidebar-layer"
@@ -76,7 +76,7 @@ export default class LayersTab extends PureComponent {
                       <label>
                         <input
                           type="checkbox"
-                          name={`geo_layer${key}`}
+                          name={`geo_layer${data.id}`}
                           onChange={geolayersOnChange}
                           data-value={data.geo_layer}
                         />
