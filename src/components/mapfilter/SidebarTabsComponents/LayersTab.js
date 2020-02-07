@@ -69,7 +69,7 @@ export default class LayersTab extends PureComponent {
             }
           >
             {geolayersList &&
-              geolayersList.map((data, key) => {
+              geolayersList.map(data => {
                 return (
                   <div key={data.id} className="form-group">
                     <div className="checkbox">

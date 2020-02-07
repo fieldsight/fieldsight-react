@@ -74,7 +74,12 @@ class MapLeftTools extends PureComponent {
             role="button"
             tabIndex={0}
           >
-            <i className="la la-server" />
+            <img
+              alt="ruler"
+              width="20px"
+              src="/static/images/ruler.png"
+            />
+            {/* <i className="las la-ruler" /> */}
           </a>
 
           <a>
