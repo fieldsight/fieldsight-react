@@ -158,7 +158,12 @@ class MapFilter extends PureComponent {
     // console.log(e.value, usedState);
     if (usedState === 'Color') {
       // this.loaderOn();
-      this.setState({ colorBySelection: e.value });
+
+      this.setState({ isLoading: true }, () => {
+        this.setState({ colorBySelection: e.value }, () => {
+          this.setState({ isLoading: false });
+        });
+      });
     } else if (usedState === 'Size') {
       this.setState({ sizeBySelection: e.value });
     }
@@ -169,9 +174,15 @@ class MapFilter extends PureComponent {
   };
 
   loaderOn = () => {
-    this.setState(prevState => ({
-      isLoading: !prevState.isLoading,
-    }));
+    this.setState({
+      isLoading: true,
+    });
+  };
+
+  loaderOff = () => {
+    this.setState({
+      isLoading: false,
+    });
   };
 
   toggleZoomforFilter = () => {
@@ -336,10 +347,10 @@ class MapFilter extends PureComponent {
   };
 
   refreshClick = () => {
-    // const map = this.mapRef.current.leafletElement;
-    // const featuregroup = this.groupRef.current.leafletElement;
-    // map.fitBounds(featuregroup.getBounds());
-    this.props.refreshGeojsonData();
+    const map = this.mapRef.current.leafletElement;
+    const featuregroup = this.groupRef.current.leafletElement;
+    map.fitBounds(featuregroup.getBounds());
+    // this.props.refreshGeojsonData();
   };
 
   onClickClearBtn = () => {
@@ -421,25 +432,53 @@ class MapFilter extends PureComponent {
   //   console.log(e.target.value);
   // };
 
+  // handleStatusChange = e => {
+  //   const {
+  //     target: { value },
+  //   } = e;
+  //   const { checkedStatusItem } = this.state;
+  //   this.setState(
+  //     { checkedStatusItem: [parseInt(value, 10)] },
+  //     () => {
+  //       // console.log(
+  //       //   `Button Name (▶️️ inside callback) = `,
+  //       //   this.state.checkedProgressItems,
+  //       // ),
+  //       if (checkedStatusItem) {
+  //         this.setState({ isStatusSelected: true });
+  //       } else {
+  //         this.setState({ isStatusSelected: false });
+  //       }
+  //     },
+  //   );
+  // };
   handleStatusChange = e => {
-    const {
-      target: { value },
-    } = e;
+    const item = parseInt(e.target.name, 10);
+    const isStatusChecked = e.target.checked;
     const { checkedStatusItem } = this.state;
-    this.setState(
-      { checkedStatusItem: [parseInt(value, 10)] },
-      () => {
-        // console.log(
-        //   `Button Name (▶️️ inside callback) = `,
-        //   this.state.checkedProgressItems,
-        // ),
-        if (checkedStatusItem) {
-          this.setState({ isStatusSelected: true });
-        } else {
-          this.setState({ isStatusSelected: false });
-        }
-      },
-    );
+    if (isStatusChecked === true) {
+      const joined = checkedStatusItem.concat(item);
+      this.setState({
+        checkedStatusItem: joined,
+        isStatusSelected: true,
+      });
+    } else {
+      const filteredData = checkedStatusItem.filter(
+        data => data !== item,
+      );
+      this.setState(
+        {
+          checkedStatusItem: filteredData,
+        },
+        () => {
+          if (this.state.checkedStatusItem.length > 0) {
+            this.setState({ isStatusSelected: true });
+          } else {
+            this.setState({ isStatusSelected: false });
+          }
+        },
+      );
+    }
   };
 
   handleProjectChange = e => {
@@ -536,6 +575,7 @@ class MapFilter extends PureComponent {
   };
 
   handleProjectParentCheckbox = e => {
+    e.stopPropagation();
     const { checkedProjectItems, isProjectSelected } = this.state;
     if (isProjectSelected) {
       const allProjectElement = document.getElementsByClassName(
@@ -573,6 +613,8 @@ class MapFilter extends PureComponent {
   };
 
   handleProgressParentCheckbox = e => {
+    // debugger;
+    e.stopPropagation();
     const { checkedProgressItems, isProgressSelected } = this.state;
     if (isProgressSelected) {
       const allProgressElement = document.getElementsByClassName(
@@ -609,7 +651,8 @@ class MapFilter extends PureComponent {
     }
   };
 
-  handleStatusParentCheckbox = () => {
+  handleStatusParentCheckbox = e => {
+    e.stopPropagation();
     const { checkedStatusItem, isStatusSelected } = this.state;
     if (isStatusSelected) {
       this.setState({
@@ -629,12 +672,17 @@ class MapFilter extends PureComponent {
       const allStatusElement = document.getElementsByClassName(
         'status_checkbox',
       );
-      checkedStatusItem.push(parseInt(allStatusElement[0].value, 10));
-      allStatusElement[0].checked = true;
+      for (let i = 0; i < allStatusElement.length; i += 1) {
+        checkedStatusItem.push(
+          parseInt(allStatusElement[i].value, 10),
+        );
+        allStatusElement[i].checked = true;
+      }
     }
   };
 
   handleSiteTypeParentCheckbox = e => {
+    e.stopPropagation();
     const { checkedSiteItems, isSiteTypeSelected } = this.state;
     if (isSiteTypeSelected) {
       const allSiteTypeElement = document.getElementsByClassName(
@@ -672,6 +720,7 @@ class MapFilter extends PureComponent {
   };
 
   handleRegionParentCheckbox = e => {
+    e.stopPropagation();
     const { checkedRegionItems, isRegionSelected } = this.state;
     if (isRegionSelected) {
       const allRegionElement = document.getElementsByClassName(
@@ -779,6 +828,7 @@ class MapFilter extends PureComponent {
     const mapref = this.mapRef.current.leafletElement;
 
     if (loadallGeoLayer === false) {
+      this.loaderOn();
       geolayersList.forEach(element => {
         Axios.get(element.geo_layer)
           .then(res => {
@@ -824,8 +874,13 @@ class MapFilter extends PureComponent {
             window[`geo_layer${element.id}`].addTo(mapref);
             mapref.removeLayer(window[`geo_layer${element.id}`]);
             if (!mapref.hasLayer(window[`${name}`])) {
+              this.loaderOff();
               mapref.addLayer(window[`${name}`]);
+              console.log(window[`${name}`].getBounds());
+              const addedLayerBound = window[`${name}`].getBounds();
+              mapref.fitBounds(addedLayerBound);
             }
+
             // mapref.addLayer(window[name]);
           })
           .catch({});
@@ -835,7 +890,10 @@ class MapFilter extends PureComponent {
       if (mapref.hasLayer(window[`${name}`])) {
         mapref.removeLayer(window[`${name}`]);
       } else {
+        this.loaderOff();
         mapref.addLayer(window[`${name}`]);
+        const nextaddedLayerBound = window[`${name}`].getBounds();
+        mapref.fitBounds(nextaddedLayerBound);
       }
     }
     this.setState({ loadallGeoLayer: true });
@@ -945,7 +1003,7 @@ class MapFilter extends PureComponent {
                       className="form-control searchinput"
                       // onChange={this.handleSearchChange}
                       // onKeyDown={this.handleSearchEnter}
-                      placeholder="Search By Site Region"
+                      placeholder="Search By Address"
                     />
                     <section
                       className={`search-control-info-wrapper ${
@@ -1021,7 +1079,17 @@ class MapFilter extends PureComponent {
                             onKeyPress={this.SearchBy}
                             onClick={this.SearchBy}
                           >
-                            Search by Name
+                            <div
+                              className="circle"
+                              style={{
+                                border: '1px solid black',
+                                background: '#e69109',
+                                marginLeft: '4px',
+                                marginTop: '3px',
+                              }}
+                              title="Sites"
+                            />
+                            Search by Site Name
                           </a>
                         </li>
                         <li>
@@ -1038,6 +1106,13 @@ class MapFilter extends PureComponent {
                             onKeyPress={this.SearchBy}
                             onClick={this.SearchBy}
                           >
+                            <img
+                              alt="osm_search"
+                              src="/static/images/osm_search.png"
+                              width="22px"
+                              style={{ marginRight: '5px' }}
+                              title="OSM Search"
+                            />
                             Search by Address
                           </a>
                         </li>

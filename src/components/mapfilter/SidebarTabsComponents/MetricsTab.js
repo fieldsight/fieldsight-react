@@ -62,7 +62,9 @@ class MetricsTab extends PureComponent {
         <br />
         <div className="form-group">
           {/* <label>Color</label> */}
-          <label>Change Color By:</label>
+          <label style={{ marginBottom: '12px' }}>
+            Change Color By:
+          </label>
           <Select
             name="siteinfo color"
             className="wide"

@@ -9,6 +9,7 @@ import {
   withLeaflet,
   LayersControl,
 } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import PrintControlDefault from 'react-leaflet-easyprint';
 import MeasureControlDefault from 'react-leaflet-measure';
@@ -32,6 +33,8 @@ class MapComponent extends PureComponent {
       regionLegend: [],
     };
   }
+
+  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
     // let allLayers = null;
@@ -482,6 +485,8 @@ class MapComponent extends PureComponent {
     }
     if (prevProps.clonePrimaryGeojson !== clonePrimaryGeojson) {
       map.fitBounds(groupRef.current.leafletElement.getBounds());
+      const elem = L.DomUtil.get('legend_id');
+      L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation);
     }
   }
 
@@ -528,91 +533,6 @@ class MapComponent extends PureComponent {
 
     return (
       <>
-        <div
-          className="map-sidebar left-map-sidebar"
-          style={{ left: '86%', top: '471px', bottom: '20px' }}
-        >
-          <div className="sidebar-wrapper">
-            <div className="sidebar-title flex-between">
-              <h4>Legend</h4>
-            </div>
-          </div>
-          <div
-            style={{
-              marginLeft: '15px',
-            }}
-            className="panel-header"
-          >
-            <b
-              style={{
-                margin: '0 auto',
-                textTransform: 'capitalize',
-                // color: 'red',
-                fontWeight: 200,
-                // border: '2px solid',
-              }}
-            >
-              {colorBySelection}
-            </b>
-          </div>
-          <div
-            className="whole-content"
-            style={{
-              margin: '15px',
-              overflowY: 'scroll',
-              maxHeight: '251px',
-              height: '182px',
-            }}
-          >
-            <div className="panel-wrap mt-3">
-              <br />
-              <div className="panel-section">
-                <div id="legend">
-                  <div
-                    id="form_legend"
-                    style={{ marginTop: '-32px' }}
-                  >
-                    <div>
-                      <div id="form_legend">
-                        <div>
-                          {colorBySelection === 'project'
-                            ? projectsLegend
-                            : ''}
-                        </div>
-                        <br />
-
-                        <div style={{ marginTop: '-15px' }}>
-                          {colorBySelection === 'progress'
-                            ? progressLegend
-                            : ''}
-                        </div>
-
-                        <div>
-                          {colorBySelection === 'status'
-                            ? statusLegend
-                            : ''}
-                        </div>
-
-                        <div>
-                          {colorBySelection === 'site_type'
-                            ? sitetypeLegend
-                            : ''}
-                        </div>
-                        <div>
-                          {colorBySelection === 'region'
-                            ? regionLegend
-                            : ''}
-                        </div>
-                        <br />
-                      </div>
-                    </div>
-                    <br />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <Map
           ref={mapRef}
           center={position}
@@ -634,6 +554,105 @@ class MapComponent extends PureComponent {
             title="Export as PNG"
             exportOnly
           />
+          <div
+            id="legend_id"
+            className="map-sidebar left-map-sidebar"
+            style={{
+              left: '86%',
+              top: '471px',
+              bottom: '20px',
+              zIndex: '999',
+            }}
+          >
+            <div className="sidebar-wrapper">
+              <div className="sidebar-title flex-between">
+                <h4>Legend</h4>
+              </div>
+            </div>
+            <div
+              style={{
+                marginLeft: '15px',
+              }}
+              className="panel-header"
+            >
+              <b
+                style={{
+                  margin: '0 auto',
+                  textTransform: 'capitalize',
+                  // color: 'red',
+                  fontWeight: 200,
+                  // border: '2px solid',
+                }}
+              >
+                {`${
+                  colorBySelection === 'project'
+                    ? 'projects'
+                    : colorBySelection === 'site_type'
+                    ? 'site Types'
+                    : colorBySelection === 'region'
+                    ? 'regions'
+                    : colorBySelection
+                }`}
+              </b>
+            </div>
+            <div
+              className="whole-content"
+              style={{
+                margin: '15px',
+                overflowY: 'scroll',
+                maxHeight: '251px',
+                height: '182px',
+              }}
+            >
+              <div className="panel-wrap mt-3">
+                <br />
+                <div className="panel-section">
+                  <div id="legend">
+                    <div
+                      id="form_legend"
+                      style={{ marginTop: '-32px' }}
+                    >
+                      <div>
+                        <div id="form_legend">
+                          <div>
+                            {colorBySelection === 'project'
+                              ? projectsLegend
+                              : ''}
+                          </div>
+                          <br />
+
+                          <div style={{ marginTop: '-15px' }}>
+                            {colorBySelection === 'progress'
+                              ? progressLegend
+                              : ''}
+                          </div>
+
+                          <div>
+                            {colorBySelection === 'status'
+                              ? statusLegend
+                              : ''}
+                          </div>
+
+                          <div>
+                            {colorBySelection === 'site_type'
+                              ? sitetypeLegend
+                              : ''}
+                          </div>
+                          <div>
+                            {colorBySelection === 'region'
+                              ? regionLegend
+                              : ''}
+                          </div>
+                          <br />
+                        </div>
+                      </div>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <LayersControl position="topright">
             <BaseLayer
               checked={selectedBaseLayer === 'openstreet'}
