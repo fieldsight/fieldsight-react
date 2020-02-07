@@ -170,13 +170,17 @@ export default class FormDataFilter extends Component {
       },
     } = this.props;
     // debugger;
-    const region = this.state.selected.map(reg => reg.id);
-    const site = this.state.siteSelected.map(reg => reg.id);
+    const region = this.state.selected.filter(
+      reg => reg.id !== 'all_regions',
+    );
+    const site = this.state.siteSelected.filter(
+      s => s.id !== 'all_sitetypes',
+    );
     const startDate = format(this.state.startedDate, ['YYYY-MM-DD']);
     const endDate = format(this.state.endedDate, ['YYYY-MM-DD']);
     const data = {
-      siteTypes: region,
-      regions: site,
+      siteTypes: site.map(s => s.id),
+      regions: region.map(r => r.id),
       fs_ids: [this.props.location.state.fromDashboard],
       start_date: startDate,
       end_date: endDate,

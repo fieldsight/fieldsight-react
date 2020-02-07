@@ -155,13 +155,16 @@ export default class ExportDataFilter extends Component {
         state: { fromDashboard },
       },
     } = this.props;
-    const region = this.state.selected.map(reg => reg.id);
-    const site = this.state.siteSelected.map(reg => reg.id);
+    const region = this.state.selected.filter(
+      reg => reg.id !== 'all_regions',
+    );
+    const site = this.state.siteSelected.filter(
+      s => s.id !== 'all_sitetypes',
+    );
     const data = {
-      siteTypes: region,
-      regions: site,
+      regions: region.map(r => r.id),
+      siteTypes: site.map(s => s.id),
     };
-
     const route = this.toUpper(fromDashboard);
 
     axios

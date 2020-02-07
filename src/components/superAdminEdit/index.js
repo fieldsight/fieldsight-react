@@ -113,7 +113,7 @@ export default class SuperAdminFormEdit extends Component {
               errorFlag: true,
             });
           }
-          if (value.trim().length > 5) {
+          if (value.trim().length > 4) {
             this.setState({
               errorFlag: false,
             });
@@ -282,6 +282,7 @@ export default class SuperAdminFormEdit extends Component {
                     className="form-control"
                     label="Country"
                     translation
+                    formType="editForm"
                     options={country}
                     changeHandler={e => onSelectChangeHandler(e)}
                     value={Selectedtypes && Selectedtypes}

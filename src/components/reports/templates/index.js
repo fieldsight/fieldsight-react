@@ -11,6 +11,20 @@ import {
   getFormType,
 } from '../../../actions/templateAction';
 
+const StandardReportComponent = ({ path, title, description }) => (
+  <Link
+    to={{
+      pathname: path,
+      state: {
+        fromDashboard: title,
+      },
+    }}
+  >
+    <h4>{title}</h4>
+    <p>{description}</p>
+  </Link>
+);
+
 class Templates extends Component {
   constructor(props) {
     super(props);
@@ -179,7 +193,6 @@ class Templates extends Component {
         link: this.handleCustomLink,
       },
     ];
-
     return (
       <>
         <div className="card-body">
@@ -219,52 +232,45 @@ class Templates extends Component {
                         )}
 
                         {standardReport.title ===
-                          'Site Information' ||
-                          (standardReport.title ===
-                            'Progress Report' && (
-                            <Link
-                              to={{
-                                pathname: `/export-data/${id}`,
-                                state: {
-                                  fromDashboard: standardReport.title,
-                                },
-                              }}
-                            >
-                              <h4>{standardReport.title}</h4>
-                              <p>{standardReport.description}</p>
-                            </Link>
-                          ))}
+                          'Site Information' && (
+                          <StandardReportComponent
+                            path={`/export-data/${id}`}
+                            title={standardReport.title}
+                            description={standardReport.description}
+                          />
+                        )}
+                        {standardReport.title ===
+                          'Progress Report' && (
+                          <StandardReportComponent
+                            path={`/export-data/${id}`}
+                            title={standardReport.title}
+                            description={standardReport.description}
+                          />
+                        )}
 
-                        {standardReport.title === 'Activity Report' ||
-                          (standardReport.title ===
-                            'Project Logs' && (
-                            <Link
-                              to={{
-                                pathname: `/user-export/${id}`,
-                                state: {
-                                  fromDashboard: standardReport.title,
-                                },
-                              }}
-                            >
-                              <h4>{standardReport.title}</h4>
-                              <p>{standardReport.description}</p>
-                            </Link>
-                          ))}
+                        {standardReport.title ===
+                          'Activity Report' && (
+                          <StandardReportComponent
+                            path={`/user-export/${id}`}
+                            title={standardReport.title}
+                            description={standardReport.description}
+                          />
+                        )}
+                        {standardReport.title === 'Project Logs' && (
+                          <StandardReportComponent
+                            path={`/user-export/${id}`}
+                            title={standardReport.title}
+                            description={standardReport.description}
+                          />
+                        )}
 
                         {standardReport.title ===
                           'User Activity Report' && (
-                          <Link
-                            to={{
-                              pathname: `/activity-export/${id}`,
-
-                              state: {
-                                fromDashboard: standardReport.title,
-                              },
-                            }}
-                          >
-                            <h4>{standardReport.title}</h4>
-                            <p>{standardReport.description}</p>
-                          </Link>
+                          <StandardReportComponent
+                            path={`/activity-export/${id}`}
+                            title={standardReport.title}
+                            description={standardReport.description}
+                          />
                         )}
                       </div>
                     </div>
