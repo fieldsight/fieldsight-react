@@ -4,7 +4,8 @@ import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import L from 'leaflet';
 import Axios from 'axios';
 // import 'react-bootstrap-typeahead/css/Typeahead.css';
-
+import worker from './webWorker/worker';
+import WebWorker from './webWorker/workerSetup';
 import Loader from '../common/Loader';
 import MapComponent from './MapComponent';
 import MapLeftTools from './MapLeftTools';
@@ -88,6 +89,12 @@ class MapFilter extends PureComponent {
     const searchselect = form.querySelector(
       '.search-control-info-list',
     );
+    this.worker = new WebWorker(worker);
+    // const myWorker = new Worker('worker.js');
+
+    // if (window.Worker) {
+    //   console.log('worker Running');
+    // }
     // console.log(input, 'input');
 
     // console.log(searchselect, 'searchselect');
@@ -150,11 +157,22 @@ class MapFilter extends PureComponent {
     });
   }
 
+  fetchWebWorker = () => {
+    console.log('function inside');
+    this.worker.postMessage('Fetch Users');
+
+    this.worker.addEventListener('message', event => {
+      console.log('worker function clicked');
+      console.log(event.data);
+    });
+  };
+
   handleBaseLayer = selectedBaseLayer => {
     this.setState({ selectedBaseLayer });
   };
 
   handleMetricsChange = (e, usedState) => {
+    this.fetchWebWorker();
     // console.log(e.value, usedState);
     if (usedState === 'Color') {
       // this.loaderOn();
