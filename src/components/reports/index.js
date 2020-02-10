@@ -47,7 +47,7 @@ class Reports extends Component {
             </li>
 
             <li className="breadcrumb-item" aria-current="page">
-              {breadcrumb.current_page}
+              Custom Reports
             </li>
           </ol>
         </nav>

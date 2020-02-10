@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 // import { Redirect } from 'react-router';
 import Loader from '../../common/Loader';
@@ -198,7 +198,8 @@ class Templates extends Component {
         <div className="reports mrb-30">
           <div className="card">
             <div className="reports-header mt-4">
-              <ul className="common-tab is-bg">
+              <h4>Project Reports</h4>
+              {/* <ul className="common-tab is-bg">
                 <li
                   className="current"
                   // tabIndex="0"
@@ -206,13 +207,19 @@ class Templates extends Component {
                 >
                   templates
                 </li>
-              </ul>
+              </ul> */}
               <Link
                 to={`/report-list/${id}`}
                 className="common-button no-border is-icon"
+                target="_blank"
               >
-                <i className="material-icons">list_alt</i>
-                <span>All Reports</span>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>Custom Reports (Beta)</Tooltip>}
+                >
+                  <i className="material-icons">settings</i>
+                </OverlayTrigger>
+                {/* <span>All Reports</span> */}
               </Link>
             </div>
             <div className="card-body">

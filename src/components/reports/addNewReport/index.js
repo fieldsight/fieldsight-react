@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import { Dropdown } from 'react-bootstrap';
+// import { Dropdown } from 'react-bootstrap';
 import {
   getMetricsData,
   getForms,
@@ -16,10 +16,10 @@ import {
 } from '../../../utils/toastHandler';
 import CustomSelect from '../common/CustomSelect';
 import Metrics from './metrics';
-import DataFilter from '../common/dataFilter';
+// import DataFilter from '../common/dataFilter';
 import SelectedColumn from './selectedColumn';
 import DeleteModal from '../../common/DeleteModal';
-import { BlockContentLoader } from '../../common/Loader';
+// import { BlockContentLoader } from '../../common/Loader';
 
 /* eslint-disable */
 
@@ -86,6 +86,7 @@ const InitialState = {
   },
   isDelete: false,
   errors: {},
+  breadcrumb: {},
 };
 
 class AddNewReport extends Component {
@@ -106,6 +107,12 @@ class AddNewReport extends Component {
         params: { id, reportId },
       },
     } = this.props;
+    Axios.get(`/fv3/api/settings-breadcrumbs/${id}/?type=project`)
+      .then(res => {
+        this.setState({ breadcrumb: res.data });
+      })
+      .catch(() => {});
+
     this.setState({ projectId: id }, () => {
       if (reportId) {
         this.setState({ reportId }),
@@ -1231,6 +1238,7 @@ class AddNewReport extends Component {
           filterByUserRoles,
         },
         applyFilter,
+        breadcrumb,
         isDelete,
         errors,
       },
@@ -1258,11 +1266,15 @@ class AddNewReport extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`/fieldsight/application/#/project-dashboard/${projectId}/report`}
+                href={breadcrumb.name_url}
+                style={{ color: '#00628E' }}
               >
-                Reports
+                {breadcrumb.name}
               </a>
             </li>
+            {isEdit && (
+              <li className="breadcrumb-item">{reportName}</li>
+            )}
             <li className="breadcrumb-item">
               {isEdit ? 'Edit Report' : 'Create Report'}
             </li>
@@ -1453,7 +1465,7 @@ class AddNewReport extends Component {
                         </div>
                       </div>
                     </div>
-                    {filterArr.length > 0 && (
+                    {/* {filterArr.length > 0 && (
                       <DataFilter
                         toggleSelectClass={toggleSelectClass}
                         handleToggleClass={this.handleToggleClass}
@@ -1470,7 +1482,7 @@ class AddNewReport extends Component {
                         selectedReportType={selectedReportType}
                         projectCreatedOn={projectCreatedOn}
                       />
-                    )}
+                    )} */}
                   </>
                 )}
               </div>

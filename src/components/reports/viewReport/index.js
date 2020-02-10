@@ -44,6 +44,7 @@ class ReportDashboard extends Component {
         filterUserRole: false,
       },
       filterDataLoaded: false,
+      breadcrumb: {},
     };
   }
 
@@ -57,6 +58,12 @@ class ReportDashboard extends Component {
     } = this;
     this.props.getReportData(id);
     this.props.getToFilterData(pid);
+    axios
+      .get(`/fv3/api/settings-breadcrumbs/${pid}/?type=project`)
+      .then(res => {
+        this.setState({ breadcrumb: res.data });
+      })
+      .catch(() => {});
   }
 
   componentDidMount() {
@@ -293,6 +300,7 @@ class ReportDashboard extends Component {
         },
         filteredList,
         filterDataLoaded,
+        breadcrumb,
       },
     } = this;
 
@@ -302,11 +310,13 @@ class ReportDashboard extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`/fieldsight/application/#/project-dashboard/${pid}/report`}
+                href={breadcrumb.name_url}
+                style={{ color: '#00628E' }}
               >
-                Report
+                {breadcrumb.name}
               </a>
             </li>
+            <li className="breadcrumb-item">{title}</li>
             <li className="breadcrumb-item">View Report</li>
           </ol>
         </nav>
