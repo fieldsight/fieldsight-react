@@ -9,6 +9,8 @@ import {
   REFRESH_GEOJSONDATA,
   GET_GEOLAYERS_LIST,
 } from './types';
+import worker from '../components/mapfilter/webWorker/worker';
+import WebWorker from '../components/mapfilter/webWorker/workerSetup';
 
 export const getProjectsList = id => dispatch => {
   axios
@@ -59,10 +61,25 @@ export const getProjectsRegionTypes = id => dispatch => {
     })
     .catch(() => {});
 };
-export const getFilteredPrimaryGeojson = payload => dispatch => {
-  dispatch({
-    type: FILTER_PRIMARYGEOJSON,
-    payload,
+export const getFilteredPrimaryGeojson = payload => async (
+  dispatch,
+  getState,
+) => {
+  const {
+    mapFilterReducer: { clonePrimaryGeojson, primaryGeojson },
+  } = getState();
+  const workers = new WebWorker(worker);
+
+  workers.postMessage({
+    state: { clonePrimaryGeojson, primaryGeojson },
+    action: { payload },
+  });
+
+  workers.addEventListener('message', event => {
+    dispatch({
+      type: FILTER_PRIMARYGEOJSON,
+      payload: event.data,
+    });
   });
 };
 export const getSearchPrimaryGeojson = payload => dispatch => {

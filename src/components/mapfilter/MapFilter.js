@@ -802,26 +802,26 @@ class MapFilter extends PureComponent {
     });
     this.toggleZoomforFilter();
 
-    if (
-      checkedProgressItems.length === 0 &&
-      checkedStatusItem.length === 0 &&
-      checkedSiteItems.length === 0 &&
-      checkedRegionItems.length === 0
-    ) {
-      this.setState({ colorBySelection: 'project' });
-    }
-    if (checkedProgressItems.length > 0) {
-      this.setState({ colorBySelection: 'progress' });
-    }
-    if (checkedStatusItem.length > 0) {
-      this.setState({ colorBySelection: 'status' });
-    }
-    if (checkedSiteItems.length > 0) {
-      this.setState({ colorBySelection: 'site_type' });
-    }
-    if (checkedRegionItems.length > 0) {
-      this.setState({ colorBySelection: 'region' });
-    }
+    // if (
+    //   checkedProgressItems.length === 0 &&
+    //   checkedStatusItem.length === 0 &&
+    //   checkedSiteItems.length === 0 &&
+    //   checkedRegionItems.length === 0
+    // ) {
+    //   this.setState({ colorBySelection: 'project' });
+    // }
+    // if (checkedProgressItems.length > 0) {
+    //   this.setState({ colorBySelection: 'progress' });
+    // }
+    // if (checkedStatusItem.length > 0) {
+    //   this.setState({ colorBySelection: 'status' });
+    // }
+    // if (checkedSiteItems.length > 0) {
+    //   this.setState({ colorBySelection: 'site_type' });
+    // }
+    // if (checkedRegionItems.length > 0) {
+    //   this.setState({ colorBySelection: 'region' });
+    // }
     // const { mapFilterReducer: clonePrimaryGeojson } = this.props;
   };
 
@@ -1003,7 +1003,7 @@ class MapFilter extends PureComponent {
             > */}
             <div className="sidebar-wrapper">
               <div className="sidebar-title flex-between">
-                <h4>{projectsList[0] && projectsList[0].name}</h4>
+                {/* <h4>{projectsList[0] && projectsList[0].name}</h4> */}
               </div>
               <form className="search-custom">
                 <div className="form-group search">
