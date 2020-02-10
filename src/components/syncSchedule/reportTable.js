@@ -40,7 +40,7 @@ export default class ReportTable extends PureComponent {
             ) : (
               <>
                 {data.map(each => (
-                  <tr key={`report_${each.report_id}`}>
+                  <tr key={`report_${each.form_id}`}>
                     <td>
                       <label>
                         {each.report_type === 'form'
@@ -120,10 +120,10 @@ export default class ReportTable extends PureComponent {
                                 role="button"
                                 tabIndex="0"
                                 onKeyDown={() => {
-                                  this.props.reqSync(each.report_id);
+                                  this.props.reqSync(each);
                                 }}
                                 onClick={() => {
-                                  this.props.reqSync(each.report_id);
+                                  this.props.reqSync(each);
                                 }}
                                 className="pending td-edit-btn td-btn"
                               >
