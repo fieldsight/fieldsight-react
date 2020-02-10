@@ -6,6 +6,7 @@ import RadioElement from '../../common/RadioElement';
 import CheckBox from '../../common/CheckBox';
 import SelectElement from '../../common/SelectElement';
 import Loader from '../../common/Loader';
+import { errorToast } from '../../../utils/toastHandler';
 
 /* eslint-disable  camelcase */
 /* eslint-disable  react/jsx-one-expression-per-line */
@@ -26,7 +27,7 @@ export default class ScheduleFormModal extends Component {
       startedDate: '',
       endedDate: '',
       errorStatedDate: '',
-      errorEndedDate: '',
+      // errorEndedDate: '',
     };
   }
 
@@ -148,64 +149,61 @@ export default class ScheduleFormModal extends Component {
   };
 
   handleStartDateChange = date => {
-    const { startedDate } = this.state;
-
-    this.setState(
-      {
+    this.setState(() => {
+      if (date) {
+        return {
+          startedDate: date,
+          errorStatedDate: '',
+        };
+      }
+      return {
         startedDate: date,
-      },
-      () => {
-        if (startedDate !== '') {
-          this.setState({
-            errorStatedDate: '',
-          });
-        }
-      },
-    );
+      };
+    });
   };
 
   handleEndDate = date => {
-    const { endedDate } = this.state;
+    // const { endedDate } = this.state;
 
     this.setState(
       {
         endedDate: date,
       },
-      () => {
-        if (endedDate !== '') {
-          this.setState({
-            errorEndedDate: '',
-          });
-        }
-      },
+      // () => {
+      //   if (endedDate !== '') {
+      //     this.setState({
+      //       errorEndedDate: '',
+      //     });
+      //   }
+      // },
     );
   };
 
   handleDateValidation() {
-    const { endedDate, startedDate } = this.state;
+    const { startedDate } = this.state;
 
     if (!startedDate) {
       this.setState({
         errorStatedDate: 'Started date is required',
       });
     }
-    if (!endedDate) {
-      this.setState({
-        errorEndedDate: 'Ended date is required',
-      });
-    }
+    // if (!endedDate) {
+    //   this.setState({
+    //     errorEndedDate: 'Ended date is required',
+    //   });
+    // }
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    const { endedDate, startedDate } = this.state;
+    const { startedDate } = this.state;
     this.handleDateValidation();
-    if (endedDate && startedDate) {
+    if (startedDate) {
       this.setState(
         {
           saveLoader: false,
         },
-        this.requestHandler,
+        this.requestHandler(),
       );
     }
   };
@@ -234,8 +232,9 @@ export default class ScheduleFormModal extends Component {
     const result = dailyArrDays.map(function(x) {
       return parseInt(x, 10);
     });
-    const StarttedDate = format(startedDate, ['YYYY-MM-DD']);
-    const EndedDate = format(endedDate, ['YYYY-MM-DD']);
+    const StarttedDate =
+      startedDate && format(startedDate, ['YYYY-MM-DD']);
+    const EndedDate = endedDate && format(endedDate, ['YYYY-MM-DD']);
 
     const body = {
       schedule_level_id: JSON.parse(scheduleType),
@@ -252,12 +251,14 @@ export default class ScheduleFormModal extends Component {
       default_submission_status: JSON.parse(status),
       frequency: JSON.parse(frequency),
       month_day: JSON.parse(selectedMonthlyDays),
-      xf_ids:
-        selected !== ''
-          ? JSON.parse(selected)
-          : JSON.parse(organization),
+      xf_ids: selected
+        ? selected
+        : organization
+        ? JSON.parse(organization)
+        : '',
     };
-
+    // debugger;
+    // console.log('body', body);
     axios
       .post(
         `/fv3/api/manage-super-organizations-library/${id}/`,
@@ -275,7 +276,17 @@ export default class ScheduleFormModal extends Component {
           }
         }
       })
-      .catch();
+      .catch(err => {
+        this.setState(
+          State => ({
+            saveLoader: !State.saveLoader,
+          }),
+          () => {
+            const errors = err.response;
+            errorToast(errors && errors.data && errors.data.detail);
+          },
+        );
+      });
   };
 
   componentWillUnmount() {
@@ -294,7 +305,7 @@ export default class ScheduleFormModal extends Component {
       startedDate,
       saveLoader,
       errorStatedDate,
-      errorEndedDate,
+      // errorEndedDate,
     } = this.state;
 
     const weeks = [];
@@ -311,12 +322,26 @@ export default class ScheduleFormModal extends Component {
         day.push({ key: i, name: i });
       } else day.push({ id: i, name: 'Last' });
     }
+    // console.log('in schedule', this.props);
     return (
       <>
         {saveLoader === false && <Loader />}
         <form className="floating-form" onSubmit={this.handleSubmit}>
           <div className="form-form">
             <div className="selected-form">
+              <button
+                type="button"
+                onClick={this.props.handleFormType}
+                className="fieldsight-btn"
+              >
+                {this.props.SelectedArr.length === 0
+                  ? ' Select Form'
+                  : 'Change Form'}
+              </button>
+              {this.props.SelectedArr &&
+                this.props.SelectedArr.map(name => (
+                  <p key={name.xf_id}>{name.title}</p>
+                ))}
               <div className="selected-text">
                 <div className="form-group checkbox-group">
                   <label>Type of schedule</label>
@@ -451,6 +476,7 @@ export default class ScheduleFormModal extends Component {
                     </div>
                   </div>
                 )}
+
                 {scheduleType === '2' && (
                   <div className="every-week flex">
                     <span className="ml-0">every</span>
@@ -499,11 +525,11 @@ export default class ScheduleFormModal extends Component {
                       />
                     </div>
 
-                    {errorEndedDate && (
+                    {/* {errorEndedDate && (
                       <small style={{ color: 'red' }}>
                         *{errorEndedDate}
                       </small>
-                    )}
+                    )} */}
                   </div>
                 </div>
 
@@ -545,17 +571,6 @@ export default class ScheduleFormModal extends Component {
                   </div>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={this.props.handleFormType}
-                className="fieldsight-btn"
-              >
-                Select Form
-              </button>
-              {this.props.SelectedArr &&
-                this.props.SelectedArr.map(name => (
-                  <p key={name.xf_id}>{name.title}</p>
-                ))}
             </div>
           </div>
 

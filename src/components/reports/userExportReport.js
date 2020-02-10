@@ -347,7 +347,7 @@ export default class UserExportReport extends Component {
                       </div>
                       <div className="col-md-12">
                         <a
-                          href={`/user/report/activity/${id}/${Userselected}/${format(
+                          href={`/fieldsight/user/report/activity/${id}/${Userselected}/${format(
                             preview_startedDate,
                             ['YYYY-MM-DD'],
                           )}/${format(preview_endedDate, [
