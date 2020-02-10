@@ -61,7 +61,15 @@ class DeleteTable extends PureComponent {
               deleted_forms.map(deleted => {
                 return (
                   <tr key={deleted.id}>
-                    <td>{deleted.name}</td>
+                    <td>
+                      {deleted.name !== 'None'
+                        ? deleted.from_organization
+                          ? `*${deleted.name}`
+                          : deleted.name
+                        : deleted.from_organization
+                        ? `*${deleted.form_name}`
+                        : deleted.form_name}
+                    </td>
                     <td>{deleted.title}</td>
                     <td>
                       {deleted.last_response.length > 0
