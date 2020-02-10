@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 // import { Redirect } from 'react-router';
 import Loader from '../../common/Loader';
 import FormTemplate from './formTemplate';
@@ -11,17 +12,33 @@ import {
   getFormType,
 } from '../../../actions/templateAction';
 
-const StandardReportComponent = ({ path, title, description }) => (
+const StandardReportComponent = ({ path, data }) => (
   <Link
     to={{
       pathname: path,
       state: {
-        fromDashboard: title,
+        fromDashboard: data.title,
       },
     }}
   >
-    <h4>{title}</h4>
-    <p>{description}</p>
+    <h4>{data.title}</h4>
+    <div className="summary-content">
+      {data.schedule_type && (
+        <p>
+          <b>Schedule Type</b>
+          <span>{data.schedule_type}</span>
+        </p>
+      )}
+      {data.last_synced_date && (
+        <p>
+          <b>Last Synced Date</b>
+          <span>
+            {format(data.last_synced_date, ['MMMM Do YYYY'])}
+          </span>
+        </p>
+      )}
+    </div>
+    <p>{data.description}</p>
   </Link>
 );
 
@@ -198,7 +215,10 @@ class Templates extends Component {
         <div className="reports mrb-30">
           <div className="card">
             <div className="reports-header mt-4">
-              <ul className="common-tab is-bg">
+              <h4 className="mb-3" style={{ padding: '20px' }}>
+                Project Reports
+              </h4>
+              {/* <ul className="common-tab is-bg">
                 <li
                   className="current"
                   // tabIndex="0"
@@ -206,13 +226,19 @@ class Templates extends Component {
                 >
                   templates
                 </li>
-              </ul>
+              </ul> */}
               <Link
                 to={`/report-list/${id}`}
                 className="common-button no-border is-icon"
+                target="_blank"
               >
-                <i className="material-icons">list_alt</i>
-                <span>All Reports</span>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>Custom Reports (Beta)</Tooltip>}
+                >
+                  <i className="material-icons">settings</i>
+                </OverlayTrigger>
+                {/* <span>All Reports</span> */}
               </Link>
             </div>
             <div className="card-body">
@@ -238,16 +264,6 @@ class Templates extends Component {
                               >
                                 <h4>{standardReport.title}</h4>
                                 <p>{standardReport.description}</p>
-                                {/* <div className="summary-content">
-                              <p>
-                                <b>Report Type</b>
-                                <span>my Reports</span>
-                              </p>
-                              <p>
-                                <b>no. of datapoints</b>
-                                <span>100</span>
-                              </p>
-                            </div> */}
                               </a>
                             )}
 
@@ -255,20 +271,14 @@ class Templates extends Component {
                               'Site Information' && (
                               <StandardReportComponent
                                 path={`/export-data/${id}`}
-                                title={standardReport.title}
-                                description={
-                                  standardReport.description
-                                }
+                                data={standardReport}
                               />
                             )}
                             {standardReport.title ===
                               'Progress Report' && (
                               <StandardReportComponent
                                 path={`/export-data/${id}`}
-                                title={standardReport.title}
-                                description={
-                                  standardReport.description
-                                }
+                                data={standardReport}
                               />
                             )}
 
@@ -276,20 +286,14 @@ class Templates extends Component {
                               'Activity Report' && (
                               <StandardReportComponent
                                 path={`/user-export/${id}`}
-                                title={standardReport.title}
-                                description={
-                                  standardReport.description
-                                }
+                                data={standardReport}
                               />
                             )}
                             {standardReport.title ===
                               'Project Logs' && (
                               <StandardReportComponent
                                 path={`/user-export/${id}`}
-                                title={standardReport.title}
-                                description={
-                                  standardReport.description
-                                }
+                                data={standardReport}
                               />
                             )}
 
@@ -297,10 +301,7 @@ class Templates extends Component {
                               'User Activity Report' && (
                               <StandardReportComponent
                                 path={`/activity-export/${id}`}
-                                title={standardReport.title}
-                                description={
-                                  standardReport.description
-                                }
+                                data={standardReport}
                               />
                             )}
                           </div>
