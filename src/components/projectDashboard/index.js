@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import DashboardHeader from './DashboardHeader';
 import ProjectDashboardComponent from './dashboardComponent';
-import Reports from '../reports';
+import Templates from '../reports/templates';
 
 import { getProjectDashboard } from '../../actions/projectDashboardActions';
 /* eslint-disable camelcase */
@@ -119,27 +119,26 @@ class ProjectDashboard extends React.Component {
             </ol>
           )}
         </nav>
-        <div className="right-content no-bg new-dashboard">
-          <DashboardHeader
-            name={name}
-            address={address}
-            logo={logo}
-            public_desc={public_desc}
-            totalUsers={total_users}
-            totalSites={total_sites}
-            totalSubmissions={project_activity.total_submissions}
-            id={projectId}
-            showContentLoader={projectDashboardLoader}
-            closeModal={this.closeModal}
-            openModal={this.openModal}
-            showCropper={showCropper}
-            termsAndLabels={terms_and_labels}
-            showGallery={showGallery}
-            isProjectManager={is_project_manager}
-            surveyData={surveyData}
-            path={url}
-          />
-        </div>
+        <DashboardHeader
+          name={name}
+          address={address}
+          logo={logo}
+          public_desc={public_desc}
+          totalUsers={total_users}
+          totalSites={total_sites}
+          totalSubmissions={project_activity.total_submissions}
+          id={projectId}
+          showContentLoader={projectDashboardLoader}
+          closeModal={this.closeModal}
+          openModal={this.openModal}
+          showCropper={showCropper}
+          termsAndLabels={terms_and_labels}
+          showGallery={showGallery}
+          isProjectManager={is_project_manager}
+          surveyData={surveyData}
+          path={url}
+        />
+        {/* </div> */}
         <Switch>
           <Route
             exact
@@ -154,9 +153,7 @@ class ProjectDashboard extends React.Component {
           <Route
             exact
             path={`${url}/report`}
-            render={props => (
-              <Reports {...props} projectId={projectId} />
-            )}
+            render={props => <Templates {...props} id={projectId} />}
           />
         </Switch>
       </>

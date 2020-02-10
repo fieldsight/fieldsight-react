@@ -195,30 +195,50 @@ class Templates extends Component {
     ];
     return (
       <>
-        <div className="card-body">
-          <div className="standard-tempalte">
-            <h2 className="my-3">Standard</h2>
-            {loader &&
-            standardReports !== undefined &&
-            standardReports.length > 0 ? (
-              standardReports.map(standardReport => (
-                <div
-                  className="report-list"
-                  key={standardReport.title}
+        <div className="reports mrb-30">
+          <div className="card">
+            <div className="reports-header mt-4">
+              <ul className="common-tab is-bg">
+                <li
+                  className="current"
+                  // tabIndex="0"
+                  role="presentation"
                 >
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="report-content">
-                        {standardReport.title ===
-                          'Project Summary' && (
-                          <a
-                            href={`/fieldsight/project/report/summary/${id}/`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <h4>{standardReport.title}</h4>
-                            <p>{standardReport.description}</p>
-                            {/* <div className="summary-content">
+                  templates
+                </li>
+              </ul>
+              <Link
+                to={`/report-list/${id}`}
+                className="common-button no-border is-icon"
+              >
+                <i className="material-icons">list_alt</i>
+                <span>All Reports</span>
+              </Link>
+            </div>
+            <div className="card-body">
+              <div className="standard-tempalte">
+                <h2 className="my-3">Standard</h2>
+                {loader &&
+                standardReports !== undefined &&
+                standardReports.length > 0 ? (
+                  standardReports.map(standardReport => (
+                    <div
+                      className="report-list"
+                      key={standardReport.title}
+                    >
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="report-content">
+                            {standardReport.title ===
+                              'Project Summary' && (
+                              <a
+                                href={`/fieldsight/project/report/summary/${id}/`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <h4>{standardReport.title}</h4>
+                                <p>{standardReport.description}</p>
+                                {/* <div className="summary-content">
                               <p>
                                 <b>Report Type</b>
                                 <span>my Reports</span>
@@ -228,135 +248,152 @@ class Templates extends Component {
                                 <span>100</span>
                               </p>
                             </div> */}
-                          </a>
-                        )}
+                              </a>
+                            )}
 
-                        {standardReport.title ===
-                          'Site Information' && (
-                          <StandardReportComponent
-                            path={`/export-data/${id}`}
-                            title={standardReport.title}
-                            description={standardReport.description}
-                          />
-                        )}
-                        {standardReport.title ===
-                          'Progress Report' && (
-                          <StandardReportComponent
-                            path={`/export-data/${id}`}
-                            title={standardReport.title}
-                            description={standardReport.description}
-                          />
-                        )}
+                            {standardReport.title ===
+                              'Site Information' && (
+                              <StandardReportComponent
+                                path={`/export-data/${id}`}
+                                title={standardReport.title}
+                                description={
+                                  standardReport.description
+                                }
+                              />
+                            )}
+                            {standardReport.title ===
+                              'Progress Report' && (
+                              <StandardReportComponent
+                                path={`/export-data/${id}`}
+                                title={standardReport.title}
+                                description={
+                                  standardReport.description
+                                }
+                              />
+                            )}
 
-                        {standardReport.title ===
-                          'Activity Report' && (
-                          <StandardReportComponent
-                            path={`/user-export/${id}`}
-                            title={standardReport.title}
-                            description={standardReport.description}
-                          />
-                        )}
-                        {standardReport.title === 'Project Logs' && (
-                          <StandardReportComponent
-                            path={`/user-export/${id}`}
-                            title={standardReport.title}
-                            description={standardReport.description}
-                          />
-                        )}
+                            {standardReport.title ===
+                              'Activity Report' && (
+                              <StandardReportComponent
+                                path={`/user-export/${id}`}
+                                title={standardReport.title}
+                                description={
+                                  standardReport.description
+                                }
+                              />
+                            )}
+                            {standardReport.title ===
+                              'Project Logs' && (
+                              <StandardReportComponent
+                                path={`/user-export/${id}`}
+                                title={standardReport.title}
+                                description={
+                                  standardReport.description
+                                }
+                              />
+                            )}
 
-                        {standardReport.title ===
-                          'User Activity Report' && (
-                          <StandardReportComponent
-                            path={`/activity-export/${id}`}
-                            title={standardReport.title}
-                            description={standardReport.description}
-                          />
-                        )}
+                            {standardReport.title ===
+                              'User Activity Report' && (
+                              <StandardReportComponent
+                                path={`/activity-export/${id}`}
+                                title={standardReport.title}
+                                description={
+                                  standardReport.description
+                                }
+                              />
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  {standardReport.title === 'Project Summary' ? (
-                    <div className="dropdown report-option">
-                      <Dropdown drop="left">
-                        <Dropdown.Toggle
-                          variant=""
-                          id="dropdown-Data"
-                          className="dropdown-toggle common-button no-border is-icon"
-                        >
-                          <i className="material-icons">more_vert</i>
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                          {projectSummery.map(item => (
-                            <Dropdown.Item
-                              href={item.link}
-                              key={item.id}
-                              target="_blank"
+                      {standardReport.title === 'Project Summary' ? (
+                        <div className="dropdown report-option">
+                          <Dropdown drop="left">
+                            <Dropdown.Toggle
+                              variant=""
+                              id="dropdown-Data"
+                              className="dropdown-toggle common-button no-border is-icon"
                             >
-                              {item.title}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </div>
-                  ) : (
-                    <div className="dropdown report-option">
-                      <Dropdown drop="left">
-                        <Dropdown.Toggle
-                          variant=""
-                          id="dropdown-Data"
-                          className="dropdown-toggle common-button no-border is-icon"
-                        >
-                          <i className="material-icons">more_vert</i>
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                          {siteInformation.map(item => (
-                            <Dropdown.Item
-                              href={item.link}
-                              key={item.id}
-                              target="_blank"
+                              <i className="material-icons">
+                                more_vert
+                              </i>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                              {projectSummery.map(item => (
+                                <Dropdown.Item
+                                  href={item.link}
+                                  key={item.id}
+                                  target="_blank"
+                                >
+                                  {item.title}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </div>
+                      ) : (
+                        <div className="dropdown report-option">
+                          <Dropdown drop="left">
+                            <Dropdown.Toggle
+                              variant=""
+                              id="dropdown-Data"
+                              className="dropdown-toggle common-button no-border is-icon"
                             >
-                              {item.title}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
+                              <i className="material-icons">
+                                more_vert
+                              </i>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                              {siteInformation.map(item => (
+                                <Dropdown.Item
+                                  href={item.link}
+                                  key={item.id}
+                                  target="_blank"
+                                >
+                                  {item.title}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <Loader />
-            )}
+                  ))
+                ) : (
+                  <Loader />
+                )}
 
-            <FormTemplate
-              general={general}
-              generalhandle={this.generalhandle}
-              formLoader={formLoader}
-              generalData={generalData}
-              generalLinkhandle={this.generalLinkhandle}
-              projectCreatedOn={projectCreatedOn}
-              scheduledhandle={this.scheduledhandle}
-              scheduled={scheduled}
-              scheduledLoader={scheduledLoader}
-              scheduledData={scheduledData}
-              surveyhandle={this.surveyhandle}
-              survey={survey}
-              surveyLoader={surveyLoader}
-              surveyData={surveyData}
-              stagedhandle={this.stagedhandle}
-              staged={staged}
-              stagedLoader={stagedLoader}
-              stagedData={stagedData}
-              showSubStage={this.showSubStage}
-              showSub={showSub}
-            />
+                <FormTemplate
+                  general={general}
+                  generalhandle={this.generalhandle}
+                  formLoader={formLoader}
+                  generalData={generalData}
+                  generalLinkhandle={this.generalLinkhandle}
+                  projectCreatedOn={projectCreatedOn}
+                  scheduledhandle={this.scheduledhandle}
+                  scheduled={scheduled}
+                  scheduledLoader={scheduledLoader}
+                  scheduledData={scheduledData}
+                  surveyhandle={this.surveyhandle}
+                  survey={survey}
+                  surveyLoader={surveyLoader}
+                  surveyData={surveyData}
+                  stagedhandle={this.stagedhandle}
+                  staged={staged}
+                  stagedLoader={stagedLoader}
+                  stagedData={stagedData}
+                  showSubStage={this.showSubStage}
+                  showSub={showSub}
+                />
+              </div>
+
+              <CustomTemplate
+                customReports={customReports}
+                customReporthandler={this.customReporthandler}
+                id={id}
+              />
+            </div>
           </div>
-
-          <CustomTemplate
-            customReports={customReports}
-            customReporthandler={this.customReporthandler}
-            id={id}
-          />
         </div>
       </>
     );
