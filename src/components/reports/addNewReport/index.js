@@ -79,10 +79,10 @@ const InitialState = {
   metaAttributes: [],
   formQuestions: [],
   filter: {
-    filterByRegions: [],
-    filterBySiteType: [],
+    filterByRegions: [{ id: 'all_regions', name: 'Select All' }],
+    filterBySiteType: [{ id: 'all_sitetypes', name: 'Select All' }],
     filterBy: {},
-    filterByUserRoles: [],
+    filterByUserRoles: [{ id: 'all_userroles', name: 'Select All' }],
   },
   isDelete: false,
   errors: {},
@@ -1190,7 +1190,7 @@ class AddNewReport extends Component {
 
   handleConfirmDelete = () => {
     const { projectId } = this.state;
-    this.props.history.push(`/project-dashboard/${projectId}/report`);
+    this.props.history.push(`/report-list/${projectId}`);
   };
 
   render() {

@@ -211,7 +211,7 @@ class Templates extends Component {
                 to={`/report-list/${id}`}
                 className="common-button no-border is-icon"
               >
-                <i className="material-icons">add_circle</i>
+                <i className="material-icons">list_alt</i>
                 <span>All Reports</span>
               </Link>
             </div>

@@ -30,9 +30,13 @@ class ReportDashboard extends Component {
       loader: false,
       filteredList: {},
       toFilterList: {
-        filterByRegions: [],
-        filterBySiteType: [],
-        filterByUserRoles: [],
+        filterByRegions: [{ id: 'all_regions', name: 'Select All' }],
+        filterBySiteType: [
+          { id: 'all_sitetypes', name: 'Select All' },
+        ],
+        filterByUserRoles: [
+          { id: 'all_userroles', name: 'Select All' },
+        ],
       },
       toggleSelectClass: {
         filterRegion: false,
@@ -108,7 +112,7 @@ class ReportDashboard extends Component {
   loadSelectedFilter = list => {
     this.setState({
       filteredList: list,
-      filterDataLoaded: true,
+      // filterDataLoaded: true,
     });
   };
 
@@ -387,7 +391,11 @@ class ReportDashboard extends Component {
               />
             )}
 
-            <CollapseFilterTable id={id} projectId={pid} />
+            <CollapseFilterTable
+              id={id}
+              projectId={pid}
+              getReportDataById={this.props.getReportData}
+            />
 
             <div className="form-group pull-right no-margin">
               <button

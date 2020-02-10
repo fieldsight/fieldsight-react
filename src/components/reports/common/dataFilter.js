@@ -55,6 +55,7 @@ export default class DataFilter extends Component {
             ]
           : data.user_roles
         : this.props.filterByUserRoles;
+      // debugger;
       const startDate = data.start_date
         ? new Date(data.start_date)
         : new Date(this.props.projectCreatedOn);
@@ -238,9 +239,9 @@ export default class DataFilter extends Component {
     this.setState(state => ({
       filterData: {
         ...state.filterData,
-        regions: [{ id: 'all_regions', name: 'Select All' }],
-        siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
-        userRoles: [{ id: 'all_userroles', name: 'Select All' }],
+        regions: [],
+        siteType: [],
+        userRoles: [],
         startDate: new Date(this.props.projectCreatedOn),
         endDate: new Date(),
       },
@@ -325,6 +326,7 @@ export default class DataFilter extends Component {
       selectedReportType,
     } = this.props;
 
+    // console.log('in filter', this.props);
     return (
       <div className="data-filter filter-bottom mrt-30">
         <form onSubmit={this.handleSubmit}>
