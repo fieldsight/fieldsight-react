@@ -1,4 +1,16 @@
 .fieldsight-new {
+  // .custom-checkbox {
+  //   display: block !important;
+  // }
+  .custom_btn_text {
+    padding: 0 !important;
+  }
+
+  .card-link {
+    input[type='checkbox'] {
+      margin-right: 7px;
+    }
+  }
   .custom_pane {
     padding: 0 !important;
   }
@@ -60,11 +72,6 @@
         max-width: 240px;
         width: 100%;
         z-index: 99;
-        &.left-map-sidebar {
-          // left: 77rem;
-          // top: 471px;
-          // bottom: 20px;
-        }
 
         .sidebar-wrapper {
           padding: 0.6125rem;
@@ -121,7 +128,7 @@
                   position: absolute;
                   right: 0;
                   left: auto;
-                  min-width: 130px;
+                  min-width: 221px;
                   background-color: $color-white;
                   opacity: 0;
                   visibility: hidden;

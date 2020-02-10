@@ -53,7 +53,7 @@ class FiltersTab extends PureComponent {
                   type="checkbox"
                   name="projectCheckbox"
                   checked={isProjectSelected}
-                  onChange={handleProjectParentCheckbox}
+                  onClick={handleProjectParentCheckbox}
                 />
                 Projects
               </Accordion.Toggle>
@@ -104,7 +104,7 @@ class FiltersTab extends PureComponent {
                   name="progressCheckbox"
                   className="to_reset_checkbox"
                   checked={isProgressSelected}
-                  onChange={handleProgressParentCheckbox}
+                  onClick={handleProgressParentCheckbox}
                 />
                 Progress
               </Accordion.Toggle>
@@ -237,7 +237,7 @@ class FiltersTab extends PureComponent {
                   name="statusCheckbox"
                   className="to_reset_checkbox"
                   checked={isStatusSelected}
-                  onChange={handleStatusParentCheckbox}
+                  onClick={handleStatusParentCheckbox}
                 />
                 Form Status
               </Accordion.Toggle>
@@ -245,13 +245,15 @@ class FiltersTab extends PureComponent {
             <Accordion.Collapse eventKey="2">
               <Card.Body>
                 <Scrollbars style={{ height: '200px' }}>
-                  <div className="form-group flexrow checkbox-group">
-                    <div className="custom-checkbox display-inline">
-                      <div className="radiobox approved">
+                  {/* <div className="form-group"> */}
+                  {/* <div className="custom-checkbox display-inline"> */}
+                  <div className="sidebar-list">
+                    <div className="form-group">
+                      <div className="checkbox approved">
                         <label>
                           <input
-                            type="radio"
-                            name="radioYes"
+                            type="checkbox"
+                            name="3"
                             value="3"
                             className="status_checkbox"
                             onChange={handleStatusChange}
@@ -260,11 +262,13 @@ class FiltersTab extends PureComponent {
                           Approved
                         </label>
                       </div>
-                      <div className="radiobox pending">
+                    </div>
+                    <div className="form-group">
+                      <div className="checkbox pending">
                         <label>
                           <input
-                            type="radio"
-                            name="radioYes"
+                            type="checkbox"
+                            name="0"
                             value="0"
                             className="status_checkbox"
                             onChange={handleStatusChange}
@@ -273,11 +277,14 @@ class FiltersTab extends PureComponent {
                           Pending
                         </label>
                       </div>
-                      <div className="radiobox flagged">
+                    </div>
+
+                    <div className="form-group">
+                      <div className="checkbox flagged">
                         <label>
                           <input
-                            type="radio"
-                            name="radioYes"
+                            type="checkbox"
+                            name="2"
                             value="2"
                             className="status_checkbox"
                             onChange={handleStatusChange}
@@ -286,11 +293,14 @@ class FiltersTab extends PureComponent {
                           Flagged
                         </label>
                       </div>
-                      <div className="radiobox rejected">
+                    </div>
+
+                    <div className="form-group">
+                      <div className="checkbox rejected">
                         <label>
                           <input
-                            type="radio"
-                            name="radioYes"
+                            type="checkbox"
+                            name="1"
                             value="1"
                             className="status_checkbox"
                             onChange={handleStatusChange}
@@ -301,6 +311,8 @@ class FiltersTab extends PureComponent {
                       </div>
                     </div>
                   </div>
+                  {/* </div> */}
+                  {/* </div> */}
                 </Scrollbars>
               </Card.Body>
             </Accordion.Collapse>
@@ -318,7 +330,7 @@ class FiltersTab extends PureComponent {
                   name="siteTypeCheckbox"
                   className="to_reset_checkbox"
                   checked={isSiteTypeSelected}
-                  onChange={handleSiteTypeParentCheckbox}
+                  onClick={handleSiteTypeParentCheckbox}
                 />
                 Site Types
               </Accordion.Toggle>
@@ -370,7 +382,7 @@ class FiltersTab extends PureComponent {
                   name="regionCheckbox"
                   className="to_reset_checkbox"
                   checked={isRegionSelected}
-                  onChange={handleRegionParentCheckbox}
+                  onClick={handleRegionParentCheckbox}
                 />
                 Regions
               </Accordion.Toggle>
@@ -416,7 +428,7 @@ class FiltersTab extends PureComponent {
             type="button"
             onClick={onClickClearBtn}
             // role="button"
-            className="fieldsight-btn border-btn"
+            className="fieldsight-btn border-btn custom_btn_text"
           >
             Clear
           </button>
@@ -425,7 +437,7 @@ class FiltersTab extends PureComponent {
             onClick={applyFilter}
             // tabIndex={0}
             // role="button"
-            className="fieldsight-btn bg-btn"
+            className="fieldsight-btn bg-btn custom_btn_text"
           >
             apply
           </button>
