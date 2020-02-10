@@ -48,6 +48,7 @@ const INITIAL_STATE = {
   isSiteTypeSelected: false,
   isRegionSelected: false,
   loadallGeoLayer: false,
+  filterLegendSelection: 'project',
 };
 class MapFilter extends PureComponent {
   constructor(props) {
@@ -393,22 +394,28 @@ class MapFilter extends PureComponent {
       this.setState({
         checkedRegionItems: joined,
         isRegionSelected: true,
+        filterLegendSelection: 'region',
       });
     } else {
       const filteredData = checkedRegionItems.filter(
         data => data !== item,
       );
-      this.setState({ checkedRegionItems: filteredData }, () => {
-        // console.log(
-        //   `Button Name (▶️️ inside callback) = `,
-        //   this.state.checkedProgressItems,
-        // ),
-        if (this.state.checkedRegionItems.length > 0) {
-          this.setState({ isRegionSelected: true });
-        } else {
-          this.setState({ isRegionSelected: false });
-        }
-      });
+      this.setState(
+        {
+          checkedRegionItems: filteredData,
+        },
+        () => {
+          // console.log(
+          //   `Button Name (▶️️ inside callback) = `,
+          //   this.state.checkedProgressItems,
+          // ),
+          if (this.state.checkedRegionItems.length > 0) {
+            this.setState({ isRegionSelected: true });
+          } else {
+            this.setState({ isRegionSelected: false });
+          }
+        },
+      );
     }
     // this.setState({ isfiltered: true });
     // this.setState({
@@ -426,6 +433,7 @@ class MapFilter extends PureComponent {
       this.setState({
         checkedSiteItems: joined,
         isSiteTypeSelected: true,
+        filterLegendSelection: 'site_type',
       });
     } else {
       const filteredData = checkedSiteItems.filter(
@@ -479,6 +487,7 @@ class MapFilter extends PureComponent {
       this.setState({
         checkedStatusItem: joined,
         isStatusSelected: true,
+        filterLegendSelection: 'status',
       });
     } else {
       const filteredData = checkedStatusItem.filter(
@@ -511,22 +520,28 @@ class MapFilter extends PureComponent {
       this.setState({
         checkedProjectItems: [item],
         isProjectSelected: true,
+        filterLegendSelection: 'project',
       });
     } else {
       const filteredData = checkedProjectItems.filter(
         data => data !== item,
       );
-      this.setState({ checkedProjectItems: filteredData }, () => {
-        // console.log(
-        //   `Button Name (▶️️ inside callback) = `,
-        //   this.state.checkedProgressItems,
-        // ),
-        if (this.state.checkedProjectItems.length > 0) {
-          this.setState({ isProjectSelected: true });
-        } else {
-          this.setState({ isProjectSelected: false });
-        }
-      });
+      this.setState(
+        {
+          checkedProjectItems: filteredData,
+        },
+        () => {
+          // console.log(
+          //   `Button Name (▶️️ inside callback) = `,
+          //   this.state.checkedProgressItems,
+          // ),
+          if (this.state.checkedProjectItems.length > 0) {
+            this.setState({ isProjectSelected: true });
+          } else {
+            this.setState({ isProjectSelected: false });
+          }
+        },
+      );
     }
   };
 
@@ -569,6 +584,7 @@ class MapFilter extends PureComponent {
       this.setState({
         checkedProgressItems: joined,
         isProgressSelected: true,
+        filterLegendSelection: 'progress',
       });
     } else {
       const filteredData = checkedProgressItems.filter(
@@ -578,17 +594,22 @@ class MapFilter extends PureComponent {
       // this.setState({
       //   checkedProgressItems: filteredData,
       // });
-      this.setState({ checkedProgressItems: filteredData }, () => {
-        // console.log(
-        //   `Button Name (▶️️ inside callback) = `,
-        //   this.state.checkedProgressItems,
-        // ),
-        if (this.state.checkedProgressItems.length > 0) {
-          this.setState({ isProgressSelected: true });
-        } else {
-          this.setState({ isProgressSelected: false });
-        }
-      });
+      this.setState(
+        {
+          checkedProgressItems: filteredData,
+        },
+        () => {
+          // console.log(
+          //   `Button Name (▶️️ inside callback) = `,
+          //   this.state.checkedProgressItems,
+          // ),
+          if (this.state.checkedProgressItems.length > 0) {
+            this.setState({ isProgressSelected: true });
+          } else {
+            this.setState({ isProgressSelected: false });
+          }
+        },
+      );
     }
   };
 
@@ -790,6 +811,7 @@ class MapFilter extends PureComponent {
       checkedStatusItem,
       checkedSiteItems,
       checkedRegionItems,
+      filterLegendSelection,
     } = this.state;
     this.props.getFilteredPrimaryGeojson({
       filterByType: {
@@ -820,7 +842,7 @@ class MapFilter extends PureComponent {
     //   this.setState({ colorBySelection: 'site_type' });
     // }
     // if (checkedRegionItems.length > 0) {
-    //   this.setState({ colorBySelection: 'region' });
+    this.setState({ colorBySelection: filterLegendSelection });
     // }
     // const { mapFilterReducer: clonePrimaryGeojson } = this.props;
   };
