@@ -1,4 +1,8 @@
-import { GET_FORM_TYPES, GET_REPORT_LIST } from '../actions/types';
+import {
+  GET_FORM_TYPES,
+  GET_REPORT_LIST,
+  GET_PROJECT_BREADCRUMB,
+} from '../actions/types';
 
 const initialState = {
   customReports: [],
@@ -13,6 +17,7 @@ const initialState = {
   stagedLoader: false,
   surveyLoader: false,
   projectCreatedOn: '',
+  breadcrumb: {},
 };
 
 export default function(state = initialState, action) {
@@ -38,6 +43,12 @@ export default function(state = initialState, action) {
         scheduledLoader: action.flag === 'scheduled' ? true : false,
         stagedLoader: action.flag === 'stage' ? true : false,
         surveyLoader: action.flag === 'survey' ? true : false,
+      };
+
+    case GET_PROJECT_BREADCRUMB:
+      return {
+        ...state,
+        breadcrumb: action.payload,
       };
     default:
       return state;

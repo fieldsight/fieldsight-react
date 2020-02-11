@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Accordion, Card } from 'react-bootstrap';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-class FiltersTab extends Component {
+class FiltersTab extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -18,6 +18,18 @@ class FiltersTab extends Component {
       handleProgressChange,
       handleStatusChange,
       handleProjectChange,
+      isProgressSelected,
+      handleProgressParentCheckbox,
+      isStatusSelected,
+      handleStatusParentCheckbox,
+      isSiteTypeSelected,
+      handleSiteTypeParentCheckbox,
+      isRegionSelected,
+      handleRegionParentCheckbox,
+      isProjectSelected,
+      handleProjectParentCheckbox,
+      applyFilter,
+      onClickClearBtn,
     } = this.props;
     return (
       <div
@@ -37,7 +49,13 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="0"
               >
-                Project
+                <input
+                  type="checkbox"
+                  name="projectCheckbox"
+                  checked={isProjectSelected}
+                  onClick={handleProjectParentCheckbox}
+                />
+                Projects
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
@@ -55,6 +73,7 @@ class FiltersTab extends Component {
                                   <input
                                     type="checkbox"
                                     name={projectName}
+                                    className="project_checkbox"
                                     defaultChecked
                                     onChange={handleProjectChange}
                                   />
@@ -80,6 +99,13 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="1"
               >
+                <input
+                  type="checkbox"
+                  name="progressCheckbox"
+                  className="to_reset_checkbox"
+                  checked={isProgressSelected}
+                  onClick={handleProgressParentCheckbox}
+                />
                 Progress
               </Accordion.Toggle>
             </Card.Header>
@@ -93,7 +119,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="0_0"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="0_0"
                             onChange={handleProgressChange}
                           />
@@ -108,7 +134,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="1_20"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="1_20"
                             onChange={handleProgressChange}
                           />
@@ -123,7 +149,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="21_40"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="21_40"
                             onChange={handleProgressChange}
                           />
@@ -138,7 +164,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="41_60"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="41_60"
                             onChange={handleProgressChange}
                           />
@@ -153,7 +179,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="61_80"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="61_80"
                             onChange={handleProgressChange}
                           />
@@ -167,13 +193,13 @@ class FiltersTab extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="81_100"
-                            className="to_reset_checkbox"
-                            value="81_100"
+                            name="81_99"
+                            className="to_reset_checkbox progress_checkbox"
+                            value="81_99"
                             onChange={handleProgressChange}
                           />
                           <i className="helper" />
-                          81%-100%
+                          81%-99%
                         </label>
                       </div>
                     </div>
@@ -183,7 +209,7 @@ class FiltersTab extends Component {
                           <input
                             type="checkbox"
                             name="100_100"
-                            className="to_reset_checkbox"
+                            className="to_reset_checkbox progress_checkbox"
                             value="100_100"
                             onChange={handleProgressChange}
                           />
@@ -206,56 +232,77 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="2"
               >
+                <input
+                  type="checkbox"
+                  name="statusCheckbox"
+                  className="to_reset_checkbox"
+                  checked={isStatusSelected}
+                  onClick={handleStatusParentCheckbox}
+                />
                 Form Status
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="2">
               <Card.Body>
                 <Scrollbars style={{ height: '200px' }}>
-                  <div className="form-group flexrow checkbox-group">
-                    <div className="custom-checkbox display-inline">
-                      <div className="radiobox approved">
+                  {/* <div className="form-group"> */}
+                  {/* <div className="custom-checkbox display-inline"> */}
+                  <div className="sidebar-list">
+                    <div className="form-group">
+                      <div className="checkbox approved">
                         <label>
                           <input
-                            type="radio"
-                            name="radioYes"
+                            type="checkbox"
+                            name="3"
                             value="3"
+                            className="status_checkbox"
                             onChange={handleStatusChange}
                           />
                           <i className="helper" />
                           Approved
                         </label>
                       </div>
-                      <div className="radiobox pending">
+                    </div>
+                    <div className="form-group">
+                      <div className="checkbox pending">
                         <label>
                           <input
-                            type="radio"
-                            name="radioYes"
+                            type="checkbox"
+                            name="0"
                             value="0"
+                            className="status_checkbox"
                             onChange={handleStatusChange}
                           />
                           <i className="helper" />
                           Pending
                         </label>
                       </div>
-                      <div className="radiobox flagged">
+                    </div>
+
+                    <div className="form-group">
+                      <div className="checkbox flagged">
                         <label>
                           <input
-                            type="radio"
-                            name="radioYes"
+                            type="checkbox"
+                            name="2"
                             value="2"
+                            className="status_checkbox"
                             onChange={handleStatusChange}
                           />
                           <i className="helper" />
                           Flagged
                         </label>
                       </div>
-                      <div className="radiobox rejected">
+                    </div>
+
+                    <div className="form-group">
+                      <div className="checkbox rejected">
                         <label>
                           <input
-                            type="radio"
-                            name="radioYes"
+                            type="checkbox"
+                            name="1"
                             value="1"
+                            className="status_checkbox"
                             onChange={handleStatusChange}
                           />
                           <i className="helper" />
@@ -264,6 +311,8 @@ class FiltersTab extends Component {
                       </div>
                     </div>
                   </div>
+                  {/* </div> */}
+                  {/* </div> */}
                 </Scrollbars>
               </Card.Body>
             </Accordion.Collapse>
@@ -276,7 +325,14 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="3"
               >
-                Site Type
+                <input
+                  type="checkbox"
+                  name="siteTypeCheckbox"
+                  className="to_reset_checkbox"
+                  checked={isSiteTypeSelected}
+                  onClick={handleSiteTypeParentCheckbox}
+                />
+                Site Types
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="3">
@@ -294,7 +350,7 @@ class FiltersTab extends Component {
                                 <input
                                   type="checkbox"
                                   name={data.name}
-                                  className="to_reset_checkbox"
+                                  className="to_reset_checkbox sitetype_checkbox"
                                   // checked={this.state.checkedItems.includes(
                                   //   data.name,
                                   // )}
@@ -321,7 +377,14 @@ class FiltersTab extends Component {
                 // variant="link"
                 eventKey="4"
               >
-                Region
+                <input
+                  type="checkbox"
+                  name="regionCheckbox"
+                  className="to_reset_checkbox"
+                  checked={isRegionSelected}
+                  onClick={handleRegionParentCheckbox}
+                />
+                Regions
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="4">
@@ -340,7 +403,7 @@ class FiltersTab extends Component {
                                 <input
                                   type="checkbox"
                                   name={data.name}
-                                  className="to_reset_checkbox"
+                                  className="to_reset_checkbox region_checkbox"
                                   // checked={this.state.checkedItems.includes(
                                   //   data.name,
                                   // )}
@@ -360,6 +423,25 @@ class FiltersTab extends Component {
             </Accordion.Collapse>
           </Card>
         </Accordion>
+        <div className="buttons flex-between">
+          <button
+            type="button"
+            onClick={onClickClearBtn}
+            // role="button"
+            className="fieldsight-btn border-btn custom_btn_text"
+          >
+            Clear
+          </button>
+          <button
+            type="button"
+            onClick={applyFilter}
+            // tabIndex={0}
+            // role="button"
+            className="fieldsight-btn bg-btn custom_btn_text"
+          >
+            apply
+          </button>
+        </div>
       </div>
     );
   }

@@ -12,7 +12,6 @@ import Modal from '../common/Modal';
 import Sheet from '../../static/images/sheets.png';
 import Form from '../syncSchedule/form';
 import {
-  formatDate,
   getScheduleType,
   getDayOnWeeklySchedule,
   getReportName,
@@ -67,7 +66,9 @@ class CollapseFilterTable extends Component {
     }
     if (
       prevProps.reportReducer.report_sync_settings !==
-      report_sync_settings
+        report_sync_settings &&
+      report_sync_settings &&
+      Object.keys(report_sync_settings).length > 0
     ) {
       this.setSyncReportData(report_sync_settings);
     }
@@ -146,14 +147,20 @@ class CollapseFilterTable extends Component {
   };
 
   handleSuccess = data => {
-    this.setState(state => ({
-      openEditModal: !state.openEditModal,
-      openModal: !state.openModal,
-    }));
+    const { id, getReportDataById } = this.props;
+    this.setState(
+      state => ({
+        openEditModal: !state.openEditModal,
+        openModal: !state.openModal,
+      }),
+      () => {
+        getReportDataById(id);
+      },
+    );
   };
 
   viewHandler = () => {
-    console.log('entered');
+    // console.log('entered');
   };
 
   render() {
@@ -171,7 +178,8 @@ class CollapseFilterTable extends Component {
       {
         id: 1,
         title: 'sync',
-        icon: 'expand_more',
+        hasDropdown: true,
+        icon: 'sync',
         menu: [
           {
             key: 1.1,
@@ -183,6 +191,7 @@ class CollapseFilterTable extends Component {
       {
         id: 2,
         title: 'export',
+        hasDropdown: true,
         icon: 'save_alt',
         menu: [
           { key: 2.1, text: 'As Excel', link: this.onExportCSV },
@@ -213,8 +222,11 @@ class CollapseFilterTable extends Component {
                   id="dropdown-Data"
                   className="common-button data-toggle is-border is-icon"
                 >
-                  {action.title}
                   <i className="material-icons">{action.icon}</i>
+                  {action.title}
+                  {action.hasDropdown && (
+                    <i className="material-icons">expand_more</i>
+                  )}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
                   {action.menu.map(item => (
@@ -317,18 +329,18 @@ class CollapseFilterTable extends Component {
                 {report_sync_settings.schedule_type === 'Manual' && (
                   <span>
                     <a
-                      role="button"
-                      tabIndex="0"
-                      onKeyDown={() => {
-                        this.props.reqSync(
-                          report_sync_settings.report_id,
-                        );
-                      }}
-                      onClick={() => {
-                        this.props.reqSync(
-                          report_sync_settings.report_id,
-                        );
-                      }}
+                      // role="button"
+                      // tabIndex="0"
+                      // onKeyDown={() => {
+                      //   this.props.reqSync(
+                      //     report_sync_settings.report_id,
+                      //   );
+                      // }}
+                      // onClick={() => {
+                      //   this.props.reqSync(
+                      //     report_sync_settings.report_id,
+                      //   );
+                      // }}
                       className="pending td-edit-btn td-btn"
                     >
                       <OverlayTrigger
@@ -344,12 +356,26 @@ class CollapseFilterTable extends Component {
 
               <div style={{ display: 'flex' }}>
                 <label>Schedule Type</label>:
-                <p>{report_sync_settings.schedule_type}</p>
+                <p>
+                  {report_sync_settings.schedule_type === 'Weekly'
+                    ? `${
+                        report_sync_settings.schedule_type
+                      } on ${getDayOnWeeklySchedule(
+                        report_sync_settings.day,
+                      )}`
+                    : report_sync_settings.schedule_type === 'Monthly'
+                    ? report_sync_settings.day === 0
+                      ? ` ${report_sync_settings.schedule_type} on last day`
+                      : ` ${report_sync_settings.schedule_type} on day ${report_sync_settings.day}`
+                    : report_sync_settings.schedule_type}{' '}
+                </p>
               </div>
-              <div style={{ display: 'flex' }}>
-                <label>Last Sync</label>:
-                <p>{report_sync_settings.last_synced_date}</p>
-              </div>
+              {report_sync_settings.last_synced_date && (
+                <div style={{ display: 'flex' }}>
+                  <label>Last Sync</label>:
+                  <p>{report_sync_settings.last_synced_date}</p>
+                </div>
+              )}
               <button type="button" onClick={this.handleEdit}>
                 Edit Schedule
               </button>

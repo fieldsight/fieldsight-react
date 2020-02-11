@@ -67,7 +67,7 @@ export default class FormTable extends PureComponent {
                         </OverlayTrigger>
                       </a>
                       <a
-                        href={`/#/organization-exports/${orgId}/${teams.id}`}
+                        href={`/fieldsight/application/#/organization-exports/${orgId}/${teams.id}`}
                         className="edit-tag tag"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -140,7 +140,7 @@ export default class FormTable extends PureComponent {
                         </OverlayTrigger>
                       </a>
                       <a
-                        href={`/#/organization-exports/${orgId}/${teams.id}`}
+                        href={`/fieldsight/application/#/organization-exports/${orgId}/${teams.id}`}
                         className="edit-tag tag"
                         target="_blank"
                         rel="noopener noreferrer"

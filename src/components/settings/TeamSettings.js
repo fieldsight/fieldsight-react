@@ -8,12 +8,17 @@ import EditTeam from '../editTeam/EditTeam';
 import TeamMapLayer from '../mapLayer/TeamMapLayer';
 import AccountInfoLayout from '../accountInfo/AccountInfoLayout';
 
+const onmountUrls = [
+  'fv3/api/team-owner-account',
+  '/fv3/api/settings-breadcrumbs',
+];
+
 export default class TeamSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
       teamData: {},
-      teamName: '',
+      breadcrumb: {},
     };
   }
 
@@ -23,16 +28,21 @@ export default class TeamSettings extends Component {
         params: { id: teamId },
       },
     } = this.props;
-    Axios.get(`fv3/api/team-owner-account/${teamId}/`).then(res => {
-      this.setState({ teamData: res.data });
-    }).catch = () => {};
+    Axios.all(
+      onmountUrls.map((url, i) => {
+        return i === 0
+          ? Axios.get(`${url}/${teamId}/`)
+          : Axios.get(`${url}/${teamId}/?type=team`);
+      }),
+    ).then(
+      Axios.spread((team, breadcrumb) => {
+        this.setState({
+          teamData: team.data,
+          breadcrumb: breadcrumb.data,
+        });
+      }),
+    ).catch = () => {};
   }
-
-  reqTeamName = data => {
-    this.setState({
-      teamName: data,
-    });
-  };
 
   render() {
     const {
@@ -43,26 +53,22 @@ export default class TeamSettings extends Component {
       height,
     } = this.props;
 
-    const { teamData, teamName } = this.state;
-
+    const { teamData, breadcrumb } = this.state;
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item ">
               <a
-                href={`/fieldsight/application/#/team-dashboard/${teamId}/`}
+                href={breadcrumb.name_url}
                 style={{ color: '#00628E' }}
               >
-                {teamName}
+                {breadcrumb.name}
               </a>
             </li>
 
             <li className="breadcrumb-item" aria-current="page">
-              <FormattedMessage
-                id="app.teamSettings"
-                defaultMessage="Team Settings"
-              />
+              {breadcrumb.current_page}
             </li>
           </ol>
         </nav>
@@ -94,12 +100,7 @@ export default class TeamSettings extends Component {
                   <Route
                     exact
                     path={`${path}`}
-                    render={props => (
-                      <EditTeam
-                        {...props}
-                        reqTeamName={this.reqTeamName}
-                      />
-                    )}
+                    component={EditTeam}
                   />
                   <Route
                     path={`${path}/map-layer`}

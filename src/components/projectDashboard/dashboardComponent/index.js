@@ -138,7 +138,7 @@ class ProjectDashboardComponent extends Component {
                     </h5> */}
                 <div className="dash-btn">
                   <a
-                    href={`/#/mapfilter/${id}/`}
+                    href={`/fieldsight/application/#/mapfilter/${id}/`}
                     className="fieldsight-btn left-icon"
                     target="_blank"
                     rel="noopener noreferrer"

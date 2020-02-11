@@ -1,10 +1,30 @@
 .fieldsight-new {
+  // .custom-checkbox {
+  //   display: block !important;
+  // }
+  .custom_btn_text {
+    padding: 0 !important;
+  }
+
+  .card-link {
+    input[type='checkbox'] {
+      margin-right: 7px;
+    }
+  }
+  .custom_pane {
+    padding: 0 !important;
+  }
   .custom-css-typeahead {
     position: relative !important;
     flex: 1 1 auto;
     width: 1%;
     margin-bottom: 0;
   }
+
+  a.searchselected {
+    background-color: #f5f5f5;
+  }
+
   .circle {
     width: 15px;
     height: 15px;
@@ -41,6 +61,7 @@
 
       .map {
         z-index: 2;
+        position: relative;
       }
 
       .map-sidebar {
@@ -107,7 +128,7 @@
                   position: absolute;
                   right: 0;
                   left: auto;
-                  min-width: 130px;
+                  min-width: 221px;
                   background-color: $color-white;
                   opacity: 0;
                   visibility: hidden;
@@ -304,7 +325,9 @@
 
           .layers-list {
             display: none;
-
+            .selected {
+              background: #ece9e9;
+            }
             &.display-list {
               display: block;
             }
@@ -372,7 +395,7 @@
         }
 
         &.top {
-          top: 0;
+          top: 5px;
         }
       }
     }

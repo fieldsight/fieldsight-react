@@ -32,6 +32,7 @@ const initialState = {
   exportOrgList: [],
   createExportResp: '',
   deleteResp: {},
+  identifier: '',
 };
 
 export default function(state = initialState, action) {
@@ -40,6 +41,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         id: action.payload.id,
+        identifier: action.payload.identifier,
         name: action.payload.name,
         phone: action.payload.phone,
         country: action.payload.country,

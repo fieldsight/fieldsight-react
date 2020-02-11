@@ -421,7 +421,7 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required
+                // required
                 label="app.phone"
                 name="phone"
                 value={phone}
@@ -434,7 +434,7 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="email"
-                required
+                // required
                 label="app.email"
                 name="email"
                 value={email}
@@ -497,7 +497,7 @@ class EditProject extends Component {
                 formType="editForm"
                 tag="input"
                 type="text"
-                required
+                // required
                 label="app.description"
                 name="public_desc"
                 value={public_desc}

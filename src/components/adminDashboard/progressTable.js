@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -7,18 +7,13 @@ import { BlockContentLoader } from '../common/Loader';
 /* eslint-disable */
 
 const ShowRow = ({ name }) => (
-  <>
+  <Fragment key={name}>
     <tr>
       <td />
       <td>{!!name && <strong>{name}</strong>}</td>
-      <td />
-      <td />
-      <td />
-      <td />
-      <td />
-      <td />
+      <td colSpan={7} />
     </tr>
-  </>
+  </Fragment>
 );
 
 const ShowContentRow = ({
@@ -32,25 +27,25 @@ const ShowContentRow = ({
   title,
 }) => {
   const totalSubmissions = pending + approved + flagged + rejected;
+  const key = id ? `row_${title}_${sn}_${id}` : `row_${title}_${sn}`;
   return (
-    <tr
-      className={id ? 'sub-row' : 'heading-row'}
-      key={id ? `row_${title}_${sn}_${id}` : `row_${title}_${sn}`}
-    >
+    <tr className={id ? 'sub-row' : 'heading-row'} key={key}>
       <td>{sn}</td>
       <td>{title}</td>
-      <a
-        className="pending table-profile"
-        href={`/fieldsight/application/#/organization-submission/${orgId}/${id}`}
-      >
-        <i className="la la-eye" />
+      <td>
+        <a
+          className="pending table-profile"
+          href={`/fieldsight/application/#/organization-submission/${orgId}/${id}`}
+        >
+          <i className="la la-eye" />
 
-        {totalSubmissions === 0
-          ? 'No Submission'
-          : totalSubmissions > 1
-          ? `${totalSubmissions} Submissions`
-          : `${totalSubmissions} Submission`}
-      </a>
+          {totalSubmissions === 0
+            ? 'No Submission'
+            : totalSubmissions > 1
+            ? `${totalSubmissions} Submissions`
+            : `${totalSubmissions} Submission`}
+        </a>
+      </td>
       <td>
         <a className="pending">{pending}</a>
       </td>
@@ -62,6 +57,16 @@ const ShowContentRow = ({
       </td>
       <td>
         <a className="rejected">{rejected}</a>
+      </td>
+      <td>
+        <a
+          href={`/fieldsight/application/#/organization-exports/${orgId}/${id}`}
+          className="edit-tag tag"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i className="la la-download " />
+        </a>
       </td>
     </tr>
   );
@@ -93,6 +98,7 @@ class ProgressTable extends React.PureComponent {
                       <th>Approved</th>
                       <th>Flagged</th>
                       <th>Rejected</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -101,7 +107,7 @@ class ProgressTable extends React.PureComponent {
                     ) && <ShowRow name="General Forms" />}
                     {!!progressTable &&
                       progressTable.map((schedule, id) => (
-                        <>
+                        <Fragment key={schedule.id}>
                           {schedule.form_type === 'General' && (
                             <ShowContentRow
                               sn={sn + id}
@@ -114,16 +120,16 @@ class ProgressTable extends React.PureComponent {
                               orgId={orgId}
                             />
                           )}
-                        </>
+                        </Fragment>
                       ))}
 
                     {Object.keys(
                       !!progressTable && progressTable.length > 0,
-                    ) && <ShowRow name="Schedule Forms" />}
+                    ) && <ShowRow name="Scheduled Forms" />}
 
                     {!!progressTable &&
                       progressTable.map((schedule, id) => (
-                        <>
+                        <Fragment key={schedule.id}>
                           {schedule.form_type === 'Scheduled' && (
                             <ShowContentRow
                               sn={sn + id}
@@ -136,7 +142,7 @@ class ProgressTable extends React.PureComponent {
                               orgId={orgId}
                             />
                           )}
-                        </>
+                        </Fragment>
                       ))}
                   </tbody>
                 </Table>

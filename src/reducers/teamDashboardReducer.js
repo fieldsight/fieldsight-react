@@ -22,6 +22,7 @@ const initialState = {
   map: {},
   package_details: [],
   postCardResponse: {},
+  identifier: '',
 };
 
 export default function(state = initialState, action) {

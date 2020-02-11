@@ -11,6 +11,7 @@ import {
 import { errorToast, successToast } from '../../utils/toastHandler';
 import ExportTable from './exportTable';
 import AdvancedExportModal from './advanceExportModal';
+import DeleteModal from '../common/DeleteModal';
 /* eslint-disable */
 
 class OrganizationExport extends Component {
@@ -21,6 +22,8 @@ class OrganizationExport extends Component {
       loader: false,
       showModal: false,
       modalLoader: false,
+      deleteModal: false,
+      selected: '',
     };
   }
 
@@ -76,6 +79,7 @@ class OrganizationExport extends Component {
       superAdminDashboard.deleteResp
     ) {
       successToast(superAdminDashboard.deleteResp);
+      this.handleToggleDeleteModal();
     }
   }
 
@@ -85,6 +89,13 @@ class OrganizationExport extends Component {
 
   handleToggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+
+  handleToggleDeleteModal = id => {
+    this.setState(state => ({
+      deleteModal: !state.deleteModal,
+      selected: id,
+    }));
   };
 
   handleAdvanceSubmit = ({
@@ -124,8 +135,9 @@ class OrganizationExport extends Component {
     this.props.createOrgExport(orgLibId, body);
   };
 
-  handleDelete = id => {
-    this.props.deleteOrgExport(id);
+  handleDelete = () => {
+    const { selected } = this.state;
+    this.props.deleteOrgExport(selected);
   };
 
   render() {
@@ -134,6 +146,7 @@ class OrganizationExport extends Component {
       loader,
       showModal,
       modalLoader,
+      deleteModal,
     } = this.state;
     const {
       match: {
@@ -146,7 +159,7 @@ class OrganizationExport extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`fieldsight/application/#/organization-dashboard/${orgId}`}
+                href={`/fieldsight/application/#/organization-dashboard/${orgId}`}
               >
                 Organization
               </a>
@@ -190,7 +203,7 @@ class OrganizationExport extends Component {
             {!loader && (
               <ExportTable
                 exportHistory={exportHistory}
-                handleDelete={this.handleDelete}
+                handleDelete={this.handleToggleDeleteModal}
               />
             )}
           </div>
@@ -199,6 +212,15 @@ class OrganizationExport extends Component {
               handleToggleModal={this.handleToggleModal}
               handleAdvanceSubmit={this.handleAdvanceSubmit}
               modalLoader={modalLoader}
+            />
+          )}
+          {deleteModal && (
+            <DeleteModal
+              onCancel={this.handleToggleDeleteModal}
+              onConfirm={this.handleDelete}
+              onToggle={this.handleToggleDeleteModal}
+              message="Are you sure to delete this data?"
+              title="Delete Organization Export"
             />
           )}
         </div>

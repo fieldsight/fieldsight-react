@@ -6,15 +6,10 @@ import { FormattedMessage } from 'react-intl';
 import { BlockContentLoader } from '../../common/Loader';
 
 const ShowRow = ({ name }) => (
-  <tr>
+  <tr key={name}>
     <td />
     <td>{!!name && <strong>{name}</strong>}</td>
-    <td />
-    <td />
-    <td />
-    <td />
-    <td />
-    <td />
+    <td colSpan={6} />
   </tr>
 );
 
@@ -30,11 +25,9 @@ const ShowContentRow = ({
   formUrl,
 }) => {
   const totalSubmissions = pending + approved + flagged + rejected;
+  // const key = id ? `row_${name}_${sn}_${id}` : `row_${name}_${sn}`;
   return (
-    <tr
-      className={id ? 'sub-row' : 'heading-row'}
-      key={id ? `row_${name}_${sn}_${id}` : `row_${name}_${sn}`}
-    >
+    <tr className={id ? 'sub-row' : 'heading-row'}>
       <td>{id ? `${sn}.${id}` : sn}</td>
       <td>{name}</td>
 
@@ -86,7 +79,7 @@ const ShowContentRow = ({
 };
 
 const CheckCase = ({ sub, sn }) => (
-  <Fragment key={`sub_${sn}`}>
+  <>
     <tr className="heading-row">
       <td>{sn}</td>
       <td>{sub.name}</td>
@@ -101,20 +94,22 @@ const CheckCase = ({ sub, sn }) => (
       sub.sub_stages.length > 0 &&
       sub.sub_stages.map((item, key) => {
         return (
-          <ShowContentRow
-            sn={sn}
-            id={key + 1}
-            name={item.form_name}
-            progress={item.progress}
-            pending={item.pending}
-            approved={item.approved}
-            flagged={item.flagged}
-            rejected={item.rejected}
-            formUrl={item.form_url}
-          />
+          <Fragment key={`row_${item.form_name}_${sn + key}`}>
+            <ShowContentRow
+              sn={sn}
+              id={key + 1}
+              name={item.form_name}
+              progress={item.progress}
+              pending={item.pending}
+              approved={item.approved}
+              flagged={item.flagged}
+              rejected={item.rejected}
+              formUrl={item.form_url}
+            />
+          </Fragment>
         );
       })}
-  </Fragment>
+  </>
 );
 
 class ProgressTable extends React.PureComponent {
@@ -191,16 +186,26 @@ class ProgressTable extends React.PureComponent {
                       .length > 0 && <ShowRow name="General Forms" />}
                     {!!data.generals &&
                       data.generals.map((general, id) => (
-                        <ShowContentRow
-                          sn={sn + id}
-                          name={general.name}
-                          progress={general.progress_data[0].progress}
-                          pending={general.progress_data[0].pending}
-                          approved={general.progress_data[0].approved}
-                          flagged={general.progress_data[0].flagged}
-                          rejected={general.progress_data[0].rejected}
-                          formUrl={general.form_url}
-                        />
+                        <Fragment
+                          key={`row_${general.name}_${sn + id}`}
+                        >
+                          <ShowContentRow
+                            sn={sn + id}
+                            name={general.name}
+                            progress={
+                              general.progress_data[0].progress
+                            }
+                            pending={general.progress_data[0].pending}
+                            approved={
+                              general.progress_data[0].approved
+                            }
+                            flagged={general.progress_data[0].flagged}
+                            rejected={
+                              general.progress_data[0].rejected
+                            }
+                            formUrl={general.form_url}
+                          />
+                        </Fragment>
                       ))}
                     {Object.keys(!!data.generals && data.generals)
                       .length > 0 && <ShowRow />}
@@ -210,22 +215,30 @@ class ProgressTable extends React.PureComponent {
                     )}
                     {!!data.schedules &&
                       data.schedules.map((schedule, id) => (
-                        <ShowContentRow
-                          sn={sn + id}
-                          name={schedule.name}
-                          progress={
-                            schedule.progress_data[0].progress
-                          }
-                          pending={schedule.progress_data[0].pending}
-                          approved={
-                            schedule.progress_data[0].approved
-                          }
-                          flagged={schedule.progress_data[0].flagged}
-                          rejected={
-                            schedule.progress_data[0].rejected
-                          }
-                          formUrl={schedule.form_url}
-                        />
+                        <Fragment
+                          key={`row_${schedule.name}_${sn + id}`}
+                        >
+                          <ShowContentRow
+                            sn={sn + id}
+                            name={schedule.name}
+                            progress={
+                              schedule.progress_data[0].progress
+                            }
+                            pending={
+                              schedule.progress_data[0].pending
+                            }
+                            approved={
+                              schedule.progress_data[0].approved
+                            }
+                            flagged={
+                              schedule.progress_data[0].flagged
+                            }
+                            rejected={
+                              schedule.progress_data[0].rejected
+                            }
+                            formUrl={schedule.form_url}
+                          />
+                        </Fragment>
                       ))}
                     {Object.keys(!!data.schedules && data.schedules)
                       .length > 0 && <ShowRow />}
@@ -233,7 +246,11 @@ class ProgressTable extends React.PureComponent {
                       .length > 0 && <ShowRow name="Staged Forms" />}
                     {!!data.stages &&
                       data.stages.map((sub, id) => {
-                        return <CheckCase sub={sub} sn={sn + id} />;
+                        return (
+                          <Fragment key={`sub_${sn + id}`}>
+                            <CheckCase sub={sub} sn={sn + id} />
+                          </Fragment>
+                        );
                       })}
                   </tbody>
                 </Table>

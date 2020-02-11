@@ -30,6 +30,7 @@ const initialState = {
   progressLoader: true,
   progressTableData: {},
   surveyData: [],
+  identifier: '',
 };
 
 export default function(state = initialState, action) {

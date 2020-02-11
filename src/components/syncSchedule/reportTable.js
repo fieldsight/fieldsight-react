@@ -14,6 +14,8 @@ export default class ReportTable extends PureComponent {
       canSyncOrEdit,
       getDayOnWeeklySchedule,
     } = this.props;
+    const hasOrgForm = data.some(e => e.from_organization);
+
     return (
       <>
         <div style={{ display: 'flex' }}>
@@ -40,11 +42,15 @@ export default class ReportTable extends PureComponent {
             ) : (
               <>
                 {data.map(each => (
-                  <tr key={`report_${each.report_id}`}>
+                  <tr key={`report_${each.form_id}`}>
                     <td>
                       <label>
                         {each.report_type === 'form'
-                          ? each.title
+                          ? each.from_organization
+                            ? `*${each.title}`
+                            : each.title
+                          : each.from_organization
+                          ? `*${each.report_type}`
                           : each.report_type}
                       </label>
                       <p>{each.description && each.description}</p>
@@ -120,10 +126,10 @@ export default class ReportTable extends PureComponent {
                                 role="button"
                                 tabIndex="0"
                                 onKeyDown={() => {
-                                  this.props.reqSync(each.report_id);
+                                  this.props.reqSync(each);
                                 }}
                                 onClick={() => {
-                                  this.props.reqSync(each.report_id);
+                                  this.props.reqSync(each);
                                 }}
                                 className="pending td-edit-btn td-btn"
                               >
@@ -147,8 +153,11 @@ export default class ReportTable extends PureComponent {
             )}
           </tbody>
         </Table>
-        {/* </PerfectScrollbar>
-        </div> */}
+        {hasOrgForm && (
+          <div className="form-group pull-right no-margin">
+            * denotes organization form
+          </div>
+        )}
       </>
     );
   }

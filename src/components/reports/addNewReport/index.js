@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import { Dropdown } from 'react-bootstrap';
+// import { Dropdown } from 'react-bootstrap';
 import {
   getMetricsData,
   getForms,
@@ -16,10 +16,10 @@ import {
 } from '../../../utils/toastHandler';
 import CustomSelect from '../common/CustomSelect';
 import Metrics from './metrics';
-import DataFilter from './dataFilter';
+// import DataFilter from '../common/dataFilter';
 import SelectedColumn from './selectedColumn';
 import DeleteModal from '../../common/DeleteModal';
-import { BlockContentLoader } from '../../common/Loader';
+// import { BlockContentLoader } from '../../common/Loader';
 
 /* eslint-disable */
 
@@ -86,6 +86,7 @@ const InitialState = {
   },
   isDelete: false,
   errors: {},
+  breadcrumb: {},
 };
 
 class AddNewReport extends Component {
@@ -106,6 +107,12 @@ class AddNewReport extends Component {
         params: { id, reportId },
       },
     } = this.props;
+    Axios.get(`/fv3/api/settings-breadcrumbs/${id}/?type=project`)
+      .then(res => {
+        this.setState({ breadcrumb: res.data });
+      })
+      .catch(() => {});
+
     this.setState({ projectId: id }, () => {
       if (reportId) {
         this.setState({ reportId }),
@@ -214,9 +221,9 @@ class AddNewReport extends Component {
           r => r.category === 'default',
         );
         const filterBy = report.filter;
-
+        // debugger;
         const objLen = Object.entries(filterBy).map(e => {
-          if (e[1].length > 0) {
+          if (e[1] && e[1].length > 0) {
             return true;
           }
           return false;
@@ -1113,7 +1120,10 @@ class AddNewReport extends Component {
   };
 
   handleSubmitFilter = filter => {
-    const { reportId, data } = this.state;
+    const {
+      reportId,
+      data: { selectedReportType, desc, reportName, selectedMetrics },
+    } = this.state;
     const {
       regions,
       siteType,
@@ -1123,12 +1133,22 @@ class AddNewReport extends Component {
     } = filter;
 
     const modifyFilter = {
-      regions: regions.filter(r => r.id !== 'all_regions'),
-      site_types: siteType.filter(r => r.id !== 'all_sitetypes'),
-      user_roles: userRoles.filter(u => u.id !== 'all_userroles'),
-      start_date: startDate,
-      end_date: endDate,
+      regions:
+        selectedReportType < 3
+          ? regions.filter(r => r.id !== 'all_regions')
+          : [],
+      site_types:
+        selectedReportType < 3
+          ? siteType.filter(r => r.id !== 'all_sitetypes')
+          : [],
+      user_roles:
+        selectedReportType === 4
+          ? userRoles.filter(u => u.id !== 'all_userroles')
+          : [],
+      start_date: selectedReportType === 5 ? startDate : '',
+      end_date: selectedReportType === 5 ? endDate : '',
     };
+
     this.setState(
       state => ({
         filter: {
@@ -1138,10 +1158,10 @@ class AddNewReport extends Component {
       }),
       () => {
         const body = {
-          type: data.selectedReportType,
-          description: data.desc,
-          title: data.reportName,
-          attributes: JSON.stringify(data.selectedMetrics),
+          type: selectedReportType,
+          description: desc,
+          title: reportName,
+          attributes: JSON.stringify(selectedMetrics),
           filter: JSON.stringify(modifyFilter),
         };
         this.requestUpdateForm(reportId, body);
@@ -1177,7 +1197,7 @@ class AddNewReport extends Component {
 
   handleConfirmDelete = () => {
     const { projectId } = this.state;
-    this.props.history.push(`/project-dashboard/${projectId}/report`);
+    this.props.history.push(`/report-list/${projectId}`);
   };
 
   render() {
@@ -1218,6 +1238,7 @@ class AddNewReport extends Component {
           filterByUserRoles,
         },
         applyFilter,
+        breadcrumb,
         isDelete,
         errors,
       },
@@ -1237,7 +1258,6 @@ class AddNewReport extends Component {
         },
       },
     } = this;
-    // console.log('class', this.state.metricArr);
     const isEdit = reportId ? true : false;
 
     return (
@@ -1246,11 +1266,15 @@ class AddNewReport extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`/fieldsight/application/#/project-dashboard/${projectId}/report`}
+                href={breadcrumb.name_url}
+                style={{ color: '#00628E' }}
               >
-                Reports
+                {breadcrumb.name}
               </a>
             </li>
+            {isEdit && (
+              <li className="breadcrumb-item">{reportName}</li>
+            )}
             <li className="breadcrumb-item">
               {isEdit ? 'Edit Report' : 'Create Report'}
             </li>
@@ -1334,6 +1358,7 @@ class AddNewReport extends Component {
                                 handleSelect={
                                   this.handleReportTypeChange
                                 }
+                                disable={isEdit}
                               />
                             )}
                           </div>
@@ -1440,7 +1465,7 @@ class AddNewReport extends Component {
                         </div>
                       </div>
                     </div>
-                    {filterArr.length > 0 && (
+                    {/* {filterArr.length > 0 && (
                       <DataFilter
                         toggleSelectClass={toggleSelectClass}
                         handleToggleClass={this.handleToggleClass}
@@ -1457,7 +1482,7 @@ class AddNewReport extends Component {
                         selectedReportType={selectedReportType}
                         projectCreatedOn={projectCreatedOn}
                       />
-                    )}
+                    )} */}
                   </>
                 )}
               </div>

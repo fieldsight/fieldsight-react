@@ -6,6 +6,7 @@ import {
   FILTER_PRIMARYGEOJSON,
   SEARCH_PRIMARYGEOJSON,
   REFRESH_GEOJSONDATA,
+  GET_GEOLAYERS_LIST,
 } from '../actions/types';
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   projectsList: [],
   projectsRegionTypes: [],
   types: [],
+  geolayersList: [],
 };
 const getSearchPrimaryGeojson = (state, action) => {
   const filteredData = state.primaryGeojson[0].features.filter(
@@ -81,7 +83,6 @@ const getVisibleTodos = (state, action) => {
           const progressfilter = filteredData.filter(
             data => data[type] >= min && data[type] <= max,
           );
-
           clonefilteredData.push(progressfilter);
         });
         if (clonefilteredData.length === 0) {
@@ -174,6 +175,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         clonePrimaryGeojson: [...state.primaryGeojson],
+      };
+    case GET_GEOLAYERS_LIST:
+      return {
+        ...state,
+        geolayersList: action.payload,
       };
     // return {
     //   ...state,

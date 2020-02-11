@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { GET_FORM_TYPES, GET_REPORT_LIST } from './types';
+import {
+  GET_FORM_TYPES,
+  GET_REPORT_LIST,
+  GET_PROJECT_BREADCRUMB,
+} from './types';
 
 export const getReportList = id => dispatch => {
   axios
@@ -23,6 +27,18 @@ export const getFormType = (id, types) => dispatch => {
         type: GET_FORM_TYPES,
         payload: res.data,
         flag: types,
+      });
+    })
+    .catch();
+};
+
+export const getProjectBreadcrumb = projectId => dispatch => {
+  axios
+    .get(`/fv3/api/settings-breadcrumbs/${projectId}/?type=project`)
+    .then(res => {
+      dispatch({
+        type: GET_PROJECT_BREADCRUMB,
+        payload: res.data,
       });
     })
     .catch();

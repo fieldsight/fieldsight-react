@@ -68,9 +68,9 @@ import OrganizationTeams from './organizationTeamList';
 import TotalOrganizationSubmission from './adminDashboard/organizationSettings/totalOrganizationSubmission';
 import TotalSiteSubmission from './adminDashboard/organizationSettings/totalSiteSubmission';
 
+import Templates from './reports/templates';
+import Reports from './reports';
 import ReportDashboard from './reports/viewReport';
-
-// import FilterDataFilter from './reports/FormDataFilter';
 import ExportDataFilter from './reports/ExportDataFilter';
 import UserList from './reports/users/usersTable';
 import UserProfile from './reports/users/userProfile/index';
@@ -435,6 +435,14 @@ class App extends Component {
                   )}
                 />
 
+                <Route
+                  path="/project/:projectId/report"
+                  render={props => <Templates {...props} />}
+                />
+                <Route
+                  path="/report-list/:projectId/"
+                  render={props => <Reports {...props} />}
+                />
                 <Route
                   path="/view-report/:pid/:id"
                   render={props => <ReportDashboard {...props} />}

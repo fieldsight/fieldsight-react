@@ -108,7 +108,7 @@ export default class SuperAdminFormEdit extends Component {
               errorFlag: true,
             });
           }
-          if (value.trim().length > 5) {
+          if (value.trim().length > 4) {
             this.setState({
               errorFlag: false,
             });
@@ -214,16 +214,6 @@ export default class SuperAdminFormEdit extends Component {
 
     return (
       <>
-        {/* <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to={`/organization-dashboard/${id}`}>
-              Organization Dashboard
-              </Link>
-            </li>
-            <li className="breadcrumb-item">Edit Super Organization</li>
-          </ol>
-        </nav> */}
         <RightContentCard title="Edit Organization">
           <form className="edit-form" onSubmit={onSubmitHandler}>
             <div className="row">
@@ -287,6 +277,7 @@ export default class SuperAdminFormEdit extends Component {
                     className="form-control"
                     label="Country"
                     translation
+                    formType="editForm"
                     options={country}
                     changeHandler={e => onSelectChangeHandler(e)}
                     value={Selectedtypes && Selectedtypes}
