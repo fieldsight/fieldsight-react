@@ -1,10 +1,7 @@
 import React from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Switch, Route, withRouter } from 'react-router-dom';
 import DashboardHeader from './DashboardHeader';
 import ProjectDashboardComponent from './dashboardComponent';
-import Templates from '../reports/templates';
 
 import { getProjectDashboard } from '../../actions/projectDashboardActions';
 /* eslint-disable camelcase */
@@ -138,8 +135,9 @@ class ProjectDashboard extends React.Component {
           surveyData={surveyData}
           path={url}
         />
+        <ProjectDashboardComponent projectId={projectId} />
         {/* </div> */}
-        <Switch>
+        {/* <Switch>
           <Route
             exact
             path={url}
@@ -155,7 +153,7 @@ class ProjectDashboard extends React.Component {
             path={`${url}/report`}
             render={props => <Templates {...props} id={projectId} />}
           />
-        </Switch>
+        </Switch> */}
       </>
     );
   }
@@ -163,9 +161,6 @@ class ProjectDashboard extends React.Component {
 const mapStateToProps = ({ projectDashboard }) => ({
   projectDashboard,
 });
-export default compose(
-  withRouter,
-  connect(mapStateToProps, {
-    getProjectDashboard,
-  }),
-)(ProjectDashboard);
+export default connect(mapStateToProps, {
+  getProjectDashboard,
+})(ProjectDashboard);

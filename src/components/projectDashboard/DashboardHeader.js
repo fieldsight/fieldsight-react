@@ -271,7 +271,7 @@ class DashboardHeader extends React.Component {
                 </button>
               )}
             </div>
-            <ul className="common-tab is-line mt-4">
+            {/* <ul className="common-tab is-line mt-4">
               {pathList.map(list => (
                 <li key={list.key}>
                   <Link
@@ -282,7 +282,7 @@ class DashboardHeader extends React.Component {
                   </Link>
                 </li>
               ))}
-            </ul>
+            </ul> */}
             {openmodel && (
               <SubmissionModal
                 surveyData={surveyData}

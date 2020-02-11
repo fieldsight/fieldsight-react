@@ -10,6 +10,7 @@ import CustomTemplate from './customTemplate';
 import {
   getReportList,
   getFormType,
+  getProjectBreadcrumb,
 } from '../../../actions/templateAction';
 
 const StandardReportComponent = ({ path, data }) => (
@@ -52,17 +53,31 @@ class Templates extends Component {
       staged: false,
       id: '',
       showSub: {},
+      // breadcrumb: {},
     };
   }
 
+  componentWillMount() {
+    const {
+      match: {
+        params: { projectId },
+      },
+    } = this.props;
+    this.props.getProjectBreadcrumb(projectId);
+  }
+
   componentDidMount() {
-    const { id } = this.props;
+    const {
+      match: {
+        params: { projectId },
+      },
+    } = this.props;
 
     this.setState({
-      id,
+      id: projectId,
     });
 
-    this.props.getReportList(id);
+    this.props.getReportList(projectId);
   }
 
   generalhandle = result => {
@@ -142,7 +157,7 @@ class Templates extends Component {
   };
 
   customReporthandler = reportid => {
-    const { id } = this.props;
+    const { id } = this.state;
     return this.props.history.push(
       `/project/${id}/edit-report/${reportid}`,
     );
@@ -191,6 +206,7 @@ class Templates extends Component {
           scheduledLoader,
           surveyLoader,
           projectCreatedOn,
+          breadcrumb,
         },
       },
     } = this;
@@ -212,21 +228,28 @@ class Templates extends Component {
     ];
     return (
       <>
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item ">
+              <a
+                href={breadcrumb.name_url}
+                style={{ color: '#00628E' }}
+              >
+                {breadcrumb.name}
+              </a>
+            </li>
+
+            <li className="breadcrumb-item" aria-current="page">
+              Project Reports
+            </li>
+          </ol>
+        </nav>
         <div className="reports mrb-30">
           <div className="card">
             <div className="reports-header mt-4">
               <h4 className="mb-3" style={{ padding: '20px' }}>
                 Project Reports
               </h4>
-              {/* <ul className="common-tab is-bg">
-                <li
-                  className="current"
-                  // tabIndex="0"
-                  role="presentation"
-                >
-                  templates
-                </li>
-              </ul> */}
               <Link
                 to={`/report-list/${id}`}
                 className="common-button no-border is-icon"
@@ -238,7 +261,6 @@ class Templates extends Component {
                 >
                   <i className="material-icons">settings</i>
                 </OverlayTrigger>
-                {/* <span>All Reports</span> */}
               </Link>
             </div>
             <div className="card-body">
@@ -386,6 +408,21 @@ class Templates extends Component {
                   showSubStage={this.showSubStage}
                   showSub={showSub}
                 />
+                <div className="report-list">
+                  <div className="row">
+                    <div className="col-md-8">
+                      <div className="report-content">
+                        <a
+                          href={`/fieldsight/application/#/sync-schedule/${id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <h4>G-Sheet Reports</h4>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <CustomTemplate
@@ -406,6 +443,7 @@ const mapStateToProps = ({ templateReducer }) => ({
 });
 
 export default connect(mapStateToProps, {
+  getProjectBreadcrumb,
   getReportList,
   getFormType,
 })(Templates);
