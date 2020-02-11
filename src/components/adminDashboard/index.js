@@ -135,12 +135,10 @@ class AdminDashboard extends Component {
 
   render() {
     const {
-      match: {
-        params: { id: superAdminId },
-      },
-    } = this.props;
-    const {
       props: {
+        match: {
+          params: { id: superAdminId },
+        },
         superAdminDashboard: {
           id,
           name,
@@ -156,10 +154,12 @@ class AdminDashboard extends Component {
           organizationDashboardLoader,
           progressTable,
           total_submissions,
+          identifier,
         },
       },
       state: { activeTab, projects, teams, admins, loader },
     } = this;
+    // debugger;
 
     const total_team = teams.length;
     const total_project = projects.length;
@@ -168,6 +168,7 @@ class AdminDashboard extends Component {
       <div className="right-content no-bg new-dashboard">
         <DashboardHeader
           name={name}
+          identifier={identifier}
           phone={phone}
           country={country}
           additional_desc={additional_desc}

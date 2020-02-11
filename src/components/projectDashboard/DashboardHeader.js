@@ -52,7 +52,7 @@ class DashboardHeader extends React.Component {
       surveyData,
       // activeTab,
       // toggleTab,
-      path,
+      identifier,
     } = this.props;
     const { openmodel } = this.state;
     const ManageDropdown = [
@@ -145,9 +145,19 @@ class DashboardHeader extends React.Component {
                 </figure>
                 <div className="dash-pf-content">
                   {name && <h5>{name}</h5>}
-                  {/* {identifier && <span>{identifier}</span>} */}
                   {address && <span>{address}</span>}
                   {/* {region && <span>{region} </span>} */}
+                  <div className="type-info">
+                    {identifier && (
+                      <div className="flex">
+                        <label>
+                          <strong>Identifier :</strong>
+                        </label>
+                        &nbsp;
+                        <span>{identifier}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

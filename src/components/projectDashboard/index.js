@@ -88,6 +88,7 @@ class ProjectDashboard extends React.Component {
         projectDashboardLoader,
         is_project_manager,
         surveyData,
+        identifier,
       },
 
       match: {
@@ -134,6 +135,7 @@ class ProjectDashboard extends React.Component {
           isProjectManager={is_project_manager}
           surveyData={surveyData}
           path={url}
+          identifier={identifier}
         />
         <ProjectDashboardComponent projectId={projectId} />
         {/* </div> */}
