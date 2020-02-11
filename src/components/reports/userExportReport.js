@@ -220,9 +220,7 @@ export default class UserExportReport extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to={`/project-dashboard/${id}/report`}>
-                Report
-              </Link>
+              <Link to={`/project/${id}/report`}>Report</Link>
             </li>
             <li className="breadcrumb-item">Export Data</li>
           </ol>
