@@ -16,9 +16,9 @@ export default class UserExportReport extends Component {
     this.state = {
       userType: [{ id: '', label: '----' }],
       startedDate: '',
-      endedDate: '',
+      endedDate: new Date(),
       Userselected: '',
-      preview_endedDate: '',
+      preview_endedDate: new Date(),
       preview_startedDate: '',
       showPreview: false,
 
@@ -192,7 +192,6 @@ export default class UserExportReport extends Component {
         },
       },
     } = this;
-
     const DataCrude = [
       {
         id: '1',
@@ -281,7 +280,7 @@ export default class UserExportReport extends Component {
                           startDateHandler={onChangeHandler}
                           endDateHandler={onEndChangeHandler}
                           // createdDate={new Date()}
-                          // tillDate={new Date()}
+                          tillDate={new Date()}
                         />
                       </div>
 
@@ -290,8 +289,8 @@ export default class UserExportReport extends Component {
                           // disabled
                           type="button"
                           className="common-button mt-3 is-bg"
-                          onClick={() => {
-                            this.handleApply();
+                          onClick={e => {
+                            this.handleApply(e);
                           }}
                         >
                           Generate
@@ -315,7 +314,7 @@ export default class UserExportReport extends Component {
                           startDateHandler={onChangeHandlerPreview}
                           endDateHandler={onEndChangeHandlerPreview}
                           // createdDate={new Date()}
-                          // tillDate={new Date()}
+                          tillDate={new Date()}
                         />
                       </div>
 
@@ -325,6 +324,7 @@ export default class UserExportReport extends Component {
                           <SelectElement
                             className="form-control"
                             label="Select User"
+                            formType="editForm"
                             translation
                             options={userType}
                             changeHandler={onSelectChangeHandler}
@@ -342,14 +342,11 @@ export default class UserExportReport extends Component {
                           ])}/`}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className={`common-button mt-3 is-bg ${
+                            !Userselected ? 'is-disable' : ''
+                          }`}
                         >
-                          <button
-                            // disabled
-                            type="button"
-                            className="common-button mt-3 is-bg"
-                          >
-                            Preview
-                          </button>
+                          Preview
                         </a>
                       </div>
                     </div>
