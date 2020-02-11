@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
 import axios from 'axios';
 import SelectElement from '../common/SelectElement';
 import { errorToast, successToast } from '../../utils/toastHandler';
+import FilterByDate from './common/filterByDate';
+import CollapseFilterTable from './CollapseFilterTable';
 
 /* eslint-disable camelcase */
 
@@ -19,6 +20,7 @@ export default class UserExportReport extends Component {
       Userselected: '',
       preview_endedDate: '',
       preview_startedDate: '',
+      showPreview: false,
 
       //   project: 'Project',
     };
@@ -51,14 +53,30 @@ export default class UserExportReport extends Component {
   }
 
   onEndChangeHandler = date => {
-    this.setState({
-      endedDate: date,
+    const { startedDate } = this.state;
+    this.setState(() => {
+      if (date < startedDate) {
+        return {
+          startedDate: date,
+        };
+      }
+      return {
+        endedDate: date,
+      };
     });
   };
 
   onChangeHandler = date => {
-    this.setState({
-      startedDate: date,
+    const { endedDate } = this.state;
+    this.setState(() => {
+      if (endedDate && date > endedDate) {
+        return {
+          endedDate: date,
+        };
+      }
+      return {
+        startedDate: date,
+      };
     });
   };
 
@@ -103,6 +121,9 @@ export default class UserExportReport extends Component {
       .then(req => {
         if (req.status === 200) {
           successToast(req.data.message);
+          this.setState({
+            showPreview: true,
+          });
         }
       })
       .catch(err => {
@@ -121,14 +142,30 @@ export default class UserExportReport extends Component {
   };
 
   onChangeHandlerPreview = date => {
-    this.setState({
-      preview_startedDate: date,
+    const { preview_endedDate } = this.state;
+    this.setState(() => {
+      if (preview_endedDate && date > preview_endedDate) {
+        return {
+          preview_endedDate: date,
+        };
+      }
+      return {
+        preview_startedDate: date,
+      };
     });
   };
 
   onEndChangeHandlerPreview = date => {
-    this.setState({
-      preview_endedDate: date,
+    const { preview_startedDate } = this.state;
+    this.setState(() => {
+      if (date < preview_startedDate) {
+        return {
+          preview_startedDate: date,
+        };
+      }
+      return {
+        preview_endedDate: date,
+      };
     });
   };
 
@@ -141,6 +178,7 @@ export default class UserExportReport extends Component {
 
         preview_endedDate,
         preview_startedDate,
+        showPreview,
         userType,
       },
       onChangeHandler,
@@ -154,10 +192,6 @@ export default class UserExportReport extends Component {
         },
       },
     } = this;
-
-    // const {
-    //     params: { id },
-    //   } = this.props.match;
 
     const DataCrude = [
       {
@@ -182,12 +216,6 @@ export default class UserExportReport extends Component {
       },
     ];
 
-    // const {
-    //   match: {
-    //     params: { id },
-    //   },
-    // } = this.props;
-
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -204,8 +232,7 @@ export default class UserExportReport extends Component {
           <div className="card">
             <div className="card-body">
               <div className="standard-tempalte">
-                <h3 className="mb-3">Template report</h3>
-
+                <h3 className="mb-3">Project report</h3>
                 <div className="report-list">
                   <div className="row">
                     <div className="col-md-12">
@@ -244,40 +271,18 @@ export default class UserExportReport extends Component {
                 </div>
                 <div className="data-filter mt-3">
                   <h3 className="mb-3">Activity Report</h3>
-
                   <form>
                     <div className="row">
                       <div className="col-lg-6 col-md-6">
-                        <div className="form-group icon-between">
-                          <label className="mb-2">Time period</label>
-                          <div className="inline-flex ">
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="Start Date"
-                                name="startedDate"
-                                selected={startedDate}
-                                onChange={onChangeHandler}
-                                dateFormat="yyyy-MM-dd"
-                                className="form-control"
-                              />
-                            </div>
-                            <span className="icon-between">
-                              <i className="material-icons">
-                                arrow_right_alt
-                              </i>
-                            </span>
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="End Date"
-                                name="endedDate"
-                                selected={endedDate}
-                                onChange={onEndChangeHandler}
-                                className="form-control"
-                                dateFormat="yyyy-MM-dd"
-                              />
-                            </div>
-                          </div>
-                        </div>
+                        <FilterByDate
+                          className="form-group icon-between"
+                          startDate={startedDate && startedDate}
+                          endDate={endedDate}
+                          startDateHandler={onChangeHandler}
+                          endDateHandler={onEndChangeHandler}
+                          // createdDate={new Date()}
+                          // tillDate={new Date()}
+                        />
                       </div>
 
                       <div className="col-md-12">
@@ -285,7 +290,9 @@ export default class UserExportReport extends Component {
                           // disabled
                           type="button"
                           className="common-button mt-3 is-bg"
-                          onClick={this.handleApply}
+                          onClick={() => {
+                            this.handleApply();
+                          }}
                         >
                           Generate
                         </button>
@@ -296,40 +303,20 @@ export default class UserExportReport extends Component {
 
                 <div className="data-filter mt-3">
                   <h3 className="mb-3">Individual Activity Report</h3>
-
                   <form>
                     <div className="row">
                       <div className="col-lg-6 col-md-6">
-                        <div className="form-group icon-between">
-                          <label className="mb-2">Time period</label>
-                          <div className="inline-flex ">
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="Start Date"
-                                name="startedDate"
-                                selected={preview_startedDate}
-                                onChange={onChangeHandlerPreview}
-                                dateFormat="yyyy-MM-dd"
-                                className="form-control"
-                              />
-                            </div>
-                            <span className="icon-between">
-                              <i className="material-icons">
-                                arrow_right_alt
-                              </i>
-                            </span>
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="End Date"
-                                name="endedDate"
-                                selected={preview_endedDate}
-                                onChange={onEndChangeHandlerPreview}
-                                className="form-control"
-                                dateFormat="yyyy-MM-dd"
-                              />
-                            </div>
-                          </div>
-                        </div>
+                        <FilterByDate
+                          className="form-group icon-between"
+                          startDate={
+                            preview_startedDate && preview_startedDate
+                          }
+                          endDate={preview_endedDate}
+                          startDateHandler={onChangeHandlerPreview}
+                          endDateHandler={onEndChangeHandlerPreview}
+                          // createdDate={new Date()}
+                          // tillDate={new Date()}
+                        />
                       </div>
 
                       <div className="col-lg-3 col-md-6">
@@ -369,6 +356,9 @@ export default class UserExportReport extends Component {
                   </form>
                 </div>
               </div>
+              {showPreview && (
+                <CollapseFilterTable id={id} type="standard" />
+              )}
             </div>
           </div>
         </div>
