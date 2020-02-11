@@ -385,7 +385,21 @@ class Templates extends Component {
                 ) : (
                   <Loader />
                 )}
-
+                <div className="report-list">
+                  <div className="row">
+                    <div className="col-md-8">
+                      <div className="report-content">
+                        <a
+                          href={`/fieldsight/application/#/sync-schedule/${id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <h4>G-Sheet Reports</h4>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <FormTemplate
                   general={general}
                   generalhandle={this.generalhandle}
@@ -408,21 +422,6 @@ class Templates extends Component {
                   showSubStage={this.showSubStage}
                   showSub={showSub}
                 />
-                <div className="report-list">
-                  <div className="row">
-                    <div className="col-md-8">
-                      <div className="report-content">
-                        <a
-                          href={`/fieldsight/application/#/sync-schedule/${id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <h4>G-Sheet Reports</h4>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               <CustomTemplate
