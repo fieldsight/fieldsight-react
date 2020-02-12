@@ -4,10 +4,13 @@ import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
 // import CustomCheckBox from './CustomCheckbox';
-import CollapseFilterTable from './CollapseFilterTable';
-import FilterByDate from './common/filterByDate';
-import FilterByData from './common/filterByData';
-import { errorToast, successToast } from '../../utils/toastHandler';
+import CollapseFilterTable from '../CollapseFilterTable';
+import FilterByDate from '../common/filterByDate';
+import FilterByData from '../common/filterByData';
+import {
+  errorToast,
+  successToast,
+} from '../../../utils/toastHandler';
 
 /* eslint-disable */
 
@@ -294,9 +297,7 @@ export default class FormDataFilter extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to={`/project-dashboard/${id}/report`}>
-                Report
-              </Link>
+              <Link to={`/project/${id}/report`}>Report</Link>
             </li>
             <li className="breadcrumb-item">Export Data</li>
           </ol>
@@ -305,7 +306,7 @@ export default class FormDataFilter extends Component {
           <div className="card">
             <div className="card-body">
               <div className="standard-tempalte">
-                <h3 className="mb-3">Template report</h3>
+                <h3 className="mb-3">Project report</h3>
 
                 <div className="report-list">
                   <div className="row">

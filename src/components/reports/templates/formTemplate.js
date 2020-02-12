@@ -7,6 +7,7 @@ import { BlockContentLoader } from '../../common/Loader';
 export default class FormTemplate extends PureComponent {
   render() {
     const {
+      id,
       general,
       generalhandle,
       formLoader,
@@ -51,7 +52,7 @@ export default class FormTemplate extends PureComponent {
         <div className="row">
           <div className="col-md-8">
             <div className="report-content">
-              <a href="#">
+              <a href={`/fieldsight/application/#/data-export/${id}`}>
                 <h4>Form Data</h4>
               </a>
               <p>

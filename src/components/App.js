@@ -71,7 +71,7 @@ import TotalSiteSubmission from './adminDashboard/organizationSettings/totalSite
 import Templates from './reports/templates';
 import Reports from './reports';
 import ReportDashboard from './reports/viewReport';
-import ExportDataFilter from './reports/ExportDataFilter';
+import ExportDataFilter from './reports/templates/ExportDataFilter';
 import UserList from './reports/users/usersTable';
 import UserProfile from './reports/users/userProfile/index';
 import RegionDashboard from './reports/regionDashboard/index';
@@ -79,9 +79,10 @@ import UserManage from './reports/users/userManage';
 import MyFormTable from './reports/myForm';
 import Submission from './reports/submission';
 import AddNewReport from './reports/addNewReport';
-import FormDataFilter from './reports/FormDataFilter';
-import ActivityExportFile from './reports/activityExportFile';
-import UserExportReport from './reports/userExportReport';
+import FormDataFilter from './reports/templates/FormDataFilter';
+import ActivityExportFile from './reports/templates/activityExportFile';
+import UserExportReport from './reports/templates/userExportReport';
+import DataExport from './reports/dataExport';
 
 import OrganizationExport from './excelExport/organizationExport';
 import ExcelExport from './excelExport';
@@ -421,6 +422,10 @@ class App extends Component {
                 <Route
                   path="/user-export/:id"
                   render={props => <UserExportReport {...props} />}
+                />
+                <Route
+                  path="/data-export/:id"
+                  render={props => <DataExport {...props} />}
                 />
                 <Route
                   path="/organization-projects/:id"
