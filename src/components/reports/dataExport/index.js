@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import format from 'date-fns/format';
 import {
   getReportList,
   getFormType,
@@ -35,12 +36,12 @@ class DataExport extends Component {
       toggleSelectClass: {
         filterRegion: false,
         filterSiteType: false,
-        startDate: '',
-        endDate: new Date(),
       },
       selectedArr: {
         regions: [],
         types: [],
+        startDate: '',
+        endDate: new Date(),
       },
     };
   }
@@ -61,6 +62,12 @@ class DataExport extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (
+      prevProps.templateReducer.breadcrumb !==
+      this.props.templateReducer.breadcrumb
+    ) {
+      this.setStartDate(this.props.templateReducer.breadcrumb);
+    }
     if (
       prevProps.templateReducer.formLoader !==
       this.props.templateReducer.formLoader
@@ -110,6 +117,15 @@ class DataExport extends Component {
       this.props.history.push(`/project/${id}/report`);
     }
   }
+
+  setStartDate = data => {
+    this.setState(state => ({
+      selectedArr: {
+        ...state.selectedArr,
+        startDate: new Date(data.created_date),
+      },
+    }));
+  };
 
   setGeneralArr = data => {
     this.setState(state => ({
@@ -352,8 +368,8 @@ class DataExport extends Component {
         fs_ids: fsIds.flat(),
         filterRegion: region.map(r => r.id),
         siteTypes: site.map(s => s.id),
-        startdate: selectedArr.startDate,
-        enddate: selectedArr.endDate,
+        startdate: format(selectedArr.startDate, 'YYYY/MM/DD'),
+        enddate: format(selectedArr.endDate, 'YYYY/MM/DD'),
       };
       this.props.generateDataExport(id, body);
     }
@@ -382,7 +398,7 @@ class DataExport extends Component {
       toggleSelectClass,
       selectedArr: { regions, types, startDate, endDate },
     } = this.state;
-    // console.log('general', this.state);
+    // const start Object.keys(breadcrumb).length > 0 ?
     return (
       <>
         {Object.keys(breadcrumb).length > 0 && (

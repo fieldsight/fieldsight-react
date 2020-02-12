@@ -6,7 +6,6 @@ import {
   getOrgExportList,
   createOrgExport,
   deleteOrgExport,
-  downloadOrgExport,
 } from '../../actions/superAdminDashboardActions';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import ExportTable from './exportTable';
@@ -237,5 +236,4 @@ export default connect(mapStateToProps, {
   getOrgExportList,
   createOrgExport,
   deleteOrgExport,
-  downloadOrgExport,
 })(OrganizationExport);

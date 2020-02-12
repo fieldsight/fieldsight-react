@@ -156,12 +156,12 @@ export default class StagedList extends Component {
                           filterList && filterList[0] ? true : false;
                         const id = option.name ? option.name : '';
                         const name = option.name ? option.name : '';
+                        const key =
+                          option.name && option.sub_stages
+                            ? option.name + option.sub_stages.length
+                            : '';
                         return (
-                          <li
-                            key={`option_${
-                              option.name ? option.name : ''
-                            }`}
-                          >
+                          <li key={`option_${key}`}>
                             <div className="custom-control custom-checkbox">
                               <input
                                 type="checkbox"

@@ -73,7 +73,7 @@ export const getTypeList = projectId => dispatch => {
 export const generateDataExport = (projectId, body) => dispatch => {
   axios
     .post(
-      `fieldsight/export/xls/project/responses/${projectId}/`,
+      `/v4/api/reporting/xls-project-responses/${projectId}/`,
       body,
     )
     .then(res => {

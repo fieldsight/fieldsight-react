@@ -85,26 +85,13 @@ class DashboardHeader extends React.Component {
     const DataDropdown = [
       {
         title: 'Generate Report',
-        link: `/fieldsight/project-dashboard/${id}/`,
+        link: `fieldsight/application/#/project/${id}/report`,
         id: 'app.generate-report',
       },
       {
         title: 'View Data',
         link: `/fieldsight/application/#/project-responses/${id}/general/`,
         id: 'app.view-data',
-      },
-    ];
-    const pathList = [
-      { key: 0, title: 'Home', route: `/project-dashboard/${id}` },
-      // {
-      //   key: 1,
-      //   title: 'Dashboard',
-      //   route: `/project-dashboard/${id}`,
-      // },
-      {
-        key: 2,
-        title: 'Reports',
-        route: `/project-dashboard/${id}/report`,
       },
     ];
 
@@ -281,18 +268,6 @@ class DashboardHeader extends React.Component {
                 </button>
               )}
             </div>
-            {/* <ul className="common-tab is-line mt-4">
-              {pathList.map(list => (
-                <li key={list.key}>
-                  <Link
-                    to={list.route}
-                    className={list.route === path ? 'current ' : ''}
-                  >
-                    {list.title}
-                  </Link>
-                </li>
-              ))}
-            </ul> */}
             {openmodel && (
               <SubmissionModal
                 surveyData={surveyData}

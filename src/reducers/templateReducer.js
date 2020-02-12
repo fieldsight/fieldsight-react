@@ -86,7 +86,7 @@ export default function(state = initialState, action) {
     case GENERATE_DATA_EXPORT:
       return {
         ...state,
-        dataExportResponse: action.payload.details,
+        dataExportResponse: action.payload.message,
       };
     default:
       return state;
