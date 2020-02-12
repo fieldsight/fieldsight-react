@@ -116,7 +116,7 @@ export default class ExportTable extends Component {
             onCancel={CloseDeleteModal}
             onConfirm={ConfirmHandler}
             onToggle={CloseDeleteModal}
-            message="Are you sure u want to delete ?"
+            message="Are you sure you want to delete ?"
             title="Export table"
           />
         )}

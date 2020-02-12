@@ -114,7 +114,7 @@ class DataExport extends Component {
         },
       } = this.props;
       successToast(this.props.templateReducer.dataExportResponse);
-      this.props.history.push(`/project/${id}/report`);
+      // this.props.history.push(`/project/${id}/report`);
     }
   }
 
@@ -423,12 +423,12 @@ class DataExport extends Component {
           <div className="card">
             <div className="card-body">
               <div className="standard-tempalte">
-                <h3 className="mb-3">Project report</h3>
+                <h3 className="mb-3">Data Export</h3>
                 <div className="report-list">
                   <div className="row">
                     <div className="col-md-12">
                       <div className="report-content">
-                        <h4>Data Export</h4>
+                        <h4> Select Forms</h4>
                         <p>
                           Export of forms data and site information an
                           Excel File, generated with filters in
@@ -439,7 +439,6 @@ class DataExport extends Component {
                   </div>
                 </div>
                 <div className="data-filter mt-3">
-                  <h3 className="mb-3">Filters</h3>
                   <form
                     onSubmit={e => {
                       this.handleGenerate(e);
@@ -470,6 +469,9 @@ class DataExport extends Component {
                           handleSelected={this.handleSelected}
                         />
                       )}
+                      <div className="col-lg-12">
+                        <h3 className="mb-3">Filter By</h3>
+                      </div>
                       <div className="col-lg-3 col-md-6">
                         <FilterByData
                           className="form-group inline-form-group"
