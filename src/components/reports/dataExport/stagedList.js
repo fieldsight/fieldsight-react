@@ -181,48 +181,51 @@ export default class StagedList extends Component {
                                 {option.name}
                               </label>
                             </div>
-                            {option.sub_stages &&
-                              option.sub_stages.length > 0 &&
-                              option.sub_stages.map(sub => {
-                                const isSubChecked =
-                                  filterList &&
-                                  filterList[0] &&
-                                  filterList[0].sub_stages &&
-                                  filterList[0].sub_stages.find(
-                                    s => s.id === sub.id,
-                                  )
-                                    ? true
-                                    : false;
+                            <ul className="nested form">
+                              {option.sub_stages &&
+                                option.sub_stages.length > 0 &&
+                                option.sub_stages.map(sub => {
+                                  const isSubChecked =
+                                    filterList &&
+                                    filterList[0] &&
+                                    filterList[0].sub_stages &&
+                                    filterList[0].sub_stages.find(
+                                      s => s.id === sub.id,
+                                    )
+                                      ? true
+                                      : false;
 
-                                return (
-                                  <div
-                                    className="custom-control custom-checkbox"
-                                    key={sub.id}
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      className="custom-control-input"
-                                      id={sub.id}
-                                      name={sub.form_name}
-                                      checked={isSubChecked}
-                                      onChange={e => {
-                                        this.handleSubStageCheck(
-                                          e,
-                                          sub,
-                                          option,
-                                        );
-                                      }}
-                                    />
-                                    <label
-                                      className="custom-control-label"
-                                      htmlFor={sub.id}
-                                      style={{ paddingLeft: '2em' }}
-                                    >
-                                      {sub.form_name}
-                                    </label>
-                                  </div>
-                                );
-                              })}
+                                  return (
+                                    <li key={sub.id}>
+                                      <div className="custom-control custom-checkbox">
+                                        <input
+                                          type="checkbox"
+                                          className="custom-control-input"
+                                          id={sub.id}
+                                          name={sub.form_name}
+                                          checked={isSubChecked}
+                                          onChange={e => {
+                                            this.handleSubStageCheck(
+                                              e,
+                                              sub,
+                                              option,
+                                            );
+                                          }}
+                                        />
+                                        <label
+                                          className="custom-control-label"
+                                          htmlFor={sub.id}
+                                          style={{
+                                            paddingLeft: '2em',
+                                          }}
+                                        >
+                                          {sub.form_name}
+                                        </label>
+                                      </div>
+                                    </li>
+                                  );
+                                })}
+                            </ul>
                           </li>
                         );
                       })}
