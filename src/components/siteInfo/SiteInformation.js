@@ -10,7 +10,6 @@ import Loader from '../common/Loader';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
-import DeleteModel from '../common/DeleteModal';
 /* eslint-disable */
 /* eslint no-param-reassign: ["error", { "props": false }] */
 /* eslint-disable  no-return-await  */

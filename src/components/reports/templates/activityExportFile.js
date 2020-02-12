@@ -4,8 +4,12 @@ import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
 import axios from 'axios';
-import RadioElement from '../common/RadioElement';
-import { errorToast, successToast } from '../../utils/toastHandler';
+import RadioElement from '../../common/RadioElement';
+import {
+  errorToast,
+  successToast,
+} from '../../../utils/toastHandler';
+import FilterByDate from '../common/filterByDate';
 
 export default class ActivityExportFile extends Component {
   constructor(props) {
@@ -42,14 +46,30 @@ export default class ActivityExportFile extends Component {
   };
 
   onEndChangeHandler = date => {
-    this.setState({
-      endedDate: date,
+    const { startedDate } = this.state;
+    this.setState(() => {
+      if (date < startedDate) {
+        return {
+          startedDate: date,
+        };
+      }
+      return {
+        endedDate: date,
+      };
     });
   };
 
   onChangeHandler = date => {
-    this.setState({
-      startedDate: date,
+    const { endedDate } = this.state;
+    this.setState(() => {
+      if (endedDate && date > endedDate) {
+        return {
+          endedDate: date,
+        };
+      }
+      return {
+        startedDate: date,
+      };
     });
   };
 
@@ -124,7 +144,6 @@ export default class ActivityExportFile extends Component {
       onChangeHandler,
       onEndChangeHandler,
     } = this;
-    // const {state:{fromDashboard}}=this.props.location
 
     const DataCrude = [
       {
@@ -160,9 +179,7 @@ export default class ActivityExportFile extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to={`/project-dashboard/${id}/report`}>
-                Report
-              </Link>
+              <Link to={`/project/${id}/report`}>Report</Link>
             </li>
             <li className="breadcrumb-item">Export Data</li>
           </ol>
@@ -171,7 +188,7 @@ export default class ActivityExportFile extends Component {
           <div className="card">
             <div className="card-body">
               <div className="standard-tempalte">
-                <h3 className="mb-3">Template report</h3>
+                <h3 className="mb-3">Project report</h3>
 
                 <div className="report-list">
                   <div className="row">
@@ -257,36 +274,15 @@ export default class ActivityExportFile extends Component {
 
                     <div className="row">
                       <div className="col-lg-6 col-md-6">
-                        <div className="form-group icon-between">
-                          <label className="mb-2">Time period</label>
-                          <div className="inline-flex ">
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="Start Date"
-                                name="startedDate"
-                                selected={startedDate}
-                                onChange={onChangeHandler}
-                                dateFormat="yyyy-MM-dd"
-                                className="form-control"
-                              />
-                            </div>
-                            <span className="icon-between">
-                              <i className="material-icons">
-                                arrow_right_alt
-                              </i>
-                            </span>
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="End Date"
-                                name="endedDate"
-                                selected={endedDate}
-                                onChange={onEndChangeHandler}
-                                className="form-control"
-                                dateFormat="yyyy-MM-dd"
-                              />
-                            </div>
-                          </div>
-                        </div>
+                        <FilterByDate
+                          className="form-group icon-between"
+                          startDate={startedDate && startedDate}
+                          endDate={endedDate}
+                          startDateHandler={onChangeHandler}
+                          endDateHandler={onEndChangeHandler}
+                          // createdDate={new Date(projectCreatedOn)}
+                          tillDate={new Date()}
+                        />
                       </div>
 
                       <div className="col-md-12">

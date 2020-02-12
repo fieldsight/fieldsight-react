@@ -1491,7 +1491,7 @@ class AddNewReport extends Component {
                   onConfirm={this.handleConfirmDelete}
                   onCancel={this.handleCancel}
                   onToggle={this.handleToggleDelete}
-                  message="Are you sure you want to cancel? All entered data will be lost"
+                  message="Are you sure you want to cancel? All entered data will be lost!"
                 />
               )}
             </div>

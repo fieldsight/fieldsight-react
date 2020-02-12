@@ -401,6 +401,7 @@ class Templates extends Component {
                   </div>
                 </div>
                 <FormTemplate
+                  id={id}
                   general={general}
                   generalhandle={this.generalhandle}
                   formLoader={formLoader}
