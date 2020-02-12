@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
 
 import { getType } from '../MyReports';
 
@@ -50,7 +49,7 @@ export default class CustomTemplate extends PureComponent {
                           <span>{getType(custom.type)}</span>
                         </p>
                         <p>
-                          <b>no. of datapoints</b>
+                          <b>no. of columns</b>
                           <span>{custom.datapoints}</span>
                         </p>
                         {custom.report_sync_settings

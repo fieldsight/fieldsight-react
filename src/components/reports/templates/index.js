@@ -163,13 +163,14 @@ class Templates extends Component {
     );
   };
 
-  generalLinkhandle = (fromDashboard, projectCreatedOn) => {
+  generalLinkhandle = (fromDashboard, formName, projectCreatedOn) => {
     const { id } = this.state;
 
     return this.props.history.push({
       pathname: `/form-data/${id}/${fromDashboard}`,
       state: {
         fromDashboard,
+        formName,
         projectCreatedOn,
       },
     });

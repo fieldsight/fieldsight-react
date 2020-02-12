@@ -155,6 +155,7 @@ class AdminDashboard extends Component {
           progressTable,
           total_submissions,
           identifier,
+          breadcrumbs,
         },
       },
       state: { activeTab, projects, teams, admins, loader },
@@ -165,198 +166,216 @@ class AdminDashboard extends Component {
     const total_project = projects.length;
 
     return (
-      <div className="right-content no-bg new-dashboard">
-        <DashboardHeader
-          name={name}
-          identifier={identifier}
-          phone={phone}
-          country={country}
-          additional_desc={additional_desc}
-          logo={logo}
-          showContentLoader={showContentLoader}
-          total_sites={total_sites}
-          total_projects={total_project}
-          total_users={total_users}
-          total_teams={total_team}
-          superAdminId={superAdminId}
-          total_submissions={total_submissions}
-        />
+      <>
+        <nav aria-label="breadcrumb" role="navigation">
+          {Object.keys(breadcrumbs).length > 0 && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={breadcrumbs.teams_url}>
+                  {breadcrumbs.teams}
+                </a>
+              </li>
+              <li className="breadcrumb-item">{breadcrumbs.name}</li>
 
-        <div className="row">
-          <div className="col-lg-6">
-            <div className="card map">
-              <div className="card-header main-card-header sub-card-header">
-                <h5>Project Maps</h5>
-                <div className="dash-btn">
-                  <a
-                    href="/fieldsight/org-map/"
-                    className="fieldsight-btn left-icon"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className="la la-map" />
-                    Full map
-                  </a>
+              {/* <li className="breadcrumb-item active" aria-current="page">
+                {breadcrumbs.site}
+              </li> */}
+            </ol>
+          )}
+        </nav>
+        <div className="right-content no-bg new-dashboard">
+          <DashboardHeader
+            name={name}
+            identifier={identifier}
+            phone={phone}
+            country={country}
+            additional_desc={additional_desc}
+            logo={logo}
+            showContentLoader={showContentLoader}
+            total_sites={total_sites}
+            total_projects={total_project}
+            total_users={total_users}
+            total_teams={total_team}
+            superAdminId={superAdminId}
+            total_submissions={total_submissions}
+          />
+
+          <div className="row">
+            <div className="col-lg-6">
+              <div className="card map">
+                <div className="card-header main-card-header sub-card-header">
+                  <h5>Project Maps</h5>
+                  <div className="dash-btn">
+                    <a
+                      href="/fieldsight/org-map/"
+                      className="fieldsight-btn left-icon"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="la la-map" />
+                      Full map
+                    </a>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <SiteMap
+                    map={map}
+                    showContentLoader={organizationDashboardLoader}
+                  />
                 </div>
               </div>
-              <div className="card-body">
-                <SiteMap
-                  map={map}
-                  showContentLoader={organizationDashboardLoader}
-                />
-              </div>
             </div>
-          </div>
-          <div className="col-lg-6">
-            <div className="card region-table">
-              <div className="card-header main-card-header sub-card-header">
-                {/* <div className="form-group"> */}
-                <ul className="nav nav-tabs ">
-                  <li className="nav-item">
-                    <a
-                      tabIndex="0"
-                      role="button"
-                      onKeyDown={() => {
-                        this.toggleTab('teams');
-                      }}
-                      className={
-                        activeTab === 'teams'
-                          ? 'nav-link active'
-                          : 'nav-link'
-                      }
-                      onClick={() => {
-                        this.toggleTab('teams');
-                      }}
-                    >
-                      teams
-                    </a>
-                  </li>
+            <div className="col-lg-6">
+              <div className="card region-table">
+                <div className="card-header main-card-header sub-card-header">
+                  {/* <div className="form-group"> */}
+                  <ul className="nav nav-tabs ">
+                    <li className="nav-item">
+                      <a
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          this.toggleTab('teams');
+                        }}
+                        className={
+                          activeTab === 'teams'
+                            ? 'nav-link active'
+                            : 'nav-link'
+                        }
+                        onClick={() => {
+                          this.toggleTab('teams');
+                        }}
+                      >
+                        teams
+                      </a>
+                    </li>
 
-                  <li className="nav-item">
-                    <a
-                      tabIndex="0"
-                      role="button"
-                      onKeyDown={() => {
-                        this.toggleTab('project');
-                      }}
-                      className={
-                        activeTab === 'project'
-                          ? 'nav-link active'
-                          : 'nav-link'
-                      }
-                      onClick={() => {
-                        this.toggleTab('project');
-                      }}
-                    >
-                      project
-                    </a>
-                  </li>
-                </ul>
-                {/* </div> */}
-                {activeTab === 'teams' && (
-                  <div className="dash-btn">
-                    <form className="floating-form">
-                      <div className="form-group mr-0">
-                        <input
-                          type="search"
-                          className="form-control"
-                          required
-                          onChange={this.teamSearch}
-                        />
-                        <label htmlFor="input">Search</label>
-                        <i className="la la-search" />
-                      </div>
-                    </form>
-                    <a
-                      href={`/fieldsight/application/#/create-team/${id}`}
-                      className="fieldsight-btn"
-                    >
-                      <i className="la la-plus" />
-                    </a>
-                  </div>
-                )}
+                    <li className="nav-item">
+                      <a
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={() => {
+                          this.toggleTab('project');
+                        }}
+                        className={
+                          activeTab === 'project'
+                            ? 'nav-link active'
+                            : 'nav-link'
+                        }
+                        onClick={() => {
+                          this.toggleTab('project');
+                        }}
+                      >
+                        project
+                      </a>
+                    </li>
+                  </ul>
+                  {/* </div> */}
+                  {activeTab === 'teams' && (
+                    <div className="dash-btn">
+                      <form className="floating-form">
+                        <div className="form-group mr-0">
+                          <input
+                            type="search"
+                            className="form-control"
+                            required
+                            onChange={this.teamSearch}
+                          />
+                          <label htmlFor="input">Search</label>
+                          <i className="la la-search" />
+                        </div>
+                      </form>
+                      <a
+                        href={`/fieldsight/application/#/create-team/${id}`}
+                        className="fieldsight-btn"
+                      >
+                        <i className="la la-plus" />
+                      </a>
+                    </div>
+                  )}
+                  {activeTab === 'project' && (
+                    <div className="dash-btn">
+                      <form
+                        className="floating-form"
+                        onSubmit={e => {
+                          e.preventDefault();
+                        }}
+                      >
+                        <div className="form-group mr-0">
+                          <input
+                            type="search"
+                            className="form-control"
+                            placeholder="Search"
+                            onChange={this.onChangeHandler}
+                          />
+
+                          <i className="la la-search" />
+                        </div>
+                      </form>
+                      {/* {is_project_manager && ( */}
+
+                      {/* )} */}
+                    </div>
+                  )}
+                </div>
+
                 {activeTab === 'project' && (
-                  <div className="dash-btn">
-                    <form
-                      className="floating-form"
-                      onSubmit={e => {
-                        e.preventDefault();
-                      }}
-                    >
-                      <div className="form-group mr-0">
-                        <input
-                          type="search"
-                          className="form-control"
-                          placeholder="Search"
-                          onChange={this.onChangeHandler}
-                        />
-
-                        <i className="la la-search" />
-                      </div>
-                    </form>
-                    {/* {is_project_manager && ( */}
-
-                    {/* )} */}
-                  </div>
+                  <>
+                    <Project projects={projects} />
+                  </>
                 )}
+
+                {activeTab === 'teams' && <TeamTable teams={teams} />}
               </div>
-
-              {activeTab === 'project' && (
-                <>
-                  <Project projects={projects} />
-                </>
-              )}
-
-              {activeTab === 'teams' && <TeamTable teams={teams} />}
             </div>
           </div>
-        </div>
-        <div className="progress-table mrb-30 mrt-30">
-          <div className="card">
-            {/* <div className="card-header main-card-header sub-card-header">
+          <div className="progress-table mrb-30 mrt-30">
+            <div className="card">
+              {/* <div className="card-header main-card-header sub-card-header">
               
             </div> */}
 
-            <ProgressTable
-              orgId={superAdminId}
-              progressTable={progressTable}
-              loader={loader}
-            />
+              <ProgressTable
+                orgId={superAdminId}
+                progressTable={progressTable}
+                loader={loader}
+              />
+            </div>
           </div>
-        </div>
-        {/* <DashboardCounter submissions={submissions} /> */}
-        <div className="about-section  mrt-30">
-          <div className="row">
-            <About contacts={contact} desc={additional_desc} />
-            {/* <About contacts={contact} desc={public_desc} /> */}
-            <div className="col-lg-4">
-              <div className="card admin">
-                <div className="card-header main-card-header sub-card-header">
-                  <h5>Admin</h5>
-                  <div className="dash-btn">
-                    <form className="floating-form">
-                      <div className="form-group mr-0">
-                        <input
-                          type="search"
-                          className="form-control"
-                          required
-                          onChange={this.adminSearch}
-                        />
-                        <label htmlFor="input">Search</label>
-                        <i className="la la-search" />
-                      </div>
-                    </form>
+          {/* <DashboardCounter submissions={submissions} /> */}
+          <div className="about-section  mrt-30">
+            <div className="row">
+              <About contacts={contact} desc={additional_desc} />
+              {/* <About contacts={contact} desc={public_desc} /> */}
+              <div className="col-lg-4">
+                <div className="card admin">
+                  <div className="card-header main-card-header sub-card-header">
+                    <h5>Admin</h5>
+                    <div className="dash-btn">
+                      <form className="floating-form">
+                        <div className="form-group mr-0">
+                          <input
+                            type="search"
+                            className="form-control"
+                            required
+                            onChange={this.adminSearch}
+                          />
+                          <label htmlFor="input">Search</label>
+                          <i className="la la-search" />
+                        </div>
+                      </form>
+                    </div>
                   </div>
+                  <Admin
+                    admin={admins}
+                    showContentLoader={showContentLoader}
+                  />
                 </div>
-                <Admin
-                  admin={admins}
-                  showContentLoader={showContentLoader}
-                />
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
