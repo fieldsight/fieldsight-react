@@ -35,7 +35,7 @@
             opacity: 0;
             visibility: hidden;
             @include transition(all .5s ease-in-out);
-            z-index: 2;
+            z-index: 99;
             @include box_shadow(0 1px 6px rgba($heading-color, .16));
 
             li {
