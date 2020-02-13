@@ -94,12 +94,12 @@ export default class StagedList extends Component {
           const checkData =
             filteredSub.length > 0
               ? [
-                  ...filteredArr,
-                  {
-                    name,
-                    sub_stages: filteredSub,
-                  },
-                ]
+                ...filteredArr,
+                {
+                  name,
+                  sub_stages: filteredSub,
+                },
+              ]
               : [...filteredArr];
           return {
             selectedData: checkData,
@@ -187,11 +187,11 @@ export default class StagedList extends Component {
                                 option.sub_stages.map(sub => {
                                   const isSubChecked =
                                     filterList &&
-                                    filterList[0] &&
-                                    filterList[0].sub_stages &&
-                                    filterList[0].sub_stages.find(
-                                      s => s.id === sub.id,
-                                    )
+                                      filterList[0] &&
+                                      filterList[0].sub_stages &&
+                                      filterList[0].sub_stages.find(
+                                        s => s.id === sub.id,
+                                      )
                                       ? true
                                       : false;
 
