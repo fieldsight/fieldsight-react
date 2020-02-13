@@ -74,7 +74,6 @@ import ReportDashboard from './reports/viewReport';
 import ExportDataFilter from './reports/templates/ExportDataFilter';
 import UserList from './reports/users/usersTable';
 import UserProfile from './reports/users/userProfile/index';
-import RegionDashboard from './reports/regionDashboard/index';
 import UserManage from './reports/users/userManage';
 import MyFormTable from './reports/myForm';
 import Submission from './reports/submission';
@@ -399,10 +398,7 @@ class App extends Component {
                   path="/userProfile"
                   render={props => <UserProfile {...props} />}
                 />
-                <Route
-                  path="/region-dashboard"
-                  render={props => <RegionDashboard {...props} />}
-                />
+
                 <Route
                   path="/user-manage"
                   render={props => <UserManage {...props} />}
