@@ -333,22 +333,34 @@ class DataExport extends Component {
       state: { selectedArr },
     } = this;
     const fsIds = [];
-    if (selectedArr.selectedGeneral) {
+    if (
+      selectedArr.selectedGeneral &&
+      selectedArr.selectedGeneral.length > 0
+    ) {
       const gId = selectedArr.selectedGeneral.map(g => g.id);
       fsIds.push(gId);
     }
-    if (selectedArr.selectedScheduled) {
+    if (
+      selectedArr.selectedScheduled &&
+      selectedArr.selectedScheduled.length > 0
+    ) {
       const gId = selectedArr.selectedScheduled.map(g => g.id);
       fsIds.push(gId);
     }
-    if (selectedArr.selectedSurvey) {
+    if (
+      selectedArr.selectedSurvey &&
+      selectedArr.selectedSurvey.length > 0
+    ) {
       const gId = selectedArr.selectedSurvey.map(g => g.id);
       fsIds.push(gId);
     }
-    if (selectedArr.selectedStaged) {
+    if (
+      selectedArr.selectedStaged &&
+      selectedArr.selectedStaged.length > 0
+    ) {
       const gId = selectedArr.selectedStaged.flatMap(s => {
         let subIds = [];
-        if (s.sub_stages.length > 0) {
+        if (s.sub_stages && s.sub_stages.length > 0) {
           subIds = s.sub_stages.flatMap(sub => sub.id);
         }
         return subIds;
@@ -361,6 +373,7 @@ class DataExport extends Component {
     const site = selectedArr.types.filter(
       s => s.id !== 'all_sitetypes',
     );
+
     if (fsIds.length === 0) {
       errorToast('Select atleast one form to generate data export.');
     } else {
@@ -398,6 +411,7 @@ class DataExport extends Component {
       toggleSelectClass,
       selectedArr: { regions, types, startDate, endDate },
     } = this.state;
+    // console.log('object, ', this.state.selectedArr);
     // const start Object.keys(breadcrumb).length > 0 ?
     return (
       <>

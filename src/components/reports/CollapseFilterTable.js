@@ -195,6 +195,7 @@ class CollapseFilterTable extends Component {
           key: 2.1,
           text: 'As Excel',
           link: this.props.excelFileToDownload,
+          action: this.props.handleExcelExport,
         },
       ],
     };
@@ -260,9 +261,22 @@ class CollapseFilterTable extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
                 {actionExport.menu.map(item => (
-                  <Dropdown.Item href={item.link} key={item.key}>
-                    {item.text}
-                  </Dropdown.Item>
+                  <>
+                    {item.link && (
+                      <Dropdown.Item href={item.link} key={item.key}>
+                        {item.text}
+                      </Dropdown.Item>
+                    )}
+                    {item.action && (
+                      <Dropdown.Item
+                        onClick={item.action}
+                        onKeyDown={item.action}
+                        key={item.key}
+                      >
+                        {item.text}
+                      </Dropdown.Item>
+                    )}
+                  </>
                 ))}
               </Dropdown.Menu>
             </Dropdown>

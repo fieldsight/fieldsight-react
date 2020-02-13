@@ -50,7 +50,8 @@ export const getProjectBreadcrumb = projectId => dispatch => {
 
 export const getRegionList = projectId => dispatch => {
   axios
-    .get(`/fieldsight/api/site-types/${projectId}/`)
+    .get(`/fieldsight/api/project-regions/${projectId}/`)
+
     .then(res => {
       dispatch({
         type: GET_REGIONS,
@@ -62,7 +63,7 @@ export const getRegionList = projectId => dispatch => {
 
 export const getTypeList = projectId => dispatch => {
   axios
-    .get(`/fieldsight/api/project-regions/${projectId}/`)
+    .get(`/fieldsight/api/site-types/${projectId}/`)
     .then(res => {
       dispatch({
         type: GET_TYPES,
