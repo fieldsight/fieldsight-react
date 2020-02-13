@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import DatePicker from 'react-datepicker';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
@@ -10,8 +10,12 @@ import {
   successToast,
 } from '../../../utils/toastHandler';
 import FilterByDate from '../common/filterByDate';
+import CollapseFilterTable from '../CollapseFilterTable';
+import { excelExport } from '../../../actions/templateAction';
 
-export default class ActivityExportFile extends Component {
+let statusLoaded = '';
+
+class ActivityExportFile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,8 +23,31 @@ export default class ActivityExportFile extends Component {
       startedDate: '',
       endedDate: '',
       project: 'Project',
+      showPreview: false,
+      taskId: '',
+      fileToDownload: '',
     };
   }
+
+  componentDidUpdate(prevProps) {
+    const { taskId } = this.state;
+    if (
+      prevProps.templateReducer.exportExcel !==
+      this.props.templateReducer.exportExcel
+    ) {
+      const resp = this.props.templateReducer.exportExcel;
+      if (resp.task_status !== 'Completed') {
+        setInterval(this.props.excelExport(taskId), 5000);
+      } else {
+        this.setDownloadFile(resp.file_url);
+      }
+    }
+  }
+
+  setDownloadFile = file => {
+    this.setState({ fileToDownload: file, showPreview: true });
+    statusLoaded = true;
+  };
 
   handleYearlyChange = e => {
     const { value } = e.target;
@@ -123,6 +150,12 @@ export default class ActivityExportFile extends Component {
       .then(req => {
         if (req.status === 200) {
           successToast(req.data.message);
+          this.props.excelExport(req.data.task_id);
+          statusLoaded = false;
+          this.setState({
+            // showPreview: true,
+            taskId: req.data.task_id,
+          });
         }
       })
       .catch(err => {
@@ -133,9 +166,20 @@ export default class ActivityExportFile extends Component {
       });
   };
 
+  handleExcelExport = () => {
+    const { taskId } = this.state;
+    this.props.excelExport(taskId);
+  };
+
   render() {
     const {
-      state: { scheduleType, startedDate, endedDate },
+      state: {
+        scheduleType,
+        startedDate,
+        endedDate,
+        showPreview,
+        fileToDownload,
+      },
       props: {
         location: {
           state: { fromDashboard },
@@ -287,18 +331,27 @@ export default class ActivityExportFile extends Component {
 
                       <div className="col-md-12">
                         <button
-                          // disabled
+                          disabled={statusLoaded === false}
                           type="button"
                           className="common-button mt-3 is-bg"
                           onClick={this.handleApply}
                         >
-                          Apply
+                          {statusLoaded === false
+                            ? 'Downloading'
+                            : 'Apply'}
                         </button>
                       </div>
                     </div>
                   </form>
                 </div>
               </div>
+              {showPreview && (
+                <CollapseFilterTable
+                  id={id}
+                  type="standard"
+                  excelFileToDownload={fileToDownload}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -306,3 +359,11 @@ export default class ActivityExportFile extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ templateReducer }) => ({
+  templateReducer,
+});
+
+export default connect(mapStateToProps, {
+  excelExport,
+})(ActivityExportFile);

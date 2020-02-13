@@ -119,8 +119,8 @@ export default class FormTemplate extends PureComponent {
                                 );
                               }}
                             >
+                              <p>{genInfo.title}</p>
                               <div className="summary-content">
-                                <p>{genInfo.title}</p>
                                 {genInfo.schedule_type && (
                                   <p>
                                     <b>Schedule Type</b>
@@ -203,8 +203,8 @@ export default class FormTemplate extends PureComponent {
                                 );
                               }}
                             >
+                              <p>{scheinfo.title}</p>
                               <div className="summary-content">
-                                <p>{scheinfo.title}</p>
                                 {scheinfo.schedule_type && (
                                   <p>
                                     <b>Schedule Type</b>
@@ -286,8 +286,8 @@ export default class FormTemplate extends PureComponent {
                                 );
                               }}
                             >
+                              <p>{surData.title}</p>
                               <div className="summary-content">
-                                <p>{surData.title}</p>
                                 {surData.schedule_type && (
                                   <p>
                                     <b>Schedule Type</b>
@@ -392,8 +392,8 @@ export default class FormTemplate extends PureComponent {
                                       );
                                     }}
                                   >
+                                    <p>{sub.form_name}</p>
                                     <div className="summary-content">
-                                      <p>{sub.form_name}</p>
                                       {sub.schedule_type && (
                                         <p>
                                           <b>Schedule Type</b>

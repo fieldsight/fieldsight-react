@@ -5,6 +5,7 @@ import format from 'date-fns/format';
 import {
   getReportData,
   getToFilterData,
+  applyActionToReport,
 } from '../../../actions/reportActions';
 import RightContentCard from '../../common/RightContentCard';
 import Modal from '../../common/Modal';
@@ -267,6 +268,17 @@ class ReportDashboard extends Component {
     });
   };
 
+  onExportCSV = () => {
+    const {
+      props: {
+        match: {
+          params: { id },
+        },
+      },
+    } = this;
+    this.props.applyActionToReport(id, 'excel');
+  };
+
   render() {
     const {
       props: {
@@ -405,6 +417,7 @@ class ReportDashboard extends Component {
               id={id}
               projectId={pid}
               getReportDataById={this.props.getReportData}
+              handleExcelExport={this.onExportCSV}
             />
 
             <div className="form-group pull-right no-margin">
@@ -442,4 +455,5 @@ const mapStateToProps = ({ reportReducer }) => ({
 export default connect(mapStateToProps, {
   getReportData,
   getToFilterData,
+  applyActionToReport,
 })(ReportDashboard);

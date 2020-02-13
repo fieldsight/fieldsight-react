@@ -6,6 +6,7 @@ import {
   GET_TYPES,
   GET_REGIONS,
   GENERATE_DATA_EXPORT,
+  EXPORT_EXCEL_REPORT,
 } from './types';
 
 export const getReportList = id => dispatch => {
@@ -79,6 +80,17 @@ export const generateDataExport = (projectId, body) => dispatch => {
     .then(res => {
       dispatch({
         type: GENERATE_DATA_EXPORT,
+        payload: res.data,
+      });
+    })
+    .catch();
+};
+export const excelExport = taskId => dispatch => {
+  axios
+    .get(`/v4/api/reporting/standard-reports-export-xls/${taskId}/`)
+    .then(res => {
+      dispatch({
+        type: EXPORT_EXCEL_REPORT,
         payload: res.data,
       });
     })
