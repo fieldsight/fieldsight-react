@@ -39,6 +39,7 @@ class StagedForms extends Component {
       myFormList: props.myForms,
       projectFormList: props.projectForms,
       sharedFormList: props.sharedForms,
+      orgForms: props.orgLibraryForms,
       isEditForm: false,
       subStageData: [],
       showSubstageForm: false,
@@ -107,6 +108,10 @@ class StagedForms extends Component {
     } else if (nextProps.sharedForms !== props.sharedForms) {
       this.setState({
         sharedFormList: props.sharedForms,
+      });
+    } else if (nextProps.orgLibraryForms !== props.orgLibraryForms) {
+      this.setState({
+        orgForms: props.orgLibraryForms,
       });
     }
   }
@@ -342,7 +347,12 @@ class StagedForms extends Component {
   };
 
   handleClosePopup = () => {
-    const { myForms, projectForms, sharedForms } = this.props;
+    const {
+      myForms,
+      projectForms,
+      sharedForms,
+      orgLibraryForms,
+    } = this.props;
     this.setState({
       formTitle: '',
       formId: '',
@@ -352,6 +362,7 @@ class StagedForms extends Component {
       projectFormList: projectForms,
       sharedFormList: sharedForms,
       xf: '',
+      orgForms: orgLibraryForms,
       isEditForm: false,
     });
     this.handleSubStageForm();
@@ -718,12 +729,18 @@ class StagedForms extends Component {
   };
 
   toggleTab = tab => {
-    const { myForms, sharedForms, projectForms } = this.props;
+    const {
+      myForms,
+      sharedForms,
+      projectForms,
+      orgLibraryForms,
+    } = this.props;
     this.setState({
       activeTab: tab,
       myFormList: myForms,
       sharedFormList: sharedForms,
       projectFormList: projectForms,
+      orgForms: orgLibraryForms,
     });
   };
 
@@ -745,7 +762,7 @@ class StagedForms extends Component {
   onChangeHandler = async e => {
     const {
       state: { activeTab },
-      props: { myForms, sharedForms, projectForms },
+      props: { myForms, sharedForms, projectForms, orgLibraryForms },
     } = this;
     const searchValue = e.target.value;
 
@@ -797,11 +814,22 @@ class StagedForms extends Component {
         this.setState({
           sharedFormList: filteredData,
         });
+      } else if (activeTab === 'orgLibraryForms') {
+        const filteredData = await orgLibraryForms.filter(form => {
+          return form.title
+            .toLowerCase()
+            .includes(searchValue.toLowerCase());
+        });
+
+        this.setState({
+          orgForms: filteredData,
+        });
       }
     } else {
       this.setState({
         myFormList: myForms,
         sharedFormList: sharedForms,
+        orgForms: orgLibraryForms,
         projectFormList: projectForms,
       });
     }
@@ -982,6 +1010,7 @@ class StagedForms extends Component {
         isEditForm,
         stagedRegions,
         stagedTypes,
+        orgForms,
         loadReq,
       },
     } = this;
@@ -1320,7 +1349,7 @@ class StagedForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                // handleSaveForm={this.handleSaveForm}
+                orgForms={orgForms}
                 loader={formLoader}
               />
             </ManageModal>

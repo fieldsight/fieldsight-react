@@ -27,6 +27,7 @@ class SideNav extends Component {
       myForms: [],
       projectForms: [],
       sharedForms: [],
+      orgLibraryForms: [],
       loader: false,
       isProjectForm: false,
     };
@@ -90,6 +91,9 @@ class SideNav extends Component {
               if (state.isProjectForm) {
                 const { regions } = list.data;
                 const types = list.data.site_types;
+                if (list.data.has_organization) {
+                  this.requestOrgLibraryForms(id);
+                }
                 return {
                   regionOptions: [
                     {
@@ -138,6 +142,17 @@ class SideNav extends Component {
       .catch(() => {});
   }
 
+  requestOrgLibraryForms = id => {
+    axios
+      .get(`/fv3/api/organization-library-forms/${id}/`)
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({ orgLibraryForms: res.data });
+        }
+      })
+      .catch(() => {});
+  };
+
   render() {
     const {
       props: {
@@ -156,6 +171,7 @@ class SideNav extends Component {
         sharedForms,
         loader,
         isProjectForm,
+        orgLibraryForms,
       },
     } = this;
 
@@ -286,6 +302,7 @@ class SideNav extends Component {
                 projectForms={projectForms}
                 sharedForms={sharedForms}
                 formLoader={loader}
+                orgLibraryForms={orgLibraryForms}
               />
             )}
           />
@@ -307,6 +324,7 @@ class SideNav extends Component {
                 projectForms={projectForms}
                 sharedForms={sharedForms}
                 formLoader={loader}
+                orgLibraryForms={orgLibraryForms}
               />
             )}
           />
@@ -328,6 +346,7 @@ class SideNav extends Component {
                 projectForms={projectForms}
                 sharedForms={sharedForms}
                 formLoader={loader}
+                orgLibraryForms={orgLibraryForms}
               />
             )}
           />
@@ -347,6 +366,7 @@ class SideNav extends Component {
                 projectForms={projectForms}
                 sharedForms={sharedForms}
                 formLoader={loader}
+                orgLibraryForms={orgLibraryForms}
               />
             )}
           />

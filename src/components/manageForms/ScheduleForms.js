@@ -11,6 +11,7 @@ import AddForm from './AddForm';
 import ManageModal from './ManageModal';
 import Loader from '../common/Loader';
 /* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-did-update-set-state */
 
 const formatDate = date => {
   const dateIdx = date.getDate();
@@ -43,6 +44,7 @@ class ScheduleForms extends Component {
       myFormList: props.myForms,
       projectFormList: props.projectForms,
       sharedFormList: props.sharedForms,
+      orgForms: props.orgLibraryForms,
       isEditForm: false,
       fsxf: '',
       loadReq: false,
@@ -79,10 +81,31 @@ class ScheduleForms extends Component {
     }
   }
 
+  componentDidUpdate(nextProps) {
+    const { props } = this;
+    if (nextProps.myForms !== props.myForms) {
+      this.setState({
+        myFormList: props.myForms,
+      });
+    } else if (nextProps.projectForms !== props.projectForms) {
+      this.setState({
+        projectFormList: props.projectForms,
+      });
+    } else if (nextProps.sharedForms !== props.sharedForms) {
+      this.setState({
+        sharedFormList: props.sharedForms,
+      });
+    } else if (nextProps.orgLibraryForms !== props.orgLibraryForms) {
+      this.setState({
+        orgForms: props.orgLibraryForms,
+      });
+    }
+  }
+
   onChangeHandler = async e => {
     const {
       state: { activeTab },
-      props: { myForms, projectForms, sharedForms },
+      props: { myForms, projectForms, sharedForms, orgLibraryForms },
     } = this;
     const searchValue = e.target.value;
 
@@ -134,12 +157,23 @@ class ScheduleForms extends Component {
         this.setState({
           sharedFormList: filteredData,
         });
+      } else if (activeTab === 'orgLibraryForms') {
+        const filteredData = await orgLibraryForms.filter(form => {
+          return form.title
+            .toLowerCase()
+            .includes(searchValue.toLowerCase());
+        });
+
+        this.setState({
+          orgForms: filteredData,
+        });
       }
     } else {
       this.setState({
         myFormList: myForms,
         sharedFormList: sharedForms,
         projectFormList: projectForms,
+        orgForms: orgLibraryForms,
       });
     }
   };
@@ -296,12 +330,18 @@ class ScheduleForms extends Component {
   };
 
   toggleTab = tab => {
-    const { myForms, sharedForms, projectForms } = this.props;
+    const {
+      myForms,
+      sharedForms,
+      projectForms,
+      orgLibraryForms,
+    } = this.props;
     this.setState({
       activeTab: tab,
       myFormList: myForms,
       sharedFormList: sharedForms,
       projectFormList: projectForms,
+      orgForms: orgLibraryForms,
     });
   };
 
@@ -311,6 +351,7 @@ class ScheduleForms extends Component {
       projectForms,
       sharedForms,
       closePopup,
+      orgLibraryForms,
     } = this.props;
     this.setState({
       formTitle: '',
@@ -322,6 +363,7 @@ class ScheduleForms extends Component {
       sharedFormList: sharedForms,
       xf: '',
       isEditForm: false,
+      orgForms: orgLibraryForms,
     });
     closePopup();
   };
@@ -539,6 +581,7 @@ class ScheduleForms extends Component {
         sharedFormList,
         isEditForm,
         isProjectForm,
+        orgForms,
       },
       props: {
         typeOptions,
@@ -633,7 +676,7 @@ class ScheduleForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                // handleSaveForm={this.handleSaveForm}
+                orgForms={orgForms}
                 loader={formLoader}
               />
             </ManageModal>

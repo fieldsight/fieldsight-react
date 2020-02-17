@@ -42,6 +42,7 @@ class GeneralForms extends Component {
       myFormList: props.myForms,
       projectFormList: props.projectForms,
       sharedFormList: props.sharedForms,
+      orgForms: props.orgLibraryForms,
       isEditForm: false,
     };
   }
@@ -89,6 +90,10 @@ class GeneralForms extends Component {
     } else if (nextProps.sharedForms !== props.sharedForms) {
       this.setState({
         sharedFormList: props.sharedForms,
+      });
+    } else if (nextProps.orgLibraryForms !== props.orgLibraryForms) {
+      this.setState({
+        orgForms: props.orgLibraryForms,
       });
     }
   }
@@ -257,6 +262,7 @@ class GeneralForms extends Component {
         myFormList: props.myForms,
         projectFormList: props.projectForms,
         sharedFormList: props.sharedForms,
+        orgForms: props.orgLibraryForms,
         xf: '',
         isEditForm: false,
       },
@@ -440,6 +446,7 @@ class GeneralForms extends Component {
       myFormList: props.myForms,
       sharedFormList: props.sharedForms,
       projectFormList: props.projectForms,
+      orgForms: props.orgLibraryForms,
     });
   };
 
@@ -497,12 +504,25 @@ class GeneralForms extends Component {
         this.setState({
           sharedFormList: filteredData,
         });
+      } else if (activeTab === 'orgLibraryForms') {
+        const filteredData = await props.orgLibraryForms.filter(
+          form => {
+            return form.title
+              .toLowerCase()
+              .includes(searchValue.toLowerCase());
+          },
+        );
+
+        this.setState({
+          orgForms: filteredData,
+        });
       }
     } else {
       this.setState({
         myFormList: props.myForms,
         sharedFormList: props.sharedForms,
         projectFormList: props.projectForms,
+        orgForms: props.orgLibraryForms,
       });
     }
   };
@@ -553,6 +573,7 @@ class GeneralForms extends Component {
         myFormList,
         projectFormList,
         sharedFormList,
+        orgForms,
         isEditForm,
         isProjectForm,
       },
@@ -648,6 +669,7 @@ class GeneralForms extends Component {
                 formList={myFormList}
                 projectList={projectFormList}
                 sharedList={sharedFormList}
+                orgForms={orgForms}
                 handleRadioChange={this.handleMyFormChange}
                 // handleSaveForm={this.handleSaveForm}
                 loader={formLoader}
