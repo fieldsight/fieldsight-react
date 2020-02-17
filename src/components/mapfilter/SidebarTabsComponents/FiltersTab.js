@@ -30,7 +30,11 @@ class FiltersTab extends PureComponent {
       handleProjectParentCheckbox,
       applyFilter,
       onClickClearBtn,
+      path,
     } = this.props;
+    // const {
+    //   match: { path },
+    // } = this.props;
     return (
       <div
         className={`tab-pane fade ${
@@ -41,7 +45,12 @@ class FiltersTab extends PureComponent {
         aria-labelledby="sidebar-filter_tab"
       >
         <Accordion id="accordion" className="map-accordion">
-          <Card>
+          <Card
+            style={{
+              display:
+                path === '/team-mapfilter/:id' ? 'block' : 'none',
+            }}
+          >
             <Card.Header>
               <Accordion.Toggle
                 as={Card.Link}

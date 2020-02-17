@@ -50,6 +50,7 @@ class MainSidebarTab extends PureComponent {
         geolayersList,
         geolayersOnChange,
         colorBySelection,
+        path,
       },
       // match: {
       //   params: { id: siteId },
@@ -161,6 +162,7 @@ class MainSidebarTab extends PureComponent {
             handleRegionParentCheckbox={handleRegionParentCheckbox}
             onClickClearBtn={onClickClearBtn}
             applyFilter={applyFilter}
+            path={path}
           />
           <MetricsTab
             activeTab={activeTab}

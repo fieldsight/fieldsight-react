@@ -15,9 +15,70 @@ import PrintControlDefault from 'react-leaflet-easyprint';
 import MeasureControlDefault from 'react-leaflet-measure';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import ProgressLegend from './LegendComponents/ProgressLegend';
+// import worker from './webWorker/markerColorChangeWorker';
+// import WebWorker from './webWorker/workerSetup';
 
 const { BaseLayer } = LayersControl;
-
+const formStatusColor = ['#0080ff', '#FF0000', '#FFFF00', '#069806'];
+const progressColor = [
+  '#FF0000',
+  '#f66565',
+  '#f4c08c',
+  '#FFFF00',
+  '#7FFF00',
+  '#00FF00',
+  '#069806',
+];
+const otherColors = [
+  '#e69109',
+  '#f0e111',
+  '#9ff035',
+  '#34ede1',
+  '#63a4ff',
+  '#8629ff',
+  '#e553ed',
+  '#f2575f',
+  '#915e0d',
+  '#a1970d',
+  '#4f7d14',
+  '#07aba1',
+  '#1d4c8f',
+  '#491991',
+  '#610766',
+  '#6e0208',
+];
+const progressList = [
+  '0%',
+  '1-20%',
+  '21-40%',
+  '41-60%',
+  '61-80%',
+  '81-99%',
+  '100%',
+];
+const statusList = ['Pending', 'Rejected', 'Flagged', 'Approved'];
+const geojsonMarkerStyle = {
+  radius: 6,
+  fillColor: '#ff7800',
+  color: '#000',
+  weight: 1,
+  opacity: 1,
+  fillOpacity: 0.8,
+};
+const measureOptions = {
+  position: 'topright',
+  primaryLengthUnit: 'meters',
+  secondaryLengthUnit: 'kilometers',
+  primaryAreaUnit: 'sqmeters',
+  secondaryAreaUnit: 'acres',
+  activeColor: '#db4a29',
+  completedColor: '#9b2d14',
+};
+const unassignedLegend = {
+  background: 'white',
+  element: 'Unassigned',
+};
 const PrintControl = withLeaflet(PrintControlDefault);
 const MeasureControl = withLeaflet(MeasureControlDefault);
 class MapComponent extends PureComponent {
@@ -26,15 +87,13 @@ class MapComponent extends PureComponent {
     this.state = {
       lat: 27.7172,
       lng: 85.324,
-      projectsLegend: null,
+      projectsLegend: [],
       progressLegend: [],
       statusLegend: [],
       sitetypeLegend: [],
       regionLegend: [],
     };
   }
-
-  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
     // let allLayers = null;
@@ -44,26 +103,10 @@ class MapComponent extends PureComponent {
       groupRef,
       projectsRegionTypes,
       projectsList,
-      loaderOn,
     } = this.props;
+    const { projectsLegend, progressLegend } = this.state;
     const map = mapRef.current.leafletElement;
-    const clearProgressLegend = () => {
-      this.setState({ progressLegend: [] });
-    };
-    const clearStatusLegend = () => {
-      this.setState({ statusLegend: [] });
-    };
-    const clearSiteTypeLegend = () => {
-      this.setState({ sitetypeLegend: [] });
-    };
-    const clearRegionLegend = () => {
-      this.setState({ regionLegend: [] });
-    };
-    // const featuregroup = groupRef.current.leafletElement;
-    // if (prevProps.geojson !== geojson) {
-    //   map.fitBounds(featuregroup.getBounds());
-    // }
-    // let mcg = null;
+
     if (
       prevProps.colorBySelection !== colorBySelection ||
       (prevProps.clonePrimaryGeojson !== clonePrimaryGeojson &&
@@ -71,39 +114,7 @@ class MapComponent extends PureComponent {
     ) {
       // this.loaderOn();
       const allLayers = groupRef.current.leafletElement.getLayers();
-      const formStatusColor = [
-        '#0080ff',
-        '#FF0000',
-        '#FFFF00',
-        '#069806',
-      ];
-      const progressColor = [
-        '#FF0000',
-        '#f66565',
-        '#f4c08c',
-        '#FFFF00',
-        '#7FFF00',
-        '#00FF00',
-        '#069806',
-      ];
-      const otherColors = [
-        '#e69109',
-        '#f0e111',
-        '#9ff035',
-        '#34ede1',
-        '#63a4ff',
-        '#8629ff',
-        '#e553ed',
-        '#f2575f',
-        '#915e0d',
-        '#a1970d',
-        '#4f7d14',
-        '#07aba1',
-        '#1d4c8f',
-        '#491991',
-        '#610766',
-        '#6e0208',
-      ];
+
       const getGradient = (start, middle, end, gradlength) => {
         const gradient = gradstop({
           stops: gradlength,
@@ -119,30 +130,12 @@ class MapComponent extends PureComponent {
           return data.name;
         },
       );
-      const progressList = [
-        '0%',
-        '1-20%',
-        '21-40%',
-        '41-60%',
-        '61-80%',
-        '81-99%',
-        '100%',
-      ];
-      const statusList = [
-        'Pending',
-        'Rejected',
-        'Flagged',
-        'Approved',
-      ];
       const regions = projectsRegionTypes[0].regions.map(data => {
         return data.name;
       });
       const projectLists = projectsList.map(data => {
         return data.name;
       });
-      // console.log(siteTypes, 'site_types');
-      // console.log(regions, 'regions');
-      // console.log(projectLists, 'projectList');
       // add more colors if the length is more than 16. For projects, site_types and regions
       let slength = 0;
       let rlength = 0;
@@ -157,8 +150,6 @@ class MapComponent extends PureComponent {
         slength,
         rlength,
       );
-      // console.log(maxLengthValue, 'maxlength');
-      // console.log(otherColors, 'othercolors before loop');
       if (maxLengthValue > 16) {
         const start = '#09e609'; // '#ff6600';
         const medium = '#e67f09'; // '#b76e79';
@@ -181,158 +172,68 @@ class MapComponent extends PureComponent {
         // console.log(otherColors, 'othercolors after loop');
       }
       //   const v = mcg.getLayers();
-
-      //   console.log(v, 'mcg');
-      if (colorBySelection === 'progress') {
-        clearProgressLegend();
-        progressList.forEach((element, key) => {
-          const Progress = (
-            <>
-              <div>
-                <div
-                  className="circle"
-                  style={{
-                    border: '1px solid black',
-                    background: progressColor[key],
-                  }}
-                />
-                <span>{element}</span>
-              </div>
-              <br />
-            </>
-          );
-
-          this.setState(prevState => ({
-            progressLegend: prevState.progressLegend.concat(Progress),
-          }));
+      if (
+        colorBySelection === 'project' &&
+        projectsLegend.length <= 0
+      ) {
+        const projectArray = projectLists.map((element, key) => ({
+          element,
+          background: otherColors[key],
+        }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          projectsLegend: projectArray,
         });
       }
-      if (colorBySelection === 'status') {
-        clearStatusLegend();
-        statusList.forEach((element, key) => {
-          const Status = (
-            <>
-              <div>
-                <div
-                  className="circle"
-                  style={{
-                    border: '1px solid black',
-                    background: formStatusColor[key],
-                  }}
-                />
-                <span>{element}</span>
-              </div>
-              <br />
-            </>
-          );
+      if (
+        colorBySelection === 'progress' &&
+        progressLegend.length <= 0
+      ) {
+        const progressArray = progressList.map((element, key) => ({
+          element,
+          background: otherColors[key],
+        }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          progressLegend: progressArray,
+        });
+      }
 
-          this.setState(prevState => ({
-            statusLegend: prevState.statusLegend.concat(Status),
-          }));
+      if (colorBySelection === 'status') {
+        const statusArray = statusList.map((element, key) => ({
+          element,
+          background: formStatusColor[key],
+        }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          statusLegend: statusArray,
         });
       }
       if (colorBySelection === 'site_type') {
-        clearSiteTypeLegend();
-        const UnassignedSiteType = (
-          <>
-            <div>
-              <div
-                className="circle"
-                style={{
-                  border: '1px solid black',
-                  background: 'white',
-                }}
-              />
-              <span>Unassigned</span>
-            </div>
-            <br />
-          </>
-        );
-        const SetUnassigned = () => {
-          this.setState(prevState => ({
-            sitetypeLegend: prevState.sitetypeLegend.concat(
-              UnassignedSiteType,
-            ),
-          }));
-        };
+        const siteTypeArray = siteTypes.map((element, key) => ({
+          element,
+          background: otherColors[key],
+        }));
 
-        siteTypes.forEach((element, key) => {
-          const SiteType = (
-            <>
-              <div>
-                <div
-                  className="circle"
-                  style={{
-                    border: '1px solid black',
-                    background: otherColors[key],
-                  }}
-                />
-                <span>{element}</span>
-              </div>
-              <br />
-            </>
-          );
-
-          this.setState(prevState => ({
-            sitetypeLegend: prevState.sitetypeLegend.concat(SiteType),
-          }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          sitetypeLegend: siteTypeArray.concat(unassignedLegend),
         });
-        SetUnassigned();
       }
       if (colorBySelection === 'region') {
-        clearRegionLegend();
-        const UnassignedRegion = (
-          <>
-            <div>
-              <div
-                className="circle"
-                style={{
-                  border: '1px solid black',
-                  background: 'white',
-                }}
-              />
-              <span>Unassigned</span>
-            </div>
-            <br />
-          </>
-        );
-        const SetUnassigned = () => {
-          this.setState(prevState => ({
-            regionLegend: prevState.regionLegend.concat(
-              UnassignedRegion,
-            ),
-          }));
-        };
+        const regionArray = regions.map((element, key) => ({
+          element,
+          background: otherColors[key],
+        }));
 
-        regions.forEach((element, key) => {
-          const Region = (
-            <>
-              <div>
-                <div
-                  className="circle"
-                  style={{
-                    border: '1px solid black',
-                    background: otherColors[key],
-                  }}
-                />
-                <span>{element}</span>
-              </div>
-              <br />
-            </>
-          );
-
-          this.setState(prevState => ({
-            regionLegend: prevState.regionLegend.concat(Region),
-          }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          regionLegend: regionArray.concat(unassignedLegend),
         });
-        SetUnassigned();
       }
 
       Object.keys(allLayers).forEach(type => {
-        // console.log(allLayers[type].options.attribution);
         if (colorBySelection === 'project') {
-          // console.log(projectsList);
-          // console.log(projectList.length);
           projectsList.forEach((element, key) => {
             if (
               allLayers[type].options.properties.project ===
@@ -341,19 +242,6 @@ class MapComponent extends PureComponent {
               allLayers[type].setStyle({
                 fillColor: otherColors[key],
               });
-              const Projects = (
-                <div>
-                  <div
-                    className="circle"
-                    style={{
-                      border: '1px solid black',
-                      background: otherColors[key],
-                    }}
-                  />
-                  <span>{element.name}</span>
-                </div>
-              );
-              this.setState({ projectsLegend: Projects });
             }
           });
         }
@@ -434,10 +322,7 @@ class MapComponent extends PureComponent {
           }
         }
         if (colorBySelection === 'site_type') {
-          // console.log(projectsList);
-          // console.log(projectList.length);
           siteTypes.forEach((element, key) => {
-            // console.log(key, 'key');
             if (
               allLayers[type].options.properties.site_type === null
             ) {
@@ -454,8 +339,6 @@ class MapComponent extends PureComponent {
           });
         }
         if (colorBySelection === 'region') {
-          // console.log(projectsList);
-          // console.log(projectList.length);
           regions.forEach((element, key) => {
             // console.log(key, 'key');
             if (allLayers[type].options.properties.region === null) {
@@ -471,17 +354,7 @@ class MapComponent extends PureComponent {
             }
           });
         }
-        // console.log(full[type].setStyle({ fillColor: 'red' }));
       });
-      //   // console.log(allLayers);
-      //   // if (this.props.colorBySelection === 'status') {
-      //   //   allLayers._layers.forEach(element => {
-      //   //     if (this.props.mapRef.current.leafletElement._layers)
-      //   //       this.props.mapRef.current.leafletElement.setStyle({
-      //   //         fillColor: 'red',
-      //   //       });
-      //   //   });
-      //   // }
     }
     if (prevProps.clonePrimaryGeojson !== clonePrimaryGeojson) {
       map.fitBounds(groupRef.current.leafletElement.getBounds());
@@ -491,15 +364,6 @@ class MapComponent extends PureComponent {
   }
 
   render() {
-    const geojsonMarkerStyle = {
-      radius: 6,
-      fillColor: '#ff7800',
-      color: '#000',
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.8,
-    };
-
     const {
       props: {
         height,
@@ -521,19 +385,11 @@ class MapComponent extends PureComponent {
       },
     } = this;
     const position = [lat, lng];
-    const measureOptions = {
-      position: 'topright',
-      primaryLengthUnit: 'meters',
-      secondaryLengthUnit: 'kilometers',
-      primaryAreaUnit: 'sqmeters',
-      secondaryAreaUnit: 'acres',
-      activeColor: '#db4a29',
-      completedColor: '#9b2d14',
-    };
 
     return (
       <>
         <Map
+          preferCanvas
           ref={mapRef}
           center={position}
           zoom={8}
@@ -557,33 +413,14 @@ class MapComponent extends PureComponent {
           <div
             id="legend_id"
             className="map-sidebar left-map-sidebar"
-            style={{
-              left: '86%',
-              top: '471px',
-              bottom: '20px',
-              zIndex: '999',
-            }}
           >
             <div className="sidebar-wrapper">
               <div className="sidebar-title flex-between">
                 <h4>Legend</h4>
               </div>
             </div>
-            <div
-              style={{
-                marginLeft: '15px',
-              }}
-              className="panel-header"
-            >
-              <b
-                style={{
-                  margin: '0 auto',
-                  textTransform: 'capitalize',
-                  // color: 'red',
-                  fontWeight: 200,
-                  // border: '2px solid',
-                }}
-              >
+            <div className="panel-header">
+              <b>
                 {`${
                   colorBySelection === 'project'
                     ? 'projects'
@@ -595,54 +432,88 @@ class MapComponent extends PureComponent {
                 }`}
               </b>
             </div>
-            <div
-              className="whole-content"
-              style={{
-                margin: '15px',
-                overflowY: 'scroll',
-                maxHeight: '251px',
-                height: '182px',
-              }}
-            >
+            <div className="whole-content">
               <div className="panel-wrap mt-3">
                 <br />
                 <div className="panel-section">
                   <div id="legend">
-                    <div
-                      id="form_legend"
-                      style={{ marginTop: '-32px' }}
-                    >
+                    <div id="form_legend">
                       <div>
                         <div id="form_legend">
-                          <div>
-                            {colorBySelection === 'project'
-                              ? projectsLegend
-                              : ''}
-                          </div>
+                          {projectsLegend.map(element => {
+                            return (
+                              <div
+                                key={Math.random()}
+                                style={
+                                  colorBySelection === 'project'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
                           <br />
+                          {progressLegend.map(element => {
+                            return (
+                              <div
+                                style={
+                                  colorBySelection === 'progress'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
 
-                          <div style={{ marginTop: '-15px' }}>
-                            {colorBySelection === 'progress'
-                              ? progressLegend
-                              : ''}
-                          </div>
+                          {statusLegend.map(element => {
+                            return (
+                              <div
+                                style={
+                                  colorBySelection === 'status'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
 
-                          <div>
-                            {colorBySelection === 'status'
-                              ? statusLegend
-                              : ''}
-                          </div>
+                          {sitetypeLegend.map(element => {
+                            return (
+                              <div
+                                style={
+                                  colorBySelection === 'site_type'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                                // style={{
+                                //   marginTop: '-15px',
+                                //   display: ${'block'},
+                                // }}
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
 
-                          <div>
-                            {colorBySelection === 'site_type'
-                              ? sitetypeLegend
-                              : ''}
-                          </div>
-                          <div>
-                            {colorBySelection === 'region'
-                              ? regionLegend
-                              : ''}
-                          </div>
+                          {regionLegend.map(element => {
+                            return (
+                              <div
+                                style={
+                                  colorBySelection === 'region'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
                           <br />
                         </div>
                       </div>

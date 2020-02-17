@@ -148,18 +148,25 @@ const getVisibleTodos = (state, action) => {
 };
 
 export default function(state = initialState, action) {
+  let allProjectsUrl = [];
   switch (action.type) {
     case GET_PROJECTS_LIST:
+      action.payload.forEach((element, key) => {
+        allProjectsUrl = allProjectsUrl.concat(
+          element.primary_geojson,
+        );
+      });
+      // return console.log(allProjectsUrl, 'reducer ');
       return {
         ...state,
         projectsList: [...action.payload],
-        projectPrimaryGeojsonUrl: action.payload[0].primary_geojson,
+        projectPrimaryGeojsonUrl: allProjectsUrl,
       };
     case GET_PRIMARY_MARKER_GEOJSON:
       return {
         ...state,
-        primaryGeojson: [action.payload],
-        clonePrimaryGeojson: [action.payload],
+        primaryGeojson: action.payload,
+        clonePrimaryGeojson: action.payload,
       };
     case GET_SECONDARY_MARKER_GEOJSON:
       return {

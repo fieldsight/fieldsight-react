@@ -2,10 +2,50 @@
   // .custom-checkbox {
   //   display: block !important;
   // }
+  .js-measuringprompt {
+    h3 {
+      font-size: 1rem;
+    }
+    p {
+      font-size: 0.7rem;
+    }
+  }
+  .leaflet-measure-resultpopup {
+    h3 {
+      font-size: 1rem;
+    }
+    p {
+      font-size: 0.7rem;
+    }
+  }
+  #legend_id {
+    left: 86%;
+    top: 471px;
+    bottom: 20px;
+    z-index: 999;
+  }
+  .panel-header {
+    margin-left: 15px;
+    b {
+      margin: 0 auto;
+      text-transform: capitalize;
+      // color: 'red',
+      font-weight: 200;
+      // border: '2px solid',
+    }
+  }
+  .whole-content {
+    margin: 15px;
+    overflow-y: scroll;
+    max-height: 251px;
+    height: 182px;
+  }
   .custom_btn_text {
     padding: 0 !important;
   }
-
+  #form_legend {
+    margin-top: -32px;
+  }
   .card-link {
     input[type='checkbox'] {
       margin-right: 7px;
