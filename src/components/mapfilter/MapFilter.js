@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import L from 'leaflet';
 import Axios from 'axios';
-// import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import worker from './webWorker/filterWorker';
 import WebWorker from './webWorker/workerSetup';
 import Loader from '../common/Loader';
 import MapComponent from './MapComponent';
 import MapLeftTools from './MapLeftTools';
 import ModalSettings from './ModalSettings';
+
 import {
   getPrimaryMarkerGeojson,
   getSecondaryMarkerGeojson,
@@ -49,6 +51,7 @@ const INITIAL_STATE = {
   isRegionSelected: false,
   loadallGeoLayer: false,
   filterLegendSelection: 'project',
+  allProjectName: [],
 };
 class MapFilter extends PureComponent {
   constructor(props) {
@@ -82,6 +85,7 @@ class MapFilter extends PureComponent {
   }
 
   componentDidMount() {
+    // this.setState({allSiteName: })
     window.addEventListener(
       'resize',
       this.updateDimensions.bind(this),
@@ -247,13 +251,20 @@ class MapFilter extends PureComponent {
     // if (totalsearchLength === 0) {
     //   this.props.refreshGeojsonData();
     // }
+    const filterSetState = filteredName => {
+      this.setState({
+        allProjectName: filteredName,
+      });
+    };
     const {
       mapFilterReducer: {
         clonePrimaryGeojson,
         projectsList,
         projectPrimaryGeojsonUrl,
+        primaryGeojson,
       },
     } = this.props;
+
     if (
       prevProps.mapFilterReducer.projectPrimaryGeojsonUrl !==
       projectPrimaryGeojsonUrl
@@ -273,7 +284,16 @@ class MapFilter extends PureComponent {
     if (prevProps.mapFilterReducer.projectsList !== projectsList) {
       this.insertProjectNameInState();
     }
-
+    if (
+      prevProps.mapFilterReducer.primaryGeojson !== primaryGeojson
+    ) {
+      const filteredName = primaryGeojson[0].features.map(
+        sitename => {
+          return sitename.properties.name;
+        },
+      );
+      filterSetState(filteredName);
+    }
     // this.props.refreshGeojsonData();
     // if (
     //   prevState.isProgressSelected === this.state.isProgressSelected
@@ -859,8 +879,9 @@ class MapFilter extends PureComponent {
     // const { mapFilterReducer: clonePrimaryGeojson } = this.props;
   };
 
-  handleSearchChange = e => {
-    this.setState({ searchText: e.target.value });
+  handleSearchChange = data => {
+    console.log(data[0], 'eeeesss');
+    this.setState({ searchText: data[0] });
     // if (this.state.searchText.length === 0) {
     //   console.log('inside');
     //   this.props.refreshGeojsonData();
@@ -999,6 +1020,7 @@ class MapFilter extends PureComponent {
         isStatusSelected,
         isSiteTypeSelected,
         isRegionSelected,
+        allProjectName,
       },
     } = this;
     return (
@@ -1087,7 +1109,7 @@ class MapFilter extends PureComponent {
                         </ul>
                       </section>
                     </section>
-                    <input
+                    {/* <input
                       style={{
                         display:
                           searchByItem === 'name' ? 'flex' : 'none',
@@ -1098,16 +1120,26 @@ class MapFilter extends PureComponent {
                       onChange={this.handleSearchChange}
                       onKeyDown={this.handleSearchEnter}
                       placeholder="Search By Site Name"
-                    />
-                    {/* )} */}
-                    {/* <Typeahead
-                      className="custom-css-typeahead"
-                      placeholder="Search By Site Name"
-                      onChange={selected => {
-                        // Handle selections...
-                      }}
-                      options={['varun', 'deepak', 'ram']}
                     /> */}
+                    {/* )} */}
+                    <div
+                      style={{
+                        display:
+                          searchByItem === 'name' ? 'flex' : 'none',
+                      }}
+                    >
+                      <Typeahead
+                        className="custom-css-typeahead"
+                        placeholder="Search By Site Name"
+                        onChange={selected => {
+                          this.handleSearchChange(selected);
+                          // Handle selections...
+                        }}
+                        selectHintOnEnter
+                        onKeyDown={this.handleSearchEnter}
+                        options={allProjectName}
+                      />
+                    </div>
                     <span
                       className={`input-group-append ${
                         searchDropdown ? 'open' : ''

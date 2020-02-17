@@ -21,6 +21,7 @@ const initialState = {
 };
 
 const getSearchPrimaryGeojson = (state, action) => {
+  console.log(action.payload, 'payload');
   const filteredData = state.primaryGeojson[0].features.filter(
     data => {
       const projectname = data.properties.name.toLowerCase();
