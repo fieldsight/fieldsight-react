@@ -11,7 +11,7 @@ const ShowRow = ({ name }) => (
     <tr>
       <td />
       <td>{!!name && <strong>{name}</strong>}</td>
-      <td colSpan={6} />
+      <td colSpan={7} />
     </tr>
   </Fragment>
 );
@@ -58,6 +58,16 @@ const ShowContentRow = ({
       <td>
         <a className="rejected">{rejected}</a>
       </td>
+      <td>
+        <a
+          href={`/fieldsight/application/#/organization-exports/${orgId}/${id}`}
+          className="edit-tag tag"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i className="la la-download " />
+        </a>
+      </td>
     </tr>
   );
 };
@@ -88,6 +98,7 @@ class ProgressTable extends React.PureComponent {
                       <th>Approved</th>
                       <th>Flagged</th>
                       <th>Rejected</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>

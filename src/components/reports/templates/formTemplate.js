@@ -1,12 +1,15 @@
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Dropdown } from 'react-bootstrap';
+import { format } from 'date-fns';
 import { BlockContentLoader } from '../../common/Loader';
+
 /* eslint-disable */
 
 export default class FormTemplate extends PureComponent {
   render() {
     const {
+      id,
       general,
       generalhandle,
       formLoader,
@@ -51,7 +54,11 @@ export default class FormTemplate extends PureComponent {
         <div className="row">
           <div className="col-md-8">
             <div className="report-content">
-              <a href="#">
+              <a
+                href={`/fieldsight/application/#/data-export/${id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <h4>Form Data</h4>
               </a>
               <p>
@@ -100,17 +107,40 @@ export default class FormTemplate extends PureComponent {
                               onKeyDown={() => {
                                 generalLinkhandle(
                                   genInfo.id,
+                                  genInfo.title,
                                   projectCreatedOn,
                                 );
                               }}
                               onClick={() => {
                                 generalLinkhandle(
                                   genInfo.id,
+                                  genInfo.title,
                                   projectCreatedOn,
                                 );
                               }}
                             >
-                              {genInfo.title}
+                              <div className="summary-content">
+                                <p>{genInfo.title}</p>
+                                {genInfo.schedule_type && (
+                                  <p>
+                                    <b>Schedule Type</b>
+                                    <span>
+                                      {genInfo.schedule_type}
+                                    </span>
+                                  </p>
+                                )}
+                                {genInfo.last_synced_date && (
+                                  <p>
+                                    <b>Last Synced Date</b>
+                                    <span>
+                                      {format(
+                                        genInfo.last_synced_date,
+                                        'YYYY-MM-DD',
+                                      )}
+                                    </span>
+                                  </p>
+                                )}
+                              </div>
                             </span>
                           </p>
                         ))
@@ -161,17 +191,40 @@ export default class FormTemplate extends PureComponent {
                               onKeyDown={() => {
                                 generalLinkhandle(
                                   scheinfo.id,
+                                  scheinfo.title,
                                   projectCreatedOn,
                                 );
                               }}
                               onClick={() => {
                                 generalLinkhandle(
                                   scheinfo.id,
+                                  scheinfo.title,
                                   projectCreatedOn,
                                 );
                               }}
                             >
-                              {scheinfo.title}
+                              <div className="summary-content">
+                                <p>{scheinfo.title}</p>
+                                {scheinfo.schedule_type && (
+                                  <p>
+                                    <b>Schedule Type</b>
+                                    <span>
+                                      {scheinfo.schedule_type}
+                                    </span>
+                                  </p>
+                                )}
+                                {scheinfo.last_synced_date && (
+                                  <p>
+                                    <b>Last Synced Date</b>
+                                    <span>
+                                      {format(
+                                        scheinfo.last_synced_date,
+                                        'YYYY-MM-DD',
+                                      )}
+                                    </span>
+                                  </p>
+                                )}
+                              </div>
                             </span>
                           </p>
                         ))
@@ -221,17 +274,40 @@ export default class FormTemplate extends PureComponent {
                               onKeyDown={() => {
                                 generalLinkhandle(
                                   surData.id,
+                                  surData.title,
                                   projectCreatedOn,
                                 );
                               }}
                               onClick={() => {
                                 generalLinkhandle(
                                   surData.id,
+                                  surData.title,
                                   projectCreatedOn,
                                 );
                               }}
                             >
-                              {surData.title}
+                              <div className="summary-content">
+                                <p>{surData.title}</p>
+                                {surData.schedule_type && (
+                                  <p>
+                                    <b>Schedule Type</b>
+                                    <span>
+                                      {surData.schedule_type}
+                                    </span>
+                                  </p>
+                                )}
+                                {surData.last_synced_date && (
+                                  <p>
+                                    <b>Last Synced Date</b>
+                                    <span>
+                                      {format(
+                                        surData.last_synced_date,
+                                        'YYYY-MM-DD',
+                                      )}
+                                    </span>
+                                  </p>
+                                )}
+                              </div>
                             </span>
                           </p>
                         ))
@@ -275,16 +351,11 @@ export default class FormTemplate extends PureComponent {
                       ) : stagedData && stagedData.length > 0 ? (
                         stagedData.map(satData => (
                           <p
-                            // role="button"
-                            // tabIndex="0"
                             className="dropdown"
                             key={satData.name}
                             onClick={() => {
                               showSubStage(satData.name);
                             }}
-                            // onKeyDown={() => {
-                            //   this.showSubStage(satData.name);
-                            // }}
                           >
                             {satData.name}
 
@@ -309,17 +380,41 @@ export default class FormTemplate extends PureComponent {
                                     onKeyDown={() => {
                                       generalLinkhandle(
                                         sub.id,
+                                        sub.form_name,
                                         projectCreatedOn,
                                       );
                                     }}
                                     onClick={() => {
                                       generalLinkhandle(
                                         sub.id,
+                                        sub.form_name,
                                         projectCreatedOn,
                                       );
                                     }}
                                   >
-                                    {sub.form_name}
+                                    <div className="summary-content">
+                                      <p>{sub.form_name}</p>
+                                      {sub.schedule_type && (
+                                        <p>
+                                          <b>Schedule Type</b>
+                                          <span>
+                                            {sub.schedule_type}
+                                          </span>
+                                        </p>
+                                      )}
+                                      {sub.last_synced_date && (
+                                        <p>
+                                          <b>Last Synced Date</b>
+                                          <span>
+                                            {format(
+                                              sub.last_synced_date,
+                                              'YYYY-MM-DD',
+                                            )}
+                                          </span>
+                                        </p>
+                                      )}
+                                    </div>
+                                    {/* {sub.form_name} */}
                                   </span>
                                 </li>
                               ))}

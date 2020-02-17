@@ -30,9 +30,13 @@ class ReportDashboard extends Component {
       loader: false,
       filteredList: {},
       toFilterList: {
-        filterByRegions: [],
-        filterBySiteType: [],
-        filterByUserRoles: [],
+        filterByRegions: [{ id: 'all_regions', name: 'Select All' }],
+        filterBySiteType: [
+          { id: 'all_sitetypes', name: 'Select All' },
+        ],
+        filterByUserRoles: [
+          { id: 'all_userroles', name: 'Select All' },
+        ],
       },
       toggleSelectClass: {
         filterRegion: false,
@@ -40,6 +44,7 @@ class ReportDashboard extends Component {
         filterUserRole: false,
       },
       filterDataLoaded: false,
+      breadcrumb: {},
     };
   }
 
@@ -53,6 +58,12 @@ class ReportDashboard extends Component {
     } = this;
     this.props.getReportData(id);
     this.props.getToFilterData(pid);
+    axios
+      .get(`/fv3/api/settings-breadcrumbs/${pid}/?type=project`)
+      .then(res => {
+        this.setState({ breadcrumb: res.data });
+      })
+      .catch(() => {});
   }
 
   componentDidMount() {
@@ -108,7 +119,7 @@ class ReportDashboard extends Component {
   loadSelectedFilter = list => {
     this.setState({
       filteredList: list,
-      filterDataLoaded: true,
+      // filterDataLoaded: true,
     });
   };
 
@@ -289,6 +300,7 @@ class ReportDashboard extends Component {
         },
         filteredList,
         filterDataLoaded,
+        breadcrumb,
       },
     } = this;
 
@@ -298,11 +310,13 @@ class ReportDashboard extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a
-                href={`/fieldsight/application/#/project-dashboard/${pid}/report`}
+                href={breadcrumb.name_url}
+                style={{ color: '#00628E' }}
               >
-                Report
+                {breadcrumb.name}
               </a>
             </li>
+            <li className="breadcrumb-item">{title}</li>
             <li className="breadcrumb-item">View Report</li>
           </ol>
         </nav>
@@ -387,7 +401,11 @@ class ReportDashboard extends Component {
               />
             )}
 
-            <CollapseFilterTable id={id} projectId={pid} />
+            <CollapseFilterTable
+              id={id}
+              projectId={pid}
+              getReportDataById={this.props.getReportData}
+            />
 
             <div className="form-group pull-right no-margin">
               <button

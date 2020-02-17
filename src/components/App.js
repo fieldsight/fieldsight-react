@@ -68,20 +68,20 @@ import OrganizationTeams from './organizationTeamList';
 import TotalOrganizationSubmission from './adminDashboard/organizationSettings/totalOrganizationSubmission';
 import TotalSiteSubmission from './adminDashboard/organizationSettings/totalSiteSubmission';
 
+import Templates from './reports/templates';
+import Reports from './reports';
 import ReportDashboard from './reports/viewReport';
-
-// import FilterDataFilter from './reports/FormDataFilter';
-import ExportDataFilter from './reports/ExportDataFilter';
+import ExportDataFilter from './reports/templates/ExportDataFilter';
 import UserList from './reports/users/usersTable';
 import UserProfile from './reports/users/userProfile/index';
-import RegionDashboard from './reports/regionDashboard/index';
 import UserManage from './reports/users/userManage';
 import MyFormTable from './reports/myForm';
 import Submission from './reports/submission';
 import AddNewReport from './reports/addNewReport';
-import FormDataFilter from './reports/FormDataFilter';
-import ActivityExportFile from './reports/activityExportFile';
-import UserExportReport from './reports/userExportReport';
+import FormDataFilter from './reports/templates/FormDataFilter';
+import ActivityExportFile from './reports/templates/activityExportFile';
+import UserExportReport from './reports/templates/userExportReport';
+import DataExport from './reports/dataExport';
 
 import OrganizationExport from './excelExport/organizationExport';
 import ExcelExport from './excelExport';
@@ -398,10 +398,7 @@ class App extends Component {
                   path="/userProfile"
                   render={props => <UserProfile {...props} />}
                 />
-                <Route
-                  path="/region-dashboard"
-                  render={props => <RegionDashboard {...props} />}
-                />
+
                 <Route
                   path="/user-manage"
                   render={props => <UserManage {...props} />}
@@ -423,6 +420,10 @@ class App extends Component {
                   render={props => <UserExportReport {...props} />}
                 />
                 <Route
+                  path="/data-export/:id"
+                  render={props => <DataExport {...props} />}
+                />
+                <Route
                   path="/organization-projects/:id"
                   render={props => (
                     <OragnizatonProjectList {...props} />
@@ -435,6 +436,14 @@ class App extends Component {
                   )}
                 />
 
+                <Route
+                  path="/project/:projectId/report"
+                  render={props => <Templates {...props} />}
+                />
+                <Route
+                  path="/report-list/:projectId/"
+                  render={props => <Reports {...props} />}
+                />
                 <Route
                   path="/view-report/:pid/:id"
                   render={props => <ReportDashboard {...props} />}

@@ -41,6 +41,8 @@ export default class Form extends Component {
             : props.data.day
           : 1,
       projectId: props.projectId,
+      form: props.data.form_id,
+      reportType: 'form',
     };
   }
 
@@ -79,33 +81,63 @@ export default class Form extends Component {
         selectedDayOnMonth,
         reportId,
         projectId,
+        form,
+        reportType,
       },
     } = this;
-    const body = {
-      schedule_type: scheduleType,
-      project: JSON.parse(projectId),
-      day:
-        scheduleType === '2' && selectedDayOnWeek
-          ? selectedDayOnWeek
-          : scheduleType === '3' && selectedDayOnMonth
-          ? selectedDayOnMonth === '31'
-            ? '0'
-            : selectedDayOnMonth
-          : null,
-    };
-
-    Axios.put(
-      `/fv3/api/update-report-sync-settings/${reportId}/`,
-      body,
-    )
-      .then(res => {
-        this.props.handleSuccess(res.data);
-        successToast('form', 'updated');
-      })
-      .catch(err => {
-        const errors = err.response;
-        errorToast(errors.data.error);
-      });
+    if (reportId) {
+      const body = {
+        schedule_type: scheduleType,
+        project: JSON.parse(projectId),
+        day:
+          scheduleType === '2' && selectedDayOnWeek
+            ? selectedDayOnWeek
+            : scheduleType === '3' && selectedDayOnMonth
+            ? selectedDayOnMonth === '31'
+              ? '0'
+              : selectedDayOnMonth
+            : null,
+      };
+      Axios.put(
+        `/fv3/api/update-report-sync-settings/${reportId}/`,
+        body,
+      )
+        .then(res => {
+          this.props.handleSuccess(res.data);
+          successToast('form', 'updated');
+        })
+        .catch(err => {
+          const errors = err.response;
+          errorToast(errors.data.error);
+        });
+    } else {
+      const body = {
+        schedule_type: scheduleType,
+        project: JSON.parse(projectId),
+        day:
+          scheduleType === '2' && selectedDayOnWeek
+            ? selectedDayOnWeek
+            : scheduleType === '3' && selectedDayOnMonth
+            ? selectedDayOnMonth === '31'
+              ? '0'
+              : selectedDayOnMonth
+            : null,
+        form,
+        report_type: reportType,
+      };
+      Axios.post(
+        `/fv3/api/add-report-sync-settings/?project_id=${projectId}`,
+        body,
+      )
+        .then(res => {
+          this.props.handleSuccess(res.data);
+          successToast('form', 'updated');
+        })
+        .catch(err => {
+          const errors = err.response;
+          errorToast(errors.data.error);
+        });
+    }
   };
 
   render() {

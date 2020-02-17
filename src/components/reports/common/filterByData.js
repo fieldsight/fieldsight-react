@@ -14,7 +14,6 @@ export default class FilterByData extends PureComponent {
       selectedArr,
       placeholderTxt,
     } = this.props;
-    // debugger;
     return (
       <div className={className}>
         <label className="mb-2">{label}</label>

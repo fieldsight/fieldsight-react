@@ -350,7 +350,7 @@ class MyReports extends Component {
             onCancel={closeDeleteHandler}
             onConfirm={deleteAction}
             onToggle={closeDeleteHandler}
-            message="Are u sure you want to delete?"
+            message="Are you sure you want to delete?"
           />
         )}
       </>

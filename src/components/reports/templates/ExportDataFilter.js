@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
-import CustomMultiSelect from './common/CustomMultiSelect';
-import CollapseFilterTable from './CollapseFilterTable';
-import { errorToast, successToast } from '../../utils/toastHandler';
+import CustomMultiSelect from '../common/CustomMultiSelect';
+import CollapseFilterTable from '../CollapseFilterTable';
+import {
+  errorToast,
+  successToast,
+} from '../../../utils/toastHandler';
 
 export default class ExportDataFilter extends Component {
   constructor(props) {
@@ -209,7 +212,6 @@ export default class ExportDataFilter extends Component {
         siteSelected,
       },
     } = this;
-    // console.log('in export', projectRegions, selected);
     const DataCrude = [
       {
         id: '1',
@@ -238,19 +240,17 @@ export default class ExportDataFilter extends Component {
         params: { id },
       },
       location: {
-        state: { fromDashboard, projectCreatedOn },
+        state: { fromDashboard },
       },
     } = this.props;
-
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to={`/project-dashboard/${id}/report`}>
-                Report
-              </Link>
+              <Link to={`/project/${id}/report`}>Report</Link>
             </li>
+            <li className="breadcrumb-item">{fromDashboard}</li>
             <li className="breadcrumb-item">Export Data</li>
           </ol>
         </nav>
@@ -258,7 +258,7 @@ export default class ExportDataFilter extends Component {
           <div className="card">
             <div className="card-body">
               <div className="standard-tempalte">
-                <h3 className="mb-3">Template report</h3>
+                <h3 className="mb-3">Project report</h3>
 
                 <div className="report-list">
                   <div className="row">

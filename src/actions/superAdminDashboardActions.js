@@ -69,13 +69,3 @@ export const deleteOrgExport = orgId => dispatch => {
     })
     .catch(() => {});
 };
-
-export const downloadOrgExport = orgLibId => dispatch => {
-  axios
-    .get(`fv3/api/kobo/exports/${orgLibId}/`)
-    .then(res => {
-      dispatch({ type: DOWNLOAD_ORG_EXPORT, payload: res.data });
-    })
-    .catch(() => {});
-};
-// export default getSuperAdminDashboard;

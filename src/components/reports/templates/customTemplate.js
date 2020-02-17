@@ -49,9 +49,33 @@ export default class CustomTemplate extends PureComponent {
                           <span>{getType(custom.type)}</span>
                         </p>
                         <p>
-                          <b>no. of datapoints</b>
+                          <b>no. of columns</b>
                           <span>{custom.datapoints}</span>
                         </p>
+                        {custom.report_sync_settings
+                          .schedule_type && (
+                          <p>
+                            <b>Schedule Type</b>
+                            <span>
+                              {
+                                custom.report_sync_settings
+                                  .schedule_type
+                              }
+                            </span>
+                          </p>
+                        )}
+                        {custom.report_sync_settings
+                          .last_synced_date && (
+                          <p>
+                            <b>Last Synced Date</b>
+                            <span>
+                              {formatDate(
+                                custom.report_sync_settings
+                                  .last_synced_date,
+                              )}
+                            </span>
+                          </p>
+                        )}
                       </div>
                     </Link>
                   </div>

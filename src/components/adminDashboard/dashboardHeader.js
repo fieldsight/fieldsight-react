@@ -31,6 +31,7 @@ class DashboardHeader extends PureComponent {
       superAdminId,
       total_teams,
       total_submissions,
+      identifier,
     } = this.props;
     const ManageDropDown = [
       {
@@ -120,6 +121,17 @@ class DashboardHeader extends PureComponent {
                 {country && <span>{country}</span>}
                 &nbsp;&nbsp;&nbsp;
                 {additional_desc && <span>{additional_desc}</span>}
+                <div className="type-info">
+                  {identifier && (
+                    <div className="flex">
+                      <label>
+                        <strong>Identifier :</strong>
+                      </label>
+                      &nbsp;
+                      <span>{identifier}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}

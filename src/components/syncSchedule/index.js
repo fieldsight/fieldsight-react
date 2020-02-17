@@ -164,22 +164,55 @@ export default class SyncSchedule extends Component {
     });
   };
 
-  handleSyncReq = id => {
-    Axios.post(`/fv3/api/report-sync/${id}/`)
-      .then(res => {
-        if (res.data) {
-          toast.success(res.data.detail, {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-          });
-        }
-      })
-      .catch(err => {
-        const errors = err.response;
-        errorToast(errors.data.detail);
-      });
+  handleSyncReq = report => {
+    const {
+      match: {
+        params: { projectId },
+      },
+    } = this.props;
+    if (report.report_id) {
+      Axios.post(`/fv3/api/report-sync/${report.report_id}/`)
+        .then(res => {
+          if (res.data) {
+            toast.success(res.data.detail, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+            });
+          }
+        })
+        .catch(err => {
+          const errors = err.response;
+          errorToast(errors.data.detail);
+        });
+    } else {
+      const body = {
+        project: projectId,
+        form: report.form_id,
+        schedule_type: getScheduleType(report.schedule_type),
+        day: report.day,
+        report_type: report.report_type,
+      };
+      Axios.post(
+        `/fv3/api/organization-form-report-sync/?project_id=${projectId}`,
+        body,
+      )
+        .then(res => {
+          if (res.data) {
+            toast.success(res.data.detail, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+            });
+          }
+        })
+        .catch(err => {
+          const errors = err.response;
+          errorToast(errors.data.detail);
+        });
+    }
   };
 
   render() {

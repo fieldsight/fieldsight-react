@@ -23,13 +23,14 @@ const ShowContentRow = ({
   flagged,
   rejected,
   formUrl,
+  fromOrganization,
 }) => {
   const totalSubmissions = pending + approved + flagged + rejected;
   // const key = id ? `row_${name}_${sn}_${id}` : `row_${name}_${sn}`;
   return (
     <tr className={id ? 'sub-row' : 'heading-row'}>
       <td>{id ? `${sn}.${id}` : sn}</td>
-      <td>{name}</td>
+      <td>{fromOrganization ? `*${name}` : name}</td>
 
       <td>
         <div className="progress">
@@ -83,12 +84,7 @@ const CheckCase = ({ sub, sn }) => (
     <tr className="heading-row">
       <td>{sn}</td>
       <td>{sub.name}</td>
-      <td />
-      <td />
-      <td />
-      <td />
-      <td />
-      <td />
+      <td colSpan={6} />
     </tr>
     {sub.sub_stages &&
       sub.sub_stages.length > 0 &&
@@ -105,6 +101,7 @@ const CheckCase = ({ sub, sn }) => (
               flagged={item.flagged}
               rejected={item.rejected}
               formUrl={item.form_url}
+              fromOrganization={item.from_organization}
             />
           </Fragment>
         );
@@ -204,6 +201,9 @@ class ProgressTable extends React.PureComponent {
                               general.progress_data[0].rejected
                             }
                             formUrl={general.form_url}
+                            fromOrganization={
+                              general.from_organization
+                            }
                           />
                         </Fragment>
                       ))}
@@ -237,6 +237,9 @@ class ProgressTable extends React.PureComponent {
                               schedule.progress_data[0].rejected
                             }
                             formUrl={schedule.form_url}
+                            fromOrganization={
+                              schedule.from_organization
+                            }
                           />
                         </Fragment>
                       ))}

@@ -230,6 +230,7 @@ class TeamDashboard extends Component {
           total_users,
           package_details,
           postCardResponse,
+          identifier,
         },
         match: {
           params: { id: teamId },
@@ -331,6 +332,7 @@ class TeamDashboard extends Component {
                 activeTab={activeTab}
                 closeModal={closeModal}
                 openModal={openModal}
+                identifier={identifier}
               />
               <div className="row">
                 <div className="col-lg-8">

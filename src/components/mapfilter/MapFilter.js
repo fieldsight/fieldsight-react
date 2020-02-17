@@ -1061,14 +1061,14 @@ class MapFilter extends PureComponent {
                       // onKeyDown={this.handleSearchEnter}
                       placeholder="Search By Address"
                     />
-                    <section
+                    <div
                       className={`search-control-info-wrapper ${
                         isAddressSearched
                           ? ''
                           : 'search-control-info-wrapper-close'
-                      }`}
+                        }`}
                     >
-                      <section className="search-control-info">
+                      <div className="search-control-info">
                         <ul
                           className="search-control-info-list"
                           style={{ maxHeight: '260px' }}
@@ -1085,8 +1085,8 @@ class MapFilter extends PureComponent {
                               );
                             })}
                         </ul>
-                      </section>
-                    </section>
+                      </div>
+                    </div>
                     <input
                       style={{
                         display:
@@ -1111,7 +1111,7 @@ class MapFilter extends PureComponent {
                     <span
                       className={`input-group-append ${
                         searchDropdown ? 'open' : ''
-                      }`}
+                        }`}
                       onClick={this.searchDropdownClick}
                       onKeyPress={this.searchDropdownClick}
                       role="link"
@@ -1194,8 +1194,8 @@ class MapFilter extends PureComponent {
                     />
                   </span>
                 ) : (
-                  ''
-                )}
+                    ''
+                  )}
               </div>
               <MainSidebarTab
                 projectsList={projectsList}

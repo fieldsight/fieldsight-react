@@ -7,21 +7,21 @@ import DeleteModal from '../common/DeleteModal';
 /* eslint-disable  consistent-return */
 /* eslint-disable   react/destructuring-assignment */
 
-const getStatus = value => {
+export const getStatus = value => {
   if (value === 0) return <span>pending</span>;
   if (value === 1) return <span>Rejected</span>;
   if (value === 2) return <span>Flagged</span>;
   if (value === 3) return <span>Approved</span>;
 };
 
-const getClass = status => {
+export const getClass = status => {
   if (status === 0) return 'pending';
   if (status === 1) return 'rejected';
   if (status === 2) return 'flagged';
   if (status === 3) return 'approved';
 };
 
-const formatDate = date => {
+export const formatDate = date => {
   const dateIdx = date.getDate();
   const monthIndex = date.getMonth() + 1;
   const year = date.getFullYear();
@@ -127,27 +127,29 @@ const GetActionForProject = props => {
             </a>
           </span>
         )}
-        <a
-          onClick={() => editAction(item)}
-          className="pending td-edit-btn td-btn"
-          tabIndex="0"
-          role="button"
-          onKeyDown={() => editAction(item)}
-        >
-          <OverlayTrigger
-            placement="top"
-            overlay={
-              <Tooltip>
-                <FormattedMessage
-                  id="app.edit"
-                  defaultMessage="Edit"
-                />
-              </Tooltip>
-            }
+        {!item.from_organization && (
+          <a
+            onClick={() => editAction(item)}
+            className="pending td-edit-btn td-btn"
+            tabIndex="0"
+            role="button"
+            onKeyDown={() => editAction(item)}
           >
-            <i className="la la-edit" />
-          </OverlayTrigger>
-        </a>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip>
+                  <FormattedMessage
+                    id="app.edit"
+                    defaultMessage="Edit"
+                  />
+                </Tooltip>
+              }
+            >
+              <i className="la la-edit" />
+            </OverlayTrigger>
+          </a>
+        )}
 
         {!item.is_deployed && (
           <span>
@@ -348,6 +350,7 @@ class GeneralFormTable extends Component {
         formTable,
       },
     } = this;
+    const hasOrgForm = data.some(e => e.from_organization);
 
     return (
       <>
@@ -359,102 +362,115 @@ class GeneralFormTable extends Component {
             />
           </div>
         ) : (
-          <Table
-            responsive="xl"
-            className="table  table-bordered  dataTable "
-          >
-            <thead>
-              <tr>
-                <th>
-                  <FormattedMessage
-                    id="app.form-title"
-                    defaultMessage="Form Title"
-                  />
-                </th>
-                <th>
-                  <FormattedMessage
-                    id="app.response"
-                    defaultMessage="Responses"
-                  />
-                </th>
-                <th>
-                  <FormattedMessage
-                    id="app.formGuide"
-                    defaultMessage="Form Guide"
-                  />
-                </th>
-                <th>
-                  <FormattedMessage
-                    id="app.assigned-date"
-                    defaultMessage="Assigned Date"
-                  />
-                </th>
-                <th>
-                  <FormattedMessage
-                    id="app.defaultStatus"
-                    defaultMessage="Default status"
-                  />
-                </th>
-                <th width="15%">
-                  <FormattedMessage
-                    id="app.action"
-                    defaultMessage="Action"
-                  />
-                </th>
-              </tr>
-            </thead>
+          <>
+            <Table
+              responsive="xl"
+              className="table  table-bordered  dataTable "
+            >
+              <thead>
+                <tr>
+                  <th>
+                    <FormattedMessage
+                      id="app.form-title"
+                      defaultMessage="Form Title"
+                    />
+                  </th>
+                  <th>
+                    <FormattedMessage
+                      id="app.response"
+                      defaultMessage="Responses"
+                    />
+                  </th>
+                  <th>
+                    <FormattedMessage
+                      id="app.formGuide"
+                      defaultMessage="Form Guide"
+                    />
+                  </th>
+                  <th>
+                    <FormattedMessage
+                      id="app.assigned-date"
+                      defaultMessage="Assigned Date"
+                    />
+                  </th>
+                  <th>
+                    <FormattedMessage
+                      id="app.defaultStatus"
+                      defaultMessage="Default status"
+                    />
+                  </th>
+                  <th width="15%">
+                    <FormattedMessage
+                      id="app.action"
+                      defaultMessage="Action"
+                    />
+                  </th>
+                </tr>
+              </thead>
 
-            <tbody>
-              {/* {!loader && data.length === 0 && (
+              <tbody>
+                {/* {!loader && data.length === 0 && (
             <tr>
               <td colSpan={6}>
                 <p>No Form Data Available</p>
               </td>
             </tr>
           )} */}
-              {!loader &&
-                data.map(item => (
-                  <tr key={item.id}>
-                    <td>{item.xf ? item.xf.title : ''}</td>
-                    <td>{item.responses_count}</td>
-                    <td>
-                      <EducationMaterialForProject
-                        formTable={formTable}
-                        item={item}
-                        editForm={handleEditGuide}
-                      />
-                    </td>
-                    <td>
-                      <time>
-                        <i className="la la-clock-o" />
-                        {formatDate(new Date(item.date_created))}
-                      </time>
-                    </td>
-                    <td>
-                      <span
-                        className={getClass(
-                          item.default_submission_status,
-                        )}
-                      >
-                        {getStatus(item.default_submission_status)}
-                      </span>
-                    </td>
-                    <td>
-                      <GetActionForProject
-                        formTable={formTable}
-                        item={item}
-                        deployAction={changeDeployStatus}
-                        isDelete={this.state.confirmDelete}
-                        handleConfirm={this.handleConfirm}
-                        handleToggle={this.handleToggle}
-                        handleCancel={this.handleCancel}
-                        editAction={handleEditForm}
-                      />
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
+                {!loader &&
+                  data.map(item => (
+                    <tr key={item.id}>
+                      <td>
+                        {item.xf
+                          ? item.from_organization
+                            ? `*${item.xf.title}`
+                            : item.xf.title
+                          : ''}
+                      </td>
+                      <td>{item.responses_count}</td>
+                      <td>
+                        <EducationMaterialForProject
+                          formTable={formTable}
+                          item={item}
+                          editForm={handleEditGuide}
+                        />
+                      </td>
+                      <td>
+                        <time>
+                          <i className="la la-clock-o" />
+                          {formatDate(new Date(item.date_created))}
+                        </time>
+                      </td>
+                      <td>
+                        <span
+                          className={getClass(
+                            item.default_submission_status,
+                          )}
+                        >
+                          {getStatus(item.default_submission_status)}
+                        </span>
+                      </td>
+                      <td>
+                        <GetActionForProject
+                          formTable={formTable}
+                          item={item}
+                          deployAction={changeDeployStatus}
+                          isDelete={this.state.confirmDelete}
+                          handleConfirm={this.handleConfirm}
+                          handleToggle={this.handleToggle}
+                          handleCancel={this.handleCancel}
+                          editAction={handleEditForm}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
+            {hasOrgForm && (
+              <div className="form-group pull-right no-margin">
+                * denotes organization form
+              </div>
+            )}
+          </>
         )}
       </>
     );
