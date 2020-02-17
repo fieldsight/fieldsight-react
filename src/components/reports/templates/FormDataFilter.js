@@ -26,11 +26,13 @@ class FormDataFilter extends Component {
       siteSelected: [],
       projectRegions: [{ id: 'all_regions', name: 'Select All' }],
       siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
-      startedDate: '',
+      startedDate: new Date(localStorage.getItem('createdOn')),
       endedDate: new Date(),
       showPreview: false,
       taskId: '',
       fileToDownload: '',
+      formName: localStorage.getItem('form'),
+      projectCreatedOn: localStorage.getItem('createdOn'),
     };
   }
 
@@ -38,9 +40,6 @@ class FormDataFilter extends Component {
     const {
       match: {
         params: { id },
-      },
-      location: {
-        state: { projectCreatedOn },
       },
     } = this.props;
     const { projectRegions, siteType } = this.state;
@@ -79,9 +78,9 @@ class FormDataFilter extends Component {
         // react on errors.
       });
 
-    this.setState({
-      startedDate: new Date(projectCreatedOn),
-    });
+    // this.setState({
+    //   startedDate: new Date(projectCreatedOn),
+    // });
   }
 
   componentDidUpdate(prevProps) {
@@ -99,6 +98,11 @@ class FormDataFilter extends Component {
         this.setDownloadFile(resp.file_url);
       }
     }
+  }
+
+  componentWillUnmount() {
+    localStorage.removeItem('form');
+    localStorage.removeItem('createdOn');
   }
 
   setDownloadFile = file => {
@@ -292,6 +296,13 @@ class FormDataFilter extends Component {
         endedDate,
         showPreview,
         fileToDownload,
+        formName,
+        projectCreatedOn,
+      },
+      props: {
+        match: {
+          params: { id, fid },
+        },
       },
     } = this;
     const DataCrude = [
@@ -316,14 +327,7 @@ class FormDataFilter extends Component {
         link: '#',
       },
     ];
-    const {
-      match: {
-        params: { id, fid },
-      },
-      location: {
-        state: { projectCreatedOn, formName },
-      },
-    } = this.props;
+
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">

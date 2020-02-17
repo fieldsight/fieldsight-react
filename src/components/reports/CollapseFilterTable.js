@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 import { OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
@@ -261,9 +261,9 @@ class CollapseFilterTable extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
                 {actionExport.menu.map(item => (
-                  <>
+                  <Fragment key={item.key}>
                     {item.link && (
-                      <Dropdown.Item href={item.link} key={item.key}>
+                      <Dropdown.Item href={item.link}>
                         {item.text}
                       </Dropdown.Item>
                     )}
@@ -271,12 +271,11 @@ class CollapseFilterTable extends Component {
                       <Dropdown.Item
                         onClick={item.action}
                         onKeyDown={item.action}
-                        key={item.key}
                       >
                         {item.text}
                       </Dropdown.Item>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </Dropdown.Menu>
             </Dropdown>

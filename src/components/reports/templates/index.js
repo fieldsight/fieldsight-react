@@ -17,9 +17,9 @@ const StandardReportComponent = ({ path, data }) => (
   <Link
     to={{
       pathname: path,
-      state: {
-        fromDashboard: data.title,
-      },
+      // state: {
+      //   fromDashboard: data.title,
+      // },
     }}
   >
     <h4>{data.title}</h4>
@@ -165,14 +165,15 @@ class Templates extends Component {
 
   generalLinkhandle = (fromDashboard, formName, projectCreatedOn) => {
     const { id } = this.state;
-
+    localStorage.setItem('form', formName);
+    localStorage.setItem('createdOn', projectCreatedOn);
     return this.props.history.push({
       pathname: `/form-data/${id}/${fromDashboard}`,
-      state: {
-        fromDashboard,
-        formName,
-        projectCreatedOn,
-      },
+      // state: {
+      //   fromDashboard,
+      //   formName,
+      //   projectCreatedOn,
+      // },
     });
   };
 
@@ -293,14 +294,18 @@ class Templates extends Component {
                             {standardReport.title ===
                               'Site Information' && (
                               <StandardReportComponent
-                                path={`/export-data/${id}`}
+                                path={`/export-data/${id}/${encodeURI(
+                                  standardReport.title,
+                                )}`}
                                 data={standardReport}
                               />
                             )}
                             {standardReport.title ===
                               'Progress Report' && (
                               <StandardReportComponent
-                                path={`/export-data/${id}`}
+                                path={`/export-data/${id}/${encodeURI(
+                                  standardReport.title,
+                                )}`}
                                 data={standardReport}
                               />
                             )}
@@ -308,14 +313,18 @@ class Templates extends Component {
                             {standardReport.title ===
                               'Activity Report' && (
                               <StandardReportComponent
-                                path={`/user-export/${id}`}
+                                path={`/user-export/${id}/${encodeURI(
+                                  standardReport.title,
+                                )}`}
                                 data={standardReport}
                               />
                             )}
                             {standardReport.title ===
                               'Project Logs' && (
                               <StandardReportComponent
-                                path={`/user-export/${id}`}
+                                path={`/user-export/${id}/${encodeURI(
+                                  standardReport.title,
+                                )}`}
                                 data={standardReport}
                               />
                             )}
@@ -323,7 +332,9 @@ class Templates extends Component {
                             {standardReport.title ===
                               'User Activity Report' && (
                               <StandardReportComponent
-                                path={`/activity-export/${id}`}
+                                path={`/activity-export/${id}/${encodeURI(
+                                  standardReport.title,
+                                )}`}
                                 data={standardReport}
                               />
                             )}

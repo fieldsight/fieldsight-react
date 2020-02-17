@@ -186,11 +186,11 @@ class ExportDataFilter extends Component {
   handleApply = () => {
     const {
       match: {
-        params: { id },
+        params: { id, reportType },
       },
-      location: {
-        state: { fromDashboard },
-      },
+      // location: {
+      //   state: { fromDashboard },
+      // },
     } = this.props;
     const region = this.state.selected.filter(
       reg => reg.id !== 'all_regions',
@@ -202,7 +202,7 @@ class ExportDataFilter extends Component {
       regions: region.map(r => r.id),
       siteTypes: site.map(s => s.id),
     };
-    const route = this.toUpper(fromDashboard);
+    const route = this.toUpper(reportType);
 
     axios
       .post(
@@ -272,11 +272,11 @@ class ExportDataFilter extends Component {
 
     const {
       match: {
-        params: { id },
+        params: { id, reportType },
       },
-      location: {
-        state: { fromDashboard },
-      },
+      // location: {
+      //   state: { fromDashboard },
+      // },
     } = this.props;
     return (
       <>
@@ -285,7 +285,7 @@ class ExportDataFilter extends Component {
             <li className="breadcrumb-item">
               <Link to={`/project/${id}/report`}>Report</Link>
             </li>
-            <li className="breadcrumb-item">{fromDashboard}</li>
+            <li className="breadcrumb-item">{reportType}</li>
             <li className="breadcrumb-item">Export Data</li>
           </ol>
         </nav>
@@ -301,13 +301,13 @@ class ExportDataFilter extends Component {
                       <div className="report-content">
                         <h4>Export Data</h4>
 
-                        {fromDashboard === 'Site Information' && (
+                        {reportType === 'Site Information' && (
                           <p>
                             Export of all site information in an
                             spreadsheet
                           </p>
                         )}
-                        {fromDashboard === 'Progress Report' && (
+                        {reportType === 'Progress Report' && (
                           <p>
                             Export of key progress indicators like
                             submission count,status and site visits

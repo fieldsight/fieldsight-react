@@ -116,31 +116,31 @@ class ActivityExportFile extends Component {
     const {
       props: {
         match: {
-          params: { id },
+          params: { id, reportType },
         },
-        location: {
-          state: { fromDashboard },
-        },
+        // location: {
+        //   state: { fromDashboard },
+        // },
       },
       state: { startedDate, endedDate, scheduleType, project },
     } = this;
     const user = 'u';
-
+    const reportTitle = decodeURI(reportType);
     const data = {
       start_date: format(startedDate, ['YYYY-MM-DD']),
       end_date: format(endedDate, ['YYYY-MM-DD']),
-      ...(fromDashboard === 'Activity Report' && {
+      ...(reportTitle === 'Activity Report' && {
         type: scheduleType,
       }),
-      ...(fromDashboard === 'Project Logs' && {
+      ...(reportTitle === 'Project Logs' && {
         type: project,
       }),
-      ...(fromDashboard === 'User Activity Report' && {
+      ...(reportTitle === 'User Activity Report' && {
         type: `${user}${project}`,
       }),
     };
 
-    const route = this.toUpper(fromDashboard);
+    const route = this.toUpper(reportTitle);
 
     axios
       .post(
@@ -181,8 +181,8 @@ class ActivityExportFile extends Component {
         fileToDownload,
       },
       props: {
-        location: {
-          state: { fromDashboard },
+        match: {
+          params: { id, reportType },
         },
       },
       onChangeHandler,
@@ -212,11 +212,7 @@ class ActivityExportFile extends Component {
       },
     ];
 
-    const {
-      match: {
-        params: { id },
-      },
-    } = this.props;
+    const reportTitle = decodeURI(reportType);
 
     return (
       <>
@@ -239,20 +235,20 @@ class ActivityExportFile extends Component {
                     <div className="col-md-12">
                       <div className="report-content">
                         <h4>Export Data</h4>
-                        {fromDashboard === 'Activity Report' && (
+                        {reportTitle === 'Activity Report' && (
                           <p>
                             Export of site visits, submissions and
                             active users in a selected time interval.
                           </p>
                         )}
 
-                        {fromDashboard === 'Project Logs' && (
+                        {reportTitle === 'Project Logs' && (
                           <p>
                             Export of all the logs in the project in a
                             selected time interval.
                           </p>
                         )}
-                        {fromDashboard === 'User Activity Report' && (
+                        {reportTitle === 'User Activity Report' && (
                           <p>
                             Export of User Activities in a selected
                             time interval.
@@ -287,7 +283,7 @@ class ActivityExportFile extends Component {
                 <div className="data-filter mt-3">
                   <h3 className="mb-3">Filters</h3>
                   <form>
-                    {fromDashboard === 'Activity Report' && (
+                    {reportTitle === 'Activity Report' && (
                       <div className="form-group checkbox-group">
                         <label>Select Report Type:</label>
                         <div className="custom-checkbox display-inline">
