@@ -257,6 +257,8 @@ export default class SiteEdit extends Component {
   };
 
   handleCheckboxChange = e => {
+    e.persist();
+    // debugger;
     this.setState(state => ({
       project: {
         ...state.project,

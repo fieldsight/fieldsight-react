@@ -271,7 +271,7 @@ export default class Library extends Component {
             handleSubmit={this.handleSubmit}
             showButton
             showText="Create Form"
-            url="/forms/create"
+            url="/forms/create/"
           >
             <>
               <div className="form-group search-group mrt-15">
