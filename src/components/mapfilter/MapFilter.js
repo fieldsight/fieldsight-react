@@ -1066,7 +1066,7 @@ class MapFilter extends PureComponent {
                         isAddressSearched
                           ? ''
                           : 'search-control-info-wrapper-close'
-                        }`}
+                      }`}
                     >
                       <div className="search-control-info">
                         <ul
@@ -1111,7 +1111,7 @@ class MapFilter extends PureComponent {
                     <span
                       className={`input-group-append ${
                         searchDropdown ? 'open' : ''
-                        }`}
+                      }`}
                       onClick={this.searchDropdownClick}
                       onKeyPress={this.searchDropdownClick}
                       role="link"
@@ -1194,8 +1194,8 @@ class MapFilter extends PureComponent {
                     />
                   </span>
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
               </div>
               <MainSidebarTab
                 projectsList={projectsList}
