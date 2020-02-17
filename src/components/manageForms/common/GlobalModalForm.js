@@ -2,17 +2,11 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import { FormattedMessage } from 'react-intl';
 import DatePicker from 'react-datepicker';
-import RadioElement from '../common/RadioElement';
-import CheckBox from '../common/CheckBox';
-import SelectElement from '../common/SelectElement';
-
+import RadioElement from '../../common/RadioElement';
+import CheckBox from '../../common/CheckBox';
+import SelectElement from '../../common/SelectElement';
+import { getArrValue, getDay } from './getStatus';
 /* eslint-disable   react/destructuring-assignment */
-
-const getArrValue = (arr, value) => {
-  if (arr.includes(value)) return true;
-  return false;
-  // else return false;
-};
 
 class GlobalModalForm extends Component {
   _isMounted = false;
@@ -316,17 +310,13 @@ class GlobalModalForm extends Component {
 
   handleSelectRegionChange = region => {
     this.setState({
-      // return {
       regionSelected: region,
-      // };
     });
   };
 
   handleSelectTypeChange = type => {
     this.setState({
-      // return {
       typeSelected: type,
-      // };
     });
   };
 
@@ -347,13 +337,10 @@ class GlobalModalForm extends Component {
           errors,
         };
       }
-      // else {
-      //   errors = {};
       return {
         startDate: e,
         errors,
       };
-      // }
     });
   };
 
@@ -368,25 +355,11 @@ class GlobalModalForm extends Component {
           errors,
         };
       }
-      // else {
-      //   errors = {};
       return {
         endDate: e,
         errors,
       };
-      // }
     });
-  };
-
-  getDay = day => {
-    if (day === 'mon') return 1;
-    if (day === 'tue') return 2;
-    if (day === 'wed') return 3;
-    if (day === 'thu') return 4;
-    if (day === 'fri') return 5;
-    if (day === 'sat') return 6;
-    if (day === 'sun') return 7;
-    return null;
   };
 
   handleCheckbox = e => {
@@ -397,7 +370,7 @@ class GlobalModalForm extends Component {
     const {
       target: { name, checked },
     } = e;
-    const selectedDay = this.getDay(name);
+    const selectedDay = getDay(name);
     this.setState(
       preState => ({
         dailyArrDays: {
@@ -414,7 +387,6 @@ class GlobalModalForm extends Component {
             };
           }
           if (!checked) {
-            // const days = state.selectedDays;
             return {
               selectedDays: state.selectedDays.filter(
                 day => day !== selectedDay,
@@ -431,7 +403,7 @@ class GlobalModalForm extends Component {
     const {
       target: { name, checked },
     } = e;
-    const day = this.getDay(name);
+    const day = getDay(name);
     this.setState(
       state => {
         if (name === 'sun') {

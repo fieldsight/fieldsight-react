@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import {
-  errorToast,
-  successToast,
-} from '../../../utils/toastHandler';
+import { successToast } from '../../../utils/toastHandler';
 import RightContentCard from '../../common/RightContentCard';
 import Modal from '../../common/Modal';
 import DeleteModal from '../../common/DeleteModal';
 import FormTable from './formTable';
-import SelectElement from '../../common/SelectElement';
 import GeneralFormModal from './generalForm';
 import ScheduleFormModal from './scheduleform';
 import RadioElement from '../../common/RadioElement';
-import ManageModal from '../../manageForms/ManageModal';
 
 /* eslint-disable */
 
@@ -380,7 +375,7 @@ export default class MyForm extends Component {
     return (
       <>
         <RightContentCard
-          title="Organization Default Form"
+          title="Organization Default FormS"
           addButton
           toggleModal={this.handleChange}
           // buttonName="Add"

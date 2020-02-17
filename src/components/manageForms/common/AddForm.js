@@ -1,7 +1,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
-import RadioElement from '../common/RadioElement';
-import { DotLoader } from '../myForm/Loader';
+import RadioElement from '../../common/RadioElement';
+import { DotLoader } from '../../myForm/Loader';
 
 /* eslint-disable  consistent-return */
 /* eslint-disable   react/destructuring-assignment */

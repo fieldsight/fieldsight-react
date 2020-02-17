@@ -6,12 +6,12 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { DotLoader } from '../myForm/Loader';
 import Modal from '../common/Modal';
 import AddSubstageForm from './AddSubstageForm';
-import AddForm from './AddForm';
+import AddForm from './common/AddForm';
 import { errorToast, successToast } from '../../utils/toastHandler';
-import EditFormGuide from './EditFormGuide';
+import EditFormGuide from './common/EditFormGuide';
 import SortableStage from './SortableStage';
 import AddStageForm from './AddStageForm';
-import ManageModal from './ManageModal';
+import ManageModal from './common/ManageModal';
 import Loader from '../common/Loader';
 
 /* eslint-disable react/destructuring-assignment */

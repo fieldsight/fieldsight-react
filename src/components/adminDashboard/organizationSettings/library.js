@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import RightContentCard from '../../common/RightContentCard';
-import ManageModal from '../../manageForms/ManageModal';
-import Modal from '../../common/Modal';
+import ManageModal from '../../manageForms/common/ManageModal';
 import Loader from '../../common/Loader';
 import {
   errorToast,
   successToast,
 } from '../../../utils/toastHandler';
-
 import LibraryTable from './libraryTable';
-
 import DeleteModal from '../../common/DeleteModal';
 
 /* eslint-disable  react/no-unused-state */

@@ -117,45 +117,31 @@ class ProjectDashboard extends React.Component {
             </ol>
           )}
         </nav>
-        <DashboardHeader
-          name={name}
-          address={address}
-          logo={logo}
-          public_desc={public_desc}
-          totalUsers={total_users}
-          totalSites={total_sites}
-          totalSubmissions={project_activity.total_submissions}
-          id={projectId}
-          showContentLoader={projectDashboardLoader}
-          closeModal={this.closeModal}
-          openModal={this.openModal}
-          showCropper={showCropper}
-          termsAndLabels={terms_and_labels}
-          showGallery={showGallery}
-          isProjectManager={is_project_manager}
-          surveyData={surveyData}
-          path={url}
-          identifier={identifier}
-        />
-        <ProjectDashboardComponent projectId={projectId} />
-        {/* </div> */}
-        {/* <Switch>
-          <Route
-            exact
-            path={url}
-            render={props => (
-              <ProjectDashboardComponent
-                {...props}
-                projectId={projectId}
-              />
-            )}
-          />
-          <Route
-            exact
-            path={`${url}/report`}
-            render={props => <Templates {...props} id={projectId} />}
-          />
-        </Switch> */}
+        <div className="row">
+          <div className="col-xl-12">
+            <DashboardHeader
+              name={name}
+              address={address}
+              logo={logo}
+              public_desc={public_desc}
+              totalUsers={total_users}
+              totalSites={total_sites}
+              totalSubmissions={project_activity.total_submissions}
+              id={projectId}
+              showContentLoader={projectDashboardLoader}
+              closeModal={this.closeModal}
+              openModal={this.openModal}
+              showCropper={showCropper}
+              termsAndLabels={terms_and_labels}
+              showGallery={showGallery}
+              isProjectManager={is_project_manager}
+              surveyData={surveyData}
+              path={url}
+              identifier={identifier}
+            />
+            <ProjectDashboardComponent projectId={projectId} />
+          </div>
+        </div>
       </>
     );
   }

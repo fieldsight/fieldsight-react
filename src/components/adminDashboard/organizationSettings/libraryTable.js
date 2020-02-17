@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import Table from 'react-bootstrap/Table';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 import { DotLoader } from '../../myForm/Loader';
 
 /*  eslint-disable  */
