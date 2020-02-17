@@ -463,7 +463,11 @@ class App extends Component {
                   render={props => <TotalSiteSubmission {...props} />}
                 />
                 <Route
-                  path="/mapfilter/:id"
+                  path="/proj-mapfilter/:id"
+                  render={props => <MapFilter {...props} />}
+                />
+                <Route
+                  path="/team-mapfilter/:id"
                   render={props => <MapFilter {...props} />}
                 />
               </Switch>

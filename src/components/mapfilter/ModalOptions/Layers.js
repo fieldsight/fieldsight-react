@@ -19,10 +19,10 @@ class Layers extends Component {
   render() {
     const { addLayerClicked, uploadType } = this.state;
     const uploadTypeOptions = [
-      { value: 'csv', label: 'CSV' },
+      // { value: 'csv', label: 'CSV' },
       { value: 'geojson', label: 'Geojson' },
-      { value: 'kml', label: 'Kml' },
-      { value: 'shapefile', label: 'Shapefile' },
+      // { value: 'kml', label: 'Kml' },
+      // { value: 'shapefile', label: 'Shapefile' },
     ];
 
     return (

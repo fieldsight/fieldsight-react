@@ -30,7 +30,11 @@ class FiltersTab extends PureComponent {
       handleProjectParentCheckbox,
       applyFilter,
       onClickClearBtn,
+      path,
     } = this.props;
+    // const {
+    //   match: { path },
+    // } = this.props;
     return (
       <div
         className={`tab-pane fade ${
@@ -41,7 +45,12 @@ class FiltersTab extends PureComponent {
         aria-labelledby="sidebar-filter_tab"
       >
         <Accordion id="accordion" className="map-accordion">
-          <Card>
+          <Card
+            style={{
+              display:
+                path === '/team-mapfilter/:id' ? 'block' : 'none',
+            }}
+          >
             <Card.Header>
               <Accordion.Toggle
                 as={Card.Link}
@@ -53,7 +62,8 @@ class FiltersTab extends PureComponent {
                   type="checkbox"
                   name="projectCheckbox"
                   checked={isProjectSelected}
-                  onClick={handleProjectParentCheckbox}
+                  // onClick={handleProjectParentCheckbox}
+                  onChange={handleProjectParentCheckbox}
                 />
                 Projects
               </Accordion.Toggle>
@@ -104,7 +114,8 @@ class FiltersTab extends PureComponent {
                   name="progressCheckbox"
                   className="to_reset_checkbox"
                   checked={isProgressSelected}
-                  onClick={handleProgressParentCheckbox}
+                  // onClick={handleProgressParentCheckbox}
+                  onChange={handleProgressParentCheckbox}
                 />
                 Progress
               </Accordion.Toggle>
@@ -237,7 +248,8 @@ class FiltersTab extends PureComponent {
                   name="statusCheckbox"
                   className="to_reset_checkbox"
                   checked={isStatusSelected}
-                  onClick={handleStatusParentCheckbox}
+                  // onClick={handleStatusParentCheckbox}
+                  onChange={handleStatusParentCheckbox}
                 />
                 Form Status
               </Accordion.Toggle>
@@ -330,7 +342,8 @@ class FiltersTab extends PureComponent {
                   name="siteTypeCheckbox"
                   className="to_reset_checkbox"
                   checked={isSiteTypeSelected}
-                  onClick={handleSiteTypeParentCheckbox}
+                  // onClick={handleSiteTypeParentCheckbox}
+                  onChange={handleSiteTypeParentCheckbox}
                 />
                 Site Types
               </Accordion.Toggle>
@@ -382,7 +395,8 @@ class FiltersTab extends PureComponent {
                   name="regionCheckbox"
                   className="to_reset_checkbox"
                   checked={isRegionSelected}
-                  onClick={handleRegionParentCheckbox}
+                  // onClick={handleRegionParentCheckbox}
+                  onChange={handleRegionParentCheckbox}
                 />
                 Regions
               </Accordion.Toggle>
