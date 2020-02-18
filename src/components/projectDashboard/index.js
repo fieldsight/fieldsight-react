@@ -20,7 +20,9 @@ import {
   getProjectDashboard,
   getRegionData,
   getProgressTableData,
-  getSurveyForm
+  getSurveyForm,
+  getChartData,
+  getProjectLogs
 } from "../../actions/projectDashboardActions";
 import { LanguageContext } from "../../languageContext";
 
@@ -82,6 +84,8 @@ class ProjectDashboard extends React.Component {
     this.props.getProjectDashboard(projectId);
     this.props.getProgressTableData(projectId);
     this.props.getSurveyForm(projectId);
+    this.props.getChartData(projectId);
+    this.props.getProjectLogs(projectId);
     this.setState({ projectId: projectId });
     this.props.paginationHandler(1, null, {
       type: "projectSiteList",
@@ -90,29 +94,6 @@ class ProjectDashboard extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.projectDashboard != this.props.projectDashboard) {
-    //   const { projectId, activeTab } = this.state;
-    //   if (!!nextProps.projectDashboard.has_region && activeTab === "") {
-    //     this.setState(
-    //       {
-    //         activeTab: "region"
-    //       },
-    //       this.props.getRegionData(projectId)
-    //     );
-    //   } else if (!nextProps.projectDashboard.has_region && activeTab === "") {
-    //     this.setState(
-    //       {
-    //         activeTab: "site"
-    //       },
-    //       () => {
-    //         this.props.paginationHandler(1, null, {
-    //           type: "projectSiteList",
-    //           projectId: projectId
-    //         });
-    //       }
-    //     );
-    //   }
-    // }
     if (nextProps.match.params.id !== this.props.match.params.id) {
       const { id: projectId } = this.props.match.params;
 
@@ -123,12 +104,14 @@ class ProjectDashboard extends React.Component {
         () => {
           this.props.getProjectDashboard(projectId);
           this.props.getProgressTableData(projectId);
-
+          this.props.getChartData(projectId);
+          this.props.getProjectLogs(projectId);
           this.setState({ projectId: projectId });
         }
       );
     }
   }
+
   onChangeHandler = e => {
     const searchValue = e.target.value;
     const { projectId } = this.state;
@@ -494,7 +477,9 @@ export default compose(
     getProjectDashboard,
     getRegionData,
     getProgressTableData,
-    getSurveyForm
+    getSurveyForm,
+    getChartData,
+    getProjectLogs
   }),
   withPagination
 )(ProjectDashboard);

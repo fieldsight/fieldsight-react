@@ -8,7 +8,8 @@ import {
   SHOW_PROJECT_DASHBOARD_LOADERS,
   GET_REGION_DATA,
   GET_PROGRESS_TABLE_DATA,
-  GET_SURVEY_FORM
+  GET_SURVEY_FORM,
+  GET_CHART_DATA
 } from "./types";
 import { successToast, errorToast } from "../utils/toastHandler";
 
@@ -24,11 +25,7 @@ export const getProjectDashboard = id => dispatch => {
         payload: res.data
       });
     })
-    .catch(err => {
-      // dispatch({
-      //   type: SITE_DASHBOARD_ERR
-      // });
-    });
+    .catch(() => {});
 };
 
 export const getRegionData = id => dispatch => {
@@ -43,8 +40,9 @@ export const getRegionData = id => dispatch => {
         payload: res.data
       });
     })
-    .catch(err => {});
+    .catch(() => {});
 };
+
 export const getProgressTableData = id => dispatch => {
   dispatch({
     type: SHOW_PROJECT_DASHBOARD_LOADERS
@@ -57,10 +55,10 @@ export const getProgressTableData = id => dispatch => {
         payload: res.data
       });
     })
-    .catch(err => {});
+    .catch(() => {});
 };
 
-export const getSurveyForm = id => dispatch =>{
+export const getSurveyForm = id => dispatch => {
   axios
     .get(`/fv3/api/project-survey-forms/${id}/`)
     .then(res => {
@@ -69,5 +67,29 @@ export const getSurveyForm = id => dispatch =>{
         payload: res.data
       });
     })
-    .catch(err => {});
-}
+    .catch(() => {});
+};
+
+export const getChartData = id => dispatch => {
+  axios
+    .get(`/fv3/api/project-chart-data/${id}/`)
+    .then(res => {
+      dispatch({
+        type: GET_CHART_DATA,
+        payload: res.data
+      });
+    })
+    .catch(() => {});
+};
+
+export const getProjectLogs = id => dispatch => {
+  axios
+    .get(`/fv3/api/project-logs/${id}/`)
+    .then(res => {
+      dispatch({
+        type: GET_PROJECT_LOGS,
+        payload: res.data
+      });
+    })
+    .catch(() => {});
+};
