@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import L from 'leaflet';
 import Axios from 'axios';
-// import 'react-bootstrap-typeahead/css/Typeahead.css';
-
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import worker from './webWorker/filterWorker';
+import WebWorker from './webWorker/workerSetup';
 import Loader from '../common/Loader';
 import MapComponent from './MapComponent';
 import MapLeftTools from './MapLeftTools';
 import ModalSettings from './ModalSettings';
+
 import {
   getPrimaryMarkerGeojson,
   getSecondaryMarkerGeojson,
@@ -47,6 +50,8 @@ const INITIAL_STATE = {
   isSiteTypeSelected: false,
   isRegionSelected: false,
   loadallGeoLayer: false,
+  filterLegendSelection: 'project',
+  allProjectName: [],
 };
 class MapFilter extends PureComponent {
   constructor(props) {
@@ -58,8 +63,7 @@ class MapFilter extends PureComponent {
   }
 
   updateDimensions() {
-    const height =
-      window.innerWidth >= 992 ? window.innerHeight : 400;
+    const height = window.innerHeight;
     this.setState({ height: height - 85 });
   }
 
@@ -68,19 +72,24 @@ class MapFilter extends PureComponent {
     const {
       match: {
         params: { id },
+        path,
       },
     } = this.props;
-    this.props.getProjectsList(id);
-    this.props.getProjectsRegionTypes(id);
-    this.props.getGeolayersList(id);
+    const urlRole =
+      path === '/team-mapfilter/:id' ? 'team' : 'project';
+    this.props.getProjectsList(id, urlRole);
+    this.props.getProjectsRegionTypes(id, urlRole);
+    this.props.getGeolayersList(id, urlRole);
     // console.log(this.props, 'willmount');
   }
 
   componentDidMount() {
+    // this.setState({allSiteName: })
     window.addEventListener(
       'resize',
       this.updateDimensions.bind(this),
     );
+    const workers = new WebWorker(worker);
     const provider = new OpenStreetMapProvider();
     const form = document.querySelector('form');
     // console.log(form, 'form');
@@ -88,12 +97,22 @@ class MapFilter extends PureComponent {
     const searchselect = form.querySelector(
       '.search-control-info-list',
     );
+    this.worker = new WebWorker(worker);
+    // const myWorker = new Worker('worker.js');
+
+    // if (window.Worker) {
+    //   console.log('worker Running');
+    // }
     // console.log(input, 'input');
 
     // console.log(searchselect, 'searchselect');
     // const { addressSearch } = this.state;
+
     let results = [];
     searchselect.addEventListener('click', async el => {
+      document.getElementsByClassName(
+        'search-control-info',
+      )[0].style.display = 'none';
       const selectedIndex = el.target.value;
       // console.log(selectedIndex, 'index');
       const bbox = results[selectedIndex].bounds;
@@ -112,8 +131,17 @@ class MapFilter extends PureComponent {
       });
     });
     input.addEventListener('keyup', async () => {
+      // console.log(input.value, 'value');
       // event.preventDefault();
-
+      if (input.value.length < 1) {
+        document.getElementsByClassName(
+          'search-control-info',
+        )[0].style.display = 'none';
+      } else {
+        document.getElementsByClassName(
+          'search-control-info',
+        )[0].style.display = 'block';
+      }
       results = await provider.search({ query: input.value });
       // console.log(results); // » [{}, {}, {}, ...]
       if (results.length > 0) {
@@ -150,19 +178,27 @@ class MapFilter extends PureComponent {
     });
   }
 
+  fetchWebWorker = () => {
+    this.worker.postMessage('Fetch Users');
+
+    // this.worker.addEventListener('message', event => {
+    // });
+  };
+
   handleBaseLayer = selectedBaseLayer => {
     this.setState({ selectedBaseLayer });
   };
 
   handleMetricsChange = (e, usedState) => {
+    // this.fetchWebWorker();
     // console.log(e.value, usedState);
     if (usedState === 'Color') {
       // this.loaderOn();
 
-      this.setState({ isLoading: true }, () => {
-        this.setState({ colorBySelection: e.value }, () => {
-          this.setState({ isLoading: false });
-        });
+      // this.setState({ isLoading: true }, () => {
+      this.setState({ colorBySelection: e.value }, () => {
+        // this.setState({ isLoading: false });
+        // });
       });
     } else if (usedState === 'Size') {
       this.setState({ sizeBySelection: e.value });
@@ -196,12 +232,12 @@ class MapFilter extends PureComponent {
     const { checkedProjectItems } = this.state;
     if (projectsList) {
       if (projectsList.length >= 1) {
+        const projectPush = [];
         projectsList.map(data => {
-          return this.setState({
-            checkedProjectItems: checkedProjectItems.concat(
-              data.name,
-            ),
-          });
+          return projectPush.push(data.name);
+        });
+        this.setState({
+          checkedProjectItems: projectPush,
         });
       }
     }
@@ -222,13 +258,20 @@ class MapFilter extends PureComponent {
     // if (totalsearchLength === 0) {
     //   this.props.refreshGeojsonData();
     // }
+    const filterSetState = filteredName => {
+      this.setState({
+        allProjectName: filteredName,
+      });
+    };
     const {
       mapFilterReducer: {
         clonePrimaryGeojson,
         projectsList,
         projectPrimaryGeojsonUrl,
+        primaryGeojson,
       },
     } = this.props;
+
     if (
       prevProps.mapFilterReducer.projectPrimaryGeojsonUrl !==
       projectPrimaryGeojsonUrl
@@ -248,7 +291,16 @@ class MapFilter extends PureComponent {
     if (prevProps.mapFilterReducer.projectsList !== projectsList) {
       this.insertProjectNameInState();
     }
-
+    if (
+      prevProps.mapFilterReducer.primaryGeojson !== primaryGeojson
+    ) {
+      const filteredName = primaryGeojson[0].features.map(
+        sitename => {
+          return sitename.properties.name;
+        },
+      );
+      filterSetState(filteredName);
+    }
     // this.props.refreshGeojsonData();
     // if (
     //   prevState.isProgressSelected === this.state.isProgressSelected
@@ -360,10 +412,10 @@ class MapFilter extends PureComponent {
       const element = el;
       element.checked = false;
     });
-    document.querySelectorAll('input[type=radio]').forEach(el => {
-      const element = el;
-      element.checked = false;
-    });
+    // document.querySelectorAll('input[type=radio]').forEach(el => {
+    //   const element = el;
+    //   element.checked = false;
+    // });
   };
 
   handleRegionChange = e => {
@@ -375,22 +427,28 @@ class MapFilter extends PureComponent {
       this.setState({
         checkedRegionItems: joined,
         isRegionSelected: true,
+        filterLegendSelection: 'region',
       });
     } else {
       const filteredData = checkedRegionItems.filter(
         data => data !== item,
       );
-      this.setState({ checkedRegionItems: filteredData }, () => {
-        // console.log(
-        //   `Button Name (▶️️ inside callback) = `,
-        //   this.state.checkedProgressItems,
-        // ),
-        if (this.state.checkedRegionItems.length > 0) {
-          this.setState({ isRegionSelected: true });
-        } else {
-          this.setState({ isRegionSelected: false });
-        }
-      });
+      this.setState(
+        {
+          checkedRegionItems: filteredData,
+        },
+        () => {
+          // console.log(
+          //   `Button Name (▶️️ inside callback) = `,
+          //   this.state.checkedProgressItems,
+          // ),
+          if (this.state.checkedRegionItems.length > 0) {
+            this.setState({ isRegionSelected: true });
+          } else {
+            this.setState({ isRegionSelected: false });
+          }
+        },
+      );
     }
     // this.setState({ isfiltered: true });
     // this.setState({
@@ -402,12 +460,12 @@ class MapFilter extends PureComponent {
     const item = e.target.name;
     const isSiteChecked = e.target.checked;
     const { checkedSiteItems } = this.state;
-    console.log(isSiteChecked, 'checked');
     if (isSiteChecked === true) {
       const joined = checkedSiteItems.concat(item);
       this.setState({
         checkedSiteItems: joined,
         isSiteTypeSelected: true,
+        filterLegendSelection: 'site_type',
       });
     } else {
       const filteredData = checkedSiteItems.filter(
@@ -461,6 +519,7 @@ class MapFilter extends PureComponent {
       this.setState({
         checkedStatusItem: joined,
         isStatusSelected: true,
+        filterLegendSelection: 'status',
       });
     } else {
       const filteredData = checkedStatusItem.filter(
@@ -490,25 +549,32 @@ class MapFilter extends PureComponent {
     const isProjectChecked = e.target.checked;
     const { checkedProjectItems } = this.state;
     if (isProjectChecked === true) {
+      const joined = checkedProjectItems.concat(item);
       this.setState({
-        checkedProjectItems: [item],
+        checkedProjectItems: joined,
         isProjectSelected: true,
+        filterLegendSelection: 'project',
       });
     } else {
       const filteredData = checkedProjectItems.filter(
         data => data !== item,
       );
-      this.setState({ checkedProjectItems: filteredData }, () => {
-        // console.log(
-        //   `Button Name (▶️️ inside callback) = `,
-        //   this.state.checkedProgressItems,
-        // ),
-        if (this.state.checkedProjectItems.length > 0) {
-          this.setState({ isProjectSelected: true });
-        } else {
-          this.setState({ isProjectSelected: false });
-        }
-      });
+      this.setState(
+        {
+          checkedProjectItems: filteredData,
+        },
+        () => {
+          // console.log(
+          //   `Button Name (▶️️ inside callback) = `,
+          //   this.state.checkedProgressItems,
+          // ),
+          if (this.state.checkedProjectItems.length > 0) {
+            this.setState({ isProjectSelected: true });
+          } else {
+            this.setState({ isProjectSelected: false });
+          }
+        },
+      );
     }
   };
 
@@ -551,6 +617,7 @@ class MapFilter extends PureComponent {
       this.setState({
         checkedProgressItems: joined,
         isProgressSelected: true,
+        filterLegendSelection: 'progress',
       });
     } else {
       const filteredData = checkedProgressItems.filter(
@@ -560,17 +627,22 @@ class MapFilter extends PureComponent {
       // this.setState({
       //   checkedProgressItems: filteredData,
       // });
-      this.setState({ checkedProgressItems: filteredData }, () => {
-        // console.log(
-        //   `Button Name (▶️️ inside callback) = `,
-        //   this.state.checkedProgressItems,
-        // ),
-        if (this.state.checkedProgressItems.length > 0) {
-          this.setState({ isProgressSelected: true });
-        } else {
-          this.setState({ isProgressSelected: false });
-        }
-      });
+      this.setState(
+        {
+          checkedProgressItems: filteredData,
+        },
+        () => {
+          // console.log(
+          //   `Button Name (▶️️ inside callback) = `,
+          //   this.state.checkedProgressItems,
+          // ),
+          if (this.state.checkedProgressItems.length > 0) {
+            this.setState({ isProgressSelected: true });
+          } else {
+            this.setState({ isProgressSelected: false });
+          }
+        },
+      );
     }
   };
 
@@ -604,6 +676,7 @@ class MapFilter extends PureComponent {
         }
         this.setState({
           checkedProjectItems,
+          filterLegendSelection: 'project',
         });
         // this.setState({
         //   checkedProgressItems: joined,
@@ -643,6 +716,7 @@ class MapFilter extends PureComponent {
         }
         this.setState({
           checkedProgressItems,
+          filterLegendSelection: 'progress',
         });
         // this.setState({
         //   checkedProgressItems: joined,
@@ -668,6 +742,7 @@ class MapFilter extends PureComponent {
     } else {
       this.setState({
         isStatusSelected: true,
+        filterLegendSelection: 'status',
       });
       const allStatusElement = document.getElementsByClassName(
         'status_checkbox',
@@ -699,6 +774,7 @@ class MapFilter extends PureComponent {
     } else {
       this.setState({
         isSiteTypeSelected: true,
+        filterLegendSelection: 'site_type',
       });
       if (e.target.checked === true) {
         const allSiteTypeElement = document.getElementsByClassName(
@@ -737,6 +813,7 @@ class MapFilter extends PureComponent {
     } else {
       this.setState({
         isRegionSelected: true,
+        filterLegendSelection: 'region',
       });
       if (e.target.checked === true) {
         const allRegionElement = document.getElementsByClassName(
@@ -772,6 +849,7 @@ class MapFilter extends PureComponent {
       checkedStatusItem,
       checkedSiteItems,
       checkedRegionItems,
+      filterLegendSelection,
     } = this.state;
     this.props.getFilteredPrimaryGeojson({
       filterByType: {
@@ -784,35 +862,44 @@ class MapFilter extends PureComponent {
     });
     this.toggleZoomforFilter();
 
-    if (
-      checkedProgressItems.length === 0 &&
-      checkedStatusItem.length === 0 &&
-      checkedSiteItems.length === 0 &&
-      checkedRegionItems.length === 0
-    ) {
-      this.setState({ colorBySelection: 'project' });
-    }
-    if (checkedProgressItems.length > 0) {
-      this.setState({ colorBySelection: 'progress' });
-    }
-    if (checkedStatusItem.length > 0) {
-      this.setState({ colorBySelection: 'status' });
-    }
-    if (checkedSiteItems.length > 0) {
-      this.setState({ colorBySelection: 'site_type' });
-    }
-    if (checkedRegionItems.length > 0) {
-      this.setState({ colorBySelection: 'region' });
-    }
+    // if (
+    //   checkedProgressItems.length === 0 &&
+    //   checkedStatusItem.length === 0 &&
+    //   checkedSiteItems.length === 0 &&
+    //   checkedRegionItems.length === 0
+    // ) {
+    //   this.setState({ colorBySelection: 'project' });
+    // }
+    // if (checkedProgressItems.length > 0) {
+    //   this.setState({ colorBySelection: 'progress' });
+    // }
+    // if (checkedStatusItem.length > 0) {
+    //   this.setState({ colorBySelection: 'status' });
+    // }
+    // if (checkedSiteItems.length > 0) {
+    //   this.setState({ colorBySelection: 'site_type' });
+    // }
+    // if (checkedRegionItems.length > 0) {
+    this.setState({ colorBySelection: filterLegendSelection });
+    // }
     // const { mapFilterReducer: clonePrimaryGeojson } = this.props;
   };
 
-  handleSearchChange = e => {
-    this.setState({ searchText: e.target.value });
-    // if (this.state.searchText.length === 0) {
-    //   console.log('inside');
-    //   this.props.refreshGeojsonData();
-    // }
+  handleSearchChange = data => {
+    // const typeaheadClass = document.querySelector(
+    //   '.custom-css-typeahead',
+    // );
+    // const a = typeaheadClass.querySelector('input').value;
+    // console.log(a);
+    if (data.length !== 0) {
+      this.setState({ searchText: data[0] }, () => {
+        if (this.state.searchText !== undefined) {
+          this.handleSearchEnter();
+        }
+      });
+    } else if (data.length === 0) {
+      this.props.refreshGeojsonData();
+    }
   };
 
   geolayersOnChange = async e => {
@@ -870,13 +957,11 @@ class MapFilter extends PureComponent {
                 },
               },
             );
-            console.log(window[`geo_layer${element.id}`]);
             window[`geo_layer${element.id}`].addTo(mapref);
             mapref.removeLayer(window[`geo_layer${element.id}`]);
             if (!mapref.hasLayer(window[`${name}`])) {
               this.loaderOff();
               mapref.addLayer(window[`${name}`]);
-              console.log(window[`${name}`].getBounds());
               const addedLayerBound = window[`${name}`].getBounds();
               mapref.fitBounds(addedLayerBound);
             }
@@ -899,17 +984,15 @@ class MapFilter extends PureComponent {
     this.setState({ loadallGeoLayer: true });
   };
 
-  handleSearchEnter = e => {
-    if (e.key === 'Enter') {
-      const { searchText } = this.state;
-      this.props.getSearchPrimaryGeojson({
-        keyword: searchText,
-      });
-      const mapref = this.markerRef.current.leafletElement;
-      mapref.openPopup();
-      // console.log(mapref.openPopup());
-      // console.log(markerref);
-    }
+  handleSearchEnter = () => {
+    const { searchText } = this.state;
+    this.props.getSearchPrimaryGeojson({
+      keyword: searchText,
+    });
+    // const mapref = this.markerRef.current.leafletElement;
+    // mapref.openPopup();
+    // console.log(mapref.openPopup());
+    // console.log(markerref);
   };
 
   SearchBy = e => {
@@ -926,9 +1009,7 @@ class MapFilter extends PureComponent {
           clonePrimaryGeojson,
           geolayersList,
         },
-        // match: {
-        //   params: { id: siteId },
-        // },
+        match: { path },
       },
       state: {
         searchText,
@@ -949,6 +1030,7 @@ class MapFilter extends PureComponent {
         isStatusSelected,
         isSiteTypeSelected,
         isRegionSelected,
+        allProjectName,
       },
     } = this;
     return (
@@ -985,7 +1067,13 @@ class MapFilter extends PureComponent {
             > */}
             <div className="sidebar-wrapper">
               <div className="sidebar-title flex-between">
-                <h4>{projectsList[0] && projectsList[0].name}</h4>
+                <h4>
+                  {path === '/team-mapfilter/:id'
+                    ? 'Team:'
+                    : 'Project:'}
+                  &nbsp;
+                  {projectsList[0] && projectsList[0].name}
+                </h4>
               </div>
               <form className="search-custom">
                 <div className="form-group search">
@@ -1005,22 +1093,30 @@ class MapFilter extends PureComponent {
                       // onKeyDown={this.handleSearchEnter}
                       placeholder="Search By Address"
                     />
-                    <section
+                    <div
                       className={`search-control-info-wrapper ${
                         isAddressSearched
                           ? ''
                           : 'search-control-info-wrapper-close'
                       }`}
                     >
-                      <section className="search-control-info">
+                      <div className="search-control-info">
                         <ul
                           className="search-control-info-list"
-                          style={{ maxHeight: '260px' }}
+                          // style={{ maxHeight: '260px' }}
+                          style={{
+                            display:
+                              isAddressSearched === true
+                                ? 'block'
+                                : 'none',
+                            maxHeight: '260px',
+                          }}
                         >
                           {addressSearch &&
                             addressSearch.map((data, key) => {
                               return (
                                 <li
+                                  key={Math.random()}
                                   value={key}
                                   className="search-control-info-list-item candidate"
                                 >
@@ -1029,9 +1125,9 @@ class MapFilter extends PureComponent {
                               );
                             })}
                         </ul>
-                      </section>
-                    </section>
-                    <input
+                      </div>
+                    </div>
+                    {/* <input
                       style={{
                         display:
                           searchByItem === 'name' ? 'flex' : 'none',
@@ -1042,16 +1138,29 @@ class MapFilter extends PureComponent {
                       onChange={this.handleSearchChange}
                       onKeyDown={this.handleSearchEnter}
                       placeholder="Search By Site Name"
-                    />
+                    /> */}
                     {/* )} */}
-                    {/* <Typeahead
-                      className="custom-css-typeahead"
+                    {/* isAddressSearched */}
+
+                    <Typeahead
+                      style={{ backgroundColor: 'red' }}
+                      id="typeahead_custom"
+                      className={`custom-css-typeahead ${
+                        searchByItem === 'name'
+                          ? 'show_typeahead'
+                          : 'hide_typeahead'
+                      } `}
                       placeholder="Search By Site Name"
                       onChange={selected => {
+                        this.handleSearchChange(selected);
                         // Handle selections...
                       }}
-                      options={['varun', 'deepak', 'ram']}
-                    /> */}
+                      minLength={2}
+                      selectHintOnEnter
+                      // onKeyDown={this.handleSearchEnter}
+                      // onClick={this.handleSearchEnter}
+                      options={allProjectName}
+                    />
                     <span
                       className={`input-group-append ${
                         searchDropdown ? 'open' : ''
@@ -1123,19 +1232,23 @@ class MapFilter extends PureComponent {
               </form>
               <div className="sidebar-title flex-between">
                 <h4>Map</h4>
-                {/* <span className="filters flex-end">
-                  <i
-                    className="la la-cogs setting"
-                    data-toggle="tooltip"
-                    title="Setting"
-                    aria-label="Setting"
-                    data-tab="site-info-popup"
-                    onClick={this.openModalSetting}
-                    onKeyPress={this.handleKeyPress}
-                    role="tab"
-                    tabIndex={0}
-                  />
-                </span> */}
+                {/* {path === '/proj-mapfilter/:id' ? (
+                  <span className="filters flex-end">
+                    <i
+                      className="la la-cogs setting"
+                      data-toggle="tooltip"
+                      title="Setting"
+                      aria-label="Setting"
+                      data-tab="site-info-popup"
+                      onClick={this.openModalSetting}
+                      onKeyPress={this.handleKeyPress}
+                      role="tab"
+                      tabIndex={0}
+                    />
+                  </span>
+                ) : (
+                  ''
+                )} */}
               </div>
               <MainSidebarTab
                 projectsList={projectsList}
@@ -1172,6 +1285,7 @@ class MapFilter extends PureComponent {
                 selectedBaseLayer={selectedBaseLayer}
                 geolayersList={geolayersList}
                 geolayersOnChange={this.geolayersOnChange}
+                path={path}
               />
             </div>
             {/* </Scrollbars> */}

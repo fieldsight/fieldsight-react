@@ -346,7 +346,7 @@ class TeamDashboard extends Component {
                       </h5>
                       <div className="dash-btn">
                         <a
-                          href={`/fieldsight/org-map/${teamId}/`}
+                          href={`fieldsight/application/#/team-mapfilter/${teamId}/`}
                           className="fieldsight-btn left-icon"
                           target="_blank"
                           rel="noopener noreferrer"

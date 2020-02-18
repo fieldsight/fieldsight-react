@@ -30,7 +30,11 @@ class FiltersTab extends PureComponent {
       handleProjectParentCheckbox,
       applyFilter,
       onClickClearBtn,
+      path,
     } = this.props;
+    // const {
+    //   match: { path },
+    // } = this.props;
     return (
       <div
         className={`tab-pane fade ${
@@ -41,7 +45,12 @@ class FiltersTab extends PureComponent {
         aria-labelledby="sidebar-filter_tab"
       >
         <Accordion id="accordion" className="map-accordion">
-          <Card>
+          <Card
+            style={{
+              display:
+                path === '/team-mapfilter/:id' ? 'block' : 'none',
+            }}
+          >
             <Card.Header>
               <Accordion.Toggle
                 as={Card.Link}
@@ -53,7 +62,8 @@ class FiltersTab extends PureComponent {
                   type="checkbox"
                   name="projectCheckbox"
                   checked={isProjectSelected}
-                  onClick={handleProjectParentCheckbox}
+                  // onClick={handleProjectParentCheckbox}
+                  onChange={handleProjectParentCheckbox}
                 />
                 Projects
               </Accordion.Toggle>
@@ -66,6 +76,7 @@ class FiltersTab extends PureComponent {
                       {projectsList &&
                         projectsList.map(each => {
                           const projectName = each.name;
+                          console.log(each, 'project');
                           return (
                             <div key={each.id} className="form-group">
                               <div className="checkbox">
@@ -78,7 +89,12 @@ class FiltersTab extends PureComponent {
                                     onChange={handleProjectChange}
                                   />
                                   <i className="helper" />
-                                  {projectName}
+
+                                  <a
+                                    href={`/fieldsight/application/#/project-dashboard/${each.id}/`}
+                                  >
+                                    {projectName}
+                                  </a>
                                 </label>
                               </div>
                             </div>
@@ -104,7 +120,8 @@ class FiltersTab extends PureComponent {
                   name="progressCheckbox"
                   className="to_reset_checkbox"
                   checked={isProgressSelected}
-                  onClick={handleProgressParentCheckbox}
+                  // onClick={handleProgressParentCheckbox}
+                  onChange={handleProgressParentCheckbox}
                 />
                 Progress
               </Accordion.Toggle>
@@ -237,83 +254,84 @@ class FiltersTab extends PureComponent {
                   name="statusCheckbox"
                   className="to_reset_checkbox"
                   checked={isStatusSelected}
-                  onClick={handleStatusParentCheckbox}
+                  // onClick={handleStatusParentCheckbox}
+                  onChange={handleStatusParentCheckbox}
                 />
                 Form Status
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="2">
               <Card.Body>
-                <Scrollbars style={{ height: '200px' }}>
-                  {/* <div className="form-group"> */}
-                  {/* <div className="custom-checkbox display-inline"> */}
-                  <div className="sidebar-list">
-                    <div className="form-group">
-                      <div className="checkbox approved">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="3"
-                            value="3"
-                            className="status_checkbox"
-                            onChange={handleStatusChange}
-                          />
-                          <i className="helper" />
-                          Approved
-                        </label>
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <div className="checkbox pending">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="0"
-                            value="0"
-                            className="status_checkbox"
-                            onChange={handleStatusChange}
-                          />
-                          <i className="helper" />
-                          Pending
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <div className="checkbox flagged">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="2"
-                            value="2"
-                            className="status_checkbox"
-                            onChange={handleStatusChange}
-                          />
-                          <i className="helper" />
-                          Flagged
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <div className="checkbox rejected">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="1"
-                            value="1"
-                            className="status_checkbox"
-                            onChange={handleStatusChange}
-                          />
-                          <i className="helper" />
-                          Rejected
-                        </label>
-                      </div>
+                {/* <Scrollbars style={{ height: '200px' }}> */}
+                {/* <div className="form-group"> */}
+                {/* <div className="custom-checkbox display-inline"> */}
+                <div className="sidebar-list">
+                  <div className="form-group">
+                    <div className="checkbox approved">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="3"
+                          value="3"
+                          className="status_checkbox"
+                          onChange={handleStatusChange}
+                        />
+                        <i className="helper" />
+                        Approved
+                      </label>
                     </div>
                   </div>
-                  {/* </div> */}
-                  {/* </div> */}
-                </Scrollbars>
+                  <div className="form-group">
+                    <div className="checkbox pending">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="0"
+                          value="0"
+                          className="status_checkbox"
+                          onChange={handleStatusChange}
+                        />
+                        <i className="helper" />
+                        Pending
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <div className="checkbox flagged">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="2"
+                          value="2"
+                          className="status_checkbox"
+                          onChange={handleStatusChange}
+                        />
+                        <i className="helper" />
+                        Flagged
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <div className="checkbox rejected">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="1"
+                          value="1"
+                          className="status_checkbox"
+                          onChange={handleStatusChange}
+                        />
+                        <i className="helper" />
+                        Rejected
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                {/* </div> */}
+                {/* </div> */}
+                {/* </Scrollbars> */}
               </Card.Body>
             </Accordion.Collapse>
           </Card>
@@ -330,7 +348,8 @@ class FiltersTab extends PureComponent {
                   name="siteTypeCheckbox"
                   className="to_reset_checkbox"
                   checked={isSiteTypeSelected}
-                  onClick={handleSiteTypeParentCheckbox}
+                  // onClick={handleSiteTypeParentCheckbox}
+                  onChange={handleSiteTypeParentCheckbox}
                 />
                 Site Types
               </Accordion.Toggle>
@@ -382,7 +401,8 @@ class FiltersTab extends PureComponent {
                   name="regionCheckbox"
                   className="to_reset_checkbox"
                   checked={isRegionSelected}
-                  onClick={handleRegionParentCheckbox}
+                  // onClick={handleRegionParentCheckbox}
+                  onChange={handleRegionParentCheckbox}
                 />
                 Regions
               </Accordion.Toggle>
