@@ -191,7 +191,7 @@ class MapComponent extends PureComponent {
       ) {
         const progressArray = progressList.map((element, key) => ({
           element,
-          background: otherColors[key],
+          background: progressColor[key],
         }));
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({
