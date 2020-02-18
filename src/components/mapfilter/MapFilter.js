@@ -1232,7 +1232,7 @@ class MapFilter extends PureComponent {
               </form>
               <div className="sidebar-title flex-between">
                 <h4>Map</h4>
-                {path === '/proj-mapfilter/:id' ? (
+                {/* {path === '/proj-mapfilter/:id' ? (
                   <span className="filters flex-end">
                     <i
                       className="la la-cogs setting"
@@ -1248,7 +1248,7 @@ class MapFilter extends PureComponent {
                   </span>
                 ) : (
                   ''
-                )}
+                )} */}
               </div>
               <MainSidebarTab
                 projectsList={projectsList}
