@@ -91,7 +91,10 @@ class FormDataFilter extends Component {
     ) {
       const resp = this.props.templateReducer.exportExcel;
       if (resp.task_status !== 'Completed') {
-        setInterval(this.props.excelExport(taskId), 5000);
+        const firstInterval = setTimeout(() => {
+          this.props.excelExport(taskId);
+        }, 5000);
+        return firstInterval;
       } else if (resp.task_status === 'Failed') {
         errorToast('Error In Downloading File');
       } else {
@@ -219,7 +222,7 @@ class FormDataFilter extends Component {
     const data = {
       siteTypes: site.map(s => s.id),
       regions: region.map(r => r.id),
-      fs_ids: [this.props.location.state.fromDashboard],
+      fs_ids: [fid],
       start_date: startDate,
       end_date: endDate,
     };
