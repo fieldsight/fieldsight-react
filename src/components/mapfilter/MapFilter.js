@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import L from 'leaflet';
 import Axios from 'axios';
-// import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import worker from './webWorker/filterWorker';
 import WebWorker from './webWorker/workerSetup';
 import Loader from '../common/Loader';
 import MapComponent from './MapComponent';
 import MapLeftTools from './MapLeftTools';
 import ModalSettings from './ModalSettings';
+
 import {
   getPrimaryMarkerGeojson,
   getSecondaryMarkerGeojson,
@@ -49,6 +51,7 @@ const INITIAL_STATE = {
   isRegionSelected: false,
   loadallGeoLayer: false,
   filterLegendSelection: 'project',
+  allProjectName: [],
 };
 class MapFilter extends PureComponent {
   constructor(props) {
@@ -60,8 +63,7 @@ class MapFilter extends PureComponent {
   }
 
   updateDimensions() {
-    const height =
-      window.innerWidth >= 992 ? window.innerHeight : 400;
+    const height = window.innerHeight;
     this.setState({ height: height - 85 });
   }
 
@@ -82,6 +84,7 @@ class MapFilter extends PureComponent {
   }
 
   componentDidMount() {
+    // this.setState({allSiteName: })
     window.addEventListener(
       'resize',
       this.updateDimensions.bind(this),
@@ -104,8 +107,12 @@ class MapFilter extends PureComponent {
 
     // console.log(searchselect, 'searchselect');
     // const { addressSearch } = this.state;
+
     let results = [];
     searchselect.addEventListener('click', async el => {
+      document.getElementsByClassName(
+        'search-control-info',
+      )[0].style.display = 'none';
       const selectedIndex = el.target.value;
       // console.log(selectedIndex, 'index');
       const bbox = results[selectedIndex].bounds;
@@ -124,8 +131,17 @@ class MapFilter extends PureComponent {
       });
     });
     input.addEventListener('keyup', async () => {
+      // console.log(input.value, 'value');
       // event.preventDefault();
-
+      if (input.value.length < 1) {
+        document.getElementsByClassName(
+          'search-control-info',
+        )[0].style.display = 'none';
+      } else {
+        document.getElementsByClassName(
+          'search-control-info',
+        )[0].style.display = 'block';
+      }
       results = await provider.search({ query: input.value });
       // console.log(results); // » [{}, {}, {}, ...]
       if (results.length > 0) {
@@ -163,13 +179,10 @@ class MapFilter extends PureComponent {
   }
 
   fetchWebWorker = () => {
-    console.log('function inside');
     this.worker.postMessage('Fetch Users');
 
-    this.worker.addEventListener('message', event => {
-      console.log('worker function clicked');
-      console.log(event.data);
-    });
+    // this.worker.addEventListener('message', event => {
+    // });
   };
 
   handleBaseLayer = selectedBaseLayer => {
@@ -217,12 +230,10 @@ class MapFilter extends PureComponent {
       mapFilterReducer: { projectsList },
     } = this.props;
     const { checkedProjectItems } = this.state;
-    console.log(projectsList, 'list');
     if (projectsList) {
       if (projectsList.length >= 1) {
         const projectPush = [];
         projectsList.map(data => {
-          console.log(data.name);
           return projectPush.push(data.name);
         });
         this.setState({
@@ -247,13 +258,20 @@ class MapFilter extends PureComponent {
     // if (totalsearchLength === 0) {
     //   this.props.refreshGeojsonData();
     // }
+    const filterSetState = filteredName => {
+      this.setState({
+        allProjectName: filteredName,
+      });
+    };
     const {
       mapFilterReducer: {
         clonePrimaryGeojson,
         projectsList,
         projectPrimaryGeojsonUrl,
+        primaryGeojson,
       },
     } = this.props;
+
     if (
       prevProps.mapFilterReducer.projectPrimaryGeojsonUrl !==
       projectPrimaryGeojsonUrl
@@ -273,7 +291,16 @@ class MapFilter extends PureComponent {
     if (prevProps.mapFilterReducer.projectsList !== projectsList) {
       this.insertProjectNameInState();
     }
-
+    if (
+      prevProps.mapFilterReducer.primaryGeojson !== primaryGeojson
+    ) {
+      const filteredName = primaryGeojson[0].features.map(
+        sitename => {
+          return sitename.properties.name;
+        },
+      );
+      filterSetState(filteredName);
+    }
     // this.props.refreshGeojsonData();
     // if (
     //   prevState.isProgressSelected === this.state.isProgressSelected
@@ -433,7 +460,6 @@ class MapFilter extends PureComponent {
     const item = e.target.name;
     const isSiteChecked = e.target.checked;
     const { checkedSiteItems } = this.state;
-    console.log(isSiteChecked, 'checked');
     if (isSiteChecked === true) {
       const joined = checkedSiteItems.concat(item);
       this.setState({
@@ -859,12 +885,21 @@ class MapFilter extends PureComponent {
     // const { mapFilterReducer: clonePrimaryGeojson } = this.props;
   };
 
-  handleSearchChange = e => {
-    this.setState({ searchText: e.target.value });
-    // if (this.state.searchText.length === 0) {
-    //   console.log('inside');
-    //   this.props.refreshGeojsonData();
-    // }
+  handleSearchChange = data => {
+    // const typeaheadClass = document.querySelector(
+    //   '.custom-css-typeahead',
+    // );
+    // const a = typeaheadClass.querySelector('input').value;
+    // console.log(a);
+    if (data.length !== 0) {
+      this.setState({ searchText: data[0] }, () => {
+        if (this.state.searchText !== undefined) {
+          this.handleSearchEnter();
+        }
+      });
+    } else if (data.length === 0) {
+      this.props.refreshGeojsonData();
+    }
   };
 
   geolayersOnChange = async e => {
@@ -922,13 +957,11 @@ class MapFilter extends PureComponent {
                 },
               },
             );
-            console.log(window[`geo_layer${element.id}`]);
             window[`geo_layer${element.id}`].addTo(mapref);
             mapref.removeLayer(window[`geo_layer${element.id}`]);
             if (!mapref.hasLayer(window[`${name}`])) {
               this.loaderOff();
               mapref.addLayer(window[`${name}`]);
-              console.log(window[`${name}`].getBounds());
               const addedLayerBound = window[`${name}`].getBounds();
               mapref.fitBounds(addedLayerBound);
             }
@@ -951,17 +984,15 @@ class MapFilter extends PureComponent {
     this.setState({ loadallGeoLayer: true });
   };
 
-  handleSearchEnter = e => {
-    if (e.key === 'Enter') {
-      const { searchText } = this.state;
-      this.props.getSearchPrimaryGeojson({
-        keyword: searchText,
-      });
-      const mapref = this.markerRef.current.leafletElement;
-      mapref.openPopup();
-      // console.log(mapref.openPopup());
-      // console.log(markerref);
-    }
+  handleSearchEnter = () => {
+    const { searchText } = this.state;
+    this.props.getSearchPrimaryGeojson({
+      keyword: searchText,
+    });
+    // const mapref = this.markerRef.current.leafletElement;
+    // mapref.openPopup();
+    // console.log(mapref.openPopup());
+    // console.log(markerref);
   };
 
   SearchBy = e => {
@@ -999,6 +1030,7 @@ class MapFilter extends PureComponent {
         isStatusSelected,
         isSiteTypeSelected,
         isRegionSelected,
+        allProjectName,
       },
     } = this;
     return (
@@ -1071,12 +1103,20 @@ class MapFilter extends PureComponent {
                       <div className="search-control-info">
                         <ul
                           className="search-control-info-list"
-                          style={{ maxHeight: '260px' }}
+                          // style={{ maxHeight: '260px' }}
+                          style={{
+                            display:
+                              isAddressSearched === true
+                                ? 'block'
+                                : 'none',
+                            maxHeight: '260px',
+                          }}
                         >
                           {addressSearch &&
                             addressSearch.map((data, key) => {
                               return (
                                 <li
+                                  key={Math.random()}
                                   value={key}
                                   className="search-control-info-list-item candidate"
                                 >
@@ -1087,7 +1127,7 @@ class MapFilter extends PureComponent {
                         </ul>
                       </div>
                     </div>
-                    <input
+                    {/* <input
                       style={{
                         display:
                           searchByItem === 'name' ? 'flex' : 'none',
@@ -1098,16 +1138,29 @@ class MapFilter extends PureComponent {
                       onChange={this.handleSearchChange}
                       onKeyDown={this.handleSearchEnter}
                       placeholder="Search By Site Name"
-                    />
+                    /> */}
                     {/* )} */}
-                    {/* <Typeahead
-                      className="custom-css-typeahead"
+                    {/* isAddressSearched */}
+
+                    <Typeahead
+                      style={{ backgroundColor: 'red' }}
+                      id="typeahead_custom"
+                      className={`custom-css-typeahead ${
+                        searchByItem === 'name'
+                          ? 'show_typeahead'
+                          : 'hide_typeahead'
+                      } `}
                       placeholder="Search By Site Name"
                       onChange={selected => {
+                        this.handleSearchChange(selected);
                         // Handle selections...
                       }}
-                      options={['varun', 'deepak', 'ram']}
-                    /> */}
+                      minLength={2}
+                      selectHintOnEnter
+                      // onKeyDown={this.handleSearchEnter}
+                      // onClick={this.handleSearchEnter}
+                      options={allProjectName}
+                    />
                     <span
                       className={`input-group-append ${
                         searchDropdown ? 'open' : ''
@@ -1179,7 +1232,7 @@ class MapFilter extends PureComponent {
               </form>
               <div className="sidebar-title flex-between">
                 <h4>Map</h4>
-                {path === '/team-mapfilter/:id' ? (
+                {path === '/proj-mapfilter/:id' ? (
                   <span className="filters flex-end">
                     <i
                       className="la la-cogs setting"

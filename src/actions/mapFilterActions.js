@@ -52,7 +52,6 @@ export const getPrimaryMarkerGeojson = url => dispatch => {
       features: [],
     },
   ];
-  console.log(url, 'url action');
   Promise.all(
     url.map(u =>
       axios
@@ -68,7 +67,6 @@ export const getPrimaryMarkerGeojson = url => dispatch => {
         .catch(() => {}),
     ),
   ).then(key => {
-    console.log(fullGeojson, 'output');
     dispatch({
       type: GET_PRIMARY_MARKER_GEOJSON,
       payload: fullGeojson,
