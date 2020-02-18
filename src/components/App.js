@@ -362,14 +362,7 @@ class App extends Component {
                   path="/site-submission-responses/:id"
                   render={props => <SiteSubmissionForm {...props} />}
                 />
-                <Route
-                  path="/export-data/:id"
-                  render={props => <ExportDataFilter {...props} />}
-                />
-                <Route
-                  path="/form-data/:id/:fid"
-                  render={props => <FormDataFilter {...props} />}
-                />
+
                 <Route
                   path="/organization-dashboard/:id"
                   render={props => <AdminDashboard {...props} />}
@@ -412,28 +405,24 @@ class App extends Component {
                   render={props => <Submission {...props} />}
                 />
                 <Route
-                  path="/activity-export/:id"
+                  path="/export-data/:id/:reportType"
+                  render={props => <ExportDataFilter {...props} />}
+                />
+                <Route
+                  path="/form-data/:id/:fid"
+                  render={props => <FormDataFilter {...props} />}
+                />
+                <Route
+                  path="/activity-export/:id/:reportType"
                   render={props => <ActivityExportFile {...props} />}
                 />
                 <Route
-                  path="/user-export/:id"
+                  path="/user-export/:id/:reportType"
                   render={props => <UserExportReport {...props} />}
                 />
                 <Route
                   path="/data-export/:id"
                   render={props => <DataExport {...props} />}
-                />
-                <Route
-                  path="/organization-projects/:id"
-                  render={props => (
-                    <OragnizatonProjectList {...props} />
-                  )}
-                />
-                <Route
-                  path="/organization-users/:id"
-                  render={props => (
-                    <OrganizationUserList {...props} />
-                  )}
                 />
 
                 <Route
@@ -451,6 +440,19 @@ class App extends Component {
                 <Route
                   path="/exports/:isProject/:formId/:id/:version"
                   render={props => <ExcelExport {...props} />}
+                />
+
+                <Route
+                  path="/organization-projects/:id"
+                  render={props => (
+                    <OragnizatonProjectList {...props} />
+                  )}
+                />
+                <Route
+                  path="/organization-users/:id"
+                  render={props => (
+                    <OrganizationUserList {...props} />
+                  )}
                 />
                 <Route
                   path="/organization-submission/:orgId/:id/"

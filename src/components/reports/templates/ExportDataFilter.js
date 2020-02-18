@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
@@ -8,8 +9,10 @@ import {
   errorToast,
   successToast,
 } from '../../../utils/toastHandler';
+import { excelExport } from '../../../actions/templateAction';
 
-export default class ExportDataFilter extends Component {
+let statusLoaded = '';
+class ExportDataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,10 +20,11 @@ export default class ExportDataFilter extends Component {
       open: false,
       siteOpen: false,
       siteSelected: [],
-      applyButton: false,
       projectRegions: [{ id: 'all_regions', name: 'Select All' }],
       siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
       showPreview: false,
+      taskId: '',
+      fileToDownload: '',
     };
   }
 
@@ -63,6 +67,30 @@ export default class ExportDataFilter extends Component {
       )
       .catch();
   }
+
+  componentDidUpdate(prevProps) {
+    const { taskId } = this.state;
+    if (
+      prevProps.templateReducer.exportExcel !==
+      this.props.templateReducer.exportExcel
+    ) {
+      const resp = this.props.templateReducer.exportExcel;
+      if (resp.task_status !== 'Completed') {
+        setTimeout(() => {
+          this.props.excelExport(taskId);
+        }, 5000);
+      } else if (resp.task_status === 'Failed') {
+        errorToast('Error In Downloading File');
+      } else {
+        this.setDownloadFile(resp.file_url);
+      }
+    }
+  }
+
+  setDownloadFile = file => {
+    this.setState({ fileToDownload: file, showPreview: true });
+    statusLoaded = true;
+  };
 
   changeHandlers = (e, info) => {
     const { checked } = e.target;
@@ -158,11 +186,11 @@ export default class ExportDataFilter extends Component {
   handleApply = () => {
     const {
       match: {
-        params: { id },
+        params: { id, reportType },
       },
-      location: {
-        state: { fromDashboard },
-      },
+      // location: {
+      //   state: { fromDashboard },
+      // },
     } = this.props;
     const region = this.state.selected.filter(
       reg => reg.id !== 'all_regions',
@@ -174,7 +202,7 @@ export default class ExportDataFilter extends Component {
       regions: region.map(r => r.id),
       siteTypes: site.map(s => s.id),
     };
-    const route = this.toUpper(fromDashboard);
+    const route = this.toUpper(reportType);
 
     axios
       .post(
@@ -184,10 +212,13 @@ export default class ExportDataFilter extends Component {
       .then(req => {
         if (req.status === 200) {
           successToast(req.data.detail);
+          this.props.excelExport(req.data.task_id);
+          statusLoaded = false;
           this.setState({
             selected: [],
             siteType: [],
-            showPreview: true,
+            // showPreview: true,
+            taskId: req.data.task_id,
           });
         }
       })
@@ -199,17 +230,21 @@ export default class ExportDataFilter extends Component {
       });
   };
 
+  // handleExcelExport = () => {
+  //   const { taskId } = this.state;
+  // };
+
   render() {
     const {
       state: {
         selected,
         open,
         siteOpen,
-        applyButton,
         projectRegions,
         siteType,
         showPreview,
         siteSelected,
+        fileToDownload,
       },
     } = this;
     const DataCrude = [
@@ -237,11 +272,11 @@ export default class ExportDataFilter extends Component {
 
     const {
       match: {
-        params: { id },
+        params: { id, reportType },
       },
-      location: {
-        state: { fromDashboard },
-      },
+      // location: {
+      //   state: { fromDashboard },
+      // },
     } = this.props;
     return (
       <>
@@ -250,7 +285,7 @@ export default class ExportDataFilter extends Component {
             <li className="breadcrumb-item">
               <Link to={`/project/${id}/report`}>Report</Link>
             </li>
-            <li className="breadcrumb-item">{fromDashboard}</li>
+            <li className="breadcrumb-item">{reportType}</li>
             <li className="breadcrumb-item">Export Data</li>
           </ol>
         </nav>
@@ -266,13 +301,13 @@ export default class ExportDataFilter extends Component {
                       <div className="report-content">
                         <h4>Export Data</h4>
 
-                        {fromDashboard === 'Site Information' && (
+                        {reportType === 'Site Information' && (
                           <p>
                             Export of all site information in an
                             spreadsheet
                           </p>
                         )}
-                        {fromDashboard === 'Progress Report' && (
+                        {reportType === 'Progress Report' && (
                           <p>
                             Export of key progress indicators like
                             submission count,status and site visits
@@ -342,18 +377,24 @@ export default class ExportDataFilter extends Component {
                         <button
                           type="button"
                           className="common-button mt-3 is-bg"
+                          disabled={statusLoaded === false}
                           onClick={this.handleApply}
                         >
-                          Apply
+                          {statusLoaded === false
+                            ? 'Downloading'
+                            : 'Apply'}
                         </button>
                       </div>
                     </div>
                   </form>
-                  {applyButton && <CollapseFilterTable />}
                 </div>
               </div>
               {showPreview && (
-                <CollapseFilterTable id={id} type="standard" />
+                <CollapseFilterTable
+                  id={id}
+                  type="standard"
+                  excelFileToDownload={fileToDownload}
+                />
               )}
             </div>
           </div>
@@ -362,3 +403,11 @@ export default class ExportDataFilter extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ templateReducer }) => ({
+  templateReducer,
+});
+
+export default connect(mapStateToProps, {
+  excelExport,
+})(ExportDataFilter);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import format from 'date-fns/format';
 import { FormattedMessage } from 'react-intl';
 import {
   sortableContainer,
@@ -9,31 +10,11 @@ import {
 } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import DeleteModal from '../common/DeleteModal';
+import EducationMaterial from './common/educationMaterial';
+import GetStatus, { getClass } from './common/getStatus';
+
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key */
-
-const getStatus = value => {
-  if (value === 0) return <span>pending</span>;
-  if (value === 1) return <span>Rejected</span>;
-  if (value === 2) return <span>Flagged</span>;
-  if (value === 3) return <span>Approved</span>;
-  return null;
-};
-
-const getClass = status => {
-  if (status === 0) return 'pending';
-  if (status === 1) return 'rejected';
-  if (status === 2) return 'flagged';
-  if (status === 3) return 'approved';
-  return null;
-};
-
-const formatDate = date => {
-  const dateIdx = date.getDate();
-  const monthIndex = date.getMonth() + 1;
-  const year = date.getFullYear();
-  return `${year}-${monthIndex}-${dateIdx}`;
-};
 
 const DragHandle = sortableHandle(({ sub, index, formTable }) => (
   <tr key={`sub_stage_${index}`}>
@@ -47,7 +28,7 @@ const DragHandle = sortableHandle(({ sub, index, formTable }) => (
     <td>{sub && sub.xf && sub.xf.title ? sub.xf.title : '-'}</td>
     <td>{sub && sub.responses_count}</td>
     <td>
-      <EducationMaterialForProject
+      <EducationMaterial
         formTable={formTable}
         item={sub && sub}
         toDrag
@@ -58,14 +39,14 @@ const DragHandle = sortableHandle(({ sub, index, formTable }) => (
     <td>
       <time>
         <i className="la la-clock-o" />
-        {formatDate(new Date(sub && sub.date_created))}
+        {format(sub.date_created, 'YYYY-MM-DD')}
       </time>
     </td>
     <td>
       <span
         className={getClass(sub && sub.default_submission_status)}
       >
-        {getStatus(sub && sub.default_submission_status)}
+        {GetStatus(sub && sub.default_submission_status)}
       </span>
     </td>
     <td>
@@ -80,43 +61,6 @@ const DragHandle = sortableHandle(({ sub, index, formTable }) => (
     </td>
   </tr>
 ));
-
-const EducationMaterialForProject = props => {
-  const { formTable, item, editForm, toDrag } = props;
-  if (formTable === 'project') {
-    return (
-      <span className={`${!!toDrag} ? disabled : ''`}>
-        <a
-          onClick={() => editForm(item.em, item.id)}
-          tabIndex="0"
-          role="button"
-          onKeyDown={() => editForm(item.em, item.id)}
-        >
-          <i className="la la-book" />
-          {item && item.em ? item.em.title : ''}
-        </a>
-      </span>
-    );
-  }
-  if (formTable === 'site') {
-    return (
-      <span className={`${!!toDrag} ? disabled : ''`}>
-        {!!item.site && (
-          <a
-            onClick={() => editForm(item.em, item.id)}
-            tabIndex="0"
-            role="button"
-            onKeyDown={() => editForm(item.em, item.id)}
-          >
-            <i className="la la-book" />
-            {item && item.em ? item.em.title : ''}
-          </a>
-        )}
-      </span>
-    );
-  }
-  return null;
-};
 
 const GetActionForProject = props => {
   const {
@@ -520,7 +464,7 @@ class SubStageTable extends Component {
                       </td>
                       <td>{sub.responses_count}</td>
                       <td>
-                        <EducationMaterialForProject
+                        <EducationMaterial
                           formTable={formTable}
                           item={sub}
                           editForm={handleEditGuide}
@@ -530,7 +474,7 @@ class SubStageTable extends Component {
                       <td>
                         <time>
                           <i className="la la-clock-o" />
-                          {formatDate(new Date(sub.date_created))}
+                          {format(sub.date_created, 'YYYY-MM-DD')}
                         </time>
                       </td>
                       <td>
@@ -539,7 +483,7 @@ class SubStageTable extends Component {
                             sub.default_submission_status,
                           )}
                         >
-                          {getStatus(sub.default_submission_status)}
+                          {GetStatus(sub.default_submission_status)}
                         </span>
                       </td>
                       <td>

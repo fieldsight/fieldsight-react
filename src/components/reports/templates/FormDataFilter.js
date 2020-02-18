@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
@@ -11,10 +12,11 @@ import {
   errorToast,
   successToast,
 } from '../../../utils/toastHandler';
+import { excelExport } from '../../../actions/templateAction';
 
 /* eslint-disable */
-
-export default class FormDataFilter extends Component {
+let statusLoaded = '';
+class FormDataFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,12 +24,15 @@ export default class FormDataFilter extends Component {
       open: false,
       siteOpen: false,
       siteSelected: [],
-      applyButton: false,
       projectRegions: [{ id: 'all_regions', name: 'Select All' }],
       siteType: [{ id: 'all_sitetypes', name: 'Select All' }],
-      startedDate: '',
+      startedDate: new Date(localStorage.getItem('createdOn')),
       endedDate: new Date(),
       showPreview: false,
+      taskId: '',
+      fileToDownload: '',
+      formName: localStorage.getItem('form'),
+      projectCreatedOn: localStorage.getItem('createdOn'),
     };
   }
 
@@ -35,9 +40,6 @@ export default class FormDataFilter extends Component {
     const {
       match: {
         params: { id },
-      },
-      location: {
-        state: { projectCreatedOn },
       },
     } = this.props;
     const { projectRegions, siteType } = this.state;
@@ -76,10 +78,37 @@ export default class FormDataFilter extends Component {
         // react on errors.
       });
 
-    this.setState({
-      startedDate: new Date(projectCreatedOn),
-    });
+    // this.setState({
+    //   startedDate: new Date(projectCreatedOn),
+    // });
   }
+
+  componentDidUpdate(prevProps) {
+    const { taskId } = this.state;
+    if (
+      prevProps.templateReducer.exportExcel !==
+      this.props.templateReducer.exportExcel
+    ) {
+      const resp = this.props.templateReducer.exportExcel;
+      if (resp.task_status !== 'Completed') {
+        setInterval(this.props.excelExport(taskId), 5000);
+      } else if (resp.task_status === 'Failed') {
+        errorToast('Error In Downloading File');
+      } else {
+        this.setDownloadFile(resp.file_url);
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    localStorage.removeItem('form');
+    localStorage.removeItem('createdOn');
+  }
+
+  setDownloadFile = file => {
+    this.setState({ fileToDownload: file, showPreview: true });
+    statusLoaded = true;
+  };
 
   changeHandlers = (e, info) => {
     const { checked } = e.target;
@@ -203,11 +232,13 @@ export default class FormDataFilter extends Component {
       .then(req => {
         if (req.status === 200) {
           successToast(req.data.detail);
-          // this.props.history.push(`/view-report/${id}/${fid}`);
+          this.props.excelExport(req.data.task_id);
+          statusLoaded = false;
           this.setState({
             selected: [],
             siteType: [],
-            showPreview: true,
+            // showPreview: true,
+            taskId: req.data.task_id,
           });
         }
       })
@@ -247,19 +278,31 @@ export default class FormDataFilter extends Component {
     });
   };
 
+  // handleExcelExport = () => {
+  //   const { taskId } = this.state;
+  //   this.props.excelExport(taskId);
+  // };
+
   render() {
     const {
       state: {
         selected,
         open,
         siteOpen,
-        applyButton,
         projectRegions,
         siteType,
         siteSelected,
         startedDate,
         endedDate,
         showPreview,
+        fileToDownload,
+        formName,
+        projectCreatedOn,
+      },
+      props: {
+        match: {
+          params: { id, fid },
+        },
       },
     } = this;
     const DataCrude = [
@@ -284,14 +327,7 @@ export default class FormDataFilter extends Component {
         link: '#',
       },
     ];
-    const {
-      match: {
-        params: { id, fid },
-      },
-      location: {
-        state: { projectCreatedOn, formName },
-      },
-    } = this.props;
+
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
@@ -388,21 +424,26 @@ export default class FormDataFilter extends Component {
 
                       <div className="col-md-12">
                         <button
-                          // disabled
+                          disabled={statusLoaded === false}
                           type="button"
                           className="common-button mt-3 is-bg"
                           onClick={this.handleApply}
                         >
-                          Apply
+                          {statusLoaded === false
+                            ? 'Downloading'
+                            : 'Apply'}
                         </button>
                       </div>
                     </div>
                   </form>
-                  {applyButton && <CollapseFilterTable />}
                 </div>
               </div>
               {showPreview && (
-                <CollapseFilterTable id={fid} type="standard" />
+                <CollapseFilterTable
+                  id={fid}
+                  type="standard"
+                  excelFileToDownload={fileToDownload}
+                />
               )}
             </div>
           </div>
@@ -411,3 +452,11 @@ export default class FormDataFilter extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ templateReducer }) => ({
+  templateReducer,
+});
+
+export default connect(mapStateToProps, {
+  excelExport,
+})(FormDataFilter);

@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 import { OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
 
-import {
-  applyActionToReport,
-  getCustomReportTableData,
-} from '../../actions/reportActions';
+import { getCustomReportTableData } from '../../actions/reportActions';
 import { successToast } from '../../utils/toastHandler';
 import Modal from '../common/Modal';
 import Sheet from '../../static/images/sheets.png';
@@ -118,9 +115,9 @@ class CollapseFilterTable extends Component {
     });
   };
 
-  onExportCSV = () => {
-    this.props.applyActionToReport(this.props.id, 'excel');
-  };
+  // onExportCSV = () => {
+  //   this.props.applyActionToReport(this.props.id, 'excel');
+  // };
 
   onSyncHandler = () => {
     this.setState(state => ({
@@ -174,75 +171,114 @@ class CollapseFilterTable extends Component {
       type,
       reportReducer: { report_sync_settings },
     } = this.props;
-    const actions = [
-      {
-        id: 1,
-        title: 'sync',
-        hasDropdown: true,
-        icon: 'sync',
-        menu: [
-          {
-            key: 1.1,
-            text: 'To Google Sheets',
-            link: this.onSyncHandler,
-          },
-        ],
-      },
-      {
-        id: 2,
-        title: 'export',
-        hasDropdown: true,
-        icon: 'save_alt',
-        menu: [
-          { key: 2.1, text: 'As Excel', link: this.onExportCSV },
-        ],
-      },
-    ];
+    const actionSync = {
+      id: 1,
+      title: 'sync',
+      hasDropdown: true,
+      icon: 'sync',
+      menu: [
+        {
+          key: 1.1,
+          text: 'To Google Sheets',
+          link: this.onSyncHandler,
+        },
+      ],
+    };
+
+    const actionExport = {
+      id: 2,
+      title: 'export',
+      hasDropdown: true,
+      icon: 'save_alt',
+      menu: [
+        {
+          key: 2.1,
+          text: 'As Excel',
+          link: this.props.excelFileToDownload,
+          action: this.props.handleExcelExport,
+        },
+      ],
+    };
+
     const previewData = this.getPivotTable();
 
     return (
       <>
         <div className="report-table  mt-3">
           <div className="report-table-header">
-            <div className="dropdown">
-              <button
-                type="button"
-                className="common-button data-toggle is-border is-icon"
-              >
-                <i className="material-icons">import_export</i>
-                <span>API</span>
-              </button>
-            </div>
-
-            {actions.map(action => (
-              <Dropdown key={action.title}>
+            {/* {!type && (
+              <div className="dropdown">
+                <button
+                  type="button"
+                  className="common-button data-toggle is-border is-icon"
+                >
+                  <i className="material-icons">import_export</i>
+                  <span>API</span>
+                </button>
+              </div>
+            )} */}
+            {!type && (
+              <Dropdown>
                 <Dropdown.Toggle
                   drop="right"
                   variant=""
                   id="dropdown-Data"
                   className="common-button data-toggle is-border is-icon"
                 >
-                  <i className="material-icons">{action.icon}</i>
-                  {action.title}
-                  {action.hasDropdown && (
+                  <i className="material-icons">{actionSync.icon}</i>
+                  {actionSync.title}
+                  {actionSync.hasDropdown && (
                     <i className="material-icons">expand_more</i>
                   )}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                  {action.menu.map(item => (
+                  {actionSync.menu.map(item => (
                     <Dropdown.Item
                       onClick={() => {
                         item.link();
                       }}
                       key={item.key}
-                      // target="_blank"
                     >
                       {item.text}
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
-            ))}
+            )}
+
+            <Dropdown>
+              <Dropdown.Toggle
+                drop="right"
+                variant=""
+                id="dropdown-Data"
+                className="common-button data-toggle is-border is-icon"
+              >
+                <i className="material-icons">{actionExport.icon}</i>
+                {actionExport.title}
+                {actionExport.hasDropdown && (
+                  <i className="material-icons">expand_more</i>
+                )}
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                {actionExport.menu.map(item => (
+                  <Fragment key={item.key}>
+                    {item.link && (
+                      <Dropdown.Item href={item.link}>
+                        {item.text}
+                      </Dropdown.Item>
+                    )}
+                    {item.action && (
+                      <Dropdown.Item
+                        onClick={item.action}
+                        onKeyDown={item.action}
+                      >
+                        {item.text}
+                      </Dropdown.Item>
+                    )}
+                  </Fragment>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
           {!type && (
             <div className="table-responsive my-2">
@@ -408,6 +444,5 @@ const mapStateToProps = ({ reportReducer }) => ({
 });
 
 export default connect(mapStateToProps, {
-  applyActionToReport,
   getCustomReportTableData,
 })(CollapseFilterTable);

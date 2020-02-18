@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
@@ -10,10 +11,13 @@ import {
 } from '../../../utils/toastHandler';
 import FilterByDate from '../common/filterByDate';
 import CollapseFilterTable from '../CollapseFilterTable';
+import { excelExport } from '../../../actions/templateAction';
 
 /* eslint-disable camelcase */
 
-export default class UserExportReport extends Component {
+let statusLoaded = '';
+
+class UserExportReport extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +28,8 @@ export default class UserExportReport extends Component {
       preview_endedDate: new Date(),
       preview_startedDate: '',
       showPreview: false,
-
+      taskId: '',
+      fileToDownload: '',
       //   project: 'Project',
     };
   }
@@ -54,6 +59,26 @@ export default class UserExportReport extends Component {
       })
       .catch();
   }
+
+  componentDidUpdate(prevProps) {
+    const { taskId } = this.state;
+    if (
+      prevProps.templateReducer.exportExcel !==
+      this.props.templateReducer.exportExcel
+    ) {
+      const resp = this.props.templateReducer.exportExcel;
+      if (resp.task_status !== 'Completed') {
+        setInterval(this.props.excelExport(taskId), 5000);
+      } else {
+        this.setDownloadFile(resp.file_url);
+      }
+    }
+  }
+
+  setDownloadFile = file => {
+    this.setState({ fileToDownload: file, showPreview: true });
+    statusLoaded = true;
+  };
 
   onEndChangeHandler = date => {
     const { startedDate } = this.state;
@@ -124,8 +149,11 @@ export default class UserExportReport extends Component {
       .then(req => {
         if (req.status === 200) {
           successToast(req.data.message);
+          this.props.excelExport(req.data.task_id);
+          statusLoaded = false;
           this.setState({
-            showPreview: true,
+            // showPreview: true,
+            taskId: req.data.task_id,
           });
         }
       })
@@ -172,13 +200,18 @@ export default class UserExportReport extends Component {
     });
   };
 
+  // handleExcelExport = () => {
+  //   const { fileToDownload } = this.state;
+  //   // this.props.excelExport(taskId);
+  // };
+
   render() {
     const {
       state: {
         Userselected,
         startedDate,
         endedDate,
-
+        fileToDownload,
         preview_endedDate,
         preview_startedDate,
         showPreview,
@@ -287,14 +320,16 @@ export default class UserExportReport extends Component {
 
                       <div className="col-md-12">
                         <button
-                          // disabled
+                          disabled={statusLoaded === false}
                           type="button"
                           className="common-button mt-3 is-bg"
                           onClick={e => {
                             this.handleApply(e);
                           }}
                         >
-                          Generate
+                          {statusLoaded === false
+                            ? 'Downloading'
+                            : 'Generate'}
                         </button>
                       </div>
                     </div>
@@ -355,7 +390,11 @@ export default class UserExportReport extends Component {
                 </div>
               </div>
               {showPreview && (
-                <CollapseFilterTable id={id} type="standard" />
+                <CollapseFilterTable
+                  id={id}
+                  type="standard"
+                  excelFileToDownload={fileToDownload}
+                />
               )}
             </div>
           </div>
@@ -364,3 +403,10 @@ export default class UserExportReport extends Component {
     );
   }
 }
+const mapStateToProps = ({ templateReducer }) => ({
+  templateReducer,
+});
+
+export default connect(mapStateToProps, {
+  excelExport,
+})(UserExportReport);

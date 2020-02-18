@@ -5,6 +5,7 @@ import {
   GET_TYPES,
   GET_REGIONS,
   GENERATE_DATA_EXPORT,
+  EXPORT_EXCEL_REPORT,
 } from '../actions/types';
 
 const initialState = {
@@ -24,6 +25,8 @@ const initialState = {
   regions: [],
   types: [],
   dataExportResponse: '',
+  taskId: '',
+  exportExcel: {},
 };
 
 export default function(state = initialState, action) {
@@ -87,6 +90,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         dataExportResponse: action.payload.message,
+        taskId: action.payload.task_id,
+      };
+    case EXPORT_EXCEL_REPORT:
+      return {
+        ...state,
+        exportExcel: action.payload,
       };
     default:
       return state;

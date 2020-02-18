@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
-import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 import { DotLoader } from '../../myForm/Loader';
 
 /* eslint-disable camelcase */

@@ -9,7 +9,7 @@ import {
 } from '../../actions/superAdminDashboardActions';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import ExportTable from './exportTable';
-import AdvancedExportModal from './advanceExportModal';
+// import AdvancedExportModal from './advanceExportModal';
 import DeleteModal from '../common/DeleteModal';
 /* eslint-disable */
 
@@ -19,7 +19,7 @@ class OrganizationExport extends Component {
     this.state = {
       exportHistory: [],
       loader: false,
-      showModal: false,
+      // showModal: false,
       modalLoader: false,
       deleteModal: false,
       selected: '',
@@ -54,7 +54,7 @@ class OrganizationExport extends Component {
 
   componentDidUpdate(prevProps) {
     const { superAdminDashboard } = this.props;
-    const { showModal } = this.state;
+    // const { showModal } = this.state;
     if (
       prevProps.superAdminDashboard.exportOrgList !==
       superAdminDashboard.exportOrgList
@@ -67,11 +67,11 @@ class OrganizationExport extends Component {
       superAdminDashboard.createExportResp !== ''
     ) {
       successToast(superAdminDashboard.createExportResp);
-      if (showModal) {
-        this.setState({ modalLoader: false }, () => {
-          this.handleToggleModal();
-        });
-      }
+      // if (showModal) {
+      //   this.setState({ modalLoader: false }, () => {
+      //     this.handleToggleModal();
+      //   });
+      // }
     }
     if (
       prevProps.superAdminDashboard.deleteResp !==
@@ -86,9 +86,9 @@ class OrganizationExport extends Component {
     this.setState({ exportHistory: list, loader: false });
   };
 
-  handleToggleModal = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
-  };
+  // handleToggleModal = () => {
+  //   this.setState(({ showModal }) => ({ showModal: !showModal }));
+  // };
 
   handleToggleDeleteModal = id => {
     this.setState(state => ({
@@ -187,7 +187,7 @@ class OrganizationExport extends Component {
                 >
                   New Export
                 </button>
-                <button
+                {/* <button
                   type="button"
                   className="common-button is-bg"
                   onClick={() => {
@@ -195,7 +195,7 @@ class OrganizationExport extends Component {
                   }}
                 >
                   Advanced Export
-                </button>
+                </button> */}
               </div>
             </div>
             {loader && <DotLoader />}
@@ -206,13 +206,13 @@ class OrganizationExport extends Component {
               />
             )}
           </div>
-          {showModal && (
+          {/* {showModal && (
             <AdvancedExportModal
               handleToggleModal={this.handleToggleModal}
               handleAdvanceSubmit={this.handleAdvanceSubmit}
               modalLoader={modalLoader}
             />
-          )}
+          )} */}
           {deleteModal && (
             <DeleteModal
               onCancel={this.handleToggleDeleteModal}
