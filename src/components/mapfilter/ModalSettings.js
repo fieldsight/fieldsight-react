@@ -42,7 +42,7 @@ class ModalSettings extends PureComponent {
         <div className="popup-body">
           <div className="card">
             <div className="card-header main-card-header">
-              <h5>Manage filters & Metrics</h5>
+              <h5>Manage filters,Metrics & Layers</h5>
               <span
                 className="popup-close"
                 onClick={openModalSetting}

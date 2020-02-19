@@ -1,23 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import format from 'date-fns/format';
 import { DotLoader } from '../myForm/Loader';
 import Modal from '../common/Modal';
 import RightContentCard from '../common/RightContentCard';
-import GlobalModalForm from './GlobalModalForm';
+import GlobalModalForm from './common/GlobalModalForm';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import ScheduleFormTable from './ScheduleFormTable';
-import EditFormGuide from './EditFormGuide';
-import AddForm from './AddForm';
-import ManageModal from './ManageModal';
+import EditFormGuide from './common/EditFormGuide';
+import AddForm from './common/AddForm';
+import ManageModal from './common/ManageModal';
 import Loader from '../common/Loader';
 /* eslint-disable react/destructuring-assignment */
-
-const formatDate = date => {
-  const dateIdx = date.getDate();
-  const monthIndex = date.getMonth() + 1;
-  const year = date.getFullYear();
-  return `${year}-${monthIndex}-${dateIdx}`;
-};
+/* eslint-disable react/no-did-update-set-state */
 
 class ScheduleForms extends Component {
   _isMounted = false;
@@ -43,6 +38,7 @@ class ScheduleForms extends Component {
       myFormList: props.myForms,
       projectFormList: props.projectForms,
       sharedFormList: props.sharedForms,
+      orgForms: props.orgLibraryForms,
       isEditForm: false,
       fsxf: '',
       loadReq: false,
@@ -79,10 +75,31 @@ class ScheduleForms extends Component {
     }
   }
 
+  componentDidUpdate(nextProps) {
+    const { props } = this;
+    if (nextProps.myForms !== props.myForms) {
+      this.setState({
+        myFormList: props.myForms,
+      });
+    } else if (nextProps.projectForms !== props.projectForms) {
+      this.setState({
+        projectFormList: props.projectForms,
+      });
+    } else if (nextProps.sharedForms !== props.sharedForms) {
+      this.setState({
+        sharedFormList: props.sharedForms,
+      });
+    } else if (nextProps.orgLibraryForms !== props.orgLibraryForms) {
+      this.setState({
+        orgForms: props.orgLibraryForms,
+      });
+    }
+  }
+
   onChangeHandler = async e => {
     const {
       state: { activeTab },
-      props: { myForms, projectForms, sharedForms },
+      props: { myForms, projectForms, sharedForms, orgLibraryForms },
     } = this;
     const searchValue = e.target.value;
 
@@ -134,12 +151,23 @@ class ScheduleForms extends Component {
         this.setState({
           sharedFormList: filteredData,
         });
+      } else if (activeTab === 'orgLibraryForms') {
+        const filteredData = await orgLibraryForms.filter(form => {
+          return form.title
+            .toLowerCase()
+            .includes(searchValue.toLowerCase());
+        });
+
+        this.setState({
+          orgForms: filteredData,
+        });
       }
     } else {
       this.setState({
         myFormList: myForms,
         sharedFormList: sharedForms,
         projectFormList: projectForms,
+        orgForms: orgLibraryForms,
       });
     }
   };
@@ -296,12 +324,18 @@ class ScheduleForms extends Component {
   };
 
   toggleTab = tab => {
-    const { myForms, sharedForms, projectForms } = this.props;
+    const {
+      myForms,
+      sharedForms,
+      projectForms,
+      orgLibraryForms,
+    } = this.props;
     this.setState({
       activeTab: tab,
       myFormList: myForms,
       sharedFormList: sharedForms,
       projectFormList: projectForms,
+      orgForms: orgLibraryForms,
     });
   };
 
@@ -311,6 +345,7 @@ class ScheduleForms extends Component {
       projectForms,
       sharedForms,
       closePopup,
+      orgLibraryForms,
     } = this.props;
     this.setState({
       formTitle: '',
@@ -322,6 +357,7 @@ class ScheduleForms extends Component {
       sharedFormList: sharedForms,
       xf: '',
       isEditForm: false,
+      orgForms: orgLibraryForms,
     });
     closePopup();
   };
@@ -393,9 +429,9 @@ class ScheduleForms extends Component {
           selected_days: selectedDay,
           month_day: monthDay,
 
-          date_range_start: formatDate(data.startDate),
+          date_range_start: format(data.startDate, 'YYYY-MM-DD'),
           ...(data.endDate && {
-            date_range_end: formatDate(data.endDate),
+            date_range_end: format(data.endDate, 'YYYY-MM-DD'),
           }),
           setting: {
             notify_incomplete_schedule: data.notifyIncomplete,
@@ -439,9 +475,9 @@ class ScheduleForms extends Component {
           frequency,
           selected_days: selectedDay,
           month_day: monthDay,
-          date_range_start: formatDate(data.startDate),
+          date_range_start: format(data.startDate, 'YYYY-MM-DD'),
           ...(data.endDate && {
-            date_range_end: formatDate(data.endDate),
+            date_range_end: format(data.endDate, 'YYYY-MM-DD'),
           }),
           setting: {
             id: data.settingId,
@@ -539,6 +575,7 @@ class ScheduleForms extends Component {
         sharedFormList,
         isEditForm,
         isProjectForm,
+        orgForms,
       },
       props: {
         typeOptions,
@@ -633,7 +670,7 @@ class ScheduleForms extends Component {
                 projectList={projectFormList}
                 sharedList={sharedFormList}
                 handleRadioChange={this.handleMyFormChange}
-                // handleSaveForm={this.handleSaveForm}
+                orgForms={orgForms}
                 loader={formLoader}
               />
             </ManageModal>

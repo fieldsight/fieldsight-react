@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import CountCard from '../common/CountCard';
 import { AvatarContentLoader } from '../common/Loader';
@@ -31,6 +31,7 @@ class DashboardHeader extends PureComponent {
       superAdminId,
       total_teams,
       total_submissions,
+      identifier,
     } = this.props;
     const ManageDropDown = [
       {
@@ -120,6 +121,17 @@ class DashboardHeader extends PureComponent {
                 {country && <span>{country}</span>}
                 &nbsp;&nbsp;&nbsp;
                 {additional_desc && <span>{additional_desc}</span>}
+                <div className="type-info">
+                  {identifier && (
+                    <div className="flex">
+                      <label>
+                        <strong>Identifier :</strong>
+                      </label>
+                      &nbsp;
+                      <span>{identifier}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -167,12 +179,14 @@ class DashboardHeader extends PureComponent {
                     />
                   </a>
                 ) : (
-                  <CountCard
-                    countName={manage.title}
-                    countNumber={manage.total_sites}
-                    icon={manage.icon}
-                    noSubmissionText
-                  />
+                  <Fragment key={manage.title}>
+                    <CountCard
+                      countName={manage.title}
+                      countNumber={manage.total_sites}
+                      icon={manage.icon}
+                      noSubmissionText
+                    />
+                  </Fragment>
                 ),
               )}
             </div>

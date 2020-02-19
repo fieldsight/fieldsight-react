@@ -5,6 +5,11 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Table, Button } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import {
+  BlockContentLoader,
+  TableContentLoader,
+} from '../common/Loader';
+
 // import SelectElement from '../common/SelectElement';
 
 import { getTeam, getTranslate } from '../../actions/teamAction';
@@ -17,13 +22,16 @@ class Teams extends Component {
       results: [],
       masterresult: [],
       organization: [],
+      loader: false,
       // count: '',
       // selectedLanguage: 'en',
     };
   }
 
   componentDidMount() {
-    this.props.getTeam();
+    this.setState({ loader: true }, () => {
+      this.props.getTeam();
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -37,7 +45,7 @@ class Teams extends Component {
       results: nextprops.teams.teams,
       masterresult: nextprops.teams.teams,
       organization: nextprops.teams.organizations,
-      // count: nextprops.teams.count,
+      loader: false,
     });
   }
 
@@ -77,7 +85,7 @@ class Teams extends Component {
   };
 
   render() {
-    const { results, organization } = this.state;
+    const { results, organization, loader } = this.state;
 
     // const { selected, orgs } = this.props;
 
@@ -101,29 +109,33 @@ class Teams extends Component {
                 </a>
               </div>
             </div>
-            <div className="card-body">
-              <div className="row">
-                {organization.map(subRegion => (
-                  <div
-                    className="col-xl-3 col-lg-6"
-                    key={subRegion.id}
-                    style={{ marginBottom: '20px' }}
-                  >
-                    <Link
-                      to={`/organization-dashboard/${subRegion.id}`}
+            {loader ? (
+              <TableContentLoader row={10} column={4} />
+            ) : (
+              <div className="card-body">
+                <div className="row">
+                  {organization.map(subRegion => (
+                    <div
+                      className="col-xl-3 col-lg-6"
+                      key={subRegion.id}
+                      style={{ marginBottom: '20px' }}
                     >
-                      <div className="sub-regions-item ">
-                        <h5>{subRegion.name}</h5>
-                        <p>
-                          <label>Teams :</label>
-                          {subRegion.teams}
-                        </p>
-                      </div>
-                    </Link>
-                  </div>
-                ))}
+                      <Link
+                        to={`/organization-dashboard/${subRegion.id}`}
+                      >
+                        <div className="sub-regions-item ">
+                          <h5>{subRegion.name}</h5>
+                          <p>
+                            <label>Teams :</label>
+                            {subRegion.teams}
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -179,103 +191,106 @@ class Teams extends Component {
               </Button>
             </div>
           </div>
+          {loader ? (
+            <BlockContentLoader number={10} height="30px" />
+          ) : (
+            <div className="card-body">
+              <div style={{ position: 'relative', height: '800px' }}>
+                <PerfectScrollbar>
+                  <Table
+                    id="manage_table"
+                    className="table dataTable table-bordered manage_table"
+                  >
+                    <thead>
+                      <tr>
+                        <th>
+                          <FormattedMessage
+                            id="app.teams"
+                            defaultMessage="Teams"
+                          />
+                        </th>
+                        <th>
+                          <FormattedMessage
+                            id="app.address"
+                            defaultMessage="Address"
+                          />
+                        </th>
+                        <th>
+                          <FormattedMessage
+                            id="app.projects"
+                            defaultMessage="Projects"
+                          />
+                        </th>
+                        <th>
+                          <FormattedMessage
+                            id="app.sites"
+                            defaultMessage="Sites"
+                          />
+                        </th>
+                        <th>
+                          <FormattedMessage
+                            id="app.users"
+                            defaultMessage="Users"
+                          />
+                        </th>
 
-          <div className="card-body">
-            <div style={{ position: 'relative', height: '800px' }}>
-              <PerfectScrollbar>
-                <Table
-                  id="manage_table"
-                  className="table dataTable table-bordered manage_table"
-                >
-                  <thead>
-                    <tr>
-                      <th>
-                        <FormattedMessage
-                          id="app.teams"
-                          defaultMessage="Teams"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.address"
-                          defaultMessage="Address"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.projects"
-                          defaultMessage="Projects"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.sites"
-                          defaultMessage="Sites"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.users"
-                          defaultMessage="Users"
-                        />
-                      </th>
+                        <th>
+                          <FormattedMessage
+                            id="app.action"
+                            defaultMessage="Action"
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {results &&
+                        results.length > 0 &&
+                        results.map(project => {
+                          return (
+                            <tr key={project.id}>
+                              <td>
+                                <a
+                                  href={`/fieldsight/application/#/team-dashboard/${project.id}`}
+                                  className="pending table-profile"
+                                >
+                                  <figure>
+                                    <img
+                                      src={project.logo}
+                                      alt="site-logo"
+                                    />
+                                  </figure>
+                                  <h5>{project.name}</h5>
+                                </a>
+                              </td>
 
-                      <th>
-                        <FormattedMessage
-                          id="app.action"
-                          defaultMessage="Action"
-                        />
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {results &&
-                      results.length > 0 &&
-                      results.map(project => {
-                        return (
-                          <tr key={project.id}>
-                            <td>
-                              <a
-                                href={`/fieldsight/application/#/team-dashboard/${project.id}`}
-                                className="pending table-profile"
-                              >
-                                <figure>
-                                  <img
-                                    src={project.logo}
-                                    alt="site-logo"
-                                  />
-                                </figure>
-                                <h5>{project.name}</h5>
-                              </a>
-                            </td>
+                              <td>{project.address}</td>
+                              <td>{project.projects}</td>
+                              <td>{project.sites}</td>
+                              <td>{project.users}</td>
 
-                            <td>{project.address}</td>
-                            <td>{project.projects}</td>
-                            <td>{project.sites}</td>
-                            <td>{project.users}</td>
-
-                            <td>
-                              <a
-                                href={`/fieldsight/application/#/team-dashboard/${project.id}`}
-                                className="td-view-btn td-btn"
-                              >
-                                <i className="la la-eye" />
-                              </a>
-                              <a
-                                href={`/fieldsight/application/#/team-settings/${project.id}`}
-                                className="td-edit-btn td-btn"
-                              >
-                                <i className="la la-edit" />
-                              </a>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </Table>
-              </PerfectScrollbar>
+                              <td>
+                                <a
+                                  href={`/fieldsight/application/#/team-dashboard/${project.id}`}
+                                  className="td-view-btn td-btn"
+                                >
+                                  <i className="la la-eye" />
+                                </a>
+                                <a
+                                  href={`/fieldsight/application/#/team-settings/${project.id}`}
+                                  className="td-edit-btn td-btn"
+                                >
+                                  <i className="la la-edit" />
+                                </a>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </Table>
+                </PerfectScrollbar>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </>
     );

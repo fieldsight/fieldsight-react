@@ -138,7 +138,7 @@ class ProjectDashboardComponent extends Component {
                     </h5> */}
                 <div className="dash-btn">
                   <a
-                    href={`/#/mapfilter/${id}/`}
+                    href={`/fieldsight/application/#/proj-mapfilter/${id}/`}
                     className="fieldsight-btn left-icon"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -391,12 +391,18 @@ class ProjectDashboardComponent extends Component {
         <div className="progress-table mrb-30">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-              <h5>
-                <FormattedMessage
-                  id="app.progress-table"
-                  defaultMessage="Progress table"
-                />
-              </h5>
+              <div className="col-lg-8">
+                <h5>
+                  <FormattedMessage
+                    id="app.progress-table"
+                    defaultMessage="Progress table"
+                  />
+                </h5>
+              </div>
+              <div className="form-group pull-right no-margin">
+                {' '}
+                * denotes organization form{' '}
+              </div>
             </div>
 
             <ProgressTable

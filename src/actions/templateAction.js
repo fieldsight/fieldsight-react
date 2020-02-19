@@ -1,5 +1,13 @@
 import axios from 'axios';
-import { GET_FORM_TYPES, GET_REPORT_LIST } from './types';
+import {
+  GET_FORM_TYPES,
+  GET_REPORT_LIST,
+  GET_PROJECT_BREADCRUMB,
+  GET_TYPES,
+  GET_REGIONS,
+  GENERATE_DATA_EXPORT,
+  EXPORT_EXCEL_REPORT,
+} from './types';
 
 export const getReportList = id => dispatch => {
   axios
@@ -23,6 +31,68 @@ export const getFormType = (id, types) => dispatch => {
         type: GET_FORM_TYPES,
         payload: res.data,
         flag: types,
+      });
+    })
+    .catch();
+};
+
+export const getProjectBreadcrumb = projectId => dispatch => {
+  axios
+    .get(`/fv3/api/settings-breadcrumbs/${projectId}/?type=project`)
+    .then(res => {
+      dispatch({
+        type: GET_PROJECT_BREADCRUMB,
+        payload: res.data,
+      });
+    })
+    .catch();
+};
+
+export const getRegionList = projectId => dispatch => {
+  axios
+    .get(`/fieldsight/api/project-regions/${projectId}/`)
+
+    .then(res => {
+      dispatch({
+        type: GET_REGIONS,
+        payload: res.data,
+      });
+    })
+    .catch();
+};
+
+export const getTypeList = projectId => dispatch => {
+  axios
+    .get(`/fieldsight/api/site-types/${projectId}/`)
+    .then(res => {
+      dispatch({
+        type: GET_TYPES,
+        payload: res.data,
+      });
+    })
+    .catch();
+};
+export const generateDataExport = (projectId, body) => dispatch => {
+  axios
+    .post(
+      `/v4/api/reporting/xls-project-responses/${projectId}/`,
+      body,
+    )
+    .then(res => {
+      dispatch({
+        type: GENERATE_DATA_EXPORT,
+        payload: res.data,
+      });
+    })
+    .catch();
+};
+export const excelExport = taskId => dispatch => {
+  axios
+    .get(`/v4/api/reporting/standard-reports-export-xls/${taskId}/`)
+    .then(res => {
+      dispatch({
+        type: EXPORT_EXCEL_REPORT,
+        payload: res.data,
       });
     })
     .catch();

@@ -52,7 +52,7 @@ class DashboardHeader extends React.Component {
       surveyData,
       // activeTab,
       // toggleTab,
-      path,
+      identifier,
     } = this.props;
     const { openmodel } = this.state;
     const ManageDropdown = [
@@ -85,7 +85,7 @@ class DashboardHeader extends React.Component {
     const DataDropdown = [
       {
         title: 'Generate Report',
-        link: `/fieldsight/project-dashboard/${id}/`,
+        link: `/fieldsight/application/#/project/${id}/report`,
         id: 'app.generate-report',
       },
       {
@@ -94,111 +94,79 @@ class DashboardHeader extends React.Component {
         id: 'app.view-data',
       },
     ];
-    const pathList = [
-      { key: 0, title: 'Home', route: `/project-dashboard/${id}` },
-      {
-        key: 1,
-        title: 'Dashboard',
-        route: `/project-dashboard/${id}`,
-      },
-      {
-        key: 2,
-        title: 'Reports',
-        route: `/project-dashboard/${id}/report`,
-      },
-    ];
 
     return (
-      <div className="card mrb-30">
-        <div className="card-header main-card-header dashboard-header">
-          {showContentLoader ? (
-            <AvatarContentLoader number={1} width="300px" size="80" />
-          ) : (
-            <div className="dash-pf">
-              <figure
-                style={{
-                  backgroundImage: `url(${logo})`,
-                  width: '80px',
-                }}
-              >
-                <span />
-                <figcaption>
-                  <a
-                    onKeyDown={() => {
-                      openModal('Gallery');
-                    }}
-                    tabIndex="0"
-                    role="button"
-                    className="photo-preview"
-                    onClick={() => {
-                      openModal('Gallery');
-                    }}
-                  >
-                    <i className="la la-eye" />
-                  </a>
-                </figcaption>
-              </figure>
-              <div className="dash-pf-content">
-                {name && <h5>{name}</h5>}
-                {/* {identifier && <span>{identifier}</span>} */}
-                {address && <span>{address}</span>}
-                {/* {region && <span>{region} </span>} */}
+      <div className="right-content no-bg new-dashboard">
+        <div className="card mrb-30">
+          <div className="card-header main-card-header dashboard-header">
+            {showContentLoader ? (
+              <AvatarContentLoader
+                number={1}
+                width="300px"
+                size="80"
+              />
+            ) : (
+              <div className="dash-pf">
+                <figure
+                  style={{
+                    backgroundImage: `url(${logo})`,
+                    width: '80px',
+                  }}
+                >
+                  <span />
+                  <figcaption>
+                    <a
+                      onKeyDown={() => {
+                        openModal('Gallery');
+                      }}
+                      tabIndex="0"
+                      role="button"
+                      className="photo-preview"
+                      onClick={() => {
+                        openModal('Gallery');
+                      }}
+                    >
+                      <i className="la la-eye" />
+                    </a>
+                  </figcaption>
+                </figure>
+                <div className="dash-pf-content">
+                  {name && <h5>{name}</h5>}
+                  {address && <span>{address}</span>}
+                  {/* {region && <span>{region} </span>} */}
+                  <div className="type-info">
+                    {identifier && (
+                      <div className="flex">
+                        <label>
+                          <strong>Identifier :</strong>
+                        </label>
+                        &nbsp;
+                        <span>{identifier}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
-          <div className="dash-btn">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant=""
-                id="dropdown-Data"
-                className="fieldsight-btn"
-              >
-                <i className="la la-paste" />
-
-                <span>
-                  <FormattedMessage
-                    id="app.data"
-                    defaultMessage="Data"
-                    description="Data"
-                  />
-                </span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-right">
-                {DataDropdown.map((item, i) => (
-                  <Dropdown.Item
-                    href={item.link}
-                    key={i}
-                    target="_blank"
-                  >
-                    <FormattedMessage
-                      id={item.id}
-                      defaultMessage={item.title}
-                      description={item.title}
-                    />
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-
-            {isProjectManager && (
+            )}
+            <div className="dash-btn">
               <Dropdown>
                 <Dropdown.Toggle
                   variant=""
-                  id="dropdown-Manage"
+                  id="dropdown-Data"
                   className="fieldsight-btn"
                 >
-                  <i className="la la-cog" />
+                  <i className="la la-paste" />
 
                   <span>
                     <FormattedMessage
-                      id="app.manage"
-                      defaultMessage="Manage"
-                      description="Manage"
+                      id="app.data"
+                      defaultMessage="Data"
+                      description="Data"
                     />
                   </span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
-                  {ManageDropdown.map((item, i) => (
+                  {DataDropdown.map((item, i) => (
                     <Dropdown.Item
                       href={item.link}
                       key={i}
@@ -213,112 +181,137 @@ class DashboardHeader extends React.Component {
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
-            )}
-          </div>
-        </div>
-        <div className="card-body dashboard-header-bottom">
-          <div className="flex-between">
-            <div className="header-count">
-              <Link
-                to={`/project-responses/${id}/general`}
-                target="_blank"
-              >
-                <CountCard
-                  countName=""
-                  countNumber={totalSubmissions}
-                  icon="la-copy"
-                  // noSubmissionText={true}
-                />
-              </Link>
-              <a
-                href={`/fieldsight/application/#/project-users/${id}/`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <CountCard
-                  countName="User"
-                  countNumber={totalUsers}
-                  icon="la-user"
-                  noSubmissionText
-                />
-              </a>
-              <a
-                href={`/fieldsight/application/?project=${id}#/project-sitelist`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <CountCard
-                  countName="site"
-                  countNumber={totalSites}
-                  icon="la-map-marker"
-                  noSubmissionText
-                />
-              </a>
+
+              {isProjectManager && (
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant=""
+                    id="dropdown-Manage"
+                    className="fieldsight-btn"
+                  >
+                    <i className="la la-cog" />
+
+                    <span>
+                      <FormattedMessage
+                        id="app.manage"
+                        defaultMessage="Manage"
+                        description="Manage"
+                      />
+                    </span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="dropdown-menu-right">
+                    {ManageDropdown.map((item, i) => (
+                      <Dropdown.Item
+                        href={item.link}
+                        key={i}
+                        target="_blank"
+                      >
+                        <FormattedMessage
+                          id={item.id}
+                          defaultMessage={item.title}
+                          description={item.title}
+                        />
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+              )}
             </div>
-            {isProjectManager && (
-              <button
-                type="button"
-                onClick={() => this.setState({ openmodel: true })}
-                className="common-button is-border is-icon"
-              >
-                <i className="material-icons">library_add</i>
-                <span>Add data</span>
-              </button>
-            )}
           </div>
-          <ul className="common-tab is-line mt-4">
-            {pathList.map(list => (
-              <li key={list.key}>
+          <div className="card-body dashboard-header-bottom">
+            <div className="flex-between">
+              <div className="header-count">
                 <Link
-                  to={list.route}
-                  className={list.route === path ? 'current' : ''}
+                  to={`/project-responses/${id}/general`}
+                  target="_blank"
                 >
-                  {list.title}
+                  <CountCard
+                    countName=""
+                    countNumber={totalSubmissions}
+                    icon="la-copy"
+                    // noSubmissionText={true}
+                  />
                 </Link>
-              </li>
-            ))}
-          </ul>
-          {openmodel && (
-            <SubmissionModal
-              surveyData={surveyData}
-              toggleModal={() => this.setState({ openmodel: false })}
-            />
-          )}
-          {showGallery && (
-            <div
-              tabIndex="0"
-              role="button"
-              onKeyDown={() => {
-                closeModal('Gallery');
-              }}
-              className="gallery-zoom fieldsight-popup open"
-              style={{ zIndex: 99999 }}
-              onClick={() => {
-                closeModal('Gallery');
-              }}
-            >
-              <div className="gallery-body">
-                <img
-                  src={logo}
-                  alt="logo"
-                  style={{ minHeight: '400px', maxHeight: '400px' }}
-                />
+                <a
+                  href={`/fieldsight/application/#/project-users/${id}/`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <CountCard
+                    countName="User"
+                    countNumber={totalUsers}
+                    icon="la-user"
+                    noSubmissionText
+                  />
+                </a>
+                <a
+                  href={`/fieldsight/application/?project=${id}#/project-sitelist`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <CountCard
+                    countName="site"
+                    countNumber={totalSites}
+                    icon="la-map-marker"
+                    noSubmissionText
+                  />
+                </a>
               </div>
-              <span
+              {isProjectManager && (
+                <button
+                  type="button"
+                  onClick={() => this.setState({ openmodel: true })}
+                  className="common-button is-border is-icon"
+                >
+                  <i className="material-icons">library_add</i>
+                  <span>Add data</span>
+                </button>
+              )}
+            </div>
+            {openmodel && (
+              <SubmissionModal
+                surveyData={surveyData}
+                toggleModal={() => {
+                  this.setState({ openmodel: false });
+                }}
+              />
+            )}
+            {showGallery && (
+              <div
                 tabIndex="0"
                 role="button"
                 onKeyDown={() => {
-                  closeModal('Header');
+                  closeModal('Gallery');
                 }}
-                className="popup-close"
+                className="gallery-zoom fieldsight-popup open"
+                style={{ zIndex: 99999 }}
                 onClick={() => {
                   closeModal('Gallery');
                 }}
               >
-                <i className="la la-close" />
-              </span>
-            </div>
-          )}
+                <div className="gallery-body">
+                  <img
+                    src={logo}
+                    alt="logo"
+                    style={{ minHeight: '400px', maxHeight: '400px' }}
+                  />
+                </div>
+                <span
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={() => {
+                    closeModal('Header');
+                  }}
+                  className="popup-close"
+                  onClick={() => {
+                    closeModal('Gallery');
+                  }}
+                >
+                  <i className="la la-close" />
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );

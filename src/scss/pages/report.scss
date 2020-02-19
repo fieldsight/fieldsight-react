@@ -40,11 +40,62 @@
         }
 
         .report-content {
-            color: $heading-color;
+
             cursor: pointer;
 
             h4 {
-                font-size: 1.125rem;
+                font-size: 1rem;
+                color: $heading-color;
+            }
+
+            .summary-content {
+                @include display-flex(flex);
+                @include justify-content-start;
+                @include align-items-center;
+            }
+
+            p {
+                color: $color-primary;
+
+                b {
+                    text-transform: capitalize;
+                    color: $primary-light;
+                    font-weight: 500;
+
+                    &::after {
+                        content: ':';
+                        display: inline-flex;
+                        margin: 0 .25rem;
+
+                    }
+
+                }
+
+                &:not(:last-child) {
+                    margin-right: 1rem;
+                    ;
+                }
+
+
+            }
+
+            a {
+                color: $color-primary;
+
+                h4 {
+                    font-size: 1rem;
+                    color: $heading-color;
+                }
+
+                p {
+                    color: $color-primary;
+
+                    b {
+                        color: $primary-light;
+                    }
+
+
+                }
             }
 
 
@@ -60,7 +111,7 @@
                             padding: .25rem 1rem .25rem 1.5rem;
                             display: block;
                             font-weight: 600;
-                            font-size: .9375rem;
+                            font-size: .875rem;
                             position: relative;
 
                             &::before {
@@ -85,6 +136,40 @@
 
                                 &:hover {
                                     color: $color-secondary;
+                                }
+
+                                ul {
+                                    display: none;
+                                    margin-left: 1rem;
+                                    padding: .25rem;
+
+                                    li {
+                                        font-weight: 400;
+                                    }
+                                }
+
+                                &.dropdown {
+                                    padding-left: 1rem;
+                                    position: relative;
+                                    font-weight: 600;
+
+                                    &::after {
+                                        content: 'expand_more';
+                                        font-family: 'Material Icons';
+                                        left: 0;
+                                        position: absolute;
+                                        top: 0;
+                                    }
+
+                                    &.active {
+                                        ul {
+                                            display: block;
+
+                                            p {
+                                                font-size: .9375rem;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -223,4 +308,52 @@
             background-color: $color-white;
         }
     }
+}
+
+.view-report {
+    @include display-flex(flex);
+    @include justify-content-start;
+    @include align-items-center;
+
+    p {
+        color: $color-primary;
+        @include display-flex(flex);
+        @include justify-content-start;
+        @include align-items-center;
+        margin-bottom: .25rem;
+
+        b {
+            text-transform: capitalize;
+            color: $primary-light;
+            font-weight: 500;
+
+            &::after {
+                content: ':';
+                display: inline-flex;
+                margin: 0 .25rem;
+
+            }
+
+        }
+
+        &:not(:last-child) {
+            margin-right: 1rem;
+        }
+
+        span {
+            i {
+                color: $color-green;
+                cursor: pointer;
+                font-size: 1rem;
+            }
+        }
+
+
+    }
+
+}
+
+.description {
+    display: block;
+    width: 100%;
 }

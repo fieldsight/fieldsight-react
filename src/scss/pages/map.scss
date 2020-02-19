@@ -1,10 +1,105 @@
 .fieldsight-new {
+  .search-control-info-list-item {
+    &:hover {
+      background: #d4cdcd40;
+    }
+  }
+  .checkbox {
+    a {
+      &:hover {
+        color: #0056b3 !important;
+        text-decoration: underline !important;
+      }
+    }
+  }
+  .show_typeahead {
+    display: flex;
+  }
+  .dropdown-menu {
+    font-size: 0.7rem;
+  }
+  .hide_typeahead {
+    display: none;
+  }
+  // .custom-checkbox {
+  //   display: block !important;
+  // }
+  .js-measuringprompt {
+    h3 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.7rem;
+    }
+  }
+
+  .leaflet-measure-resultpopup {
+    h3 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.7rem;
+    }
+  }
+
+  #legend_id {
+    right: 0;
+    left: auto;
+    bottom: 0;
+    top: auto;
+    z-index: 999;
+  }
+
+  .panel-header {
+    margin-left: 15px;
+
+    b {
+      margin: 0 auto;
+      text-transform: capitalize;
+      // color: 'red',
+      font-weight: 200;
+      // border: '2px solid',
+    }
+  }
+
+  .whole-content {
+    margin: 15px;
+    overflow-y: scroll;
+    max-height: 251px;
+    height: 182px;
+  }
+
+  .custom_btn_text {
+    padding: 0 !important;
+  }
+
+  #form_legend {
+    margin-top: -32px;
+  }
+
+  .card-link {
+    input[type='checkbox'] {
+      margin-right: 7px;
+    }
+  }
+
+  .custom_pane {
+    padding: 0 !important;
+  }
+
   .custom-css-typeahead {
     position: relative !important;
     flex: 1 1 auto;
     width: 1%;
     margin-bottom: 0;
   }
+
+  a.searchselected {
+    background-color: #f5f5f5;
+  }
+
   .circle {
     width: 15px;
     height: 15px;
@@ -17,18 +112,25 @@
     margin-left: 8px;
     margin-right: 8px;
   }
-  .search-control-info {
-    background-color: white;
-  }
-  .search-control-info-list-item:hover {
-    background-color: #8080809e;
-  }
-  .search-control-info-list-item {
-    border-bottom: 1px solid #dedede;
-  }
+
   a.leaflet-control-measure-toggle.js-toggle {
     display: none;
   }
+
+  .search-control-info {
+    background-color: $color-white;
+
+    .search-control-info-list {
+      overflow-y: scroll;
+      max-height: 200px;
+
+      li {
+        font-size: 0.775rem;
+        padding: 0.5rem 0.6125rem;
+      }
+    }
+  }
+
   .card {
     .map-wrapper {
       position: relative;
@@ -41,6 +143,7 @@
 
       .map {
         z-index: 2;
+        position: relative;
       }
 
       .map-sidebar {
@@ -98,16 +201,18 @@
                 margin: 0;
                 position: relative;
                 cursor: pointer;
+
                 .input-group-text {
                   background-color: $color-white;
                   border: 0;
                   border-left: 1px solid $color-bg;
                 }
+
                 ul {
                   position: absolute;
                   right: 0;
                   left: auto;
-                  min-width: 130px;
+                  min-width: 221px;
                   background-color: $color-white;
                   opacity: 0;
                   visibility: hidden;
@@ -116,21 +221,25 @@
                     0 2px 6px rgba($color-primary, 0.2)
                   );
                   top: 130%;
+
                   li {
                     a {
                       display: block;
                       padding: 0.25rem 0.5rem;
                       font-size: 0.75rem;
                       color: $primary-light;
+
                       &:hover {
                         background-color: $color-border;
                       }
                     }
+
                     &:not(:last-child) {
                       border-bottom: 1px solid $color-border;
                     }
                   }
                 }
+
                 &.open {
                   ul {
                     top: 100%;
@@ -305,6 +414,10 @@
           .layers-list {
             display: none;
 
+            .selected {
+              background: #ece9e9;
+            }
+
             &.display-list {
               display: block;
             }
@@ -372,7 +485,7 @@
         }
 
         &.top {
-          top: 0;
+          top: 5px;
         }
       }
     }
@@ -391,6 +504,7 @@
           }
         }
       }
+
       .filter-content {
         display: none;
       }
@@ -402,9 +516,11 @@
       font-size: 0.875rem;
       text-transform: capitalize;
     }
+
     .filter-list-title {
       align-items: center;
     }
+
     .form-group {
       margin: 0;
     }
@@ -502,6 +618,7 @@
   .layer-form {
     display: none;
   }
+
   .custom-file-label {
     z-index: 0 !important;
   }

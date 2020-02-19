@@ -9,6 +9,7 @@ import format from 'date-fns/format';
 class ResponseTable extends PureComponent {
   render() {
     const { generals_forms, table, survey, id } = this.props;
+    const hasOrgForm = generals_forms.some(e => e.from_organization);
 
     return (
       <>
@@ -66,10 +67,16 @@ class ResponseTable extends PureComponent {
                 return (
                   <tr key={generals.id}>
                     {survey === 'true' ? (
-                      <td>{generals.form_name}</td>
+                      <td>
+                        {generals.from_organization
+                          ? `*${generals.form_name}`
+                          : generals.form_name}
+                      </td>
                     ) : (
                       <td style={{ width: '45px' }}>
-                        {generals.name}
+                        {generals.from_organization
+                          ? `*${generals.name}`
+                          : generals.name}
                       </td>
                     )}
                     <td>
@@ -201,6 +208,11 @@ class ResponseTable extends PureComponent {
               })}
           </tbody>
         </Table>
+        {hasOrgForm && (
+          <div className="form-group pull-right no-margin">
+            * denotes organization form
+          </div>
+        )}
       </>
     );
   }

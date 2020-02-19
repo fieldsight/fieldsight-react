@@ -15,7 +15,6 @@ export default class CustomMultiSelect extends PureComponent {
       placeholderTxt,
       site,
     } = this.props;
-    // debugger;
     const className = toggleType
       ? toggleSelectClass[toggleType]
       : toggleSelectClass;

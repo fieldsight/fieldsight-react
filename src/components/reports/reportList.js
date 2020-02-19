@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import MyReports from './MyReports';
 import ShareWithMe from './SharedWithMe';
-import Templates from './templates';
+// import Templates from './templates/index';
 
 class ReportList extends Component {
   constructor(props) {
@@ -52,19 +52,6 @@ class ReportList extends Component {
               >
                 shared with me
               </li>
-              <li
-                className={activeTab === 'templates' ? 'current' : ''}
-                // tabIndex="0"
-                role="presentation"
-                onKeyDown={() => {
-                  this.toggleTab('templates');
-                }}
-                onClick={() => {
-                  this.toggleTab('templates');
-                }}
-              >
-                templates
-              </li>
             </ul>
             {activeTab === 'myReports' && (
               <Link
@@ -78,9 +65,9 @@ class ReportList extends Component {
           </div>
           {activeTab === 'myReports' && <MyReports id={id} />}
           {activeTab === 'sharedWithMe' && <ShareWithMe id={id} />}
-          {activeTab === 'templates' && (
+          {/* {activeTab === 'templates' && (
             <Templates id={id} history={this.props.history} />
-          )}
+          )} */}
         </div>
       </div>
     );

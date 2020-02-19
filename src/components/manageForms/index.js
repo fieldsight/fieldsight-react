@@ -70,11 +70,6 @@ class ManageForms extends Component {
               </li>
             </ol>
           )}
-          {/* <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a>Forms</a>
-            </li>
-          </ol> */}
         </nav>
         <div className="row">
           <SideNav

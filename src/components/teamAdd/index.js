@@ -308,8 +308,8 @@ class TeamAdd extends Component {
           <ol className="breadcrumb">
             {id ? (
               <li className="breadcrumb-item">
-                <Link to={`/team-dashboard/${id}`}>
-                  Team Dashboard
+                <Link to={`/organization-dashboard/${id}`}>
+                  Organization Dashboard
                 </Link>
               </li>
             ) : (

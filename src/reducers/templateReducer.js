@@ -1,4 +1,12 @@
-import { GET_FORM_TYPES, GET_REPORT_LIST } from '../actions/types';
+import {
+  GET_FORM_TYPES,
+  GET_REPORT_LIST,
+  GET_PROJECT_BREADCRUMB,
+  GET_TYPES,
+  GET_REGIONS,
+  GENERATE_DATA_EXPORT,
+  EXPORT_EXCEL_REPORT,
+} from '../actions/types';
 
 const initialState = {
   customReports: [],
@@ -13,6 +21,12 @@ const initialState = {
   stagedLoader: false,
   surveyLoader: false,
   projectCreatedOn: '',
+  breadcrumb: {},
+  regions: [],
+  types: [],
+  dataExportResponse: '',
+  taskId: '',
+  exportExcel: {},
 };
 
 export default function(state = initialState, action) {
@@ -27,17 +41,61 @@ export default function(state = initialState, action) {
       };
 
     case GET_FORM_TYPES:
+      if (action.flag === 'general') {
+        return {
+          ...state,
+          generalData: action.payload,
+          formLoader: true,
+        };
+      }
+      if (action.flag === 'survey') {
+        return {
+          ...state,
+          surveyData: action.payload,
+          surveyLoader: true,
+        };
+      }
+      if (action.flag === 'stage') {
+        return {
+          ...state,
+          stagedData: action.payload,
+          stagedLoader: true,
+        };
+      }
+      if (action.flag === 'scheduled') {
+        return {
+          ...state,
+          scheduledData: action.payload,
+          scheduledLoader: true,
+        };
+      }
+      return { ...state };
+
+    case GET_PROJECT_BREADCRUMB:
       return {
         ...state,
-        generalData: action.flag === 'general' ? action.payload : [],
-        scheduledData:
-          action.flag === 'scheduled' ? action.payload : [],
-        surveyData: action.flag === 'survey' ? action.payload : [],
-        stagedData: action.flag === 'stage' ? action.payload : [],
-        formLoader: action.flag === 'general' ? true : false,
-        scheduledLoader: action.flag === 'scheduled' ? true : false,
-        stagedLoader: action.flag === 'stage' ? true : false,
-        surveyLoader: action.flag === 'survey' ? true : false,
+        breadcrumb: action.payload,
+      };
+    case GET_REGIONS:
+      return {
+        ...state,
+        regions: action.payload,
+      };
+    case GET_TYPES:
+      return {
+        ...state,
+        types: action.payload,
+      };
+    case GENERATE_DATA_EXPORT:
+      return {
+        ...state,
+        dataExportResponse: action.payload.message,
+        taskId: action.payload.task_id,
+      };
+    case EXPORT_EXCEL_REPORT:
+      return {
+        ...state,
+        exportExcel: action.payload,
       };
     default:
       return state;

@@ -4,7 +4,7 @@ import { AvatarContentLoader } from '../common/Loader';
 
 const AdminListItem = ({ admin }) => {
   return (
-    <li>
+    <li key={admin.id}>
       <figure>
         <img src={admin.profile} alt="user avatar" />
       </figure>
@@ -42,12 +42,10 @@ class Admin extends PureComponent {
                 <ul>
                   {admin && admin.length > 0 ? (
                     admin.map(each => (
-                      <>
-                        <AdminListItem
-                          admin={each}
-                          key={`admin_${each.id}`}
-                        />
-                      </>
+                      <AdminListItem
+                        admin={each}
+                        key={`admin_${each.id}`}
+                      />
                     ))
                   ) : (
                     <p>No Data Available</p>

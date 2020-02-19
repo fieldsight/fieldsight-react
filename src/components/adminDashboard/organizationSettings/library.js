@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import RightContentCard from '../../common/RightContentCard';
-import ManageModal from '../../manageForms/ManageModal';
-import Modal from '../../common/Modal';
+import ManageModal from '../../manageForms/common/ManageModal';
 import Loader from '../../common/Loader';
 import {
   errorToast,
   successToast,
 } from '../../../utils/toastHandler';
-
 import LibraryTable from './libraryTable';
-
 import DeleteModal from '../../common/DeleteModal';
 
 /* eslint-disable  react/no-unused-state */
@@ -54,6 +51,7 @@ export default class Library extends Component {
             selected_organization_library_forms:
               res.data.selected_organization_library_forms,
             loader: true,
+            masterorganization_library_forms: res.data.forms,
           };
         });
       })
@@ -205,6 +203,30 @@ export default class Library extends Component {
       });
   };
 
+  onChangeHandler = async e => {
+    const { value } = e.target;
+    const {
+      masterorganization_library_forms,
+      organization_library_forms,
+    } = this.state;
+    if (value) {
+      const search = await organization_library_forms.filter(
+        result => {
+          return result.title
+            .toLowerCase()
+            .includes(value.toLowerCase());
+        },
+      );
+      this.setState({
+        organization_library_forms: search,
+      });
+    } else {
+      this.setState({
+        organization_library_forms: masterorganization_library_forms,
+      });
+    }
+  };
+
   render() {
     const {
       state: {
@@ -246,58 +268,59 @@ export default class Library extends Component {
             handleSubmit={this.handleSubmit}
             showButton
             showText="Create Form"
-            url="/forms/create"
+            url="/forms/create/"
           >
-            <form className="floating-form">
-              <>
-                <ul>
-                  <div
-                    style={{
-                      position: 'relative',
-                      height: `200px`,
-                    }}
-                  >
-                    {organization_library_forms.length > 0 &&
-                      organization_library_forms.map(
-                        (option, index) => {
-                          const filterList = this.state.selectedArr.filter(
-                            i => i.xf_id === option.xf_id,
-                          );
+            <>
+              <div className="form-group search-group mrt-15">
+                <input
+                  type="search"
+                  className="form-control"
+                  placeholder="Search"
+                  onChange={e => this.onChangeHandler(e)}
+                />
+                <i className="la la-search" />
+              </div>
+              <div
+                style={{
+                  position: 'relative',
+                  height: `200px`,
+                }}
+              >
+                {organization_library_forms.length > 0 &&
+                  organization_library_forms.map((option, index) => {
+                    const filterList = this.state.selectedArr.filter(
+                      i => i.xf_id === option.xf_id,
+                    );
 
-                          const isChecked =
-                            filterList && filterList[0]
-                              ? true
-                              : false;
+                    const isChecked =
+                      filterList && filterList[0] ? true : false;
 
-                          return (
-                            <li key={option.id}>
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id={option.xf_id}
-                                  name={option.title}
-                                  checked={isChecked}
-                                  onChange={e => {
-                                    this.handleCheck(e, option);
-                                  }}
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor={option.xf_id}
-                                  style={{ paddingLeft: '2em' }}
-                                >
-                                  {option.title}
-                                </label>
-                              </div>
-                            </li>
-                          );
-                        },
-                      )}
-                  </div>
-                </ul>
-              </>
-            </form>
+                    return (
+                      <div key={option.id}>
+                        <div className="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            className="custom-control-input"
+                            id={option.xf_id}
+                            name={option.title}
+                            checked={isChecked}
+                            onChange={e => {
+                              this.handleCheck(e, option);
+                            }}
+                          />
+                          <label
+                            className="custom-control-label"
+                            htmlFor={option.xf_id}
+                            style={{ paddingLeft: '2em' }}
+                          >
+                            {option.title}
+                          </label>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </>
           </ManageModal>
         )}
         {openDeleteModal && (
@@ -306,7 +329,7 @@ export default class Library extends Component {
             onConfirm={handleConfirm}
             onToggle={handleCancel}
             title="Warning"
-            message="Are u sure you want to remove?"
+            message="Are you sure you want to remove?"
           />
         )}
       </>

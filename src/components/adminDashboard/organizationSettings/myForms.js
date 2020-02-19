@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import {
-  errorToast,
-  successToast,
-} from '../../../utils/toastHandler';
+import { successToast } from '../../../utils/toastHandler';
 import RightContentCard from '../../common/RightContentCard';
 import Modal from '../../common/Modal';
 import DeleteModal from '../../common/DeleteModal';
 import FormTable from './formTable';
-import SelectElement from '../../common/SelectElement';
 import GeneralFormModal from './generalForm';
 import ScheduleFormModal from './scheduleform';
 import RadioElement from '../../common/RadioElement';
-import ManageModal from '../../manageForms/ManageModal';
 
 /* eslint-disable */
 
@@ -26,7 +21,7 @@ export default class MyForm extends Component {
       popUpPage: false,
       scheduled_forms: [],
       selectId: '',
-      forms: [{ xf_id: '', title: 'No forms to select' }],
+      forms: [],
       selected: '',
       openModal: false,
       form_id: '',
@@ -36,9 +31,7 @@ export default class MyForm extends Component {
       form_type: '',
       checkbox: [],
       activeTab: 'myForms',
-      organization_library_forms: [
-        { xf_id: '', title: 'No library organization to select' },
-      ],
+      organization_library_forms: [],
       selectOrganization: '',
       radioForms: '0',
       formTypePopUp: false,
@@ -72,23 +65,14 @@ export default class MyForm extends Component {
             }
 
             return {
-              forms:
-                res.data.forms.length > 0 ? res.data.forms : newArr,
+              forms: res.data.forms,
               scheduled_forms:
                 res.data.selected_forms.scheduled_forms,
               general_forms: res.data.selected_forms.general_forms,
               organization_library_forms:
-                res.data.organization_library_forms.length > 0
-                  ? res.data.organization_library_forms
-                  : orgArr,
-              selectId:
-                res.data.forms.length > 0
-                  ? res.data.forms[0].xf_id
-                  : '',
-              selectOrganization:
-                res.data.organization_library_forms.length > 0
-                  ? res.data.organization_library_forms[0].xf_id
-                  : '',
+                res.data.organization_library_forms,
+              masterOrganization: res.data.organization_library_forms,
+              masterForms: res.data.forms,
               loader: true,
             };
           });
@@ -144,7 +128,7 @@ export default class MyForm extends Component {
     } = this.state;
     const { id } = this.props;
     const body = { id: form_id };
-
+    // debugger;
     axios
       .post(
         `/fv3/api/manage-super-organizations-library/${id}/`,
@@ -177,10 +161,11 @@ export default class MyForm extends Component {
         }
       })
       .catch(err => {
-        const error = err.response.data;
-        Object.entries(error).map(([key, value]) => {
-          return errorToast(`${value}`);
-        });
+        console.log(err.response, err, 'err');
+        // const error = err.response.data;
+        // Object.entries(error).map(([key, value]) => {
+        //   return errorToast(`${value}`);
+        // });
       });
   };
 
@@ -189,22 +174,6 @@ export default class MyForm extends Component {
       openModal: false,
     });
   };
-
-  // selectHandler = e => {
-  //   const { value } = e.target;
-  //   this.setState(
-  //     {
-  //       selectId: value,
-  //     },
-  //     () => {
-  //       if (value) {
-  //         this.setState(prevState => ({
-  //           formTypePopUp: !prevState.formTypePopUp,
-  //         }));
-  //       }
-  //     },
-  //   );
-  // };
 
   generalCloseButton = () => {
     this.setState({
@@ -260,7 +229,7 @@ export default class MyForm extends Component {
   };
 
   OrganizationHandler = id => {
-    // const { value } = e.target;
+    const { masterOrganization } = this.state;
 
     this.setState(
       {
@@ -273,6 +242,7 @@ export default class MyForm extends Component {
         );
         this.setState({
           selectedArr: displayName,
+          organization_library_forms: masterOrganization,
         });
       },
     );
@@ -312,6 +282,8 @@ export default class MyForm extends Component {
   }
 
   handleForm(id) {
+    const { masterForms, masterOrganization } = this.state;
+
     this.setState(
       {
         selectId: id,
@@ -323,10 +295,54 @@ export default class MyForm extends Component {
         );
         this.setState({
           selectedArr: displayName,
+          forms: masterForms,
         });
       },
     );
   }
+
+  onChangeHandler = async (e, type) => {
+    const {
+      target: { value },
+    } = e;
+    const {
+      organization_library_forms,
+      forms,
+      masterOrganization,
+      masterForms,
+    } = this.state;
+
+    if (value && type === 'organization') {
+      const search = await organization_library_forms.filter(
+        result => {
+          return result.title
+            .toLowerCase()
+            .includes(value.toLowerCase());
+        },
+      );
+      this.setState({
+        organization_library_forms: search,
+      });
+    } else {
+      this.setState({
+        organization_library_forms: masterOrganization,
+      });
+    }
+    if (value && type === 'myForms') {
+      const search = await forms.filter(result => {
+        return result.title
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      });
+      this.setState({
+        forms: search,
+      });
+    } else {
+      this.setState({
+        forms: masterForms,
+      });
+    }
+  };
 
   render() {
     const {
@@ -356,16 +372,16 @@ export default class MyForm extends Component {
       handleAllModel,
       toggleTab,
     } = this;
-
     return (
       <>
         <RightContentCard
-          title="Organization Default Form"
+          title="Organization Default FormS"
           addButton
           toggleModal={this.handleChange}
           // buttonName="Add"
         >
           <FormTable
+            orgId={id}
             selected_forms={scheduled_forms}
             openDelete={openDelete}
             general_forms={general_forms}
@@ -478,59 +494,76 @@ export default class MyForm extends Component {
             </ul>
 
             {activeTab === 'myForms' && (
-              <ul>
-                {forms.map(formList => (
-                  <li key={formList.xf_id}>
-                    <a
-                      role="button"
-                      onKeyDown={handleConfirm}
-                      tabIndex="0"
-                      className="td-delete-btn"
-                      onClick={() => {
-                        this.handleForm(formList.xf_id);
-                      }}
-                    >
-                      {formList.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {activeTab === 'organizationForm' && (
-              // <form className="floating-form">
-              //   <div className="row">
-              //     <div className="col-xl-12 col-md-12">
-              //       {/* <SelectElement
-              //         className="form-control"
-              //         options={organization_library_forms}
-              //         changeHandler={this.OrganizationHandler}
-              //         value={selectOrganization}
-              //       /> */}
-              //     </div>
-              //   </div>
-              // </form>
-              <ul>
-                {organization_library_forms ? (
-                  organization_library_forms.map(formList => (
-                    <li key={formList.xf_id}>
+              <>
+                <div className="form-group search-group mrt-15">
+                  <input
+                    type="search"
+                    className="form-control"
+                    placeholder="Search"
+                    onChange={e => this.onChangeHandler(e, 'myForms')}
+                  />
+                  <i className="la la-search" />
+                </div>
+                <div className="form-group">
+                  {forms.map(formList => (
+                    <div key={formList.xf_id}>
                       <a
                         role="button"
                         onKeyDown={handleConfirm}
                         tabIndex="0"
                         className="td-delete-btn"
                         onClick={() => {
-                          this.OrganizationHandler(formList.xf_id);
+                          this.handleForm(formList.xf_id);
                         }}
                       >
-                        {formList.title}
+                        <div className="form-group">
+                          <label>{formList.title}</label>
+                        </div>
+                        {/* {formList.title} */}
                       </a>
-                    </li>
-                  ))
-                ) : (
-                  <p>No organization library forms </p>
-                )}
-              </ul>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {activeTab === 'organizationForm' && (
+              <>
+                <div className="form-group search-group mrt-15">
+                  <input
+                    type="search"
+                    className="form-control"
+                    placeholder="Search"
+                    onChange={e =>
+                      this.onChangeHandler(e, 'organization')
+                    }
+                  />
+                  <i className="la la-search" />
+                </div>
+                <div className="form-group">
+                  {organization_library_forms ? (
+                    organization_library_forms.map(formList => (
+                      <div key={formList.xf_id}>
+                        <a
+                          role="button"
+                          onKeyDown={handleConfirm}
+                          tabIndex="0"
+                          className="td-delete-btn"
+                          onClick={() => {
+                            this.OrganizationHandler(formList.xf_id);
+                          }}
+                        >
+                          <div className="form-group">
+                            <label>{formList.title}</label>
+                          </div>
+                        </a>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No organization library forms </p>
+                  )}
+                </div>
+              </>
             )}
           </Modal>
         )}
@@ -540,7 +573,7 @@ export default class MyForm extends Component {
             onConfirm={handleConfirm}
             onToggle={handleCancle}
             title="Warning"
-            message="Are u sure you want to delete"
+            message="Are you sure you want to delete?"
           />
         )}
       </>

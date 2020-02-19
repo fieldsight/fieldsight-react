@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
-import DatePicker from 'react-datepicker';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
 import axios from 'axios';
-import RadioElement from '../common/RadioElement';
-import { errorToast, successToast } from '../../utils/toastHandler';
+import RadioElement from '../../common/RadioElement';
+import {
+  errorToast,
+  successToast,
+} from '../../../utils/toastHandler';
+import FilterByDate from '../common/filterByDate';
+import CollapseFilterTable from '../CollapseFilterTable';
+import { excelExport } from '../../../actions/templateAction';
 
-export default class ActivityExportFile extends Component {
+let statusLoaded = '';
+
+class ActivityExportFile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,8 +23,31 @@ export default class ActivityExportFile extends Component {
       startedDate: '',
       endedDate: '',
       project: 'Project',
+      showPreview: false,
+      taskId: '',
+      fileToDownload: '',
     };
   }
+
+  componentDidUpdate(prevProps) {
+    const { taskId } = this.state;
+    if (
+      prevProps.templateReducer.exportExcel !==
+      this.props.templateReducer.exportExcel
+    ) {
+      const resp = this.props.templateReducer.exportExcel;
+      if (resp.task_status !== 'Completed') {
+        setInterval(this.props.excelExport(taskId), 5000);
+      } else {
+        this.setDownloadFile(resp.file_url);
+      }
+    }
+  }
+
+  setDownloadFile = file => {
+    this.setState({ fileToDownload: file, showPreview: true });
+    statusLoaded = true;
+  };
 
   handleYearlyChange = e => {
     const { value } = e.target;
@@ -42,14 +73,30 @@ export default class ActivityExportFile extends Component {
   };
 
   onEndChangeHandler = date => {
-    this.setState({
-      endedDate: date,
+    const { startedDate } = this.state;
+    this.setState(() => {
+      if (date < startedDate) {
+        return {
+          startedDate: date,
+        };
+      }
+      return {
+        endedDate: date,
+      };
     });
   };
 
   onChangeHandler = date => {
-    this.setState({
-      startedDate: date,
+    const { endedDate } = this.state;
+    this.setState(() => {
+      if (endedDate && date > endedDate) {
+        return {
+          endedDate: date,
+        };
+      }
+      return {
+        startedDate: date,
+      };
     });
   };
 
@@ -69,31 +116,31 @@ export default class ActivityExportFile extends Component {
     const {
       props: {
         match: {
-          params: { id },
+          params: { id, reportType },
         },
-        location: {
-          state: { fromDashboard },
-        },
+        // location: {
+        //   state: { fromDashboard },
+        // },
       },
       state: { startedDate, endedDate, scheduleType, project },
     } = this;
     const user = 'u';
-
+    const reportTitle = decodeURI(reportType);
     const data = {
       start_date: format(startedDate, ['YYYY-MM-DD']),
       end_date: format(endedDate, ['YYYY-MM-DD']),
-      ...(fromDashboard === 'Activity Report' && {
+      ...(reportTitle === 'Activity Report' && {
         type: scheduleType,
       }),
-      ...(fromDashboard === 'Project Logs' && {
+      ...(reportTitle === 'Project Logs' && {
         type: project,
       }),
-      ...(fromDashboard === 'User Activity Report' && {
+      ...(reportTitle === 'User Activity Report' && {
         type: `${user}${project}`,
       }),
     };
 
-    const route = this.toUpper(fromDashboard);
+    const route = this.toUpper(reportTitle);
 
     axios
       .post(
@@ -103,6 +150,12 @@ export default class ActivityExportFile extends Component {
       .then(req => {
         if (req.status === 200) {
           successToast(req.data.message);
+          this.props.excelExport(req.data.task_id);
+          statusLoaded = false;
+          this.setState({
+            // showPreview: true,
+            taskId: req.data.task_id,
+          });
         }
       })
       .catch(err => {
@@ -113,18 +166,28 @@ export default class ActivityExportFile extends Component {
       });
   };
 
+  handleExcelExport = () => {
+    const { taskId } = this.state;
+    this.props.excelExport(taskId);
+  };
+
   render() {
     const {
-      state: { scheduleType, startedDate, endedDate },
+      state: {
+        scheduleType,
+        startedDate,
+        endedDate,
+        showPreview,
+        fileToDownload,
+      },
       props: {
-        location: {
-          state: { fromDashboard },
+        match: {
+          params: { id, reportType },
         },
       },
       onChangeHandler,
       onEndChangeHandler,
     } = this;
-    // const {state:{fromDashboard}}=this.props.location
 
     const DataCrude = [
       {
@@ -149,20 +212,14 @@ export default class ActivityExportFile extends Component {
       },
     ];
 
-    const {
-      match: {
-        params: { id },
-      },
-    } = this.props;
+    const reportTitle = decodeURI(reportType);
 
     return (
       <>
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to={`/project-dashboard/${id}/report`}>
-                Report
-              </Link>
+              <Link to={`/project/${id}/report`}>Report</Link>
             </li>
             <li className="breadcrumb-item">Export Data</li>
           </ol>
@@ -171,27 +228,27 @@ export default class ActivityExportFile extends Component {
           <div className="card">
             <div className="card-body">
               <div className="standard-tempalte">
-                <h3 className="mb-3">Template report</h3>
+                <h3 className="mb-3">Project report</h3>
 
                 <div className="report-list">
                   <div className="row">
                     <div className="col-md-12">
                       <div className="report-content">
                         <h4>Export Data</h4>
-                        {fromDashboard === 'Activity Report' && (
+                        {reportTitle === 'Activity Report' && (
                           <p>
                             Export of site visits, submissions and
                             active users in a selected time interval.
                           </p>
                         )}
 
-                        {fromDashboard === 'Project Logs' && (
+                        {reportTitle === 'Project Logs' && (
                           <p>
                             Export of all the logs in the project in a
                             selected time interval.
                           </p>
                         )}
-                        {fromDashboard === 'User Activity Report' && (
+                        {reportTitle === 'User Activity Report' && (
                           <p>
                             Export of User Activities in a selected
                             time interval.
@@ -226,7 +283,7 @@ export default class ActivityExportFile extends Component {
                 <div className="data-filter mt-3">
                   <h3 className="mb-3">Filters</h3>
                   <form>
-                    {fromDashboard === 'Activity Report' && (
+                    {reportTitle === 'Activity Report' && (
                       <div className="form-group checkbox-group">
                         <label>Select Report Type:</label>
                         <div className="custom-checkbox display-inline">
@@ -257,52 +314,40 @@ export default class ActivityExportFile extends Component {
 
                     <div className="row">
                       <div className="col-lg-6 col-md-6">
-                        <div className="form-group icon-between">
-                          <label className="mb-2">Time period</label>
-                          <div className="inline-flex ">
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="Start Date"
-                                name="startedDate"
-                                selected={startedDate}
-                                onChange={onChangeHandler}
-                                dateFormat="yyyy-MM-dd"
-                                className="form-control"
-                              />
-                            </div>
-                            <span className="icon-between">
-                              <i className="material-icons">
-                                arrow_right_alt
-                              </i>
-                            </span>
-                            <div className="custom-group">
-                              <DatePicker
-                                placeholderText="End Date"
-                                name="endedDate"
-                                selected={endedDate}
-                                onChange={onEndChangeHandler}
-                                className="form-control"
-                                dateFormat="yyyy-MM-dd"
-                              />
-                            </div>
-                          </div>
-                        </div>
+                        <FilterByDate
+                          className="form-group icon-between"
+                          startDate={startedDate && startedDate}
+                          endDate={endedDate}
+                          startDateHandler={onChangeHandler}
+                          endDateHandler={onEndChangeHandler}
+                          // createdDate={new Date(projectCreatedOn)}
+                          tillDate={new Date()}
+                        />
                       </div>
 
                       <div className="col-md-12">
                         <button
-                          // disabled
+                          disabled={statusLoaded === false}
                           type="button"
                           className="common-button mt-3 is-bg"
                           onClick={this.handleApply}
                         >
-                          Apply
+                          {statusLoaded === false
+                            ? 'Downloading'
+                            : 'Apply'}
                         </button>
                       </div>
                     </div>
                   </form>
                 </div>
               </div>
+              {showPreview && (
+                <CollapseFilterTable
+                  id={id}
+                  type="standard"
+                  excelFileToDownload={fileToDownload}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -310,3 +355,11 @@ export default class ActivityExportFile extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ templateReducer }) => ({
+  templateReducer,
+});
+
+export default connect(mapStateToProps, {
+  excelExport,
+})(ActivityExportFile);

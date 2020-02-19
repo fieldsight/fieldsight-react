@@ -1,10 +1,7 @@
 import React from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Switch, Route, withRouter } from 'react-router-dom';
 import DashboardHeader from './DashboardHeader';
 import ProjectDashboardComponent from './dashboardComponent';
-import Reports from '../reports';
 
 import { getProjectDashboard } from '../../actions/projectDashboardActions';
 /* eslint-disable camelcase */
@@ -91,6 +88,7 @@ class ProjectDashboard extends React.Component {
         projectDashboardLoader,
         is_project_manager,
         surveyData,
+        identifier,
       },
 
       match: {
@@ -119,46 +117,31 @@ class ProjectDashboard extends React.Component {
             </ol>
           )}
         </nav>
-        <div className="right-content no-bg new-dashboard">
-          <DashboardHeader
-            name={name}
-            address={address}
-            logo={logo}
-            public_desc={public_desc}
-            totalUsers={total_users}
-            totalSites={total_sites}
-            totalSubmissions={project_activity.total_submissions}
-            id={projectId}
-            showContentLoader={projectDashboardLoader}
-            closeModal={this.closeModal}
-            openModal={this.openModal}
-            showCropper={showCropper}
-            termsAndLabels={terms_and_labels}
-            showGallery={showGallery}
-            isProjectManager={is_project_manager}
-            surveyData={surveyData}
-            path={url}
-          />
+        <div className="row">
+          <div className="col-xl-12">
+            <DashboardHeader
+              name={name}
+              address={address}
+              logo={logo}
+              public_desc={public_desc}
+              totalUsers={total_users}
+              totalSites={total_sites}
+              totalSubmissions={project_activity.total_submissions}
+              id={projectId}
+              showContentLoader={projectDashboardLoader}
+              closeModal={this.closeModal}
+              openModal={this.openModal}
+              showCropper={showCropper}
+              termsAndLabels={terms_and_labels}
+              showGallery={showGallery}
+              isProjectManager={is_project_manager}
+              surveyData={surveyData}
+              path={url}
+              identifier={identifier}
+            />
+            <ProjectDashboardComponent projectId={projectId} />
+          </div>
         </div>
-        <Switch>
-          <Route
-            exact
-            path={url}
-            render={props => (
-              <ProjectDashboardComponent
-                {...props}
-                projectId={projectId}
-              />
-            )}
-          />
-          <Route
-            exact
-            path={`${url}/report`}
-            render={props => (
-              <Reports {...props} projectId={projectId} />
-            )}
-          />
-        </Switch>
       </>
     );
   }
@@ -166,9 +149,6 @@ class ProjectDashboard extends React.Component {
 const mapStateToProps = ({ projectDashboard }) => ({
   projectDashboard,
 });
-export default compose(
-  withRouter,
-  connect(mapStateToProps, {
-    getProjectDashboard,
-  }),
-)(ProjectDashboard);
+export default connect(mapStateToProps, {
+  getProjectDashboard,
+})(ProjectDashboard);

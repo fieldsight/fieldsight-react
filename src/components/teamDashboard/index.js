@@ -230,6 +230,7 @@ class TeamDashboard extends Component {
           total_users,
           package_details,
           postCardResponse,
+          identifier,
         },
         match: {
           params: { id: teamId },
@@ -331,6 +332,7 @@ class TeamDashboard extends Component {
                 activeTab={activeTab}
                 closeModal={closeModal}
                 openModal={openModal}
+                identifier={identifier}
               />
               <div className="row">
                 <div className="col-lg-8">
@@ -344,7 +346,7 @@ class TeamDashboard extends Component {
                       </h5>
                       <div className="dash-btn">
                         <a
-                          href={`/fieldsight/org-map/${teamId}/`}
+                          href={`/fieldsight/application/#/team-mapfilter/${teamId}/`}
                           className="fieldsight-btn left-icon"
                           target="_blank"
                           rel="noopener noreferrer"

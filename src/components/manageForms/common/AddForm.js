@@ -1,7 +1,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
-import RadioElement from '../common/RadioElement';
-import { DotLoader } from '../myForm/Loader';
+import RadioElement from '../../common/RadioElement';
+import { DotLoader } from '../../myForm/Loader';
 
 /* eslint-disable  consistent-return */
 /* eslint-disable   react/destructuring-assignment */
@@ -18,6 +18,7 @@ class AddForm extends PureComponent {
         handleRadioChange,
         projectList,
         sharedList,
+        orgForms,
         loader,
       },
     } = this;
@@ -79,27 +80,26 @@ class AddForm extends PureComponent {
               />
             </a>
           </li>
-          {/* <li className="nav-item">
-              <a
-                className={
-                  activeTab === "libraryForms" ? "nav-link active" : "nav-link"
-                }
-                onClick={() => toggleTab("libraryForms")}
-              >
-                Library Forms
-              </a>
-            </li> */}
+          <li className="nav-item">
+            <a
+              className={
+                activeTab === 'orgLibraryForms'
+                  ? 'nav-link active'
+                  : 'nav-link'
+              }
+              onClick={() => toggleTab('orgLibraryForms')}
+              tabIndex="0"
+              role="button"
+              onKeyDown={() => toggleTab('orgLibraryForms')}
+            >
+              Organization Library Forms
+            </a>
+          </li>
         </ul>
         {loader && <DotLoader />}
 
         {!loader && activeTab === 'myForms' && (
           <div className="thumb-list mr-0 ">
-            {/* <form
-              className="floating-form"
-              onSubmit={e => {
-                e.preventDefault();
-              }}
-            > */}
             <div className="form-group search-group mrt-15">
               <input
                 type="search"
@@ -142,29 +142,13 @@ class AddForm extends PureComponent {
                     </div>
                   );
                 })}
-                {/* <div className="form-group pull-right no-margin">
-                    <button
-                      type="button"
-                      className="fieldsight-btn"
-                      onClick={handleSaveForm}
-                    >
-                      Save
-                    </button>
-                  </div> */}
               </div>
             )}
-            {/* </form> */}
           </div>
         )}
 
         {!loader && activeTab === 'projectForms' && (
           <div className="thumb-list mr-0 ">
-            {/* <form
-              className="floating-form"
-              onSubmit={e => {
-                e.preventDefault();
-              }}
-            > */}
             <div className="form-group search-group mrt-15">
               <input
                 type="search"
@@ -219,29 +203,13 @@ class AddForm extends PureComponent {
                     )}
                   </Fragment>
                 ))}
-                {/* <div className="form-group pull-right no-margin">
-                    <button
-                      type="button"
-                      className="fieldsight-btn"
-                      onClick={handleSaveForm}
-                    >
-                      Save
-                    </button>
-                  </div> */}
               </div>
             )}
-            {/* </form> */}
           </div>
         )}
 
         {!loader && activeTab === 'sharedForms' && (
           <div className="thumb-list mr-0 ">
-            {/* <form
-              className="floating-form"
-              onSubmit={e => {
-                e.preventDefault();
-              }}
-            > */}
             <div className="form-group search-group mrt-15">
               <input
                 type="search"
@@ -284,18 +252,51 @@ class AddForm extends PureComponent {
                     </div>
                   );
                 })}
-                {/* <div className="form-group pull-right no-margin">
-                    <button
-                      type="button"
-                      className="fieldsight-btn"
-                      onClick={handleSaveForm}
-                    >
-                      Save
-                    </button>
-                  </div> */}
               </div>
             )}
-            {/* </form> */}
+          </div>
+        )}
+
+        {!loader && activeTab === 'orgLibraryForms' && (
+          <div className="thumb-list mr-0 ">
+            <div className="form-group search-group mrt-15">
+              <input
+                type="search"
+                className="form-control"
+                placeholder="Search"
+                onChange={onChangeHandler}
+              />
+              <i className="la la-search" />
+            </div>
+            {orgForms.length === 0 ? (
+              <div>
+                <FormattedMessage
+                  id="app.noFormAvailable"
+                  defaultMessage="No Form Available"
+                />
+              </div>
+            ) : (
+              <div>
+                {orgForms.map(each => {
+                  return (
+                    <div
+                      className="form-group"
+                      key={`form_${each.id}`}
+                    >
+                      <RadioElement
+                        label={each.title}
+                        className="radiobox"
+                        name="myform"
+                        value={each.xf}
+                        changeHandler={e => {
+                          handleRadioChange(e, each.title);
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
       </>

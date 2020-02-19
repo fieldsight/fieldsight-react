@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import { FormattedMessage } from 'react-intl';
-import InputElement from '../common/InputElement';
+import InputElement from '../../common/InputElement';
 
 /* eslint-disable   react/destructuring-assignment */
 /* eslint-disable camelcase */

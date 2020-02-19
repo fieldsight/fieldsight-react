@@ -9,17 +9,76 @@ import {
   withLeaflet,
   LayersControl,
 } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import PrintControlDefault from 'react-leaflet-easyprint';
 import MeasureControlDefault from 'react-leaflet-measure';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
-import ReactLeafletSearch from 'react-leaflet-search';
+import ProgressLegend from './LegendComponents/ProgressLegend';
+// import worker from './webWorker/markerColorChangeWorker';
+// import WebWorker from './webWorker/workerSetup';
 
-import { getSeconds } from 'date-fns';
-
-const { BaseLayer, Overlay } = LayersControl;
-
+const { BaseLayer } = LayersControl;
+const formStatusColor = ['#0080ff', '#FF0000', '#FFFF00', '#069806'];
+const progressColor = [
+  '#FF0000',
+  '#f66565',
+  '#f4c08c',
+  '#FFFF00',
+  '#7FFF00',
+  '#00FF00',
+  '#069806',
+];
+const otherColors = [
+  '#e69109',
+  '#f0e111',
+  '#9ff035',
+  '#34ede1',
+  '#63a4ff',
+  '#8629ff',
+  '#e553ed',
+  '#f2575f',
+  '#915e0d',
+  '#a1970d',
+  '#4f7d14',
+  '#07aba1',
+  '#1d4c8f',
+  '#491991',
+  '#610766',
+  '#6e0208',
+];
+const progressList = [
+  '0%',
+  '1-20%',
+  '21-40%',
+  '41-60%',
+  '61-80%',
+  '81-99%',
+  '100%',
+];
+const statusList = ['Pending', 'Rejected', 'Flagged', 'Approved'];
+const geojsonMarkerStyle = {
+  radius: 6,
+  fillColor: '#ff7800',
+  color: '#000',
+  weight: 1,
+  opacity: 1,
+  fillOpacity: 0.8,
+};
+const measureOptions = {
+  position: 'topright',
+  primaryLengthUnit: 'meters',
+  secondaryLengthUnit: 'kilometers',
+  primaryAreaUnit: 'sqmeters',
+  secondaryAreaUnit: 'acres',
+  activeColor: '#db4a29',
+  completedColor: '#9b2d14',
+};
+const unassignedLegend = {
+  background: 'white',
+  element: 'Unassigned',
+};
 const PrintControl = withLeaflet(PrintControlDefault);
 const MeasureControl = withLeaflet(MeasureControlDefault);
 class MapComponent extends PureComponent {
@@ -28,7 +87,7 @@ class MapComponent extends PureComponent {
     this.state = {
       lat: 27.7172,
       lng: 85.324,
-      projectsLegend: null,
+      projectsLegend: [],
       progressLegend: [],
       statusLegend: [],
       sitetypeLegend: [],
@@ -38,76 +97,24 @@ class MapComponent extends PureComponent {
 
   componentDidUpdate(prevProps) {
     // let allLayers = null;
-    const {
-      clonePrimaryGeojson,
-      colorBySelection,
-      progressLegend,
-      statusLegend,
-    } = this.props;
+    const { clonePrimaryGeojson, colorBySelection } = this.props;
     const {
       mapRef,
       groupRef,
       projectsRegionTypes,
       projectsList,
     } = this.props;
+    const { projectsLegend, progressLegend } = this.state;
     const map = mapRef.current.leafletElement;
-    const clearProgressLegend = () => {
-      this.setState({ progressLegend: [] });
-    };
-    const clearStatusLegend = () => {
-      this.setState({ statusLegend: [] });
-    };
-    const clearSiteTypeLegend = () => {
-      this.setState({ sitetypeLegend: [] });
-    };
-    const clearRegionLegend = () => {
-      this.setState({ regionLegend: [] });
-    };
-    // const featuregroup = groupRef.current.leafletElement;
-    // if (prevProps.geojson !== geojson) {
-    //   map.fitBounds(featuregroup.getBounds());
-    // }
-    // let mcg = null;
+
     if (
       prevProps.colorBySelection !== colorBySelection ||
       (prevProps.clonePrimaryGeojson !== clonePrimaryGeojson &&
         projectsRegionTypes)
     ) {
+      // this.loaderOn();
       const allLayers = groupRef.current.leafletElement.getLayers();
 
-      const formStatusColor = [
-        '#0080ff',
-        '#FF0000',
-        '#FFFF00',
-        '#069806',
-      ];
-      const progressColor = [
-        '#FF0000',
-        '#f66565',
-        '#f4c08c',
-        '#FFFF00',
-        '#7FFF00',
-        '#00FF00',
-        '#069806',
-      ];
-      const otherColors = [
-        '#e69109',
-        '#f0e111',
-        '#9ff035',
-        '#34ede1',
-        '#63a4ff',
-        '#8629ff',
-        '#e553ed',
-        '#f2575f',
-        '#915e0d',
-        '#a1970d',
-        '#4f7d14',
-        '#07aba1',
-        '#1d4c8f',
-        '#491991',
-        '#610766',
-        '#6e0208',
-      ];
       const getGradient = (start, middle, end, gradlength) => {
         const gradient = gradstop({
           stops: gradlength,
@@ -123,30 +130,12 @@ class MapComponent extends PureComponent {
           return data.name;
         },
       );
-      const progressList = [
-        '0%',
-        '1-20%',
-        '21-40%',
-        '41-60%',
-        '61-80%',
-        '81-99%',
-        '100%',
-      ];
-      const statusList = [
-        'Pending',
-        'Rejected',
-        'Flagged',
-        'Approved',
-      ];
       const regions = projectsRegionTypes[0].regions.map(data => {
         return data.name;
       });
       const projectLists = projectsList.map(data => {
         return data.name;
       });
-      // console.log(siteTypes, 'site_types');
-      // console.log(regions, 'regions');
-      // console.log(projectLists, 'projectList');
       // add more colors if the length is more than 16. For projects, site_types and regions
       let slength = 0;
       let rlength = 0;
@@ -161,8 +150,6 @@ class MapComponent extends PureComponent {
         slength,
         rlength,
       );
-      // console.log(maxLengthValue, 'maxlength');
-      // console.log(otherColors, 'othercolors before loop');
       if (maxLengthValue > 16) {
         const start = '#09e609'; // '#ff6600';
         const medium = '#e67f09'; // '#b76e79';
@@ -173,256 +160,158 @@ class MapComponent extends PureComponent {
           end,
           maxLengthValue - 16 + 2,
         );
-
-        for (let x = 0; x < extraColor.length; x += 1) {
-          otherColors.push(extraColor[x]);
+        if (
+          colorBySelection === 'site_type' ||
+          colorBySelection === 'region'
+        ) {
+          for (let x = 0; x < extraColor.length; x += 1) {
+            otherColors.push(extraColor[x]);
+          }
         }
+
         // console.log(otherColors, 'othercolors after loop');
       }
       //   const v = mcg.getLayers();
-
-      //   console.log(v, 'mcg');
-      if (colorBySelection === 'progress') {
-        clearProgressLegend();
-        progressList.forEach((element, key) => {
-          const Progress = (
-            <>
-              <div style={{ marginTop: '-8px' }}>
-                <div
-                  className="circle"
-                  style={{
-                    border: '1px solid black',
-                    background: progressColor[key],
-                  }}
-                />
-                <span>{element}</span>
-              </div>
-              <br />
-            </>
-          );
-
-          this.setState((prevState, props) => ({
-            progressLegend: prevState.progressLegend.concat(Progress),
-          }));
+      if (
+        colorBySelection === 'project' &&
+        projectsLegend.length <= 0
+      ) {
+        const projectArray = projectLists.map((element, key) => ({
+          element,
+          background: otherColors[key],
+        }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          projectsLegend: projectArray,
         });
       }
-      if (colorBySelection === 'status') {
-        clearStatusLegend();
-        statusList.forEach((element, key) => {
-          const Status = (
-            <>
-              <div style={{ marginTop: '-8px' }}>
-                <div
-                  className="circle"
-                  style={{
-                    border: '1px solid black',
-                    background: formStatusColor[key],
-                  }}
-                />
-                <span>{element}</span>
-              </div>
-              <br />
-            </>
-          );
+      if (
+        colorBySelection === 'progress' &&
+        progressLegend.length <= 0
+      ) {
+        const progressArray = progressList.map((element, key) => ({
+          element,
+          background: progressColor[key],
+        }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          progressLegend: progressArray,
+        });
+      }
 
-          this.setState((prevState, props) => ({
-            statusLegend: prevState.statusLegend.concat(Status),
-          }));
+      if (colorBySelection === 'status') {
+        const statusArray = statusList.map((element, key) => ({
+          element,
+          background: formStatusColor[key],
+        }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          statusLegend: statusArray,
         });
       }
       if (colorBySelection === 'site_type') {
-        clearSiteTypeLegend();
-        const UnassignedSiteType = (
-          <>
-            <div style={{ marginTop: '-8px' }}>
-              <div
-                className="circle"
-                style={{
-                  border: '1px solid black',
-                  background: 'white',
-                }}
-              />
-              <span>Unassigned</span>
-            </div>
-            <br />
-          </>
-        );
-        const SetUnassigned = () => {
-          this.setState((prevState, props) => ({
-            sitetypeLegend: prevState.sitetypeLegend.concat(
-              UnassignedSiteType,
-            ),
-          }));
-        };
+        const siteTypeArray = siteTypes.map((element, key) => ({
+          element,
+          background: otherColors[key],
+        }));
 
-        siteTypes.forEach((element, key) => {
-          const SiteType = (
-            <>
-              <div style={{ marginTop: '-8px' }}>
-                <div
-                  className="circle"
-                  style={{
-                    border: '1px solid black',
-                    background: otherColors[key],
-                  }}
-                />
-                <span>{element}</span>
-              </div>
-              <br />
-            </>
-          );
-
-          this.setState((prevState, props) => ({
-            sitetypeLegend: prevState.sitetypeLegend.concat(SiteType),
-          }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          sitetypeLegend: siteTypeArray.concat(unassignedLegend),
         });
-        SetUnassigned();
       }
       if (colorBySelection === 'region') {
-        clearRegionLegend();
-        const UnassignedRegion = (
-          <>
-            <div style={{ marginTop: '-8px' }}>
-              <div
-                className="circle"
-                style={{
-                  border: '1px solid black',
-                  background: 'white',
-                }}
-              />
-              <span>Unassigned</span>
-            </div>
-            <br />
-          </>
-        );
-        const SetUnassigned = () => {
-          this.setState((prevState, props) => ({
-            regionLegend: prevState.regionLegend.concat(
-              UnassignedRegion,
-            ),
-          }));
-        };
+        const regionArray = regions.map((element, key) => ({
+          element,
+          background: otherColors[key],
+        }));
 
-        regions.forEach((element, key) => {
-          const Region = (
-            <>
-              <div style={{ marginTop: '-8px' }}>
-                <div
-                  className="circle"
-                  style={{
-                    border: '1px solid black',
-                    background: otherColors[key],
-                  }}
-                />
-                <span>{element}</span>
-              </div>
-              <br />
-            </>
-          );
-
-          this.setState((prevState, props) => ({
-            regionLegend: prevState.regionLegend.concat(Region),
-          }));
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({
+          regionLegend: regionArray.concat(unassignedLegend),
         });
-        SetUnassigned();
       }
 
-      Object.keys(allLayers).forEach((type, data) => {
-        // console.log(allLayers[type].options.attribution);
+      Object.keys(allLayers).forEach(type => {
         if (colorBySelection === 'project') {
-          // console.log(projectsList);
-          // console.log(projectList.length);
           projectsList.forEach((element, key) => {
             if (
-              allLayers[type].options.attribution.project ===
+              allLayers[type].options.properties.project ===
               element.name
             ) {
               allLayers[type].setStyle({
                 fillColor: otherColors[key],
               });
-              const Projects = (
-                <div style={{ marginTop: '-8px' }}>
-                  <div
-                    className="circle"
-                    style={{
-                      border: '1px solid black',
-                      background: otherColors[key],
-                    }}
-                  />
-                  <span>{element.name}</span>
-                </div>
-              );
-              this.setState({ projectsLegend: Projects });
             }
           });
         }
         if (colorBySelection === 'progress') {
-          if (allLayers[type].options.attribution.progress === 0) {
+          if (allLayers[type].options.properties.progress === 0) {
             allLayers[type].setStyle({
               fillColor: progressColor[0],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 0 &&
-            allLayers[type].options.attribution.progress <= 20
+            allLayers[type].options.properties.progress > 0 &&
+            allLayers[type].options.properties.progress <= 20
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[1],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 20 &&
-            allLayers[type].options.attribution.progress <= 40
+            allLayers[type].options.properties.progress > 20 &&
+            allLayers[type].options.properties.progress <= 40
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[2],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 40 &&
-            allLayers[type].options.attribution.progress <= 60
+            allLayers[type].options.properties.progress > 40 &&
+            allLayers[type].options.properties.progress <= 60
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[3],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 60 &&
-            allLayers[type].options.attribution.progress <= 80
+            allLayers[type].options.properties.progress > 60 &&
+            allLayers[type].options.properties.progress <= 80
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[4],
             });
           } else if (
-            allLayers[type].options.attribution.progress > 80 &&
-            allLayers[type].options.attribution.progress <= 99
+            allLayers[type].options.properties.progress > 80 &&
+            allLayers[type].options.properties.progress <= 99
           ) {
             allLayers[type].setStyle({
               fillColor: progressColor[5],
             });
           }
-          if (allLayers[type].options.attribution.progress === 100) {
+          if (allLayers[type].options.properties.progress === 100) {
             allLayers[type].setStyle({
               fillColor: progressColor[6],
             });
           }
         }
         if (colorBySelection === 'status') {
-          if (allLayers[type].options.attribution !== undefined) {
-            if (allLayers[type].options.attribution.status === 0) {
+          if (allLayers[type].options.properties !== undefined) {
+            if (allLayers[type].options.properties.status === 0) {
               allLayers[type].setStyle({
                 fillColor: formStatusColor[0],
               });
             } else if (
-              allLayers[type].options.attribution.status === 1
+              allLayers[type].options.properties.status === 1
             ) {
               allLayers[type].setStyle({
                 fillColor: formStatusColor[1],
               });
             } else if (
-              allLayers[type].options.attribution.status === 2
+              allLayers[type].options.properties.status === 2
             ) {
               allLayers[type].setStyle({
                 fillColor: formStatusColor[2],
               });
             } else if (
-              allLayers[type].options.attribution.status === 3
+              allLayers[type].options.properties.status === 3
             ) {
               allLayers[type].setStyle({
                 fillColor: formStatusColor[3],
@@ -433,19 +322,15 @@ class MapComponent extends PureComponent {
           }
         }
         if (colorBySelection === 'site_type') {
-          // console.log(projectsList);
-          // console.log(projectList.length);
           siteTypes.forEach((element, key) => {
-            // console.log(key, 'key');
             if (
-              allLayers[type].options.attribution.site_type === null
+              allLayers[type].options.properties.site_type === null
             ) {
               allLayers[type].setStyle({
                 fillColor: 'white',
               });
             } else if (
-              allLayers[type].options.attribution.site_type ===
-              element
+              allLayers[type].options.properties.site_type === element
             ) {
               allLayers[type].setStyle({
                 fillColor: otherColors[key],
@@ -454,16 +339,14 @@ class MapComponent extends PureComponent {
           });
         }
         if (colorBySelection === 'region') {
-          // console.log(projectsList);
-          // console.log(projectList.length);
           regions.forEach((element, key) => {
             // console.log(key, 'key');
-            if (allLayers[type].options.attribution.region === null) {
+            if (allLayers[type].options.properties.region === null) {
               allLayers[type].setStyle({
                 fillColor: 'white',
               });
             } else if (
-              allLayers[type].options.attribution.region === element
+              allLayers[type].options.properties.region === element
             ) {
               allLayers[type].setStyle({
                 fillColor: otherColors[key],
@@ -471,81 +354,16 @@ class MapComponent extends PureComponent {
             }
           });
         }
-        // console.log(full[type].setStyle({ fillColor: 'red' }));
       });
-      //   // console.log(allLayers);
-      //   // if (this.props.colorBySelection === 'status') {
-      //   //   allLayers._layers.forEach(element => {
-      //   //     if (this.props.mapRef.current.leafletElement._layers)
-      //   //       this.props.mapRef.current.leafletElement.setStyle({
-      //   //         fillColor: 'red',
-      //   //       });
-      //   //   });
-      //   // }
     }
     if (prevProps.clonePrimaryGeojson !== clonePrimaryGeojson) {
       map.fitBounds(groupRef.current.leafletElement.getBounds());
-
-      // console.log(clonePrimaryGeojson, 'clone');
-      // // console.log(this.props.markerRef.current.leafletElement);
-      // // console.log(this.props.groupRef.current.leafletElement);
-
-      // console.log(clonePrimaryGeojson[0].features);
-      // mcg = L.markerClusterGroup({
-      //   chunkedLoading: true,
-      //   // singleMarkerMode: true,
-      //   spiderfyOnMaxZoom: false,
-      // });
-      // clonePrimaryGeojson[0].features.forEach(element => {
-      //   const marker = L.circleMarker(
-      //     [
-      //       element.geometry.coordinates[1],
-      //       element.geometry.coordinates[0],
-      //     ],
-      //     {
-      //       radius: 6,
-      //       fillColor: '#ff7800',
-      //       color: '#000',
-      //       weight: 1,
-      //       opacity: 1,
-      //       fillOpacity: 0.8,
-      //     },
-      //   );
-      //   marker.bindPopup(
-      //     `<strong>${element.project}</strong><br/>${element.region} ${element.progress}, ${element.status}<br/>`,
-      //   );
-      //   marker.feature = {
-      //     properties: {
-      //       project: element.project,
-      //       progress: element.progress,
-      //       status: element.status,
-      //       site_type: element.site_type,
-      //       region: element.region,
-      //     },
-      //     // geometry: undefined,
-      //   };
-      //   mcg.addLayer(marker);
-      //   // console.log(marker, 'markers');
-      //   return marker;
-      // });
-      // map.addLayer(mcg);
-      // console.log(this.props.mapRef.current.leafletElement);
-      // console.log(mcg.getLayers());
-      // console.log(mcg.getLayers(), 'get last');
-      // // allLayers = this.props.mapRef.current.leafletElement._layers;
+      const elem = L.DomUtil.get('legend_id');
+      L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation);
     }
   }
 
   render() {
-    const geojsonMarkerStyle = {
-      radius: 6,
-      fillColor: '#ff7800',
-      color: '#000',
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.8,
-    };
-
     const {
       props: {
         height,
@@ -567,105 +385,11 @@ class MapComponent extends PureComponent {
       },
     } = this;
     const position = [lat, lng];
-    const measureOptions = {
-      position: 'topright',
-      primaryLengthUnit: 'meters',
-      secondaryLengthUnit: 'kilometers',
-      primaryAreaUnit: 'sqmeters',
-      secondaryAreaUnit: 'acres',
-      activeColor: '#db4a29',
-      completedColor: '#9b2d14',
-    };
-    const formStatusColor = [
-      '#0080ff',
-      '#FF0000',
-      '#FFFF00',
-      '#069806',
-    ];
+
     return (
       <>
-        <div
-          className="map-sidebar left-map-sidebar"
-          style={{ left: '93rem', top: '471px', bottom: '20px' }}
-        >
-          <div className="sidebar-wrapper">
-            <div className="sidebar-title flex-between">
-              <h4>Legend</h4>
-            </div>
-          </div>
-          <div
-            style={{
-              marginLeft: '15px',
-            }}
-            className="panel-header"
-          >
-            <b
-              style={{
-                margin: '0 auto',
-                textTransform: 'capitalize',
-                // color: 'red',
-                fontWeight: 200,
-                // border: '2px solid',
-              }}
-            >
-              {colorBySelection}
-            </b>
-          </div>
-          <div
-            className="whole-content"
-            style={{
-              margin: '15px',
-              overflowY: 'scroll',
-              maxHeight: '246px',
-            }}
-          >
-            <div className="panel-wrap mt-3">
-              <br />
-              <div className="panel-section">
-                <div id="legend">
-                  <div id="form_legend">
-                    <div style={{ marginTop: '-8px' }}>
-                      <div id="form_legend">
-                        <div style={{ marginTop: '-8px' }}>
-                          {colorBySelection === 'project'
-                            ? projectsLegend
-                            : ''}
-                        </div>
-                        <br />
-
-                        <div style={{ marginTop: '-8px' }}>
-                          {colorBySelection === 'progress'
-                            ? progressLegend
-                            : ''}
-                        </div>
-
-                        <div style={{ marginTop: '-8px' }}>
-                          {colorBySelection === 'status'
-                            ? statusLegend
-                            : ''}
-                        </div>
-
-                        <div style={{ marginTop: '-8px' }}>
-                          {colorBySelection === 'site_type'
-                            ? sitetypeLegend
-                            : ''}
-                        </div>
-                        <div style={{ marginTop: '-8px' }}>
-                          {colorBySelection === 'region'
-                            ? regionLegend
-                            : ''}
-                        </div>
-                        <br />
-                      </div>
-                    </div>
-                    <br />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <Map
+          preferCanvas
           ref={mapRef}
           center={position}
           zoom={8}
@@ -686,6 +410,120 @@ class MapComponent extends PureComponent {
             title="Export as PNG"
             exportOnly
           />
+          <div
+            id="legend_id"
+            className="map-sidebar left-map-sidebar"
+          >
+            <div className="sidebar-wrapper">
+              <div className="sidebar-title flex-between">
+                <h4>Legend</h4>
+              </div>
+            </div>
+            <div className="panel-header">
+              <b>
+                {`${
+                  colorBySelection === 'project'
+                    ? 'projects'
+                    : colorBySelection === 'site_type'
+                    ? 'site Types'
+                    : colorBySelection === 'region'
+                    ? 'regions'
+                    : colorBySelection
+                }`}
+              </b>
+            </div>
+            <div className="whole-content">
+              <div className="panel-wrap mt-3">
+                <br />
+                <div className="panel-section">
+                  <div id="legend">
+                    <div id="form_legend">
+                      <div>
+                        <div id="form_legend">
+                          {projectsLegend.map(element => {
+                            return (
+                              <div
+                                key={Math.random()}
+                                style={
+                                  colorBySelection === 'project'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
+                          <br />
+                          {progressLegend.map(element => {
+                            return (
+                              <div
+                                style={
+                                  colorBySelection === 'progress'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
+
+                          {statusLegend.map(element => {
+                            return (
+                              <div
+                                style={
+                                  colorBySelection === 'status'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
+
+                          {sitetypeLegend.map(element => {
+                            return (
+                              <div
+                                style={
+                                  colorBySelection === 'site_type'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                                // style={{
+                                //   marginTop: '-15px',
+                                //   display: ${'block'},
+                                // }}
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
+
+                          {regionLegend.map(element => {
+                            return (
+                              <div
+                                style={
+                                  colorBySelection === 'region'
+                                    ? { display: 'block' }
+                                    : { display: 'none' }
+                                }
+                              >
+                                <ProgressLegend props={element} />
+                              </div>
+                            );
+                          })}
+                          <br />
+                        </div>
+                      </div>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <LayersControl position="topright">
             <BaseLayer
               checked={selectedBaseLayer === 'openstreet'}
@@ -695,7 +533,7 @@ class MapComponent extends PureComponent {
               name="OpenStreetMap"
             >
               <TileLayer
-                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                attribution='OpenStreetMap © Developer:<a href="http://naxa.com.np">NAXA</a>'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
             </BaseLayer>
@@ -707,7 +545,7 @@ class MapComponent extends PureComponent {
               name="Google Streets"
             >
               <TileLayer
-                attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
+                attribution='Google Streets © Developer:<a href=" http://naxa.com.np">NAXA</a>'
                 url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
                 maxZoom={20}
                 subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
@@ -718,7 +556,7 @@ class MapComponent extends PureComponent {
               name="Google Hybrid"
             >
               <TileLayer
-                attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
+                attribution='Google Hybrid © Developer:<a href=" http://naxa.com.np">NAXA</a>'
                 url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
                 maxZoom={20}
                 subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
@@ -729,7 +567,7 @@ class MapComponent extends PureComponent {
               name="Google Satellite"
             >
               <TileLayer
-                attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
+                attribution='Google Satellite © Developer:<a href=" http://naxa.com.np">NAXA</a>'
                 url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
                 maxZoom={20}
                 subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
@@ -740,7 +578,7 @@ class MapComponent extends PureComponent {
               name="Google Terrain"
             >
               <TileLayer
-                attribution='&amp;copy <a href="http://maps.google.com">Google Maps</a> contributors'
+                attribution='Google Terrain © Developer:<a href=" http://naxa.com.np">NAXA</a>'
                 url="http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
                 maxZoom={20}
                 subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
@@ -757,7 +595,7 @@ class MapComponent extends PureComponent {
           }} */}
           {/* {isfiltered === true ? ( */}
           <MarkerClusterGroup
-            disableClusteringAtZoom={14}
+            disableClusteringAtZoom={12}
             ref={groupRef}
           >
             {clonePrimaryGeojson[0] &&
@@ -774,7 +612,8 @@ class MapComponent extends PureComponent {
                       lat: location[1],
                       lng: location[0],
                     }}
-                    attribution={{
+                    // properties={{ name: 'varun' }}
+                    properties={{
                       project: each.project,
                       progress: each.progress,
                       status: each.status,
@@ -790,7 +629,16 @@ class MapComponent extends PureComponent {
                   >
                     <Popup>
                       <span>
-                        <label>{projectName}</label>
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          label={projectName}
+                          href={`/fieldsight/application/#/site-dashboard/${id}/`}
+                        >
+                          <label style={{ cursor: 'pointer' }}>
+                            {projectName}
+                          </label>
+                        </a>
                       </span>
                       <br />
                     </Popup>

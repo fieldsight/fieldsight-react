@@ -1,5 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import Axios from 'axios';
+
 import SuperAdminFormEdit from '../../superAdminEdit';
 import LeftSideBar from './leftSideBar';
 import Teams from './teams';
@@ -7,7 +9,25 @@ import MyForm from './myForms';
 import Library from './library';
 import { RegionProvider } from '../../../context';
 
-export default class SuperAdminSetting extends PureComponent {
+export default class SuperAdminSetting extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { breadcrumb: {} };
+  }
+
+  componentWillMount() {
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+    Axios.get(
+      `/fv3/api/settings-breadcrumbs/${id}/?type=organization`,
+    ).then(res => {
+      this.setState({ breadcrumb: res.data });
+    });
+  }
+
   render() {
     const {
       match: {
@@ -15,6 +35,7 @@ export default class SuperAdminSetting extends PureComponent {
         params: { id },
       },
     } = this.props;
+    const { breadcrumb } = this.state;
 
     return (
       <RegionProvider>
@@ -22,15 +43,15 @@ export default class SuperAdminSetting extends PureComponent {
           <ol className="breadcrumb">
             <li className="breadcrumb-item ">
               <a
-                href={`/fieldsight/application/#/organization-dashboard/${id}`}
+                href={breadcrumb.name_url}
                 style={{ color: '#00628E' }}
               >
-                Organization Dashboard
+                {breadcrumb.name}
               </a>
             </li>
 
             <li className="breadcrumb-item" aria-current="page">
-              Organization Settings
+              {breadcrumb.current_page}
             </li>
           </ol>
         </nav>
