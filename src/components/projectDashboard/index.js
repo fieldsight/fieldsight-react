@@ -155,6 +155,8 @@ class ProjectDashboard extends React.Component {
       },
       siteList,
       dLoader,
+      totalPage,
+      pageNum,
       match: {
         params: { id: projectId }
       }
@@ -309,14 +311,15 @@ class ProjectDashboard extends React.Component {
                               of <span>{this.props.totalCount}</span> entries.
                             </p>
                           </div>
-                          {this.props.toData < this.props.totalCount ? (
-                            <div className="table-pagination">
-                              <ul>
+                          {/* {this.props.toData < this.props.totalCount ? ( */}
+                          <div className="table-pagination">
+                            <ul>
+                              {pageNum !== 1 && (
                                 <li className="page-item">
                                   <a
                                     onClick={e =>
                                       this.props.paginationHandler(
-                                        this.props.pageNum - 1,
+                                        pageNum - 1,
                                         null,
                                         {
                                           type: "projectSiteList",
@@ -328,17 +331,19 @@ class ProjectDashboard extends React.Component {
                                     <i className="la la-long-arrow-left" />
                                   </a>
                                 </li>
+                              )}
 
-                                {this.props.renderPageNumbers({
-                                  type: "projectSiteList",
-                                  projectId: projectId
-                                })}
+                              {this.props.renderPageNumbers({
+                                type: "projectSiteList",
+                                projectId: projectId
+                              })}
 
+                              {pageNum !== totalPage && (
                                 <li className="page-item ">
                                   <a
                                     onClick={e =>
                                       this.props.paginationHandler(
-                                        this.props.pageNum + 1,
+                                        pageNum + 1,
                                         null,
                                         {
                                           type: "projectSiteList",
@@ -350,9 +355,10 @@ class ProjectDashboard extends React.Component {
                                     <i className="la la-long-arrow-right" />
                                   </a>
                                 </li>
-                              </ul>
-                            </div>
-                          ) : null}
+                              )}
+                            </ul>
+                          </div>
+                          {/* ) : null} */}
                         </div>
                       </div>
                     )}

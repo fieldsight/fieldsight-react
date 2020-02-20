@@ -106,8 +106,10 @@ class DatatablePage extends Component {
       toData,
       fromData,
       pageNum,
-      dLoader
+      dLoader,
+      totalPage
     } = this.state;
+
     return (
       <>
         <div className="col-xl-6 col-md-12">
@@ -129,7 +131,10 @@ class DatatablePage extends Component {
             </div>
             <div
               className="card-body"
-              style={{ position: "relative", height: "434px" }}
+              style={{
+                position: "relative",
+                height: `${!dLoader ? "363px" : "434px"}`
+              }}
             >
               {dLoader ? (
                 <TableContentLoader row={11} column={5} />
@@ -202,9 +207,10 @@ class DatatablePage extends Component {
                       of <span>{totalCount}</span> entries.
                     </p>
                   </div>
-                  {toData < totalCount ? (
-                    <div className="table-pagination">
-                      <ul>
+                  {/* {toData < totalCount ? ( */}
+                  <div className="table-pagination">
+                    <ul>
+                      {pageNum !== 1 && (
                         <li className="page-item">
                           <a
                             onClick={e =>
@@ -216,11 +222,13 @@ class DatatablePage extends Component {
                             <i className="la la-long-arrow-left" />
                           </a>
                         </li>
+                      )}
 
-                        {this.renderPageNumbers({
-                          siteId
-                        })}
+                      {this.renderPageNumbers({
+                        siteId
+                      })}
 
+                      {pageNum !== totalPage && (
                         <li className="page-item ">
                           <a
                             onClick={e =>
@@ -232,9 +240,10 @@ class DatatablePage extends Component {
                             <i className="la la-long-arrow-right" />
                           </a>
                         </li>
-                      </ul>
-                    </div>
-                  ) : null}
+                      )}
+                    </ul>
+                  </div>
+                  {/* ) : null} */}
                 </div>
               </div>
             )}
