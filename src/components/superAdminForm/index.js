@@ -41,6 +41,7 @@ export default class SuperAdminForm extends Component {
       Selectedtypes: '',
       country: [{ value: 'Select Option ', key: '' }],
       errorFlag: false,
+      isEmptyCountry: false,
     };
   }
 
@@ -85,7 +86,7 @@ export default class SuperAdminForm extends Component {
               errorFlag: true,
             });
           }
-          if (value.trim().length > 5) {
+          if (value.trim().length > 4) {
             this.setState({
               errorFlag: false,
             });
@@ -97,6 +98,8 @@ export default class SuperAdminForm extends Component {
 
   onSubmitHandler = e => {
     e.preventDefault();
+    this.handleValidation();
+
     const {
       state: {
         identifier,
@@ -109,6 +112,7 @@ export default class SuperAdminForm extends Component {
         public_desc,
         position: { latitude, longitude },
         Selectedtypes,
+        errorFlag,
       },
     } = this;
 
@@ -125,11 +129,7 @@ export default class SuperAdminForm extends Component {
       latitude,
       longitude,
     };
-    if (identifier.trim().length < 5) {
-      this.setState({
-        errorFlag: true,
-      });
-    } else {
+    if (!errorFlag && Selectedtypes) {
       axios
         .post(`/fv3/api/super-organization-form/`, data)
         .then(req => {
@@ -163,6 +163,20 @@ export default class SuperAdminForm extends Component {
             return errorToast(`${value}`);
           });
         });
+    } else {
+      this.setState({ isEmptyCountry: true });
+    }
+  };
+
+  handleValidation = () => {
+    const { identifier, Selectedtypes } = this.state;
+    if (identifier.trim().length < 5) {
+      this.setState({
+        errorFlag: true,
+      });
+    }
+    if (!Selectedtypes) {
+      this.setState({ isEmptyCountry: true });
     }
   };
 
@@ -178,8 +192,11 @@ export default class SuperAdminForm extends Component {
 
   onSelectChangeHandler = e => {
     const { value } = e.target;
-    this.setState({
-      Selectedtypes: value,
+    this.setState(() => {
+      if (value) {
+        return { Selectedtypes: value, isEmptyCountry: false };
+      }
+      return { Selectedtypes: value, isEmptyCountry: true };
     });
   };
 
@@ -202,6 +219,7 @@ export default class SuperAdminForm extends Component {
         position: { latitude, longitude },
         Selectedtypes,
         errorFlag,
+        isEmptyCountry,
         zoom,
       },
     } = this;
@@ -284,10 +302,16 @@ export default class SuperAdminForm extends Component {
                     className="form-control"
                     label="Country"
                     translation
+                    formType="editForm"
                     options={country}
                     changeHandler={e => onSelectChangeHandler(e)}
                     value={Selectedtypes}
                   />
+                )}
+                {isEmptyCountry && (
+                  <span style={{ color: 'red' }}>
+                    Select a country.
+                  </span>
                 )}
               </div>
               <div className="col-xl-4 col-md-6">
