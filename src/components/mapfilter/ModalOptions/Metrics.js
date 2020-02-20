@@ -55,7 +55,7 @@ class Metrics extends Component {
                   size
                 </label>
               </div>
-              <div className="radiobox ">
+              {/* <div className="radiobox ">
                 <label>
                   <input
                     type="radio"
@@ -66,7 +66,7 @@ class Metrics extends Component {
                   <i className="helper" />
                   Color
                 </label>
-              </div>
+              </div> */}
             </div>
           </div>
           <div

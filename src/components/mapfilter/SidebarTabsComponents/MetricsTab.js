@@ -44,6 +44,7 @@ class MetricsTab extends PureComponent {
       props: {
         activeTab,
         handleMetricsChange,
+        handleMetricssChange,
         // colorBySelection,
         // sizeBySelection,
       },
@@ -69,11 +70,11 @@ class MetricsTab extends PureComponent {
             name="siteinfo color"
             className="wide"
             defaultValue={{ value: 'project', label: 'Projects' }}
-            value={
-              colorBySelection === 'project'
-                ? { value: 'project', label: 'Projects' }
-                : colorBySelection[0]
-            }
+            // value={
+            //   colorBySelection === 'project'
+            //     ? { value: 'project', label: 'Projects' }
+            //     : colorBySelection[0]
+            // }
             onChange={e => {
               handleMetricsChange(e, 'Color');
             }}
