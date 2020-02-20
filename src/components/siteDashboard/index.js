@@ -16,7 +16,7 @@ import Logs from "../common/Logs";
 import {
   getSiteDashboard,
   getSiteMetas,
-  getSiteSubmissions,
+  // getSiteSubmissions,
   getSiteDocuments,
   getSiteLogs,
   getSiteForms,
@@ -97,7 +97,7 @@ class SiteDashboard extends Component {
 
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
-    this.props.getSiteSubmissions(siteId);
+    // this.props.getSiteSubmissions(siteId);
     this.props.getSiteDocuments(siteId);
     this.props.getSiteLogs(siteId);
     this.props.getSiteForms(siteId, "general");
@@ -117,7 +117,7 @@ class SiteDashboard extends Component {
         () => {
           this.props.getSiteDashboard(siteId);
           this.props.getSiteMetas(siteId);
-          this.props.getSiteSubmissions(siteId);
+          // this.props.getSiteSubmissions(siteId);
           this.props.getSiteDocuments(siteId);
           this.props.getSiteLogs(siteId);
           this.props.getSiteForms(siteId, "general");
@@ -143,7 +143,7 @@ class SiteDashboard extends Component {
           users,
           recentPictures,
           siteMetas,
-          siteSubmissions,
+          // siteSubmissions,
           siteDocuments,
           siteLogs,
           siteForms,
@@ -155,7 +155,7 @@ class SiteDashboard extends Component {
           showDotLoader,
           siteDashboardLoader,
           siteMetasLoader,
-          siteSubmissionsLoader,
+          // siteSubmissionsLoader,
           siteLogsLoader,
           siteDocumentsLoader,
           sitePicturesLoader,
@@ -308,8 +308,8 @@ class SiteDashboard extends Component {
 
                   <DatatablePage
                     enableSubsites={enable_subsites}
-                    siteSubmissions={siteSubmissions}
-                    showContentLoader={siteSubmissionsLoader}
+                    // siteSubmissions={siteSubmissions}
+                    // showContentLoader={siteSubmissionsLoader}
                     siteForms={siteForms}
                     showDotLoader={showDotLoader}
                     showModal={showSubmissionModal}
@@ -318,6 +318,7 @@ class SiteDashboard extends Component {
                     openModal={openModal}
                     toggleTab={toggleTab}
                     hasWritePermission={has_write_permission}
+                    siteId={siteId}
                   />
                 </div>
               </div>
@@ -424,17 +425,14 @@ const mapStateToProps = ({ siteDashboard }) => ({
   siteDashboard
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    getSiteDashboard,
-    getSiteMetas,
-    getSiteSubmissions,
-    getSiteDocuments,
-    getSiteLogs,
-    getSiteForms,
-    getRecentPictures,
-    getSubsites,
-    putCropImage
-  }
-)(SiteDashboard);
+export default connect(mapStateToProps, {
+  getSiteDashboard,
+  getSiteMetas,
+  // getSiteSubmissions,
+  getSiteDocuments,
+  getSiteLogs,
+  getSiteForms,
+  getRecentPictures,
+  getSubsites,
+  putCropImage
+})(SiteDashboard);
