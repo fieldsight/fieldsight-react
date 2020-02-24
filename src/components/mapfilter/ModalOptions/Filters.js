@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import GroupSelect from '../../common/GroupSelect';
-import StagedList from '../../reports/dataExport/stagedList';
+import { connect } from 'react-redux';
+import ModifiedDropdown from '../Component/ModifiedDropdown';
+import { getQuestionListFormData } from '../../../actions/mapFilterActions';
 
 class Filters extends Component {
   constructor(props) {
@@ -11,7 +12,41 @@ class Filters extends Component {
       selectedOption: null,
       formOptions: null,
       questionOptions: null,
+      selectedForm: 'Select Form',
+      selectedQuestion: null,
+      // selectedForm: '',
     };
+  }
+
+  // const questionoptions = [
+  //   { value: 'question1', label: 'Question 1' },
+  //   { value: 'question2', label: 'Question 2' },
+  // ];
+  componentDidUpdate(prevProps) {
+    const {
+      props: {
+        mapFilterReducer: { questionList },
+      },
+    } = this;
+    // console.log(questionList, 'aaaaa');
+
+    if (
+      prevProps.mapFilterReducer.questionList !== questionList &&
+      questionList.length !== 0
+    ) {
+      console.log(questionList, 'sadas');
+
+      const a =
+        questionList &&
+        questionList.questions.map(data => ({
+          value: data.name,
+          label: data.name,
+        }));
+      const setStateQuestionOption = () => {
+        this.setState({ questionOptions: a, selectedQuestion: null });
+      };
+      setStateQuestionOption();
+    }
   }
 
   onSiteChanged = e => {
@@ -27,15 +62,36 @@ class Filters extends Component {
     this.setState({ formOptions });
   };
 
-  questionOptionsChange = questionOptions => {
-    this.setState({ questionOptions });
+  questionOptionsChange = selectedQuestion => {
+    console.log(selectedQuestion, 'que');
+    this.setState({ selectedQuestion });
+  };
+
+  handleSelected = (arr, data) => {
+    this.setState(state => ({
+      selectedArr: {
+        ...state.selectedArr,
+        [arr]: data,
+      },
+    }));
+  };
+
+  handleSelectedForm = (selectedForm, selectedId) => {
+    this.setState({ selectedForm }, () => {
+      this.props.getQuestionListFormData(selectedId);
+    });
   };
 
   render() {
     const { siteoptions, formoptions, questionoptions } = this.props;
     const {
+      mapFilterReducer: { formList, questionList },
+    } = this.props;
+    const {
       filterType,
       selectedOption,
+      selectedForm,
+      selectedQuestion,
       formOptions,
       questionOptions,
     } = this.state;
@@ -119,7 +175,12 @@ class Filters extends Component {
                 onChange={this.formOptionsChange}
                 options={formoptions}
               /> */}
-              {/* <StagedList /> */}
+              <ModifiedDropdown
+                stagedArr={formList}
+                // handleSelected={this.handleSelected}
+                selectedForm={selectedForm}
+                handleSelectedForm={this.handleSelectedForm}
+              />
               {/* <GroupSelect /> */}
               {/* <select className="wide">
                 <option>Form 1</option>
@@ -131,9 +192,9 @@ class Filters extends Component {
               <Select
                 name="questioninfo"
                 className="wide"
-                value={questionOptions}
+                value={selectedQuestion}
                 onChange={this.questionOptionsChange}
-                options={questionoptions}
+                options={this.state.questionOptions}
               />
             </div>
           </div>
@@ -193,5 +254,9 @@ class Filters extends Component {
     );
   }
 }
-
-export default Filters;
+const mapStateToProps = ({ mapFilterReducer }) => ({
+  mapFilterReducer,
+});
+export default connect(mapStateToProps, {
+  getQuestionListFormData,
+})(Filters);

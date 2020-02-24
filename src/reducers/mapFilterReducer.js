@@ -7,6 +7,8 @@ import {
   SEARCH_PRIMARYGEOJSON,
   REFRESH_GEOJSONDATA,
   GET_GEOLAYERS_LIST,
+  GET_FORM_LIST_DATA,
+  GET_QUESTION_LIST_FORMDATA,
 } from '../actions/types';
 
 const initialState = {
@@ -18,6 +20,8 @@ const initialState = {
   projectsRegionTypes: [],
   types: [],
   geolayersList: [],
+  formList: [],
+  questionList: [],
 };
 
 const getSearchPrimaryGeojson = (state, action) => {
@@ -192,6 +196,16 @@ export default function(state = initialState, action) {
       return {
         ...state,
         geolayersList: action.payload,
+      };
+    case GET_FORM_LIST_DATA:
+      return {
+        ...state,
+        formList: action.payload,
+      };
+    case GET_QUESTION_LIST_FORMDATA:
+      return {
+        ...state,
+        questionList: action.payload,
       };
     // return {
     //   ...state,

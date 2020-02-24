@@ -1,4 +1,21 @@
 .fieldsight-new {
+  // .form-group .nested .custom-checkbox label {
+  //   &:hover {
+  //     background-color: #97daf5;
+  //   }
+  // }
+  .common-select .select-wrapper ul li.active,
+  .common-select .select-wrapper ul li {
+    &:hover {
+      background-color: #f3f3f3ba;
+    }
+  }
+  .expandcollapseimg {
+    width: 20px;
+    max-width: 100%;
+    height: 20px;
+    float: right;
+  }
   .search-control-info-list-item {
     &:hover {
       background: #d4cdcd40;

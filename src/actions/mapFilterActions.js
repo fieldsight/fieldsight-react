@@ -8,6 +8,8 @@ import {
   SEARCH_PRIMARYGEOJSON,
   REFRESH_GEOJSONDATA,
   GET_GEOLAYERS_LIST,
+  GET_FORM_LIST_DATA,
+  GET_QUESTION_LIST_FORMDATA,
 } from './types';
 import worker from '../components/mapfilter/webWorker/filterWorker';
 import WebWorker from '../components/mapfilter/webWorker/workerSetup';
@@ -172,4 +174,30 @@ export const getGeolayersList = (id, urlRole) => dispatch => {
       })
       .catch(() => {});
   }
+};
+
+export const getFormListData = id => dispatch => {
+  axios
+    .get(
+      `https://fieldsight.naxa.com.np/fv3/api/project-forms/${id}/`,
+    )
+    .then(res => {
+      console.log(res.data, 'getformlistdata');
+      dispatch({
+        type: GET_FORM_LIST_DATA,
+        payload: res.data,
+      });
+    });
+};
+export const getQuestionListFormData = id => dispatch => {
+  axios
+    .get(
+      `https://fieldsight.naxa.com.np/fv3/api/form-questions/${id}/`,
+    )
+    .then(res => {
+      dispatch({
+        type: GET_QUESTION_LIST_FORMDATA,
+        payload: res.data,
+      });
+    });
 };

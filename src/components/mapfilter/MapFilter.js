@@ -21,6 +21,7 @@ import {
   getSearchPrimaryGeojson,
   refreshGeojsonData,
   getGeolayersList,
+  getFormListData,
 } from '../../actions/mapFilterActions';
 import MainSidebarTab from './SidebarTabsComponents/MainSidebarTab';
 
@@ -80,6 +81,7 @@ class MapFilter extends PureComponent {
     this.props.getProjectsList(id, urlRole);
     this.props.getProjectsRegionTypes(id, urlRole);
     this.props.getGeolayersList(id, urlRole);
+    this.props.getFormListData(id);
     // console.log(this.props, 'willmount');
   }
 
@@ -1232,7 +1234,7 @@ class MapFilter extends PureComponent {
               </form>
               <div className="sidebar-title flex-between">
                 <h4>Map</h4>
-                {/* {path === '/proj-mapfilter/:id' ? (
+                {path === '/proj-mapfilter/:id' ? (
                   <span className="filters flex-end">
                     <i
                       className="la la-cogs setting"
@@ -1248,7 +1250,7 @@ class MapFilter extends PureComponent {
                   </span>
                 ) : (
                   ''
-                )} */}
+                )}
               </div>
               <MainSidebarTab
                 projectsList={projectsList}
@@ -1839,4 +1841,5 @@ export default connect(mapStateToProps, {
   getSearchPrimaryGeojson,
   refreshGeojsonData,
   getGeolayersList,
+  getFormListData,
 })(MapFilter);
