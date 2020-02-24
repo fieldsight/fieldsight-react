@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
+import GroupSelect from '../../common/GroupSelect';
+import StagedList from '../../reports/dataExport/stagedList';
 
 class Filters extends Component {
   constructor(props) {
@@ -110,13 +112,15 @@ class Filters extends Component {
           >
             <div className="form-group">
               <label>Select form</label>
-              <Select
+              {/* <Select
                 name="forminfo"
                 className="wide"
                 value={formOptions}
                 onChange={this.formOptionsChange}
                 options={formoptions}
-              />
+              /> */}
+              {/* <StagedList /> */}
+              {/* <GroupSelect /> */}
               {/* <select className="wide">
                 <option>Form 1</option>
                 <option>Form 2</option>
