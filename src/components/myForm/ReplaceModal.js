@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Dropzone from "react-dropzone";
-
+import { errorToast } from "../../utils/toastHandler";
 import "react-perfect-scrollbar/dist/css/styles.css";
 
 let tokenVal = window.token
@@ -22,30 +22,34 @@ class ReplaceModal extends Component {
   onChangeHandler = e => {
     e.preventDefault();
     const { file } = this.state;
-    const id = this.props.assetUid;
-    const editUrl = this.props.modalDatas;
-    const destinationUrl = kpiUrl + "assets/" + id + "/";
-    const formData = new FormData();
+    if (Object.keys(file).length > 0) {
+      const id = this.props.assetUid;
+      const editUrl = this.props.modalDatas;
+      const destinationUrl = `${kpiUrl}assets/${id}/`;
+      const formData = new FormData();
 
-    formData.append("assetUid", id);
-    formData.append("name", file.name);
-    formData.append("file", file);
-    formData.append("destination", destinationUrl);
+      formData.append("assetUid", id);
+      formData.append("name", file.name);
+      formData.append("file", file);
+      formData.append("destination", destinationUrl);
 
-    axios
-      .post(kpiUrl + "imports/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Token " + tokenVal
-        }
-      })
-      .then(res => {
-        if (res.status === 201) {
-          window.open(editUrl, "_self");
-          this.props.toggleModal();
-        }
-      })
-      .catch(err => console.log("err", err));
+      axios
+        .post(kpiUrl + "imports/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Token " + tokenVal
+          }
+        })
+        .then(res => {
+          if (res.status === 201) {
+            window.open(editUrl, "_self");
+            this.props.toggleModal();
+          }
+        })
+        .catch(err => console.log("err", err));
+    } else {
+      errorToast("Select a file first!");
+    }
   };
 
   readFile = file => {
