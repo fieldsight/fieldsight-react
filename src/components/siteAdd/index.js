@@ -523,7 +523,7 @@ export default class SiteAdd extends Component {
       return (
         <Select
           data={data.project_id}
-          onchange={this.ondynamiChangeHandler}
+          onChange={this.ondynamiChangeHandler}
           value={this.state.data[data.id] || ''}
           type={data.question_text}
           selectedValue={this.selectedValue}

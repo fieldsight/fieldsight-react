@@ -6,6 +6,7 @@ import SiteInformationTable from './SiteInformationTable';
 import FeaturedPictures from './FeaturedPictures';
 import RightContentCard from '../common/RightContentCard';
 import InputElement from '../common/InputElement';
+import DeleteModal from '../common/DeleteModal';
 import Loader from '../common/Loader';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
@@ -492,7 +493,7 @@ class SiteInformation extends Component {
         </RightContentCard>
         {isLoading && <Loader />}
         {showConfirmation && (
-          <DeleteModel
+          <DeleteModal
             onCancel={cancelHandler}
             onConfirm={confirmHandler}
             onToggle={cancelHandler}
@@ -535,7 +536,7 @@ class SiteInformation extends Component {
                 />
               </li>
             </ul>
-          </DeleteModel>
+          </DeleteModal>
         )}
       </>
     );

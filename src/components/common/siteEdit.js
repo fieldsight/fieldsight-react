@@ -531,7 +531,7 @@ export default class SiteAdd extends Component {
                     {data.question_type === 'Link' ? (
                       <Select
                         data={data.project_id}
-                        onchange={ondynamiChangeHandler}
+                        onChange={ondynamiChangeHandler}
                         value={project_info[data.question_name]}
                         type={data.question_text}
                         name={data.question_name}

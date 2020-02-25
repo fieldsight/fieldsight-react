@@ -31,13 +31,15 @@ export default class Select extends Component {
   }
 
   onchange = e => {
-    const { selectedValue, name } = this.props;
+    const { onChange, name } = this.props;
 
     this.setState(
       {
         selected: e.target.value,
       },
-      () => selectedValue(this.state.selected, name),
+      () => {
+        onChange(this.state.selected, name);
+      },
     );
   };
 
