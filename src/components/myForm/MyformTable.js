@@ -21,7 +21,9 @@ class MyformTable extends Component {
     tblDiv: false,
     showDeleteConfirmation: false,
     delete_id: null,
-    showReplace: false
+    showReplace: false,
+    assetUid: "",
+    modalDatas: ""
   };
 
   componentDidMount() {
@@ -75,9 +77,18 @@ class MyformTable extends Component {
     });
   };
 
-  replaceOptionToggle = () => {
-    this.setState({
-      showReplace: !this.state.showReplace
+  replaceOptionToggle = (id, url) => {
+    this.setState(state => {
+      if (id && url) {
+        return {
+          showReplace: !state.showReplace,
+          assetUid: id,
+          modalDatas: url
+        };
+      }
+      return {
+        showReplace: !state.showReplace
+      };
     });
   };
 
@@ -102,7 +113,7 @@ class MyformTable extends Component {
   };
 
   render() {
-    const { showReplace } = this.state;
+    const { showReplace, assetUid, modalDatas } = this.state;
 
     return (
       <React.Fragment>
@@ -146,7 +157,11 @@ class MyformTable extends Component {
         </div>
         {showReplace && (
           <Modal toggleModal={this.replaceOptionToggle}>
-            <ReplaceModal toggleModal={this.replaceOptionToggle} />
+            <ReplaceModal
+              toggleModal={this.replaceOptionToggle}
+              assetUid={assetUid}
+              modalDatas={modalDatas}
+            />
           </Modal>
         )}
         {this.state.showDeleteConfirmation && (

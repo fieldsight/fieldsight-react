@@ -22,7 +22,7 @@ class ReplaceModal extends Component {
   onChangeHandler = e => {
     e.preventDefault();
     const { file } = this.state;
-    const id = this.props.shareUrls;
+    const id = this.props.assetUid;
     const editUrl = this.props.modalDatas;
     const destinationUrl = kpiUrl + "assets/" + id + "/";
     const formData = new FormData();

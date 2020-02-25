@@ -83,7 +83,9 @@ class FormShare extends Component {
             overlay={<Tooltip id="tooltip-disabled">Replace</Tooltip>}
           >
             <a
-              onClick={replaceToggleModal}
+              onClick={() => {
+                replaceToggleModal(item.id_string, item.edit_url);
+              }}
               role="button"
               tabIndex="0"
               // this.props.commonPopupHandler(
