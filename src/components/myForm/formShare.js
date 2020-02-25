@@ -11,14 +11,8 @@ class FormShare extends Component {
     shareOption: false
   };
 
-  // shareToggle = e => {
-  //   this.setState({
-  //     shareOption: !this.state.shareOption
-  //   });
-  // };
-
   render() {
-    const item = this.props.item;
+    const { item, replaceToggleModal } = this.props;
     return (
       <tr key={item.id_string}>
         <td style={{ width: "50%" }}>{item.title}</td>
@@ -89,16 +83,18 @@ class FormShare extends Component {
             overlay={<Tooltip id="tooltip-disabled">Replace</Tooltip>}
           >
             <a
-              onClick={e =>
-                this.props.commonPopupHandler(
-                  e,
-                  ReplaceModal,
-                  item.edit_url,
-                  "Replace Form",
-                  "replace",
-                  item.id_string
-                )
-              }
+              onClick={replaceToggleModal}
+              role="button"
+              tabIndex="0"
+              // this.props.commonPopupHandler(
+              //   e,
+              //   ReplaceModal,
+              //   item.edit_url,
+              //   "Replace Form",
+              //   "replace",
+              //   item.id_string
+              // )
+              // }
               className="td-edit-btn td-btn"
             >
               {" "}
@@ -125,7 +121,7 @@ class FormShare extends Component {
               overlay={<Tooltip id="tooltip-disabled">Share</Tooltip>}
             >
               <a
-                onClick={e => this.props.shareToggle(e,item.id_string)}
+                onClick={e => this.props.shareToggle(e, item.id_string)}
                 className="td-share-btn td-btn"
               >
                 {" "}

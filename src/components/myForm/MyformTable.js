@@ -6,6 +6,7 @@ import FormShare from "./formShare";
 import { DotLoader } from "./Loader";
 import Modal from "../common/Modal";
 import DeleteModal from "../common/DeleteModal";
+import ReplaceModal from "./ReplaceModal";
 
 const url = "fv3/api/myforms/";
 const deleteUrl = "/fv3/api/form/delete/";
@@ -19,7 +20,8 @@ class MyformTable extends Component {
     dLoader: true,
     tblDiv: false,
     showDeleteConfirmation: false,
-    delete_id: null
+    delete_id: null,
+    showReplace: false
   };
 
   componentDidMount() {
@@ -73,6 +75,12 @@ class MyformTable extends Component {
     });
   };
 
+  replaceOptionToggle = () => {
+    this.setState({
+      showReplace: !this.state.showReplace
+    });
+  };
+
   confirmHandler = () => {
     const id = this.state.delete_id;
     axios
@@ -94,6 +102,8 @@ class MyformTable extends Component {
   };
 
   render() {
+    const { showReplace } = this.state;
+
     return (
       <React.Fragment>
         <div className="myform-table">
@@ -124,6 +134,7 @@ class MyformTable extends Component {
                       commonPopupHandler={this.props.commonPopupHandler}
                       deleteHandler={this.deleteHandler}
                       shareToggle={this.shareToggle}
+                      replaceToggleModal={this.replaceOptionToggle}
                     />
                   ))}
                 </tbody>
@@ -133,6 +144,11 @@ class MyformTable extends Component {
             </PerfectScrollbar>
           </div>
         </div>
+        {showReplace && (
+          <Modal toggleModal={this.replaceOptionToggle}>
+            <ReplaceModal toggleModal={this.replaceOptionToggle} />
+          </Modal>
+        )}
         {this.state.showDeleteConfirmation && (
           <DeleteModal
             onConfirm={this.confirmHandler}

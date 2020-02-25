@@ -42,6 +42,7 @@ class ReplaceModal extends Component {
       .then(res => {
         if (res.status === 201) {
           window.open(editUrl, "_self");
+          this.props.toggleModal();
         }
       })
       .catch(err => console.log("err", err));
