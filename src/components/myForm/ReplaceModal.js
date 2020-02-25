@@ -14,19 +14,22 @@ let kpiUrl = window.kpi_base_url
 
 class ReplaceModal extends Component {
   state = {
-    images: {},
-    srcs: []
+    file: {},
+    fileName: "",
+    hasFile: false
   };
 
-  onChangeHandler = file => {
+  onChangeHandler = e => {
+    e.preventDefault();
+    const { file } = this.state;
     const id = this.props.shareUrls;
     const editUrl = this.props.modalDatas;
     const destinationUrl = kpiUrl + "assets/" + id + "/";
     const formData = new FormData();
 
     formData.append("assetUid", id);
-    formData.append("name", file[0].name);
-    formData.append("file", file[0]);
+    formData.append("name", file.name);
+    formData.append("file", file);
     formData.append("destination", destinationUrl);
 
     axios
@@ -44,60 +47,55 @@ class ReplaceModal extends Component {
       .catch(err => console.log("err", err));
   };
 
-  readImageFile = file => {
-    this.previewImg(file);
-    this.onChangeHandler(file);
-  };
-
-  previewImg = files => {
-    files.map(img => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.setState({
-          srcs: [...this.state.srcs, reader.result]
-        });
-      };
-      reader.readAsDataURL(img);
+  readFile = file => {
+    const newFile = file[0];
+    this.setState({
+      file: newFile,
+      fileName: newFile.name,
+      hasFile: true
     });
   };
 
   render() {
-    const { srcs } = this.state;
+    const { fileName, hasFile } = this.state;
     return (
       <React.Fragment>
-        <form>
+        <form
+          onSubmit={e => {
+            this.onChangeHandler(e);
+          }}
+        >
           <div className="form-group">
             <label>attach file</label>
-            {srcs.length > 0 ? (
+            {hasFile ? (
               <Dropzone
-                accept="image/*"
-                onDrop={acceptedFile => readImageFile(acceptedFile)}
+                accept=".xls"
+                onDrop={acceptedFile => this.readFile(acceptedFile)}
               >
                 {({ getRootProps, getInputProps }) => {
-                  return srcs.map((each, index) => {
-                    return (
-                      <section key={`image_${index}`}>
-                        <div className="upload-form">
-                          <img src={each} alt="Preview Image" />
-                        </div>
-                        <div {...getRootProps()}>
-                          <input {...getInputProps()} multiple={true} />
-                          <div className="upload-icon" />
+                  return (
+                    <section>
+                      <div className="upload-form">
+                        <i className="la la-file-o"></i>
+                        <span>{fileName}</span>
+                      </div>
+                      <div {...getRootProps()}>
+                        <input {...getInputProps()} multiple={false} />
+                        <div className="upload-icon" />
 
-                          <button className="fieldsight-btn">
-                            Upload
-                            <i className="la la-cloud-upload" />
-                          </button>
-                        </div>
-                      </section>
-                    );
-                  });
+                        <button className="fieldsight-btn">
+                          Upload
+                          <i className="la la-cloud-upload" />
+                        </button>
+                      </div>
+                    </section>
+                  );
                 }}
               </Dropzone>
             ) : (
               <Dropzone
-                accept="image/*"
-                onDrop={acceptedFile => this.readImageFile(acceptedFile)}
+                accept=".xls"
+                onDrop={acceptedFile => this.readFile(acceptedFile)}
               >
                 {({ getRootProps, getInputProps }) => {
                   return (
@@ -108,7 +106,7 @@ class ReplaceModal extends Component {
                             <div {...getRootProps()}>
                               <input {...getInputProps()} multiple={false} />
                               <div className="upload-icon" />
-                              <h3>Upload an image</h3>
+                              <h3>Upload XLS file</h3>
                               <button className="fieldsight-btn">
                                 Upload
                                 <i className="la la-cloud-upload" />
@@ -141,6 +139,11 @@ class ReplaceModal extends Component {
                 </div>
               </div> */}
             {/* </div> */}
+          </div>
+          <div className="form-group">
+            <button type="submit" className="fieldsight-btn pull-right ">
+              Upload
+            </button>
           </div>
         </form>
       </React.Fragment>
