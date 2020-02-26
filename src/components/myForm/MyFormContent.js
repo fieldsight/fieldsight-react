@@ -28,7 +28,7 @@ class MyFormContent extends PureComponent {
                     </h5>
                     <div className="add-btn">
                       <a
-                        href={`${base_url}/forms/create/`}
+                        href={`/forms/create/`}
                         target="_blank"
                         data-tab="site-popup"
                         rel="noopener noreferrer"
