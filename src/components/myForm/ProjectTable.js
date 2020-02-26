@@ -34,7 +34,6 @@ class ProjecTable extends Component {
       .then(res => {
         if (this._isMounted) {
           if (res.status === 200) {
-            
             this.setState({
               project_list: res.data,
               dLoader: false
@@ -148,7 +147,10 @@ class ProjecTable extends Component {
                               <Tooltip id="tooltip-disabled">download</Tooltip>
                             }
                           >
-                            <a className="td-edit-btn td-btn">
+                            <a
+                              className="td-edit-btn td-btn"
+                              href={items.download_url}
+                            >
                               {" "}
                               <i className="la la-download"> </i>{" "}
                             </a>
