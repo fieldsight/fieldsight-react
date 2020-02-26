@@ -164,13 +164,13 @@ class SiteTable extends Component {
                 of <span>{this.props.totalCount}</span> entries.
               </p>
             </div>
-            {this.props.fromData < this.props.totalCount ? (
-              <div className="table-pagination">
-                <ul>
+
+            <div className="table-pagination">
+              <ul>
+                {this.props.pageNum !== 1 && (
                   <li
-                    className={` page-item ${
-                      this.props.pageNum == 1 ? "disabled" : ""
-                    }`}
+                    className={` page-item
+                    `}
                   >
                     <a
                       onClick={e =>
@@ -197,26 +197,21 @@ class SiteTable extends Component {
                       <i className={`la la-long-arrow-left `} />
                     </a>
                   </li>
+                )}
 
-                  {!!this.props.profileId
-                    ? this.props.renderPageNumbers({
-                        type: "siteListByProfileId",
-                        projectId: this.props.siteId,
-                        profileId: this.props.profileId
-                      })
-                    : this.props.renderPageNumbers({
-                        type: "mySiteList",
-                        projectId: this.props.siteId
-                      })}
+                {!!this.props.profileId
+                  ? this.props.renderPageNumbers({
+                      type: "siteListByProfileId",
+                      projectId: this.props.siteId,
+                      profileId: this.props.profileId
+                    })
+                  : this.props.renderPageNumbers({
+                      type: "mySiteList",
+                      projectId: this.props.siteId
+                    })}
 
-                  <li
-                    className={`page-item  ${
-                      this.props.pageNum ==
-                      Math.ceil(this.props.totalCount / 200)
-                        ? " disabled"
-                        : ""
-                    }`}
-                  >
+                {this.props.pageNum !== this.props.totalPage && (
+                  <li className={`page-item  `}>
                     <a
                       onClick={e =>
                         !!this.props.profileId
@@ -242,9 +237,9 @@ class SiteTable extends Component {
                       <i className={`la la-long-arrow-right`} />
                     </a>
                   </li>
-                </ul>
-              </div>
-            ) : null}
+                )}
+              </ul>
+            </div>
           </div>
         )}
       </Fragment>
