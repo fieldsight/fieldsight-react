@@ -3,8 +3,6 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import MyformTable from "./MyformTable";
 import SharedTable from "./SharedTable";
 
-const base_url = "https://fieldsight.naxa.com.np";
-
 class MyFormContent extends Component {
   render() {
     return (
@@ -18,7 +16,7 @@ class MyFormContent extends Component {
                     <h5>My Forms</h5>
                     <div className="add-btn">
                       <a
-                        href={base_url + "/forms/create/"}
+                        href={"/forms/create/"}
                         target="_blank"
                         data-tab="site-popup"
                       >
