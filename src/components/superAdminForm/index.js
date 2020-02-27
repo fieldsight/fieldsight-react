@@ -49,15 +49,14 @@ export default class SuperAdminForm extends Component {
     axios
       .get(`/fv3/api/team-types-countries`)
       .then(res => {
-        const newArr = this.state.country;
-        this.setState(() => {
+        this.setState(state => {
+          const newArr = state.country;
           if (res.data.countries !== undefined) {
             res.data.countries.map(country => newArr.push(country));
           }
 
           return {
             country: newArr,
-            // Selectedtypes: res.data.countries[0].key,
           };
         });
       })
@@ -114,6 +113,7 @@ export default class SuperAdminForm extends Component {
         Selectedtypes,
         errorFlag,
       },
+      props: { history },
     } = this;
 
     const data = {
@@ -135,9 +135,7 @@ export default class SuperAdminForm extends Component {
         .then(req => {
           if (req.status === 201) {
             successToast('Organization', 'created');
-            this.props.history.push(
-              `/organization-dashboard/${req.data.id}`,
-            );
+            history.push(`/organization-dashboard/${req.data.id}`);
             this.setState({
               identifier: '',
               name: '',

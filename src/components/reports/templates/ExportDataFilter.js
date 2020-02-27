@@ -70,11 +70,12 @@ class ExportDataFilter extends Component {
 
   componentDidUpdate(prevProps) {
     const { taskId } = this.state;
+    const { templateReducer } = this.props;
     if (
       prevProps.templateReducer.exportExcel !==
-      this.props.templateReducer.exportExcel
+      templateReducer.exportExcel
     ) {
-      const resp = this.props.templateReducer.exportExcel;
+      const resp = templateReducer.exportExcel;
       if (resp.task_status !== 'Completed') {
         setTimeout(() => {
           this.props.excelExport(taskId);
@@ -177,7 +178,7 @@ class ExportDataFilter extends Component {
     return str
       .toLowerCase()
       .split(' ')
-      .map(function(word) {
+      .map(word => {
         return word[0].toLowerCase() + word.substr(1);
       })
       .join('_');
@@ -188,16 +189,10 @@ class ExportDataFilter extends Component {
       match: {
         params: { id, reportType },
       },
-      // location: {
-      //   state: { fromDashboard },
-      // },
     } = this.props;
-    const region = this.state.selected.filter(
-      reg => reg.id !== 'all_regions',
-    );
-    const site = this.state.siteSelected.filter(
-      s => s.id !== 'all_sitetypes',
-    );
+    const { selected, siteSelected } = this.state;
+    const region = selected.filter(reg => reg.id !== 'all_regions');
+    const site = siteSelected.filter(s => s.id !== 'all_sitetypes');
     const data = {
       regions: region.map(r => r.id),
       siteTypes: site.map(s => s.id),
@@ -217,7 +212,6 @@ class ExportDataFilter extends Component {
           this.setState({
             selected: [],
             siteType: [],
-            // showPreview: true,
             taskId: req.data.task_id,
           });
         }
@@ -229,10 +223,6 @@ class ExportDataFilter extends Component {
         });
       });
   };
-
-  // handleExcelExport = () => {
-  //   const { taskId } = this.state;
-  // };
 
   render() {
     const {
@@ -274,9 +264,6 @@ class ExportDataFilter extends Component {
       match: {
         params: { id, reportType },
       },
-      // location: {
-      //   state: { fromDashboard },
-      // },
     } = this.props;
     return (
       <>

@@ -15,8 +15,10 @@ import {
 } from '../syncSchedule/index';
 import Loader from '../common/Loader';
 
-/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable camelcase */
+/* eslint-disable  react/destructuring-assignment */
+/* eslint-disable  react/jsx-one-expression-per-line */
+
 class CollapseFilterTable extends Component {
   constructor(props) {
     super(props);
@@ -108,16 +110,12 @@ class CollapseFilterTable extends Component {
   };
 
   transpose = a => {
-    return Object.keys(a[0]).map(function(c) {
-      return a.map(function(r) {
+    return Object.keys(a[0]).map(c => {
+      return a.map(r => {
         return r[c];
       });
     });
   };
-
-  // onExportCSV = () => {
-  //   this.props.applyActionToReport(this.props.id, 'excel');
-  // };
 
   onSyncHandler = () => {
     this.setState(state => ({
@@ -143,7 +141,7 @@ class CollapseFilterTable extends Component {
     }));
   };
 
-  handleSuccess = data => {
+  handleSuccess = () => {
     const { id, getReportDataById } = this.props;
     this.setState(
       state => ({
@@ -170,6 +168,8 @@ class CollapseFilterTable extends Component {
     const {
       type,
       reportReducer: { report_sync_settings },
+      excelFileToDownload,
+      handleExcelExport,
     } = this.props;
     const actionSync = {
       id: 1,
@@ -194,8 +194,8 @@ class CollapseFilterTable extends Component {
         {
           key: 2.1,
           text: 'As Excel',
-          link: this.props.excelFileToDownload,
-          action: this.props.handleExcelExport,
+          link: excelFileToDownload,
+          action: handleExcelExport,
         },
       ],
     };
@@ -302,7 +302,7 @@ class CollapseFilterTable extends Component {
                         previewData.rowData.map(row => (
                           <tr key={uuid()}>
                             {row.map(value => (
-                              <td key={uuid()}> {value}</td>
+                              <td key={uuid()}>{value}</td>
                             ))}
                           </tr>
                         ))}
@@ -394,16 +394,16 @@ class CollapseFilterTable extends Component {
                 <label>Schedule Type</label>:
                 <p>
                   {report_sync_settings.schedule_type === 'Weekly'
-                    ? `${
-                        report_sync_settings.schedule_type
-                      } on ${getDayOnWeeklySchedule(
+                    ? `${report_sync_settings.schedule_type} 
+                      on
+                      ${getDayOnWeeklySchedule(
                         report_sync_settings.day,
                       )}`
                     : report_sync_settings.schedule_type === 'Monthly'
                     ? report_sync_settings.day === 0
-                      ? ` ${report_sync_settings.schedule_type} on last day`
-                      : ` ${report_sync_settings.schedule_type} on day ${report_sync_settings.day}`
-                    : report_sync_settings.schedule_type}{' '}
+                      ? `${report_sync_settings.schedule_type} on last day`
+                      : `${report_sync_settings.schedule_type} on day ${report_sync_settings.day}`
+                    : report_sync_settings.schedule_type}
                 </p>
               </div>
               {report_sync_settings.last_synced_date && (
@@ -430,7 +430,6 @@ class CollapseFilterTable extends Component {
               data={this.state.data}
               getScheduleType={getScheduleType}
               getReportName={getReportName}
-              // onCancel={this.handleToggleFlag}
             />
           </Modal>
         )}

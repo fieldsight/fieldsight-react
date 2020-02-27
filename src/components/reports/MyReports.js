@@ -12,8 +12,6 @@ import Modal from '../common/Modal';
 import ShareModal from './shareModal';
 import DeleteModal from '../common/DeleteModal';
 
-/* eslint-disable react/no-did-update-set-state */
-
 export const getType = type => {
   if (type === 0) {
     return 'Site';
@@ -52,37 +50,32 @@ class MyReports extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { id } = this.props;
     this.setState({ reportLoader: true }, () => {
       this.props.getReportsList(id, 'my_reports');
     });
-    // this.props.getProjectData(id);
   }
 
-  // componentDidMount() {
-  //   const { id } = this.props;
-  //   this.intervalID = setInterval(
-  //   //   this.props.getProjectData(id).bind(this),
-  //   //   10000,
-  //   // );
-  // }
-
   componentDidUpdate(prevProps) {
+    const { reportReducer } = this.props;
     if (
-      prevProps.reportReducer.reportList !==
-      this.props.reportReducer.reportList
+      prevProps.reportReducer.reportList !== reportReducer.reportList
     ) {
-      this.setState({
-        reportList: this.props.reportReducer.reportList,
-        reportLoader: false,
-      });
+      this.setReportList(reportReducer.reportList);
     }
   }
 
   componentWillUnmount() {
     clearInterval(this.intervalID);
   }
+
+  setReportList = reports => {
+    this.setState({
+      reportList: reports,
+      reportLoader: false,
+    });
+  };
 
   handle = id => {
     const { reportList } = this.state;
@@ -160,15 +153,15 @@ class MyReports extends Component {
     }));
   };
 
-  closeDeleteHandler = deleteId => {
+  closeDeleteHandler = () => {
     this.setState(prevState => ({
       openDelete: !prevState.openDelete,
     }));
   };
 
   handleClickTitle = (e, reportId) => {
-    const { id } = this.props;
-    this.props.history.push({
+    const { id, history } = this.props;
+    history.push({
       pathname: `/project/${id}/edit-report/${reportId}`,
       state: { fromRow: true },
     });

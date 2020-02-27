@@ -62,11 +62,12 @@ class UserExportReport extends Component {
 
   componentDidUpdate(prevProps) {
     const { taskId } = this.state;
+    const { templateReducer } = this.props;
     if (
       prevProps.templateReducer.exportExcel !==
-      this.props.templateReducer.exportExcel
+      templateReducer.exportExcel
     ) {
-      const resp = this.props.templateReducer.exportExcel;
+      const resp = templateReducer.exportExcel;
       if (resp.task_status !== 'Completed') {
         setInterval(this.props.excelExport(taskId), 5000);
       } else {
@@ -112,7 +113,7 @@ class UserExportReport extends Component {
     return str
       .toLowerCase()
       .split(' ')
-      .map(function(word) {
+      .map(word => {
         return word[0].toLowerCase() + word.substr(1);
       })
       .join('_');
@@ -152,7 +153,6 @@ class UserExportReport extends Component {
           this.props.excelExport(req.data.task_id);
           statusLoaded = false;
           this.setState({
-            // showPreview: true,
             taskId: req.data.task_id,
           });
         }

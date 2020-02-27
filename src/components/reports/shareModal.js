@@ -34,7 +34,7 @@ export default class ShareModal extends Component {
       props: { Shareid, shareCloseButton },
       state: { checkbox },
     } = this;
-    const selected = checkbox.map(function(x) {
+    const selected = checkbox.map(x => {
       return parseInt(x, 10);
     });
 

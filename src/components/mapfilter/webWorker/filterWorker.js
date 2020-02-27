@@ -80,7 +80,6 @@ export default () => {
       }
       isSelected = true;
     });
-    console.log('final data', filteredData);
     const finaloutput = { filteredData, isSelected };
 
     postMessage(finaloutput);

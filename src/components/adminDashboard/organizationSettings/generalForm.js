@@ -73,7 +73,7 @@ export default class GeneralFormModal extends Component {
         if (res.status === 201) {
           if (this._isMounted) {
             this.setState(
-              prevState => ({
+              () => ({
                 saveLoader: false,
               }),
               () => {
@@ -106,6 +106,7 @@ export default class GeneralFormModal extends Component {
 
   render() {
     const { status, saveLoader } = this.state;
+    const { handleFormType, SelectedArr } = this.props;
 
     return (
       <>
@@ -154,13 +155,13 @@ export default class GeneralFormModal extends Component {
               </div>
               <button
                 type="button"
-                onClick={this.props.handleFormType}
+                onClick={handleFormType}
                 className="fieldsight-btn"
               >
                 Select Form
               </button>
-              {this.props.SelectedArr &&
-                this.props.SelectedArr.map(name => (
+              {SelectedArr &&
+                SelectedArr.map(name => (
                   <p key={name.xf_id}>{name.title}</p>
                 ))}
             </div>

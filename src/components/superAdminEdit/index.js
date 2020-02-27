@@ -150,7 +150,7 @@ export default class SuperAdminFormEdit extends Component {
       longitude,
     };
 
-    if (this.state.identifier.trim().length < 5) {
+    if (identifier.trim().length < 5) {
       this.setState({
         errorFlag: true,
       });

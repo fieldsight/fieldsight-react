@@ -229,7 +229,7 @@ export default class ScheduleFormModal extends Component {
         selectedMonthlyDays,
       },
     } = this;
-    const result = dailyArrDays.map(function(x) {
+    const result = dailyArrDays.map(x => {
       return parseInt(x, 10);
     });
     const StarttedDate =
@@ -307,7 +307,7 @@ export default class ScheduleFormModal extends Component {
       errorStatedDate,
       // errorEndedDate,
     } = this.state;
-
+    const { handleFormType, SelectedArr } = this.props;
     const weeks = [];
     const months = [];
     const day = [];
@@ -331,15 +331,15 @@ export default class ScheduleFormModal extends Component {
             <div className="selected-form">
               <button
                 type="button"
-                onClick={this.props.handleFormType}
+                onClick={handleFormType}
                 className="fieldsight-btn"
               >
-                {this.props.SelectedArr.length === 0
+                {SelectedArr.length === 0
                   ? ' Select Form'
                   : 'Change Form'}
               </button>
-              {this.props.SelectedArr &&
-                this.props.SelectedArr.map(name => (
+              {SelectedArr &&
+                SelectedArr.map(name => (
                   <p key={name.xf_id}>{name.title}</p>
                 ))}
               <div className="selected-text">

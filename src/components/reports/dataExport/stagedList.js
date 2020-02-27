@@ -59,9 +59,9 @@ export default class StagedList extends Component {
 
   handleSubStageCheck = (e, subData, stageData) => {
     const {
-      target: { checked, id },
+      target: { checked },
     } = e;
-    const { stagedArr, handleSelected } = this.props;
+    const { handleSelected } = this.props;
     this.setState(
       state => {
         const { selectedData } = state;
@@ -72,8 +72,6 @@ export default class StagedList extends Component {
           s => s.name !== stageData.name,
         );
         if (checked) {
-          // debugger;
-
           if (inputArr[0]) {
             inputArr[0].sub_stages.push(subData);
           }

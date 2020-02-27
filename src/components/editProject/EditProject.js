@@ -11,7 +11,7 @@ import InputElement from '../common/InputElement';
 import SelectElement from '../common/SelectElement';
 import RightContentCard from '../common/RightContentCard';
 import Loader from '../common/Loader';
-import { errorToast, successToast } from '../../utils/toastHandler';
+import { successToast } from '../../utils/toastHandler';
 import { RegionContext } from '../../context';
 import markerIcon from '../common/Marker';
 
@@ -203,18 +203,11 @@ class EditProject extends Component {
             () => successToast('Project', 'updated'),
           );
         })
-        .catch(err => {
-          const error = err.response.data;
-          this.setState(
-            {
-              isLoading: false,
-            },
-            // () => {
-            //   Object.entries(error).map(([key, value]) => {
-            //     return errorToast(`${value}`);
-            //   });
-            // },
-          );
+        .catch(() => {
+          // const error = err.response.data;
+          this.setState({
+            isLoading: false,
+          });
         });
     }
   };

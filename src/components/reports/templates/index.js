@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Dropdown, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-// import { Redirect } from 'react-router';
 import Loader from '../../common/Loader';
 import FormTemplate from './formTemplate';
 import CustomTemplate from './customTemplate';
@@ -13,13 +12,12 @@ import {
   getProjectBreadcrumb,
 } from '../../../actions/templateAction';
 
+/* eslint-disable  react/destructuring-assignment */
+
 const StandardReportComponent = ({ path, data }) => (
   <Link
     to={{
       pathname: path,
-      // state: {
-      //   fromDashboard: data.title,
-      // },
     }}
   >
     <h4>{data.title}</h4>
@@ -57,15 +55,6 @@ class Templates extends Component {
     };
   }
 
-  componentWillMount() {
-    const {
-      match: {
-        params: { projectId },
-      },
-    } = this.props;
-    this.props.getProjectBreadcrumb(projectId);
-  }
-
   componentDidMount() {
     const {
       match: {
@@ -76,6 +65,7 @@ class Templates extends Component {
     this.setState({
       id: projectId,
     });
+    this.props.getProjectBreadcrumb(projectId);
 
     this.props.getReportList(projectId);
   }
@@ -157,23 +147,22 @@ class Templates extends Component {
   };
 
   customReporthandler = reportid => {
-    const { id } = this.state;
-    return this.props.history.push(
-      `/project/${id}/edit-report/${reportid}`,
-    );
+    const {
+      state: { id },
+      props: { history },
+    } = this;
+    return history.push(`/project/${id}/edit-report/${reportid}`);
   };
 
   generalLinkhandle = (fromDashboard, formName, projectCreatedOn) => {
-    const { id } = this.state;
+    const {
+      state: { id },
+      props: { history },
+    } = this;
     localStorage.setItem('form', formName);
     localStorage.setItem('createdOn', projectCreatedOn);
-    return this.props.history.push({
+    return history.push({
       pathname: `/form-data/${id}/${fromDashboard}`,
-      // state: {
-      //   fromDashboard,
-      //   formName,
-      //   projectCreatedOn,
-      // },
     });
   };
 

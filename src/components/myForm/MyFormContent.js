@@ -6,7 +6,7 @@ import SharedTable from './SharedTable';
 /* eslint-disable react/prop-types  */
 /* eslint-disable camelcase */
 
-const base_url = 'https://fieldsight.naxa.com.np';
+// const base_url = 'https://fieldsight.naxa.com.np';
 
 class MyFormContent extends PureComponent {
   render() {
@@ -28,7 +28,7 @@ class MyFormContent extends PureComponent {
                     </h5>
                     <div className="add-btn">
                       <a
-                        href={`/forms/create/`}
+                        href="/forms/create/"
                         target="_blank"
                         data-tab="site-popup"
                         rel="noopener noreferrer"

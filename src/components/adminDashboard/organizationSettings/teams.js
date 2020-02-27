@@ -56,10 +56,6 @@ export default class Teams extends React.PureComponent {
         popUpPage: true,
       });
     }
-
-    // } else {
-    //   this.props.history.push(`/create-team/${id}`);
-    // }
   };
 
   handleClosePopup = () => {
@@ -69,7 +65,7 @@ export default class Teams extends React.PureComponent {
   };
 
   changeHandler = async e => {
-    const { checked, value, id } = e.target;
+    const { checked, id } = e.target;
     await this.setState(prevState => {
       if (checked) {
         const key = 'id';
@@ -96,7 +92,7 @@ export default class Teams extends React.PureComponent {
       props: { id },
       state: { selected, masterTeams },
     } = this;
-    const result = selected.map(function(x) {
+    const result = selected.map(x => {
       return x.id;
     });
     const body = { team_ids: result };

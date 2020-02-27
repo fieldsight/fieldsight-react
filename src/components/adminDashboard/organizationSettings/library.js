@@ -40,7 +40,7 @@ export default class Library extends Component {
   componentDidMount() {
     const {
       props: { id },
-      state: { forms },
+      // state: { forms },
     } = this;
     axios
       .get(`/fv3/api/manage-super-organizations-library/${id}/`)
@@ -123,7 +123,7 @@ export default class Library extends Component {
       props: { id },
       state: { selectedArr },
     } = this;
-    const result = selectedArr.map(function(x) {
+    const result = selectedArr.map(x => {
       return x.xf_id;
     });
     const body = {
@@ -236,8 +236,9 @@ export default class Library extends Component {
         selected_organization_library_forms,
         loader,
         saveLoader,
+        selectedArr,
       },
-      props: { id },
+      // props: { id },
       handleCancel,
       handleConfirm,
     } = this;
@@ -287,8 +288,8 @@ export default class Library extends Component {
                 }}
               >
                 {organization_library_forms.length > 0 &&
-                  organization_library_forms.map((option, index) => {
-                    const filterList = this.state.selectedArr.filter(
+                  organization_library_forms.map(option => {
+                    const filterList = selectedArr.filter(
                       i => i.xf_id === option.xf_id,
                     );
 

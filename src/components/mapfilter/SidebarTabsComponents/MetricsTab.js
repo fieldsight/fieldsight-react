@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react';
 import Select from 'react-select';
 
 class MetricsTab extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      colorBySelection: '',
-      sizeBySelection: '',
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     colorBySelection: '',
+  //     sizeBySelection: '',
+  //   };
+  // }
 
   // colorSelectChange = selectedColorOption => {
   //   this.setState({ selectedColorOption });
@@ -33,22 +33,22 @@ class MetricsTab extends PureComponent {
       { value: 'site_type', label: 'Site Type' },
       { value: 'region', label: 'Region' },
     ];
-    const sizeOption = [
-      { value: 'project', label: 'Projects' },
-      { value: 'progress', label: 'Progress' },
-      { value: 'status', label: 'Form Status' },
-      { value: 'site_type', label: 'Site Type' },
-      { value: 'region', label: 'Region' },
-    ];
+    // const sizeOption = [
+    //   { value: 'project', label: 'Projects' },
+    //   { value: 'progress', label: 'Progress' },
+    //   { value: 'status', label: 'Form Status' },
+    //   { value: 'site_type', label: 'Site Type' },
+    //   { value: 'region', label: 'Region' },
+    // ];
     const {
       props: {
         activeTab,
         handleMetricsChange,
-        handleMetricssChange,
+        // handleMetricssChange,
         // colorBySelection,
         // sizeBySelection,
       },
-      state: { colorBySelection, sizeBySelection },
+      // state: { colorBySelection, sizeBySelection },
     } = this;
     return (
       <div

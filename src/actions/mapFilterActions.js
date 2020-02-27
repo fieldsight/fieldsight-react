@@ -66,7 +66,7 @@ export const getPrimaryMarkerGeojson = url => dispatch => {
         })
         .catch(() => {}),
     ),
-  ).then(key => {
+  ).then(() => {
     dispatch({
       type: GET_PRIMARY_MARKER_GEOJSON,
       payload: fullGeojson,
@@ -145,7 +145,7 @@ export const getSearchPrimaryGeojson = payload => dispatch => {
     payload,
   });
 };
-export const refreshGeojsonData = payload => dispatch => {
+export const refreshGeojsonData = () => dispatch => {
   dispatch({
     type: REFRESH_GEOJSONDATA,
   });

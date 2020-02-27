@@ -21,6 +21,7 @@ import {
   errorToast,
 } from '../../../utils/toastHandler';
 
+/* eslint-disable  react/destructuring-assignment */
 class DataExport extends Component {
   constructor(props) {
     super(props);
@@ -46,7 +47,7 @@ class DataExport extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {
       match: {
         params: { id },
@@ -62,59 +63,50 @@ class DataExport extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    const { templateReducer } = this.props;
     if (
       prevProps.templateReducer.breadcrumb !==
-      this.props.templateReducer.breadcrumb
+      templateReducer.breadcrumb
     ) {
-      this.setStartDate(this.props.templateReducer.breadcrumb);
+      this.setStartDate(templateReducer.breadcrumb);
     }
     if (
       prevProps.templateReducer.formLoader !==
-      this.props.templateReducer.formLoader
+      templateReducer.formLoader
     ) {
-      this.setGeneralArr(this.props.templateReducer.generalData);
+      this.setGeneralArr(templateReducer.generalData);
     }
     if (
       prevProps.templateReducer.scheduledLoader !==
-      this.props.templateReducer.scheduledLoader
+      templateReducer.scheduledLoader
     ) {
-      this.setScheduledArr(this.props.templateReducer.scheduledData);
+      this.setScheduledArr(templateReducer.scheduledData);
     }
     if (
       prevProps.templateReducer.surveyLoader !==
-      this.props.templateReducer.surveyLoader
+      templateReducer.surveyLoader
     ) {
-      this.setSurveyArr(this.props.templateReducer.surveyData);
+      this.setSurveyArr(templateReducer.surveyData);
     }
     if (
       prevProps.templateReducer.stagedLoader !==
-      this.props.templateReducer.stagedLoader
+      templateReducer.stagedLoader
     ) {
-      this.setStagedArr(this.props.templateReducer.stagedData);
+      this.setStagedArr(templateReducer.stagedData);
     }
     if (
-      prevProps.templateReducer.regions !==
-      this.props.templateReducer.regions
+      prevProps.templateReducer.regions !== templateReducer.regions
     ) {
-      this.setRegionArr(this.props.templateReducer.regions);
+      this.setRegionArr(templateReducer.regions);
     }
-    if (
-      prevProps.templateReducer.types !==
-      this.props.templateReducer.types
-    ) {
-      this.setTypeArr(this.props.templateReducer.types);
+    if (prevProps.templateReducer.types !== templateReducer.types) {
+      this.setTypeArr(templateReducer.types);
     }
     if (
       prevProps.templateReducer.dataExportResponse !==
-      this.props.templateReducer.dataExportResponse
+      templateReducer.dataExportResponse
     ) {
-      const {
-        match: {
-          params: { id },
-        },
-      } = this.props;
-      successToast(this.props.templateReducer.dataExportResponse);
-      // this.props.history.push(`/project/${id}/report`);
+      successToast(templateReducer.dataExportResponse);
     }
   }
 

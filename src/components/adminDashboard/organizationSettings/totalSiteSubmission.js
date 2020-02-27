@@ -34,14 +34,19 @@ class TotalSiteSubmission extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.siteList !== this.props.siteList) {
-      this.setState({
-        siteList: nextProps.siteList,
-        mastersiteList: nextProps.siteList,
-      });
+  componentDidUpdate(prevProps) {
+    const { siteList } = this.props;
+    if (prevProps.siteList !== siteList) {
+      this.setMap(siteList);
     }
   }
+
+  setMap = siteList => {
+    this.setState({
+      siteList,
+      mastersiteList: siteList,
+    });
+  };
 
   cancleModel = () => {
     this.setState({
@@ -57,8 +62,8 @@ class TotalSiteSubmission extends Component {
   };
 
   delete = () => {
-    const { deleteId } = this.state;
-    let list = this.state.siteList;
+    const { deleteId, siteList } = this.state;
+    let list = siteList;
 
     axios
       .get(`/fv3/api/delete-submission/${deleteId}/`)
@@ -136,8 +141,8 @@ class TotalSiteSubmission extends Component {
       },
     } = this;
     const {
-      siteSubmission,
-      loader,
+      // siteSubmission,
+      // loader,
       siteList,
       showConfirmation,
     } = this.state;

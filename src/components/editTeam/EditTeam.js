@@ -10,7 +10,7 @@ import InputElement from '../common/InputElement';
 import SelectElement from '../common/SelectElement';
 import RightContentCard from '../common/RightContentCard';
 import Loader from '../common/Loader';
-import { errorToast, successToast } from '../../utils/toastHandler';
+import { successToast } from '../../utils/toastHandler';
 import 'leaflet/dist/leaflet.css';
 import markerIcon from '../common/Marker';
 
@@ -149,7 +149,6 @@ class EditTeam extends Component {
         cropResult,
         updateLogo,
       },
-      // props: {},
     } = this;
 
     const team = {
@@ -169,15 +168,7 @@ class EditTeam extends Component {
     };
 
     axios
-      .put(`${urls[0]}${teamId}/`, team, {
-        // onUploadProgress: progressEvent => {
-        //   this.setState({
-        //     loaded: Math.round(
-        //       (progressEvent.loaded * 100) / progressEvent.total,
-        //     ),
-        //   });
-        // },
-      })
+      .put(`${urls[0]}${teamId}/`, team)
       .then(() => {
         this.setState(
           {
@@ -187,19 +178,12 @@ class EditTeam extends Component {
           () => successToast('Team', 'updated'),
         );
       })
-      .catch(err => {
-        const error = err.response.data;
+      .catch(() => {
+        // const error = err.response.data;
 
-        this.setState(
-          {
-            isLoading: false,
-          },
-
-          // () =>
-          //   Object.entries(error).map(([key, value]) => {
-          //     return errorToast(`${value}`);
-          //   }),
-        );
+        this.setState({
+          isLoading: false,
+        });
       });
   };
 
