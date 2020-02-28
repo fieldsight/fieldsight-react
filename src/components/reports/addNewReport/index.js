@@ -9,12 +9,12 @@ import {
   applyActionToReport,
   getReportData,
 } from '../../../actions/reportActions';
-import InputElement from '../../common/InputElement';
 import {
   errorToast,
   successToast,
 } from '../../../utils/toastHandler';
-import CustomSelect from '../common/CustomSelect';
+import Nav from './nav';
+import BasicData from './basicData';
 import Metrics from './metrics';
 // import DataFilter from '../common/dataFilter';
 import SelectedColumn from './selectedColumn';
@@ -1262,24 +1262,11 @@ class AddNewReport extends Component {
 
     return (
       <>
-        <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a
-                href={breadcrumb.name_url}
-                style={{ color: '#00628E' }}
-              >
-                {breadcrumb.name}
-              </a>
-            </li>
-            {isEdit && (
-              <li className="breadcrumb-item">{reportName}</li>
-            )}
-            <li className="breadcrumb-item">
-              {isEdit ? 'Edit Report' : 'Create Report'}
-            </li>
-          </ol>
-        </nav>
+        <Nav
+          breadcrumb={breadcrumb}
+          isEdit={isEdit}
+          reportName={reportName}
+        />
         <div className="reports mrb-30">
           <div className="card">
             <div className="card-body">
@@ -1298,96 +1285,19 @@ class AddNewReport extends Component {
                     <span>Cancel</span>
                   </button>
                 </div>
-                <div className="filter-all-header">
-                  <form
-                    className="floating-form "
-                    onSubmit={e => {
-                      e.preventDefault();
-                    }}
-                  >
-                    <div>
-                      <InputElement
-                        formType="editForm"
-                        tag="input"
-                        type="text"
-                        required
-                        label="Report Name"
-                        name="reportName"
-                        value={reportName}
-                        changeHandler={this.handleChange}
-                      />
-                      {errors && errors.reportName && (
-                        <small style={{ color: 'red' }}>
-                          {`*${errors.reportName}`}
-                        </small>
-                      )}
-                    </div>
-                    <div>
-                      <InputElement
-                        formType="editForm"
-                        tag="input"
-                        type="text"
-                        required
-                        label="Description"
-                        name="desc"
-                        value={desc}
-                        changeHandler={this.handleChange}
-                      />
-                      {errors && errors.desc && (
-                        <small style={{ color: 'red' }}>
-                          {`*${errors.desc}`}
-                        </small>
-                      )}
-                    </div>
-                    <div className="report-type">
-                      <div className="row">
-                        <div
-                          className="col-lg-3 col-md-4"
-                          // ref={node => (this.reportRef = node)}
-                        >
-                          <div className="form-group inline-form-group">
-                            <label className="">Report type</label>
-                            {!reportLoader && (
-                              <CustomSelect
-                                name={reportType.filter(
-                                  each =>
-                                    each.id === selectedReportType,
-                                )}
-                                options={reportType}
-                                value={selectedReportType}
-                                handleSelect={
-                                  this.handleReportTypeChange
-                                }
-                                disable={isEdit}
-                              />
-                            )}
-                          </div>
-                        </div>
-                        <div className="col-lg-9 col-md-8">
-                          <button
-                            className={`common-button ${
-                              collapseClass ? '' : 'is-disable'
-                            } is-icon pull-right is-bg`}
-                            type="button"
-                            onClick={() => {
-                              this.handleToggleCollapse();
-                            }}
-                          >
-                            <i className="material-icons">
-                              filter_list
-                            </i>
-                            <span>collapse all</span>
-                            <i className="material-icons arrow-icon">
-                              {collapseClass
-                                ? 'expand_less'
-                                : 'expand_more'}
-                            </i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
+                <BasicData
+                  handleChange={this.handleChange}
+                  reportName={reportName}
+                  desc={desc}
+                  errors={errors}
+                  reportType={reportType}
+                  selectedReportType={selectedReportType}
+                  handleReportTypeChange={this.handleReportTypeChange}
+                  isEdit={isEdit}
+                  handleToggleCollapse={this.handleToggleCollapse}
+                  collapseClass={collapseClass}
+                  reportLoader={reportLoader}
+                />
                 {collapseClass && (
                   <>
                     <div className="report-accordion">

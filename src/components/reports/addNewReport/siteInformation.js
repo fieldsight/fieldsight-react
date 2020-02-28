@@ -72,7 +72,7 @@ export default class SiteInformation extends Component {
         }
         if (!checked) {
           const filterMetas = selectedMetas.filter(
-            type => type.code !== name,
+            type => type.id !== name,
           );
           return {
             siteInfo: {
@@ -150,19 +150,18 @@ export default class SiteInformation extends Component {
                         {metaAttributes.length > 0 &&
                           metaAttributes.map(item => {
                             const filterList = selectedMetas.filter(
-                              i => i.code === item.code,
+                              i => i.id === item.id,
                             );
                             const isChecked =
                               filterList && filterList[0]
                                 ? true
                                 : false;
-
                             return (
-                              <li key={item.code}>
+                              <li key={item.id}>
                                 <CustomCheckBox
-                                  id={item.code}
+                                  id={item.id}
                                   label={item.label}
-                                  name={item.code}
+                                  name={item.id}
                                   checked={isChecked}
                                   changeHandler={e => {
                                     this.handleSelectMeta(e, item);

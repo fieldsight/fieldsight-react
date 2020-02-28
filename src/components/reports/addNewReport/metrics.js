@@ -88,7 +88,6 @@ export default class Metrics extends Component {
       handleSiteAddValue,
       selectedValue,
     } = this.props;
-    // console.log('metrics', formTypes, '-----', selectedFormType);
 
     return (
       <div className="col-lg-7 col-md-7">
