@@ -228,7 +228,7 @@ class MyReports extends Component {
                             <span>{getType(report.type)}</span>
                           </p>
                           <p>
-                            <b>no. of datapoints</b>
+                            <b>no. of columns</b>
                             <span>{report.datapoints}</span>
                           </p>
                         </div>

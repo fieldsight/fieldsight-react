@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import MyReports from './MyReports';
 import ShareWithMe from './SharedWithMe';
-// import Templates from './templates/index';
 
 class ReportList extends Component {
   constructor(props) {
@@ -65,9 +64,6 @@ class ReportList extends Component {
           </div>
           {activeTab === 'myReports' && <MyReports id={id} />}
           {activeTab === 'sharedWithMe' && <ShareWithMe id={id} />}
-          {/* {activeTab === 'templates' && (
-            <Templates id={id} history={this.props.history} />
-          )} */}
         </div>
       </div>
     );

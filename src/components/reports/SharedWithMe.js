@@ -12,7 +12,8 @@ class SharedWithMe extends Component {
       sharedList: [],
     };
   }
-  componentWillMount() {
+
+  componentDidMount() {
     const { id } = this.props;
     this.props.getReportsList(id, 'shared_with_me');
   }

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 // import { Dropdown } from 'react-bootstrap';
 import format from 'date-fns/format';
-import CollapseFilterTable from '../CollapseFilterTable';
+import CollapseFilterTable from '../common/CollapseFilterTable';
 import FilterByDate from '../common/filterByDate';
 import FilterByData from '../common/filterByData';
 import {

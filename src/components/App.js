@@ -72,11 +72,6 @@ import Templates from './reports/templates';
 import Reports from './reports';
 import ReportDashboard from './reports/viewReport';
 import ExportDataFilter from './reports/templates/ExportDataFilter';
-import UserList from './reports/users/usersTable';
-import UserProfile from './reports/users/userProfile/index';
-import UserManage from './reports/users/userManage';
-import MyFormTable from './reports/myForm';
-import Submission from './reports/submission';
 import AddNewReport from './reports/addNewReport';
 import FormDataFilter from './reports/templates/FormDataFilter';
 import ActivityExportFile from './reports/templates/activityExportFile';
@@ -383,27 +378,7 @@ class App extends Component {
                   path="/organization-settings/:id"
                   render={props => <SuperAdminSetting {...props} />}
                 />
-                <Route
-                  path="/userLists"
-                  render={props => <UserList {...props} />}
-                />
-                <Route
-                  path="/userProfile"
-                  render={props => <UserProfile {...props} />}
-                />
 
-                <Route
-                  path="/user-manage"
-                  render={props => <UserManage {...props} />}
-                />
-                <Route
-                  path="/myFormtable"
-                  render={props => <MyFormTable {...props} />}
-                />
-                <Route
-                  path="/form-submission"
-                  render={props => <Submission {...props} />}
-                />
                 <Route
                   path="/export-data/:id/:reportType"
                   render={props => <ExportDataFilter {...props} />}

@@ -11,7 +11,7 @@ import RightContentCard from '../../common/RightContentCard';
 import Modal from '../../common/Modal';
 import ExportTable from './exportTable';
 import { DotLoader } from '../../myForm/Loader';
-import CollapseFilterTable from '../CollapseFilterTable';
+import CollapseFilterTable from '../common/CollapseFilterTable';
 import DataFilter from '../common/dataFilter';
 import {
   errorToast,
@@ -342,7 +342,7 @@ class ReportDashboard extends Component {
           <div className="floating-form">
             <div className="view-report">
               <p>
-                <b>No of datapoints</b>
+                <b>No of columns</b>
                 <span>{attributes && attributes.length}</span>
               </p>
               <p>

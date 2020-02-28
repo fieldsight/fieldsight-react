@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 import { OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
 
-import { getCustomReportTableData } from '../../actions/reportActions';
-import { successToast } from '../../utils/toastHandler';
-import Modal from '../common/Modal';
-import Sheet from '../../static/images/sheets.png';
-import Form from '../syncSchedule/form';
+import { getCustomReportTableData } from '../../../actions/reportActions';
+import { successToast } from '../../../utils/toastHandler';
+import Modal from '../../common/Modal';
+import Sheet from '../../../static/images/sheets.png';
+import Form from '../../syncSchedule/form';
 import {
   getScheduleType,
   getDayOnWeeklySchedule,
   getReportName,
-} from '../syncSchedule/index';
-import Loader from '../common/Loader';
+} from '../../syncSchedule/index';
+import Loader from '../../common/Loader';
 
 /* eslint-disable camelcase */
 /* eslint-disable  react/destructuring-assignment */
@@ -117,12 +117,6 @@ class CollapseFilterTable extends Component {
     });
   };
 
-  onSyncHandler = () => {
-    this.setState(state => ({
-      openModal: !state.openModal,
-    }));
-  };
-
   handleToggle = () => {
     this.setState(state => ({
       openModal: !state.openModal,
@@ -130,12 +124,6 @@ class CollapseFilterTable extends Component {
   };
 
   handleEdit = () => {
-    this.setState(state => ({
-      openEditModal: !state.openEditModal,
-    }));
-  };
-
-  handleEditClose = () => {
     this.setState(state => ({
       openEditModal: !state.openEditModal,
     }));
@@ -171,6 +159,7 @@ class CollapseFilterTable extends Component {
       excelFileToDownload,
       handleExcelExport,
     } = this.props;
+
     const actionSync = {
       id: 1,
       title: 'sync',
@@ -180,7 +169,7 @@ class CollapseFilterTable extends Component {
         {
           key: 1.1,
           text: 'To Google Sheets',
-          link: this.onSyncHandler,
+          link: this.handleToggle,
         },
       ],
     };
@@ -206,17 +195,6 @@ class CollapseFilterTable extends Component {
       <>
         <div className="report-table  mt-3">
           <div className="report-table-header">
-            {/* {!type && (
-              <div className="dropdown">
-                <button
-                  type="button"
-                  className="common-button data-toggle is-border is-icon"
-                >
-                  <i className="material-icons">import_export</i>
-                  <span>API</span>
-                </button>
-              </div>
-            )} */}
             {!type && (
               <Dropdown>
                 <Dropdown.Toggle
@@ -419,10 +397,7 @@ class CollapseFilterTable extends Component {
           </Modal>
         )}
         {openEditModal && (
-          <Modal
-            title="Edit Report"
-            toggleModal={this.handleEditClose}
-          >
+          <Modal title="Edit Report" toggleModal={this.handleEdit}>
             <Form
               projectId={this.props.projectId}
               reportId={this.props.id}

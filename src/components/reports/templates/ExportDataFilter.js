@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import CustomMultiSelect from '../common/CustomMultiSelect';
-import CollapseFilterTable from '../CollapseFilterTable';
+import CollapseFilterTable from '../common/CollapseFilterTable';
 import {
   errorToast,
   successToast,

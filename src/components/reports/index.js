@@ -10,7 +10,7 @@ class Reports extends Component {
     this.state = { breadcrumb: {} };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {
       match: {
         params: { projectId },

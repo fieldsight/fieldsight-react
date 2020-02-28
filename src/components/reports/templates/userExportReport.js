@@ -10,7 +10,7 @@ import {
   successToast,
 } from '../../../utils/toastHandler';
 import FilterByDate from '../common/filterByDate';
-import CollapseFilterTable from '../CollapseFilterTable';
+import CollapseFilterTable from '../common/CollapseFilterTable';
 import { excelExport } from '../../../actions/templateAction';
 
 /* eslint-disable camelcase */
