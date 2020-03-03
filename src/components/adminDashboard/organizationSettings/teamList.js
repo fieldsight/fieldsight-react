@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import CustomCheckBox from '../../reports/common/CustomCheckbox';
+import CustomCheckBox from '../../common/CustomCheckbox';
 
 export default class TeamList extends PureComponent {
   render() {

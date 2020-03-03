@@ -68,16 +68,6 @@ import OrganizationTeams from './organizationTeamList';
 import TotalOrganizationSubmission from './adminDashboard/organizationSettings/totalOrganizationSubmission';
 import TotalSiteSubmission from './adminDashboard/organizationSettings/totalSiteSubmission';
 
-import Templates from './reports/templates';
-import Reports from './reports';
-import ReportDashboard from './reports/viewReport';
-import ExportDataFilter from './reports/templates/ExportDataFilter';
-import AddNewReport from './reports/addNewReport';
-import FormDataFilter from './reports/templates/FormDataFilter';
-import ActivityExportFile from './reports/templates/activityExportFile';
-import UserExportReport from './reports/templates/userExportReport';
-import DataExport from './reports/dataExport';
-
 import OrganizationExport from './excelExport/organizationExport';
 import ExcelExport from './excelExport';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -196,16 +186,6 @@ class App extends Component {
                 <Route
                   path="/project-dashboard/:id"
                   render={props => <ProjectDashboard {...props} />}
-                />
-                <Route
-                  exact
-                  path="/project/:id/add-report"
-                  render={props => <AddNewReport {...props} />}
-                />
-                <Route
-                  exact
-                  path="/project/:id/edit-report/:reportId"
-                  render={props => <AddNewReport {...props} />}
                 />
                 <Route
                   path="/team-dashboard/:id"
@@ -379,39 +359,6 @@ class App extends Component {
                   render={props => <SuperAdminSetting {...props} />}
                 />
 
-                <Route
-                  path="/export-data/:id/:reportType"
-                  render={props => <ExportDataFilter {...props} />}
-                />
-                <Route
-                  path="/form-data/:id/:fid"
-                  render={props => <FormDataFilter {...props} />}
-                />
-                <Route
-                  path="/activity-export/:id/:reportType"
-                  render={props => <ActivityExportFile {...props} />}
-                />
-                <Route
-                  path="/user-export/:id/:reportType"
-                  render={props => <UserExportReport {...props} />}
-                />
-                <Route
-                  path="/data-export/:id"
-                  render={props => <DataExport {...props} />}
-                />
-
-                <Route
-                  path="/project/:projectId/report"
-                  render={props => <Templates {...props} />}
-                />
-                <Route
-                  path="/report-list/:projectId/"
-                  render={props => <Reports {...props} />}
-                />
-                <Route
-                  path="/view-report/:pid/:id"
-                  render={props => <ReportDashboard {...props} />}
-                />
                 <Route
                   path="/exports/:isProject/:formId/:id/:version"
                   render={props => <ExcelExport {...props} />}
