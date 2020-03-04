@@ -4,7 +4,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import Select from 'react-select';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { FormattedMessage } from 'react-intl';
 import InputElement from '../common/InputElement';
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-restricted-globals  */
@@ -34,12 +33,7 @@ class AddSite extends Component {
             <div className="popup-body lg-body">
               <div className="card">
                 <div className="card-header main-card-header">
-                  <h5>
-                    <FormattedMessage
-                      id="app.addSite"
-                      defaultMessage="Add Site"
-                    />
-                  </h5>
+                  <h5>Add Site</h5>
                   <span
                     tabIndex="0"
                     role="button"
@@ -64,12 +58,7 @@ class AddSite extends Component {
                               className="form-control"
                               required
                             />
-                            <label htmlFor="input">
-                              <FormattedMessage
-                                id="app.id"
-                                defaultMessage="id"
-                              />
-                            </label>
+                            <label htmlFor="input">id</label>
                           </div>
                         </div>
                         <div className="col-xl-6 col-md-12">
@@ -79,12 +68,7 @@ class AddSite extends Component {
                               className="form-control"
                               required
                             />
-                            <label htmlFor="input">
-                              <FormattedMessage
-                                id="app.name"
-                                defaultMessage="Name"
-                              />
-                            </label>
+                            <label htmlFor="input">Name</label>
                           </div>
                         </div>
                         <div className="col-xl-6 col-md-12">
@@ -99,12 +83,7 @@ class AddSite extends Component {
                               className="form-control"
                               required
                             />
-                            <label htmlFor="input">
-                              <FormattedMessage
-                                id="app.phone"
-                                defaultMessage="Phone"
-                              />
-                            </label>
+                            <label htmlFor="input">Phone</label>
                           </div>
                         </div>
 
@@ -115,12 +94,7 @@ class AddSite extends Component {
                               className="form-control"
                               required
                             />
-                            <label htmlFor="input">
-                              <FormattedMessage
-                                id="app.address"
-                                defaultMessage="Address"
-                              />
-                            </label>
+                            <label htmlFor="input">Address</label>
                           </div>
                         </div>
                         <div className="col-xl-6 col-md-12">
@@ -130,37 +104,17 @@ class AddSite extends Component {
                               className="form-control"
                               required
                             />
-                            <label htmlFor="input">
-                              <FormattedMessage
-                                id="app.region"
-                                defaultMessage="Region"
-                              />
-                            </label>
+                            <label htmlFor="input">Region</label>
                           </div>
                         </div>
                         <div className="col-md-12">
                           <div className="form-group">
-                            <label>
-                              <FormattedMessage
-                                id="app.sitePhoto"
-                                defaultMessage="Site Photo"
-                              />
-                            </label>
+                            <label>Site Photo</label>
                             <div className="upload-form">
                               <div className="upload-wrap">
                                 <div className="content">
-                                  <h3>
-                                    <FormattedMessage
-                                      id="app.drag&DropAnImage"
-                                      defaultMessage="Drag & Drop an image"
-                                    />
-                                  </h3>
-                                  <span>
-                                    <FormattedMessage
-                                      id="app.or"
-                                      defaultMessage="or"
-                                    />
-                                  </span>
+                                  <h3>Drag & Drop an image</h3>
+                                  <span>or</span>
                                 </div>
                                 <input
                                   type="file"
@@ -169,10 +123,7 @@ class AddSite extends Component {
                                 />
                                 <div className="fieldsight-btn">
                                   <label htmlFor="upload-btn">
-                                    <FormattedMessage
-                                      id="app.upload"
-                                      defaultMessage="upload"
-                                    />
+                                    upload
                                     <i className="la la-cloud-upload" />
                                   </label>
                                   <input
@@ -189,10 +140,7 @@ class AddSite extends Component {
                         <div className="col-xl-4 col-md-6">
                           <div className="form-group">
                             <label>
-                              <FormattedMessage
-                                id="app.map"
-                                defaultMessage="Map"
-                              />
+                              Map
                               <sup>*</sup>
                             </label>
 
@@ -214,13 +162,7 @@ class AddSite extends Component {
                                   position={[27.2234, 87.23232]}
                                 >
                                   <Popup>
-                                    <b>
-                                      <FormattedMessage
-                                        id="app.name"
-                                        defaultMessage="Name"
-                                      />
-                                      :
-                                    </b>
+                                    <b>Name :</b>
                                     {name}
                                   </Popup>
                                 </Marker>
@@ -232,10 +174,9 @@ class AddSite extends Component {
                                     tag="input"
                                     type="number"
                                     required
-                                    label="app.latitude"
+                                    label="latitude"
                                     name="latitude"
                                     value={27.2234}
-                                    translation
                                     changeHandler={e => {
                                       onChangeHandler(e, 'latitude');
                                     }}
@@ -248,10 +189,9 @@ class AddSite extends Component {
                                     tag="input"
                                     type="number"
                                     required
-                                    label="app.longitude"
+                                    label="longitude"
                                     name="longitude"
                                     value={87.23232}
-                                    translation
                                     changeHandler={e => {
                                       onChangeHandler(e, 'longitude');
                                     }}
@@ -269,10 +209,7 @@ class AddSite extends Component {
                             type="submit"
                             className="fieldsight-btn"
                           >
-                            <FormattedMessage
-                              id="app.save"
-                              defaultMessage="Save"
-                            />
+                            Save
                           </button>
                         </div>
                       </div>

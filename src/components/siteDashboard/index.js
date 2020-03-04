@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 
 import DashboardHeader from './dashboardComponent/DashBoardHeader';
 import DatatablePage from './dashboardComponent/DatatablePage';
@@ -281,11 +280,7 @@ class SiteDashboard extends Component {
                     <div className="card-header main-card-header sub-card-header">
                       <h5>
                         {terms_and_labels && terms_and_labels.site}
-
-                        <FormattedMessage
-                          id="app.map"
-                          defaultMessage="Map"
-                        />
+                        Map
                       </h5>
                       <div className="dash-btn">
                         <a
@@ -295,10 +290,7 @@ class SiteDashboard extends Component {
                           rel="noopener noreferrer"
                         >
                           <i className="la la-map" />
-                          <FormattedMessage
-                            id="app.full-map"
-                            defaultMessage="full map"
-                          />
+                          Full map
                         </a>
                       </div>
                     </div>
@@ -325,11 +317,7 @@ class SiteDashboard extends Component {
                       <div className="card-header main-card-header sub-card-header">
                         <h5>
                           {terms_and_labels && terms_and_labels.site}
-                          &nbsp;
-                          <FormattedMessage
-                            id="app.information"
-                            defaultMessage="Information"
-                          />
+                          &nbsp; Information
                         </h5>
                       </div>
                       <div
@@ -375,12 +363,7 @@ class SiteDashboard extends Component {
                   <div className="col-md-6">
                     <div className="card">
                       <div className="card-header main-card-header sub-card-header">
-                        <h5>
-                          <FormattedMessage
-                            id="app.form-submission"
-                            defaultMessage="Form submissions"
-                          />
-                        </h5>
+                        <h5>Form submissions</h5>
                       </div>
                       <div className="card-body">
                         <SubmissionChart
@@ -394,11 +377,7 @@ class SiteDashboard extends Component {
                       <div className="card-header main-card-header sub-card-header">
                         <h5>
                           {terms_and_labels && terms_and_labels.site}
-                          &nbsp;&nbsp;
-                          <FormattedMessage
-                            id="app.progress"
-                            defaultMessage="Progress"
-                          />
+                          &nbsp;&nbsp; Progress
                         </h5>
                       </div>
                       <div className="card-body">
@@ -422,12 +401,7 @@ class SiteDashboard extends Component {
                   <div className="col-xl-4 col-md-6">
                     <div className="card mangager-list">
                       <div className="card-header main-card-header sub-card-header">
-                        <h5>
-                          <FormattedMessage
-                            id="app.users"
-                            defaultMessage="Users"
-                          />
-                        </h5>
+                        <h5>Users</h5>
 
                         {/* <div className="dash-btn">
                           <form className="floating-form">

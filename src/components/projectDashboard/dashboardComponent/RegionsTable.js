@@ -2,7 +2,6 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage } from 'react-intl';
 import { DotLoader } from '../../myForm/Loader';
 import isEmpty from '../../../utils/isEmpty';
 import withPagination from '../../../hoc/WithPagination';
@@ -51,12 +50,7 @@ class RegionsTable extends React.PureComponent {
                 ) : (
                   <tbody>
                     <tr>
-                      <td colSpan={4}>
-                        <FormattedMessage
-                          id="app.noFormDataAvailable"
-                          defaultMessage="No Form Data Available"
-                        />
-                      </td>
+                      <td colSpan={4}>No Form Data Available</td>
                     </tr>
                   </tbody>
                 )}

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage } from 'react-intl';
 import { AvatarContentLoader } from '../../common/Loader';
 
 const AdminListItem = ({ admin }) => {
@@ -49,12 +48,7 @@ class Admin extends PureComponent {
                       />
                     ))
                   ) : (
-                    <p>
-                      <FormattedMessage
-                        id="app.noDataAvailable"
-                        defaultMessage="No Data Available"
-                      />
-                    </p>
+                    <p>No Data Available</p>
                   )}
                 </ul>
               </PerfectScrollbar>

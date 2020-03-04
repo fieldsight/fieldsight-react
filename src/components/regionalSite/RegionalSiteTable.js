@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage } from 'react-intl';
 import { TableContentLoader } from '../common/Loader';
 import withPagination from '../../hoc/WithPagination';
 import isEmpty from '../../utils/isEmpty';
@@ -103,51 +102,16 @@ class RegionalSiteTable extends Component {
                 <thead>
                   <tr>
                     <th>
-                      {!isEmpty(this.props.terms) ? (
-                        `${this.props.terms.site} name`
-                      ) : (
-                        <FormattedMessage
-                          id="app.site-name"
-                          defaultMessage="Site name"
-                        />
-                      )}
+                      {!isEmpty(this.props.terms)
+                        ? `${this.props.terms.site} name`
+                        : 'Site name'}
                     </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.identifier"
-                        defaultMessage="Identifier"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.address"
-                        defaultMessage="Address"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.type"
-                        defaultMessage="Type"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.progress"
-                        defaultMessage="Progress"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.submissions"
-                        defaultMessage="Submissions"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.latest-status"
-                        defaultMessage="Latest status"
-                      />
-                    </th>
+                    <th>Identifier</th>
+                    <th>Address</th>
+                    <th>Type</th>
+                    <th>Progress</th>
+                    <th>Submissions</th>
+                    <th>Latest status</th>
                   </tr>
                 </thead>
 
@@ -219,28 +183,15 @@ class RegionalSiteTable extends Component {
           <div className="table-footer">
             <div className="showing-rows">
               <p>
-                <FormattedMessage
-                  id="app.showing"
-                  defaultMessage="Showing"
-                />
-                &nbsp;
+                Showing &nbsp;
                 <span>{fromData}</span>
-                &nbsp;
-                <FormattedMessage id="app.to" defaultMessage="to" />
-                &nbsp;
+                &nbsp; to &nbsp;
                 <span>
                   {toData > totalCount ? totalCount : toData}
                 </span>
-                &nbsp;
-                <FormattedMessage id="app.of" defaultMessage="of" />
-                &nbsp;
+                &nbsp; of &nbsp;
                 <span>{totalCount}</span>
-                &nbsp;
-                <FormattedMessage
-                  id="app.entries"
-                  defaultMessage="entries"
-                />
-                .
+                &nbsp; entries .
               </p>
             </div>
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import uuid from 'uuid/v4';
-import { FormattedMessage } from 'react-intl';
 import { AvatarContentLoader } from '../../common/Loader';
 
 const UsersListItem = ({ user }) => {
@@ -32,12 +31,7 @@ const UsersList = ({ users, showContentLoader }) => (
               <UsersListItem user={user} key={uuid()} />
             ))
           ) : (
-            <p>
-              <FormattedMessage
-                id="app.noDataAvailable"
-                defaultMessage="No Data Available"
-              />
-            </p>
+            <p>No Data Available</p>
           )}
         </ul>
       </PerfectScrollbar>

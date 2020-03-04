@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage, injectIntl } from 'react-intl';
 import { DotLoader } from '../myForm/Loader';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
@@ -19,29 +18,6 @@ const base_url = window.base_url
 const project_id = window.project_id
   ? window.project_id
   : process.env.PROJECT_ID;
-
-const exportSites = site => {
-  return (
-    <FormattedMessage
-      id="app.export"
-      defaultMessage="Export {name}"
-      values={{
-        name: site,
-      }}
-    />
-  );
-};
-const siteName = site => {
-  return (
-    <FormattedMessage
-      id="app.name"
-      defaultMessage="{name} Export"
-      values={{
-        name: site,
-      }}
-    />
-  );
-};
 
 class ProjectSiteTable extends Component {
   static contextType = RegionContext;
@@ -92,14 +68,7 @@ class ProjectSiteTable extends Component {
       <>
         <div className="card-header main-card-header sub-card-header">
           <h5>
-            {!isEmpty(terms) ? (
-              `${terms.site}`
-            ) : (
-              <FormattedMessage
-                id="app.sites"
-                defaultMessage="Sites"
-              />
-            )}
+            <h5>{!isEmpty(terms) ? `${terms.site}` : 'Sites'}</h5>
           </h5>
           <div className="dash-btn">
             <form
@@ -139,10 +108,7 @@ class ProjectSiteTable extends Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FormattedMessage
-                id="app.assignSitestoRegions"
-                defaultMessage="Assign Sites to Regions"
-              />
+              Assign Sites to Regions
             </a>
             <a
               className="fieldsight-btn"
@@ -150,14 +116,9 @@ class ProjectSiteTable extends Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {!isEmpty(terms) ? (
-                exportSites(terms.site)
-              ) : (
-                <FormattedMessage
-                  id="app.exportSites"
-                  defaultMessage="Export Sites"
-                />
-              )}
+              {!isEmpty(terms)
+                ? `Export ${terms.site} `
+                : 'Export Sites'}
             </a>
             <button
               type="button"
@@ -169,10 +130,7 @@ class ProjectSiteTable extends Component {
                 );
               }}
             >
-              <FormattedMessage
-                id="app.bulkUpload/update"
-                defaultMessage="Bulk upload/update"
-              />
+              Bulk upload/update
             </button>
           </div>
         </div>
@@ -186,57 +144,17 @@ class ProjectSiteTable extends Component {
                 <thead>
                   <tr>
                     <th>
-                      {!isEmpty(terms) ? (
-                        siteName(terms.site)
-                      ) : (
-                        <FormattedMessage
-                          id="app.site-name"
-                          defaultMessage="Site Name"
-                        />
-                      )}
+                      {!isEmpty(terms)
+                        ? `${terms.site} Name`
+                        : 'Site Name'}
                     </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.id"
-                        defaultMessage="Id"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.address"
-                        defaultMessage="Address"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.region"
-                        defaultMessage="Region"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.type"
-                        defaultMessage="Type"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.progress"
-                        defaultMessage="Progress"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.submissions"
-                        defaultMessage="Submissions"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.latest-status"
-                        defaultMessage="Latest status"
-                      />
-                    </th>
+                    <th>Id</th>
+                    <th>Address</th>
+                    <th>Region</th>
+                    <th>Type</th>
+                    <th>Progress</th>
+                    <th>Submissions</th>
+                    <th>Latest status</th>
                   </tr>
                 </thead>
 
@@ -317,28 +235,15 @@ class ProjectSiteTable extends Component {
             <div className="table-footer">
               <div className="showing-rows">
                 <p>
-                  <FormattedMessage
-                    id="app.showing"
-                    defaultMessage="Showing"
-                  />
-                  &nbsp;
+                  Showing &nbsp;
                   <span>{fromData}</span>
-                  &nbsp;
-                  <FormattedMessage id="app.to" defaultMessage="to" />
-                  &nbsp;
+                  &nbsp; to &nbsp;
                   <span>
                     {toData > totalCount ? totalCount : toData}
                   </span>
-                  &nbsp;
-                  <FormattedMessage id="app.of" defaultMessage="of" />
-                  &nbsp;
+                  &nbsp; of &nbsp;
                   <span>{totalCount}</span>
-                  &nbsp;
-                  <FormattedMessage
-                    id="app.entries"
-                    defaultMessage="entries"
-                  />
-                  .
+                  &nbsp; entries .
                 </p>
               </div>
               {toData < totalCount ? (
@@ -396,4 +301,4 @@ class ProjectSiteTable extends Component {
     );
   }
 }
-export default withPagination(injectIntl(ProjectSiteTable));
+export default withPagination(ProjectSiteTable);

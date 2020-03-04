@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import Select from 'react-select';
 
 import InputElement from '../common/InputElement';
@@ -154,21 +153,15 @@ class AddStageForm extends Component {
             tag="input"
             type="text"
             required
-            label="app.name"
+            label="name"
             name="name"
             value={name}
             changeHandler={handleChange}
-            translation
           />
           {/* </div> */}
           {regionDropdown && regionDropdown.length > 0 && (
             <div>
-              <label>
-                <FormattedMessage
-                  id="app.regions"
-                  defaultMessage="Regions"
-                />
-              </label>
+              <label>Regions</label>
               {hasLoaded && (
                 <Select
                   defaultValue={selectedRegion}
@@ -181,12 +174,7 @@ class AddStageForm extends Component {
           )}
           {typeDropdown && typeDropdown.length > 0 && (
             <div>
-              <label>
-                <FormattedMessage
-                  id="app.types"
-                  defaultMessage="Types"
-                />
-              </label>
+              <label>Types</label>
               {hasLoaded && (
                 <Select
                   defaultValue={selectedType}
@@ -203,11 +191,10 @@ class AddStageForm extends Component {
             tag="input"
             type="text"
             // required
-            label="app.description"
+            label="description"
             name="desc"
             value={desc}
             changeHandler={handleChange}
-            translation
           />
         </div>
         {/* <div className="modal-footer"> */}
@@ -217,10 +204,9 @@ class AddStageForm extends Component {
             className="fieldsight-btn"
             onClick={handleSubmitForm}
           >
-            <FormattedMessage id="app.save" defaultMessage="Save" />
+            Save
           </button>
         </div>
-        {/* </div> */}
       </form>
     );
   }

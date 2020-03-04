@@ -244,7 +244,6 @@ export default class SuperAdminFormEdit extends Component {
                   required
                   value={name}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -256,7 +255,6 @@ export default class SuperAdminFormEdit extends Component {
                   name="phone"
                   value={phone}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -268,7 +266,6 @@ export default class SuperAdminFormEdit extends Component {
                   name="website"
                   value={website}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -276,7 +273,6 @@ export default class SuperAdminFormEdit extends Component {
                   <SelectElement
                     className="form-control"
                     label="Country"
-                    translation
                     formType="editForm"
                     options={country}
                     changeHandler={e => onSelectChangeHandler(e)}
@@ -293,7 +289,6 @@ export default class SuperAdminFormEdit extends Component {
                   name="email"
                   value={email}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
 
@@ -306,7 +301,6 @@ export default class SuperAdminFormEdit extends Component {
                   name="fax"
                   value={fax}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
               <div className="col-xl-4 col-md-6">
@@ -318,7 +312,6 @@ export default class SuperAdminFormEdit extends Component {
                   name="address"
                   value={address}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
 
@@ -331,7 +324,6 @@ export default class SuperAdminFormEdit extends Component {
                   name="public_desc"
                   value={public_desc}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
             </div>
@@ -374,7 +366,6 @@ export default class SuperAdminFormEdit extends Component {
                           changeHandler={e => {
                             onChangeHandler(e, 'latitude');
                           }}
-                          translation
                         />
                       </div>
 
@@ -390,7 +381,6 @@ export default class SuperAdminFormEdit extends Component {
                           changeHandler={e => {
                             onChangeHandler(e, 'longitude');
                           }}
-                          translation
                         />
                       </div>
                     </div>

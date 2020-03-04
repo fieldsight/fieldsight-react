@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import InputElement from '../common/InputElement';
 import RadioElement from '../common/RadioElement';
 
@@ -122,28 +121,19 @@ class StatusTab extends Component {
             <form className="edit-form" onSubmit={submitHandler}>
               <InputElement
                 tag="textarea"
-                label="app.comment"
+                label="comment"
                 htmlFor="comment"
                 name="comment"
                 placeholder="Please put your comment here."
                 value={comment}
                 changeHandler={onChangeHandler}
-                translation
               />
               <div className="form-group">
-                <label>
-                  <FormattedMessage
-                    id="app.attach-file"
-                    defaultMessage="Attach File"
-                  />
-                </label>
+                <label>Attach File</label>
                 <div className="upload-form">
                   <div className="fieldsight-btn">
                     <label htmlFor="upload-btn">
-                      <FormattedMessage
-                        id="app.upload"
-                        defaultMessage="Upload"
-                      />
+                      Upload
                       <i className="la la-cloud-upload" />
                     </label>
                     <input
@@ -158,41 +148,35 @@ class StatusTab extends Component {
               <div className="form-group flexrow">
                 <div className="custom-checkbox display-inline">
                   <RadioElement
-                    label="app.approve"
+                    label="approve"
                     name="status"
                     value="3"
                     className="approved"
                     checked={status === '3'}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                   <RadioElement
-                    label="app.flag"
+                    label="flag"
                     name="status"
                     value="2"
                     className="flagged"
                     checked={status === '2'}
                     changeHandler={onChangeHandler}
-                    translation
                   />
 
                   <RadioElement
-                    label="app.reject"
+                    label="reject"
                     name="status"
                     value="1"
                     className="rejected"
                     checked={status === '1'}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
               </div>
               <div className="form-group pull-right">
                 <button type="submit" className="fieldsight-btn">
-                  <FormattedMessage
-                    id="app.save"
-                    defaultMessage="Save"
-                  />
+                  Save
                 </button>
               </div>
             </form>

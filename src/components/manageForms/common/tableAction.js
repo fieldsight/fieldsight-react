@@ -1,6 +1,5 @@
 import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
 
 import DeleteModal from '../../common/DeleteModal';
 
@@ -28,14 +27,7 @@ const TableAction = props => {
           >
             <OverlayTrigger
               placement="top"
-              overlay={
-                <Tooltip>
-                  <FormattedMessage
-                    id="app.undeploy"
-                    defaultMessage="Undeploy"
-                  />
-                </Tooltip>
-              }
+              overlay={<Tooltip>Undeploy</Tooltip>}
             >
               <i className="la la-rocket" />
             </OverlayTrigger>
@@ -56,14 +48,7 @@ const TableAction = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={
-                  <Tooltip>
-                    <FormattedMessage
-                      id="app.deploy"
-                      defaultMessage="Deploy"
-                    />
-                  </Tooltip>
-                }
+                overlay={<Tooltip>Deploy</Tooltip>}
               >
                 <i className="la la-rocket" />
               </OverlayTrigger>
@@ -84,14 +69,7 @@ const TableAction = props => {
           >
             <OverlayTrigger
               placement="top"
-              overlay={
-                <Tooltip>
-                  <FormattedMessage
-                    id="app.edit"
-                    defaultMessage="Edit"
-                  />
-                </Tooltip>
-              }
+              overlay={<Tooltip>Edit</Tooltip>}
             >
               <i className="la la-edit" />
             </OverlayTrigger>
@@ -113,14 +91,7 @@ const TableAction = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={
-                  <Tooltip>
-                    <FormattedMessage
-                      id="app.delete"
-                      defaultMessage="Delete"
-                    />
-                  </Tooltip>
-                }
+                overlay={<Tooltip>Delete</Tooltip>}
               >
                 <i className="la la-trash" />
               </OverlayTrigger>
@@ -155,14 +126,7 @@ const TableAction = props => {
           >
             <OverlayTrigger
               placement="top"
-              overlay={
-                <Tooltip>
-                  <FormattedMessage
-                    id="app.undeploy"
-                    defaultMessage="Undeploy"
-                  />
-                </Tooltip>
-              }
+              overlay={<Tooltip>Undeploy</Tooltip>}
             >
               <i className="la la-rocket" />
             </OverlayTrigger>
@@ -183,14 +147,7 @@ const TableAction = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={
-                  <Tooltip>
-                    <FormattedMessage
-                      id="app.deploy"
-                      defaultMessage="Deploy"
-                    />
-                  </Tooltip>
-                }
+                overlay={<Tooltip>Deploy</Tooltip>}
               >
                 <i className="la la-rocket" />
               </OverlayTrigger>
@@ -211,14 +168,7 @@ const TableAction = props => {
           >
             <OverlayTrigger
               placement="top"
-              overlay={
-                <Tooltip>
-                  <FormattedMessage
-                    id="app.edit"
-                    defaultMessage="Edit"
-                  />
-                </Tooltip>
-              }
+              overlay={<Tooltip>Edit</Tooltip>}
             >
               <i className="la la-edit" />
             </OverlayTrigger>
@@ -239,14 +189,7 @@ const TableAction = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={
-                  <Tooltip>
-                    <FormattedMessage
-                      id="app.delete"
-                      defaultMessage="Delete"
-                    />
-                  </Tooltip>
-                }
+                overlay={<Tooltip>Delete</Tooltip>}
               >
                 <i className="la la-trash" />
               </OverlayTrigger>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
-import { FormattedMessage } from 'react-intl';
 import InputElement from '../../common/InputElement';
 
 /* eslint-disable   react/destructuring-assignment */
@@ -128,11 +127,10 @@ class EditFormGuide extends Component {
               tag="input"
               type="text"
               //   required={true}
-              label="app.title"
+              label="title"
               name="title"
               value={title}
               changeHandler={handleChange}
-              translation
             />
           </div>
           <div className="col-md-6 col-md-8">
@@ -141,21 +139,15 @@ class EditFormGuide extends Component {
               tag="input"
               type="text"
               //   required={true}
-              label="app.description"
+              label="description"
               name="text"
               value={text}
               changeHandler={handleChange}
-              translation
             />
           </div>
           <div className="col-md-12">
             <div className="form-group">
-              <label>
-                <FormattedMessage
-                  id="app.attachedImages"
-                  defaultMessage="Attached Images"
-                />
-              </label>
+              <label>Attached Images</label>
               {srcs.length > 0 ? (
                 <Dropzone
                   accept="image/*"
@@ -176,11 +168,7 @@ class EditFormGuide extends Component {
                               className="fieldsight-btn"
                               type="button"
                             >
-                              <FormattedMessage
-                                id="app.upload"
-                                defaultMessage="Upload"
-                              />
-
+                              Upload
                               <i className="la la-cloud-upload" />
                             </button>
                           </div>
@@ -206,20 +194,12 @@ class EditFormGuide extends Component {
                                   multiple
                                 />
                                 <div className="upload-icon" />
-                                <h3>
-                                  <FormattedMessage
-                                    id="app.drag&DropAnImage"
-                                    defaultMessage="Drag & Drop an image"
-                                  />
-                                </h3>
+                                <h3>Drag & Drop an image</h3>
                                 <button
                                   className="fieldsight-btn"
                                   type="button"
                                 >
-                                  <FormattedMessage
-                                    id="app.upload"
-                                    defaultMessage="Upload"
-                                  />
+                                  Upload
                                   <i className="la la-cloud-upload" />
                                 </button>
                               </div>
@@ -235,12 +215,7 @@ class EditFormGuide extends Component {
           </div>
           <div className="col-md-12">
             <div className="form-group">
-              <label>
-                <FormattedMessage
-                  id="app.attach-file"
-                  defaultMessage="Attach File"
-                />
-              </label>
+              <label>Attach File</label>
               {is_pdf ? (
                 <Dropzone
                   accept=".pdf"
@@ -265,11 +240,7 @@ class EditFormGuide extends Component {
                             className="fieldsight-btn"
                             type="button"
                           >
-                            <FormattedMessage
-                              id="app.upload"
-                              defaultMessage="Upload"
-                            />
-
+                            Upload
                             <i className="la la-cloud-upload" />
                           </button>
                         </div>
@@ -294,20 +265,12 @@ class EditFormGuide extends Component {
                                   multiple={false}
                                 />
                                 <div className="upload-icon" />
-                                <h3>
-                                  <FormattedMessage
-                                    id="app.drag&DropAnImage"
-                                    defaultMessage="Drag & Drop a file"
-                                  />
-                                </h3>
+                                <h3>Drag & Drop a file</h3>
                                 <button
                                   className="fieldsight-btn"
                                   type="button"
                                 >
-                                  <FormattedMessage
-                                    id="app.upload"
-                                    defaultMessage="Upload"
-                                  />
+                                  Upload
                                   <i className="la la-cloud-upload" />
                                 </button>
                               </div>
@@ -326,20 +289,14 @@ class EditFormGuide extends Component {
               type="submit"
               className="fieldsight-btn pull-right "
             >
-              <FormattedMessage
-                id="app.saveChanges"
-                defaultMessage="Save Changes"
-              />
+              Save Changes
             </button>
             <button
               type="button"
               className="fieldsight-btn pull-right"
               onClick={handleCancel}
             >
-              <FormattedMessage
-                id="app.cancel"
-                defaultMessage="Cancel"
-              />
+              Cancel
             </button>
           </div>
         </div>

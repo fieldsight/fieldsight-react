@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import format from 'date-fns/format';
-import { FormattedMessage } from 'react-intl';
 import {
   sortableContainer,
   sortableElement,
@@ -107,14 +106,7 @@ const GetActionForProject = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={
-                  <Tooltip>
-                    <FormattedMessage
-                      id="app.deploy"
-                      defaultMessage="Deploy"
-                    />
-                  </Tooltip>
-                }
+                overlay={<Tooltip>Deploy</Tooltip>}
               >
                 <i className="la la-rocket" />
               </OverlayTrigger>
@@ -130,14 +122,7 @@ const GetActionForProject = props => {
         >
           <OverlayTrigger
             placement="top"
-            overlay={
-              <Tooltip>
-                <FormattedMessage
-                  id="app.edit"
-                  defaultMessage="Edit"
-                />
-              </Tooltip>
-            }
+            overlay={<Tooltip>Edit</Tooltip>}
           >
             <i className="la la-edit" />
           </OverlayTrigger>
@@ -156,14 +141,7 @@ const GetActionForProject = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={
-                  <Tooltip>
-                    <FormattedMessage
-                      id="app.delete"
-                      defaultMessage="Delete"
-                    />
-                  </Tooltip>
-                }
+                overlay={<Tooltip>Delete</Tooltip>}
               >
                 <i className="la la-trash" />
               </OverlayTrigger>
@@ -213,14 +191,7 @@ const GetActionForProject = props => {
             >
               <OverlayTrigger
                 placement="top"
-                overlay={
-                  <Tooltip>
-                    <FormattedMessage
-                      id="app.deploy"
-                      defaultMessage="Deploy"
-                    />
-                  </Tooltip>
-                }
+                overlay={<Tooltip>Deploy</Tooltip>}
               >
                 <i className="la la-rocket" />
               </OverlayTrigger>
@@ -237,14 +208,7 @@ const GetActionForProject = props => {
           >
             <OverlayTrigger
               placement="top"
-              overlay={
-                <Tooltip>
-                  <FormattedMessage
-                    id="app.edit"
-                    defaultMessage="Edit"
-                  />
-                </Tooltip>
-              }
+              overlay={<Tooltip>Edit</Tooltip>}
             >
               <i className="la la-edit" />
             </OverlayTrigger>
@@ -293,54 +257,14 @@ const SortableContainer = sortableContainer(({ children }) => {
     >
       <thead>
         <tr>
-          <th>
-            <FormattedMessage
-              id="app.subStageName"
-              defaultMessage="Substage Name"
-            />
-          </th>
-          <th>
-            <FormattedMessage
-              id="app.form-title"
-              defaultMessage="form Name"
-            />
-          </th>
-          <th>
-            <FormattedMessage
-              id="app.response"
-              defaultMessage="Responses"
-            />
-          </th>
-          <th>
-            <FormattedMessage
-              id="app.formGuide"
-              defaultMessage="Form Guide"
-            />
-          </th>
-          <th>
-            <FormattedMessage
-              id="app.weight"
-              defaultMessage="Weight"
-            />
-          </th>
-          <th>
-            <FormattedMessage
-              id="app.assigned-date"
-              defaultMessage="Assigned Date"
-            />
-          </th>
-          <th>
-            <FormattedMessage
-              id="app.defaultStatus"
-              defaultMessage="Default status"
-            />
-          </th>
-          <th width="15%">
-            <FormattedMessage
-              id="app.action"
-              defaultMessage="Action"
-            />
-          </th>
+          <th>Substage Name</th>
+          <th>form Name</th>
+          <th>Responses</th>
+          <th>Form Guide</th>
+          <th>Weight</th>
+          <th>Assigned Date</th>
+          <th>Default status</th>
+          <th width="15%">Action</th>
         </tr>
       </thead>
       {children}

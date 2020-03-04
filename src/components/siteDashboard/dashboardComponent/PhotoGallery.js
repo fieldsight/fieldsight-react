@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
 import { GridContentLoader } from '../../common/Loader';
 import Modal from '../../common/Modal';
 /* eslint-disable react/destructuring-assignment */
@@ -187,12 +186,7 @@ class PhotoGallery extends Component {
         <div className="card recent-photo">
           <div className="card-header main-card-header sub-card-header">
             {/* <h5>Recent Pictures</h5> */}
-            <h5>
-              <FormattedMessage
-                id="app.recent-pictures"
-                defaultMessage="Recent Pictures"
-              />
-            </h5>
+            <h5>Recent Pictures</h5>
             {recentPictures.length > 0 ? (
               <div className="dash-btn">
                 <a
@@ -201,10 +195,7 @@ class PhotoGallery extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <FormattedMessage
-                    id="app.view-all"
-                    defaultMessage="view all"
-                  />
+                  view all
                 </a>
                 <Dropdown>
                   <Dropdown.Toggle
@@ -213,12 +204,7 @@ class PhotoGallery extends Component {
                     className="fieldsight-btn"
                   >
                     <i className="la la-download" />
-                    <span>
-                      <FormattedMessage
-                        id="app.download"
-                        defaultMessage="Download"
-                      />
-                    </span>
+                    <span>Download</span>
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="dropdown-menu-right">
@@ -226,28 +212,19 @@ class PhotoGallery extends Component {
                       target="_blank"
                       onClick={() => this.imageQuality(0, siteId)}
                     >
-                      <FormattedMessage
-                        id="app.low"
-                        defaultMessage="Low"
-                      />
+                      Low
                     </Dropdown.Item>
                     <Dropdown.Item
                       target="_blank"
                       onClick={() => this.imageQuality(1, siteId)}
                     >
-                      <FormattedMessage
-                        id="app.medium"
-                        defaultMessage="Medium"
-                      />
+                      Medium
                     </Dropdown.Item>
                     <Dropdown.Item
                       target="_blank"
                       onClick={() => this.imageQuality(2, siteId)}
                     >
-                      <FormattedMessage
-                        id="app.high"
-                        defaultMessage="High"
-                      />
+                      High
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -291,12 +268,7 @@ class PhotoGallery extends Component {
                       ))}
                     </div>
                   ) : (
-                    <p>
-                      <FormattedMessage
-                        id="app.noDataAvailable"
-                        defaultMessage="No Data Available"
-                      />
-                    </p>
+                    <p>No Data Available</p>
                   )}
                 </div>
                 {Object.keys(selectedImage).length > 0 && (

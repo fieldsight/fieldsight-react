@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
 import { Dropdown } from 'react-bootstrap';
 import CountCard from '../common/CountCard';
 import { AvatarContentLoader } from '../common/Loader';
@@ -157,13 +156,7 @@ class DashboardHeader extends React.Component {
                 >
                   <i className="la la-paste" />
 
-                  <span>
-                    <FormattedMessage
-                      id="app.data"
-                      defaultMessage="Data"
-                      description="Data"
-                    />
-                  </span>
+                  <span>Data</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
                   {DataDropdown.map((item, i) => (
@@ -172,11 +165,7 @@ class DashboardHeader extends React.Component {
                       key={i}
                       target="_blank"
                     >
-                      <FormattedMessage
-                        id={item.id}
-                        defaultMessage={item.title}
-                        description={item.title}
-                      />
+                      {item.title}
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
@@ -191,13 +180,7 @@ class DashboardHeader extends React.Component {
                   >
                     <i className="la la-cog" />
 
-                    <span>
-                      <FormattedMessage
-                        id="app.manage"
-                        defaultMessage="Manage"
-                        description="Manage"
-                      />
-                    </span>
+                    <span>Manage</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-right">
                     {ManageDropdown.map((item, i) => (
@@ -206,11 +189,7 @@ class DashboardHeader extends React.Component {
                         key={i}
                         target="_blank"
                       >
-                        <FormattedMessage
-                          id={item.id}
-                          defaultMessage={item.title}
-                          description={item.title}
-                        />
+                        {item.title}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>

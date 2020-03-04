@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 /* eslint-disable react/destructuring-assignment */
 
@@ -36,14 +35,7 @@ class FeaturedPicturesCard extends Component {
               >
                 <OverlayTrigger
                   placement="top"
-                  overlay={
-                    <Tooltip>
-                      <FormattedMessage
-                        id="app.edit"
-                        defaultMessage="Edit"
-                      />
-                    </Tooltip>
-                  }
+                  overlay={<Tooltip>Edit</Tooltip>}
                 >
                   <i className="la la-edit" />
                 </OverlayTrigger>
@@ -61,14 +53,7 @@ class FeaturedPicturesCard extends Component {
               >
                 <OverlayTrigger
                   placement="top"
-                  overlay={
-                    <Tooltip>
-                      <FormattedMessage
-                        id="app.delete"
-                        defaultMessage="Delete"
-                      />
-                    </Tooltip>
-                  }
+                  overlay={<Tooltip>Delete</Tooltip>}
                 >
                   <i className="la la-trash-o" />
                 </OverlayTrigger>
@@ -79,36 +64,18 @@ class FeaturedPicturesCard extends Component {
             <div className="before-content">
               <ul>
                 <li>
-                  <label>
-                    <FormattedMessage
-                      id="app.type"
-                      defaultMessage="Type"
-                    />
-                    :
-                  </label>
+                  <label>Type :</label>
                   <span>{picture.question_type}</span>
                 </li>
                 {picture.form_id && (
                   <li>
-                    <label>
-                      <FormattedMessage
-                        id="app.form"
-                        defaultMessage="Form"
-                      />
-                      :
-                    </label>
+                    <label>Form :</label>
                     <span>{renderName(picture.form_id)}</span>
                   </li>
                 )}
                 {picture.question && (
                   <li>
-                    <label>
-                      <FormattedMessage
-                        id="app.question"
-                        defaultMessage="Question"
-                      />
-                      :
-                    </label>
+                    <label>Question :</label>
                     <span>{picture.question.name}</span>
                   </li>
                 )}

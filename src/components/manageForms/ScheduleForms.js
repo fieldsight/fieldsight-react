@@ -590,7 +590,7 @@ class ScheduleForms extends Component {
     return (
       <div className="col-xl-9 col-lg-8">
         <RightContentCard
-          title="app.scheduled-form"
+          title="Scheduled Form"
           addButton
           toggleModal={commonPopupHandler}
           showText

@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
 
 /* eslint-disable  consistent-return */
 /* eslint-disable react/prop-types */
@@ -50,10 +49,7 @@ class TeamLeftSidebar extends Component {
                   : 'nav-link'
               }
             >
-              <FormattedMessage
-                id={route.id}
-                defaultMessage={route.id}
-              />
+              {route.id}
             </Link>
           </li>
         )}
@@ -67,10 +63,7 @@ class TeamLeftSidebar extends Component {
                   : 'nav-link'
               }
             >
-              <FormattedMessage
-                id={route.id}
-                defaultMessage={route.id}
-              />
+              {route.id}
             </Link>
           </li>
         )}

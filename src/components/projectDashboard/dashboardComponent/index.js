@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   getRegionData,
   getProgressTableData,
@@ -126,16 +125,6 @@ class ProjectDashboardComponent extends Component {
                   {terms_and_labels && terms_and_labels.site} Map
                 </h5>
 
-                {/* <h5>
-                    <FormattedMessage
-                      id={
-                        terms_and_labels.site == "School"
-                          ? "app.school-map"
-                          : "app.map"
-                      }
-                      defaultMessage="School Map"
-                    />
-                    </h5> */}
                 <div className="dash-btn">
                   <a
                     href={`/fieldsight/application/#/proj-mapfilter/${id}/`}
@@ -144,10 +133,7 @@ class ProjectDashboardComponent extends Component {
                     rel="noopener noreferrer"
                   >
                     <i className="la la-map" />
-                    <FormattedMessage
-                      id="app.full-map"
-                      defaultMessage="Full Map"
-                    />
+                    Full Map
                   </a>
                 </div>
               </div>
@@ -180,10 +166,7 @@ class ProjectDashboardComponent extends Component {
                         this.toggleTab('site');
                       }}
                     >
-                      <FormattedMessage
-                        id="app.sites"
-                        defaultMessage="Sites"
-                      />
+                      Sites
                     </a>
                   </li>
                   {!!has_region && (
@@ -203,10 +186,7 @@ class ProjectDashboardComponent extends Component {
                           this.toggleTab('region');
                         }}
                       >
-                        <FormattedMessage
-                          id="app.regions"
-                          defaultMessage="Regions"
-                        />
+                        Regions
                       </a>
                     </li>
                   )}
@@ -267,36 +247,17 @@ class ProjectDashboardComponent extends Component {
                       <div className="table-footer">
                         <div className="showing-rows">
                           <p>
-                            <FormattedMessage
-                              id="app.showing"
-                              defaultMessage="Showing"
-                            />
-                            &nbsp;
+                            Showing &nbsp;
                             <span>{fromData}</span>
-                            &nbsp;
-                            <FormattedMessage
-                              id="app.to"
-                              defaultMessage="to"
-                            />
-                            &nbsp;
+                            &nbsp; to &nbsp;
                             <span>
                               {toData > totalCount
                                 ? totalCount
                                 : toData}
                             </span>
-                            &nbsp;
-                            <FormattedMessage
-                              id="app.of"
-                              defaultMessage="of"
-                            />
-                            &nbsp;
+                            &nbsp; of &nbsp;
                             <span>{totalCount}</span>
-                            &nbsp;
-                            <FormattedMessage
-                              id="app.entries"
-                              defaultMessage="entries"
-                            />
-                            .
+                            &nbsp; entries .
                           </p>
                         </div>
                         {toData < totalCount ? (
@@ -392,12 +353,7 @@ class ProjectDashboardComponent extends Component {
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
               <div className="col-lg-8">
-                <h5>
-                  <FormattedMessage
-                    id="app.progress-table"
-                    defaultMessage="Progress table"
-                  />
-                </h5>
+                <h5>Progress table</h5>
               </div>
               <div className="form-group pull-right no-margin">
                 {' '}
@@ -417,12 +373,7 @@ class ProjectDashboardComponent extends Component {
             <div className="col-md-6">
               <div className="card">
                 <div className="card-header main-card-header sub-card-header">
-                  <h5>
-                    <FormattedMessage
-                      id="app.form-submission"
-                      defaultMessage="Form Submissions"
-                    />
-                  </h5>
+                  <h5>Form Submissions</h5>
                 </div>
                 <div className="card-body">
                   <SubmissionChart
@@ -434,12 +385,7 @@ class ProjectDashboardComponent extends Component {
             <div className="col-md-6">
               <div className="card">
                 <div className="card-header main-card-header sub-card-header">
-                  <h5>
-                    <FormattedMessage
-                      id="app.site-progress"
-                      defaultMessage="Site Progress"
-                    />
-                  </h5>
+                  <h5>Site Progress</h5>
                 </div>
                 <div className="card-body">
                   <ProgressChart
@@ -460,12 +406,7 @@ class ProjectDashboardComponent extends Component {
             <div className="col-xl-4 col-md-6">
               <div className="card mangager-list">
                 <div className="card-header main-card-header sub-card-header">
-                  <h5>
-                    <FormattedMessage
-                      id="app.project-managers"
-                      defaultMessage="Progress Managers"
-                    />
-                  </h5>
+                  <h5>Progress Managers</h5>
                   {/* <div className="dash-btn">
                         <form className="floating-form">
                           <div className="form-group mr-0">
@@ -517,7 +458,6 @@ const mapStateToProps = ({ projectDashboard }) => ({
 });
 export default compose(
   withPagination,
-  injectIntl,
   connect(mapStateToProps, {
     getRegionData,
     getProgressTableData,

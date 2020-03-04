@@ -1,5 +1,4 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 /* eslint-disable react/destructuring-assignment */
 
 const getIcon = submission => {
@@ -23,12 +22,7 @@ const ShowAcitivity = props => (
       <div className="count-content">
         <h4>{props.value}</h4>
 
-        <h6>
-          <FormattedMessage
-            id={props.id}
-            defaultMessage={props.name}
-          />
-        </h6>
+        <h6>{props.name}</h6>
       </div>
     </div>
   </div>
@@ -41,12 +35,7 @@ class ProjectActivity extends React.PureComponent {
       <div className="dashboard-counter mrt-30 bg-counter">
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            <h5>
-              <FormattedMessage
-                id="app.project-activity"
-                defaultMessage="Progress table"
-              />
-            </h5>
+            <h5>Progress table</h5>
           </div>
           <div className="card-body">
             <div className="row">

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import WithPagination from '../../../../hoc/WithPagination';
 import Modal from '../../../common/Modal';
 import { DotLoader } from '../../../myForm/Loader';
@@ -170,20 +169,12 @@ class SubmissionData extends Component {
         </nav>
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            <h5>
-              <FormattedMessage
-                id="app.project-submission"
-                defaultMessage="Project Submissions"
-              />
-            </h5>
+            <h5>Project Submissions</h5>
             <div className="dash-btn">
               <form className="floating-form">
                 <div className="form-group mr-0">
                   <label htmlFor="input">
-                    <FormattedMessage
-                      id="app.teams-search"
-                      defaultMessage="Search"
-                    />
+                    Search
                     <input
                       type="search"
                       className="form-control"
@@ -205,46 +196,12 @@ class SubmissionData extends Component {
                 <thead>
                   <tr>
                     {/* <th>S.N.</th> */}
-                    {!isSurvey && (
-                      <th>
-                        <FormattedMessage
-                          id="app.site-name"
-                          defaultMessage="Site Name"
-                        />
-                      </th>
-                    )}
-                    {!isSurvey && (
-                      <th>
-                        <FormattedMessage
-                          id="app.site.id"
-                          defaultMessage="Site Id"
-                        />
-                      </th>
-                    )}
-                    <th>
-                      <FormattedMessage
-                        id="app.submission-id"
-                        defaultMessage="submission id"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.submission-by"
-                        defaultMessage="Submission By"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.submission-date"
-                        defaultMessage="Submission Date"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.action"
-                        defaultMessage="Action"
-                      />
-                    </th>
+                    {!isSurvey && <th>Site Name</th>}
+                    {!isSurvey && <th>Site Id</th>}
+                    <th>submission id</th>
+                    <th>Submission By</th>
+                    <th>Submission Date</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -302,34 +259,15 @@ class SubmissionData extends Component {
                   <div className="table-footer">
                     <div className="showing-rows">
                       <p>
-                        <FormattedMessage
-                          id="app.showing"
-                          defaultMessage="Showing"
-                        />
-                        &nbsp;
+                        Showing &nbsp;
                         <span>{fromData}</span>
-                        &nbsp;
-                        <FormattedMessage
-                          id="app.to"
-                          defaultMessage="to"
-                        />
-                        &nbsp;
+                        &nbsp; to &nbsp;
                         <span>
                           {toData > totalCount ? totalCount : toData}
                         </span>
-                        &nbsp;
-                        <FormattedMessage
-                          id="app.of"
-                          defaultMessage="of"
-                        />
-                        &nbsp;
+                        &nbsp; of &nbsp;
                         <span>{totalCount}</span>
-                        &nbsp;
-                        <FormattedMessage
-                          id="app.entries"
-                          defaultMessage="entries"
-                        />
-                        .
+                        &nbsp; entries .
                       </p>
                     </div>
 
@@ -404,12 +342,7 @@ class SubmissionData extends Component {
                 <div className="card-body">
                   <div className="table-footer">
                     <div className="showing-rows">
-                      <p>
-                        <FormattedMessage
-                          id="app.sorryNoData"
-                          defaultMessage="Sorry No Data"
-                        />
-                      </p>
+                      <p>Sorry No Data</p>
                     </div>
                   </div>
                 </div>

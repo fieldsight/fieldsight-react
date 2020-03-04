@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
 import LeftSidebar from '../leftSidebar/LeftSidebar';
 import EditProject from '../editProject/EditProject';
 import SiteType from '../siteType/SiteType';
@@ -38,10 +37,7 @@ export default class Settings extends PureComponent {
               className="breadcrumb-item active"
               aria-current="page"
             >
-              <FormattedMessage
-                id="app.projectSettings"
-                defaultMessage="Project Settings"
-              />
+              Project Settings
             </li>
           </ol>
         </nav>
@@ -50,12 +46,7 @@ export default class Settings extends PureComponent {
             <div className="left-sidebar new-sidebar sticky-top">
               <div className="card">
                 <div className="card-header main-card-header">
-                  <h5>
-                    <FormattedMessage
-                      id="app.projectSettings"
-                      defaultMessage="Project Settings"
-                    />
-                  </h5>
+                  <h5>Project Settings</h5>
                 </div>
                 <div className="card-body">
                   <LeftSidebar />

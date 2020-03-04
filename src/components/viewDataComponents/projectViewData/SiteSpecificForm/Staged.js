@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 
 import ResponseTable from '../../responded/StagedFormResponseTable';
@@ -36,7 +35,6 @@ class ResponseStageForm extends Component {
     const {
       props: {
         showViewData,
-
         stage_forms,
         deleted_forms,
         stage_forms_loader,
@@ -48,22 +46,14 @@ class ResponseStageForm extends Component {
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>
-            <FormattedMessage
-              id="app.staged-form"
-              defaultMessage="Stage Forms"
-            />
-          </h5>
+          <h5>Stage Forms</h5>
           <Link to={`/project-submission-responses/${id}/rejected`}>
             <button
               type="button"
               onClick={showViewData}
               className="fieldsight-btn"
             >
-              <FormattedMessage
-                id="app.view-by-form"
-                defaultMessage="View By Form"
-              />
+              View By Form
             </button>
           </Link>
         </div>
@@ -77,12 +67,7 @@ class ResponseStageForm extends Component {
         {deleted_forms && deleted_forms.length > 0 && (
           <div className="card no-boxshadow">
             <div className="card-header main-card-header sub-card-header">
-              <h5>
-                <FormattedMessage
-                  id="app.deleted-forms"
-                  defaultMessage="Deleted Forms"
-                />
-              </h5>
+              <h5>Deleted Forms</h5>
               <div className="dash-btn">
                 {this.state.hide ? (
                   <button
@@ -91,10 +76,7 @@ class ResponseStageForm extends Component {
                     onClick={this.toggleHide}
                     style={{ width: '97px' }}
                   >
-                    <FormattedMessage
-                      id="app.show"
-                      defaultMessage="Show"
-                    />
+                    Show
                     <div className="handle" />
                   </button>
                 ) : (
@@ -109,10 +91,7 @@ class ResponseStageForm extends Component {
                       width: '97px',
                     }}
                   >
-                    <FormattedMessage
-                      id="app.hide"
-                      defaultMessage="Hide"
-                    />
+                    Hide
                     <div
                       className="handle"
                       style={{ left: 'auto', right: '0.1875rem' }}

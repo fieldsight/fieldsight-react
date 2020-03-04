@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage } from 'react-intl';
 import MyFormContent from './MyFormContent';
 import ProjectFormContent from './ProjectFormContent';
 
@@ -27,12 +26,7 @@ class SideBar extends PureComponent {
               style={{ minHeight: height }}
             >
               <div className="card-header main-card-header sub-card-header">
-                <h5>
-                  <FormattedMessage
-                    id="app.forms"
-                    defaultMessage="Forms"
-                  />
-                </h5>
+                <h5>Forms</h5>
               </div>
               <div className="card-body">
                 <ul
@@ -49,10 +43,7 @@ class SideBar extends PureComponent {
                           : 'nav-link'
                       }
                     >
-                      <FormattedMessage
-                        id="app.my-forms"
-                        defaultMessage="My Forms"
-                      />
+                      My Forms
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -64,10 +55,7 @@ class SideBar extends PureComponent {
                           : 'nav-link'
                       }
                     >
-                      <FormattedMessage
-                        id="app.project-forms"
-                        defaultMessage="Project Forms"
-                      />
+                      Project Forms
                     </Link>
                   </li>
                 </ul>

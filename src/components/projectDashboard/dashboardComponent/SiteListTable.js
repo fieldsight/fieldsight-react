@@ -2,7 +2,6 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage } from 'react-intl';
 import { DotLoader } from '../../myForm/Loader';
 import isEmpty from '../../../utils/isEmpty';
 /* eslint-disable react/prop-types  */
@@ -40,26 +39,7 @@ class SiteListTable extends React.PureComponent {
                         {!isEmpty(terms) ? `${terms.site}` : 'Sites'}
                         Name
                       </th>
-                      {/* <th>
-                        {!isEmpty(terms) ? (
-                          `${terms.site}` ? (
-                            <FormattedMessage
-                              id="app.school-name"
-                              defaultMessage="School Name"
-                            />
-                          ) : (
-                            ""
-                          )
-                        ) : (
-                          "Sites"
-                        )}{" "}
-                      </th> */}
-                      <th>
-                        <FormattedMessage
-                          id="app.id"
-                          defaultMessage="id"
-                        />
-                      </th>
+                      <th>id</th>
                       {/* <th>Address</th> 
                       <th>{!isEmpty(terms) ?
                        `${terms.region}` : "Region"}</th> */}
@@ -68,30 +48,10 @@ class SiteListTable extends React.PureComponent {
                           ? `${terms.region}`
                           : 'Region'}
                       </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.type"
-                          defaultMessage="Type"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.progress"
-                          defaultMessage=" Progress"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.submissions"
-                          defaultMessage="Submissions"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.latest-status"
-                          defaultMessage="Latest status"
-                        />
-                      </th>
+                      <th>Type</th>
+                      <th>Progress</th>
+                      <th>Submissions</th>
+                      <th>Latest status</th>
                     </tr>
                   </thead>
 
@@ -99,12 +59,7 @@ class SiteListTable extends React.PureComponent {
                     {!loader && data.length === 0 && (
                       <tr>
                         <td colSpan={7}>
-                          <p>
-                            <FormattedMessage
-                              id="app.noFormDataAvailable"
-                              defaultMessage="No Form Data Available"
-                            />
-                          </p>
+                          <p>No Form Data Available</p>
                         </td>
                       </tr>
                     )}

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage } from 'react-intl';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { DotLoader } from './Loader';
 import { successToast } from './toastHandler';
@@ -137,10 +136,7 @@ class ShareModal extends Component {
             </ul>
             <div className="form-group mrt-30 pull-right">
               <button type="submit" className="fieldsight-btn">
-                <FormattedMessage
-                  id="app.share"
-                  defaultMessage="Share"
-                />
+                Share
               </button>
             </div>
           </form>

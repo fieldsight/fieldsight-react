@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Table from 'react-bootstrap/Table';
-import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { TableContentLoader } from '../common/Loader';
 /* eslint-disable react/destructuring-assignment */
@@ -49,12 +48,7 @@ class SiteTable extends Component {
             <div>
               <ul style={{ position: 'relative', height: '650px' }}>
                 {this.props.site.length === 0 && (
-                  <p>
-                    <FormattedMessage
-                      id="app.noSites"
-                      defaultMessage="You do not have any sites."
-                    />
-                  </p>
+                  <p>You do not have any sites.</p>
                 )}
                 <PerfectScrollbar>
                   {this.props.site.length > 0 && (
@@ -64,62 +58,15 @@ class SiteTable extends Component {
                     >
                       <thead>
                         <tr>
-                          <th>
-                            <FormattedMessage
-                              id="app.site-name"
-                              defaultMessage="Site Name"
-                            />
-                          </th>
-                          <th>
-                            <FormattedMessage
-                              id="app.id"
-                              defaultMessage="id"
-                            />
-                          </th>
-                          <th>
-                            <FormattedMessage
-                              id="app.role"
-                              defaultMessage="Role"
-                            />
-                          </th>
-                          <th>
-                            <FormattedMessage
-                              id="app.region"
-                              defaultMessage="Region"
-                            />
-                          </th>
-                          <th>
-                            <FormattedMessage
-                              id="app.type"
-                              defaultMessage="Type"
-                            />
-                          </th>
-                          <th>
-                            <FormattedMessage
-                              id="app.progress"
-                              defaultMessage="Progress"
-                            />
-                          </th>
-                          <th>
-                            <FormattedMessage
-                              id="app.submissions"
-                              defaultMessage="Submissions"
-                            />
-                          </th>
-                          <th>
-                            <FormattedMessage
-                              id="app.latest-status"
-                              defaultMessage="Latest status"
-                            />
-                          </th>
-                          {this.props.profileId && (
-                            <th>
-                              <FormattedMessage
-                                id="app.action"
-                                defaultMessage="Action"
-                              />
-                            </th>
-                          )}
+                          <th>Site Name</th>
+                          <th>id</th>
+                          <th>Role</th>
+                          <th>Region</th>
+                          <th>Type</th>
+                          <th>Progress</th>
+                          <th>Submissions</th>
+                          <th>Latest status</th>
+                          {this.props.profileId && <th>Action</th>}
                         </tr>
                       </thead>
 
@@ -219,28 +166,15 @@ class SiteTable extends Component {
           <div className="table-footer">
             <div className="showing-rows">
               <p>
-                <FormattedMessage
-                  id="app.showing"
-                  defaultMessage="Showing"
-                />
-                &nbsp;
+                Showing &nbsp;
                 <span>{fromData}</span>
-                &nbsp;
-                <FormattedMessage id="app.to" defaultMessage="to" />
-                &nbsp;
+                &nbsp; to &nbsp;
                 <span>
                   {toData > totalCount ? totalCount : toData}
                 </span>
-                &nbsp;
-                <FormattedMessage id="app.of" defaultMessage="of" />
-                &nbsp;
+                &nbsp; of &nbsp;
                 <span>{totalCount}</span>
-                &nbsp;
-                <FormattedMessage
-                  id="app.entries"
-                  defaultMessage="entries"
-                />
-                .
+                &nbsp; entries .
               </p>
             </div>
             {fromData < totalCount ? (

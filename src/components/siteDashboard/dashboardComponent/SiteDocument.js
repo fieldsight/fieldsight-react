@@ -1,6 +1,5 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage } from 'react-intl';
 import { GridContentLoader } from '../../common/Loader';
 /* eslint-disable react/no-array-index-key  */
 /* eslint-disable react/jsx-one-expression-per-line  */
@@ -17,10 +16,7 @@ const SiteDocument = ({
         <div className="card-header main-card-header sub-card-header">
           <h5>
             {termsAndLabels && termsAndLabels.site} &nbsp;&nbsp;
-            <FormattedMessage
-              id="app.documents"
-              defaultMessage="Documents"
-            />
+            Documents
           </h5>
           {siteDocuments.length > 0 ? (
             <a
@@ -29,10 +25,7 @@ const SiteDocument = ({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FormattedMessage
-                id="app.view-all"
-                defaultMessage="view all"
-              />
+              view all
             </a>
           ) : null}
         </div>
@@ -80,12 +73,7 @@ const SiteDocument = ({
                     ))}
                   </div>
                 ) : (
-                  <p>
-                    <FormattedMessage
-                      id="app.noDocumentAvailablesss"
-                      defaultMessage="No Documents Available"
-                    />
-                  </p>
+                  <p>No Documents Available</p>
                 )}
               </div>
             </PerfectScrollbar>

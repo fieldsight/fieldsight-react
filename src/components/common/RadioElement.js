@@ -10,7 +10,6 @@ const RadioElement = ({
   changeHandler,
   label,
   value,
-  translation,
 }) => (
   <div className={`radiobox ${className}`}>
     <label>
@@ -22,11 +21,7 @@ const RadioElement = ({
         value={value}
       />
       <i className="helper" />
-      {translation ? (
-        <FormattedMessage id={label} defaultMessage={label} />
-      ) : (
-        label
-      )}
+      {label}
     </label>
   </div>
 );

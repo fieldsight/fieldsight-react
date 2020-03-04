@@ -1,5 +1,4 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 /* eslint-disable  react/prop-types */
 
 const InputElement = ({
@@ -14,23 +13,16 @@ const InputElement = ({
   changeHandler,
   removeBtn,
   removeHandler,
-  translation,
   classname,
   ...rest
 }) => (
   <div className={`form-group ${classname}`}>
-    {formType === 'editForm' &&
-      (translation ? (
-        <label htmlFor={htmlFor}>
-          <FormattedMessage id={label} defaultMessage={label} />
-          {required && <sup>*</sup>}
-        </label>
-      ) : (
-        <label htmlFor={htmlFor}>
-          {label}
-          {required && <sup>*</sup>}
-        </label>
-      ))}
+    {formType === 'editForm' && (
+      <label htmlFor={htmlFor}>
+        {label}
+        {required && <sup>*</sup>}
+      </label>
+    )}
 
     <Tag
       type={type}
@@ -42,14 +34,9 @@ const InputElement = ({
       {...rest}
     />
 
-    {formType === 'floatingForm' &&
-      (translation === true ? (
-        <label htmlFor={htmlFor}>
-          <FormattedMessage id={label} defaultMessage={label} />
-        </label>
-      ) : (
-        <label htmlFor={htmlFor}>{label}</label>
-      ))}
+    {formType === 'floatingForm' && (
+      <label htmlFor={htmlFor}>{label}</label>
+    )}
 
     {removeBtn && (
       <span

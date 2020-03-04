@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { FormattedMessage } from 'react-intl';
 /* eslint-disable no-script-url  */
 /* eslint-disable jsx-a11y/anchor-is-valid  */
 /* eslint-disable react/jsx-one-expression-per-line  */
@@ -24,12 +23,7 @@ class InviteTab extends PureComponent {
         </span>
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            <h5>
-              <FormattedMessage
-                id="app.invitation"
-                defaultMessage="Invitation"
-              />
-            </h5>
+            <h5>Invitation</h5>
             <div className="dash-btn ">
               <a
                 // className="popup-close"
@@ -44,22 +38,16 @@ class InviteTab extends PureComponent {
                 className="fieldsight-btn left-icon"
               >
                 <i className="la la-check" />
-                <FormattedMessage
-                  id="app.acceptAll"
-                  defaultMessage="Accept all"
-                />
+                Accept all
               </a>
             </div>
           </div>
           <div className="card-body">
             <div className="invitation-title">
               <span>
-                <FormattedMessage
-                  id="app.invitationTitle"
-                  defaultMessage=" You have been invited to join FieldSight. You may Accept or
-                            Decline each invitations or Accept all the invitations as per
-                            required."
-                />
+                You have been invited to join FieldSight. You may
+                Accept or Decline each invitations or Accept all the
+                invitations as per required.
               </span>
             </div>
             <div className="normal-list">
@@ -68,11 +56,7 @@ class InviteTab extends PureComponent {
                   <li key={item.id}>
                     <p>
                       <a href="javascript:void(0);">{item.by_user}</a>
-                      <FormattedMessage
-                        id="app.acceptAll"
-                        defaultMessage=" has
-                            invited you to join FieldSight as"
-                      />
+                      has invited you to join FieldSight as
                       <span>{item.group}</span> .
                     </p>
                     <div className="invite-btn">
@@ -94,10 +78,7 @@ class InviteTab extends PureComponent {
                         }}
                       >
                         <i className="la la-check" />
-                        <FormattedMessage
-                          id="app.accept"
-                          defaultMessage="Accept"
-                        />
+                        Accept
                       </a>
                       <a
                         className="reject-btn"
@@ -111,11 +92,7 @@ class InviteTab extends PureComponent {
                         }}
                       >
                         <i className="la la-close" />
-
-                        <FormattedMessage
-                          id="app.reject"
-                          defaultMessage="Reject"
-                        />
+                        Reject
                       </a>
                     </div>
                   </li>

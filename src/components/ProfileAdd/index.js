@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
-import { FormattedMessage } from 'react-intl';
 import InputElement from '../common/InputElement';
 import RightContentCard from '../common/RightContentCard';
 import SelectElement from '../common/SelectElement';
@@ -237,7 +236,7 @@ class CreateProfile extends Component {
     } = this;
     return (
       <>
-        <RightContentCard title="app.createProfile">
+        <RightContentCard title="Create Profile">
           <form
             className="edit-form"
             onSubmit={e => onSubmitHandler(e)}
@@ -250,11 +249,10 @@ class CreateProfile extends Component {
                     tag="input"
                     type="text"
                     required
-                    label="app.first-name"
+                    label="first-name"
                     name="first_name"
                     value={first_name}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -263,11 +261,10 @@ class CreateProfile extends Component {
                     tag="input"
                     type="text"
                     required
-                    label="app.last-name"
+                    label="last-name"
                     name="last_name"
                     value={last_name}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -280,28 +277,23 @@ class CreateProfile extends Component {
                       textTransform: 'capitalize',
                     }}
                   >
-                    <FormattedMessage
-                      id="app.gender"
-                      defaultMessage="Gender"
-                    />
+                    Gender
                   </label>
                   <div style={{ display: 'flex' }}>
                     <RadioElement
                       name="Gender"
                       checked={selectedGender === 'Male'}
                       changeHandler={handleGender}
-                      label="app.male"
+                      label="male"
                       value="Male"
-                      translation
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <RadioElement
                       name="Gender"
                       checked={selectedGender === 'Female'}
                       changeHandler={handleGender}
-                      label="app.female"
+                      label="female"
                       value="Female"
-                      translation
                     />
                   </div>
                 </div>
@@ -310,11 +302,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.address"
+                    label="address"
                     name="address"
                     value={address}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -322,11 +313,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.phone"
+                    label="phone"
                     name="phone"
                     value={phone}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -334,11 +324,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.skype"
+                    label="skype"
                     name="skype"
                     value={skype}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -346,11 +335,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.primary-number"
+                    label="primary-number"
                     name="primary_number"
                     value={primary_number}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -358,11 +346,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.secondary-number"
+                    label="secondary-number"
                     name="secondary_number"
                     value={secondary_number}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -370,11 +357,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.office-number"
+                    label="office-number"
                     name="office_number"
                     value={office_number}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -382,11 +368,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.google-talk"
+                    label="google-talk"
                     name="google_talk"
                     value={google_talk}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -394,11 +379,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.viber"
+                    label="viber"
                     name="viber"
                     value={viber}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -410,7 +394,6 @@ class CreateProfile extends Component {
                     name="whatsapp"
                     value={whatsapp}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -422,7 +405,6 @@ class CreateProfile extends Component {
                     name="wechat"
                     value={wechat}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -430,11 +412,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.qq"
+                    label="qq"
                     name="qq"
                     value={qq}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -442,11 +423,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.line"
+                    label="line"
                     name="line"
                     value={line}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -454,11 +434,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.hike"
+                    label="hike"
                     name="hike"
                     value={hike}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -466,11 +445,10 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.tango"
+                    label="tango"
                     name="tango"
                     value={tango}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
@@ -478,37 +456,25 @@ class CreateProfile extends Component {
                     formType="editForm"
                     tag="input"
                     type="text"
-                    label="app.twitter"
+                    label="twitter"
                     name="twitter"
                     value={twitter}
                     changeHandler={onChangeHandler}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
                   <SelectElement
                     className="form-control"
-                    label="app.timeZone"
+                    label="timeZone"
                     options={timezone}
                     changeHandler={e => this.onSelectChangeHandler(e)}
                     value={selectTimeZone}
-                    translation
                   />
                 </div>
                 <div className="col-xl-4 col-md-6">
                   <div className="form-group">
                     <label>
-                      {cropResult ? (
-                        <FormattedMessage
-                          id="app.preview"
-                          defaultMessage="Preview"
-                        />
-                      ) : (
-                        <FormattedMessage
-                          id="app.attatchFile"
-                          defaultMessage="Attach File"
-                        />
-                      )}
+                      {cropResult ? 'Preview' : 'Attach File'}
                     </label>
 
                     {cropResult ? (
@@ -535,10 +501,7 @@ class CreateProfile extends Component {
                                   className="fieldsight-btn"
                                   type="button"
                                 >
-                                  <FormattedMessage
-                                    id="app.upload"
-                                    defaultMessage="Upload"
-                                  />
+                                  Upload
                                   <i className="la la-cloud-upload" />
                                 </button>
                               </div>
@@ -564,20 +527,12 @@ class CreateProfile extends Component {
                                         multiple={false}
                                       />
                                       <div className="upload-icon" />
-                                      <h3>
-                                        <FormattedMessage
-                                          id="app.drag&DropAnImage"
-                                          defaultMessage="Drag & Drop an image"
-                                        />
-                                      </h3>
+                                      <h3>Drag & Drop an image</h3>
                                       <button
                                         className="fieldsight-btn"
                                         type="button"
                                       >
-                                        <FormattedMessage
-                                          id="app.upload"
-                                          defaultMessage="Upload"
-                                        />
+                                        Upload
                                         <i className="la la-cloud-upload" />
                                       </button>
                                     </div>
@@ -593,10 +548,7 @@ class CreateProfile extends Component {
                 </div>
               </div>
               {showCropper && (
-                <Modal
-                  title="app.preview"
-                  toggleModal={this.closeModal}
-                >
+                <Modal title="Preview" toggleModal={this.closeModal}>
                   <div className="row">
                     <div className="col-md-6">
                       <div
@@ -620,10 +572,7 @@ class CreateProfile extends Component {
                             onClick={this.cropImage}
                             type="button"
                           >
-                            <FormattedMessage
-                              id="app.saveImage"
-                              defaultMessage="Save Image"
-                            />
+                            Save Image
                           </button>
                         </figure>
                       </div>
@@ -653,10 +602,7 @@ class CreateProfile extends Component {
                 type="submit"
                 className="fieldsight-btn pull-right"
               >
-                <FormattedMessage
-                  id="app.save"
-                  defaultMessage="Save"
-                />
+                Save
               </button>
             </div>
           </form>

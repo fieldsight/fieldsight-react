@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import Table from 'react-bootstrap/Table';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage } from 'react-intl';
 import { BlockContentLoader } from '../../common/Loader';
 
 const ShowRow = ({ name }) => (
@@ -128,54 +127,14 @@ class ProgressTable extends React.PureComponent {
                 >
                   <thead>
                     <tr>
-                      <th>
-                        <FormattedMessage
-                          id="app.sn"
-                          defaultMessage="SN"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.name"
-                          defaultMessage="Name"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.progress"
-                          defaultMessage="Progress"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.view-submission"
-                          defaultMessage="View Submissions"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.pending"
-                          defaultMessage="Pending"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.approved"
-                          defaultMessage="Approved"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.flagged"
-                          defaultMessage="Flagged"
-                        />
-                      </th>
-                      <th>
-                        <FormattedMessage
-                          id="app.rejected"
-                          defaultMessage="Rejected"
-                        />
-                      </th>
+                      <th>SN</th>
+                      <th>Name</th>
+                      <th>Progress</th>
+                      <th>View Submissions</th>
+                      <th>Pending</th>
+                      <th>Approved</th>
+                      <th>Flagged</th>
+                      <th>Rejected</th>
                     </tr>
                   </thead>
                   <tbody>

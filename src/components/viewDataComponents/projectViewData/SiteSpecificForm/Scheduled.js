@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { FormattedMessage } from 'react-intl';
 import ResponseTable from '../../responded/ResponseTable';
 import DeleteTable from '../deleteTable';
 import { getProjectViewData } from '../../../../actions/viewDataActions';
@@ -45,18 +44,10 @@ class ManageScheduledForm extends Component {
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>
-            <FormattedMessage
-              id="app.scheduled-form"
-              defaultMessage="Scheduled Forms"
-            />
-          </h5>
+          <h5>Scheduled Forms</h5>
           <Link to={`/project-submission-responses/${id}/rejected`}>
             <button type="button" className="fieldsight-btn">
-              <FormattedMessage
-                id="app.view-by-form"
-                defaultMessage="View By Form"
-              />
+              View By Form
             </button>
           </Link>
         </div>
@@ -75,12 +66,7 @@ class ManageScheduledForm extends Component {
         {deleted_forms.length > 0 && (
           <div className="card no-boxshadow">
             <div className="card-header main-card-header sub-card-header">
-              <h5>
-                <FormattedMessage
-                  id="app.deleted-forms"
-                  defaultMessage="Deleted Forms"
-                />
-              </h5>
+              <h5>Deleted Forms</h5>
               <div className="dash-btn">
                 {this.state.hide ? (
                   <button
@@ -89,10 +75,7 @@ class ManageScheduledForm extends Component {
                     onClick={this.toggleHide}
                     style={{ width: '97px' }}
                   >
-                    <FormattedMessage
-                      id="app.show"
-                      defaultMessage="Show"
-                    />
+                    Show
                     <div className="handle" />
                   </button>
                 ) : (
@@ -107,10 +90,7 @@ class ManageScheduledForm extends Component {
                       width: '97px',
                     }}
                   >
-                    <FormattedMessage
-                      id="app.hide"
-                      defaultMessage="Hide"
-                    />
+                    Hide
                     <div
                       className="handle"
                       style={{ left: 'auto', right: '0.1875rem' }}

@@ -13,7 +13,6 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 
-import { FormattedMessage } from 'react-intl';
 import SubStageTable from './subStageTable';
 import { DotLoader } from '../myForm/Loader';
 /* eslint-disable react/destructuring-assignment */
@@ -237,12 +236,7 @@ class SortableStage extends Component {
                                     <OverlayTrigger
                                       placement="top"
                                       overlay={
-                                        <Tooltip>
-                                          <FormattedMessage
-                                            id="app.reorder"
-                                            defaultMessage="Reorder"
-                                          />
-                                        </Tooltip>
+                                        <Tooltip>Reorder</Tooltip>
                                       }
                                     >
                                       <span className="reorder">
@@ -254,12 +248,7 @@ class SortableStage extends Component {
                                     <OverlayTrigger
                                       placement="top"
                                       overlay={
-                                        <Tooltip>
-                                          <FormattedMessage
-                                            id="app.cancel"
-                                            defaultMessage="Cancel"
-                                          />
-                                        </Tooltip>
+                                        <Tooltip>Cancel</Tooltip>
                                       }
                                     >
                                       <span>
@@ -287,14 +276,7 @@ class SortableStage extends Component {
                                   {/* Save Order */}
                                   <OverlayTrigger
                                     placement="top"
-                                    overlay={
-                                      <Tooltip>
-                                        <FormattedMessage
-                                          id="app.save"
-                                          defaultMessage="Save"
-                                        />
-                                      </Tooltip>
-                                    }
+                                    overlay={<Tooltip>Save</Tooltip>}
                                   >
                                     <span>
                                       <i className="la la-save" />
@@ -320,10 +302,7 @@ class SortableStage extends Component {
                                       placement="top"
                                       overlay={
                                         <Tooltip>
-                                          <FormattedMessage
-                                            id="app.deployAllSubstages"
-                                            defaultMessage="Deploy All Substages"
-                                          />
+                                          Deploy All Substages
                                         </Tooltip>
                                       }
                                     >
@@ -458,10 +437,7 @@ class SortableStage extends Component {
                                       placement="top"
                                       overlay={
                                         <Tooltip>
-                                          <FormattedMessage
-                                            id="app.deployAllSubstages"
-                                            defaultMessage="Deploy All Substages"
-                                          />
+                                          Deploy All Substages
                                         </Tooltip>
                                       }
                                     >
@@ -553,11 +529,7 @@ class SortableStage extends Component {
                             role="button"
                             onKeyDown={handleSubStageForm}
                           >
-                            <FormattedMessage
-                              id="app.subStageForm"
-                              defaultMessage="Add Substage"
-                            />
-
+                            Add Substage
                             <span>
                               <i className="la la-plus" />
                             </span>
@@ -573,11 +545,7 @@ class SortableStage extends Component {
                             role="button"
                             onKeyDown={handleSubStageForm}
                           >
-                            <FormattedMessage
-                              id="app.subStageForm"
-                              defaultMessage="Add Substage"
-                            />
-
+                            Add Substage
                             <span>
                               <i className="la la-plus" />
                             </span>

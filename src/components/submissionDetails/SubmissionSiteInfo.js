@@ -1,19 +1,12 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage } from 'react-intl';
 /* eslint-disable react/no-array-index-key  */
 
 const SubmissionSiteInfo = ({ siteInformation }) => (
   <div className="col-lg-6">
     <div className="card">
       <div className="card-header main-card-header">
-        <h5>
-          <FormattedMessage
-            id="app.site-information"
-            defaultMessage="site information"
-            description="site information"
-          />
-        </h5>
+        <h5>site information</h5>
       </div>
 
       <div
@@ -50,12 +43,7 @@ const SubmissionSiteInfo = ({ siteInformation }) => (
             </ul>
           </PerfectScrollbar>
         ) : (
-          <p>
-            <FormattedMessage
-              id="app.siteInfoNotAvailable"
-              defaultMessage="Site Information not available"
-            />
-          </p>
+          <p>Site Information not available</p>
         )}
       </div>
     </div>

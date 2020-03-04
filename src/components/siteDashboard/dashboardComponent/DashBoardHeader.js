@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Cropper from 'react-cropper';
-import { FormattedMessage } from 'react-intl';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Table from 'react-bootstrap/Table';
 import CountCard from '../../common/CountCard';
@@ -155,13 +154,7 @@ class DashboardHeader extends Component {
                   {identifier && (
                     <div className="flex">
                       <label>
-                        <strong>
-                          <FormattedMessage
-                            id="app.identifier"
-                            defaultMessage="Identifier"
-                          />
-                          :
-                        </strong>
+                        <strong>Identifier :</strong>
                       </label>
                       &nbsp;
                       <span>{identifier}</span>
@@ -170,13 +163,7 @@ class DashboardHeader extends Component {
                   {region && (
                     <div className="flex">
                       <label>
-                        <strong>
-                          <FormattedMessage
-                            id="app.region"
-                            defaultMessage="Region"
-                          />
-                          :
-                        </strong>
+                        <strong>Region :</strong>
                       </label>
                       &nbsp;
                       <span>{region}</span>
@@ -187,14 +174,7 @@ class DashboardHeader extends Component {
                   {address && (
                     <div className="flex">
                       <label>
-                        <strong>
-                          <FormattedMessage
-                            id="app.address"
-                            defaultMessage="Address"
-                            description="Address"
-                          />
-                          :
-                        </strong>
+                        <strong>Address :</strong>
                       </label>
                       &nbsp;
                       <span>{address}</span>
@@ -203,14 +183,7 @@ class DashboardHeader extends Component {
                   {type && (
                     <div className="flex">
                       <label>
-                        <strong>
-                          <FormattedMessage
-                            id="app.type"
-                            defaultMessage="Type"
-                            description="Type"
-                          />
-                          :
-                        </strong>
+                        <strong>Type :</strong>
                       </label>
                       &nbsp;
                       <span>{type}</span>
@@ -258,13 +231,7 @@ class DashboardHeader extends Component {
                 >
                   <i className="fa fa-cog" />
 
-                  <span>
-                    <FormattedMessage
-                      id="app.manage"
-                      defaultMessage="Manage"
-                      description="Manage"
-                    />
-                  </span>
+                  <span>Manage</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
                   {HeaderDropdown.map((item, i) => (
@@ -273,15 +240,7 @@ class DashboardHeader extends Component {
                       key={i}
                       target="_blank"
                     >
-                      {item.id ? (
-                        <FormattedMessage
-                          id={item.id}
-                          defaultMessage={item.title}
-                          description={item.title}
-                        />
-                      ) : (
-                        item.title
-                      )}
+                      {item.title}
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
@@ -374,14 +333,7 @@ class DashboardHeader extends Component {
                 >
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip>
-                        <FormattedMessage
-                          id="app.rotateLeft"
-                          defaultMessage="Rotate Left"
-                        />
-                      </Tooltip>
-                    }
+                    overlay={<Tooltip>Rotate Left</Tooltip>}
                   >
                     <i className="la la-rotate-left" />
                   </OverlayTrigger>
@@ -393,14 +345,7 @@ class DashboardHeader extends Component {
                 >
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip>
-                        <FormattedMessage
-                          id="app.rotateRight"
-                          defaultMessage="Rotate Right"
-                        />
-                      </Tooltip>
-                    }
+                    overlay={<Tooltip>Rotate Right</Tooltip>}
                   >
                     <i className="la la-rotate-right" />
                   </OverlayTrigger>
@@ -444,10 +389,7 @@ class DashboardHeader extends Component {
                     style={{ marginTop: '15px' }}
                     onClick={this.saveImage}
                   >
-                    <FormattedMessage
-                      id="app.saveImage"
-                      defaultMessage="Save Image"
-                    />
+                    Save Image
                   </button>
                 </div>
               </div>
@@ -472,37 +414,12 @@ class DashboardHeader extends Component {
                   >
                     <thead>
                       <tr>
-                        <th>
-                          <FormattedMessage
-                            id="app.identifier"
-                            defaultMessage="Identifier"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.name"
-                            defaultMessage="Name"
-                          />
-                        </th>
+                        <th>Identifier</th>
+                        <th>Name</th>
 
-                        <th>
-                          <FormattedMessage
-                            id="app.progress"
-                            defaultMessage="Progress"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.submissions"
-                            defaultMessage="Submissions"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.type"
-                            defaultMessage="Type"
-                          />
-                        </th>
+                        <th>Progress</th>
+                        <th>Submissions</th>
+                        <th>Type</th>
                       </tr>
                     </thead>
                     <tbody>

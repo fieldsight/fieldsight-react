@@ -2,7 +2,6 @@ import React, { Component, createRef } from 'react';
 import { Accordion, Card, Button } from 'react-bootstrap';
 import format from 'date-fns/format';
 import uuid from 'uuid/v4';
-import { FormattedMessage } from 'react-intl';
 import {
   Map,
   TileLayer,
@@ -310,13 +309,7 @@ class Submission extends Component {
                             radius={8}
                           >
                             <Popup>
-                              <b>
-                                <FormattedMessage
-                                  id="app.question"
-                                  defaultMessage="Question"
-                                />
-                                :
-                              </b>
+                              <b>Question :</b>
                               {question}
                             </Popup>
                           </CircleMarker>
@@ -326,55 +319,25 @@ class Submission extends Component {
                     <div className="col-lg-4 col-md-4">
                       <div className="map-legend">
                         <p>
-                          <span>
-                            <FormattedMessage
-                              id="app.latitude"
-                              defaultMessage="Latitude"
-                            />
-                            :
-                          </span>
+                          <span>Latitude :</span>
                           <label>{latitude}</label>
                         </p>
                         <p>
-                          <span>
-                            <FormattedMessage
-                              id="app.longitude"
-                              defaultMessage="Longitude"
-                            />
-                            :
-                          </span>
+                          <span>Longitude :</span>
                           <label>{longitude}</label>
                         </p>
                         <p>
-                          <span>
-                            <FormattedMessage
-                              id="app.altitude"
-                              defaultMessage="Altitude"
-                            />
-                            :
-                          </span>
+                          <span>Altitude :</span>
                           <label>{`${altitude} meters`}</label>
                         </p>
                         <p>
-                          <span>
-                            <FormattedMessage
-                              id="app.accuracy"
-                              defaultMessage="Accuracy"
-                            />
-                            :
-                          </span>
+                          <span>Accuracy :</span>
                           <label>
                             {`${(+accuracy).toFixed(2)} meters`}
                           </label>
                         </p>
                         <p>
-                          <span>
-                            <FormattedMessage
-                              id="app.distanceFromSite"
-                              defaultMessage="Distance From Site"
-                            />
-                            :
-                          </span>
+                          <span>Distance From Site :</span>
                           <label>{`${distance} meters`}</label>
                         </p>
                       </div>

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Table } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage } from 'react-intl';
 import getProjectList from '../../actions/projectListAction';
 /* eslint-disable react/destructuring-assignment */
 
@@ -76,12 +75,7 @@ class ProjectList extends Component {
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-              <h5>
-                <FormattedMessage
-                  id="app.project-list"
-                  defaultMessage="Project List"
-                />
-              </h5>
+              <h5>Project List</h5>
 
               <div className="dash-btn">
                 <form className="floating-form">
@@ -92,12 +86,7 @@ class ProjectList extends Component {
                       onChange={e => this.handleChange(e)}
                       required
                     />
-                    <label htmlFor="input">
-                      <FormattedMessage
-                        id="app.teams-search"
-                        defaultMessage="Search"
-                      />
-                    </label>
+                    <label htmlFor="input">Search</label>
                     <i className="la la-search" />
                   </div>
                 </form>
@@ -118,49 +107,13 @@ class ProjectList extends Component {
                   >
                     <thead>
                       <tr>
-                        <th>
-                          <FormattedMessage
-                            id="app.project-name"
-                            defaultMessage="Project Name"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.address"
-                            defaultMessage="Address"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.regions"
-                            defaultMessage="Regions"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.sites"
-                            defaultMessage="Sites"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.users"
-                            defaultMessage="Users"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.total-submissions"
-                            defaultMessage="Total Submissions"
-                          />
-                        </th>
-                        <th>
-                          {' '}
-                          <FormattedMessage
-                            id="app.action"
-                            defaultMessage="Action"
-                          />
-                        </th>
+                        <th>Project Name</th>
+                        <th>Address</th>
+                        <th>Regions</th>
+                        <th>Sites</th>
+                        <th>Users</th>
+                        <th>Total Submissions</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>

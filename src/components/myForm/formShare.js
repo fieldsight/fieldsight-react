@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { FormattedMessage } from 'react-intl';
 import PreviewModal from './PreviewModal';
 import ReplaceModal from './ReplaceModal';
 import ShareModal from './ShareModal';
@@ -37,15 +36,7 @@ class FormShare extends PureComponent {
         </td>
         <td>
           <OverlayTrigger
-            overlay={
-              <Tooltip id="tooltip-disabled">
-                {' '}
-                <FormattedMessage
-                  id="app.preview"
-                  defaultMessage="Preview"
-                />
-              </Tooltip>
-            }
+            overlay={<Tooltip id="tooltip-disabled">Preview</Tooltip>}
           >
             <a
               onClick={e => {
@@ -77,14 +68,7 @@ class FormShare extends PureComponent {
           </OverlayTrigger>
 
           <OverlayTrigger
-            overlay={
-              <Tooltip id="tooltip-disabled">
-                <FormattedMessage
-                  id="app.media"
-                  defaultMessage="Media"
-                />
-              </Tooltip>
-            }
+            overlay={<Tooltip id="tooltip-disabled">Media</Tooltip>}
           >
             <a
               onClick={e => {
@@ -116,14 +100,7 @@ class FormShare extends PureComponent {
           </OverlayTrigger>
 
           <OverlayTrigger
-            overlay={
-              <Tooltip id="tooltip-disabled">
-                <FormattedMessage
-                  id="app.edit"
-                  defaultMessage="Edit"
-                />
-              </Tooltip>
-            }
+            overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
           >
             <a
               onClick={e => {
@@ -141,14 +118,7 @@ class FormShare extends PureComponent {
           </OverlayTrigger>
 
           <OverlayTrigger
-            overlay={
-              <Tooltip id="tooltip-disabled">
-                <FormattedMessage
-                  id="app.replace"
-                  defaultMessage="Replace"
-                />
-              </Tooltip>
-            }
+            overlay={<Tooltip id="tooltip-disabled">Replace</Tooltip>}
           >
             <a
               onClick={e => {
@@ -180,12 +150,7 @@ class FormShare extends PureComponent {
           </OverlayTrigger>
           <OverlayTrigger
             overlay={
-              <Tooltip id="tooltip-disabled">
-                <FormattedMessage
-                  id="app.download"
-                  defaultMessage="Download"
-                />
-              </Tooltip>
+              <Tooltip id="tooltip-disabled">Download</Tooltip>
             }
           >
             <a
@@ -206,14 +171,7 @@ class FormShare extends PureComponent {
 
           <span className="share-icon">
             <OverlayTrigger
-              overlay={
-                <Tooltip id="tooltip-disabled">
-                  <FormattedMessage
-                    id="app.share"
-                    defaultMessage="Share"
-                  />
-                </Tooltip>
-              }
+              overlay={<Tooltip id="tooltip-disabled">Share</Tooltip>}
             >
               <a
                 onClick={e => {
@@ -230,12 +188,7 @@ class FormShare extends PureComponent {
 
             {item.share && (
               <ul className="share-drop">
-                <h5>
-                  <FormattedMessage
-                    id="app.shareTo"
-                    defaultMessage="Share to"
-                  />
-                </h5>
+                <h5>Share to</h5>
                 <li>
                   <a
                     onClick={e => {
@@ -262,10 +215,7 @@ class FormShare extends PureComponent {
                       );
                     }}
                   >
-                    <FormattedMessage
-                      id="app.user"
-                      defaultMessage="User"
-                    />
+                    User
                   </a>
                 </li>
                 <li>
@@ -294,10 +244,7 @@ class FormShare extends PureComponent {
                       );
                     }}
                   >
-                    <FormattedMessage
-                      id="app.projects"
-                      defaultMessage="Project"
-                    />
+                    Project
                   </a>
                 </li>
                 {/* <li>
@@ -339,14 +286,7 @@ class FormShare extends PureComponent {
             )}
           </span>
           <OverlayTrigger
-            overlay={
-              <Tooltip id="tooltip-disabled">
-                <FormattedMessage
-                  id="app.delete"
-                  defaultMessage="Delete"
-                />
-              </Tooltip>
-            }
+            overlay={<Tooltip id="tooltip-disabled">Delete</Tooltip>}
           >
             <a
               onClick={e => {

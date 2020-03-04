@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
-import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
 
 import WithPagination from '../../../../hoc/WithPagination';
@@ -161,12 +160,7 @@ class SubmissionData extends Component {
         </nav>
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            <h5>
-              <FormattedMessage
-                id="app.site-submissions"
-                defaultMessage="Site Submissions"
-              />
-            </h5>
+            <h5>Site Submissions</h5>
             <div className="dash-btn">
               <form className="floating-form">
                 <div className="form-group mr-0">
@@ -195,30 +189,10 @@ class SubmissionData extends Component {
                 <thead>
                   <tr>
                     {/* <th>S.N.</th> */}
-                    <th>
-                      <FormattedMessage
-                        id="app.submission-id"
-                        defaultMessage="submission id"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.submission-by"
-                        defaultMessage="Submission By"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.submission-date"
-                        defaultMessage="Submission Date"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.action"
-                        defaultMessage="Action"
-                      />
-                    </th>
+                    <th>submission id</th>
+                    <th>Submission By</th>
+                    <th>Submission Date</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -272,28 +246,15 @@ class SubmissionData extends Component {
                   <div className="table-footer">
                     <div className="showing-rows">
                       <p>
-                        <FormattedMessage
-                          id="app.showing"
-                          defaultMessage="Showing"
-                        />
+                        Showing
                         <span>{fromData}</span>
-                        <FormattedMessage
-                          id="app.to"
-                          defaultMessage="to"
-                        />
+                        to
                         <span>
                           {toData > totalCount ? totalCount : toData}
                         </span>
-                        <FormattedMessage
-                          id="app.of"
-                          defaultMessage="of"
-                        />
+                        of
                         <span>{this.props.totalCount}</span>
-                        <FormattedMessage
-                          id="app.entries"
-                          defaultMessage="entries"
-                        />
-                        .
+                        entries .
                       </p>
                     </div>
                     {toData < totalCount ? (
@@ -364,12 +325,7 @@ class SubmissionData extends Component {
                 <div className="card-body">
                   <div className="table-footer">
                     <div className="showing-rows">
-                      <p>
-                        <FormattedMessage
-                          id="app.sorryNoData"
-                          defaultMessage="Sorry No Data"
-                        />
-                      </p>
+                      <p>Sorry No Data</p>
                     </div>
                   </div>
                 </div>

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage } from 'react-intl';
 
 class About extends PureComponent {
   render() {
@@ -11,12 +10,7 @@ class About extends PureComponent {
         <div className="card ">
           <div className="about">
             <div className="card-header main-card-header sub-card-header">
-              <h5>
-                <FormattedMessage
-                  id="app.about"
-                  defaultMessage="About"
-                />
-              </h5>
+              <h5>About</h5>
             </div>
             <div
               className="thumb-list mr-0 "

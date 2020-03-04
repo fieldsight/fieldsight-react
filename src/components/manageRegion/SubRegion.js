@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import DeleteModel from '../common/DeleteModal';
 import WithContext from '../../hoc/WithContext';
 import Modal from '../common/Modal';
@@ -89,21 +88,13 @@ class SubRegion extends Component {
         ? [
             `${terms.region} ID`,
             `${terms.region} Name`,
-            'app.created-date',
-            'app.action',
+
+            'Created Date',
+            'Action',
           ]
-        : [
-            'app.regionId',
-            'app.regionName',
-            'app.created-date',
-            'app.action',
-          ],
+        : ['Region ID', 'Region Name', 'Created Date', 'Action'],
     };
-    const message = !isEmpty(terms) ? (
-      `${terms.region}`
-    ) : (
-      <FormattedMessage id="app.regions" defaultMessage="Regions" />
-    );
+    const message = !isEmpty(terms) ? `${terms.region}` : 'Regions';
     return (
       <>
         <RightContentCard
@@ -133,32 +124,27 @@ class SubRegion extends Component {
                 tag="input"
                 type="text"
                 required
-                label="app.id"
+                label="id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
-                translation
               />
               <InputElement
                 tag="textarea"
                 type="text"
                 required
-                label="app.name"
+                label="name"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-                translation
               />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  <FormattedMessage
-                    id="app.save"
-                    defaultMessage="Save"
-                  />
+                  Save
                 </button>
               </div>
             </form>

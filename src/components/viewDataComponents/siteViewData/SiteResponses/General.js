@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { FormattedMessage } from 'react-intl';
 
 import ResponseTable from '../../responded/ResponseTable';
 import DeleteTable from '../deleteTable';
@@ -48,19 +47,11 @@ class ManageGeneralForm extends Component {
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>
-            <FormattedMessage
-              id="app.generate-form"
-              defaultMessage="General Forms"
-            />
-          </h5>
+          <h5>General Forms</h5>
           <div className="dash-btn">
             <Link to={`/site-submission-responses/${id}/rejected`}>
               <button type="button" className="fieldsight-btn">
-                <FormattedMessage
-                  id="app.view-by-form"
-                  defaultMessage="View By Form"
-                />
+                View By Form
               </button>
             </Link>
           </div>
@@ -79,12 +70,7 @@ class ManageGeneralForm extends Component {
         {deleted_forms.length > 0 && (
           <div className="card no-boxshadow">
             <div className="card-header main-card-header sub-card-header">
-              <h5>
-                <FormattedMessage
-                  id="app.deleted-forms"
-                  defaultMessage="Deleted Forms"
-                />
-              </h5>
+              <h5>Deleted Forms</h5>
               <div className="dash-btn">
                 {hide ? (
                   <button
@@ -93,10 +79,7 @@ class ManageGeneralForm extends Component {
                     onClick={this.toggleHide}
                     style={{ width: '97px' }}
                   >
-                    <FormattedMessage
-                      id="app.show"
-                      defaultMessage="Show"
-                    />
+                    Show
                     <div className="handle" />
                   </button>
                 ) : (
@@ -111,10 +94,7 @@ class ManageGeneralForm extends Component {
                       width: '97px',
                     }}
                   >
-                    <FormattedMessage
-                      id="app.hide"
-                      defaultMessage="Hide"
-                    />
+                    Hide
                     <div
                       className="handle"
                       style={{ left: 'auto', right: '0.1875rem' }}

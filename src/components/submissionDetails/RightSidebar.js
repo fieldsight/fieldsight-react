@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
 import HistoryTab from './HistoryTab';
 import StatusTab from './StatusTab';
 /* eslint-disable camelcase */
@@ -51,10 +50,7 @@ class RightSidebar extends Component {
                       this.setState({ showStatus: true });
                     }}
                   >
-                    <FormattedMessage
-                      id="app.status"
-                      defaultMessage="Status"
-                    />
+                    Status
                   </a>
                 </li>
                 <li className="nav-item">
@@ -68,10 +64,7 @@ class RightSidebar extends Component {
                       this.setState({ showStatus: false });
                     }}
                   >
-                    <FormattedMessage
-                      id="app.history"
-                      defaultMessage="History"
-                    />
+                    History
                   </a>
                 </li>
               </ul>
@@ -84,14 +77,7 @@ class RightSidebar extends Component {
                   >
                     <OverlayTrigger
                       placement="top"
-                      overlay={
-                        <Tooltip>
-                          <FormattedMessage
-                            id="app.edit-submission"
-                            defaultMessage="Edit Submission"
-                          />
-                        </Tooltip>
-                      }
+                      overlay={<Tooltip>Edit Submission</Tooltip>}
                     >
                       <i className="la la-edit" />
                     </OverlayTrigger>
@@ -108,17 +94,9 @@ class RightSidebar extends Component {
                     placement="top"
                     overlay={
                       <Tooltip>
-                        {hideNullValues ? (
-                          <FormattedMessage
-                            id="app.showNullValues"
-                            defaultMessage="Show Null Values"
-                          />
-                        ) : (
-                          <FormattedMessage
-                            id="app.hideNullValues"
-                            defaultMessage="Hide Null Values"
-                          />
-                        )}
+                        {hideNullValues
+                          ? 'Show Null Values'
+                          : 'Hide Null Values'}
                       </Tooltip>
                     }
                   >
@@ -142,14 +120,7 @@ class RightSidebar extends Component {
                   >
                     <OverlayTrigger
                       placement="top"
-                      overlay={
-                        <Tooltip>
-                          <FormattedMessage
-                            id="app.download-as-PDF"
-                            defaultMessage="Download as PDF"
-                          />
-                        </Tooltip>
-                      }
+                      overlay={<Tooltip>Download as PDF</Tooltip>}
                     >
                       <i className="la la-download" />
                     </OverlayTrigger>

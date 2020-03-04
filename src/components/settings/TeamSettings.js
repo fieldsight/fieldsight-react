@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 
 import TeamLeftSidebar from '../leftSidebar/TeamLeftSieBar';
 import EditTeam from '../editTeam/EditTeam';
@@ -77,12 +76,7 @@ export default class TeamSettings extends Component {
             <div className="left-sidebar new-sidebar sticky-top">
               <div className="card">
                 <div className="card-header main-card-header">
-                  <h5>
-                    <FormattedMessage
-                      id="app.settings"
-                      defaultMessage="Settings"
-                    />
-                  </h5>
+                  <h5>Settings</h5>
                 </div>
                 <div className="card-body">
                   <TeamLeftSidebar

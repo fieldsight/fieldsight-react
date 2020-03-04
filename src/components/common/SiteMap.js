@@ -20,10 +20,6 @@ class SiteMap extends Component {
     super(props);
     this.state = {
       mapData: props.map ? props.map : {},
-      // bound: latLngBounds(
-      //   [29.38217507514529, 87.5390625],
-      //   [27.293689224852407, 81.474609375],
-      // ),
     };
     this.mapRef = createRef();
     this.groupRef = createRef();

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import DashboardHeader from './dashboardHeader';
-// import DashboardComponents from './dashboardComponent';
 import SiteMap from '../common/SiteMap';
-// import DashboardCounter from './dashboardCounter';
 import About from './about';
 import Project from './projectLists';
 import TeamTable from './team';
@@ -160,7 +158,6 @@ class AdminDashboard extends Component {
       },
       state: { activeTab, projects, teams, admins, loader },
     } = this;
-    // debugger;
 
     const total_team = teams.length;
     const total_project = projects.length;
@@ -176,10 +173,6 @@ class AdminDashboard extends Component {
                 </a>
               </li>
               <li className="breadcrumb-item">{breadcrumbs.name}</li>
-
-              {/* <li className="breadcrumb-item active" aria-current="page">
-                {breadcrumbs.site}
-              </li> */}
             </ol>
           )}
         </nav>
@@ -228,7 +221,6 @@ class AdminDashboard extends Component {
             <div className="col-lg-6">
               <div className="card region-table">
                 <div className="card-header main-card-header sub-card-header">
-                  {/* <div className="form-group"> */}
                   <ul className="nav nav-tabs ">
                     <li className="nav-item">
                       <a
@@ -312,7 +304,6 @@ class AdminDashboard extends Component {
                           <i className="la la-search" />
                         </div>
                       </form>
-                      {/* {is_project_manager && ( */}
 
                       {/* )} */}
                     </div>
@@ -331,10 +322,6 @@ class AdminDashboard extends Component {
           </div>
           <div className="progress-table mrb-30 mrt-30">
             <div className="card">
-              {/* <div className="card-header main-card-header sub-card-header">
-              
-            </div> */}
-
               <ProgressTable
                 orgId={superAdminId}
                 progressTable={progressTable}
@@ -342,11 +329,9 @@ class AdminDashboard extends Component {
               />
             </div>
           </div>
-          {/* <DashboardCounter submissions={submissions} /> */}
           <div className="about-section  mrt-30">
             <div className="row">
               <About contacts={contact} desc={additional_desc} />
-              {/* <About contacts={contact} desc={public_desc} /> */}
               <div className="col-lg-4">
                 <div className="card admin">
                   <div className="card-header main-card-header sub-card-header">

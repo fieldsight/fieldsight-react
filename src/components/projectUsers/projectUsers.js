@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { FormattedMessage } from 'react-intl';
 import getProjectUser from '../../actions/projectUserActions';
 /* eslint-disable react/destructuring-assignment */
 
@@ -77,12 +76,7 @@ class ProjectUser extends Component {
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-              <h5>
-                <FormattedMessage
-                  id="app.project-user"
-                  defaultMessage="Project Users"
-                />
-              </h5>
+              <h5>Project Users</h5>
               <div className="dash-btn">
                 <form className="floating-form">
                   <div className="form-group mr-0">
@@ -92,12 +86,7 @@ class ProjectUser extends Component {
                       onChange={e => this.handleChange(e)}
                       required
                     />
-                    <label htmlFor="input">
-                      <FormattedMessage
-                        id="app.teams-search"
-                        defaultMessage="Search"
-                      />
-                    </label>
+                    <label htmlFor="input">Search</label>
                     <i className="la la-search" />
                   </div>
                 </form>
@@ -110,30 +99,10 @@ class ProjectUser extends Component {
               >
                 <thead>
                   <tr>
-                    <th>
-                      <FormattedMessage
-                        id="app.name"
-                        defaultMessage="Name"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.user-name"
-                        defaultMessage="User Name"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.email"
-                        defaultMessage="Email"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.role"
-                        defaultMessage="Role"
-                      />
-                    </th>
+                    <th>Name</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import SideBar from './SideBar';
 import CommonPopup from './CommonPopup';
@@ -57,12 +56,7 @@ class MyFormMain extends Component {
         <nav aria-label="breadcrumb" role="navigation">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a>
-                <FormattedMessage
-                  id="app.forms"
-                  defaultMessage="Forms"
-                />
-              </a>
+              <a>Forms</a>
             </li>
           </ol>
         </nav>

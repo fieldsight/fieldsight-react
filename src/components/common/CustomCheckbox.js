@@ -7,7 +7,6 @@ const CustomCheckBox = ({
   checked,
   changeHandler,
   label,
-  // translation,
   ...rest
 }) => (
   <div className="custom-control custom-checkbox">

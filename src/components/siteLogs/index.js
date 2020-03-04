@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import Logs from '../common/Logs';
 import { getSiteLogs } from '../../actions/siteDashboardActions';
 
@@ -43,15 +42,10 @@ class SiteLogs extends Component {
               <a
                 href={`/fieldsight/application/#/site-dashboard/${this.state.siteId}`}
               >
-                <FormattedMessage
-                  id="app.site"
-                  defaultMessage="Site"
-                />
+                Site
               </a>
             </li>
-            <li className="breadcrumb-item">
-              <FormattedMessage id="app.logs" defaultMessage="Logs" />
-            </li>
+            <li className="breadcrumb-item">Logs</li>
           </ol>
         </nav>
 

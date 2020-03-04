@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import StatusTable from '../../responded/StatusTable';
@@ -45,19 +44,11 @@ class ApprovedTable extends Component {
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>
-            <FormattedMessage
-              id="app.approved-submissions"
-              defaultMessage="Approved Submissions"
-            />
-          </h5>
+          <h5>Approved Submissions</h5>
           <div className="dash-btn">
             <Link to={`/project-responses/${id}/general`}>
               <button type="button" className="fieldsight-btn">
-                <FormattedMessage
-                  id="app.view-by-status"
-                  defaultMessage="View By Status"
-                />
+                View By Status
               </button>
             </Link>
           </div>
@@ -72,28 +63,15 @@ class ApprovedTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      <FormattedMessage
-                        id="app.showing"
-                        defaultMessage="Showing"
-                      />
+                      Showing
                       <span>{fromData}</span>
-                      <FormattedMessage
-                        id="app.to"
-                        defaultMessage="to"
-                      />
+                      to
                       <span>
                         {toData > totalCount ? totalCount : toData}
                       </span>
-                      <FormattedMessage
-                        id="app.of"
-                        defaultMessage="of"
-                      />
+                      of
                       <span>{totalCount}</span>
-                      <FormattedMessage
-                        id="app.entries"
-                        defaultMessage="entries"
-                      />
-                      .
+                      entries .
                     </p>
                   </div>
                   {toData < totalCount ? (
@@ -159,12 +137,7 @@ class ApprovedTable extends Component {
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
-                    <p>
-                      <FormattedMessage
-                        id="app.sorryNoData"
-                        defaultMessage="Sorry No Data"
-                      />
-                    </p>
+                    <p>Sorry No Data</p>
                   </div>
                 </div>
               </div>

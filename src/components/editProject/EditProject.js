@@ -3,7 +3,6 @@ import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
 import Modal from '../common/Modal';
@@ -353,7 +352,7 @@ class EditProject extends Component {
     } = this;
 
     return (
-      <RightContentCard title="app.editProject">
+      <RightContentCard title="Edit Project">
         <form className="edit-form" onSubmit={onSubmitHandler}>
           <div className="row">
             <div className="col-xl-4 col-md-6">
@@ -380,33 +379,30 @@ class EditProject extends Component {
                 tag="input"
                 type="text"
                 required
-                label="app.name"
+                label="name"
                 name="name"
                 value={name}
                 changeHandler={onChangeHandler}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <SelectElement
                 className="form-control"
-                label="app.sector"
+                label="sector"
                 options={sector.map(sect => sect)}
                 changeHandler={onSelectChangeHandler}
                 value={selectedSector && selectedSector}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <SelectElement
                 className="form-control"
-                label="app.subSector"
+                label="subSector"
                 options={subSectors.map(subSect => subSect)}
                 changeHandler={e => {
                   onSelectChangeHandler(e, 'subSect');
                 }}
                 value={selectedSubSector && selectedSubSector}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -415,11 +411,10 @@ class EditProject extends Component {
                 tag="input"
                 type="text"
                 // required
-                label="app.phone"
+                label="phone"
                 name="phone"
                 value={phone}
                 changeHandler={onChangeHandler}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -428,11 +423,10 @@ class EditProject extends Component {
                 tag="input"
                 type="email"
                 // required
-                label="app.email"
+                label="email"
                 name="email"
                 value={email}
                 changeHandler={onChangeHandler}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -441,11 +435,10 @@ class EditProject extends Component {
                 tag="input"
                 type="text"
                 required
-                label="app.address"
+                label="address"
                 name="address"
                 value={address}
                 changeHandler={onChangeHandler}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -454,11 +447,10 @@ class EditProject extends Component {
                   formType="editForm"
                   tag="input"
                   type="url"
-                  label="app.website"
+                  label="website"
                   name="website"
                   value={website}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
             </div>
@@ -468,11 +460,10 @@ class EditProject extends Component {
                   formType="editForm"
                   tag="input"
                   type="text"
-                  label="app.donor"
+                  label="donor"
                   name="donor"
                   value={donor}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
             </div>
@@ -491,20 +482,16 @@ class EditProject extends Component {
                 tag="input"
                 type="text"
                 // required
-                label="app.description"
+                label="description"
                 name="public_desc"
                 value={public_desc}
                 changeHandler={onChangeHandler}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label>
-                  <FormattedMessage
-                    id="app.map"
-                    defaultMessage="Map"
-                  />
+                  Map
                   <sup>*</sup>
                 </label>
 
@@ -524,13 +511,7 @@ class EditProject extends Component {
                       icon={markerIcon}
                     >
                       <Popup>
-                        <b>
-                          <FormattedMessage
-                            id="app.name"
-                            defaultMessage="Name"
-                          />
-                          :
-                        </b>
+                        <b>Name :</b>
                         {name}
                       </Popup>
                     </Marker>
@@ -543,10 +524,9 @@ class EditProject extends Component {
                         type="number"
                         // step="any"
                         required
-                        label="app.latitude"
+                        label="latitude"
                         name="latitude"
                         value={latitude}
-                        translation
                         changeHandler={e => {
                           onChangeHandler(e, 'latitude');
                         }}
@@ -559,10 +539,9 @@ class EditProject extends Component {
                         tag="input"
                         type="number"
                         required
-                        label="app.longitude"
+                        label="longitude"
                         name="longitude"
                         value={longitude}
-                        translation
                         changeHandler={e => {
                           onChangeHandler(e, 'longitude');
                         }}
@@ -576,17 +555,7 @@ class EditProject extends Component {
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label>
-                  {cropResult ? (
-                    <FormattedMessage
-                      id="app.preview"
-                      defaultMessage="Preview"
-                    />
-                  ) : (
-                    <FormattedMessage
-                      id="app.attatchFile"
-                      defaultMessage="Attach File"
-                    />
-                  )}
+                  {cropResult ? 'Preview' : 'Attach File'}
                 </label>
 
                 {cropResult ? (
@@ -611,10 +580,7 @@ class EditProject extends Component {
                               className="fieldsight-btn"
                               type="button"
                             >
-                              <FormattedMessage
-                                id="app.upload"
-                                defaultMessage="Upload"
-                              />
+                              Upload
                               <i className="la la-cloud-upload" />
                             </button>
                           </div>
@@ -638,20 +604,12 @@ class EditProject extends Component {
                                     multiple={false}
                                   />
                                   <div className="upload-icon" />
-                                  <h3>
-                                    <FormattedMessage
-                                      id="app.drag&DropAnImage"
-                                      defaultMessage="Drag & Drop an image"
-                                    />
-                                  </h3>
+                                  <h3>Drag & Drop an image</h3>
                                   <button
                                     className="fieldsight-btn"
                                     type="button"
                                   >
-                                    <FormattedMessage
-                                      id="app.upload"
-                                      defaultMessage="Upload"
-                                    />
+                                    Upload
                                     <i className="la la-cloud-upload" />
                                   </button>
                                 </div>
@@ -671,10 +629,7 @@ class EditProject extends Component {
                 className="fieldsight-btn pull-right"
                 type="submit"
               >
-                <FormattedMessage
-                  id="app.save"
-                  defaultMessage="Save"
-                />
+                Save
               </button>
             </div>
           </div>
@@ -701,10 +656,7 @@ class EditProject extends Component {
                       onClick={this.cropImage}
                       type="button"
                     >
-                      <FormattedMessage
-                        id="app.saveImage"
-                        defaultMessage="Save Image"
-                      />
+                      Save Image
                     </button>
                   </figure>
                 </div>

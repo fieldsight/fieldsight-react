@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { DotLoader } from '../myForm/Loader';
@@ -1049,12 +1048,7 @@ class StagedForms extends Component {
       <div className="col-xl-9 col-lg-8">
         <div className="card">
           <div className="card-header main-card-header">
-            <h5>
-              <FormattedMessage
-                id="app.staged-form"
-                defaultMessage="Staged Forms"
-              />
-            </h5>
+            <h5>Staged Forms</h5>
             {isProjectForm && (
               <div className="add-btn">
                 <a
@@ -1066,14 +1060,7 @@ class StagedForms extends Component {
                   {!isStageReorder ? (
                     <OverlayTrigger
                       placement="top"
-                      overlay={
-                        <Tooltip>
-                          <FormattedMessage
-                            id="app.reorder"
-                            defaultMessage="Reorder"
-                          />
-                        </Tooltip>
-                      }
+                      overlay={<Tooltip>Reorder</Tooltip>}
                     >
                       <span className="reorder">
                         <i className="la la-ellipsis-v" />
@@ -1083,14 +1070,7 @@ class StagedForms extends Component {
                   ) : (
                     <OverlayTrigger
                       placement="top"
-                      overlay={
-                        <Tooltip>
-                          <FormattedMessage
-                            id="app.cancelReorder"
-                            defaultMessage="Cancel Reorder"
-                          />
-                        </Tooltip>
-                      }
+                      overlay={<Tooltip>Cancel Reorder</Tooltip>}
                     >
                       <span className="reorder">
                         <i className="la la-close" />
@@ -1108,14 +1088,7 @@ class StagedForms extends Component {
                   >
                     <OverlayTrigger
                       placement="top"
-                      overlay={
-                        <Tooltip>
-                          <FormattedMessage
-                            id="app.save"
-                            defaultMessage="Save"
-                          />
-                        </Tooltip>
-                      }
+                      overlay={<Tooltip>Save</Tooltip>}
                     >
                       <span>
                         <i className="la la-save" />
@@ -1137,14 +1110,7 @@ class StagedForms extends Component {
                 >
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip>
-                        <FormattedMessage
-                          id="app.deployAllStages"
-                          defaultMessage="Deploy All Stages"
-                        />
-                      </Tooltip>
-                    }
+                    overlay={<Tooltip>Deploy All Stages</Tooltip>}
                   >
                     <span className="">
                       <i className="la la-rocket" />
@@ -1165,14 +1131,7 @@ class StagedForms extends Component {
                   {!isStageReorder ? (
                     <OverlayTrigger
                       placement="top"
-                      overlay={
-                        <Tooltip>
-                          <FormattedMessage
-                            id="app.reorderStages"
-                            defaultMessage="Reorder Stages"
-                          />
-                        </Tooltip>
-                      }
+                      overlay={<Tooltip>Reorder Stages</Tooltip>}
                     >
                       <span className="reorder">
                         <i className="la la-ellipsis-v" />
@@ -1182,14 +1141,7 @@ class StagedForms extends Component {
                   ) : (
                     <OverlayTrigger
                       placement="top"
-                      overlay={
-                        <Tooltip>
-                          <FormattedMessage
-                            id="app.cancelReorder"
-                            defaultMessage="Cancel Reorder"
-                          />
-                        </Tooltip>
-                      }
+                      overlay={<Tooltip>Cancel Reorder</Tooltip>}
                     >
                       <span className="reorder">
                         <i className="la la-close" />
@@ -1229,14 +1181,7 @@ class StagedForms extends Component {
                 >
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip>
-                        <FormattedMessage
-                          id="app.deployAllStages"
-                          defaultMessage="Deploy All Stages"
-                        />
-                      </Tooltip>
-                    }
+                    overlay={<Tooltip>Deploy All Stage</Tooltip>}
                   >
                     <span className="">
                       <i className="la la-rocket" />
@@ -1283,10 +1228,7 @@ class StagedForms extends Component {
                     role="button"
                     onKeyDown={this.props.commonPopupHandler}
                   >
-                    <FormattedMessage
-                      id="app.addStage"
-                      defaultMessage="Add Stage"
-                    />
+                    Add Stage
                     <span>
                       <i className="la la-plus" />
                     </span>
@@ -1297,7 +1239,7 @@ class StagedForms extends Component {
           )}
           {popupModal && (
             <Modal
-              title="app.stageForm"
+              title="Stage Form"
               toggleModal={this.handleClearStageForm}
               classname="manage-body md-body"
               // handleSubmit={this.handleSubmitStageForm}
@@ -1312,7 +1254,7 @@ class StagedForms extends Component {
           )}
           {showSubstageForm && (
             <Modal
-              title="app.subStageForm"
+              title="SubStage Form"
               toggleModal={this.handleClosePopup}
               classname="manage-body md-body"
               // handleSubmit={this.handleCreateForm}

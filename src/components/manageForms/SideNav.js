@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import GeneralForms from './GeneralForms';
 import ScheduleForms from './ScheduleForms';
 import StagedForms from './StagedFoms';
@@ -184,21 +183,11 @@ class SideNav extends Component {
               style={{ minHeight: height }}
             >
               <div className="card-header main-card-header">
-                <FormattedMessage
-                  id="app.manage-forms"
-                  defaultMessage="Manage Forms"
-                />
+                Manage Forms
               </div>
               <div className="card-body">
                 <div className="manage_group">
-                  {isProjectForm && (
-                    <h5>
-                      <FormattedMessage
-                        id="app.site-specific-forms"
-                        defaultMessage="Site Specific Forms"
-                      />
-                    </h5>
-                  )}
+                  {isProjectForm && <h5>Site Specific Forms</h5>}
                   <ul className="nav nav-tabs flex-column border-tabs">
                     <li className="nav-item">
                       <Link
@@ -209,10 +198,7 @@ class SideNav extends Component {
                             : 'nav-link'
                         }
                       >
-                        <FormattedMessage
-                          id="app.general-forms"
-                          defaultMessage="General forms"
-                        />
+                        General forms
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -224,10 +210,7 @@ class SideNav extends Component {
                             : 'nav-link'
                         }
                       >
-                        <FormattedMessage
-                          id="app.scheduled-form"
-                          defaultMessage="Scheduled forms"
-                        />
+                        Scheduled forms
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -239,22 +222,14 @@ class SideNav extends Component {
                             : 'nav-link'
                         }
                       >
-                        <FormattedMessage
-                          id="app.staged-form"
-                          defaultMessage="Staged Forms"
-                        />
+                        Staged Forms
                       </Link>
                     </li>
                   </ul>
                 </div>
                 {isProjectForm && (
                   <div className="manage_group mrt-15">
-                    <h5>
-                      <FormattedMessage
-                        id="app.project-wide-forms"
-                        defaultMessage="Project-Wide Forms"
-                      />
-                    </h5>
+                    <h5>Project-Wide Forms</h5>
                     <ul
                       className="nav nav-tabs flex-column border-tabs"
                       id="myTab"
@@ -269,10 +244,7 @@ class SideNav extends Component {
                               : 'nav-link'
                           }
                         >
-                          <FormattedMessage
-                            id="app.general-forms"
-                            defaultMessage="General forms"
-                          />
+                          General forms
                         </Link>
                       </li>
                     </ul>
@@ -291,11 +263,9 @@ class SideNav extends Component {
               <GeneralForms
                 {...props}
                 title="GeneralForms"
-                // OpenTabHandler={this.props.OpenTabHandler}
                 commonPopupHandler={commonPopupHandler}
                 closePopup={closePopup}
                 popupModal={popupModal}
-                // formResponse={formProps}
                 typeOptions={typeOptions}
                 regionOptions={regionOptions}
                 myForms={myForms}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
 import { RegionContext } from '../../context';
 import isEmpty from '../../utils/isEmpty';
 
@@ -12,20 +11,6 @@ import isEmpty from '../../utils/isEmpty';
 
 class LeftSidebar extends Component {
   static contextType = RegionContext;
-
-  // translating = title => {
-  //   if (
-  //     title === 'app.projectInformation' ||
-  //     'app.siteTypes' ||
-  //     'app.regions' ||
-  //     'app.mapLayers' ||
-  //     'app.termsAndLabels'
-  //   ) {
-  //     return <FormattedMessage id={title} defaultMessage={title} />;
-  //     // } else {
-  //     //   return { title };
-  //   }
-  // };
 
   renderNavRoutes = () => {
     const { terms } = this.context;
@@ -79,11 +64,7 @@ class LeftSidebar extends Component {
             pathname === route.path ? 'nav-link active' : 'nav-link'
           }
         >
-          <FormattedMessage
-            id={route.title}
-            defaultMessage={route.title}
-          />
-          {/* {this.translating(route.title)} */}
+          {route.title}
         </Link>
       </li>
     ));

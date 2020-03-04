@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import InputElement from '../common/InputElement';
 import RightContentCard from '../common/RightContentCard';
 import Table from '../common/Table';
@@ -187,7 +186,7 @@ export default class TermAndLabel extends Component {
 
     return (
       <>
-        <RightContentCard title="app.termsAndLabels">
+        <RightContentCard title="Terms And Labels">
           {/* {dotLoader && <DotLoader />} */}
           {!showList && (
             <>
@@ -198,12 +197,11 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      label="app.donor"
+                      label="donor"
                       name="donor"
                       value={donor}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation
                     />
                   </div>
 
@@ -212,12 +210,11 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      label="app.site"
+                      label="site"
                       name="site"
                       value={site}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation
                     />
                   </div>
                   <div className="col-xl-4 col-md-6">
@@ -225,12 +222,11 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      label="app.siteSupervisor"
+                      label="siteSupervisor"
                       name="site_supervisor"
                       value={site_supervisor}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation
                     />
                   </div>
                   <div className="col-xl-4 col-md-6">
@@ -238,12 +234,11 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      label="app.siteReviewer"
+                      label="siteReviewer"
                       name="site_reviewer"
                       value={site_reviewer}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation
                     />
                   </div>
                   <div className="col-xl-4 col-md-6">
@@ -251,12 +246,11 @@ export default class TermAndLabel extends Component {
                       formType="editForm"
                       tag="input"
                       type="text"
-                      label="app.region"
+                      label="region"
                       name="region"
                       value={region}
                       required={false}
                       changeHandler={onChangeHandler}
-                      translation
                     />
                   </div>
                   <div className="col-xl-4 col-md-6">
@@ -265,12 +259,11 @@ export default class TermAndLabel extends Component {
                         formType="editForm"
                         tag="input"
                         type="text"
-                        label="app.regionSupervisor"
+                        label="regionSupervisor"
                         name="region_supervisor"
                         value={region_supervisor}
                         required={false}
                         changeHandler={onChangeHandler}
-                        translation
                       />
                     </div>
                   </div>
@@ -280,12 +273,11 @@ export default class TermAndLabel extends Component {
                         formType="editForm"
                         tag="input"
                         type="text"
-                        label="app.regionReviewer"
+                        label="regionReviewer"
                         name="region_reviewer"
                         value={region_reviewer}
                         required={false}
                         changeHandler={onChangeHandler}
-                        translation
                       />
                     </div>
                   </div>
@@ -302,19 +294,13 @@ export default class TermAndLabel extends Component {
                       }}
                       onClick={listHandler}
                     >
-                      <FormattedMessage
-                        id="app.seeList"
-                        defaultMessage="See List"
-                      />
+                      See List
                     </button>
                     <button
                       type="submit"
                       className="fieldsight-btn pull-right"
                     >
-                      <FormattedMessage
-                        id="app.save"
-                        defaultMessage="Save"
-                      />
+                      Save
                     </button>
                   </div>
                 </div>
@@ -333,10 +319,7 @@ export default class TermAndLabel extends Component {
                 className="fieldsight-btn"
                 onClick={editHandler}
               >
-                <FormattedMessage
-                  id="app.edit"
-                  defaultMessage="Edit"
-                />
+                Edit
               </button>
             </>
           )}

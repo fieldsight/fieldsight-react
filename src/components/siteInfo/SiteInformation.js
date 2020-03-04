@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import IdentityForm from './IdentityForm';
 import SiteInformationTable from './SiteInformationTable';
 import FeaturedPictures from './FeaturedPictures';
@@ -487,7 +486,7 @@ class SiteInformation extends Component {
               className="fieldsight-btn pull-right"
               onClick={onSubmitHandler}
             >
-              <FormattedMessage id="app.save" defaultMessage="Save" />
+              Save
             </button>
           </div>
         </RightContentCard>
@@ -500,40 +499,26 @@ class SiteInformation extends Component {
             message="Are you sure you want to save the changes?"
             title="Warning"
           >
-            <p>
-              <FormattedMessage
-                id="app.pleaseNote"
-                defaultMessage="Please Note"
-              />
-            </p>
+            <p>Please Note</p>
             <ul style={{ textAlign: 'left' }}>
               <li>
-                <FormattedMessage
-                  id="app.changingSiteInfo"
-                  defaultMessage="Changing site information will change data in all the sites."
-                />
+                Changing site information will change data in all the
+                sites.
               </li>
               <li>
-                <FormattedMessage
-                  id="app.siteMessage1"
-                  defaultMessage="Site pictures, featured images, locations, progress values and
-                site information will be changed to the new preferences."
-                />
+                Site pictures, featured images, locations, progress
+                values and site information will be changed to the new
+                preferences.
               </li>
               <li>
-                <FormattedMessage
-                  id="app.siteMessage2"
-                  defaultMessage="Any information deleted will not be recovered later unless the
-                same information is created again."
-                />
+                Any information deleted will not be recovered later
+                unless the same information is created again.
               </li>
               <li>
-                <FormattedMessage
-                  id="app.siteMessage3"
-                  defaultMessage="Changes may take some time to reflect in the sites depending
-                upon the total number of sites in the project and
-                calculations/form answers if pulled in the information."
-                />
+                Changes may take some time to reflect in the sites
+                depending upon the total number of sites in the
+                project and calculations/form answers if pulled in the
+                information.
               </li>
             </ul>
           </DeleteModal>

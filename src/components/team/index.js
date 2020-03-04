@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
 import { Table, Button } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -152,11 +151,7 @@ class Teams extends Component {
             className="card-header 
           main-card-header sub-card-header"
           >
-            <FormattedMessage
-              id="app.team-list"
-              defaultMessage="Team List"
-              description="Team List"
-            />
+            Team List
             <div className="dash-btn">
               <form className="floating-form">
                 <div className="form-group mr-0">
@@ -166,12 +161,7 @@ class Teams extends Component {
                     onChange={e => this.handleChange(e)}
                     required
                   />
-                  <label htmlFor="input">
-                    <FormattedMessage
-                      id="app.teams-search"
-                      defaultMessage="Search"
-                    />
-                  </label>
+                  <label htmlFor="input">Search</label>
                   <i className="la la-search" />
                 </div>
               </form>
@@ -186,8 +176,7 @@ class Teams extends Component {
                 onClick={() => this.showMap()}
               >
                 <i className="la la-map" />
-                &nbsp;
-                <FormattedMessage id="app.map" defaultMessage="Map" />
+                &nbsp; Map
               </Button>
             </div>
           </div>
@@ -203,43 +192,13 @@ class Teams extends Component {
                   >
                     <thead>
                       <tr>
-                        <th>
-                          <FormattedMessage
-                            id="app.teams"
-                            defaultMessage="Teams"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.address"
-                            defaultMessage="Address"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.projects"
-                            defaultMessage="Projects"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.sites"
-                            defaultMessage="Sites"
-                          />
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.users"
-                            defaultMessage="Users"
-                          />
-                        </th>
+                        <th>Teams</th>
+                        <th>Address</th>
+                        <th>Projects</th>
+                        <th>Sites</th>
+                        <th>Users</th>
 
-                        <th>
-                          <FormattedMessage
-                            id="app.action"
-                            defaultMessage="Action"
-                          />
-                        </th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>

@@ -4,12 +4,10 @@ import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
-import { FormattedMessage } from 'react-intl';
 import Modal from './Modal';
 import InputElement from './InputElement';
 import SelectElement from './SelectElement';
 import RightContentCard from './RightContentCard';
-// import Loader from './Loader';
 import CheckBox from './CheckBox';
 import Select from '../siteAdd/Select';
 import DeleteModel from './DeleteModal';
@@ -100,7 +98,7 @@ export default class SiteAdd extends Component {
     } = this.props;
 
     return (
-      <RightContentCard title="app.siteForm">
+      <RightContentCard title="Site Form">
         <div
           style={{
             display: 'flex',
@@ -119,10 +117,7 @@ export default class SiteAdd extends Component {
               role="button"
               onKeyDown={handleDelete}
             >
-              <FormattedMessage
-                id="app.delete"
-                defaultMessage="Delete"
-              />
+              Delete
             </a>
           ) : (
             ''
@@ -141,11 +136,10 @@ export default class SiteAdd extends Component {
                 tag="input"
                 type="text"
                 required
-                label="app.id"
+                label="id"
                 name="site_id"
                 value={site_id}
                 changeHandler={onChangeHandler}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -154,11 +148,10 @@ export default class SiteAdd extends Component {
                 tag="input"
                 type="text"
                 required
-                label="app.name"
+                label="name"
                 name="name"
                 value={name}
                 changeHandler={onChangeHandler}
-                translation
               />
             </div>
 
@@ -166,7 +159,7 @@ export default class SiteAdd extends Component {
               <div className="col-xl-4 col-md-6">
                 <SelectElement
                   className="form-control"
-                  label="app.regions"
+                  label="regions"
                   options={
                     region && region.length > 0
                       ? region.map(region1 => region1)
@@ -176,7 +169,6 @@ export default class SiteAdd extends Component {
                     onSelectChangeHandler(e, 'regions');
                   }}
                   value={regionselected}
-                  translation
                 />
               </div>
             ) : (
@@ -185,7 +177,7 @@ export default class SiteAdd extends Component {
             <div className="col-xl-4 col-md-6">
               <SelectElement
                 className="form-control"
-                label="app.siteType"
+                label="siteType"
                 options={
                   site_types && site_types.length > 0
                     ? site_types.map(region => region)
@@ -195,7 +187,6 @@ export default class SiteAdd extends Component {
                   onSelectChangeHandler(e, 'site_types');
                 }}
                 value={Selectedtypes}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -204,11 +195,10 @@ export default class SiteAdd extends Component {
                 tag="input"
                 type="text"
                 required={false}
-                label="app.phone"
+                label="phone"
                 name="phone"
                 value={phone}
                 changeHandler={onChangeHandler}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
@@ -217,21 +207,19 @@ export default class SiteAdd extends Component {
                 tag="input"
                 type="text"
                 required={false}
-                label="app.address"
+                label="address"
                 name="address"
                 value={address}
                 changeHandler={onChangeHandler}
-                translation
               />
             </div>
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <CheckBox
                   checked={cluster_sites || ''}
-                  label="app.enableSubsites"
+                  label="enableSubsites"
                   changeHandler={handleCheckboxChange}
                   value={cluster_sites}
-                  translation
                 />
               </div>
             </div>
@@ -242,11 +230,10 @@ export default class SiteAdd extends Component {
                   tag="input"
                   type="number"
                   required={false}
-                  label="app.weight"
+                  label="weight"
                   name="weight"
                   value={weight}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
             ) : (
@@ -259,21 +246,17 @@ export default class SiteAdd extends Component {
                   tag="input"
                   type="text"
                   required={false}
-                  label="app.description"
+                  label="description"
                   name="public_desc"
                   value={public_desc}
                   changeHandler={onChangeHandler}
-                  translation
                 />
               </div>
             </div>
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label>
-                  <FormattedMessage
-                    id="app.map"
-                    defaultMessage="Map"
-                  />
+                  Map
                   <sup>*</sup>
                 </label>
 
@@ -290,13 +273,7 @@ export default class SiteAdd extends Component {
                     />
                     <Marker position={[latitude, longitude]}>
                       <Popup>
-                        <b>
-                          <FormattedMessage
-                            id="app.name"
-                            defaultMessage="Name"
-                          />
-                          :
-                        </b>
+                        <b>Name :</b>
                         {name}
                       </Popup>
                     </Marker>
@@ -308,10 +285,9 @@ export default class SiteAdd extends Component {
                         tag="input"
                         type="number"
                         required
-                        label="app.latitude"
+                        label="latitude"
                         name="latitude"
                         value={latitude}
-                        translation
                         changeHandler={e => {
                           onChangeHandler(e, 'latitude');
                         }}
@@ -324,10 +300,9 @@ export default class SiteAdd extends Component {
                         tag="input"
                         type="number"
                         required
-                        label="app.longitude"
+                        label="longitude"
                         name="longitude"
                         value={longitude}
-                        translation
                         changeHandler={e => {
                           onChangeHandler(e, 'longitude');
                         }}
@@ -341,17 +316,7 @@ export default class SiteAdd extends Component {
             <div className="col-xl-4 col-md-6">
               <div className="form-group">
                 <label>
-                  {cropResult ? (
-                    <FormattedMessage
-                      id="app.preview"
-                      defaultMessage="Preview"
-                    />
-                  ) : (
-                    <FormattedMessage
-                      id="app.attatchFile"
-                      defaultMessage="Attach File"
-                    />
-                  )}
+                  {cropResult ? 'Preview' : ' Attach File'}
                 </label>
 
                 {cropResult ? (
@@ -376,10 +341,7 @@ export default class SiteAdd extends Component {
                               className="fieldsight-btn"
                               type="button"
                             >
-                              <FormattedMessage
-                                id="app.upload"
-                                defaultMessage="Upload"
-                              />
+                              Upload
                               <i className="la la-cloud-upload" />
                             </button>
                           </div>
@@ -403,20 +365,12 @@ export default class SiteAdd extends Component {
                                     multiple={false}
                                   />
                                   <div className="upload-icon" />
-                                  <h3>
-                                    <FormattedMessage
-                                      id="app.drag&DropAnImage"
-                                      defaultMessage="Drag & Drop an image"
-                                    />
-                                  </h3>
+                                  <h3>Drag & Drop an image</h3>
                                   <button
                                     className="fieldsight-btn"
                                     type="button"
                                   >
-                                    <FormattedMessage
-                                      id="app.upload"
-                                      defaultMessage="Upload"
-                                    />
+                                    Upload
                                     <i className="la la-cloud-upload" />
                                   </button>
                                 </div>
@@ -549,16 +503,13 @@ export default class SiteAdd extends Component {
                 type="button"
                 onClick={onSubmitHandler}
               >
-                <FormattedMessage
-                  id="app.save"
-                  defaultMessage="Save"
-                />
+                Save
               </button>
             </div>
           </div>
         </form>
         {showCropper && (
-          <Modal title="app.preview" toggleModal={closeModal}>
+          <Modal title="Preview" toggleModal={closeModal}>
             <div className="row">
               <div className="col-md-6">
                 <div className="card-body" style={{ padding: 0 }}>
@@ -579,10 +530,7 @@ export default class SiteAdd extends Component {
                       onClick={this.cropImage}
                       type="button"
                     >
-                      <FormattedMessage
-                        id="app.saveImage"
-                        defaultMessage="Save Image"
-                      />
+                      Save Image
                     </button>
                   </figure>
                 </div>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import Modal from '../common/Modal';
 import SiteDocumentTable from './siteDocumentTable';
 /* eslint-disable camelcase */
@@ -188,12 +187,7 @@ export default class SiteDocument extends Component {
               >
                 <div className="card no-boxshadow">
                   <div className="card-header main-card-header">
-                    <h5>
-                      <FormattedMessage
-                        id="app.site-document"
-                        defaultMessage="Site documents"
-                      />
-                    </h5>
+                    <h5>Site documents</h5>
                     <div className="add-btn">
                       {show_button && (
                         <button
@@ -308,10 +302,7 @@ export default class SiteDocument extends Component {
                             type="submit"
                             className="fieldsight-btn"
                           >
-                            <FormattedMessage
-                              id="app.save"
-                              defaultMessage="Save"
-                            />
+                            Save
                           </button>
                         </div>
                       </form>

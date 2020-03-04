@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
-import { FormattedMessage } from 'react-intl';
 import format from 'date-fns/format';
 import TableAction from './common/tableAction';
 import GetStatus, { getClass } from './common/getStatus';
@@ -58,12 +57,7 @@ class GeneralFormTable extends Component {
     return (
       <>
         {!loader && data.length === 0 ? (
-          <div>
-            <FormattedMessage
-              id="app.noFormAddedYet."
-              defaultMessage="No Form added yet."
-            />
-          </div>
+          <div>No Form added yet.</div>
         ) : (
           <>
             <Table
@@ -72,53 +66,16 @@ class GeneralFormTable extends Component {
             >
               <thead>
                 <tr>
-                  <th>
-                    <FormattedMessage
-                      id="app.form-title"
-                      defaultMessage="Form Title"
-                    />
-                  </th>
-                  <th>
-                    <FormattedMessage
-                      id="app.response"
-                      defaultMessage="Responses"
-                    />
-                  </th>
-                  <th>
-                    <FormattedMessage
-                      id="app.formGuide"
-                      defaultMessage="Form Guide"
-                    />
-                  </th>
-                  <th>
-                    <FormattedMessage
-                      id="app.assigned-date"
-                      defaultMessage="Assigned Date"
-                    />
-                  </th>
-                  <th>
-                    <FormattedMessage
-                      id="app.defaultStatus"
-                      defaultMessage="Default status"
-                    />
-                  </th>
-                  <th width="15%">
-                    <FormattedMessage
-                      id="app.action"
-                      defaultMessage="Action"
-                    />
-                  </th>
+                  <th>Form Title</th>
+                  <th>Responses</th>
+                  <th>Form Guide</th>
+                  <th>Assigned Date</th>
+                  <th>Default status</th>
+                  <th width="15%">Action</th>
                 </tr>
               </thead>
 
               <tbody>
-                {/* {!loader && data.length === 0 && (
-            <tr>
-              <td colSpan={6}>
-                <p>No Form Data Available</p>
-              </td>
-            </tr>
-          )} */}
                 {!loader &&
                   data.map(item => (
                     <tr key={item.id}>

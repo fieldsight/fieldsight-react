@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
-import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -48,18 +47,10 @@ class ManageScheduledForm extends Component {
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>
-            <FormattedMessage
-              id="app.scheduled-form"
-              defaultMessage="Scheduled Forms"
-            />
-          </h5>
+          <h5>Scheduled Forms</h5>
           <Link to={`/site-submission-responses/${id}/rejected`}>
             <button type="button" className="fieldsight-btn">
-              <FormattedMessage
-                id="app.view-by-status"
-                defaultMessage="View By Status"
-              />
+              View By Status
             </button>
           </Link>
         </div>
@@ -78,12 +69,7 @@ class ManageScheduledForm extends Component {
         {deleted_forms && deleted_forms.length > 0 && (
           <div className="card no-boxshadow">
             <div className="card-header main-card-header sub-card-header">
-              <h5>
-                <FormattedMessage
-                  id="app.deleted-forms"
-                  defaultMessage="Deleted Forms"
-                />
-              </h5>
+              <h5>Deleted Forms</h5>
               <div className="dash-btn">
                 {hide ? (
                   <button
@@ -91,10 +77,7 @@ class ManageScheduledForm extends Component {
                     className="btn-toggle"
                     onClick={this.toggleHide}
                   >
-                    <FormattedMessage
-                      id="app.show"
-                      defaultMessage="Show"
-                    />
+                    Show
                     <div className="handle" />
                   </button>
                 ) : (
@@ -108,10 +91,7 @@ class ManageScheduledForm extends Component {
                       textAlign: 'left',
                     }}
                   >
-                    <FormattedMessage
-                      id="app.hide"
-                      defaultMessage="Hide"
-                    />
+                    Hide
                     <div
                       className="handle"
                       style={{ left: 'auto', right: '0.1875rem' }}

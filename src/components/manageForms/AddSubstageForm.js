@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { FormattedMessage } from 'react-intl';
 
 import InputElement from '../common/InputElement';
 import RadioElement from '../common/RadioElement';
@@ -263,11 +262,10 @@ class AddSubstageForm extends Component {
               tag="input"
               type="text"
               required
-              label="app.name"
+              label="name"
               name="substageTitle"
               value={substageTitle}
               changeHandler={this.handleInputChange}
-              translation
             />
             <InputElement
               classname="border-0"
@@ -275,11 +273,10 @@ class AddSubstageForm extends Component {
               tag="input"
               type="text"
               //   required={true}
-              label="app.description"
+              label="description"
               name="substageDesc"
               value={substageDesc}
               changeHandler={this.handleInputChange}
-              translation
             />
             <div className="selected-form">
               <div className="selected-text">
@@ -294,17 +291,9 @@ class AddSubstageForm extends Component {
                   role="button"
                   onKeyDown={toggleFormModal}
                 >
-                  {!!isEditForm || formTitle ? (
-                    <FormattedMessage
-                      id="app.changeForm"
-                      defaultMessage="Change Form"
-                    />
-                  ) : (
-                    <FormattedMessage
-                      id="app.chooseForm"
-                      defaultMessage="Choose Form"
-                    />
-                  )}
+                  {!!isEditForm || formTitle
+                    ? 'Change Form'
+                    : 'Choose Form'}
                   {!formTitle && (
                     <sup style={{ color: '#ed5261' }}>*</sup>
                   )}
@@ -322,66 +311,51 @@ class AddSubstageForm extends Component {
             tag="input"
             type="number"
             // required={true}
-            label="app.weight"
+            label="weight"
             name="weight"
             value={weight}
             changeHandler={this.handleInputChange}
-            translation
           />
 
           <div className="form-group flexrow checkbox-group">
-            <label>
-              <FormattedMessage
-                id="app.defaultSubmissionMession"
-                defaultMessage="Default submission status"
-              />
-            </label>
+            <label>Default submission status</label>
             <div className="custom-checkbox display-inline">
               <RadioElement
-                label="app.approved"
+                label="approved"
                 className="approved"
                 name="status"
                 value={3}
                 changeHandler={this.handleRadioChange}
                 checked={status === 3}
-                translation
               />
               <RadioElement
-                label="app.pending"
+                label="pending"
                 className="pending"
                 name="status"
                 value={0}
                 changeHandler={this.handleRadioChange}
                 checked={status === 0}
-                translation
               />
               <RadioElement
-                label="app.flagged"
+                label="flagged"
                 className="flagged"
                 name="status"
                 value={2}
                 changeHandler={this.handleRadioChange}
                 checked={status === 2}
-                translation
               />
               <RadioElement
-                label="app.rejected"
+                label="rejected"
                 className="rejected"
                 name="status"
                 value={1}
                 changeHandler={this.handleRadioChange}
                 checked={status === 1}
-                translation
               />
             </div>
           </div>
           <div>
-            <label>
-              <FormattedMessage
-                id="app.regions"
-                defaultMessage="Regions"
-              />
-            </label>
+            <label>Regions</label>
             {hasLoaded && (
               <Select
                 defaultValue={regionSelected}
@@ -392,12 +366,7 @@ class AddSubstageForm extends Component {
             )}
           </div>
           <div>
-            <label>
-              <FormattedMessage
-                id="app.types"
-                defaultMessage="Types"
-              />
-            </label>
+            <label>Types</label>
             {hasLoaded && (
               <Select
                 defaultValue={typeSelected}
@@ -467,7 +436,7 @@ class AddSubstageForm extends Component {
 
           <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
-              <FormattedMessage id="app.save" defaultMessage="Save" />
+              Save
             </button>
           </div>
         </form>

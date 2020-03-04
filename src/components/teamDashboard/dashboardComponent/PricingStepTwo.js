@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/destructuring-assignment */
@@ -95,138 +94,68 @@ class PricingStepTwo extends Component {
             />
             <h6 className="text-center mt-4">
               <strong>
-                <FormattedMessage
-                  id="app.thankuMessage"
-                  defaultMessage="Thank you for signing
-                  up with FieldSight!"
-                />
+                Thank you for signing up with FieldSight!
               </strong>
             </h6>
             <h5 className="text-center mt-2 mb-3">
               <strong>
-                <FormattedMessage
-                  id="app.uHaveSelected"
-                  defaultMessage="You have selected the"
-                />
+                You have selected the
                 {selectedPackage.plan}.
               </strong>
             </h5>
             <p className="text-center mb-4 text-xlight">
-              <FormattedMessage
-                id="app.secondMessage"
-                defaultMessage="To complete the signup process, please provide your payment
-                details."
-              />
+              To complete the signup process, please provide your
+              payment details.
               <br />
-              <FormattedMessage
-                id="app.thirdMessage"
-                defaultMessage="FieldSight subscription fees are charged at the
-                start of delivering service and renew automatically."
-              />
+              FieldSight subscription fees are charged at the start of
+              delivering service and renew automatically.
             </p>
             <div className="row">
               <div className="col-md-3">
                 <h6 className="mt-4">
-                  <strong>
-                    <FormattedMessage
-                      id="app.planDetail"
-                      defaultMessage="Plan Detail"
-                    />
-                    :
-                  </strong>
+                  <strong>Plan Detail :</strong>
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
                     <i className="la la-chevron-circle-right" />
                     <strong>{selectedPackage.submissions}</strong>
-                    <FormattedMessage
-                      id="app.submissions"
-                      defaultMessage="Submissions"
-                    />
+                    Submissions
                   </li>
                   <li>
-                    <strong>
-                      <FormattedMessage
-                        id="app.unlimited"
-                        defaultMessage="Unlimited"
-                      />
-                    </strong>
-                    <FormattedMessage
-                      id="app.userProjectSites"
-                      defaultMessage="Users, Projects, Sites"
-                    />
+                    <strong>Unlimited</strong>
+                    Users, Projects, Sites
                   </li>
                   <li>
-                    <strong>
-                      <FormattedMessage
-                        id="app.unlimited"
-                        defaultMessage="Unlimited"
-                      />
-                    </strong>
-                    <FormattedMessage
-                      id="app.formStageSchedules"
-                      defaultMessage="Forms, Stages & Schedules"
-                    />
+                    <strong>Unlimited</strong>
+                    Forms, Stages & Schedules
                   </li>
                   <li>
-                    <strong>
-                      <FormattedMessage
-                        id="app.unlimited"
-                        defaultMessage="Unlimited"
-                      />
-                    </strong>
-                    <FormattedMessage
-                      id="app.reportDashboardsMaps"
-                      defaultMessage="Reports, Dashboards & Maps"
-                    />
+                    <strong>Unlimited</strong>
+                    Reports, Dashboards & Maps
                   </li>
                   <li>
                     <i className="la la-chevron-circle-right" />
-                    <strong>
-                      <FormattedMessage
-                        id="app.access"
-                        defaultMessage="Access"
-                      />
-                    </strong>
-                    <FormattedMessage
-                      id="app.androidApp"
-                      defaultMessage="to our Android App"
-                    />
+                    <strong>Access</strong>
+                    to our Android App
                   </li>
                 </ul>
               </div>
 
               <div className="col-md-3">
                 <h6 className="mt-4">
-                  <strong>
-                    <FormattedMessage
-                      id="app.planPeriod"
-                      defaultMessage="Plan Period"
-                    />
-                    :
-                  </strong>
+                  <strong>Plan Period :</strong>
                 </h6>
                 <ul className="list-icon mt-4 mb-4">
                   <li>
                     <i className="la la-calendar-check-o" />
-                    <strong>
-                      <FormattedMessage
-                        id="app.startingDate"
-                        defaultMessage="Starting Date"
-                      />
-                    </strong>
+                    <strong>Starting Date</strong>
                     <p>
                       {this.formatDate(new Date(packageStartDate))}
                     </p>
                   </li>
                   <li>
                     <i className="la la-calendar-minus-o" />
-                    <strong>
-                      <FormattedMessage
-                        id="app.endingDate"
-                        defaultMessage="Ending Date"
-                      />
-                    </strong>
+                    <strong>Ending Date</strong>
                     <p>{this.formatDate(new Date(packageEndDate))}</p>
                   </li>
                 </ul>
@@ -234,12 +163,7 @@ class PricingStepTwo extends Component {
               <div className="col-md-6">
                 <div className="card-input-wrap mt-4 mb-4">
                   <div className="checkout">
-                    <p>
-                      <FormattedMessage
-                        id="app.CreditDebit"
-                        defaultMessage="Credit or debit card"
-                      />
-                    </p>
+                    <p>Credit or debit card</p>
                     <CardElement onChange={this.handleChange} />
                     {Object.keys(errors).length > 0 && (
                       <span className="card-error">
@@ -267,10 +191,7 @@ class PricingStepTwo extends Component {
                 }}
               >
                 <i className="la la-long-arrow-left" />
-                <FormattedMessage
-                  id="app.previous"
-                  defaultMessage="Previous"
-                />
+                Previous
               </a>
               <a
                 tabIndex="0"
@@ -280,10 +201,7 @@ class PricingStepTwo extends Component {
                 className="btn btn-primary"
                 onClick={this.handleCardForm}
               >
-                <FormattedMessage
-                  id="app.next"
-                  defaultMessage="Next"
-                />
+                Next
                 <i className="la la-long-arrow-right" />
               </a>
             </div>

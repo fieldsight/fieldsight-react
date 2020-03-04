@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import Table from '../common/Table';
 import Modal from '../common/Modal';
 import InputElement from '../common/InputElement';
@@ -267,16 +266,7 @@ class SiteType extends Component {
     return (
       <>
         <RightContentCard
-          title={
-            !isEmpty(terms) ? (
-              `${terms.site} Type`
-            ) : (
-              <FormattedMessage
-                id="app.siteType"
-                defaultMessage="app.siteType"
-              />
-            )
-          }
+          title={!isEmpty(terms) ? `${terms.site} Type` : 'Site Type'}
           addButton
           toggleModal={toggleModal}
           hideButton
@@ -309,32 +299,27 @@ class SiteType extends Component {
                 tag="input"
                 type="text"
                 required
-                label="app.id"
+                label="id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
-                translation
               />
               <InputElement
                 tag="textarea"
                 type="text"
                 required
-                label="app.type"
+                label="type"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-                translation
               />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  <FormattedMessage
-                    id="app.save"
-                    defaultMessage="Save"
-                  />
+                  Save
                 </button>
               </div>
             </form>

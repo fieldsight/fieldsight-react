@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
 import { Table } from 'react-bootstrap';
 
@@ -76,12 +75,7 @@ export default class TeamUser extends Component {
         <main id="main-content">
           <div className="card">
             <div className="card-header main-card-header sub-card-header">
-              <h5>
-                <FormattedMessage
-                  id="app.team-user"
-                  defaultMessage="Team Users"
-                />
-              </h5>
+              <h5>Team Users</h5>
               <div className="dash-btn">
                 <form
                   className="floating-form"
@@ -89,10 +83,7 @@ export default class TeamUser extends Component {
                 >
                   <div className="form-group mr-0">
                     <label htmlFor="input">
-                      <FormattedMessage
-                        id="app.teams-search"
-                        defaultMessage="Search"
-                      />
+                      Search
                       <input
                         type="search"
                         className="form-control"
@@ -112,30 +103,10 @@ export default class TeamUser extends Component {
               >
                 <thead>
                   <tr>
-                    <th>
-                      <FormattedMessage
-                        id="app.name"
-                        defaultMessage="Name"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.user-name"
-                        defaultMessage="User Name"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.email"
-                        defaultMessage="Email"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.role"
-                        defaultMessage="Role"
-                      />
-                    </th>
+                    <th>Name</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
                   </tr>
                 </thead>
                 <tbody>

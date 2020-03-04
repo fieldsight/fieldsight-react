@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { FormattedMessage } from 'react-intl';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 
 const tokenVal = window.token
@@ -44,27 +43,12 @@ class ReplaceModal extends Component {
       <>
         <form>
           <div className="form-group">
-            <label>
-              <FormattedMessage
-                id="app.attach-file"
-                defaultMessage="Attach File"
-              />
-            </label>
+            <label>Attach File</label>
             <div className="upload-form">
               <div className="upload-wrap">
                 <div className="content">
-                  <h3>
-                    <FormattedMessage
-                      id="app.drag&DropAnFile"
-                      defaultMessage="Drag & Drop an File"
-                    />
-                  </h3>
-                  <span>
-                    <FormattedMessage
-                      id="app.or"
-                      defaultMessage="or"
-                    />
-                  </span>
+                  <h3>Drag & Drop an File</h3>
+                  <span>or</span>
                 </div>
                 <input
                   type="file"
@@ -74,13 +58,9 @@ class ReplaceModal extends Component {
                 />
                 <div className="fieldsight-btn">
                   <label htmlFor="upload-btn">
-                    <FormattedMessage
-                      id="app.upload"
-                      defaultMessage="Upload"
-                    />
+                    Upload
                     <i className="la la-cloud-upload" />
                   </label>
-                  {/* <input type="file" id="upload-btn"  /> */}
                 </div>
               </div>
             </div>

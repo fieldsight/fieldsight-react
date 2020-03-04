@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
 import Loader, { DotLoader } from '../common/Loader';
 import RightContentCard from '../common/RightContentCard';
@@ -130,7 +129,7 @@ export default class MapLayer extends Component {
 
     return (
       <>
-        <RightContentCard title="app.mapLayers">
+        <RightContentCard title="Map Layers">
           {dotLoader && <DotLoader />}
           {!dotLoader && (
             <form onSubmit={onSubmitHandler}>
@@ -149,10 +148,7 @@ export default class MapLayer extends Component {
                   className="fieldsight-btn pull-right"
                   style={{ marginTop: '15px' }}
                 >
-                  <FormattedMessage
-                    id="app.save"
-                    defaultMessage="Save"
-                  />
+                  Save
                 </button>
               </div>
             </form>

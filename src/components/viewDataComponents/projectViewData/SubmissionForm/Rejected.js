@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
 
 import StatusTable from '../../responded/StatusTable';
 import WithPagination from '../../../../hoc/WithPagination';
@@ -46,19 +45,11 @@ class RejectedTable extends Component {
     return (
       <>
         <div className="card-header main-card-header sub-card-header">
-          <h5>
-            <FormattedMessage
-              id="app.rejected-submissions"
-              defaultMessage="Rejected Submissions"
-            />
-          </h5>
+          <h5>Rejected Submissions</h5>
           <div className="dash-btn">
             <Link to={`/project-responses/${id}/general`}>
               <button type="button" className="fieldsight-btn">
-                <FormattedMessage
-                  id="app.view-by-status"
-                  defaultMessage="View By Status"
-                />
+                View By Status
               </button>
             </Link>
           </div>
@@ -74,28 +65,15 @@ class RejectedTable extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      <FormattedMessage
-                        id="app.showing"
-                        defaultMessage="Showing"
-                      />
+                      Showing
                       <span>{fromData}</span>
-                      <FormattedMessage
-                        id="app.to"
-                        defaultMessage="to"
-                      />
+                      to
                       <span>
                         {toData > totalCount ? totalCount : toData}
                       </span>
-                      <FormattedMessage
-                        id="app.of"
-                        defaultMessage="of"
-                      />
+                      of
                       <span>{totalCount}</span>
-                      <FormattedMessage
-                        id="app.entries"
-                        defaultMessage="entries"
-                      />
-                      .
+                      entries .
                     </p>
                   </div>
                   {toData < totalCount ? (
@@ -161,12 +139,7 @@ class RejectedTable extends Component {
               <div className="card-body">
                 <div className="table-footer">
                   <div className="showing-rows">
-                    <p>
-                      <FormattedMessage
-                        id="app.sorryNoData"
-                        defaultMessage="Sorry No Data"
-                      />
-                    </p>
+                    <p>Sorry No Data</p>
                   </div>
                 </div>
               </div>

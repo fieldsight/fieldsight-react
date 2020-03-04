@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import DeleteModel from '../common/DeleteModal';
@@ -135,34 +134,16 @@ class ManageRegion extends Component {
         ? [
             `${terms.region} ID`,
             `${terms.region} Name`,
-            'app.created-date',
-            'app.action',
+            'Created Date',
+            'Action',
           ]
-        : [
-            'app.regionId',
-            'app.regionName',
-            'app.created-date',
-            'app.action',
-          ],
+        : ['Region ID', 'Region Name', 'Created Date', 'Action'],
     };
-    const message = !isEmpty(terms) ? (
-      `${terms.region}`
-    ) : (
-      <FormattedMessage id="app.regions" defaultMessage="Regions" />
-    );
+    const message = !isEmpty(terms) ? `${terms.region}` : 'Regions';
     return (
       <>
         <RightContentCard
-          title={
-            !isEmpty(terms) ? (
-              `${terms.region}`
-            ) : (
-              <FormattedMessage
-                id="app.regions"
-                defaultMessage="Regions"
-              />
-            )
-          }
+          title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
           addButton
           toggleModal={toggleModal}
         >
@@ -187,11 +168,7 @@ class ManageRegion extends Component {
                   width: '97px',
                 }}
               >
-                <FormattedMessage
-                  id="app.turnOff"
-                  defaultMessage="Turn OFF"
-                />
-
+                Turn OFF
                 <div
                   className="handle"
                   style={{ left: 'auto', right: '0.1875rem' }}
@@ -206,11 +183,7 @@ class ManageRegion extends Component {
                   width: '97px',
                 }}
               >
-                <FormattedMessage
-                  id="app.turnOn"
-                  defaultMessage="Turn ON"
-                />
-
+                Turn ON
                 <div
                   className="handle"
                   // style={{ left: 'auto', right: '0.1875rem' }}
@@ -230,16 +203,7 @@ class ManageRegion extends Component {
 
         {showModal && (
           <Modal
-            title={
-              !isEmpty(terms) ? (
-                `${terms.region}`
-              ) : (
-                <FormattedMessage
-                  id="app.regions"
-                  defaultMessage="Regions"
-                />
-              )
-            }
+            title={!isEmpty(terms) ? `${terms.region}` : 'Regions'}
             toggleModal={toggleModal}
           >
             <form
@@ -250,32 +214,27 @@ class ManageRegion extends Component {
                 tag="input"
                 type="text"
                 required
-                label="app.id"
+                label="id"
                 formType="floatingForm"
                 htmlFor="input"
                 name="selectedIdentifier"
                 value={selectedIdentifier}
                 changeHandler={onChangeHandler}
-                translation
               />
               <InputElement
                 tag="textarea"
                 type="text"
                 required
-                label="app.name"
+                label="name"
                 formType="floatingForm"
                 htmlFor="textarea"
                 name="selectedName"
                 value={selectedName}
                 changeHandler={onChangeHandler}
-                translation
               />
               <div className="form-group pull-right no-margin">
                 <button type="submit" className="fieldsight-btn">
-                  <FormattedMessage
-                    id="app.save"
-                    defaultMessage="Save"
-                  />
+                  Save
                 </button>
               </div>
             </form>

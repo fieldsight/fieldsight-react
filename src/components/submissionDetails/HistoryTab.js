@@ -1,7 +1,6 @@
 import React from 'react';
 import format from 'date-fns/format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { FormattedMessage } from 'react-intl';
 
 class HistoryTab extends React.Component {
   render() {
@@ -36,10 +35,7 @@ class HistoryTab extends React.Component {
                           </a>
                           {statusDisplay === 'New Submission' ? (
                             <span>
-                              <FormattedMessage
-                                id="app.submitted"
-                                defaultMessage="submitted a"
-                              />
+                              submitted a
                               <strong
                                 onKeyDown={this.handleKeyDown}
                                 role="button"
@@ -48,24 +44,13 @@ class HistoryTab extends React.Component {
                                   getSubmissionDetail(history.url);
                                 }}
                               >
-                                <FormattedMessage
-                                  id="app.newVersion"
-                                  defaultMessage="New version"
-                                />
+                                New version
                               </strong>
-                              <FormattedMessage
-                                id="app.ofThisForm"
-                                defaultMessage="of this form"
-                              />
+                              of this form
                             </span>
                           ) : (
                             <>
-                              <span>
-                                <FormattedMessage
-                                  id="app.markedThisSubmissionAs"
-                                  defaultMessage="marked this submission as"
-                                />
-                              </span>
+                              <span>marked this submission as</span>
                               <strong
                                 className={
                                   statusDisplay &&
@@ -100,13 +85,7 @@ class HistoryTab extends React.Component {
                   );
                 })
               ) : (
-                <p>
-                  {' '}
-                  <FormattedMessage
-                    id="app.noHistoryAvailable"
-                    defaultMessage="No History Available"
-                  />
-                </p>
+                <p>No History Available</p>
               )}
             </ul>
           </div>

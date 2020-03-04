@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { FormattedMessage } from 'react-intl';
 import DatePicker from 'react-datepicker';
 import RadioElement from '../../common/RadioElement';
 import CheckBox from '../../common/CheckBox';
@@ -613,12 +612,7 @@ class GlobalModalForm extends Component {
             <>
               {/* // for schedule form */}
               <div className="form-group checkbox-group">
-                <label>
-                  <FormattedMessage
-                    id="app.typeofSchedule"
-                    defaultMessage="Type of schedule"
-                  />
-                </label>
+                <label>Type of schedule</label>
                 <div className="custom-checkbox display-inline">
                   <RadioElement
                     label="Daily"
@@ -825,48 +819,39 @@ class GlobalModalForm extends Component {
           )}
 
           <div className="form-group flexrow checkbox-group">
-            <label>
-              <FormattedMessage
-                id="app.defaultSubmissionStatus"
-                defaultMessage="Default submission status"
-              />
-            </label>
+            <label>Default submission status</label>
             <div className="custom-checkbox display-inline">
               <RadioElement
-                label="app.approved"
+                label="approved"
                 className="approved"
                 name="status"
                 value={3}
                 changeHandler={this.handleRadioChange}
                 checked={status === 3}
-                translation
               />
               <RadioElement
-                label="app.pending"
+                label="pending"
                 className="pending"
                 name="status"
                 value={0}
                 changeHandler={this.handleRadioChange}
                 checked={status === 0}
-                translation
               />
               <RadioElement
-                label="app.flagged"
+                label="flagged"
                 className="flagged"
                 name="status"
                 value={2}
                 changeHandler={this.handleRadioChange}
                 checked={status === 2}
-                translation
               />
               <RadioElement
-                label="app.rejected"
+                label="rejected"
                 className="rejected"
                 name="status"
                 value={1}
                 changeHandler={this.handleRadioChange}
                 checked={status === 1}
-                translation
               />
             </div>
           </div>
@@ -874,12 +859,7 @@ class GlobalModalForm extends Component {
             <>
               {regionDropdown && regionDropdown.length > 0 && (
                 <div>
-                  <label>
-                    <FormattedMessage
-                      id="app.regions"
-                      defaultMessage="Regions"
-                    />
-                  </label>
+                  <label>Regions</label>
                   {hasLoaded && (
                     <Select
                       defaultValue={regionSelected}
@@ -892,12 +872,7 @@ class GlobalModalForm extends Component {
               )}
               {typeDropdown && typeDropdown.length > 0 && (
                 <div>
-                  <label>
-                    <FormattedMessage
-                      id="app.types"
-                      defaultMessage="Types"
-                    />
-                  </label>
+                  <label>Types</label>
                   {hasLoaded && (
                     <Select
                       defaultValue={typeSelected}
@@ -969,7 +944,7 @@ class GlobalModalForm extends Component {
           </div> */}
           <div className="form-group pull-right no-margin">
             <button type="submit" className="fieldsight-btn">
-              <FormattedMessage id="app.save" defaultMessage="Save" />
+              Save
             </button>
           </div>
         </form>

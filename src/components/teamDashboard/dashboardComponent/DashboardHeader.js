@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
 import { AvatarContentLoader } from '../../common/Loader';
 import CountCard from '../../common/CountCard';
 /* eslint-disable camelcase */
@@ -95,13 +94,7 @@ class DashboardHeader extends PureComponent {
               >
                 <i className="la la-cog" />
 
-                <span>
-                  <FormattedMessage
-                    id="app.manage"
-                    defaultMessage="Manage"
-                    description="Manage"
-                  />
-                </span>
+                <span>Manage</span>
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-right">
                 {ManageDropdown.map(item => (
@@ -110,11 +103,7 @@ class DashboardHeader extends PureComponent {
                     key={item.key}
                     target="_blank"
                   >
-                    <FormattedMessage
-                      id={item.id}
-                      defaultMessage={item.title}
-                      description={item.title}
-                    />
+                    {item.title}
                   </Dropdown.Item>
                 ))}
               </Dropdown.Menu>
