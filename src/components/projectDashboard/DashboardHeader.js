@@ -84,7 +84,7 @@ class DashboardHeader extends React.Component {
     const DataDropdown = [
       {
         title: 'Generate Report',
-        link: `/fieldsight/project-dashboard/${id}/`,
+        link: `/fieldsight/application/#/project/${id}/report`,
         id: 'app.generate-report',
       },
       {

@@ -53,20 +53,21 @@ import CreateProfile from './ProfileAdd';
 import ChangePassword from './changePassword';
 
 import SyncSchedule from './syncSchedule';
-// import SelectElement from "../components/common/SelectElement";
 
-import AdminDashboard from './adminDashboard';
-import SuperAdminFormEdit from './superAdminEdit';
-import SuperAdminForm from './superAdminForm';
-import SuperAdminSetting from './adminDashboard/organizationSettings/settings';
-import OragnizatonProjectList from './organizationProjectList';
-import OrganizationUserList from './organizationUserList';
-import OrganizationTeams from './organizationTeamList';
-import TotalOrganizationSubmission from './adminDashboard/organizationSettings/totalOrganizationSubmission';
-import TotalSiteSubmission from './adminDashboard/organizationSettings/totalSiteSubmission';
-
-import OrganizationExport from './excelExport/organizationExport';
+// import OrganizationExport from './excelExport/organizationExport';
 import ExcelExport from './excelExport';
+
+import StandardReports from './standardReports';
+import FormDataFilter from './standardReports/FormDataFilter';
+import ActivityExportFile from './standardReports/ActivityExportFile';
+import UserExportReport from './standardReports/UserExportReport';
+import ExportDataFilter from './standardReports/ExportDataFilter';
+
+import CustomReports from './customReports';
+import AddNewReport from './customReports/addNewReport';
+import DataExport from './customReports/dataExport';
+import ViewReport from './viewReports';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -190,10 +191,7 @@ class App extends Component {
                   <Teams {...props} orgs="organization" />
                 )}
               />
-              <Route
-                path="/organization-teams/:id"
-                render={props => <OrganizationTeams {...props} />}
-              />
+
               <Route
                 path="/map"
                 render={props => <Mapparent {...props} />}
@@ -309,51 +307,10 @@ class App extends Component {
               />
 
               <Route
-                path="/organization-dashboard/:id"
-                render={props => <AdminDashboard {...props} />}
-              />
-              <Route
-                path="/create-organization"
-                render={props => <SuperAdminForm {...props} />}
-              />
-              <Route
-                path="/organization-exports/:orgId/:orgLibId"
-                render={props => <OrganizationExport {...props} />}
-              />
-              <Route
-                path="/edit-admin/:id"
-                render={props => <SuperAdminFormEdit {...props} />}
-              />
-              <Route
-                path="/organization-settings/:id"
-                render={props => <SuperAdminSetting {...props} />}
-              />
-
-              <Route
                 path="/exports/:isProject/:formId/:id/:version"
                 render={props => <ExcelExport {...props} />}
               />
 
-              <Route
-                path="/organization-projects/:id"
-                render={props => (
-                  <OragnizatonProjectList {...props} />
-                )}
-              />
-              <Route
-                path="/organization-users/:id"
-                render={props => <OrganizationUserList {...props} />}
-              />
-              <Route
-                path="/organization-submission/:orgId/:id/"
-                render={props => (
-                  <TotalOrganizationSubmission {...props} />
-                )}
-              />
-              <Route
-                path="/organization-submission-data/:id/:pid"
-                render={props => <TotalSiteSubmission {...props} />}
-              />
               <Route
                 path="/proj-mapfilter/:id"
                 render={props => <MapFilter {...props} />}
@@ -361,6 +318,48 @@ class App extends Component {
               <Route
                 path="/team-mapfilter/:id"
                 render={props => <MapFilter {...props} />}
+              />
+              <Route
+                path="/project/:projectId/report"
+                render={props => <StandardReports {...props} />}
+              />
+              <Route
+                path="/export-data/:id/:reportType"
+                render={props => <ExportDataFilter {...props} />}
+              />
+              <Route
+                path="/form-data/:id/:fid"
+                render={props => <FormDataFilter {...props} />}
+              />
+              <Route
+                path="/activity-export/:id/:reportType"
+                render={props => <ActivityExportFile {...props} />}
+              />
+              <Route
+                path="/user-export/:id/:reportType"
+                render={props => <UserExportReport {...props} />}
+              />
+              <Route
+                path="/report-list/:projectId/"
+                render={props => <CustomReports {...props} />}
+              />
+              <Route
+                path="/view-report/:pid/:id"
+                render={props => <ViewReport {...props} />}
+              />
+              <Route
+                path="/data-export/:id"
+                render={props => <DataExport {...props} />}
+              />
+              <Route
+                exact
+                path="/project/:id/add-report"
+                render={props => <AddNewReport {...props} />}
+              />
+              <Route
+                exact
+                path="/project/:id/edit-report/:reportId"
+                render={props => <AddNewReport {...props} />}
               />
             </Switch>
             <ToastContainer />

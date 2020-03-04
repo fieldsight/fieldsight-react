@@ -84,7 +84,7 @@ export const GET_SITE_VIEW = 'GET_SITE_VIEW';
 // Translation
 // export const GET_TRANSLATION = "GET_TRANSLATION";
 
-// Reports
+// Reports (custom reports)
 export const GET_METRICS_DATA = 'GET_METRICS_DATA';
 export const GET_FORM = 'GET_FORM';
 export const GET_TO_FILTER_DATA = 'GET_TO_FILTER_DATA';
@@ -125,7 +125,7 @@ export const CREATE_EXPORT = 'CREATE_EXPORT';
 export const DELETE_EXPORT = 'DELETE_EXPORT';
 export const DOWNLOAD_EXPORT = 'DOWNLOAD_EXPORT';
 
-// templates
+// templates (standard reports)
 export const GET_FORM_TYPES = 'GET_FORM_TYPES';
 export const GET_REPORT_LIST = 'GET_REPORT_LIST';
 export const GET_REGIONS = 'GET_REGIONS';
