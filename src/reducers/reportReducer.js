@@ -9,6 +9,7 @@ import {
   GET_CUSTOM_REPORT_TABLE_DATA,
   GET_TO_FILTER_DATA,
 } from '../actions/types';
+// custom report reducer
 
 const initialState = {
   reportTypes: [],

@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Axios from 'axios';
 
 import TeamLeftSidebar from '../leftSidebar/TeamLeftSieBar';
-import EditTeam from '../editTeam/EditTeam';
+import EditTeam from '../editTeam';
 import TeamMapLayer from '../mapLayer/TeamMapLayer';
 import AccountInfoLayout from '../accountInfo/AccountInfoLayout';
 

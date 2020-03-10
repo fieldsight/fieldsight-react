@@ -8,6 +8,8 @@ import {
   EXPORT_EXCEL_REPORT,
 } from '../actions/types';
 
+// standard report reducer
+
 const initialState = {
   customReports: [],
   standardReports: [],

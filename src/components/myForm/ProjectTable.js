@@ -5,7 +5,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PreviewModal from './PreviewModal';
 import { DotLoader } from './Loader';
-import { successToast } from './toastHandler';
+import { successToast } from '../../utils/toastHandler';
 /* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key  */
 /* eslint-disable react/no-unused-state */

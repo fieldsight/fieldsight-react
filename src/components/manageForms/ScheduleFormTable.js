@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import format from 'date-fns/format';
-import TableAction from './common/tableAction';
-import GetStatus, { getClass } from './common/getStatus';
+import TableAction from './common/TableAction';
+import GetStatus, { getClass } from './common/GetStatus';
 
 /* eslint-disable react/destructuring-assignment */
 

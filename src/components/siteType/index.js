@@ -12,7 +12,7 @@ import Warning from '../common/DeleteModal';
 /* eslint-disable  react/sort-comp */
 
 const tableHeader = {
-  siteTypes: ['app.id', 'app.type', 'app.action'],
+  siteTypes: ['ID', 'Type', 'Action'],
 };
 
 const url = 'fv3/api/project-site-types/';

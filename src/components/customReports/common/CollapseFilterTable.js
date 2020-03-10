@@ -7,7 +7,7 @@ import { getCustomReportTableData } from '../../../actions/reportActions';
 import { successToast } from '../../../utils/toastHandler';
 import Modal from '../../common/Modal';
 import Sheet from '../../../static/images/sheets.png';
-import Form from '../../syncSchedule/form';
+import Form from '../../syncSchedule/Form';
 import {
   getScheduleType,
   getDayOnWeeklySchedule,

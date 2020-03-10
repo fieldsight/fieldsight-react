@@ -11,6 +11,7 @@ import {
   GET_TO_FILTER_DATA,
 } from './types';
 /* eslint-disable */
+// custom report actions
 
 export const getMetricsData = projectId => dispatch => {
   dispatch({ type: REPORT_LOADER });

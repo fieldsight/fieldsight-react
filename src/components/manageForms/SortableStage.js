@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 
-import SubStageTable from './subStageTable';
+import SubStageTable from './SubStageTable';
 import { DotLoader } from '../myForm/Loader';
 /* eslint-disable react/destructuring-assignment */
 

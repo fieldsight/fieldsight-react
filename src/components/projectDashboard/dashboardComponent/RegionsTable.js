@@ -18,15 +18,10 @@ class RegionsTable extends React.PureComponent {
         ? [
             `${terms.region} ID`,
             `${terms.region} Name`,
-            'app.created-date',
-            'app.totalSites',
+            'Created Date',
+            'Total Sites',
           ]
-        : [
-            'app.regionId',
-            'app.regionName',
-            'app.created-date',
-            'app.totalSites',
-          ],
+        : ['Region ID', 'Region Name', 'Created Date', 'Total Sites'],
     };
     return (
       <div className="card-body">

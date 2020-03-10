@@ -3,7 +3,7 @@ import axios from 'axios';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { DotLoader } from './Loader';
-import { successToast } from './toastHandler';
+import { successToast } from '../../utils/toastHandler';
 /* eslint-disable react/destructuring-assignment */
 
 const url = 'fv3/api/form/';

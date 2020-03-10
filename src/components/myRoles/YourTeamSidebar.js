@@ -17,7 +17,7 @@ class YourTeamSideBar extends Component {
   };
 
   dashboardHandler = id => {
-    console.log(id, 'id');
+    // console.log(id, 'id');
     return id !== ''
       ? this.props.history.push(`organization-dashboard/${id}`)
       : '';

@@ -9,8 +9,8 @@ import {
   REFRESH_GEOJSONDATA,
   GET_GEOLAYERS_LIST,
 } from './types';
-import worker from '../components/mapfilter/webWorker/filterWorker';
-import WebWorker from '../components/mapfilter/webWorker/workerSetup';
+import worker from '../components/mapfilter/webWorker/FilterWorker';
+import WebWorker from '../components/mapfilter/webWorker/WorkerSetup';
 
 export const getProjectsList = (id, urlRole) => dispatch => {
   if (urlRole === 'project') {

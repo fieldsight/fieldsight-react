@@ -21,19 +21,19 @@ class TeamLeftSidebar extends Component {
         to: `${url}`,
         path: `${url}`,
         title: 'Team Information',
-        id: 'app.teamInformation',
+        id: 'Team Information',
       },
       {
         to: `${url}/map-layer`,
         path: `${url}/map-layer`,
         title: 'Map Layers',
-        id: 'app.mapLayers',
+        id: 'Map Layers',
       },
       {
         to: `${url}/subscription/team-settings`,
         path: `${url}/subscription/team-settings`,
         title: 'Account Information',
-        id: 'app.accountInformation',
+        id: 'Account Information',
       },
     ];
 

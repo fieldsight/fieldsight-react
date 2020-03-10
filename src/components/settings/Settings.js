@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import LeftSidebar from '../leftSidebar/LeftSidebar';
-import EditProject from '../editProject/EditProject';
-import SiteType from '../siteType/SiteType';
+import EditProject from '../editProject';
+import SiteType from '../siteType';
 import SiteInformation from '../siteInfo/SiteInformation';
 import SiteManage from '../SiteManage';
 import ManageRegion from '../manageRegion/ManageRegion';

@@ -23,36 +23,34 @@ class LeftSidebar extends Component {
       {
         to: `${url}`,
         path: `${url}`,
-        title: 'app.projectInformation',
+        title: 'Project Information',
       },
       {
         to: `${url}/site-type`,
         path: `${url}/site-type`,
-        title: !isEmpty(terms)
-          ? `${terms.site} Types`
-          : 'app.siteTypes',
+        title: !isEmpty(terms) ? `${terms.site} Types` : 'Site Types',
       },
       {
         to: `${url}/site-information`,
         path: `${url}/site-information`,
         title: !isEmpty(terms)
           ? `${terms.site} Information`
-          : 'app.siteInformation',
+          : 'Site Information',
       },
       {
         to: `${url}/manage-region`,
         path: `${url}/manage-region`,
-        title: !isEmpty(terms) ? `${terms.region}` : 'app.regions',
+        title: !isEmpty(terms) ? `${terms.region}` : 'Regions',
       },
       {
         to: `${url}/map-layer`,
         path: `${url}/map-layer`,
-        title: 'app.mapLayers',
+        title: 'Map Layers',
       },
       {
         to: `${url}/term-and-label`,
         path: `${url}/term-and-label`,
-        title: 'app.termsAndLabels',
+        title: 'Terms And Labels',
       },
     ];
 

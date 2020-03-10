@@ -9,6 +9,8 @@ import {
   EXPORT_EXCEL_REPORT,
 } from './types';
 
+// standard report actions
+
 export const getReportList = id => dispatch => {
   axios
     .get(`/v4/api/reporting/reports-list/${id}/?type=custom`)

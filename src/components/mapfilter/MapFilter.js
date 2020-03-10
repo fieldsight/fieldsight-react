@@ -5,8 +5,8 @@ import L from 'leaflet';
 import Axios from 'axios';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import worker from './webWorker/filterWorker';
-import WebWorker from './webWorker/workerSetup';
+import worker from './webWorker/FilterWorker';
+import WebWorker from './webWorker/WorkerSetup';
 import Loader from '../common/Loader';
 import MapComponent from './MapComponent';
 import MapLeftTools from './MapLeftTools';
@@ -22,7 +22,7 @@ import {
   refreshGeojsonData,
   getGeolayersList,
 } from '../../actions/mapFilterActions';
-import MainSidebarTab from './SidebarTabsComponents/MainSidebarTab';
+import MainSidebarTab from './sidebarTabsComponents/MainSidebarTab';
 
 const INITIAL_STATE = {
   height: 0,

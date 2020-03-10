@@ -16,7 +16,7 @@ import './teamCss.css';
 import axios from 'axios';
 import Icon from '../../static/images/marker.png';
 import 'animate.css/animate.min.css';
-import { calculaterange } from './functionss';
+import { calculaterange } from './Functionss';
 
 require('leaflet.vectorgrid/dist/Leaflet.VectorGrid.bundled');
 const giphy = require('../../static/images/giphy.gif');

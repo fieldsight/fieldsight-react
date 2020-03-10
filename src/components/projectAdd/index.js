@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Edit from '../common/editProject';
+import Edit from '../common/EditProject';
 import { errorToast, successToast } from '../../utils/toastHandler';
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
