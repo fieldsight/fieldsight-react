@@ -8,8 +8,8 @@ import {
   deleteOrgExport,
 } from '../../actions/superAdminDashboardActions';
 import { errorToast, successToast } from '../../utils/toastHandler';
-import ExportTable from './exportTable';
-// import AdvancedExportModal from './advanceExportModal';
+import ExportTable from './ExportTable';
+// import AdvancedExportModal from './AdvanceExportModal';
 import DeleteModal from '../common/DeleteModal';
 /* eslint-disable */
 

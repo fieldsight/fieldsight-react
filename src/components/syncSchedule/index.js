@@ -4,10 +4,10 @@ import { toast } from 'react-toastify';
 
 import { DotLoader } from '../myForm/Loader';
 import Modal from '../common/Modal';
-import SyncScheduleForm from './form';
-import ReportTable from './reportTable';
-import StandardReportTable from './standardReportTable';
-import StageReportTable from './stageReportTable';
+import SyncScheduleForm from './Form';
+import ReportTable from './ReportTable';
+import StandardReportTable from './StandardReportTable';
+import StageReportTable from './StageReportTable';
 import { errorToast } from '../../utils/toastHandler';
 
 export const formatDate = e => {

@@ -22,7 +22,7 @@ import {
   refreshGeojsonData,
   getGeolayersList,
 } from '../../actions/mapFilterActions';
-import MainSidebarTab from './sidebarTabsComponents/MainSidebarTab';
+import MainSidebarTab from './SidebarTabsComponents/MainSidebarTab';
 
 const INITIAL_STATE = {
   height: 0,

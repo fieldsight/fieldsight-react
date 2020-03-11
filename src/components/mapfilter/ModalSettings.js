@@ -2,9 +2,9 @@
 import React, { PureComponent } from 'react';
 
 import 'react-select-2/dist/css/react-select-2.css';
-import Filters from './modalOptions/Filters';
-import Metrics from './modalOptions/Metrics';
-import Layers from './modalOptions/Layers';
+import Filters from './ModalOptions/Filters';
+import Metrics from './ModalOptions/Metrics';
+import Layers from './ModalOptions/Layers';
 
 class ModalSettings extends PureComponent {
   constructor(props) {

@@ -15,7 +15,7 @@ import PrintControlDefault from 'react-leaflet-easyprint';
 import MeasureControlDefault from 'react-leaflet-measure';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
-import ProgressLegend from './legendComponents/ProgressLegend';
+import ProgressLegend from './LegendComponents/ProgressLegend';
 // import worker from './webWorker/markerColorChangeWorker';
 // import WebWorker from './webWorker/workerSetup';
 
