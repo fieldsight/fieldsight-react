@@ -13,11 +13,14 @@ const kpiUrl = window.kpi_base_url
   : 'https://kpi.naxa.com.np/';
 
 class ReplaceModal extends Component {
-  state = {
-    file: {},
-    fileName: '',
-    hasFile: false,
-  };
+  constructor(params) {
+    super(params);
+    this.state = {
+      file: {},
+      fileName: '',
+      hasFile: false,
+    };
+  }
 
   onChangeHandler = e => {
     e.preventDefault();
@@ -34,10 +37,10 @@ class ReplaceModal extends Component {
       formData.append('destination', destinationUrl);
 
       axios
-        .post(kpiUrl + 'imports/', formData, {
+        .post(`${kpiUrl}imports/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + tokenVal,
+            Authorization: `Token${tokenVal}`,
           },
         })
         .then(res => {
@@ -80,14 +83,17 @@ class ReplaceModal extends Component {
                 return (
                   <section>
                     <div className="upload-form">
-                      <i className="la la-file-o"></i>
+                      <i className="la la-file-o" />
                       <span>{fileName}</span>
                     </div>
                     <div {...getRootProps()}>
                       <input {...getInputProps()} multiple={false} />
                       <div className="upload-icon" />
 
-                      <button className="fieldsight-btn">
+                      <button
+                        type="button"
+                        className="fieldsight-btn"
+                      >
                         Upload
                         <i className="la la-cloud-upload" />
                       </button>
@@ -114,7 +120,10 @@ class ReplaceModal extends Component {
                             />
                             <div className="upload-icon" />
                             <h3>Upload XLS file</h3>
-                            <button className="fieldsight-btn">
+                            <button
+                              className="fieldsight-btn"
+                              type="button"
+                            >
                               Upload
                               <i className="la la-cloud-upload" />
                             </button>

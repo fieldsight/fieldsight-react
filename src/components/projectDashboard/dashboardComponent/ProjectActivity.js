@@ -35,7 +35,7 @@ class ProjectActivity extends React.PureComponent {
       <div className="dashboard-counter mrt-30 bg-counter">
         <div className="card">
           <div className="card-header main-card-header sub-card-header">
-            <h5>Progress table</h5>
+            <h5>Project Activity</h5>
           </div>
           <div className="card-body">
             <div className="row">

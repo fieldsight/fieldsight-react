@@ -6,8 +6,8 @@ import {
   GET_PROGRESS_TABLE_DATA,
   GET_SURVEY_FORM,
   GET_CHART_DATA,
+  GET_PROJECT_LOGS,
 } from './types';
-import { successToast, errorToast } from '../utils/toastHandler';
 
 export const getProjectDashboard = id => dispatch => {
   dispatch({

@@ -2,17 +2,19 @@ import React, { PureComponent } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PreviewModal from './PreviewModal';
-import ReplaceModal from './ReplaceModal';
 import ShareModal from './ShareModal';
 /* eslint-disable react/prop-types  */
 
-class FormShare extends Component {
-  state = {
-    shareOption: false,
-  };
-
+class FormShare extends PureComponent {
   render() {
-    const { item, replaceToggleModal } = this.props;
+    const {
+      item,
+      replaceToggleModal,
+      commonPopupHandler,
+      OpenTabHandler,
+      deleteHandler,
+      shareToggle,
+    } = this.props;
     return (
       <tr key={item.id_string}>
         <td style={{ width: '50%' }}>{item.title}</td>
@@ -114,29 +116,11 @@ class FormShare extends Component {
               onClick={() => {
                 replaceToggleModal(item.id_string, item.edit_url);
               }}
-              role="button"
-              tabIndex="0"
-              // this.props.commonPopupHandler(
-              //   e,
-              //   ReplaceModal,
-              //   item.edit_url,
-              //   "Replace Form",
-              //   "replace",
-              //   item.id_string
-              // )
-              // }
               className="td-edit-btn td-btn"
               tabIndex="0"
               role="button"
-              onKeyDown={e => {
-                commonPopupHandler(
-                  e,
-                  ReplaceModal,
-                  item.edit_url,
-                  'Replace Form',
-                  'replace',
-                  item.id_string,
-                );
+              onKeyDown={() => {
+                replaceToggleModal(item.id_string, item.edit_url);
               }}
             >
               <i className="la la-refresh" />
@@ -168,9 +152,7 @@ class FormShare extends Component {
               overlay={<Tooltip id="tooltip-disabled">Share</Tooltip>}
             >
               <a
-                onClick={e =>
-                  this.props.shareToggle(e, item.id_string)
-                }
+                onClick={e => shareToggle(e, item.id_string)}
                 className="td-share-btn td-btn"
                 tabIndex="0"
                 role="button"

@@ -5,7 +5,7 @@ import SharedTable from './SharedTable';
 /* eslint-disable react/prop-types  */
 /* eslint-disable camelcase */
 
-class MyFormContent extends Component {
+class MyFormContent extends PureComponent {
   render() {
     const { OpenTabHandler, commonPopupHandler } = this.props;
     return (
@@ -20,7 +20,7 @@ class MyFormContent extends Component {
                     <h5>My Forms</h5>
                     <div className="add-btn">
                       <a
-                        href={'/forms/create/'}
+                        href="/forms/create/"
                         target="_blank"
                         data-tab="site-popup"
                         rel="noopener noreferrer"

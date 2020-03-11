@@ -29,7 +29,7 @@ export const UPDATE_SITE_LOGO = 'UPDATE_SITE_LOGO';
 // export const SITE_PICTURES_ERR = "SITE_PICTURES_ERR";
 // export const SITE_LOGS_ERR = "SITE_LOGS_ERR";
 
-//Project Dashbaord Actions
+// Project Dashbaord Actions
 export const GET_PROJECT_DASHBOARD = 'GET_PROJECT_DASHBOARD';
 export const GET_PROJECT_METAS = 'GET_PROJECT_METAS';
 export const GET_PROJECT_SUBMISSIONS = 'GET_PROJECT_SUBMISSIONS';

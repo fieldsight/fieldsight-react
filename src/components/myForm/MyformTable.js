@@ -7,24 +7,29 @@ import { DotLoader } from './Loader';
 import Modal from '../common/Modal';
 import DeleteModal from '../common/DeleteModal';
 import ReplaceModal from './ReplaceModal';
+/* eslint-disable react/no-unused-state */
 
 const url = 'fv3/api/myforms/';
 const deleteUrl = '/fv3/api/form/delete/';
 
 class MyformTable extends Component {
   _isMounted = false;
-  state = {
-    project_list: [],
-    list: [],
-    shareOption: false,
-    dLoader: true,
-    tblDiv: false,
-    showDeleteConfirmation: false,
-    delete_id: null,
-    showReplace: false,
-    assetUid: '',
-    modalDatas: '',
-  };
+
+  constructor(params) {
+    super(params);
+    this.state = {
+      project_list: [],
+      list: [],
+      shareOption: false,
+      dLoader: true,
+      tblDiv: false,
+      showDeleteConfirmation: false,
+      delete_id: null,
+      showReplace: false,
+      assetUid: '',
+      modalDatas: '',
+    };
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -82,13 +87,13 @@ class MyformTable extends Component {
     });
   };
 
-  replaceOptionToggle = (id, url) => {
+  replaceOptionToggle = (id, toUrl) => {
     this.setState(state => {
-      if (id && url) {
+      if (id && toUrl) {
         return {
           showReplace: !state.showReplace,
           assetUid: id,
-          modalDatas: url,
+          modalDatas: toUrl,
         };
       }
       return {
@@ -154,7 +159,7 @@ class MyformTable extends Component {
                 <tbody>
                   {this.state.list.map((item, i) => (
                     <FormShare
-                      key={i + 1}
+                      key={item.id_string}
                       item={item}
                       OpenTabHandler={OpenTabHandler}
                       commonPopupHandler={commonPopupHandler}

@@ -32,7 +32,6 @@ class SiteTable extends Component {
       pageNum,
       paginationHandler,
       siteId,
-      renderPageNumbers,
     } = this.props;
     return (
       <>
@@ -206,7 +205,7 @@ class SiteTable extends Component {
                   </li>
                 )}
 
-                {!!this.props.profileId
+                {this.props.profileId
                   ? this.props.renderPageNumbers({
                       type: 'siteListByProfileId',
                       projectId: this.props.siteId,
@@ -218,7 +217,7 @@ class SiteTable extends Component {
                     })}
 
                 {this.props.pageNum !== this.props.totalPage && (
-                  <li className={`page-item  `}>
+                  <li className="page-item">
                     <a
                       tabIndex="0"
                       role="button"

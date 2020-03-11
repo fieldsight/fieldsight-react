@@ -7,18 +7,21 @@ import format from 'date-fns/format';
 import uuid from 'uuid/v4';
 import SubmissionModal from './SubmissionModal';
 import { TableContentLoader } from '../../common/Loader';
-
+/* eslint-disable camelcase */
 class DatatablePage extends Component {
-  state = {
-    siteList: [],
-    totalCount: 0,
-    toData: 20,
-    fromData: 1,
-    pageNum: 1,
-    dLoader: true,
-    per_page: 20,
-    totalPage: null,
-  };
+  constructor(params) {
+    super(params);
+    this.state = {
+      siteList: [],
+      totalCount: 0,
+      toData: 20,
+      fromData: 1,
+      pageNum: 1,
+      dLoader: true,
+      // per_page: 20,
+      totalPage: null,
+    };
+  }
 
   componentDidMount() {
     const { pageNum } = this.state;
@@ -57,35 +60,42 @@ class DatatablePage extends Component {
           });
         }
       })
-      .catch(err => {});
+      .catch(() => {});
   };
 
   renderPageNumbers = () => {
-    if (this.state.totalPage) {
+    const { totalPage, pageNum } = this.state;
+    if (totalPage) {
       const pageNumbers = [];
-      for (let i = 1; i <= this.state.totalPage; i++) {
+      for (let i = 1; i <= totalPage; i + 1) {
         pageNumbers.push(i);
       }
 
       return pageNumbers.map(number => {
-        let classes = this.state.pageNum === number ? 'current' : '';
+        const classes = pageNum === number ? 'current' : '';
 
         if (
-          number == 1 ||
-          number == this.state.totalPage ||
-          (number >= this.state.pageNum - 2 &&
-            number <= this.state.pageNum + 2)
+          number === 1 ||
+          number === totalPage ||
+          (number >= pageNum - 2 && number <= pageNum + 2)
         ) {
           return (
             <li key={number} className={classes}>
-              <a onClick={() => this.paginationHandler(number, null)}>
+              <a
+                role="button"
+                tabIndex="0"
+                onClick={() => this.paginationHandler(number, null)}
+                onKeyDown={() => this.paginationHandler(number, null)}
+              >
                 {number}
               </a>
             </li>
           );
         }
+        return null;
       });
     }
+    return null;
   };
 
   render() {
@@ -122,7 +132,10 @@ class DatatablePage extends Component {
               {hasWritePermission && (
                 <div className="add-btn">
                   <a
+                    role="button"
+                    tabIndex="0"
                     onClick={() => openModal('Submission')}
+                    onKeyDown={() => openModal('Submission')}
                     data-tab="scheduled-popup"
                   >
                     <span>
@@ -158,12 +171,13 @@ class DatatablePage extends Component {
                     </thead>
 
                     <tbody>
-                      {siteList.map((submission, i) => (
+                      {siteList.map(submission => (
                         <tr key={uuid()}>
                           <td>
                             <a
                               href={`/fieldsight/application/?submission=${submission.instance_id}#/submission-details`}
                               target="_blank"
+                              rel="noopener noreferrer"
                             >
                               {submission.form}
                             </a>
@@ -174,7 +188,7 @@ class DatatablePage extends Component {
                             <span
                               className={submission.status.toLowerCase()}
                             >
-                              {submission.status}{' '}
+                              {submission.status}
                             </span>
                           </td>
                           <td style={{ width: '25%' }}>
@@ -207,14 +221,15 @@ class DatatablePage extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing <span>{fromData}</span> to{' '}
+                      Showing
+                      <span>{fromData}</span>
+                      to
                       <span>
-                        {' '}
-                        {toData > totalCount
-                          ? totalCount
-                          : toData}{' '}
-                      </span>{' '}
-                      of <span>{totalCount}</span> entries.
+                        {toData > totalCount ? totalCount : toData}
+                      </span>
+                      of
+                      <span>{totalCount}</span>
+                      entries.
                     </p>
                   </div>
                   {/* {toData < totalCount ? ( */}
@@ -223,15 +238,26 @@ class DatatablePage extends Component {
                       {pageNum !== 1 && (
                         <li className="page-item">
                           <a
-                            onClick={e =>
+                            role="button"
+                            tabIndex="0"
+                            onClick={e => {
                               this.paginationHandler(
                                 pageNum - 1,
                                 null,
                                 {
                                   siteId,
                                 },
-                              )
-                            }
+                              );
+                            }}
+                            onKeyDown={e => {
+                              this.paginationHandler(
+                                pageNum - 1,
+                                null,
+                                {
+                                  siteId,
+                                },
+                              );
+                            }}
                           >
                             <i className="la la-long-arrow-left" />
                           </a>
@@ -245,15 +271,26 @@ class DatatablePage extends Component {
                       {pageNum !== totalPage && (
                         <li className="page-item ">
                           <a
-                            onClick={e =>
+                            role="button"
+                            tabIndex="0"
+                            onClick={e => {
                               this.paginationHandler(
                                 pageNum + 1,
                                 null,
                                 {
                                   siteId,
                                 },
-                              )
-                            }
+                              );
+                            }}
+                            onKeyDown={e => {
+                              this.paginationHandler(
+                                pageNum + 1,
+                                null,
+                                {
+                                  siteId,
+                                },
+                              );
+                            }}
                           >
                             <i className="la la-long-arrow-right" />
                           </a>

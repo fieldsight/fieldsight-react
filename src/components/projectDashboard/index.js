@@ -11,6 +11,8 @@ import {
   getChartData,
   getProjectLogs,
 } from '../../actions/projectDashboardActions';
+/* eslint-disable camelcase */
+/* eslint-disable react/destructuring-assignment */
 
 const INITIAL_STATE = {
   // activeTab: 'home',
@@ -42,31 +44,35 @@ class ProjectDashboard extends React.Component {
     this.props.getSurveyForm(projectId);
     this.props.getChartData(projectId);
     this.props.getProjectLogs(projectId);
-    this.setState({ projectId: projectId });
-    this.props.paginationHandler(1, null, {
-      type: 'projectSiteList',
-      projectId: projectId,
-    });
+    this.setState({ projectId });
+    // this.props.paginationHandler(1, null, {
+    //   type: 'projectSiteList',
+    //   projectId,
+    // });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.id !== this.props.match.params.id) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
       const { id: projectId } = this.props.match.params;
 
-      this.setState(
-        {
-          ...INITIAL_STATE,
-        },
-        () => {
-          this.props.getProjectDashboard(projectId);
-          this.props.getProgressTableData(projectId);
-          this.props.getChartData(projectId);
-          this.props.getProjectLogs(projectId);
-          this.setState({ projectId: projectId });
-        },
-      );
+      this.fetchData(projectId);
     }
   }
+
+  fetchData = projectId => {
+    this.setState(
+      {
+        ...INITIAL_STATE,
+      },
+      () => {
+        this.props.getProjectDashboard(projectId);
+        this.props.getProgressTableData(projectId);
+        this.props.getChartData(projectId);
+        this.props.getProjectLogs(projectId);
+        this.setState({ projectId });
+      },
+    );
+  };
 
   onChangeHandler = e => {
     const searchValue = e.target.value;
@@ -172,14 +178,11 @@ class ProjectDashboard extends React.Component {
 const mapStateToProps = ({ projectDashboard }) => ({
   projectDashboard,
 });
-export default compose(
-  connect(mapStateToProps, {
-    getProjectDashboard,
-    getRegionData,
-    getProgressTableData,
-    getSurveyForm,
-    getChartData,
-    getProjectLogs,
-  }),
-  withPagination,
-)(ProjectDashboard);
+export default connect(mapStateToProps, {
+  getProjectDashboard,
+  getRegionData,
+  getProgressTableData,
+  getSurveyForm,
+  getChartData,
+  getProjectLogs,
+})(ProjectDashboard);

@@ -406,7 +406,7 @@ class ProjectDashboardComponent extends Component {
             <div className="col-xl-4 col-md-6">
               <div className="card mangager-list">
                 <div className="card-header main-card-header sub-card-header">
-                  <h5>Progress Managers</h5>
+                  <h5>Project Managers</h5>
                   {/* <div className="dash-btn">
                         <form className="floating-form">
                           <div className="form-group mr-0">

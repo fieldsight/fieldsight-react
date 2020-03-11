@@ -190,8 +190,7 @@ class ProjecTable extends Component {
                               className="td-edit-btn td-btn"
                               href={items.download_url}
                             >
-                              {' '}
-                              <i className="la la-download"> </i>{' '}
+                              <i className="la la-download" />
                             </a>
                           </OverlayTrigger>
                           <OverlayTrigger
