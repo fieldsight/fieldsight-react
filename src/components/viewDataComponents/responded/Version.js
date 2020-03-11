@@ -36,6 +36,7 @@ class VersionTable extends Component {
     const { latest, versions, breadcrumbs, loader } = this.state;
     const { project, id, fid } = this.props;
     const isProject = project === 'project' ? 1 : 0;
+
     return (
       <>
         {breadcrumbs && Object.keys(breadcrumbs).length > 0 ? (
@@ -96,28 +97,8 @@ class VersionTable extends Component {
                     <td>{latest.total_submissions}</td>
                     <td>
                       {isProject === 0 ? (
-                        latest.version_id ? (
-                          <a
-                            href={`/fieldsight/application/#/exports/0/${fid}/${id}/${latest.version_id}`}
-                            className="edit-tag tag"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="la la-download " />
-                          </a>
-                        ) : (
-                          <a
-                            href={`/fieldsight/application/#/exports/0/${fid}/${id}/0`}
-                            className="edit-tag tag"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="la la-download " />
-                          </a>
-                        )
-                      ) : latest.version_id ? (
                         <a
-                          href={`/fieldsight/application/#/exports/1/${fid}/${id}/${latest.version_id}`}
+                          href={`/fieldsight/application/#/exports/0/${fid}/${id}/${latest.version_id}`}
                           className="edit-tag tag"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -126,7 +107,7 @@ class VersionTable extends Component {
                         </a>
                       ) : (
                         <a
-                          href={`/fieldsight/application/#/exports/1/${fid}/${id}/0`}
+                          href={`/fieldsight/application/#/exports/1/${fid}/${id}/${latest.version_id}`}
                           className="edit-tag tag"
                           target="_blank"
                           rel="noopener noreferrer"
