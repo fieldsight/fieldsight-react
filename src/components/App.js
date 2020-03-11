@@ -30,21 +30,21 @@ import SiteAdd from './siteAdd';
 import EditSite from './SiteEdit';
 import MapFilter from './mapfilter/MapFilter';
 
-import SiteSubmissionData from './viewDataComponents/siteViewData/formSubmission';
-import VersionSubmissionData from './viewDataComponents/projectViewData/versionTable';
-import VersionSiteSubmission from './viewDataComponents/siteViewData/versionTable';
-import SubmissionData from './viewDataComponents/projectViewData/submissionTable';
+import SiteSubmissionData from './viewDataComponents/siteViewData/FormSubmission';
+import VersionSubmissionData from './viewDataComponents/projectViewData/VersionTable';
+import VersionSiteSubmission from './viewDataComponents/siteViewData/VersionTable';
+import SubmissionData from './viewDataComponents/projectViewData/SubmissionTable';
 
-import SpecificViewData from './viewDataComponents/projectViewData/siteSpecificForm';
-import SubmissionForm from './viewDataComponents/projectViewData/submissionForm';
-import SiteViewData from './viewDataComponents/siteViewData/siteResponses';
-import SiteSubmissionForm from './viewDataComponents/siteViewData/submissionForm';
+import SpecificViewData from './viewDataComponents/projectViewData/SiteSpecificForm';
+import SubmissionForm from './viewDataComponents/projectViewData/SubmissionForm';
+import SiteViewData from './viewDataComponents/siteViewData/SiteResponses';
+import SiteSubmissionForm from './viewDataComponents/siteViewData/SubmissionForm';
 
 import TeamDashboard from './teamDashboard';
 import TeamSetting from './settings/TeamSettings';
 import ManageForms from './manageForms';
 import Mapparent from './team/Mapparent';
-import ResetPassword from './resetPassword';
+import ResetPassword from './ResetPassword';
 import UpdateProfile from './updateProject';
 import CreateProfile from './ProfileAdd';
 
@@ -53,10 +53,20 @@ import CreateProfile from './ProfileAdd';
 import ChangePassword from './changePassword';
 
 import SyncSchedule from './syncSchedule';
+// import SelectElement from "../components/common/SelectElement";
 
-// import OrganizationExport from './excelExport/organizationExport';
+import AdminDashboard from './adminDashboard';
+import SuperAdminFormEdit from './superAdminEdit';
+import SuperAdminForm from './superAdminForm';
+import SuperAdminSetting from './adminDashboard/organizationSettings/settings';
+import OragnizatonProjectList from './organizationProjectList';
+import OrganizationUserList from './organizationUserList';
+import OrganizationTeams from './organizationTeamList';
+import TotalOrganizationSubmission from './adminDashboard/organizationSettings/totalOrganizationSubmission';
+import TotalSiteSubmission from './adminDashboard/organizationSettings/totalSiteSubmission';
+
+import OrganizationExport from './excelExport/organizationExport';
 import ExcelExport from './excelExport';
-
 import StandardReports from './standardReports';
 import FormDataFilter from './standardReports/FormDataFilter';
 import ActivityExportFile from './standardReports/ActivityExportFile';
@@ -191,7 +201,10 @@ class App extends Component {
                   <Teams {...props} orgs="organization" />
                 )}
               />
-
+              <Route
+                path="/organization-teams/:id"
+                render={props => <OrganizationTeams {...props} />}
+              />
               <Route
                 path="/map"
                 render={props => <Mapparent {...props} />}
@@ -307,10 +320,51 @@ class App extends Component {
               />
 
               <Route
+                path="/organization-dashboard/:id"
+                render={props => <AdminDashboard {...props} />}
+              />
+              <Route
+                path="/create-organization"
+                render={props => <SuperAdminForm {...props} />}
+              />
+              <Route
+                path="/organization-exports/:orgId/:orgLibId"
+                render={props => <OrganizationExport {...props} />}
+              />
+              <Route
+                path="/edit-admin/:id"
+                render={props => <SuperAdminFormEdit {...props} />}
+              />
+              <Route
+                path="/organization-settings/:id"
+                render={props => <SuperAdminSetting {...props} />}
+              />
+
+              <Route
                 path="/exports/:isProject/:formId/:id/:version"
                 render={props => <ExcelExport {...props} />}
               />
 
+              <Route
+                path="/organization-projects/:id"
+                render={props => (
+                  <OragnizatonProjectList {...props} />
+                )}
+              />
+              <Route
+                path="/organization-users/:id"
+                render={props => <OrganizationUserList {...props} />}
+              />
+              <Route
+                path="/organization-submission/:orgId/:id/"
+                render={props => (
+                  <TotalOrganizationSubmission {...props} />
+                )}
+              />
+              <Route
+                path="/organization-submission-data/:id/:pid"
+                render={props => <TotalSiteSubmission {...props} />}
+              />
               <Route
                 path="/proj-mapfilter/:id"
                 render={props => <MapFilter {...props} />}
