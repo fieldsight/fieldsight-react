@@ -7,7 +7,7 @@ import {
   errorToast,
   successToast,
 } from '../../../utils/toastHandler';
-import LibraryTable from './libraryTable';
+import LibraryTable from './LibraryTable';
 import DeleteModal from '../../common/DeleteModal';
 
 /* eslint-disable  react/no-unused-state */

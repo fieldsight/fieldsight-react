@@ -58,12 +58,12 @@ import SyncSchedule from './syncSchedule';
 import AdminDashboard from './adminDashboard';
 import SuperAdminFormEdit from './superAdminEdit';
 import SuperAdminForm from './superAdminForm';
-import SuperAdminSetting from './adminDashboard/organizationSettings/settings';
+import SuperAdminSetting from './adminDashboard/organizationSettings/Settings';
 import OragnizatonProjectList from './organizationProjectList';
 import OrganizationUserList from './organizationUserList';
 import OrganizationTeams from './organizationTeamList';
-import TotalOrganizationSubmission from './adminDashboard/organizationSettings/totalOrganizationSubmission';
-import TotalSiteSubmission from './adminDashboard/organizationSettings/totalSiteSubmission';
+import TotalOrganizationSubmission from './adminDashboard/organizationSettings/TotalOrganizationSubmission';
+import TotalSiteSubmission from './adminDashboard/organizationSettings/TotalSiteSubmission';
 
 import OrganizationExport from './excelExport/OrganizationExport';
 import ExcelExport from './excelExport';
