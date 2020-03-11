@@ -177,13 +177,13 @@ class SiteTable extends Component {
                 &nbsp; entries .
               </p>
             </div>
-            {fromData < totalCount ? (
-              <div className="table-pagination">
-                <ul>
+
+            <div className="table-pagination">
+              <ul>
+                {this.props.pageNum !== 1 && (
                   <li
-                    className={` page-item ${
-                      pageNum === 1 ? 'disable-btn' : ''
-                    }`}
+                    className={` page-item
+                    `}
                   >
                     <a
                       tabIndex="0"
@@ -204,19 +204,21 @@ class SiteTable extends Component {
                       <i className="la la-long-arrow-left " />
                     </a>
                   </li>
+                )}
 
-                  {renderPageNumbers({
-                    type: 'mySiteList',
-                    projectId: siteId,
-                  })}
+                {!!this.props.profileId
+                  ? this.props.renderPageNumbers({
+                      type: 'siteListByProfileId',
+                      projectId: this.props.siteId,
+                      profileId: this.props.profileId,
+                    })
+                  : this.props.renderPageNumbers({
+                      type: 'mySiteList',
+                      projectId: this.props.siteId,
+                    })}
 
-                  <li
-                    className={`page-item  ${
-                      pageNum === Math.ceil(totalCount / 200)
-                        ? ' disable-btn'
-                        : ''
-                    }`}
-                  >
+                {this.props.pageNum !== this.props.totalPage && (
+                  <li className={`page-item  `}>
                     <a
                       tabIndex="0"
                       role="button"
@@ -236,9 +238,9 @@ class SiteTable extends Component {
                       <i className="la la-long-arrow-right" />
                     </a>
                   </li>
-                </ul>
-              </div>
-            ) : null}
+                )}
+              </ul>
+            </div>
           </div>
         )}
       </>

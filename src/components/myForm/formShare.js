@@ -6,23 +6,13 @@ import ReplaceModal from './ReplaceModal';
 import ShareModal from './ShareModal';
 /* eslint-disable react/prop-types  */
 
-class FormShare extends PureComponent {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     shareOption: false,
-  //   };
-  // }
+class FormShare extends Component {
+  state = {
+    shareOption: false,
+  };
 
   render() {
-    const {
-      item,
-      commonPopupHandler,
-      OpenTabHandler,
-      shareToggle,
-      deleteHandler,
-    } = this.props;
-    // const item = this.props.item;
+    const { item, replaceToggleModal } = this.props;
     return (
       <tr key={item.id_string}>
         <td style={{ width: '50%' }}>{item.title}</td>
@@ -121,16 +111,20 @@ class FormShare extends PureComponent {
             overlay={<Tooltip id="tooltip-disabled">Replace</Tooltip>}
           >
             <a
-              onClick={e => {
-                commonPopupHandler(
-                  e,
-                  ReplaceModal,
-                  item.edit_url,
-                  'Replace Form',
-                  'replace',
-                  item.id_string,
-                );
+              onClick={() => {
+                replaceToggleModal(item.id_string, item.edit_url);
               }}
+              role="button"
+              tabIndex="0"
+              // this.props.commonPopupHandler(
+              //   e,
+              //   ReplaceModal,
+              //   item.edit_url,
+              //   "Replace Form",
+              //   "replace",
+              //   item.id_string
+              // )
+              // }
               className="td-edit-btn td-btn"
               tabIndex="0"
               role="button"
@@ -174,9 +168,9 @@ class FormShare extends PureComponent {
               overlay={<Tooltip id="tooltip-disabled">Share</Tooltip>}
             >
               <a
-                onClick={e => {
-                  shareToggle(e, item.id_string);
-                }}
+                onClick={e =>
+                  this.props.shareToggle(e, item.id_string)
+                }
                 className="td-share-btn td-btn"
                 tabIndex="0"
                 role="button"

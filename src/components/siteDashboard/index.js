@@ -16,7 +16,7 @@ import Logs from '../common/Logs';
 import {
   getSiteDashboard,
   getSiteMetas,
-  getSiteSubmissions,
+  // getSiteSubmissions,
   getSiteDocuments,
   getSiteLogs,
   getSiteForms,
@@ -47,15 +47,11 @@ class SiteDashboard extends Component {
   }
 
   componentDidMount() {
-    const {
-      match: {
-        params: { id: siteId },
-      },
-    } = this.props;
+    const { id: siteId } = this.props.match.params;
 
     this.props.getSiteDashboard(siteId);
     this.props.getSiteMetas(siteId);
-    this.props.getSiteSubmissions(siteId);
+    // this.props.getSiteSubmissions(siteId);
     this.props.getSiteDocuments(siteId);
     this.props.getSiteLogs(siteId);
     this.props.getSiteForms(siteId, 'general');
@@ -67,31 +63,19 @@ class SiteDashboard extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.id !== this.props.match.params.id) {
-      const {
-        params: {
-          match: { id: siteId },
-        },
-        // getSiteDashboard,
-        // getSiteMetas,
-        // getSiteSubmissions,
-        // getSiteDocuments,
-        // getSiteLogs,
-        // getSiteForms,
-        // getRecentPictures,
-      } = this.props;
-
+      const { id: siteId } = this.props.match.params;
       this.setState(
         {
           ...INITIAL_STATE,
         },
         () => {
-          getSiteDashboard(siteId);
-          getSiteMetas(siteId);
-          getSiteSubmissions(siteId);
-          getSiteDocuments(siteId);
-          getSiteLogs(siteId);
-          getSiteForms(siteId, 'general');
-          getRecentPictures(siteId);
+          this.props.getSiteDashboard(siteId);
+          this.props.getSiteMetas(siteId);
+          // this.props.getSiteSubmissions(siteId);
+          this.props.getSiteDocuments(siteId);
+          this.props.getSiteLogs(siteId);
+          this.props.getSiteForms(siteId, 'general');
+          this.props.getRecentPictures(siteId);
         },
       );
     }
@@ -165,7 +149,7 @@ class SiteDashboard extends Component {
           users,
           recentPictures,
           siteMetas,
-          siteSubmissions,
+          // siteSubmissions,
           siteDocuments,
           siteLogs,
           siteForms,
@@ -177,7 +161,7 @@ class SiteDashboard extends Component {
           showDotLoader,
           siteDashboardLoader,
           siteMetasLoader,
-          siteSubmissionsLoader,
+          // siteSubmissionsLoader,
           siteLogsLoader,
           siteDocumentsLoader,
           sitePicturesLoader,
@@ -337,8 +321,8 @@ class SiteDashboard extends Component {
 
                   <DatatablePage
                     enableSubsites={enable_subsites}
-                    siteSubmissions={siteSubmissions}
-                    showContentLoader={siteSubmissionsLoader}
+                    // siteSubmissions={siteSubmissions}
+                    // showContentLoader={siteSubmissionsLoader}
                     siteForms={siteForms}
                     showDotLoader={showDotLoader}
                     showModal={showSubmissionModal}
@@ -347,6 +331,7 @@ class SiteDashboard extends Component {
                     openModal={openModal}
                     toggleTab={toggleTab}
                     hasWritePermission={has_write_permission}
+                    siteId={siteId}
                   />
                 </div>
               </div>
@@ -461,7 +446,7 @@ const mapStateToProps = ({ siteDashboard }) => ({
 export default connect(mapStateToProps, {
   getSiteDashboard,
   getSiteMetas,
-  getSiteSubmissions,
+  // getSiteSubmissions,
   getSiteDocuments,
   getSiteLogs,
   getSiteForms,
