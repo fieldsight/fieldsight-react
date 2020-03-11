@@ -33,21 +33,21 @@ import SiteAdd from './siteAdd';
 import EditSite from './SiteEdit';
 import MapFilter from './mapfilter/MapFilter';
 
-import SiteSubmissionData from './viewDataComponents/siteViewData/FormSubmission';
-import VersionSubmissionData from './viewDataComponents/projectViewData/VersionTable';
-import VersionSiteSubmission from './viewDataComponents/siteViewData/VersionTable';
-import SubmissionData from './viewDataComponents/projectViewData/SubmissionTable';
+import SiteSubmissionData from './viewDataComponents/siteViewData/formSubmission';
+import VersionSubmissionData from './viewDataComponents/projectViewData/versionTable';
+import VersionSiteSubmission from './viewDataComponents/siteViewData/versionTable';
+import SubmissionData from './viewDataComponents/projectViewData/submissionTable';
 
-import SpecificViewData from './viewDataComponents/projectViewData/SiteSpecificForm';
-import SubmissionForm from './viewDataComponents/projectViewData/SubmissionForm';
-import SiteViewData from './viewDataComponents/siteViewData/SiteResponses';
-import SiteSubmissionForm from './viewDataComponents/siteViewData/SubmissionForm';
+import SpecificViewData from './viewDataComponents/projectViewData/siteSpecificForm';
+import SubmissionForm from './viewDataComponents/projectViewData/submissionForm';
+import SiteViewData from './viewDataComponents/siteViewData/siteResponses';
+import SiteSubmissionForm from './viewDataComponents/siteViewData/submissionForm';
 
 import TeamDashboard from './teamDashboard';
 import TeamSetting from './settings/TeamSettings';
 import ManageForms from './manageForms';
 import Mapparent from './team/Mapparent';
-import ResetPassword from './ResetPassword';
+import ResetPassword from './resetPassword';
 import UpdateProfile from './updateProject';
 import CreateProfile from './ProfileAdd';
 

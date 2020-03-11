@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import RadioElement from '../../common/RadioElement';
 import CheckBox from '../../common/CheckBox';
 import SelectElement from '../../common/SelectElement';
-import { getArrValue, getDay } from './getStatus';
+import { getArrValue, getDay } from './GetStatus';
 /* eslint-disable   react/destructuring-assignment */
 
 class GlobalModalForm extends Component {

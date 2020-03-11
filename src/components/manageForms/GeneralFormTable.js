@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import { FormattedMessage } from 'react-intl';
 import format from 'date-fns/format';
-import TableAction from './common/tableAction';
-import GetStatus, { getClass } from './common/getStatus';
-import EducationMaterial from './common/educationMaterial';
+import TableAction from './common/TableAction';
+import GetStatus, { getClass } from './common/GetStatus';
+import EducationMaterial from './common/EducationMaterial';
 /* eslint-disable  consistent-return */
 /* eslint-disable   react/destructuring-assignment */
 
