@@ -9,7 +9,7 @@ import {
 } from '../../actions/superAdminDashboardActions';
 import { errorToast, successToast } from '../../utils/toastHandler';
 import ExportTable from './ExportTable';
-// import AdvancedExportModal from './advanceExportModal';
+// import AdvancedExportModal from './AdvanceExportModal';
 import DeleteModal from '../common/DeleteModal';
 /* eslint-disable */
 
