@@ -9,8 +9,8 @@ import {
   downloadExport,
 } from '../../actions/exportExcelActions';
 import { errorToast, successToast } from '../../utils/toastHandler';
-import ExportTable from './exportTable';
-import AdvancedExportModal from './advanceExportModal';
+import ExportTable from './ExportTable';
+import AdvancedExportModal from './AdvanceExportModal';
 /* eslint-disable */
 
 class ExcelExport extends Component {

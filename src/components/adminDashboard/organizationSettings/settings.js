@@ -3,10 +3,10 @@ import { Route, Switch } from 'react-router-dom';
 import Axios from 'axios';
 
 import SuperAdminFormEdit from '../../superAdminEdit';
-import LeftSideBar from './leftSideBar';
-import Teams from './teams';
-import MyForm from './myForms';
-import Library from './library';
+import LeftSideBar from './LeftSideBar';
+import Teams from './Teams';
+import MyForm from './MyForms';
+import Library from './Library';
 import { RegionProvider } from '../../../context';
 
 export default class SuperAdminSetting extends Component {

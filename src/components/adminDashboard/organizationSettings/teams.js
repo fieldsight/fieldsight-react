@@ -3,8 +3,8 @@ import axios from 'axios';
 import RightContentCard from '../../common/RightContentCard';
 import ManageModal from '../../manageForms/common/ManageModal';
 import DeleteModal from '../../common/DeleteModal';
-import TeamsTable from './teamsTable';
-import TeamList from './teamList';
+import TeamsTable from './TeamsTable';
+import TeamList from './TeamList';
 import Loader from '../../common/Loader';
 import {
   errorToast,

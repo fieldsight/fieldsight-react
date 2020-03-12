@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import SiteEditForm from '../common/siteEdit';
+import SiteEditForm from '../common/SiteEdit';
 import { errorToast, successToast } from '../../utils/toastHandler';
 /* eslint-disable camelcase */
 /* eslint-disable react/destructuring-assignment */

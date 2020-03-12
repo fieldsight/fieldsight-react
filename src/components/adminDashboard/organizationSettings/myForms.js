@@ -5,9 +5,9 @@ import { successToast } from '../../../utils/toastHandler';
 import RightContentCard from '../../common/RightContentCard';
 import Modal from '../../common/Modal';
 import DeleteModal from '../../common/DeleteModal';
-import FormTable from './formTable';
-import GeneralFormModal from './generalForm';
-import ScheduleFormModal from './scheduleform';
+import FormTable from './FormTable';
+import GeneralFormModal from './GeneralForm';
+import ScheduleFormModal from './Scheduleform';
 import RadioElement from '../../common/RadioElement';
 
 /* eslint-disable */

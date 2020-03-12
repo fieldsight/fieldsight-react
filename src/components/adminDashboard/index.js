@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import DashboardHeader from './dashboardHeader';
+import DashboardHeader from './DashboardHeader';
 import SiteMap from '../common/SiteMap';
-import About from './about';
-import Project from './projectLists';
-import TeamTable from './team';
-import Admin from './admin';
+import About from './About';
+import Project from './ProjectLists';
+import TeamTable from './Team';
+import Admin from './Admin';
 import {
   getSuperAdminDashboard,
   getProgressTable,
 } from '../../actions/superAdminDashboardActions';
-import ProgressTable from './progressTable';
+import ProgressTable from './ProgressTable';
 
 /* eslint-disable camelcase */
 

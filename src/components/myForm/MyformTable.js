@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import FormShare from './formShare';
+import FormShare from './FormShare';
 import { DotLoader } from './Loader';
 import Modal from '../common/Modal';
 import DeleteModal from '../common/DeleteModal';

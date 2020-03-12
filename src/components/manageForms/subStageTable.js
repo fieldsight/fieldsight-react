@@ -9,8 +9,8 @@ import {
 } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import DeleteModal from '../common/DeleteModal';
-import EducationMaterial from './common/educationMaterial';
-import GetStatus, { getClass } from './common/getStatus';
+import EducationMaterial from './common/EducationMaterial';
+import GetStatus, { getClass } from './common/GetStatus';
 
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key */
