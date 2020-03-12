@@ -27,7 +27,7 @@ import SiteLog from './siteLogs';
 import ProjectAdd from './projectAdd';
 import TeamAdd from './teamAdd';
 import SiteAdd from './siteAdd';
-import EditSite from './SiteEdit';
+import EditSite from './siteEdit';
 import MapFilter from './mapfilter/MapFilter';
 
 import SiteSubmissionData from './viewDataComponents/siteViewData/formSubmission';
