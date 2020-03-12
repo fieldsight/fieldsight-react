@@ -62,7 +62,6 @@ class ProjectSiteTable extends Component {
         renderPageNumbers,
       },
     } = this;
-    const { formatMessage } = this.props.intl;
 
     return (
       <>
@@ -82,9 +81,7 @@ class ProjectSiteTable extends Component {
                   type="search"
                   className="form-control"
                   onChange={this.onChangeHandler}
-                  placeholder={formatMessage({
-                    id: 'app.teams-search',
-                  })}
+                  placeholder="Search"
                 />
 
                 <i className="la la-search" />

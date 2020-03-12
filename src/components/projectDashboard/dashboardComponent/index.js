@@ -204,13 +204,7 @@ class ProjectDashboardComponent extends Component {
                         <input
                           type="search"
                           className="form-control"
-                          placeholder={
-                            this.props.intl &&
-                            this.props.intl.formatMessage({
-                              id: 'app.teams-search',
-                              defaultMessage: 'Search',
-                            })
-                          }
+                          placeholder="Search"
                           onChange={this.onChangeHandler}
                         />
                         {/* <label htmlFor="input">
