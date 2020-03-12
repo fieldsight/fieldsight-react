@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import DashboardHeader from './DashboardHeader';
 import ProjectDashboardComponent from './dashboardComponent';
 
-import { getProjectDashboard } from '../../actions/projectDashboardActions';
+import {
+  getProjectDashboard,
+  getRegionData,
+  getProgressTableData,
+  getSurveyForm,
+  getChartData,
+  getProjectLogs,
+} from '../../actions/projectDashboardActions';
 /* eslint-disable camelcase */
 /* eslint-disable react/destructuring-assignment */
 
@@ -33,31 +40,50 @@ class ProjectDashboard extends React.Component {
       },
     } = this.props;
     this.props.getProjectDashboard(projectId);
+    this.props.getProgressTableData(projectId);
+    this.props.getSurveyForm(projectId);
+    this.props.getChartData(projectId);
+    this.props.getProjectLogs(projectId);
+    this.setState({ projectId });
+    // this.props.paginationHandler(1, null, {
+    //   type: 'projectSiteList',
+    //   projectId,
+    // });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { props } = this;
-    if (nextProps.match.params.id !== props.match.params.id) {
-      const { id: projectId } = props.match.params;
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      const { id: projectId } = this.props.match.params;
 
-      this.setState(
-        {
-          ...INITIAL_STATE,
-        },
-        () => {
-          props.getProjectDashboard(projectId);
-        },
-      );
+      this.fetchData(projectId);
     }
   }
 
-  closeModal = type => {
-    // if (type) {
-    return (
-      type &&
-      this.setState({
-        [`show${type}`]: false,
-      })
+  fetchData = projectId => {
+    this.setState(
+      {
+        ...INITIAL_STATE,
+      },
+      () => {
+        this.props.getProjectDashboard(projectId);
+        this.props.getProgressTableData(projectId);
+        this.props.getChartData(projectId);
+        this.props.getProjectLogs(projectId);
+        this.setState({ projectId });
+      },
+    );
+  };
+
+  onChangeHandler = e => {
+    const searchValue = e.target.value;
+    const { projectId } = this.state;
+    this.props.searchHandler(
+      searchValue,
+      `/fv3/api/project-site-list/?page=1&project=${projectId}&q=${searchValue}`,
+      {
+        type: 'projectSiteList',
+        projectId,
+      },
     );
     // }
   };
@@ -90,7 +116,10 @@ class ProjectDashboard extends React.Component {
         surveyData,
         identifier,
       },
-
+      siteList,
+      dLoader,
+      totalPage,
+      pageNum,
       match: {
         params: { id: projectId },
         url,
@@ -151,4 +180,9 @@ const mapStateToProps = ({ projectDashboard }) => ({
 });
 export default connect(mapStateToProps, {
   getProjectDashboard,
+  getRegionData,
+  getProgressTableData,
+  getSurveyForm,
+  getChartData,
+  getProjectLogs,
 })(ProjectDashboard);

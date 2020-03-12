@@ -4,10 +4,10 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import FormShare from './FormShare';
 import { DotLoader } from './Loader';
+import Modal from '../common/Modal';
 import DeleteModal from '../common/DeleteModal';
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-unused-state  */
-/* eslint-disable react/no-array-index-key  */
+import ReplaceModal from './ReplaceModal';
+/* eslint-disable react/no-unused-state */
 
 const url = 'fv3/api/myforms/';
 const deleteUrl = '/fv3/api/form/delete/';
@@ -15,8 +15,8 @@ const deleteUrl = '/fv3/api/form/delete/';
 class MyformTable extends Component {
   _isMounted = false;
 
-  constructor(props) {
-    super(props);
+  constructor(params) {
+    super(params);
     this.state = {
       project_list: [],
       list: [],
@@ -25,6 +25,9 @@ class MyformTable extends Component {
       tblDiv: false,
       showDeleteConfirmation: false,
       delete_id: null,
+      showReplace: false,
+      assetUid: '',
+      modalDatas: '',
     };
   }
 
@@ -84,6 +87,21 @@ class MyformTable extends Component {
     });
   };
 
+  replaceOptionToggle = (id, toUrl) => {
+    this.setState(state => {
+      if (id && toUrl) {
+        return {
+          showReplace: !state.showReplace,
+          assetUid: id,
+          modalDatas: toUrl,
+        };
+      }
+      return {
+        showReplace: !state.showReplace,
+      };
+    });
+  };
+
   confirmHandler = () => {
     const id = this.state.delete_id;
     axios
@@ -108,6 +126,8 @@ class MyformTable extends Component {
 
   render() {
     const { OpenTabHandler, commonPopupHandler } = this.props;
+    const { showReplace, assetUid, modalDatas } = this.state;
+
     return (
       <>
         <div className="myform-table">
@@ -139,12 +159,13 @@ class MyformTable extends Component {
                 <tbody>
                   {this.state.list.map((item, i) => (
                     <FormShare
-                      key={i + 1}
+                      key={item.id_string}
                       item={item}
                       OpenTabHandler={OpenTabHandler}
                       commonPopupHandler={commonPopupHandler}
                       deleteHandler={this.deleteHandler}
                       shareToggle={this.shareToggle}
+                      replaceToggleModal={this.replaceOptionToggle}
                     />
                   ))}
                 </tbody>
@@ -154,6 +175,15 @@ class MyformTable extends Component {
             </PerfectScrollbar>
           </div>
         </div>
+        {showReplace && (
+          <Modal toggleModal={this.replaceOptionToggle}>
+            <ReplaceModal
+              toggleModal={this.replaceOptionToggle}
+              assetUid={assetUid}
+              modalDatas={modalDatas}
+            />
+          </Modal>
+        )}
         {this.state.showDeleteConfirmation && (
           <DeleteModal
             onConfirm={this.confirmHandler}

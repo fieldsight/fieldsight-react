@@ -5,10 +5,10 @@ const tokenVal = window.token ? window.token : process.env.TOKEN;
 
 const baseURL = window.base_url
   ? window.base_url
-  : // :  :'http://192.168.88.80:8002/'
-    // 'http://192.168.1.6:8002/';
+  : // : " http://ec2-18-220-9-254.us-east-2.compute.amazonaws.com";
     'https://fieldsight.naxa.com.np/';
-// : "https://app.fieldsight.org/";
+// "http://192.168.1.32:8002";
+// "https://app.fieldsight.org/";
 
 const setDefault = () => {
   axios.defaults.baseURL = baseURL;

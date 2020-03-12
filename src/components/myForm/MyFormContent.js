@@ -5,8 +5,6 @@ import SharedTable from './SharedTable';
 /* eslint-disable react/prop-types  */
 /* eslint-disable camelcase */
 
-// const base_url = 'https://fieldsight.naxa.com.np';
-
 class MyFormContent extends PureComponent {
   render() {
     const { OpenTabHandler, commonPopupHandler } = this.props;

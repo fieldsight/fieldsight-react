@@ -186,7 +186,10 @@ class ProjecTable extends Component {
                               </Tooltip>
                             }
                           >
-                            <a className="td-edit-btn td-btn">
+                            <a
+                              className="td-edit-btn td-btn"
+                              href={items.download_url}
+                            >
                               <i className="la la-download" />
                             </a>
                           </OverlayTrigger>

@@ -198,17 +198,7 @@ class AdminDashboard extends Component {
               <div className="card map">
                 <div className="card-header main-card-header sub-card-header">
                   <h5>Project Maps</h5>
-                  <div className="dash-btn">
-                    <a
-                      href="/fieldsight/org-map/"
-                      className="fieldsight-btn left-icon"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <i className="la la-map" />
-                      Full map
-                    </a>
-                  </div>
+                  <div className="dash-btn" />
                 </div>
                 <div className="card-body">
                   <SiteMap
