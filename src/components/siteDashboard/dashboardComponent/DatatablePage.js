@@ -67,7 +67,7 @@ class DatatablePage extends Component {
     const { totalPage, pageNum } = this.state;
     if (totalPage) {
       const pageNumbers = [];
-      for (let i = 1; i <= totalPage; i + 1) {
+      for (let i = 1; i <= totalPage; i += 1) {
         pageNumbers.push(i);
       }
 
@@ -221,15 +221,15 @@ class DatatablePage extends Component {
                 <div className="table-footer">
                   <div className="showing-rows">
                     <p>
-                      Showing
+                      Showing &nbsp;
                       <span>{fromData}</span>
-                      to
+                      &nbsp;to&nbsp;
                       <span>
                         {toData > totalCount ? totalCount : toData}
                       </span>
-                      of
+                      &nbsp;of&nbsp;
                       <span>{totalCount}</span>
-                      entries.
+                      &nbsp;entries.
                     </p>
                   </div>
                   {/* {toData < totalCount ? ( */}
